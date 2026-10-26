@@ -45,7 +45,7 @@ newHistogram[table] = new int[256];
             tables[table] = new(new byte[16], new byte[256], codes, lengths);
         }
         using var newOutput = new MemoryStream(8192);
-        using var newContext = new OperationContext(new() { MaxWork = 10_000_000_000 }, default);
+        using var newContext = new OperationContext(new() { }, default);
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         var totalBlocks = 0; var totalRecords = 0; var maximumPerBlock = 0;
         for (var test = 0; test < 4096; test++)
@@ -55,8 +55,7 @@ newHistogram[table] = new int[256];
             foreach (var values in newHistogram) Array.Clear(values);
             newOutput.SetLength(0);
             using var newWriter = new JpegEntropyWriter(newOutput, newContext);
-            var used = 0; newContext.Work(262144);
-            for (var b = 0; b < blocks; b++)
+            var used = 0;             for (var b = 0; b < blocks; b++)
             {
                 var block = coefficients.AsSpan(b * 64, 64); var component = Component(b, chroma);
                 records.AsSpan(used, 64).Fill(0x5a5a5a5a);
@@ -68,7 +67,7 @@ newHistogram[table] = new int[256];
                 maximumPerBlock = Math.Max(maximumPerBlock, count); used += count; totalBlocks++;
             }
             records[used - 1] |= (int)JpegEntropyRecords.EndMcuBit;
-            JpegEntropyRecords.WriteRecords(records.AsSpan(0, used), tables, newWriter, newContext, 262144);
+            JpegEntropyRecords.WriteRecords(records.AsSpan(0, used), tables, newWriter, newContext);
             newWriter.Align();
             var before = newOutput.GetBuffer().AsSpan(0, (int)newOutput.Length);
             hash.AppendData(MemoryMarshal.AsBytes(coefficients.AsSpan(0, blocks * 64))); hash.AppendData(before);

@@ -184,7 +184,7 @@ public sealed class TextDirectionTests
 
     [Theory]
     [InlineData(0)] [InlineData(1)]
-    public void RefusalAtEitherStorageBoundaryIsTerminalAndRefundsForSubsequentWork(int after)
+    public void RefusalAtEitherStorageBoundaryIsTerminalAndRefundsForSubsequent(int after)
     {
         using var budget = new TestMemoryBudget(1_000_000) { RefuseAtGrowth = after + 1 };
         using (var context = new OperationContext(new() { MemoryBudget = budget }, default))
@@ -195,18 +195,6 @@ public sealed class TextDirectionTests
         budget.RefuseAtGrowth = 0;
         using var nextContext = new OperationContext(new() { MemoryBudget = budget }, default);
         using (var next = new BidiParagraph(Scalars("A"), nextContext)) Assert.True(budget.Bytes > 0);
-        Assert.Equal(0, budget.Bytes);
-    }
-
-    [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public void CancellationAndWorkFailureAfterAdmissionReleaseStorage(bool cancel)
-    {
-        using var budget = new TestMemoryBudget(1_000_000); using var cancellation = new CancellationTokenSource();
-        budget.Admitted = _ => { if (cancel) cancellation.Cancel(); };
-        using var context = new OperationContext(new() { MemoryBudget = budget, MaxWork = cancel ? 1000 : 1 }, cancellation.Token);
-        if (cancel) Assert.Throws<OperationCanceledException>(() => new BidiParagraph(Scalars("Aאב"), context));
-        else Assert.Throws<ImageLimitException>(() => new BidiParagraph(Scalars("Aאב"), context));
         Assert.Equal(0, budget.Bytes);
     }
 

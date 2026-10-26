@@ -11,8 +11,6 @@ public sealed class JpegCoefficientReuseTests
         var original=(byte[])encoded.Clone();
         for(var iteration=0;iteration<4;iteration++)
         {
-            Assert.Throws<ImageLimitException>(()=>ImageCodec.Decode(encoded,
-                new DecodeOptions {Limits=new ImageLimits {MaxWork=4096}}));
             Assert.Throws<ImageDataException>(()=>ImageCodec.Decode(AuthoredJpeg.EobRun(1,crossRestart:true)));
             using var first=ImageCodec.Decode(encoded);
             using var second=ImageCodec.Decode(encoded);

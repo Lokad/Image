@@ -25,7 +25,7 @@ internal sealed class Vp8PartitionWriter : IDisposable
     {
         if (finished || disposed) throw new InvalidOperationException("Partition is closed.");
         if ((uint)bit > 1 || (uint)probability > 255) throw new ArgumentOutOfRangeException(nameof(bit));
-        context.Work(1); var boundary = 1 + ((range - 1) * probability >> 8);
+        context.Cancellation.ThrowIfCancellationRequested(); var boundary = 1 + ((range - 1) * probability >> 8);
         if (bit == 0) range = boundary;
         else
         {
@@ -35,7 +35,7 @@ internal sealed class Vp8PartitionWriter : IDisposable
                 bottom -= 256; var at = position - 1; var increment = used == 0 ? 1 : 1 << (8 - used);
                 while (at >= 0)
                 {
-                    context.Work(1); var value = buffer![at] + increment; buffer[at] = unchecked((byte)value);
+                    context.Cancellation.ThrowIfCancellationRequested(); var value = buffer![at] + increment; buffer[at] = unchecked((byte)value);
                     if (value < 256) break;
                     at--; increment = 1;
                 }
@@ -54,7 +54,7 @@ internal sealed class Vp8PartitionWriter : IDisposable
     internal void Finish()
     {
         if (finished || disposed) throw new InvalidOperationException("Partition is closed.");
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         // No emitted bits after an actual interval update is distinct from the
         // pristine empty stream. Do not blindly remove one lookahead byte.
         var target = position + 2 + (position == 0 && range != 255 ? 1 : 0);
@@ -79,7 +79,7 @@ internal sealed class Vp8PartitionWriter : IDisposable
     {
         var size = (int)Math.Min(Math.Min(maximum, Array.MaxLength), Math.Max(64L, (buffer?.Length ?? 0) * 2L));
         var nextCapacity = size + 128L; context.Reserve(nextCapacity); byte[] next;
-        try { context.Work(0); next = new byte[size]; context.Work(position); buffer.AsSpan(0, position).CopyTo(next); }
+        try { context.Cancellation.ThrowIfCancellationRequested(); next = new byte[size]; context.Cancellation.ThrowIfCancellationRequested(); buffer.AsSpan(0, position).CopyTo(next); }
         catch { context.Release(nextCapacity); throw; }
         var previous = capacity; buffer = next; capacity = nextCapacity;
         if (previous != 0) context.Release(previous);

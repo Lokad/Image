@@ -165,14 +165,12 @@ public sealed class JpegReferenceTests
     [InlineData(JpegSampling.Grayscale, 0)]
     [InlineData(JpegSampling.YCbCr420, 33)]
     [InlineData(JpegSampling.Grayscale, 3)]
-    public void WorkCancellationAndFailedWritesCleanUpWithoutDisposingTheCaller(JpegSampling sampling, int restart)
+    public void CancellationAndFailedWritesCleanUpWithoutDisposingTheCaller(JpegSampling sampling, int restart)
     {
         using var image = OriginalPixels.Buffer(17, 11, 8);
         using var root = new TestMemoryBudget(1024 * 1024);
         var options = Options with { Sampling = sampling, RestartInterval = restart, Limits = ImageLimits.Default with { MemoryBudget = root } };
         using var output = new MemoryStream();
-        var limited = options with { Limits = options.Limits with { MaxWork = 1 } };
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, limited)).Limit);
         var local = options with { Limits = options.Limits with { MaxWorkingBytes = 17 * 11 * 4 + 8192 + 16384 - 1 } };
         var localError = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(image, output, local));
         Assert.Equal(ImageLimitKind.WorkingBytes, localError.Limit); Assert.Equal(ImageLimitScope.Operation, localError.Scope);
@@ -307,7 +305,7 @@ public sealed class JpegReferenceTests
     [Theory]
     [InlineData(JpegSampling.YCbCr420)]
     [InlineData(JpegSampling.YCbCr422)]
-    public void EntropyReplayAndTightWorkspacePreservePacketsWorkAndSource(JpegSampling sampling)
+    public void EntropyReplayAndTightWorkspacePreservePacketsAndSource(JpegSampling sampling)
     {
         using var image = OriginalPixels.Buffer(17, 11, 16);
         var original = OriginalPixels.Bytes(image);
@@ -319,12 +317,9 @@ public sealed class JpegReferenceTests
         // records. Strategy selection must precede shared admission.
         var tight = cached with { Limits = cached.Limits with { MemoryBudget = tightRoot,
             MaxWorkingBytes = original.Length + 8192 + 16384 + 65536 + 257 * 2048 } };
-        var cachedBudget = new ImageBudget(cached.Limits.MaxWorkingBytes, cached.Limits.MaxWork);
-        var tightBudget = new ImageBudget(tight.Limits.MaxWorkingBytes, tight.Limits.MaxWork);
         using var first = new MemoryStream(); using var second = new MemoryStream();
-        cachedBudget.EncodeJpeg(image, first, cached); tightBudget.EncodeJpeg(image, second, tight);
+        ImageCodec.EncodeJpeg(image, first, cached); ImageCodec.EncodeJpeg(image, second, tight);
         Assert.Equal(first.ToArray(), second.ToArray()); Assert.Equal(original, OriginalPixels.Bytes(image));
-        Assert.Equal(cachedBudget.ConsumedWork, tightBudget.ConsumedWork);
         var recordCapacity = 2 * (sampling == JpegSampling.YCbCr420 ? 6 : 8) * 64 * 2 + 128;
         Assert.Equal(recordCapacity, cachedRoot.Peak - tightRoot.Peak);
         Assert.Equal(0, cachedRoot.Bytes); Assert.Equal(0, tightRoot.Bytes);

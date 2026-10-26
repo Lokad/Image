@@ -15,7 +15,7 @@ public sealed partial class TrueTypeFont
         var chosen = -1; var score = -1;
         for (var i = 0; i < records; i++)
         {
-            context.Work(1); var entry = bytes.Slice(4 + i * 8, 8);
+            context.Cancellation.ThrowIfCancellationRequested(); var entry = bytes.Slice(4 + i * 8, 8);
             var platform = U16(entry); var encoding = U16(entry[2..]); var offset = U32(entry[4..]);
             if (offset < 4 + records * 8 || offset > bytes.Length - 2L) throw new ImageDataException("Invalid font character mapping offset.");
             var format = U16(bytes[(int)offset..]);
@@ -41,7 +41,7 @@ public sealed partial class TrueTypeFont
             long previous = -1;
             for (var i = 0; i < count; i++)
             {
-                context.Work(1); var group = bytes.Slice(16 + i * 12, 12);
+                context.Cancellation.ThrowIfCancellationRequested(); var group = bytes.Slice(16 + i * 12, 12);
                 var first = U32(group); var last = U32(group[4..]); var glyph = U32(group[8..]);
                 if (last < first || first <= previous || last > 0x10FFFF || glyph + (ulong)last - first >= (ulong)GlyphCount)
                     throw new ImageDataException("Invalid Unicode mapping group.");
@@ -56,14 +56,14 @@ public sealed partial class TrueTypeFont
             var previous = -1;
             for (var i = 0; i < count; i++)
             {
-                context.Work(1); var end = U16(bytes[(14 + i * 2)..]); var start = U16(bytes[(16 + count * 2 + i * 2)..]);
+                context.Cancellation.ThrowIfCancellationRequested(); var end = U16(bytes[(14 + i * 2)..]); var start = U16(bytes[(16 + count * 2 + i * 2)..]);
                 var field = 16 + count * 6 + i * 2; var offset = U16(bytes[field..]);
                 if (start > end || start <= previous || (offset & 1) != 0 || offset != 0 &&
                     (field + offset < 16 + count * 8 || field + (long)offset + (end - start) * 2L + 2 > bytes.Length))
                     throw new ImageDataException("Invalid Unicode segment range.");
                 for (var code = (int)start; code <= end; code++)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (MapSegment(bytes, count, i, code) >= GlyphCount) throw new ImageDataException("Font mapping refers to an absent glyph.");
                 }
                 previous = end;
@@ -77,17 +77,17 @@ public sealed partial class TrueTypeFont
         var bytes = Span(cmap); var low = 0; var high = mappingCount - 1;
         if (cmapFormat == 4)
         {
-            if (scalar > 0xFFFF) { context.Work(1); return 0; }
+            if (scalar > 0xFFFF) { context.Cancellation.ThrowIfCancellationRequested(); return 0; }
             while (low <= high)
             {
-                context.Work(1); var mid = (low + high) / 2;
+                context.Cancellation.ThrowIfCancellationRequested(); var mid = (low + high) / 2;
                 if (U16(bytes[(14 + mid * 2)..]) < scalar) low = mid + 1; else high = mid - 1;
             }
             return low == mappingCount || scalar < U16(bytes[(16 + mappingCount * 2 + low * 2)..]) ? 0 : MapSegment(bytes, mappingCount, low, scalar);
         }
         while (low <= high)
         {
-            context.Work(1); var mid = (low + high) / 2; var group = bytes.Slice(16 + mid * 12, 12);
+            context.Cancellation.ThrowIfCancellationRequested(); var mid = (low + high) / 2; var group = bytes.Slice(16 + mid * 12, 12);
             var first = U32(group); var last = U32(group[4..]);
             if (scalar < first) high = mid - 1;
             else if (scalar > last) low = mid + 1;

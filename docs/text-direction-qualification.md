@@ -22,7 +22,7 @@ specification inputs by SHA-256; no upstream implementation or test corpus is
 used, and external files are never production build inputs.
 
 Owned paragraph storage and temporary resolution arrays reserve capacity before
-allocation through the same operation context. Independent local/work limits
+allocation through the same operation context. Independent local storage/container limits
 remain effective. Refusal is terminal; failures and cancellation refund owned
 storage. Overlapping paragraphs share the caller's root until disposal.
 
@@ -30,7 +30,7 @@ Qualification passed **4,366 tests per OS** on Windows/Linux: 1,557 internal,
 1,881 public API and 928 live FFmpeg comparisons. The **50 new checks per OS**
 also passed with intrinsics disabled. They cover numeric/mark/bracket resolution,
 isolates/overrides/depth overflow, independent line resets, joining forms, both
-storage-admission failures, aggregate ownership, cancellation/work cleanup and
+storage-admission failures, aggregate ownership, cancellation cleanup and
 successful subsequent operations. The same actual private 0.2.0 Release package
 passed isolated consumers and all three usage examples on both systems.
 

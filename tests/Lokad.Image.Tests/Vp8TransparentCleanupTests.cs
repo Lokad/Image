@@ -93,21 +93,4 @@ public sealed class Vp8TransparentCleanupTests
         using var later = new OperationContext(new() { MemoryBudget = root }, default);
         using var next = Vp8PreparedInput.Create(source, later); next.CleanupTransparentArea(); Assert.Equal(BandsHash, Hash(next));
     }
-
-    [Fact]
-    public void LateCleanupWorkFailureDoesNotReleaseStorageBeforeItsOwner()
-    {
-        using var source = Bands(); long work;
-        using (var sizing = new OperationContext(ImageLimits.Default, default))
-        using (var input = Vp8PreparedInput.Create(source, sizing))
-        { input.CleanupTransparentArea(); work = sizing.ConsumedWork; }
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        using var failed = Vp8PreparedInput.Create(source, context);
-        var error = Assert.Throws<ImageLimitException>(() => failed.CleanupTransparentArea());
-        Assert.Equal(ImageLimitKind.Work, error.Limit); Assert.Equal(failed.CapacityBytes, root.Bytes);
-        failed.Dispose(); Assert.Equal(0, root.Bytes);
-        using var later = new OperationContext(new() { MemoryBudget = root }, default);
-        using var next = Vp8PreparedInput.Create(source, later); next.CleanupTransparentArea(); Assert.Equal(BandsHash, Hash(next));
-    }
 }

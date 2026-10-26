@@ -7,7 +7,7 @@ using System.Runtime.Intrinsics.X86;
 namespace Lokad.Image.Internal;
 
 // Private encoder metrics. All buffers/weights are borrowed; the enclosing
-// operation owns their admission and block work/cancellation. There are no
+// operation owns their admission and block cancellation. There are no
 // per-block heap allocations, caches or scopes.
 internal static class Vp8Distortion
 {

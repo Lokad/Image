@@ -2,7 +2,7 @@ namespace Lokad.Image.Internal;
 
 // Device-color conversion at the pinned reference precision. The reciprocal is
 // derived from the eight-bit range, and luma coefficients from rational BT.601.
-// Parents own storage and admit row work before invoking these allocation-free leaves.
+// Parents own storage and check row cancellation before invoking these allocation-free leaves.
 internal static class JpegBlackColor
 {
     internal const ushort ProductScale = (1 << 16) / byte.MaxValue;

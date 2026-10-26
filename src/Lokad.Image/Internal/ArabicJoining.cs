@@ -14,11 +14,11 @@ internal static class ArabicJoining
         var context = glyphs.Context;
         if (start < 0 || start > glyphs.Count || length < -1 || length > glyphs.Count - start)
             throw new ArgumentOutOfRangeException(nameof(length));
-        var end = length < 0 ? glyphs.Count : start + length; context.Work(0);
+        var end = length < 0 ? glyphs.Count : start + length; context.Cancellation.ThrowIfCancellationRequested();
         var previous = -1; var previousType = JoiningType.U; byte previousLevel = 0;
         for (var i = start; i < end; i++)
         {
-            context.Work(1); ref var glyph = ref glyphs[i]; glyph.Features &= ~FormMask;
+            context.Cancellation.ThrowIfCancellationRequested(); ref var glyph = ref glyphs[i]; glyph.Features &= ~FormMask;
             if (glyph.Glyph < 0 || glyph.Kind is 2 or 3)
             { previous = -1; previousType = JoiningType.U; continue; }
             var type = UnicodeTextProperties.Joining(glyph.Scalar);

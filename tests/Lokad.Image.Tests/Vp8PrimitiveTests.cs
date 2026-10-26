@@ -65,9 +65,7 @@ public sealed class Vp8PrimitiveTests
         Assert.Throws<ImageDataException>(() => new Vp8BooleanReader(tiny, 1, 1));
         var invalid = new Vp8BooleanReader(new byte[] { 255 }, 0, 1);
         Assert.Throws<ImageDataException>(() => invalid.Read(new byte[] { 255 }, 128, context));
-        var limited = new OperationContext(new ImageLimits { MaxWork = 1 }, default);
-        var bounded = new Vp8BooleanReader(data, 0, data.Length); bounded.Read(data, 128, limited);
-        Assert.Throws<ImageLimitException>(() => bounded.Read(data, 128, limited));
+
     }
 
     [Fact]

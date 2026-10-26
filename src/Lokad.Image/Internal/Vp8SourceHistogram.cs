@@ -3,7 +3,7 @@ namespace Lokad.Image.Internal;
 // Encoder analysis policy, not a bitstream alphabet: unquantized coefficients
 // contribute to32 magnitude buckets with an eight-unit step and saturation.
 // Caller-owned scratch and borrowed coefficients introduce no storage lifetime;
-// the enclosing macroblock analysis accounts work/cancellation and workspace.
+// the enclosing macroblock analysis accounts cancellation and workspace.
 internal static class Vp8SourceHistogram
 {
     internal readonly record struct Shape(int PeakPopulation, int LastBin)

@@ -117,7 +117,7 @@ public sealed class TextLayoutTests
     }
 
     [Fact]
-    public void MetricsAndPhantomAttachmentsWorkAfterAnEmptyFirstComponent()
+    public void MetricsAndPhantomAttachmentsAfterAnEmptyFirstComponent()
     {
         var raw = AuthoredTrueType.Compound([new(1, 0, 0, Flags: 3 | 512), new(2, 1, 0, Flags: 1)]);
         var layout = TextLayout.Create(Font(new Dictionary<int, byte[]> { [5] = raw }), "\u00C1", Options);
@@ -162,14 +162,12 @@ public sealed class TextLayoutTests
     }
 
     [Theory]
-    [InlineData(ImageLimitKind.WorkingBytes)] [InlineData(ImageLimitKind.Work)]
-    [InlineData(ImageLimitKind.Dimension)] [InlineData(ImageLimitKind.PixelCount)] [InlineData(ImageLimitKind.ContainerItems)]
+    [InlineData(ImageLimitKind.WorkingBytes)]     [InlineData(ImageLimitKind.Dimension)] [InlineData(ImageLimitKind.PixelCount)] [InlineData(ImageLimitKind.ContainerItems)]
     public void LayoutLimitsFailWithTypedInformationAndLeaveFontReusable(ImageLimitKind kind)
     {
         var font = Font(); var limits = kind switch
         {
             ImageLimitKind.WorkingBytes => new ImageLimits { MaxWorkingBytes = font.StorageBytes + 100 },
-            ImageLimitKind.Work => new ImageLimits { MaxWork = 1 },
             ImageLimitKind.Dimension => new ImageLimits { MaxDimension = 9 },
             ImageLimitKind.PixelCount => new ImageLimits { MaxPixels = 50 },
             _ => new ImageLimits { MaxContainerItems = 1 }

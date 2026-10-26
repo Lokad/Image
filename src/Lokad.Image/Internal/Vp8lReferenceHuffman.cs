@@ -14,7 +14,7 @@ internal static class Vp8lReferenceHuffman
         var leaves = 0; var first = 0; var last = 0;
         for (var symbol = 0; symbol < lengths.Length; symbol++)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (lengths[symbol] == 0) continue;
             if (leaves++ == 0) first = symbol; last = symbol;
         }
@@ -27,18 +27,18 @@ internal static class Vp8lReferenceHuffman
         var reserved = lengths.Length * 2L + 64; context.Reserve(reserved);
         try
         {
-            context.Work(0); var runs = new Run[lengths.Length]; var count = 0; byte previous = 8;
+            context.Cancellation.ThrowIfCancellationRequested(); var runs = new Run[lengths.Length]; var count = 0; byte previous = 8;
             Span<int> frequencies = stackalloc int[19]; frequencies.Clear();
             for (var at = 0; at < lengths.Length;)
             {
-                context.Work(1); var value = lengths[at]; var end = at + 1;
-                while (end < lengths.Length && lengths[end] == value) { context.Work(1); end++; }
+                context.Cancellation.ThrowIfCancellationRequested(); var value = lengths[at]; var end = at + 1;
+                while (end < lengths.Length && lengths[end] == value) { context.Cancellation.ThrowIfCancellationRequested(); end++; }
                 var remaining = end - at; at = end;
                 if (value != 0 && value != previous) { runs[count++] = new(value, 0); frequencies[value]++; remaining--; }
                 if (value != 0) previous = value;
                 while (remaining != 0)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (remaining < 3) { runs[count++] = new(value, 0); frequencies[value]++; remaining--; }
                     else
                     {
@@ -57,7 +57,7 @@ internal static class Vp8lReferenceHuffman
             foreach (var length in headerLengths) if (length != 0) headerSingle++;
             while (keep > 0 && runs[keep - 1].Symbol is 0 or 17 or 18)
             {
-                context.Work(1); var run = runs[--keep];
+                context.Cancellation.ThrowIfCancellationRequested(); var run = runs[--keep];
                 saved += (headerSingle <= 1 ? 0 : headerLengths[run.Symbol]) + run.Width;
             }
             var trim = keep > 1 && saved > 12; writer.Write(trim ? 1 : 0, 1);
@@ -68,7 +68,7 @@ internal static class Vp8lReferenceHuffman
             }
             else keep = count;
             for (var i = 0; i < keep; i++)
-            { context.Work(1); var run = runs[i]; header.Write(writer, run.Symbol); writer.Write(run.Extra, run.Width); }
+            { context.Cancellation.ThrowIfCancellationRequested(); var run = runs[i]; header.Write(writer, run.Symbol); writer.Write(run.Extra, run.Width); }
         }
         finally { context.Release(reserved); }
     }
@@ -89,7 +89,7 @@ internal static class Vp8lReferenceHuffman
             var reserved = layout.Total * 4L; context.Reserve(reserved);
             try
             {
-                context.Work(0); var counts = new int[layout.Total]; layout.Fill(tokens, width, true, counts, context);
+                context.Cancellation.ThrowIfCancellationRequested(); var counts = new int[layout.Total]; layout.Fill(tokens, width, true, counts, context);
                 group = Vp8lHuffmanGroup.Build(counts, layout, context);
             }
             finally { context.Release(reserved); }

@@ -78,14 +78,13 @@ public sealed class TrueTypeFontTests
     }
 
     [Theory]
-    [InlineData(ImageLimitKind.InputBytes)] [InlineData(ImageLimitKind.Work)] [InlineData(ImageLimitKind.ContainerItems)]
+    [InlineData(ImageLimitKind.InputBytes)] [InlineData(ImageLimitKind.ContainerItems)]
     public void FontLimitsStayStructuredWithoutChangingTheInput(ImageLimitKind kind)
     {
         var data = AuthoredTrueType.Build(); var saved = data.ToArray();
         var limits = kind switch
         {
             ImageLimitKind.InputBytes => new ImageLimits { MaxInputBytes = data.Length - 1 },
-            ImageLimitKind.Work => new ImageLimits { MaxWork = data.Length },
             _ => new ImageLimits { MaxContainerItems = 1 }
         };
         var failure = Assert.Throws<ImageLimitException>(() => TrueTypeFont.Load(data, limits));
@@ -94,7 +93,7 @@ public sealed class TrueTypeFontTests
     }
 
     [Fact]
-    public void CancellationWorkAndInvalidArgumentsRemainExplicit()
+    public void CancellationAndInvalidArgumentsRemainExplicit()
     {
         var data = AuthoredTrueType.Build(); using var token = new CancellationTokenSource(); token.Cancel();
         var failure = Assert.ThrowsAny<OperationCanceledException>(() => TrueTypeFont.Load(data, cancellationToken: token.Token));
@@ -102,11 +101,8 @@ public sealed class TrueTypeFontTests
         var font = TrueTypeFont.Load(data);
         failure = Assert.ThrowsAny<OperationCanceledException>(() => font.GetGlyphMetrics(new Rune('A'), cancellationToken: token.Token));
         Assert.Equal(token.Token, failure.CancellationToken);
-        var quota = Assert.Throws<ImageLimitException>(() => font.GetGlyphIndex(new Rune('A'), new() { MaxWork = 1 }));
-        Assert.Equal(ImageLimitKind.Work, quota.Limit);
         Assert.Throws<ArgumentOutOfRangeException>(() => font.GetGlyphMetrics(-1));
         Assert.Throws<ArgumentOutOfRangeException>(() => font.GetGlyphMetrics(font.GlyphCount));
-        Assert.Throws<ArgumentOutOfRangeException>(() => TrueTypeFont.Load(data, new() { MaxWork = 0 }));
     }
 
     [Theory]

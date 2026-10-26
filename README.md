@@ -46,7 +46,7 @@ Dispose image buffers, fonts and prepared text layouts; supplied streams remain 
 precision; JPEG/WebP output is 8-bit. WebP defaults to lossless. For transparent
 JPEG input, set `JpegEncodeOptions.BackgroundRgb` explicitly.
 Development toward 0.2.0 adds caller-owned cooperative memory admission through
-`ImageLimits.MemoryBudget`. `ImageBudget` separately provides codec memory/work quotas.
+`ImageLimits.MemoryBudget`, with retained results charged until disposal.
 `ImageInfo` reports encoded color, alpha representation and sample/index depth;
 `InspectHeadersAsync` reads these with bounded workspace, without decoding pixels.
 

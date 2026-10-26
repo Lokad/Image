@@ -5,11 +5,11 @@ namespace Lokad.Image.Internal;
 internal partial struct Vp8BooleanReader
 {
     internal bool CanReadCancellableCoefficientBlock(ReadOnlySpan<byte> data, OperationContext context)
-        => context.Cancellation.CanBeCanceled && context.RemainingWork >= 304
+        => context.Cancellation.CanBeCanceled
         && range is >= 128 and <= 255 && (uint)value < (uint)range && (uint)shift <= 7
         && end <= data.Length && end - position >= 272;
 
-    // Same RFC6386 block/input/work bound as the noncancelable window. Preserve
+    // Same RFC6386 block/input bound as the noncancelable window. Preserve
     // its arithmetic unchanged, but poll before EVERY decision and publish the
     // exact completed prefix even when that poll throws. No new storage/owner.
     internal bool ReadCancellableCoefficientBlock(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
@@ -60,9 +60,6 @@ internal partial struct Vp8BooleanReader
 
         internal void Publish(ref Vp8BooleanReader target, OperationContext context)
         {
-            // Selection admits all<=304 decisions. Settlement must not poll or
-            // lose completed work when cancellation interrupted the next read.
-            context.CommitAdmittedWork(reader.Work);
             target.position = reader.Position - (reader.Bits + 7) / 8;
             target.shift = (reader.Bits - 1) & 7;
             target.range = reader.Range; target.value = (int)(reader.Value >> reader.Bits);

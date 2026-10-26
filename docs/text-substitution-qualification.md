@@ -22,7 +22,7 @@ upstream implementation, format table or font asset was incorporated.
 Qualification passed **4,284 tests per OS** on Windows/Linux: 1,475 internal,
 1,881 public API and 928 live FFmpeg comparisons. The **36 new parser checks per
 OS** also passed with intrinsics disabled. They cover lookup semantics, malformed
-prefixes/mutations, nesting, boundaries, mark filters, cancellation, work limits,
+prefixes/mutations, nesting, boundaries, mark filters, cancellation, local memory limits,
 replacement peaks, refusal cleanup and subsequent admission. The same actual
 private 0.2.0 Release package passed isolated consumers and all three usage
 examples on both systems.

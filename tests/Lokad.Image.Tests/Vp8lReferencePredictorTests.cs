@@ -157,15 +157,4 @@ public sealed class Vp8lReferencePredictorTests
         using var next = Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, nextContext);
         next.Dispose(); Assert.Equal(rgba.Length, root.Bytes);
     }
-
-    [Fact]
-    public void IndependentWorkFailureReleasesAnalysisWithoutMutatingWorkingPixels()
-    {
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = 2 }, default);
-        var pixels = Working(HiddenRgb(), false, context); var original = pixels.ToArray();
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(original, pixels); Assert.Equal(pixels.Length * 4, root.Bytes); Assert.Equal(0, root.Refusals);
-    }
 }

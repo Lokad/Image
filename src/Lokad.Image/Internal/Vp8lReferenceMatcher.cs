@@ -13,9 +13,9 @@ internal sealed class Vp8lMatchIndex : IDisposable
     {
         ArgumentOutOfRangeException.ThrowIfNegative(length);
         this.context = context;
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         context.Reserve(length * 4L);
-        try { context.Work(0); values = new uint[length]; }
+        try { context.Cancellation.ThrowIfCancellationRequested(); values = new uint[length]; }
         catch { context.Release(length * 4L); throw; }
     }
 
@@ -52,7 +52,7 @@ internal static class Vp8lReferenceMatcher
                 for (var at = 0; at < dense.Length; at += 4096)
                 {
                     var length = Math.Min(4096, dense.Length - at);
-                    context.Work(length); Array.Fill(dense, -1, at, length);
+                    context.Cancellation.ThrowIfCancellationRequested(); Array.Fill(dense, -1, at, length);
                 }
             }
         }
@@ -78,32 +78,32 @@ internal static class Vp8lReferenceMatcher
             var headBytes = pixels.Length < 16384 ? pixels.Length * 32L + 512 : HeadCount * 4L;
             var required = headBytes + pixels.Length * 4L;
             context.Reserve(required); scratch = required;
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             var heads = new Heads(pixels.Length, context);
             var previous = new int[pixels.Length];
             for (var at = 0; at < previous.Length; at += 4096)
             {
                 var length = Math.Min(4096, previous.Length - at);
-                context.Work(length); Array.Fill(previous, -1, at, length);
+                context.Cancellation.ThrowIfCancellationRequested(); Array.Fill(previous, -1, at, length);
             }
             var position = 0; var repeated = pixels[0] == pixels[1];
             while (position < pixels.Length - 2)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var nextRepeat = pixels[position + 1] == pixels[position + 2];
                 if (repeated && nextRepeat)
                 {
                     var run = 1;
                     while (position + run + 2 < pixels.Length)
                     {
-                        context.Work(1);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         if (pixels[position + run + 2] != pixels[position]) break;
                         run++;
                     }
                     if (run > MaximumLength) { position += run - MaximumLength; run = MaximumLength; }
                     while (run > 0)
                     {
-                        context.Work(1);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         var key = Key(pixels[position], (uint)run--);
                         previous[position] = heads.Get(key); heads.Set(key, position++);
                     }
@@ -123,7 +123,7 @@ internal static class Vp8lReferenceMatcher
             position = pixels.Length - 2;
             while (position > 0)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var limit = Math.Min(MaximumLength, pixels.Length - 1 - position);
                 var enough = Math.Min(256, limit); var minimum = Math.Max(0, position - window);
                 var candidate = previous[position]; var remaining = checks; var length = 0; var distance = 0;
@@ -142,7 +142,7 @@ internal static class Vp8lReferenceMatcher
                 }
                 while (candidate >= minimum && --remaining != 0)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (pixels[candidate + length] == pixels[position + length])
                     {
                         var found = Length(pixels, candidate, position, 0, limit, context);
@@ -154,7 +154,7 @@ internal static class Vp8lReferenceMatcher
                 var extensionOrigin = position;
                 while (true)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     values[position] = (uint)(distance << 12 | length); position--;
                     if (distance == 0 || position == 0 || position < distance || pixels[position - distance] != pixels[position]) break;
                     if (length == MaximumLength && distance != 1 && position + MaximumLength < extensionOrigin) break;
@@ -170,11 +170,11 @@ internal static class Vp8lReferenceMatcher
     private static int Length(ReadOnlySpan<uint> pixels, int first, int second,
         int already, int limit, OperationContext context)
     {
-        context.Work(1);
+        context.Cancellation.ThrowIfCancellationRequested();
         if (pixels[first + already] != pixels[second + already]) return 0;
         var n = 0;
         while (n < limit)
-        { context.Work(1); if (pixels[first + n] != pixels[second + n]) break; n++; }
+        { context.Cancellation.ThrowIfCancellationRequested(); if (pixels[first + n] != pixels[second + n]) break; n++; }
         return n;
     }
 
@@ -187,10 +187,10 @@ internal static class Vp8lReferenceMatcher
         try
         {
             context.Reserve(pixels.Length * 2L); scratch = pixels.Length * 2L;
-            context.Work(0); var counts = new ushort[pixels.Length]; counts[^1] = 1;
+            context.Cancellation.ThrowIfCancellationRequested(); var counts = new ushort[pixels.Length]; counts[^1] = 1;
             for (var at = pixels.Length - 2; at >= 0; at--)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 counts[at] = pixels[at] == pixels[at + 1] ? (ushort)Math.Min(MaximumLength, counts[at + 1] + 1) : (ushort)1;
             }
             Span<int> offsets = stackalloc int[32]; offsets.Clear();
@@ -198,33 +198,33 @@ internal static class Vp8lReferenceMatcher
             for (var y = 0; y <= 6; y++) for (var x = -6; x <= 6; x++)
             {
                 var distance = y * width + x; if (distance <= 0) continue;
-                context.Work(120); var code = Plane(distance, width) - 1;
+                context.Cancellation.ThrowIfCancellationRequested(); var code = Plane(distance, width) - 1;
                 if (code < 32) offsets[code] = distance;
             }
             for (var i = 0; i < offsets.Length; i++) if (offsets[i] != 0) offsets[count++] = offsets[i];
             offsets = offsets[..count];
             for (var i = 0; i < count; i++)
             {
-                context.Work(count); var reachable = false;
+                context.Cancellation.ThrowIfCancellationRequested(); var reachable = false;
                 for (var j = 0; j < count; j++) if (offsets[i] == offsets[j] + 1) { reachable = true; break; }
                 if (!reachable) entering[newCount++] = offsets[i];
             }
             var previousLength = 0; var previousDistance = 0; var values = result.Writable;
             for (var at = 1; at < pixels.Length; at++)
             {
-                context.Work(1); var length = (int)(ordinary[at] & 4095); var distance = (int)(ordinary[at] >> 12);
+                context.Cancellation.ThrowIfCancellationRequested(); var length = (int)(ordinary[at] & 4095); var distance = (int)(ordinary[at] >> 12);
                 if (length != MaximumLength || !offsets.Contains(distance))
                 {
                     var carry = previousLength > 1 && previousLength < MaximumLength;
                     length = carry ? previousLength - 1 : 0; distance = carry ? previousDistance : 0;
                     foreach (var candidate in carry ? entering[..newCount] : offsets)
                     {
-                        context.Work(1); var other = at - candidate;
+                        context.Cancellation.ThrowIfCancellationRequested(); var other = at - candidate;
                         if (other < 0 || pixels[other] != pixels[at]) continue;
                         var found = 0; var cursor = at;
                         do
                         {
-                            context.Work(1); var a = counts[other]; var b = counts[cursor];
+                            context.Cancellation.ThrowIfCancellationRequested(); var a = counts[other]; var b = counts[cursor];
                             if (a != b) { found += Math.Min(a, b); break; }
                             found += a; other += a; cursor += a;
                         } while (found <= MaximumLength && cursor < pixels.Length && pixels[other] == pixels[cursor]);

@@ -8,7 +8,7 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8lGreenPredictorHistogramTests
 {
     [Fact]
-    public void OriginalGreenPlaneAndEdgesKeepEveryFrozenHistogramAndWorkCharge()
+    public void OriginalGreenPlaneAndEdgesKeepEveryFrozenHistogramAndCharge()
     {
         uint state = 0x6d2b79f5;
         uint Next() { state ^= state << 13; state ^= state >> 17; state ^= state << 5; return state; }
@@ -57,9 +57,7 @@ public sealed class Vp8lGreenPredictorHistogramTests
                         }
                     }
                 }
-                var work = context.ConsumedWork;
                 Vp8lGreenPredictorHistogram.Build(pixels, width, height, x0, y0, bits, actual, context);
-                Assert.Equal(56L * (endX - x0) * (endY - y0), context.ConsumedWork - work);
                 Assert.True(expected.AsSpan().SequenceEqual(actual));
                 hash.AppendData(MemoryMarshal.AsBytes(actual.AsSpan())); tiles++;
             }
@@ -80,7 +78,7 @@ public sealed class Vp8lGreenPredictorHistogramTests
     [Theory]
     [InlineData(2, 3)]
     [InlineData(5, 5)]
-    public void SpecializedAndGenericPlansKeepResidualsCostsWorkAndLifetime(int minimum, int maximum)
+    public void SpecializedAndGenericPlansKeepResidualsCostsAndLifetime(int minimum, int maximum)
     {
         using var root = new TestMemoryBudget(2_000_000);
         using var generic = new OperationContext(new() { MemoryBudget = root }, default);
@@ -90,7 +88,6 @@ public sealed class Vp8lGreenPredictorHistogramTests
         using var b = Vp8lReferencePredictor.SelectAndApply(second, 19, minimum, maximum, false, specialized, greenOnly: true);
         Assert.Equal((a.SelectedBits, a.StoredBits, a.EntropyCost), (b.SelectedBits, b.StoredBits, b.EntropyCost));
         Assert.True(a.Modes.SequenceEqual(b.Modes)); Assert.Equal(first, second);
-        Assert.Equal(generic.ConsumedWork, specialized.ConsumedWork);
         Assert.Equal(2 * 19 * 7 * 4 + a.Modes.Length + b.Modes.Length, root.Bytes);
         a.Dispose(); b.Dispose(); Assert.Equal(2 * 19 * 7 * 4, root.Bytes); Assert.False(root.IsDisposed);
     }
@@ -127,17 +124,5 @@ public sealed class Vp8lGreenPredictorHistogramTests
         using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
         using var next = Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, nextContext, greenOnly: true);
         next.Dispose(); Assert.Equal(pixels.Length * 4, root.Bytes);
-    }
-
-    [Fact]
-    public void WorkRefusalInsideSpecializedTileRefundsAnalysisWithoutPublishingPixels()
-    {
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = 14 * 1024 + 55 }, default);
-        var pixels = Input(context); var original = pixels.ToArray();
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, context, greenOnly: true));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(14 * 1024, context.ConsumedWork); Assert.Equal(original, pixels);
-        Assert.Equal(pixels.Length * 4, root.Bytes); Assert.Equal(0, root.Refusals);
     }
 }

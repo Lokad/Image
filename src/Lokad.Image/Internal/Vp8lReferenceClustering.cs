@@ -72,7 +72,7 @@ internal static class Vp8lReferenceClustering
             for (var bank = 0; bank < 5; bank++)
             {
                 var samples = counts.Slice(Start(bank), Size(bank)); var nonzero = 0; var last = -1;
-                context.Work(samples.Length);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var symbol = 0; symbol < samples.Length; symbol++) if (samples[symbol] != 0) { nonzero++; last = symbol; }
                 if (nonzero != 0) result.Used |= 1 << bank;
                 var cost = Vp8lReferenceEntropy.Population(samples, context); result.Total += cost;
@@ -92,7 +92,7 @@ internal static class Vp8lReferenceClustering
                 position += tokens[i].Length;
             }
             if (position != width * height) throw new ArgumentException("Tokens do not cover their image.", nameof(tokens));
-            context.Work(original.Length); original.CopyTo(working, 0);
+            context.Cancellation.ThrowIfCancellationRequested(); original.CopyTo(working, 0);
             for (var tile = 0; tile < tiles; tile++)
             {
                 var stats = Initial(original.AsSpan(tile * layout.Total, layout.Total)); originals[tile] = items[tile] = stats;
@@ -102,12 +102,12 @@ internal static class Vp8lReferenceClustering
 
         private bool Evaluate(int aSlot, int bSlot, bool fromOriginal, long maximum, out Pair pair)
         {
-            context.Work(1); pair = default; if (maximum <= 0) return false;
+            context.Cancellation.ThrowIfCancellationRequested(); pair = default; if (maximum <= 0) return false;
             var a = items[aSlot]; var b = fromOriginal ? originals[bSlot] : items[bSlot];
             var bCounts = fromOriginal ? original : working;
             for (var bank = 0; bank < 5; bank++)
             {
-                context.Work(1); var flag = 1 << bank; long cost;
+                context.Cancellation.ThrowIfCancellationRequested(); var flag = 1 << bank; long cost;
                 if ((a.Used & flag) == 0 || (b.Used & flag) == 0 || a.Trivial(bank) >= 0 && a.Trivial(bank) == b.Trivial(bank))
                     cost = (a.Used & flag) != 0 ? a.Cost(bank) : b.Cost(bank);
                 else
@@ -123,7 +123,7 @@ internal static class Vp8lReferenceClustering
 
         private void Combine(int aSlot, int bSlot, Pair costs)
         {
-            var a = items[aSlot]; var b = items[bSlot]; context.Work(layout.Total);
+            var a = items[aSlot]; var b = items[bSlot]; context.Cancellation.ThrowIfCancellationRequested();
             for (var i = 0; i < layout.Total; i++) working[aSlot * layout.Total + i] += working[bSlot * layout.Total + i];
             for (var bank = 0; bank < 5; bank++) a.Set(bank, costs.Cost(bank), a.Trivial(bank) == b.Trivial(bank) ? a.Trivial(bank) : -1);
             a.Total = costs.Total; a.Used |= b.Used; items[aSlot] = a;
@@ -145,7 +145,7 @@ internal static class Vp8lReferenceClustering
         }
         private long Push(int a, int b, long threshold, int capacity)
         {
-            context.Work(1); if (pairs == capacity) return 0;
+            context.Cancellation.ThrowIfCancellationRequested(); if (pairs == capacity) return 0;
             var pair = new Pair { A = Math.Min(a, b), B = Math.Max(a, b) };
             if (!Refresh(ref pair, threshold)) return 0;
             pool[pairs++] = pair; Promote(pairs - 1); return pair.Delta;
@@ -154,14 +154,14 @@ internal static class Vp8lReferenceClustering
         private void MergeLowBins()
         {
             var minimum = long.MaxValue; var maximum = long.MinValue;
-            for (var i = 0; i < count; i++) { context.Work(1); var cost = items[slots[i]].C0; minimum = Math.Min(minimum, cost); maximum = Math.Max(maximum, cost); }
+            for (var i = 0; i < count; i++) { context.Cancellation.ThrowIfCancellationRequested(); var cost = items[slots[i]].C0; minimum = Math.Min(minimum, cost); maximum = Math.Max(maximum, cost); }
             var range = maximum - minimum;
             for (var i = 0; i < count; i++)
-            { context.Work(1); items[slots[i]].Bin = range == 0 ? 0 : (int)((4 - 1e-6) * (items[slots[i]].C0 - minimum) / range); }
+            { context.Cancellation.ThrowIfCancellationRequested(); items[slots[i]].Bin = range == 0 ? 0 : (int)((4 - 1e-6) * (items[slots[i]].C0 - minimum) / range); }
             Span<int> first = stackalloc int[4]; first.Fill(-1);
             for (var at = 0; at < count;)
             {
-                context.Work(1); var bin = items[slots[at]].Bin;
+                context.Cancellation.ThrowIfCancellationRequested(); var bin = items[slots[at]].Bin;
                 if (first[bin] < 0) { first[bin] = at++; continue; }
                 Combine(slots[first[bin]], slots[at], default); Remove(at);
             }
@@ -174,10 +174,10 @@ internal static class Vp8lReferenceClustering
             Span<long> maximum = stackalloc long[3]; maximum.Fill(long.MinValue);
             for (var i = 0; i < count; i++)
             for (var c = 0; c < 3; c++)
-            { context.Work(1); var cost = items[slots[i]].Cost(c); minimum[c] = Math.Min(minimum[c], cost); maximum[c] = Math.Max(maximum[c], cost); }
+            { context.Cancellation.ThrowIfCancellationRequested(); var cost = items[slots[i]].Cost(c); minimum[c] = Math.Min(minimum[c], cost); maximum[c] = Math.Max(maximum[c], cost); }
             for (var i = 0; i < count; i++)
             {
-                context.Work(3); ref var item = ref items[slots[i]]; item.Bin = 0;
+                context.Cancellation.ThrowIfCancellationRequested(); ref var item = ref items[slots[i]]; item.Bin = 0;
                 for (var c = 0; c < 3; c++) { var range = maximum[c] - minimum[c]; item.Bin = item.Bin * 4 + (range == 0 ? 0 : (int)((4 - 1e-6) * (item.Cost(c) - minimum[c]) / range)); }
             }
             Span<int> first = stackalloc int[64]; first.Fill(-1);
@@ -192,7 +192,7 @@ internal static class Vp8lReferenceClustering
             }
             for (var at = 0; at < count;)
             {
-                context.Work(1); var candidate = items[slots[at]]; var bin = candidate.Bin;
+                context.Cancellation.ThrowIfCancellationRequested(); var candidate = items[slots[at]]; var bin = candidate.Bin;
                 if (first[bin] < 0) { first[bin] = at++; continue; }
                 var aSlot = slots[first[bin]]; var a = items[aSlot]; var change = -((candidate.Total * factor + 50) / 100);
                 if (!Evaluate(aSlot, slots[at], false, a.Total + candidate.Total + change, out var costs)) { at++; continue; }
@@ -214,7 +214,7 @@ internal static class Vp8lReferenceClustering
                 var best = pairs == 0 ? 0 : pool[0].Delta; var range = (uint)((count - 1) * count); var tries = count / 2;
                 for (var trial = 0; count >= 2 && trial < tries; trial++)
                 {
-                    context.Work(1); seed = (uint)((ulong)seed * 48271 % 2147483647); var value = seed % range;
+                    context.Cancellation.ThrowIfCancellationRequested(); seed = (uint)((ulong)seed * 48271 % 2147483647); var value = seed % range;
                     var a = (int)(value / (count - 1)); var b = (int)(value % (count - 1)); if (b >= a) b++;
                     var delta = Push(a, b, best, capacity); if (delta < 0) { best = delta; if (pairs == capacity) break; }
                 }
@@ -223,7 +223,7 @@ internal static class Vp8lReferenceClustering
                 Combine(slots[first], slots[second], chosen); Remove(second);
                 for (var at = 0; at < pairs;)
                 {
-                    context.Work(1); var pair = pool[at]; var a = pair.A == first || pair.A == second; var b = pair.B == first || pair.B == second;
+                    context.Cancellation.ThrowIfCancellationRequested(); var pair = pool[at]; var a = pair.A == first || pair.A == second; var b = pair.B == first || pair.B == second;
                     if (a && b) { RemovePair(at); continue; }
                     if (a || b) { Rename(ref pair, second, first); if (!Refresh(ref pair, 0)) { RemovePair(at); continue; } }
                     Rename(ref pair, count, second); pool[at] = pair; Promote(at); at++;
@@ -241,11 +241,11 @@ internal static class Vp8lReferenceClustering
             for (var a = 0; a < count; a++) for (var b = a + 1; b < count; b++) Push(a, b, 0, capacity);
             while (pairs != 0)
             {
-                context.Work(1); var chosen = pool[0]; var a = chosen.A; var b = chosen.B;
+                context.Cancellation.ThrowIfCancellationRequested(); var chosen = pool[0]; var a = chosen.A; var b = chosen.B;
                 Combine(slots[a], slots[b], chosen); Remove(b);
                 for (var at = 0; at < pairs;)
                 {
-                    context.Work(1); var pair = pool[at];
+                    context.Cancellation.ThrowIfCancellationRequested(); var pair = pool[at];
                     if (pair.A == a || pair.A == b || pair.B == a || pair.B == b) { RemovePair(at); continue; }
                     Rename(ref pair, count, b); pool[at] = pair; Promote(at); at++;
                 }
@@ -264,7 +264,7 @@ internal static class Vp8lReferenceClustering
                 var map = result.WritableMap;
                 for (var tile = 0; tile < tiles; tile++)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (originals[tile].Used == 0) { map[tile] = tile == 0 ? 0 : map[tile - 1]; continue; }
                     long best = long.MaxValue;
                     for (var group = 0; group < count; group++)
@@ -277,7 +277,7 @@ internal static class Vp8lReferenceClustering
                 var output = result.WritablePopulations;
                 for (var tile = 0; tile < tiles; tile++)
                 {
-                    context.Work(layout.Total); var start = map[tile] * layout.Total;
+                    context.Cancellation.ThrowIfCancellationRequested(); var start = map[tile] * layout.Total;
                     for (var i = 0; i < layout.Total; i++) output[start + i] += original[tile * layout.Total + i];
                 }
                 return result;
@@ -301,10 +301,10 @@ internal static class Vp8lReferenceClustering
         // Two flat count slabs, two conservative metadata allowances, index
         // slots and a fixed pair pool. Paired costs need no sum scratch.
         var reserved = tiles * (layout.Total * 8L + 192) + pairCapacity * 64L + 512;
-        context.Work(0); context.Reserve(reserved);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
         try
         {
-            context.Work(0); var state = new State(tiles, layout, context, quality, threshold);
+            context.Cancellation.ThrowIfCancellationRequested(); var state = new State(tiles, layout, context, quality, threshold);
             state.Fill(tokens, width, height, tileBits); return state.Finish(lowEffort, columns, tileBits);
         }
         finally { context.Release(reserved); }

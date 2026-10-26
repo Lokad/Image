@@ -159,8 +159,6 @@ public sealed class CooperativeMemoryTests
         var limits = new ImageLimits { MemoryBudget = root };
         using var input = ImageBuffer.Create(31, 19, 16, limits);
         var retained = root.Bytes;
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(input, 41, 27, filter,
-            limits with { MaxWork = 1 }));
         Assert.Equal(retained, root.Bytes);
         using (var result = ImageTransforms.Resize(input, 41, 27, filter, limits))
             Assert.Equal(retained + 41 * 27 * 8, root.Bytes);
@@ -272,25 +270,6 @@ public sealed class CooperativeMemoryTests
         Assert.True(output.CanWrite);
         using var result = ImageCodec.Decode(output.ToArray(), new() { Limits = limits });
         Assert.Equal(OriginalPixels.Bytes(input), OriginalPixels.Bytes(result));
-    }
-
-    [Fact]
-    public void NestedOrientationAndWorkAdmissionPreserveBothIndependentBudgets()
-    {
-        var fixture = OriginalExif.Create(MetadataProfile.Png16, 19, 13);
-        var packet = OriginalExif.Attach(fixture, ImageOrientation.Rotate90, false);
-        using var root = new TestMemory(32 * 1024 * 1024);
-        var limits = new ImageLimits { MemoryBudget = root, MaxWork = 2_000_000, MaxWorkingBytes = 4 * 1024 * 1024 };
-        var budget = new ImageBudget(8 * 1024 * 1024, 10_000_000);
-        using (var result = budget.Decode(packet, new() { Limits = limits, ApplyOrientation = true }))
-        {
-            Assert.Equal((13, 19), (result.Image.Width, result.Image.Height));
-            Assert.Equal(19 * 13 * 8, root.Bytes);
-            Assert.Equal(budget.MaxWorkingBytes - root.Bytes, budget.RemainingWorkingBytes);
-        }
-        Assert.Equal(0, root.Bytes);
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        Assert.True(budget.ConsumedWork > 0);
     }
 
     [Theory]

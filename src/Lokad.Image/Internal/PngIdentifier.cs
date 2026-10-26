@@ -4,7 +4,7 @@ namespace Lokad.Image.Internal;
 
 // Metadata-only scan: the pixel decoder's scan/CRC path stays unchanged.
 // PNG chunk grammar and CRC: https://www.w3.org/TR/png-3/.
-// Keep the same work, metadata and working-byte admission and failure order;
+// Keep the same metadata and working-byte admission and failure order;
 // palette/transparency bytes are charged as before, but need not be retained
 // when returning metadata. No intermediate decoder Header is materialized.
 internal static class PngIdentifier
@@ -31,7 +31,7 @@ internal static class PngIdentifier
                 if (value is not (>= 65 and <= 90) and not (>= 97 and <= 122))
                     throw new ImageDataException("Invalid PNG chunk name.");
             var payload = data.Slice(position + 8, length);
-            context.Work(length + 12L);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (PngIdentificationCrc32.Compute(data.Slice(position + 4, length + 4), context.Cancellation)
                 != BinaryPrimitives.ReadUInt32BigEndian(data[(position + 8 + length)..]))
                 throw new ImageDataException("Invalid PNG chunk CRC.");

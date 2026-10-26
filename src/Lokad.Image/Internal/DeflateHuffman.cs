@@ -8,7 +8,7 @@ internal static class DeflateHuffman
 
     internal static byte[] Lengths(int[] counts, int maximumBits, OperationContext context)
     {
-        context.Work(100L * counts.Length);
+        context.Cancellation.ThrowIfCancellationRequested();
         var capacity = counts.Length * 2;
         var weights = new int[capacity]; var depth = new int[capacity]; var parent = new int[capacity];
         var heap = new int[counts.Length]; var removal = new int[capacity];

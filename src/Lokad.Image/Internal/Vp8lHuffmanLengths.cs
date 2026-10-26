@@ -11,8 +11,8 @@ internal sealed class Vp8lHuffmanLengths : IDisposable
 
     private Vp8lHuffmanLengths(int count, OperationContext context)
     {
-        this.context = context; context.Work(0); context.Reserve(count);
-        try { context.Work(0); lengths = new byte[count]; }
+        this.context = context; context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(count);
+        try { context.Cancellation.ThrowIfCancellationRequested(); lengths = new byte[count]; }
         catch { context.Release(count); throw; }
     }
 
@@ -31,7 +31,7 @@ internal sealed class Vp8lHuffmanLengths : IDisposable
             // Five int arrays, one bool array, and a presized BCL priority queue
             // (conservatively 32 bytes/entry), including object/header allowance.
             var scratch = count * 53L + 512;
-            context.Reserve(scratch); reserved = scratch; context.Work(count);
+            context.Reserve(scratch); reserved = scratch; context.Cancellation.ThrowIfCancellationRequested();
             var weights = populations.ToArray(); var protectedRun = new bool[count];
             var first = new int[count]; var second = new int[count];
             var nodes = new int[count]; var depths = new int[count];
@@ -45,14 +45,14 @@ internal sealed class Vp8lHuffmanLengths : IDisposable
             if (leaves > 1 << maximum) throw new ArgumentException("Alphabet cannot fit the requested maximum depth.", nameof(maximum));
             for (long floor = 1; ; floor *= 2)
             {
-                queue.Clear(); context.Work(count); result.Writable.Clear();
+                queue.Clear(); context.Cancellation.ThrowIfCancellationRequested(); result.Writable.Clear();
                 for (var symbol = 0; symbol < count; symbol++)
                     if (weights[symbol] != 0) queue.Enqueue(symbol, (Math.Max(weights[symbol], floor), 0, -symbol));
                 if (leaves == 1) { result.Writable[queue.Dequeue()] = 1; return result; }
                 var serial = 0;
                 while (queue.Count > 1)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     queue.TryDequeue(out var left, out var leftPriority);
                     queue.TryDequeue(out var right, out var rightPriority);
                     first[serial] = left; second[serial] = right;
@@ -61,7 +61,7 @@ internal sealed class Vp8lHuffmanLengths : IDisposable
                 var used = 1; nodes[0] = queue.Dequeue(); depths[0] = 0; var deepest = 0;
                 while (used != 0)
                 {
-                    context.Work(1); used--; var node = nodes[used]; var depth = depths[used];
+                    context.Cancellation.ThrowIfCancellationRequested(); used--; var node = nodes[used]; var depth = depths[used];
                     if (node < count)
                     {
                         deepest = Math.Max(deepest, depth);
@@ -84,20 +84,20 @@ internal sealed class Vp8lHuffmanLengths : IDisposable
     private static void Smooth(Span<int> weights, Span<bool> protectedRun, OperationContext context)
     {
         var end = weights.Length;
-        while (end != 0 && weights[end - 1] == 0) { context.Work(1); end--; }
+        while (end != 0 && weights[end - 1] == 0) { context.Cancellation.ThrowIfCancellationRequested(); end--; }
         if (end == 0) return;
         for (var start = 0; start < end;)
         {
             var stop = start + 1;
-            while (stop < end && weights[stop] == weights[start]) { context.Work(1); stop++; }
-            context.Work(1);
+            while (stop < end && weights[stop] == weights[start]) { context.Cancellation.ThrowIfCancellationRequested(); stop++; }
+            context.Cancellation.ThrowIfCancellationRequested();
             if (stop - start >= (weights[start] == 0 ? 5 : 7)) protectedRun[start..stop].Fill(true);
             start = stop;
         }
         var span = 0; long sum = 0; var center = weights[0];
         for (var at = 0; at <= end; at++)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             var boundary = at == end || protectedRun[at] || at > 0 && protectedRun[at - 1]
                 || Math.Abs((long)weights[at] - center) >= 4;
             if (boundary)

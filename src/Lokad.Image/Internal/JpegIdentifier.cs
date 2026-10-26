@@ -18,31 +18,31 @@ internal static class JpegIdentifier
         var source = new JpegSourceMetadata();
         while (position < data.Length)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (scan && data[position] != 255)
             {
-                position++; // The first byte was admitted by Work(1) above.
+                position++;
                 // Admit the search extent from the remaining logical budget.
                 // Each search is bounded to 4 KiB for cancellation responsiveness;
                 // charge only the non-marker bytes actually consumed. A marker's
-                // own Work(1), length and validation stay in their original order.
-                var count = (int)Math.Min(context.RemainingWork, Math.Min(4096, data.Length - position));
+                // length and validation stay in their original order.
+                var count = Math.Min(4096, data.Length - position);
                 if (count != 0)
                 {
                     if (!context.Cancellation.CanBeCanceled)
                     {
-                        var consumed = EntropyRun(data.Slice(position, count), out var work);
-                        context.CommitAdmittedWork(work); position += consumed;
+                        var consumed = EntropyRun(data.Slice(position, count));
+position += consumed;
                         continue;
                     }
                     var nextMarker = data.Slice(position, count).IndexOf((byte)255);
                     var plain = nextMarker < 0 ? count : nextMarker;
-                    context.CommitAdmittedWork(plain); position += plain;
+position += plain;
                 }
                 continue;
             }
             if (data[position++] != 255) throw new ImageDataException("Invalid JPEG marker.");
-            while (position < data.Length && data[position] == 255) { position++; context.Work(1); }
+            while (position < data.Length && data[position] == 255) { position++; context.Cancellation.ThrowIfCancellationRequested(); }
             if (position == data.Length) break;
             var marker = data[position++];
             if (scan && marker == 0) continue;
@@ -63,7 +63,7 @@ internal static class JpegIdentifier
             var length = BinaryPrimitives.ReadUInt16BigEndian(data[position..]);
             if (length < 2 || length > data.Length - position) throw new ImageDataException("Truncated JPEG segment.");
             var payload = data.Slice(position + 2, length - 2); position += length;
-            context.Work(length);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (marker is >= 0xC0 and <= 0xCF && marker is not (0xC4 or 0xC8 or 0xCC))
             {
                 if (marker is not (0xC0 or 0xC2)) throw new UnsupportedImageException(UnsupportedImageFeature.CodingProfile, "This JPEG coding profile is not supported.", ImageFormat.Jpeg);
@@ -100,20 +100,19 @@ internal static class JpegIdentifier
         throw new ImageDataException("JPEG is missing EOI.");
     }
 
-    private static int EntropyRun(ReadOnlySpan<byte> data, out int work)
+    private static int EntropyRun(ReadOnlySpan<byte> data)
     {
         // T.81 B.1.1.5: FF00 is one opaque entropy byte; only FF is charged.
         // The caller admits the entire bounded raw span without cancellation.
         // Leave every actual marker and any uncertain final FF to the parser.
-        var position = 0; work = 0;
-        if (Vector512.IsHardwareAccelerated)
+        var position = 0;         if (Vector512.IsHardwareAccelerated)
         {
             var ff = Vector512.Create((byte)255);
             for (; position <= data.Length - 64;)
             {
                 var value = Vector512.LoadUnsafe(ref MemoryMarshal.GetReference(data), (nuint)position);
                 var markers = Vector512.ExtractMostSignificantBits(Vector512.Equals(value, ff));
-                if (markers == 0) { position += 64; work += 64; continue; }
+                if (markers == 0) { position += 64; continue; }
                 var zeros = Vector512.ExtractMostSignificantBits(Vector512.Equals(value, Vector512<byte>.Zero));
                 var actual = markers & ~(zeros >> 1);
                 var cross = (markers >> 63) != 0 && position + 64 < data.Length && data[position + 64] == 0;
@@ -121,21 +120,19 @@ internal static class JpegIdentifier
                 if (actual != 0)
                 {
                     var plain = BitOperations.TrailingZeroCount(actual);
-                    work += plain - BitOperations.PopCount(markers & ((1UL << plain) - 1));
                     return position + plain;
                 }
                 var consumed = cross ? 65 : 64;
-                work += consumed - BitOperations.PopCount(markers); position += consumed;
+position += consumed;
             }
         }
         while (position < data.Length)
         {
             var next = data[position..].IndexOf((byte)255);
-            if (next < 0) { work += data.Length - position; return data.Length; }
-            work += next; position += next;
+            if (next < 0) { return data.Length; }
+position += next;
             if (position == data.Length - 1 || data[position + 1] != 0) return position;
-            position += 2; work++;
-        }
+            position += 2;         }
         return position;
     }
 

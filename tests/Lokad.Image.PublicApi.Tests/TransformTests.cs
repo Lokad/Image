@@ -70,7 +70,6 @@ public sealed class TransformTests
         Assert.Throws<OperationCanceledException>(() => ImageBuffer.Create(1, 1, 8, cancellationToken: new CancellationToken(true)));
         using var image = ImageBuffer.Create(3, 2, 8);
         Assert.Throws<ArgumentOutOfRangeException>(() => ImageTransforms.Crop(image, 2, 0, 2, 1));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(image, 4, 4, limits: new ImageLimits { MaxWork = 1 }));
         image.Dispose();
         Assert.Throws<ObjectDisposedException>(() => image.GetRow8(0));
     }

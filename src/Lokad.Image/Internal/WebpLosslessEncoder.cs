@@ -13,7 +13,7 @@ internal static class WebpLosslessEncoder
         context.Reserve(reserved);
         try
         {
-            context.Work(0); var pixels = new uint[count];
+            context.Cancellation.ThrowIfCancellationRequested(); var pixels = new uint[count];
             for (var i = 0; i < pixels.Length; i++) pixels[i] = Pixel(image, i, context);
             using var prepared = Vp8lPreparedEncoding.Prepare(pixels, image.Width, options.Effort, context);
             // Prepared tokens contain all literal values and copy distances.
@@ -26,7 +26,7 @@ internal static class WebpLosslessEncoder
 
     private static uint Pixel(ImageBuffer image, int position, OperationContext context)
     {
-        context.Work(4);
+        context.Cancellation.ThrowIfCancellationRequested();
         var x = position % image.Width * 4; var y = position / image.Width;
         if (image.BitDepth == 8)
         {

@@ -2,7 +2,6 @@ namespace Lokad.Image.Internal;
 
 internal static partial class JpegEncoder
 {
-    private const int ReferenceGrayBlockWork = 1 + 64 * 36 + 4096 + 128 + 192;
 
     private static void EncodeReferenceGray(ImageBuffer? image, JpegSampleInput source, Stream output,
         JpegEncodeOptions options, OperationContext context)
@@ -11,12 +10,8 @@ internal static partial class JpegEncoder
         context.PixelBytes(width, height, image?.BitDepth ?? 8);
         if (width > 65535 || height > 65535)
             throw new ImageLimitException(ImageLimitKind.Dimension, "JPEG dimensions exceed 65535.");
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         var blocks = ((width + 7L) / 8) * ((height + 7L) / 8);
-        var restartWork = options.RestartInterval == 0 ? 0 : (blocks - 1) / options.RestartInterval * 5;
-        var plannedWork = 2 * blocks * ReferenceGrayBlockWork + blocks * 132 + 2L * JpegReferenceTables.HuffmanWork + restartWork + 4096;
-        if (plannedWork > context.RemainingWork)
-            throw new ImageLimitException(ImageLimitKind.Work, "Reference grayscale JPEG work exceeds the configured limit.");
         long borrowed = 0; var fixedReserved = image is null; var tablesReserved = false;
         JpegEntropyRecords? records = null;
         try
@@ -26,7 +21,7 @@ internal static partial class JpegEncoder
                 context.ReserveBorrowed(image.ByteLength); borrowed = image.ByteLength;
                 context.Reserve(ReferenceFixedBytes); fixedReserved = true;
             }
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             // Select using declared local limits before shared admission. A
             // refused reservation is terminal, never retried by recomputation.
             var recordBytes = blocks * 32 * sizeof(int);
@@ -40,7 +35,7 @@ internal static partial class JpegEncoder
             JpegGrayQuantization.Prepare(quantization, reciprocals);
             var histograms = new int[4][]; histograms[0] = new int[256]; histograms[2] = new int[256];
             ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, null, null, context, options.RestartInterval, records);
-            context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Work(0);
+            context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Cancellation.ThrowIfCancellationRequested();
             var tables = new JpegEncodingTable[4];
             tables[0] = JpegGrayReferenceTables.Huffman(histograms[0], context);
             tables[2] = JpegGrayReferenceTables.Huffman(histograms[2], context);
@@ -49,8 +44,8 @@ internal static partial class JpegEncoder
             if (records is null)
                 ReferenceGrayPass(image, source, width, height, options.BackgroundRgb, quantization, reciprocals, histograms, tables, writer, context, options.RestartInterval);
             else
-                records.Write(tables, writer, ReferenceGrayBlockWork);
-            writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
+                records.Write(tables, writer);
+            writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.WriteByte(255); output.WriteByte(217);
         }
         finally
         {
@@ -75,7 +70,7 @@ internal static partial class JpegEncoder
             // Single-component scans have one block per MCU. Both passes must
             // reset DC before collecting/encoding the first block of an interval.
             ReferenceRestart(mcu++, restartInterval, previous, writer, context);
-            context.Work(ReferenceGrayBlockWork);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (image is null && source.Format == JpegSampleFormat.Grayscale) source.CopyGrayBlock(left, top, samples);
             else
                 JpegGrayPreparation.CopyBlock(image, source, width, height, left, top, background, samples);
@@ -95,7 +90,7 @@ internal static partial class JpegEncoder
     private static void WriteReferenceGrayHeader(Stream output, int width, int height, ushort[] quantization,
         JpegEncodingTable[] tables, OperationContext context, int restartInterval)
     {
-        context.Work(2); output.WriteByte(255); output.WriteByte(216);
+        context.Cancellation.ThrowIfCancellationRequested(); output.WriteByte(255); output.WriteByte(216);
         // JFIF APP0 version1.01 with unitless1:1 density, matching the pinned
         // grayscale reference. It has no encoder-attribution comment to replace.
         ReferenceSegment(output, 224, [74, 70, 73, 70, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0], context);

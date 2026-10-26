@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "Cleanup20261026",
+  "productionChanged": true,
+  "scope": "Fuel/API removal, one explicit IMemoryBudget ownership model, dead VP8/orientation removal, token-identical bicubic helper extraction and maintenance cleanup. No CPU-speed claim.",
+  "version": "0.2.0",
+  "publishedReleaseModified": false,
+  "packagePublished": false,
+  "removedApis": [
+    "ImageLimits.MaxWork",
+    "ImageLimitKind.Work",
+    "ImageBudget",
+    "BudgetedImage",
+    "budget codec wrappers"
+  ],
+  "qualification": {
+    "windows": {
+      "normal": {
+        "internal": 1921,
+        "public": 2035,
+        "liveFfmpeg": 947,
+        "failed": 0,
+        "skipped": 0
+      },
+      "intrinsicsDisabled": {
+        "internal": 1921,
+        "public": 2035,
+        "failed": 0,
+        "skipped": 0
+      },
+      "sameActualPackageConsumerPassed": true,
+      "usageExamplesPassed": 3,
+      "logs": [
+        {
+          "path": "tmp/cleanup-windows-regression-final.log",
+          "sha256": "21000005de626be8d33089ebc5c9af2f2ad2451142ada2f63d456bbb7b6bc139"
+        },
+        {
+          "path": "tmp/cleanup-windows-internal-scalar.log",
+          "sha256": "88cb0fcd290fbf0c1ee4fbe9e461ab94c968cd892245e8b5a23b3ffe6e73fdb0"
+        },
+        {
+          "path": "tmp/cleanup-windows-public-scalar.log",
+          "sha256": "90d3df3f008d070b0c9a22bfe4d3bb8aa0057a05eed91f88d26f31ed644f5e47"
+        },
+        {
+          "path": "tmp/cleanup-package-windows.log",
+          "sha256": "f7af6ab203eaee7768d33c676215970866c1e4bd0164d53477e412c25c6ce203"
+        }
+      ]
+    },
+    "linux": {
+      "normal": {
+        "internal": 1921,
+        "public": 2035,
+        "liveFfmpeg": 947,
+        "failed": 0,
+        "skipped": 0
+      },
+      "intrinsicsDisabled": {
+        "internal": 1921,
+        "public": 2035,
+        "failed": 0,
+        "skipped": 0
+      },
+      "sameActualPackageConsumerPassed": true,
+      "usageExamplesPassed": 3,
+      "logs": [
+        {
+          "path": "tmp/cleanup-linux-evidence/cleanup-linux-regression.log",
+          "sha256": "e2a86bf65aaa8fc45c6f7dc139527d94343ca9b79f2967e89bf4c8a3c7df455d"
+        },
+        {
+          "path": "tmp/cleanup-linux-evidence/cleanup-linux-internal-scalar.log",
+          "sha256": "0a582d31f90578da78c7de2e65ec7f7b583b9b21648e9f315dccb637dae7bb67"
+        },
+        {
+          "path": "tmp/cleanup-linux-evidence/cleanup-linux-public-scalar.log",
+          "sha256": "59c2167bb18357e154a6705b6835f95183871a9c18155ac408384c65463e61de"
+        },
+        {
+          "path": "tmp/cleanup-linux-evidence/cleanup-package-linux.log",
+          "sha256": "17fff0fccf6dab82a1ec7fe81149b3d7434f3315cc0b8e178ab506387065eb0f"
+        }
+      ]
+    }
+  },
+  "cores": {
+    "windowsSha256": "d89bc372cd98fc16c3d433bf4d735436074ea69a5a27f6b8e6b5cf363abcbb85",
+    "linuxSha256": "74d1ef50665bd4ae8932fb11a772b4fd1dd7afbf2d28baad8fb2236660876621"
+  },
+  "actualPackage": {
+    "path": "artifacts/qualification/cleanup-20261026/Lokad.Image.0.2.0.nupkg",
+    "sha256": "8959bcb62346dc63ebe61f3810fb63ebb2c903b60b1def24b5a565735e9eaa47",
+    "bytes": 374203,
+    "containedLibrarySha256": "d89bc372cd98fc16c3d433bf4d735436074ea69a5a27f6b8e6b5cf363abcbb85",
+    "configuration": "Release",
+    "nugetDependencies": 0
+  },
+  "sourceManifest": {
+    "path": "tmp/cleanup-source-manifest.json",
+    "sha256": "4c39726408240417ccb420da7509737b313c2ab5aa0b83fc718c2f536c069e99",
+    "scope": "3177 regular tracked/new source, fixture and document files before this non-build-input evidence record. Raw snapshot retained; later package/doc evidence does not alter production."
+  },
+  "bicubic": {
+    "reviewedFiles": 22,
+    "priorLines": 5516,
+    "sharedClosedHelpers": 10,
+    "removedDuplicateCopies": 25,
+    "proofPath": "tmp/cleanup-bicubic-extraction-proof.json",
+    "proofSha256": "385ff5727be6b8d5d7d4ad200794b440d7d4c3aa556c7dc7b3fa0a2bcccba716",
+    "geometryIsaCacheTapOrderChanged": false,
+    "newMemoryAbstraction": false
+  },
+  "rawArchive": {
+    "path": "tmp/cleanup-20261026-qualified.tar.xz",
+    "sha256": "c2a3127982eaf3926d6e19f22ea2efff5e8c2f01f2bfdb9b10c476c6669b00f7",
+    "bytes": 18167592,
+    "members": 24,
+    "allMembersVerified": true
+  },
+  "evidenceReuse": "Frozen packet/pixel oracles, mathematical rounding proofs, reference settings and unchanged supplied-font comparisons retained. Prior end-to-end CPU/allocation timings are historical after fuel/caller changes. Package proofs reused after benchmark-only retirement; both core hashes unchanged.",
+  "remaining": "Full 253-case warm one-CPU upper<=1x qualification and replacement readiness remain open. Resolve current measurement uncertainty before optimizing."
+}

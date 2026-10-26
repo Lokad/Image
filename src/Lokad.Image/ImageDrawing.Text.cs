@@ -8,7 +8,7 @@ public static partial class ImageDrawing
     /// <remarks>Unhinted nonzero-winding coverage; glyphs composite in layout order.
     /// Color/alpha retain sixteen-bit precision until final canvas samples. Destinations
     /// clip to the canvas. No full-frame temporary, implicit orientation or font lookup.
-    /// Workspace admission precedes mutation; work/cancellation can leave completed chunks.</remarks>
+    /// Workspace admission precedes mutation; cancellation can leave completed chunks.</remarks>
     public static void DrawText(ImageBuffer canvas, TextLayout layout, double x, double y, RgbaColor color,
         ImageLimits? limits = null, CancellationToken cancellationToken = default)
     {

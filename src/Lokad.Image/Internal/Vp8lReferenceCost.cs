@@ -41,7 +41,7 @@ internal static partial class Vp8lReferenceCost
 
     internal static long Prediction(ReadOnlySpan<int> current, ReadOnlySpan<int> previous, OperationContext context)
     {
-        context.Work(1024);
+        context.Cancellation.ThrowIfCancellationRequested();
         long cost = 0;
         for (var plane = 0; plane < 4; plane++)
         {
@@ -62,7 +62,7 @@ internal static partial class Vp8lReferenceCost
 
     internal static long Shannon(ReadOnlySpan<int> counts, OperationContext context)
     {
-        context.Work(counts.Length);
+        context.Cancellation.ThrowIfCancellationRequested();
         var sum = 0; long cost = 0;
         foreach (var count in counts) { sum += count; cost -= SLog(count); }
         return cost + SLog(sum);

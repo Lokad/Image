@@ -55,7 +55,7 @@ public sealed partial class TrueTypeFont : IDisposable
             if (length > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Owned font exceeds the managed array limit.");
             context.ReserveBorrowed(length);
             context.Reserve(length + (long)DescriptorBytes);
-            context.Work(length);
+            context.Cancellation.ThrowIfCancellationRequested();
             return context;
         }
         catch { context.Dispose(); throw; }
@@ -116,7 +116,7 @@ public sealed partial class TrueTypeFont : IDisposable
         uint previous = 0;
         for (var i = 0; i < tableCount; i++)
         {
-            context.Work(1); var entry = data.AsSpan(12 + i * 16, 16);
+            context.Cancellation.ThrowIfCancellationRequested(); var entry = data.AsSpan(12 + i * 16, 16);
             var tag = U32(entry); var offset = U32(entry[8..]); var length = U32(entry[12..]);
             if (i != 0 && tag <= previous || offset > data.Length || length > data.Length - (long)offset
                 || length != 0 && (offset < 12 + tableCount * 16 || (offset & 3) != 0))
@@ -144,7 +144,7 @@ public sealed partial class TrueTypeFont : IDisposable
         if (first > glyf.Length) throw new ImageDataException("Invalid glyph location.");
         for (var i = 0; i < GlyphCount; i++)
         {
-            context.Work(1); var last = Location(i + 1);
+            context.Cancellation.ThrowIfCancellationRequested(); var last = Location(i + 1);
             if (last < first || last > glyf.Length) throw new ImageDataException("Invalid glyph location ordering.");
             if (last != first) Header(data.AsSpan(glyf.Offset + (int)first, (int)(last - first)));
             first = last;
@@ -156,7 +156,7 @@ public sealed partial class TrueTypeFont : IDisposable
 
     private FontGlyphMetrics Metrics(int glyphIndex, OperationContext context)
     {
-        context.Work(1); var metrics = Span(hmtx);
+        context.Cancellation.ThrowIfCancellationRequested(); var metrics = Span(hmtx);
         var advance = U16(metrics[(Math.Min(glyphIndex, metricCount - 1) * 4)..]);
         var bearing = I16(metrics[(glyphIndex < metricCount ? glyphIndex * 4 + 2 : metricCount * 4 + (glyphIndex - metricCount) * 2)..]);
         var glyph = Glyph(glyphIndex);
@@ -186,7 +186,7 @@ public sealed partial class TrueTypeFont : IDisposable
         var target = Tag(tag); var low = 0; var high = tableCount - 1;
         while (low <= high)
         {
-            context.Work(1); var mid = (low + high) / 2; var entry = data.AsSpan(12 + mid * 16, 16); var actual = U32(entry);
+            context.Cancellation.ThrowIfCancellationRequested(); var mid = (low + high) / 2; var entry = data.AsSpan(12 + mid * 16, 16); var actual = U32(entry);
             if (target < actual) high = mid - 1;
             else if (target > actual) low = mid + 1;
             else return new((int)U32(entry[8..]), (int)U32(entry[12..]));

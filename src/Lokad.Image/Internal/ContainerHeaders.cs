@@ -12,10 +12,10 @@ internal static class ContainerHeaders
         var source = new JpegSourceMetadata();
         while (position < data.Length)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (scan && data[position] != 255) { position++; continue; }
             if (data[position++] != 255) throw new ImageDataException("Invalid JPEG marker.");
-            while (position < data.Length && data[position] == 255) { position++; context.Work(1); }
+            while (position < data.Length && data[position] == 255) { position++; context.Cancellation.ThrowIfCancellationRequested(); }
             if (position == data.Length) break;
             var marker = data[position++];
             if (scan && marker == 0) continue;
@@ -36,7 +36,7 @@ internal static class ContainerHeaders
             var length = BinaryPrimitives.ReadUInt16BigEndian(data[position..]);
             if (length < 2 || length > data.Length - position) throw new ImageDataException("Truncated JPEG segment.");
             var payload = data.Slice(position + 2, length - 2); position += length;
-            context.Work(length);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (marker is >= 0xC0 and <= 0xCF && marker is not (0xC4 or 0xC8 or 0xCC))
             {
                 if (marker is not (0xC0 or 0xC2)) throw new UnsupportedImageException(UnsupportedImageFeature.CodingProfile, "This JPEG coding profile is not supported.", ImageFormat.Jpeg);
@@ -93,7 +93,7 @@ internal static class ContainerHeaders
             if (padded > data.Length - position - 8) throw new ImageDataException("Invalid WebP chunk length.");
             var payload = data.Slice(position + 8, (int)size);
             if ((size & 1) != 0 && data[position + 8 + (int)size] != 0) throw new ImageDataException("Invalid WebP padding.");
-            context.Work(size + 8L);
+            context.Cancellation.ThrowIfCancellationRequested();
             position += 8 + (int)padded;
             if (type.SequenceEqual("VP8X"u8))
             {

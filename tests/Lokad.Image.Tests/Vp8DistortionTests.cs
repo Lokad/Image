@@ -133,7 +133,7 @@ public sealed class Vp8DistortionTests
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var pairs = 0;
         for (var my = 0; my < input.StorageHeight; my += 16) for (var mx = 0; mx < input.Stride; mx += 16)
         {
-            context.Work(32_768); a.Fill(0x4d); b.Fill(0x4d);
+a.Fill(0x4d); b.Fill(0x4d);
             Predict(input.Y, input.Stride, mx, my, 16, yPred);
             Predict(input.U, input.Stride / 2, mx / 2, my / 2, 8, uPred);
             Predict(input.V, input.Stride / 2, mx / 2, my / 2, 8, vPred);

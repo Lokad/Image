@@ -72,104 +72,22 @@ public sealed class AsyncInputTests
         Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(512, growth.Consumed); Assert.False(growth.WasDisposed);
     }
 
-    [Fact]
-    public async Task InputAndWorkFailuresCommitOnlyConsumedWorkAndRecover()
-    {
-        var encoded = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
-        var limits = new ImageLimits { MaxWorkingBytes = 1_000_000, MaxWork = 1_000_000, MaxInputBytes = 23 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, 3_000_000);
-        using var input = new AsyncOnlyInput(encoded, 17);
-        var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.DecodeAsync(input, new() { Limits = limits }).AsTask());
-        Assert.Equal(ImageLimitKind.InputBytes, failure.Limit); Assert.Equal(17, budget.ConsumedWork);
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.False(input.WasDisposed);
-        var used = budget.ConsumedWork;
-        using var workInput = new AsyncOnlyInput(encoded, 17);
-        var work = await Assert.ThrowsAsync<ImageLimitException>(() => budget.IdentifyAsync(workInput,
-            limits with { MaxInputBytes = encoded.Length, MaxWork = 64 }).AsTask());
-        Assert.Equal(ImageLimitKind.Work, work.Limit); Assert.Equal(51, budget.ConsumedWork - used);
-        Assert.Equal(68, workInput.Consumed); Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        using var recovery = new AsyncOnlyInput(encoded, 113);
-        using var result = await budget.DecodeAsync(recovery, new() { Limits = limits with { MaxInputBytes = encoded.Length } });
-        using var expected = ImageCodec.Decode(encoded);
-        Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(result.Image));
-    }
-
     [Theory]
     [InlineData(false)] [InlineData(true)]
     public async Task CallerIoFailuresPropagateAndRefundReservations(bool decode)
     {
         var encoded = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
-        var limits = new ImageLimits { MaxWorkingBytes = 1_000_000, MaxWork = 1_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, 2_000_000);
+        var limits = new ImageLimits { MaxWorkingBytes = 1_000_000};
+        using var root = new TestMemoryBudget(limits.MaxWorkingBytes); limits = limits with { MemoryBudget = root };
         var expected = new IOException("Original caller failure.");
         using var input = new AsyncOnlyInput(encoded, 17) { Failure = expected, FailAfter = 17 };
         var actual = await Assert.ThrowsAsync<IOException>(async () =>
         {
-            if (decode) { using var result = await budget.DecodeAsync(input, new() { Limits = limits }); }
-            else await budget.IdentifyAsync(input, limits);
+            if (decode) { using var result = await ImageCodec.DecodeAsync(input, new() { Limits = limits }); }
+            else await ImageCodec.IdentifyAsync(input, limits);
         });
-        Assert.Same(expected, actual); Assert.Equal(17, budget.ConsumedWork);
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.False(input.WasDisposed);
-    }
-
-    [Fact]
-    public async Task SharedReservationSurvivesAwaitAndRetainedImageOwnsOnlyItsPixels()
-    {
-        var encoded = OriginalExif.Create(MetadataProfile.Png16, 17, 11).Encoded;
-        var limits = new ImageLimits { MaxWorkingBytes = 1_000_000, MaxWork = 1_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes + 77, 3_000_000);
-        using var caller = budget.Reserve(77);
-        using var input = new AsyncOnlyInput(encoded) { Pause = true };
-        var pending = budget.DecodeAsync(input, new() { Limits = limits }).AsTask();
-        try
-        {
-            await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
-            Assert.False(pending.IsCompleted); Assert.Equal(0, budget.RemainingWorkingBytes);
-            using var competing = new AsyncOnlyInput(encoded);
-            var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.IdentifyAsync(competing, limits).AsTask());
-            Assert.Equal(ImageLimitScope.SharedBudget, failure.Scope); Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit);
-            Assert.Equal(0, competing.ReadCalls);
-            input.Resume.TrySetResult();
-            using var result = await pending;
-            var expected = OriginalPixels.Bytes(result.Image);
-            Assert.Equal(limits.MaxWorkingBytes - expected.Length, budget.RemainingWorkingBytes);
-            Assert.True(budget.ConsumedWork > encoded.Length); Assert.False(input.WasDisposed);
-            using var anotherInput = new AsyncOnlyInput(encoded);
-            using var another = await ImageCodec.DecodeAsync(anotherInput);
-            Assert.Equal(expected, OriginalPixels.Bytes(another));
-            another.Dispose(); Assert.Equal(expected, OriginalPixels.Bytes(result.Image));
-            result.Dispose(); Assert.Equal(limits.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        }
-        finally
-        {
-            input.Resume.TrySetResult();
-            (await pending).Dispose();
-        }
-    }
-
-    [Fact]
-    public async Task CancellationDuringSuspendedReadRefundsAndKeepsCallerOwnership()
-    {
-        var encoded = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
-        var limits = new ImageLimits { MaxWorkingBytes = 1_000_000, MaxWork = 1_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork);
-        using var cancellation = new CancellationTokenSource();
-        using var input = new AsyncOnlyInput(encoded) { Pause = true };
-        var pending = budget.DecodeAsync(input, new() { Limits = limits }, cancellation.Token).AsTask();
-        try
-        {
-            await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5)); cancellation.Cancel();
-            var failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
-            Assert.Equal(cancellation.Token, failure.CancellationToken); Assert.Equal(cancellation.Token, input.LastToken);
-            Assert.Equal(0, budget.ConsumedWork); Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-            Assert.Equal(budget.MaxWork, budget.RemainingWork); Assert.False(input.WasDisposed);
-        }
-        finally
-        {
-            cancellation.Cancel(); input.Resume.TrySetResult();
-            try { (await pending).Dispose(); }
-            catch (OperationCanceledException) { }
-        }
+        Assert.Same(expected, actual);
+        Assert.Equal(0, root.Bytes); Assert.False(input.WasDisposed);
     }
 
     [Fact]
@@ -200,20 +118,17 @@ public sealed class AsyncInputTests
     {
         public int ReadCalls, EofReads, Consumed, LargestRequest;
         public CancellationToken LastToken;
-        public bool WasDisposed, Pause;
+        public bool WasDisposed;
         public int FailAfter = int.MaxValue;
         public int? InvalidCount;
         public IOException? Failure;
         public CancellationTokenSource? CancelAtEof;
-        public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public TaskCompletionSource Resume { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             ObjectDisposedException.ThrowIf(WasDisposed, this);
             LastToken = cancellationToken; ReadCalls++; LargestRequest = Math.Max(LargestRequest, buffer.Length);
             // Announce the actual suspension before queuing artificial yield
             // work, so phase entry does not depend on other test continuations.
-            if (Pause) { Entered.TrySetResult(); await Resume.Task.WaitAsync(cancellationToken); }
             await Task.Yield(); cancellationToken.ThrowIfCancellationRequested();
             if (InvalidCount is { } invalid) return invalid;
             if (Consumed >= FailAfter && Failure is { } failure) throw failure;

@@ -3,7 +3,7 @@ using System.IO.Compression;
 namespace Lokad.Image.Internal;
 
 // Buffered BCL output is speculative: a future compressed-data error must not
-// precede the current row's filter, palette or work checks. On that error, reopen
+// precede the current row's filter or palette checks. On that error, reopen
 // the same owned input, skip only bytes already delivered and resume unbuffered.
 internal sealed class PngInflatedReader : IDisposable
 {

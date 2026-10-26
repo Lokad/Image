@@ -161,15 +161,4 @@ public sealed class LanczosTests
         using (var next = ImageTransforms.Resize(source, 5, 3, ResizeFilter.Lanczos3, limits)) { }
         Assert.Equal(0, budget.Bytes);
     }
-    [Fact]
-    public void IndependentLocalAndWorkLimitsRemainTerminal()
-    {
-        using var source = Source(9, 7, 16); using var budget = new TestMemoryBudget(1_000_000);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 5, 3, ResizeFilter.Lanczos3,
-            new() { MaxWork = 1, MemoryBudget = budget })).Limit);
-        Assert.Equal(0, budget.Bytes);
-        Assert.Equal(ImageLimitKind.WorkingBytes, Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 5, 3, ResizeFilter.Lanczos3,
-            new() { MaxWorkingBytes = source.ByteLength + 5 * 3 * 8, MemoryBudget = budget })).Limit);
-        Assert.Equal(0, budget.Bytes);
-    }
 }

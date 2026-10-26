@@ -49,12 +49,12 @@ internal sealed class EncodedOutput : IDisposable
             var length = checked((int)encoded.Length);
             // A caller can recover an array from ReadOnlyMemory. Never expose
             // an earlier private packet through the unused backing capacity.
-            context.Work(bytes.Length - length); bytes.AsSpan(length).Clear();
-            context.Work(length);
+            context.Cancellation.ThrowIfCancellationRequested(); bytes.AsSpan(length).Clear();
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var offset = 0; offset < length;)
             {
                 var count = Math.Min(BlockBytes, length - offset);
-                context.Work(count);
+                context.Cancellation.ThrowIfCancellationRequested();
                 await output.WriteAsync(bytes.AsMemory(offset, count), context.Cancellation).ConfigureAwait(false);
                 context.Cancellation.ThrowIfCancellationRequested(); offset += count;
             }
@@ -63,8 +63,8 @@ internal sealed class EncodedOutput : IDisposable
         {
             for (var chunk = chunks?.Head; chunk is not null; chunk = chunk.Next)
             {
-                context.Work(chunk.Bytes.Length - chunk.Length); chunk.Bytes.AsSpan(chunk.Length).Clear();
-                context.Work(chunk.Length);
+                context.Cancellation.ThrowIfCancellationRequested(); chunk.Bytes.AsSpan(chunk.Length).Clear();
+                context.Cancellation.ThrowIfCancellationRequested();
                 await output.WriteAsync(chunk.Bytes.AsMemory(0, chunk.Length), context.Cancellation).ConfigureAwait(false);
                 context.Cancellation.ThrowIfCancellationRequested();
             }
@@ -124,7 +124,7 @@ internal sealed class EncodedOutput : IDisposable
                 var count = Math.Min(data.Length, tail.Bytes.Length - tail.Length);
                 data[..count].CopyTo(tail.Bytes.AsSpan(tail.Length));
                 tail.Length += count; length += count; data = data[count..];
-                context.Work(count);
+                context.Cancellation.ThrowIfCancellationRequested();
             }
         }
         public override void Write(byte[] buffer, int offset, int count) => Write(buffer.AsSpan(offset, count));

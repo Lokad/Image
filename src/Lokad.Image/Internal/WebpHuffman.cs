@@ -14,7 +14,7 @@ internal sealed class WebpHuffman
         Span<int> histogram = stackalloc int[16];
         histogram.Clear();
         var total = 0; var leaf = -1;
-        context.Work(lengths.Length * 16L);
+        context.Cancellation.ThrowIfCancellationRequested();
         for (var i = 0; i < lengths.Length; i++)
         {
             var length = lengths[i];
@@ -42,7 +42,7 @@ internal sealed class WebpHuffman
         var entries = prefixBits == 0 ? 0 : 1 << prefixBits;
         MemoryBytes = 320 + total * 2 + (entries == 0 ? 0 : entries * sizeof(int) + 32);
         context.Reserve(MemoryBytes);
-        if (entries != 0) context.Work(entries + 8L * total);
+        if (entries != 0) context.Cancellation.ThrowIfCancellationRequested();
         firstCode = new int[16]; counts = new int[16]; firstSymbol = new int[16]; symbols = new ushort[total];
         // A second negative sentinel describes a complete byte alphabet without
         // growing the charged object. Ordinary reads treat both as non-single.
@@ -63,7 +63,7 @@ internal sealed class WebpHuffman
         // Original canonical entries from the encoded lengths (RFC 9649,
         // section 3.7). Reverse each code for VP8L's LSB-first byte fields;
         // replicate only its unconsumed suffix. Zero entries use canonical
-        // traversal. All storage and bounded construction work were admitted.
+        // traversal. All lookup storage was admitted before construction.
         for (var length = 1; length <= prefixBits; length++)
         for (var index = 0; index < counts[length]; index++)
         {
@@ -101,7 +101,7 @@ internal sealed class WebpHuffman
 
     // The caller supplies a fresh zeroed slice of private, unwritten pixels.
     // For T>=768 and alphabet N>=T, <=6*T+4168 reversal/store iterations fit
-    // the14*N scan iterations saved above. No extra work or storage is charged.
+    // the14*N scan iterations saved above. No extra storage is charged.
     internal void BuildWideGreen(Span<uint> lookup)
     {
         if (!CanBuildWideGreen || lookup.Length != 4096) throw new ArgumentException("Invalid VP8L green lookup workspace.");

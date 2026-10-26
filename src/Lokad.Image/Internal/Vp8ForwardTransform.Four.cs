@@ -57,7 +57,7 @@ internal static partial class Vp8ForwardTransform
     }
 
     // Borrow four compact predictions and a strided 4x4 source; publish four
-    // compact coefficient blocks after all input reads. No heap storage or work
+    // compact coefficient blocks after all input reads. No heap storage or extra
     // boundary: the enclosing macroblock already admits its fixed stack space.
     internal static void DctFourPredictions(ReadOnlySpan<byte> source, int stride, ReadOnlySpan<byte> predictions, Span<short> output)
     {

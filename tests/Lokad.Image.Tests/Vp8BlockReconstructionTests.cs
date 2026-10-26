@@ -50,7 +50,6 @@ public sealed class Vp8BlockReconstructionTests
         for (var y = 0; y < source.Length / stride; y += 4)
         for (var x = 0; x < stride; x += 4)
         {
-            context.Work(1152);
             for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++) residual[dy * 4 + dx] = (short)(source[(y + dy) * stride + x + dx] - 128);
             Vp8ForwardTransform.Dct(residual, coefficients); Vp8BlockQuantization.Apply(coefficients, levels, matrix);
             AppendPixels(coefficients, block++, hash);
@@ -82,7 +81,6 @@ public sealed class Vp8BlockReconstructionTests
             Span<short> coefficients = stackalloc short[16]; Span<short> levels = stackalloc short[16];
             for (var my = 0; my < input.StorageHeight; my += 16) for (var mx = 0; mx < input.Stride; mx += 16)
             {
-                context.Work(16 * 1152);
                 for (var by = 0; by < 16; by += 4) for (var bx = 0; bx < 16; bx += 4)
                 {
                     for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++) residual[dy * 4 + dx] = (short)(input.Y[(my + by + dy) * input.Stride + mx + bx + dx] - 128);

@@ -9,15 +9,15 @@ internal partial struct Vp8BooleanReader
     // RFC6386 sections7.2/13.2: at most7token,11category and1sign decisions
     // for each of16coefficients. Each decision consumes at most7input bits.
     // 272partition bytes cover266consumed bytes,3lookahead bytes and slack.
-    // Selection is before work; short inputs, tight work and live cancellation
+    // Short inputs and live cancellation
     // retain the original bit-at-a-time reader and its partial failure state.
     internal bool CanReadCoefficientBlock(ReadOnlySpan<byte> data, OperationContext context)
-        => !context.Cancellation.CanBeCanceled && context.RemainingWork >= 304
+        => !context.Cancellation.CanBeCanceled
         && range is >= 128 and <= 255 && (uint)value < (uint)range && (uint)shift <= 7
         && end <= data.Length && end - position >= 272;
 
     // The decoder supplies its complete private model,16sample block and valid
-    // plane/context. The selected input/work bounds exclude mid-block failures.
+    // plane/context. The selected input bounds exclude mid-block failures.
     // One small stack state lives inside the existing8192B coarse allowance.
     internal bool ReadCoefficientBlock(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
@@ -38,7 +38,6 @@ internal partial struct Vp8BooleanReader
             if (reader.Read(128) != 0) sample = -sample;
             values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
         }
-        context.CommitAdmittedWork(reader.Work);
         // The buffered word contains the original8bit value followed by Bits
         // future bits. Discarding lookahead restores the exact public cursor.
         position = reader.Position - (reader.Bits + 7) / 8;
@@ -49,20 +48,18 @@ internal partial struct Vp8BooleanReader
     private ref struct BlockReader
     {
         private readonly ReadOnlySpan<byte> data;
-        internal int Position, Bits, Range, Work;
+        internal int Position, Bits, Range;
         internal uint Value;
 
         internal BlockReader(ReadOnlySpan<byte> data, int position, int shift, int range, int value)
         {
-            this.data = data; Position = position + 1; Bits = shift + 1; Range = range; Work = 0;
-            Value = ((uint)value << Bits) | ((uint)data[position] & ((1u << Bits) - 1));
+            this.data = data; Position = position + 1; Bits = shift + 1; Range = range;             Value = ((uint)value << Bits) | ((uint)data[position] & ((1u << Bits) - 1));
             Fill();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal int Read(int probability)
         {
-            Work++;
             var boundary = 1 + ((Range - 1) * probability >> 8);
             var bit = Value >> Bits >= (uint)boundary ? 1 : 0; var mask = -bit;
             Value -= (uint)(boundary & mask) << Bits;

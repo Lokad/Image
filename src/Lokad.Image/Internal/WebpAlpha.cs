@@ -21,7 +21,7 @@ internal static class WebpAlpha
             using var decoded = new WebpLosslessDecoder(payload[1..], width, height, context, header: false).Decode();
             for (var y = 0; y < height; y++)
             {
-                context.Work(width);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var row = decoded.GetRow8(y);
                 for (var x = 0; x < width; x++) alpha[y * width + x] = row[x * 4 + 1];
             }
@@ -36,7 +36,7 @@ internal static class WebpAlpha
         if (filter == 0) return;
         for (var y = 0; y < height; y++)
         {
-            context.Work(width * 4L);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var x = 0; x < width; x++)
             {
                 var position = y * width + x; int predictor;
@@ -60,7 +60,7 @@ internal static class WebpAlpha
         for (var offset = 0; offset < source.Length;)
         {
             var count = Math.Min(65536, source.Length - offset);
-            context.Work(count); source.Slice(offset, count).CopyTo(destination.Slice(offset, count));
+            context.Cancellation.ThrowIfCancellationRequested(); source.Slice(offset, count).CopyTo(destination.Slice(offset, count));
             offset += count;
         }
     }

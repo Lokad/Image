@@ -62,7 +62,7 @@ internal sealed class WarmAsyncPngDecode
         using var first = Decode(encoded); using var second = Decode(encoded); RequirePixels(first); RequirePixels(second);
         first.GetRow8(0)[0] ^= 255; RequirePixels(second); first.Dispose(); RequirePixels(second);
         var copy = encoded.ToArray(); using var survivor = Decode(copy); Array.Clear(copy); RequirePixels(survivor);
-        foreach (var limits in new[] { ImageLimits.Default with { MaxInputBytes = encoded.Length - 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { MaxWork = 1 } })
+        foreach (var limits in new[] { ImageLimits.Default with { MaxInputBytes = encoded.Length - 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { } })
         {
             try { using var invalid = Decode(encoded, new DecodeOptions { Limits = limits }); throw new InvalidOperationException("Async decoder accepted insufficient admission."); }
             catch (ImageLimitException) { }

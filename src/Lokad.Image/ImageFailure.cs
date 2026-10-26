@@ -14,7 +14,6 @@ public enum ImageLimitKind
     WorkingBytes,
     MetadataBytes,
     ContainerItems,
-    Work,
     /// <summary>A required buffer exceeds the managed array length limit.</summary>
     BufferLength
 }

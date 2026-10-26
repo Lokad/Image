@@ -6,9 +6,9 @@ origin into the target area before drawing. The exact minimum and maximum remain
 candidates despite floating-point subtraction or division rounding. False/null
 means no completed candidate fits; resource failures and cancellation propagate.
 
-One admission/work context owns preparation before allocation and survives a
+One admission context owns preparation before allocation and survives a
 successful layout. Rejected capacities release before the next trial; no best
-candidate overlaps another and work never resets. The caller's root/font/input
+candidate overlaps another. The caller's root/font/input
 remain borrowed. Nested caller results can survive outer no-fit cleanup. No
 raster canvas, global cache or intermediate retained layout was introduced.
 
@@ -25,7 +25,7 @@ Qualification passed **4,397 tests per OS**: 1,588 internal, 1,881 public API an
 passed with intrinsics disabled. Fourteen new fitting checks cover size endpoints,
 floating-point boundaries, wrapping discontinuities, overhang placement, identical
 rendering, no fit, aggregate/retained/nested ownership, peak capacity, every growth
-refusal, cumulative work, cancellation cleanup and successful subsequent calls.
+refusal, cancellation cleanup and successful subsequent calls.
 The same actual private 0.2.0 Release package passed both consumers, including
 fitting/shared admission, plus all three usage examples.
 

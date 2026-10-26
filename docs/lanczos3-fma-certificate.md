@@ -34,8 +34,7 @@ The plan checks that each axis has `sum(abs(weights)) <= B`.
 The horizontal cache has one admitted backing allocation viewed successively as
 Int64 and double; it is not copied or exposed. Row/sum capacities are reserved
 before allocation and released with the operation. Returned images retain their
-independent owner. A conservative local work bound includes every possible exact
-recomputation and row conversion. Insufficient local work or workspace selects
+independent owner. Insufficient local workspace selects
 the integer kernel before admission; refusal, cancellation and allocation failure
 terminate and clean up without retry or waiting for capacity.
 

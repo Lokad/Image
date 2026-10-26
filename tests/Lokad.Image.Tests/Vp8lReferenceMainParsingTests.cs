@@ -164,22 +164,4 @@ public sealed class Vp8lReferenceMainParsingTests
         using var next = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, 19, false, 10, nextContext);
         next.Dispose(); Assert.Equal(baseline, root.Bytes); Assert.Equal(0, root.Refusals);
     }
-
-    [Fact]
-    public void LateWorkFailureReleasesCachedCandidatesAndScratch()
-    {
-        uint[] pixels; uint[] index; long work;
-        using (var calibration = new OperationContext(ImageLimits.Default, default))
-        {
-            pixels = Hidden(calibration);
-            using var matches = Vp8lReferenceMatcher.Build(pixels, 19, 75, false, calibration); index = matches.Values.ToArray();
-            var start = calibration.ConsumedWork;
-            using var parsed = Vp8lReferenceMainParsing.Encode(pixels, index, 19, false, 10, calibration); work = calibration.ConsumedWork - start;
-        }
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceMainParsing.Encode(pixels, index, 19, false, 10, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
-    }
 }

@@ -47,9 +47,9 @@ internal sealed partial class IdentificationInput : IDisposable
                 }
                 scratch[..read].CopyTo(buffer.AsSpan(length));
                 length += read;
-                context.Work(read);
+                context.Cancellation.ThrowIfCancellationRequested();
             }
-            // Keep the established admission and work/error ordering. Parsing the
+            // Keep memory admission and format-error ordering. Parsing the
             // fully acquired private prefix avoids the former exact-sized copy.
             if ((long)buffer.Length + length + scratch.Length > limits.MaxWorkingBytes)
                 throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Stream buffering memory limit exceeded.");

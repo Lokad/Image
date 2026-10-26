@@ -18,9 +18,7 @@ public sealed class Vp8AlphaEncodingTests
     public async Task ExistingTransparentControlMatchesEntireNativePacketWithoutRetainingSource(int depth, int method, int alphaBytes, string alphaHash, int packetBytes, string packetHash)
     {
         using var root = new TestMemoryBudget(128_000_000);
-        // Exhaustive byte proof uses an explicit caller allowance; default work
-        // refusal is a separate required test. No default limit is changed.
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = method == 6 ? 64_000_000_000 : 2_000_000_000 }, default);
+        using var context = new OperationContext(new() { MemoryBudget = root}, default);
         using var source = OriginalVp8lControls.Buffer("asymmetric", depth, root);
         using var input = Vp8PreparedInput.Create(source, context);
         using var alpha = Vp8AlphaEncoding.Create(input.Alpha, input.Width, context, method);
@@ -32,7 +30,6 @@ public sealed class Vp8AlphaEncodingTests
             ? Vp8FramePlan.CreateDistortion(input, analysis, segments, quantization, method, context)
             : Vp8FramePlan.Create(input, segments, quantization, context, method: method);
         using var packet = Vp8FrameEncoding.Create(frame, context);
-        var preparationWork = context.ConsumedWork;
         source.Dispose(); input.Dispose(); analysis.Dispose(); segments.Dispose(); quantization.Dispose(); frame.Dispose();
         Assert.Equal(alpha.CapacityBytes + packet.CapacityBytes, root.Bytes);
         using var output = new MemoryStream(); packet.WriteWebp(output, alpha); var bytes = output.ToArray();
@@ -42,8 +39,6 @@ public sealed class Vp8AlphaEncodingTests
         Assert.Equal(packetBytes, packet.WebpLengthWithAlpha(alpha)); Assert.Equal(packetBytes, bytes.Length);
         Assert.Equal(packetHash, Convert.ToHexStringLower(SHA256.HashData(bytes)));
         using var second = new MemoryStream(); await packet.WriteWebpAsync(second, alpha); Assert.Equal(bytes, second.ToArray());
-        if (method == 6 && Environment.GetEnvironmentVariable("LOKAD_VP8_PACKET_TRACE") is { } workPath)
-            File.WriteAllText(workPath + "-alpha6-work.json", System.Text.Json.JsonSerializer.Serialize(new { preparationWork, workIncludingBothDeliveries = context.ConsumedWork, retainedAccountingBytes = root.Bytes, callerMaxWork = context.Limits.MaxWork, cpuOrGcAllocationMeasurement = false }));
         alpha.Dispose(); packet.Dispose(); Assert.Equal(0, root.Bytes); Assert.True(output.CanWrite); Assert.True(second.CanWrite); Assert.False(root.IsDisposed);
     }
 
@@ -105,11 +100,11 @@ public sealed class Vp8AlphaEncodingTests
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(5)]
-    public void CancellationLocalWorkAndOutputFailuresReleaseAllNewOwnership(int method)
+    public void CancellationLocalAndOutputFailuresReleaseAllNewOwnership(int method)
     {
-        var source = Ramp(); long work;
+        var source = Ramp();
         using (var sizing = new OperationContext(ImageLimits.Default, default))
-        { using var encoded = Vp8AlphaEncoding.Create(source, 17, sizing, method); work = sizing.ConsumedWork; }
+        { using var encoded = Vp8AlphaEncoding.Create(source, 17, sizing, method); }
         using var root = new TestMemoryBudget(10_000_000); using var cancel = new CancellationTokenSource();
         using var cancelled = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
         root.Admitted = _ => cancel.Cancel(); Assert.Throws<OperationCanceledException>(() => Vp8AlphaEncoding.Create(source, 17, cancelled, method));
@@ -117,7 +112,6 @@ public sealed class Vp8AlphaEncodingTests
         foreach (var limits in new ImageLimits[]
         {
             new() { MemoryBudget = root, MaxWorkingBytes = 127 },
-            new() { MemoryBudget = root, MaxWork = work - 1 },
             new() { MemoryBudget = root, MaxOutputBytes = 1 }
         })
         {

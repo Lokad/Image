@@ -29,6 +29,4 @@ internal static class OriginalVp8Controls
         yield return ["opaque", 16, 4, 75, 72380, "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f"];
         yield return ["asymmetric", 16, 4, 75, 98590, "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10"];
     }
-
-    internal static long WorkLimit(string name, int method) => name == "asymmetric" && method == 6 ? 64_000_000_000 : 2_000_000_000;
 }

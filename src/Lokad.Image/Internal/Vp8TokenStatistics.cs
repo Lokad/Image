@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace Lokad.Image.Internal;
 
 // Borrowed frame-level adaptive state. The enclosing encoder reserves the
-// counter/probability capacities and admits work/cancellation in block batches.
+// counter/probability capacities and admits cancellation in block batches.
 // RFC6386 section13 supplies coefficient branches and update probabilities.
 internal static class Vp8TokenStatistics
 {

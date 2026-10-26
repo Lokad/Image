@@ -7,14 +7,10 @@ internal sealed class OperationContext : IDisposable
     public ImageLimits Limits { get; }
     public CancellationToken Cancellation { get; }
     private long liveBytes;
-    private long work;
     private IMemoryScope? memoryScope;
     private IMemoryReservation? memory;
     internal bool HasMemoryBudget => Limits.MemoryBudget is not null;
-
-    public long RemainingWork => Limits.MaxWork - work;
     public long RemainingWorkingBytes => Limits.MaxWorkingBytes - liveBytes;
-    internal long ConsumedWork => work;
 
     public OperationContext(ImageLimits limits, CancellationToken cancellation)
     {
@@ -77,36 +73,6 @@ internal sealed class OperationContext : IDisposable
     internal void ReturnCoefficients(int[] bytes)
     {
         if (!HasMemoryBudget) JpegCoefficientPool.Shared.Return(bytes);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Work(long units)
-    {
-        Cancellation.ThrowIfCancellationRequested();
-        if (units < 0 || units > Limits.MaxWork - work)
-            throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
-        work += units;
-    }
-
-    // Publish charges already admitted by an exclusive loop against its saved
-    // remaining budget. Each charge must check cancellation before consumption.
-    // Cleanup must also publish completed work after cancellation, without a
-    // new cancellation check discarding charges or replacing the original error.
-    public void CommitAdmittedWork(long units)
-    {
-        if (units < 0 || units > Limits.MaxWork - work)
-            throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
-        work += units;
-    }
-
-    // An entropy code may admit its full logical bit cost together. When the
-    // budget is too tight, its caller retains the original one-bit sequence so
-    // partial consumption and format/limit failure precedence stay unchanged.
-    public bool TryWork(long units)
-    {
-        Cancellation.ThrowIfCancellationRequested();
-        if (units < 0 || units > Limits.MaxWork - work) return false;
-        work += units; return true;
     }
 
     public int PixelBytes(int width, int height, int bitDepth)

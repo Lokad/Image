@@ -22,7 +22,7 @@ separate products/additions. Independent rows and vertical frequencies are
 interleaved while retaining each sum’s x/y order. A conservative 2^-30 margin
 certifies the original rounded quantized integer; uncertain coefficients use
 the original direct evaluation. Standalone forward coefficient bits remain
-unchanged. The [independent proof](../docs/jpeg-forward-quantization.md) defines
+unchanged. The [independent proof](https://github.com/lokad/image/blob/39402e74e0f95c82ab209e5a950066a206c2af65/docs/jpeg-forward-quantization.md) defines
 the domain and bound. The original 4096-unit atomic work/cancellation boundary
 and fixed scratch admission remain; 512 stack bytes are reused and the existing
 coefficient-array allocation is preserved. No lookup, cache or heap buffer is added.

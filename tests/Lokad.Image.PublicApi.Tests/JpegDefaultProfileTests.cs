@@ -15,7 +15,6 @@ public sealed class JpegDefaultProfileTests
 
     [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)]
-    [InlineData(4)] [InlineData(5)] [InlineData(6)] [InlineData(7)]
     public async Task AllDefaultWrappersMatchTheFrozenPacket(int boundary)
     {
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
@@ -33,7 +32,6 @@ public sealed class JpegDefaultProfileTests
                 normalized.AsSpan((y * 513 + x) * 4, 3).CopyTo(rgb.AsSpan(y * stride + x * 3, 3));
         }
         var original = rgb.ToArray();
-        var budget = new ImageBudget(ImageLimits.Default.MaxWorkingBytes, long.MaxValue);
         async Task<byte[]> Encode(JpegEncodeOptions? options)
         {
             using var output = new MemoryStream();
@@ -43,14 +41,9 @@ public sealed class JpegDefaultProfileTests
                 case 1: ImageCodec.EncodeJpeg(rgb, 513, 259, JpegSampleFormat.Rgb, output, stride, options); break;
                 case 2: await ImageCodec.EncodeJpegAsync(image, output, options); break;
                 case 3: await ImageCodec.EncodeJpegAsync(rgb, 513, 259, JpegSampleFormat.Rgb, output, stride, options); break;
-                case 4: budget.EncodeJpeg(image, output, options); break;
-                case 5: budget.EncodeJpeg(rgb, 513, 259, JpegSampleFormat.Rgb, output, stride, options); break;
-                case 6: await budget.EncodeJpegAsync(image, output, options); break;
-                case 7: await budget.EncodeJpegAsync(rgb, 513, 259, JpegSampleFormat.Rgb, output, stride, options); break;
                 default: throw new ArgumentOutOfRangeException(nameof(boundary));
             }
             Assert.Equal(513L * 259 * 4, root.Bytes); Assert.False(root.IsDisposed);
-            Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.True(output.CanWrite);
             return output.ToArray();
         }
 

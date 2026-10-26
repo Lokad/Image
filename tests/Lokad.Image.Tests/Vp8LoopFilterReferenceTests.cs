@@ -40,21 +40,20 @@ public sealed class Vp8LoopFilterReferenceTests
             Vp8LoopFilter.Macroblock(actual, stride, column, row, size, level, sharpness, simple, skip, context);
             Assert.Equal(expected, actual);
             var edges = (column == 0 ? 0 : 1) + (row == 0 ? 0 : 1) + (skip ? 0 : 2 * (size / 4 - 1));
-            Assert.Equal(level == 0 ? 0 : edges * size * 64L, ImageLimits.Default.MaxWork - context.RemainingWork);
         }
     }
 
     [Theory]
-    [InlineData(false)]
+
     [InlineData(true)]
-    public void WorkAndCancellationRejectBeforeFirstWrite(bool cancel)
+    public void CancellationRejectBeforeFirstWrite(bool cancel)
     {
         var plane = Enumerable.Repeat((byte)108, 64 * 64).ToArray(); var original = plane.ToArray();
         using var cancellation = new CancellationTokenSource();
-        var context = new OperationContext(new ImageLimits { MaxWork = cancel ? 4096 : 1 }, cancellation.Token);
+        var context = new OperationContext(new ImageLimits { }, cancellation.Token);
         if (cancel) cancellation.Cancel();
         var error = Record.Exception(() => Vp8LoopFilter.Macroblock(plane, 64, 16, 16, 16, 40, 0, false, false, context));
-        if (cancel) Assert.IsType<OperationCanceledException>(error); else Assert.IsType<ImageLimitException>(error);
+        if (cancel) Assert.IsType<OperationCanceledException>(error);
         Assert.Equal(original, plane);
     }
 
@@ -84,7 +83,6 @@ public sealed class Vp8LoopFilterReferenceTests
             Vp8LoopFilter.Macroblock(actual, stride, x, y, size, level, sharpness, simple, skip, context);
             Assert.Equal(expected, actual);
             var edges = (x == 0 ? 0 : 1) + (y == 0 ? 0 : 1) + (skip ? 0 : 2 * (size / 4 - 1));
-            Assert.Equal(edges * size * 64L, ImageLimits.Default.MaxWork - context.RemainingWork);
         }
     }
 

@@ -22,7 +22,7 @@ internal static class Vp8Encoder
     private static Prepared Prepare(ImageBuffer image, WebpEncodeOptions options, OperationContext context)
     {
         if (options.Quality is < 1 or > 100 || options.Effort is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(options));
-        context.Work(0); context.PixelBytes(image.Width, image.Height, image.BitDepth);
+        context.Cancellation.ThrowIfCancellationRequested(); context.PixelBytes(image.Width, image.Height, image.BitDepth);
         if (image.Width > 16383 || image.Height > 16383)
             throw new ImageLimitException(ImageLimitKind.Dimension, "VP8 dimensions exceed 16383.");
         var borrowed = image.ByteLength; context.ReserveBorrowed(borrowed);

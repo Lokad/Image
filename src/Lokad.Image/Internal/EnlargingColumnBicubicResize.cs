@@ -16,9 +16,9 @@ internal static class EnlargingColumnBicubicResize
     private const uint DeferredPixel = 0x00FFFFFF;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
-        if (!TryApplyCore(source, result, scaleX, scaleY, tapsX, tapsY, rowWork, context, out var deferred)) return false;
+        if (!TryApplyCore(source, result, scaleX, scaleY, tapsX, tapsY, context, out var deferred)) return false;
         if (deferred) ReplayTiny(source, result, scaleX, scaleY, context);
         return true;
     }
@@ -26,7 +26,7 @@ internal static class EnlargingColumnBicubicResize
     // Exact tiny-alpha scratch is acquired only after this stack frame returns.
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool TryApplyCore(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context, out bool deferred)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context, out bool deferred)
     {
         deferred = false;
         if (source.BitDepth != 8 || result.Width < source.Width || result.Height < source.Height
@@ -82,7 +82,7 @@ internal static class EnlargingColumnBicubicResize
                     context.Cancellation.ThrowIfCancellationRequested();
                     // Integer centers on an unchanged axis have the exact
                     // cardinal kernel [0, 0, 1, 0, 0]. Omit zero-weight rows;
-                    // admission and work still charge the original support.
+                    // workspace admission still covers the original support.
                     var center = (y + .5) * source.Height / result.Height - .5;
                     // Retain original coordinate rounding even if callers raise
                     // dimension limits beyond exact binary64 products.
@@ -154,7 +154,7 @@ internal static class EnlargingColumnBicubicResize
                         for (var t = 0; t < count; t++)
                             sum = Avx.Add(sum, Avx.Multiply(cache[rows[t] + x], Vector256.Create(vertical[t])));
                         var normalizer = normalizers[x] * normalizerY;
-                        if (!TryWriteSingle(sum, normalizer, destination.Slice((tile + x) * 4, 4)))
+                        if (!BicubicMath.TryWriteByte(sum, normalizer, destination.Slice((tile + x) * 4, 4)))
                         {
                             if (!(normalizer >= .5)
                                 || !OriginalByte(source, result, tile + x, y, weights.Slice(x * 5, counts[x]),
@@ -165,7 +165,7 @@ internal static class EnlargingColumnBicubicResize
             }
             // Admission bounds complete original tap cost. Failed speculative
             // strips leave the counter untouched for original-order replay.
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
@@ -205,33 +205,6 @@ internal static class EnlargingColumnBicubicResize
         return true;
     }
 
-    private static bool TryWriteSingle(Vector256<double> sum, double normalizer, Span<byte> output)
-    {
-        const double unitError = 2.3283064365386963e-10;
-        const double maximum = 255d;
-        const double alphaError = unitError * maximum;
-        var alpha = sum.GetElement(3);
-        if (!(normalizer >= .5 && alpha > alphaError)) return false;
-        var values = Avx.Divide(sum, Vector256.Create(alpha, alpha, alpha, normalizer));
-        var magnitude = Math.Max(Math.Abs(values.GetElement(0)),
-            Math.Max(Math.Abs(values.GetElement(1)), Math.Abs(values.GetElement(2))));
-        var colorMargin = 2 * (alphaError * maximum + magnitude * alphaError) / (alpha - alphaError);
-        var alphaMargin = 2 * (alphaError + Math.Abs(values.GetElement(3)) * unitError) / (normalizer - unitError);
-        if (colorMargin >= .25 || !(values.GetElement(3) >= 1 + alphaMargin)) return false;
-        for (var c = 0; c < 4; c++)
-        {
-            var value = values.GetElement(c);
-            if (value >= 0 && value <= maximum
-                && Math.Abs(value - Math.Floor(value) - .5) <= (c == 3 ? alphaMargin : colorMargin)) return false;
-        }
-        var clipped = Avx.Min(Vector256.Create(maximum), Avx.Max(Vector256<double>.Zero, values));
-        var ints = Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
-        var shorts = Sse2.PackSignedSaturate(ints, Vector128<int>.Zero);
-        var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt32().GetElement(0);
-        BinaryPrimitives.WriteUInt32LittleEndian(output, packed);
-        return true;
-    }
-
     private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,
         ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, int sourceFirst,
         ReadOnlySpan<double> vertical, int firstY, OperationContext context, ref bool deferred)
@@ -260,12 +233,12 @@ internal static class EnlargingColumnBicubicResize
             deferred = true;
             return true;
         }
-        var aOut = RoundByte(normalized);
+        var aOut = BicubicMath.RoundByte(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow8(y).Slice(x * 4, 4);
-        destination[0] = RoundByte(color ? red / alphaSum : 0);
-        destination[1] = RoundByte(color ? green / alphaSum : 0);
-        destination[2] = RoundByte(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundByte(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundByte(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundByte(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
     }
@@ -305,15 +278,12 @@ internal static class EnlargingColumnBicubicResize
                 var rounded = ResizeAlpha.Round(source, x, y, result.Width, result.Height, ResizeFilter.Bicubic, context);
                 var color = rounded > 0 && alphaSum > 0;
                 var pixel = destination.Slice(x * 4, 4);
-                pixel[0] = RoundByte(color ? red / alphaSum : 0);
-                pixel[1] = RoundByte(color ? green / alphaSum : 0);
-                pixel[2] = RoundByte(color ? blue / alphaSum : 0);
+                pixel[0] = BicubicMath.RoundByte(color ? red / alphaSum : 0);
+                pixel[1] = BicubicMath.RoundByte(color ? green / alphaSum : 0);
+                pixel[2] = BicubicMath.RoundByte(color ? blue / alphaSum : 0);
                 pixel[3] = (byte)rounded;
             }
         }
     }
-
-    private static byte RoundByte(double value)
-        => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
 
 }

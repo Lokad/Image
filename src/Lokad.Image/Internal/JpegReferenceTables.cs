@@ -28,8 +28,6 @@ internal static class JpegReferenceTables
     private readonly record struct Symbol(int Value, long Weight);
     private sealed record Package(long Weight, int Leaf, Package? Left, Package? Right);
 
-    internal const int HuffmanWork = 131072;
-
     internal static JpegEncodingTable Huffman(int[] histogram, OperationContext context)
     {
         if (histogram.Length != 256) throw new ArgumentException("Byte alphabet required.");
@@ -44,7 +42,7 @@ internal static class JpegReferenceTables
         // was established by the caller before entering this temporary scope.
         var scratch = 65536L + (active + 1) * 2048L;
         context.Reserve(scratch);
-        try { context.Work(HuffmanWork); return Build(histogram, context); }
+        try { context.Cancellation.ThrowIfCancellationRequested(); return Build(histogram, context); }
         finally { context.Release(scratch); }
     }
 
@@ -68,7 +66,7 @@ internal static class JpegReferenceTables
         // determine the code-length multiset, excluding the reserved leaf.
         for (int level = 0; level <= 16; level++)
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             var packages = new List<Package>();
             for (int i = 0; i + 1 < previous.Count; i += 2)
                 packages.Add(new Package(previous[i].Weight + previous[i + 1].Weight, -1, previous[i], previous[i + 1]));
@@ -83,7 +81,7 @@ internal static class JpegReferenceTables
         for (int i = 0; i < ordered.Length - 1; i++) pending.Push(previous[i]);
         while (pending.Count != 0)
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             Package item = pending.Pop();
             if (item.Leaf >= 0) lengths[item.Leaf]++;
             else { pending.Push(item.Left!); pending.Push(item.Right!); }
@@ -114,7 +112,7 @@ internal static class JpegReferenceTables
     // pointer-sort implementation or lookup permutation is imported.
     private static void Order(Symbol[] data, int first, int last, OperationContext context)
     {
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         if (first >= last) return;
         if (last == first + 1)
         {

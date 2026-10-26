@@ -19,7 +19,7 @@ internal static class Vp8lReferenceEntropy
 
     internal static long Population(ReadOnlySpan<int> counts, OperationContext context)
     {
-        context.Work(counts.Length * 2L);
+        context.Cancellation.ThrowIfCancellationRequested();
         var sum = 0; var nonzero = 0; var maximum = 0; long entropy = 0;
         foreach (var count in counts)
         {
@@ -61,7 +61,7 @@ internal static class Vp8lReferenceEntropy
         if (a.Length != b.Length) throw new ArgumentException("Population lengths must match.", nameof(b));
         // Keep the separate addition and population charges without materializing
         // their sum. Equal summed runs share one exact integer logarithm.
-        context.Work(a.Length); context.Work(a.Length * 2L);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Cancellation.ThrowIfCancellationRequested();
         var sum = 0; var nonzero = 0; var maximum = 0; long entropy = 0;
         var zeroRuns = 0; var nonzeroRuns = 0; var shortZero = 0; var shortNonzero = 0; var longZero = 0; var longNonzero = 0;
         for (var start = 0; start < a.Length;)

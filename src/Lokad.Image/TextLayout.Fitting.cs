@@ -11,7 +11,7 @@ public sealed partial class TextLayout
     /// exact minimum. Wrapping is capped at width. Bounds must fit after translating
     /// their origin to (0,0): draw at (-layout.Bounds.X, -layout.Bounds.Y) within the
     /// target area. No raster is allocated. Completed nonfitting trials release
-    /// storage before the next trial; work is cumulative. Limit/admission refusal,
+    /// storage before the next trial; the same shared root is forwarded. Limit/admission refusal,
     /// cancellation, unsupported features and allocation failure terminate the call.
     /// </remarks>
     public static bool TryFit(TrueTypeFont font, string text, double width, double height,
@@ -51,7 +51,7 @@ public sealed partial class TextLayout
             // smaller size fails. One candidate is live at a time.
             for (var index = 0; index <= (int)intervals; index++)
             {
-                context.Work(1); var before = context.RemainingWorkingBytes;
+                context.Cancellation.ThrowIfCancellationRequested(); var before = context.RemainingWorkingBytes;
                 context.Reserve(512);
                 var candidate = options with { FontSize = index == (int)intervals ? minimumFontSize
                     : Math.Max(minimumFontSize, options.FontSize - index * fontSizeStep),

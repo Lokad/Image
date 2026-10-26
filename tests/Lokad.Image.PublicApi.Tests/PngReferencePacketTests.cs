@@ -75,19 +75,16 @@ public sealed class PngReferencePacketTests
                 image.GetRow16(y)[i] = BinaryPrimitives.ReadUInt16LittleEndian(pixels.AsSpan((y * 513 * 4 + i) * 2));
         }
         var options = new PngEncodeOptions { Limits = limits, Compression = compression };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork * 2);
+
         using var live = new CancellationTokenSource();
-        for (var boundary = 0; boundary < 4; boundary++)
+        for (var boundary = 0; boundary < 2; boundary++)
         {
-            using var output = new ForwardOutput(asyncOnly: boundary >= 2);
+            using var output = new ForwardOutput(asyncOnly: boundary == 1);
             if (boundary == 0) ImageCodec.EncodePng(image, output, options, live.Token);
-            else if (boundary == 1) budget.EncodePng(image, output, options, live.Token);
-            else if (boundary == 2) await ImageCodec.EncodePngAsync(image, output, options, live.Token);
-            else await budget.EncodePngAsync(image, output, options, live.Token);
+            else await ImageCodec.EncodePngAsync(image, output, options, live.Token);
             Assert.Equal(packetHash,
                 Convert.ToHexStringLower(SHA256.HashData(output.Bytes)));
             Assert.Equal(pixels.Length, root.Bytes); Assert.False(output.WasDisposed);
-            Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
         }
         Assert.Equal(pixels, OriginalPixels.Bytes(image)); Assert.False(root.IsDisposed);
     }

@@ -5,21 +5,6 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8ColorTests
 {
-    [Fact]
-    public void WorkAdmissionIsAtomicPerRowAndPrecedesNextRowAccess()
-    {
-        var original = Planes(33, 2, 0);
-        var planes = original with { Y = original.Y.AsSpan(0, original.Stride).ToArray() };
-        var rowWork = planes.Width * 64L;
-        foreach (var budget in new[] { rowWork - 1, rowWork, rowWork * 2 - 1 })
-        {
-            var context = Context(planes, null, ImageLimits.Default with { MaxWork = budget });
-            var error = Assert.Throws<ImageLimitException>(() => Vp8Color.Render(planes, null, context));
-            Assert.Equal("Computational work limit exceeded.", error.Message);
-            Assert.Equal(budget < rowWork ? budget : budget - rowWork, context.RemainingWork);
-            Assert.Equal(planes.MemoryBytes + planes.Width * planes.Height * 4L, LiveBytes(context));
-        }
-    }
 
     [Fact]
     public void ExactOutputMemoryAdmissionAndPlaneReleaseRemain()
@@ -29,22 +14,19 @@ public sealed class Vp8ColorTests
         var below = Context(planes, alpha, ImageLimits.Default with { MaxWorkingBytes = input + output - 1 });
         Assert.Throws<ImageLimitException>(() => Vp8Color.Render(planes, alpha, below));
         Assert.Equal(input, LiveBytes(below));
-        Assert.Equal(ImageLimits.Default.MaxWork, below.RemainingWork);
         var exact = Context(planes, alpha, ImageLimits.Default with { MaxWorkingBytes = input + output });
         using var result = Vp8Color.Render(planes, alpha, exact);
         Assert.Equal(output, LiveBytes(exact));
-        Assert.Equal(ImageLimits.Default.MaxWork - 33 * 3 * 64L, exact.RemainingWork);
     }
 
     [Fact]
-    public void CancellationPrecedesFirstRowAccessWithoutChargingWork()
+    public void CancellationPrecedesFirstRowAccessWithoutCharging()
     {
         var planes = Planes(33, 3, 0) with { Y = [] };
         using var cancellation = new CancellationTokenSource();
         var context = Context(planes, null, cancellation: cancellation.Token);
         cancellation.Cancel();
         Assert.Throws<OperationCanceledException>(() => Vp8Color.Render(planes, null, context));
-        Assert.Equal(ImageLimits.Default.MaxWork, context.RemainingWork);
         Assert.Equal(planes.MemoryBytes + 33 * 3 * 4L, LiveBytes(context));
     }
 

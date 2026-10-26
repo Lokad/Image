@@ -42,14 +42,14 @@ internal static partial class ZlibFraming
             bool final;
             do
             {
-                context.Work(1); final = reader.Read(1) != 0; var type = reader.Read(2);
+                context.Cancellation.ThrowIfCancellationRequested(); final = reader.Read(1) != 0; var type = reader.Read(2);
                 if (type == 0)
                 {
                     reader.Align(); var length = reader.Read(16); var complement = reader.Read(16);
                     if ((length ^ complement) != 65535) throw new ImageDataException("Invalid PNG Deflate stored length.");
                     if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
                     var start = reader.Position;
-                    reader.SkipBytes(length); context.Work(length);
+                    reader.SkipBytes(length); context.Cancellation.ThrowIfCancellationRequested();
                     if (materialize) data.Slice(start, length).CopyTo(destination.Slice((int)output, length));
                     output += length; continue;
                 }
@@ -81,7 +81,7 @@ internal static partial class ZlibFraming
                             var repeat = symbol == 16 ? reader.Read(2) + 3 : symbol == 17 ? reader.Read(3) + 3 : reader.Read(7) + 11;
                             if (repeat > total - position) throw new ImageDataException("PNG Deflate code repeat exceeds alphabet.");
                             var value = symbol == 16 ? lengths[position - 1] : 0;
-                            lengths.Slice(position, repeat).Fill(value); position += repeat; context.Work(repeat);
+                            lengths.Slice(position, repeat).Fill(value); position += repeat; context.Cancellation.ThrowIfCancellationRequested();
                         }
                     }
                 }
@@ -93,11 +93,6 @@ internal static partial class ZlibFraming
                 completeTrees &= literals.Complete && distances.Complete;
                 materialize &= completeTrees;
                 BuildLiteralLookup(literals, literalLookup, context); BuildDistanceLookup(distances, distanceLookup, context);
-                // Only reader bit charges occur in this exclusive region.
-                // Keep exact charges locally, retaining every cancellation poll,
-                // and publish on every exit before further parent-context work.
-                reader.BeginLocalWork();
-                try
                 {
                     if (!materialize)
                     {
@@ -111,8 +106,7 @@ internal static partial class ZlibFraming
                             distanceLookup, destination, output, expectedBytes, window);
                         continue;
                     }
-                    if (expectedBytes == destination.Length && reader.CanInflateMaterializedCursor(
-                        destination.Length - (int)output))
+                    if (expectedBytes == destination.Length && reader.CanInflateMaterializedCursor())
                     {
                         output = reader.InflateMaterializedCursor(literals, distances, literalLookup,
                             distanceLookup, destination, (int)output, window);
@@ -170,7 +164,6 @@ internal static partial class ZlibFraming
                         output += length;
                     }
                 }
-                finally { reader.EndLocalWork(); }
             } while (!final);
             if (output != expectedBytes) throw new ImageDataException("Truncated PNG pixel data.");
             reader.Align(); var checksum = reader.Position; reader.SkipBytes(4);
@@ -200,14 +193,14 @@ internal static partial class ZlibFraming
             bool final;
             do
             {
-                context.Work(1); final = reader.Read(1) != 0; var type = reader.Read(2);
+                context.Cancellation.ThrowIfCancellationRequested(); final = reader.Read(1) != 0; var type = reader.Read(2);
                 if (type == 0)
                 {
                     reader.Align(); var length = reader.Read(16); var complement = reader.Read(16);
                     if ((length ^ complement) != 65535) throw new ImageDataException("Invalid PNG Deflate stored length.");
                     if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
                     var start = reader.Position;
-                    reader.SkipBytes(length); context.Work(length);
+                    reader.SkipBytes(length); context.Cancellation.ThrowIfCancellationRequested();
                     if (completeTrees) destination.Stored(data.Slice(start, length));
                     output += length; continue;
                 }
@@ -239,7 +232,7 @@ internal static partial class ZlibFraming
                             var repeat = symbol == 16 ? reader.Read(2) + 3 : symbol == 17 ? reader.Read(3) + 3 : reader.Read(7) + 11;
                             if (repeat > total - position) throw new ImageDataException("PNG Deflate code repeat exceeds alphabet.");
                             var value = symbol == 16 ? lengths[position - 1] : 0;
-                            lengths.Slice(position, repeat).Fill(value); position += repeat; context.Work(repeat);
+                            lengths.Slice(position, repeat).Fill(value); position += repeat; context.Cancellation.ThrowIfCancellationRequested();
                         }
                     }
                 }
@@ -250,11 +243,6 @@ internal static partial class ZlibFraming
                 // Single/empty/incomplete alphabets retain BCL acceptance behavior.
                 completeTrees &= literals.Complete && distances.Complete;
                 BuildLiteralLookup(literals, literalLookup, context); BuildDistanceLookup(distances, distanceLookup, context);
-                // Only reader bit charges occur in this exclusive region.
-                // Keep exact charges locally, retaining every cancellation poll,
-                // and publish on every exit before further parent-context work.
-                reader.BeginLocalWork();
-                try
                 {
                     output = completeTrees
                         ? InflateStreamingBlock(ref reader, literals, distances, literalLookup, distanceLookup,
@@ -262,7 +250,6 @@ internal static partial class ZlibFraming
                         : CountBlock(ref reader, literals, distances, literalLookup, distanceLookup,
                             output, expectedBytes, window);
                 }
-                finally { reader.EndLocalWork(); }
             } while (!final);
             if (output != expectedBytes) throw new ImageDataException("Truncated PNG pixel data.");
             reader.Align(); var checksum = reader.Position; reader.SkipBytes(4);
@@ -416,38 +403,21 @@ internal static partial class ZlibFraming
         private int position;
         private ulong buffer;
         private int available;
-        private long remainingWork;
-        private long initialWork;
         public Bits(ReadOnlySpan<byte> data, OperationContext context)
         {
-            this.data = data; this.context = context; cancellation = context.Cancellation; remainingWork = -1;
-        }
+            this.data = data; this.context = context; cancellation = context.Cancellation;         }
         public readonly int Position => position;
-
-        public void BeginLocalWork()
-        {
-            initialWork = remainingWork = context.RemainingWork;
-        }
-
-        public void EndLocalWork()
-        {
-            if (remainingWork < 0) return;
-            // Completed charges survive cancellation or a format failure. A new
-            // cleanup poll would replace the original error or discard work.
-            context.CommitAdmittedWork(initialWork - remainingWork); remainingWork = -1;
-        }
 
         public long ReadLiteralRun(scoped ReadOnlySpan<ushort> lookup, long maximum)
         {
             // Framing needs only the output count for literal bytes. Walk their
             // RFC 1951 prefixes together, keeping the bit cache in locals rather
             // than re-entering the length/distance dispatcher for each byte.
-            // Cancelable operations retain both per-symbol cancellation checks
-            // and exact atomic bit charges in their separate local loop.
+            // Cancelable operations retain per-symbol checks in a separate loop.
             if (maximum <= 0) return 0;
             if (cancellation.CanBeCanceled) return ReadCancelableLiteralRun(lookup, maximum);
             var cached = buffer; var bits = available; var offset = position;
-            var budget = remainingWork; long count = 0;
+long count = 0;
             while (count < maximum)
             {
                 if (bits < 9)
@@ -458,26 +428,24 @@ internal static partial class ZlibFraming
                     offset += 4; bits += 32;
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
-                // Leave long/unassigned prefixes, EOB, matches, output overflow
-                // and a tight atomic work charge to the original dispatcher.
-                if (length == 0 || entry >> 4 >= 256 || length > budget) break;
-                cached >>= length; bits -= length; budget -= length; count++;
+                // Leave long/unassigned prefixes, EOB, matches and output overflow to the original dispatcher.
+                if (length == 0 || entry >> 4 >= 256) break;
+                cached >>= length; bits -= length; count++;
             }
-            buffer = cached; available = bits; position = offset; remainingWork = budget;
-            return count;
+            buffer = cached; available = bits; position = offset;             return count;
         }
 
         private long ReadCancelableLiteralRun(scoped ReadOnlySpan<ushort> lookup, long maximum)
         {
             var cached = buffer; var bits = available; var offset = position;
             var cancellation = this.cancellation;
-            var budget = remainingWork; long count = 0;
+long count = 0;
             while (count < maximum)
             {
-                // Poll at the original Peek/Work boundaries. On cancellation,
-                // a short tail or an insufficient atomic charge, commit the
+                // Poll at the bounded prefix boundaries. On cancellation,
+                // a short tail, commit the
                 // preceding literals and let the original dispatcher fail.
-                // No parent work changes and no format error throws here.
+                // No format error throws here.
                 if (cancellation.IsCancellationRequested) break;
                 if (bits < 9)
                 {
@@ -487,11 +455,10 @@ internal static partial class ZlibFraming
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
                 if (length == 0 || entry >> 4 >= 256) break;
-                if (cancellation.IsCancellationRequested || length > budget) break;
-                budget -= length; cached >>= length; bits -= length; count++;
+                if (cancellation.IsCancellationRequested) break;
+cached >>= length; bits -= length; count++;
             }
-            buffer = cached; available = bits; position = offset; remainingWork = budget;
-            return count;
+            buffer = cached; available = bits; position = offset;             return count;
         }
 
         public int CopyStreamingLiteralRun(scoped ReadOnlySpan<ushort> lookup, scoped Span<byte> destination)
@@ -501,13 +468,13 @@ internal static partial class ZlibFraming
         {
             var cached = buffer; var bits = available; var offset = position;
             var cancellation = this.cancellation;
-            var budget = remainingWork; var count = 0;
+var count = 0;
             while (count < destination.Length)
             {
-                // Poll at the original Peek/Work boundaries. On cancellation,
-                // a short tail or an insufficient atomic charge, commit the
+                // Poll at the bounded prefix boundaries. On cancellation,
+                // a short tail, commit the
                 // preceding literals and let the original dispatcher fail.
-                // No parent work changes and no format error throws here.
+                // No format error throws here.
                 if (cancellation.IsCancellationRequested) break;
                 if (bits < 9)
                 {
@@ -517,19 +484,18 @@ internal static partial class ZlibFraming
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
                 if (length == 0 || entry >> 4 >= 256) break;
-                if (cancellation.IsCancellationRequested || length > budget) break;
+                if (cancellation.IsCancellationRequested) break;
                 destination[count++] = (byte)(entry >> 4);
-                budget -= length; cached >>= length; bits -= length;
+cached >>= length; bits -= length;
             }
-            buffer = cached; available = bits; position = offset; remainingWork = budget;
-            return count;
+            buffer = cached; available = bits; position = offset;             return count;
         }
 
         public int CopyLiteralRun(scoped ReadOnlySpan<ushort> lookup, scoped Span<byte> destination)
         {
-            if (cancellation.CanBeCanceled || remainingWork < 0 || destination.IsEmpty) return 0;
+            if (cancellation.CanBeCanceled || destination.IsEmpty) return 0;
             var cached = buffer; var bits = available; var offset = position;
-            var budget = remainingWork; var count = 0;
+var count = 0;
             while (count < destination.Length)
             {
                 if (bits < 9)
@@ -539,27 +505,16 @@ internal static partial class ZlibFraming
                     offset += 4; bits += 32;
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
-                if (length == 0 || entry >> 4 >= 256 || length > budget) break;
+                if (length == 0 || entry >> 4 >= 256) break;
                 destination[count++] = (byte)(entry >> 4);
-                cached >>= length; bits -= length; budget -= length;
-            }
-            buffer = cached; available = bits; position = offset; remainingWork = budget;
-            return count;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Work(int count)
-        {
-            if (remainingWork < 0) { context.Work(count); return; }
-            cancellation.ThrowIfCancellationRequested();
-            if (count < 0 || count > remainingWork) throw new ImageLimitException(ImageLimitKind.Work, "Computational work limit exceeded.");
-            remainingWork -= count;
+                cached >>= length; bits -= length;             }
+            buffer = cached; available = bits; position = offset;             return count;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Read(int count)
         {
-            Work(count);
+            cancellation.ThrowIfCancellationRequested();
             Fill(count);
             var value = (int)(buffer & ((1u << count) - 1)); buffer >>= count; available -= count; return value;
         }
@@ -590,7 +545,7 @@ internal static partial class ZlibFraming
 
         public void Consume(int count)
         {
-            Work(count); buffer >>= count; available -= count;
+            cancellation.ThrowIfCancellationRequested(); buffer >>= count; available -= count;
         }
 
         public void Align()
@@ -617,7 +572,7 @@ internal static partial class ZlibFraming
 
         public Huffman(ReadOnlySpan<int> lengths, Span<int> counts, Span<int> symbols, OperationContext context)
         {
-            Counts = counts; Symbols = symbols; counts.Clear(); Maximum = 0; FirstLongCode = 0; context.Work(lengths.Length * 2L + 16);
+            Counts = counts; Symbols = symbols; counts.Clear(); Maximum = 0; FirstLongCode = 0; context.Cancellation.ThrowIfCancellationRequested();
             foreach (var length in lengths) if (length > 0) { counts[length]++; Maximum = Math.Max(Maximum, length); }
             var space = 1;
             for (var length = 1; length <= Maximum; length++)
@@ -644,7 +599,7 @@ internal static partial class ZlibFraming
     {
         // Conservative bounded construction charge: 512 clears/table writes, at most
         // 288 nine-bit reversals and canonical-symbol visits (RFC 1951 3.2.2).
-        context.Work(8192); lookup.Clear();
+        context.Cancellation.ThrowIfCancellationRequested(); lookup.Clear();
         int code = 0, index = 0;
         for (var length = 1; length <= 9; length++)
         {
@@ -674,7 +629,7 @@ internal static partial class ZlibFraming
     {
         if (tree.Maximum <= 9) return Decode(ref reader, tree.Counts, tree.Symbols, tree.Maximum);
         // A root miss has already excluded every assigned code through depth
-        // nine. Keep the original full lookahead and atomic matched-bit charge,
+        // nine. Keep the original full lookahead and exact matched-bit consumption,
         // but begin the canonical search at depth ten (RFC 1951 section 3.2.2).
         var bits = reader.Peek(tree.Maximum);
         var reversed = (uint)bits;
@@ -699,9 +654,8 @@ internal static partial class ZlibFraming
     private static void BuildDistanceLookup(scoped Huffman tree, scoped Span<ushort> lookup, OperationContext context)
     {
         // RFC 1951 section 3.2.2 canonical construction, five-bit root only.
-        // 32 clears/writes, at most 32 five-bit reversals and symbol visits
-        // fit within the conservative 512-unit construction charge.
-        context.Work(512); lookup.Clear();
+        // The five-bit root has at most 32 entries.
+        context.Cancellation.ThrowIfCancellationRequested(); lookup.Clear();
         int code = 0, index = 0;
         for (var length = 1; length <= 5; length++)
         {
@@ -727,9 +681,8 @@ internal static partial class ZlibFraming
 
     private static int Decode(scoped ref Bits reader, scoped ReadOnlySpan<int> counts, scoped ReadOnlySpan<int> symbols, int maximum)
     {
-        // A bounded lookahead and one work charge per prefix avoid repeating
-        // admission/cancellation accounting for every individual code bit.
-        // Consume still charges the exact matched length, never the lookahead.
+        // Bounded lookahead avoids refilling for each individual code bit.
+        // Consume advances only the exact matched length, never the lookahead.
         var bits = reader.Peek(maximum);
         int code = 0, first = 0, index = 0;
         for (var length = 1; length <= maximum; length++)

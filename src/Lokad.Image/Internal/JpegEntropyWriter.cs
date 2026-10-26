@@ -24,9 +24,9 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
     {
         if (buffer is null)
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             context.Reserve(StorageBytes);
-            try { context.Work(0); buffer = new byte[Capacity]; }
+            try { context.Cancellation.ThrowIfCancellationRequested(); buffer = new byte[Capacity]; }
             catch { context.Release(StorageBytes); throw; }
         }
         buffer[used++] = value;
@@ -36,7 +36,7 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
     private void Flush()
     {
         if (used == 0) return;
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         output.Write(buffer.AsSpan(0, used));
         used = 0;
     }
@@ -45,7 +45,7 @@ internal sealed class JpegEntropyWriter(Stream output, OperationContext context)
     {
         ObjectDisposedException.ThrowIf(disposed, this);
         if (count is < 0 or > 16 || value < 0 || value >= 1 << count) throw new ArgumentOutOfRangeException(nameof(value));
-        context.Work(1);
+        context.Cancellation.ThrowIfCancellationRequested();
         bits = bits << count | (uint)value; available += count;
         while (available >= 8)
         {

@@ -44,7 +44,7 @@ public static partial class ImageCodec
         {
             // Orientation is part of this decode's live-memory admission.
             context.ReserveBorrowed(result.ByteLength);
-            context.Work((long)result.Width * result.Height * 4);
+            context.Cancellation.ThrowIfCancellationRequested();
             return ImageTransforms.AutoOrient(result, options.Limits, context.Cancellation);
         }
         finally { result.Dispose(); }

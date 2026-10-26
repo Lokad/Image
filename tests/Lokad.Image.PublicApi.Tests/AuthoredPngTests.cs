@@ -134,7 +134,7 @@ public sealed class AuthoredPngTests
     }
 
     [Fact]
-    public void InflaterBufferPreservesOriginalMemoryAndWorkThresholds()
+    public void InflaterBufferPreservesOriginalMemoryAndThresholds()
     {
         var frame = new AuthoredPng.Frame("inflater-admission", 6, 8, 513, 9, false);
         var compressed = AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame));
@@ -146,21 +146,7 @@ public sealed class AuthoredPngTests
             Assert.Equal(expected, OriginalPixels.Bytes(image));
         }
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak - 1 } }));
-        using var cancellation = new CancellationTokenSource();
-        long low = 1, high = ImageLimits.Default.MaxWork;
-        while (low < high)
-        {
-            var middle = low + (high - low) / 2;
-            try { using var image = ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWork = middle } }, cancellation.Token); high = middle; }
-            catch (ImageLimitException) { low = middle + 1; }
-        }
-        foreach (var work in new[] { low - 1, low })
-        {
-            var options = new DecodeOptions { Limits = ImageLimits.Default with { MaxWork = work } };
-            var direct = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options); });
-            var original = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options, cancellation.Token); });
-            Assert.Equal(original?.GetType(), direct?.GetType()); Assert.Equal(original?.Message, direct?.Message);
-        }
+
     }
 
     [Theory]
@@ -188,7 +174,7 @@ public sealed class AuthoredPngTests
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void WidePaletteRowsRetainExactPixelsMemoryThresholdAndWorkFailure(bool interlace)
+    public void WidePaletteRowsRetainExactPixelsMemoryThresholdAndFailure(bool interlace)
     {
         var frame = new AuthoredPng.Frame("wide-palette-budget", 3, 8, 513, 5, interlace);
         var compressed = AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame));
@@ -202,22 +188,7 @@ public sealed class AuthoredPngTests
             Assert.Equal(expected, OriginalPixels.Bytes(image));
         }
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak - 1 } }));
-        using var cancellation = new CancellationTokenSource();
-        long low = 1, high = ImageLimits.Default.MaxWork;
-        while (low < high)
-        {
-            var middle = low + (high - low) / 2;
-            var options = new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak + 1024, MaxWork = middle } };
-            try { using var image = ImageCodec.Decode(encoded, options, cancellation.Token); high = middle; }
-            catch (ImageLimitException) { low = middle + 1; }
-        }
-        foreach (var work in new[] { low - 1, low })
-        {
-            var options = new DecodeOptions { Limits = ImageLimits.Default with { MaxWorkingBytes = peak + 1024, MaxWork = work } };
-            var direct = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options); });
-            var scalar = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options, cancellation.Token); });
-            Assert.Equal(scalar?.GetType(), direct?.GetType()); Assert.Equal(scalar?.Message, direct?.Message);
-        }
+
     }
 
     [Theory]

@@ -34,7 +34,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
     private static int Candidates(ReadOnlySpan<byte> alpha, int width, OperationContext context, int method)
     {
         Span<byte> colors = stackalloc byte[256]; colors.Clear();
-        for (var i = 0; i < alpha.Length; i++) { context.Work(1); colors[alpha[i]] = 1; }
+        for (var i = 0; i < alpha.Length; i++) { context.Cancellation.ThrowIfCancellationRequested(); colors[alpha[i]] = 1; }
         var count = 0; foreach (var color in colors) count += color;
         if (count <= 16) return 1;
         Span<ushort> bins = stackalloc ushort[4]; bins.Clear();
@@ -43,7 +43,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             var mean = (int)alpha[y * width];
             for (var x = 2; x < width - 1; x += 2)
             {
-                context.Work(8); var at = y * width + x; var value = alpha[at];
+                context.Cancellation.ThrowIfCancellationRequested(); var at = y * width + x; var value = alpha[at];
                 bins[0] |= (ushort)(1 << (Math.Abs(value - mean) >> 4));
                 for (var f = 1; f < 4; f++) bins[f] |= (ushort)(1 << (Math.Abs(value - Predict(alpha, width, at, f)) >> 4));
                 mean = (3 * mean + value + 2) >> 2;
@@ -63,21 +63,21 @@ internal sealed class Vp8AlphaEncoding : IDisposable
         if (method is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(method));
         if (width is < 1 or > 16383 || alpha.Length == 0 || alpha.Length % width != 0 || alpha.Length / width > 16383)
             throw new ArgumentException("Expected complete VP8 alpha rows.");
-        context.Work(0); context.PixelBytes(width, alpha.Length / width, 8);
+        context.Cancellation.ThrowIfCancellationRequested(); context.PixelBytes(width, alpha.Length / width, 8);
         var result = new Vp8AlphaEncoding(width, alpha.Length / width, context);
         try
         {
-            context.Reserve(128); result.capacity = 128; context.Work(0);
+            context.Reserve(128); result.capacity = 128; context.Cancellation.ThrowIfCancellationRequested();
             var scratch = alpha.Length * 4L + 512; context.Reserve(scratch);
             try
             {
-                context.Work(0); var working = new uint[alpha.Length]; var candidates = Candidates(alpha, width, context, method);
+                context.Cancellation.ThrowIfCancellationRequested(); var working = new uint[alpha.Length]; var candidates = Candidates(alpha, width, context, method);
                 for (var filter = 0; filter < 4; filter++)
                 {
                     if ((candidates & (1 << filter)) == 0) continue;
                     for (var i = 0; i < alpha.Length; i++)
                     {
-                        context.Work(4);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         // A/R/B are deliberately zero, including when alpha is
                         // carried in green: this is an internal exact image.
                         working[i] = (uint)((alpha[i] - Predict(alpha, width, i, filter)) & 255) << 8;
@@ -90,7 +90,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                     context.Reserve(length);
                     try
                     {
-                        context.Work(0); var next = new byte[length]; next[0] = (byte)((filter << 2) | (compressed ? 1 : 0));
+                        context.Cancellation.ThrowIfCancellationRequested(); var next = new byte[length]; next[0] = (byte)((filter << 2) | (compressed ? 1 : 0));
                         if (compressed)
                         {
                             using var output = new MemoryStream(next, 1, length - 1, writable: true);
@@ -100,7 +100,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                         else
                         {
                             for (var i = 0; i < alpha.Length; i++)
-                            { context.Work(1); next[i + 1] = unchecked((byte)(alpha[i] - Predict(alpha, width, i, filter))); }
+                            { context.Cancellation.ThrowIfCancellationRequested(); next[i + 1] = unchecked((byte)(alpha[i] - Predict(alpha, width, i, filter))); }
                         }
                         var old = result.payload; result.payload = next; result.capacity += length;
                         if (old is not null) { result.capacity -= old.Length; context.Release(old.Length); }

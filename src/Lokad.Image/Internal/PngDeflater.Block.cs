@@ -25,7 +25,7 @@ internal sealed partial class PngDeflater
 
     private void Block(bool final)
     {
-        context.Work(tokenCount * 8L);
+        context.Cancellation.ThrowIfCancellationRequested();
         var literalFrequency = new int[286]; var distanceFrequency = new int[30]; literalFrequency[256] = 1;
         var expanded = 0;
         for (var index = 0; index < tokenCount; index++)

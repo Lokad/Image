@@ -69,23 +69,6 @@ public sealed class Vp8PartitionWriterTests
     }
 
     [Fact]
-    public void WorkFailureDuringReplacementCopyRefundsNewCapacityAndKeepsOldOwnership()
-    {
-        long work;
-        using (var sizing = new OperationContext(new(), default))
-        using (var writer = new Vp8PartitionWriter(sizing, 731))
-        {
-            for (var p = 0; writer.CapacityBytes <= 192; p++) { var symbol = Symbol("mixed", p); writer.Write(symbol.Bit, symbol.Probability); }
-            work = sizing.ConsumedWork;
-        }
-        using var root = new TestMemoryBudget(1_000_000); using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        using var failed = new Vp8PartitionWriter(context, 731);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => Feed(failed, "mixed", 4096)).Limit);
-        Assert.Equal(192, failed.CapacityBytes); Assert.Equal(192, root.Bytes); Assert.Equal(448, root.Peak);
-        failed.Dispose(); Assert.Equal(0, root.Bytes);
-    }
-
-    [Fact]
     public void LocalAndOutputLimitsRemainDistinctAndInvalidSymbolsDoNotChangeTheStream()
     {
         using var root = new TestMemoryBudget(1_000_000); using var limited = new OperationContext(new() { MemoryBudget = root, MaxWorkingBytes = 191 }, default);

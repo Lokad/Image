@@ -57,8 +57,8 @@ public sealed class ResizeReferenceTests
         using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, depth);
         var input = OriginalPixels.Bytes(source);
         var expected = ExactResizeReference.Resize(input, sourceWidth, sourceHeight, depth, width, height, ResizeFilter.Nearest);
-        var work = (long)width * height * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + (long)expected.Length, MaxWork = work };
+
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + (long)expected.Length};
         using var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest, limits);
         using var second = ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest, limits);
         Assert.Equal(expected, OriginalPixels.Bytes(first));
@@ -69,8 +69,6 @@ public sealed class ResizeReferenceTests
         Assert.Equal(input, OriginalPixels.Bytes(source));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest,
             limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, width, height, ResizeFilter.Nearest,
-            limits with { MaxWork = work - 1 }));
     }
 
     [Theory]
@@ -253,7 +251,7 @@ public sealed class ResizeReferenceTests
     [InlineData(8, ResizeFilter.Bicubic)]
     [InlineData(16, ResizeFilter.Bilinear)]
     [InlineData(16, ResizeFilter.Bicubic)]
-    public void HalfAlphaResolutionRespectsExactMemoryAdmissionAndWorkLimits(int depth, ResizeFilter filter)
+    public void HalfAlphaResolutionRespectsExactMemoryAdmissionAndCancellation(int depth, ResizeFilter filter)
     {
         using var source = ImageBuffer.Create(5, 2, depth);
         for (var y = 0; y < 2; y++)
@@ -265,10 +263,7 @@ public sealed class ResizeReferenceTests
         using var prepared = ImageTransforms.Resize(source, 3, 3, filter);
         Assert.Equal(OriginalPixels.Bytes(exact), OriginalPixels.Bytes(prepared));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 3, 3, filter, limits: new ImageLimits { MaxWorkingBytes = peak - 1 }));
-        // The ordinary float path's entire work fits; resolving half alpha must
-        // consume additional work rather than escaping the operation budget.
-        var ordinaryWork = filter == ResizeFilter.Bilinear ? 540 : 1440;
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 3, 3, filter, limits: new ImageLimits { MaxWork = ordinaryWork }));
+
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 3, 3, filter,
             cancellationToken: new CancellationToken(true)));
         Assert.Equal(depth == 8 ? 255 : 65535, depth == 8 ? source.GetRow8(0)[0] : source.GetRow16(0)[0]);

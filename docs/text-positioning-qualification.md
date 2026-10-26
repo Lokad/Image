@@ -23,7 +23,7 @@ Qualification passed **4,316 tests per OS** on Windows/Linux: 1,507 internal,
 positioning checks per OS** also passed with intrinsics disabled. The 32 new
 positioning checks cover lookup/anchor semantics, filtering, ligature components,
 run boundaries, deferred parent movement, malformed tables, typed unsupported
-features, cancellation after admission, work limits and refusal cleanup/reuse.
+features, cancellation after admission, local memory limits and refusal cleanup/reuse.
 The same actual private 0.2.0 Release package passed isolated consumers and all
 three usage examples on both systems.
 

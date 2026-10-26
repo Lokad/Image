@@ -21,8 +21,8 @@ public sealed class VerticalFlipReferenceTests
         var original = OriginalPixels.Bytes(source);
         var expected = ReverseReference(original, width, height, depth);
         var peak = original.Length * 2L;
-        var work = (long)width * height * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = peak, MaxWork = work };
+
+        var limits = new ImageLimits { MaxWorkingBytes = peak};
         using var first = ImageTransforms.FlipVertical(source, limits);
         using var second = ImageTransforms.FlipVertical(source, limits);
         Assert.Equal((width, height, depth, source.Orientation),
@@ -34,28 +34,8 @@ public sealed class VerticalFlipReferenceTests
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.FlipVertical(source,
             limits with { MaxWorkingBytes = peak - 1 }));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.FlipVertical(source,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.FlipVertical(source,
             limits, new CancellationToken(true)));
-        Assert.Equal(original, OriginalPixels.Bytes(source));
-    }
-
-    [Theory]
-    [InlineData(8)]
-    [InlineData(16)]
-    public void PartialFailureCannotPublishStaleReusableRows(int depth)
-    {
-        using var source = OriginalPixels.Buffer(2051, 3, depth);
-        var original = OriginalPixels.Bytes(source);
-        using (var poison = ImageTransforms.FlipVertical(source))
-            for (var y = 0; y < poison.Height; y++)
-                if (depth == 8) poison.GetRow8(y).Fill(0xA5);
-                else poison.GetRow16(y).Fill(0xA55A);
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.FlipVertical(source,
-            new ImageLimits { MaxWork = 4096 }));
-        using var result = ImageTransforms.FlipVertical(source);
-        Assert.Equal(ReverseReference(original, source.Width, source.Height, depth), OriginalPixels.Bytes(result));
         Assert.Equal(original, OriginalPixels.Bytes(source));
     }
 

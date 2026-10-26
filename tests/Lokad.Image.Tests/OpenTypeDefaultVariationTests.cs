@@ -121,7 +121,7 @@ public sealed class OpenTypeDefaultVariationTests
         {
             try
             {
-                using var context = Context(new() { MemoryBudget = budget, MaxWork = 20_000 });
+                using var context = Context(new() { MemoryBudget = budget});
                 using var run = Buffer(context);
                 using var engine = new OpenTypePositioning(Program(1, Single(Index())), bytes, 64, context);
                 engine.ApplyStandardFeatures(Tag("latn"), 0, run);
@@ -132,13 +132,12 @@ public sealed class OpenTypeDefaultVariationTests
     }
 
     [Fact]
-    public void RegionWorkAndItemLimitsCancellationRefusalAndSubsequentReuseStayIndependent()
+    public void RegionAndItemLimitsCancellationRefusalAndSubsequentReuseStayIndependent()
     {
         var definitions = DefinitionsWithVariation(Store()); using var budget = new TestMemoryBudget(100_000);
         using (var context = Context(new() { MemoryBudget = budget, MaxContainerItems = 3 }))
             Assert.Throws<ImageLimitException>(() => new OpenTypeGlyphClasses(definitions, 64, context).CheckDefaultVariation(0, 0));
-        using (var context = Context(new() { MemoryBudget = budget, MaxWork = 20 }))
-            Assert.Throws<ImageLimitException>(() => new OpenTypeGlyphClasses(definitions, 64, context).CheckDefaultVariation(0, 0));
+
         using var cancel = new CancellationTokenSource();
         using (var context = Context(new() { MemoryBudget = budget }, cancel.Token))
         {

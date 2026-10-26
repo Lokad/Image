@@ -110,9 +110,9 @@ public class WarmIdentify
         var badCrc = encoded.ToArray(); badCrc[41] ^= 1;
         Reject(badCrc); Reject(encoded.AsSpan(0, encoded.Length - 1));
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
-        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length, MaxWork = encoded.Length - 8 };
+        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length};
         if (ImageCodec.Identify(encoded, exact) != Expected) throw new InvalidOperationException("Exact Identify admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { MaxWork = encoded.Length - 9 } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { } })
         {
             try { ImageCodec.Identify(encoded, limits); throw new InvalidOperationException("Identify accepted an insufficient limit."); }
             catch (ImageLimitException) { }
@@ -148,7 +148,7 @@ public class WarmIdentify
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length };
         if (ImageCodec.Identify(encoded, exact) != Expected) throw new InvalidOperationException("JPEG input/working admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { MaxWork = 1 } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { } })
         {
             try { ImageCodec.Identify(encoded, limits); throw new InvalidOperationException("JPEG Identify accepted insufficient limits."); }
             catch (ImageLimitException) { }
@@ -175,7 +175,7 @@ public class WarmIdentify
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length };
         if (ImageCodec.Identify(encoded, exact) != Expected) throw new InvalidOperationException("WebP input/working admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { MaxWork = 1 } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { } })
         {
             try { ImageCodec.Identify(encoded, limits); throw new InvalidOperationException("WebP Identify accepted insufficient limits."); }
             catch (ImageLimitException) { }
@@ -239,7 +239,7 @@ public class WarmIdentify
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmIdentify).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
                 boundary = Webp ? "One resident original frozen533100-byte WebP VP8L (513x259) to a fresh independently owned ImageInfo; complete public span Identify/default admission, full RIFF/chunk/padding/VP8X/VP8L/VP8/feature/EXIF validation, no entropy/pixel decode. FFmpeg public WebP parser with original full structural/metadata compatibility scan; required parser buffered acquisition/EOF flush and fresh AVCodecParameters ownership/release timed. Input/parser/context reused; no descriptor cache. Twenty-one same-packet controls and direct span owner/changedwidth/opaque-payload/limits/cancellation gates. Only this existing resident packet/default scope timed; startup, IPC, I/O, hashing/preparation/validation excluded, one CPU/normal SIMD/no concurrency." : Jpeg ? "One resident frozen 52093-byte original JPEG420 (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, default/input/work/working admission, full original marker/scan-header/entropy-stuffing/EXIF/EOI+EOF structural validation; no coefficient/pixel decoding. FFmpeg MJPEG discard-all metadata extraction with original complete structural/EXIF scan and TIMED canonical17-byte SOF2 grayscale metadata-header projection. Projection removes stronger DQT/sampling/encoded-size checks intentionally outside Identify; all six original metadata fields remain exact. Fresh projection payload, native decoder reset/header submission, owned AVCodecParameters extraction/materialization/release timed; codec/frame/packet wrappers and original input reused, descriptor never cached. Pixel buffer callback rejects every request (zero allowed). Twenty-one same-packet controls plus direct span owner/changedwidth/opaque-entropy/limits/cancellation gates. Only this existing resident packet/default scope is timed; startup, IPC, I/O, hashing/preparation/validation excluded, one CPU, normal SIMD, no concurrency."
-                    : "One resident frozen 218775-byte original RGBA8 PNG (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, input/default-limit admission, full chunk scan/CRC, required metadata validation and descriptor construction. FFmpeg public PNG parser/CRC with original timed structural/metadata compatibility adapter and fresh AVCodecParameters acquisition/materialization/release; no pixel decoder or inflation on either side. Parser/context/input reused, descriptor never cached. All six metadata fields exact; native live descriptor independence and 21 same-packet controls including invalid Deflate/valid CRC, changed width, orientation6, CRC, truncation, ordering, IEND/EOF and limits. Direct managed span controls also cover exact input/working/work limits and cancellation. Only this resident PNG boundary is measured. Startup, IPC, I/O, generation/hashing/validation excluded; one CPU, normal SIMD, no concurrency."
+                    : "One resident frozen 218775-byte original RGBA8 PNG (513x259) to a fresh independently owned ImageInfo. Complete public span Identify, input/default-limit admission, full chunk scan/CRC, required metadata validation and descriptor construction. FFmpeg public PNG parser/CRC with original timed structural/metadata compatibility adapter and fresh AVCodecParameters acquisition/materialization/release; no pixel decoder or inflation on either side. Parser/context/input reused, descriptor never cached. All six metadata fields exact; native live descriptor independence and 21 same-packet controls including invalid Deflate/valid CRC, changed width, orientation6, CRC, truncation, ordering, IEND/EOF and limits. Direct managed span controls also cover exact input/working limits and cancellation. Only this resident PNG boundary is measured. Startup, IPC, I/O, generation/hashing/validation excluded; one CPU, normal SIMD, no concurrency."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); state?.Dispose(); ready = false; }

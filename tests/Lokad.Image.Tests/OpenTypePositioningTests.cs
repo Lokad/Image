@@ -256,7 +256,7 @@ public sealed class OpenTypePositioningTests
         }
         static void Check(ReadOnlyMemory<byte> bytes)
         {
-            using var context = Context(new() { MaxWork = 20_000 }); using var run = Buffer(context, (2, 600), (7, 0));
+            using var context = Context(new() { }); using var run = Buffer(context, (2, 600), (7, 0));
             try { using var engine = new OpenTypePositioning(bytes, Classes(), 64, context); engine.ApplyFeature(Latin, 0, Mark, run); engine.ResolveAttachments(run); }
             catch (Exception e) { Assert.True(e is ImageDataException or ImageLimitException or UnsupportedImageException, e.ToString()); }
         }
@@ -286,29 +286,12 @@ public sealed class OpenTypePositioningTests
         Assert.Equal(0, budget.Bytes); Assert.False(budget.IsDisposed);
     }
 
-    [Fact]
-    public void CancellationAndWorkFailuresRefundSelectorAndBufferAdmission()
-    {
-        using var budget = new TestMemoryBudget(1_000_000); using var cancellation = new CancellationTokenSource();
-        using (var context = Context(new() { MemoryBudget = budget }, cancellation.Token))
-        using (var run = Buffer(context, (2, 600), (7, 0)))
-        using (var engine = new OpenTypePositioning(default, default, 64, context))
-        {
-            run[1].AttachTo = 1; cancellation.Cancel();
-            var error = Assert.ThrowsAny<OperationCanceledException>(() => engine.ResolveAttachments(run));
-            Assert.Equal(cancellation.Token, error.CancellationToken);
-        }
-        Assert.Equal(0, budget.Bytes);
-        using var limited = Context(new() { MemoryBudget = budget, MaxWork = 1 });
-        Assert.Throws<ImageLimitException>(() => new OpenTypePositioning(Program(new Lookup(1, 0, [SinglePosition(2, 1, 1)])), default, 64, limited));
-    }
-
     [Theory]
-    [InlineData(false)] [InlineData(true)]
+     [InlineData(true)]
     public void FailuresAfterResolutionWorkspaceAdmissionRefundTheWorkspace(bool cancel)
     {
         using var budget = new TestMemoryBudget(1_000_000); using var cancellation = new CancellationTokenSource();
-        using (var context = Context(new() { MemoryBudget = budget, MaxWork = cancel ? 1000 : 5 }, cancellation.Token))
+        using (var context = Context(new() { MemoryBudget = budget}, cancellation.Token))
         using (var run = Buffer(context, (2, 600), (7, 0)))
         using (var engine = new OpenTypePositioning(default, default, 64, context))
         {
@@ -319,7 +302,6 @@ public sealed class OpenTypePositioningTests
                 var error = Assert.ThrowsAny<OperationCanceledException>(() => engine.ResolveAttachments(run));
                 Assert.Equal(cancellation.Token, error.CancellationToken);
             }
-            else Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => engine.ResolveAttachments(run)).Limit);
             Assert.Equal(baseline, budget.Bytes); Assert.True(budget.Peak > baseline);
         }
         Assert.Equal(0, budget.Bytes); budget.Admitted = null;

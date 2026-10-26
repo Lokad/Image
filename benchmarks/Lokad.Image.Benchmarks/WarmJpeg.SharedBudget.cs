@@ -3,8 +3,6 @@ using Lokad.Image.Tooling;
 
 public partial class WarmJpeg
 {
-    private ImageBudget? sharedBudget;
-    private IDisposable? sharedCallerMemory;
     private long sharedCallerBytes;
     private const long CallerMemoryLimit = 32 * 1024 * 1024;
     private TestMemoryBudget? callerMemoryBudget;
@@ -13,10 +11,7 @@ public partial class WarmJpeg
         "Borrowed caller IMemoryBudget through ImageLimits.MemoryBudget; private coefficient storage, admission and refunds timed. " +
         "One finite root and resident-source reservation prepared outside timing. Source/root borrowing, terminal refusal/recovery, " +
         "cancellation, independent surviving packets and full temporary return checked. Native has no shared admission API; " +
-        "managed accounting is included additional work. " : sharedBudget is null ? "" :
-        "Shared ImageBudget EncodeJpeg, admission and actual-work/temporary-memory settlement timed. " +
-        "One finite long-lived caller budget and resident-source reservation prepared outside timing; original per-operation limits unchanged. " +
-        "Source stability, two independent packets, surviving output and full temporary-memory return checked. Native remains the same complete encode/owned-output reference. ";
+        "managed accounting is included additional work. " : "";
 
     private void PrepareSharedBudget()
     {
@@ -29,20 +24,11 @@ public partial class WarmJpeg
             options = options with { Limits = options.Limits with { MemoryBudget = callerMemoryBudget } };
             return;
         }
-        var selection = Environment.GetEnvironmentVariable("LOKAD_IMAGE_SHARED_BUDGET");
-        if (selection is null) return;
-        if (selection != "1" || Case != WarmJpegCase.Encode420_8)
-            throw new InvalidOperationException("Shared JPEG measurement requires the existing Encode420_8 case.");
-        sharedCallerBytes = (long)source.Stride * source.Height;
-        sharedBudget = new ImageBudget(2 * ImageLimits.Default.MaxWorkingBytes + sharedCallerBytes, 100_000_000_000_000);
-        sharedCallerMemory = sharedBudget.Reserve(sharedCallerBytes);
+
     }
 
     private void ValidateSharedBudget()
     {
-        if (sharedBudget is not null && (sharedBudget.RemainingWorkingBytes != sharedBudget.MaxWorkingBytes - sharedCallerBytes
-            || sharedBudget.ConsumedWork <= 0))
-            throw new InvalidOperationException("Shared JPEG completion did not settle actual work and temporary memory.");
         if (callerMemoryBudget is not null && (callerMemoryBudget.IsDisposed || callerMemoryBudget.Bytes != sharedCallerBytes
             || callerSourceMemory?.Bytes != sharedCallerBytes || callerMemoryBudget.Peak <= sharedCallerBytes))
             throw new InvalidOperationException("JPEG did not borrow the caller root or return temporary storage.");

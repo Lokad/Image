@@ -14,7 +14,7 @@ internal readonly record struct Vp8lEncodingAnalysis(Vp8lTransformKind Transform
 
     private static long Entropy(ReadOnlySpan<int> histogram, OperationContext context)
     {
-        context.Work(256);
+        context.Cancellation.ThrowIfCancellationRequested();
         var total = 0; var nonzero = 0; var maximum = 0; long entropy = 0;
         foreach (var count in histogram)
         {
@@ -38,27 +38,27 @@ internal readonly record struct Vp8lEncodingAnalysis(Vp8lTransformKind Transform
             || pixels.Length / width > 16384) throw new ArgumentException("Expected complete VP8L image rows.");
         if (effort is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(effort));
         var height = pixels.Length / width;
-        context.Work(0); context.Reserve(ScratchBytes);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(ScratchBytes);
         try
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             var histograms = new int[HistogramLength];
             // Count at most 257 distinct colors. Fixed half-full storage needs
-            // no resize, and every collision probe checks work/cancellation.
+            // no resize, and every collision probe checks cancellation.
             var colors = new uint[ColorSlots]; var occupied = new byte[ColorSlots];
             var distinct = 0; var alpha = false; var previous = pixels[0];
             for (var at = 0; at < pixels.Length; at++)
             {
-                context.Work(16);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var pixel = pixels[at]; alpha |= pixel >> 24 != 255;
                 if (distinct <= 256)
                 {
                     // Only cardinality matters here; this table order never
                     // becomes palette order or encoded data.
                     var slot = (int)(unchecked(pixel * 0x9e3779b9u) >> 23);
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     while (occupied[slot] != 0 && colors[slot] != pixel)
-                    { context.Work(1); slot = (slot + 1) & (ColorSlots - 1); }
+                    { context.Cancellation.ThrowIfCancellationRequested(); slot = (slot + 1) & (ColorSlots - 1); }
                     if (occupied[slot] == 0) { occupied[slot] = 1; colors[slot] = pixel; distinct++; }
                 }
                 var prior = previous; previous = pixel;
@@ -104,7 +104,7 @@ internal readonly record struct Vp8lEncodingAnalysis(Vp8lTransformKind Transform
                 if (costs[candidate] < costs[mode]) mode = candidate;
             var redPlane = mode is 0 or 4 ? 1 : mode == 1 ? 5 : mode == 2 ? 8 : 10;
             var bluePlane = mode is 0 or 4 ? 3 : mode == 1 ? 7 : mode == 2 ? 9 : 11;
-            context.Work(510); var redBlueZero = true;
+            context.Cancellation.ThrowIfCancellationRequested(); var redBlueZero = true;
             for (var i = 1; i < 256; i++)
                 redBlueZero &= histograms[redPlane * 256 + i] == 0 && histograms[bluePlane * 256 + i] == 0;
             return new((Vp8lTransformKind)mode, redBlueZero, alpha, distinct, histogramBits, transformBits);

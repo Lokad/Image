@@ -13,7 +13,7 @@ checks exact pixels for enlargement/reduction, transparency at both depths,
 mixed axes, single rows/columns, edge impulses, constants and row-cache eviction.
 Other controls cover aspect-fit rounding, orientation, source independence,
 retained-result and replacement-peak admission, every growth refusal, cancellation
-cleanup, subsequent success, local storage/work limits and extreme coordinates.
+cleanup, subsequent success, local storage limits and extreme coordinates.
 
 The same actual private 0.2.0 Release package passes both consumers, including
 Lanczos3 at both depths with shared admission and independent result lifetimes.
@@ -44,23 +44,23 @@ actual private package on both systems. All four original frames remain exact;
 the warm parity objective remains open.
 The [exact SIMD accumulation round](../benchmarks/WARM-LANCZOS3-SPLIT.md) saves
 another37.5–42.4%, qualifies4440tests/39scalar checks per OS and the same actual
-private package on both systems. Scratch, work and cancellation boundaries are
+private package on both systems. Scratch and cancellation boundaries are
 unchanged; every original output remains exact. Warm parity remains open.
 The [certified SIMD normalization round](../benchmarks/WARM-LANCZOS3-NORMALIZE.md)
 saves another16.6–47.3%, qualifies4445tests/44scalar checks per OS and the same
 actual private package on both systems. All four original frames remain exact;
-admitted storage, work, cancellation and the parity objective are unchanged.
+admitted storage, cancellation and the parity objective are unchanged.
 The [exact SIMD horizontal round](../benchmarks/WARM-LANCZOS3-HORIZONTAL.md)
 saves another10.5–30.8%, qualifies4448tests/47scalar checks per OS and the same
 actual private package on both systems. Original frames, working storage,
-work and cancellation remain unchanged; warm parity stays open.
+cancellation remain unchanged; warm parity stays open.
 The [AVX2 byte-product round](../benchmarks/WARM-LANCZOS3-BYTE-PRODUCTS.md)
 cuts Reduce8 another13.3%, qualifies4448tests/47scalar plus47AVX512F-off checks
 per OS and the same actual package on both systems. All original frames stay
-exact; storage, work and cancellation are unchanged. The paired trial is rejected.
+exact; storage, cancellation are unchanged. The paired trial is rejected.
 The [eight-channel vertical round](../benchmarks/WARM-LANCZOS3-WIDE-VERTICAL.md)
 saves another10.8–20.5%, with the same4448tests/47scalar/47AVX512F-off checks and
-actual package on both OS. Original frames, storage and work remain unchanged.
+actual package on both OS. Original frames, storage remains unchanged.
 The3.9% word-product trial is parked; parity stays open.
 The [four-tap word round](../benchmarks/WARM-LANCZOS3-WORD-FOUR-TAP.md) saves
 26.9% on RGBA16 reduction and6.4% on enlargement, adding no scratch. The same
@@ -69,7 +69,7 @@ including1031-tap support in the independent row theory. Four original frames
 remain exact; unchanged byte timing paths reuse their preceding build evidence.
 The [four-tap byte round](../benchmarks/WARM-LANCZOS3-BYTE-FOUR-TAP.md) then saves
 16.7% on RGBA8 reduction and2.7% on enlargement, with the same qualification,
-exact frames and unchanged storage/work/owners. Only byte timing rows refresh;
+exact frames and unchanged storage/owners. Only byte timing rows refresh;
 word helper paths retain their identified build evidence. Parity remains open.
 The [packed-coefficient round](../benchmarks/WARM-LANCZOS3-COEFFICIENT-PERMUTATIONS.md)
 refreshes all four rows with2.8–7.2% lower complete time. Exact lanes, frames,
@@ -80,7 +80,7 @@ The [certified FMA round](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) saves
 Uncertain pixels use exact recomputation. It qualifies 4457tests/55scalar/
 55AVX512F-off per OS, all four exact frames and the same actual private package
 on both systems. Scratch allocation falls; retained owners, terminal refusal,
-local work bounds and cancellation remain qualified. All four remain parity gaps.
+local memory bounds and cancellation remain qualified. All four remain parity gaps.
 
 Retained SHA-256 identities:
 

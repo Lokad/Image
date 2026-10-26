@@ -7,7 +7,7 @@ namespace Lokad.Image.Internal;
 // Independent fixed-point coefficient quantization. RFC6386 section13 supplies
 // diagonal scan geometry; the encoder's level cap/rounding/sharpening are pinned
 // separately. Caller buffers and the matrix view are borrowed, with no heap,
-// cache or per-block admission. The outer encoder admits work/cancellation.
+// cache or per-block admission. The outer encoder admits cancellation.
 internal static class Vp8BlockQuantization
 {
     private static int ScanRank(int position)

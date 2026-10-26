@@ -20,8 +20,8 @@ internal sealed partial class JpegEntropyRecords : IDisposable
             throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG replay capacity exceeds the array limit.");
         this.context = context; maximumEntries = initialEntries * 2;
         var bytes = initialEntries * 4L + MetadataBytes;
-        context.Work(0); context.Reserve(bytes); reserved = bytes;
-        try { context.Work(0); storage = context.RentCoefficients(initialEntries); }
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(bytes); reserved = bytes;
+        try { context.Cancellation.ThrowIfCancellationRequested(); storage = context.RentCoefficients(initialEntries); }
         catch { reserved = 0; context.Release(bytes); throw; }
     }
 
@@ -54,14 +54,14 @@ internal sealed partial class JpegEntropyRecords : IDisposable
     private void Grow(int[] old)
     {
         var bytes = maximumEntries * 4L;
-        context.Work(0); context.Reserve(bytes);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(bytes);
         int[]? replacement = null;
         try
         {
-            context.Work(0); replacement = context.RentCoefficients(maximumEntries);
+            context.Cancellation.ThrowIfCancellationRequested(); replacement = context.RentCoefficients(maximumEntries);
             // At most one growth, with <=32 copied records per frame block.
-            // This amortized cost fits the existing conservative MCU work owner.
-            context.Work(0); old.AsSpan(0, count).CopyTo(replacement);
+            // Record storage is covered by the admitted capacity, including growth overlap.
+            context.Cancellation.ThrowIfCancellationRequested(); old.AsSpan(0, count).CopyTo(replacement);
         }
         catch
         {
@@ -72,8 +72,8 @@ internal sealed partial class JpegEntropyRecords : IDisposable
         context.ReturnCoefficients(old); context.Release(old.Length * 4L); reserved -= old.Length * 4L;
     }
 
-    internal void Write(JpegEncodingTable[] tables, JpegEntropyWriter writer, long mcuWork)
-        => WriteRecords(Values, tables, writer, context, mcuWork);
+    internal void Write(JpegEncodingTable[] tables, JpegEntropyWriter writer)
+        => WriteRecords(Values, tables, writer, context);
 
     public void Dispose()
     {
@@ -153,12 +153,12 @@ internal sealed partial class JpegEntropyRecords : IDisposable
         return count;
     }
 
-    internal static void WriteRecords(ReadOnlySpan<int> records, JpegEncodingTable[] tables, JpegEntropyWriter writer, OperationContext context, long mcuWork)
+    internal static void WriteRecords(ReadOnlySpan<int> records, JpegEncodingTable[] tables, JpegEntropyWriter writer, OperationContext context)
     {
         var offset = 0;
         while (offset < records.Length)
         {
-            context.Work(mcuWork); uint record;
+            context.Cancellation.ThrowIfCancellationRequested(); uint record;
             do
             {
                 record = (uint)records[offset++]; var table = tables[(int)(record >> 24 & 3)];

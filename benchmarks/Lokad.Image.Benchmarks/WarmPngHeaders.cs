@@ -72,9 +72,9 @@ internal sealed class WarmPngHeaders
         if (survivor != Expected || first != Expected || second != Expected) throw new InvalidOperationException("Surviving metadata aliases source.");
         var items = 0;
         for (var p = 8; p < encoded.Length; p = checked(p + 12 + (int)BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(p)))) items++;
-        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 8448, MaxWork = encoded.Length + items };
+        var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 8448};
         if (Inspect(encoded, exact) != Expected) throw new InvalidOperationException("Exact header admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = 8447 }, exact with { MaxWork = exact.MaxWork - 1 } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = 8447 }, exact with { } })
         {
             try { Inspect(encoded, limits); throw new InvalidOperationException("Header inspector accepted insufficient admission."); }
             catch (ImageLimitException) { }

@@ -36,7 +36,7 @@ public sealed class Crc32Tests
     }
 
     [Fact]
-    public void IdentificationCrcPreservesCancellationAndTheEmptyNoWorkCase()
+    public void IdentificationCrcPreservesCancellationAndTheEmptyNoCase()
     {
         using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
         Assert.Equal(0u, PngIdentificationCrc32.Compute([], cancellation.Token));
@@ -102,7 +102,7 @@ public sealed class Crc32Tests
     }
 
     [Fact]
-    public void EmptyChecksumKeepsTheOriginalNoWorkCancellationBoundary()
+    public void EmptyChecksumKeepsTheOriginalNoCancellationBoundary()
     {
         using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
         Assert.Equal(0u, Crc32.Compute([], cancellation.Token));

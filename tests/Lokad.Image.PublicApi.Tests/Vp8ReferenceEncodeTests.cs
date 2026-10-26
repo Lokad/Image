@@ -14,7 +14,7 @@ public sealed class Vp8ReferenceEncodeTests
         using var source = OriginalVp8lControls.Buffer(name, depth, root);
         var original = OriginalPixels.Bytes(source); var baseline = root.Bytes;
         var options = new WebpEncodeOptions { Lossless = false, Effort = method, Quality = quality,
-            Limits = new() { MemoryBudget = root, MaxWork = OriginalVp8Controls.WorkLimit(name, method) } };
+            Limits = new() { MemoryBudget = root} };
         using var sync = new MemoryStream(); ImageCodec.EncodeWebp(source, sync, options);
         Assert.Equal(baseline, root.Bytes); var packet = sync.ToArray();
         Assert.Equal(bytes, packet.Length); Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(packet)));
@@ -33,22 +33,6 @@ public sealed class Vp8ReferenceEncodeTests
         ImageCodec.EncodeWebp(source, output, new() { Lossless = false });
         Assert.Equal(8898, output.Length);
         Assert.Equal("51a4abeda30c4f8c8b1dea563ab6690a89a5feed93b69c467398f9b736aeb536", Convert.ToHexStringLower(SHA256.HashData(output.ToArray())));
-    }
-
-    [Theory]
-    [InlineData(32_000_000L, 4)]
-    [InlineData(2_000_000_000L, 6)]
-    public void RequiredWorkBoundariesFailTerminallyWithoutOutputAndReleaseAllNewCharges(long work, int method)
-    {
-        using var root = new TestMemoryBudget(128_000_000); using var source = OriginalVp8lControls.Buffer("asymmetric", 8, root);
-        var baseline = root.Bytes; var original = OriginalPixels.Bytes(source); using var output = new MemoryStream();
-        var error = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, output,
-            new() { Lossless = false, Quality = 75, Effort = method, Limits = new() { MemoryBudget = root, MaxWork = work } }));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(0, output.Length); Assert.Equal(baseline, root.Bytes); Assert.Equal(0, root.Refusals); Assert.Equal(original, OriginalPixels.Bytes(source));
-        using var small = OriginalVp8lControls.Buffer("singleton", 8, root); using var recovered = new MemoryStream();
-        ImageCodec.EncodeWebp(small, recovered, new() { Lossless = false, Limits = new() { MemoryBudget = root } });
-        small.Dispose(); Assert.True(recovered.Length > 0); Assert.Equal(baseline, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Theory]

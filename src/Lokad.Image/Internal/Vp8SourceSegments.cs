@@ -34,7 +34,7 @@ internal sealed class Vp8SourceSegments : IDisposable
         Span<Segment> segments, OperationContext context)
     {
         var low = 0; var high = 255;
-        context.Work(256);
+        context.Cancellation.ThrowIfCancellationRequested();
         while (low < 255 && histogram[low] == 0) low++;
         while (high > low && histogram[high] == 0) high--;
         var count = segments.Length;
@@ -43,7 +43,7 @@ internal sealed class Vp8SourceSegments : IDisposable
         var mean = low; var iterations = 0;
         for (var iteration = 0; iteration < 6; iteration++)
         {
-            context.Work(256); weights.Clear(); moments.Clear(); var nearest = 0;
+            context.Cancellation.ThrowIfCancellationRequested(); weights.Clear(); moments.Clear(); var nearest = 0;
             for (var value = low; value <= high; value++)
             {
                 var frequency = histogram[value]; if (frequency == 0) continue;
@@ -81,7 +81,7 @@ internal sealed class Vp8SourceSegments : IDisposable
         Span<int> neighbors = stackalloc int[4];
         for (var y = 1; y < height - 1; y++)
         {
-            context.Work(width * 16L);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var x = 1; x < width - 1; x++)
             {
                 neighbors.Clear(); var at = y * width + x; var selected = map[at];
@@ -96,7 +96,7 @@ internal sealed class Vp8SourceSegments : IDisposable
         // border cells need no duplicate copy and remain exactly unchanged.
         for (var y = 1; y < height - 1; y++)
         {
-            context.Work(width);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (width > 2) replacement.Slice(y * width + 1, width - 2).CopyTo(map.Slice(y * width + 1, width - 2));
         }
     }
@@ -104,26 +104,26 @@ internal sealed class Vp8SourceSegments : IDisposable
     internal static Vp8SourceSegments Create(Vp8SourceAnalysis source, int quality, bool smooth, OperationContext context)
     {
         if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         var result = new Vp8SourceSegments(context, source.Width, source.Height);
         try
         {
             var capacity = source.Count + 4L * 5 * sizeof(int) + MetadataBytes;
             context.Reserve(capacity); result.retainedBytes = capacity;
-            context.Work(0); result.map = new byte[source.Count]; result.parameters = new Segment[4];
+            context.Cancellation.ThrowIfCancellationRequested(); result.map = new byte[source.Count]; result.parameters = new Segment[4];
             context.Reserve(ScratchBytes);
             try
             {
-                context.Work(0); Span<byte> assignment = stackalloc byte[256];
+                context.Cancellation.ThrowIfCancellationRequested(); Span<byte> assignment = stackalloc byte[256];
                 result.Statistics = Cluster(source.Histogram, assignment, result.parameters, context);
-                context.Work(source.Count);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var at = 0; at < source.Count; at++) result.map[at] = assignment[source.Alpha[at]];
                 if (smooth && source.Width > 2 && source.Height > 2)
                 {
                     context.Reserve(source.Count);
                     try
                     {
-                        context.Work(0); var replacement = new byte[source.Count];
+                        context.Cancellation.ThrowIfCancellationRequested(); var replacement = new byte[source.Count];
                         SmoothMap(result.map, source.Width, source.Height, replacement, context);
                     }
                     finally { context.Release(source.Count); }
@@ -135,7 +135,7 @@ internal sealed class Vp8SourceSegments : IDisposable
                 var q = quality / 100d;
                 var compression = Math.Pow(q < 0.75 ? q * (2d / 3) : 2 * q - 1, 1d / 3);
                 const double amplitude = 0.9 * 50 / 100 / 128;
-                context.Work(1024);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var k = 0; k < 4; k++)
                 {
                     var segment = result.parameters[k];
@@ -150,7 +150,7 @@ internal sealed class Vp8SourceSegments : IDisposable
                     remap[k] = (byte)match;
                     if (match == unique) result.parameters[unique++] = segment;
                 }
-                context.Work(source.Count);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var at = 0; at < source.Count; at++) result.map[at] = remap[result.map[at]];
                 for (var k = unique; k < 4; k++) result.parameters[k] = result.parameters[unique - 1];
                 result.SegmentCount = unique;

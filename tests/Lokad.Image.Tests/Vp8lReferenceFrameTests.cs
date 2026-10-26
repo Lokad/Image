@@ -186,23 +186,4 @@ public sealed class Vp8lReferenceFrameTests
         Assert.Equal(ImageLimitKind.OutputBytes, error.Limit); Assert.Equal(0, output.Length); Assert.True(output.CanWrite);
         Assert.Equal(retained, root.Bytes); prepared.Dispose(); Assert.Equal(0, root.Bytes);
     }
-
-    [Fact]
-    public void LateEmissionWorkFailureKeepsCallerStreamOpenAndReleasesOwnedStateOnDisposal()
-    {
-        long work;
-        using (var calibration = new OperationContext(ImageLimits.Default, default))
-        { using var ready = Palette("singleton", calibration); Emit(ready, calibration); work = calibration.ConsumedWork; }
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        using var prepared = Palette("singleton", context); var retained = root.Bytes;
-        var count = Vp8lReferenceFrame.CountPayload(prepared.Prefix, prepared.Main!, context);
-        using var output = new MemoryStream();
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceFrame.Write(output, prepared.Prefix, prepared.Main!, count, context));
-        Assert.Equal(ImageLimitKind.Work, error.Limit); Assert.True(output.CanWrite); Assert.True(output.Length >= 20);
-        Assert.Equal(retained, root.Bytes); prepared.Dispose(); Assert.Equal(0, root.Bytes);
-        using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
-        using var next = Palette("singleton", nextContext); Assert.Equal(34, Emit(next, nextContext).Length);
-        next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-    }
 }

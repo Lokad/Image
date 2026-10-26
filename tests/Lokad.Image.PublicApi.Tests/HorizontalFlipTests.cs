@@ -39,8 +39,6 @@ public sealed class HorizontalFlipTests
     {
         using var source = OriginalPixels.Buffer(2051, 2, depth);
         var original = OriginalPixels.Bytes(source);
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.FlipHorizontal(source,
-            limits: new ImageLimits { MaxWork = 1024 * 4 }));
         using var complete = ImageTransforms.FlipHorizontal(source);
         Assert.Equal(OriginalExif.Permute(original, source.Width, source.Height, depth, ImageOrientation.MirrorHorizontal),
             OriginalPixels.Bytes(complete));
@@ -73,7 +71,7 @@ public sealed class HorizontalFlipTests
 
     [Theory]
     [MemberData(nameof(Boundaries))]
-    public void ReversesWholePixelsAcrossVectorAndWorkBoundaries(int depth, int width)
+    public void ReversesWholePixelsAcrossVectorAndBoundaries(int depth, int width)
     {
         using var source = OriginalPixels.Buffer(width, 3, depth);
         if (depth == 8) source.GetRow8(0)[3] = 0;

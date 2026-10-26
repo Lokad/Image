@@ -5,7 +5,7 @@ namespace Lokad.Image.Tests;
 public sealed class JpegEntropyWriterTests
 {
     [Fact]
-    public void EverySignedAmplitudeKeepsCanonicalBytesStuffingPaddingRestartAndWork()
+    public void EverySignedAmplitudeKeepsCanonicalBytesStuffingPaddingRestart()
     {
         var expected = new byte[6];
         for (var width = 1; width <= 16; width++)
@@ -26,23 +26,21 @@ public sealed class JpegEntropyWriterTests
                 }
                 expected[length++] = 255; expected[length++] = 0xD0;
                 using var output = new MemoryStream();
-                using var context = Context(padding == 0 ? 1 : 2);
+                using var context = Context();
                 using var writer = new JpegEntropyWriter(output, context);
                 writer.Signed(sign * magnitude, width); writer.Restart(0);
                 Assert.True(expected.AsSpan(0, length).SequenceEqual(output.GetBuffer().AsSpan(0, (int)output.Length)));
-                Assert.Throws<ImageLimitException>(() => context.Work(1));
                 Assert.True(output.CanWrite);
             }
         }
     }
 
     [Fact]
-    public void ZeroWidthStillAdmitsWorkAndObservesCancellation()
+    public void ZeroWidthStillAdmitsAndObservesCancellation()
     {
-        using var output = new MemoryStream(); using var context = Context(1);
+        using var output = new MemoryStream(); using var context = Context();
         using var writer = new JpegEntropyWriter(output, context); writer.Signed(0, 0);
-        Assert.Equal(0, output.Length); Assert.Throws<ImageLimitException>(() => context.Work(1));
-        using var cancellation = new CancellationTokenSource();
+        Assert.Equal(0, output.Length);         using var cancellation = new CancellationTokenSource();
         using var canceled = new OperationContext(ImageLimits.Default, cancellation.Token); cancellation.Cancel();
         using var stopped = new JpegEntropyWriter(output, canceled);
         Assert.Throws<OperationCanceledException>(() => stopped.Signed(0, 0));
@@ -50,7 +48,7 @@ public sealed class JpegEntropyWriterTests
     }
 
     [Fact]
-    public void InvalidWidthsAndValuesRejectBeforeWorkOrOutput()
+    public void InvalidWidthsAndValuesRejectBeforeOrOutput()
     {
         foreach (var width in new[] { int.MinValue, -1, 17, 31, 32, int.MaxValue })
         foreach (var value in new[] { int.MinValue, -1, 0, 1, int.MaxValue }) Check(value, width);
@@ -61,13 +59,12 @@ public sealed class JpegEntropyWriterTests
         }
         static void Check(int value, int width)
         {
-            using var output = new MemoryStream(); using var context = Context(1);
+            using var output = new MemoryStream(); using var context = Context();
             using var writer = new JpegEntropyWriter(output, context);
             var error = Assert.Throws<ArgumentOutOfRangeException>(() => writer.Signed(value, width));
             Assert.Equal("value", error.ParamName); Assert.Equal(0, output.Length);
-            context.Work(1); Assert.Throws<ImageLimitException>(() => context.Work(1));
         }
     }
 
-    private static OperationContext Context(long work) => new(ImageLimits.Default with { MaxWork = work }, default);
+    private static OperationContext Context() => new(ImageLimits.Default, default);
 }

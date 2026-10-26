@@ -34,7 +34,7 @@ internal sealed class OpenTypePositioning : IDisposable
         if (!ReferenceEquals(glyphs.Context, context)) throw new ArgumentException("Shaping storage must share the operation context.", nameof(glyphs));
         if (start < 0 || start > glyphs.Count || length < -1 || length > glyphs.Count - start)
             throw new ArgumentOutOfRangeException(nameof(length));
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
     }
     internal bool ApplyFeature(uint script, uint language, uint feature, ShapingBuffer glyphs,
         uint mask = 0, int start = 0, int length = -1, bool required = false)
@@ -69,7 +69,7 @@ internal sealed class OpenTypePositioning : IDisposable
             if (selected[lookup] == 0) continue;
             for (var at = start; at < runEnd;)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 if (mask != 0 && (glyphs[at].Features & mask) == 0) { at++; continue; }
                 ApplyAt(lookup, glyphs, at, out var next); at = Math.Max(at + 1, next);
             }
@@ -273,7 +273,7 @@ internal sealed class OpenTypePositioning : IDisposable
         // unrelated base/ligature merely because it lacks a covered anchor.
         for (var i = at - 1; i >= runStart; i--)
         {
-            context.Work(1); if (Boundary(glyphs[i])) return -1;
+            context.Cancellation.ThrowIfCancellationRequested(); if (Boundary(glyphs[i])) return -1;
             if (classes.Class(glyphs[i]) != 3) return i;
         }
         return -1;
@@ -283,7 +283,7 @@ internal sealed class OpenTypePositioning : IDisposable
     {
         while (at >= runStart && at < runEnd)
         {
-            context.Work(1); if (Boundary(glyphs[at])) return -1;
+            context.Cancellation.ThrowIfCancellationRequested(); if (Boundary(glyphs[at])) return -1;
             if (!classes.Ignored(glyphs[at], flags, filteringSet)) return at;
             at += step;
         }
@@ -295,23 +295,23 @@ internal sealed class OpenTypePositioning : IDisposable
         Check(glyphs, start, length);
         var count = length < 0 ? glyphs.Count - start : length; var end = start + count;
         var any = false;
-        for (var i = start; i < end; i++) { context.Work(1); any |= glyphs[i].AttachTo != 0; }
+        for (var i = start; i < end; i++) { context.Cancellation.ThrowIfCancellationRequested(); any |= glyphs[i].AttachTo != 0; }
         if (!any) return;
         var bytes = count * 8L + 32; context.Reserve(bytes);
         try
         {
             var origins = new double[count]; double pen = 0;
             if (rightToLeft)
-                for (var i = start; i < end; i++) { context.Work(1); pen += glyphs[i].Advance; }
+                for (var i = start; i < end; i++) { context.Cancellation.ThrowIfCancellationRequested(); pen += glyphs[i].Advance; }
             for (var i = start; i < end; i++)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 if (rightToLeft) { pen -= glyphs[i].Advance; origins[i - start] = pen; }
                 else { origins[i - start] = pen; pen += glyphs[i].Advance; }
             }
             for (var i = start; i < end; i++)
             {
-                context.Work(1); var parent = glyphs[i].AttachTo - 1;
+                context.Cancellation.ThrowIfCancellationRequested(); var parent = glyphs[i].AttachTo - 1;
                 if (parent == -1) continue;
                 if (parent < start || parent >= i) throw OpenTypeTable.Bad("Invalid or cyclic OpenType mark attachment.");
                 glyphs[i].OffsetX += origins[parent - start] - origins[i - start] + glyphs[parent].OffsetX + glyphs[i].AttachX;

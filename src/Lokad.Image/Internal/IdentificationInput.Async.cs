@@ -38,7 +38,7 @@ internal sealed partial class IdentificationInput
                 }
                 scratch.AsSpan(0, read).CopyTo(buffer.AsSpan(length));
                 length += read;
-                context.Work(read);
+                context.Cancellation.ThrowIfCancellationRequested();
             }
             context.Cancellation.ThrowIfCancellationRequested();
             var result = new IdentificationInput(buffer, length, !context.HasMemoryBudget);

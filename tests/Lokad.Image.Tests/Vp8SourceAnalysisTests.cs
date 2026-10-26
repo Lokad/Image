@@ -98,7 +98,7 @@ public sealed class Vp8SourceAnalysisTests
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public void CancellationAfterResultOrScratchAdmissionRefundsAndAllowsSubsequentWork(int growth)
+    public void CancellationAfterResultOrScratchAdmissionRefundsAndAllowsSubsequent(int growth)
     {
         using var source = OriginalVp8lControls.Buffer("singleton", 8);
         using var root = new TestMemoryBudget(16_000_000); using var cancel = new CancellationTokenSource();
@@ -110,22 +110,6 @@ public sealed class Vp8SourceAnalysisTests
         using var later = new OperationContext(new() { MemoryBudget = root }, default);
         using var next = Vp8SourceAnalysis.Create(input, later); next.Dispose();
         Assert.Equal(baseline, root.Bytes); input.Dispose(); Assert.Equal(0, root.Bytes);
-    }
-
-    [Fact]
-    public void LateWorkFailureRefundsTheNewOwnerWithoutReleasingBorrowedInput()
-    {
-        using var source = OriginalVp8lControls.Buffer("singleton", 8);
-        using var root = new TestMemoryBudget(16_000_000);
-        using var inputContext = new OperationContext(new() { MemoryBudget = root }, default);
-        using var input = Vp8PreparedInput.Create(source, inputContext); var baseline = root.Bytes;
-        long work;
-        using (var sizing = new OperationContext(new() { MemoryBudget = root }, default))
-        using (var result = Vp8SourceAnalysis.Create(input, sizing)) work = sizing.ConsumedWork;
-        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8SourceAnalysis.Create(input, limited));
-        Assert.Equal(ImageLimitKind.Work, error.Limit); Assert.Equal(baseline, root.Bytes);
-        using var next = Vp8SourceAnalysis.Create(input, inputContext); next.Dispose(); Assert.Equal(baseline, root.Bytes);
     }
 
     [Fact]

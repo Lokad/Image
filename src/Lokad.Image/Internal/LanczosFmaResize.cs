@@ -25,12 +25,7 @@ internal static class LanczosFmaResize
         var pixels = (long)width * height;
         if (rows * 8 > Array.MaxLength || channels * 16 > Array.MaxLength
             || originalBytes + pixels * (source.BitDepth / 8) * 4 > context.RemainingWorkingBytes) return false;
-        // Every row-cache miss, vertical pass and possible exact pixel is covered.
-        // Int128 avoids overflow for geometry whose allocation/work will refuse.
-        var fallback = ((Int128)horizontal.MaximumCount * vertical.MaximumCount + vertical.MaximumCount + 1) * 4;
-        var work = (Int128)channels * (2L * height + vertical.Weights.LongLength)
-            + vertical.Weights.LongLength * (1 + (Int128)horizontal.Weights.LongLength * 4 + channels) + pixels * fallback;
-        return work <= context.RemainingWork;
+        return true;
     }
 
     internal static ImageBuffer Apply(ImageBuffer source, int width, int height, LanczosPlan horizontal,
@@ -51,16 +46,16 @@ internal static class LanczosFmaResize
                 var numeratorError = errors.Rgb + 65535d * errors.Alpha;
                 for (var y = 0; y < height; y++)
                 {
-                    context.Work(channels); sums.AsSpan().Clear(); var window = vertical.Windows[y];
+                    context.Cancellation.ThrowIfCancellationRequested(); sums.AsSpan().Clear(); var window = vertical.Windows[y];
                     for (var tap = 0; tap < window.Count; tap++)
                     {
-                        context.Work(1); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
+                        context.Cancellation.ThrowIfCancellationRequested(); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
                         var sy = window.First + tap; var slot = sy % slots;
                         var row = rows.AsSpan(slot * channels, channels);
                         if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, context); rowIds[slot] = sy; }
-                        context.Work(channels); Accumulate(row, sums, weight, context);
+                        context.Cancellation.ThrowIfCancellationRequested(); Accumulate(row, sums, weight, context);
                     }
-                    context.Work(channels);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     Span<byte> output8 = default; Span<ushort> output16 = default;
                     if (source.BitDepth == 8) output8 = result.GetRow8(y); else output16 = result.GetRow16(y);
                     for (var x = 0; x < width; x++)
@@ -124,7 +119,7 @@ internal static class LanczosFmaResize
         // frame or extra row copy: exact signed sums are converted in place.
         var integer = MemoryMarshal.Cast<double, long>(output);
         LanczosResize.Horizontal(source, y, plan, integer, context);
-        context.Work(output.Length);
+        context.Cancellation.ThrowIfCancellationRequested();
         var i = 0;
         for (; i <= output.Length - 8; i += 8)
         {
@@ -157,7 +152,7 @@ internal static class LanczosFmaResize
         LanczosPlan vertical, OperationContext context)
     {
         var hw = horizontal.Windows[x]; var vw = vertical.Windows[y];
-        context.Work(((long)hw.Count * vw.Count + vw.Count + 1) * 4);
+        context.Cancellation.ThrowIfCancellationRequested();
         Int128 r = 0, g = 0, b = 0, a = 0;
         for (var v = 0; v < vw.Count; v++)
         {

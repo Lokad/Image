@@ -107,24 +107,6 @@ public sealed class Vp8FrameEncodingTests
         }
     }
 
-    [Theory]
-    [InlineData(4)]
-    [InlineData(5)]
-    [InlineData(6)]
-    public void FrameCancellationAndLateWorkFailureRefundAllNewOwnership(int method)
-    {
-        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root, method); var baseline = root.Bytes;
-        using var cancel = new CancellationTokenSource(); using var cancelled = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
-        root.Admitted = _ => cancel.Cancel(); Assert.Throws<OperationCanceledException>(() => input.Frame(cancelled));
-        Assert.Equal(baseline, root.Bytes); root.Admitted = null;
-        long work; using (var sizing = new OperationContext(new() { MemoryBudget = root }, default)) using (var frame = input.Frame(sizing)) work = sizing.ConsumedWork;
-        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => input.Frame(limited)).Limit); Assert.Equal(baseline, root.Bytes);
-        using var local = new OperationContext(new() { MemoryBudget = root, MaxWorkingBytes = 2195 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => input.Frame(local)); Assert.Equal(ImageLimitScope.Operation, error.Scope); Assert.Equal(baseline, root.Bytes);
-        using var next = input.Frame(); next.Dispose(); Assert.Equal(baseline, root.Bytes);
-    }
-
     [Fact]
     public void PartitionCreationRefusalAndFinalOutputLimitReleaseEveryBuffer()
     {
@@ -182,21 +164,6 @@ public sealed class Vp8FrameEncodingTests
             Assert.Equal(refusals + 1, root.Refusals); Assert.Equal(baseline, root.Bytes); held.Dispose();
             using var next = input.Frame(); next.Dispose(); Assert.False(root.IsDisposed);
         }
-    }
-
-    [Fact]
-    public void FastFrameCancellationAndLateWorkFailureReleaseAllNewCharges()
-    {
-        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("singleton", root, 0); var baseline = root.Bytes;
-        using var cancel = new CancellationTokenSource(); using var cancelled = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
-        root.Admitted = _ => cancel.Cancel(); Assert.Throws<OperationCanceledException>(() => input.Frame(cancelled));
-        Assert.Equal(baseline, root.Bytes); root.Admitted = null;
-        long work; using (var sizing = new OperationContext(new() { MemoryBudget = root }, default)) using (var frame = input.Frame(sizing)) work = sizing.ConsumedWork;
-        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => input.Frame(limited)).Limit); Assert.Equal(baseline, root.Bytes);
-        using var local = new OperationContext(new() { MemoryBudget = root, MaxWorkingBytes = 2195 }, default);
-        Assert.Equal(ImageLimitScope.Operation, Assert.Throws<ImageLimitException>(() => input.Frame(local)).Scope); Assert.Equal(baseline, root.Bytes);
-        using var next = input.Frame(); next.Dispose(); Assert.Equal(baseline, root.Bytes);
     }
 
     [Theory]

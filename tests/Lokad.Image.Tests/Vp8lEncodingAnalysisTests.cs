@@ -121,16 +121,4 @@ public sealed class Vp8lEncodingAnalysisTests
         Assert.Equal(Vp8lTransformKind.Prediction, Vp8lEncodingAnalysis.Select(pixels, 19, 4, nextContext).Transform);
         Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(0, root.Refusals);
     }
-
-    [Fact]
-    public void LocalWorkLimitRemainsIndependentAndRefundsScratch()
-    {
-        var rgba = HiddenRgb();
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = 2 }, default);
-        var pixels = Working(rgba, false, context);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lEncodingAnalysis.Select(pixels, 19, 4, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(0, root.Refusals);
-    }
 }

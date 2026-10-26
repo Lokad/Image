@@ -42,7 +42,7 @@ internal sealed class FontOutline : IDisposable
             if (bytes > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Glyph point storage exceeds the managed limit.");
             context.Reserve(bytes);
             FontPoint[] next;
-            try { context.Work(PointCount); next = new FontPoint[capacity]; points.AsSpan(0, PointCount).CopyTo(next); }
+            try { context.Cancellation.ThrowIfCancellationRequested(); next = new FontPoint[capacity]; points.AsSpan(0, PointCount).CopyTo(next); }
             catch { context.Release(bytes); throw; }
             context.Release(PointBytes(points.Length)); points = next;
         }
@@ -54,7 +54,7 @@ internal sealed class FontOutline : IDisposable
             if (bytes > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Glyph contour storage exceeds the managed limit.");
             context.Reserve(bytes);
             int[] next;
-            try { context.Work(ContourCount); next = new int[capacity]; ends.AsSpan(0, ContourCount).CopyTo(next); }
+            try { context.Cancellation.ThrowIfCancellationRequested(); next = new int[capacity]; ends.AsSpan(0, ContourCount).CopyTo(next); }
             catch { context.Release(bytes); throw; }
             context.Release(EndBytes(ends.Length)); ends = next;
         }
@@ -68,10 +68,10 @@ internal sealed class FontOutline : IDisposable
         Ensure((int)count, (int)contours);
         for (var i = 0; i < child.PointCount; i++)
         {
-            context.Work(1); points[PointCount + i] = Transform(child.points[i], xx, yx, xy, yy, dx, dy);
+            context.Cancellation.ThrowIfCancellationRequested(); points[PointCount + i] = Transform(child.points[i], xx, yx, xy, yy, dx, dy);
         }
         for (var i = 0; i < child.ContourCount; i++)
-        { context.Work(1); ends[ContourCount + i] = PointCount + child.ends[i]; }
+        { context.Cancellation.ThrowIfCancellationRequested(); ends[ContourCount + i] = PointCount + child.ends[i]; }
         PointCount = (int)count; ContourCount = (int)contours;
     }
     internal static FontPoint Transform(FontPoint p, double xx, double yx, double xy, double yy, double dx = 0, double dy = 0)
@@ -98,7 +98,7 @@ internal sealed class FontOutline : IDisposable
         var segments = Segments();
         while (segments.Next(out var segment))
         {
-            context.Work(1); Include(segment.Start.X, segment.Start.Y); Include(segment.End.X, segment.End.Y);
+            context.Cancellation.ThrowIfCancellationRequested(); Include(segment.Start.X, segment.Start.Y); Include(segment.End.X, segment.End.Y);
             if (!segment.Quadratic) continue;
             for (var axis = 0; axis < 2; axis++)
             {

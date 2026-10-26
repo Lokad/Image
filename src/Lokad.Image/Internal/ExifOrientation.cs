@@ -23,7 +23,7 @@ internal static class ExifOrientation
         var found = false;
         for (var i = 0; i < count; i++)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             var entry = directory.Slice(2 + i * 12, 12);
             if (Read16(entry, little) != 0x0112) continue;
             if (found || Read16(entry[2..], little) != 3 || Read32(entry[4..], little) != 1)

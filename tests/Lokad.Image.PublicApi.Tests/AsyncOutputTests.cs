@@ -113,126 +113,23 @@ public sealed class AsyncOutputTests
         Assert.Equal(expected.ToArray(), output.Bytes); Assert.Equal(token.Token, output.LastToken);
     }
 
-    [Theory]
-    [InlineData("jpeg")] [InlineData("vp8l")] [InlineData("vp8")] [InlineData("samples")]
-    public async Task EveryBudgetedEncoderKeepsItsReservationUntilDeliveryCompletes(string codec)
-    {
-        using var image = OriginalPixels.Buffer(17, 11, 8, opaque: true);
-        var source = OriginalPixels.Bytes(image); var rgb = new byte[17 * 11 * 3];
-        for (var y = 0; y < 11; y++) for (var x = 0; x < 17; x++) image.GetRow8(y).Slice(x * 4, 3).CopyTo(rgb.AsSpan((y * 17 + x) * 3));
-        var limits = new ImageLimits { MaxWorkingBytes = 2_000_000, MaxWork = 5_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork); using var expected = new MemoryStream();
-        using var output = new AsyncOnlyOutput { Pause = true };
-        Task pending;
-        if (codec == "samples")
-        {
-            ImageCodec.EncodeJpeg(rgb, 17, 11, JpegSampleFormat.Rgb, expected, options: new() { Quality = 69 });
-            pending = budget.EncodeJpegAsync(rgb.AsMemory(), 17, 11, JpegSampleFormat.Rgb, output,
-                options: new() { Quality = 69, Limits = limits }).AsTask();
-        }
-        else
-        {
-            Encode(image, expected, codec);
-            pending = codec == "jpeg" ? budget.EncodeJpegAsync(image, output, new() { Quality = 69, BackgroundRgb = 0x204060, Limits = limits }).AsTask()
-                : budget.EncodeWebpAsync(image, output, new() { Lossless = codec == "vp8l", Quality = 85, Effort = 4, Limits = limits }).AsTask();
-        }
-        await output.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
-        Assert.False(pending.IsCompleted); Assert.Equal(0, budget.RemainingWorkingBytes);
-        output.Resume.TrySetResult(); await pending;
-        Assert.Equal(expected.ToArray(), output.Bytes); Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        Assert.True(budget.ConsumedWork > 0); Assert.Equal(source, OriginalPixels.Bytes(image)); Assert.False(output.WasDisposed);
-    }
-
-    [Fact]
-    public async Task ExactPrivateStagingMemoryIsAdmittedAndRefundedOnFailure()
-    {
-        using var image = OriginalPixels.Buffer(1, 1, 8); using var expected = new MemoryStream();
-        ImageCodec.EncodePng(image, expected, new() { Compression = CompressionLevel.NoCompression });
-        var limits = new ImageLimits { MaxOutputBytes = checked((int)expected.Length), MaxWorkingBytes = 4 + 4 + 1024 * 1024 + 65536 + 320 + expected.Length, MaxWork = 1_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork * 2);
-        using var output = new AsyncOnlyOutput();
-        await budget.EncodePngAsync(image, output, new() { Limits = limits, Compression = CompressionLevel.NoCompression });
-        Assert.Equal(expected.ToArray(), output.Bytes); Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        using var failed = new AsyncOnlyOutput();
-        var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.EncodePngAsync(image, failed,
-            new() { Limits = limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }, Compression = CompressionLevel.NoCompression }).AsTask());
-        Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Empty(failed.Bytes);
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.False(failed.WasDisposed);
-    }
-
-    [Fact]
-    public async Task SharedBudgetSurvivesOutputAwaitAndIndependentOperationsDoNotAlias()
-    {
-        using var image = OriginalPixels.Buffer(17, 11, 8); var source = OriginalPixels.Bytes(image);
-        var limits = new ImageLimits { MaxWorkingBytes = 2_000_000, MaxWork = 5_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes + 77, limits.MaxWork * 3);
-        using var caller = budget.Reserve(77); using var output = new AsyncOnlyOutput { Pause = true };
-        var pending = budget.EncodePngAsync(image, output, new() { Limits = limits }).AsTask();
-        await output.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
-        Assert.False(pending.IsCompleted); Assert.Equal(0, budget.RemainingWorkingBytes);
-        var failure = Assert.Throws<ImageLimitException>(() => budget.Reserve(1)); Assert.Equal(ImageLimitScope.SharedBudget, failure.Scope);
-        using var independent = new AsyncOnlyOutput(); await ImageCodec.EncodePngAsync(image, independent);
-        var saved = independent.Bytes; output.Resume.TrySetResult(); await pending;
-        Assert.Equal(saved, output.Bytes); Assert.Equal(saved, independent.Bytes); Assert.Equal(source, OriginalPixels.Bytes(image));
-        Assert.Equal(limits.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.False(output.WasDisposed);
-    }
-
-    [Fact]
-    public async Task CancellationDuringSuspendedWriteReturnsPrivateStorageAndSharedReservation()
-    {
-        using var image = OriginalPixels.Buffer(17, 11, 8);
-        var limits = new ImageLimits { MaxWorkingBytes = 2_000_000, MaxWork = 5_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork);
-        using var cancellation = new CancellationTokenSource(); using var output = new AsyncOnlyOutput { Pause = true };
-        var pending = budget.EncodePngAsync(image, output, new() { Limits = limits }, cancellation.Token).AsTask();
-        await output.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5)); cancellation.Cancel();
-        var failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
-        Assert.Equal(cancellation.Token, failure.CancellationToken); Assert.Equal(cancellation.Token, output.LastToken);
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.True(budget.ConsumedWork > 0);
-        Assert.Equal(budget.MaxWork - budget.ConsumedWork, budget.RemainingWork); Assert.False(output.WasDisposed);
-    }
-
-    [Fact]
-    public async Task PreCancellationDoesNotWriteOrConsumeSharedBudget()
-    {
-        using var image = OriginalPixels.Buffer(1, 1, 8); using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
-        var budget = new ImageBudget(0, 0); using var output = new AsyncOnlyOutput();
-        var failure = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => budget.EncodeWebpAsync(image, output, cancellationToken: cancellation.Token).AsTask());
-        Assert.Equal(cancellation.Token, failure.CancellationToken); Assert.Equal(0, output.WriteCalls); Assert.Equal(0, budget.ConsumedWork);
-    }
-
     [Fact]
     public async Task CallerPartialIoFailureIsPreservedAndSurvivingOutputStaysIndependent()
     {
         using var image = OriginalPixels.Buffer(257, 129, 8); var source = OriginalPixels.Bytes(image);
         using var expected = new MemoryStream(); ImageCodec.EncodePng(image, expected, new() { Compression = CompressionLevel.NoCompression });
-        var limits = new ImageLimits { MaxWorkingBytes = 4_000_000, MaxWork = 50_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork * 2);
+        var limits = new ImageLimits { MaxWorkingBytes = 4_000_000};
+        using var root = new TestMemoryBudget(limits.MaxWorkingBytes); limits = limits with { MemoryBudget = root };
         var original = new IOException("Original caller write failure.");
         using var output = new AsyncOnlyOutput { FailAt = 2, Failure = original };
-        var actual = await Assert.ThrowsAsync<IOException>(() => budget.EncodePngAsync(image, output,
+        var actual = await Assert.ThrowsAsync<IOException>(() => ImageCodec.EncodePngAsync(image, output,
             new() { Limits = limits, Compression = CompressionLevel.NoCompression }).AsTask());
         Assert.Same(original, actual); Assert.Equal(65536 + 7, output.Bytes.Length);
         Assert.Equal(expected.ToArray()[..output.Bytes.Length], output.Bytes); Assert.False(output.WasDisposed);
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); var prefix = output.Bytes;
+        Assert.Equal(0, root.Bytes); var prefix = output.Bytes;
         using var recovery = new AsyncOnlyOutput();
-        await budget.EncodePngAsync(image, recovery, new() { Limits = limits, Compression = CompressionLevel.NoCompression });
+        await ImageCodec.EncodePngAsync(image, recovery, new() { Limits = limits, Compression = CompressionLevel.NoCompression });
         Assert.Equal(expected.ToArray(), recovery.Bytes); Assert.Equal(prefix, output.Bytes); Assert.Equal(source, OriginalPixels.Bytes(image));
-    }
-
-    [Fact]
-    public async Task WorkLimitDuringDeliveryLeavesOnlyCompletedPrefixAndRefundsMemory()
-    {
-        using var image = OriginalPixels.Buffer(257, 129, 8);
-        var limits = new ImageLimits { MaxWorkingBytes = 4_000_000, MaxWork = 50_000_000 };
-        var measured = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork); using var expected = new AsyncOnlyOutput();
-        await measured.EncodePngAsync(image, expected, new() { Limits = limits, Compression = CompressionLevel.NoCompression });
-        var constrained = limits with { MaxWork = measured.ConsumedWork - 1 };
-        var budget = new ImageBudget(constrained.MaxWorkingBytes, constrained.MaxWork); using var output = new AsyncOnlyOutput();
-        var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.EncodePngAsync(image, output,
-            new() { Limits = constrained, Compression = CompressionLevel.NoCompression }).AsTask());
-        Assert.Equal(ImageLimitKind.Work, failure.Limit); Assert.InRange(output.Bytes.Length, 65536, expected.Bytes.Length - 1);
-        Assert.Equal(expected.Bytes[..output.Bytes.Length], output.Bytes); Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
     }
 
     [Fact]
@@ -272,16 +169,13 @@ public sealed class AsyncOutputTests
         public int FailAt = int.MaxValue;
         public IOException? Failure;
         public CancellationTokenSource? CancelAfterWrite;
-        public bool WasDisposed, Pause, RequireZeroUnusedTail;
+        public bool WasDisposed, RequireZeroUnusedTail;
         public CancellationToken LastToken;
-        public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public TaskCompletionSource Resume { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
         {
             ObjectDisposedException.ThrowIf(WasDisposed, this);
             WriteCalls++; LargestWrite = Math.Max(LargestWrite, buffer.Length); LastToken = cancellationToken;
             await Task.Yield(); cancellationToken.ThrowIfCancellationRequested();
-            if (Pause) { Entered.TrySetResult(); await Resume.Task.WaitAsync(cancellationToken); }
             if (RequireZeroUnusedTail && MemoryMarshal.TryGetArray(buffer, out var segment))
                 Assert.Equal(-1, segment.Array!.AsSpan(segment.Offset + segment.Count).IndexOfAnyExcept((byte)0));
             if (WriteCalls == FailAt && Failure is { } failure) { content.Write(buffer.Span[..Math.Min(7, buffer.Length)]); throw failure; }

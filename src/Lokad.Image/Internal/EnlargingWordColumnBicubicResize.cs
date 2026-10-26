@@ -16,9 +16,9 @@ internal static class EnlargingWordColumnBicubicResize
     private const ulong DeferredPixel = 0x0000FFFFFFFFFFFF;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
-        if (!TryApplyCore(source, result, scaleX, scaleY, tapsX, tapsY, rowWork, context, out var deferred)) return false;
+        if (!TryApplyCore(source, result, scaleX, scaleY, tapsX, tapsY, context, out var deferred)) return false;
         if (deferred) ReplayTiny(source, result, scaleX, scaleY, context);
         return true;
     }
@@ -26,7 +26,7 @@ internal static class EnlargingWordColumnBicubicResize
     // Exact tiny-alpha scratch is acquired only after this stack frame returns.
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool TryApplyCore(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context, out bool deferred)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context, out bool deferred)
     {
         deferred = false;
         if (source.BitDepth != 16 || result.Width < source.Width || result.Height < source.Height
@@ -82,7 +82,7 @@ internal static class EnlargingWordColumnBicubicResize
                     context.Cancellation.ThrowIfCancellationRequested();
                     // Integer centers on an unchanged axis have the exact
                     // cardinal kernel [0, 0, 1, 0, 0]. Omit zero-weight rows;
-                    // admission and work still charge the original support.
+                    // workspace admission still covers the original support.
                     var center = (y + .5) * source.Height / result.Height - .5;
                     // Retain original coordinate rounding even if callers raise
                     // dimension limits beyond exact binary64 products.
@@ -139,7 +139,7 @@ internal static class EnlargingWordColumnBicubicResize
                         }
                         var n0 = normalizers[outputX] * normalizerY;
                         var n1 = normalizers[outputX + 1] * normalizerY;
-                        if (!TryWritePair(sum, n0, n1, destination.Slice((tile + outputX) * 8, 16)))
+                        if (!BicubicMath.TryWriteWordPairWide(sum, n0, n1, destination.Slice((tile + outputX) * 8, 16)))
                         {
                             if (!(n0 >= .5 && n1 >= .5)
                                 || !OriginalWord(source, result, tile + outputX, y, weights.Slice(outputX * 5, counts[outputX]),
@@ -154,7 +154,7 @@ internal static class EnlargingWordColumnBicubicResize
                         for (var t = 0; t < count; t++)
                             sum = Avx.Add(sum, Avx.Multiply(cache[rows[t] + x], Vector256.Create(vertical[t])));
                         var normalizer = normalizers[x] * normalizerY;
-                        if (!TryWriteSingle(sum, normalizer, destination.Slice((tile + x) * 8, 8)))
+                        if (!BicubicMath.TryWriteWord(sum, normalizer, destination.Slice((tile + x) * 8, 8)))
                         {
                             if (!(normalizer >= .5)
                                 || !OriginalWord(source, result, tile + x, y, weights.Slice(x * 5, counts[x]),
@@ -165,69 +165,10 @@ internal static class EnlargingWordColumnBicubicResize
             }
             // Admission bounds complete original tap cost. Failed speculative
             // strips leave the counter untouched for original-order replay.
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
-    }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
-    {
-        const double unitError = 2.3283064365386963e-10;
-        const double maximum = 65535d;
-        const double alphaError = unitError * maximum;
-        var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
-        if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
-        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
-        var values = Avx512F.Divide(sum, divisors);
-        var magnitudes = Avx512F.AndNot(Vector512.Create(long.MinValue), values.AsInt64()).AsDouble();
-        // Per-channel quotient bounds avoid scalar maximum/division chains.
-        // Doubling covers rounding of the positive error-bound calculation.
-        var errors = Vector512.Create(alphaError, alphaError, alphaError, unitError,
-            alphaError, alphaError, alphaError, unitError);
-        var numerators = Avx512F.Add(Vector512.Create(alphaError * maximum, alphaError * maximum, alphaError * maximum, alphaError,
-            alphaError * maximum, alphaError * maximum, alphaError * maximum, alphaError), Avx512F.Multiply(magnitudes, errors));
-        var margins = Avx512F.Divide(Avx512F.Multiply(numerators, Vector512.Create(2d)), Avx512F.Subtract(divisors, errors));
-        if (Vector512.ExtractMostSignificantBits(Avx512F.CompareGreaterThanOrEqual(margins, Vector512.Create(.25))) != 0
-            || !(values.GetElement(3) >= 1 + margins.GetElement(3) && values.GetElement(7) >= 1 + margins.GetElement(7))) return false;
-        var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
-        var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
-            Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();
-        var inRange = Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values, Vector512<double>.Zero).AsInt64(),
-            Avx512F.CompareLessThanOrEqual(values, Vector512.Create(maximum)).AsInt64());
-        var ambiguous = Avx512F.And(inRange, Avx512F.CompareLessThanOrEqual(distance, margins).AsInt64());
-        if (Vector512.ExtractMostSignificantBits(ambiguous) != 0) return false;
-        var clipped = Avx512F.Min(Vector512.Create(maximum), Avx512F.Max(Vector512<double>.Zero, values));
-        var ints = Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped, 0));
-        var words = Sse41.PackUnsignedSaturate(ints.GetLower(), ints.GetUpper());
-        MemoryMarshal.Write(output, in words);
-        return true;
-    }
-
-    private static bool TryWriteSingle(Vector256<double> sum, double normalizer, Span<byte> output)
-    {
-        const double unitError = 2.3283064365386963e-10;
-        const double maximum = 65535d;
-        const double alphaError = unitError * maximum;
-        var alpha = sum.GetElement(3);
-        if (!(normalizer >= .5 && alpha > alphaError)) return false;
-        var values = Avx.Divide(sum, Vector256.Create(alpha, alpha, alpha, normalizer));
-        var magnitude = Math.Max(Math.Abs(values.GetElement(0)),
-            Math.Max(Math.Abs(values.GetElement(1)), Math.Abs(values.GetElement(2))));
-        var colorMargin = 2 * (alphaError * maximum + magnitude * alphaError) / (alpha - alphaError);
-        var alphaMargin = 2 * (alphaError + Math.Abs(values.GetElement(3)) * unitError) / (normalizer - unitError);
-        if (colorMargin >= .25 || !(values.GetElement(3) >= 1 + alphaMargin)) return false;
-        for (var c = 0; c < 4; c++)
-        {
-            var value = values.GetElement(c);
-            if (value >= 0 && value <= maximum
-                && Math.Abs(value - Math.Floor(value) - .5) <= (c == 3 ? alphaMargin : colorMargin)) return false;
-        }
-        var clipped = Avx.Min(Vector256.Create(maximum), Avx.Max(Vector256<double>.Zero, values));
-        var ints = Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
-        var words = Sse41.PackUnsignedSaturate(ints, Vector128<int>.Zero).AsUInt64().GetElement(0);
-        BinaryPrimitives.WriteUInt64LittleEndian(output, words);
-        return true;
     }
 
     private static bool OriginalWord(ImageBuffer source, ImageBuffer result, int x, int y,
@@ -258,12 +199,12 @@ internal static class EnlargingWordColumnBicubicResize
             deferred = true;
             return true;
         }
-        var aOut = RoundWord(normalized);
+        var aOut = BicubicMath.RoundWord(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow16(y).Slice(x * 4, 4);
-        destination[0] = RoundWord(color ? red / alphaSum : 0);
-        destination[1] = RoundWord(color ? green / alphaSum : 0);
-        destination[2] = RoundWord(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundWord(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundWord(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundWord(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
     }
@@ -303,15 +244,12 @@ internal static class EnlargingWordColumnBicubicResize
                 var rounded = ResizeAlpha.Round(source, x, y, result.Width, result.Height, ResizeFilter.Bicubic, context);
                 var color = rounded > 0 && alphaSum > 0;
                 var pixel = destination.Slice(x * 4, 4);
-                pixel[0] = RoundWord(color ? red / alphaSum : 0);
-                pixel[1] = RoundWord(color ? green / alphaSum : 0);
-                pixel[2] = RoundWord(color ? blue / alphaSum : 0);
+                pixel[0] = BicubicMath.RoundWord(color ? red / alphaSum : 0);
+                pixel[1] = BicubicMath.RoundWord(color ? green / alphaSum : 0);
+                pixel[2] = BicubicMath.RoundWord(color ? blue / alphaSum : 0);
                 pixel[3] = (ushort)rounded;
             }
         }
     }
-
-    private static ushort RoundWord(double value)
-        => (ushort)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 65535);
 
 }

@@ -8,21 +8,21 @@ internal static partial class Vp8lReferenceCache
     {
         var maximum = new Vp8lHistogramLayout(maximumBits);
         var reserved = (maximum.Total + maximum.CacheSize) * 4L + 128;
-        context.Work(0); context.Reserve(reserved);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
         try
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             var cache = new uint[maximum.CacheSize]; var counts = new int[maximum.Total];
             var best = 0; var bestCost = long.MaxValue;
             for (var bits = 0; bits <= maximumBits; bits++)
             {
                 var layout = new Vp8lHistogramLayout(bits);
-                context.Work(layout.CacheSize + layout.Total);
+                context.Cancellation.ThrowIfCancellationRequested();
                 cache.AsSpan(0, layout.CacheSize).Clear(); counts.AsSpan(0, layout.Total).Clear();
                 var position = 0;
                 foreach (var token in seed)
                 {
-                    context.Work(4);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (token.Code > 0)
                     {
                         counts[256 + Vp8lSymbols.Prefix(token.Code).Code]++;
@@ -30,7 +30,7 @@ internal static partial class Vp8lReferenceCache
                         if (bits != 0)
                         {
                             for (var i = position; i < position + token.Length; i++)
-                            { context.Work(1); var pixel = pixels[i]; cache[Key(pixel, bits)] = pixel; }
+                            { context.Cancellation.ThrowIfCancellationRequested(); var pixel = pixels[i]; cache[Key(pixel, bits)] = pixel; }
                         }
                     }
                     else
@@ -60,7 +60,7 @@ internal static partial class Vp8lReferenceCache
     internal static void Apply(ReadOnlySpan<uint> pixels, Vp8lTokenBuffer buffer, int bits, OperationContext context)
     {
         var layout = new Vp8lHistogramLayout(bits);
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         if (bits == 0)
         {
             if (buffer.CacheBits != 0) throw new InvalidOperationException("Cannot remove an already applied token cache.");
@@ -70,14 +70,14 @@ internal static partial class Vp8lReferenceCache
         context.Reserve(reserved);
         try
         {
-            context.Work(0); var cache = new uint[layout.CacheSize]; var tokens = buffer.Writable; var position = 0;
+            context.Cancellation.ThrowIfCancellationRequested(); var cache = new uint[layout.CacheSize]; var tokens = buffer.Writable; var position = 0;
             for (var i = 0; i < tokens.Length; i++)
             {
-                context.Work(1); var token = tokens[i];
+                context.Cancellation.ThrowIfCancellationRequested(); var token = tokens[i];
                 if (token.Code > 0)
                 {
                     for (var at = position; at < position + token.Length; at++)
-                    { context.Work(1); var pixel = pixels[at]; cache[Key(pixel, bits)] = pixel; }
+                    { context.Cancellation.ThrowIfCancellationRequested(); var pixel = pixels[at]; cache[Key(pixel, bits)] = pixel; }
                 }
                 else
                 {

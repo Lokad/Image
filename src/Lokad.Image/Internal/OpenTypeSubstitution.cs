@@ -42,7 +42,7 @@ internal sealed class OpenTypeSubstitution : IDisposable
             var at = start;
             while (at < runEnd)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 if (mask != 0 && (glyphs[at].Features & mask) == 0) { at++; continue; }
                 ApplyAt(lookup, glyphs, at, runEnd, 0, out var next);
                 at = Math.Max(at + 1, next);
@@ -160,7 +160,7 @@ internal sealed class OpenTypeSubstitution : IDisposable
         var components = 0; var id = checked(++glyphs.NextLigature);
         for (var i = 0; i < matched.Length; i++)
         {
-            context.Work(1); var component = glyphs[matched[i]];
+            context.Cancellation.ThrowIfCancellationRequested(); var component = glyphs[matched[i]];
             sourceStart = Math.Min(sourceStart, component.SourceOffset);
             sourceEnd = Math.Max(sourceEnd, checked(component.SourceOffset + component.SourceLength));
             cluster = Math.Min(cluster, component.Cluster);
@@ -172,7 +172,7 @@ internal sealed class OpenTypeSubstitution : IDisposable
                 var attached = true;
                 for (var mark = matched[i] + 1; mark < matched[i + 1]; mark++)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (classes.Class(glyphs[mark]) != 3) { attached = false; continue; }
                     if (!attached) continue;
                     var part = component.ComponentCount > 1 && glyphs[mark].Ligature == component.Ligature
@@ -307,7 +307,7 @@ internal sealed class OpenTypeSubstitution : IDisposable
     {
         while (step > 0 ? at < end : at >= end)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (at < runStart || at >= runEnd || Boundary(glyphs[at])) return -1;
             if (!classes.Ignored(glyphs[at], flags, filteringSet)) return at;
             at += step;

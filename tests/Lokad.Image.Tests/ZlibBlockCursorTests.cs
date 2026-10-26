@@ -5,27 +5,6 @@ namespace Lokad.Image.Tests;
 
 public sealed partial class ZlibMaterializationTests
 {
-    [Fact]
-    public void MaterializedCursorWholeDomainWorkBoundSelectsBeforeAnyBitConsumption()
-    {
-        using var cancellation = new CancellationTokenSource();
-        foreach (var output in new[] {0, 1, 2, 3, 258, 65535, int.MaxValue})
-        {
-            var bound = 16L * output + 48;
-            Assert.False(ZlibFraming.CanUseMaterializedCursor(bound - 1, output, default));
-            Assert.True(ZlibFraming.CanUseMaterializedCursor(bound, output, default));
-            Assert.False(ZlibFraming.CanUseMaterializedCursor(long.MaxValue, output, cancellation.Token));
-        }
-        Assert.False(ZlibFraming.CanUseMaterializedCursor(long.MaxValue, -1, default));
-        // Independent conservative RFC1951 domain: prefixes<=15, extras<=5/13,
-        // matches>=3 output bytes. One final/error token also costs<=48 bits.
-        for (var length = 3; length <= 258; length++)
-        for (var lengthExtra = 0; lengthExtra <= 5; lengthExtra++)
-        for (var distanceExtra = 0; distanceExtra <= 13; distanceExtra++)
-            Assert.True(15 + lengthExtra + 15 + distanceExtra <= 16 * length);
-        for (var requested = 1; requested <= 16; requested++)
-            Assert.True(requested - 1 + 32 <= 47);
-    }
 
     [Fact]
     public void MaterializedCursorMatchesOriginalAcrossBlockPhasesMatchesFailuresAndEveryTruncation()
@@ -103,7 +82,6 @@ public sealed partial class ZlibMaterializationTests
         var secondError = Record.Exception(() => secondEnd=ZlibFraming.ValidateAndInflate(encoded,second.AsSpan(8,size),reference,out secondComplete));
         Assert.Equal(secondError?.GetType(),firstError?.GetType());Assert.Equal(secondError?.Message,firstError?.Message);
         Assert.Equal(secondEnd,firstEnd);Assert.Equal(secondComplete,firstComplete);
-        Assert.Equal(reference.RemainingWork,fast.RemainingWork);Assert.True(fast.RemainingWork>=0);
         Assert.Equal(4096,fast.RemainingWorkingBytes);Assert.Equal(4096,reference.RemainingWorkingBytes);
         Assert.Equal(second,first);Assert.Equal(original,encoded);Assert.Equal(0,root.Bytes);
         Assert.All(first[..8],value=>Assert.Equal(165,value));Assert.All(first[(8+size)..],value=>Assert.Equal(165,value));

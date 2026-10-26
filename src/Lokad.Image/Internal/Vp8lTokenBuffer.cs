@@ -26,14 +26,14 @@ internal sealed class Vp8lTokenBuffer : IDisposable
     {
         ArgumentOutOfRangeException.ThrowIfNegative(capacity);
         if (capacity > Array.MaxLength / 8) throw new ImageLimitException(ImageLimitKind.BufferLength, "Token buffer exceeds the supported length.");
-        this.context = context; context.Work(0); context.Reserve(capacity * 8L);
-        try { context.Work(0); tokens = new Vp8lToken[capacity]; }
+        this.context = context; context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(capacity * 8L);
+        try { context.Cancellation.ThrowIfCancellationRequested(); tokens = new Vp8lToken[capacity]; }
         catch { context.Release(capacity * 8L); throw; }
     }
 
     internal void Add(Vp8lToken token)
     {
-        context.Work(1);
+        context.Cancellation.ThrowIfCancellationRequested();
         var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
         if (Count == storage.Length) throw new InvalidOperationException("Token capacity exceeded.");
         storage[Count++] = token;
@@ -41,12 +41,12 @@ internal sealed class Vp8lTokenBuffer : IDisposable
 
     internal void Reverse()
     {
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
         var pairs = Count / 2;
         for (var i = 0; i < pairs; i++)
         {
-            if ((i & 1023) == 0) context.Work(Math.Min(1024, pairs - i));
+            if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
             (storage[i], storage[Count - 1 - i]) = (storage[Count - 1 - i], storage[i]);
         }
     }

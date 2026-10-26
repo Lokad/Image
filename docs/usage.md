@@ -76,7 +76,6 @@ var limits = new ImageLimits
     MaxInputBytes = 1024 * 1024,
     MaxOutputBytes = 4 * 1024 * 1024,
     MaxWorkingBytes = 64L * 1024 * 1024,
-    MaxWork = 100_000_000
 };
 using var cancellation = new CancellationTokenSource();
 var token = cancellation.Token;
@@ -94,7 +93,7 @@ File.WriteAllBytes("bounded-thumbnail.png", encoded.ToArray());
 Connect the token to the caller's cancellation source. `MaxWorkingBytes` admits
 the operation's accounted source, result and scratch buffers; it is not a cap
 on process RSS. The [resource admission notes](resource-admission.md) define
-the charges and work limits. A failed encode may leave partial bytes in its
+the charges and local memory limits. A failed encode may leave partial bytes in its
 output stream; discard them. The example writes the destination after encoding
 succeeds.
 
@@ -115,19 +114,19 @@ Actual retained input capacity counts toward the working limit.
 
 `IdentifyAsync(Stream)` and `DecodeAsync(Stream)` asynchronously acquire input
 through EOF, then run the same CPU validation/decoding. Both accept cancellation,
-leave input open and have corresponding `ImageBudget` methods. Keep the stream
+leave input open. Keep the stream
 alive until completion and dispose returned image owners normally. Async input
 uses bounded encoded-input buffering.
 
 `InspectHeaders(Stream)` and `InspectHeadersAsync(Stream)` obtain dimensions and
-orientation with fixed workspace, also through `ImageBudget`. They scan through
+orientation with fixed workspace. They scan through
 EOF, seeking over opaque payloads when possible and otherwise draining them.
 PNG CRCs and compressed pixels are not validated; `Identify` retains its fuller
 container checks. Configured limits and cancellation still apply. Input stays open.
 
 `EncodePngAsync`, `EncodeJpegAsync` and `EncodeWebpAsync` stage encoded bytes within
 working/output limits, then write asynchronously. They leave output open and
-have `ImageBudget` counterparts. The JPEG sample overload accepts borrowed
+use the same memory-admission root. The JPEG sample overload accepts borrowed
 `ReadOnlyMemory<byte>` gray/RGB samples with the same stride/quality controls.
 Keep source storage stable until completion. No final `ToArray` copy is needed;
 discard partial output after a write failure or cancellation.
@@ -136,7 +135,7 @@ discard partial output after a write failure or cancellation.
 coordinates with clipped destinations. Copy source rectangles must fit and depths
 must match; compositing accepts either source/canvas depth. `RgbaColor.From8` expands
 eight-bit colors exactly. Self-overlap is safe without a full-frame temporary.
-Mutations can leave completed chunks on cancellation/work exhaustion; synchronize
+Mutations can leave completed chunks on cancellation; synchronize
 access to mutable images. No EXIF orientation is implicitly applied.
 
 `TrueTypeFont.Load` owns a supplied standalone TrueType face. Dispose fonts and
@@ -157,7 +156,7 @@ new TextOptions { FontSize = 24, Shaping = TextShaping.OpenType },
 minimumFontSize: 8, fontSizeStep: .25)`. On success, dispose `fitted` after use
 and draw it at `(-fitted.Bounds.X, -fitted.Bounds.Y)` relative to the target area.
 The largest fitting grid candidate is returned; false/null means none fits.
-Trials share work/admission and release rejected storage. Resource failure or
+Trials share admission and release rejected storage. Resource failure or
 cancellation terminates the call rather than trying a smaller candidate.
 
 For cooperative memory admission in 0.2.0 development, set

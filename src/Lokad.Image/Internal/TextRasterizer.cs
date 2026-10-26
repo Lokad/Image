@@ -35,14 +35,14 @@ internal sealed class TextRasterizer : IDisposable
         this.context = context;
         Admit(4096); // Owner/comparers plus bounded sort/integration frame allowance.
         crossingComparer = Comparer<Crossing>.Create((a, b) =>
-        { context.Work(1); var order = a.X.CompareTo(b.X); return order != 0 ? order : a.Index.CompareTo(b.Index); });
-        eventComparer = Comparer<double>.Create((a, b) => { context.Work(1); return a.CompareTo(b); });
+        { context.Cancellation.ThrowIfCancellationRequested(); var order = a.X.CompareTo(b.X); return order != 0 ? order : a.Index.CompareTo(b.Index); });
+        eventComparer = Comparer<double>.Create((a, b) => { context.Cancellation.ThrowIfCancellationRequested(); return a.CompareTo(b); });
         try
         {
             var maximum = 0;
             foreach (var p in layout.Placements)
             {
-                context.Work(1); var shape = p.Shape!;
+                context.Cancellation.ThrowIfCancellationRequested(); var shape = p.Shape!;
                 if (shapes.ContainsKey(shape)) continue;
                 Admit(512); var prepared = new RasterShape(this);
                 try { prepared.Build(shape.Outline, layout.FontSize / layout.Font.UnitsPerEm); shapes.Add(shape, prepared); }
@@ -66,7 +66,7 @@ internal sealed class TextRasterizer : IDisposable
     {
         foreach (var glyph in layout.Placements)
         {
-            context.Work(1); var shape = shapes[glyph.Shape!]; if (shape.Count == 0) continue;
+            context.Cancellation.ThrowIfCancellationRequested(); var shape = shapes[glyph.Shape!]; if (shape.Count == 0) continue;
             var dx = x + glyph.X; var dy = y + glyph.Y;
             var first = Math.Max(top, Math.Floor(shape.MinY + dy)); var last = Math.Min(bottom, Math.Ceiling(shape.MaxY + dy));
             if (first >= last) continue;
@@ -75,11 +75,11 @@ internal sealed class TextRasterizer : IDisposable
             {
                 for (var offset = 0; offset < row.Length;)
                 {
-                    var count = Math.Min(4096, row.Length - offset); context.Work(count);
+                    var count = Math.Min(4096, row.Length - offset); context.Cancellation.ThrowIfCancellationRequested();
                     row.AsSpan(offset, count).Clear(); offset += count;
                 }
                 var band = py - dy; var rowEnd = py + 1 - dy;
-                while (eventIndex < shape.EventCount && shape.Events[eventIndex] <= band) { context.Work(1); eventIndex++; }
+                while (eventIndex < shape.EventCount && shape.Events[eventIndex] <= band) { context.Cancellation.ThrowIfCancellationRequested(); eventIndex++; }
                 while (eventIndex < shape.EventCount && shape.Events[eventIndex] < rowEnd)
                 {
                     var end = shape.Events[eventIndex++];
@@ -89,7 +89,7 @@ internal sealed class TextRasterizer : IDisposable
                 if (rowEnd > band) Band(shape, band, rowEnd, dx, dy - py, left, right);
                 for (var i = 0; i < row.Length;)
                 {
-                    var count = Math.Min(128, row.Length - i); context.Work(count * 24L);
+                    var count = Math.Min(128, row.Length - i); context.Cancellation.ThrowIfCancellationRequested();
                     for (var j = i; j < i + count; j++)
                     {
                         var coverage = (uint)Math.Clamp(Math.Floor(row[j] * 65535 + .5), 0, 65535);
@@ -106,14 +106,14 @@ internal sealed class TextRasterizer : IDisposable
         var middle = top * .5 + bottom * .5; var count = 0;
         for (var i = 0; i < shape.Count; i++)
         {
-            context.Work(1); var edge = shape.Edges[i];
+            context.Cancellation.ThrowIfCancellationRequested(); var edge = shape.Edges[i];
             if (edge.MinY < middle && middle < edge.MaxY) crossings[count++] = new(edge.X(middle), i);
         }
         Sort(crossings, count, crossingComparer);
         var winding = 0; Edge start = default;
         for (var i = 0; i < count; i++)
         {
-            context.Work(1); var edge = shape.Edges[crossings[i].Index]; var previous = winding; winding += edge.Winding;
+            context.Cancellation.ThrowIfCancellationRequested(); var edge = shape.Edges[crossings[i].Index]; var previous = winding; winding += edge.Winding;
             if (previous == 0 && winding != 0) start = edge;
             else if (previous != 0 && winding == 0)
             {
@@ -123,7 +123,7 @@ internal sealed class TextRasterizer : IDisposable
                 if (first >= last) continue;
                 for (var px = (int)first; px < last; px++)
                 {
-                    context.Work(12);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     row[px - left] += Area(a - px, b - px, c - px, d - px, top + dy, bottom + dy);
                 }
             }
@@ -204,12 +204,12 @@ internal sealed class TextRasterizer : IDisposable
                 Point Position(FontPoint p) => new((p.X - outline.Left.X) * scale, -p.Y * scale);
                 while (segments.Next(out var segment))
                 {
-                    owner.context.Work(1); var a = Position(segment.Start); var b = Position(segment.End);
+                    owner.context.Cancellation.ThrowIfCancellationRequested(); var a = Position(segment.Start); var b = Position(segment.End);
                     if (!segment.Quadratic) { Add(a, b); continue; }
                     var used = 1; stack[0] = new(a, Position(segment.Control), b, 0);
                     while (used != 0)
                     {
-                        owner.context.Work(1); var curve = stack[--used];
+                        owner.context.Cancellation.ThrowIfCancellationRequested(); var curve = stack[--used];
                         var deviation = Math.Max(Math.Abs(curve.A.X - 2 * curve.C.X + curve.B.X), Math.Abs(curve.A.Y - 2 * curve.C.Y + curve.B.Y)) * .25;
                         if (deviation <= 1.0 / 1024) { Add(curve.A, curve.B); continue; }
                         if (curve.Depth == depthLimit) throw new UnsupportedImageException(UnsupportedImageFeature.FontOutline, "Text curve subdivision exceeds 24 levels.");
@@ -224,7 +224,7 @@ internal sealed class TextRasterizer : IDisposable
             for (var i = 0; i < Count; i++)
             for (var j = i + 1; j < Count; j++)
             {
-                owner.context.Work(1); var a = Edges[i]; var b = Edges[j];
+                owner.context.Cancellation.ThrowIfCancellationRequested(); var a = Edges[i]; var b = Edges[j];
                 var low = Math.Max(a.MinY, b.MinY); var high = Math.Min(a.MaxY, b.MaxY); if (low >= high) continue;
                 var d0 = a.X(low) - b.X(low); var d1 = a.X(high) - b.X(high);
                 if (d0 < 0 && d1 > 0 || d0 > 0 && d1 < 0)
@@ -236,7 +236,7 @@ internal sealed class TextRasterizer : IDisposable
             Sort(Events, EventCount, owner.eventComparer);
             var unique = 0;
             for (var i = 0; i < EventCount; i++)
-            { owner.context.Work(1); if (unique == 0 || Events[i] != Events[unique - 1]) Events[unique++] = Events[i]; }
+            { owner.context.Cancellation.ThrowIfCancellationRequested(); if (unique == 0 || Events[i] != Events[unique - 1]) Events[unique++] = Events[i]; }
             EventCount = unique;
             if (unique != 0) { MinY = Events[0]; MaxY = Events[unique - 1]; }
         }
@@ -253,7 +253,7 @@ internal sealed class TextRasterizer : IDisposable
             var capacity = (int)Math.Min(owner.context.Limits.MaxContainerItems, Math.Max(count + 1L, Math.Max(8, array.Length * 2L)));
             var nextBytes = 32 + capacity * (long)itemBytes; owner.Admit(nextBytes);
             T[] next;
-            try { owner.context.Work(count); next = new T[capacity]; array.AsSpan(0, count).CopyTo(next); }
+            try { owner.context.Cancellation.ThrowIfCancellationRequested(); next = new T[capacity]; array.AsSpan(0, count).CopyTo(next); }
             catch { owner.Release(nextBytes); throw; }
             owner.Release(bytes); bytes = nextBytes; array = next;
         }

@@ -43,7 +43,7 @@ internal static class Vp8TrellisQuantization
             if (coefficients[p] is < -2040 or > 2040) throw new ArgumentOutOfRangeException(nameof(coefficients), "Coefficient exceeds the VP8 DCT domain.");
         var sum = 0; foreach (var weight in weights[..16]) sum += weight;
         if (sum != 256) throw new ArgumentException("Trellis importance must sum to256.");
-        _ = rate.Values; operation.Work(2048);
+        _ = rate.Values; operation.Cancellation.ThrowIfCancellationRequested();
         Span<byte> scan = stackalloc byte[16]; var at = 0;
         for (var diagonal = 0; diagonal <= 6; diagonal++)
         {

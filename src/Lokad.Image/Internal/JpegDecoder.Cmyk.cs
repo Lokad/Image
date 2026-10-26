@@ -37,7 +37,7 @@ internal ref partial struct JpegDecoder
             {
                 for (var y = 0; y < info.Height; y++)
                 {
-                    context.Work(info.Width * 32L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     RenderCmykRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
                         components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
                         components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width),
@@ -47,7 +47,7 @@ internal ref partial struct JpegDecoder
             }
             for (var y = 0; y < info.Height; y++)
             {
-                context.Work(info.Width * 32L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var row = result.GetRow8(y);
                 for (var x = 0; x < info.Width; x++)
                 {
@@ -85,7 +85,7 @@ internal ref partial struct JpegDecoder
             && TryWriteFullResolutionCmyk(destination, stride, invert)) return;
         for (var y = 0; y < info.Height; y++)
         {
-            context.Work(info.Width * 32L);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var x = 0; x < info.Width; x++)
             {
                 var (dx, dy) = orientation switch

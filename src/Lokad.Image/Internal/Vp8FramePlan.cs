@@ -83,7 +83,7 @@ internal sealed class Vp8FramePlan : IDisposable
     {
         if (method is < 3 or > 6 || headerLimit is < 0 or > 65536 || segments.Width != input.Stride / 16 || segments.Height != input.StorageHeight / 16
             || quantization.SegmentCount != segments.SegmentCount) throw new ArgumentException("Inconsistent VP8 frame preparation.");
-        context.Work(0); var result = new Vp8FramePlan(input, segments, quantization, headerLimit, context);
+        context.Cancellation.ThrowIfCancellationRequested(); var result = new Vp8FramePlan(input, segments, quantization, headerLimit, context);
         try
         {
             result.Initialize(segments);
@@ -91,7 +91,7 @@ internal sealed class Vp8FramePlan : IDisposable
             context.Reserve(scratch);
             try
             {
-                context.Work(0); result.Prepare(input, segments, quantization, correctDc, method);
+                context.Cancellation.ThrowIfCancellationRequested(); result.Prepare(input, segments, quantization, correctDc, method);
             }
             finally { context.Release(scratch); }
             return result;
@@ -102,7 +102,7 @@ internal sealed class Vp8FramePlan : IDisposable
     private void Initialize(Vp8SourceSegments segments)
     {
         var bytes = Count * 820L + 1056 + 16 * sizeof(int) + MetadataBytes;
-        context.Reserve(bytes); capacity = bytes; context.Work(0);
+        context.Reserve(bytes); capacity = bytes; context.Cancellation.ThrowIfCancellationRequested();
         coefficients = new short[checked(Count * 400)]; blocks = new byte[checked(Count * BlockBytes)];
         probabilities = Vp8Tables.CoefficientProbabilities.ToArray(); parameters = new int[16];
         for (var s = 0; s < 4; s++) { parameters[s] = segments.Parameters[s].Quantizer; parameters[4 + s] = segments.Parameters[s].InitialFilter; }
@@ -127,13 +127,13 @@ internal sealed class Vp8FramePlan : IDisposable
         if (method is < 0 or > 2 || analysis.Width != input.Stride / 16 || analysis.Height != input.StorageHeight / 16
             || segments.Width != analysis.Width || segments.Height != analysis.Height || quantization.SegmentCount != segments.SegmentCount)
             throw new ArgumentException("Inconsistent VP8 distortion frame preparation.");
-        context.Work(0); var result = new Vp8FramePlan(input, segments, quantization, 65536, context);
+        context.Cancellation.ThrowIfCancellationRequested(); var result = new Vp8FramePlan(input, segments, quantization, 65536, context);
         try
         {
             result.Initialize(segments);
             var scratch = Vp8DistortionDecision.ScratchBytes + 4096L + 45L * result.Columns + 4224 + 512;
             context.Reserve(scratch);
-            try { context.Work(0); result.PrepareDistortion(input, analysis, segments, quantization, method, correctDc); }
+            try { context.Cancellation.ThrowIfCancellationRequested(); result.PrepareDistortion(input, analysis, segments, quantization, method, correctDc); }
             finally { context.Release(scratch); }
             return result;
         }
@@ -148,7 +148,7 @@ internal sealed class Vp8FramePlan : IDisposable
         Span<byte> source = stackalloc byte[384]; Span<byte> neighbors = stackalloc byte[71]; Span<byte> modeContexts = stackalloc byte[8];
         Span<byte> contexts = stackalloc byte[18]; Span<byte> modeLeft = stackalloc byte[4]; Span<sbyte> diffusion = stackalloc sbyte[8]; diffusion.Clear();
         Span<sbyte> errors = stackalloc sbyte[14]; Span<byte> pixels = stackalloc byte[384]; Span<int> counts = stackalloc int[4]; counts.Clear();
-        context.Work(Count * 24L);
+        context.Cancellation.ThrowIfCancellationRequested();
         for (var index = 0; index < Count; index++)
         {
             var data = blocks!.AsSpan(index * BlockBytes, BlockBytes); var small = analysis.LumaModes[index] == 2;
@@ -161,11 +161,11 @@ internal sealed class Vp8FramePlan : IDisposable
         var statisticsCount = method == 0 ? Math.Min(Count, Count > 200 ? Count >> 2 : 50) : Count;
         for (var pass = 0; pass < 2; pass++)
         {
-            context.Work(Columns * 45L); yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
+            context.Cancellation.ThrowIfCancellationRequested(); yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
             coefficientTop.AsSpan().Clear(); contexts.Clear(); var count = pass == 0 ? statisticsCount : Count;
             for (var index = 0; index < count; index++)
             {
-                context.Work(32768); var x = index % Columns; var y = index / Columns;
+                context.Cancellation.ThrowIfCancellationRequested(); var x = index % Columns; var y = index / Columns;
                 if (x == 0)
                 {
                     neighbors[..35].Fill(129); neighbors[0] = neighbors[17] = neighbors[26] = y == 0 ? (byte)127 : (byte)129;
@@ -211,7 +211,7 @@ internal sealed class Vp8FramePlan : IDisposable
                 // Native distortion-only scores have H=0. A zero map cost makes
                 // its statistics loop return before finalizing either profile;
                 // the final encoder still runs with defaults in that case.
-                context.Work(1056 * 16L); Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities!, out _);
+                context.Cancellation.ThrowIfCancellationRequested(); Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities!, out _);
                 SkipProbability = (byte)((Count - skipped) * 255L / Count); UseSkipProbability = SkipProbability < 250;
             }
         }
@@ -233,7 +233,7 @@ internal sealed class Vp8FramePlan : IDisposable
         while (true)
         {
             if (HeaderRetries != 0) FillHeaderParameters(segments.Parameters, SegmentCount, ownedParameters);
-            context.Work(Count); yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
+            context.Cancellation.ThrowIfCancellationRequested(); yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
             coefficientTop.AsSpan().Clear(); errorTop.AsSpan().Clear(); statistics.AsSpan().Clear(); ownedParameters.AsSpan(8, 4).Clear();
             Vp8RatePlan? rate = null;
             try
@@ -243,7 +243,7 @@ internal sealed class Vp8FramePlan : IDisposable
                 rate = Vp8RatePlan.Create(probabilities, context); long headerCost = SegmentHeaderCost(counts, rate.Entropy);
                 for (var index = 0; index < Count; index++)
                 {
-                    context.Work(32768); var x = index % Columns; var y = index / Columns;
+                    context.Cancellation.ThrowIfCancellationRequested(); var x = index % Columns; var y = index / Columns;
                     if (x == 0)
                     {
                         neighbors[..35].Fill(129); neighbors[0] = neighbors[17] = neighbors[26] = y == 0 ? (byte)127 : (byte)129;
@@ -286,7 +286,7 @@ internal sealed class Vp8FramePlan : IDisposable
                     errors.Slice(6, 4).CopyTo(errorTop.AsSpan(x * 4, 4)); errors.Slice(10, 4).CopyTo(errorLeft);
                 }
                 // Header-size strengthening is a format policy, not a resource
-                // refusal fallback. All reservations/work failures remain terminal.
+                // refusal fallback. All reservation failures remain terminal.
                 if (HeaderLimit > 0 && headerCost > ((524288L - 2048) << 11)) { HeaderLimit >>= 1; HeaderRetries++; continue; }
                 Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities, out _);
                 for (var s = 0; s < 4; s++)

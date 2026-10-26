@@ -20,11 +20,4 @@ public sealed class TextRasterizerTests
         var failure = Assert.Throws<ImageLimitException>(() => new TextRasterizer(layout, denied, 10));
         Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(6559, denied.RemainingWorkingBytes);
     }
-    [Fact]
-    public void SortingWorkFailureIsTypedAndReleasesPreparedGeometry()
-    {
-        var layout = Rectangle(); var context = new OperationContext(new() { MaxWork = 7 }, default); var before = context.RemainingWorkingBytes;
-        var failure = Assert.Throws<ImageLimitException>(() => new TextRasterizer(layout, context, 10));
-        Assert.Equal(ImageLimitKind.Work, failure.Limit); Assert.Null(failure.InnerException); Assert.Equal(before, context.RemainingWorkingBytes);
-    }
 }

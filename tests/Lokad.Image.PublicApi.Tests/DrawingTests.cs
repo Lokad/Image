@@ -92,12 +92,12 @@ public sealed class DrawingTests
     [Theory]
     [InlineData("fill", 8)] [InlineData("copy", 8)] [InlineData("composite", 8)]
     [InlineData("fill", 16)] [InlineData("copy", 16)] [InlineData("composite", 16)]
-    public void ExactMemoryWorkAndGeometryAdmissionPrecedeMutation(string operation, int depth)
+    public void ExactMemoryAndGeometryAdmissionPrecedeMutation(string operation, int depth)
     {
         using var canvas = OriginalPixels.Buffer(9, 7, depth); using var source = canvas.Clone(); var saved = OriginalPixels.Bytes(canvas);
         var bytes = saved.Length * (operation == "fill" ? 1L : 2L);
-        var work = 9 * 7 * (operation == "composite" ? 16L : 4L);
-        var limits = new ImageLimits { MaxWorkingBytes = bytes, MaxWork = work };
+
+        var limits = new ImageLimits { MaxWorkingBytes = bytes};
         var failure = Assert.Throws<ImageLimitException>(() => Apply(operation, canvas, source, limits with { MaxWorkingBytes = bytes - 1 }));
         Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(saved, OriginalPixels.Bytes(canvas));
         failure = Assert.Throws<ImageLimitException>(() => Apply(operation, canvas, source, limits with { MaxDimension = 8 }));
@@ -112,16 +112,11 @@ public sealed class DrawingTests
 
     [Theory]
     [InlineData("fill")] [InlineData("copy")] [InlineData("composite")]
-    public void WorkLimitLeavesOnlyCompletedChunksAndSelfOperationsAdmitOneOwner(string operation)
+    public void SelfOperationsAdmitOneOwner(string operation)
     {
-        using var canvas = ImageBuffer.Create(5000, 1, 8); using var source = ImageBuffer.Create(5000, 1, 8);
+        using var source = ImageBuffer.Create(5000, 1, 8);
         ImageDrawing.FillRectangle(source, 0, 0, 5000, 1, RgbaColor.From8(1, 2, 3));
-        var chunk = operation == "composite" ? 256 : 4096;
-        var limits = new ImageLimits { MaxWorkingBytes = 40000, MaxWork = chunk * (operation == "composite" ? 16L : 4L) };
-        var failure = Assert.Throws<ImageLimitException>(() => Apply(operation, canvas, source, limits));
-        Assert.Equal(ImageLimitKind.Work, failure.Limit);
-        for (var x = 0; x < 5000; x++) Assert.Equal(x < chunk ? 255 : 0, canvas.GetRow8(0)[x * 4 + 3]);
-        limits = limits with { MaxWorkingBytes = 20000, MaxWork = 100000 };
+        var limits = new ImageLimits { MaxWorkingBytes = (long)source.Width * source.Height * 4 };
         Apply(operation, source, source, limits);
     }
 

@@ -123,26 +123,4 @@ public sealed class Vp8lReferencePaletteTests
         using var next = Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, Vp8lPaletteOrder.MinDelta, nextContext);
         next.Dispose(); Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(0, root.Refusals);
     }
-
-    [Fact]
-    public void EarlyAndLateWorkFailuresReleaseScratchAndAnyUnreturnedPalette()
-    {
-        var rgba = Source(7, 3, 4); long completeWork;
-        using (var calibration = new OperationContext(ImageLimits.Default, default))
-        {
-            var working = Working(rgba, false, calibration);
-            using var plan = Vp8lReferencePalette.SelectAndPack(working, 7, 4, Vp8lPaletteOrder.MinDelta, calibration);
-            completeWork = calibration.ConsumedWork;
-        }
-        foreach (var budget in new[] { 2L, completeWork - 1 })
-        {
-            using var root = new TestMemoryBudget(10_000);
-            using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = budget }, default);
-            var pixels = Working(rgba, false, context);
-            var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 7, 4, Vp8lPaletteOrder.MinDelta, context));
-            Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-            Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(0, root.Refusals);
-            if (budget != 2) Assert.NotEqual(0u, pixels[0]); // Packing had already begun in owned working storage.
-        }
-    }
 }

@@ -23,7 +23,7 @@ internal sealed class Vp8lImageCode : IDisposable
         // Group references and a coarse allowance for code-owner/array headers.
         // Substantial symbol storage is charged by each canonical-code owner.
         var reservation = count * 1024L + 64; context.Reserve(reservation);
-        try { context.Work(0); groups = new Vp8lHuffmanGroup?[count]; groupReservation = reservation; }
+        try { context.Cancellation.ThrowIfCancellationRequested(); groups = new Vp8lHuffmanGroup?[count]; groupReservation = reservation; }
         catch { context.Release(reservation); throw; }
         for (var i = 0; i < count; i++) groups[i] = Vp8lHuffmanGroup.Build(counts.Slice(i * layout.Total, layout.Total), layout, context);
     }
@@ -39,7 +39,7 @@ internal sealed class Vp8lImageCode : IDisposable
             var layout = new Vp8lHistogramLayout(0); var reserved = layout.Total * 4L; context.Reserve(reserved);
             try
             {
-                context.Work(0); var counts = new int[layout.Total]; layout.Fill(tokens.Tokens, width, true, counts, context);
+                context.Cancellation.ThrowIfCancellationRequested(); var counts = new int[layout.Total]; layout.Fill(tokens.Tokens, width, true, counts, context);
                 result.BuildGroups(counts, layout, 1);
             }
             finally { context.Release(reserved); }
@@ -67,7 +67,7 @@ internal sealed class Vp8lImageCode : IDisposable
                     for (var y = 0; same && y < rows; y++)
                     for (var x = 0; x < columns; x++)
                     {
-                        context.Work(1);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         if (map[y * columns + x] != map[(y / step * step) * columns + x / step * step]) { same = false; break; }
                     }
                     if (!same) break; result.StoredTileBits = candidate;
@@ -77,10 +77,10 @@ internal sealed class Vp8lImageCode : IDisposable
                 var reserved = codedColumns * codedRows * 4L; context.Reserve(reserved);
                 try
                 {
-                    context.Work(0); var pixels = new uint[codedColumns * codedRows];
+                    context.Cancellation.ThrowIfCancellationRequested(); var pixels = new uint[codedColumns * codedRows];
                     for (var y = 0; y < codedRows; y++)
                     for (var x = 0; x < codedColumns; x++)
-                    { context.Work(1); pixels[y * codedColumns + x] = (uint)map[y * stride * columns + x * stride] << 8; }
+                    { context.Cancellation.ThrowIfCancellationRequested(); pixels[y * codedColumns + x] = (uint)map[y * stride * columns + x * stride] << 8; }
                     result.groupMap = Auxiliary(pixels, codedColumns, quality, lowEffort, context);
                 }
                 finally { context.Release(reserved); }

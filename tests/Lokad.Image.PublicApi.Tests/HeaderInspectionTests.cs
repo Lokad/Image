@@ -154,42 +154,24 @@ public sealed class HeaderInspectionTests
     [Theory]
     [InlineData(ImageLimitKind.InputBytes)] [InlineData(ImageLimitKind.WorkingBytes)]
     [InlineData(ImageLimitKind.MetadataBytes)] [InlineData(ImageLimitKind.ContainerItems)]
-    [InlineData(ImageLimitKind.Work)] [InlineData(ImageLimitKind.Dimension)] [InlineData(ImageLimitKind.PixelCount)]
+[InlineData(ImageLimitKind.Dimension)] [InlineData(ImageLimitKind.PixelCount)]
     public async Task LimitsRemainTypedAndSharedReservationsRefundOnFailure(ImageLimitKind kind)
     {
         var data = OriginalExif.Attach(OriginalExif.Create(MetadataProfile.Png8, 17, 11), ImageOrientation.Rotate90, false);
-        var limits = new ImageLimits { MaxWorkingBytes = Workspace, MaxWork = 1_000_000 };
+        var limits = new ImageLimits { MaxWorkingBytes = Workspace};
         limits = kind switch
         {
             ImageLimitKind.InputBytes => limits with { MaxInputBytes = 1 }, ImageLimitKind.WorkingBytes => limits with { MaxWorkingBytes = Workspace - 1 },
             ImageLimitKind.MetadataBytes => limits with { MaxMetadataBytes = 1 }, ImageLimitKind.ContainerItems => limits with { MaxContainerItems = 1 },
-            ImageLimitKind.Work => limits with { MaxWork = 1 }, ImageLimitKind.Dimension => limits with { MaxDimension = 1 },
+ImageLimitKind.Dimension => limits with { MaxDimension = 1 },
             _ => limits with { MaxPixels = 1 }
         };
-        var budget = new ImageBudget(Workspace, 2_000_000); using var input = SparseInput.Bytes(data, true);
-        var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.InspectHeadersAsync(input, limits).AsTask());
+        using var root = new TestMemoryBudget(Workspace); limits = limits with { MemoryBudget = root };
+        using var input = SparseInput.Bytes(data, true);
+        var failure = await Assert.ThrowsAsync<ImageLimitException>(() => ImageCodec.InspectHeadersAsync(input, limits).AsTask());
         Assert.Equal(kind, failure.Limit); Assert.Equal(ImageLimitScope.Operation, failure.Scope);
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.False(input.WasDisposed);
+        Assert.Equal(0, root.Bytes); Assert.False(input.WasDisposed);
         if (kind == ImageLimitKind.WorkingBytes) Assert.Equal(0, input.ReadCalls);
-    }
-
-    [Fact]
-    public async Task SharedBudgetSurvivesAwaitCancellationAndCallerIoFailure()
-    {
-        var data = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
-        var limits = new ImageLimits { MaxWorkingBytes = Workspace, MaxWork = 1_000_000 };
-        var budget = new ImageBudget(Workspace, 3_000_000);
-        using var token = new CancellationTokenSource(); using var input = SparseInput.Bytes(data, true); input.Pause = true;
-        var pending = budget.InspectHeadersAsync(input, limits, token.Token).AsTask();
-        await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5)); Assert.False(pending.IsCompleted); Assert.Equal(0, budget.RemainingWorkingBytes);
-        var refused = Assert.Throws<ImageLimitException>(() => budget.Reserve(1)); Assert.Equal(ImageLimitScope.SharedBudget, refused.Scope);
-        token.Cancel(); var canceled = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
-        Assert.Equal(token.Token, canceled.CancellationToken); Assert.Equal(Workspace, budget.RemainingWorkingBytes); Assert.False(input.WasDisposed);
-        var original = new IOException("Original caller read failure."); using var broken = SparseInput.Bytes(data, true, chunk: 7); broken.FailAfter = 7; broken.Failure = original;
-        var failure = await Assert.ThrowsAsync<IOException>(() => budget.InspectHeadersAsync(broken, limits).AsTask());
-        Assert.Same(original, failure); Assert.Equal(7, budget.ConsumedWork); Assert.Equal(Workspace, budget.RemainingWorkingBytes);
-        using var recovery = SparseInput.Bytes(data, false); Assert.Equal(ImageCodec.Identify(data), budget.InspectHeaders(recovery, limits));
-        Assert.Equal(Workspace, budget.RemainingWorkingBytes);
     }
 
     [Fact]
@@ -213,48 +195,6 @@ public sealed class HeaderInspectionTests
         Assert.Equal(ImageCodec.Identify(data), await ImageCodec.InspectHeadersAsync(input,
             new() { MaxWorkingBytes = Workspace, MaxInputBytes = data.Length }));
         Assert.Equal(input.Length, input.Position); Assert.Equal(data.Length, input.BytesRead);
-    }
-
-    [Theory]
-    [InlineData("byte-order")] [InlineData("offset")] [InlineData("directory")]
-    [InlineData("type")] [InlineData("count")] [InlineData("orientation")]
-    public async Task InvalidStreamedExifIsRejectedWithoutLeakingAdmission(string field)
-    {
-        var tiff = Tiff(6);
-        switch (field)
-        {
-            case "byte-order": tiff[0] = 0; break;
-            case "offset": BinaryPrimitives.WriteUInt32LittleEndian(tiff.AsSpan(4), uint.MaxValue); break;
-            case "directory": BinaryPrimitives.WriteUInt16LittleEndian(tiff.AsSpan(8), ushort.MaxValue); break;
-            case "type": tiff[12] = 4; break;
-            case "count": tiff[14] = 2; break;
-            default: tiff[18] = 9; break;
-        }
-        var frame = new AuthoredPng.Frame("invalid-exif", 6, 8, 1, 1, false);
-        var data = AuthoredPng.Wrap(frame, AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame)), ("eXIf", tiff));
-        var limits = new ImageLimits { MaxWorkingBytes = Workspace, MaxWork = 1_000_000 };
-        var budget = new ImageBudget(Workspace, limits.MaxWork); using var input = SparseInput.Bytes(data, true, chunk: 3);
-        await Assert.ThrowsAsync<ImageDataException>(() => budget.InspectHeadersAsync(input, limits).AsTask());
-        Assert.Equal(Workspace, budget.RemainingWorkingBytes); Assert.False(input.WasDisposed);
-    }
-
-    [Fact]
-    public async Task SeekedPayloadStillConsumesInputAndWorkQuotas()
-    {
-        using var input = Large("png", true);
-        var limits = new ImageLimits { MaxWorkingBytes = Workspace, MaxDimension = 65535, MaxPixels = 3_500_000_000,
-            MaxInputBytes = (int)input.Length, MaxWork = input.Length + 3 };
-        var budget = new ImageBudget(Workspace, 3 * limits.MaxWork);
-        await budget.InspectHeadersAsync(input, limits);
-        Assert.Equal(input.Length + 3, budget.ConsumedWork); Assert.True(input.BytesRead < 20000);
-        using var work = Large("png", true);
-        var failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.InspectHeadersAsync(work,
-            limits with { MaxWork = limits.MaxWork - 1 }).AsTask());
-        Assert.Equal(ImageLimitKind.Work, failure.Limit);
-        using var bytes = Large("png", true);
-        failure = await Assert.ThrowsAsync<ImageLimitException>(() => budget.InspectHeadersAsync(bytes,
-            limits with { MaxInputBytes = limits.MaxInputBytes - 1 }).AsTask());
-        Assert.Equal(ImageLimitKind.InputBytes, failure.Limit); Assert.Equal(Workspace, budget.RemainingWorkingBytes);
     }
 
     private static byte[] ChunkHeader(string type, int size)
@@ -301,18 +241,14 @@ public sealed class HeaderInspectionTests
         private long position;
         public long BytesRead;
         public int ReadCalls, SeekCalls, LargestRequest;
-        public bool WasDisposed, Pause, FalseSeek;
+        public bool WasDisposed, FalseSeek;
         public long FailAfter = long.MaxValue;
-        public IOException? Failure;
         public CancellationToken LastToken;
-        public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public TaskCompletionSource Resume { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         internal static SparseInput Bytes(byte[] data, bool asynchronous, int chunk = int.MaxValue, bool seekable = false)
             => new(data.Length, seekable, asynchronous, [(0, data)], chunk);
         private int ReadCore(Span<byte> buffer)
         {
             ObjectDisposedException.ThrowIf(WasDisposed, this);
-            if (BytesRead >= FailAfter && Failure is { } failure) throw failure;
             if (position >= length) return 0;
             var count = (int)Math.Min(Math.Min(buffer.Length, chunk), length - position); buffer[..count].Clear();
             foreach (var piece in pieces)
@@ -331,7 +267,6 @@ public sealed class HeaderInspectionTests
         {
             if (!asynchronous) throw new InvalidOperationException("Async read forbidden."); ReadCalls++; LargestRequest = Math.Max(LargestRequest, buffer.Length); LastToken = cancellationToken;
             await Task.Yield(); cancellationToken.ThrowIfCancellationRequested();
-            if (Pause) { Entered.TrySetResult(); await Resume.Task.WaitAsync(cancellationToken); }
             return ReadCore(buffer.Span);
         }
         public override long Seek(long offset, SeekOrigin origin)

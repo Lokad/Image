@@ -22,17 +22,15 @@ internal sealed class LanczosPlan : IDisposable
         {
             var windowsBytes = 32 + target * 16L;
             Buffer(windowsBytes); context.Reserve(windowsBytes); plan.storage += windowsBytes;
-            plan.Windows = new Window[target]; long total = 0, kernelWork = 0;
+            plan.Windows = new Window[target]; long total = 0;
             for (var x = 0; x < target; x++)
             {
-                context.Work(1); var (first, last) = Support(x, source, target);
+                context.Cancellation.ThrowIfCancellationRequested(); var (first, last) = Support(x, source, target);
                 var begin = (int)Math.Clamp(first, 0, source - 1L); var finish = (int)Math.Clamp(last, 0, source - 1L);
                 var count = finish - begin + 1;
                 if (total > (Array.MaxLength - 32) / 4L - count) throw Length();
                 plan.Windows[x] = new(begin, count, (int)total); total += count;
                 plan.MaximumCount = Math.Max(plan.MaximumCount, count);
-                kernelWork += (last - first + 1) * 2 + count * 2L;
-                if (kernelWork > context.RemainingWork) throw new ImageLimitException(ImageLimitKind.Work, "Lanczos coefficient work limit exceeded.");
             }
             var weightsBytes = 32 + total * 4; context.Reserve(weightsBytes); plan.storage += weightsBytes;
             plan.Weights = new int[(int)total];
@@ -41,7 +39,7 @@ internal sealed class LanczosPlan : IDisposable
             for (var x = 0; x < target; x++)
             {
                 var window = plan.Windows[x]; var (first, last) = Support(x, source, target);
-                context.Work((last - first + 1) * 2 + window.Count * 2L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 raw.AsSpan(0, window.Count).Clear();
                 var numerator = (2L * x + 1) * source - target;
                 var denominator = 2d * Math.Max(source, target);

@@ -31,16 +31,12 @@ public sealed class PngManagedAdmissionTests
 
     [Theory]
     [InlineData("shared", CompressionLevel.NoCompression)]
-    [InlineData("work", CompressionLevel.NoCompression)]
     [InlineData("cancellation", CompressionLevel.NoCompression)]
     [InlineData("shared", CompressionLevel.Fastest)]
-    [InlineData("work", CompressionLevel.Fastest)]
     [InlineData("cancellation", CompressionLevel.Fastest)]
     [InlineData("shared", CompressionLevel.Optimal)]
-    [InlineData("work", CompressionLevel.Optimal)]
     [InlineData("cancellation", CompressionLevel.Optimal)]
     [InlineData("shared", CompressionLevel.SmallestSize)]
-    [InlineData("work", CompressionLevel.SmallestSize)]
     [InlineData("cancellation", CompressionLevel.SmallestSize)]
     public void FailureReleasesWorkspaceWithoutFallbackAndKeepsRetainedSource(string failure, CompressionLevel compression)
     {
@@ -50,7 +46,6 @@ public sealed class PngManagedAdmissionTests
         using var source = ImageBuffer.Create(width, height, 8, limits);
         using var cancellation = new CancellationTokenSource();
         if (failure == "shared") root.RefuseAtGrowth = root.GrowthAttempts + 2;
-        if (failure == "work") limits = limits with { MaxWork = 1 };
         using var output = new CallbackOutput(() => { if (failure == "cancellation") cancellation.Cancel(); });
         var error = Record.Exception(() => ImageCodec.EncodePng(source, output, new() { Limits = limits, Compression = compression }, cancellation.Token));
         if (failure == "cancellation") Assert.Equal(cancellation.Token, Assert.IsType<OperationCanceledException>(error).CancellationToken);
@@ -58,7 +53,7 @@ public sealed class PngManagedAdmissionTests
         {
             var limit = Assert.IsType<ImageLimitException>(error);
             Assert.Equal(failure == "shared" ? ImageLimitScope.SharedBudget : ImageLimitScope.Operation, limit.Scope);
-            Assert.Equal(failure == "shared" ? ImageLimitKind.WorkingBytes : ImageLimitKind.Work, limit.Limit);
+            Assert.Equal(ImageLimitKind.WorkingBytes, limit.Limit);
         }
         Assert.Equal(failure == "shared" ? 1 : 0, root.Refusals);
         if (failure == "shared") Assert.Equal(0, output.Length);

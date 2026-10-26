@@ -97,7 +97,7 @@ public sealed class Vp8Tests
             }
         }
         Assert.True(failures > 0, "Truncated coefficient partitions must be rejected.");
-        var options = new DecodeOptions { Limits = new ImageLimits { MaxDimension = 128, MaxPixels = 4096, MaxWorkingBytes = 1024 * 1024, MaxWork = 2_000_000 } };
+        var options = new DecodeOptions { Limits = new ImageLimits { MaxDimension = 128, MaxPixels = 4096, MaxWorkingBytes = 1024 * 1024} };
         var random = new Random(684921);
         for (var mutation = 0; mutation < 256; mutation++)
         {
@@ -110,11 +110,10 @@ public sealed class Vp8Tests
     }
 
     [Fact]
-    public void LossyDecodeChargesResourceWorkAndHonorsCancellation()
+    public void LossyDecodeChargesResourceAndHonorsCancellation()
     {
         var encoded = File.ReadAllBytes(Path.Combine(FindFixtures(), "vp8-ffmpeg-31x23-effort6-quality75-alpha.webp"));
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = 1024 } }));
-        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = new ImageLimits { MaxWork = 64 } }));
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = new ImageLimits { MaxPixels = 512 } }));
         Assert.Throws<OperationCanceledException>(() => ImageCodec.Decode(encoded, cancellationToken: new CancellationToken(true)));
     }

@@ -85,20 +85,4 @@ public sealed class Vp8lPaletteAdjacencyTests
         using var next = Vp8lReferencePalette.SelectAndPack(pixels, 3, 4, Vp8lPaletteOrder.ModifiedZeng, nextContext);
         next.Dispose(); context.Release(24); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
-
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void IndependentLocalAndWorkLimitsCleanUpWithoutPacking(bool local)
-    {
-        using var root = new TestMemoryBudget(10_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWorkingBytes = local ? 24 + 32 + 3200 + 140 - 1 : 10_000, MaxWork = local ? 100_000 : 100 }, default);
-        var pixels = Fragment(context); var original = pixels.ToArray(); var growths = root.GrowthAttempts;
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePalette.SelectAndPack(pixels, 3, 4, Vp8lPaletteOrder.ModifiedZeng, context));
-        Assert.Equal((local ? ImageLimitKind.WorkingBytes : ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(growths + (local ? 2 : 3), root.GrowthAttempts); Assert.Equal(24, root.Bytes); Assert.Equal(0, root.Refusals); Assert.Equal(original, pixels);
-        using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
-        using var next = Vp8lReferencePalette.SelectAndPack(pixels, 3, 4, Vp8lPaletteOrder.ModifiedZeng, nextContext);
-        next.Dispose(); context.Release(24); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-    }
 }

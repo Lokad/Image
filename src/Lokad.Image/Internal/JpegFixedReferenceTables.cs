@@ -8,14 +8,13 @@ namespace Lokad.Image.Internal;
 
 internal static class JpegFixedReferenceTables
 {
-    internal const int TableWork = 1024;
 
     // The caller admits the retained16-KiB table owner before allocating. All
     // arrays are fixed-size; no growing backing store or table cache survives.
     internal static JpegEncodingTable Create(int family, OperationContext context)
     {
         if (family < 0 || family > 3) throw new ArgumentOutOfRangeException(nameof(family));
-        context.Work(TableWork);
+        context.Cancellation.ThrowIfCancellationRequested();
         bool ac = family >= 2, chroma = (family & 1) != 0;
         var counts = new byte[16]; var symbols = new byte[ac ? 162 : 12];
         if (!ac)

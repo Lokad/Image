@@ -150,7 +150,7 @@ public sealed partial class TextLayout : IDisposable
         var count = 0;
         for (var offset = 0; offset < text.Length;)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (Rune.DecodeFromUtf16(text.AsSpan(offset), out var rune, out var length) != OperationStatus.Done)
                 throw new ArgumentException("Text must contain valid Unicode scalars.", nameof(text));
             if (rune.Value == '\r' && offset + length < text.Length && text[offset + length] == '\n') length++;
@@ -193,7 +193,7 @@ public sealed partial class TextLayout : IDisposable
 
         private Shape Get(int glyph)
         {
-            context.Work(1); if (Shapes.TryGetValue(glyph, out var shape)) return shape;
+            context.Cancellation.ThrowIfCancellationRequested(); if (Shapes.TryGetValue(glyph, out var shape)) return shape;
             context.Reserve(512); FontOutline? outline = null;
             try
             {
@@ -207,7 +207,7 @@ public sealed partial class TextLayout : IDisposable
             var index = 0;
             for (var offset = 0; offset < text.Length;)
             {
-                context.Work(1); Rune.DecodeFromUtf16(text.AsSpan(offset), out var rune, out var length);
+                context.Cancellation.ThrowIfCancellationRequested(); Rune.DecodeFromUtf16(text.AsSpan(offset), out var rune, out var length);
                 if (rune.Value == '\r' && offset + length < text.Length && text[offset + length] == '\n') length++;
                 var p = new Placement { SourceOffset = offset, SourceLength = length, GlyphIndex = -1 };
                 if (rune.Value is '\r' or '\n' or 0x2028 or 0x2029) p.Kind = 3;
@@ -237,10 +237,10 @@ public sealed partial class TextLayout : IDisposable
                     if (pendingStart < 0) { pendingStart = Emitted; pendingPen = pen; pendingMin = lineMin; pendingMax = lineMax; }
                     Place(p); i++; continue;
                 }
-                var end = i + 1; while (end < itemCount && Glyphs[end].Kind == 0) { context.Work(1); end++; }
+                var end = i + 1; while (end < itemCount && Glyphs[end].Kind == 0) { context.Cancellation.ThrowIfCancellationRequested(); end++; }
                 double width = 0; var prev = previousGlyph;
                 for (var j = i; j < end; j++)
-                { context.Work(1); var word = Glyphs[j]; width += Kern(prev, word.GlyphIndex) + word.Advance; prev = word.GlyphIndex; }
+                { context.Cancellation.ThrowIfCancellationRequested(); var word = Glyphs[j]; width += Kern(prev, word.GlyphIndex) + word.Advance; prev = word.GlyphIndex; }
                 if (lineHasWord && pen + width > options.WrapWidth)
                 {
                     if (pendingStart >= 0) { Emitted = pendingStart; pen = pendingPen; lineMin = pendingMin; lineMax = pendingMax; }
@@ -259,7 +259,7 @@ public sealed partial class TextLayout : IDisposable
 
         private void Place(Placement p)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (p.Kind == 2)
             {
                 var space = Get(font.MapForText(' ', context)).Outline.Advance * scale;
@@ -276,7 +276,7 @@ public sealed partial class TextLayout : IDisposable
         }
         private void FinishLine()
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (LineCount == context.Limits.MaxContainerItems) throw new ImageLimitException(ImageLimitKind.ContainerItems, "Text line limit exceeded.");
             if (LineCount == Lines.Length)
             {
@@ -284,7 +284,7 @@ public sealed partial class TextLayout : IDisposable
                 var bytes = 32 + capacity * 64L;
                 if (bytes > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "Text line storage exceeds the managed limit.");
                 context.Reserve(bytes); TextLine[] next;
-                try { context.Work(LineCount); next = new TextLine[capacity]; Lines.AsSpan(0, LineCount).CopyTo(next); }
+                try { context.Cancellation.ThrowIfCancellationRequested(); next = new TextLine[capacity]; Lines.AsSpan(0, LineCount).CopyTo(next); }
                 catch { context.Release(bytes); throw; }
                 if (Lines.Length != 0) context.Release(32 + Lines.Length * 64L);
                 Lines = next;
@@ -299,7 +299,7 @@ public sealed partial class TextLayout : IDisposable
             var hasInk = false; double minX = 0, minY = 0, maxX = 0, maxY = 0;
             for (var i = 0; i < Emitted; i++)
             {
-                context.Work(1); var p = Glyphs[i]; var shape = p.Shape!;
+                context.Cancellation.ThrowIfCancellationRequested(); var p = Glyphs[i]; var shape = p.Shape!;
                 if (shape.XMin == shape.XMax || shape.YMin == shape.YMax) continue;
                 var x0 = p.X + (shape.XMin - shape.Outline.Left.X) * scale; var x1 = p.X + (shape.XMax - shape.Outline.Left.X) * scale;
                 var y0 = p.Y - shape.YMax * scale; var y1 = p.Y - shape.YMin * scale;

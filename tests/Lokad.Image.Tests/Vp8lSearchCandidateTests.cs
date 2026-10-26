@@ -13,10 +13,10 @@ public sealed class Vp8lSearchCandidateTests
         context.Reserve(source.Width * source.Height * 4L);
         try
         {
-            context.Work(0); var result = new uint[source.Width * source.Height];
+var result = new uint[source.Width * source.Height];
             for (var i = 0; i < result.Length; i++)
             {
-                context.Work(4); var prediction = filter == 0 || i == 0 ? 0
+var prediction = filter == 0 || i == 0 ? 0
                     : source.Pixels[(i < source.Width || i % source.Width != 0 ? i - 1 : i - source.Width) * 4 + 3];
                 result[i] = (uint)((source.Pixels[i * 4 + 3] - prediction) & 255) << 8;
             }
@@ -56,7 +56,7 @@ public sealed class Vp8lSearchCandidateTests
         using var root = new TestMemoryBudget(128_000_000);
         // The default2B refusal is a separate gate below. This one expensive
         // native candidate receives an explicit caller allowance for byte proof.
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = filter == 0 && kind == 3 || order == Vp8lPaletteOrder.ModifiedZeng ? 8_000_000_000 : 2_000_000_000 }, default);
+        using var context = new OperationContext(new() { MemoryBudget = root}, default);
         var transform = (Vp8lTransformKind)kind;
         var working = AlphaWorking(filter, context); var analysis = Vp8lEncodingAnalysis.Select(working, 513, 6, context);
         using var prepared = Vp8lPreparedEncoding.PrepareCandidate(working, 513, analysis, transform, context, order);
@@ -93,41 +93,5 @@ public sealed class Vp8lSearchCandidateTests
         var nextPixels = Working(source.Pixels, false, context); info = Vp8lEncodingAnalysis.Select(nextPixels, source.Width, 6, context);
         using var next = Vp8lPreparedEncoding.PrepareCandidate(nextPixels, source.Width, info, Vp8lTransformKind.Palette, context);
         context.Release(nextPixels.Length * 4L); next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-    }
-
-    [Fact]
-    public void DefaultWorkRefusalInTheExpensiveFamilyIsTerminalAndReleasesOwnedStorage()
-    {
-        using var root = new TestMemoryBudget(128_000_000); using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        var working = AlphaWorking(0, context); var analysis = Vp8lEncodingAnalysis.Select(working, 513, 6, context); var baseline = root.Bytes;
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lPreparedEncoding.PrepareCandidate(working, 513, analysis, Vp8lTransformKind.PredictionSubtractGreen, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(baseline, root.Bytes); Assert.Equal(0, root.Refusals); Assert.True(context.ConsumedWork <= 2_000_000_000);
-        context.Release(working.Length * 4L); Assert.Equal(0, root.Bytes);
-        using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
-        var source = OriginalVp8lControls.Input("two-color"); var fresh = Working(source.Pixels, false, nextContext);
-        analysis = Vp8lEncodingAnalysis.Select(fresh, source.Width, 6, nextContext);
-        using var next = Vp8lPreparedEncoding.PrepareCandidate(fresh, source.Width, analysis, Vp8lTransformKind.Palette, nextContext);
-        nextContext.Release(fresh.Length * 4L); next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-    }
-
-    [Fact]
-    public void CancellationAndLateWorkFailureReleaseNewCandidateStorageAndPreserveBorrowedRoot()
-    {
-        var source = OriginalVp8lControls.Input("two-color"); using var root = new TestMemoryBudget(10_000_000);
-        using var context = new OperationContext(new() { MemoryBudget = root }, default); var pixels = Working(source.Pixels, false, context);
-        var analysis = Vp8lEncodingAnalysis.Select(pixels, source.Width, 6, context); var baseline = root.Bytes;
-        using var cancel = new CancellationTokenSource(); using var cancelled = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
-        root.Admitted = _ => cancel.Cancel();
-        Assert.Throws<OperationCanceledException>(() => Vp8lPreparedEncoding.PrepareCandidate(pixels, source.Width, analysis, Vp8lTransformKind.Palette, cancelled));
-        Assert.Equal(baseline, root.Bytes); root.Admitted = null; long work;
-        using (var sizing = new OperationContext(new() { MemoryBudget = root }, default))
-        using (var prepared = Vp8lPreparedEncoding.PrepareCandidate(pixels, source.Width, analysis, Vp8lTransformKind.Palette, sizing)) work = sizing.ConsumedWork;
-        var retry = Working(source.Pixels, false, context); var bothInputs = root.Bytes;
-        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => Vp8lPreparedEncoding.PrepareCandidate(retry, source.Width, analysis, Vp8lTransformKind.Palette, limited)).Limit);
-        Assert.Equal(bothInputs, root.Bytes); context.Release(retry.Length * 4L); context.Release(pixels.Length * 4L);
-        var fresh = Working(source.Pixels, false, context); using var next = Vp8lPreparedEncoding.PrepareCandidate(fresh, source.Width, analysis, Vp8lTransformKind.Palette, context);
-        context.Release(fresh.Length * 4L); next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

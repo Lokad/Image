@@ -14,13 +14,12 @@ public sealed class JpegBaselineBlockTests
         foreach (var value in size == 0 ? new[] { 0 } : new[] { 1 << (size - 1), (1 << size) - 1, -(1 << (size - 1)), -((1 << size) - 1) })
         {
             var text = Dc(size) + Signed(value, size) + Ac(0); var data = Stuff(text);
-            var context = Context(76 + (size == 0 ? 0 : 1)); var reader = new JpegEntropyReader(data, 0, context);
+            var context = Context(); var reader = new JpegEntropyReader(data, 0, context);
             var block = Enumerable.Repeat(12345, 66).ToArray(); var predictor = 777;
             JpegDecoder.ReadBaselineBlock(ref reader, block.AsSpan(1, 64), ref predictor, tables.Dc, tables.Ac, context);
             Assert.Equal(777 + value, predictor); Assert.Equal(predictor, block[1]);
             Assert.Equal(12345, block[0]); Assert.All(block.Skip(2), coefficient => Assert.Equal(12345, coefficient));
             Assert.Equal(data.Length - 2, reader.Position); reader.Restart(0); Assert.Equal(data.Length, reader.Position);
-            Assert.Throws<ImageLimitException>(() => context.Work(1));
         }
     }
 
@@ -36,13 +35,12 @@ public sealed class JpegBaselineBlockTests
             while (remaining >= 16) { text += Ac(0xF0); remaining -= 16; symbols++; }
             text += Ac((byte)(remaining << 4 | size)) + Signed(value, size); symbols++;
             if (position != 63) { text += Ac(0); symbols++; }
-            var data = Stuff(text); var context = Context(69 + symbols * 8); var reader = new JpegEntropyReader(data, 0, context);
+            var data = Stuff(text); var context = Context(); var reader = new JpegEntropyReader(data, 0, context);
             var block = Enumerable.Repeat(12345, 66).ToArray(); var predictor = 0;
             JpegDecoder.ReadBaselineBlock(ref reader, block.AsSpan(1, 64), ref predictor, tables.Dc, tables.Ac, context);
             for (var index = 0; index < 66; index++)
                 Assert.Equal(index == 1 ? 0 : index == 1 + JpegTransform.Zigzag[position] ? value : 12345, block[index]);
             Assert.Equal(data.Length - 2, reader.Position); reader.Restart(0); Assert.Equal(data.Length, reader.Position);
-            Assert.Throws<ImageLimitException>(() => context.Work(1));
         }
     }
 
@@ -55,12 +53,11 @@ public sealed class JpegBaselineBlockTests
             var size = 1 + k % 10; var value = ((k & 1) == 0 ? 1 : -1) * ((1 << size) - 1);
             text += Ac((byte)size) + Signed(value, size); expected[JpegTransform.Zigzag[k]] = value;
         }
-        var data = Stuff(text); var context = Context(69 + 63 * 9); var reader = new JpegEntropyReader(data, 0, context);
+        var data = Stuff(text); var context = Context(); var reader = new JpegEntropyReader(data, 0, context);
         var actual = new int[64]; var predictor = 123;
         JpegDecoder.ReadBaselineBlock(ref reader, actual, ref predictor, tables.Dc, tables.Ac, context);
         Assert.Equal(expected, actual); Assert.Equal(92, predictor); Assert.Equal(data.Length - 2, reader.Position);
-        reader.Restart(0); Assert.Equal(data.Length, reader.Position); Assert.Throws<ImageLimitException>(() => context.Work(1));
-    }
+        reader.Restart(0); Assert.Equal(data.Length, reader.Position);     }
 
     [Theory]
     [InlineData(0, "Invalid JPEG DC coefficient category.")]
@@ -68,7 +65,7 @@ public sealed class JpegBaselineBlockTests
     [InlineData(3, "Invalid baseline JPEG end-of-block symbol.")]
     [InlineData(4, "Invalid JPEG AC coefficient category.")]
     [InlineData(5, "JPEG zero run exceeds band.")] [InlineData(6, "JPEG coefficient run exceeds band.")]
-    public void InvalidSymbolsAndPredictorsKeepFailurePositionPartialWritesAndWork(int scenario, string message)
+    public void InvalidSymbolsAndPredictorsKeepFailurePositionPartialWrites(int scenario, string message)
     {
         var tables = Tables();
         var text = scenario switch
@@ -78,32 +75,14 @@ public sealed class JpegBaselineBlockTests
             5 => Dc(0) + string.Concat(Enumerable.Repeat(Ac(0xF0), 4)),
             _ => Dc(0) + string.Concat(Enumerable.Repeat(Ac(0xF0), 3)) + Ac(0xF1)
         };
-        var work = scenario < 3 ? 68 + (scenario == 0 ? 0 : 1) : scenario < 5 ? 76 : 100;
-        var data = Stuff(text); var context = Context(work); var reader = new JpegEntropyReader(data, 0, context);
+
+        var data = Stuff(text); var context = Context(); var reader = new JpegEntropyReader(data, 0, context);
         var predictor = scenario == 1 ? 32767 : scenario == 2 ? -32768 : 0;
         var originalPredictor = predictor; var block = Enumerable.Repeat(12345, 64).ToArray();
         try { JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context); Assert.Fail("Invalid coefficient syntax must fail."); }
         catch (ImageDataException error) { Assert.Equal(message, error.Message); }
         Assert.Equal(originalPredictor, predictor); Assert.Equal(scenario < 3 ? 12345 : 0, block[0]);
         Assert.All(block.Skip(1), value => Assert.Equal(12345, value)); Assert.Equal(data.Length - 2, reader.Position);
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
-    }
-
-    [Fact]
-    public void TightWorkBudgetsKeepBlockAdmissionAndPartialHuffmanBitConsumption()
-    {
-        var tables = Tables();
-        foreach (var limit in new[] { 63, 66 })
-        {
-            var context = Context(limit); var reader = new JpegEntropyReader(Stuff(Dc(0) + Ac(0)), 0, context);
-            var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 7;
-            try { JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context); Assert.Fail("The original work boundary must fail."); }
-            catch (ImageLimitException error) { Assert.Equal("Computational work limit exceeded.", error.Message); }
-            Assert.Equal(7, predictor); Assert.All(block, value => Assert.Equal(12345, value));
-            Assert.Equal(limit == 63 ? 0 : 1, reader.Position);
-            if (limit == 63) context.Work(63);
-            Assert.Throws<ImageLimitException>(() => context.Work(1));
-        }
     }
 
     [Fact]
@@ -120,42 +99,13 @@ public sealed class JpegBaselineBlockTests
 
     [Theory]
     [InlineData(63)] [InlineData(65)]
-    public void IncompleteBlocksRejectBeforeWorkInputOrMutation(int length)
+    public void IncompleteBlocksRejectBeforeInputOrMutation(int length)
     {
-        var tables = Tables(); var context = Context(64); var reader = new JpegEntropyReader([], 0, context);
+        var tables = Tables(); var context = Context(); var reader = new JpegEntropyReader([], 0, context);
         var block = Enumerable.Repeat(12345, length).ToArray(); var predictor = 7;
         try { JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context); Assert.Fail("Only complete coefficient blocks are valid."); }
         catch (ArgumentException error) { Assert.Equal("block", error.ParamName); }
         Assert.Equal(7, predictor); Assert.Equal(0, reader.Position); Assert.All(block, value => Assert.Equal(12345, value));
-        context.Work(64); Assert.Throws<ImageLimitException>(() => context.Work(1));
-    }
-
-    [Theory]
-    [InlineData(68)] [InlineData(69)] [InlineData(72)]
-    public void TruncatedAmplitudeKeepsAdmittedWorkAndReusableReaderWithParentWorkAlreadyConsumed(int allowance)
-    {
-        var tables = Tables();
-        foreach (var cancellable in new[] { false, true })
-        {
-            using var cancellation = new CancellationTokenSource();
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = 11 + allowance },
-                cancellable ? cancellation.Token : default);
-            context.Work(11);
-            // Category five occupies four bits; only four amplitude bits remain.
-            // Its original one-unit amplitude charge precedes the missing refill.
-            var reader = new JpegEntropyReader(new byte[] { 0x5F }, 0, context);
-            var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 7;
-            try { JpegDecoder.ReadBaselineBlock(ref reader, block, ref predictor, tables.Dc, tables.Ac, context); Assert.Fail("The incomplete amplitude must fail."); }
-            catch (ImageLimitException error) { Assert.Equal(68, allowance); Assert.Equal("Computational work limit exceeded.", error.Message); }
-            catch (ImageDataException error) { Assert.NotEqual(68, allowance); Assert.Equal("Truncated JPEG entropy data.", error.Message); }
-            Assert.Equal(7, predictor); Assert.Equal(1, reader.Position); Assert.All(block, value => Assert.Equal(12345, value));
-            Assert.Equal(allowance - Math.Min(allowance, 69), context.RemainingWork);
-            if (allowance == 72)
-            {
-                context.Work(1); Assert.Equal(0, reader.ReadBits(0)); Assert.Equal(1, context.RemainingWork); context.Work(1);
-            }
-            Assert.Throws<ImageLimitException>(() => context.Work(1));
-        }
     }
 
     private static (JpegHuffman Dc, JpegHuffman Ac) Tables()
@@ -166,30 +116,26 @@ public sealed class JpegBaselineBlockTests
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void ConsecutiveShortAcKeepsEveryBudgetTruncationAndCachedPhase(bool cancelable)
+    public void ConsecutiveShortAcKeepsEveryTruncationAndCachedPhase(bool cancelable)
     {
         var tables = Tables();
         var payload = Dc(0) + string.Concat(Enumerable.Range(1, 63).Select(k => Ac(1) + ((k & 1) == 0 ? "1" : "0")));
         for (var phase = 0; phase < 8; phase++)
         {
             var original = Stuff(new string('0', phase) + payload);
-            // Exhaust each budget on the full run, then each truncation with
-            // enough work. Avoid a redundant Cartesian product of both axes.
-            var cases = Enumerable.Range(63, 578).Select(work => (Length: original.Length, Work: work))
-                .Concat(Enumerable.Range(0, original.Length).Select(length => (Length: length, Work: 640)));
-            foreach (var item in cases)
+            // Compare each byte truncation and the complete stream once.
+            foreach (var length in Enumerable.Range(0, original.Length + 1))
             {
-                var input = original.AsSpan(0, item.Length).ToArray();
+                var input = original.AsSpan(0, length).ToArray();
                 var expected = Run(true); var actual = Run(false);
                 Assert.Equal(expected.Error, actual.Error); Assert.Equal(expected.Message, actual.Message);
-                Assert.Equal(expected.Position, actual.Position); Assert.Equal(expected.Remaining, actual.Remaining);
-                Assert.Equal(expected.Predictor, actual.Predictor); Assert.Equal(expected.Block, actual.Block);
-                Assert.Equal(original.AsSpan(0, item.Length).ToArray(), input);
+                Assert.Equal(expected.Position, actual.Position);                 Assert.Equal(expected.Predictor, actual.Predictor); Assert.Equal(expected.Block, actual.Block);
+                Assert.Equal(original.AsSpan(0, length).ToArray(), input);
 
-                (Type? Error, string? Message, int Position, long Remaining, int Predictor, int[] Block) Run(bool scalar)
+                (Type? Error, string? Message, int Position, int Predictor, int[] Block) Run(bool scalar)
                 {
                     using var cancellation = new CancellationTokenSource();
-                    var context = new OperationContext(ImageLimits.Default with { MaxWork = item.Work },
+                    var context = new OperationContext(ImageLimits.Default,
                         cancelable ? cancellation.Token : default);
                     var reader = new JpegEntropyReader(input, 0, context);
                     var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 17; Exception? error = null;
@@ -201,14 +147,14 @@ public sealed class JpegBaselineBlockTests
                         reader.Restart(0);
                     }
                     catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
-                    return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, predictor, block);
+                    return (error?.GetType(), error?.Message, reader.Position, predictor, block);
                 }
             }
         }
     }
 
     [Fact]
-    public void AcPrefixAndAmplitudeRetainEveryBudgetTruncationAndPartialState()
+    public void AcPrefixAndAmplitudeRetainEveryTruncationAndPartialState()
     {
         var tables = Tables();
         // Original T.81 grammars: mixed amplitudes, a stuffed FF byte, a zero
@@ -220,16 +166,14 @@ public sealed class JpegBaselineBlockTests
         {
             var original = Stuff(text);
             for (var length = 0; length <= original.Length; length++)
-            for (var work = 63; work <= 130; work++)
             {
                 var input = original.AsSpan(0, length).ToArray();
-                var checkedSymbols = Decode(input, work, true, scalar: true);
-                foreach (var fast in new[] { Decode(input, work, false), Decode(input, work, true) })
+                var checkedSymbols = Decode(input, true, scalar: true);
+                foreach (var fast in new[] { Decode(input, false), Decode(input, true) })
                 {
                     Assert.Equal(checkedSymbols.Error, fast.Error);
                     Assert.Equal(checkedSymbols.Message, fast.Message);
                     Assert.Equal(checkedSymbols.Position, fast.Position);
-                    Assert.Equal(checkedSymbols.RemainingWork, fast.RemainingWork);
                     Assert.Equal(checkedSymbols.Predictor, fast.Predictor);
                     Assert.Equal(checkedSymbols.Block, fast.Block);
                     Assert.Equal(original.AsSpan(0, length).ToArray(), input);
@@ -237,11 +181,11 @@ public sealed class JpegBaselineBlockTests
             }
         }
 
-        (Type? Error, string? Message, int Position, long RemainingWork, int Predictor, int[] Block)
-            Decode(byte[] input, long work, bool cancelable, bool scalar = false)
+        (Type? Error, string? Message, int Position, int Predictor, int[] Block)
+            Decode(byte[] input, bool cancelable, bool scalar = false)
         {
             using var cancellation = new CancellationTokenSource();
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = work }, cancelable ? cancellation.Token : default);
+            var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
             var reader = new JpegEntropyReader(input, 0, context);
             var block = Enumerable.Repeat(12345, 64).ToArray(); var predictor = 17;
             Exception? error = null;
@@ -252,7 +196,7 @@ public sealed class JpegBaselineBlockTests
                 reader.Restart(0);
             }
             catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
-            return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, predictor, block);
+            return (error?.GetType(), error?.Message, reader.Position, predictor, block);
         }
     }
 
@@ -276,16 +220,15 @@ public sealed class JpegBaselineBlockTests
                 var input = original.AsSpan(0, length).ToArray();
                 var expected = Run(true); var actual = Run(false);
                 Assert.Equal(expected.Error, actual.Error); Assert.Equal(expected.Message, actual.Message);
-                Assert.Equal(expected.Position, actual.Position); Assert.Equal(expected.Remaining, actual.Remaining);
-                Assert.Equal(expected.Predictor, actual.Predictor); Assert.Equal(expected.Tail, actual.Tail);
+                Assert.Equal(expected.Position, actual.Position);                 Assert.Equal(expected.Predictor, actual.Predictor); Assert.Equal(expected.Tail, actual.Tail);
                 Assert.Equal(expected.Blocks.Count, actual.Blocks.Count);
                 for (var i = 0; i < expected.Blocks.Count; i++) Assert.Equal(expected.Blocks[i], actual.Blocks[i]);
                 Assert.Equal(original.AsSpan(0, length).ToArray(), input);
 
-                (Type? Error, string? Message, int Position, long Remaining, int Predictor, int Tail, List<int[]> Blocks) Run(bool scalar)
+                (Type? Error, string? Message, int Position, int Predictor, int Tail, List<int[]> Blocks) Run(bool scalar)
                 {
                     using var cancellation = new CancellationTokenSource();
-                    var context = new OperationContext(ImageLimits.Default with { MaxWork = 100000 },
+                    var context = new OperationContext(ImageLimits.Default,
                         cancelable ? cancellation.Token : default);
                     var reader = new JpegEntropyReader(input, 0, context);
                     var predictor = 17; var tail = -1; var blocks = new List<int[]>(); Exception? error = null;
@@ -301,18 +244,17 @@ public sealed class JpegBaselineBlockTests
                         tail = reader.ReadBits(3); reader.Restart(0);
                     }
                     catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
-                    return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, predictor, tail, blocks);
+                    return (error?.GetType(), error?.Message, reader.Position, predictor, tail, blocks);
                 }
             }
         }
     }
 
     // Original unfused traversal with immediate parent charges, independently
-    // retaining symbol/amplitude and syntax failure order. No local-work scope.
+    // retaining symbol/amplitude and syntax failure order. No speculative state escapes.
     private static void ScalarBaseline(ref JpegEntropyReader reader, Span<int> block, ref int predictor,
         JpegHuffman dc, JpegHuffman ac, OperationContext context)
     {
-        context.Work(64);
         var category = dc.Read(ref reader);
         if (category > 11) throw new ImageDataException("Invalid JPEG DC coefficient category.");
         var next = (long)predictor + reader.ReadSigned(category);
@@ -337,7 +279,7 @@ public sealed class JpegBaselineBlockTests
     private static string Dc(int size) => Convert.ToString(size, 2).PadLeft(4, '0');
     private static string Ac(byte symbol) => Convert.ToString(Array.IndexOf(AcSymbols, symbol), 2).PadLeft(8, '0');
     private static string Signed(int value, int size) => size == 0 ? "" : Convert.ToString(value >= 0 ? value : value + (1 << size) - 1, 2).PadLeft(size, '0');
-    private static OperationContext Context(long work = 2000000000) => new(ImageLimits.Default with { MaxWork = work }, default);
+    private static OperationContext Context() => new(ImageLimits.Default, default);
     private static byte[] Stuff(string bits)
     {
         bits = bits.PadRight((bits.Length + 7) / 8 * 8, '1'); var bytes = new List<byte>();

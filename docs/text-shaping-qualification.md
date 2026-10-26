@@ -21,7 +21,7 @@ Font tables borrow retained input. Temporary glyph/scalar/line workspace and
 retained output geometry use the same cooperative admission context. Preparation
 owners release before publication; a layout remains renderable after font
 disposal. Every growing admission in the authored layout can refuse terminally,
-with cleanup and subsequent successful admission. Cancellation/work failures also
+with cleanup and subsequent successful admission. Cancellation and memory failures also
 refund owned storage. No global font/glyph cache or RGBA intermediate was added.
 
 Qualification passed **4,383 tests per OS**: 1,574 internal, 1,881 public API and

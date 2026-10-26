@@ -10,7 +10,7 @@ namespace Lokad.Image.Internal;
 internal static class WideCachedBicubicResize
 {
     internal static bool TryApply(ImageBuffer source, ImageBuffer result, double scaleX, double scaleY,
-        long tapsX, long tapsY, long rowWork, OperationContext context)
+        long tapsX, long tapsY, OperationContext context)
     {
         var support=Math.Max(tapsX,tapsY);
         if(support>2048)return false;
@@ -66,7 +66,7 @@ internal static class WideCachedBicubicResize
             var input=source.Pixels;
             for(var y=0;y<result.Height;y++)
             {
-                context.Work(rowWork);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var center=(y+0.5)*source.Height/result.Height-0.5;
                 var first=(int)Math.Ceiling(center-2*scaleY);
                 var count=(int)Math.Floor(center+2*scaleY)-first+1;
@@ -257,19 +257,19 @@ internal static class WideCachedBicubicResize
             }
         }
         var normalized=a/n;
-        var rounded=normalized>0 && normalized<1?ResizeAlpha.Round(source,x,y,result.Width,result.Height,ResizeFilter.Bicubic,context):Round(normalized,maximum);
+        var rounded=normalized>0 && normalized<1?ResizeAlpha.Round(source,x,y,result.Width,result.Height,ResizeFilter.Bicubic,context):BicubicMath.Round(normalized,maximum);
         var color=rounded>0 && a>0;
         if(wide16)
         {
             var destination=result.GetRow16(y);
-            destination[x*4]=(ushort)Round(color?r/a:0,maximum);destination[x*4+1]=(ushort)Round(color?g/a:0,maximum);
-            destination[x*4+2]=(ushort)Round(color?b/a:0,maximum);destination[x*4+3]=(ushort)rounded;
+            destination[x*4]=(ushort)BicubicMath.Round(color?r/a:0,maximum);destination[x*4+1]=(ushort)BicubicMath.Round(color?g/a:0,maximum);
+            destination[x*4+2]=(ushort)BicubicMath.Round(color?b/a:0,maximum);destination[x*4+3]=(ushort)rounded;
         }
         else
         {
             var destination=result.GetRow8(y);
-            destination[x*4]=(byte)Round(color?r/a:0,maximum);destination[x*4+1]=(byte)Round(color?g/a:0,maximum);
-            destination[x*4+2]=(byte)Round(color?b/a:0,maximum);destination[x*4+3]=(byte)rounded;
+            destination[x*4]=(byte)BicubicMath.Round(color?r/a:0,maximum);destination[x*4+1]=(byte)BicubicMath.Round(color?g/a:0,maximum);
+            destination[x*4+2]=(byte)BicubicMath.Round(color?b/a:0,maximum);destination[x*4+3]=(byte)rounded;
         }
     }
     private static void WriteByte(Span<byte> destination,int x,Vector256<double> values)
@@ -287,5 +287,4 @@ internal static class WideCachedBicubicResize
         var packed=Sse41.PackUnsignedSaturate(ints,Vector128<int>.Zero).AsUInt64().GetElement(0);
         BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*8,8),packed);
     }
-    private static int Round(double value,int maximum)=>(int)Math.Clamp(Math.Round(value,MidpointRounding.AwayFromZero),0,maximum);
 }

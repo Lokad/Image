@@ -31,18 +31,18 @@ internal static class LanczosResize
                 var maximum = source.BitDepth == 8 ? 255 : 65535;
                 for (var y = 0; y < height; y++)
                 {
-                    context.Work(channels); sums.AsSpan().Clear();
+                    context.Cancellation.ThrowIfCancellationRequested(); sums.AsSpan().Clear();
                     var window = vertical.Windows[y];
                     for (var tap = 0; tap < window.Count; tap++)
                     {
-                        context.Work(1); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
+                        context.Cancellation.ThrowIfCancellationRequested(); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
                         var sy = window.First + tap; var slot = sy % slots;
                         var row = rows.AsSpan(slot * (int)channels, (int)channels);
                         if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, context); rowIds[slot] = sy; }
-                        context.Work(channels);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         AccumulateVertical(row, sums, weight, context);
                     }
-                    context.Work(channels);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     Span<byte> destination8 = default; Span<ushort> destination16 = default;
                     if (source.BitDepth == 8) destination8 = result.GetRow8(y); else destination16 = result.GetRow16(y);
                     for (var x = 0; x < width; x++)
@@ -165,7 +165,7 @@ internal static class LanczosResize
         { Horizontal16(input16, plan, output, context); return; }
         for (var x = 0; x < plan.Windows.Length; x++)
         {
-            var window = plan.Windows[x]; context.Work(window.Count * 4L);
+            var window = plan.Windows[x]; context.Cancellation.ThrowIfCancellationRequested();
             long r = 0, g = 0, b = 0, alpha = 0;
             for (var i = 0; i < window.Count; i++)
             {
@@ -192,7 +192,7 @@ internal static class LanczosResize
         var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
         for (var x = 0; x < plan.Windows.Length; x++)
         {
-            var window = plan.Windows[x]; context.Work(window.Count * 4L);
+            var window = plan.Windows[x]; context.Cancellation.ThrowIfCancellationRequested();
             var sum = Vector256<long>.Zero; var i = 0;
             if (Avx512DQ.IsSupported)
             {
@@ -238,7 +238,7 @@ internal static class LanczosResize
         var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
         for (var x = 0; x < plan.Windows.Length; x++)
         {
-            var window = plan.Windows[x]; context.Work(window.Count * 4L);
+            var window = plan.Windows[x]; context.Cancellation.ThrowIfCancellationRequested();
             var sum = Vector256<long>.Zero; var i = 0;
             if (Avx512F.IsSupported)
             {

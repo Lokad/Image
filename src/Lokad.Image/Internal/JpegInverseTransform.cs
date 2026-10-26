@@ -28,7 +28,7 @@ internal static class JpegInverseTransform
     {
         if (coefficients.Length != 64 || quantization.Length != 64 || pixels.Length != 64)
             throw new ArgumentException("JPEG transforms operate on complete 8x8 blocks.");
-        context.Work(4096);
+        context.Cancellation.ThrowIfCancellationRequested();
         Span<short> input = stackalloc short[64];
         Span<short> rows = stackalloc short[64];
         for (var i = 0; i < 64; i++)

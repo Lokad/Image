@@ -2,7 +2,7 @@ using Lokad.Image.Internal;
 
 namespace Lokad.Image.Tests;
 
-public sealed class JpegCancelableWorkTests
+public sealed class JpegCancellationTests
 {
     [Fact]
     public void CanceledAcLookaheadReturnsEveryPrefetchedByteBeforePrefixAdmission()
@@ -10,28 +10,23 @@ public sealed class JpegCancelableWorkTests
         var lengths = new byte[16]; lengths[0] = 1;
         var table = new JpegHuffman(lengths, new byte[] { 0x01 }, new OperationContext(ImageLimits.Default, default));
         for (var phase = 0; phase < 8; phase++)
-        foreach (var work in new[] { 2L, 17L, long.MaxValue })
         {
             using var cancellation = new CancellationTokenSource();
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = work }, cancellation.Token);
-            context.Work(1); // A completed parent charge survives the local scope.
+            var context = new OperationContext(ImageLimits.Default, cancellation.Token);
             var reader = new JpegEntropyReader(new byte[] { 0, 0, 0, 0, 0, 0xFF, 0xD0 }, 0, context);
-            reader.BeginLocalWork();
             if (phase != 0) reader.ReadBits(phase);
             cancellation.Cancel();
             var block = Enumerable.Repeat(12345, 64).ToArray(); var coefficient = 1;
             try { table.ReadPlainCancelableAc(ref reader, block, ref coefficient); Assert.Fail("Canceled lookahead must not admit the prefix."); }
             catch (OperationCanceledException error) { Assert.Equal(cancellation.Token, error.CancellationToken); }
-            finally { reader.EndLocalWork(); }
             Assert.Equal(phase == 0 ? 0 : 1, reader.Position); Assert.Equal(1, coefficient);
             Assert.All(block, value => Assert.Equal(12345, value));
-            Assert.Equal(work - 1 - (phase == 0 ? 0 : 1), context.RemainingWork);
         }
     }
 
     [Theory]
     [InlineData(9, true)] [InlineData(10, true)] [InlineData(9, false)] [InlineData(10, false)]
-    public void LongAcCodesKeepEveryCachedPhaseBudgetAndTruncation(int codeLength, bool cancelable)
+    public void LongAcCodesKeepEveryCachedPhaseAndTruncation(int codeLength, bool cancelable)
     {
         var lengths = new byte[16]; lengths[codeLength - 1] = 1;
         for (var size = 1; size <= 10; size++)
@@ -53,18 +48,15 @@ public sealed class JpegCancelableWorkTests
                 }
                 bytes.AddRange([255, 0xD0]); var full = bytes.ToArray();
                 for (var length = 0; length <= full.Length; length++)
-                for (var budget = 0; budget <= codeLength + 4; budget++)
                 {
                     var input = full.AsSpan(0, length).ToArray();
                     Assert.Equal(Run(false), Run(true));
 
-                    (Type? Error, string? Message, int Position, long Remaining, int Value, int Tail) Run(bool fused)
+                    (Type? Error, string? Message, int Position, int Value, int Tail) Run(bool fused)
                     {
                         using var cancellation = new CancellationTokenSource();
-                        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget + 1 }, cancelable ? cancellation.Token : default);
-                        context.Work(1); // Include an exhausted, but validly configured, parent budget.
+                        var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
                         var reader = new JpegEntropyReader(input, 0, context); var value = 0; var tail = 0; Exception? error = null;
-                        if (fused) reader.BeginLocalWork();
                         try
                         {
                             if (offset != 0) reader.ReadBits(offset);
@@ -82,8 +74,7 @@ public sealed class JpegCancelableWorkTests
                             tail = reader.ReadBits(3); reader.Restart(0);
                         }
                         catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
-                        finally { if (fused) reader.EndLocalWork(); }
-                        return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, value, tail);
+                        return (error?.GetType(), error?.Message, reader.Position, value, tail);
                     }
                 }
             }
@@ -104,12 +95,11 @@ public sealed class JpegCancelableWorkTests
             Assert.Equal(reference, actual);
         }
 
-        (Type? Error, string? Message, int Position, long Remaining, int Value, int Tail) Run(bool fused)
+        (Type? Error, string? Message, int Position, int Value, int Tail) Run(bool fused)
         {
             using var cancellation = new CancellationTokenSource();
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = 12 }, cancelable ? cancellation.Token : default);
+            var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
             var reader = new JpegEntropyReader(data, 0, context); var value = 0; var tail = 0; Exception? error = null;
-            if (fused) reader.BeginLocalWork();
             try
             {
                 reader.ReadBits(7); // One cached zero bit is the one-bit AC code.
@@ -127,25 +117,7 @@ public sealed class JpegCancelableWorkTests
                 tail = reader.ReadBits(6); tail = tail * 4 + reader.ReadBits(2);
             }
             catch (Exception failure) when (failure is ImageDataException or ImageLimitException) { error = failure; }
-            finally { if (fused) reader.EndLocalWork(); }
-            return (error?.GetType(), error?.Message, reader.Position, context.RemainingWork, value, tail);
+            return (error?.GetType(), error?.Message, reader.Position, value, tail);
         }
-    }
-
-    [Theory]
-    [InlineData(2L)] [InlineData(100L)] [InlineData(long.MaxValue)]
-    public void CancellationKeepsCompletedChargesAndEndsTheScopeWithoutAnExtraCheck(long budget)
-    {
-        using var cancellation = new CancellationTokenSource();
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget }, cancellation.Token);
-        var reader = new JpegEntropyReader(new byte[] { 0xA5, 0xFF, 0xD9 }, 0, context);
-        reader.BeginLocalWork();
-        Assert.Equal(5, reader.ReadBits(3)); Assert.Equal(0, reader.ReadBits(2));
-        cancellation.Cancel();
-        try { reader.ReadBits(1); Assert.Fail("Cancellation must precede even an exhausted work budget."); }
-        catch (OperationCanceledException exception) { Assert.Equal(cancellation.Token, exception.CancellationToken); }
-        reader.EndLocalWork();
-        Assert.Equal(budget - 2, context.RemainingWork); Assert.Equal(1, reader.Position);
-        reader.EndLocalWork(); Assert.Equal(budget - 2, context.RemainingWork);
     }
 }

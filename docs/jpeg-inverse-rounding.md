@@ -18,8 +18,7 @@ normal AVX results; native C agreement is claimed only where observed.
 The existing31x23 baseline444 control has exact independent quantizers and all36
 visible coefficient blocks, then exact2,139 decoded Y/Cb/Cr samples. Eighteen
 original numeric spectra cover DC ties/clipping, signed impulses, mixed spectra
-and wide quantizers. The public decoder retains the existing4096 work units per
-block and checks cancellation/work before mutation. Temporary scratch is256
+and wide quantizers. The public decoder checks cooperative cancellation before mutation. Temporary scratch is256
 stack bytes; the256-byte static kernel payload is minor fixed storage. No content
 cache or per-block owned heap buffer is introduced.
 

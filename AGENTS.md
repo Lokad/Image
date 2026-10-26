@@ -19,8 +19,15 @@ supplied-font layout/shaping compatibility (including Arabic) and Lanczos3.
 Forward the borrowed ImageLimits.MemoryBudget root through nested work; reserve
 owned capacity before allocation and keep retained results charged until disposal.
 Admission refusal is terminal, without retry, waiting or a lower-memory fallback.
-Preserve independent local/work limits and await actual asynchronous users before
-releasing their storage. Published 0.1.0 is immutable; development targets 0.2.0.
+Preserve input, output, dimension, container and memory bounds and await actual
+asynchronous users before releasing their storage. Fuel accounting is being
+removed: do not retain MaxWork, cumulative work quotas, work reservations or
+partial-charge semantics. Use direct cooperative cancellation checkpoints.
+IMemoryBudget is the sole shared admission model; do not recreate ImageBudget,
+BudgetedImage, whole-operation ceiling reservations, weak ownership tracking or
+finalizer-backed leases. Breaking cleanup of unpublished APIs is authorized;
+remove obsolete APIs rather than forwarding them. Published 0.1.0 is immutable;
+development targets 0.2.0.
 Lokad.Image has no production usage. Unpublished APIs and implementations may be
 replaced without compatibility layers; preserve the declared contracts and tests.
 
@@ -46,10 +53,19 @@ Maintain `docs/benchmark.md` after every accepted performance round. Keep at mos
 three tables, include allocations and verification status, and check the generated
 summary with `python benchmarks/render-benchmark.py --check`.
 
-Keep the checkout, including ignored artifacts, below 5,000,000,000 bytes.
+Keep artifacts manageable without an arbitrary checkout-size cap. Routine builds
+and package verification must not be blocked by negligible workspace growth;
+check actual disk space when substantial growth is expected.
 Preserve release packages and cited raw evidence; prune redundant extractions,
 stale generated consumers and unreferenced experiment outputs before accumulating
 more artifacts. Reinstallable tool caches may be removed; keep reference sources.
 
 The local PLAN.md is ignored. Durable requirements belong in tracked documents
 and tests. Keep all public files exclusively about Lokad.Image.
+
+Finish the cleanup before further performance optimization. Preserve encoder
+byte exactness, decoder correctness and meaningful editing coverage. Review
+bicubic duplication with bounded evidence; keep useful measured kernels and
+portable fallbacks rather than starting an open-ended tuning campaign. Qualify
+accepted production cleanup on Windows/Linux and through the actual Release
+package consumer. Historical benchmark evidence is retained, not current proof.

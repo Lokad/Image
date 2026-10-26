@@ -70,64 +70,18 @@ public static class ImageTransforms
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(source);
-        var w = source.Width;
-        var h = source.Height;
-        if ((int)orientation is < 1 or > 8) throw new ArgumentOutOfRangeException(nameof(orientation));
-        if (orientation == ImageOrientation.MirrorHorizontal)
-            return HorizontalFlip.Apply(source, limits, cancellationToken);
-        if (orientation == ImageOrientation.MirrorVertical)
-            return VerticalFlip.Apply(source, limits, cancellationToken);
-        if (orientation == ImageOrientation.Rotate180)
-            return HalfTurn.Apply(source, limits, cancellationToken);
-        if (orientation == ImageOrientation.Rotate90)
-            return ClockwiseTurn.Apply(source, limits, cancellationToken);
-        if (orientation == ImageOrientation.Normal)
-            return NormalOrientation.Apply(source, limits, cancellationToken);
-        if (orientation == ImageOrientation.Rotate270)
-            return CounterclockwiseTurn.Apply(source, limits, cancellationToken);
-        if (orientation == ImageOrientation.Transpose)
-            return TransposeCopy.Apply(source, limits, cancellationToken);
-        if (orientation == ImageOrientation.Transverse)
-            return TransverseCopy.Apply(source, limits, cancellationToken);
-        return Map(source, (int)orientation >= 5 ? h : w, (int)orientation >= 5 ? w : h, (x, y) => orientation switch
+        return orientation switch
         {
-            ImageOrientation.Normal => (x, y),
-            ImageOrientation.MirrorHorizontal => (w - 1 - x, y),
-            ImageOrientation.Rotate180 => (w - 1 - x, h - 1 - y),
-            ImageOrientation.MirrorVertical => (x, h - 1 - y),
-            ImageOrientation.Transpose => (y, x),
-            ImageOrientation.Rotate90 => (y, h - 1 - x),
-            ImageOrientation.Transverse => (w - 1 - y, h - 1 - x),
-            ImageOrientation.Rotate270 => (w - 1 - y, x),
+            ImageOrientation.Normal => NormalOrientation.Apply(source, limits, cancellationToken),
+            ImageOrientation.MirrorHorizontal => HorizontalFlip.Apply(source, limits, cancellationToken),
+            ImageOrientation.MirrorVertical => VerticalFlip.Apply(source, limits, cancellationToken),
+            ImageOrientation.Rotate180 => HalfTurn.Apply(source, limits, cancellationToken),
+            ImageOrientation.Rotate90 => ClockwiseTurn.Apply(source, limits, cancellationToken),
+            ImageOrientation.Rotate270 => CounterclockwiseTurn.Apply(source, limits, cancellationToken),
+            ImageOrientation.Transpose => TransposeCopy.Apply(source, limits, cancellationToken),
+            ImageOrientation.Transverse => TransverseCopy.Apply(source, limits, cancellationToken),
             _ => throw new ArgumentOutOfRangeException(nameof(orientation))
-        }, limits, cancellationToken);
-    }
-
-    private static ImageBuffer Map(ImageBuffer source, int width, int height, Func<int, int, (int X, int Y)> map,
-        ImageLimits? limits, CancellationToken cancellationToken)
-    {
-        using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
-        context.ReserveBorrowed(source.ByteLength);
-        var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
-        try
-        {
-            var bytesPerPixel = source.BitDepth / 8 * 4;
-            for (var y = 0; y < height; y++)
-            {
-                for (var x = 0; x < width; x++)
-                {
-                    // A caller may raise MaxDimension beyond the default. Keep work
-                    // admission and cancellation bounded within a long row as well.
-                    if ((x & 1023) == 0) context.Work(Math.Min(1024, width - x) * 4L);
-                    var (sx, sy) = map(x, y);
-                    source.Pixels.Slice(sy * source.Stride + sx * bytesPerPixel, bytesPerPixel)
-                        .CopyTo(result.Pixels.Slice(y * result.Stride + x * bytesPerPixel, bytesPerPixel));
-                }
-            }
-            result.Orientation = source.Orientation;
-            return result;
-        }
-        catch { result.Dispose(); throw; }
+        };
     }
 
     public static ImageBuffer ResizeToFit(ImageBuffer source, int maxWidth, int maxHeight, bool allowUpscaling,
@@ -161,49 +115,47 @@ public static class ImageTransforms
         var radius = filter == ResizeFilter.Bicubic ? 2 : 1;
         var tapsX = (long)Math.Ceiling(2 * radius * scaleX) + 1;
         var tapsY = (long)Math.Ceiling(2 * radius * scaleY) + 1;
-        var units = (double)width * height * tapsX * tapsY * 4;
-        if (units > context.Limits.MaxWork) throw new ImageLimitException(ImageLimitKind.Work, "Resize work limit exceeded.");
         var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
         try
         {
             var maximum = source.BitDepth == 8 ? 255 : 65535;
             if (filter == ResizeFilter.Bicubic && MixedColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
-                tapsX, tapsY, width * tapsX * tapsY * 4, context))
+                tapsX, tapsY, context))
             {
                 result.Orientation = source.Orientation;
                 return result;
             }
             if (filter == ResizeFilter.Bicubic && MixedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY,
-                tapsX, tapsY, width * tapsX * tapsY * 4, context))
+                tapsX, tapsY, context))
             {
                 result.Orientation = source.Orientation;
                 return result;
             }
             if (filter == ResizeFilter.Bicubic && CachedBicubicResize.TryApply(source, result, scaleX, scaleY,
-                tapsX, tapsY, width * tapsX * tapsY * 4, context))
+                tapsX, tapsY, context))
             {
                 result.Orientation = source.Orientation;
                 return result;
             }
             if (filter == ResizeFilter.Bicubic && (source.BitDepth == 8
-                ? ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || DeepColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || PackedStreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || GeneratedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || EnlargingColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || CrossColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                : WordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || WideWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || PackedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || DeepWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || StreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || PackedStreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || GeneratedWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || EnlargingWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)
-                    || CrossWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, width * tapsX * tapsY * 4, context)))
+                ? ColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || WideColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || PackedColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || DeepColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || PackedStreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || GeneratedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || EnlargingColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || CrossColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                : WordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || WideWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || PackedWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || DeepWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || StreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || PackedStreamingWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || GeneratedWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || EnlargingWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
+                    || CrossWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)))
             {
                 result.Orientation = source.Orientation;
                 return result;
@@ -252,16 +204,16 @@ public static class ImageTransforms
             {
                 if (source.BitDepth == 8)
                     PreparedResize.Apply<byte>(source, result, horizontalWeights, horizontalOffsets,
-                        horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
+                        horizontalCounts, scaleY, radius, filter, context);
                 else
                     PreparedResize.Apply<ushort>(source, result, horizontalWeights, horizontalOffsets,
-                        horizontalCounts, scaleY, radius, filter, width * tapsX * tapsY * 4, context);
+                        horizontalCounts, scaleY, radius, filter, context);
                 result.Orientation = source.Orientation;
                 return result;
             }
             for (var y = 0; y < height; y++)
             {
-                context.Work(width * tapsX * tapsY * 4);
+                context.Cancellation.ThrowIfCancellationRequested();
                 Span<byte> destination8 = default;
                 Span<ushort> destination16 = default;
                 if (source.BitDepth == 8) destination8 = result.GetRow8(y);

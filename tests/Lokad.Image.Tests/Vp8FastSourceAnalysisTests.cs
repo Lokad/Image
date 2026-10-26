@@ -46,21 +46,6 @@ public sealed class Vp8FastSourceAnalysisTests
         next.Dispose(); Assert.Equal(before, root.Bytes);
     }
 
-    [Fact]
-    public void FastCancellationAndLateWorkFailureRefundEveryNewOwner()
-    {
-        using var root = new TestMemoryBudget(100_000); using var source = OriginalVp8lControls.Buffer("hidden", 8, root);
-        using var context = new OperationContext(new() { MemoryBudget = root }, default); using var input = Vp8PreparedInput.Create(source, context); var before = root.Bytes;
-        using var cancel = new CancellationTokenSource(); using var stopped = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
-        root.Admitted = _ => cancel.Cancel(); Assert.Throws<OperationCanceledException>(() => Vp8SourceAnalysis.Create(input, stopped, 0));
-        Assert.Equal(before, root.Bytes); root.Admitted = null; long work;
-        using (var sizing = new OperationContext(new() { MemoryBudget = root }, default))
-        { using var plan = Vp8SourceAnalysis.Create(input, sizing, 0); work = sizing.ConsumedWork; }
-        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => Vp8SourceAnalysis.Create(input, limited, 0)).Limit);
-        Assert.Equal(before, root.Bytes); using var recovered = Vp8SourceAnalysis.Create(input, context, 1); recovered.Dispose(); Assert.Equal(before, root.Bytes);
-    }
-
     [Theory]
     [InlineData(-1, 75)]
     [InlineData(7, 75)]

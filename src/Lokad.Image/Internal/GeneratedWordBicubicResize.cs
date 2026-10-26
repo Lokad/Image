@@ -12,7 +12,7 @@ internal static class GeneratedWordBicubicResize
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
         if (source.BitDepth != 16 || result.Width >= source.Width || result.Height >= source.Height
             || (double)tapsX * tapsY > (1L << 40)
@@ -44,7 +44,7 @@ internal static class GeneratedWordBicubicResize
                 for (var t = 0; t < countX; t += 8)
                 {
                     if ((t & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                    var generated = Coefficients(firstX + t, centerX, scaleX);
+                    var generated = BicubicMath.Coefficients(firstX + t, centerX, scaleX);
                     var count = Math.Min(8, countX - t);
                     for (var lane = 0; lane < count; lane++)
                     {
@@ -105,26 +105,10 @@ internal static class GeneratedWordBicubicResize
                     }
                 }
             }
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
-    }
-
-    private static Vector512<double> Coefficients(int first, double center, double scale)
-    {
-        var positions = Vector512.Create((double)first, first + 1d, first + 2d, first + 3d,
-            first + 4d, first + 5d, first + 6d, first + 7d);
-        var distance = Avx512F.Divide(Avx512F.Subtract(positions, Vector512.Create(center)), Vector512.Create(scale));
-        var x = Avx512F.AndNot(Vector512.Create(long.MinValue), distance.AsInt64()).AsDouble();
-        var squareTerm = Avx512F.Multiply(Avx512F.Multiply(Vector512.Create(2.5), x), x);
-        var nearCube = Avx512F.Multiply(Avx512F.Multiply(Avx512F.Multiply(Vector512.Create(1.5), x), x), x);
-        var near = Avx512F.Add(Avx512F.Subtract(nearCube, squareTerm), Vector512.Create(1d));
-        var farCube = Avx512F.Multiply(Avx512F.Multiply(Avx512F.Multiply(Vector512.Create(-.5), x), x), x);
-        var far = Avx512F.Add(Avx512F.Subtract(Avx512F.Add(farCube, squareTerm),
-            Avx512F.Multiply(Vector512.Create(4d), x)), Vector512.Create(2d));
-        var outside = Vector512.ConditionalSelect(Avx512F.CompareLessThan(x, Vector512.Create(2d)), far, Vector512<double>.Zero);
-        return Vector512.ConditionalSelect(Avx512F.CompareLessThan(x, Vector512.Create(1d)), near, outside);
     }
 
     private static Vector256<double> FilterRow(ReadOnlySpan<byte> row, int firstX, int countX,
@@ -134,7 +118,7 @@ internal static class GeneratedWordBicubicResize
         for (var t = 0; t < countX; t += 8)
         {
             if ((t & 255) == 0) context.Cancellation.ThrowIfCancellationRequested();
-            var weights = Coefficients(firstX + t, centerX, scaleX);
+            var weights = BicubicMath.Coefficients(firstX + t, centerX, scaleX);
             var count = Math.Min(8, countX - t);
             var lane = 0;
             for (; lane + 1 < count; lane += 2)
@@ -212,16 +196,13 @@ internal static class GeneratedWordBicubicResize
         var normalized = alphaSum / normalizer;
         // Decline before exact tiny-alpha replay can require the entire scratch.
         if (normalized > 0 && normalized < 1) return false;
-        var aOut = RoundWord(normalized);
+        var aOut = BicubicMath.RoundWord(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow16(y).Slice(x * 4, 4);
-        destination[0] = RoundWord(color ? red / alphaSum : 0);
-        destination[1] = RoundWord(color ? green / alphaSum : 0);
-        destination[2] = RoundWord(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundWord(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundWord(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundWord(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
     }
-
-    private static ushort RoundWord(double value)
-        => (ushort)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 65535);
 }

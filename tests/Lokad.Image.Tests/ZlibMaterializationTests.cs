@@ -34,26 +34,24 @@ public sealed partial class ZlibMaterializationTests
             Assert.True(complete); Assert.Equal(raw, output); Assert.Equal(Inflate(encoded), output);
             var counted = new OperationContext(ImageLimits.Default, default);
             Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, raw.Length, counted));
-            Assert.Equal(counted.RemainingWork, context.RemainingWork);
             Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);
         }
     }
 
     [Fact]
-    public void EveryLiteralTruncationRetainsAtomicWorkOutputBoundsAndChecksumPosition()
+    public void EveryLiteralTruncationRetainsAtomicOutputBoundsAndChecksumPosition()
     {
         var raw = Enumerable.Range(0, 260).Select(i => (byte)i).ToArray();
         var bits = new Writer(); bits.Number(1, 1); bits.Number(1, 2);
         foreach (var value in raw) bits.Literal(value);
         bits.Code(0, 7); var encoded = Envelope(bits, raw);
         using var cancellation = new CancellationTokenSource();
-        var completeWork = 9380 + raw.Sum(value => value < 144 ? 8 : 9) + 7;
+
         foreach (var cancelable in new[] { false, true })
         foreach (var expected in new[] { raw.Length - 1, raw.Length, raw.Length + 1 })
         for (var length = 0; length <= encoded.Length; length++)
-        foreach (var work in new[] { 1, 9379, 9380, 9381, completeWork - 1, completeWork, completeWork + 1 })
         {
-            var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
+            var limits = ImageLimits.Default with { MaxWorkingBytes = 4096 };
             var materialized = new OperationContext(limits, cancelable ? cancellation.Token : default);
             var perSymbol = new OperationContext(limits, cancellation.Token);
             var input = encoded[..length]; var output = Enumerable.Repeat((byte)165, expected + 16).ToArray();
@@ -61,8 +59,7 @@ public sealed partial class ZlibMaterializationTests
             var first = Record.Exception(() => firstEnd = ZlibFraming.ValidateAndInflate(input, output.AsSpan(8, expected), materialized, out _));
             var second = Record.Exception(() => secondEnd = ZlibFraming.Validate(input, expected, perSymbol));
             Assert.Equal(second?.GetType(), first?.GetType()); Assert.Equal(second?.Message, first?.Message);
-            Assert.Equal(secondEnd, firstEnd); Assert.Equal(perSymbol.RemainingWork, materialized.RemainingWork);
-            Assert.Equal(perSymbol.RemainingWorkingBytes, materialized.RemainingWorkingBytes);
+            Assert.Equal(secondEnd, firstEnd);             Assert.Equal(perSymbol.RemainingWorkingBytes, materialized.RemainingWorkingBytes);
             Assert.All(output[..8], value => Assert.Equal(165, value));
             Assert.All(output[(expected + 8)..], value => Assert.Equal(165, value));
             if (first is null) Assert.Equal(raw, output.AsSpan(8, expected).ToArray());
@@ -98,7 +95,6 @@ public sealed partial class ZlibMaterializationTests
         Assert.Equal(encoded.Length, ZlibFraming.ValidateAndInflate(encoded, output, materialized, out var compatible));
         Assert.True(compatible); Assert.Equal(raw, output); Assert.Equal(Inflate(encoded), output);
         Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, raw.Length, perSymbol));
-        Assert.Equal(perSymbol.RemainingWork, materialized.RemainingWork);
         Assert.Equal(perSymbol.RemainingWorkingBytes, materialized.RemainingWorkingBytes);
         Assert.Equal(original, encoded);
     }
@@ -156,7 +152,6 @@ public sealed partial class ZlibMaterializationTests
             Assert.Equal(encoded.Length, ZlibFraming.ValidateAndInflateRgba(encoded, raw.Length, context, output, out var complete));
             Assert.True(complete); Assert.True(output.Finish(System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(encoded.Length - 4))));
             Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, raw.Length, counted));
-            Assert.Equal(counted.RemainingWork, context.RemainingWork);
             Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);
             output.DecodeRows(new OperationContext(ImageLimits.Default, token));
             Assert.Equal(expected, image.Pixels.ToArray());
@@ -169,18 +164,17 @@ public sealed partial class ZlibMaterializationTests
     public void RollingLiteralTruncationsPreserveOriginalChargesAndErrors(bool cancelable)
     {
         // Independent small fixed stream: every truncation and the nearby
-        // atomic bit budgets must agree with the unchanged counting path.
+        // malformed input must agree with the independent counting path.
         var raw = Enumerable.Range(0, 25).Select(i => (byte)(i % 5 == 0 ? 0 : i * 7)).ToArray();
         var bits = new Writer(); bits.Number(1, 1); bits.Number(1, 2);
         foreach (var value in raw) bits.Literal(value);
         bits.Code(0, 7); var encoded = Envelope(bits, raw);
-        var full = 9380 + raw.Sum(value => value < 144 ? 8 : 9) + 7;
+
         using var cancellation = new CancellationTokenSource();
         var token = cancelable ? cancellation.Token : default;
         foreach (var length in Enumerable.Range(0, encoded.Length + 1))
-        foreach (var work in new[] { 1, 9379, 9380, 9381, 9387, 9388, 9395, 9396, full - 8, full - 7, full - 1, full, full + 1 })
         {
-            var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
+            var limits = ImageLimits.Default with { MaxWorkingBytes = 4096 };
             var context = new OperationContext(limits, token);
             var counted = new OperationContext(limits, token);
             using var image = ImageBuffer.Create(1, 5, 8);
@@ -189,32 +183,7 @@ public sealed partial class ZlibMaterializationTests
             var actual = Record.Exception(() => end = ZlibFraming.ValidateAndInflateRgba(input, raw.Length, context, output, out _));
             var expected = Record.Exception(() => countedEnd = ZlibFraming.Validate(input, raw.Length, counted));
             Assert.Equal(expected?.GetType(), actual?.GetType()); Assert.Equal(expected?.Message, actual?.Message);
-            Assert.Equal(countedEnd, end); Assert.Equal(counted.RemainingWork, context.RemainingWork);
-            Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);
-        }
-    }
-
-    [Fact]
-    public void RollingRowsAdmitWorkBeforeEachPredictorOrByteConversion()
-    {
-        byte[] raw = [1, 1, 2, 3, 4, 5, 6, 7, 8, 2, 9, 10, 11, 12, 13, 14, 15, 16];
-        var bits = new Writer(); bits.Number(1, 1); bits.Number(1, 2);
-        foreach (var value in raw) bits.Literal(value);
-        bits.Code(0, 7); var encoded = Envelope(bits, raw);
-        const int rowWork = 8 * 6 + 2 * 4;
-        foreach (var work in new[] { rowWork - 1, rowWork })
-        {
-            using var image = ImageBuffer.Create(2, 2, 8);
-            var output = new PngRgbaInflation(image);
-            ZlibFraming.ValidateAndInflateRgba(encoded, raw.Length,
-                new OperationContext(ImageLimits.Default, default), output, out var complete);
-            Assert.True(complete); Assert.True(output.Finish(System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(encoded.Length - 4))));
-            var original = image.Pixels.ToArray();
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = work }, default);
-            Assert.Throws<ImageLimitException>(() => output.DecodeRows(context));
-            Assert.Equal(work < rowWork ? work : 0, context.RemainingWork);
-            Assert.Equal(work < rowWork ? original[..8] : new byte[] { 1, 2, 3, 4, 6, 8, 10, 12 }, image.GetRow8(0).ToArray());
-            Assert.Equal(original[8..], image.GetRow8(1).ToArray());
+            Assert.Equal(countedEnd, end);             Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);
         }
     }
 

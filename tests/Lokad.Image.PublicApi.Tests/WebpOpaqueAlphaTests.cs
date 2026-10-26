@@ -72,9 +72,7 @@ public sealed class WebpOpaqueAlphaTests
         foreach (var (denied, expected) in new[]
         {
             (limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }, ImageLimitKind.WorkingBytes),
-            (limits with { MaxOutputBytes = limits.MaxOutputBytes - 1 }, ImageLimitKind.OutputBytes),
-            (limits with { MaxWork = 1 }, ImageLimitKind.Work)
-        })
+            (limits with { MaxOutputBytes = limits.MaxOutputBytes - 1 }, ImageLimitKind.OutputBytes),})
         {
             using var rejected = new MemoryStream();
             var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejected, new() { Limits = denied }, traversal.Token));

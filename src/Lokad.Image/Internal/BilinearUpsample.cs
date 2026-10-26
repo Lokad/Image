@@ -11,7 +11,7 @@ internal static class BilinearUpsample
 {
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts,
-        long rowWork, OperationContext context)
+OperationContext context)
     {
         var width = result.Width;
         var height = result.Height;
@@ -37,7 +37,7 @@ internal static class BilinearUpsample
             colorError, colorError, colorError, alphaError);
         for (var y = 0; y < height; y++)
         {
-            context.Work(rowWork);
+            context.Cancellation.ThrowIfCancellationRequested();
             var cy = (2L * y + 1) * source.Height - height;
             var firstY = cy < 0 ? -1 : (int)(cy / dy);
             var fy = (int)(cy - firstY * dy);

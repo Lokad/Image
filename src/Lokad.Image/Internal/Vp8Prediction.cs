@@ -17,7 +17,7 @@ internal static class Vp8Prediction
     // Pure borrowed4x4 entry for the prepared encoder. Caller supplies eight top
     // and four left samples (including defaults/edge replication). Snapshot all
     // neighbors before writes so the output can alias either border. The outer
-    // encoder admits block work/cancel and coarse workspace; no heap/cache/scope.
+    // encoder admits block cancellation and coarse workspace; no heap/cache/scope.
     internal static void SmallBlock(Vp8SmallIntraMode mode, ReadOnlySpan<byte> topSamples,
         ReadOnlySpan<byte> leftSamples, byte corner, Span<byte> destination)
     {
@@ -90,7 +90,7 @@ internal static class Vp8Prediction
 
     // RFC 6386 section 12: encoder candidates overwrite only this block;
     // every top/left/corner sample lies outside it and is immutable throughout
-    // their ordered search. Caller retains each original work/cancel checkpoint.
+    // their ordered search. Caller retains each original cancellation checkpoint.
     internal static int PrepareSmall(byte[] plane, int stride, int x, int y, int macroX, int macroY,
         Span<int> prepared)
     {

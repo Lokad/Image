@@ -19,7 +19,7 @@ internal static class VerticalFlip
                 for (var start = 0; start < source.Width; start += 1024)
                 {
                     var count = Math.Min(1024, source.Width - start);
-                    context.Work(count * 4L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     input.Slice(start * pixelBytes, count * pixelBytes)
                         .CopyTo(output.Slice(start * pixelBytes, count * pixelBytes));
                 }

@@ -5,26 +5,16 @@ namespace Lokad.Image.Internal;
 
 internal static partial class ZlibFraming
 {
-    // RFC1951 3.2: prefix<=15 bits, length extra<=5, distance extra<=13.
-    // Literals cost<=15 bits/byte; matches cost<=48 bits for>=3 bytes.
-    // Another48 covers EOB or the first offending/truncated/excess token.
-    // This is local work preselection, never recovery from admission refusal.
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static bool CanUseMaterializedCursor(long work, int remainingOutput, CancellationToken cancellation)
-        => !cancellation.CanBeCanceled && remainingOutput >= 0 && work >= 16L * remainingOutput + 48;
-
     private ref partial struct Bits
     {
-        public readonly bool CanInflateMaterializedCursor(int remainingOutput)
-            => CanUseMaterializedCursor(remainingWork, remainingOutput, cancellation);
+        public readonly bool CanInflateMaterializedCursor() => !cancellation.CanBeCanceled;
 
         public int InflateMaterializedCursor(scoped Huffman literals, scoped Huffman distances,
             scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
             scoped Span<byte> destination, int output, int window)
         {
             var bytes = data; var cached = buffer; var bits = available;
-            var offset = position; var budget = remainingWork;
-            try
+            var offset = position;             try
             {
                 while (true)
                 {
@@ -35,15 +25,13 @@ internal static partial class ZlibFraming
                     if (codeBits != 0)
                     {
                         symbol = entry >> 4;
-                        cached >>= codeBits; bits -= codeBits; budget -= codeBits;
-                    }
+                        cached >>= codeBits; bits -= codeBits;                     }
                     else
                     {
-                        // Keep the original canonical decoder and exact error/work
+                        // Keep the original canonical decoder and exact error/cursor
                         // behavior for long prefixes, publishing only at this boundary.
-                        buffer = cached; available = bits; position = offset; remainingWork = budget;
-                        try { symbol = DecodeLongLiteral(ref this, literals); }
-                        finally { cached = buffer; bits = available; offset = position; budget = remainingWork; }
+                        buffer = cached; available = bits; position = offset;                         try { symbol = DecodeLongLiteral(ref this, literals); }
+                        finally { cached = buffer; bits = available; offset = position; }
                     }
                     if (symbol == 256) return output;
                     if (symbol < 256)
@@ -60,7 +48,7 @@ internal static partial class ZlibFraming
                     {
                         var extra = (symbol - 265) / 4 + 1;
                         length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra)
-                            + ReadCursor(bytes, ref cached, ref bits, ref offset, ref budget, extra);
+                            + ReadCursor(bytes, ref cached, ref bits, ref offset, extra);
                     }
                     FillCursor(bytes, ref cached, ref bits, ref offset, 5);
                     entry = distanceLookup[(int)(cached & 31)]; codeBits = entry & 15;
@@ -68,13 +56,11 @@ internal static partial class ZlibFraming
                     if (codeBits != 0)
                     {
                         distanceSymbol = entry >> 4;
-                        cached >>= codeBits; bits -= codeBits; budget -= codeBits;
-                    }
+                        cached >>= codeBits; bits -= codeBits;                     }
                     else
                     {
-                        buffer = cached; available = bits; position = offset; remainingWork = budget;
-                        try { distanceSymbol = Decode(ref this, distances.Counts, distances.Symbols, distances.Maximum); }
-                        finally { cached = buffer; bits = available; offset = position; budget = remainingWork; }
+                        buffer = cached; available = bits; position = offset;                         try { distanceSymbol = Decode(ref this, distances.Counts, distances.Symbols, distances.Maximum); }
+                        finally { cached = buffer; bits = available; offset = position; }
                     }
                     if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
                     var distance = distanceSymbol + 1;
@@ -82,7 +68,7 @@ internal static partial class ZlibFraming
                     {
                         var extra = distanceSymbol / 2 - 1;
                         distance = 1 + ((2 + (distanceSymbol & 1)) << extra)
-                            + ReadCursor(bytes, ref cached, ref bits, ref offset, ref budget, extra);
+                            + ReadCursor(bytes, ref cached, ref bits, ref offset, extra);
                     }
                     if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
                     if (length > destination.Length - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
@@ -101,7 +87,7 @@ internal static partial class ZlibFraming
                     output += length;
                 }
             }
-            finally { buffer = cached; available = bits; position = offset; remainingWork = budget; }
+            finally { buffer = cached; available = bits; position = offset; }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -127,11 +113,8 @@ internal static partial class ZlibFraming
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int ReadCursor(scoped ReadOnlySpan<byte> bytes, ref ulong cached,
-            ref int bits, ref int offset, ref long budget, int count)
+            ref int bits, ref int offset, int count)
         {
-            // Original Read charges the extra field before attempting its refill.
-            // Selection proves that all successful/error-prefix charges fit.
-            budget -= count;
             FillCursor(bytes, ref cached, ref bits, ref offset, count);
             var value = (int)(cached & ((1u << count) - 1)); cached >>= count; bits -= count;
             return value;

@@ -90,7 +90,7 @@ coverage; quality endpoints do not imply a broader native-packet claim.
 Shared admission reserves fixed/table capacity and coarse table-building peaks
 before allocation. Temporary storage is released before async delivery; encoded
 chunks remain charged until the actual writer finishes, including cancellation
-and failure. Inputs and the shared root are borrowed. Existing local/work limits
+and failure. Inputs and the shared root are borrowed. Existing local storage/container limits
 remain independent; refusal has no fallback. Other settings/scopes need separate
 qualification. These procedural controls establish no general compression claim.
 Current JPEG timing/allocation scope and older producer-specific observations are
@@ -101,7 +101,7 @@ stored level0, greedy level1, lazy level6 and longer lazy level9. The existing
 four color types at8/16bits qualify Optimal; RGBA8/16 also qualify each other
 policy. All14 **513×259** controls match complete frozen FFmpeg packets raw-exact,
 including pHYs,4096-byte IDAT chunks, checksums and entropy. No metadata exemption
-is used. Required async, forward, live-token and ImageBudget boundaries retain
+is used. Required async, forward, live-token and caller-root boundaries retain
 those packets; no quality search or new reference setting is involved.
 
 One bounded history/dictionary/token-block workspace is reserved before allocation
@@ -134,7 +134,7 @@ and observed tables are verification data only.
 The scope includes the513×259 photograph/diagram at160,032/7,234 bytes, asymmetric
 RGBA8 across efforts0/1/4/5, adaptive photograph effort5, direct noise, hidden RGB,
 packed palettes, single-axis16383 controls and all existing two-color effort settings. Complete public sync,
-async and ImageBudget boundaries retain the asymmetric packet at8/16bits, with
+async and caller-root boundaries retain the asymmetric packet at8/16bits, with
 one normalization and independent owners. The16384-axis companions remain functional
 format extensions; the pinned native encoder accepts at most16383, so those axes
 make no encoder-byte claim. Exact-decoder and new single-CPU/allocation
@@ -154,12 +154,9 @@ The superseded encoder and its internal experimental profiles are removed.
 Admitted planes, frame state and old/new arithmetic capacities share the borrowed
 root. Source/frame storage releases before delivery; alpha/partitions remain owned
 until actual sync/async users finish. Lossy async streams need no extra encoded
-staging copy. Refusal, cancellation and actual work exhaustion terminate without
-another strategy. Small frozen header fields provide a fast regression for the
+staging copy. Refusal and cancellation terminate without another strategy. Small frozen header fields provide a fast regression for the
 large case. [VP8 evidence](../benchmarks/vp8-byte-parity-evidence.json) preserves
-primitive, complete-packet, producer and resource scope. The high-effort positive
-alpha proof uses an explicit64B work allowance; default2B and public32M failures
-remain separate safeguards. Work counters are not timing/allocation measurements.
+primitive, complete-packet, producer and resource scope. Cancellation remains cooperative; no cumulative work quota is provided.
 
 Lossless WebP retains the approved libwebp `exact=1` reference; grayscale JPEG
 retains the explicitly labeled SIMD-enabled libjpeg-turbo reference. New encoding

@@ -92,14 +92,14 @@ internal sealed class Vp8QuantizationPlan : IDisposable
     {
         if (method is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(method));
         if (chromaScore is < 0 or > 7905) throw new ArgumentOutOfRangeException(nameof(chromaScore));
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         var result = new Vp8QuantizationPlan(context, source.SegmentCount, chromaScore);
         try
         {
             var length = checked(result.SegmentCount * SegmentLength);
             var capacity = length * (long)sizeof(int) + MetadataBytes;
             context.Reserve(capacity); result.retainedBytes = capacity;
-            context.Work(0); result.storage = new int[length];
+            context.Cancellation.ThrowIfCancellationRequested(); result.storage = new int[length];
             // The twelve-byte temporary and small value locals fit within the
             // coarse metadata allowance; no separate minor-allocation scope.
             Span<int> average = stackalloc int[3];
@@ -109,7 +109,7 @@ internal sealed class Vp8QuantizationPlan : IDisposable
                 var values = result.storage.AsSpan(segment * SegmentLength, SegmentLength);
                 for (var plane = 0; plane < 3; plane++)
                 {
-                    context.Work(512);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     var dc = plane == 0 ? Vp8Tables.DcQuantizers[q]
                         : plane == 1 ? 2 * Vp8Tables.DcQuantizers[q]
                         : Vp8Tables.DcQuantizers[Math.Clamp(q + result.QuantizerDeltas.ChromaDc, 0, 117)];
@@ -118,7 +118,7 @@ internal sealed class Vp8QuantizationPlan : IDisposable
                         : Vp8Tables.AcQuantizers[Math.Clamp(q + result.QuantizerDeltas.ChromaAc, 0, 127)];
                     average[plane] = FillMatrix(values.Slice(plane * MatrixLength, MatrixLength), dc, ac, (Vp8CoefficientPlane)plane);
                 }
-                context.Work(256);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var y = average[0]; var y2 = average[1]; var uv = average[2];
                 var costs = values[(3 * MatrixLength)..];
                 costs[0] = Math.Max(1, 3 * y * y >> 7); costs[1] = Math.Max(1, 3 * y2 * y2);

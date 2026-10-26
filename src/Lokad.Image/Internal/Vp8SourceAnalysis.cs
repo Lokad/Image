@@ -33,7 +33,7 @@ internal sealed class Vp8SourceAnalysis : IDisposable
     private static void CollectPlane(ReadOnlySpan<byte> plane, int stride, int x, int y, int size,
         Vp8IntraMode mode, Span<byte> prediction, Span<int> population, OperationContext context)
     {
-        context.Work(size * size);
+        context.Cancellation.ThrowIfCancellationRequested();
         ReadOnlySpan<byte> top = y == 0 ? default : plane.Slice((y - 1) * stride + x, size);
         Span<byte> left = stackalloc byte[16]; left = left[..size];
         if (x == 0) left = default;
@@ -44,7 +44,7 @@ internal sealed class Vp8SourceAnalysis : IDisposable
         for (var by = 0; by < size; by += 4)
         for (var bx = 0; bx < size; bx += 4)
         {
-            context.Work(1024);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var py = 0; py < 4; py++)
             for (var px = 0; px < 4; px++)
                 residual[py * 4 + px] = (short)(plane[(y + by + py) * stride + x + bx + px]
@@ -78,7 +78,7 @@ internal sealed class Vp8SourceAnalysis : IDisposable
     {
         // Compare dispersion of the sixteen 4x4 cell sums. Source padding is
         // already admitted and filled, including partial right/bottom blocks.
-        context.Work(512); uint total = 0, squares = 0;
+        context.Cancellation.ThrowIfCancellationRequested(); uint total = 0, squares = 0;
         var pixels = source.Y; var start = y * 16 * source.Stride + x * 16;
         for (var cy = 0; cy < 4; cy++) for (var cx = 0; cx < 4; cx++)
         {
@@ -97,17 +97,17 @@ internal sealed class Vp8SourceAnalysis : IDisposable
     {
         if (method is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(method));
         if (quality is < 1 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         var result = new Vp8SourceAnalysis(context, source.Stride / 16, source.StorageHeight / 16);
         try
         {
             var capacity = checked(result.Count * 3L + 256 * sizeof(int) + MetadataBytes);
             context.Reserve(capacity); result.retainedBytes = capacity;
-            context.Work(0); result.records = new byte[checked(result.Count * 3)]; result.histogram = new int[256];
+            context.Cancellation.ThrowIfCancellationRequested(); result.records = new byte[checked(result.Count * 3)]; result.histogram = new int[256];
             context.Reserve(ScratchBytes);
             try
             {
-                context.Work(0);
+                context.Cancellation.ThrowIfCancellationRequested();
                 Span<byte> prediction = stackalloc byte[256]; Span<int> population = stackalloc int[32];
                 long sumAlpha = 0, sumChroma = 0;
                 for (var y = 0; y < result.Height; y++)

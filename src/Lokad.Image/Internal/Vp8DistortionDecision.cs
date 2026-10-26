@@ -32,7 +32,7 @@ internal static class Vp8DistortionDecision
     private static uint Reconstruct16(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, bool top, bool left, int mode,
         Vp8QuantizationMatrix luma, Vp8QuantizationMatrix walshMatrix, Span<byte> pixels, Span<short> levels, OperationContext context)
     {
-        context.Work(16_384); Predict16(neighbors, top, left, mode, pixels);
+        context.Cancellation.ThrowIfCancellationRequested(); Predict16(neighbors, top, left, mode, pixels);
         Span<short> coefficients = stackalloc short[256]; Span<short> dc = stackalloc short[16]; Span<short> walsh = stackalloc short[16];
         for (var b = 0; b < 16; b++)
         { Vp8MacroblockDecision.Transform(source, pixels, Block(b), coefficients.Slice(b * 16, 16)); dc[b] = coefficients[b * 16]; }
@@ -66,13 +66,13 @@ internal static class Vp8DistortionDecision
             var costs = prices.Slice(8 + (above * 10 + side) * 10, 10); var bestMode = 0; var best = Unselected;
             for (var mode = 0; mode < 10; mode++)
             {
-                context.Work(256); Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
+                context.Cancellation.ThrowIfCancellationRequested(); Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
                 var current = 256L * Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4) + costs[mode] * 11L;
                 if (current < best) { best = current; bestMode = mode; trial.CopyTo(selected); }
             }
             modes[b] = (byte)bestMode; score += best; header += costs[bestMode];
             if (score >= previous || header > headerLimit) return false;
-            context.Work(1024);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++)
                 residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - selected[yy * 4 + xx]);
             Vp8ForwardTransform.Dct(residual, coefficients);
@@ -87,7 +87,7 @@ internal static class Vp8DistortionDecision
         bool top, bool left, int mode, bool correctDc, Vp8QuantizationMatrix matrix, Span<byte> pixels,
         Span<short> levels, Span<sbyte> errors, OperationContext context)
     {
-        context.Work(8192); PredictUv(neighbors, top, left, mode, pixels);
+        context.Cancellation.ThrowIfCancellationRequested(); PredictUv(neighbors, top, left, mode, pixels);
         Span<short> coefficients = stackalloc short[128];
         for (var b = 0; b < 8; b++) Vp8MacroblockDecision.Transform(source, pixels, UvBlock(b), coefficients.Slice(b * 16, 16));
         errors[..14].Clear();
@@ -121,7 +121,7 @@ internal static class Vp8DistortionDecision
         if (pixels[..384].Overlaps(levelBytes) || pixels[..384].Overlaps(modes[..16]) || pixels[..384].Overlaps(errorBytes)
             || levelBytes.Overlaps(modes[..16]) || levelBytes.Overlaps(errorBytes) || modes[..16].Overlaps(errorBytes))
             throw new ArgumentException("Macroblock result buffers must not overlap.");
-        context.Work(0); Span<byte> snapshot = stackalloc byte[463]; source[..384].CopyTo(snapshot);
+        context.Cancellation.ThrowIfCancellationRequested(); Span<byte> snapshot = stackalloc byte[463]; source[..384].CopyTo(snapshot);
         neighbors[..71].CopyTo(snapshot[384..]); modeContexts[..8].CopyTo(snapshot[455..]);
         Span<sbyte> errorInput = stackalloc sbyte[8]; diffusion[..8].CopyTo(errorInput);
         var src = snapshot[..384]; var edges = snapshot.Slice(384, 71); var incomingModes = snapshot.Slice(455, 8);
@@ -132,7 +132,7 @@ internal static class Vp8DistortionDecision
         {
             for (var mode = 0; mode < 4; mode++)
             {
-                context.Work(1024); Predict16(edges, hasTop, hasLeft, mode, prediction);
+                context.Cancellation.ThrowIfCancellationRequested(); Predict16(edges, hasTop, hasLeft, mode, prediction);
                 var score = 256L * Vp8Distortion.Squared(src, 16, prediction, 16, 16, 16) + prices[mode] * 106L;
                 if (mode != 0 && prices[mode] > limit) continue;
                 if (score < best) { best = score; lumaMode = mode; }
@@ -160,7 +160,7 @@ internal static class Vp8DistortionDecision
             var bestUv = Unselected;
             for (var mode = 0; mode < 4; mode++)
             {
-                context.Work(512); PredictUv(edges, hasTop, hasLeft, mode, prediction[..128]);
+                context.Cancellation.ThrowIfCancellationRequested(); PredictUv(edges, hasTop, hasLeft, mode, prediction[..128]);
                 var score = 256L * Vp8Distortion.Squared(src[256..], 16, prediction, 16, 16, 8) + prices[4 + mode] * 120L;
                 if (score < bestUv) { bestUv = score; uvMode = mode; }
             }

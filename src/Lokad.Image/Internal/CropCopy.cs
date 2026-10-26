@@ -21,7 +21,7 @@ internal static class CropCopy
                 for (var start = 0; start < width; start += 1024)
                 {
                     var count = Math.Min(1024, width - start);
-                    context.Work(count * 4L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     input.Slice(start * pixelBytes, count * pixelBytes)
                         .CopyTo(output.Slice(start * pixelBytes, count * pixelBytes));
                 }

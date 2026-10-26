@@ -114,7 +114,6 @@ public sealed class JpegGrayQuantizationTests
             JpegGrayQuantization.Quantize(source, table, reciprocals, output);
         }
         Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before);
-        Assert.Equal(8192, root.Bytes); Assert.Equal(attempts, root.Attempts); Assert.Equal(0, context.ConsumedWork);
-        context.Release(8192); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        Assert.Equal(8192, root.Bytes); Assert.Equal(attempts, root.Attempts);         context.Release(8192); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

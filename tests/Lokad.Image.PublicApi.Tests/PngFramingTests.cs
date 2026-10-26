@@ -147,7 +147,6 @@ public sealed class PngFramingTests
     {
         var frame = new AuthoredPng.Frame("limits", 6, 16, 19, 17, true);
         var encoded = AuthoredPng.Build(frame);
-        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = new ImageLimits { MaxWork = encoded.Length } }));
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, new DecodeOptions { Limits = new ImageLimits { MaxContainerItems = 3 } }));
         var withMetadata = AuthoredPng.Wrap(frame, AuthoredPng.StoredZlib(AuthoredPng.FilteredRows(frame)), ("vpAg", new byte[3]), ("vpBg", new byte[3]));
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(withMetadata, new DecodeOptions { Limits = new ImageLimits { MaxMetadataBytes = 5 } }));

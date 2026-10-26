@@ -316,11 +316,10 @@ public partial class WarmPng
                 ValidatePng(normal, nativePacket: true);
                 using (var decoded = ImageCodec.Decode(normal)) ValidatePixels(decoded);
             }
-            PrepareSharedBudget();
             before = native.Measure(smoke, sampleCount: sampleCount);
             ready = true;
         }
-        catch { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
+        catch { native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state.Dispose(); throw; }
     }
 
     private void ValidatePixels(ImageBuffer value)
@@ -516,12 +515,6 @@ public partial class WarmPng
             using var output = new MemoryStream(); EncodeInto(output);
             return checked((int)output.Length) ^ output.GetBuffer()[checked((int)output.Length) / 2];
         }
-        if (sharedBudget is not null)
-        {
-            using var owner = sharedBudget.Decode(encoded, decodeOptions, decodeCancellation);
-            var value = owner.Image;
-            return value.Stride * value.Height ^ value.GetRow8(0)[source.Stride / 2];
-        }
         using var result = ImageCodec.Decode(encoded, decodeOptions, decodeCancellation);
         return result.Stride * result.Height ^ (Depth == 8 ? result.GetRow8(0)[source.Stride / 2] : result.GetRow16(0)[source.Stride / 4]);
     }
@@ -549,7 +542,7 @@ public partial class WarmPng
         try
         {
             if (!ready) return;
-            ValidateManaged(); ValidateSharedBudget();
+            ValidateManaged();
             var after = native.Measure(smoke, before[0].Operations, sampleCount);
             native.Check(); ValidateNative(); native.Stop();
             var path = Path.Combine(state.Root, "artifacts", "benchmark-validation", nameof(WarmPng) + "-" + Guid.NewGuid().ToString("N") + ".json");
@@ -558,10 +551,6 @@ public partial class WarmPng
             {
                 schemaVersion = 1, name = nameof(WarmPng), caseId = Case.ToString(), smoke, nativeSampleCount = smoke ? 1 : sampleCount,
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"),
-                sharedBudget = sharedBudget is not null, sharedBudgetWorkConsumed = sharedBudget?.ConsumedWork,
-                sharedBudgetResidentInputBytes = sharedBudget is null ? 0 : encoded.LongLength,
-                sharedBudgetTwoOwnersAndRetainedChargesChecked = sharedBudget is not null,
-                sharedBudgetTemporaryMemoryReturned = sharedBudget is not null,
                 width = source.Width, height = source.Height, depth = Depth, cpu, managedAffinityCount = 1,
                 processorCount = Environment.ProcessorCount, serverGc = GCSettings.IsServerGC, gcConfiguration = GC.GetConfigurationVariables(),
                 runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
@@ -634,7 +623,7 @@ public partial class WarmPng
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmPng).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = SharedBudgetBoundary + (ForwardOutput ? "Fresh forward-only caller Stream over independent MemoryStream; wrapper creation/disposal and all span callbacks included, Length/Position/Seek unavailable, caller remains open. Native direct independent packet acquisition needs no seeking or equivalent wrapper. " : "") + (Tight
+                boundary = (ForwardOutput ? "Fresh forward-only caller Stream over independent MemoryStream; wrapper creation/disposal and all span callbacks included, Length/Position/Seek unavailable, caller remains open. Native direct independent packet acquisition needs no seeking or equivalent wrapper. " : "") + (Tight
                     ? $"Warm identical frozen RGBA{Depth} PNG bytes to independent owned RGBA{Depth} pixels under exact managed working limit: encoded span + IDAT bytes + output + 256 KiB original inflater allowance + two rows. The optional whole-filter and 8 KiB read buffers cannot fit. Public Decode admission/framing/BCL inflation/{(Depth == 16 ? "word conversion/" : "")}output acquisition/disposal timed; preconstructed immutable options excluded. Native equivalent complete decode{(Depth == 16 ? " plus owned BE-to-LE conversion" : " without conversion")}/output acquisition/release, context/packet/frame wrappers reused. Native has no matching caller admission setting. Exact pixels/alpha/hidden RGB/source/two owners and one-byte-below rejection checked outside timing. Startup/IPC/file IO/hashes/validation excluded."
                     : RgbTransparency && Depth == 16
                     ? "Warm identical RGB16BE PNG bytes with six-byte full-word tRNS key to independent owned RGBA16 pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output acquisition/release. Native decoder performs exact full RGB-key alpha expansion to owned RGBA64BE inside every operation, followed by included endian conversion and second owned RGBA64LE output acquisition/release. No colorspace conversion. Full RGB/alpha/hidden RGB exact. Startup/IPC/file IO/hashes/validation excluded."
@@ -656,6 +645,6 @@ public partial class WarmPng
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
             Console.WriteLine("Validated warm PNG pair: " + path);
         }
-        finally { sharedCallerMemory?.Dispose(); native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
+        finally { native?.Dispose(); source?.Dispose(); cancellationSource?.Dispose(); state?.Dispose(); ready = false; }
     }
 }

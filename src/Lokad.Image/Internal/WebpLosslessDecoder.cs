@@ -61,7 +61,7 @@ internal ref struct WebpLosslessDecoder
                 var mask = (1 << indexBits) - 1;
                 for (var y = 0; y < height; y++)
                 {
-                    context.Work(transform.Width * 4L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     for (var x = 0; x < transform.Width; x++)
                     {
                         var packed = (pixels[y * codedWidth + (x >> transform.Bits)] >> 8) & 255;
@@ -81,7 +81,7 @@ internal ref struct WebpLosslessDecoder
         {
             for (var y = 0; y < height; y++)
             {
-                context.Work(width * 4L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var row = result.GetRow8(y);
                 for (var x = 0; x < width; x++)
                 {
@@ -135,7 +135,7 @@ internal ref struct WebpLosslessDecoder
         }
         while (position < pixels.Length)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             var group = entropy.Length == 0 ? 0 : (int)((entropy[(position / imageWidth >> entropyBits) * entropyWidth
                 + (position % imageWidth >> entropyBits)] >> 8) & 65535);
             var start = group * 5;
@@ -162,7 +162,7 @@ internal ref struct WebpLosslessDecoder
                 var distance = WebpDistances.Resolve(Prefix(tables[start + 4].Read(ref reader)), imageWidth);
                 if (distance > position || length > pixels.Length - position)
                     throw new ImageDataException("VP8L backward reference exceeds the raster.");
-                context.Work(length);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var i = 0; i < length; i++)
                 {
                     var pixel = pixels[position - distance]; pixels[position++] = pixel; Insert(cache, cacheBits, pixel);
@@ -211,7 +211,7 @@ internal ref struct WebpLosslessDecoder
             int position = 0, previous = 8;
             for (var token = 0; token < maximum && position < alphabet; token++)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var symbol = codes.Read(ref reader);
                 if (symbol < 16)
                 {
@@ -248,7 +248,7 @@ internal ref struct WebpLosslessDecoder
         var tileWidth = Ceil(imageWidth, transform.Bits);
         for (var y = 0; y < height; y++)
         {
-            context.Work(imageWidth * 32L);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var x = 0; x < imageWidth; x++)
             {
                 var position = y * imageWidth + x; var pixel = pixels[position];
@@ -288,7 +288,7 @@ internal ref struct WebpLosslessDecoder
         var tileWidth = Ceil(imageWidth, transform.Bits); var tileSize = 1 << transform.Bits;
         for (var y = 0; y < height; y++)
         {
-            context.Work(imageWidth * 32L);
+            context.Cancellation.ThrowIfCancellationRequested();
             var row = y * imageWidth;
             if (y == 0)
             {
@@ -411,7 +411,7 @@ internal ref struct WebpLosslessDecoder
         for (var start = 0; start < modes.Length;)
         {
             var count = Math.Min(1024, modes.Length - start);
-            context.Work(count);
+            context.Cancellation.ThrowIfCancellationRequested();
             foreach (var value in modes.Slice(start, count))
                 if (((value >> 8) & 15) > 13) throw new ImageDataException("Invalid VP8L predictor mode.");
             start += count;
@@ -424,7 +424,7 @@ internal ref struct WebpLosslessDecoder
         for (var start = 0; start < entropy.Length;)
         {
             var count = Math.Min(1024, entropy.Length - start);
-            context.Work(count);
+            context.Cancellation.ThrowIfCancellationRequested();
             foreach (var value in entropy.Slice(start, count)) groups = Math.Max(groups, (int)((value >> 8) & 65535) + 1);
             start += count;
         }

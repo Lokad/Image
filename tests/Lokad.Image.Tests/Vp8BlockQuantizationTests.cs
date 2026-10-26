@@ -49,7 +49,6 @@ public sealed class Vp8BlockQuantizationTests
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var nonzero = 0; var max = 0; var retained = root.Bytes;
         for (var fragment = 0; fragment < 11; fragment++)
         {
-            context.Work(128);
             for (var p = 0; p < 16; p++)
                 coefficients[p] = (short)(fragment switch
                 {
@@ -73,7 +72,6 @@ public sealed class Vp8BlockQuantizationTests
         for (var y = 0; y < plane.Length / stride; y += 4)
         for (var x = 0; x < stride; x += 4)
         {
-            context.Work(1024);
             for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++)
                 residual[dy * 4 + dx] = (short)(plane[(y + dy) * stride + x + dx] - 128);
             Vp8ForwardTransform.Dct(residual, coefficients); Append(coefficients, levels, matrix, hash); blocks++;
@@ -106,7 +104,6 @@ public sealed class Vp8BlockQuantizationTests
             for (var my = 0; my < input.StorageHeight; my += 16)
             for (var mx = 0; mx < input.Stride; mx += 16)
             {
-                context.Work(16 * 1024);
                 for (var by = 0; by < 16; by += 4) for (var bx = 0; bx < 16; bx += 4)
                 {
                     for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++)

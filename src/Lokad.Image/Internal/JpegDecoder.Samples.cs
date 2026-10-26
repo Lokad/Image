@@ -27,7 +27,7 @@ internal ref partial struct JpegDecoder
         {
             while (position < data.Length)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var marker = ReadMarker();
                 if (marker == 0xD9)
                 {
@@ -118,7 +118,7 @@ internal ref partial struct JpegDecoder
         {
             for (var y = 0; y < info.Height; y++)
             {
-                context.Work(info.Width * 32L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 JpegInverseColor.WriteRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
                     components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
                     components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width),
@@ -131,7 +131,7 @@ internal ref partial struct JpegDecoder
         {
             for (var y = 0; y < info.Height; y++)
             {
-                context.Work(info.Width * 32L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 WriteYcbcrPixels(y, 0, info.Width, destination.Slice(y * stride, info.Width * 3), 3);
             }
             return;
@@ -141,7 +141,7 @@ internal ref partial struct JpegDecoder
         {
             for (var y = 0; y < info.Height; y++)
             {
-                context.Work(info.Width * 32L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 WriteQuarterYcbcrPixels(y, 0, info.Width, destination.Slice(y * stride, info.Width * 3), 3);
             }
             return;
@@ -151,7 +151,7 @@ internal ref partial struct JpegDecoder
         {
             for (var y = 0; y < info.Height; y++)
             {
-                context.Work(info.Width * 32L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width)
                     .CopyTo(destination.Slice(y * stride, info.Width));
             }
@@ -159,7 +159,7 @@ internal ref partial struct JpegDecoder
         }
         for (var y = 0; y < info.Height; y++)
         {
-            context.Work(info.Width * 32L);
+            context.Cancellation.ThrowIfCancellationRequested();
             var firstRow = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width);
             for (var x = 0; x < info.Width; x++)
             {

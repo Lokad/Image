@@ -101,7 +101,7 @@ public sealed class Vp8EncodeTests
         foreach (var limits in new[]
         {
             new ImageLimits { MaxOutputBytes = 1 }, new ImageLimits { MaxWorkingBytes = 64 },
-            new ImageLimits { MaxWork = 1 }, new ImageLimits { MaxPixels = 1 }
+            new ImageLimits { MaxPixels = 1 }
         }) Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(image, output, new WebpEncodeOptions { Lossless = false, Limits = limits }));
         Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeWebp(image, output,
             new WebpEncodeOptions { Lossless = false }, new CancellationToken(true)));

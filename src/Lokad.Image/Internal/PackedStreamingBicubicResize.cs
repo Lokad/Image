@@ -13,7 +13,7 @@ internal static class PackedStreamingBicubicResize
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
         if (source.BitDepth != 8 || result.Width >= source.Width || result.Height >= source.Height
             || tapsX > Capacity || tapsY > Capacity
@@ -52,7 +52,7 @@ internal static class PackedStreamingBicubicResize
                     var bits = BitConverter.DoubleToUInt64Bits(w);
                     coefficientLow[t] = (uint)(bits >> 16);
                     coefficientHigh[t] = (ushort)(bits >> 48);
-                    coefficientError += Math.Abs(w - Coefficient(coefficientLow[t], coefficientHigh[t]));
+                    coefficientError += Math.Abs(w - BicubicMath.Coefficient(coefficientLow[t], coefficientHigh[t]));
                 }
                 var sourceCount = Math.Clamp(firstX + countX - 1, 0, source.Width - 1) - sourceFirst + 1;
                 // Reuse the same bounded arrays for each output-row block.
@@ -109,14 +109,11 @@ internal static class PackedStreamingBicubicResize
                     }
                 }
             }
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
     }
-
-    private static double Coefficient(uint low, ushort high)
-        => BitConverter.UInt64BitsToDouble(((ulong)high << 48) | ((ulong)low << 16));
 
     private static Vector256<double> FilterRow(ReadOnlySpan<byte> row,
         ReadOnlySpan<uint> low, ReadOnlySpan<ushort> high, int firstX, int sourceFirst, int sourceWidth)
@@ -130,7 +127,7 @@ internal static class PackedStreamingBicubicResize
             var samples = Avx2.ConvertToVector256Int32(Vector128.CreateScalar(p0 | ((ulong)p1 << 32)).AsByte());
             var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
             var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors));
-            var w0 = Coefficient(low[t], high[t]); var w1 = Coefficient(low[t + 1], high[t + 1]);
+            var w0 = BicubicMath.Coefficient(low[t], high[t]); var w1 = BicubicMath.Coefficient(low[t + 1], high[t + 1]);
             var products = Avx512F.Multiply(values, Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1));
             sum = Avx.Add(sum, products.GetLower());
             sum = Avx.Add(sum, products.GetUpper());
@@ -142,7 +139,7 @@ internal static class PackedStreamingBicubicResize
             var alpha = (int)(packed >> 24);
             var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1));
             var values = Avx.ConvertToVector256Double(products);
-            sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(Coefficient(low[t], high[t]))));
+            sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(BicubicMath.Coefficient(low[t], high[t]))));
         }
         return sum;
     }
@@ -196,16 +193,13 @@ internal static class PackedStreamingBicubicResize
         var normalized = alphaSum / normalizer;
         // Decline before exact tiny-alpha replay can require the entire scratch.
         if (normalized > 0 && normalized < 1) return false;
-        var aOut = RoundByte(normalized);
+        var aOut = BicubicMath.RoundByte(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow8(y).Slice(x * 4, 4);
-        destination[0] = RoundByte(color ? red / alphaSum : 0);
-        destination[1] = RoundByte(color ? green / alphaSum : 0);
-        destination[2] = RoundByte(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundByte(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundByte(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundByte(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
     }
-
-    private static byte RoundByte(double value)
-        => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
 }

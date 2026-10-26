@@ -103,20 +103,6 @@ public sealed class TextShapingTests
         Assert.All(Glyphs(layout), glyph => Assert.Equal(0, glyph.X));
     }
 
-    [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public void CancellationAndWorkFailureAfterAdmissionRefundTheWholeLayout(bool cancel)
-    {
-        using var font = Font(); using var budget = new TestMemoryBudget(1_000_000); using var cancellation = new CancellationTokenSource();
-        budget.Admitted = _ => { if (cancel) cancellation.Cancel(); };
-        var limits = new ImageLimits { MemoryBudget = budget, MaxWork = cancel ? 10000 : 20 };
-        if (cancel) Assert.Throws<OperationCanceledException>(() => TextLayout.Create(font, "AV AV", Options with { Limits = limits }, cancellation.Token));
-        else Assert.Throws<ImageLimitException>(() => TextLayout.Create(font, "AV AV", Options with { Limits = limits }));
-        Assert.Equal(0, budget.Bytes); budget.Admitted = null;
-        using (var next = TextLayout.Create(font, "AV", Options with { Limits = new() { MemoryBudget = budget } })) Assert.True(budget.Bytes > 0);
-        Assert.Equal(0, budget.Bytes);
-    }
-
     [Fact]
     public void UnsupportedScriptsJoiningProgramsAndLogicalDirectionAreExplicit()
     {

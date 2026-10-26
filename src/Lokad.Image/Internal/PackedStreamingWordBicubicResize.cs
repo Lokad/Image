@@ -13,7 +13,7 @@ internal static class PackedStreamingWordBicubicResize
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
         if (source.BitDepth != 16 || result.Width >= source.Width || result.Height >= source.Height
             || tapsX > Capacity || tapsY > Capacity
@@ -52,7 +52,7 @@ internal static class PackedStreamingWordBicubicResize
                     var bits = BitConverter.DoubleToUInt64Bits(w);
                     coefficientLow[t] = (uint)(bits >> 16);
                     coefficientHigh[t] = (ushort)(bits >> 48);
-                    coefficientError += Math.Abs(w - Coefficient(coefficientLow[t], coefficientHigh[t]));
+                    coefficientError += Math.Abs(w - BicubicMath.Coefficient(coefficientLow[t], coefficientHigh[t]));
                 }
                 var sourceCount = Math.Clamp(firstX + countX - 1, 0, source.Width - 1) - sourceFirst + 1;
                 // Reuse the same bounded arrays for each output-row block.
@@ -109,14 +109,11 @@ internal static class PackedStreamingWordBicubicResize
                     }
                 }
             }
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
     }
-
-    private static double Coefficient(uint low, ushort high)
-        => BitConverter.UInt64BitsToDouble(((ulong)high << 48) | ((ulong)low << 16));
 
     private static Vector256<double> FilterRow(ReadOnlySpan<byte> row,
         ReadOnlySpan<uint> low, ReadOnlySpan<ushort> high, int firstX, int sourceFirst, int sourceWidth)
@@ -130,7 +127,7 @@ internal static class PackedStreamingWordBicubicResize
             var samples = Avx2.ConvertToVector256Int32(Vector128.Create(p0, p1).AsUInt16());
             var factors = Avx2.Blend(Avx2.Shuffle(samples, 255), Vector256.Create(1), 136);
             var values = Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(samples, factors).AsUInt32());
-            var w0 = Coefficient(low[t], high[t]); var w1 = Coefficient(low[t + 1], high[t + 1]);
+            var w0 = BicubicMath.Coefficient(low[t], high[t]); var w1 = BicubicMath.Coefficient(low[t + 1], high[t + 1]);
             var products = Avx512F.Multiply(values, Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1));
             sum = Avx.Add(sum, products.GetLower());
             sum = Avx.Add(sum, products.GetUpper());
@@ -142,7 +139,7 @@ internal static class PackedStreamingWordBicubicResize
             var alpha = (int)(packed >> 48);
             var products = Sse41.MultiplyLow(samples, Vector128.Create(alpha, alpha, alpha, 1)).AsUInt32();
             var values = Avx512F.ConvertToVector512Double(Vector256.Create(products, Vector128<uint>.Zero)).GetLower();
-            sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(Coefficient(low[t], high[t]))));
+            sum = Avx.Add(sum, Avx.Multiply(values, Vector256.Create(BicubicMath.Coefficient(low[t], high[t]))));
         }
         return sum;
     }
@@ -195,16 +192,13 @@ internal static class PackedStreamingWordBicubicResize
         var normalized = alphaSum / normalizer;
         // Decline before exact tiny-alpha replay can require the entire scratch.
         if (normalized > 0 && normalized < 1) return false;
-        var aOut = RoundWord(normalized);
+        var aOut = BicubicMath.RoundWord(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow16(y).Slice(x * 4, 4);
-        destination[0] = RoundWord(color ? red / alphaSum : 0);
-        destination[1] = RoundWord(color ? green / alphaSum : 0);
-        destination[2] = RoundWord(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundWord(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundWord(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundWord(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
     }
-
-    private static ushort RoundWord(double value)
-        => (ushort)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 65535);
 }

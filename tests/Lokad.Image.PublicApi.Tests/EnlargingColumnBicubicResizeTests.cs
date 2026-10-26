@@ -7,13 +7,12 @@ public sealed class EnlargingColumnBicubicResizeTests
 {
     [Theory]
     [InlineData(4095)] [InlineData(4096)]
-    public void WiderStripsKeepFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    public void WiderStripsKeepFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        const long work = 1027L * 519 * 5 * 5 * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 519 * 4 + scratch, MaxWork = work * 2 };
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 519 * 4 + scratch};
         if (scratch < 4096)
         {
             // The authored byte enlargement needs exact tiny-alpha scratch.
@@ -31,8 +30,6 @@ public sealed class EnlargingColumnBicubicResizeTests
         first.GetRow8(0)[0] ^= 255;
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
         source.GetRow8(258)[512 * 4 + 3] ^= 255;
@@ -45,13 +42,12 @@ public sealed class EnlargingColumnBicubicResizeTests
 
     [Theory]
     [InlineData(4095)] [InlineData(4096)]
-    public void IdentityWidthEnlargementKeepsFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    public void IdentityWidthEnlargementKeepsFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        const long work = 513L * 519 * 5 * 5 * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 513L * 519 * 4 + scratch, MaxWork = work + 10_000_000 };
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 513L * 519 * 4 + scratch};
         if (scratch < 4096)
         {
             Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 513, 519, ResizeFilter.Bicubic, limits));
@@ -69,8 +65,6 @@ public sealed class EnlargingColumnBicubicResizeTests
         first.GetRow8(0)[0] ^= 255;
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 513, 519, ResizeFilter.Bicubic,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 513, 519, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
         source.GetRow8(258)[512 * 4 + 3] ^= 255;
@@ -83,13 +77,12 @@ public sealed class EnlargingColumnBicubicResizeTests
 
     [Theory]
     [InlineData(4095)] [InlineData(4096)]
-    public void IdentityHeightEnlargementKeepsFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    public void IdentityHeightEnlargementKeepsFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        const long work = 1027L * 259 * 5 * 5 * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 259 * 4 + scratch, MaxWork = work + 10_000_000 };
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 259 * 4 + scratch};
         if (scratch < 4096)
         {
             Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic, limits));
@@ -107,8 +100,6 @@ public sealed class EnlargingColumnBicubicResizeTests
         first.GetRow8(0)[0] ^= 255;
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 1027, 259, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
         source.GetRow8(258)[512 * 4 + 3] ^= 255;
@@ -179,7 +170,7 @@ public sealed class EnlargingColumnBicubicResizeTests
     }
 
     [Fact]
-    public void DeferredTinyAlphaKeepsExactHalvesScratchWorkAndClearedTransparentPixels()
+    public void DeferredTinyAlphaKeepsExactHalvesScratchAndClearedTransparentPixels()
     {
         using var source = ImageBuffer.Create(5, 2, 8);
         for (var y = 0; y < 2; y++)
@@ -200,8 +191,6 @@ public sealed class EnlargingColumnBicubicResizeTests
         Assert.Equal(input, OriginalPixels.Bytes(source));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 11, 5, ResizeFilter.Bicubic,
             limits with { MaxWorkingBytes = peak - 1 }));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 11, 5, ResizeFilter.Bicubic,
-            limits with { MaxWork = 11L * 5 * 5 * 5 * 4 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 11, 5, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
     }

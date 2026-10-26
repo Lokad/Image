@@ -17,7 +17,7 @@ internal sealed class Vp8lHuffmanCode : IDisposable
         var lengths = Vp8lHuffmanLengths.Build(populations, context, maximum); long reserved = 0;
         try
         {
-            context.Reserve(populations.Length * 2L); reserved = populations.Length * 2L; context.Work(populations.Length);
+            context.Reserve(populations.Length * 2L); reserved = populations.Length * 2L; context.Cancellation.ThrowIfCancellationRequested();
             var words = new ushort[populations.Length];
             Span<int> counts = stackalloc int[16]; counts.Clear();
             Span<int> next = stackalloc int[16]; next.Clear();
@@ -28,7 +28,7 @@ internal sealed class Vp8lHuffmanCode : IDisposable
             { code = (code + (depth == 1 ? 0 : counts[depth - 1])) << 1; next[depth] = code; }
             for (var symbol = 0; symbol < populations.Length; symbol++)
             {
-                context.Work(1); var depth = lengths.Values[symbol]; if (depth == 0) continue;
+                context.Cancellation.ThrowIfCancellationRequested(); var depth = lengths.Values[symbol]; if (depth == 0) continue;
                 var value = next[depth]++; var reversed = 0;
                 for (var i = 0; i < depth; i++) { reversed = reversed * 2 + (value & 1); value >>= 1; }
                 words[symbol] = (ushort)reversed;

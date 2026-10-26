@@ -28,7 +28,7 @@ public sealed partial class TrueTypeFont
                 tables = new KernTable[count]; var offset = 4;
                 for (var i = 0; i < count; i++)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (bytes.Length - offset < 6) throw new ImageDataException("Truncated kerning subtable.");
                     var length = U16(bytes[(offset + 2)..]); var flags = U16(bytes[(offset + 4)..]);
                     if (length < 6 || length > bytes.Length - offset) throw new ImageDataException("Invalid kerning subtable length.");
@@ -42,7 +42,7 @@ public sealed partial class TrueTypeFont
                         uint previous = 0;
                         for (var j = 0; j < pairs; j++)
                         {
-                            context.Work(1); var pair = bytes.Slice(offset + 14 + j * 6, 6); var key = U32(pair);
+                            context.Cancellation.ThrowIfCancellationRequested(); var pair = bytes.Slice(offset + 14 + j * 6, 6); var key = U32(pair);
                             if (U16(pair) >= font.GlyphCount || U16(pair[2..]) >= font.GlyphCount || j != 0 && key <= previous)
                                 throw new ImageDataException("Invalid kerning pair order or glyph index.");
                             previous = key;
@@ -63,7 +63,7 @@ public sealed partial class TrueTypeFont
                 var low = 0; var high = table.Count - 1;
                 while (low <= high)
                 {
-                    context.Work(1); var mid = (low + high) / 2;
+                    context.Cancellation.ThrowIfCancellationRequested(); var mid = (low + high) / 2;
                     var pair = font.data.AsSpan(table.Offset + mid * 6, 6); var actual = U32(pair);
                     if (key < actual) high = mid - 1;
                     else if (key > actual) low = mid + 1;

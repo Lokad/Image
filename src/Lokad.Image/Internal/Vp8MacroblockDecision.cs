@@ -6,7 +6,7 @@ internal readonly record struct Vp8MacroblockScore(long Distortion, long Texture
     uint Nonzero, int LumaMode, int ChromaMode, bool Intra16, int MaximumEdge);
 
 // Composed private encoder decision. All image/state/result buffers are borrowed;
-// the enclosing operation admits ScratchBytes once and checks work below. Source
+// the enclosing operation admits ScratchBytes once and checks cancellation below. Source
 // pixels use compact Y16x16 followed by eight rows of U8|V8, all with stride16.
 // This does not switch the public encoder. Method5 refines selected modes;
 // method6 applies luma trellis while evaluating each candidate.
@@ -53,7 +53,7 @@ internal static class Vp8MacroblockDecision
         Metric best = default; bestMode = 0; nonzero = 0;
         for (var mode = 0; mode < 4; mode++)
         {
-            context.Work(16_384);
+            context.Cancellation.ThrowIfCancellationRequested();
             Vp8BlockPrediction.Fill(16, (Vp8IntraMode)mode, hasTop ? neighbors.Slice(35, 16) : default,
                 hasLeft ? neighbors.Slice(1, 16) : default, neighbors[0], trial);
             for (var b = 0; b < 16; b++) { Transform(source, trial, Block(b), coefficients.Slice(b * 16, 16)); dc[b] = coefficients[b * 16]; }
@@ -124,11 +124,8 @@ internal static class Vp8MacroblockDecision
             var leftMode = bx == 0 ? modeContexts[4 + by] : modes[b - 1];
             var bestMode = -1; Metric best = default; var bestNonzero = false;
             // Pure candidate inputs stay fixed until the winner is published.
-            // Ordinary quantization/rate/reconstruction have no nested work.
-            // Tight work, cancellable and trellis searches retain their original
-            // traversal. The extra 576 stack bytes fit ScratchBytes above.
-            var batch = Vp8ForwardTransform.SupportsFour && !trellis && !context.Cancellation.CanBeCanceled
-                && context.RemainingWork >= 10 * 2048;
+            // Cancellable and trellis searches retain their separate traversal. The extra 576 stack bytes fit ScratchBytes above.
+            var batch = Vp8ForwardTransform.SupportsFour && !trellis && !context.Cancellation.CanBeCanceled;
             if (batch)
             {
                 for (var mode = 0; mode < 10; mode++)
@@ -140,7 +137,7 @@ internal static class Vp8MacroblockDecision
             }
             for (var mode = 0; mode < 10; mode++)
             {
-                context.Work(2048);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var candidate = batch ? transforms.Slice(mode * 16, 16) : coefficients;
                 if (batch) predictions.Slice(mode * 16, 16).CopyTo(trial);
                 else
@@ -205,7 +202,7 @@ internal static class Vp8MacroblockDecision
         Metric best = default; bestMode = 0; nonzero = 0;
         for (var mode = 0; mode < 4; mode++)
         {
-            context.Work(8192);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var plane = 0; plane < 2; plane++)
             {
                 var left = plane == 0 ? 17 : 26;
@@ -253,7 +250,7 @@ internal static class Vp8MacroblockDecision
         Vp8QuantizationMatrix chroma, Vp8QuantizationCosts costs, Vp8RatePlan rate, bool correctDc,
         Span<byte> pixels, Span<short> levels, Span<sbyte> errors, OperationContext context)
     {
-        context.Work(16_384);
+        context.Cancellation.ThrowIfCancellationRequested();
         Span<short> coefficients = stackalloc short[256]; Span<short> dc = stackalloc short[16]; Span<short> y2 = stackalloc short[16];
         Span<ushort> weights = stackalloc ushort[16]; Vp8TrellisQuantization.Weights(weights);
         Span<byte> topNz = stackalloc byte[4]; Span<byte> leftNz = stackalloc byte[4];
@@ -339,7 +336,7 @@ internal static class Vp8MacroblockDecision
         if (pixels[..384].Overlaps(levelBytes) || pixels[..384].Overlaps(modes[..16]) || pixels[..384].Overlaps(errorBytes)
             || levelBytes.Overlaps(modes[..16]) || levelBytes.Overlaps(errorBytes) || modes[..16].Overlaps(errorBytes))
             throw new ArgumentException("Macroblock result buffers must not overlap.");
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         // Snapshot all small borrowed inputs before any result write. Caller
         // image/border/context views may alias result storage without feedback.
         Span<byte> snapshot = stackalloc byte[481]; source[..384].CopyTo(snapshot); neighbors[..71].CopyTo(snapshot[384..]);

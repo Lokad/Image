@@ -9,25 +9,20 @@ public static partial class ImageCodec
     /// or compressed pixels. Uses seek to skip opaque payloads when available;
     /// otherwise drains them through bounded scratch. Full Identify is unchanged.</remarks>
     public static ImageInfo InspectHeaders(Stream input, ImageLimits? limits = null, CancellationToken cancellationToken = default)
-        => InspectHeadersCore(input, limits, cancellationToken, null, false).GetAwaiter().GetResult();
+        => InspectHeadersCore(input, limits, cancellationToken, false).GetAwaiter().GetResult();
 
     /// <summary>Inspect headers/EXIF with asynchronous reads and fixed workspace; leaves input open.</summary>
     /// <remarks>Same validation scope as InspectHeaders; seeking may skip opaque payloads.
     /// PNG CRCs and compressed pixel syntax are not validated.</remarks>
     public static ValueTask<ImageInfo> InspectHeadersAsync(Stream input, ImageLimits? limits = null, CancellationToken cancellationToken = default)
-        => InspectHeadersCore(input, limits, cancellationToken, null, true);
+        => InspectHeadersCore(input, limits, cancellationToken, true);
 
-    internal static async ValueTask<ImageInfo> InspectHeadersCore(Stream input, ImageLimits? limits, CancellationToken cancellationToken,
-        ImageBudget? budget, bool asynchronous)
+    private static async ValueTask<ImageInfo> InspectHeadersCore(Stream input, ImageLimits? limits, CancellationToken cancellationToken,
+        bool asynchronous)
     {
         using var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
         ArgumentNullException.ThrowIfNull(input);
-        var admission = budget?.Begin(context.Limits);
-        try
-        {
-            using var reader = new InspectionReader(input, context, asynchronous);
-            return await StreamInspection.InspectAsync(reader).ConfigureAwait(false);
-        }
-        finally { admission?.Complete(context.ConsumedWork); }
+        using var reader = new InspectionReader(input, context, asynchronous);
+        return await StreamInspection.InspectAsync(reader).ConfigureAwait(false);
     }
 }

@@ -37,13 +37,12 @@ public sealed class TransformAdmissionTests
         using var expected = Apply(source, operation, ImageLimits.Default, default);
         var resultPixels = OriginalPixels.Bytes(expected);
         var peak = sourcePixels.Length + (long)resultPixels.Length;
-        var work = (long)expected.Width * expected.Height * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = peak, MaxWork = work };
+
+        var limits = new ImageLimits { MaxWorkingBytes = peak};
         using var exact = Apply(source, operation, limits, default);
         Assert.Equal(resultPixels, OriginalPixels.Bytes(exact));
         Assert.Equal((expected.Width, expected.Height, depth), (exact.Width, exact.Height, exact.BitDepth));
         Assert.Throws<ImageLimitException>(() => Apply(source, operation, limits with { MaxWorkingBytes = peak - 1 }, default));
-        Assert.Throws<ImageLimitException>(() => Apply(source, operation, limits with { MaxWork = work - 1 }, default));
         Assert.Throws<OperationCanceledException>(() => Apply(source, operation, limits, new CancellationToken(true)));
         Assert.Equal(sourcePixels, OriginalPixels.Bytes(source));
     }

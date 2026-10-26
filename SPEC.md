@@ -38,7 +38,6 @@ target; the existing implemented behavior below remains the current contract.
 | Drawing/compositing | Implemented in development | Alpha compositing, rectangle fills and rectangular pixel copies at 8/16 bits |
 | Text | Supplied TrueType, logical/OpenType layout, Latin/Hebrew/Arabic shaping, alignment/fitting and 8/16-bit rendering in development; full replacement/performance qualification pending | Supplied faces, alignment/style, wrapping/line spacing, reliable bounds/fitting, combining marks and bidirectional/shaped text including Arabic |
 | Failure details | Implemented in development | Typed exhausted-limit and unsupported-feature categories with recognized codec when known |
-| Shared admission | Implemented in development | ImageBudget codec entry points and caller reservations; coarse per-operation reservation, cumulative charged work and independently retained BudgetedImage outputs |
 | Cooperative memory | Implemented in development; qualification ongoing | Borrowed host-independent shared-root hooks, pre-allocation capacity/peak admission and explicit retained-image/font/layout lifetime accounting across public operations |
 | Compression efficiency | High-priority ongoing work | Lossless WebP size competitive with the fixed FFmpeg/libwebp reference; JPEG size and reconstruction quality assessed together, with matched quality and no material grayscale regression; content/sampling scope stated |
 | Source metadata | Typed encoded representation | `ImageInfo.SourceColor`, `SourceAlpha`, `SourceComponentCount` and source `BitDepth`; consistent sync/async Identify and bounded InspectHeaders |
@@ -85,7 +84,8 @@ live until actual reads/writes and cleanup complete, including after cancellatio
 Refusal throws `ImageLimitException` with `WorkingBytes`/`SharedBudget`, ends the
 operation and refunds relinquished storage. It never triggers a retry, wait,
 eviction or lower-memory fallback. Cancellation and actual allocation failure
-remain distinct. Existing work limits and `ImageBudget` quotas remain independent.
+remain distinct. Local input/output, geometry, container and memory limits remain independent.
+There is no cumulative CPU allowance; cancellation is cooperative.
 
 ### Pixel buffers
 
@@ -107,14 +107,13 @@ JPEG decoding may also retain three idle exact-size coefficient arrays; owned
 full-resolution CMYK can grow this to four. The combined cap remains 4 MiB.
 Every lease is fully zeroed before parsing and returned after
 its last use or a decode failure. Live decoders never share a lease. Original
-coefficient working-memory and work admission remain unchanged.
+coefficient working-memory admission remains in force.
 
 `ImageCodec.DecodeJpeg` writes caller-owned interleaved 8-bit grayscale, RGB or CMYK
 samples without an RGBA frame or encoded-input copy. Stride zero means packed;
 positive stride must cover a row. Padding/suffix bytes are untouched. The supplied
 input and complete destination spans count toward working admission and must not
-overlap. `ImageBudget.DecodeJpeg` uses the same operation, releasing codec
-admission on return; caller storage lifetimes can use an explicit reservation.
+overlap. Caller storage remains borrowed; codec scratch releases on return.
 Failures may leave a completed pixel prefix; no buffer ownership is transferred.
 `JpegDecodeOptions.SourceColorSpace` selects encoded Gray/RGB/YCbCr/CMYK/YCCK interpretation;
 Auto preserves component-count, Adobe and RGB-ID inference. RGB output uses the
@@ -144,14 +143,14 @@ endpoint-aligned Q14 full-range conversion and final byte rounding. Canonical
 CMYK output retains the stated ink interpretation and its own matrix precision.
 Owned RGBA and caller RGB/grayscale share these output boundaries, including
 opt-in orientation. No full-frame intermediate is required; YCCK RGB uses three
-stack bytes. Existing block/row work and ownership/admission boundaries remain.
+stack bytes. Ownership and memory-admission boundaries remain.
 Original constant, varying, progressive, saturated and AC controls have exact
 native pixel gates; the tested scope is in the decoder evidence ledger.
 This is a device-color approximation with no ICC processing. JPEG K is never
 alpha. CMYK output requires four encoded components; CMYK encoding is unsupported.
 Four-component frames use the existing sampling-factor and ten-block MCU bounds.
 
-`ImageCodec.EncodeJpeg` and `ImageBudget.EncodeJpeg` also accept borrowed gray/RGB
+`ImageCodec.EncodeJpeg` also accepts borrowed gray/RGB
 samples and positive or packed strides. Input is neither changed nor retained.
 Gray input always produces one component; RGB input uses `JpegEncodeOptions`
 quality, sampling and restart controls. Samples are opaque; a valid background
@@ -177,8 +176,8 @@ including table-building workspace. For4:4:4, selection covers the worst single
 growth overlap and future tables beside maximum record capacity. Tight local allowances select recomputation
 before admission. Any admission refusal is terminal. Governed storage is private
 to the operation and releases promptly. Calls without a memory root may reuse
-the existing pool, whose retained ceiling remains4MiB. Logical work, writer-call
-order and cancellation checks remain equivalent. Fixed-table color and restart grayscale paths do not use this owner.
+the existing pool, whose retained ceiling remains4MiB. Writer-call
+order and cooperative cancellation are preserved. Fixed-table color and restart grayscale paths do not use this owner.
 
 Transforms return new owned buffers and preserve precision and source pixels.
 Outstanding raw orientation is retained until `AutoOrient` or decode with
@@ -188,8 +187,8 @@ container structure and checksums, but does not validate all compressed pixels.
 
 JPEG inspection validates the complete marker/scan-header, stuffing, EXIF and
 EOI/EOF structure without decoding entropy symbols. Noncancelable inspection
-may batch ordinary and stuffed bytes within an admitted 4 KiB raw span; logical
-work, validation order and the cancelable scan's polling remain unchanged.
+may batch ordinary and stuffed bytes within an admitted 4 KiB raw span;
+validation order and the cancelable scan's polling remain unchanged.
 
 ## Drawing and compositing
 
@@ -214,9 +213,9 @@ Self-copy and self-compositing use the original source and destination samples,
 traversing rows/chunks/pixels in a safe order without a snapshot raster. Distinct
 source buffers remain unchanged. No buffer ownership transfers or full-frame
 temporary copies occur. Working admission counts each distinct supplied buffer
-once. Geometry limits apply to the clipped affected rectangle. Work charges four
-units per copied/filled pixel and sixteen per composited pixel, before chunks of
-at most 4096 or 256 pixels respectively. Cancellation/work exhaustion can leave
+once. Geometry limits apply to the clipped affected rectangle. Cancellation
+checkpoints occur before chunks of at most 4096 copied/filled pixels or 256
+composited pixels. Cancellation can leave
 completed chunks in traversal order; argument, geometry and memory failures occur
 before mutation. Callers synchronize mutable pixel access.
 
@@ -239,10 +238,10 @@ features, with no image format assigned. Malformed structure raises `ImageDataEx
 The implementation follows public [OpenType table definitions](https://learn.microsoft.com/en-us/typography/opentype/spec/otff).
 Layout decodes and validates the outlines it uses.
 
-Input, working-memory, item and work limits plus cancellation apply. Load admits
+Input, working-memory and item limits plus cancellation apply. Load admits
 supplied input plus one owned copy and a coarse 256-byte descriptor allowance
 before allocation. `StorageBytes` reports retained bytes for caller reservations;
-subsequent lookups admit that font storage and charge bounded search/metric work.
+subsequent lookups count that font storage toward local memory admission.
 There is no mutable global font cache or per-lookup font copy.
 
 `TextLayout.Create(font, text, TextOptions)` returns immutable layout in pixels.
@@ -304,7 +303,7 @@ have a monotonic fit predicate across wrapping discontinuities.
 
 The potential candidate count is bounded by `MaxContainerItems`. One retained
 owner/admission context precedes allocation and survives a successful result.
-Rejected geometry/capacities release before the next trial; work remains cumulative.
+Rejected geometry/capacities release before the next trial.
 No image canvas or intermediate retained layout is created. Limits, admission
 refusal, cancellation, unsupported features and allocation failures terminate
 the call; they never trigger a lower-size retry or become a false/no-fit result.
@@ -315,14 +314,14 @@ attachments, including phantom points. `USE_MY_METRICS` inherits component phant
 metrics independently of its outline transform. Instructions are skipped; offsets
 are unhinted, with unscaled offsets when neither offset flag is present. Cycles
 are malformed; nesting beyond 64 glyph nodes raises typed `FontOutline` unsupported.
-Point/contour/component counts, coordinate reads and work are bounded.
+Point/contour/component counts and coordinate reads are bounded by input and item limits.
 
 Layout owns private placements, lines and the needed decoded geometry; it retains
 the immutable face, not the source string. `StorageBytes` includes that face and
 coarse retained capacities for caller reservations. Admission includes borrowed
 UTF-16 input while preparing, temporary component/flag/kerning storage and old/new
 capacities during growth. Extent dimension/pixel limits apply without a hypothetical
-RGBA frame. Work/cancellation checks cover decoding, layout and curve bounds.
+RGBA frame. Cancellation checkpoints cover decoding, layout and curve bounds.
 
 `ImageDrawing.DrawText(canvas, layout, x, y, color)` renders a prepared layout in
 coded canvas coordinates. The position is a finite continuous pixel origin;
@@ -341,9 +340,9 @@ all destination samples unchanged, including hidden RGB.
 
 Admission counts canvas/layout storage, prepared edges/events/crossings, one
 coverage row, a coarse 4 KiB frame/descriptor allowance and 1600-byte subdivision
-stack. Old/new capacities overlap during growth. Edge/event item limits, work,
+stack. Old/new capacities overlap during growth. Edge/event item limits,
 clipped geometry and cancellation apply. All argument/geometry/workspace admission
-precedes mutation; later work/cancellation may leave completed chunks (at most
+precedes mutation; later cancellation may leave completed chunks (at most
 128 pixels each) in glyph, row and left-to-right order. No rendered glyph cache
 or whole-frame mask is retained. Different rasterizers' curve approximation and
 fixed-point scaling can produce different antialiasing; native development image
@@ -380,478 +379,26 @@ result owners, while successful results retain independent shared-root charges.
 Final quotient calculation may use a projected estimate certified by a bounded
 rounding interval or its exact integer remainder, with exact division otherwise. This changes neither rounding
 nor resource/cancellation behavior and introduces no approximate pixels.
-On AVX2, vertical accumulation splits each certified horizontal Int64 value into
-signed 32-bit limbs. The axis absolute-weight bound keeps either limb's every
-partial sum within 2^62; two Int64 planes reuse the admitted Int128 accumulator
-storage. Output recombination is exact. Other processors retain Int128 accumulation;
-work accounting and cancellation polling boundaries are unchanged.
-AVX512F can process eight independent channels per vertical vector with the
-same per-lane arithmetic order and bounds. A remaining four-channel group uses
-the accepted AVX2 path; scalar Int128 remains the fallback. The admitted planes
-and 4096-channel cancellation boundaries are unchanged.
-On AVX512DQ/VL, the certified limbs may normalize four channels together in
-binary64. Numerator and alpha conversion errors are bounded by 2^44 and 2^28;
-clipping, division and rounding-bin comparisons keep quotient error below 2^-10
-when both actual and estimated alpha exceed the guarded half-Q60 threshold.
-Only complete rounding bins are accepted; uncertain pixels retain the exact
-integer path. A separately certified zero-alpha shortcut clears all channels.
-This uses the same admitted scratch and preserves exact pixels at both depths.
-AVX512DQ/VL may also accumulate horizontal RGBA products in four Int64 lanes.
-Unsigned 32-bit premultiplied samples widen before signed weighting; the existing
-axis magnitude bound keeps every partial sum within Int64, including full RGBA16
-precision and negative weights. On AVX512DQ, word filtering can process four
-adjacent taps from one bounded 32-byte read, with four independent tap subsets.
-Each subset and disjoint recombination obey the same Int64 absolute bound;
-remaining taps use one-pixel reads. This adds no scratch or cache. Scalar
-fallback, admitted rows, work charges and 1024-tap cancellation boundaries are unchanged.
-Byte-depth horizontal filtering also has an AVX2 path: premultiplied samples
-are at most 65025, so signed 32Ã—32â†’64 products retain every bit and all partial
-sums stay below 2^47. AVX512F can group four byte-depth taps from a bounded
-16-byte read using eight-lane signed32 products for each pair. Subset prefixes
-and recombination retain that same exact bound; the AVX2 tail remains. It uses
-the same admitted storage, work and polling; word filtering retains its existing
-unsigned-widened path.
-Four-tap horizontal groups may load four coefficients together, sign-extend
-them and replicate their lanes with register permutations. Coefficients, arithmetic
-order, work, cancellation and admitted storage remain unchanged.
-Eligible hardware can instead retain exact horizontal rows, convert them in
-place and use FMA vertical sums. A [strict rounding certificate](docs/lanczos3-fma-certificate.md)
-accepts only pixels whose four error intervals fit inside their rounding bins;
-uncertain pixels use the exact integer computation. The sum workspace is smaller,
-with reservations before allocation and independent result ownership. Missing
-hardware or tight local work/storage selects the integer kernel before admission;
-shared-budget refusal is terminal. Exact pixels and cancellation remain required.
-The independent decimal/BigInteger oracle covers transparency, edges and cache
-eviction. Opaque live FFmpeg controls use explicit edge extension and radius
-three, maximum RGB error 1, RGB RMSE <=0.25 and exact alpha. That correctness
-graph generates surplus border output and is not a warm-performance baseline.
-The four warm cases on the two original rasters also have independently exact managed outputs
-and qualified transparent normal/scalar native controls (RGB/alpha maximum1,
-RMSE <=0.25). Their [warm screens](benchmarks/WARM-LANCZOS3-BASELINE.md) expose
-material gaps; performance parity remains unqualified.
+Optimized kernels must preserve these pixels, including exact-half and tiny-alpha
+cases. Uncertain rounding uses the exact computation; unsupported hardware retains
+portable fallbacks. Workspace is reserved before allocation, and shared refusal
+terminates rather than selecting a fallback. The
+[Lanczos3 certificate](docs/lanczos3-fma-certificate.md) records its rounding proof.
 
 Filtering operates in encoded sample space with premultiplied-alpha accumulation,
 followed by unpremultiplication. Round halves away from zero and clamp to sample
-range. Filtered pixels whose rounded alpha is zero have RGB zero; exact permutations and
-identity resize preserve hidden RGB. No linear-light or ICC conversion is applied.
+range. Filtered pixels whose rounded alpha is zero have RGB zero; exact permutations
+and identity resize preserve hidden RGB. No linear-light or ICC conversion is applied.
+Bilinear/bicubic retain their defined tap order and exact tiny-alpha handling.
+Geometry and row caches are operation-local, admitted with source/result capacity
+and scratch, and never make a refused shared admission recoverable.
 
-Short horizontal support may prepare weights and clamped sample offsets once
-per operation, reusing them across output rows. This optional geometry workspace
-is admitted conservatively and leaves 4 KiB for exact tiny-alpha arithmetic.
-Wide support or tight memory limits retain direct evaluation with the same tap
-order, binary64 arithmetic and pixels. Geometry is not cached across calls.
-RGBA8/16 bicubic downsampling and enlargement on both axes, on
-AVX-512F/DQ and AVX2, may reuse unrounded horizontal
-intermediates in sixteen operation-local rows, with up to sixteen taps per axis.
-RGBA8/16 width reduction with unchanged height may use the same bounded rows;
-its conservative guards preserve original binary64 pixels, including exact-half
-rounding, with the same workspace admission and direct fallback.
-RGBA8 width enlargement with unchanged height may also reuse these sixteen
-rows, preserving the existing arithmetic, guards, workspace and direct fallback.
-Interior adjacent four-tap outputs may reuse five source vectors instead of eight,
-retaining each output's original tap and multiply/add order.
-RGBA8/16 height reduction with unchanged width may use these same bounded rows.
-Its integer horizontal centers have weights 0,0,1,0,0; copying decoded exact
-products into the cache preserves every unrounded intermediate. RGBA8/16 height
-enlargement with unchanged width may use the same identity copy and sixteen-row
-cache. Cancellation checks every two copied pixels, work charges, precision guards,
-memory admission and direct fallback remain unchanged.
-RGBA8 nonmixed cached resizes may emit rows in a separate byte-depth
-routine. Vertical tap order, sums, divisions, byte margins, clipping, packing
-and original-order replay stay identical. Odd cache-row widths require no
-padding or additional allocation; admission and cancellation remain unchanged.
-RGBA8/16 downsampling with wider support may use thirty-two operation-local rows
-and up to thirty-two taps per axis. Its optional workspace is
-1420*outputWidth + 32*sourceWidth + 256 bytes, with 4 KiB retained for exact
-low-alpha handling. RGBA8/16 may use sixty-four rows/taps for support exceeding
-thirty-two taps. That workspace is 2828*outputWidth + 32*sourceWidth + 512 bytes,
-with the same 4 KiB allowance. Conservative byte alpha/color margins widen to
-1e-4/4e-3 using the 2^-40*4096 per-unit absolute-error bound. Words use an alpha
-margin of 4e-3 and a color quotient bound of 32.04/alphaSum, conservatively
-computed from the lower power of two. Margins at least 0.25 retain original
-evaluation, including clamped out-of-range samples. Each byte or word pixel
-independently selects original-order evaluation when its guards are uncertain;
-its neighbor retains depth-specific fast packing when every guard passes.
-Managed pixels stay exact. Larger support and tight budgets retain direct evaluation.
-RGBA8/16 supports exceeding sixty-four taps may use at most 128 operation-local
-rows/taps, with workspace `5644*outputWidth + 32*sourceWidth + 1024` bytes and
-the same 4 KiB allowance. The `2^-40*128^2` per-unit absolute-error budget bounds
-unrounded alpha, premultiplied color and normalization. For each pixel, quotient
-error is bounded by `(EC + abs(C/A)*EA)/(A-EA)` for color and
-`(EA + abs(A/N)*EN)/(N-EN)` for alpha; the margins are doubled to cover their
-own rounding. Nonpositive lower denominators, uncertain rounding, the existing
-normalizer/tiny-alpha guards and tight budgets retain original evaluation.
-Bounds use the full sample maximum (255 or 65535), including exact unsigned
-premultiplied word products. Additional support uses the bounded path below.
-Supports above 128 may select the next power-of-two capacity, bounded at 2048
-rows/taps, with the same `2^-40*capacity^2` error budget and quotient guards.
-For these larger capacities, row identifiers, row offsets and vertical weights
-occupy admitted portions of the existing managed arrays instead of larger stack
-tables. Workspace is `(44*capacity+12)*outputWidth + 32*sourceWidth + 16*capacity`
-bytes, with the same 4 KiB allowance. Memory admission precedes allocation;
-support above 2048, insufficient memory and unsupported hardware retain direct
-evaluation. Geometry, tap order, work charges, cancellation and pixels remain.
-RGBA8/16 may also reuse these rows when one axis grows while the other shrinks.
-That path pads odd cache-row widths by one pixel (512 additional workspace
-bytes across sixteen rows), allowing safe indexing of cached two-pixel vectors.
-Source premultiplication is exact unsigned integer arithmetic, including the
-full UInt16 product range. Conservative sample-depth-specific rounding
-guards retain the original binary64 order and exact tiny-alpha handling near
-ambiguous samples. Optional workspace is `716*outputWidth + 32*sourceWidth + 128`
-bytes, admitted before allocation and released on every exit, leaving 4 KiB for
-tiny-alpha arithmetic. Tight budgets, unsupported hardware and other directions
-retain the previous path; work charges and bounded cancellation are preserved.
-When the full row cache cannot be admitted, RGBA8 reduction on both axes may
-reuse up to eight-column strips and at most ten rows/taps per axis on
-AVX512F/AVX2/AVX/SSE4.1 hardware. Below vertical scale 2.25, nine row slots hold
-an eight-column strip; larger scales retain six columns and ten slots. This
-optional path admits 4 KiB before its fixed stack workspace (4,080 bytes of
-arrays); it adds no heap workspace or persistent state. Checked byte offsets
-address at most 25 decoded source pixels per reused row. Adjacent horizontal
-accumulators share 512-bit lanes, retaining each column's original tap order
-and separate multiply/add; unmatched taps stay in their original half. Paired
-quotient guards retain the conservative `2^-40*16^2` absolute-error budget and
-exact unsigned byte premultiplication.
-Uncertain rounding, small normalization or tiny alpha returns to the complete
-original-order operation after the stack frame and admission unwind. Speculative
-strips leave work accounting untouched; success charges the complete original tap
-cost. Every sample remains exact, with bounded cancellation. Other directions,
-supports and smaller budgets retain the existing paths.
-RGBA16 reduction may use a separate word specialization of the same six-column,
-ten-row strip strategy, with the same 4-KiB admission and 3,640-byte fixed arrays. Full
-UInt16 premultiplication produces unsigned 32-bit products converted exactly to
-binary64. The error budget scales with 65535, including squared color products.
-Uncertain ordinary-alpha word pixels may replay the original tap order locally;
-paired replay requires normalization at least 0.5 and computed normalized alpha
-at least two. Any exact tiny-alpha calculation instead declines the complete
-strip operation, releasing its frame and charge before original replay needs
-scratch. Odd word tails likewise use original-order evaluation. The byte kernel
-is separate and remains unchanged; work, precision and owner contracts are retained.
-RGBA8 reduction with support above ten and at most twenty taps per axis may use
-a separate three-column/twenty-row strip cache on the same hardware. It admits
-4 KiB for 4,056 bytes of fixed arrays, retaining scalar coefficient preparation
-and the `2^-40*20^2` absolute-error budget. Adjacent exact decoded pixels may be
-stored as one checked wide vector; fixed strip offsets and a common-tap prefix
-remove repeated indexing/count branches without changing either accumulation's
-tap order. Bounds, uncertainty, tiny-alpha replay, complete work and cancellation
-remain active. Unsupported supports/windows and smaller budgets keep prior paths.
-The same wider-support strip strategy has a separate RGBA16 specialization,
-retaining 4-KiB admission and 4,056 bytes of fixed arrays. Full unsigned word
-products convert exactly to binary64; quotient bounds scale with 65535 and its
-square. Paired and single word outputs use guarded unsigned packing. Uncertain
-ordinary-alpha pixels may replay their original tap order locally when
-normalization is at least 0.5 and computed normalized alpha is at least two.
-Tiny-alpha evaluation instead unwinds the complete strip operation before
-original replay needs exact scratch. Source, ownership, work and precision remain;
-existing byte and short-support word kernels stay separate and unchanged.
-RGBA8 reduction above twenty and up to thirty-six taps per axis may use a
-separate two-column/thirty-six-row strip cache. Its 4-KiB admission covers
-3,992 bytes of fixed arrays. Exact byte premultiplication products (at most
-65025) and alpha fit UInt16; this compact source-window storage introduces no
-pixel quantization. Relative window offsets also fit UInt16, while absolute
-source coordinates remain Int32 and checked before narrowing. Paired samples
-widen exactly to binary64 and preserve each original tap order. The conservative
-`2^-40*36^2` error budget, uncertainty/tiny-alpha unwind, complete work and bounded
-cancellation remain. Other supports/windows/hardware retain existing paths.
-RGBA16 reduction above twenty and up to thirty-four taps per axis may use a
-separate two-column/thirty-four-row strip cache. Its 4-KiB admission covers
-4,044 bytes of fixed arrays. Full-range premultiplication products (at most
-4294836225) remain UInt32 and widen unsigned to binary64 without quantization.
-Checked relative source-window offsets fit UInt16; absolute coordinates remain
-Int32. The `2^-40*34^2` error budget scales with 65535 and its square. Paired
-and single word outputs retain quotient/rounding guards and unsigned packing;
-uncertain ordinary-alpha samples replay the original tap order under the same
-normalization/alpha guards. Tiny alpha unwinds the frame and admission before
-exact scratch is needed. Complete work, bounded cancellation and independent
-owners remain; existing byte and smaller-support word kernels are unchanged.
-RGBA16 reduction with support above thirty-four and at most seventy-two taps
-per axis may use a separate single-column row cache. Its 4-KiB admission covers
-4,032 bytes of fixed arrays. Each selected source row is horizontally filtered
-once per output column, without a decoded-source table or intermediate pixel
-quantization. Paired full-range unsigned word products widen exactly to binary64;
-separate additions preserve horizontal tap order. Checked relative offsets retain
-absolute Int32 coordinates. The `2^-40*72^2` budget and depth-scaled quotient
-guards preserve original pixels, with guarded local ordinary-alpha replay and
-complete tiny-alpha unwind before exact scratch. Work, bounded cancellation and
-owner contracts remain. Other supports, directions, hardware and smaller budgets
-retain the existing paths.
-RGBA8 reduction above thirty-six and up to seventy-two taps per axis may use
-a separate byte specialization of that single-column row cache, with the same
-4-KiB admission and 4,032 bytes of fixed arrays. Exact byte premultiplication
-products are at most 65025 and widen to binary64 without quantization. Paired
-products may accumulate in independent alternating-tap streams, folded once per
-row. At most 37 dependent additions per stream/fold remain within the original
-72-term error bound. Checked relative offsets, the `2^-40*72^2` budget and
-byte-depth quotient/rounding guards preserve every original sample. Guarded
-ordinary-alpha replay and complete tiny-alpha unwind retain exact handling;
-complete work, bounded cancellation and independent owners remain unchanged.
-Existing word and smaller-support byte kernels stay separate and unchanged.
-For RGBA16 reduction with support above seventy-two and at most 304 taps per
-axis, a separate streaming path handles any reduction height in blocks of at
-most sixteen output rows, reusing the same bounded arrays. Its
-4-KiB admission covers 3,936 bytes of fixed arrays. A selected source row is
-horizontally filtered once per output column within each block, then feeds the bounded output
-accumulators. Increasing unclamped vertical coordinates preserve each output's
-original tap order, including separate contributions from duplicated clamped
-edge rows; only the last horizontal result is retained. Exact unsigned word
-products, checked relative offsets/full absolute Int32 coordinates and the
-depth-scaled `2^-40*304^2` quotient guards preserve every sample. Uncertain
-ordinary-alpha pixels may replay the original order; tiny alpha unwinds before
-exact scratch. Complete work, bounded cancellation and independent owners remain.
-No heap workspace, full support cache or output cache is added. Other supports,
-directions, hardware and budgets retain the existing paths.
-RGBA8 reduction with support above seventy-two and at most 304 taps per axis
-may use a separate byte streaming specialization that handles any reduction
-height in blocks of at most sixteen output rows. It reuses the same bounded arrays,
-with the same 4-KiB admission and 3,936 bytes of
-fixed arrays. Exact byte products widen to binary64, and byte-depth quotient
-guards use the same `2^-40*304^2` budget. Original tap order and separate clamped
-edge contributions, guarded ordinary replay, complete tiny-alpha unwind, work,
-cancellation and owner contracts remain. Existing word and smaller-support byte
-kernels stay separate and unchanged; no heap workspace or output cache is added.
-RGBA16 reductions beyond 304 and at most 544 taps per axis may use a separate
-packed-coefficient streaming fallback. It handles any reduction height in blocks
-of at most eight output rows, preserving global output coordinates and each
-output's complete original tap order. The same bounded arrays are reused. Fixed
-arrays occupy 3,776 bytes within a 4-KiB admission. Each original binary64
-horizontal coefficient keeps its sign, exponent and 36 fraction bits in six
-bytes; the discarded absolute error is measured before filtering. Products and
-accumulators remain unrounded binary64. With horizontal/vertical coefficient
-L1 sums `Lx/Ly` and measured horizontal loss `Qx`, the absolute unit bound is
-`2^-40*544^2*max(1,Lx*Ly/1024) + 2*Qx*Ly`. It conservatively covers original
-and separable arithmetic plus coefficient storage loss. Quotient and quarter-
-margin guards force original full-coefficient tap-order replay whenever
-rounding is uncertain; tiny alpha unwinds before exact scratch. Returned pixels
-retain the contract, including independently certified rational-half behavior.
-Clamped-edge order, full unsigned products, absolute coordinates, work,
-cancellation and independent owners remain. No heap/full-support/output cache
-is introduced; other directions, supports, heights, hardware and smaller budgets
-retain prior paths.
-RGBA8 may use a separate packed-coefficient streaming fallback for the same
-above-304/up-to-544 support. It also handles any reduction height in blocks of
-at most eight output rows, reusing the same bounded arrays. Its 3,776-byte fixed arrays,
-six-byte coefficients, measured discarded error and L1-scaled arithmetic bound
-match the word strategy, with byte-scaled quotient guards and exact byte products.
-Uncertainty recomputes original full coefficients and tap order; tiny alpha
-unwinds before exact scratch. Certified rational halves retain original rounding,
-with complete work, cancellation, source and independent owner contracts.
-No heap/full-support/output cache is added; other geometry, hardware and budgets
-retain prior paths.
-RGBA8/16 reductions exceeding 544 taps on either axis may use separate
-generated-coefficient streaming fallbacks. Each processes any reduction height in
-blocks of at most eight output rows, reusing the same bounded arrays for each
-block. Each output retains its complete
-original tap order and normalization; no intermediate pixel is stored. It stores no
-coefficient table; eight-lane SIMD evaluates the original binary64 Catmull-Rom
-operations on demand. A preparatory scan checks every generated coefficient bit
-against the original scalar kernel and computes normalization/L1 sums; any
-mismatch declines the path. Fixed arrays occupy 512 bytes within 4-KiB admission.
-For admitted horizontal/vertical tap bounds `Nx/Ny` and original coefficient
-L1 sums `Lx/Ly`, the unit error bound is
-`Nx*Ny/2^40*max(1,Lx*Ly/1024)`; the path requires `Nx*Ny <= 2^40`.
-It conservatively covers original and separable arithmetic with no coefficient
-storage loss. Quotient/quarter-margin guards retain original tap-order replay
-for uncertainty; tiny alpha unwinds before exact scratch. Horizontal preparation
-and filtering check cancellation every 256 taps. Full unsigned products, checked
-loads, complete work, absolute coordinates and independent owners remain.
-No heap/full-support/output cache is added; other directions, heights, hardware
-and budgets retain prior paths.
-RGBA16 enlargement on one or both axes may use a separate fourteen-column/five-row strip
-cache when the full row cache cannot be admitted. Its optional 4-KiB admission
-covers 4,000 bytes of fixed arrays. At most 21 source pixels are decoded once per
-reused row; exact unsigned word products widen to binary64 without quantization.
-Each horizontal/vertical accumulation retains tap order. Paired and single word
-outputs use the conservative `2^-40*16^2` budget and depth-scaled quotient guards.
-When height is unchanged and the original binary64 center is exactly integral,
-the cardinal vertical kernel has one unit tap; zero-weight source rows may be
-omitted. Original coordinate evaluation, full support admission and work remain.
-Uncertain ordinary or negative-alpha samples replay the original order locally;
-tiny-alpha pixels use an impossible completed-pixel marker in the private output.
-After the non-inlined strip frame returns and releases its admission, a timed
-scan replays only marked pixels with original color arithmetic and exact rational
-alpha scratch, charging its additional work. No marker reaches a returned image.
-Complete work, bounded cancellation and independent owners remain. No heap
-workspace or persistent state is added; existing byte and reduction kernels stay
-unchanged. Other directions, hardware and smaller budgets retain prior paths.
-RGBA8 enlargement on one or both axes has a separate byte specialization of the
-fourteen-column/five-row cache, with the same 4-KiB admission and 4,000 bytes of
-fixed arrays. Exact byte products, original tap order and byte-depth quotient
-guards use the same `2^-40*16^2` budget. The same original-coordinate equality
-check may omit zero-weight vertical rows when height is unchanged. Ordinary or
-negative-alpha uncertainty replays locally. Tiny-alpha pixels are marked only
-in the private unfinished
-output and resolved after a non-inlined core frame returns and releases its
-admission. The marker cannot occur in completed resize pixels because zero alpha
-requires zero RGB. The timed final scan replays original color arithmetic and
-the existing exact rational alpha rounding, including its additional work charge,
-with the full 4-KiB scratch available. No marker reaches a returned image.
-Memory/work limits, cancellation and independent owners remain; no extra heap
-workspace, persistent state or output cache is introduced. Existing word and
-smaller-support byte kernels remain unchanged.
-RGBA16 width enlargement combined with height reduction may prefer vertical-first
-filtering when horizontal support is at most five taps and vertical support at
-most ten. The same path may preserve width while reducing height when the existing
-vertical row cache cannot fit; that cache remains preferred when feasible.
-Up to eight output rows reuse six source-column slots, decoding and filtering
-adjacent columns together. Checked source-row offsets fit bytes; 3,972 bytes of
-fixed arrays fit the unchanged admitted 4-KiB workspace. Scales above 2.125 retain
-four-row bands. Exact unsigned word products and unrounded
-binary64 vertical results feed horizontal filtering without pixel quantization.
-The original coefficient values and each pass's tap order remain; uncertainty
-replays the original horizontal-within-vertical order. The established
-`2^-40*16^2` bounds use word alpha margin 1e-4 and color margin
-`2.0001 / lower-power-of-two(alphaSum)`, with normalizer/alpha/quarter-margin
-guards and exact tiny-alpha unwind. Staged paired packing reuses decoded storage
-before separate checked stores to the two output rows. Complete work,
-cancellation and independent owners remain. No heap workspace, persistent state
-or output cache is added; other directions/supports/hardware and smaller budgets
-retain prior paths.
-RGBA8 may prefer a separate vertical-first specialization for the same
-width-growth/height-reduction supports. Up to eight output rows reuse six
-source-column slots, decoding and filtering adjacent columns together; scales
-above 2.125 retain four-row bands. Checked source-row offsets fit bytes, and
-3,972-byte fixed arrays fit the unchanged 4-KiB admission. It may also preserve width when the existing vertical row cache is
-unavailable, retaining that faster cache when feasible. Exact byte products
-(at most 65,025) widen to unrounded binary64;
-the same `2^-40*16^2` bounds permit alpha margin 1e-6 and color margin
-`1e-4 / lower-power-of-two(alphaSum)`, retaining normalizer/alpha/quarter-margin
-guards and original-order replay for uncertainty. Tiny alpha is marked only in
-the private unfinished output, using the impossible completed zero-alpha/nonzero
-RGB combination. The noninlined frame returns and releases its workspace before
-a timed final scan replays original color arithmetic and exact rational alpha,
-including additional work. No marker escapes; other geometry, budgets and
-hardware retain prior paths. No heap workspace, persistent state or output
-cache is introduced.
-RGBA16 width reduction combined with preserved or enlarged height may use a separate
-horizontal-first fallback when horizontal support is at most ten taps and
-vertical support at most five. The existing row cache remains preferred when
-admitted. Eight output columns reuse five filtered source
-rows; 32 decoded source-column slots and the other fixed arrays occupy 3,440
-bytes within a 4-KiB admission. Full unsigned word products widen exactly to
-unrounded binary64. The `2^-40*16^2` quotient bounds and guarded packing retain
-original-order replay for uncertain ordinary alpha and frame unwind before
-exact tiny-alpha scratch. Each complete operation charges the original tap
-work; cancellation, source and independent owner contracts remain. Other
-directions/supports/hardware and smaller budgets retain prior paths. No heap
-workspace, persistent state or output cache is introduced.
-RGBA8 may use a separate horizontal-first fallback for the same width-reduction/
-height-preservation-or-enlargement supports and 3,440-byte fixed arrays within
-4-KiB admission. The existing row cache remains preferred when admitted.
-Exact byte products widen to unrounded binary64; the `2^-40*16^2` guards use
-alpha margin 1e-6 and color margin `1e-4 / lower-power-of-two(alphaSum)`.
-Uncertainty replays the original tap order. Tiny alpha uses a private deferred
-marker, then a noninlined frame unwind and timed exact replay with additional
-work and the full scratch allowance. No marker is returned. Other geometry,
-hardware and budgets retain prior paths; no heap workspace, persistent state
-or output cache is introduced.
-When both supports are short, a byte/UInt16-specialized kernel captures local
-buffer views and prepares vertical weights/row offsets in bounded stack storage.
-It retains the same per-pixel tap order, alpha handling and per-row work charges,
-with bounded cancellation and memory admission.
-On supported hardware, this kernel loads RGBA8 samples with bounded four-byte
-reads and widens them into independent binary64 RGB/alpha accumulation lanes.
-Multiplication and addition remain separate, with the original tap order and
-exact pixels. Scalar and UInt16 filtering retain their existing behavior.
-On AVX512F/AVX2 hardware, matching short row supports may filter two independent
-RGBA8 output rows together, sharing horizontal geometry. Bounded sample reads
-and direct weight broadcasts preserve each pixel's arithmetic order. Paired
-vertical geometry adds 192 bytes of fixed stack storage and no heap workspace.
-Unequal supports and odd tails retain the single-row path.
-For exactly four consecutive horizontal sample offsets, the paired path may
-read one bounded 16-byte group per source row and interleave independent sample
-pairs. Four unrolled taps preserve the same binary64 arithmetic order and pixels,
-without new workspace. Duplicate clamped offsets and other counts retain the
-general paired path.
-The four-tap path may prepare weights and alpha coefficients with packed
-binary64 arithmetic, preserving wy*wx then *alpha and consuming coefficients
-in the original tap order. Inactive coefficients only add zero; output pixels
-and admission remain unchanged.
-
-For RGBA8 bilinear enlargement on both axes, AVX512F/AVX512DQ hardware may
-filter four output pixels together using exact integer triangle coefficients.
-Existing unused geometry slots hold fractional numerators and bounded source
-offsets; no extra workspace or pixel cache is introduced. Premultiplied integer
-sums remain below 2^47 under output-array admission. Near a quantization boundary
-or tiny alpha, the original binary64 calculation and exact-alpha work/memory
-checks remain active, preserving established pixels and rounding. Other filters,
-mixed scaling and unsupported hardware retain their existing paths.
-For output widths through 16,512, horizontal premultiplied sums fit signed
-32-bit integers and may be factored before widening for the vertical weights.
-Integer distributivity preserves every final sum; wider outputs retain the
-original four-tap arithmetic. Workspace, work charges and rounding are unchanged.
-
-RGBA16 bilinear enlargement may use the same four-output strategy with exact
-64-bit horizontal intermediates, reusing at most four operation-local rows.
-Its optional workspace is `128 * outputWidth + 64` bytes and leaves room for
-exact tiny-alpha scratch; tighter budgets retain the existing paired-row path.
-Unsigned full-word premultiplication and output-array admission keep integer
-sums below 2^62. A conservative precision bound covers final binary64 conversion,
-with original rounding near ambiguous boundaries. Intermediates are never rounded
-to pixels or reused across operations, and admission is released on every exit.
-
-RGBA16 bilinear reduction on both axes may use a separable six-column row
-cache when each scale is at most 2.5 and the required SIMD is available.
-Its 3,640 bytes of fixed arrays fit an optional 4-KiB reservation after existing
-horizontal geometry. Exact unsigned premultiplication and unrounded binary64
-intermediates use the established `2^-40*16^2` word error bounds; guarded output
-pairs replay original tap order near rounding boundaries. Tiny alpha declines
-the specialization, releases its frame and reservation, then uses the existing
-exact-alpha path. A successful pass charges the complete original tap cost;
-declined speculative work leaves that charge to the original path. Cancellation,
-independent outputs and tighter-budget fallbacks remain. No heap workspace,
-persistent state or output cache is added.
-RGBA8 reduction may use a separate byte specialization at the same scales and
-4-KiB admission. Exact signed-32-bit premultiplication precedes unrounded row
-reuse. Normalizers at least one and alpha above the tiny-alpha boundary permit
-conservative 1e-4 RGB / 1e-6 alpha rounding margins under the same error budget.
-Uncertain ordinary-alpha pixels replay the original tap order; tiny alpha
-unwinds before exact scratch. The word kernel and earlier enlargement paths
-remain unchanged; no heap workspace or persistent cache is added.
-
-An original development-only reference uses exact integer kernel weights and
-`BigInteger` separable accumulation, with no production resize helpers. Public
-tests cover both depths, transparent/opaque rasters, up/down/mixed scaling,
-one-pixel output and identity. Nearest and identity are exact; filtered values
-allow one sample of binary64 rounding disagreement at exact rational halves.
-RGBA16 CLI controls preserve full sample precision. On the authored filtered
-case, the native float path can differ by one alpha sample near rounding
-boundaries while managed output matches the rational reference. The
-[precision audit](benchmarks/BILINEAR16-PRECISION.md) records this limitation
-under the original exact-alpha gate. The native-only bilinear comparison bound
-below subsequently permits this rounding difference; managed pixels remain exact.
-Live nearest coordinate-equation controls also cover original 1025/2049-wide
-sources at both depths in both directions, including alpha and hidden RGB.
-Fractional-support edges and tiny positive alpha separately require zero RGB
-whenever the final alpha rounds to zero.
-When accumulated alpha lies between zero and one sample, exact integer kernel
-weights resolve its final rounding. An exact half therefore becomes alpha one
-and retains its visible RGB. This path admits 4 KiB of conservative arithmetic
-scratch, charges additional bounded work and checks cancellation; it adds no
-coefficient arrays or runtime package dependency. Other filtered channels retain
-binary64 accumulation and the original rounding convention.
-
-A live RGBA8 bilinear 513x259-to-256x129 profile checks the same original
-transparent raster against FFmpeg's widened triangle kernel with encoded-space
-premultiplied-alpha filtering. Managed output matches the exact rational reference;
-native alpha is exact and native RGB uses the existing filtered maximum error 1 /
-RMSE 0.25 comparison bound. This establishes that one native profile only; other
-sizes, depths, bicubic and tiny-alpha native comparisons remain open.
-
-The original RGBA16 bilinear comparison admits a native-only alpha maximum
-error of one full 16-bit sample and RMSE at most 0.25, alongside the same RGB
-bounds. FFmpeg's float stages differ near half-sample rounding boundaries.
-Lokad.Image must still match the exact rational reference on that raster;
-this comparison tolerance does not change its pixel contract. RGBA8 native
-alpha remains exact, and native zero-alpha RGB must remain zero at both depths.
-On AVX-512-capable CPUs, short-support RGBA16 filtering processes two output
-rows in independent SIMD lanes, with the original tap and multiply/add order.
-Other CPUs and an unpaired final row retain scalar filtering. Memory admission,
-per-row work charges and exact tiny-alpha rounding remain unchanged.
-RGBA16 tap alpha extraction and coefficient application stay in SIMD lanes;
-full samples are widened once, with no intermediate image or added scratch.
-RGBA16 stores normalize and round four channels together. Half comparisons use
-the fractional remainder, preserving adjacent binary64 values on either side
-of a half; final channels saturate to the full 16-bit range.
+All eight EXIF orientations dispatch to exact pixel permutations. Exact edits
+preserve every sample and return independent storage. Orientation is retained until
+explicit AutoOrient or opted-in decode applies it, then resets to Normal.
+Cancellation is checked in bounded row/tile/sample intervals; failed private
+results are disposed before publication. The
+[cleanup review](docs/cleanup-qualification.md) explains retained bicubic kernels.
 
 ## Formats and metadata
 
@@ -879,664 +426,208 @@ The original six-argument `ImageInfo` construction/deconstruction is retained; m
 construction leaves descriptors `Unknown` and count zero until initialized. Record
 equality and serialization include the new fields.
 
-Additional required supplied TrueType faces must form an explicit bounded set
-with names, versions, styles and licensed provenance. The existing twelve
-DejaVu Sans comparisons do not qualify other faces. Qualification must cover
-glyphs, wrapping, baseline/line spacing, alignment, ink bounds, fitting and
-measurement/rendering agreement within documented tolerances. Required faces
-exposing unsupported tables or scripts need a focused implementation or an
-explicit remaining blocker; no exhaustive font-engine expansion is implied.
+### PNG
 
-Compression acceptance considers complete encoded packets. The current VP8L
-photograph/diagram controls are exactly160,032/7,234 bytes; VP8 controls are
-exactly17,688/7,100 bytes at their pinned quality75/method4 settings. These are
-raw packet identities, with no WebP metadata exemption, rather than matched-quality
-size tolerances. Other content/settings claims require their own declared evidence.
-Equal numerical quality values alone never establish equivalent reconstruction.
-Current CPU/allocation qualification remains separate and open. Compression,
-memory, correctness and performance remain cumulative readiness requirements.
-JPEG RGB420 improvements retain the existing matched-quality
-gate and avoid material grayscale regression; equal quality numbers do not prove
-equivalence. Claims name content, sampling and settings; broader claims require
-representative photographic and text/diagram evidence. Encoded lossy bytes and
-pixels may change while explicit quality, sampling, flattening, resource, ownership
-and warm-performance requirements remain satisfied.
+PNG follows the [W3C specification](https://www.w3.org/TR/png/). Decoding supports
+all legal static color/depth combinations, packed/indexed samples, palette/color-key
+tRNS, five filters and Adam7. Validate signature, chunk lengths/names/order/CRCs,
+geometry, transparency and the exact filtered-raster byte count. Unknown critical
+chunks fail; unused ancillary payloads are skipped without decompression. Recognized
+EXIF must precede IDAT. APNG is unsupported.
 
-PNG follows the [W3C specification](https://www.w3.org/TR/png/). Validate signature,
-chunk lengths/names/order/CRCs, image geometry, transparency and decoded pixel
-count. An owned bounded Deflate framing walk validates final blocks, stored
-lengths, fixed/dynamic prefix trees, repeats, backward distances, the declared
-zlib window and the exact filtered-raster byte count before raster decisions
-are published.
-For noninterlaced inputs with at most 4 MiB of filtered data,
-the same walk may also materialize bytes in a private, exactly admitted buffer.
-Selection first ensures that this buffer, framing scratch, the original inflater
-allowance, result, rows and optional read buffer all fit. Complete code trees
-and a valid Adler checksum are required before using those bytes; uncertain
-trees or checksums retain the original BCL row reader without repeating framing
-work. Cancelable framing retains both per-symbol cancellation checks and exact
-prefix-bit charges. Inside each compressed block, the reader admits exact bit
-charges against a saved remaining budget and publishes completed work on every
-exit without a new cancellation poll. Count-only framing uses a separate loop
-from materialized-output dispatch, retaining the same literal, length, distance,
-truncation and atomic-charge checks. Completed work survives cancellation.
-The private whole-stream checksum checks cancellation every 4096 bytes.
-When full filtered storage cannot fit, noninterlaced RGBA8/16 may instead use a
-separate streaming framing walker. A 64 KiB sliding buffer retains 32 KiB of raw
-Deflate history; raw row payloads occupy only the private result, with at most
-64 KiB of row-filter bytes. Predictors and byte conversion run after each
-original row work charge. Taller inputs retain the original reader.
-Selection preserves the original
-result/two-row/256 KiB peak; framing scratch borrows 4 KiB of that allowance.
-Only complete framing, complete trees, valid filters and the Adler checksum
-permit row reconstruction and publication. Other outcomes
-replay the original BCL raster reader without repeating framing work. The
-original validator/materializer, bit charges and cancellation checks remain.
-PNG encoding may fold chunk payloads of at least 64 bytes through four
-independent polynomial residues on supported PCLMUL/SSSE3 hardware. The existing
-normal PNG polynomial powers and generated bit-order permutations are reused;
-the chunk-type CRC seeds the payload, residues combine in order, and the final
-32 zero bits are appended once. Smaller payloads and other hardware retain the
-original chunk path. Chunk bytes, scalar tails, write sequence, admission and
-cancellation remain unchanged; no per-operation workspace is added. Decode and
-metadata checksum entry points keep their original arithmetic and polling.
-Byte grayscale/RGB/grayscale-alpha encoding may pack bounded RGBA row spans
-after each original 4,096-pixel cancellation checkpoint. Supported AVX-512
-hardware selects complete groups of 16 pixels; invalid groups retain scalar
-RGB-before-opacity validation and the first failing pixel. Channel bytes,
-compression, writes, work and admission remain unchanged, with no new workspace.
-PNG Up reconstruction may add nonoverlapping byte rows with safe 512/256/128-bit
-SIMD and scalar tails, independently modulo256 at either precision. Original
-64 KiB cancellation boundaries remain; overlapping rows and unsupported hardware
-retain scalar behavior. No workspace, admission or work charge is added.
-Other tight layouts and Adam7 retain the original reader when full filtered
-storage cannot fit.
-The original bit/row work, error order, precision and pixel contracts are unchanged.
-Filtered buffers may reuse two released exact-size arrays with a combined 4 MiB
-idle ceiling, separate from pixel and compressed storage. Every delivered byte
-is materialized before use, and leases end before requested orientation.
-Concatenated IDAT bytes may reuse at most two released exact-size private arrays,
-whose combined idle bytes stay within 4 MiB independently of pixel storage.
-Every byte is copied before framing;
-the lease ends after the inflater and streams are disposed, including failures.
-Input admission remains exact and live leases never share storage.
-Noninterlaced, noncancelable decoding may admit 8 KiB of buffered BCL output when
-all remaining row work and memory fit. Tight budgets retain unbuffered reads.
-A speculative inflater error reopens the owned input, skips only delivered bytes
-and resumes original reads, preserving row/filter/palette failure ordering.
-Validate the zlib header and Adler checksum at the actual stream boundary;
-ignore unused trailing IDAT bytes as permitted by PNG section 11.2.3. Future
-reserved chunk bits follow unknown-chunk handling: unknown critical chunks fail,
-and unknown ancillary chunks are skipped. Recognized EXIF must precede IDAT.
-Unused ancillary payloads are skipped without decompression. Decoder scratch and
-compressed buffers cease admission before requested orientation. The encoder uses
-filter None, splits IDAT output into bounded chunks, and strips source metadata. Selecting
-gray requires equal RGB channels; selecting a format without alpha requires
-opaque pixels. No implicit grayscale conversion or alpha removal occurs.
+An owned bounded Deflate framing walk validates final blocks, stored lengths,
+fixed/dynamic trees, repeats, distances and the declared zlib window. Validate
+the zlib header and Adler checksum at the actual stream boundary; ignore unused
+trailing IDAT bytes as permitted by PNG section11.2.3. Eligible noninterlaced
+inputs may materialize filtered data within4MiB, or stream RGBA reconstruction
+within the existing inflater allowance. Selection considers complete local
+workspace before admission; a shared-root refusal remains terminal. Uncertain
+format/checksum cases retain the validating reader, never publish speculative pixels.
+Scratch and compressed buffers release before requested orientation.
 
-All PNG compression policies use independently implemented safe managed Deflate:
-`NoCompression` maps to stored level0, `Fastest` to greedy level1, the default
-`Optimal` to lazy level6, and `SmallestSize` to longer lazy level9. Source-derived
-Huffman trees and fixed/dynamic/stored block costs require no full-frame filtered
-or token storage. Each compressor uses bounded history/dictionary/token buffers.
-Stored blocks retain complete scanline boundaries, including the filter byte.
-IDAT payloads are at most4096 bytes; neutral pHYs matches the pinned reference
-(x0/y1/unit0). No source metadata is copied.
+PNG encoding is noninterlaced grayscale/RGB/grayscale-alpha/RGBA at8/16bits.
+Gray output requires equal RGB; outputs without alpha require opaque samples.
+There is no implicit grayscale conversion or alpha removal. Source metadata is
+stripped. Filter None, complete-row stored blocks, IDAT payloads at most4096bytes
+and neutral pHYs (x0/y1/unit0) follow the pinned reference policy.
+Managed Deflate policies are stored level0 (NoCompression), greedy level1
+(Fastest), lazy level6 (Optimal/default) and longer lazy level9 (SmallestSize).
+Bounded search effort defines compression policy, not a caller fuel allowance.
+History/dictionary/token storage is bounded, without full-frame filtered/token
+storage. Fourteen frozen513×259 controls match complete reference packets:
+four color types at both depths for Optimal, RGBA8/16 for the other policies.
 
-Fourteen existing513x259 controls reproduce complete FFmpeg packets raw-exact:
-all four color types at8/16bits for Optimal, and RGBA8/16 for the other policies.
-Forward/cancelable/async/budget delivery retains the same coded packets. This
-bounded scope does not establish every image/setting or CPU/allocation parity.
-See [codec compatibility](docs/codec-parity.md).
+Packed-gray tRNS qualification corrects the registered native decoder's omitted
+alpha with the approved timed color-key transform. All72 authored profiles require
+exact analytical/native RGBA;44 live controls check every key at both interlace
+settings. This reference correction does not change managed pixel requirements.
 
-Memory ownership precedes allocation. Refusal stops the operation without a
-lower-memory retry; failure disposal releases workspace without output writes.
-Work accounts for packed-row preparation and managed compression. Stored encoding
-charges nine units per row byte plus one for each filter byte; compressed modes
-also charge actual bounded search/token/tree work. Limits remain independent of
-shared memory admission, and cancellation is checked during bounded work.
+### JPEG
 
-RGBA16 encoding packs complete RGBA words into big-endian rows using safe span
-conversion in groups of at most 4096 pixels. RGBA8 copies complete rows in the
-same bounded pixel groups. Cancellation precedes each group; packing preserves
-full samples/hidden RGB/alpha, logical row work and admitted row storage under
-every compression policy. The selected compressor determines lossless encoded
-bytes. Other color types retain their existing sample validation.
+JPEG follows [T.81](https://www.itu.int/rec/T-REC-T.81/en). Decode8-bit Huffman
+baseline/progressive grayscale, RGB, YCbCr, CMYK and YCCK. Supported layouts include
+4:4:4/4:2:2/4:2:0 and three-component4:1:1 (4×1)/4:1:0 (4×2), including equivalent
+sampling representations within the component/ten-block MCU bounds.
+Arithmetic/lossless/12-bit JPEG and progressive encoding remain unsupported.
+All inverse blocks use the independently generated fixed-point cosine kernel;
+[inverse rounding](docs/jpeg-inverse-rounding.md) defines dequantization, signed
+row saturation, column precision and clipping. Thirty frozen gray/color controls
+require exact native samples, including progressive refinement, EOB/split scans,
+odd edges and restarts. Named CMYK/YCCK/411/410 controls also require exact native
+samples. Older bounded comparisons are historical, not substitutes for these gates.
 
-The original corpus covers every legal static color/depth profile at both interlace
-settings, all five filters, packed padding, partial palette alpha and hidden RGB.
-Dense RGB8 rows without tRNS expand directly into RGBA8 with opaque alpha.
-Bounded 24-byte AVX2 groups produce eight pixels; scalar tails and other hardware
-retain every sample. Dense Adam7 passes qualify, while sparse paths
-retain their mapping. No workspace or admission change is introduced;
-cancellation is checked at most every 4096 pixels.
-Dense RGB8 rows with a six-byte tRNS key use bounded eight-pixel expansion and
-compare all three complete 16-bit keys. Exact matches receive alpha zero while
-retaining their RGB samples; any key channel above 255 never matches. Scalar
-tails and other hardware preserve the same mapping. Dense Adam7 passes qualify;
-sparse paths, admission, work and cancellation cadence remain unchanged, with
-no additional workspace.
-Dense packed gray1/2/4 rows without tRNS expand directly into RGBA8. Bounded
-AVX2 groups read one/two/four bytes for eight pixels, extract MSB-first samples,
-apply exact scales 255/85/17 and insert opaque alpha. Scalar tails ignore unused
-padding. Dense Adam7 passes qualify; sparse/transparency paths retain their
-mapping. No workspace/admission change is introduced; cancellation is checked
-at most every 4096 pixels.
-Dense RGB16 rows without tRNS expand directly into native-endian RGBA16 with
-opaque alpha. On AVX2 hardware, bounded 24-byte groups become four output pixels
-through byte shuffles; scalar tails and other hardware preserve full samples.
-This also covers dense Adam7 passes. Sparse passes and transparency retain their
-existing mapping. Work and memory admission are unchanged; expansion checks
-cancellation at most every 4096 pixels and adds no workspace.
-RGB16 Paeth reconstruction uses six independent byte lanes with safe Vector128
-dispatch. Loads stay within both rows and SIMD stores change only six bytes.
-Scalar tails, overlapping/short previous rows and other hardware retain the
-original recurrence, tie order and modulo256 arithmetic. Cancellation is checked
-within64KiB; work and memory admission are unchanged.
-Dense gray8 rows without tRNS expand directly to equal RGB samples and opaque
-alpha. Bounded AVX2 groups process eight samples; tails and other hardware use
-scalar expansion. Dense Adam7 passes also qualify; sparse paths, work and memory
-admission remain unchanged, with no additional workspace.
-Dense gray8 rows with a two-byte tRNS key use the same bounded eight-sample
-expansion with an exact full-key comparison. Matching pixels retain their gray
-RGB and receive alpha zero; other pixels are opaque. Keys beyond the 8-bit sample
-range never match. Scalar tails, other hardware and cancellation at most every
-4096 pixels preserve the existing mapping without additional workspace.
-Dense gray16 rows without tRNS expand directly into native-endian RGBA16,
-retaining the full gray sample in RGB and inserting alpha 65535. Bounded
-eight-byte AVX2 groups produce four pixels; scalar tails and other hardware
-preserve all samples. Dense Adam7 passes qualify; sparse/transparency paths
-retain their mapping. Workspace/admission are unchanged and cancellation is
-checked at most every 4096 pixels.
-Dense gray-alpha8 rows expand directly to equal RGB samples and retain alpha,
-including hidden RGB. Bounded AVX2 byte shuffles process eight pixels; scalar
-tails and other hardware preserve all samples. Dense Adam7 passes qualify,
-while sparse passes retain their mapping. No workspace or admission change is
-introduced; cancellation is checked at most every 4096 pixels.
-Dense gray-alpha16 rows expand directly into native-endian RGBA16, retaining
-every gray/alpha sample and hidden RGB. Bounded 16-byte AVX2 groups produce four
-pixels; scalar tails and other hardware preserve full samples. Dense Adam7 passes
-qualify; sparse mapping stays unchanged. No workspace/admission change is
-introduced and cancellation is checked at most every 4096 pixels.
-Dense palette8 rows expand directly from the existing RGB palette/tRNS storage
-into RGBA8, preserving hidden RGB and defaulting missing alpha entries to 255.
-Palettes of up to sixteen entries can form channel vectors for SSSE3 byte
-shuffles. A group with any invalid index resumes scalar traversal before its
-first store, preserving the original valid prefix and cancellation/error order.
-Absent/partial alpha and scalar tails remain exact; no padded palette storage is
-introduced. Larger palettes retain their existing expansion paths.
-Each palette index is validated before its output pixel is written. Dense Adam7
-passes qualify; sparse mapping stays unchanged. Dense packed palette1/2/4 rows
-also expand directly. Full 16-entry palette4 rows with absent/full tRNS use bounded
-eight-byte SSSE3 groups to produce sixteen pixels; partial palettes/alpha, tails
-and other hardware retain scalar validation. Unused padding bits are ignored.
-No palette workspace or admission change is introduced; cancellation is checked
-at most every 4096 pixels.
-The registered FFmpeg 8.1 decoder ignores tRNS alpha for 1/2/4-bit grayscale.
-For these cases the reference pipeline applies the declared transparent gray key
-through FFmpeg's [colorkey filter](https://ffmpeg.org/ffmpeg-filters.html#colorkey),
-with similarity 0.01 and blend zero. Packed sample expansion is injective and
-adjacent gray levels differ by at least 17/255, so only the declared key is selected.
-All 72 authored profiles require exact native and analytical RGBA. Unfiltered
-native output is retained separately; 44 live cases check every transparent key
-at both interlace settings without a pixel tolerance.
+Caller grayscale/RGB/CMYK buffers, explicit color transforms and inversion,
+orientation and padding contracts are specified under Pixels and ownership.
+No mandatory RGBA or full-frame RGB intermediate is used. Coefficient planes,
+Huffman tables, scans and transforms count toward local/shared memory admission;
+replacement peaks are covered before allocation. Component coefficients release
+after sample conversion. Every Huffman redefinition is charged, including replaced
+tables. Cancellation checkpoints preserve valid reader/coefficient state without
+cumulative work counters or partial-charge semantics.
 
-JPEG follows [T.81](https://www.itu.int/rec/T-REC-T.81/en). Decode 8-bit Huffman
-baseline sequential and progressive grayscale/YCbCr at 4:4:4, 4:2:2 and 4:2:0,
-including equivalent sampling-factor representations. Every inverse block uses
-an independently generated fixed-point T.81 cosine kernel with the pinned native
-precision boundaries: dequantization and DC level shift, signed row saturation,
-word-width column bias, final shifting and byte clipping. All4096 block work units
-are admitted before pixel writes. The primitive uses256 bytes of stack scratch
-and a minor256-byte immutable kernel payload, without per-block heap buffers.
-[Inverse rounding](docs/jpeg-inverse-rounding.md) states the numerical policy.
+Encoding emits baseline Huffman gray/4:4:4/4:2:2/4:2:0 (default420). Quality1..100
+defaults85. Color maps to qscale1+(100-Quality)*30/99, with quantization derived from
+normative H.262§6.3.11 data. Gray uses basis1+2(u+v)+uv and integer scale
+Quality<50?5000/Quality:200-2*Quality, then clamp((basis*scale+50)/100,1,255).
+Quality100 is lossy; equal numeric qualities across encoders are not equivalent.
 
-YCbCr 4:4:4, 4:2:2 and 4:2:0 use integer BT.601 conversion with coefficients
-derived from Kr=299/1000 and Kb=114/1000 through the pinned Q16/range/Q13 precision
-steps. RGBA and caller RGB share this conversion, including opt-in orientation.
-Centered bilinear chroma expansion extends the edge and rounds to eight bits
-before the matrix. Fixed32-sample chunks use64 bytes of stack scratch; no extra
-row/frame allocation is introduced. Existing32-per-pixel row work/cancellation
-boundaries remain. RGB component identifiers or Adobe transform0 select direct
-RGB planes. Decode produces opaque RGBA8; no ICC conversion is applied.
+Reference-compatible full-range BT.601 conversion, transforms, quantization,
+Huffman construction and entropy are generated from source samples/options.
+Color uses16-row MCU padding; gray uses8×8 blocks. Adaptive tables collect
+frequencies before emission; eligible paths retain bounded entropy records,
+otherwise recompute. Color restarts use mathematically generated T.81 AnnexK
+tables; grayscale optimizes with predictor resets. No full-frame YUV copy is used.
+One bounded18×18 tile and512-byte MCU share the8KiB fixed owner, alongside
+separate coding-table/building owners. Admission refusal is terminal.
 
-All30 existing frozen grayscale/4:4:4/4:2:2/4:2:0 controls require exact native
-samples, including baseline, odd edges, progressive refinement, EOB runs, split
-bands and restarts. Existing live controls require exact samples too. Named CMYK/
-YCCK and4:1:1/4:1:0 controls also require exact RGB samples and caller grayscale.
-This is not a claim of exact decoding for every input. No superseded inverse or
-floating half-resolution YCbCr color variant is retained.
+Images require opaque samples or explicit0xRRGGBB BackgroundRgb. Flattening in
+encoded sample space and16→8 normalization use one nearest-integer rounding.
+Caller gray/RGB is opaque and borrowed. The sole allowed packet difference is
+the identified encoder-attribution COM in [codec parity](docs/codec-parity.md).
+No source metadata is copied. Frozen packet claims name content/settings; they
+do not imply arbitrary-content compression or CPU parity. Original quality/size
+experiments remain historical producer evidence only.
 
+### WebP
 
-For three-component4:1:1/4:1:0, output uses the pinned decoder/converter's
-co-sited phase and dimension-aware Q16 positions. Normalized bilinear weights
-retain Q14 horizontal and Q12 vertical precision, including near-zero leading-tap
-reduction. Filtered chroma stays at Q7/Q9 through the shared Q13 color matrix;
-only final RGB channels are quantized.4:1:0 computes its initial horizontal
-half-grid byte expansion on demand. No filter table, owned scratch or frame
-intermediate is allocated. Owned RGBA and caller RGB, including opt-in orientation,
-share this path; caller grayscale still takes decoded Y. Existing4096 block and
-32-per-pixel row work, cancellation and admission/ownership remain. Original
-67x19 baseline/progressive, constant/varying and targeted near-integral filter
-controls have exact reference gates. No floating quarter-width renderer remains.
+WebP follows [RFC9649](https://www.rfc-editor.org/rfc/rfc9649.html) and VP8 intra
+sections of [RFC6386](https://www.rfc-editor.org/rfc/rfc6386.html). Simple/extended
+still containers accept EXIF/XMP before or after pixel chunks. Animation is rejected.
+Reserved/future VP8X fields are ignored as required by the format; short headers
+and impossible canvas products fail. VP8 coded sides are at most16383pixels.
+Video display-scaling hints do not resize the canvas; reserved color spaces fail.
 
+VP8L decoding covers all four transforms/fourteen predictor modes, packed palettes,
+spatial prefix groups, canonical codes, caches and overlapping references. Alpha
+and hidden RGB stay exact even if the header alpha hint is unset. Trees/maps,
+conversion overlap and rasters are admitted before allocation; temporary codec
+owners release before optional orientation. Input/truncation checks and bounded
+cancellation remain independent of memory admission.
 
-Full-resolution direct RGB planes pack their already rounded/clipped bytes into
-opaque RGBA directly, with AVX2 batches and an exact scalar tail. Equal sampling
-factors give zero interpolation fractions; no further rounding is needed. The
-original per-row work/cancellation admission is retained, with no new workspace.
-Subsampled direct RGB keeps the original interpolation and rounding.
-For horizontal 2:1 RGB sampling with full vertical resolution, centered coordinates
-are exact quarters. Rows use equivalent integer quarter weights, AVX2 batches
-and a scalar edge/tail path, preserving the original binary64 result and opaque
-alpha. Equal sampling-factor representations are supported. Existing per-row
-work/cancellation checks remain; no extra workspace or pixel cache is introduced.
-For direct RGB with horizontal and vertical 2:1 sampling, rows combine two
-component rows with exact sixteenth weights and one final rounding. AVX2 batches
-and scalar edges/tails retain the original binary64 pixels, clamped borders and
-opaque alpha without quantizing intermediate rows or adding workspace. Existing
-row work/cancellation checks and equivalent sampling factors remain unchanged.
+VP8 decoding covers token partitions, probability updates, intra prediction,
+integer inverse DCT/Walsh and normal/simple filtering. Empty partitions and
+inconsistent lengths fail. Separate ALPH accepts raw/headerless VP8L with all four
+inverse filters and modulo256 reconstruction. Reserved bits and informative
+level reduction do not change samples. Raw copies check cancellation every64KiB.
+Parser/mode owners release before alpha; YUV/alpha survive RGBA conversion.
 
-Baseline entropy traversal retains exact logical work charges in a local block
-budget, including cancelable operations. Completed charges are published on every
-exit without another cancellation check. Noncancelable blocks may also keep runs
-of ordinary short AC symbols in local reader state, preserving the existing atomic
-fused prefix/amplitude charge and original fallback state.
-Short end-of-block codes may complete in that cache with only their exact
-code-bit work charge and no coefficient writes. Tight work retains the original
-per-bit fallback and partial admission.
-Noncancelable runs may refill a local 64-bit cache with four ordinary bytes and
-reuse its lookahead across symbols. Only bytes required by completed symbols
-are committed; unused whole bytes are returned before every exit. Stuffing,
-markers, long/invalid codes, short tails and tight work budgets use the original
-fallback with exact logical bits, partial coefficients and work/error ordering.
-With a live token, consecutive ordinary AC symbols may reuse a local 64-bit
-cache, safely refilled with four ordinary bytes at a time.
-Prefix and amplitude retain separate work admissions and cancellation checks.
-Unused whole bytes are returned before publishing the original reader position
-and pending bits. Stuffed bytes, markers, incomplete/long codes, syntax failures
-and tight budgets retain the original traversal and partial-failure state. No
-additional table or heap workspace is introduced.
+Reconstruction matches frozen Y/U/V and alpha exactly. RGBA8 uses centered
+bilinear chroma with edge extension and8-bit chroma rounding before limited-range
+BT.601. The explicit Q13/Q15 studio round-trip, saturated16-bit intermediate and
+15-bit truncation match164 frozen native/authored RGBA controls. The reference
+normalizes through RGBA16 because its registered direct-byte conversion wraps
+blue for one analytical saturated input; this approved reference normalization
+does not relax managed exactness. No full intermediate RGBA frame is allocated.
 
-Progressive scans retain coefficients in spectral order. After all scans and
-component DC progression are validated, reconstruction reuses the already
-admitted approximation array to map each block to natural order. On AVX2/BMI2,
-correction traversal can discover one nonzero-position mask per refinement block,
-reuse it across symbols and update it only when a coefficient is inserted. Zero
-runs count only zero positions; grouped bits visit nonzero positions in spectral
-order while preserving insertion boundaries and signs. Each correction retains its original
-logical work charge. Cancellable tokens, incomplete entropy, tight work budgets
-and unsupported hardware retain scalar correction reads and failure precedence.
-With AVX2/BMI2, no active local-work scope and at least 2,048 remaining work
-units, whole AC refinement blocks may retain cursor, bit cache and work locally;
-each block costs less than that bound. Noncancelable correction fields retain
-safe grouped reads. Live-token blocks preserve every original Huffman, sign/EOB
-and per-correction-bit cancellation check and immediate coefficient update.
-Live-token blocks may also refill four ordinary lookahead bytes at a time.
-Unused whole bytes are returned before publishing the logical cursor and pending
-bits. Stuffed bytes, markers and short tails publish prior state before using
-the original reader; cancellation and format/overflow failures publish completed
-work and partial coefficient changes at the original logical boundary.
-Every exit publishes exact reader/work state without replacing the original
-failure. Tighter budgets and unsupported hardware retain the preceding masked
-or scalar traversal. No additional table or heap workspace is introduced.
+EncodeWebp defaults to lossless. RGBA16 normalizes once by(sample+128)/257;
+RGBA8, alpha and hidden RGB stay exact in lossless mode. Quality1..100 is ignored
+for lossless; Effort0..6/default4 controls transform/reference search. Byte controls
+use pinned libwebp1.6.0 quality75, matching method, exact=1, one CPU. Independent
+prediction/subtract-green/palette/color transforms, matching/cache selection,
+histogram clustering and canonical codes produce19 selected plus two forced
+packet identities. Photograph/diagram are160032/7234B. Candidate choice uses coded
+length/tie order, never available memory. Refusal/cancellation ends the call.
 
-JPEG encoding always emits baseline Huffman syntax with grayscale,4:4:4,4:2:2
-or4:2:0 sampling (default420). Quality1..100 defaults to85. Color uses the explicit
-qscale mapping above and mathematically generated quantization from normative
-H.262 section6.3.11 format data. Grayscale retains the independently chosen luma
-basis `1+2(u+v)+uv`, scaled by `quality<50 ? 5000/quality : 200-2*quality`, then
-`clamp((basis*scale+50)/100,1,255)` with integer division. Quality100 still loses
-information through conversion, sampling and coefficient rounding; numeric quality
-values across encoders are not equivalent.
+Prepared tokens/maps/codes own their capacities without borrowing source pixels.
+Histogram/replacement overlap is admitted before allocation. Normalized working
+pixels and losing candidates release before delivery; complete RIFF lengths and
+padding are checked before writes. No full encoded-frame buffer is required.
 
-The encoder independently generates full-range BT.601 color samples, integer
-transforms, quantization, canonical Huffman tables and entropy syntax. Subsampled
-color uses the pinned conversion phase/rounding, with independently generated
-cell-area weights and edge handling. Color uses the reference's16-row MCU layout,
-including required vertical padding; grayscale uses8x8blocks. Two passes collect
-source frequencies and write optimized entropy. Eligible adaptive color and nonrestart grayscale paths retain
-operation-owned entropy records; other adaptive paths recompute. No full-frame
-YUV copy is needed. Color restart intervals use generated
-T.81 AnnexK fixed tables in one pass; grayscale optimizes tables with DC predictors
-reset at restart boundaries. Format constants come from public specifications.
+Lossless=false emits VP8 key frames with4:2:0, Quality1..100/default85, Effort0..6.
+Quality100 still quantizes. Pinned prediction, rate/distortion, trellis, source
+clustering, quantization, probability, retry and filtering policies define bytes.
+Use one token partition and sharpness0. RGBA16 normalizes once; luma and gamma-aware
+alpha-weighted chroma match the undithered reference. Edges repeat source borders;
+transparent cleanup follows lossy policy. Alpha is exact after normalization,
+raw or headerless VP8L as chosen by that policy. ICC/reorientation is never implicit.
 
-RGBA8/16 images and padded caller gray/RGB spans share the same encoder. Grayscale
-caller input selects one component independently of Sampling, with no mandatory
-RGBA intermediate. Images require opaque pixels or explicit `BackgroundRgb`
-packed as0xRRGGBB. Flattening in encoded sample space and16-to8 normalization use
-one nearest-integer rounding; alpha becomes opaque and source metadata is stripped.
-The only approved reference-byte difference is the single encoder-attribution COM
-described in [codec compatibility](docs/codec-parity.md). No experimental
-quantization policies, progressive encoder or lower-memory encoder fallback remain.
+Twenty complete513×259 packet identities across22 source/settings rows cover
+procedural/photograph/diagram, all efforts, named qualities and8/16normalization.
+A separate5632² opaque Q75/method4 control matches its16787132-byte retry packet.
+Photograph/diagram Q75/method4 are17688/7100B. There is no WebP metadata exemption.
+Inputs and codec settings stay frozen; no reference packet/table is a build input.
+Broader claims need their own declared scope, not a settings grid.
 
-Before output, owned fixed/table capacity and temporary tree-building peaks are
-admitted through the borrowed operation context. Supplied images/spans remain
-borrowed; temporary storage is refunded when encoding finishes. Local/output/work
-limits remain independent; shared refusal is terminal, without fallback or waiting.
-Async encoded storage keeps its separate owner through actual writer completion.
-Quality/sampling/restart/background options, source precision and caller ownership
-remain explicit. Complete-packet claims cover the named frozen controls, not every
-image/settings combination or warm CPU/allocation parity.
-
-JPEG decoder coefficient planes, Huffman tables, scans and transforms remain
-charged against operation limits. Component coefficients release after conversion
-to sample planes; table/plane charges conservatively remain through optional
-orientation. Every Huffman redefinition is charged, including unused/replaced
-tables. [Resource admission](docs/resource-admission.md) describes the owners.
-
-The original JPEG correctness corpus uses maximum RGB-channel error 4 and RGB
-RMSE 1.5 against pinned FFmpeg, with exact dimensions and alpha 255. These bounds
-cover IDCT and color-rounding differences; they are not encoder quality targets.
-FFmpeg reference conversion expands extracted chroma planes by their sampling
-factors before cropping odd dimensions and applies explicit full-range BT.601
-conversion. Numerical comparison settings are recorded with each frozen fixture.
-The original [JPEG quality/size report](tests/Quality/README.md) records 320 cases
-across five patterns, all four sampling modes, both source depths and four settings
-per encoder. Quantization endpoints, actual sampling factors and once-only alpha
-flattening have public API checks. FFmpeg qscale values and Lokad.Image quality
-values are independent controls; equal positions in the report do not imply
-matched quality, compression efficiency or speed.
-
-WebP follows
-[RFC 9649](https://www.rfc-editor.org/rfc/rfc9649.html) and VP8 intra-frame sections
-of [RFC 6386](https://www.rfc-editor.org/rfc/rfc6386.html). VP8L decoding implements
-all four transforms, all fourteen predictor modes, packed palettes, spatial prefix
-groups, canonical prefix codes, color caches and overlapping backward references.
-Simple and extended still containers are accepted, including EXIF/XMP before or
-after the pixel chunk. Alpha samples and hidden RGB are preserved even when the
-header's alpha hint is unset. Reserved and future VP8X fields are ignored as
-required by RFC 9649; short headers and impossible canvas products are rejected.
-VP8L admits auxiliary rasters, cache/group/tree state and overlapping palette
-expansion before allocation. Predictor-mode validation and entropy group discovery
-charge every atlas entry, checking work/cancellation every 1024 entries. Decoder
-workspace charges are released before optional orientation. Exact memory/work
-boundaries are recorded in [resource admission](docs/resource-admission.md).
-Canonical Huffman lookup may resolve an entire symbol using local bit-reader
-state and the existing tables. It charges the same logical bit reads and consumes
-no byte beyond the symbol. Tight work budgets and truncated inputs retain the
-per-bit path, partial consumption and original error precedence. Table admission
-and zero-bit single leaves are unchanged. With noncancelable tokens, three
-complete eight-bit red/blue/alpha trees may consume one locally staged triplet,
-charging the original 24 logical bit reads and reading only required bytes.
-Insufficient work/input and live tokens retain the original channel reads.
-The existing tables and object storage suffice; no allocation or admission is added.
-Large green-code trees can use a
-12-bit lookup borrowed from the freshly zeroed, unwritten tail of their private
-pixel array. Decoding stops using that lookup before the write cursor reaches
-it, including after a backward reference crosses the boundary; every borrowed
-word is overwritten before output is published. Stable one-pass code grouping
-funds bounded lookup construction within the original logical work charge.
-No additional allocation, working-memory reservation or output owner is added.
-Output is RGBA8; VP8L dimensions are at most 16384
-per side.
-
-VP8 key-frame decoding implements arithmetic partitions, segmentation, all ten
-subblock and four large-block prediction modes, coefficient contexts, integer
-DCT/Walsh inversion and normal/simple loop filtering. Fully bounded horizontal
-lines use eight-pixel integer word vectors when available, preserving scalar
-thresholds, signed clamps, strong/weak rounding and work charges exactly. On
-SSE2, bounded vertical lines can transpose eight independent row neighborhoods
-to the same word arithmetic and transpose back. Loads/stores stay within each
-row, neighboring bytes and original edge order remain exact, and no allocation
-or additional admission is needed. Other lines retain the scalar path.
-Zero frame-level filter
-strength disables the entire filtering stage, including positive segment,
-reference and mode adjustments. A nonzero frame level permits the per-macroblock
-adjusted strength, clamped to 0..63. Versions 0..3 are accepted;
-reserved color spaces fail explicitly. Video display scaling hints do not resize
-the coded WebP canvas. Coded dimensions
-are at most 16383 per side. The separate ALPH chunk supports raw and headerless
-VP8L compression, all four inverse filters, and modulo-256 reconstruction. Reserved
-ALPH bits and the informative level-reduction flag do not change decoded samples.
-Raw alpha copying checks work/cancellation every 64 KiB. The VP8 parser/mode
-charges are released before alpha decoding; decoded YUV/alpha charges remain
-through RGBA conversion and are released before optional orientation.
-The required probability and quantization constants come from RFC 6386's narrative
-tables; decoding algorithms are independently written.
-
-VP8 reconstruction matches frozen FFmpeg Y/U/V planes and alpha exactly. Output is
-RGBA8 using centered bilinear chroma expansion with edge extension, rounded to
-8-bit chroma samples before explicit limited-range BT.601 conversion. Color
-conversion derives studio Q13 coefficients from the BT.601 rational weights,
-saturates a16-bit RGB intermediate, and preserves the approved Q15 studio-YUV
-round trip and15-bit truncation before final Q13 RGB byte rounding. This explicit
-precision contract matches all110 native and54 authored frozen RGBA controls,
-and existing live decoder/encoder comparisons require exact normalized samples.
-No intermediate frame/row is allocated. Work remains64 units per output pixel;
-shared admission, retained-output ownership and independent alpha are unchanged.
-The pinned oracle saturates through RGBA16 before explicitly reducing to RGBA8.
-Its registered8.1 scalar direct-RGBA8 conversion wraps blue for the analytical
-YUV=(255,255,128) case; the approved16-bit path clips correctly. This normalization
-and its existing fixture arguments remain unchanged. Exactness claims concern
-these declared normalized controls, not every possible native scaler invocation.
-Original authored cases additionally cover
-all token partition counts, sparse categories and probability updates, both
-segment feature modes, quantizer deltas/clamps and filter adjustment/sharpness
-boundaries. Empty partitions and inconsistent sizes are rejected.
-
-`EncodeWebp` defaults to lossless VP8L. RGBA16 input is normalized once per
-channel with integer `(sample+128)/257`; RGBA8 samples, alpha and hidden RGB are
-preserved exactly. `Quality` accepts1..100 but is ignored in lossless mode.
-`Effort` accepts0..6 (default4) and controls transform/reference search. The
-reference settings for byte qualification are libwebp1.6.0 quality75, matching
-method, exact=1 and one CPU; the numerical lossy quality option is unrelated.
-
-The encoder independently analyzes five transform families: direct, prediction,
-subtract-green, prediction/subtract-green and palette. Palette ordering, modular
-color deltas, partial-row index packing and implicit final zero follow the format.
-Spatial prediction selects among all fourteen format modes with bounded tile maps;
-signed cross-color search uses the unchanged residual tiles before applying each
-selected transform in place. Effort zero uses forced prediction or numeric palette
-order. Higher efforts use entropy-based choices; small palettes compare ordinary
-and short-distance box references. Effort five additionally compares cache/no-cache
-and plain/spatial palette candidates. Complete payload byte lengths determine the
-winner, with earlier candidates winning ties. Choices never depend on available
-memory, and admission refusal never selects a different candidate.
-
-Bounded matching, greedy/repeated/trace parsing, color-cache selection and spatial
-histogram clustering construct canonical Huffman codes (maximum15 bits;7 for tree
-headers). References may overlap and span rows. Counts, maps, tokens, paths and
-replacement peaks are reserved before allocation through the same borrowed root.
-Final tokens own literal values/distances and keep their actual capacity charge;
-prepared coding state borrows no source pixels. Unused histogram populations and
-losing candidates release promptly. Shared refusal, cancellation and work failure
-terminate with cleanup, without retry or a lower-memory encoding path.
-
-The normalized working image releases before delivery. Prepared transforms,
-tokens/maps and codes are counted and emitted without repeating pixel analysis or
-allocating a full encoded-frame buffer. Complete RIFF lengths/padding are checked
-before caller writes, including nonseekable output. Async encoding uses the existing
-single admitted output staging owner until its actual writes finish.
-
-The frozen scope contains19 selected packet identities and two additional forced spatial/box
-candidate identities from original controls; no metadata difference is allowed.
-It includes photograph/diagram outputs of160,032/7,234 bytes at their declared
-settings. Those controls establish no general content or CPU/allocation claim.
-[Codec compatibility](docs/codec-parity.md) records exact reference scope; broader
-codec replication and performance qualification remain in progress.
-
-`Lossless=false` emits a VP8 key frame with4:2:0 chroma. `Quality` is1..100
-(default85);100 still quantizes. `Effort` is0..6 and controls the pinned prediction,
-rate/distortion and trellis policies. Source clustering, nonlinear quality mapping,
-quantization, probability updates, header strengthening and strong loop filtering
-are independently implemented. One token partition and sharpness0 are used.
-RGBA16 samples normalize once by `(sample+128)/257`; luma and gamma-aware,
-alpha-weighted chroma conversion match the ordinary undithered reference path.
-Opaque detection uses these normalized samples. Partial edges repeat source
-borders; transparent-area cleanup follows the declared lossy policy. Alpha remains
-exact after normalization, using raw or headerless VP8L `ALPH` as selected by the
-fixed codec policy. No ICC conversion or EXIF reorientation is implicit.
-
-The bounded inventory comprises20 complete513×259 packet identities across22
-public source/settings rows: procedural opaque/alpha, photographs and text/diagrams;
-all seven effort policies; named quality endpoints/default85; and default-method
-RGBA8/16 normalization. A separate opaque5,632×5,632 Q75/method4 control takes one
-native header-strengthening retry and matches its complete16,787,132-byte packet.
-Unused segment syntax is refreshed on retry, while initial padding remains intact.
-[Codec compatibility](docs/codec-parity.md) and its numeric ledger state exact
-content/settings/producer scope. No WebP metadata exception or general image-grid
-claim is made. Reference packets/tables never become encoder inputs.
-
-One borrowed operation/root admits source planes, alpha search, frame/coding state
-and overlapping arithmetic-buffer capacities before allocation. The caller image
-is borrowed and independently lifetime-owned. Source/analysis/frame storage is
-released after partition preparation; surviving alpha/partition owners retain their
-charges through actual sync/async writes. No joined encoded-frame buffer is needed;
-lossy async output writes those prepared partitions directly. Caller streams stay
-open. All local/work limits remain independent of aggregate shared admission.
-
-Encoding choices do not change with available memory/work. Admission refusal,
-actual work exhaustion and cancellation terminate with cleanup; there is no
-lower-memory codec, retry or waiting. The named32M-work public operation is a
-required structured Work failure. The high-effort alpha control also exceeds the
-default2B work allowance: its positive byte proof uses an explicit64B caller limit,
-while the default refusal remains tested. The large-header positive scope uses an
-explicit512B work allowance. These are deterministic work-accounting units,
-without CPU or GC-allocation claims. Performance qualification for the new encoder
-remains open. Published0.1.0 artifacts remain unchanged.
+Source/analysis/frame owners release after preparation; alpha/partition owners
+remain charged through actual sync/async writes. Lossy async writes partitions
+directly. No shared refusal triggers waiting, retry or lower-memory encoding.
+[Codec parity](docs/codec-parity.md) retains producer/packet details; CPU and
+replacement qualification remain separate and open.
 
 ## Limits, failures and streams
 
-Default per-operation limits are 32768 pixels/side, 32 million pixels, 64 MiB input
-and encoded output, 512 MiB admitted working memory, 4 MiB optional metadata,
-100000 container items and two billion charged work units. Codec-specific limits
-apply in addition. All limits are positive immutable options and may be lowered.
-Work units are deterministic admission accounting, not elapsed-time guarantees.
+Default positive immutable ImageLimits:32768pixels/side,32million pixels,64MiB
+input/output each,512MiB working storage,4MiB metadata,100000container/EXIF items.
+Codec/managed array-length ceilings also apply. Local memory includes borrowed
+inputs/results as well as owned temporary capacity; shared admission charges only
+owned storage and copies. Neither is a process heap/RSS limit. Geometry applies
+to codec input/new results; an existing larger transform source still counts
+toward local memory. No fuel, cumulative CPU allowance or deterministic partial
+charge is provided. Use cooperative CancellationToken checkpoints for interruption.
 
-Working-memory admission includes supplied pixels/encoded input, result pixels,
-codec buffers and conservative compressor workspace. This is an
-allocation policy, not a bound on total process RSS or .NET GC heap retention.
-Limits and cancellation are checked before allocation and within long loops.
-PNG encoding admits one packed row and64KiB chunk allowance, plus1MiB for the
-managed compressor workspace for every policy, before writing
-its signature. The managed owner reserves before allocation and releases on
-success/failure without retry; failure cleanup does not flush more output.
-PNG decoding retains its separate 256 KiB inflater allowance, including the
-optional managed-inflation path. Its additional filtered buffer is admitted
-exactly; insufficient room selects bounded RGBA streaming or the original
-reader. Geometry limits
-apply to new buffers and codec input; transforms count an existing larger source
-in working memory even when their result fits lower geometry limits. Exact
-mapping checks work/cancellation every 1024 output pixels, and cloning every
-16 KiB of row data, including when the caller raises dimension limits.
-Horizontal flip reverses whole RGBA8/RGBA16 pixels with safe span-based SIMD
-when supported, with a scalar fallback and the same admission checkpoints.
-Vertical flip copies complete rows in reversed placement at both depths, with
-work/cancellation checks every 1024 pixels. Half turns reverse complete packed
-pixels with safe SIMD and a scalar fallback at the same bounded work intervals.
-Crop, vertical flip and half turns use the
-existing bounded reusable storage only for results that overwrite every sample;
-partial failures dispose their private result before publication.
-Clockwise and counterclockwise quarter turns place complete RGBA8/RGBA16 pixels
-in bounded 32x32 tiles with the same reusable storage policy, both-buffer admission and at most
-1024 pixels between work/cancellation checks. Partial tiles preserve exact
-placement and precision. Plain and mirrored transpose use the same complete-pixel
-tile, allocation, admission and bounded-work policy, with exact axis swapping
-and reversal of both axes when mirrored.
-Normal-orientation AutoOrient copies complete RGBA8/RGBA16 rows into independent
-storage with the same complete-overwrite policy and at most 1024 pixels between
-work/cancellation checks. It retains every channel byte and resets orientation
-to Normal; source buffers and other mapping kernels are unchanged.
-Clone uses the same admitted complete-overwrite storage policy, preserving every
-channel byte, source orientation and independent ownership. Its original row
-copying, sample work count and at most 16384-byte cancellation intervals are
-unchanged. Private partial results are disposed on failure; zero-initialized
-Create buffers retain their separate allocation policy.
-See [resource admission](docs/resource-admission.md) for review evidence and scope.
+ImageDataException means malformed data; UnsupportedImageException exposes Feature
+and recognized Format; ImageLimitException exposes Limit and Operation/SharedBudget
+Scope. Shared refusal reports WorkingBytes. Cancellation preserves the supplied
+token in OperationCanceledException; actual allocation failure stays distinct.
+Invalid arguments use standard argument exceptions. No message parsing is required.
 
-Malformed data raises `ImageDataException`, unsupported features raise
-`UnsupportedImageException`, and exhausted limits raise `ImageLimitException`.
-Cancellation uses `OperationCanceledException`; invalid public arguments use
-standard argument exceptions. Programming errors are not translated into corrupt
-input errors. Mutable buffers require caller synchronization; independent calls
-share no mutable operation settings.
+Caller streams remain open. Identify/Decode(Stream) read through EOF into bounded
+private capacity without a final exact-length copy or borrowing an exposed caller
+array. Admit8KiB scratch and old/new growth overlap; retained capacity, capped by
+MaxInputBytes, survives parsing/decoding. Returned pixels are independent.
+Without a shared root, idle input reuse is bounded below8MiB; governed calls bypass
+uncharged pools. Mutable inputs require caller synchronization.
 
-Supplied streams remain open. Nonseekable input uses bounded buffering. Identification
-may reuse private fully written input storage and inspect its acquired prefix
-without an extra exact-length copy. Retention is bounded to one array per
-power-of-two bucket up to4 MiB (less than8 MiB total); live calls never share a
-lease. Original bounded-growth admission, read/work/cancellation and failure
-ordering remain unchanged; the source is read through EOF and never exposed as
-a borrowed input view.
+IdentifyAsync/DecodeAsync use actual ReadAsync(Memory,token), ConfigureAwait(false)
+and synchronous CPU parsing, without Task.Run or synchronous reads/length/position.
+Storage survives all actual asynchronous users and releases on every exit.
+Returned images retain independent charges until disposal; the caller keeps streams
+and the borrowed root alive through completion and all surviving results.
 
-Synchronous `Decode(Stream)`, including `ImageBudget.Decode`, retains a private
-input lease through decoding instead of making a final exact-length encoded copy.
-Acquisition admits 8 KiB scratch and simultaneous old/new growth capacities;
-the actual retained capacity stays charged during decoding and is released on
-every exit. Capacity growth is capped by `MaxInputBytes`. Tight working budgets
-therefore account for retained capacity rather than only the acquired prefix.
-Pixels remain independently owned after input release, disposal or reuse.
-Input is read through EOF without querying length/position or borrowing an exposed
-caller array. Work charges acquired bytes in addition to the existing codec work.
-Existing synchronous `Identify` and async input policies are unchanged.
+InspectHeaders/InspectHeadersAsync scan through EOF with fixed8448-byte allowance
+(8KiB scratch plus coarse parser state). No image/metadata-sized buffer is retained.
+Seek opaque payloads when possible, otherwise drain; scan JPEG entropy framing.
+Read-ahead/skipped bytes count toward input limits. Read EXIF entries individually,
+without following thumbnails/other directories/external offsets. Report dimensions,
+source representation, precision, alpha semantics and IFD0 orientation consistently.
+Dimension/pixel/input/metadata/item limits apply without hypothetical decoded-array
+limits. Check container order/lengths/profile/EOF; omit PNG CRC, JPEG table/entropy
+and WebP pixel validation. Identify validates fuller containers; Decode validates
+pixels. Async inspection uses ReadAsync and available synchronous seek.
 
-`IdentifyAsync(Stream)` and `DecodeAsync(Stream)` use `ReadAsync(Memory<byte>,
-CancellationToken)` through EOF with `ConfigureAwait(false)`, then synchronous
-CPU parsing/decoding. They neither use `Task.Run` nor invoke synchronous reads,
-seek, length or position. Caller streams remain open. Identification keeps the
-complete existing structural/EXIF contract. Decode preserves the same samples,
-opt-in orientation and independent output ownership. These methods buffer encoded
-input; use the separate header inspector for constant-space metadata acquisition.
+EncodePng/Jpeg/WebpAsync use actual WriteAsync with ConfigureAwait(false), no worker
+threads, synchronous caller writes/flush/seek or final ToArray. Stage PNG/JPEG and
+lossless WebP privately; lossy WebP delivers prepared partitions. Writes are at most
+64KiB. Admit actual staging capacity plus256B stream/64B chunk bookkeeping; growth
+covers overlap. Keep each owner through actual writes even on cancellation/failure.
+Unused tails are cleared before exposing array-backed memory. Governed calls bypass
+uncharged idle pools. Otherwise output reuse has at most two arrays totaling4MiB.
 
-`InspectHeaders(Stream)` and `InspectHeadersAsync(Stream)`, also on `ImageBudget`,
-scan PNG/JPEG/WebP containers through EOF from the current position, leaving input
-open. They report the same dimension, precision, alpha and IFD0 orientation fields
-for supported headers using a fixed 8,448-byte working allowance: 8 KiB read scratch
-plus coarse header/parser state. No encoded-input, metadata-block or pixel-sized
-array is retained. EXIF entries are read individually without following thumbnails,
-other directories or external offsets. Opaque PNG/WebP payloads and metadata gaps
-are seeked when possible, otherwise drained. JPEG entropy is scanned for marker,
-stuffing and restart framing, including metadata following a scan.
+Staging failure leaves caller output untouched. Delivery or synchronous encoding
+failure/cancellation can leave a prefix; stage externally for atomic publication.
+Keep samples/images stable and caller output alive until completion. The JPEG async
+sample overload takes ReadOnlyMemory and retains direct gray/RGB/stride contracts.
+No production filesystem/process capabilities are used.
 
-Inspection checks container lengths/order, supported dimension/profile fields,
-EXIF orientation and terminal EOF. It intentionally does not check PNG CRCs,
-JPEG coding tables/entropy symbols or WebP compressed pixels. Existing `Identify`
-keeps its fuller structural validation; `Decode` validates pixels. Configured
-dimension/pixel/input/metadata/item/work limits still apply. No hypothetical decoded
-RGBA array ceiling is imposed because inspection creates no raster. Large images
-may require raised dimension/pixel limits. Read-ahead and seeked bytes count toward
-input and work admission, along with container/EXIF items. Async inspection uses
-actual `ReadAsync` and synchronous seek where available, never synchronous reads
-or `Task.Run`. Shared reservations span awaits and settle on all exits.
-
-The async reader admits an 8 KiB scratch array and actual old/new capacities
-during growth. Capacity is capped by `MaxInputBytes`; the acquired prefix is
-parsed directly without an exact-length final copy. The retained full capacity
-stays charged throughout parsing/decoding and is released with its private lease.
-One live operation owns each leased array; the same bounded idle input pool may
-be reused only after release. Shared-budget async entry points reserve before
-the first read and settle in `finally`, including across suspended I/O, failures
-and cancellation. Surviving `BudgetedImage` pixels retain their own admission.
-Limits, typed failures, cumulative consumed work and caller exceptions remain.
-Callers must keep the input stream alive until the returned ValueTask completes.
-
-`EncodePngAsync`, `EncodeJpegAsync` and `EncodeWebpAsync` run CPU encoding into
-private admitted staging, then call `WriteAsync(ReadOnlyMemory<byte>, token)`
-in blocks of at most 64 KiB with `ConfigureAwait(false)`. No worker thread,
-concurrent codec, synchronous caller write/flush, seek or final `ToArray` copy is
-used. Caller streams stay open. Keep image/supplied samples stable and output
-alive until completion. The JPEG sample overload uses `ReadOnlyMemory<byte>`;
-it preserves positive strides, source ownership and direct gray/RGB processing
-without an RGBA frame. Corresponding `ImageBudget` methods retain reservations
-until delivery finishes and settle consumed work on every exit.
-
-Staging normally uses linked private chunks, each at most 64 KiB. Actual byte
-capacity plus coarse 256-byte stream and 64-byte per-chunk bookkeeping allowances
-count toward working memory. Chunk capacity also respects the remaining working
-and output allowance. PNG/JPEG output uses admitted segments; JPEG has no
-alternative adaptive staging or encoder fallback. Planning and delivery preserve
-cancellation and shared admission.
-
-Private output reuse retains at most two exact arrays totaling 4 MiB; active
-operations never share a lease and only fully written prefixes are delivered.
-Unused array tails are cleared before delivery, including when a caller recovers
-the backing array from ReadOnlyMemory. Codec work, staged-copy bytes, cleared-tail
-bytes and delivery-attempt bytes count toward `MaxWork`.
-Errors during staging leave caller output untouched. Delivery errors/cancellation
-may leave a written prefix; discard it when atomic publication is required.
-
-Stream
-encoding can leave partial output on failure: callers needing atomic publication
-must stage output themselves. No filesystem or process capabilities are used by
-production code.
+See [resource admission](docs/resource-admission.md) for ownership and
+[cleanup qualification](docs/cleanup-qualification.md) for current evidence.

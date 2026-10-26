@@ -11,14 +11,14 @@ specified semantics. Offsets use each record's immediate parent, including PairS
 This follows public [variation-store formats](https://learn.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats)
 and [GPOS value records](https://learn.microsoft.com/en-us/typography/opentype/spec/gpos#value-record).
 All tracked fixtures are independently authored. There is no added heap storage,
-cache, input copy or owner. Existing reader work/cancellation and shared shaping/
+cache, input copy or owner. Existing reader cancellation and shared shaping/
 retained-layout admission remain in force. Axis selection, synthetic styles,
 nonzero default corrections, device corrections and long-word positioning deltas
 remain explicitly unsupported; malformed references remain typed data failures.
 
 Windows/Linux each pass4,596 tests, including932 live FFmpeg comparisons, plus105
 affected scalar checks. Fifteen new controls cover relative origins, exact sums,
-sentinels, malformed/truncated/mutated programs, work/item limits, cancellation,
+sentinels, malformed/truncated/mutated programs, item limits, cancellation,
 refusal cleanup and subsequent success. All twelve existing licensed public font
 comparisons retain their glyph/cluster/line/fitting and raster gates. The same
 actual private0.2.0 package and all three usage examples pass on both platforms,

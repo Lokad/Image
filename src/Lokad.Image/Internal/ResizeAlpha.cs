@@ -33,7 +33,7 @@ internal static class ResizeAlpha
                 var iy = (int)Math.Clamp(sy, 0, source.Height - 1);
                 for (var sx = firstX; sx <= lastX; sx++)
                 {
-                    context.Work(32);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (wy == 0) continue;
                     var wx = Weight(Int128.Abs((Int128)2 * width * sx - cx), dx, filter);
                     if (wx == 0) continue;

@@ -79,44 +79,14 @@ public sealed class JpegReferenceInverseTests
         Assert.Equal(expectedHash, Convert.ToHexStringLower(SHA256.HashData(guarded.AsSpan(8, 64))));
         Assert.Equal(beforeCoefficients, coefficients); Assert.Equal(beforeQuantization, quantization);
         Assert.All(guarded.Take(8).Concat(guarded.Skip(72)), value => Assert.Equal(165, value));
-        Assert.Equal(4096, context.ConsumedWork);
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
     }
 
     [Theory] [InlineData(63, 64, 64)] [InlineData(64, 63, 64)] [InlineData(64, 64, 63)]
-    public void IncompleteBlocksFailBeforeMutationOrWork(int coefficients, int quantizers, int pixels)
+    public void IncompleteBlocksFailBeforeMutationOr(int coefficients, int quantizers, int pixels)
     {
         var output = Enumerable.Repeat((byte)165, pixels).ToArray();
         using var context = new OperationContext(ImageLimits.Default, default);
         Assert.Throws<ArgumentException>(() => JpegInverseTransform.Inverse(new int[coefficients], new ushort[quantizers], output, context));
-        Assert.All(output, value => Assert.Equal(165, value)); Assert.Equal(0, context.ConsumedWork);
-    }
-
-    [Fact]
-    public void WorkRefusalAndCancellationPrecedeWritesAndAllowSubsequentUse()
-    {
-        var coefficients = new int[64]; var quantization = new ushort[64];
-        OriginalJpegInverseControls.Fill(13, coefficients, quantization);
-        var output = Enumerable.Repeat((byte)165, 64).ToArray();
-        using var root = new TestMemoryBudget(0);
-        var limits = ImageLimits.Default with { MemoryBudget = root, MaxWork = 4095, MaxWorkingBytes = 1 };
-        using (var refused = new OperationContext(limits, default))
-        {
-            var failure = Assert.Throws<ImageLimitException>(() => JpegInverseTransform.Inverse(coefficients, quantization, output, refused));
-            Assert.Equal(ImageLimitKind.Work, failure.Limit); Assert.Equal(0, refused.ConsumedWork);
-        }
-        Assert.All(output, value => Assert.Equal(165, value));
-        using var cancellation = new CancellationTokenSource();
-        using (var cancelled = new OperationContext(limits with { MaxWork = 4096 }, cancellation.Token))
-        {
-            cancellation.Cancel();
-            Assert.Throws<OperationCanceledException>(() => JpegInverseTransform.Inverse(coefficients, quantization, output, cancelled));
-            Assert.Equal(0, cancelled.ConsumedWork);
-        }
-        Assert.All(output, value => Assert.Equal(165, value));
-        using (var successful = new OperationContext(limits with { MaxWork = 4096 }, default))
-            JpegInverseTransform.Inverse(coefficients, quantization, output, successful);
-        Assert.Equal("39856e989bffd9645bc139f06542afe687fe0b8c2105522d9424d3a25215ee88", Convert.ToHexStringLower(SHA256.HashData(output)));
-        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
-    }
+        Assert.All(output, value => Assert.Equal(165, value));     }
 }

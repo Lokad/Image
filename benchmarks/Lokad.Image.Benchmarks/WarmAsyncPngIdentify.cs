@@ -57,7 +57,7 @@ internal sealed class WarmAsyncPngIdentify
         if (first != Expected || second != Expected || ReferenceEquals(first, second)) throw new InvalidOperationException("Async descriptors differ or alias.");
         var copy = encoded.ToArray(); var survivor = Inspect(copy); Array.Clear(copy);
         if (survivor != Expected || first != Expected || second != Expected) throw new InvalidOperationException("Surviving metadata aliases source.");
-        foreach (var limits in new[] { ImageLimits.Default with { MaxInputBytes = encoded.Length - 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { MaxWork = 1 } })
+        foreach (var limits in new[] { ImageLimits.Default with { MaxInputBytes = encoded.Length - 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { } })
         {
             try { Inspect(encoded, limits); throw new InvalidOperationException("Async reader accepted insufficient admission."); }
             catch (ImageLimitException) { }

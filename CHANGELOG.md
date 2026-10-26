@@ -2,6 +2,13 @@
 
 ## 0.2.0 — Unreleased
 
+- Breaking unpublished API cleanup: removed `MaxWork`, cumulative work quotas,
+  `ImageLimitKind.Work`, `ImageBudget`/`BudgetedImage` and their codec wrappers.
+  Use direct cooperative cancellation and the existing `IMemoryBudget` root for
+  explicit storage admission/ownership. Local storage/container bounds remain.
+- Removed unused VP8 encoder prototypes and unreachable orientation mapping;
+  consolidated identical bicubic arithmetic without changing pixels.
+
 - Reference-compatible managed JPEG encoding for grayscale/4:4:4/4:2:2/4:2:0,
   including restarts, direct caller samples and async output. Removed superseded
   experimental encoders and switches. Ten frozen controls match complete reference

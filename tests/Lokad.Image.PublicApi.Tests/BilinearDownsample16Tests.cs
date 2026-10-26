@@ -9,7 +9,7 @@ public sealed class BilinearDownsample16Tests
     [InlineData(17, 17, 8, 8)]
     [InlineData(40, 20, 16, 8)]
     [InlineData(65, 17, 33, 9)]
-    public void CachedStripsKeepOriginalSamplesOwnersAndWork(int sourceWidth, int sourceHeight, int width, int height)
+    public void CachedStripsKeepOriginalSamplesOwners(int sourceWidth, int sourceHeight, int width, int height)
     {
         using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, 16);
         source.GetRow16(0)[3] = 0;
@@ -18,8 +18,8 @@ public sealed class BilinearDownsample16Tests
         var planBytes = (long)width * 8 * (sizeof(double) + sizeof(int)) + (long)width * sizeof(int) + 192;
         var scaleX = (double)sourceWidth / width;
         var scaleY = (double)sourceHeight / height;
-        var work = (long)width * height * ((long)Math.Ceiling(2 * scaleX) + 1) * ((long)Math.Ceiling(2 * scaleY) + 1) * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + outputBytes + planBytes + 4096, MaxWork = work };
+
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + outputBytes + planBytes + 4096};
         using var expected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear,
             limits with { MaxWorkingBytes = input.Length + outputBytes + 4096 });
         using var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear, limits);
@@ -30,8 +30,6 @@ public sealed class BilinearDownsample16Tests
         first.GetRow16(0)[0] ^= 65535;
         Assert.Equal(bytes, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear,
             limits, new CancellationToken(true)));
     }

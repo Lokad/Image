@@ -72,7 +72,7 @@ internal sealed class Vp8PreparedInput : IDisposable
     // operation/root. Neither source pixels nor gamma storage escape preparation.
     internal static Vp8PreparedInput Create(ImageBuffer source, OperationContext context)
     {
-        context.Work(0); context.PixelBytes(source.Width, source.Height, source.BitDepth);
+        context.Cancellation.ThrowIfCancellationRequested(); context.PixelBytes(source.Width, source.Height, source.BitDepth);
         if (source.Width > 16383 || source.Height > 16383)
             throw new ImageLimitException(ImageLimitKind.Dimension, "VP8 dimensions exceed 16383.");
         ReadOnlySpan<byte> bytes = source.Pixels; var words = MemoryMarshal.Cast<byte, ushort>(bytes);
@@ -80,7 +80,7 @@ internal sealed class Vp8PreparedInput : IDisposable
         var hasAlpha = false;
         for (var y = 0; y < height; y++)
         {
-            context.Work(width * 4L);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var x = 0; x < width; x++)
                 hasAlpha |= Sample(bytes, words, eightBit, (y * width + x) * 4 + 3) != 255;
         }
@@ -89,11 +89,11 @@ internal sealed class Vp8PreparedInput : IDisposable
         {
             var capacity = checked(result.lumaLength + 2 * result.chromaLength + (hasAlpha ? width * height : 0));
             context.Reserve(capacity + (long)MetadataBytes); result.retainedBytes = capacity + (long)MetadataBytes;
-            context.Work(0); result.storage = new byte[capacity];
+            context.Cancellation.ThrowIfCancellationRequested(); result.storage = new byte[capacity];
             context.Reserve(ScratchBytes);
             try
             {
-                context.Work(289 * 64L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 Span<ushort> linear = stackalloc ushort[256]; Span<int> knots = stackalloc int[33];
                 for (var i = 0; i < linear.Length; i++) linear[i] = (ushort)Math.Floor(Math.Pow(i / 255d, 0.8) * 4095 + 0.5);
                 for (var i = 0; i < knots.Length; i++) knots[i] = (int)Math.Floor(255 * Math.Pow(i * 128d / 4095, 1 / 0.8) + 0.5);
@@ -103,7 +103,7 @@ internal sealed class Vp8PreparedInput : IDisposable
                 var alphaPlane = result.storage.AsSpan(result.lumaLength + 2 * result.chromaLength);
                 for (var y = 0; y < height; y++)
                 {
-                    context.Work(result.Stride * 8L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     for (var x = 0; x < width; x++)
                     {
                         var p = (y * width + x) * 4;
@@ -115,7 +115,7 @@ internal sealed class Vp8PreparedInput : IDisposable
                 var chromaWidth = (width + 1) / 2; var chromaHeight = (height + 1) / 2; var stride = result.Stride / 2;
                 for (var y = 0; y < chromaHeight; y++)
                 {
-                    context.Work(stride * 128L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     var row0 = 2 * y * width * 4; var row1 = Math.Min(2 * y + 1, height - 1) * width * 4;
                     for (var x = 0; x < chromaWidth; x++)
                     {
@@ -150,12 +150,12 @@ internal sealed class Vp8PreparedInput : IDisposable
     {
         for (var y = 0; y < height; y++)
         {
-            context.Work(stride - width);
+            context.Cancellation.ThrowIfCancellationRequested();
             plane.Slice(y * stride + width, stride - width).Fill(plane[y * stride + width - 1]);
         }
         for (var y = height; y < plane.Length / stride; y++)
         {
-            context.Work(stride);
+            context.Cancellation.ThrowIfCancellationRequested();
             plane.Slice((height - 1) * stride, stride).CopyTo(plane.Slice(y * stride));
         }
     }
@@ -167,7 +167,7 @@ internal sealed class Vp8PreparedInput : IDisposable
     internal void CleanupTransparentArea()
     {
         var data = storage ?? throw new ObjectDisposedException(nameof(Vp8PreparedInput));
-        context.Work(0); if (!HasAlpha) return;
+        context.Cancellation.ThrowIfCancellationRequested(); if (!HasAlpha) return;
         var yPlane = data.AsSpan(0, lumaLength);
         var uPlane = data.AsSpan(lumaLength, chromaLength);
         var vPlane = data.AsSpan(lumaLength + chromaLength, chromaLength);
@@ -179,7 +179,7 @@ internal sealed class Vp8PreparedInput : IDisposable
             for (var left = 0; left < Width; left += 8)
             {
                 var width = Math.Min(8, Width - left); var count = 0; var sum = 0;
-                context.Work(width * height * 4L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var y = top; y < top + height; y++)
                 for (var x = left; x < left + width; x++)
                     if (alpha[y * Width + x] != 0) { count++; sum += yPlane[y * Stride + x]; }

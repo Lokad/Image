@@ -106,22 +106,6 @@ public sealed class Vp8QuantizationPlanTests
     }
 
     [Fact]
-    public void LateWorkFailureRefundsThePartiallyFilledPlan()
-    {
-        using var image = OriginalVp8lControls.Buffer("singleton", 8); using var root = new TestMemoryBudget(16_000_000);
-        using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        using var input = Vp8PreparedInput.Create(image, context); using var analysis = Vp8SourceAnalysis.Create(input, context);
-        using var segments = Vp8SourceSegments.Create(analysis, 75, false, context); long work;
-        using (var sizing = new OperationContext(new() { MemoryBudget = root }, default))
-        using (var plan = Vp8QuantizationPlan.Create(segments, analysis.MeanChromaScore, sizing)) work = sizing.ConsumedWork;
-        var baseline = root.Bytes;
-        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => Vp8QuantizationPlan.Create(segments, analysis.MeanChromaScore, limited)).Limit);
-        Assert.Equal(baseline, root.Bytes);
-        using var next = Vp8QuantizationPlan.Create(segments, analysis.MeanChromaScore, context); next.Dispose(); Assert.Equal(baseline, root.Bytes);
-    }
-
-    [Fact]
     public void RetainedPlanAndReplacementUseTheSameAggregateAllowance()
     {
         using var image = OriginalVp8lControls.Buffer("singleton", 8); using var root = new TestMemoryBudget(16_000_000);

@@ -48,8 +48,6 @@ public sealed class JpegAdmissionTests
         Assert.Equal(ImageOrientation.Normal, exact.Orientation);
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, options with
         { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }));
-        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded, options with
-        { Limits = options.Limits with { MaxWork = 1 } }));
         Assert.Throws<OperationCanceledException>(() => ImageCodec.Decode(encoded, options, new CancellationToken(true)));
     }
 

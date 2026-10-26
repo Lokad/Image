@@ -64,7 +64,7 @@ public sealed class JpegEntropyBufferTests
             var error = Assert.Throws<ImageLimitException>(() => writer.Write(255, 8));
             Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
         }
-        Assert.Equal(1, context.ConsumedWork); Assert.Equal(1, root.GrowthAttempts);
+Assert.Equal(1, root.GrowthAttempts);
         Assert.Equal(cancel ? 0 : 1, root.Refusals); writer.Dispose();
         Assert.Equal(0, root.Bytes); Assert.Equal(0, output.Length); Assert.False(root.IsDisposed);
         root.Admitted = null; root.RefuseAtGrowth = 0;
@@ -103,19 +103,5 @@ public sealed class JpegEntropyBufferTests
         writer.Dispose(); writer.Dispose(); Assert.Equal(0, root.Bytes);
         Assert.Equal(writes, output.Writes); Assert.Equal(length, output.Length);
         Assert.True(output.CanWrite); Assert.False(root.IsDisposed); Assert.Equal(0, root.Refusals);
-    }
-
-    [Fact]
-    public void WorkFailureRetainsItsOriginalChargeAndDropsPendingBytesOnDisposal()
-    {
-        using var root = new TestMemoryBudget(JpegEntropyWriter.StorageBytes);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = 2 }, default);
-        using var output = new MemoryStream(); using var writer = new JpegEntropyWriter(output, context);
-        writer.Write(91, 8); writer.Write(92, 8);
-        var error = Assert.Throws<ImageLimitException>(() => writer.Write(93, 8));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(2, context.ConsumedWork); Assert.Equal(JpegEntropyWriter.StorageBytes, root.Bytes);
-        writer.Dispose(); Assert.Equal(0, root.Bytes); Assert.Equal(0, output.Length); Assert.True(output.CanWrite);
-        Assert.Throws<ObjectDisposedException>(() => writer.Write(0, 0));
     }
 }

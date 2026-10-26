@@ -100,7 +100,7 @@ public sealed class ImageBuffer : IDisposable
                 for (var offset = 0; offset < row.Length;)
                 {
                     var count = Math.Min(16384, row.Length - offset);
-                    context.Work(count / (BitDepth / 8));
+                    context.Cancellation.ThrowIfCancellationRequested();
                     row.Slice(offset, count).CopyTo(destination.Slice(offset, count)); offset += count;
                 }
             }

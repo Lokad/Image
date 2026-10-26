@@ -103,7 +103,7 @@ internal sealed class WarmAsyncJpegEncode
         {
             using var output = new NonSeekableAsyncOutput(); Encode(output, image: transient); transient.Dispose(); RequireManaged(output);
         }
-        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { MaxWork = 1 } })
+        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { } })
         {
             using var output = new NonSeekableAsyncOutput();
             try { Encode(output, profileOptions with { Limits = limits }); throw new InvalidOperationException("Encoder accepted insufficient admission."); }

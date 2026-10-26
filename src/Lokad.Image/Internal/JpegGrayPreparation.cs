@@ -1,7 +1,7 @@
 namespace Lokad.Image.Internal;
 
 // Borrowed image/RGB samples to one gray8 block. The outer grayscale pass
-// validates geometry and admits work plus its8KiB fixed workspace. Row scratch
+// validates geometry and admits its8KiB fixed workspace. Row scratch
 // stays bounded at32packedRGB bytes or24callerRGB bytes, with no owned storage.
 internal static class JpegGrayPreparation
 {

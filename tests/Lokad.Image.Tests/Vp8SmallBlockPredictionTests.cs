@@ -36,7 +36,7 @@ public sealed class Vp8SmallBlockPredictionTests
         foreach (var (mx, my) in new[] { (0, 0), (16, 16), (512, 256) })
         for (var by = 0; by < 16; by += 4) for (var bx = 0; bx < 16; bx += 4)
         {
-            context.Work(128); var x = mx + bx; var y = my + by;
+var x = mx + bx; var y = my + by;
             for (var p = 0; p < 8; p++) top[p] = Sample(input.Y, input.Stride, x + p, bx == 12 && p >= 4 ? my - 1 : y - 1);
             for (var p = 0; p < 4; p++) left[p] = Sample(input.Y, input.Stride, x - 1, y + p);
             var corner = Sample(input.Y, input.Stride, x - 1, y - 1);

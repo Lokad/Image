@@ -102,16 +102,6 @@ public sealed class Vp8lReferenceMatcherTests
     }
 
     [Fact]
-    public void IndependentWorkLimitAlsoReleasesTemporaryAndResultStorage()
-    {
-        using var root = new TestMemoryBudget(1_000_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = 2 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceMatcher.Build(Pixels(), 513, 75, false, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
-    }
-
-    [Fact]
     public void ZeroOwnerIsValidAndNegativeCapacityAllocatesNothing()
     {
         using var root = new TestMemoryBudget(0);

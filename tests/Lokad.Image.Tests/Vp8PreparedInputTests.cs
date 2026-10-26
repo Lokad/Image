@@ -107,18 +107,4 @@ public sealed class Vp8PreparedInputTests
         using var next = Vp8PreparedInput.Create(source, later); Assert.NotEqual(0, root.Bytes);
         next.Dispose(); Assert.Equal(0, root.Bytes);
     }
-
-    [Fact]
-    public void LateWorkFailureRefundsOutputAndScratchWithoutASecondAllowance()
-    {
-        using var source = OriginalVp8lControls.Buffer("asymmetric", 8); long work;
-        using (var sizing = new OperationContext(ImageLimits.Default, default))
-        using (var input = Vp8PreparedInput.Create(source, sizing)) work = sizing.ConsumedWork;
-        using var root = new TestMemoryBudget(16_000_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8PreparedInput.Create(source, context));
-        Assert.Equal(ImageLimitKind.Work, error.Limit); Assert.Equal(0, root.Bytes);
-        using var later = new OperationContext(new() { MemoryBudget = root }, default);
-        using var next = Vp8PreparedInput.Create(source, later); next.Dispose(); Assert.Equal(0, root.Bytes);
-    }
 }

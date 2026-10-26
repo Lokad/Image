@@ -19,17 +19,17 @@ internal sealed class Vp8FrameEncoding : IDisposable
 
     internal static Vp8FrameEncoding Create(Vp8FramePlan frame, OperationContext context)
     {
-        context.Work(0); var result = new Vp8FrameEncoding(frame, context);
+        context.Cancellation.ThrowIfCancellationRequested(); var result = new Vp8FrameEncoding(frame, context);
         try
         {
-            context.Reserve(512); result.metadata = 512; context.Work(0);
+            context.Reserve(512); result.metadata = 512; context.Cancellation.ThrowIfCancellationRequested();
             result.header = new(context, context.Limits.MaxOutputBytes); result.tokens = new(context, context.Limits.MaxOutputBytes);
             var scratch = frame.Columns * 13L + 1024; context.Reserve(scratch);
-            try { context.Work(0); result.Encode(frame); }
+            try { context.Cancellation.ThrowIfCancellationRequested(); result.Encode(frame); }
             finally { context.Release(scratch); }
             result.header.Finish(); result.tokens.Finish();
-            if (result.header.Bytes.Length >= 524288) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8 first partition exceeds its 19-bit format limit.");
-            var length = 10L + result.header.Bytes.Length + result.tokens.Bytes.Length;
+            if (result.header!.Bytes.Length >= 524288) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8 first partition exceeds its 19-bit format limit.");
+            var length = 10L + result.header!.Bytes.Length + result.tokens!.Bytes.Length;
             if (20 + length + (length & 1) > context.Limits.MaxOutputBytes)
                 throw new ImageLimitException(ImageLimitKind.OutputBytes, "Encoded WebP exceeds its output limit.");
             // The pinned container counts the final zero inside the VP8 chunk,
@@ -125,7 +125,7 @@ internal sealed class Vp8FrameEncoding : IDisposable
         Span<byte> modeLeft = stackalloc byte[4]; Span<byte> contexts = stackalloc byte[18];
         for (var index = 0; index < frame.Count; index++)
         {
-            context.Work(1024); var x = index % frame.Columns;
+            context.Cancellation.ThrowIfCancellationRequested(); var x = index % frame.Columns;
             if (x == 0) { modeLeft.Clear(); contexts[9..].Clear(); }
             var block = frame.Block(index); var modes = frame.SmallModes(index);
             if (frame.UpdateMap) { Bit(h, block.Segment >= 2, p.Root); Bit(h, (block.Segment & 1) != 0, block.Segment < 2 ? p.Left : p.Right); }
@@ -178,9 +178,9 @@ internal sealed class Vp8FrameEncoding : IDisposable
     internal void WriteFrame(Stream output)
     {
         if (metadata == 0) throw new ObjectDisposedException(nameof(Vp8FrameEncoding));
-        Span<byte> bytes = stackalloc byte[10]; FrameHeader(bytes); context.Work(10); output.Write(bytes);
-        context.Work(header!.Bytes.Length); output.Write(header.Bytes); context.Work(tokens!.Bytes.Length); output.Write(tokens.Bytes); context.Work(0);
-        if (padded) { context.Work(1); output.WriteByte(0); }
+        Span<byte> bytes = stackalloc byte[10]; FrameHeader(bytes); context.Cancellation.ThrowIfCancellationRequested(); output.Write(bytes);
+        context.Cancellation.ThrowIfCancellationRequested(); output.Write(header!.Bytes); context.Cancellation.ThrowIfCancellationRequested(); output.Write(tokens!.Bytes); context.Cancellation.ThrowIfCancellationRequested();
+        if (padded) { context.Cancellation.ThrowIfCancellationRequested(); output.WriteByte(0); }
     }
 
     internal void WriteOpaqueWebp(Stream output)
@@ -188,26 +188,26 @@ internal sealed class Vp8FrameEncoding : IDisposable
         if (metadata == 0) throw new ObjectDisposedException(nameof(Vp8FrameEncoding));
         Span<byte> bytes = stackalloc byte[20]; "RIFF"u8.CopyTo(bytes); BinaryPrimitives.WriteUInt32LittleEndian(bytes[4..], (uint)(WebpLength - 8));
         "WEBPVP8 "u8.CopyTo(bytes[8..]); BinaryPrimitives.WriteUInt32LittleEndian(bytes[16..], (uint)Length);
-        context.Work(20); output.Write(bytes); WriteFrame(output);
+        context.Cancellation.ThrowIfCancellationRequested(); output.Write(bytes); WriteFrame(output);
     }
 
     internal async ValueTask WriteFrameAsync(Stream output)
     {
         if (metadata == 0) throw new ObjectDisposedException(nameof(Vp8FrameEncoding));
-        context.Work(10); var bytes = new byte[10]; FrameHeader(bytes);
+        context.Cancellation.ThrowIfCancellationRequested(); var bytes = new byte[10]; FrameHeader(bytes);
         await output.WriteAsync(bytes, context.Cancellation).ConfigureAwait(false);
-        context.Work(header!.Memory.Length); await output.WriteAsync(header.Memory, context.Cancellation).ConfigureAwait(false);
-        context.Work(tokens!.Memory.Length); await output.WriteAsync(tokens.Memory, context.Cancellation).ConfigureAwait(false); context.Work(0);
-        if (padded) { context.Work(1); await output.WriteAsync(new byte[1], context.Cancellation).ConfigureAwait(false); }
+        context.Cancellation.ThrowIfCancellationRequested(); await output.WriteAsync(header!.Memory, context.Cancellation).ConfigureAwait(false);
+        context.Cancellation.ThrowIfCancellationRequested(); await output.WriteAsync(tokens!.Memory, context.Cancellation).ConfigureAwait(false); context.Cancellation.ThrowIfCancellationRequested();
+        if (padded) { context.Cancellation.ThrowIfCancellationRequested(); await output.WriteAsync(new byte[1], context.Cancellation).ConfigureAwait(false); }
     }
 
     internal async ValueTask WriteOpaqueWebpAsync(Stream output)
     {
         if (metadata == 0) throw new ObjectDisposedException(nameof(Vp8FrameEncoding));
-        context.Work(20); var bytes = new byte[20]; "RIFF"u8.CopyTo(bytes); BinaryPrimitives.WriteUInt32LittleEndian(bytes.AsSpan(4), (uint)(WebpLength - 8));
+        context.Cancellation.ThrowIfCancellationRequested(); var bytes = new byte[20]; "RIFF"u8.CopyTo(bytes); BinaryPrimitives.WriteUInt32LittleEndian(bytes.AsSpan(4), (uint)(WebpLength - 8));
         "WEBPVP8 "u8.CopyTo(bytes.AsSpan(8)); BinaryPrimitives.WriteUInt32LittleEndian(bytes.AsSpan(16), (uint)Length);
         await output.WriteAsync(bytes, context.Cancellation).ConfigureAwait(false); await WriteFrameAsync(output).ConfigureAwait(false);
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
     }
 
     internal int WebpLengthWithAlpha(Vp8AlphaEncoding alpha)
@@ -231,22 +231,22 @@ internal sealed class Vp8FrameEncoding : IDisposable
 
     internal void WriteWebp(Stream output, Vp8AlphaEncoding alpha)
     {
-        Span<byte> bytes = stackalloc byte[38]; AlphaHeader(bytes, alpha); context.Work(38); output.Write(bytes);
-        context.Work(alpha.Bytes.Length); output.Write(alpha.Bytes);
-        if ((alpha.Bytes.Length & 1) != 0) { context.Work(1); output.WriteByte(0); }
+        Span<byte> bytes = stackalloc byte[38]; AlphaHeader(bytes, alpha); context.Cancellation.ThrowIfCancellationRequested(); output.Write(bytes);
+        context.Cancellation.ThrowIfCancellationRequested(); output.Write(alpha.Bytes);
+        if ((alpha.Bytes.Length & 1) != 0) { context.Cancellation.ThrowIfCancellationRequested(); output.WriteByte(0); }
         "VP8 "u8.CopyTo(bytes); BinaryPrimitives.WriteUInt32LittleEndian(bytes[4..], (uint)Length);
-        context.Work(8); output.Write(bytes[..8]); WriteFrame(output);
+        context.Cancellation.ThrowIfCancellationRequested(); output.Write(bytes[..8]); WriteFrame(output);
     }
 
     internal async ValueTask WriteWebpAsync(Stream output, Vp8AlphaEncoding alpha)
     {
-        context.Work(0); var bytes = new byte[38]; AlphaHeader(bytes, alpha); context.Work(38);
+        context.Cancellation.ThrowIfCancellationRequested(); var bytes = new byte[38]; AlphaHeader(bytes, alpha); context.Cancellation.ThrowIfCancellationRequested();
         await output.WriteAsync(bytes, context.Cancellation).ConfigureAwait(false);
-        context.Work(alpha.Memory.Length); await output.WriteAsync(alpha.Memory, context.Cancellation).ConfigureAwait(false);
-        if ((alpha.Memory.Length & 1) != 0) { context.Work(1); await output.WriteAsync(new byte[1], context.Cancellation).ConfigureAwait(false); }
+        context.Cancellation.ThrowIfCancellationRequested(); await output.WriteAsync(alpha.Memory, context.Cancellation).ConfigureAwait(false);
+        if ((alpha.Memory.Length & 1) != 0) { context.Cancellation.ThrowIfCancellationRequested(); await output.WriteAsync(new byte[1], context.Cancellation).ConfigureAwait(false); }
         "VP8 "u8.CopyTo(bytes); BinaryPrimitives.WriteUInt32LittleEndian(bytes.AsSpan(4), (uint)Length);
-        context.Work(8); await output.WriteAsync(bytes.AsMemory(0, 8), context.Cancellation).ConfigureAwait(false);
-        await WriteFrameAsync(output).ConfigureAwait(false); context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested(); await output.WriteAsync(bytes.AsMemory(0, 8), context.Cancellation).ConfigureAwait(false);
+        await WriteFrameAsync(output).ConfigureAwait(false); context.Cancellation.ThrowIfCancellationRequested();
     }
 
     public void Dispose()

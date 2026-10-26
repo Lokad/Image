@@ -28,9 +28,8 @@ public sealed class LanczosHorizontalTests
             using var context = new OperationContext(ImageLimits.Default, default);
             using var plan = LanczosPlan.Create(width, target, context);
             var output = new long[target * 4 + 2]; Array.Fill(output, long.MinValue + 37);
-            var work = context.RemainingWork; var storage = context.RemainingWorkingBytes;
+var storage = context.RemainingWorkingBytes;
             LanczosResize.Horizontal(source, 1, plan, output.AsSpan(1, target * 4), context);
-            Assert.Equal(work - plan.Windows.Sum(w => w.Count * 4L), context.RemainingWork);
             Assert.Equal(storage, context.RemainingWorkingBytes);
             Assert.Equal(long.MinValue + 37, output[0]); Assert.Equal(long.MinValue + 37, output[^1]);
             for (var x = 0; x < target; x++)
@@ -46,7 +45,7 @@ public sealed class LanczosHorizontalTests
     }
 
     [Fact]
-    public void CanceledHorizontalWorkDoesNotPublishPartialRows()
+    public void CanceledHorizontalDoesNotPublishPartialRows()
     {
         using var source = ImageBuffer.Create(7, 1, 16);
         using var cancellation = new CancellationTokenSource();

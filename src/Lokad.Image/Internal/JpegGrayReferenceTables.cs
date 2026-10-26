@@ -21,7 +21,7 @@ internal static class JpegGrayReferenceTables
         // capacity and old/new array overlap. The caller owns surviving tables.
         long scratch = 65536L + (active + 1) * 2048L;
         context.Reserve(scratch);
-        try { context.Work(JpegReferenceTables.HuffmanWork); return Build(histogram, context); }
+        try { context.Cancellation.ThrowIfCancellationRequested(); return Build(histogram, context); }
         finally { context.Release(scratch); }
     }
 
@@ -40,7 +40,7 @@ internal static class JpegGrayReferenceTables
         queue.Enqueue(new Branch(1, 256, 256, null, null), (1, -256));
         while (queue.Count > 1)
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             Branch left = queue.Dequeue(), right = queue.Dequeue();
             var parent = new Branch(left.Weight + right.Weight, left.Identity, -1, left, right);
             queue.Enqueue(parent, (parent.Weight, -parent.Identity));
@@ -49,7 +49,7 @@ internal static class JpegGrayReferenceTables
         var pending = new Stack<(Branch Branch, int Depth)>(); pending.Push((queue.Dequeue(), 0));
         while (pending.Count != 0)
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             var item = pending.Pop();
             if (item.Branch.Symbol >= 0) depths[item.Branch.Symbol] = item.Depth;
             else
@@ -77,7 +77,7 @@ internal static class JpegGrayReferenceTables
         int at = 0;
         for (int depth = 1; depth <= 256; depth++)
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (int symbol = 0; symbol < 256; symbol++)
                 if (depths[symbol] == depth) symbols[at++] = (byte)symbol;
         }

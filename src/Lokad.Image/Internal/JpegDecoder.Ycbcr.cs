@@ -13,7 +13,7 @@ internal ref partial struct JpegDecoder
     {
         // Preserve centered interpolation and edge clamping. The native color
         // boundary consumes rounded eight-bit chroma, not fractional samples.
-        // Fixed chunks avoid a row/frame copy; the parent admits row work.
+        // Fixed chunks avoid a row/frame copy; the parent checks row cancellation.
         Span<byte> cb = stackalloc byte[32];
         Span<byte> cr = stackalloc byte[32];
         var luma = components[0].Plane.AsSpan(y * components[0].BlockColumns * 8 + start, count);

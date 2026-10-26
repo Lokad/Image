@@ -17,7 +17,7 @@ internal partial struct Vp8BooleanReader
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Read(ReadOnlySpan<byte> data, int probability, OperationContext context)
     {
-        context.Work(1);
+        context.Cancellation.ThrowIfCancellationRequested();
         if ((uint)probability > 255) throw new ArgumentOutOfRangeException(nameof(probability));
         if (value >= range) throw new ImageDataException("Invalid VP8 arithmetic interval.");
         var boundary = 1 + ((range - 1) * probability >> 8);

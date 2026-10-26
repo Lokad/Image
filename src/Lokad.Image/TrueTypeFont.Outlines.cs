@@ -25,11 +25,11 @@ public sealed partial class TrueTypeFont
 
     private FontOutline ReadOutline(int glyphIndex, OperationContext context, Span<int> path, int depth, ref long visits)
     {
-        context.Work(1);
+        context.Cancellation.ThrowIfCancellationRequested();
         if ((uint)glyphIndex >= GlyphCount) throw new ImageDataException("Composite references an absent glyph.");
         if (++visits > context.Limits.MaxContainerItems) throw new ImageLimitException(ImageLimitKind.ContainerItems, "Glyph component limit exceeded.");
         for (var i = 0; i < depth; i++)
-        { context.Work(1); if (path[i] == glyphIndex) throw new ImageDataException("Cyclic composite glyph."); }
+        { context.Cancellation.ThrowIfCancellationRequested(); if (path[i] == glyphIndex) throw new ImageDataException("Cyclic composite glyph."); }
         if (depth == path.Length) throw new UnsupportedImageException(UnsupportedImageFeature.FontOutline, "Composite nesting beyond 64 glyphs is unsupported.");
         path[depth] = glyphIndex;
         var result = new FontOutline(context);
@@ -111,18 +111,18 @@ public sealed partial class TrueTypeFont
             {
                 var flag = cursor.Byte(); var repeat = (flag & 8) != 0 ? cursor.Byte() : 0;
                 if (repeat >= count - index) throw new ImageDataException("Glyph flag repeat exceeds its point count.");
-                context.Work(repeat + 1); flags.AsSpan(index, repeat + 1).Fill(flag); index += repeat + 1;
+                context.Cancellation.ThrowIfCancellationRequested(); flags.AsSpan(index, repeat + 1).Fill(flag); index += repeat + 1;
             }
             var x = 0; var y = 0;
             for (var i = 0; i < count; i++)
             {
-                context.Work(1); x += Coordinate(flags[i], 2, 16, ref cursor);
+                context.Cancellation.ThrowIfCancellationRequested(); x += Coordinate(flags[i], 2, 16, ref cursor);
                 if (x is < short.MinValue or > short.MaxValue) throw new ImageDataException("Glyph X coordinate exceeds the design grid.");
                 result.SetPoint(i, new(x, 0, (flags[i] & 1) != 0));
             }
             for (var i = 0; i < count; i++)
             {
-                context.Work(1); y += Coordinate(flags[i], 4, 32, ref cursor);
+                context.Cancellation.ThrowIfCancellationRequested(); y += Coordinate(flags[i], 4, 32, ref cursor);
                 if (y is < short.MinValue or > short.MaxValue) throw new ImageDataException("Glyph Y coordinate exceeds the design grid.");
                 result.SetPoint(i, result.Point(i) with { Y = y });
             }
@@ -157,7 +157,7 @@ public sealed partial class TrueTypeFont
         internal ReadOnlySpan<byte> Read(int length)
         {
             if (length < 0 || length > rest.Length) throw new ImageDataException("Truncated TrueType outline.");
-            context.Work(length); var value = rest[..length]; rest = rest[length..]; return value;
+            context.Cancellation.ThrowIfCancellationRequested(); var value = rest[..length]; rest = rest[length..]; return value;
         }
         internal byte Byte() => Read(1)[0];
         internal ushort U16() => TrueTypeFont.U16(Read(2));

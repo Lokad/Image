@@ -35,7 +35,7 @@ public sealed class WebpColorCacheTests
     }
 
     [Fact]
-    public void CachedEncodingRespectsLocalOutputAndWorkPreflightWithoutClosingCallerStream()
+    public void CachedEncodingRespectsLocalOutputAndPreflightWithoutClosingCallerStream()
     {
         using var source = Source(8);
         var reference = WebpAdmissionControl.Reference(source); var packet = reference.Packet;
@@ -44,9 +44,7 @@ public sealed class WebpColorCacheTests
         Assert.Equal(packet, exact.ToArray()); Assert.True(exact.CanWrite);
         foreach (var (denied, kind) in new[]
         {
-            (limits with { MaxOutputBytes = packet.Length - 1 }, ImageLimitKind.OutputBytes),
-            (limits with { MaxWork = 1 }, ImageLimitKind.Work)
-        })
+            (limits with { MaxOutputBytes = packet.Length - 1 }, ImageLimitKind.OutputBytes),})
         {
             using var rejected = new NonseekableOutput();
             Assert.Equal(kind, Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejected, new() { Limits = denied })).Limit);

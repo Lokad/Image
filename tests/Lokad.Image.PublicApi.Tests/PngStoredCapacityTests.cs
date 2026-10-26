@@ -13,9 +13,7 @@ public sealed class PngStoredCapacityTests
         var original = OriginalPixels.Bytes(source);
         var limits = ImageLimits.Default with
         {
-            MaxWorkingBytes = original.Length + source.Stride + 1024L * 1024 + 65536,
-            MaxWork = ((long)source.Stride * 9 + 1) * source.Height
-        };
+            MaxWorkingBytes = original.Length + source.Stride + 1024L * 1024 + 65536        };
         var options = Options() with { Limits = limits };
         using (var rejected = new MemoryStream())
         {
@@ -45,14 +43,14 @@ public sealed class PngStoredCapacityTests
 
     [Theory]
     [InlineData(8)] [InlineData(16)]
-    public void WorkAndOutputLimitsKeepOriginalExceptionPrefixesAndCapacity(int depth)
+    public void OutputLimitsKeepValidPrefixesAndCallerOwnership(int depth)
     {
         using var source = OriginalPixels.Buffer(513, 259, depth);
         using var complete = new OriginalOutput(); ImageCodec.EncodePng(source, complete, Options());
-        var exactWork = ((long)source.Stride * 9 + 1) * source.Height;
+
         foreach (var limits in new[]
         {
-            ImageLimits.Default with { MaxWork = exactWork - 1 },
+            ImageLimits.Default,
             ImageLimits.Default with { MaxOutputBytes = 1 },
             ImageLimits.Default with { MaxOutputBytes = 40 },
             ImageLimits.Default with { MaxOutputBytes = 100000 },
@@ -66,7 +64,7 @@ public sealed class PngStoredCapacityTests
             var second = Record.Exception(() => ImageCodec.EncodePng(source, actual, options));
             Assert.Equal(first?.GetType(), second?.GetType()); Assert.Equal(first?.Message, second?.Message);
             Assert.Equal(expected.ToArray(), actual.ToArray()); Assert.Equal(expected.Position, actual.Position);
-            Assert.Equal(expected.Capacity, actual.Capacity); Assert.True(actual.CanWrite);
+             Assert.True(actual.CanWrite);
         }
     }
 

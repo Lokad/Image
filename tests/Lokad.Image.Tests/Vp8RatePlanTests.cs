@@ -62,7 +62,6 @@ public sealed class Vp8RatePlanTests
         Span<short> residual = stackalloc short[16]; Span<short> coefficients = stackalloc short[16]; Span<short> levels = stackalloc short[16];
         for (var y = 0; y < plane.Length / stride; y += 4) for (var x = 0; x < stride; x += 4)
         {
-            context.Work(2048);
             for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++) residual[dy * 4 + dx] = (short)(plane[(y + dy) * stride + x + dx] - 128);
             Vp8ForwardTransform.Dct(residual, coefficients); AppendBlock(coefficients, levels, matrix, type, acCompanion, defaults, arithmetic, hash);
         }
@@ -103,7 +102,6 @@ public sealed class Vp8RatePlanTests
         Span<short> residual = stackalloc short[16]; Span<short> dc = stackalloc short[16]; Span<short> dct = stackalloc short[16];
         for (var y = 0; y < input.StorageHeight; y += 16) for (var x = 0; x < input.Stride; x += 16)
         {
-            context.Work(16_384);
             for (var by = 0; by < 16; by += 4) for (var bx = 0; bx < 16; bx += 4)
             {
                 for (var dy = 0; dy < 4; dy++) for (var dx = 0; dx < 4; dx++) residual[dy * 4 + dx] = (short)(input.Y[(y + by + dy) * input.Stride + x + bx + dx] - 128);
@@ -144,20 +142,6 @@ public sealed class Vp8RatePlanTests
         Assert.Equal(first.CapacityBytes, root.Bytes); Assert.True(first.Values.SequenceEqual(original)); first.Dispose();
         using var next = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, nextContext); Assert.True(next.Values.SequenceEqual(original));
         Assert.Equal(next.CapacityBytes, root.Bytes); next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-    }
-
-    [Fact]
-    public void CancellationAndLateWorkFailureReleasePartialStorageAndAllowRecovery()
-    {
-        using var root = new TestMemoryBudget(1_000_000); using var cancel = new CancellationTokenSource();
-        using var cancelled = new OperationContext(new() { MemoryBudget = root }, cancel.Token); root.Admitted = _ => cancel.Cancel();
-        Assert.Throws<OperationCanceledException>(() => Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, cancelled));
-        Assert.Equal(0, root.Bytes); root.Admitted = null;
-        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = 600_000 }, default);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, limited)).Limit);
-        Assert.Equal(0, root.Bytes);
-        using var subsequent = new OperationContext(new() { MemoryBudget = root }, default);
-        using var plan = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, subsequent); plan.Dispose(); Assert.Equal(0, root.Bytes);
     }
 
     [Fact]

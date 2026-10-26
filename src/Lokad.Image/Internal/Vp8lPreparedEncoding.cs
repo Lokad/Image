@@ -79,8 +79,8 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
         var reserved = plan.Modes.Length * 4L; context.Reserve(reserved);
         try
         {
-            context.Work(0); var map = new uint[plan.Modes.Length];
-            for (var i = 0; i < map.Length; i++) { context.Work(1); map[i] = 0xff000000u | (uint)plan.Modes[i] << 8; }
+            context.Cancellation.ThrowIfCancellationRequested(); var map = new uint[plan.Modes.Length];
+            for (var i = 0; i < map.Length; i++) { context.Cancellation.ThrowIfCancellationRequested(); map[i] = 0xff000000u | (uint)plan.Modes[i] << 8; }
             prediction = Vp8lImageCode.Auxiliary(map, (width + (1 << plan.StoredBits) - 1) >> plan.StoredBits, quality, effort == 0, context);
         }
         finally { context.Release(reserved); }
@@ -110,7 +110,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
         Vp8lPreparedEncoding? best = null;
         try
         {
-            context.Work(0); var trial = new uint[source.Length];
+            context.Cancellation.ThrowIfCancellationRequested(); var trial = new uint[source.Length];
             for (var family = Vp8lTransformKind.Direct; family <= Vp8lTransformKind.PalettePrediction; family++)
             {
                 var palette = family is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction;
@@ -118,7 +118,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                 var orders = palette ? 2 : 1;
                 for (var order = 0; order < orders; order++)
                 {
-                    context.Work(source.Length); source.CopyTo(trial);
+                    context.Cancellation.ThrowIfCancellationRequested(); source.CopyTo(trial);
                     var next = PrepareCandidate(trial, width, analysis, family, context,
                         order == 0 ? Vp8lPaletteOrder.MinDelta : Vp8lPaletteOrder.ModifiedZeng);
                     try
@@ -147,7 +147,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
         if (transform is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction && analysis.DistinctColorsCapped is < 1 or > 256)
             throw new ArgumentException("Palette candidate requires a representable source palette.");
         if ((uint)paletteOrder > (uint)Vp8lPaletteOrder.ModifiedZeng) throw new ArgumentOutOfRangeException(nameof(paletteOrder));
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         return PrepareCore(working, width, 6, context, 100, analysis with { Transform = transform }, comparePalettePrediction: false, paletteOrder);
     }
 

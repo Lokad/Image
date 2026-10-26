@@ -22,13 +22,11 @@ public sealed class JpegShortRefinementTests
             var data = bytes.ToArray();
             var actual = Coefficients(increment); var expected = actual.ToArray();
             var cost = BitOperations.PopCount(mask) + (prefix == 0 ? 0 : 1) + 1;
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = cost }, (seed & 1) == 0 ? default : cancellation.Token);
-            var referenceContext = new OperationContext(ImageLimits.Default with { MaxWork = cost }, default);
+            var context = new OperationContext(ImageLimits.Default, (seed & 1) == 0 ? default : cancellation.Token);
+            var referenceContext = new OperationContext(ImageLimits.Default, default);
             var reader = new JpegEntropyReader(data, 0, context);
             var reference = new JpegEntropyReader(data, 0, referenceContext);
             var local = (seed & 2) != 0;
-            if (local) reader.BeginLocalWork();
-            try
             {
                 if (prefix != 0) Assert.Equal(reference.ReadBits(prefix), reader.ReadBits(prefix));
                 for (var bits = mask; bits != 0; bits &= bits - 1)
@@ -40,9 +38,7 @@ public sealed class JpegShortRefinementTests
                 JpegDecoder.RefineMaskedBits(ref reader, actual, mask, increment);
                 Assert.Equal(reference.ReadBits(3), reader.ReadBits(3));
             }
-            finally { if (local) reader.EndLocalWork(); }
             Assert.Equal(expected, actual); Assert.Equal(reference.Position, reader.Position);
-            Assert.Equal(referenceContext.RemainingWork, context.RemainingWork);
         }
     }
 
@@ -54,17 +50,15 @@ public sealed class JpegShortRefinementTests
         foreach (var cancelable in new[] { false, true })
         foreach (var local in new[] { false, true })
         foreach (var bytes in new byte[][] { [], [0xA5], [0xA5, 255], [0xA5, 255, 217], [0xA5, 255, 0] })
-        for (var budget = 0; budget <= count; budget++)
         {
             Assert.Equal(Run(false), Run(true));
 
-            (Type? Error, string? Message, int Position, long Remaining, string Coefficients) Run(bool optimized)
+            (Type? Error, string? Message, int Position, string Coefficients) Run(bool optimized)
             {
-                var context = new OperationContext(ImageLimits.Default with { MaxWork = budget + 1 }, cancelable ? cancellation.Token : default);
+                var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
                 var reader = new JpegEntropyReader(bytes, 0, context);
                 var values = Coefficients(1); var mask = Mask((1 << count) - 1, true);
                 Exception? failure = null;
-                if (local) reader.BeginLocalWork();
                 try
                 {
                     if (bytes.Length != 0) reader.ReadBits(7); else reader.ReadBits(0);
@@ -78,8 +72,7 @@ public sealed class JpegShortRefinementTests
                         }
                 }
                 catch (Exception error) when (error is ImageDataException or ImageLimitException) { failure = error; }
-                finally { if (local) reader.EndLocalWork(); }
-                return (failure?.GetType(), failure?.Message, reader.Position, context.RemainingWork, string.Join(',', values));
+                return (failure?.GetType(), failure?.Message, reader.Position, string.Join(',', values));
             }
         }
     }

@@ -18,17 +18,17 @@ internal sealed class OpenTypeTable(ReadOnlyMemory<byte> data, int glyphCount, O
     }
     internal int U16(int offset)
     {
-        context.Work(1); Range(offset, 2);
+        context.Cancellation.ThrowIfCancellationRequested(); Range(offset, 2);
         return BinaryPrimitives.ReadUInt16BigEndian(data.Span[offset..]);
     }
     internal int I16(int offset) => (short)U16(offset);
     internal int I8(int offset)
     {
-        context.Work(1); Range(offset, 1); return unchecked((sbyte)data.Span[offset]);
+        context.Cancellation.ThrowIfCancellationRequested(); Range(offset, 1); return unchecked((sbyte)data.Span[offset]);
     }
     internal uint U32(int offset)
     {
-        context.Work(1); Range(offset, 4);
+        context.Cancellation.ThrowIfCancellationRequested(); Range(offset, 4);
         return BinaryPrimitives.ReadUInt32BigEndian(data.Span[offset..]);
     }
     internal int Offset16(int origin, int field, bool optional = false)

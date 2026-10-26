@@ -12,7 +12,7 @@ internal static class BilinearDownsample8
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleY, long rowWork, OperationContext context)
+        double scaleY, OperationContext context)
     {
         var scaleX = (double)source.Width / result.Width;
         if (source.BitDepth != 8 || result.Width < 2 || result.Width >= source.Width || result.Height >= source.Height
@@ -148,7 +148,7 @@ internal static class BilinearDownsample8
             }
             // Admission bounds complete original tap cost. Failed speculative
             // strips leave the counter untouched for original-order replay.
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }

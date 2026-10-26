@@ -48,7 +48,7 @@ internal ref partial struct JpegDecoder
         {
             while (position < data.Length)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var marker = ReadMarker();
                 if (marker == 0xD9)
                 {
@@ -94,7 +94,7 @@ internal ref partial struct JpegDecoder
     private int ReadMarker()
     {
         if (position >= data.Length || data[position++] != 255) throw new ImageDataException("Invalid JPEG marker.");
-        while (position < data.Length && data[position] == 255) { context.Work(1); position++; }
+        while (position < data.Length && data[position] == 255) { context.Cancellation.ThrowIfCancellationRequested(); position++; }
         if (position >= data.Length) throw new ImageDataException("Truncated JPEG marker.");
         var marker = data[position++];
         if (marker is 0 or 0xD8 or >= 0xD0 and <= 0xD7) throw new ImageDataException("Unexpected JPEG marker.");
@@ -107,7 +107,7 @@ internal ref partial struct JpegDecoder
         var length = BinaryPrimitives.ReadUInt16BigEndian(data[position..]);
         if (length < 2 || length > data.Length - position) throw new ImageDataException("Invalid JPEG segment length.");
         var payload = data.Slice(position + 2, length - 2); position += length;
-        context.Work(length);
+        context.Cancellation.ThrowIfCancellationRequested();
         return payload;
     }
 
@@ -245,7 +245,7 @@ internal ref partial struct JpegDecoder
         int eobRun = 0, expectedRestart = 0;
         for (var mcu = 0; mcu < columns * rows; mcu++)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (restartInterval != 0 && mcu != 0 && mcu % restartInterval == 0)
             {
                 if (eobRun != 0) throw new ImageDataException("JPEG EOB run crosses a restart interval.");
@@ -279,9 +279,7 @@ internal ref partial struct JpegDecoder
         // T.81 F.2.2: ReadScan has already admitted baseline SS=0, SE=63,
         // Ah=Al=0. Keep symbol/amplitude traversal and every failure boundary
         // while removing progressive/refinement state from this hot loop.
-        context.Work(64);
-        reader.BeginLocalWork();
-        try
+        context.Cancellation.ThrowIfCancellationRequested();
         {
             var category = dc.Read(ref reader);
             if (category > 11) throw new ImageDataException("Invalid JPEG DC coefficient category.");
@@ -317,7 +315,6 @@ internal ref partial struct JpegDecoder
                 block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
             }
         }
-        finally { reader.EndLocalWork(); }
     }
 
     private static void ReadCancelableBaselineAc(ref JpegEntropyReader reader, Span<int> block, JpegHuffman ac)
@@ -346,7 +343,7 @@ internal ref partial struct JpegDecoder
     {
         // Progressive scans revisit spectral bands. Retain their coefficients
         // in scan order and map to natural order once, after the final scan.
-        context.Work(64);
+        context.Cancellation.ThrowIfCancellationRequested();
         if (ss == 0)
         {
             if (ah == 0)
@@ -498,7 +495,7 @@ internal ref partial struct JpegDecoder
                 var stop = target == 0 ? end + 1 : BitOperations.TrailingZeroCount(target) + (newValue != 0 ? 0 : 1);
                 var prefix = (stop == 64 ? ulong.MaxValue : (1UL << stop) - 1) & remainingBand;
                 // Refine before reporting an overlong zero run, retaining
-                // the original entropy/work/format failure precedence.
+                // the original entropy/format failure precedence.
                 RefineMaskedBits(ref reader, block, nonzero & prefix, increment);
                 run -= BitOperations.PopCount(zeros & prefix); position = stop;
                 if (run != 0 || (newValue != 0 && position > end)) throw new ImageDataException("JPEG refinement run exceeds band.");
@@ -655,7 +652,7 @@ internal ref partial struct JpegDecoder
             var quarterYcbcr = !rgb && HasQuarterWidthChroma();
             for (var y = 0; y < info.Height; y++)
             {
-                context.Work(info.Width * 32L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var row = result.GetRow8(y);
                 if (fullResolutionRgb)
                 {
@@ -669,7 +666,7 @@ internal ref partial struct JpegDecoder
                 if (horizontalRgb422)
                 {
                     // Centered 2:1 coordinates are exact quarters; vertical
-                    // coordinates are integral. Keep the same per-row work.
+                    // coordinates are integral. Keep per-row cancellation checkpoints.
                     RenderRgb422Row(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
                         components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, components[1].SampleWidth),
                         components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, components[2].SampleWidth), row);

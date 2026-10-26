@@ -11,9 +11,8 @@ public sealed record ImageLimits
     public long MaxWorkingBytes { get; init; } = 512L * 1024 * 1024;
     public int MaxMetadataBytes { get; init; } = 4 * 1024 * 1024;
     public int MaxContainerItems { get; init; } = 100_000;
-    public long MaxWork { get; init; } = 2_000_000_000;
     /// <summary>Optional borrowed admission root, shared with concurrent and nested work.</summary>
-    /// <remarks>Does not replace local limits or work accounting. Retained results
+    /// <remarks>Does not replace local memory and container limits. Retained results
     /// own admission until disposal; keep the supplied owner alive through all
     /// operations and results. Caller-owned inputs are not charged again.</remarks>
     public IMemoryBudget? MemoryBudget { get; init; }
@@ -21,7 +20,7 @@ public sealed record ImageLimits
     internal void Validate()
     {
         if (MaxDimension < 1 || MaxPixels < 1 || MaxInputBytes < 1 || MaxOutputBytes < 1
-            || MaxWorkingBytes < 1 || MaxMetadataBytes < 1 || MaxContainerItems < 1 || MaxWork < 1)
+            || MaxWorkingBytes < 1 || MaxMetadataBytes < 1 || MaxContainerItems < 1)
             throw new ArgumentOutOfRangeException(nameof(ImageLimits), "All limits must be positive.");
     }
 }

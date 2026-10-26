@@ -29,13 +29,12 @@ public sealed class MixedColumnBicubicResizeTests
 
     [Theory]
     [InlineData(4095)] [InlineData(4096)]
-    public void WiderStripsKeepFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    public void WiderStripsKeepFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        const long work = 1027L * 129 * 5 * 10 * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 129 * 4 + scratch, MaxWork = work };
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 129 * 4 + scratch};
         using var first = ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic, limits);
         using var second = ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic, limits);
         var expected = OriginalPixels.Bytes(first);
@@ -47,8 +46,6 @@ public sealed class MixedColumnBicubicResizeTests
         first.GetRow8(0)[0] ^= 255;
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
         source.GetRow8(258)[512 * 4 + 3] ^= 255;
@@ -61,13 +58,12 @@ public sealed class MixedColumnBicubicResizeTests
 
     [Theory]
     [InlineData(4095)] [InlineData(4096)]
-    public void IdentityWidthKeepsFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    public void IdentityWidthKeepsFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
         using var source = OriginalPixels.Buffer(513, 259, 8);
         source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        const long work = 513L * 129 * 5 * 10 * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 513L * 129 * 4 + scratch, MaxWork = work };
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 513L * 129 * 4 + scratch};
         using var first = ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic, limits);
         using var second = ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic, limits);
         var expected = OriginalPixels.Bytes(first);
@@ -79,8 +75,6 @@ public sealed class MixedColumnBicubicResizeTests
         first.GetRow8(0)[0] ^= 255;
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
         source.GetRow8(258)[512 * 4 + 3] ^= 255;
@@ -165,7 +159,7 @@ public sealed class MixedColumnBicubicResizeTests
     }
 
     [Fact]
-    public void DeferredTinyAlphaKeepsExactHalvesScratchWorkAndClearedTransparentPixels()
+    public void DeferredTinyAlphaKeepsExactHalvesScratchAndClearedTransparentPixels()
     {
         using var source = ImageBuffer.Create(5, 6, 8);
         for (var y = 0; y < 6; y++)
@@ -187,8 +181,6 @@ public sealed class MixedColumnBicubicResizeTests
         Assert.Equal(input, OriginalPixels.Bytes(source));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 11, 3, ResizeFilter.Bicubic,
             limits with { MaxWorkingBytes = peak - 1 }));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 11, 3, ResizeFilter.Bicubic,
-            limits with { MaxWork = 11L * 3 * 5 * 9 * 4 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 11, 3, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
     }

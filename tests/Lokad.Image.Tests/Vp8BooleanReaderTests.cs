@@ -18,23 +18,21 @@ public sealed class Vp8BooleanReaderTests
         return (Vp8BooleanReader)reader;
     }
     private static void Equal(Exception? expected, Exception? actual, int? expectedBit, int? actualBit,
-        Scalar scalar, Vp8BooleanReader reader, OperationContext referenceWork, OperationContext actualWork)
+        Scalar scalar, Vp8BooleanReader reader, OperationContext referenceContext, OperationContext actualContext)
     {
         Assert.Equal(expected?.GetType(), actual?.GetType());
         if (expected is not null) Assert.Equal(expected.Message, actual!.Message);
         Assert.Equal(expectedBit, actualBit); Assert.Equal(scalar.State, State(reader));
-        Assert.Equal(referenceWork.RemainingWork, actualWork.RemainingWork);
     }
     private static void Read(byte[] partition, byte[] data, int range, int value, int shift, int probability)
     {
         var reader = Reader(partition, range, value, shift); var scalar = new Scalar(partition.Length, range, value, shift);
-        var actualWork = new OperationContext(new ImageLimits { MaxWork = 1 }, default);
-        var referenceWork = new OperationContext(new ImageLimits { MaxWork = 1 }, default);
+        var actualContext = new OperationContext(new ImageLimits { }, default);
+        var referenceContext = new OperationContext(new ImageLimits { }, default);
         int? expectedBit = null, actualBit = null;
-        var expected = Record.Exception(() => expectedBit = scalar.Read(data, probability, referenceWork));
-        var actual = Record.Exception(() => actualBit = reader.Read(data, probability, actualWork));
-        Equal(expected, actual, expectedBit, actualBit, scalar, reader, referenceWork, actualWork);
-        Assert.Equal(0, actualWork.RemainingWork);
+        var expected = Record.Exception(() => expectedBit = scalar.Read(data, probability, referenceContext));
+        var actual = Record.Exception(() => actualBit = reader.Read(data, probability, actualContext));
+        Equal(expected, actual, expectedBit, actualBit, scalar, reader, referenceContext, actualContext);
     }
 
     [Theory]
@@ -95,73 +93,68 @@ public sealed class Vp8BooleanReaderTests
                     bytes[offset] = 192; var data = bytes[..spanLength];
                     var reader = new Vp8BooleanReader(bytes, offset, length);
                     var scalar = new Scalar(offset + length, 255, 192, 7, offset + 1);
-                    var actualWork = new OperationContext(new ImageLimits { MaxWork = 8 }, default);
-                    var referenceWork = new OperationContext(new ImageLimits { MaxWork = 8 }, default);
+                    var actualContext = new OperationContext(new ImageLimits { }, default);
+                    var referenceContext = new OperationContext(new ImageLimits { }, default);
                     for (var step = 0; step < 12; step++)
                     {
                         int? expectedBit = null, actualBit = null;
-                        var expected = Record.Exception(() => expectedBit = scalar.Read(data, probability, referenceWork));
-                        var actual = Record.Exception(() => actualBit = reader.Read(data, probability, actualWork));
-                        Equal(expected, actual, expectedBit, actualBit, scalar, reader, referenceWork, actualWork);
+                        var expected = Record.Exception(() => expectedBit = scalar.Read(data, probability, referenceContext));
+                        var actual = Record.Exception(() => actualBit = reader.Read(data, probability, actualContext));
+                        Equal(expected, actual, expectedBit, actualBit, scalar, reader, referenceContext, actualContext);
                     }
                 }
     }
 
     [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public void WorkAndCancellationRejectionPrecedeValidationAndLeaveCursorUnchanged(bool cancelled)
+     [InlineData(true)]
+    public void CancellationRejectionPrecedeValidationAndLeaveCursorUnchanged(bool cancelled)
     {
         foreach (var probability in new[] { -1, 0, 128, 255, 256 })
             foreach (var value in new[] { 0, 255 })
             {
                 using var cancellation = new CancellationTokenSource();
                 byte[] data = [0]; var reader = Reader(data, 255, value, 0); var before = State(reader);
-                var work = new OperationContext(new ImageLimits { MaxWork = 1 }, cancelled ? cancellation.Token : default);
-                if (cancelled) cancellation.Cancel(); else work.Work(1);
-                var remaining = work.RemainingWork;
-                var error = Record.Exception(() => reader.Read([], probability, work));
-                if (cancelled) Assert.IsType<OperationCanceledException>(error); else Assert.IsType<ImageLimitException>(error);
-                Assert.Equal(before, State(reader)); Assert.Equal(remaining, work.RemainingWork);
-            }
+                var operation = new OperationContext(new ImageLimits { }, cancelled ? cancellation.Token : default);
+                if (cancelled) cancellation.Cancel();                 var error = Record.Exception(() => reader.Read([], probability, operation));
+                if (cancelled) Assert.IsType<OperationCanceledException>(error);
+                Assert.Equal(before, State(reader));             }
     }
 
     [Theory]
     [InlineData(-1)] [InlineData(0)] [InlineData(1)] [InlineData(7)] [InlineData(8)]
     [InlineData(9)] [InlineData(16)] [InlineData(24)] [InlineData(25)]
-    public void LiteralValuesWorkAndTruncationMatchOriginalRecurrence(int bits)
+    public void LiteralValuesAndTruncationMatchOriginalRecurrence(int bits)
     {
         byte[] bytes = [192, 0x53, 0xad, 0xf0, 0x17, 0x80, 0x5a, 0];
         foreach (var length in new[] { 1, 2, bytes.Length })
-            for (var budget = 1; budget <= 25; budget++)
             {
                 var data = bytes[..length]; var reader = new Vp8BooleanReader(data, 0, length);
                 var scalar = new Scalar(length, 255, data[0], 7);
-                var actualWork = new OperationContext(new ImageLimits { MaxWork = budget }, default);
-                var referenceWork = new OperationContext(new ImageLimits { MaxWork = budget }, default);
+                var actualContext = new OperationContext(new ImageLimits { }, default);
+                var referenceContext = new OperationContext(new ImageLimits { }, default);
                 int? expectedValue = null, actualValue = null;
-                var expected = Record.Exception(() => expectedValue = scalar.Literal(data, bits, referenceWork));
-                var actual = Record.Exception(() => actualValue = reader.Literal(data, bits, actualWork));
-                Equal(expected, actual, expectedValue, actualValue, scalar, reader, referenceWork, actualWork);
+                var expected = Record.Exception(() => expectedValue = scalar.Literal(data, bits, referenceContext));
+                var actual = Record.Exception(() => actualValue = reader.Literal(data, bits, actualContext));
+                Equal(expected, actual, expectedValue, actualValue, scalar, reader, referenceContext, actualContext);
             }
     }
 
     [Fact]
-    public void TreeLeavesPartialWorkAndMalformedTraversalMatchOriginalRecurrence()
+    public void TreeLeavesPartialAndMalformedTraversalMatchOriginalRecurrence()
     {
         byte[] bytes = [192, 0x53, 0xad];
         foreach (var tree in new sbyte[][] { [2, 4, -1, -2, -3, -4], [2, 4] })
             foreach (var probabilities in new byte[][] { [128, 128, 128], [0, 255, 1], [255, 0, 254], [128] })
                 foreach (var length in new[] { 1, bytes.Length })
-                    foreach (var budget in new[] { 1, 2, 3 })
                     {
                         var data = bytes[..length]; var reader = new Vp8BooleanReader(data, 0, length);
                         var scalar = new Scalar(length, 255, data[0], 7);
-                        var actualWork = new OperationContext(new ImageLimits { MaxWork = budget }, default);
-                        var referenceWork = new OperationContext(new ImageLimits { MaxWork = budget }, default);
+                        var actualContext = new OperationContext(new ImageLimits { }, default);
+                        var referenceContext = new OperationContext(new ImageLimits { }, default);
                         int? expectedValue = null, actualValue = null;
-                        var expected = Record.Exception(() => expectedValue = scalar.Tree(data, tree, probabilities, referenceWork));
-                        var actual = Record.Exception(() => actualValue = reader.Tree(data, tree, probabilities, actualWork));
-                        Equal(expected, actual, expectedValue, actualValue, scalar, reader, referenceWork, actualWork);
+                        var expected = Record.Exception(() => expectedValue = scalar.Tree(data, tree, probabilities, referenceContext));
+                        var actual = Record.Exception(() => actualValue = reader.Tree(data, tree, probabilities, actualContext));
+                        Equal(expected, actual, expectedValue, actualValue, scalar, reader, referenceContext, actualContext);
                     }
     }
 
@@ -172,35 +165,19 @@ public sealed class Vp8BooleanReaderTests
         OperationContext context, bool previousZero) => reader.CoefficientToken(data, probabilities, context, previousZero);
 
     private static int? CompareCoefficientToken(byte[] partition, byte[] data, byte[] probabilities,
-        int range, int value, int shift, long budget, bool previousZero, bool cancelled = false)
+        int range, int value, int shift, bool previousZero, bool cancelled = false)
     {
         using var cancellation = new CancellationTokenSource();
         var reader = Reader(partition, range, value, shift);
         var scalar = new Scalar(partition.Length, range, value, shift);
-        var actualWork = new OperationContext(new ImageLimits { MaxWork = Math.Max(1, budget) }, cancellation.Token);
-        var referenceWork = new OperationContext(new ImageLimits { MaxWork = Math.Max(1, budget) }, cancellation.Token);
-        if (budget == 0) { actualWork.Work(1); referenceWork.Work(1); }
+        var actualContext = new OperationContext(new ImageLimits { }, cancellation.Token);
+        var referenceContext = new OperationContext(new ImageLimits { }, cancellation.Token);
         if (cancelled) cancellation.Cancel();
         int? expectedToken = null, actualToken = null;
-        var expected = Record.Exception(() => expectedToken = scalar.Tree(data, CoefficientTree, probabilities, referenceWork, previousZero ? 2 : 0));
-        var actual = Record.Exception(() => actualToken = CoefficientToken(ref reader, data, probabilities, actualWork, previousZero));
-        Equal(expected, actual, expectedToken, actualToken, scalar, reader, referenceWork, actualWork);
+        var expected = Record.Exception(() => expectedToken = scalar.Tree(data, CoefficientTree, probabilities, referenceContext, previousZero ? 2 : 0));
+        var actual = Record.Exception(() => actualToken = CoefficientToken(ref reader, data, probabilities, actualContext, previousZero));
+        Equal(expected, actual, expectedToken, actualToken, scalar, reader, referenceContext, actualContext);
         return expected is null ? expectedToken : null;
-    }
-
-    [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public void CoefficientTokensCoverEveryLeafAndPreserveEachPartialWorkBudget(bool previousZero)
-    {
-        var leaves = new HashSet<int>(); var probabilities = Enumerable.Repeat((byte)128, 11).ToArray();
-        for (var value = 0; value < 255; value++)
-            for (var budget = 1; budget <= 8; budget++)
-            {
-                byte[] data = [(byte)value, 0x53, 0xad, 0x17, 0x80, 0x5a, 0, 0];
-                var token = CompareCoefficientToken(data, data, probabilities, 255, value, 7, budget, previousZero);
-                if (token is not null) leaves.Add(token.Value);
-            }
-        Assert.Equal(Enumerable.Range(0, previousZero ? 11 : 12), leaves.Order());
     }
 
     [Theory]
@@ -214,28 +191,27 @@ public sealed class Vp8BooleanReaderTests
                 foreach (var value in new[] { 0, range / 2, range - 1, range })
                     foreach (var shift in new[] { 0, 3, 7 })
                         foreach (var length in new[] { 1, 2, 8 })
-                            foreach (var budget in new[] { 1, 2, 4, 8 })
                             {
                                 byte[] bytes = [0, 0x53, 0xad, 0x17, 0x80, 0x5a, 0, 0]; var partition = bytes[..length];
-                                CompareCoefficientToken(partition, partition, p, range, value, shift, budget, previousZero);
-                                CompareCoefficientToken(partition, partition[..(length - 1)], p, range, value, shift, budget, previousZero);
+                                CompareCoefficientToken(partition, partition, p, range, value, shift, previousZero);
+                                CompareCoefficientToken(partition, partition[..(length - 1)], p, range, value, shift, previousZero);
                             }
         for (var length = 0; length < 11; length++)
             for (var value = 0; value < 255; value++)
             {
                 byte[] data = [0, 0x53, 0xad, 0x17, 0x80, 0x5a, 0, 0];
-                CompareCoefficientToken(data, data, probabilities[0][..length], 255, value, 7, 8, previousZero);
+                CompareCoefficientToken(data, data, probabilities[0][..length], 255, value, 7, previousZero);
             }
     }
 
     [Fact]
-    public void CoefficientTokenCancellationAndExhaustedWorkPreserveValidationOrder()
+    public void CoefficientTokenCancellationAndExhaustedPreserveValidationOrder()
     {
         foreach (var previousZero in new[] { false, true })
             foreach (var length in new[] { 0, 1, 11 })
                 foreach (var value in new[] { 0, 255 })
                     foreach (var cancelled in new[] { false, true })
-                        CompareCoefficientToken([0], [], new byte[length], 255, value, 7, 0, previousZero, cancelled);
+                        CompareCoefficientToken([0], [], new byte[length], 255, value, 7, previousZero, cancelled);
     }
 
     // Retained original bit-by-bit recurrence, independently of any bulk path.
@@ -245,7 +221,7 @@ public sealed class Vp8BooleanReaderTests
         public int[] State => [position, end, shift, range, value];
         public int Read(ReadOnlySpan<byte> data, int probability, OperationContext context)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if ((uint)probability > 255) throw new ArgumentOutOfRangeException(nameof(probability));
             if (value >= range) throw new ImageDataException("Invalid VP8 arithmetic interval.");
             var boundary = 1 + ((range - 1) * probability >> 8); var bit = value >= boundary ? 1 : 0;

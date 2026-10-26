@@ -25,8 +25,8 @@ internal sealed class Vp8lPalettePlan : IDisposable
         PackingBits = count <= 2 ? 3 : count <= 4 ? 2 : count <= 16 ? 1 : 0;
         CodedWidth = (width + (1 << PackingBits) - 1) >> PackingBits;
         PackedPixelCount = CodedWidth * height;
-        context.Work(0); context.Reserve(count * 8L);
-        try { context.Work(0); samples = new uint[count * 2]; }
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(count * 8L);
+        try { context.Cancellation.ThrowIfCancellationRequested(); samples = new uint[count * 2]; }
         catch { context.Release(count * 8L); throw; }
     }
 
@@ -71,9 +71,9 @@ internal static class Vp8lReferencePalette
     private static int Find(uint value, ReadOnlySpan<uint> keys, ReadOnlySpan<ushort> indices, OperationContext context)
     {
         var slot = (int)(unchecked(value * 0x9e3779b9u) >> 23);
-        context.Work(1);
+        context.Cancellation.ThrowIfCancellationRequested();
         while (indices[slot] != 0 && keys[slot] != value)
-        { context.Work(1); slot = (slot + 1) & (Slots - 1); }
+        { context.Cancellation.ThrowIfCancellationRequested(); slot = (slot + 1) & (Slots - 1); }
         return slot;
     }
 
@@ -81,14 +81,14 @@ internal static class Vp8lReferencePalette
     {
         // Numeric order is independent of collection-table positions. At most
         // 256 elements bound this sort and its cancellation interval.
-        context.Work(colors.Length * 16L); colors.Sort();
+        context.Cancellation.ThrowIfCancellationRequested(); colors.Sort();
         if (order == Vp8lPaletteOrder.ModifiedZeng)
         { Vp8lPaletteAdjacency.Reorder(colors, working, width, context); return; }
         var minimizeDeltas = order == Vp8lPaletteOrder.MinDelta;
         var positive = 0; var negative = 0; uint previous = 0;
         foreach (var color in colors)
         {
-            context.Work(4);
+            context.Cancellation.ThrowIfCancellationRequested();
             var delta = Difference(color, previous); previous = color;
             for (var channel = 0; channel < 3; channel++)
             {
@@ -108,7 +108,7 @@ internal static class Vp8lReferencePalette
                 var winner = at; var best = int.MaxValue;
                 for (var trial = at; trial < active; trial++)
                 {
-                    context.Work(4);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     var cost = Distance(colors[trial], previous);
                     if (cost < best) { best = cost; winner = trial; }
                 }
@@ -117,7 +117,7 @@ internal static class Vp8lReferencePalette
         }
         if (!minimizeDeltas && colors.Length > 17 && colors[0] == 0)
         {
-            context.Work(colors.Length);
+            context.Cancellation.ThrowIfCancellationRequested();
             colors[1..].CopyTo(colors); colors[^1] = 0;
         }
     }
@@ -136,8 +136,8 @@ internal static class Vp8lReferencePalette
         long scratch = 0;
         try
         {
-            context.Work(0); context.Reserve(ScratchBytes); scratch = ScratchBytes;
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(ScratchBytes); scratch = ScratchBytes;
+            context.Cancellation.ThrowIfCancellationRequested();
             var keys = new uint[Slots]; var indices = new ushort[Slots];
             var colors = result.WritableColors; var found = 0;
             foreach (var pixel in working)
@@ -152,10 +152,10 @@ internal static class Vp8lReferencePalette
             var deltas = result.WritableDeltas; uint previous = 0;
             for (var i = 0; i < colorCount; i++)
             {
-                context.Work(4); deltas[i] = Difference(colors[i], previous); previous = colors[i];
+                context.Cancellation.ThrowIfCancellationRequested(); deltas[i] = Difference(colors[i], previous); previous = colors[i];
             }
             result.OmitImplicitZero();
-            context.Work(Slots); indices.AsSpan().Clear();
+            context.Cancellation.ThrowIfCancellationRequested(); indices.AsSpan().Clear();
             for (var i = 0; i < colorCount; i++)
             {
                 var slot = Find(colors[i], keys, indices, context);
@@ -164,7 +164,7 @@ internal static class Vp8lReferencePalette
             for (var y = 0; y < height; y++)
             for (var block = 0; block < result.CodedWidth; block++)
             {
-                context.Work(1); uint value = 0;
+                context.Cancellation.ThrowIfCancellationRequested(); uint value = 0;
                 for (var at = 0; at < (1 << result.PackingBits) && (block << result.PackingBits) + at < width; at++)
                 {
                     var source = y * width + (block << result.PackingBits) + at;

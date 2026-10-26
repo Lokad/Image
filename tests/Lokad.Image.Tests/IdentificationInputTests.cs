@@ -13,7 +13,7 @@ public sealed class IdentificationInputTests
     }
 
     [Fact]
-    public void InputWorkAndWorkingLimitsPreserveConsumedReadsAndFailureOrder()
+    public void InputAndWorkingLimitsPreserveConsumedReadsAndFailureOrder()
     {
         foreach (var length in new[] { 33, 8193, 218775 })
         foreach (var chunk in new[] { 257, 8192 })
@@ -35,10 +35,10 @@ public sealed class IdentificationInputTests
             foreach (var maximum in new[] { 1L, length - 1, length })
             {
                 Compare(length, chunk, ImageLimits.Default with { MaxInputBytes = (int)maximum });
-                Compare(length, chunk, ImageLimits.Default with { MaxWork = maximum });
+                Compare(length, chunk, ImageLimits.Default);
             }
         }
-        for (var budget = 1; budget <= 67; budget++) Compare(67, 3, ImageLimits.Default with { MaxWork = budget });
+        Compare(67, 3, ImageLimits.Default);
     }
 
     [Fact]
@@ -70,13 +70,12 @@ public sealed class IdentificationInputTests
         var current = Run(data, chunk, limits, fast: true, fail, cancel);
         Assert.Equal(original.Bytes, current.Bytes);
         Assert.Equal(original.Error, current.Error);
-        Assert.Equal(original.RemainingWork, current.RemainingWork);
         Assert.Equal(original.RemainingWorking, current.RemainingWorking);
         Assert.Equal(original.Reads, current.Reads); Assert.Equal(original.Consumed, current.Consumed);
         Assert.Equal(original.CanceledWithExpectedToken, current.CanceledWithExpectedToken);
         Assert.Equal(Bytes(length, 31), data);
     }
-    private sealed record Outcome(byte[]? Bytes, Type? Error, long RemainingWork, long RemainingWorking, int Reads, int Consumed, bool CanceledWithExpectedToken);
+    private sealed record Outcome(byte[]? Bytes, Type? Error, long RemainingWorking, int Reads, int Consumed, bool CanceledWithExpectedToken);
     private static Outcome Run(byte[] bytes, int chunk, ImageLimits limits, bool fast, bool fail, bool cancel)
     {
         using var cts = new CancellationTokenSource(); using var reader = new Reader(bytes, chunk, fail, cancel ? cts : null);
@@ -88,7 +87,7 @@ public sealed class IdentificationInputTests
         }
         catch (Exception e) { error = e; }
         Assert.True(reader.CanRead);
-        return new(result, error?.GetType(), context.RemainingWork, context.RemainingWorkingBytes, reader.Reads, reader.Consumed,
+        return new(result, error?.GetType(), context.RemainingWorkingBytes, reader.Reads, reader.Consumed,
             error is OperationCanceledException canceled && canceled.CancellationToken == cts.Token);
     }
     // Buffered reference for synchronous Identify admission. Decode uses
@@ -118,7 +117,6 @@ public sealed class IdentificationInputTests
                 buffer.Capacity = (int)capacity;
             }
             buffer.Write(scratch.AsSpan(0, read));
-            context.Work(read);
         }
         if (buffer.Capacity + buffer.Length + scratch.Length > limits.MaxWorkingBytes)
             throw new ImageLimitException(ImageLimitKind.WorkingBytes, "Stream buffering memory limit exceeded.");

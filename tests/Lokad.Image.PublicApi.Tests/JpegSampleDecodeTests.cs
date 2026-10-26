@@ -139,25 +139,6 @@ public sealed class JpegSampleDecodeTests
             new() { ApplyOrientation = true, Limits = options.Limits }));
     }
 
-    [Theory]
-    [InlineData(JpegSampleFormat.Grayscale)] [InlineData(JpegSampleFormat.Rgb)]
-    public void WorkFailuresKeepTheCompletedRowPrefixAndDoNotPoisonLaterCalls(JpegSampleFormat format)
-    {
-        var encoded = AuthoredJpeg.GrayscaleDcGrid(8, 8, false);
-        var result = new byte[64 * (int)format];
-        var budget = new ImageBudget(ImageLimits.Default.MaxWorkingBytes, ImageLimits.Default.MaxWork);
-        budget.DecodeJpeg(encoded, result, format);
-        var work = budget.ConsumedWork;
-        result.AsSpan().Fill(0xA7);
-        var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.DecodeJpeg(encoded, result, format,
-            options: new() { Limits = new() { MaxWork = work - 1 } }));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (failure.Limit, failure.Scope));
-        Assert.All(result.AsSpan(0, 56 * (int)format).ToArray(), value => Assert.Equal(0, value));
-        Assert.All(result.AsSpan(56 * (int)format).ToArray(), value => Assert.Equal(0xA7, value));
-        ImageCodec.DecodeJpeg(encoded, result, format);
-        Assert.All(result, value => Assert.Equal(0, value));
-    }
-
     [Fact]
     public void InvalidLayoutsAndOverlapFailBeforeWritingAndDisjointSlicesAreAllowed()
     {
@@ -176,32 +157,5 @@ public sealed class JpegSampleDecodeTests
         ImageCodec.DecodeJpeg(shared.AsSpan(0, data.Length), shared.AsSpan(data.Length), JpegSampleFormat.Rgb);
         Assert.Equal(data, shared.AsSpan(0, data.Length).ToArray());
         Assert.All(shared.AsSpan(data.Length).ToArray().Chunk(3), pixel => Assert.Equal(new byte[] { 45, 105, 205 }, pixel));
-    }
-
-    [Fact]
-    public void CallerOwnershipSurvivesSharedBudgetReleaseAndFailuresDoNotClaimPixels()
-    {
-        var data = AuthoredJpeg.DirectRgb();
-        var limits = new ImageLimits { MaxWorkingBytes = 1024 * 1024, MaxWork = 1_000_000 };
-        var budget = new ImageBudget(limits.MaxWorkingBytes + 192, limits.MaxWork * 2);
-        var result = new byte[192];
-        using (budget.Reserve(result.Length))
-        {
-            budget.DecodeJpeg(data, result, JpegSampleFormat.Rgb, options: new() { Limits = limits });
-            Assert.Equal(limits.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        }
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        Assert.Equal(budget.MaxWork - budget.ConsumedWork, budget.RemainingWork);
-        Assert.All(result.Chunk(3), pixel => Assert.Equal(new byte[] { 45, 105, 205 }, pixel));
-        var empty = new ImageBudget(0, limits.MaxWork);
-        var failure = Assert.Throws<ImageLimitException>(() => empty.DecodeJpeg(data, result, JpegSampleFormat.Rgb,
-            options: new() { Limits = limits }));
-        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (failure.Limit, failure.Scope));
-        Assert.Equal(0, empty.ConsumedWork);
-        using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
-        var canceled = Assert.Throws<OperationCanceledException>(() => empty.DecodeJpeg(data, result,
-            JpegSampleFormat.Rgb, cancellationToken: cancellation.Token));
-        Assert.Equal(cancellation.Token, canceled.CancellationToken);
-        Assert.All(result.Chunk(3), pixel => Assert.Equal(new byte[] { 45, 105, 205 }, pixel));
     }
 }

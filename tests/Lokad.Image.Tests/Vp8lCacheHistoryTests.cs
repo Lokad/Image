@@ -22,11 +22,10 @@ public sealed class Vp8lCacheHistoryTests
         return result.ToArray();
     }
     [Fact]
-    public void FrozenHistogramsChoicesWorkAndEveryPrefixCacheRemainExact()
+    public void FrozenHistogramsChoicesAndEveryPrefixCacheRemainExact()
     {
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
-        long compared = 0; long maximumWork = 0;
-        for (var test = 0; test < 2048; test++)
+        long compared = 0; for (var test = 0; test < 2048; test++)
         {
             var length = 1 + (int)(Next() % 257); var maximumBits = test % 11; var pixels = new uint[length];
             for (var i = 0; i < length; i++) pixels[i] = (test % 6) switch {
@@ -39,9 +38,8 @@ public sealed class Vp8lCacheHistoryTests
             if (!Vp8lReferenceCache.TryBestBitsWithHistory(pixels, a, b, maximumBits, candidate, out var ca, out var cb))
             { ca = Vp8lReferenceCache.BestBits(pixels, a, maximumBits, candidate); cb = Vp8lReferenceCache.BestBits(pixels, b, maximumBits, candidate); }
             var after = (ca, cb);
-            if (before != after || original.ConsumedWork != candidate.ConsumedWork)
-                throw new Exception($"Choice/work/cleanup mismatch at {test}: {before}/{after} {original.ConsumedWork}/{candidate.ConsumedWork}");
-            if (original.ConsumedWork > Vp8lReferenceCache.HistoryWorkBound(pixels.Length,a.Length,b.Length,maximumBits)) throw new Exception("Work bound underestimated");
+            if (before != after)
+                throw new Exception($"Choice/cleanup mismatch at {test}: {before}/{after}");
             var history = new byte[length];
             Vp8lReferenceCache.BuildHistory(pixels, maximumBits, new uint[(1 << (maximumBits + 1)) - 2], history);
             for (var bits = 1; bits <= maximumBits; bits++)
@@ -67,9 +65,8 @@ public sealed class Vp8lCacheHistoryTests
             }
             hash.AppendData(MemoryMarshal.AsBytes(pixels.AsSpan()));
             int[] choice=[before.Item1,before.Item2];hash.AppendData(MemoryMarshal.AsBytes(choice.AsSpan()));
-            maximumWork=Math.Max(maximumWork,original.ConsumedWork);
         }
-        Assert.Equal(24558, compared); Assert.Equal(95762, maximumWork);
+        Assert.Equal(24558, compared);
         Assert.Equal("3173bdbb95d0152e56e89d294a53b1e6b4f34b7ba4ccc8cf1a0e66c6d0b3a1ab", Convert.ToHexStringLower(hash.GetHashAndReset()));
     }
 }
@@ -83,18 +80,16 @@ public sealed class Vp8lCacheHistoryAdmissionTests
     private const long Scratch = 64_372;
 
     [Fact]
-    public void ZeroWidthCancellableTightWorkAndTightLocalCasesSelectBeforeAdmission()
+    public void ZeroWidthCancellableAndTightLocalCasesSelectBeforeAdmission()
     {
         using var root = new TestMemoryBudget(100_000); using var cancellation = new CancellationTokenSource();
-        var bound = Vp8lReferenceCache.HistoryWorkBound(Pixels.Length, First.Length, Second.Length, 10);
-        for (var kind = 0; kind < 4; kind++)
+        for (var kind = 0; kind < 3; kind++)
         {
             using var context = new OperationContext(new() { MemoryBudget = root,
-                MaxWork = kind == 1 ? bound - 1 : 2_000_000_000,
                 MaxWorkingBytes = kind == 2 ? Scratch - 1 : 100_000 }, kind == 0 ? cancellation.Token : default);
             var attempts = root.GrowthAttempts;
-            Assert.False(Vp8lReferenceCache.TryBestBitsWithHistory(Pixels, First, Second, kind == 3 ? 0 : 10, context, out _, out _));
-            Assert.Equal(attempts, root.GrowthAttempts); Assert.Equal(0, context.ConsumedWork); Assert.Equal(0, root.Bytes);
+            Assert.False(Vp8lReferenceCache.TryBestBitsWithHistory(Pixels, First, Second, kind == 1 ? 0 : 10, context, out _, out _));
+            Assert.Equal(attempts, root.GrowthAttempts); Assert.Equal(0, root.Bytes);
         }
         Assert.False(root.IsDisposed);
     }
@@ -107,8 +102,7 @@ public sealed class Vp8lCacheHistoryAdmissionTests
         root.RefuseAtGrowth = 1;
         var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceCache.TryBestBitsWithHistory(Pixels, First, Second, 10, context, out _, out _));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
-        Assert.Equal(1, root.Refusals); Assert.Equal(1, root.GrowthAttempts); Assert.Equal(0, root.Bytes); Assert.Equal(0, context.ConsumedWork);
-        root.RefuseAtGrowth = 0; var observed = false;
+        Assert.Equal(1, root.Refusals); Assert.Equal(1, root.GrowthAttempts); Assert.Equal(0, root.Bytes);         root.RefuseAtGrowth = 0; var observed = false;
         root.Admitted = _ => { Assert.Equal(Scratch, root.Bytes); observed = true; };
         using var next = new OperationContext(new() { MemoryBudget = root }, default);
         Assert.True(Vp8lReferenceCache.TryBestBitsWithHistory(Pixels, First, Second, 10, next, out _, out _));
@@ -116,7 +110,7 @@ public sealed class Vp8lCacheHistoryAdmissionTests
     }
 
     [Fact]
-    public void OneRootGovernsConcurrentOwnersAndReleaseAllowsSubsequentWork()
+    public void OneRootGovernsConcurrentOwnersAndReleaseAllowsSubsequent()
     {
         using var root = new TestMemoryBudget(Scratch + 1023);
         using var owner = new OperationContext(new() { MemoryBudget = root }, default); owner.Reserve(1024);

@@ -21,7 +21,7 @@ internal sealed class JpegHuffman
         var code = 0; var offset = 0;
         for (var length = 1; length <= 16; length++)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             var count = lengthCounts[length - 1];
             // JPEG reserves the all-ones code, including at the longest length,
             // so padding can never decode to a valid symbol.
@@ -35,7 +35,7 @@ internal sealed class JpegHuffman
         // Original eight-bit prefixes derived from this encoded canonical
         // table (T.81 C.2). Packed symbol/length entries; zero means fallback.
         // Admit all additional storage before allocating it, on every decode.
-        context.Reserve(256 * sizeof(ushort)); context.Work(256); shortCodes = new ushort[256];
+        context.Reserve(256 * sizeof(ushort)); context.Cancellation.ThrowIfCancellationRequested(); shortCodes = new ushort[256];
         for (var length = 1; length <= 8; length++)
         for (var index = 0; index < counts[length]; index++)
         {
@@ -44,10 +44,10 @@ internal sealed class JpegHuffman
             shortCodes.AsSpan(prefix, 1 << (8 - length)).Fill(packed);
         }
         // Only tables with nine/ten-bit codes need the additional canonical
-        // lookup. Fixed short-code tables keep their original storage/work.
+        // lookup. Fixed short-code tables keep their original storage.
         if (counts[9] != 0 || counts[10] != 0)
         {
-            context.Reserve(1024 * sizeof(ushort)); context.Work(1024); longCodes = new ushort[1024];
+            context.Reserve(1024 * sizeof(ushort)); context.Cancellation.ThrowIfCancellationRequested(); longCodes = new ushort[1024];
             for (var length = 9; length <= 10; length++)
             for (var index = 0; index < counts[length]; index++)
             {

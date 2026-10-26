@@ -16,8 +16,8 @@ internal sealed class Vp8lPredictionPlan : IDisposable
     {
         ArgumentOutOfRangeException.ThrowIfNegative(length);
         this.context = context; SelectedBits = selectedBits; StoredBits = storedBits; EntropyCost = entropyCost;
-        context.Work(0); context.Reserve(length);
-        try { context.Work(0); modes = new byte[length]; }
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(length);
+        try { context.Cancellation.ThrowIfCancellationRequested(); modes = new byte[length]; }
         catch { context.Release(length); throw; }
     }
 
@@ -56,10 +56,10 @@ internal static class Vp8lReferencePredictor
             // Flat reusable level histograms, accumulated counts, mode counts and
             // candidate maps; the coarse allowance covers the small owner arrays.
             reserved = levels * LevelSize * 4L + mapLength + 512;
-            context.Work(0); context.Reserve(reserved);
+            context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
             try
             {
-                context.Work(0);
+                context.Cancellation.ThrowIfCancellationRequested();
                 data = new int[levels * LevelSize]; maps = new byte[mapLength];
                 offsets = new int[levels]; columns = new int[levels];
                 var offset = 0;
@@ -84,7 +84,7 @@ internal static class Vp8lReferencePredictor
             for (var at = 0; at < histogram.Length; at += 4096)
             {
                 var count = Math.Min(4096, histogram.Length - at);
-                context.Work(count); histogram.Slice(at, count).Clear();
+                context.Cancellation.ThrowIfCancellationRequested(); histogram.Slice(at, count).Clear();
             }
             if (level == 0 && greenOnly)
                 Vp8lGreenPredictorHistogram.Build(pixels, width, height, x0, y0, bits, histogram, context);
@@ -93,7 +93,7 @@ internal static class Vp8lReferencePredictor
                 for (var y = y0; y < Math.Min(y0 + (1 << bits), height); y++)
                 for (var x = x0; x < Math.Min(x0 + (1 << bits), width); x++)
                 {
-                    context.Work(56);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     var at = y * width + x; var actual = pixels[at];
                     for (var mode = 0; mode < 14; mode++)
                     {
@@ -122,7 +122,7 @@ internal static class Vp8lReferencePredictor
                     var lower = Histogram(level - 1);
                     for (var at = 0; at < histogram.Length; at += 4096)
                     {
-                        var count = Math.Min(4096, histogram.Length - at); context.Work(count);
+                        var count = Math.Min(4096, histogram.Length - at); context.Cancellation.ThrowIfCancellationRequested();
                         for (var i = at; i < at + count; i++) histogram[i] += lower[i];
                     }
                 }
@@ -139,7 +139,7 @@ internal static class Vp8lReferencePredictor
                 if (cost < best) { best = cost; chosen = mode; }
             }
             modes[tile] = (byte)chosen; Frequency(level)[chosen]++;
-            context.Work(1024);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var i = 0; i < 1024; i++) history[i] += histogram[chosen * 1024 + i];
         }
 
@@ -162,7 +162,7 @@ internal static class Vp8lReferencePredictor
                 var step = 1 << (bits - selected); var same = true;
                 for (var y = 0; same && y < oldRows; y++)
                 {
-                    context.Work(oldColumns);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     for (var x = 0; x < oldColumns; x++)
                         if (original[y * oldColumns + x] != original[(y / step * step) * oldColumns + x / step * step])
                         { same = false; break; }
@@ -177,7 +177,7 @@ internal static class Vp8lReferencePredictor
                 var destination = result.Writable;
                 for (var y = 0; y < newRows; y++)
                 {
-                    context.Work(newColumns);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     for (var x = 0; x < newColumns; x++)
                         destination[y * newColumns + x] = original[y * stride * oldColumns + x * stride];
                 }
@@ -211,7 +211,7 @@ internal static class Vp8lReferencePredictor
                 var modes = result.Writable;
                 for (var at = 0; at < modes.Length; at += 4096)
                 {
-                    var count = Math.Min(4096, modes.Length - at); context.Work(count); modes.Slice(at, count).Fill(11);
+                    var count = Math.Min(4096, modes.Length - at); context.Cancellation.ThrowIfCancellationRequested(); modes.Slice(at, count).Fill(11);
                 }
             }
             else
@@ -229,19 +229,19 @@ internal static class Vp8lReferencePredictor
     private static void Apply(Span<uint> working, int width, Vp8lPredictionPlan plan, OperationContext context)
     {
         var scratch = width * 8L;
-        context.Work(0); context.Reserve(scratch);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(scratch);
         try
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             var rows = new uint[width * 2];
             var previous = rows.AsSpan(0, width); var current = rows.AsSpan(width);
             var modes = plan.Modes; var columns = Ceil(width, plan.StoredBits);
             for (var y = 0; y < working.Length / width; y++)
             {
-                context.Work(width); working.Slice(y * width, width).CopyTo(current);
+                context.Cancellation.ThrowIfCancellationRequested(); working.Slice(y * width, width).CopyTo(current);
                 for (var x = 0; x < width; x++)
                 {
-                    context.Work(4);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     var prediction = y == 0 ? x == 0 ? 0xff000000u : current[x - 1]
                         : x == 0 ? previous[x]
                         : WebpLosslessDecoder.Predict(modes[(y >> plan.StoredBits) * columns + (x >> plan.StoredBits)],

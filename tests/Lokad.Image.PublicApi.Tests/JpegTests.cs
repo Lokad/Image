@@ -71,7 +71,7 @@ public sealed class JpegTests
     public void ProgressiveMutationsStayWithinDocumentedFailuresAndLimits()
     {
         var original = AuthoredJpeg.RefinedBlock();
-        var options = new DecodeOptions { Limits = new ImageLimits { MaxPixels = 1024, MaxDimension = 32, MaxWork = 1_000_000, MaxWorkingBytes = 128 * 1024 } };
+        var options = new DecodeOptions { Limits = new ImageLimits { MaxPixels = 1024, MaxDimension = 32, MaxWorkingBytes = 128 * 1024 } };
         for (var position = 0; position < original.Length; position++)
         foreach (var mask in new byte[] { 1, 0x80, 0xFF })
         {
@@ -131,7 +131,6 @@ public sealed class JpegTests
         for (var length = 2; length < bytes.Length; length++)
             Assert.Throws<ImageDataException>(() => ImageCodec.Decode(bytes.AsSpan(0, length)));
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(bytes, new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = bytes.Length + 1024 } }));
-        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(bytes, new DecodeOptions { Limits = new ImageLimits { MaxWork = 1 } }));
         using var output = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeJpeg(source, output, new JpegEncodeOptions { Limits = new ImageLimits { MaxOutputBytes = 1 } }));
         Assert.Throws<OperationCanceledException>(() => ImageCodec.Decode(bytes, cancellationToken: new CancellationToken(true)));

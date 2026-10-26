@@ -158,28 +158,4 @@ public sealed class Vp8lReferenceHuffmanTests
         using var next = Vp8lHuffmanCode.Build([1, 2, 5, 9], nextContext);
         next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
-
-    [Fact]
-    public void LateAuxiliaryWorkFailureReleasesTreesButKeepsOwnedOutputUntilDisposal()
-    {
-        Vp8lToken[] tokens; long work;
-        using (var calibration = new OperationContext(ImageLimits.Default, default))
-        {
-            var pixels = Map(false, calibration);
-            using var matches = Vp8lReferenceMatcher.Build(pixels, 65, 75, false, calibration);
-            using var parsed = Vp8lReferenceLz.Encode(pixels, matches.Values, 65, true, calibration); tokens = parsed.Tokens.ToArray();
-            using var output = EncodedOutput.Segmented(calibration); var writer = new WebpBitWriter(output.Target, calibration);
-            var start = calibration.ConsumedWork; Vp8lReferenceHuffman.WriteAuxiliary(writer, tokens, 65, calibration); work = calibration.ConsumedWork - start;
-        }
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        using var failedOutput = EncodedOutput.Segmented(context); var failedWriter = new WebpBitWriter(failedOutput.Target, context);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceHuffman.WriteAuxiliary(failedWriter, tokens, 65, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(65536 + 320, root.Bytes); failedOutput.Dispose(); Assert.Equal(0, root.Bytes);
-        using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
-        using var nextOutput = EncodedOutput.Segmented(nextContext); var nextWriter = new WebpBitWriter(nextOutput.Target, nextContext);
-        Vp8lReferenceHuffman.WriteAuxiliary(nextWriter, tokens, 65, nextContext); nextWriter.Finish();
-        nextOutput.Dispose(); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
-    }
 }

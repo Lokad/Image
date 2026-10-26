@@ -13,7 +13,7 @@ codecs, retained images, and independent font/layout disposal.
 
 Focused tests cover concurrent aggregate admission, borrowed caller scopes and
 samples, independently retained results, clone/replacement peaks, overlapping
-encoded-input growth, nested output callbacks/orientation, local work quotas,
+encoded-input growth, nested output callbacks/orientation, local memory limits,
 terminal refusal, cancellation during actual reads/writes, cleanup and subsequent
 reuse. Forced refusal at every growth admission of twelve fixed tiny operations
 covers PNG/JPEG/VP8L/VP8 decode/encode, fonts, layouts, resizing and inspection.

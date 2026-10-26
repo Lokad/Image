@@ -29,13 +29,12 @@ public sealed class MixedWordColumnBicubicResizeTests
 
     [Theory]
     [InlineData(4095)] [InlineData(4096)]
-    public void WiderStripsKeepFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    public void WiderStripsKeepFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
         using var source = OriginalPixels.Buffer(513, 259, 16);
         source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        const long work = 1027L * 129 * 5 * 10 * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 129 * 8 + scratch, MaxWork = work };
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 1027L * 129 * 8 + scratch};
         using var first = ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic, limits);
         using var second = ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic, limits);
         var expected = OriginalPixels.Bytes(first);
@@ -47,8 +46,6 @@ public sealed class MixedWordColumnBicubicResizeTests
         first.GetRow16(0)[0] ^= 65535;
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 1027, 129, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
         source.GetRow16(258)[512 * 4 + 3] ^= 65535;
@@ -61,13 +58,12 @@ public sealed class MixedWordColumnBicubicResizeTests
 
     [Theory]
     [InlineData(4095)] [InlineData(4096)]
-    public void IdentityWidthKeepsFrozenPixelsAdmissionWorkAndIndependentOwners(int scratch)
+    public void IdentityWidthKeepsFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
         using var source = OriginalPixels.Buffer(513, 259, 16);
         source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        const long work = 513L * 129 * 5 * 10 * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 513L * 129 * 8 + scratch, MaxWork = work };
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 513L * 129 * 8 + scratch};
         using var first = ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic, limits);
         using var second = ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic, limits);
         var expected = OriginalPixels.Bytes(first);
@@ -79,8 +75,6 @@ public sealed class MixedWordColumnBicubicResizeTests
         first.GetRow16(0)[0] ^= 65535;
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 513, 129, ResizeFilter.Bicubic,
             limits, new CancellationToken(true)));
         source.GetRow16(258)[512 * 4 + 3] ^= 65535;

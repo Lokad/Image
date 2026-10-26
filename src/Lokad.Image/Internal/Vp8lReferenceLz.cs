@@ -15,14 +15,14 @@ internal static class Vp8lReferenceLz
             var at = 0;
             while (at < pixels.Length)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var length = (int)(matches[at] & 4095); var distance = (int)(matches[at] >> 12);
                 if (length >= 4)
                 {
                     var farthest = 0; var stop = Math.Min(at + length, pixels.Length - 1);
                     for (var next = at + 1; next <= stop; next++)
                     {
-                        context.Work(1);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         var span = (int)(matches[next] & 4095); var reach = next + (span >= 4 ? span : 1);
                         if (reach > farthest) { length = next - at; farthest = reach; if (reach >= pixels.Length) break; }
                     }
@@ -40,7 +40,7 @@ internal static class Vp8lReferenceLz
         var length = 0; var maximum = Math.Min(4095, pixels.Length - at);
         while (length < maximum)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (pixels[at + length] != pixels[at + length - distance]) break;
             length++;
         }
@@ -69,13 +69,13 @@ internal static class Vp8lReferenceLz
     internal static long Estimate(ReadOnlySpan<Vp8lToken> tokens, int width, OperationContext context, int cacheBits = 0)
     {
         var layout = new Vp8lHistogramLayout(cacheBits);
-        context.Work(0); context.Reserve(layout.Total * 4L);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(layout.Total * 4L);
         try
         {
-            context.Work(0); var counts = new int[layout.Total];
+            context.Cancellation.ThrowIfCancellationRequested(); var counts = new int[layout.Total];
             layout.Fill(tokens, width, false, counts, context);
             var cost = layout.Population(counts, context);
-            context.Work(64);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var code = 0; code < 24; code++) cost += counts[256 + code] * (long)Vp8lSymbols.Extra(code) * Scale;
             for (var code = 0; code < 40; code++) cost += counts[layout.Distance + code] * (long)Vp8lSymbols.Extra(code) * Scale;
             return cost;
@@ -100,22 +100,22 @@ internal static class Vp8lReferenceLz
             layout = new(cacheBits);
             var lengths = Math.Min(4095, length);
             reserved = layout.Total * 12L + lengths * 8L + length * 22L + layout.CacheSize * 4L + 320;
-            context.Work(0); context.Reserve(reserved);
+            context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
             try
             {
-                context.Work(0);
+                context.Cancellation.ThrowIfCancellationRequested();
                 histogram = new int[layout.Total]; prices = new long[layout.Total]; lengthPrices = new long[lengths];
                 costs = new long[length]; pending = new long[length]; path = new ushort[length]; pendingSource = new int[length];
                 cache = new uint[layout.CacheSize];
                 for (var at = 0; at < length; at += 4096)
                 {
-                    var count = Math.Min(4096, length - at); context.Work(count * 2L);
+                    var count = Math.Min(4096, length - at); context.Cancellation.ThrowIfCancellationRequested();
                     costs.AsSpan(at, count).Fill(long.MaxValue); pending.AsSpan(at, count).Fill(long.MaxValue);
                 }
                 layout.Fill(seed, width, true, histogram, context);
                 PricePlane(0, layout.GreenSize); PricePlane(layout.Red, 256); PricePlane(layout.Blue, 256);
                 PricePlane(layout.Alpha, 256); PricePlane(layout.Distance, 40);
-                context.Work(lengths);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var i = 0; i < lengths; i++)
                 {
                     var prefix = Vp8lSymbols.Prefix(i);
@@ -127,7 +127,7 @@ internal static class Vp8lReferenceLz
 
         private void PricePlane(int start, int length)
         {
-            context.Work(length * 2L); var sum = 0; var nonzero = 0;
+            context.Cancellation.ThrowIfCancellationRequested(); var sum = 0; var nonzero = 0;
             for (var i = start; i < start + length; i++) { sum += histogram![i]; if (histogram[i] != 0) nonzero++; }
             if (nonzero <= 1) return;
             var total = Vp8lReferenceEntropy.Log(sum);
@@ -136,7 +136,7 @@ internal static class Vp8lReferenceLz
 
         internal void Resolve(int at)
         {
-            context.Work(1);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (pending![at] < costs![at]) { costs[at] = pending[at]; path![at] = (ushort)(at - pendingSource![at] + 1); }
         }
 
@@ -150,7 +150,7 @@ internal static class Vp8lReferenceLz
 
         internal void Literal(ReadOnlySpan<uint> pixels, int at, long prior)
         {
-            context.Work(4);
+            context.Cancellation.ThrowIfCancellationRequested();
             var pixel = pixels[at]; var hit = false; var key = 0;
             if (layout.CacheBits != 0)
             {
@@ -168,7 +168,7 @@ internal static class Vp8lReferenceLz
         {
             for (var i = 0; i < length; i++)
             {
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var value = prior + lengthPrices![i]; var end = at + i;
                 if (length < 10)
                 {
@@ -216,7 +216,7 @@ internal static class Vp8lReferenceLz
                             var next = at; var nextLength = 0;
                             for (; next <= reach; next++)
                             {
-                                context.Work(1); nextLength = (int)(matches[next + 1] & 4095);
+                                context.Cancellation.ThrowIfCancellationRequested(); nextLength = (int)(matches[next + 1] & 4095);
                                 if ((int)(matches[next + 1] >> 12) != distance) { nextLength = (int)(matches[next] & 4095); break; }
                             }
                             state.Resolve(next - 1); state.Resolve(next);
@@ -228,7 +228,7 @@ internal static class Vp8lReferenceLz
             }
             for (var end = pixels.Length - 1; end >= 0;)
             {
-                context.Work(1); var length = state.PathAt(end);
+                context.Cancellation.ThrowIfCancellationRequested(); var length = state.PathAt(end);
                 if (length < 1) throw new InvalidOperationException("Incomplete VP8L parse path.");
                 var start = end - length + 1;
                 result.Add(length == 1 ? Vp8lToken.Literal(pixels[start]) : Vp8lToken.Copy(length, (int)(matches[start] >> 12)));

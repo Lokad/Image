@@ -8,7 +8,7 @@ public sealed class JpegHuffmanTests
     public void MixedShortCanonicalCodesStopAtCachedPaddingBeforeAMarker()
     {
         var lengths = new byte[16]; lengths[0] = 1; lengths[2] = 2;
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 279 }, default);
+        var context = new OperationContext(ImageLimits.Default, default);
         var table = new JpegHuffman(lengths, new byte[] { 17, 29, 43 }, context);
         // Codes 0,100,101, then one padding bit and RST0.
         var reader = new JpegEntropyReader(new byte[] { 0x4B, 0xFF, 0xD0 }, 0, context);
@@ -16,7 +16,6 @@ public sealed class JpegHuffmanTests
         Assert.Equal(29, table.Read(ref reader)); Assert.Equal(1, reader.Position);
         Assert.Equal(43, table.Read(ref reader)); Assert.Equal(1, reader.Position);
         reader.Restart(0); Assert.Equal(3, reader.Position);
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
     }
 
     [Fact]
@@ -33,17 +32,16 @@ public sealed class JpegHuffmanTests
     public void MarkerAndTightBudgetRetainOriginalFormatFailurePrecedence()
     {
         var lengths = new byte[16]; lengths[7] = 2;
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 273 }, default);
+        var context = new OperationContext(ImageLimits.Default, default);
         var table = new JpegHuffman(lengths, new byte[] { 17, 29 }, context);
         var reader = new JpegEntropyReader(new byte[] { 0xFF, 0xD0 }, 0, context);
         try { table.Read(ref reader); Assert.Fail("A marker cannot supply an eight-bit code."); }
         catch (ImageDataException error) { Assert.Equal("Unexpected marker in JPEG entropy data.", error.Message); }
-        Assert.Equal(2, reader.Position); Assert.Throws<ImageLimitException>(() => context.Work(1));
-    }
+        Assert.Equal(2, reader.Position);     }
 
     [Theory]
     [InlineData(1)] [InlineData(4)] [InlineData(8)] [InlineData(9)] [InlineData(10)] [InlineData(16)]
-    public void OneLengthCanonicalCodesPreserveSymbolsPaddingPositionsAndWork(int length)
+    public void OneLengthCanonicalCodesPreserveSymbolsPaddingPositions(int length)
     {
         var values = length == 1 ? new byte[] { 17 } : new byte[] { 17, 29, 43 };
         var lengths = new byte[16]; lengths[length - 1] = (byte)values.Length;
@@ -59,37 +57,23 @@ public sealed class JpegHuffmanTests
             if (value == 255) bytes.Add(0);
         }
         var payloadBytes = bytes.Count; bytes.Add(255); bytes.Add(0xD0);
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 272 + (length is 9 or 10 ? 1024 : 0) + 3 * length }, default);
+        var context = new OperationContext(ImageLimits.Default, default);
         var table = new JpegHuffman(lengths, values, context);
         var reader = new JpegEntropyReader(bytes.ToArray(), 0, context);
         foreach (var code in codes) Assert.Equal(values[code], table.Read(ref reader));
         Assert.Equal(payloadBytes, reader.Position); reader.Restart(0); Assert.Equal(bytes.Count, reader.Position);
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
     }
 
     [Fact]
-    public void UnassignedFixedPrefixRetainsSixteenBitFailureAndWork()
+    public void UnassignedFixedPrefixRetainsSixteenBitFailure()
     {
         var lengths = new byte[16]; lengths[3] = 2;
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 288 }, default);
+        var context = new OperationContext(ImageLimits.Default, default);
         var table = new JpegHuffman(lengths, new byte[] { 17, 29 }, context);
         var reader = new JpegEntropyReader(new byte[] { 0x20, 0 }, 0, context);
         try { table.Read(ref reader); Assert.Fail("Canonical prefix 0010 is unassigned."); }
         catch (ImageDataException error) { Assert.Equal("Invalid JPEG Huffman code.", error.Message); }
-        Assert.Equal(2, reader.Position); Assert.Throws<ImageLimitException>(() => context.Work(1));
-    }
-
-    [Fact]
-    public void PartialCodeLimitPreservesOneBitAdmissionAndBytePosition()
-    {
-        var lengths = new byte[16]; lengths[3] = 2;
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 275 }, default);
-        var table = new JpegHuffman(lengths, new byte[] { 17, 29 }, context);
-        var reader = new JpegEntropyReader(new byte[] { 0x10 }, 0, context);
-        try { table.Read(ref reader); Assert.Fail("A four-bit code needs four work units."); }
-        catch (ImageLimitException) { Assert.Equal(1, reader.Position); }
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
-    }
+        Assert.Equal(2, reader.Position);     }
 
     [Fact]
     public void LongPrefixStorageIsAdmittedBeforeAllocation()
@@ -102,17 +86,19 @@ public sealed class JpegHuffmanTests
     }
 
     [Theory]
-    [InlineData(1, 7, false)] [InlineData(2, 9, false)] [InlineData(1, 9, true)]
-    public void LongPrefixFallbackPreservesPartialWorkPositionAndFormatPrecedence(int bytes, int budget, bool marker)
+    [InlineData(false)] [InlineData(true)]
+    public void LongPrefixFallbackReportsTruncationAndMarkers(bool marker)
     {
         var lengths = new byte[16]; lengths[9] = 1;
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 1296 + budget }, default);
+        using var context = new OperationContext(ImageLimits.Default, default);
         var table = new JpegHuffman(lengths, new byte[] { 17 }, context);
-        var input = marker ? new byte[] { 0, 255, 0xD0 } : new byte[bytes];
+        var input = marker ? new byte[] { 0, 255, 0xD0 } : new byte[1];
         var reader = new JpegEntropyReader(input, 0, context);
-        try { table.Read(ref reader); Assert.Fail("A ten-bit code cannot complete with this input/work allowance."); }
-        catch (ImageLimitException) { Assert.False(marker); Assert.Equal(bytes, reader.Position); }
-        catch (ImageDataException error) { Assert.True(marker); Assert.Equal("Unexpected marker in JPEG entropy data.", error.Message); Assert.Equal(3, reader.Position); }
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
+        try { table.Read(ref reader); Assert.Fail("Incomplete entropy must reject."); }
+        catch (ImageDataException error)
+        {
+            Assert.Equal(marker ? "Unexpected marker in JPEG entropy data." : "Truncated JPEG entropy data.", error.Message);
+            Assert.Equal(marker ? 3 : 1, reader.Position);
+        }
     }
 }

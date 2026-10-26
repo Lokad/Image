@@ -45,16 +45,6 @@ public sealed class FontOutlineTests
         Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit); Assert.Equal(942, denied.RemainingWorkingBytes);
     }
 
-    [Fact]
-    public void CompositeAndWorkFailuresReleaseEveryPrivateLease()
-    {
-        var cycle = AuthoredTrueType.Build(glyphOverrides: new Dictionary<int, byte[]> { [5] = AuthoredTrueType.Compound([new(5, 0, 0)]) });
-        var font = TrueTypeFont.Load(cycle); var context = new OperationContext(ImageLimits.Default, default); var before = context.RemainingWorkingBytes;
-        Assert.Throws<ImageDataException>(() => font.OutlineForText(5, context)); Assert.Equal(before, context.RemainingWorkingBytes);
-        var work = new OperationContext(new() { MaxWork = 20 }, default); before = work.RemainingWorkingBytes;
-        Assert.Throws<ImageLimitException>(() => font.OutlineForText(2, work)); Assert.Equal(before, work.RemainingWorkingBytes);
-    }
-
     private static FontSegment[] Segments(FontPoint[] points)
     {
         var enumerator = new FontSegmentEnumerator(points, [points.Length - 1]); var result = new List<FontSegment>();

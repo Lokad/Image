@@ -21,7 +21,7 @@ internal readonly struct Vp8lHistogramLayout
     {
         foreach (var token in tokens)
         {
-            context.Work(4);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (token.Code > 0)
             {
                 counts[256 + Vp8lSymbols.Prefix(token.Code).Code]++;

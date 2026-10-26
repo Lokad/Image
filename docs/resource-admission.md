@@ -1,205 +1,56 @@
 # Resource admission
 
-## Caller-owned cooperative memory (0.2.0 development)
+Pass a caller-owned `IMemoryBudget` through `ImageLimits.MemoryBudget` in codec,
+editing and text options. Nested/concurrent calls forward the same borrowed root;
+the package supplies no governor, independent allowance or cumulative CPU quota.
+`MaxWorkingBytes` remains a separate per-operation storage bound, counting borrowed
+inputs as well as results and temporary capacity. Shared admission charges owned
+storage/copies, not caller-owned input storage again.
 
-Set `ImageLimits.MemoryBudget` to an adapter implementing `IMemoryBudget` in
-`Lokad.Image`. Forward the same borrowed root in nested/concurrent operations;
-the package supplies no governor implementation or host dependency. Child scopes
-share its allowance. Zero is valid, negatives throw, refusal is immediate and
-leaves accounting unchanged, and disposed owners reject admission/resizing.
-Scope/reservation disposal is idempotent and nonthrowing; scope disposal refunds
-and invalidates descendants without canceling work or disposing runtime objects.
+`IMemoryScope` starts empty and shares its ancestor's allowance. Reserve capacity
+before allocating, including old/new overlap during replacement. `TryReserve` and
+`TryResize` accept zero, reject negative values, and leave accounting unchanged on
+refusal. Admission/resizing is thread-safe; disposed owners reject it. Dispose
+reservations/scopes idempotently without throwing; scope disposal refunds and
+invalidates descendants. It does not cancel operations or dispose their storage.
+Callers synchronize ancestor disposal with all users.
 
-Owned storage is admitted before allocation, including retained capacities and
-old/new replacement peaks. Caller inputs/budgets are borrowed; copies are charged
-separately. Dispose images, fonts and prepared layouts to release their charges
-promptly. Prepared outlines survive font disposal. Keep the supplied ancestor
-alive and synchronize its disposal with every operation and retained result.
-Async cancellation keeps storage charged until the actual I/O user finishes.
-Governed calls use uncached storage and do not populate unowned global pools.
-Minor allocations are approximate; keep headroom for runtime storage and delayed GC.
+Images, fonts and layouts own retained charges until explicit disposal. Prepared
+layouts own decoded outlines and remain usable after font disposal. Finish all
+row-span/async users before disposing their owner. No refund depends on collection,
+finalizers or weak-table tracking. Caller roots, inputs and streams stay borrowed.
+Copies are charged separately. Temporary owners release on every exit; growing
+buffers cover retained capacity and replacement overlap. Asynchronous owners stay
+charged until actual reads/writes finish, including cancellation and failure.
 
-Refusal raises `ImageLimitException` (`WorkingBytes`, `SharedBudget`), stops the
-operation and releases relinquished storage. It never waits, retries or selects
-a fallback after refusal. Cancellation and allocation failure remain distinct.
-Local limits and cumulative `ImageBudget` work quotas continue independently.
+Shared refusal throws `ImageLimitException` with `WorkingBytes` and `SharedBudget`,
+terminates the affected operation and releases unused/relinquished reservations.
+There is no retry, wait, eviction or lower-memory fallback after refusal. A local
+workspace-dependent path may be chosen before admission; that does not make shared
+refusal recoverable. Cancellation and allocation failure remain distinct.
 
-The JPEG encoder borrows pixels. Its 8 KiB fixed owner covers a 512-byte MCU,
-a bounded18×18 packed tile reused from RGB through signed horizontal chroma,
-stack plans, a 54-byte caller row and transform scratch; sampling needs no
-full-frame YUV workspace. The quantization plan uses256 stack bytes. Optimal tables
-use preparation and emission passes; bounded entropy records can avoid repeated
-pixel work. Color restarts use fixed format tables in one pass. It admits
-16 KiB for retained coding tables and coarse
-temporary table-building capacity before allocation, including grayscale tree/
-priority-queue replacement peaks. Grayscale uses a single64-byte block. Scratch is released after
-each builder; codec workspace releases when its producer finishes, while encoded chunks remain
-charged until their actual I/O users finish. Refusal is terminal.
-Entropy output has a lazy 512-byte buffer plus 128 bytes of coarse metadata,
-admitted separately before allocation and released before asynchronous delivery.
+Meaningful local bounds remain positive: dimension32768, pixels32million,
+input/output64MiB each, working512MiB, metadata4MiB, container/EXIF items100000.
+Codec/managed buffer-length ceilings also apply. Cancellation is cooperative,
+with direct checkpoints in long loops and before substantial allocations;
+it is not a CPU/time quota. Drawing/stream failure may leave a completed prefix.
 
-JPEG4:4:4 cache selection covers its worst replacement peak and table workspace.
-A tighter declared `MaxWorkingBytes` selects recomputation before admission;
-a shared-root refusal never triggers that alternative. The representative
-513×259 RGBA8 cache audit peaks at3,085,708 B including the531,468 B source owner;
-[benchmark evidence](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md) gives its scope.
+Substantial ownership boundaries include codec planes/tables/trees/history,
+input/output capacity, resize tables/caches/results, font copies, prepared text
+placements/outlines and rendering edges/rows. Memory admission is coarse logical
+capacity rather than measured GC allocation or process RSS. Minor objects/runtime
+storage are approximate; allow runtime/collection headroom. Calls with a shared
+root bypass uncharged global pixel/coefficient/input/output pools. Caller-root
+storage never enters those caches. Other calls retain bounded idle caches.
 
-`ImageLimits` bounds one operation's admitted buffers and algorithm work. It is
-not a process RSS, GC-heap, elapsed-time or global-cache quota. Supplied pixel or
-encoded buffers, results and live codec workspaces count toward admission;
-releasing admission does not force garbage collection. [SPEC.md](../SPEC.md)
-defines the detailed codec and pixel contracts.
+Inspection uses fixed8448-byte workspace without a raster; Identify/Decode stream
+buffers retain actual capacity through parsing, avoiding a final encoded copy.
+Async encoding retains staged chunks/prepared partitions through actual delivery.
+Returned results have independent lifetimes. See [SPEC](../SPEC.md) for codec,
+stream validation and pixel details and [migration](migration.md) for0.2 API removals.
 
-## Defaults
-
-All limits must be positive. Codec format limits also apply.
-
-| Limit | Default |
-| --- | ---: |
-| Maximum side length | 32,768 pixels |
-| Maximum pixel count | 32,000,000 |
-| Encoded input / output | 64 MiB each |
-| Working memory | 512 MiB |
-| Optional metadata | 4 MiB |
-| Container items / EXIF directory entries | 100,000 |
-| Charged work | 2,000,000,000 units |
-
-Geometry limits apply to codec input and newly created outputs. A transform may
-read a larger existing buffer to produce a smaller admitted result; that source
-still counts toward working memory. Work units are deterministic accounting,
-not CPU instructions or a time limit.
-Optional codec eligibility does not promise that a whole operation fits its work
-limit. Variable work is charged as performed; exhaustion stops the operation and
-releases temporary storage without retrying another encoding strategy.
-
-## Shared budgets
-
-`ImageBudget` provides `Identify`, `InspectHeaders`, `Decode` and `EncodePng/Jpeg/Webp` entry points
-with the same codec options, pixels and stream ownership. Calls reserve the full
-configured `MaxWorkingBytes` and `MaxWork` atomically before codec execution.
-Choose per-operation limits that fit alongside other live reservations; this
-coarse admission can reject a call whose actual needs would have been smaller.
-Completion refunds temporary memory and unconsumed work, including on failure
-or cancellation. Charged work is cumulative across calls. Concurrent calls share
-the allowance safely; each codec operation itself uses one CPU thread.
-
-Decode returns a `BudgetedImage`. Use its `Image` and dispose the outer owner
-after all pixel uses; its retained pixel charge then ends. Each result owns its
-storage and reservation independently. Disposing `Image` directly leaves the
-reservation held until the outer owner is disposed or the image is collected.
-`Reserve(bytes, work)` lets caller-managed storage and work use the same budget;
-dispose that reservation after the storage's lifetime. Its explicit work charge
-is not refunded. Caller streams/output storage and later unbudgeted image copies
-remain caller-managed. Existing `ImageCodec` entry points use per-operation limits.
-
-## What working memory includes
-
-| Operation | Main admitted storage |
-| --- | --- |
-| Exact edits / nearest resize | Supplied pixels plus an independent result; orientation may require a second full result |
-| Drawing / compositing | Each distinct supplied canvas/source once; no snapshot raster, including self-overlap |
-| TrueType face load / lookup | Load: caller input plus one owned copy and 256-byte descriptor; lookup: immutable font StorageBytes |
-| Text layout / measurement | Font, borrowed UTF-16 input, private placement/line capacities and decoded geometry; temporary component/flag/kerning storage and overlapping growth capacities, with no raster allocation |
-| Text rendering | Canvas/layout storage, prepared edges/events/crossings, one coverage row, 4 KiB descriptor/frame allowance and 1600-byte subdivision stack; overlapping growth capacities, no frame mask |
-| Bilinear / bicubic resize | Source, result, admitted optional geometry/row caches, and 4 KiB for exact low-alpha rounding when needed; tight limits select the original bounded path |
-| Lanczos3 resize | Source/result, Q30 plans, up to 64 horizontal rows and one output-sum row; eligible SIMD uses in-place Int64-to-double row conversion and certified FMA sums. Tight local work/memory selects the original integer kernel before admission; shared refusal is terminal |
-| Decode Stream input | 8 KiB scratch, simultaneous old/new growth capacities and actual retained capacity throughout decoding; no final full-input copy |
-| Synchronous Identify Stream input | 8 KiB scratch and conservative growth/final-copy admission; parses a private input prefix without the final copy |
-| Container / EXIF inspection | Encoded input and bounded metadata/parser state; dimensions are checked without allocating a decoded image |
-| InspectHeaders / InspectHeadersAsync | Fixed 8,448-byte scratch/parser allowance; no whole-input, metadata-block or raster allocation |
-| PNG decode | Encoded input, concatenated IDAT, result, pass rows/palette/transparency, 4 KiB framing scratch and 256 KiB inflater allowance; optional filtered storage is separately admitted |
-| PNG encode | Source, packed row, 64 KiB chunk allowance and 1 MiB compressor workspace, admitted before the signature; all policies use bounded managed storage |
-| JPEG decode | Encoded input, parser/tables, padded coefficient/sample planes and RGBA result; orientation is admitted in the same operation. Integer inverse blocks use256 stack bytes and a minor256-byte generated kernel payload, without per-block heap buffers |
-| JPEG caller-sample decode | Supplied encoded/destination spans and the same parser/planes; orientation writes directly into caller storage without an RGBA frame |
-| Four-component JPEG | The same bounds with four coefficient/sample planes and descriptors; K is color, and shared admission counts caller CMYK storage |
-| JPEG encode | Borrowed source,8KiB fixed workspace,16KiB table owner and temporary Huffman-building peaks. Adaptive4:4:4/4:2:2/4:2:0 and nonrestart grayscale may retain entropy records: initial data up to4MiB plus128B ownership, one doubling up to8MiB, and old/new capacity charged together during growth. Shared refusal is terminal; the retained pool ceiling stays4MiB |
-| JPEG caller-sample encode | Borrowed gray/RGB span and the same fixed/table/tree owners; bounded rows without RGBA conversion storage |
-| VP8L decode / encode | Decode admits trees/cache/transform rasters and simultaneous conversion buffers. Encode admits one normalized working image, predictor/color/palette maps, matching/trace scratch, original/working histogram slabs, cache-selection history and all-width populations, fixed candidate storage and overlapping token/code owners. It releases populations after code construction and working pixels before delivery; prepared state counts/emits without an encoded-frame buffer. Tight budgets fail without choosing a different encoder. |
-| VP8 decode / encode | Decode admits models/modes, padded YUV, alpha and RGBA phases; encode admits source/reconstruction planes, coefficient caches, alpha and optional bounded alpha history/tables, plus arithmetic-buffer capacity and old/new growth overlap |
-
-These are logical admission charges, including conservative BCL allowances,
-rather than measured native or managed allocation totals. Optional fast paths
-must fit their complete workspace before selection; fallback preserves pixels,
-work, cancellation and failure ordering.
-Drawing applies geometry limits to the clipped affected rectangle. Copy/fill charge
-four work units per pixel in chunks up to 4096 pixels; compositing charges sixteen
-in chunks up to 256. Limits/cancellation can leave completed chunks in traversal
-order. Argument, geometry and memory validation precede mutation.
-Caller-owned encoded output storage is separate from codec workspace;
-`MaxOutputBytes` limits actual writes. Stored PNG work includes packed-row preparation plus one unit per filtered byte;
-compressed policies additionally count bounded search/token/tree work.
-Eligible stored RGBA PNG encodes may
-reserve plain `MemoryStream` capacity after work/output preflight, preserving
-the original writes and limit checks.
-Tight noninterlaced PNG RGBA decoding can keep 64 KiB of raw history inside the
-existing inflater allowance; its original result/two-row peak stays unchanged.
-
-## Streams, ownership and failures
-
-Input is read through EOF using bounded buffering, including nonseekable streams;
-caller streams remain open. `Identify(Stream)` may reuse a fully written private
-prefix instead of making an extra exact-length copy, while preserving the same
-conservative growth/final-copy admission. Its idle pool retains less than 8 MiB;
-live operations never share a lease. Pixel and codec storage can also be reused
-after release, as specified in [SPEC.md](../SPEC.md#pixels-and-ownership).
-
-`Decode(Stream)` also parses a private input prefix without a final copy. Its actual
-retained capacity stays charged during decoding, with simultaneous capacities
-admitted during growth and capacity capped by `MaxInputBytes`. Pixel outputs remain
-independent after the input lease is released; shared admission retains only pixels.
-
-`IdentifyAsync`/`DecodeAsync` use asynchronous reads through EOF, leaving input
-open. They admit 8 KiB scratch plus simultaneous growth capacities and retain
-the full input capacity during CPU parsing/decoding; no final input copy is made.
-Shared reservations span awaits and settle on every exit. Identification still
-validates the full container/EXIF structure.
-
-`InspectHeaders`/`InspectHeadersAsync` scan dimensions/orientation through EOF with
-fixed workspace. Seekable inputs can skip opaque payloads; other inputs are drained.
-Read-ahead and skipped bytes still consume input/work quotas. Dimension/pixel and
-metadata/item limits apply, without a hypothetical decoded-array ceiling. PNG CRCs
-and compressed pixels are outside this API's validation scope; use `Identify` for
-fuller container validation and `Decode` for pixels. Shared reservations span awaits.
-
-`EncodePng/Jpeg/WebpAsync` stage encoded bytes privately, then use caller
-`WriteAsync` in blocks up to 64 KiB. Charge actual staging capacity, 256 bytes
-of stream bookkeeping and 64 bytes per linked chunk, plus existing codec workspaces.
-JPEG uses the same reference-compatible encoder and segmented staging for every
-stream and cancellation boundary; admission refusal terminates the operation. A separate private output pool retains at
-most two exact arrays totaling 4 MiB. Shared reservations remain held across writes.
-Unused tails are cleared before handing array-backed memory to callers. Work
-includes codec work, staging-copy, cleared-tail and delivery-attempt bytes. No final
-output copy is made before delivery; failures during delivery may leave a prefix.
-
-Dispose image buffers and stop using their row spans before disposal. Transforms
-return independent owners. Mutable input buffers require caller synchronization.
-Limits and cancellation are checked during long loops and before associated
-large allocations. Optional optimizations preserve the original resource checks.
-
-Exhausted quotas raise `ImageLimitException`; malformed data raises
-`ImageDataException`; unsupported features raise `UnsupportedImageException`.
-`ImageLimitException.Limit` identifies the exhausted `ImageLimits` category or
-the managed buffer-length ceiling. `UnsupportedImageException.Feature` identifies
-the unsupported feature and `Format` identifies the recognized codec when known.
-Message-only constructors report `Unspecified`; library failures provide
-typed categories. These properties do not require exception-message parsing.
-`ImageLimitException.Scope` distinguishes per-operation exhaustion from shared
-budget exhaustion; shared failures report `WorkingBytes` or `Work` as the limit.
-Cancellation raises `OperationCanceledException` with the supplied token. Invalid
-public arguments use standard argument exceptions. Stream encoding can leave
-partial output on failure; stage output when atomic publication is required.
-
-## Validation
-
-JPEG coefficient reuse starts with three idle exact-size slots; owned full-
-resolution CMYK can grow it to four, still totaling at most 4 MiB. Leases are
-zeroed before parsing and returned on success or failure;
-the original live working-memory and work charges remain unchanged.
-
-Authored boundary tests cover exact admission and one-byte-below rejection,
-limited work, cancellation, malformed input, overlapping owners and unchanged
-sources. Windows/Linux correctness and live FFmpeg suites validate behavior;
-the actual Release package is exercised by an isolated consumer and all usage
-examples. [Benchmark results](benchmark.md) report the separate quiet-VM timing
-and managed-allocation evidence. Changes to workspaces or accounting require
-updating the relevant boundary tests and contract.
+Focused tests cover aggregate/nested admission, retained outputs/fonts/layouts,
+replacement overlap, refusal/cancellation cleanup, real suspended I/O users and
+successful subsequent calls after release. [Cleanup qualification](cleanup-qualification.md)
+records current Windows/Linux/package checks. [Benchmark state](benchmark.md)
+separately identifies historical timing/allocation evidence.

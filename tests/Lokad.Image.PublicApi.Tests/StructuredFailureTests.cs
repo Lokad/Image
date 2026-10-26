@@ -27,14 +27,13 @@ public sealed class StructuredFailureTests
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public void InputAndWorkLimitsPreserveSourceAndStreamOwnership(bool streamed)
+    public void InputAndLimitsPreserveSourceAndStreamOwnership(bool streamed)
     {
         var data = AuthoredJpeg.GrayscaleDcGrid(8, 8, false);
         var original = data.ToArray();
         foreach (var (limits, expected) in new[]
         {
             (new ImageLimits { MaxInputBytes = data.Length - 1 }, ImageLimitKind.InputBytes),
-            (new ImageLimits { MaxWork = 1 }, ImageLimitKind.Work),
             (new ImageLimits { MaxContainerItems = 1 }, ImageLimitKind.ContainerItems),
             (new ImageLimits { MaxWorkingBytes = 8192 }, ImageLimitKind.WorkingBytes)
         })

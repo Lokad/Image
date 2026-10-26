@@ -148,16 +148,6 @@ public sealed class TextRenderingTests
     }
 
     [Fact]
-    public void WorkExhaustionLeavesOnlyCompletedRowChunksAndDoesNotInvalidateLayout()
-    {
-        var layout = Layout(Rectangle(0, 0, 1000, 600)); using var canvas = ImageBuffer.Create(14, 12, 8);
-        var failure = Assert.Throws<ImageLimitException>(() => ImageDrawing.DrawText(canvas, layout, 0, 0, Ink, new() { MaxWork = 500 }));
-        Assert.Equal(ImageLimitKind.Work, failure.Limit); Assert.Null(failure.InnerException);
-        Assert.NotEqual(0, Sample(canvas, 0, 2, 3)); Assert.Equal(0, Sample(canvas, 0, 3, 3));
-        ImageDrawing.DrawText(canvas, layout, 0, 0, Ink); Assert.NotEqual(0, Sample(canvas, 0, 7, 3));
-    }
-
-    [Fact]
     public void EmptyTransparentOutsideAndPreCancelledDrawsPreserveEverySample()
     {
         var layout = Layout(Rectangle(0, 0, 1000, 600)); using var canvas = ImageBuffer.Create(14, 12, 8); Seed(canvas); using var before = canvas.Clone();

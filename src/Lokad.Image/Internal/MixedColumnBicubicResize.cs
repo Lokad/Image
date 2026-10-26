@@ -16,16 +16,16 @@ internal static class MixedColumnBicubicResize
     private const uint DeferredPixel = 0x00FFFFFF;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
-        if (!TryApplyCore(source, result, scaleX, scaleY, tapsX, tapsY, rowWork, context, out var deferred)) return false;
+        if (!TryApplyCore(source, result, scaleX, scaleY, tapsX, tapsY, context, out var deferred)) return false;
         if (deferred) ReplayTiny(source, result, scaleX, scaleY, context);
         return true;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool TryApplyCore(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context, out bool deferred)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context, out bool deferred)
     {
         deferred = false;
         if (source.BitDepth != 8 || result.Width < source.Width || result.Height >= source.Height
@@ -141,7 +141,7 @@ internal static class MixedColumnBicubicResize
                         // A packed pair is staged in existing decoded storage;
                         // its two rows then receive separate checked byte stores.
                         var packed = MemoryMarshal.AsBytes(decoded)[..8];
-                        if (TryWritePair(sum, n0, n1, packed))
+                        if (BicubicMath.TryWriteBytePair(sum, n0, n1, packed))
                         {
                             BinaryPrimitives.WriteUInt32LittleEndian(output.Slice((tileY + outputY) * outputStride + x * 4, 4),
                                 BinaryPrimitives.ReadUInt32LittleEndian(packed[..4]));
@@ -159,78 +159,16 @@ internal static class MixedColumnBicubicResize
                         for (var t = 0; t < count; t++)
                             sum = Avx.Add(sum, Avx.Multiply(cache[columns[t] + y], Vector256.Create(horizontal[t])));
                         var normalizer = normalizerX * normalizers[y];
-                        if (!TryWriteSingle(sum, normalizer, output.Slice((tileY + y) * outputStride + x * 4, 4))
+                        if (!BicubicMath.TryWriteByte(sum, normalizer, output.Slice((tileY + y) * outputStride + x * 4, 4))
                             && !OriginalByte(source, result, x, tileY + y, center, first,
                                 vertical.Slice(y * 10, counts[y]), rowOffsets.Slice(y * 10, counts[y]), sourceFirst, context, ref deferred)) return false;
                     }
                 }
             }
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
-    }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
-    {
-        const double unitError = 2.3283064365386963e-10;
-        const double maximum = 255d;
-        const double alphaError = unitError * maximum;
-        var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
-        if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
-        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
-        var values = Avx512F.Divide(sum, divisors);
-        // With 2^-40*16^2 and maximum 255, quotient bounds at every
-        // in-range threshold are below 1e-6 for alpha and 1e-4/alpha
-        // for color. The quarter-margin guard protects clipping thresholds.
-        // Alpha's lower power of two gives a conservative reciprocal bound.
-        var exponent0 = (int)((BitConverter.DoubleToUInt64Bits(a0) >> 52) & 2047);
-        var exponent1 = (int)((BitConverter.DoubleToUInt64Bits(a1) >> 52) & 2047);
-        var margin0 = 1e-4 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent0) << 52);
-        var margin1 = 1e-4 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent1) << 52);
-        if (margin0 >= .25 || margin1 >= .25
-            || !(values.GetElement(3) >= 1 + 1e-6 && values.GetElement(7) >= 1 + 1e-6)) return false;
-        var margins = Vector512.Create(margin0, margin0, margin0, 1e-6, margin1, margin1, margin1, 1e-6);
-        var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
-        var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
-            Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();
-        var inRange = Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values, Vector512<double>.Zero).AsInt64(),
-            Avx512F.CompareLessThanOrEqual(values, Vector512.Create(maximum)).AsInt64());
-        var ambiguous = Avx512F.And(inRange, Avx512F.CompareLessThanOrEqual(distance, margins).AsInt64());
-        if (Vector512.ExtractMostSignificantBits(ambiguous) != 0) return false;
-        var clipped = Avx512F.Min(Vector512.Create(maximum), Avx512F.Max(Vector512<double>.Zero, values));
-        var ints = Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped, 0));
-        var shorts = Sse2.PackSignedSaturate(ints.GetLower(), ints.GetUpper());
-        var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt64().GetElement(0);
-        BinaryPrimitives.WriteUInt64LittleEndian(output, packed);
-        return true;
-    }
-
-    private static bool TryWriteSingle(Vector256<double> sum, double normalizer, Span<byte> output)
-    {
-        const double unitError = 2.3283064365386963e-10;
-        const double maximum = 255d;
-        const double alphaError = unitError * maximum;
-        var alpha = sum.GetElement(3);
-        if (!(normalizer >= .5 && alpha > alphaError)) return false;
-        var values = Avx.Divide(sum, Vector256.Create(alpha, alpha, alpha, normalizer));
-        var magnitude = Math.Max(Math.Abs(values.GetElement(0)),
-            Math.Max(Math.Abs(values.GetElement(1)), Math.Abs(values.GetElement(2))));
-        var colorMargin = 2 * (alphaError * maximum + magnitude * alphaError) / (alpha - alphaError);
-        var alphaMargin = 2 * (alphaError + Math.Abs(values.GetElement(3)) * unitError) / (normalizer - unitError);
-        if (colorMargin >= .25 || !(values.GetElement(3) >= 1 + alphaMargin)) return false;
-        for (var c = 0; c < 4; c++)
-        {
-            var value = values.GetElement(c);
-            if (value >= 0 && value <= maximum
-                && Math.Abs(value - Math.Floor(value) - .5) <= (c == 3 ? alphaMargin : colorMargin)) return false;
-        }
-        var clipped = Avx.Min(Vector256.Create(maximum), Avx.Max(Vector256<double>.Zero, values));
-        var ints = Avx.ConvertToVector128Int32WithTruncation(Avx.RoundToNearestInteger(clipped));
-        var shorts = Sse2.PackSignedSaturate(ints, Vector128<int>.Zero);
-        var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt32().GetElement(0);
-        BinaryPrimitives.WriteUInt32LittleEndian(output, packed);
-        return true;
     }
 
     private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,
@@ -261,12 +199,12 @@ internal static class MixedColumnBicubicResize
             deferred = true;
             return true;
         }
-        var alphaOut = RoundByte(normalized);
+        var alphaOut = BicubicMath.RoundByte(normalized);
         var color = alphaOut > 0 && alphaSum > 0;
         var destination = result.GetRow8(y).Slice(x * 4, 4);
-        destination[0] = RoundByte(color ? red / alphaSum : 0);
-        destination[1] = RoundByte(color ? green / alphaSum : 0);
-        destination[2] = RoundByte(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundByte(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundByte(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundByte(color ? blue / alphaSum : 0);
         destination[3] = alphaOut;
         return true;
     }
@@ -306,14 +244,11 @@ internal static class MixedColumnBicubicResize
                 var rounded = ResizeAlpha.Round(source, x, y, result.Width, result.Height, ResizeFilter.Bicubic, context);
                 var color = rounded > 0 && alphaSum > 0;
                 var pixel = destination.Slice(x * 4, 4);
-                pixel[0] = RoundByte(color ? red / alphaSum : 0);
-                pixel[1] = RoundByte(color ? green / alphaSum : 0);
-                pixel[2] = RoundByte(color ? blue / alphaSum : 0);
+                pixel[0] = BicubicMath.RoundByte(color ? red / alphaSum : 0);
+                pixel[1] = BicubicMath.RoundByte(color ? green / alphaSum : 0);
+                pixel[2] = BicubicMath.RoundByte(color ? blue / alphaSum : 0);
                 pixel[3] = (byte)rounded;
             }
         }
     }
-
-    private static byte RoundByte(double value)
-        => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
 }

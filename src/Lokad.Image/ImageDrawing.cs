@@ -33,7 +33,7 @@ public static partial class ImageDrawing
         for (var row = 0; row < region.Height; row++)
         for (var first = 0; first < region.Width;)
         {
-            var count = Math.Min(4096, region.Width - first); context.Work(count * 4L);
+            var count = Math.Min(4096, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
             var yRow = region.DestinationY + row;
             if (canvas.BitDepth == 8)
             {
@@ -70,7 +70,7 @@ public static partial class ImageDrawing
             var offsetY = backwardsY ? region.Height - row - 1 : row;
             for (var first = 0; first < region.Width;)
             {
-                var count = Math.Min(4096, region.Width - first); context.Work(count * 4L);
+                var count = Math.Min(4096, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
                 var offsetX = backwardsX ? region.Width - first - count : first;
                 var sx = (region.SourceX + offsetX) * 4; var dx = (region.DestinationX + offsetX) * 4;
                 var sy = region.SourceY + offsetY; var dy = region.DestinationY + offsetY;
@@ -101,7 +101,7 @@ public static partial class ImageDrawing
             var sy = region.SourceY + offsetY; var dy = region.DestinationY + offsetY;
             for (var first = 0; first < region.Width;)
             {
-                var count = Math.Min(256, region.Width - first); context.Work(count * 16L);
+                var count = Math.Min(256, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
                 for (var i = first; i < first + count; i++)
                 {
                     var offsetX = backwardsX ? region.Width - i - 1 : i;

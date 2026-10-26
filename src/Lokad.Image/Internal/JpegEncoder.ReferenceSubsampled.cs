@@ -4,9 +4,6 @@ namespace Lokad.Image.Internal;
 
 internal static partial class JpegEncoder
 {
-    // Covers at most256 luma conversions,128 chroma samples with3x3 taps and
-    // paired RGB input, area/range rounding, eight transforms and entropy events.
-    private const int ReferenceSubsampledMcuWork = 262144;
 
     private static void ReferenceSubsampledPass(ImageBuffer? image, JpegSampleInput source, int width, int height,
         uint? background, JpegSampling sampling, ReadOnlySpan<ushort> quantizationPlan, int[][] histograms,
@@ -40,7 +37,7 @@ internal static partial class JpegEncoder
         for (var left = 0; left < width; left += 16)
         {
             ReferenceRestart(mcuIndex++, restartInterval, previous, writer, context);
-            context.Work(ReferenceSubsampledMcuWork);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var x = 0; x < 8; x++)
                 horizontalPlans[x] = JpegReferenceArea.Create(pair ? width / 2 : width, chromaWidth,
                     Math.Min(left / 2 + x, chromaWidth - 1), 14);

@@ -12,7 +12,7 @@ internal ref partial struct JpegDecoder
             if (component.H != maxH || component.V != maxV) return false;
         for (var y = 0; y < info.Height; y++)
         {
-            context.Work(info.Width * 32L);
+            context.Cancellation.ThrowIfCancellationRequested();
             PackCmykSamples(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
                 components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
                 components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width),

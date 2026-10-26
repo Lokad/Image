@@ -43,9 +43,7 @@ public sealed class WebpPreviousRowTests
         foreach (var (bound, kind) in new[]
         {
             (limits with { MaxWorkingBytes = limits.MaxWorkingBytes - 1 }, ImageLimitKind.WorkingBytes),
-            (limits with { MaxOutputBytes = packet.Length - 1 }, ImageLimitKind.OutputBytes),
-            (limits with { MaxWork = 1 }, ImageLimitKind.Work)
-        })
+            (limits with { MaxOutputBytes = packet.Length - 1 }, ImageLimitKind.OutputBytes),})
         {
             using var rejected = new MemoryStream();
             Assert.Equal(kind, Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(image, rejected, new() { Limits = bound })).Limit);

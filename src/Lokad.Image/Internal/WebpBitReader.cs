@@ -20,7 +20,7 @@ internal ref struct WebpBitReader
     public int Read(int count)
     {
         if ((uint)count > 24) throw new ArgumentOutOfRangeException(nameof(count));
-        context.Work(1);
+        context.Cancellation.ThrowIfCancellationRequested();
         while (available < count)
         {
             if (position == data.Length) throw new ImageDataException("Truncated VP8L bitstream.");
@@ -31,7 +31,7 @@ internal ref struct WebpBitReader
     }
 
     // Trusted complete eight-bit channel trees. On refusal the caller retains
-    // the original three reads, including every partial bit/work/EOF failure.
+    // the original three reads, including every partial bit/EOF failure.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal bool TryReadByteChannels(ReadOnlySpan<int> red,ReadOnlySpan<int> blue,
         ReadOnlySpan<int> alpha,out uint channels)
@@ -52,7 +52,7 @@ internal ref struct WebpBitReader
             if(candidatePosition==data.Length)return false;
             candidateBits|=(ulong)data[candidatePosition++]<<candidateAvailable;candidateAvailable+=8;
         }
-        if(!context.TryWork(24))return false;
+        context.Cancellation.ThrowIfCancellationRequested();
         var r=red[(int)candidateBits&255]>>4;
         var b=blue[(int)(candidateBits>>8)&255]>>4;
         var a=alpha[(int)(candidateBits>>16)&255]>>4;
@@ -72,10 +72,9 @@ internal ref struct WebpBitReader
             var packed = codes[(int)candidateBits & mask]; var count = packed & 15;
             if (count != 0 && count <= candidateAvailable)
             {
-                // Charge the same logical one-bit reads. A tight budget falls
-                // back without mutation, retaining partial consumption and
-                // limit-before-truncation precedence. Read no unnecessary byte.
-                if (!context.TryWork(count)) return false;
+                // Publish only a complete symbol, after observing cancellation.
+                // Read no unnecessary byte.
+                context.Cancellation.ThrowIfCancellationRequested();
                 bits = candidateBits >> count; available = candidateAvailable - count; position = candidatePosition;
                 symbol = packed >> 4; return true;
             }
@@ -105,7 +104,7 @@ internal ref struct WebpBitReader
             if ((uint)index >= (uint)counts[length]) continue;
             // A partial budget or missing byte keeps the original per-bit path,
             // including consumed prefixes and limit-before-truncation order.
-            if (!context.TryWork(length)) return false;
+            context.Cancellation.ThrowIfCancellationRequested();
             bits = candidateBits >> length; available = candidateAvailable - length; position = candidatePosition;
             symbol = symbols[firstSymbol[length] + index]; return true;
         }
@@ -122,7 +121,7 @@ internal ref struct WebpBitReader
             var packed = codes[(int)candidateBits & 4095]; var count = (int)(packed & 15);
             if (count != 0 && count <= candidateAvailable)
             {
-                if (!context.TryWork(count)) return false;
+                context.Cancellation.ThrowIfCancellationRequested();
                 bits = candidateBits >> count; available = candidateAvailable - count; position = candidatePosition;
                 symbol = (int)(packed >> 4); return true;
             }

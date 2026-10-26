@@ -140,17 +140,4 @@ public sealed class Vp8lReferenceColorTransformTests
         using var next = Vp8lReferenceColorTransform.SelectAndApply(pixels, 513, 3, 75, nextContext);
         next.Dispose(); Assert.Equal(4104, root.Bytes);
     }
-
-    [Theory]
-    [InlineData(2)]
-    [InlineData(256)]
-    public void IndependentWorkFailureReleasesMapAndSearchStorage(long maximum)
-    {
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = maximum }, default);
-        var pixels = Packed(context); var original = pixels.ToArray();
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceColorTransform.SelectAndApply(pixels, 513, 3, 75, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(4104, root.Bytes); Assert.Equal(original, pixels); Assert.Equal(0, root.Refusals);
-    }
 }

@@ -8,33 +8,21 @@ internal static partial class Vp8lReferenceCache
         return pixelCount + (entries + (long)HistogramValues(maximumBits)) * 4 + 128;
     }
 
-    internal static long HistoryWorkBound(int pixels, int firstCount, int secondCount, int maximumBits)
-    {
-        var work = 4L * (firstCount + (long)secondCount) * (maximumBits + 1) + 2L * maximumBits * pixels;
-        for (var bits = 0; bits <= maximumBits; bits++)
-        {
-            var layout = new Vp8lHistogramLayout(bits);
-            work += 2L * layout.CacheSize + 6L * layout.Total;
-        }
-        return work;
-    }
-
     internal static bool TryBestBitsWithHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> first,
         ReadOnlySpan<Vp8lToken> second, int maximumBits, OperationContext context, out int firstBits, out int secondBits)
     {
         firstBits = secondBits = 0;
-        // These cases need the original individual work/cancellation checks.
+        // These cases need the original individual cancellation checks.
         if (maximumBits == 0 || context.Cancellation.CanBeCanceled) return false;
         var reserved = HistoryBytes(pixels.Length, maximumBits);
-        if (reserved > context.RemainingWorkingBytes
-            || HistoryWorkBound(pixels.Length, first.Length, second.Length, maximumBits) > context.RemainingWork)
+        if (reserved > context.RemainingWorkingBytes)
             return false;
         // Eligibility uses only declared local allowances. Shared refusal below
         // is terminal and never selects a second, lower-memory attempt.
-        context.Work(0); context.Reserve(reserved);
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
         try
         {
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             var minimum = new byte[pixels.Length];
             var cache = new uint[(1 << (maximumBits + 1)) - 2];
             var counts = new int[HistogramValues(maximumBits)];
@@ -84,10 +72,10 @@ internal static partial class Vp8lReferenceCache
         for (var bits = 0; bits <= maximumBits; bits++)
         {
             var layout = new Vp8lHistogramLayout(bits);
-            context.Work(layout.CacheSize + layout.Total);
+            context.Cancellation.ThrowIfCancellationRequested();
             // The exclusive noncancellable operation proved the full original
-            // work upper fits before admission. Publish exactly those charges.
-            context.Work(4L * seed.Length + (bits == 0 ? 0 : copied));
+            // bounded histogram traversal preserves the original counts.
+            context.Cancellation.ThrowIfCancellationRequested();
             var cost = layout.Population(counts.Slice(HistogramOffset(bits), layout.Total), context);
             if (cost < bestCost) { bestCost = cost; best = bits; }
         }

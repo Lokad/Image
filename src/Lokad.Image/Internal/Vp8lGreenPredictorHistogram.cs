@@ -54,7 +54,7 @@ internal static class Vp8lGreenPredictorHistogram
         for (var y = y0; y < endY; y++)
         for (var x = x0; x < endX; x++)
         {
-            context.Work(56);
+            context.Cancellation.ThrowIfCancellationRequested();
             var at = y * width + x; var actual = (int)(pixels[at] >> 8);
             if (y == 0 || x == 0)
             {

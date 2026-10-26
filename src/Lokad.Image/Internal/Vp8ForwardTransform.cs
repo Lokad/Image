@@ -12,7 +12,7 @@ internal static partial class Vp8ForwardTransform
     // Only sixteen9-bit residuals are consumed, then sixteen coefficients are
     // written. Input/output may overlap; trailing caller samples stay untouched.
     // The bounded64-byte stack scratch has no owner/cache/heap lifetime. The
-    // encoder admits work and checks cancellation at its block boundary.
+    // encoder checks cancellation at its block boundary.
     internal static void Dct(ReadOnlySpan<short> residual, Span<short> coefficients)
     {
         if (residual.Length < 16 || coefficients.Length < 16) throw new ArgumentException("A4x4 transform requires16samples.");

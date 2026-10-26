@@ -111,7 +111,7 @@ public sealed class TextFittingTests
     }
 
     [Fact]
-    public void EveryGrowingAdmissionRefusesTerminallyAndAllowsSubsequentWorkAfterCleanup()
+    public void EveryGrowingAdmissionRefusesTerminallyAndAllowsSubsequentAfterCleanup()
     {
         using var font = Font(); using var budget = new TestMemoryBudget(1_000_000);
         var options = Options with { Limits = new() { MemoryBudget = budget }, Shaping = TextShaping.OpenType };
@@ -142,23 +142,6 @@ public sealed class TextFittingTests
     }
 
     [Fact]
-    public void WorkIsCumulativeAcrossCompletedTrialsRatherThanResetForEachSize()
-    {
-        using var font = Font(); var low = 1; var high = 1024;
-        while (low < high)
-        {
-            var middle = (low + high) / 2;
-            try { using var probe = TextLayout.Create(font, "A", Options with { Limits = new() { MaxWork = middle } }); high = middle; }
-            catch (ImageLimitException error) when (error.Limit == ImageLimitKind.Work) { low = middle + 1; }
-        }
-        using var budget = new TestMemoryBudget(1_000_000); var limits = new ImageLimits { MaxWork = low + 4, MemoryBudget = budget };
-        using (var single = TextLayout.Create(font, "A", Options with { Limits = limits })) Assert.True(budget.Bytes > 0);
-        Assert.Equal(0, budget.Bytes);
-        var failure = Assert.Throws<ImageLimitException>(() => TextLayout.TryFit(font, "A", 1, 1, out _, Options with { Limits = limits }, minimumFontSize: 9, fontSizeStep: 1));
-        Assert.Equal(ImageLimitKind.Work, failure.Limit); Assert.Equal(0, budget.Bytes);
-    }
-
-    [Fact]
     public void IndependentRetainedResultsUseTheSameCallerRoot()
     {
         using var font = Font(); using var budget = new TestMemoryBudget(1_000_000);
@@ -170,7 +153,7 @@ public sealed class TextFittingTests
     }
 
     [Fact]
-    public void AResultRetainedByNestedCallerWorkSurvivesOuterNoFitCleanup()
+    public void AResultRetainedByNestedCallerSurvivesOuterNoFitCleanup()
     {
         using var font = Font(); using var budget = new TestMemoryBudget(1_000_000);
         var options = Options with { Limits = new() { MemoryBudget = budget } };

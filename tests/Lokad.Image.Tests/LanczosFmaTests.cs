@@ -20,13 +20,11 @@ public sealed class LanczosFmaTests
         using var h = LanczosPlan.Create(9, 5, context); using var v = LanczosPlan.Create(7, 3, context);
         using var root = new TestMemoryBudget(0);
         using var admitted = new OperationContext(new() { MemoryBudget = root }, default);
-        var work = admitted.RemainingWork; var bytes = admitted.RemainingWorkingBytes;
+var bytes = admitted.RemainingWorkingBytes;
         Assert.Equal(Supported, LanczosFmaResize.CanUse(source, 5, 3, h, v, admitted));
-        Assert.Equal(work, admitted.RemainingWork); Assert.Equal(bytes, admitted.RemainingWorkingBytes);
+Assert.Equal(bytes, admitted.RemainingWorkingBytes);
         Assert.Equal(0, root.GrowthAttempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-        using var tightWork = new OperationContext(new() { MaxWork = 1 }, default);
         using var tightMemory = new OperationContext(new() { MaxWorkingBytes = 1 }, default);
-        Assert.False(LanczosFmaResize.CanUse(source, 5, 3, h, v, tightWork));
         Assert.False(LanczosFmaResize.CanUse(source, 5, 3, h, v, tightMemory));
     }
 
@@ -53,9 +51,7 @@ public sealed class LanczosFmaTests
             for (var y = 0; y < 3; y++)
             {
                 rows[y] = new double[dw * 4]; exact[y] = new BigInteger[dw * 4];
-                var before = context.RemainingWork;
                 LanczosFmaResize.Horizontal(source, y, h, rows[y], context);
-                Assert.Equal(before - h.Weights.LongLength * 4 - rows[y].Length, context.RemainingWork);
                 for (var x = 0; x < dw; x++)
                 for (var c = 0; c < 4; c++)
                 {
@@ -136,7 +132,7 @@ public sealed class LanczosFmaTests
 
     [Theory]
     [InlineData(8)] [InlineData(16)]
-    public void HalfAlphaUsesExactHalfUpAndTightWorkKeepsTheOriginalPath(int depth)
+    public void HalfAlphaUsesExactHalfUp(int depth)
     {
         using var source = ImageBuffer.Create(2, 1, depth);
         for (var c = 0; c < 3; c++) { source.SetSample(0, 0, c, depth == 8 ? 255 : 65535); source.SetSample(1, 0, c, c + 7); }
@@ -144,14 +140,6 @@ public sealed class LanczosFmaTests
         using var full = ImageTransforms.Resize(source, 1, 1, ResizeFilter.Lanczos3);
         Assert.Equal(1, full.Sample(0, 0, 3));
         for (var c = 0; c < 3; c++) Assert.Equal(c + 7, full.Sample(0, 0, c));
-        long low = 1, high = 10000;
-        while (low < high)
-        {
-            var middle = low + (high - low) / 2;
-            try { using var result = ImageTransforms.Resize(source, 1, 1, ResizeFilter.Lanczos3, new() { MaxWork = middle }); high = middle; }
-            catch (ImageLimitException error) when (error.Limit == ImageLimitKind.Work) { low = middle + 1; }
-        }
-        using var tight = ImageTransforms.Resize(source, 1, 1, ResizeFilter.Lanczos3, new() { MaxWork = low });
-        Assert.Equal(full.Pixels.ToArray(), tight.Pixels.ToArray());
+
     }
 }

@@ -30,7 +30,7 @@ internal static class Vp8LoopFilter
     private static void Line(byte[] plane, int start, int step, int along, int count, int edge, int interior,
         int variance, bool macroblock, bool simple, OperationContext context)
     {
-        context.Work(count * 64L);
+        context.Cancellation.ThrowIfCancellationRequested();
         if (Vector128.IsHardwareAccelerated && along == 1 && count is 8 or 16 && step >= count
             && start >= 4L * step && (long)start + 3L * step + count <= plane.Length)
         {

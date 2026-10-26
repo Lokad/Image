@@ -116,21 +116,21 @@ internal sealed partial class Vp8RatePlan : IDisposable
     internal static Vp8RatePlan Create(ReadOnlySpan<byte> probabilities, OperationContext context)
     {
         if (probabilities.Length != 1056) throw new ArgumentException("VP8 requires 1,056 coefficient probabilities.", nameof(probabilities));
-        context.Work(0); var result = new Vp8RatePlan(context);
+        context.Cancellation.ThrowIfCancellationRequested(); var result = new Vp8RatePlan(context);
         try
         {
             const int bytes = Length * sizeof(ushort) + 128;
             context.Reserve(bytes); result.capacity = bytes;
-            context.Work(0); result.storage = new ushort[Length]; var values = result.storage.AsSpan();
+            context.Cancellation.ThrowIfCancellationRequested(); result.storage = new ushort[Length]; var values = result.storage.AsSpan();
             context.Reserve(1024);
             try
             {
                 Span<int> seen = stackalloc int[128]; Span<int> shifts = stackalloc int[128];
                 for (var p = 0; p < 256; p++)
-                { context.Work(2048); values[p] = (ushort)EntropyCost(p, seen, shifts); }
+                { context.Cancellation.ThrowIfCancellationRequested(); values[p] = (ushort)EntropyCost(p, seen, shifts); }
                 ReadOnlySpan<ushort> entropy = values[..FixedAt];
                 for (var p = 0; p < 2048; p++)
-                { if ((p & 127) == 0) context.Work(2048); values[FixedAt + p] = (ushort)FixedCost(p, entropy); }
+                { if ((p & 127) == 0) context.Cancellation.ThrowIfCancellationRequested(); values[FixedAt + p] = (ushort)FixedCost(p, entropy); }
                 for (var mode = 0; mode < 4; mode++)
                 {
                     var branch = mode is 1 or 3;
@@ -145,14 +145,14 @@ internal sealed partial class Vp8RatePlan : IDisposable
                 }
                 for (var top = 0; top < 10; top++) for (var left = 0; left < 10; left++)
                 {
-                    context.Work(256);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     var p = Vp8Tables.BlockModeProbabilities.Slice((Geometry(top) * 10 + Geometry(left)) * 9, 9);
                     for (var mode = 0; mode < 10; mode++)
                         values[ModesAt + 8 + (top * 10 + left) * 10 + mode] = (ushort)SmallMode(mode, p, entropy);
                 }
                 for (var index = 0; index < 96; index++)
                 {
-                    context.Work(1024); var p = probabilities.Slice(index * 11, 11); var extra = index % 3 == 0 ? 0 : Bit(entropy, true, p[0]);
+                    context.Cancellation.ThrowIfCancellationRequested(); var p = probabilities.Slice(index * 11, 11); var extra = index % 3 == 0 ? 0 : Bit(entropy, true, p[0]);
                     values[EobAt + index * 2] = (ushort)Bit(entropy, false, p[0]);
                     values[EobAt + index * 2 + 1] = (ushort)Bit(entropy, true, p[0]);
                     for (var level = 0; level < 68; level++)
@@ -169,7 +169,7 @@ internal sealed partial class Vp8RatePlan : IDisposable
     { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
 
     // Borrowed zigzag levels and integer result only. The enclosing encoder
-    // admits block work/cancellation in batches, without per-block scopes.
+    // admits block cancellation in batches, without per-block scopes.
     internal int Residual(ReadOnlySpan<short> levels, int type, int first, int initialContext, out bool nonzero)
     {
         var values = Values;

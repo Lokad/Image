@@ -24,17 +24,14 @@ public sealed class JpegCompatibilityBoundaryTests
             Assert.Equal(255, owned.GetRow8(y)[x * 4 + 3]);
         }
         var expectedBytes = OriginalPixels.Bytes(owned);
-        var budget = new ImageBudget(16 * 1024 * 1024, 1_000_000_000);
-        using (var survivor = budget.Decode(data, new() { Limits = new() { MaxWorkingBytes = budget.MaxWorkingBytes, MaxWork = budget.MaxWork } }))
+        using var root = new TestMemoryBudget(16 * 1024 * 1024);
+        using (var survivor = ImageCodec.Decode(data, new() { Limits = new() { MemoryBudget = root } }))
         {
             owned.GetRow8(0)[0] ^= 255; owned.Dispose();
-            Assert.Equal(expectedBytes, OriginalPixels.Bytes(survivor.Image));
-            Assert.Equal(budget.MaxWorkingBytes - expectedBytes.Length, budget.RemainingWorkingBytes);
+            Assert.Equal(expectedBytes, OriginalPixels.Bytes(survivor));
+            Assert.Equal(expectedBytes.Length, root.Bytes);
         }
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes);
-        var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(data,
-            new() { Limits = new() { MaxWork = budget.ConsumedWork - 1 } }));
-        Assert.Equal(ImageLimitKind.Work, failure.Limit);
+        Assert.Equal(0, root.Bytes);
         using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
         var canceled = Assert.Throws<OperationCanceledException>(() => ImageCodec.Decode(data, cancellationToken: cancellation.Token));
         Assert.Equal(cancellation.Token, canceled.CancellationToken);
@@ -83,39 +80,6 @@ public sealed class JpegCompatibilityBoundaryTests
         // The pinned Q16 reciprocal keeps opaque alpha even at the black endpoints.
         byte[] expected = black == 0 ? [0, 0, 0, 255] : [74, 109, 189, 255];
         Assert.Equal(expected, result.GetRow8(0)[..4].ToArray());
-    }
-
-    [Fact]
-    public void FourComponentAdmissionHasExactBoundsAndSharedCallerStorageOwnership()
-    {
-        const int width = 16, height = 8, pixels = width * height;
-        var data = AuthoredJpegCompatibility.Create(width, height, [220, 180, 100, 200], adobe: 0);
-        const long tables = 2 * (204 + 512) + 12 + 1;
-        var peak = data.Length + pixels * 4L + 1024 + 128 + tables + 4 * (256 + 128) + pixels * 17L;
-        var options = new JpegDecodeOptions { Limits = new() { MaxWorkingBytes = peak } };
-        var result = new byte[pixels * 4];
-        ImageCodec.DecodeJpeg(data, result, JpegSampleFormat.Cmyk, options: options);
-        var expected = result.ToArray();
-        var failure = Assert.Throws<ImageLimitException>(() => ImageCodec.DecodeJpeg(data, result, JpegSampleFormat.Cmyk,
-            options: options with { Limits = options.Limits with { MaxWorkingBytes = peak - 1 } }));
-        Assert.Equal(ImageLimitKind.WorkingBytes, failure.Limit);
-        var budget = new ImageBudget(peak + result.Length, options.Limits.MaxWork);
-        using (budget.Reserve(result.Length))
-        {
-            budget.DecodeJpeg(data, result, JpegSampleFormat.Cmyk, options: options);
-            Assert.Equal(peak, budget.RemainingWorkingBytes);
-        }
-        Assert.Equal(budget.MaxWorkingBytes, budget.RemainingWorkingBytes); Assert.Equal(expected, result);
-        Assert.True(budget.ConsumedWork > 0); Assert.Equal(budget.MaxWork - budget.ConsumedWork, budget.RemainingWork);
-        result.AsSpan().Fill(0xA7);
-        var work = Assert.Throws<ImageLimitException>(() => ImageCodec.DecodeJpeg(data, result, JpegSampleFormat.Cmyk,
-            options: options with { Limits = options.Limits with { MaxWork = budget.ConsumedWork - 1 } }));
-        Assert.Equal(ImageLimitKind.Work, work.Limit);
-        Assert.All(result.AsSpan((height - 1) * width * 4).ToArray(), sample => Assert.Equal(0xA7, sample));
-        using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
-        var canceled = Assert.Throws<OperationCanceledException>(() => ImageCodec.DecodeJpeg(data, result, JpegSampleFormat.Cmyk,
-            options: options, cancellationToken: cancellation.Token)); Assert.Equal(cancellation.Token, canceled.CancellationToken);
-        ImageCodec.DecodeJpeg(data, result, JpegSampleFormat.Cmyk, options: options); Assert.Equal(expected, result);
     }
 
 }

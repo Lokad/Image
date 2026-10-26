@@ -6,7 +6,7 @@ internal static partial class Vp8lReferenceCost
 {
     internal static long PredictionGreen(ReadOnlySpan<int> current, ReadOnlySpan<int> previous, OperationContext context)
     {
-        context.Work(1024);
+        context.Cancellation.ThrowIfCancellationRequested();
         // Red/blue each have a single nonzero bin: entropy cancels exactly.
         var cost = -(current[256] * Scale + 5) / 10 - (current[768] * Scale + 5) / 10;
         var zero = current[0]; var one = current[1];

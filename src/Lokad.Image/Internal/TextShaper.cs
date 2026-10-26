@@ -22,11 +22,11 @@ internal static class TextShaper
             var cluster = 0; var clusterEnd = 0;
             for (var offset = 0; offset < text.Length;)
             {
-                context.Work(1); Rune.DecodeFromUtf16(text.AsSpan(offset), out var rune, out var length);
+                context.Cancellation.ThrowIfCancellationRequested(); Rune.DecodeFromUtf16(text.AsSpan(offset), out var rune, out var length);
                 if (offset == clusterEnd)
                 {
                     cluster = offset; var n = StringInfo.GetNextTextElementLength(text.AsSpan(offset));
-                    context.Work(n); clusterEnd += n;
+                    context.Cancellation.ThrowIfCancellationRequested(); clusterEnd += n;
                 }
                 if (rune.Value == '\r' && offset + length < text.Length && text[offset + length] == '\n') length++;
                 var scalar = rune.Value; var bidi = UnicodeTextProperties.Bidi(scalar);
@@ -47,14 +47,14 @@ internal static class TextShaper
                 byte nextLevel = paragraph.BaseLevel;
                 for (var i = end - 1; i >= start; i--)
                 {
-                    context.Work(1); if (!paragraph.IsRemoved(i - start)) nextLevel = paragraph.Level(i - start);
+                    context.Cancellation.ThrowIfCancellationRequested(); if (!paragraph.IsRemoved(i - start)) nextLevel = paragraph.Level(i - start);
                     glyphs[i].Level = nextLevel;
                     if (paragraph.BaseLevel == 1) glyphs[i].Features |= ParagraphRight;
                 }
                 var previousLevel = -1;
                 for (var i = start; i < end; i++)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (paragraph.IsRemoved(i - start)) { if (previousLevel >= 0) glyphs[i].Level = (byte)previousLevel; }
                     else previousLevel = glyphs[i].Level;
                     if (glyphs[i].Glyph >= 0 && (glyphs[i].Level & 1) != 0 && UnicodeTextProperties.Mirrored(glyphs[i].Scalar))
@@ -80,12 +80,12 @@ internal static class TextShaper
                     Tag("rlig"), Tag("rclt"), Tag("calt"), Tag("liga"), Tag("mset")];
                 for (var start = 0; start < glyphs.Count;)
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (glyphs[start].Glyph < 0) { start++; continue; }
                     var script = (TextScript)((glyphs[start].Features >> ScriptShift) & 7); var level = glyphs[start].Level;
                     var end = start + 1;
                     while (end < glyphs.Count && glyphs[end].Glyph >= 0 && glyphs[end].Level == level
-                        && ((glyphs[end].Features >> ScriptShift) & 7) == (uint)script) { context.Work(1); end++; }
+                        && ((glyphs[end].Features >> ScriptShift) & 7) == (uint)script) { context.Cancellation.ThrowIfCancellationRequested(); end++; }
                     var tag = script switch { TextScript.Arabic => Tag("arab"), TextScript.Hebrew => Tag("hebr"), _ => Tag("latn") };
                     var required = gsub.RequiredTag(tag, 0);
                     if (required != 0 && required != Tag("rtlm") && !features.Contains(required))
@@ -95,7 +95,7 @@ internal static class TextShaper
                     end += glyphs.Count - oldCount;
                     for (var i = start; i < end; i++)
                     {
-                        context.Work(1);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         if ((glyphs[i].Features & MirrorFeature) == 0) continue;
                         if (glyphs[i].Glyph == font.MapForText(glyphs[i].Scalar, context))
                             throw OpenTypeTable.Unsupported("This mirrored glyph needs a mapped partner or a supported rtlm substitution.");
@@ -111,7 +111,7 @@ internal static class TextShaper
                         if (!found && mask != 0 && mask != ArabicJoining.Isolated)
                             for (var i = start; i < end; i++)
                             {
-                                context.Work(1);
+                                context.Cancellation.ThrowIfCancellationRequested();
                                 if ((glyphs[i].Features & mask) != 0 && glyphs[i].Glyph != 0)
                                     throw OpenTypeTable.Unsupported("The supplied font lacks a required Arabic joining-form feature.");
                             }
@@ -148,16 +148,16 @@ internal static class TextShaper
         {
             for (var at = start; at < end;)
             {
-                context.Work(1); if (glyphs[at].Glyph < 0) { at++; continue; }
+                context.Cancellation.ThrowIfCancellationRequested(); if (glyphs[at].Glyph < 0) { at++; continue; }
                 var script = (TextScript)((glyphs[at].Features >> ScriptShift) & 7); var level = glyphs[at].Level;
                 var finish = at + 1;
                 while (finish < end && glyphs[finish].Glyph >= 0 && glyphs[finish].Level == level
-                    && ((glyphs[finish].Features >> ScriptShift) & 7) == (uint)script) { context.Work(1); finish++; }
+                    && ((glyphs[finish].Features >> ScriptShift) & 7) == (uint)script) { context.Cancellation.ThrowIfCancellationRequested(); finish++; }
                 var tag = script switch { TextScript.Arabic => Tag("arab"), TextScript.Hebrew => Tag("hebr"), _ => Tag("latn") };
                 var hasKern = kerning && gpos.HasFeature(tag, 0, Tag("kern"));
                 for (var i = at; i < finish; i++)
                 {
-                    context.Work(1); var m = metrics(glyphs[i].Glyph);
+                    context.Cancellation.ThrowIfCancellationRequested(); var m = metrics(glyphs[i].Glyph);
                     glyphs[i].OriginX = m.Origin; glyphs[i].Advance = classes.Class(glyphs[i]) == 3 ? 0 : m.Advance;
                     glyphs[i].OffsetX = glyphs[i].OffsetY = glyphs[i].AttachX = glyphs[i].AttachY = 0; glyphs[i].AttachTo = 0;
                 }
@@ -180,7 +180,7 @@ internal static class TextShaper
         var context = glyphs.Context; var next = TextScript.Latin; var previous = TextScript.Common; var previousLevel = -1;
         for (var i = end - 1; i >= start; i--)
         {
-            context.Work(1); var script = UnicodeTextProperties.Script(glyphs[i].Scalar);
+            context.Cancellation.ThrowIfCancellationRequested(); var script = UnicodeTextProperties.Script(glyphs[i].Scalar);
             if (script == TextScript.Other && Rune.GetUnicodeCategory(new Rune(glyphs[i].Scalar)) != UnicodeCategory.OtherNotAssigned)
                 throw OpenTypeTable.Unsupported("OpenType text currently supports Latin, Hebrew and Arabic scripts.");
             if (script is TextScript.Latin or TextScript.Hebrew or TextScript.Arabic) next = script;
@@ -188,7 +188,7 @@ internal static class TextShaper
         }
         for (var i = start; i < end; i++)
         {
-            context.Work(1); var script = UnicodeTextProperties.Script(glyphs[i].Scalar);
+            context.Cancellation.ThrowIfCancellationRequested(); var script = UnicodeTextProperties.Script(glyphs[i].Scalar);
             if (script is TextScript.Common or TextScript.Inherited && previousLevel == glyphs[i].Level)
                 glyphs[i].Features = (glyphs[i].Features & ~(7U << ScriptShift)) | (uint)previous << ScriptShift;
             previous = (TextScript)((glyphs[i].Features >> ScriptShift) & 7); previousLevel = glyphs[i].Level;

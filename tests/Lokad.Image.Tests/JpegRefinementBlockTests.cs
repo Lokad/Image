@@ -23,9 +23,9 @@ public sealed class JpegRefinementBlockTests
             var data = Enumerable.Range(0, 40).Select(i => (byte)(seed * 73 + i * 41)).Take(length).ToArray();
             Assert.Equal(Run(false), Run(true));
 
-            (Type? Error, string? Message, int Position, long Remaining, int Eob, int Tail, string Values) Run(bool fused)
+            (Type? Error, string? Message, int Position, int Eob, int Tail, string Values) Run(bool fused)
             {
-                var context = new OperationContext(ImageLimits.Default with { MaxWork = 4096 }, cancelable ? cancellation.Token : default);
+                var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
                 var reader = new JpegEntropyReader(data, 0, context);
                 var low = seed % 3 == 0 ? 13 : 0; var increment = 1 << low;
                 var values = Enumerable.Range(0, 64).Select(i => (i + seed) % 5 == 0 ? 0
@@ -41,46 +41,13 @@ public sealed class JpegRefinementBlockTests
                     tail = reader.ReadBits(3);
                 }
                 catch (Exception error) when (error is ImageDataException or ImageLimitException) { failure = error; }
-                return (failure?.GetType(), failure?.Message, reader.Position, context.RemainingWork, eob, tail, string.Join(',', values));
+                return (failure?.GetType(), failure?.Message, reader.Position, eob, tail, string.Join(',', values));
             }
         }
     }
 
-    [Theory]
-    [InlineData(2047, false)] [InlineData(2048, false)] [InlineData(4096, true)]
-    public void BudgetAndCancellationGuardsDoNotConsumeInput(int budget, bool cancelable)
-    {
-        using var cancellation = new CancellationTokenSource();
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget }, cancelable ? cancellation.Token : default);
-        var counts = new byte[16]; counts[0] = 1;
-        var table = new JpegHuffman(counts, [0], new OperationContext(ImageLimits.Default, default));
-        var reader = new JpegEntropyReader([0], 0, context); var values = new int[64]; var eob = 1;
-        var eligible = budget >= 2048 && !cancelable && Avx2.IsSupported && Bmi2.X64.IsSupported;
-        Assert.Equal(eligible, table.TryReadRefinementBlock(ref reader, values, 1, 63, 0, ref eob));
-        Assert.Equal(0, reader.Position); Assert.Equal(budget, context.RemainingWork);
-        Assert.Equal(eligible ? 0 : 1, eob); Assert.All(values, value => Assert.Equal(0, value));
-    }
-
-    [Theory]
-    [InlineData(2047, false)] [InlineData(2048, false)]
-    [InlineData(2047, true)] [InlineData(2048, true)]
-    public void CancelableBlockGuardsRetainOriginalScopeAndBudget(int budget, bool local)
-    {
-        using var cancellation = new CancellationTokenSource();
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = budget }, cancellation.Token);
-        var counts = new byte[16]; counts[0] = 1;
-        var table = new JpegHuffman(counts, [0], new OperationContext(ImageLimits.Default, default));
-        var reader = new JpegEntropyReader([0], 0, context); var values = new int[64]; var eob = 1;
-        if (local) reader.BeginLocalWork();
-        var eligible = budget >= 2048 && !local && Avx2.IsSupported && Bmi2.X64.IsSupported;
-        Assert.Equal(eligible, table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, 0, ref eob));
-        if (local) reader.EndLocalWork();
-        Assert.Equal(0, reader.Position); Assert.Equal(budget, context.RemainingWork);
-        Assert.Equal(eligible ? 0 : 1, eob); Assert.All(values, value => Assert.Equal(0, value));
-    }
-
     [Fact]
-    public void CancelableBlockKeepsPendingBitsAndWorkOnCancellation()
+    public void CancelableBlockKeepsPendingBitsAndOnCancellation()
     {
         if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
         using var cancellation = new CancellationTokenSource();
@@ -89,13 +56,12 @@ public sealed class JpegRefinementBlockTests
         var table = new JpegHuffman(counts, [0], new OperationContext(ImageLimits.Default, default));
         var reader = new JpegEntropyReader([0xA5], 0, context); var values = new int[64]; values[1] = 2;
         Assert.Equal(5, reader.ReadBits(3));
-        var remaining = context.RemainingWork; var eob = 1;
+var eob = 1;
         cancellation.Cancel(); OperationCanceledException? failure = null;
         try { table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, 0, ref eob); }
         catch (OperationCanceledException error) { failure = error; }
         Assert.NotNull(failure); Assert.Equal(cancellation.Token, failure.CancellationToken);
-        Assert.Equal(1, reader.Position); Assert.Equal(remaining, context.RemainingWork);
-        Assert.Equal(2, values[1]); Assert.Equal(1, eob);
+        Assert.Equal(1, reader.Position);         Assert.Equal(2, values[1]); Assert.Equal(1, eob);
     }
 
     [Fact]
@@ -107,10 +73,9 @@ public sealed class JpegRefinementBlockTests
         var counts = new byte[16]; counts[0] = 1;
         var table = new JpegHuffman(counts, [0], new OperationContext(ImageLimits.Default, default));
         var reader = new JpegEntropyReader([], 0, context); var values = new int[64]; var eob = 1;
-        var remaining = context.RemainingWork; cancellation.Cancel();
+cancellation.Cancel();
         Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, 0, ref eob));
-        Assert.Equal(0, eob); Assert.Equal(0, reader.Position); Assert.Equal(remaining, context.RemainingWork);
-    }
+        Assert.Equal(0, eob); Assert.Equal(0, reader.Position);     }
 
     [Fact]
     public void CancelableOverflowRetainsTheAlreadyConsumedCorrectionBit()
@@ -121,53 +86,11 @@ public sealed class JpegRefinementBlockTests
         var counts = new byte[16]; counts[0] = 1;
         var table = new JpegHuffman(counts, [0], new OperationContext(ImageLimits.Default, default));
         var reader = new JpegEntropyReader([255, 0], 0, context); var values = new int[64]; values[1] = int.MinValue;
-        var remaining = context.RemainingWork; var eob = 1; OverflowException? failure = null;
+var eob = 1; OverflowException? failure = null;
         try { table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, 0, ref eob); }
         catch (OverflowException error) { failure = error; }
         Assert.NotNull(failure); Assert.Equal(int.MinValue, values[1]); Assert.Equal(1, eob);
-        Assert.Equal(2, reader.Position); Assert.Equal(remaining - 1, context.RemainingWork);
-        Assert.Equal(127, reader.ReadBits(7));
-    }
-
-    [Fact]
-    public void ConcurrentCancellationPublishesAnOriginalLogicalPrefix()
-    {
-        if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
-        var counts = new byte[16]; counts[0] = 1;
-        var table = new JpegHuffman(counts, [0], new OperationContext(ImageLimits.Default, default));
-        for (var attempt = 0; attempt < 8; attempt++)
-        {
-            using var cancellation = new CancellationTokenSource();
-            var context = new OperationContext(ImageLimits.Default, cancellation.Token);
-            var data = Enumerable.Range(0, 16).Select(i => (byte)((attempt * 73 + i * 41) % 255)).ToArray();
-            var worker = new Thread(() => { Thread.SpinWait(20000); cancellation.Cancel(); });
-            var canceled = false;
-            worker.Start();
-            try
-            {
-                for (var round = 0; round < 100000; round++)
-                {
-                    var reader = new JpegEntropyReader(data, 0, context);
-                    var values = Enumerable.Repeat(2, 64).ToArray(); var eob = 1;
-                    var before = context.RemainingWork;
-                    try { Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, 0, ref eob)); }
-                    catch (OperationCanceledException error)
-                    {
-                        var consumed = (int)(before - context.RemainingWork);
-                        Assert.InRange(consumed, 0, 63); Assert.Equal(1, eob);
-                        Assert.Equal(cancellation.Token, error.CancellationToken);
-                        var reference = new JpegEntropyReader(data, 0, new OperationContext(ImageLimits.Default, default));
-                        var expected = Enumerable.Repeat(2, 64).ToArray();
-                        for (var i = 1; i <= consumed; i++)
-                            if (reference.ReadBits(1) != 0) expected[i]++;
-                        Assert.Equal(expected, values); Assert.Equal(reference.Position, reader.Position);
-                        canceled = true; break;
-                    }
-                }
-                Assert.True(canceled);
-            }
-            finally { cancellation.Cancel(); worker.Join(); }
-        }
+        Assert.Equal(2, reader.Position);         Assert.Equal(127, reader.ReadBits(7));
     }
 
     [Fact]
@@ -188,7 +111,7 @@ public sealed class JpegRefinementBlockTests
 
             string Run(bool fused)
             {
-                var context = new OperationContext(ImageLimits.Default with { MaxWork = 100000 }, cancellation.Token);
+                var context = new OperationContext(ImageLimits.Default, cancellation.Token);
                 var reader = new JpegEntropyReader(data, 0, context); var eob = seed % 3;
                 var values = new int[64]; var states = new List<string>(); Exception? failure = null;
                 try
@@ -200,13 +123,12 @@ public sealed class JpegRefinementBlockTests
                         for (var i = 0; i < 64; i++) values[i] = (i + seed + round) % 5 == 0 ? 0 : (2 + i % 2) * increment * (i % 3 == 0 ? -1 : 1);
                         if (fused) Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, low, ref eob));
                         else Reference(ref reader, values, table, 1, 63, low, ref eob);
-                        states.Add($"{reader.Position}:{context.RemainingWork}:{eob}:{string.Join(',', values)}");
                         states.Add(reader.ReadBits(round + 1).ToString());
                     }
                     states.Add(reader.ReadBits(16).ToString());
                 }
                 catch (Exception error) when (error is ImageDataException or ImageLimitException) { failure = error; }
-                return $"{failure?.GetType()}:{failure?.Message}:{reader.Position}:{context.RemainingWork}:{eob}:{string.Join(',', values)}:{string.Join(';', states)}";
+                return $"{failure?.GetType()}:{failure?.Message}:{reader.Position}:{eob}:{string.Join(',', values)}:{string.Join(';', states)}";
             }
         }
     }
@@ -224,7 +146,7 @@ public sealed class JpegRefinementBlockTests
         foreach (var overflow in new[] { false, true })
         {
             var data = all[..length]; Assert.Equal(Run(false), Run(true));
-            (Type?, string?, int, long, int, string, int) Run(bool fused)
+            (Type?, string?, int, int, string, int) Run(bool fused)
             {
                 var context = new OperationContext(ImageLimits.Default, cancellation.Token);
                 var reader = new JpegEntropyReader(data, 0, context); var eob = 1;
@@ -239,7 +161,7 @@ public sealed class JpegRefinementBlockTests
                     tail = reader.ReadBits(3); reader.Align();
                 }
                 catch (Exception error) when (error is ImageDataException or ImageLimitException or OverflowException) { failure = error; }
-                return (failure?.GetType(), failure?.Message, reader.Position, context.RemainingWork, eob, string.Join(',', values), tail);
+                return (failure?.GetType(), failure?.Message, reader.Position, eob, string.Join(',', values), tail);
             }
         }
     }

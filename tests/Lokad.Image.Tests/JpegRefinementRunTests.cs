@@ -32,7 +32,7 @@ public sealed class JpegRefinementRunTests
             {
                 Assert.False(success); Assert.False(finished); Assert.Equal(original, actual);
                 Assert.Equal(start, position); Assert.Equal(initialRun, run); Assert.Equal(0, reader.Position);
-                Assert.Equal(ImageLimits.Default.MaxWork, context.RemainingWork); continue;
+continue;
             }
             Assert.True(success);
             var expectedPosition = start; var expectedRun = initialRun; var expectedFinished = false;
@@ -54,23 +54,20 @@ public sealed class JpegRefinementRunTests
             }
             Assert.Equal(expected, actual); Assert.Equal(expectedPosition, position);
             Assert.Equal(expectedRun, run); Assert.Equal(expectedFinished, finished);
-            Assert.Equal(reference.Position, reader.Position); Assert.Equal(referenceContext.RemainingWork, context.RemainingWork);
-        }
+            Assert.Equal(reference.Position, reader.Position);         }
     }
 
     [Theory]
-    [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)] [InlineData(4)]
-    public void RefusalPreservesCoefficientsReaderWorkAndTraversal(int reason)
+    [InlineData(0)] [InlineData(1)]  [InlineData(3)] [InlineData(4)]
+    public void RefusalPreservesCoefficientsReaderAndTraversal(int reason)
     {
         byte[] data = reason switch { 0 => [], 1 => [255, 217], _ => [255, 0] };
         using var cancellation = new CancellationTokenSource();
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = reason == 2 ? 1 : 100 },
+        var context = new OperationContext(ImageLimits.Default,
             reason == 3 ? cancellation.Token : default);
         var reader = new JpegEntropyReader(data, 0, context);
         var original = Enumerable.Repeat(-6, 64).ToArray(); var block = original.ToArray();
-        var position = reason == 4 ? 57 : 0; var run = 16; var remaining = context.RemainingWork;
-        Assert.False(JpegDecoder.TryRefineRun(ref reader, block, ref position, 63, ref run, false, 1, out var finished));
+        var position = reason == 4 ? 57 : 0; var run = 16;         Assert.False(JpegDecoder.TryRefineRun(ref reader, block, ref position, 63, ref run, false, 1, out var finished));
         Assert.False(finished); Assert.Equal(original, block); Assert.Equal(reason == 4 ? 57 : 0, position);
-        Assert.Equal(16, run); Assert.Equal(0, reader.Position); Assert.Equal(remaining, context.RemainingWork);
-    }
+        Assert.Equal(16, run); Assert.Equal(0, reader.Position);     }
 }

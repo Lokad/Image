@@ -12,7 +12,7 @@ internal static class WideWordColumnBicubicResize
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
         if (source.BitDepth != 16 || result.Width < 2 || result.Width >= source.Width || result.Height >= source.Height
             || tapsX > 20 || tapsY > 20 || tapsX <= 10 && tapsY <= 10
@@ -161,7 +161,7 @@ internal static class WideWordColumnBicubicResize
             }
             // Admission bounds complete original tap cost. Failed speculative
             // strips leave the counter untouched for original-order replay.
-            context.Work(rowWork * result.Height);
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
@@ -249,17 +249,14 @@ internal static class WideWordColumnBicubicResize
         // Exact tiny-alpha arithmetic needs the complete 4-KiB allowance.
         // Decline while this frame is live; the caller replays after it unwinds.
         if (normalized > 0 && normalized < 1) return false;
-        var aOut = RoundWord(normalized);
+        var aOut = BicubicMath.RoundWord(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow16(y).Slice(x * 4, 4);
-        destination[0] = RoundWord(color ? red / alphaSum : 0);
-        destination[1] = RoundWord(color ? green / alphaSum : 0);
-        destination[2] = RoundWord(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundWord(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundWord(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundWord(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
     }
-
-    private static ushort RoundWord(double value)
-        => (ushort)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 65535);
 
 }

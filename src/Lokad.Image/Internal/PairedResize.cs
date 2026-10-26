@@ -12,7 +12,7 @@ internal static class PairedResize
     internal static bool TryRows<T>(ImageBuffer source, ImageBuffer result,
         ReadOnlySpan<byte> input, Span<byte> output, ReadOnlySpan<double> horizontalWeights,
         ReadOnlySpan<int> horizontalOffsets, ReadOnlySpan<int> horizontalCounts, int y,
-        double scaleY, int radius, ResizeFilter filter, long rowWork, OperationContext context) where T : unmanaged
+        double scaleY, int radius, ResizeFilter filter, OperationContext context) where T : unmanaged
     {
         var height = result.Height;
         if (y + 1 >= height) return false;
@@ -25,7 +25,7 @@ internal static class PairedResize
         if ((int)Math.Floor(center1 + radius * scaleY) - first1 + 1 != count) return false;
 
         // The caller has charged the first row. Each accepted pair charges both.
-        context.Work(rowWork);
+        context.Cancellation.ThrowIfCancellationRequested();
         var width = result.Width;
         var wide16 = typeof(T) == typeof(ushort);
         var sampleBytes = wide16 ? 2 : 1;

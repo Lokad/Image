@@ -12,7 +12,7 @@ internal static class PreparedResize
     internal static void Apply<T>(ImageBuffer source, ImageBuffer result,
         ReadOnlySpan<double> horizontalWeights, ReadOnlySpan<int> horizontalOffsets,
         ReadOnlySpan<int> horizontalCounts, double scaleY, int radius, ResizeFilter filter,
-        long rowWork, OperationContext context) where T : unmanaged, INumberBase<T>
+OperationContext context) where T : unmanaged, INumberBase<T>
     {
         // Byte and UInt16 specializations keep sample conversion and storage
         // outside runtime depth dispatch. Views remain local to this operation.
@@ -23,15 +23,15 @@ internal static class PreparedResize
         if (paired && Avx512DQ.IsSupported && typeof(T) == typeof(byte) && filter == ResizeFilter.Bilinear
             && result.Width > source.Width && result.Height > source.Height
             && BilinearUpsample.TryApply(source, result, horizontalWeights, horizontalOffsets,
-                horizontalCounts, rowWork, context)) return;
+                horizontalCounts, context)) return;
         if (paired && Avx512DQ.IsSupported && typeof(T) == typeof(ushort) && filter == ResizeFilter.Bilinear
             && result.Width > source.Width && result.Height > source.Height
             && BilinearUpsample16.TryApply(source, result, horizontalWeights, horizontalOffsets,
-                horizontalCounts, rowWork, context)) return;
+                horizontalCounts, context)) return;
         if (paired && typeof(T) == typeof(ushort) && filter == ResizeFilter.Bilinear
-            && BilinearDownsample16.TryApply(source, result, scaleY, rowWork, context)) return;
+            && BilinearDownsample16.TryApply(source, result, scaleY, context)) return;
         if (paired && typeof(T) == typeof(byte) && filter == ResizeFilter.Bilinear
-            && BilinearDownsample8.TryApply(source, result, scaleY, rowWork, context)) return;
+            && BilinearDownsample8.TryApply(source, result, scaleY, context)) return;
         ReadOnlySpan<byte> packedInput = packed8 || paired ? MemoryMarshal.Cast<T, byte>(input) : default;
         var output = MemoryMarshal.Cast<byte, T>(result.Pixels);
         Span<byte> pairedOutput = paired ? MemoryMarshal.Cast<T, byte>(output) : default;
@@ -44,9 +44,9 @@ internal static class PreparedResize
         Span<int> verticalOffsets = stackalloc int[8];
         for (var y = 0; y < height; y++)
         {
-            context.Work(rowWork);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (paired && PairedResize.TryRows<T>(source, result, packedInput, pairedOutput,
-                horizontalWeights, horizontalOffsets, horizontalCounts, y, scaleY, radius, filter, rowWork, context))
+                horizontalWeights, horizontalOffsets, horizontalCounts, y, scaleY, radius, filter, context))
             {
                 y++;
                 continue;

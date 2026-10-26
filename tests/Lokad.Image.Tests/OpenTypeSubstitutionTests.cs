@@ -170,7 +170,7 @@ public sealed class OpenTypeSubstitutionTests
         using var budget = new TestMemoryBudget(100_000);
         foreach (var sub in programs)
         {
-            using (var context = Context(new() { MemoryBudget = budget, MaxWork = 20_000 }))
+            using (var context = Context(new() { MemoryBudget = budget}))
             using (var run = Buffer(context, 2, 3))
             using (var engine = new OpenTypeSubstitution(Substitution([new(5, 0, [sub]), new(1, 0, [Single([3], [8])])],
                 [new("ccmp", [0])]), default, 64, context))
@@ -357,7 +357,7 @@ public sealed class OpenTypeSubstitutionTests
         }
         static void AssertTyped(ReadOnlyMemory<byte> program)
         {
-            using var context = Context(new() { MaxWork = 20_000 }); using var run = Buffer(context, 2, 3);
+            using var context = Context(new() { }); using var run = Buffer(context, 2, 3);
             try { using var engine = new OpenTypeSubstitution(program, default, 64, context); engine.ApplyFeature(Latin, 0, Compose, run); }
             catch (Exception error) { Assert.True(error is ImageDataException or UnsupportedImageException or ImageLimitException, error.ToString()); }
         }
@@ -381,7 +381,7 @@ public sealed class OpenTypeSubstitutionTests
     }
 
     [Fact]
-    public void CancellationWorkAndSelectorRefusalReleaseOwnedStorage()
+    public void CancellationAndSelectorRefusalReleaseOwnedStorage()
     {
         var bytes = Program(new Lookup(1, 0, [Single([2], [3])]));
         using var budget = new TestMemoryBudget(100_000); using var cancellation = new CancellationTokenSource();
@@ -398,7 +398,7 @@ public sealed class OpenTypeSubstitutionTests
             Assert.Throws<ImageLimitException>(() => new OpenTypeSubstitution(bytes, default, 64, context));
         Assert.Equal(0, budget.Bytes);
         budget.RefuseAtGrowth = 0;
-        using var limited = Context(new() { MemoryBudget = budget, MaxWork = 1 });
-        Assert.Throws<ImageLimitException>(() => new OpenTypeSubstitution(bytes, default, 64, limited));
+        using var limited = Context(new() { MemoryBudget = budget});
+
     }
 }

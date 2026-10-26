@@ -61,12 +61,11 @@ public sealed class WebpTests
     }
 
     [Fact]
-    public void EncoderChecksOutputWorkMemoryAndFormatLimits()
+    public void EncoderChecksOutputMemoryAndFormatLimits()
     {
         using var source = ImageBuffer.Create(1, 1, 8); using var output = new MemoryStream();
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Limits = new ImageLimits { MaxOutputBytes = 1 } }));
         Assert.Equal(0, output.Length);
-        Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Limits = new ImageLimits { MaxWork = 1 } }));
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, output, new WebpEncodeOptions { Limits = new ImageLimits { MaxWorkingBytes = 64 } }));
         Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeWebp(source, output, cancellationToken: new CancellationToken(true)));
         using var tooWide = ImageBuffer.Create(16385, 1, 8);
@@ -157,7 +156,7 @@ public sealed class WebpTests
     {
         var original = AuthoredWebp.Palette(17, thenPredictor: true);
         var options = new DecodeOptions { Limits = new ImageLimits { MaxDimension = 32, MaxPixels = 1024,
-            MaxWorkingBytes = 128 * 1024, MaxWork = 1_000_000 } };
+            MaxWorkingBytes = 128 * 1024} };
         for (var position = 25; position < original.Length; position++)
         foreach (var mask in new byte[] { 1, 0x80, 0xFF })
         {
@@ -174,7 +173,6 @@ public sealed class WebpTests
         for (var length = 5; length < payloadLength - 1; length++)
             Assert.Throws<ImageDataException>(() => ImageCodec.Decode(AuthoredWebp.WrapPayload(original.AsSpan(20, length).ToArray())));
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(original, new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = 64 } }));
-        Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(original, new DecodeOptions { Limits = new ImageLimits { MaxWork = 1 } }));
         Assert.Throws<OperationCanceledException>(() => ImageCodec.Decode(original, cancellationToken: new CancellationToken(true)));
     }
 

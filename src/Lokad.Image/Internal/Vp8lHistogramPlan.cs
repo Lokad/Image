@@ -20,8 +20,8 @@ internal sealed class Vp8lHistogramPlan : IDisposable
     {
         this.context = context; Layout = layout; GroupCount = groups; Columns = columns; TileBits = bits;
         var capacity = checked(groups * layout.Total); var reserved = ((long)capacity + tiles) * 4;
-        context.Work(0); context.Reserve(reserved);
-        try { context.Work(0); counts = new int[capacity]; map = new int[tiles]; }
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
+        try { context.Cancellation.ThrowIfCancellationRequested(); counts = new int[capacity]; map = new int[tiles]; }
         catch { counts = null; context.Release(reserved); throw; }
     }
 

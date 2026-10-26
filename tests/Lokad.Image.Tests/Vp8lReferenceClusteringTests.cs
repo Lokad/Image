@@ -103,23 +103,6 @@ public sealed class Vp8lReferenceClusteringTests
         next.Dispose(); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
     }
 
-    [Theory]
-    [InlineData(75)]
-    [InlineData(8)]
-    public void LateRecountWorkFailureDisposesBothRetainedArraysAndScratch(int quality)
-    {
-        long work;
-        using (var calibration = new OperationContext(ImageLimits.Default, default))
-        {
-            using var plan = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, calibration, quality); work = calibration.ConsumedWork;
-        }
-        using var root = new TestMemoryBudget(100_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = work - 1 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context, quality));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
-    }
-
     [Fact]
     public void InvalidTilingAndIncompleteTokensFailWithoutRetainingStorage()
     {

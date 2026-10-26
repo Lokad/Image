@@ -150,17 +150,15 @@ public sealed class SourceMetadataTests
 
     private static async Task CheckEveryApi(byte[] data, SourceColorModel color, SourceAlphaRepresentation alpha, int depth, int count, bool hasAlpha)
     {
-        using var root = new TestMemoryBudget(4 * 1024 * 1024); var limits = new ImageLimits { MemoryBudget = root, MaxWork = 1_000_000 };
+        using var root = new TestMemoryBudget(4 * 1024 * 1024); var limits = new ImageLimits { MemoryBudget = root};
         var copy = data.ToArray(); var expected = ImageCodec.Identify(data, limits);
         Assert.Equal((color,alpha,depth,count,hasAlpha), (expected.SourceColor,expected.SourceAlpha,expected.BitDepth,(int)expected.SourceComponentCount,expected.HasAlpha));
         using var sync = new FragmentedInput(data, false); Assert.Equal(expected, ImageCodec.Identify(sync, limits));
         using var asynchronous = new FragmentedInput(data, true); Assert.Equal(expected, await ImageCodec.IdentifyAsync(asynchronous, limits));
         using var header = new FragmentedInput(data, false); Assert.Equal(expected, ImageCodec.InspectHeaders(header, limits with { MaxWorkingBytes = 8448 }));
         using var asyncHeader = new FragmentedInput(data, true); Assert.Equal(expected, await ImageCodec.InspectHeadersAsync(asyncHeader, limits with { MaxWorkingBytes = 8448 }));
-        var budget = new ImageBudget(1 << 20, 10_000_000); Assert.Equal(expected, budget.Identify(data, limits with { MaxWorkingBytes = 1 << 20 }));
-        using var budgetHeader = new FragmentedInput(data, true); Assert.Equal(expected, await budget.InspectHeadersAsync(budgetHeader, limits with { MaxWorkingBytes = 8448 }));
         Assert.Equal(copy, data); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
-        foreach (var input in new[] {sync,asynchronous,header,asyncHeader,budgetHeader}) Assert.False(input.WasDisposed);
+        foreach (var input in new[] {sync,asynchronous,header,asyncHeader}) Assert.False(input.WasDisposed);
     }
 
     private sealed class FragmentedInput(byte[] bytes, bool asynchronous) : Stream

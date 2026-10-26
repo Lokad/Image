@@ -30,7 +30,7 @@ internal static class Vp8Color
         {
             for (var y = 0; y < planes.Height; y++)
             {
-                context.Work(planes.Width * 64L);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var row = result.GetRow8(y);
                 for (var x = 0; x < planes.Width; x++)
                 {

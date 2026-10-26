@@ -37,7 +37,7 @@ public sealed class PngFastCompressionTests
     }
 
     [Theory]
-    [InlineData("memory")] [InlineData("work")] [InlineData("output")]
+    [InlineData("memory")]  [InlineData("output")]
     public void ConstrainedFailuresKeepOriginalExceptionAndPartialPacket(string constraint)
     {
         using var source = OriginalPixels.Buffer(513, 259, 16); using var live = new CancellationTokenSource();
@@ -45,7 +45,6 @@ public sealed class PngFastCompressionTests
         var limits = constraint switch
         {
             "memory" => ImageLimits.Default with { MaxWorkingBytes = 513L * 259 * 8 + 513 * 8 + 65536 + 1024 * 1024 - 1 },
-            "work" => ImageLimits.Default with { MaxWork = 513L * 259 * 8 * 8 - 1 },
             _ => ImageLimits.Default with { MaxOutputBytes = cancelable.Length - 1 }
         };
         using var actual = new MemoryStream(); using var reference = new MemoryStream();

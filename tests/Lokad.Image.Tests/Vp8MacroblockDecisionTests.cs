@@ -97,7 +97,7 @@ public sealed class Vp8MacroblockDecisionTests
             rate = Vp8RatePlan.Create(probabilities, context); var leftDc = (byte)0; var count = columns * rows;
             for (var index = 0; index < count; index++)
             {
-                context.Work(32_768); var x = index % columns; var y = index / columns;
+var x = index % columns; var y = index / columns;
                 if (x == 0)
                 {
                     neighbors[..35].Fill(129); neighbors[0] = neighbors[17] = neighbors[26] = y == 0 ? (byte)127 : (byte)129;
@@ -208,8 +208,7 @@ public sealed class Vp8MacroblockDecisionTests
             using var cancel = new CancellationTokenSource(); using var cancelled = new OperationContext(new() { MemoryBudget = root }, cancel.Token); cancel.Cancel();
             Assert.Throws<OperationCanceledException>(() => Run(source, modeInput, contexts, diffusion, shared, levels, modes, errors, cancelled));
             Assert.All(shared, value => Assert.Equal((byte)55, value));
-            using var limited = new OperationContext(new() { MemoryBudget = root, MaxWork = 20_000 }, default);
-            Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => Run(source, modeInput, contexts, diffusion, pixels, levels, modes, errors, limited)).Limit);
+            using var limited = new OperationContext(new() { MemoryBudget = root}, default);
             Assert.Equal(expected, Run(source, modeInput, contexts, diffusion, pixels, levels, modes, errors, context));
             Assert.Equal(originalSource, source); Assert.Equal(originalNeighbors, neighbors); Assert.Equal(retained, root.Bytes); Assert.False(root.IsDisposed);
         }

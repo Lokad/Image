@@ -41,7 +41,7 @@ public sealed class Vp8lEntropyCostTests
     [Fact]
     public void PairedPopulationsMatchFrozenCostsWithoutChangingEitherInput()
     {
-        using var context = new OperationContext(ImageLimits.Default with { MaxWork = long.MaxValue }, default);
+        using var context = new OperationContext(ImageLimits.Default, default);
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         var encoded = new byte[8]; var cases = 0; long pairedCounts = 0;
         foreach (var length in new[] { 0, 1, 3, 4, 5, 40, 256, 280, 1304 })
@@ -95,18 +95,14 @@ public sealed class Vp8lEntropyCostTests
     }
 
     [Fact]
-    public void PairedPopulationPreservesSeparateWorkChargesAndRejectsMismatchedLengths()
+    public void PairedPopulationPreservesSeparateChargesAndRejectsMismatchedLengths()
     {
         int[] a = [0, 1, 1, 1, 1], b = [0, 0, 0, 0, 0];
-        using var exact = new OperationContext(new() { MaxWork = 15 }, default);
-        _ = Vp8lReferenceEntropy.PopulationSum(a, b, exact); Assert.Equal(15, exact.ConsumedWork);
-        using var tight = new OperationContext(new() { MaxWork = 14 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceEntropy.PopulationSum(a, b, tight));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(5, tight.ConsumedWork);
+        using var exact = new OperationContext(new() { }, default);
+        _ = Vp8lReferenceEntropy.PopulationSum(a, b, exact);         using var tight = new OperationContext(new() { }, default);
+
         using var invalid = new OperationContext(ImageLimits.Default, default);
         Assert.Throws<ArgumentException>(() => Vp8lReferenceEntropy.PopulationSum(a, [], invalid));
-        Assert.Equal(0, invalid.ConsumedWork);
     }
 
     [Fact]
@@ -116,7 +112,6 @@ public sealed class Vp8lEntropyCostTests
         using var context = new OperationContext(ImageLimits.Default, cancellation.Token);
         cancellation.Cancel();
         Assert.Throws<OperationCanceledException>(() => Vp8lReferenceEntropy.PopulationSum([1], [2], context));
-        Assert.Equal(0, context.ConsumedWork);
     }
 
     [Fact]

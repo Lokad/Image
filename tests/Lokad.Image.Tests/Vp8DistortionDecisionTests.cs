@@ -87,7 +87,7 @@ public sealed class Vp8DistortionDecisionTests
                 var length = pass == 0 && method == 0 ? count / 4 : count;
                 for (var index = 0; index < length; index++, call++)
                 {
-                    context.Work(4096); var x = index % columns; var y = index / columns;
+var x = index % columns; var y = index / columns;
                     if (x == 0) { edges[..35].Fill(129); edges[0] = edges[17] = edges[26] = y == 0 ? (byte)127 : (byte)129; modeLeft.Clear(); leftDc = 0; }
                     for (var yy = 0; yy < 16; yy++) input.Y.Slice((y * 16 + yy) * input.Stride + x * 16, 16).CopyTo(source.Slice(yy * 16, 16));
                     for (var yy = 0; yy < 8; yy++)
@@ -133,7 +133,7 @@ public sealed class Vp8DistortionDecisionTests
                 }
                 if (pass == 0)
                 {
-                    context.Work(1056 * 16L); Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities, out var changed); Assert.True(changed);
+Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities, out var changed); Assert.True(changed);
                     "PRB8"u8.CopyTo(profile); BinaryPrimitives.WriteInt32LittleEndian(profile[4..], call); probabilities.CopyTo(profile[8..]); profileHash.AppendData(profile);
                 }
             }
@@ -231,31 +231,6 @@ public sealed class Vp8DistortionDecisionTests
         Assert.Throws<ArgumentOutOfRangeException>(() => Vp8QuantizationPlan.Create(f.Segments, 42, f.Context, -1));
         Assert.Throws<ArgumentOutOfRangeException>(() => Vp8QuantizationPlan.Create(f.Segments, 42, f.Context, 7));
         Assert.All(pixels, value => Assert.Equal((byte)88, value)); Assert.Equal(before, f.Root.Bytes); Assert.Equal(attempts, f.Root.Attempts);
-    }
-
-    [Fact]
-    public void CallerScratchAdmissionCancellationAndLateWorkFailurePreserveInputsAndRecover()
-    {
-        using var f = new Fixture(); var original = f.Source.ToArray(); var modes = new byte[18]; var errors = new sbyte[16]; var pixels = new byte[384]; var levels = new short[400];
-        var before = f.Root.Bytes; using var caller = f.Root.CreateScope();
-        Assert.True(caller.TryReserve(2_000_000 - before - Vp8DistortionDecision.ScratchBytes + 1, out var held));
-        Assert.Equal(ImageLimitScope.SharedBudget, Assert.Throws<ImageLimitException>(() => f.Context.Reserve(Vp8DistortionDecision.ScratchBytes)).Scope);
-        Assert.Equal(before + held.Bytes, f.Root.Bytes); held.Dispose();
-        using var cancellation = new CancellationTokenSource(); using var stopped = new OperationContext(new() { MemoryBudget = f.Root }, cancellation.Token);
-        stopped.Reserve(Vp8DistortionDecision.ScratchBytes); cancellation.Cancel();
-        Assert.Throws<OperationCanceledException>(() => f.Run(0, true, f.Source, modes, errors, pixels, levels, modes, errors, stopped));
-        stopped.Release(Vp8DistortionDecision.ScratchBytes); Assert.Equal(before, f.Root.Bytes);
-        long work;
-        using (var sizing = new OperationContext(new() { MemoryBudget = f.Root }, default))
-        {
-            sizing.Reserve(Vp8DistortionDecision.ScratchBytes); f.Run(0, true, f.Source, modes, errors, pixels, levels, modes, errors, sizing); work = sizing.ConsumedWork;
-            sizing.Release(Vp8DistortionDecision.ScratchBytes);
-        }
-        using var limited = new OperationContext(new() { MemoryBudget = f.Root, MaxWork = work - 1 }, default); limited.Reserve(Vp8DistortionDecision.ScratchBytes);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => f.Run(0, true, f.Source, modes, errors, pixels, levels, modes, errors, limited)).Limit);
-        limited.Release(Vp8DistortionDecision.ScratchBytes); Assert.Equal(before, f.Root.Bytes); Assert.Equal(original, f.Source);
-        f.Context.Reserve(Vp8DistortionDecision.ScratchBytes); f.Run(0, true, f.Source, modes, errors, pixels, levels, modes, errors, f.Context);
-        f.Context.Release(Vp8DistortionDecision.ScratchBytes); Assert.Equal(before, f.Root.Bytes); Assert.False(f.Root.IsDisposed);
     }
 
 }

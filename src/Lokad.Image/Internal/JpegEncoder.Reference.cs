@@ -6,7 +6,6 @@ internal static partial class JpegEncoder
 {
     private const int ReferenceFixedBytes = 8192;
     private const int ReferenceTableBytes = 16384;
-    private const int ReferenceMcuWork = 1 + 128 * 36 + 6 * (4096 + 128 + 192);
 
     internal static int ReferenceQScale(int quality)
     {
@@ -34,17 +33,11 @@ internal static partial class JpegEncoder
         context.PixelBytes(width, height, image?.BitDepth ?? 8);
         if (width > 65535 || height > 65535)
             throw new ImageLimitException(ImageLimitKind.Dimension, "JPEG dimensions exceed 65535.");
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         var mcuWidth = options.Sampling == JpegSampling.YCbCr444 ? 8 : 16;
         var mcus = ((width + mcuWidth - 1L) / mcuWidth) * ((height + 15L) / 16);
-        var mcuWork = options.Sampling == JpegSampling.YCbCr444 ? ReferenceMcuWork : ReferenceSubsampledMcuWork;
         var blocks = options.Sampling == JpegSampling.YCbCr422 ? 8 : 6;
         var fixedTables = options.RestartInterval != 0;
-        var restartWork = fixedTables ? (mcus - 1) / options.RestartInterval * 3 : 0;
-        var plannedWork = (fixedTables ? 1 : 2) * mcus * mcuWork + mcus * blocks * 132
-            + 4L * (fixedTables ? JpegFixedReferenceTables.TableWork : JpegReferenceTables.HuffmanWork) + restartWork + 4096;
-        if (plannedWork > context.RemainingWork)
-            throw new ImageLimitException(ImageLimitKind.Work, "Reference JPEG work exceeds the configured limit.");
         long borrowed = 0; var fixedReserved = image is null; var tablesReserved = false;
         JpegEntropyRecords? records = null;
         // Caller sample entry points already admitted their borrowed span and
@@ -56,7 +49,7 @@ internal static partial class JpegEncoder
                 context.ReserveBorrowed(image.ByteLength); borrowed = image.ByteLength;
                 context.Reserve(ReferenceFixedBytes); fixedReserved = true;
             }
-            context.Work(0);
+            context.Cancellation.ThrowIfCancellationRequested();
             // Choose before admission, using declared local limits only. A
             // refused shared reservation is never retried through recomputation.
             // The conservative future table peak also fits beside this owner.
@@ -86,7 +79,7 @@ internal static partial class JpegEncoder
             }
             // Establish the owner of all four surviving table arrays before the
             // generators allocate them. Their graph scratch has a shorter owner.
-            context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Work(0);
+            context.Reserve(ReferenceTableBytes); tablesReserved = true; context.Cancellation.ThrowIfCancellationRequested();
             var tables = new JpegEncodingTable[4];
             for (var i = 0; i < 4; i++) tables[i] = fixedTables
                 ? JpegFixedReferenceTables.Create(i, context) : JpegReferenceTables.Huffman(histograms[i], context);
@@ -95,8 +88,8 @@ internal static partial class JpegEncoder
             if (records is null)
                 ReferencePass(image, source, width, height, options.BackgroundRgb, options.Sampling, quantizationPlan, histograms, tables, writer, context, options.RestartInterval);
             else
-                records.Write(tables, writer, mcuWork);
-            writer.Align(); context.Work(2); output.WriteByte(255); output.WriteByte(217);
+                records.Write(tables, writer);
+            writer.Align(); context.Cancellation.ThrowIfCancellationRequested(); output.WriteByte(255); output.WriteByte(217);
         }
         finally
         {
@@ -125,7 +118,7 @@ internal static partial class JpegEncoder
         for (var left = 0; left < width; left += 8)
         {
             ReferenceRestart(mcuIndex++, restartInterval, previous, writer, context);
-            context.Work(ReferenceMcuWork);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var y = 0; y < 16; y++)
             {
                 var sy = Math.Min(top + y, height - 1);
@@ -162,7 +155,7 @@ internal static partial class JpegEncoder
         JpegEntropyWriter? writer, OperationContext context)
     {
         if (interval == 0 || mcu == 0 || mcu % interval != 0) return;
-        context.Work(2); writer?.Restart(mcu / interval - 1); previous.Clear();
+        context.Cancellation.ThrowIfCancellationRequested(); writer?.Restart(mcu / interval - 1); previous.Clear();
     }
 
     private static void ReferenceBlock(ReadOnlySpan<short> coefficients, int component, Span<int> previous,
@@ -216,7 +209,7 @@ internal static partial class JpegEncoder
     private static void WriteReferenceHeader(Stream output, int width, int height, JpegSampling sampling, ushort[] quantization,
         JpegEncodingTable[] tables, OperationContext context, int restartInterval = 0)
     {
-        context.Work(2); output.WriteByte(255); output.WriteByte(216);
+        context.Cancellation.ThrowIfCancellationRequested(); output.WriteByte(255); output.WriteByte(216);
         ReferenceSegment(output, 254, "Lokad.Image\0"u8, context);
         Span<byte> quant = stackalloc byte[65]; quant[0] = 0;
         for (var i = 0; i < 64; i++) quant[i + 1] = (byte)quantization[JpegTransform.Zigzag[i]];
@@ -241,7 +234,7 @@ internal static partial class JpegEncoder
 
     private static void ReferenceSegment(Stream output, byte marker, ReadOnlySpan<byte> payload, OperationContext context)
     {
-        context.Work(payload.Length + 4); var length = payload.Length + 2;
+        context.Cancellation.ThrowIfCancellationRequested(); var length = payload.Length + 2;
         output.WriteByte(255); output.WriteByte(marker); output.WriteByte((byte)(length >> 8)); output.WriteByte((byte)length);
         output.Write(payload);
     }

@@ -113,10 +113,6 @@ public sealed class WebpLosslessAdmissionTests
         Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejectedOutput, options with
         { Limits = limits with { MaxOutputBytes = expected.Length - 1 } }));
         Assert.Equal(0, rejectedOutput.Length); Assert.True(rejectedOutput.CanWrite);
-        using var rejectedWork = new MemoryStream();
-        Assert.Throws<ImageLimitException>(() => ImageCodec.EncodeWebp(source, rejectedWork, options with
-        { Limits = limits with { MaxWork = 1 } }));
-        Assert.Equal(0, rejectedWork.Length); Assert.True(rejectedWork.CanWrite);
         using var canceled = new MemoryStream();
         Assert.Throws<OperationCanceledException>(() => ImageCodec.EncodeWebp(source, canceled, options, new CancellationToken(true)));
         Assert.Equal(0, canceled.Length); Assert.True(canceled.CanWrite);

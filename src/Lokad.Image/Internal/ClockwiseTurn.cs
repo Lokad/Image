@@ -34,7 +34,7 @@ internal static class ClockwiseTurn
         {
             var rows = Math.Min(32, height - y);
             var columns = Math.Min(32, width - x);
-            context.Work(rows * columns * 4L);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var column = x; column < x + columns; column++)
             {
                 var input = y * width + column;

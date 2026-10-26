@@ -32,7 +32,7 @@ internal sealed class InspectionReader : IDisposable
         if ((uint)read > requested) throw new ImageDataException("Stream returned an invalid read count.");
         if (read > Context.Limits.MaxInputBytes - acquired)
             throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
-        Context.Work(read); acquired += read; first = 0; last = read;
+        Context.Cancellation.ThrowIfCancellationRequested(); acquired += read; first = 0; last = read;
         return read != 0;
     }
 
@@ -66,7 +66,7 @@ internal sealed class InspectionReader : IDisposable
         {
             var position = input.Position; var length = input.Length;
             if (position < 0 || length < position || count > length - position) throw new ImageDataException("Truncated image payload.");
-            Context.Work(count);
+            Context.Cancellation.ThrowIfCancellationRequested();
             if (input.Seek(count, SeekOrigin.Current) != position + count) throw new ImageDataException("Invalid stream seek result.");
             acquired += count; Context.Cancellation.ThrowIfCancellationRequested();
         }

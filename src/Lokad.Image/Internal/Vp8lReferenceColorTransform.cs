@@ -16,8 +16,8 @@ internal sealed class Vp8lColorTransformPlan : IDisposable
     {
         ArgumentOutOfRangeException.ThrowIfNegative(length);
         this.context = context; count = length; StoredBits = bits;
-        context.Work(0); context.Reserve(length * 4L);
-        try { context.Work(0); coefficients = new uint[length]; }
+        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(length * 4L);
+        try { context.Cancellation.ThrowIfCancellationRequested(); coefficients = new uint[length]; }
         catch { context.Release(length * 4L); throw; }
     }
 
@@ -32,7 +32,7 @@ internal sealed class Vp8lColorTransformPlan : IDisposable
             var stride = 1 << (bits - initial); var same = true;
             for (var y = 0; same && y < rows; y++)
             {
-                context.Work(columns);
+                context.Cancellation.ThrowIfCancellationRequested();
                 for (var x = 0; x < columns; x++)
                     if (map[y * columns + x] != map[y / stride * stride * columns + x / stride * stride])
                     { same = false; break; }
@@ -45,7 +45,7 @@ internal sealed class Vp8lColorTransformPlan : IDisposable
         var newRows = (height + (1 << stored) - 1) >> stored;
         for (var y = 0; y < newRows; y++)
         {
-            context.Work(newColumns);
+            context.Cancellation.ThrowIfCancellationRequested();
             // Source anchors advance at least as fast as destination indices;
             // writing the compact prefix cannot overwrite a later source anchor.
             for (var x = 0; x < newColumns; x++) map[y * newColumns + x] = map[y * step * columns + x * step];
@@ -68,7 +68,7 @@ internal static class Vp8lReferenceColorTransform
     {
         for (var at = 0; at < working.Length; at += 4096)
         {
-            var count = Math.Min(4096, working.Length - at); context.Work(count * 2L);
+            var count = Math.Min(4096, working.Length - at); context.Cancellation.ThrowIfCancellationRequested();
             var chunk = working.Slice(at, count);
             for (var i = 0; i < chunk.Length; i++)
             {
@@ -105,14 +105,14 @@ internal static class Vp8lReferenceColorTransform
         internal Search(OperationContext context)
         {
             this.context = context;
-            context.Work(0); context.Reserve(ScratchBytes);
-            try { context.Work(0); counts = new int[3 * 256]; products = new long[2 * 256]; }
+            context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(ScratchBytes);
+            try { context.Cancellation.ThrowIfCancellationRequested(); counts = new int[3 * 256]; products = new long[2 * 256]; }
             catch { context.Release(ScratchBytes); throw; }
         }
 
         private long Cost(bool red)
         {
-            context.Work(256);
+            context.Cancellation.ThrowIfCancellationRequested();
             return Vp8lColorCost.Evaluate(Histogram, red ? RedHistory : BlueHistory,
                 red ? RedProducts : BlueProducts, red ? redBaseCost : blueBaseCost);
         }
@@ -120,12 +120,12 @@ internal static class Vp8lReferenceColorTransform
         private long Score(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
             uint previousX, uint previousY, bool red, int gr, int gb, int rb)
         {
-            context.Work(256); var histogram = Histogram; histogram.Clear();
+            context.Cancellation.ThrowIfCancellationRequested(); var histogram = Histogram; histogram.Clear();
             // This tile remains unchanged during the complete coefficient search.
             // Strided borrowing needs neither a tile copy nor a second image.
             for (var y = y0; y < y1; y++)
             {
-                var row = working.Slice(y * width + x0, x1 - x0); context.Work(row.Length * 4L);
+                var row = working.Slice(y * width + x0, x1 - x0); context.Cancellation.ThrowIfCancellationRequested();
                 foreach (var pixel in row)
                 {
                     var transformed = Apply(pixel, gr, gb, rb);
@@ -167,8 +167,8 @@ internal static class Vp8lReferenceColorTransform
                 // Both histories and tile population remain fixed through all
                 // coefficient trials. Charge and prepare each history once.
                 var population = (x1 - x0) * (y1 - y0);
-                context.Work(256); redBaseCost = Vp8lColorCost.Prepare(RedHistory, population, RedProducts);
-                context.Work(256); blueBaseCost = Vp8lColorCost.Prepare(BlueHistory, population, BlueProducts);
+                context.Cancellation.ThrowIfCancellationRequested(); redBaseCost = Vp8lColorCost.Prepare(RedHistory, population, RedProducts);
+                context.Cancellation.ThrowIfCancellationRequested(); blueBaseCost = Vp8lColorCost.Prepare(BlueHistory, population, BlueProducts);
                 var bestGr = 0;
                 var bestRedCost = Score(working, width, x0, y0, x1, y1, previousX, previousY, true, 0, 0, 0);
                 for (var level = 0; level < 4 + ((7 * quality) >> 8); level++)
@@ -203,13 +203,13 @@ internal static class Vp8lReferenceColorTransform
                 map[tile] = previousX;
                 for (var y = y0; y < y1; y++)
                 {
-                    context.Work((x1 - x0) * 4L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     for (var x = x0; x < x1; x++) working[y * width + x] = Apply(working[y * width + x], bestGr, bestGb, bestRb);
                 }
                 var redHistory = RedHistory; var blueHistory = BlueHistory;
                 for (var y = y0; y < y1; y++)
                 {
-                    context.Work((x1 - x0) * 2L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     for (var x = x0; x < x1; x++)
                     {
                         var at = y * width + x; var pixel = working[at];

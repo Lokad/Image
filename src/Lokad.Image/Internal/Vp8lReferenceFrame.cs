@@ -52,10 +52,10 @@ internal static class Vp8lReferenceFrame
         var length = payloadBytes + 20L + (payloadBytes & 1);
         if (payloadBytes < 0 || length > context.Limits.MaxOutputBytes)
             throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
-        context.Work(20); Span<byte> header = stackalloc byte[20];
+        context.Cancellation.ThrowIfCancellationRequested(); Span<byte> header = stackalloc byte[20];
         "RIFF"u8.CopyTo(header); BinaryPrimitives.WriteUInt32LittleEndian(header[4..], (uint)(length - 8));
         "WEBPVP8L"u8.CopyTo(header[8..]); BinaryPrimitives.WriteInt32LittleEndian(header[16..], payloadBytes);
         output.Write(header); WritePayload(output, prefix, image, context);
-        if ((payloadBytes & 1) != 0) { context.Work(1); output.WriteByte(0); }
+        if ((payloadBytes & 1) != 0) { context.Cancellation.ThrowIfCancellationRequested(); output.WriteByte(0); }
     }
 }

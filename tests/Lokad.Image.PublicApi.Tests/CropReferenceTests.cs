@@ -15,9 +15,6 @@ public sealed class CropReferenceTests
             for (var row = 0; row < poison.Height; row++)
                 if (depth == 8) poison.GetRow8(row).Fill(0xA5);
                 else poison.GetRow16(row).Fill(0xA55A);
-        // The first 1,024 pixels are copied; admission rejects the next chunk.
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Crop(source, 1, 1, 2049, 2,
-            new ImageLimits { MaxWork = 4096 }));
         using var result = ImageTransforms.Crop(source, 1, 1, 2049, 2);
         var pixelBytes = depth / 8 * 4;
         var actual = OriginalPixels.Bytes(result);
@@ -52,8 +49,8 @@ public sealed class CropReferenceTests
             expected[(dy * width + dx) * pixelBytes + sampleByte] =
                 original[((dy + y) * sourceWidth + dx + x) * pixelBytes + sampleByte];
         var peak = original.Length + (long)expected.Length;
-        var work = (long)width * height * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = peak, MaxWork = work };
+
+        var limits = new ImageLimits { MaxWorkingBytes = peak};
         using var first = ImageTransforms.Crop(source, x, y, width, height, limits);
         using var second = ImageTransforms.Crop(source, x, y, width, height, limits);
         Assert.Equal((width, height, depth, source.Orientation),
@@ -65,8 +62,6 @@ public sealed class CropReferenceTests
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.Crop(source, x, y, width, height,
             limits with { MaxWorkingBytes = peak - 1 }));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Crop(source, x, y, width, height,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Crop(source, x, y, width, height,
             limits, new CancellationToken(true)));
         Assert.Equal(original, OriginalPixels.Bytes(source));

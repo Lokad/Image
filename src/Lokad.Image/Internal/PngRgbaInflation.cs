@@ -5,7 +5,7 @@ namespace Lokad.Image.Internal;
 // A 64-KiB buffer retains the preceding 32 KiB when it slides. Row/filter and
 // checksum decisions are published only after framing, or replayed by the
 // original reader when this output cannot certify the complete raster. Row
-// reconstruction remains after its original per-row work admission.
+// reconstruction remains after its per-row cancellation checkpoint.
 internal sealed class PngRgbaInflation
 {
     internal const int MaxRows = 65536;
@@ -82,7 +82,7 @@ internal sealed class PngRgbaInflation
     {
         for (var y = 0; y < result.Height; y++)
         {
-            context.Work(result.Stride * 6L + result.Width * 4L);
+            context.Cancellation.ThrowIfCancellationRequested();
             var row = result.Pixels.Slice(y * result.Stride, result.Stride);
             ReadOnlySpan<byte> prior = result.BitDepth == 8 && y > 0
                 ? result.Pixels.Slice((y - 1) * result.Stride, result.Stride) : previous;

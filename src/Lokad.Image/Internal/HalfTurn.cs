@@ -30,7 +30,7 @@ internal static class HalfTurn
         for (var start = 0; start < destination.Length; start += 1024)
         {
             var count = Math.Min(1024, destination.Length - start);
-            context.Work(count * 4L);
+            context.Cancellation.ThrowIfCancellationRequested();
             var input = source.Slice(source.Length - start - count, count);
             var output = destination.Slice(start, count);
             var x = 0;
@@ -51,7 +51,7 @@ internal static class HalfTurn
         for (var start = 0; start < destination.Length; start += 1024)
         {
             var count = Math.Min(1024, destination.Length - start);
-            context.Work(count * 4L);
+            context.Cancellation.ThrowIfCancellationRequested();
             var input = source.Slice(source.Length - start - count, count);
             var output = destination.Slice(start, count);
             var x = 0;

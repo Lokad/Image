@@ -44,7 +44,7 @@ internal static class NearestResize
             var remainder = initialRemainder;
             for (var x = 0; x < width; x++)
             {
-                if ((x & 1023) == 0) context.Work(Math.Min(1024, width - x) * 4L);
+                if ((x & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
                 destination[x] = row[(int)sx];
 
                 // Maintain quotient/remainder of (2*x+1)*sourceWidth over 2*width.

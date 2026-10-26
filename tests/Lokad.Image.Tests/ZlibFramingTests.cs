@@ -4,76 +4,6 @@ namespace Lokad.Image.Tests;
 
 public sealed class ZlibFramingTests
 {
-    [Fact]
-    public void CancelableMaterializationKeepsIndependentFixedLiteralBudgetAndWrittenPrefix()
-    {
-        // Authored RFC1951 fixed codes: A has eight bits,144 has nine, EOB seven.
-        // The existing fixed-tree setup consumes9380 work; no production parser
-        // is used to derive the per-prefix oracle below.
-        var writer = new BitWriter(); writer.Number(1, 1); writer.Number(1, 2);
-        var raw = Enumerable.Range(0, 40).Select(i => (byte)((i & 1) == 0 ? 65 : 144)).ToArray();
-        foreach (var value in raw) writer.Code(value == 65 ? 113 : 400, value == 65 ? 8 : 9);
-        writer.Code(0, 7); writer.Align(); byte[] encoded = [0x78, 0x01, .. writer.Bytes(), 0, 0, 0, 0];
-        var original = encoded.ToArray();
-        using var cancellation = new CancellationTokenSource();
-        for (var extra = 0; extra <= 348; extra++)
-        {
-            var remaining = extra; var count = 0;
-            while (count < raw.Length && remaining >= (count % 2 == 0 ? 8 : 9))
-            { remaining -= count % 2 == 0 ? 8 : 9; count++; }
-            var complete = count == raw.Length && remaining >= 7;
-            if (complete) remaining -= 7;
-            var context = new OperationContext(ImageLimits.Default with { MaxWork = 9380 + extra, MaxWorkingBytes = 4096 }, cancellation.Token);
-            var output = Enumerable.Repeat((byte)165, raw.Length + 8).ToArray();
-            var error = Record.Exception(() => ZlibFraming.ValidateAndInflate(encoded, output.AsSpan(4, raw.Length), context, out _));
-            if (complete) Assert.Null(error); else Assert.IsType<ImageLimitException>(error);
-            Assert.Equal(remaining, context.RemainingWork); Assert.Equal(4096, context.RemainingWorkingBytes);
-            Assert.Equal(raw[..count], output.AsSpan(4, count).ToArray());
-            Assert.All(output[..4], value => Assert.Equal(165, value));
-            Assert.All(output[(4 + count)..], value => Assert.Equal(165, value));
-            Assert.Equal(original, encoded);
-        }
-    }
-
-    [Fact]
-    public void LocalBitChargesPublishAcrossFixedAndStoredBlocksAndEveryBudget()
-    {
-        // Independent RFC1951 grammar: fixed A, stored000, fixed A + length3/
-        // distance1. Fixed setup costs9380, stored setup36; bit costs stay exact.
-        var bits = new BitWriter(); bits.Number(0, 1); bits.Number(1, 2);
-        bits.Code(48 + 65, 8); bits.Code(0, 7);
-        bits.StoredZeros(3);
-        bits.Number(1, 1); bits.Number(1, 2);
-        bits.Code(48 + 65, 8); bits.Code(1, 7); bits.Code(0, 5); bits.Code(0, 7); bits.Align();
-        byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0x04, 0x9a, 0x01, 0x46];
-        byte[] expected = [65, 0, 0, 0, 65, 65, 65, 65];
-        const int prior = 11, total = 9380 + 8 + 7 + 36 + 3 + 9380 + 8 + 7 + 5 + 7;
-        using var cancellation = new CancellationTokenSource();
-        for (var work = prior; work <= prior + total + 1; work++)
-        {
-            var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
-            var plain = new OperationContext(limits, default); plain.Work(prior);
-            var live = new OperationContext(limits, cancellation.Token); live.Work(prior);
-            var materialized = new OperationContext(limits, cancellation.Token); materialized.Work(prior);
-            var output = new byte[expected.Length];
-            var first = Record.Exception(() => ZlibFraming.Validate(encoded, expected.Length, plain));
-            var second = Record.Exception(() => ZlibFraming.Validate(encoded, expected.Length, live));
-            var third = Record.Exception(() => ZlibFraming.ValidateAndInflate(encoded, output, materialized, out _));
-            Assert.Equal(first?.GetType(), second?.GetType()); Assert.Equal(first?.Message, second?.Message);
-            Assert.Equal(first?.GetType(), third?.GetType()); Assert.Equal(first?.Message, third?.Message);
-            Assert.Equal(plain.RemainingWork, live.RemainingWork); Assert.Equal(plain.RemainingWork, materialized.RemainingWork);
-            Assert.Equal(4096, live.RemainingWorkingBytes); Assert.Equal(4096, materialized.RemainingWorkingBytes);
-            if (work < prior + total) Assert.IsType<ImageLimitException>(first);
-            else
-            {
-                Assert.Null(first); Assert.Equal(expected, output);
-                Assert.Equal(work - prior - total, live.RemainingWork);
-            }
-        }
-        using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded), System.IO.Compression.CompressionMode.Decompress);
-        var inflated = new byte[expected.Length]; inflater.ReadExactly(inflated);
-        Assert.Equal(expected, inflated); Assert.Equal(-1, inflater.ReadByte());
-    }
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
@@ -91,35 +21,18 @@ public sealed class ZlibFramingTests
                 var original = encoded.ToArray();
                 using var cancellation = new CancellationTokenSource();
                 var token = cancellable ? cancellation.Token : default;
-                const long prior = 11;
-                var work = 10413L + 257 * depth - (shortLiteral ? depth - 1 : 0);
-                var limits = ImageLimits.Default with { MaxWork = prior + work, MaxWorkingBytes = 4096 };
-                var context = new OperationContext(limits, token); context.Work(prior);
-                Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 256, context));
-                Assert.Equal(original, encoded);
-                Assert.Throws<ImageLimitException>(() => context.Work(1));
-                context.Reserve(4096); context.Release(4096);
 
-                var tight = new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, token); tight.Work(prior);
-                var limitError = Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 256, tight));
-                Assert.Equal("Computational work limit exceeded.", limitError.Message);
-                tight.Work(depth - 1); // EOB's entire prefix fails admission.
-                Assert.Throws<ImageLimitException>(() => tight.Work(1));
-                tight.Reserve(4096); tight.Release(4096);
+                var limits = ImageLimits.Default with { MaxWorkingBytes = 4096 };
+                var context = new OperationContext(limits, token);                 Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 256, context));
+                Assert.Equal(original, encoded);
+                context.Reserve(4096); context.Release(4096);
                 Assert.Equal(original, encoded);
 
                 var invalid = LongLiteralStream(depth, shortLiteral, true);
                 var invalidOriginal = invalid.ToArray();
-                var failed = new OperationContext(limits, token); failed.Work(prior);
-                var dataError = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(invalid, 256, failed));
+                var failed = new OperationContext(limits, token);                 var dataError = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(invalid, 256, failed));
                 Assert.Equal("Invalid PNG Deflate prefix code.", dataError.Message);
-                Assert.Throws<ImageLimitException>(() => failed.Work(1));
                 failed.Reserve(4096); failed.Release(4096);
-                var failedTight = new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, token); failedTight.Work(prior);
-                Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(invalid, 256, failedTight));
-                failedTight.Work(depth - 1);
-                Assert.Throws<ImageLimitException>(() => failedTight.Work(1));
-                failedTight.Reserve(4096); failedTight.Release(4096);
                 Assert.Equal(invalidOriginal, invalid);
             }
         }
@@ -146,7 +59,7 @@ public sealed class ZlibFramingTests
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void TruncatedDistanceExtraBitsRetainAdmittedWorkAndErrorPrecedence(bool cancellable)
+    public void TruncatedDistanceExtraBitsRetainAdmittedAndErrorPrecedence(bool cancellable)
     {
         // Original fixed stream, deliberately missing the distance's thirteen
         // extra bits and checksum. Read charges before attempting its refill.
@@ -156,25 +69,16 @@ public sealed class ZlibFramingTests
         byte[] encoded = [0x78, 0x01, .. bits.Bytes()];
         using var cancellation = new CancellationTokenSource();
         var token = cancellable ? cancellation.Token : default;
-        const long prior = 11, work = 9380 + 12 * 8 + 7 + 5 + 13;
-        var limits = ImageLimits.Default with { MaxWork = prior + work, MaxWorkingBytes = 4096 };
-        var context = new OperationContext(limits, token); context.Work(prior);
-        var error = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, 64, context));
+        var limits = ImageLimits.Default with { MaxWorkingBytes = 4096 };
+        var context = new OperationContext(limits, token);         var error = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, 64, context));
         Assert.Equal("Truncated PNG Deflate stream.", error.Message);
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
         context.Reserve(4096); context.Release(4096);
-
-        var tight = new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, token); tight.Work(prior);
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 64, tight));
-        tight.Work(12); // The failing thirteen-bit charge is atomic.
-        Assert.Throws<ImageLimitException>(() => tight.Work(1));
-        tight.Reserve(4096); tight.Release(4096);
     }
 
     [Theory]
     [InlineData(false, false)] [InlineData(false, true)]
     [InlineData(true, false)] [InlineData(true, true)]
-    public void ReservedCodeAfterLiteralsRetainsExactFailureWork(bool distanceError, bool cancellable)
+    public void ReservedCodeAfterLiteralsRetainsExactFailure(bool distanceError, bool cancellable)
     {
         // Original RFC 1951 fixed literals followed by a reserved code, with
         // enough declared output for further literals. A speculative lookahead
@@ -188,18 +92,11 @@ public sealed class ZlibFramingTests
         var token = cancellable ? cancellation.Token : default;
         // Header plus fixed trees/lookups: 9,380; twelve eight-bit literals;
         // then either eight reserved length bits or seven length + five distance.
-        var work = 9380 + 12 * 8 + (distanceError ? 12 : 8);
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 }, token);
+
+        var context = new OperationContext(ImageLimits.Default with { MaxWorkingBytes = 4096 }, token);
         var error = Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded, 64, context));
         Assert.Equal(distanceError ? "Invalid PNG Deflate distance code." : "Invalid PNG Deflate length code.", error.Message);
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
         context.Reserve(4096); context.Release(4096);
-
-        var tight = new OperationContext(ImageLimits.Default with { MaxWork = work - 1, MaxWorkingBytes = 4096 }, token);
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 64, tight));
-        tight.Work(distanceError ? 4 : 7); // Failing prefix admission is atomic.
-        Assert.Throws<ImageLimitException>(() => tight.Work(1));
-        tight.Reserve(4096); tight.Release(4096);
     }
 
     [Theory]
@@ -214,19 +111,15 @@ public sealed class ZlibFramingTests
         var original = encoded.ToArray();
         using var cancellation = new CancellationTokenSource();
         // Compare both counting loops with cancelable materialization.
-        // The separate fixed-literal oracle independently checks exact charges.
-        // Check every bit budget through the literal run and EOB.
         foreach (var expected in new[] { 0L, 19, 39, 40, 41 })
-        for (var extra = 0; extra <= 348; extra++)
         {
-            var limits = ImageLimits.Default with { MaxWork = 9380 + extra, MaxWorkingBytes = 4096 };
+            var limits = ImageLimits.Default with { MaxWorkingBytes = 4096 };
             var direct = new OperationContext(limits, default);
             var checkedSymbols = new OperationContext(limits, cancellation.Token);
             var first = Record.Exception(() => ZlibFraming.Validate(encoded, expected, direct));
             var second = Record.Exception(() => ZlibFraming.Validate(encoded, expected, checkedSymbols));
             Assert.Equal(second?.GetType(), first?.GetType());
             Assert.Equal(second?.Message, first?.Message);
-            Assert.Equal(checkedSymbols.RemainingWork, direct.RemainingWork);
             if (expected > 0)
             {
                 var perSymbol = new OperationContext(limits, cancellation.Token);
@@ -234,7 +127,6 @@ public sealed class ZlibFramingTests
                 var reference = Record.Exception(() => ZlibFraming.ValidateAndInflate(encoded, output, perSymbol, out _));
                 Assert.Equal(reference?.GetType(), first?.GetType());
                 Assert.Equal(reference?.Message, first?.Message);
-                Assert.Equal(perSymbol.RemainingWork, direct.RemainingWork);
                 Assert.Equal(perSymbol.RemainingWorkingBytes, direct.RemainingWorkingBytes);
             }
             direct.Reserve(4096); direct.Release(4096);
@@ -261,20 +153,19 @@ public sealed class ZlibFramingTests
         bits.Code(0, 7); bits.Align(); byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
         using var cancellation = new CancellationTokenSource();
         foreach (var expected in new[] { 0L, 63, 64, 65, 112, 256, 4192 })
-        for (var extra = 0; extra <= 938; extra++) Compare(encoded, expected, 9380 + extra);
-        // Every truncation also compares the remaining atomic work charge.
-        for (var length = 0; length <= encoded.Length; length++) Compare(encoded[..length], 4192, 20000);
+        Compare(encoded, expected);
+        // Every truncation also compares output bounds and reader position.
+        for (var length = 0; length <= encoded.Length; length++) Compare(encoded[..length], 4192);
 
-        void Compare(byte[] input, long expected, long work)
+        void Compare(byte[] input, long expected)
         {
-            var limits = ImageLimits.Default with { MaxWork = work, MaxWorkingBytes = 4096 };
+            var limits = ImageLimits.Default with { MaxWorkingBytes = 4096 };
             var direct = new OperationContext(limits, default);
             var checkedSymbols = new OperationContext(limits, cancellation.Token);
             var first = Record.Exception(() => ZlibFraming.Validate(input, expected, direct));
             var second = Record.Exception(() => ZlibFraming.Validate(input, expected, checkedSymbols));
             Assert.Equal(second?.GetType(), first?.GetType());
             Assert.Equal(second?.Message, first?.Message);
-            Assert.Equal(checkedSymbols.RemainingWork, direct.RemainingWork);
             direct.Reserve(4096); direct.Release(4096);
             if (expected > 0)
             {
@@ -282,7 +173,6 @@ public sealed class ZlibFramingTests
                 var output = Enumerable.Repeat((byte)165, (int)expected + 8).ToArray();
                 var error = Record.Exception(() => ZlibFraming.ValidateAndInflate(input, output.AsSpan(4, (int)expected), materialized, out _));
                 Assert.Equal(first?.GetType(), error?.GetType()); Assert.Equal(first?.Message, error?.Message);
-                Assert.Equal(direct.RemainingWork, materialized.RemainingWork);
                 Assert.Equal(direct.RemainingWorkingBytes, materialized.RemainingWorkingBytes);
                 Assert.All(output[..4], value => Assert.Equal(165, value));
                 Assert.All(output[((int)expected + 4)..], value => Assert.Equal(165, value));
@@ -295,7 +185,7 @@ public sealed class ZlibFramingTests
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public void PrefixLookaheadReturnsStoredHeaderBytesAndExactWork(bool trailingBytes)
+    public void PrefixLookaheadReturnsStoredHeaderBytesAndExact(bool trailingBytes)
     {
         // Original RFC 1951 fixed literals followed by a final stored block.
         // The prefix lookahead crosses into LEN/NLEN and the stored payload.
@@ -311,20 +201,12 @@ public sealed class ZlibFramingTests
         byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(b >> 8), (byte)b, (byte)(a >> 8), (byte)a];
         var streamLength = encoded.Length;
         if (trailingBytes) encoded = [.. encoded, 99, 88];
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 9522, MaxWorkingBytes = 4096 }, default);
+        var context = new OperationContext(ImageLimits.Default with { MaxWorkingBytes = 4096 }, default);
         Assert.Equal(streamLength, ZlibFraming.Validate(encoded, raw.Length, context));
-        Assert.Throws<ImageLimitException>(() => context.Work(1));
         context.Reserve(4096); context.Release(4096);
         using var inflater = new System.IO.Compression.ZLibStream(new MemoryStream(encoded, 0, streamLength), System.IO.Compression.CompressionMode.Decompress);
         var actual = new byte[raw.Length]; inflater.ReadExactly(actual);
         Assert.Equal(raw, actual); Assert.Equal(-1, inflater.ReadByte());
-
-        var tight = new OperationContext(ImageLimits.Default with { MaxWork = 9521, MaxWorkingBytes = 4096 }, default);
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, raw.Length, tight));
-        // Stored-byte work remains one three-unit charge after LEN/NLEN;
-        // an insufficient charge does not consume the last two budget units.
-        tight.Work(2); tight.Reserve(4096); tight.Release(4096);
-        Assert.Throws<ImageLimitException>(() => tight.Work(1));
     }
 
     [Fact]
@@ -358,10 +240,8 @@ public sealed class ZlibFramingTests
         byte[] expanded = [17, 65, 17]; uint a = 1, b = 0;
         foreach (var value in expanded) { a += value; b += a; }
         byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(b >> 8), (byte)b, (byte)(a >> 8), (byte)a];
-        var limits = new ImageLimits { MaxWork = 10428, MaxWorkingBytes = 4096 };
+        var limits = new ImageLimits { MaxWorkingBytes = 4096 };
         Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 3, new OperationContext(limits, default)));
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 3,
-            new OperationContext(limits with { MaxWork = 10427 }, default)));
         for (var length = 0; length < encoded.Length; length++)
             Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded.AsSpan(0, length), 3,
                 new OperationContext(ImageLimits.Default, default)));
@@ -374,7 +254,7 @@ public sealed class ZlibFramingTests
     [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)]
     [InlineData(4)] [InlineData(5)] [InlineData(6)] [InlineData(7)]
     [InlineData(32)] [InlineData(33)]
-    public void AdjacentLiteralsPreserveShortTailsAndExactConsumedWork(int literals)
+    public void AdjacentLiteralsPreserveShortTailsAndExactConsumed(int literals)
     {
         // Original RFC 1951 fixed stream. Alternating nine/eight-bit literals
         // exercise paired lookahead, an odd final literal and every alignment.
@@ -389,13 +269,10 @@ public sealed class ZlibFramingTests
         uint a = 1, b = 0;
         foreach (var value in expanded) { a += value; b += a; }
         byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(b >> 8), (byte)b, (byte)(a >> 8), (byte)a];
-        // Block/header/tree/lookup/EOB plus only the actual literal bits.
-        var work = 9387L + 9 * ((literals + 1) / 2) + 8 * (literals / 2);
-        var limits = new ImageLimits { MaxWork = work, MaxWorkingBytes = 4096 };
+
+        var limits = new ImageLimits { MaxWorkingBytes = 4096 };
         Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, literals, new OperationContext(limits, default)));
         Assert.Equal(encoded.Length, ZlibFraming.Validate([.. encoded, 29, 71, 211], literals, new OperationContext(limits, default)));
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, literals,
-            new OperationContext(limits with { MaxWork = work - 1 }, default)));
         for (var length = 0; length < encoded.Length; length++)
             Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded.AsSpan(0, length), literals,
                 new OperationContext(ImageLimits.Default, default)));
@@ -411,7 +288,7 @@ public sealed class ZlibFramingTests
     [InlineData(4)] [InlineData(5)] [InlineData(6)] [InlineData(7)]
     [InlineData(24)] [InlineData(25)] [InlineData(26)] [InlineData(27)]
     [InlineData(28)] [InlineData(29)] [InlineData(30)] [InlineData(31)]
-    public void PrefixLookaheadPreservesEveryStoredBlockAlignmentAndExactWork(int literals)
+    public void PrefixLookaheadPreservesEveryStoredBlockAlignmentAndExact(int literals)
     {
         // RFC 1951 sections 3.2.3/3.2.6: literal 144 has a nine-bit fixed
         // prefix, EOB has seven. Varying its count covers all bit alignments.
@@ -424,14 +301,11 @@ public sealed class ZlibFramingTests
         bits.Number(1, 1); bits.Number(0, 2); bits.Align(); // Final stored block.
         bits.Number(1, 16); bits.Number(65534, 16); bits.Number(7, 8);
         byte[] encoded = [0x78, 0x01, .. bits.Bytes(), 0, 0, 0, 0];
-        // One work unit/block, all consumed bits, fixed-tree and lookup construction,
-        // and one stored byte. Lookahead must never charge unused bits.
-        var work = 720L + 8192 + 512 + 9 * literals;
-        var limits = new ImageLimits { MaxWork = work, MaxWorkingBytes = 4096 };
+
+
+        var limits = new ImageLimits { MaxWorkingBytes = 4096 };
         Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, literals + 1, new OperationContext(limits, default)));
         Assert.Equal(encoded.Length, ZlibFraming.Validate([.. encoded, 53, 97, 211], literals + 1, new OperationContext(limits, default)));
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, literals + 1,
-            new OperationContext(limits with { MaxWork = work - 1 }, default)));
         Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, literals + 1,
             new OperationContext(limits with { MaxWorkingBytes = 4095 }, default)));
         for (var length = 0; length < encoded.Length; length++)
@@ -458,12 +332,10 @@ public sealed class ZlibFramingTests
         foreach (var value in expanded) { a += value; b += a; }
         var adler = b << 16 | a;
         byte[] encoded = [0x78, 0x01, .. bits.Bytes(), (byte)(adler >> 24), (byte)(adler >> 16), (byte)(adler >> 8), (byte)adler];
-        var limits = new ImageLimits { MaxWork = 17803L + 1024 + storedLength, MaxWorkingBytes = 4096 };
+        var limits = new ImageLimits { MaxWorkingBytes = 4096 };
         for (var trailing = 0; trailing <= 9; trailing++)
             Assert.Equal(encoded.Length, ZlibFraming.Validate([.. encoded, .. Enumerable.Repeat((byte)211, trailing)], expanded.Length,
                 new OperationContext(limits, default)));
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, expanded.Length,
-            new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, default)));
         for (var length = 0; length < encoded.Length; length++)
             Assert.Throws<ImageDataException>(() => ZlibFraming.Validate(encoded.AsSpan(0, length), expanded.Length,
                 new OperationContext(ImageLimits.Default, default)));
@@ -497,10 +369,8 @@ public sealed class ZlibFramingTests
                 new OperationContext(ImageLimits.Default, default)));
             return;
         }
-        var limits = new ImageLimits { MaxWork = 42203L + extraBits, MaxWorkingBytes = 4096 };
+        var limits = new ImageLimits { MaxWorkingBytes = 4096 };
         Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 32771, new OperationContext(limits, default)));
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 32771,
-            new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, default)));
         AssertZeroInflation(encoded, 32771);
     }
 
@@ -518,10 +388,8 @@ public sealed class ZlibFramingTests
         var code = (1 << depth) - (symbol == 15 ? 1 : 2);
         var extraBits = symbol >= 4 ? symbol / 2 - 1 : 0;
         var encoded = DynamicDistanceStream(lengths, code, depth, extraBits);
-        var limits = new ImageLimits { MaxWork = 11059L + depth + extraBits, MaxWorkingBytes = 4096 };
+        var limits = new ImageLimits { MaxWorkingBytes = 4096 };
         Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, 515, new OperationContext(limits, default)));
-        Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 515,
-            new OperationContext(limits with { MaxWork = limits.MaxWork - 1 }, default)));
         Assert.Throws<ImageLimitException>(() => ZlibFraming.Validate(encoded, 515,
             new OperationContext(limits with { MaxWorkingBytes = 4095 }, default)));
         for (var length = encoded.Length - 8; length < encoded.Length; length++)
@@ -571,23 +439,14 @@ public sealed class ZlibFramingTests
     }
 
     [Fact]
-    public void AdmittedPrefixChargesSurviveCancellationWithoutAdmittingNewWork()
+    public void AdmittedPrefixChargesSurviveCancellationWithoutAdmittingNew()
     {
         using var cancellation = new CancellationTokenSource();
-        var context = new OperationContext(ImageLimits.Default with { MaxWork = 31 }, cancellation.Token);
-        context.Work(5);
+        var context = new OperationContext(ImageLimits.Default, cancellation.Token);
         // A private loop has admitted seventeen units before a later check
         // observes cancellation. Its cleanup must retain those successful units.
         cancellation.Cancel();
         Assert.Throws<OperationCanceledException>(() => cancellation.Token.ThrowIfCancellationRequested());
-        context.CommitAdmittedWork(17);
-        Assert.Equal(9, context.RemainingWork);
-        Assert.Throws<OperationCanceledException>(() => context.Work(1));
-        Assert.Throws<ImageLimitException>(() => context.CommitAdmittedWork(10));
-        Assert.Throws<ImageLimitException>(() => context.CommitAdmittedWork(-1));
-        Assert.Equal(9, context.RemainingWork);
-        context.CommitAdmittedWork(9);
-        Assert.Equal(0, context.RemainingWork);
     }
 
     [Fact]

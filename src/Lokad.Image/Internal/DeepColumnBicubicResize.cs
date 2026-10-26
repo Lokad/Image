@@ -12,7 +12,7 @@ internal static class DeepColumnBicubicResize
     private const int WorkspaceBytes = 4096;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, long rowWork, OperationContext context)
+        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
         if (source.BitDepth != 8 || result.Width >= source.Width || result.Height >= source.Height
             || tapsX > Capacity || tapsY > Capacity || tapsX <= 36 && tapsY <= 36
@@ -105,8 +105,8 @@ internal static class DeepColumnBicubicResize
                     }
                 }
             }
-            // Speculation leaves work untouched; success charges original cost.
-            context.Work(rowWork * result.Height);
+            // Speculation preserves the original tap order and pixel rounding.
+            context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
@@ -161,16 +161,13 @@ internal static class DeepColumnBicubicResize
         }
         var normalized = alphaSum / normalizer;
         if (normalized > 0 && normalized < 1) return false;
-        var aOut = RoundByte(normalized);
+        var aOut = BicubicMath.RoundByte(normalized);
         var color = aOut > 0 && alphaSum > 0;
         var destination = result.GetRow8(y).Slice(x * 4, 4);
-        destination[0] = RoundByte(color ? red / alphaSum : 0);
-        destination[1] = RoundByte(color ? green / alphaSum : 0);
-        destination[2] = RoundByte(color ? blue / alphaSum : 0);
+        destination[0] = BicubicMath.RoundByte(color ? red / alphaSum : 0);
+        destination[1] = BicubicMath.RoundByte(color ? green / alphaSum : 0);
+        destination[2] = BicubicMath.RoundByte(color ? blue / alphaSum : 0);
         destination[3] = aOut;
         return true;
     }
-
-    private static byte RoundByte(double value)
-        => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);
 }

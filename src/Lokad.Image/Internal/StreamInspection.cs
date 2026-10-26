@@ -31,7 +31,7 @@ internal static class StreamInspection
     private static int U24(ReadOnlySpan<byte> bytes) => bytes[0] | bytes[1] << 8 | bytes[2] << 16;
     private static void Item(InspectionReader r, ref int items)
     {
-        r.Context.Work(1);
+        r.Context.Cancellation.ThrowIfCancellationRequested();
         if (++items > r.Context.Limits.MaxContainerItems) throw new ImageLimitException(ImageLimitKind.ContainerItems, "Image container item limit exceeded.");
     }
     private static void Metadata(InspectionReader r, long bytes, ref long total)
@@ -289,7 +289,7 @@ internal static class StreamInspection
         var found = false; var orientation = ImageOrientation.Normal;
         for (var i = 0; i < count; i++)
         {
-            r.Context.Work(1); await r.ReadAsync(12).ConfigureAwait(false);
+            r.Context.Cancellation.ThrowIfCancellationRequested(); await r.ReadAsync(12).ConfigureAwait(false);
             if (U16(r.Header, little) != 0x0112) continue;
             if (found || U16(r.Header.AsSpan(2), little) != 3 || U32(r.Header.AsSpan(4), little) != 1) throw new ImageDataException("Invalid EXIF orientation field.");
             var value = U16(r.Header.AsSpan(8), little); if (value is < 1 or > 8) throw new ImageDataException("Invalid EXIF orientation value.");

@@ -33,7 +33,7 @@ internal sealed class Vp8lHuffmanGroup : IDisposable
 
     internal void WriteToken(WebpBitWriter writer, Vp8lToken token, int width)
     {
-        ObjectDisposedException.ThrowIf(disposed, this); context.Work(1);
+        ObjectDisposedException.ThrowIf(disposed, this); context.Cancellation.ThrowIfCancellationRequested();
         if (token.Code > 0)
         {
             Vp8lReferenceHuffman.WritePrefix(writer, codes[0]!, token.Code, 256);

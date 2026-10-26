@@ -44,9 +44,8 @@ admitted local budget. Quality85 and effort4 remain defaults; all efforts0..6
 are supported. Packet bytes and reconstructed RGB can change. The declared
 controls now match complete native packets; alpha remains exact after8-bit
 normalization. Async output delivers prepared partitions directly. Resource
-refusal never selects another encoder. Tight work limits can fail earlier;
-method6's exhaustive alpha search may need an explicit larger caller allowance.
-The32M-work control is a required terminal Work failure. Historical VP8 timings
+refusal never selects another encoder. Cancellation uses direct cooperative
+checkpoints; encoding no longer has cumulative work allowances. Historical VP8 timings
 refer to the replaced producer; new CPU/allocation qualification remains open.
 
 `ImageInfo.SourceColor`, `SourceAlpha` and `SourceComponentCount` describe encoded
@@ -67,8 +66,14 @@ record equality/serialization include the new fields.
   result. Caller inputs and budgets stay borrowed. Admission refusal is a typed
   `ImageLimitException`, distinct from cancellation and allocation failure; it
   terminates the operation without retrying or waiting.
-- `ImageBudget` remains a separate codec memory/work quota. It can be used with
-  cooperative memory hooks; local `ImageLimits` and work limits still apply.
+- **Breaking0.2.0 cleanup:** `ImageBudget`, `BudgetedImage`, their codec overloads,
+  `ImageLimits.MaxWork` and `ImageLimitKind.Work` are removed. Use the regular
+  `ImageCodec` methods with `ImageLimits.MemoryBudget`; dispose returned
+  `ImageBuffer` directly. Reserve caller-owned storage through your existing root
+  if needed. There are no forwarding wrappers, whole-operation ceiling leases or
+  cumulative work counters. `BufferLength`'s enum numeric value also changes;
+  persist named categories rather than old ordinal values. Cancellation is
+  cooperative, not a CPU quota. Published0.1.0 packages remain immutable.
 
 Text defaults to supplied-face logical layout with horizontal `kern` kerning. Select
 `TextShaping.OpenType` for supported Latin/Hebrew/Arabic shaping and bidirectional

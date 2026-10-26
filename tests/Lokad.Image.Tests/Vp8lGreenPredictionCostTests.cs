@@ -26,7 +26,7 @@ public sealed class Vp8lGreenPredictionCostTests
         Fill(histogram.Slice(512, 256), total, active, phase);
     }
     [Fact]
-    public void FrozenFourPlaneScoresAndWorkRemainExact()
+    public void FrozenFourPlaneScoresAndRemainExact()
     {
         var current = new int[1024]; var previous = new int[1024];
         int[] populations = [0, 1, 4, 16, 1024, 262144];
@@ -39,12 +39,9 @@ public sealed class Vp8lGreenPredictionCostTests
         {
             Input(current, populations[test % populations.Length], active[(test / 3) % active.Length], test & 255);
             Input(previous, histories[test % histories.Length], active[(test / 7) % active.Length], (test >> 3) & 255);
-            var genericWork = generic.ConsumedWork; var specializedWork = specialized.ConsumedWork;
             var wanted = Vp8lReferenceCost.Prediction(current, previous, generic);
             var actual = Vp8lReferenceCost.PredictionGreen(current, previous, specialized);
             Assert.Equal(wanted, actual);
-            Assert.Equal(1024, generic.ConsumedWork - genericWork);
-            Assert.Equal(1024, specialized.ConsumedWork - specializedWork);
             hash.AppendData(MemoryMarshal.AsBytes(current.AsSpan()));
             hash.AppendData(MemoryMarshal.AsBytes(previous.AsSpan()));
             result[0] = actual; hash.AppendData(MemoryMarshal.AsBytes(result));
@@ -54,26 +51,22 @@ public sealed class Vp8lGreenPredictionCostTests
     }
 
     [Theory]
-    [InlineData(false)]
+
     [InlineData(true)]
     public void FailureKeepsBorrowedHistogramsAndAllowsIndependentRecovery(bool cancel)
     {
         using var root = new TestMemoryBudget(10000); using var cancellation = new CancellationTokenSource();
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = cancel ? 10000 : 1023 }, cancellation.Token);
+        using var context = new OperationContext(new() { MemoryBudget = root}, cancellation.Token);
         if (cancel) cancellation.Cancel();
         var current = new int[1024]; var previous = new int[1024];
         Input(current, 1024, 16, 17); Input(previous, 65536, 64, 37);
         var first = current.ToArray(); var second = previous.ToArray();
         if (cancel) Assert.Throws<OperationCanceledException>(() => Vp8lReferenceCost.PredictionGreen(current, previous, context));
-        else
-        {
-            var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceCost.PredictionGreen(current, previous, context));
-            Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        }
-        Assert.Equal(0, context.ConsumedWork); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
+
+Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
         Assert.Equal(first, current); Assert.Equal(second, previous); Assert.False(root.IsDisposed);
         using var next = new OperationContext(new() { MemoryBudget = root }, default);
         Assert.Equal(Vp8lReferenceCost.Prediction(current, previous, next), Vp8lReferenceCost.PredictionGreen(current, previous, next));
-        Assert.Equal(2048, next.ConsumedWork); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

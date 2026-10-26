@@ -23,8 +23,8 @@ public sealed class ClockwiseTurnReferenceTests
         var original = OriginalPixels.Bytes(source);
         var expected = ClockwiseReference(original, width, height, depth);
         var peak = original.Length * 2L;
-        var work = (long)width * height * 4;
-        var limits = new ImageLimits { MaxWorkingBytes = peak, MaxWork = work };
+
+        var limits = new ImageLimits { MaxWorkingBytes = peak};
         using var first = ImageTransforms.Rotate(source, QuarterTurn.Clockwise90, limits);
         using var second = ImageTransforms.Rotate(source, QuarterTurn.Clockwise90, limits);
         Assert.Equal((height, width, depth, source.Orientation),
@@ -36,28 +36,8 @@ public sealed class ClockwiseTurnReferenceTests
         Assert.Equal(expected, OriginalPixels.Bytes(second));
         Assert.Throws<ImageLimitException>(() => ImageTransforms.Rotate(source, QuarterTurn.Clockwise90,
             limits with { MaxWorkingBytes = peak - 1 }));
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Rotate(source, QuarterTurn.Clockwise90,
-            limits with { MaxWork = work - 1 }));
         Assert.Throws<OperationCanceledException>(() => ImageTransforms.Rotate(source, QuarterTurn.Clockwise90,
             limits, new CancellationToken(true)));
-        Assert.Equal(original, OriginalPixels.Bytes(source));
-    }
-
-    [Theory]
-    [InlineData(8)]
-    [InlineData(16)]
-    public void PartialFailureCannotPublishStaleReusableRows(int depth)
-    {
-        using var source = OriginalPixels.Buffer(2051, 3, depth);
-        var original = OriginalPixels.Bytes(source);
-        using (var poison = ImageTransforms.Rotate(source, QuarterTurn.Clockwise90))
-            for (var y = 0; y < poison.Height; y++)
-                if (depth == 8) poison.GetRow8(y).Fill(0xA5);
-                else poison.GetRow16(y).Fill(0xA55A);
-        Assert.Throws<ImageLimitException>(() => ImageTransforms.Rotate(source, QuarterTurn.Clockwise90,
-            new ImageLimits { MaxWork = 4096 }));
-        using var result = ImageTransforms.Rotate(source, QuarterTurn.Clockwise90);
-        Assert.Equal(ClockwiseReference(original, source.Width, source.Height, depth), OriginalPixels.Bytes(result));
         Assert.Equal(original, OriginalPixels.Bytes(source));
     }
 

@@ -45,7 +45,7 @@ internal static class PngCodec
                 if (value is not (>= 65 and <= 90) and not (>= 97 and <= 122))
                     throw new ImageDataException("Invalid PNG chunk name.");
             var payload = data.Slice(position + 8, length);
-            context.Work(length + 12L);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (Crc32.Compute(data.Slice(position + 4, length + 4), context.Cancellation)
                 != BinaryPrimitives.ReadUInt32BigEndian(data[(position + 8 + length)..]))
                 throw new ImageDataException("Invalid PNG chunk CRC.");
@@ -139,7 +139,7 @@ internal static class PngCodec
                 if (data.Slice(source + 4, 4).SequenceEqual("IDAT"u8))
                     for (var offset = 0; offset < length;)
                     {
-                        var count = Math.Min(65536, length - offset); context.Work(count);
+                        var count = Math.Min(65536, length - offset); context.Cancellation.ThrowIfCancellationRequested();
                         data.Slice(source + 8 + offset, count).CopyTo(compressed.AsSpan(target));
                         target += count; offset += count;
                     }
@@ -148,11 +148,11 @@ internal static class PngCodec
             var filteredLength = FilteredLength(header);
             var rowBytes = ((long)header.Info.Width * Channels(header.ColorType) * header.Depth + 7) / 8;
             var pixelBytes = (long)header.Info.Width * header.Info.Height * (header.Depth == 16 ? 8 : 4);
-            // Select before framing work. Keep the original workspace allowance
+            // Select before parsing Deflate framing. Keep the original workspace allowance
             // and every subsequent row/result admission available. Tight RGBA
             // can stream within the original workspace; other inputs retain
             // the original reader. Cancelable framing
-            // keeps its original per-symbol cancellation and work checks.
+            // keeps its original per-symbol cancellation checks.
             var materialize = header.Interlace == 0
                 && filteredLength <= PixelStoragePool.MaxRetainedBytes
                 && context.RemainingWorkingBytes >= filteredLength + 4096 + 256 * 1024L
@@ -202,7 +202,7 @@ internal static class PngCodec
                             context.Reserve(4096);
                             try
                             {
-                                // Framing errors/work always precede row work.
+                                // Framing validation precedes row reconstruction.
                                 // Preserve the original per-row atomic charges.
                                 output.DecodeRows(context);
                                 speculative.Orientation = header.Info.Orientation;
@@ -296,9 +296,8 @@ internal static class PngCodec
             try
             {
                 // Only the single-pass, noncancelable case can preflight all
-                // remaining row work and memory without moving a failure ahead.
+                // remaining row storage without moving a failure ahead.
                 if (header.Interlace == 0 && !context.Cancellation.CanBeCanceled
-                    && context.RemainingWork >= height * (rowBytes * 6L + width * 4L)
                     && context.RemainingWorkingBytes >= PngInflatedReader.BufferBytes)
                 {
                     context.Reserve(PngInflatedReader.BufferBytes);
@@ -306,7 +305,7 @@ internal static class PngCodec
                 }
                 for (var y = 0; y < height; y++)
                 {
-                    context.Work(rowBytes * 6L + width * 4L);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     var filter = zlib.ReadByte();
                     if (filter is < 0 or > 4) throw new ImageDataException("Invalid PNG row filter.");
                     AddAdler((byte)filter);
@@ -1465,12 +1464,11 @@ internal static class PngCodec
             WriteChunk(output, "pHYs"u8, physical);
         }
         if (level == 0 && color == 6
-            && context.RemainingWork >= (rowBytes * 9L + 1) * source.Height
             && output is LimitedWriteStream bounded)
             bounded.PrepareStoredPngCapacity((rowBytes + 1L) * source.Height);
         for (var y = 0; y < source.Height; y++)
         {
-            context.Work(rowBytes * 8L);
+            context.Cancellation.ThrowIfCancellationRequested();
             if (color == 6 && source.BitDepth == 8)
             {
                 for (var x = 0; x < source.Width; x += 4096)

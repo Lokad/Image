@@ -142,7 +142,7 @@ internal ref struct Vp8Decoder
             leftCoefficients.Clear();
             for (var mx = 0; mx < columns; mx++)
             {
-                context.Work(2048);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var index = my * columns + mx; ref var block = ref blocks[index];
                 var q = segmentation ? segmentQuantizers[block.Segment] + (absoluteSegments ? 0 : quantizer) : quantizer;
                 q = Math.Clamp(q, 0, 127); var any = false; coefficients.Clear();
@@ -205,7 +205,7 @@ internal ref struct Vp8Decoder
             for (var mx = 0; mx < columns; mx++)
             {
                 // Check even when this block's adjustments reduce its level to zero.
-                context.Work(1);
+                context.Cancellation.ThrowIfCancellationRequested();
                 var block = blocks[my * columns + mx];
                 var level = segmentation ? segmentFilters[block.Segment] + (absoluteSegments ? 0 : filterLevel) : filterLevel;
                 if (deltasEnabled) level += referenceDeltas[0] + (block.Mode == 4 ? modeDeltas[0] : 0);

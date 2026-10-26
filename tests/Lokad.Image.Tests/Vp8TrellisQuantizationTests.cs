@@ -79,30 +79,4 @@ public sealed class Vp8TrellisQuantizationTests
         }
         finally { context.Release(Vp8TrellisQuantization.ScratchBytes); }
     }
-
-    [Fact]
-    public void InvalidInputsCancellationAndWorkRefusalPreserveBorrowedBuffersAndAllowRecovery()
-    {
-        using var input = new Inputs(0); var matrixValues = input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma).Values.ToArray();
-        var weights = new ushort[16]; Vp8TrellisQuantization.Weights(weights); var coefficients = Enumerable.Repeat((short)73, 18).ToArray();
-        var levels = Enumerable.Repeat((short)77, 18).ToArray(); var original = coefficients.ToArray(); var retained = input.Root.Bytes;
-        bool Run(OperationContext context, int type = 3) => Vp8TrellisQuantization.Apply(coefficients, levels, new(matrixValues), input.Rate, weights, type, 0, 1400, context);
-        foreach (var invalid in new short[] { -2041, 2041 })
-        {
-            coefficients[15] = invalid; Assert.Throws<ArgumentOutOfRangeException>(() => Run(input.Context));
-            Assert.Equal(invalid, coefficients[15]); Assert.All(levels, value => Assert.Equal((short)77, value)); coefficients[15] = original[15];
-        }
-        Assert.Throws<ArgumentException>(() => Run(input.Context, 1)); Assert.Equal(original, coefficients);
-        Assert.Throws<ArgumentException>(() => Vp8TrellisQuantization.Apply(coefficients.AsSpan(0, 16), coefficients.AsSpan(1, 16), new(matrixValues), input.Rate, weights, 3, 0, 1400, input.Context));
-        Assert.Equal(original, coefficients);
-        using var cancel = new CancellationTokenSource(); using var cancelled = new OperationContext(new() { MemoryBudget = input.Root }, cancel.Token); cancel.Cancel();
-        Assert.Throws<OperationCanceledException>(() => Run(cancelled)); Assert.Equal(original, coefficients);
-        using var limited = new OperationContext(new() { MemoryBudget = input.Root, MaxWork = 2047 }, default);
-        Assert.Equal(ImageLimitKind.Work, Assert.Throws<ImageLimitException>(() => Run(limited)).Limit);
-        Assert.Equal(original, coefficients); Assert.All(levels, value => Assert.Equal((short)77, value));
-        input.Context.Reserve(Vp8TrellisQuantization.ScratchBytes);
-        try { Assert.True(Run(input.Context)); }
-        finally { input.Context.Release(Vp8TrellisQuantization.ScratchBytes); }
-        Assert.Equal(retained, input.Root.Bytes); Assert.False(input.Root.IsDisposed);
-    }
 }

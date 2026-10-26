@@ -133,25 +133,6 @@ public sealed class Vp8lReferenceLzTests
     }
 
     [Fact]
-    public void LateWorkFailureReleasesTraceScratchAndUnreturnedTokens()
-    {
-        uint[] pixels; uint[] matches; long completeWork;
-        using (var calibration = new OperationContext(ImageLimits.Default, default))
-        {
-            pixels = Map(false, calibration);
-            using var index = Vp8lReferenceMatcher.Build(pixels, 65, 75, false, calibration); matches = index.Values.ToArray();
-            var before = calibration.ConsumedWork;
-            using var result = Vp8lReferenceLz.Encode(pixels, matches, 65, true, calibration);
-            completeWork = calibration.ConsumedWork - before;
-        }
-        using var root = new TestMemoryBudget(1_000_000);
-        using var context = new OperationContext(new() { MemoryBudget = root, MaxWork = completeWork - 1 }, default);
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceLz.Encode(pixels, matches, 65, true, context));
-        Assert.Equal((ImageLimitKind.Work, ImageLimitScope.Operation), (error.Limit, error.Scope));
-        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals); Assert.False(root.IsDisposed);
-    }
-
-    [Fact]
     public void TokenOwnerAcceptsZeroRejectsNegativeAndKeepsEncodedTokenKindsTyped()
     {
         using var root = new TestMemoryBudget(24);

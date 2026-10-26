@@ -33,7 +33,7 @@ try {
             }
         }
         if (-not ($archive.Entries.FullName -contains 'lib/net10.0/Lokad.Image.dll')) { throw 'Library DLL missing.' }
-        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/codec-parity.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/usage.md', 'docs/migration.md')) {
+        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/codec-parity.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/usage.md', 'docs/migration.md', 'docs/cleanup-qualification.md')) {
             $entry = $archive.GetEntry($document)
             if ($null -eq $entry) { throw "Package document missing: $document" }
             $bytes = [IO.MemoryStream]::new()
@@ -104,7 +104,7 @@ foreach (var control in Lokad.Image.Tooling.OriginalVp8Controls.Cases())
     using var image = Lokad.Image.Tooling.OriginalVp8lControls.Buffer(name, depth, root);
     var before = Lokad.Image.Tooling.OriginalPixels.Bytes(image); var retained = root.Bytes;
     var options = new WebpEncodeOptions { Lossless = false, Effort = effort, Quality = quality,
-        Limits = new() { MemoryBudget = root, MaxWork = Lokad.Image.Tooling.OriginalVp8Controls.WorkLimit(name, effort) } };
+        Limits = new() { MemoryBudget = root } };
     using var packet = new MemoryStream(); ImageCodec.EncodeWebp(image, packet, options);
     using var asynchronous = new MemoryStream(); await ImageCodec.EncodeWebpAsync(image, asynchronous, options);
     var bytes = packet.ToArray();
@@ -555,13 +555,13 @@ VerifyAsyncOutput(opaque).GetAwaiter().GetResult();
 foreach (var packet in new[] { encoded.ToArray(), jpeg.ToArray(), exampleWebp.ToArray() })
 {
     var expected = ImageCodec.Identify(packet);
-    var limits = new ImageLimits { MaxWorkingBytes = 8448, MaxWork = 1_000_000 };
+    var limits = new ImageLimits { MaxWorkingBytes = 8448 };
     using var headers = new MemoryStream(packet, writable: false);
     if (ImageCodec.InspectHeaders(headers, limits) != expected || headers.Position != headers.Length || !headers.CanRead)
         throw new Exception("Package fixed-workspace header inspection differs.");
     headers.Position = 0;
-    var budget = new ImageBudget(limits.MaxWorkingBytes, limits.MaxWork);
-    if (budget.InspectHeadersAsync(headers, limits).GetAwaiter().GetResult() != expected || budget.RemainingWorkingBytes != 8448)
+    using var root = new Lokad.Image.Tooling.TestMemoryBudget(8448);
+    if (ImageCodec.InspectHeadersAsync(headers, limits with { MemoryBudget = root }).GetAwaiter().GetResult() != expected || root.Bytes != 0)
         throw new Exception("Package async/shared header inspection differs.");
 }
 static async Task VerifyAsyncOutput(ImageBuffer image)
@@ -574,20 +574,21 @@ static async Task VerifyAsyncOutput(ImageBuffer image)
     await ImageCodec.EncodeJpegAsync(image, jpegOutput, options);
     using var jpegExpected = new MemoryStream(); ImageCodec.EncodeJpeg(image, jpegExpected, options);
     if (!jpegOutput.ToArray().AsSpan().SequenceEqual(jpegExpected.ToArray())) throw new Exception("Package async JPEG differs.");
-    var limits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
-    var budget = new ImageBudget(limits.MaxWorkingBytes, 4 * limits.MaxWork);
+    var limits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024 };
+    using var root = new Lokad.Image.Tooling.TestMemoryBudget(limits.MaxWorkingBytes);
+    limits = limits with { MemoryBudget = root };
     using var webp = new MemoryStream();
-    await budget.EncodeWebpAsync(image, webp, new() { Limits = limits, Lossless = true });
+    await ImageCodec.EncodeWebpAsync(image, webp, new() { Limits = limits, Lossless = true });
     using var webpExpected = new MemoryStream(); ImageCodec.EncodeWebp(image, webpExpected, new() { Lossless = true });
     var gray = new byte[image.Width * image.Height];
     for (var y = 0; y < image.Height; y++) for (var x = 0; x < image.Width; x++) gray[y * image.Width + x] = image.GetRow8(y)[x * 4];
     using var samples = new MemoryStream();
-    await budget.EncodeJpegAsync(gray.AsMemory(), image.Width, image.Height, JpegSampleFormat.Grayscale, samples,
+    await ImageCodec.EncodeJpegAsync(gray.AsMemory(), image.Width, image.Height, JpegSampleFormat.Grayscale, samples,
         options: new() { Limits = limits, Quality = 69 });
     using var samplesExpected = new MemoryStream();
     ImageCodec.EncodeJpeg(gray, image.Width, image.Height, JpegSampleFormat.Grayscale, samplesExpected, options: new() { Quality = 69 });
     if (!webp.ToArray().AsSpan().SequenceEqual(webpExpected.ToArray()) || !samples.ToArray().AsSpan().SequenceEqual(samplesExpected.ToArray())
-        || budget.RemainingWorkingBytes != budget.MaxWorkingBytes || budget.ConsumedWork <= 0 || !webp.CanWrite || !samples.CanWrite)
+        || root.Bytes != 0 || !webp.CanWrite || !samples.CanWrite)
         throw new Exception("Package async output shared admission/packets/ownership differs.");
 }
 static async Task VerifyAsyncInput(byte[] packet)
@@ -600,23 +601,24 @@ static async Task VerifyAsyncInput(byte[] packet)
     using var expected = ImageCodec.Decode(packet);
     for (var y = 0; y < pixels.Height; y++)
         if (!pixels.GetRow8(y).SequenceEqual(expected.GetRow8(y))) throw new Exception("Package async pixels differ.");
-    var limits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
-    var budget = new ImageBudget(limits.MaxWorkingBytes, 2 * limits.MaxWork);
+    var limits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024 };
+    using var root = new Lokad.Image.Tooling.TestMemoryBudget(limits.MaxWorkingBytes);
+    limits = limits with { MemoryBudget = root };
     using var budgetInfoInput = new MemoryStream(packet, writable: false);
-    if (await budget.IdentifyAsync(budgetInfoInput, limits) != ImageCodec.Identify(packet))
+    if (await ImageCodec.IdentifyAsync(budgetInfoInput, limits) != ImageCodec.Identify(packet))
         throw new Exception("Package async budget Identify differs.");
     using var budgetInput = new MemoryStream(packet, writable: false);
-    using (var result = await budget.DecodeAsync(budgetInput, new() { Limits = limits }))
+    using (var result = await ImageCodec.DecodeAsync(budgetInput, new() { Limits = limits }))
     {
-        if (budget.RemainingWorkingBytes != limits.MaxWorkingBytes - result.Image.Width * result.Image.Height * 4L)
+        if (root.Bytes != result.Width * result.Height * 4L)
             throw new Exception("Package async retained admission differs.");
-        for (var y = 0; y < result.Image.Height; y++)
-            if (!result.Image.GetRow8(y).SequenceEqual(expected.GetRow8(y))) throw new Exception("Package async budget pixels differ.");
+        for (var y = 0; y < result.Height; y++)
+            if (!result.GetRow8(y).SequenceEqual(expected.GetRow8(y))) throw new Exception("Package async budget pixels differ.");
     }
-    if (budget.RemainingWorkingBytes != limits.MaxWorkingBytes || !pixelsInput.CanRead || !budgetInput.CanRead || !budgetInfoInput.CanRead)
+    if (root.Bytes != 0 || !pixelsInput.CanRead || !budgetInput.CanRead || !budgetInfoInput.CanRead)
         throw new Exception("Package async lifetime/refund differs.");
 }
-var sharedLimits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024, MaxWork = 2_000_000 };
+var sharedLimits = new ImageLimits { MaxWorkingBytes = 2 * 1024 * 1024 };
 var callerSamples = Enumerable.Repeat((byte)0xA7, 8 * 27).ToArray();
 var sampleInfo = ImageCodec.DecodeJpeg(jpeg.ToArray(), callerSamples, JpegSampleFormat.Rgb, 27);
 if ((sampleInfo.Width, sampleInfo.Height) != (8, 8))
@@ -627,48 +629,52 @@ for (var y = 0; y < 8; y++)
         || callerSamples.AsSpan(y * 27 + 24, 3).IndexOfAnyExcept((byte)0xA7) >= 0)
         throw new Exception("Package consumer JPEG samples or padding differ.");
 }
-var shared = new ImageBudget(sharedLimits.MaxWorkingBytes + 256, sharedLimits.MaxWork * 2);
-using (shared.Reserve(256, 1))
+using var shared = new Lokad.Image.Tooling.TestMemoryBudget(sharedLimits.MaxWorkingBytes);
+sharedLimits = sharedLimits with { MemoryBudget = shared };
+if (!shared.TryReserve(256, out var callerStorage)) throw new Exception("Caller reservation refused.");
+using (callerStorage)
 {
-    using (var budgeted = shared.Decode(jpeg.ToArray(), new DecodeOptions { Limits = sharedLimits }))
+    using (var retained = ImageCodec.Decode(jpeg.ToArray(), new DecodeOptions { Limits = sharedLimits }))
     {
-        if (shared.RemainingWorkingBytes != sharedLimits.MaxWorkingBytes - 8 * 8 * 4)
-            throw new Exception("Package consumer retained shared memory differs.");
+        if (shared.Bytes != 256 + 8 * 8 * 4) throw new Exception("Retained image admission differs.");
         for (var y = 0; y < 8; y++)
-            if (!budgeted.Image.GetRow8(y).SequenceEqual(opaque.GetRow8(y)))
-                throw new Exception("Package consumer budgeted pixels differ.");
+            if (!retained.GetRow8(y).SequenceEqual(opaque.GetRow8(y))) throw new Exception("Admitted pixels differ.");
     }
-    if (shared.RemainingWorkingBytes != sharedLimits.MaxWorkingBytes)
-        throw new Exception("Package consumer budgeted disposal did not release pixels.");
+    if (shared.Bytes != 256) throw new Exception("Image disposal did not release its own pixels.");
 }
-if (shared.RemainingWorkingBytes != shared.MaxWorkingBytes || shared.ConsumedWork <= 1
-    || shared.RemainingWork != shared.MaxWork - shared.ConsumedWork)
-    throw new Exception("Package consumer shared admission did not settle.");
+if (shared.Bytes != 0 || shared.IsDisposed) throw new Exception("Caller root ownership differs.");
 var callerGray = new byte[64];
-shared.DecodeJpeg(jpeg.ToArray(), callerGray, JpegSampleFormat.Grayscale,
+ImageCodec.DecodeJpeg(jpeg.ToArray(), callerGray, JpegSampleFormat.Grayscale,
     options: new JpegDecodeOptions { Limits = sharedLimits });
-if (callerGray.AsSpan().IndexOfAnyExcept((byte)123) >= 0 || shared.RemainingWorkingBytes != shared.MaxWorkingBytes)
-    throw new Exception("Package consumer caller-owned grayscale admission differs.");
+if (callerGray.AsSpan().IndexOfAnyExcept((byte)123) >= 0 || shared.Bytes != 0)
+    throw new Exception("Caller-owned grayscale admission differs.");
 using var callerEncoded = new MemoryStream();
 ImageCodec.EncodeJpeg(callerSamples, 8, 8, JpegSampleFormat.Rgb, callerEncoded, 27,
     new JpegEncodeOptions { Quality = 100, Sampling = JpegSampling.Grayscale, RestartInterval = 1 });
 if (!callerEncoded.ToArray().AsSpan().SequenceEqual(jpeg.ToArray()) || !callerEncoded.CanWrite)
-    throw new Exception("Package consumer caller RGB encoding differs.");
+    throw new Exception("Caller RGB encoding differs.");
 using var callerEncodedGray = new MemoryStream();
-shared.EncodeJpeg(callerGray, 8, 8, JpegSampleFormat.Grayscale, callerEncodedGray,
+ImageCodec.EncodeJpeg(callerGray, 8, 8, JpegSampleFormat.Grayscale, callerEncodedGray,
     options: new JpegEncodeOptions { Quality = 100, RestartInterval = 1, Limits = sharedLimits });
-if (!callerEncodedGray.ToArray().AsSpan().SequenceEqual(jpeg.ToArray()) || shared.RemainingWorkingBytes != shared.MaxWorkingBytes)
-    throw new Exception("Package consumer caller grayscale encoding/admission differs.");
+if (!callerEncodedGray.ToArray().AsSpan().SequenceEqual(jpeg.ToArray()) || shared.Bytes != 0)
+    throw new Exception("Caller grayscale encoding/admission differs.");
+using var emptyRoot = new Lokad.Image.Tooling.TestMemoryBudget(0);
 try
 {
-    new ImageBudget(1, sharedLimits.MaxWork).Identify(jpeg.ToArray(), sharedLimits);
-    throw new Exception("Package consumer accepted exhausted shared memory.");
+    using var refused = ImageBuffer.Create(8, 8, 8, new ImageLimits { MemoryBudget = emptyRoot });
+    throw new Exception("Package accepted refused image storage.");
 }
 catch (ImageLimitException failure)
 {
-    if (failure.Limit != ImageLimitKind.WorkingBytes || failure.Scope != ImageLimitScope.SharedBudget)
-        throw new Exception("Package consumer shared limit category differs.");
+    if (failure.Limit != ImageLimitKind.WorkingBytes || failure.Scope != ImageLimitScope.SharedBudget
+        || emptyRoot.Bytes != 0 || emptyRoot.Refusals != 1 || emptyRoot.IsDisposed)
+        throw new Exception("Shared refusal or cleanup differs.");
 }
+if (typeof(ImageLimits).GetProperty("MaxWork") is not null
+    || typeof(ImageBuffer).Assembly.GetType("Lokad.Image.ImageBudget") is not null
+    || typeof(ImageBuffer).Assembly.GetType("Lokad.Image.BudgetedImage") is not null
+    || Enum.GetNames<ImageLimitKind>().Contains("Work"))
+    throw new Exception("Removed fuel/ownership APIs remain in the package.");
 // Independently authored TIFF IFD0: 63 unrelated inline LONG tags followed by
 // a SHORT orientation. Validate error classification through the actual package.
 var tiff = new byte[14 + 64*12]; tiff[0] = tiff[1] = (byte)'I';

@@ -38,7 +38,7 @@ internal sealed partial class PngDeflater : Stream
     {
         ObjectDisposedException.ThrowIf(disposed, this);
         if (completed) throw new InvalidOperationException("PNG compression is complete.");
-        context.Work(0); Start();
+        context.Cancellation.ThrowIfCancellationRequested(); Start();
         if (level == 0) { WriteStored(data); return; }
         while (!data.IsEmpty)
         {
@@ -65,7 +65,7 @@ internal sealed partial class PngDeflater : Stream
 
     private void WriteStored(ReadOnlySpan<byte> data)
     {
-        context.Work(data.Length);
+        context.Cancellation.ThrowIfCancellationRequested();
         while (!data.IsEmpty)
         {
             var count = Math.Min(data.Length, 65531 - storedCount);
@@ -111,26 +111,26 @@ internal sealed partial class PngDeflater : Stream
     {
         while (position < filled && (final || filled - position >= Lookahead))
         {
-            context.Work(1); AdvanceOrigin();
+            context.Cancellation.ThrowIfCancellationRequested(); AdvanceOrigin();
             var prior = position + Minimum <= filled ? Insert(position) : 0;
             var length = Minimum - 1; long start = 0;
             var available = (int)Math.Min(Maximum, filled - position);
             if (prior > windowOrigin && position - prior <= Window - Lookahead)
             {
-                var budget = 4; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
+                var searches = 4; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
                 do
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (length < available && Byte(prior + length) == Byte(position + length)
                         && Byte(prior) == Byte(position) && Byte(prior + 1) == Byte(position + 1))
                     {
                         var found = 2;
                         while (found < available && Byte(prior + found) == Byte(position + found)) found++;
-                        context.Work(found);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         if (found > length) { length = found; start = prior; if (found >= Math.Min(8, available)) break; }
                     }
                     prior = older[(int)(prior & (Window - 1))];
-                } while (prior > limit && --budget != 0);
+                } while (prior > limit && --searches != 0);
             }
             if (length >= Minimum)
             {
@@ -147,28 +147,28 @@ internal sealed partial class PngDeflater : Stream
     {
         while (position < filled && (final || filled - position >= Lookahead))
         {
-            context.Work(1); AdvanceOrigin();
+            context.Cancellation.ThrowIfCancellationRequested(); AdvanceOrigin();
             var prior = position + Minimum <= filled ? Insert(position) : 0;
             var length = Minimum - 1; long start = 0;
             if (prior > windowOrigin && position - prior <= Window - Lookahead && deferredLength < (level == 9 ? 258 : 16))
             {
-                var budget = level == 9 ? (deferredLength >= 32 ? 1024 : 4096) : deferredLength >= 8 ? 32 : 128;
+                var searches = level == 9 ? (deferredLength >= 32 ? 1024 : 4096) : deferredLength >= 8 ? 32 : 128;
                 var best = deferredLength; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
                 var available = (int)Math.Min(Maximum, filled - position); var enough = Math.Min(level == 9 ? 258 : 128, available);
                 do
                 {
-                    context.Work(1);
+                    context.Cancellation.ThrowIfCancellationRequested();
                     if (best < available && Byte(prior + best) == Byte(position + best)
                         && Byte(prior + best - 1) == Byte(position + best - 1)
                         && Byte(prior) == Byte(position) && Byte(prior + 1) == Byte(position + 1))
                     {
                         var found = 2;
                         while (found < available && Byte(prior + found) == Byte(position + found)) found++;
-                        context.Work(found);
+                        context.Cancellation.ThrowIfCancellationRequested();
                         if (found > best) { best = found; start = prior; if (found >= enough) break; }
                     }
                     prior = older[(int)(prior & (Window - 1))];
-                } while (prior > limit && --budget != 0);
+                } while (prior > limit && --searches != 0);
                 length = Math.Min(best, available);
                 if (length == Minimum && position - start > Window / 8) length = Minimum - 1;
             }
@@ -197,7 +197,7 @@ internal sealed partial class PngDeflater : Stream
     {
         ObjectDisposedException.ThrowIf(disposed, this);
         if (completed) throw new InvalidOperationException("PNG compression is complete.");
-        context.Work(0); Start();
+        context.Cancellation.ThrowIfCancellationRequested(); Start();
         if (level == 0) StoredBlock(true);
         else
         {
@@ -230,10 +230,10 @@ internal sealed partial class PngDeflater : Stream
     public override void Flush()
     {
         ObjectDisposedException.ThrowIf(disposed, this);
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
         if (encodedCount == 0) return;
         output.Write(encoded.AsSpan(0, encodedCount)); encodedCount = 0;
-        context.Work(0);
+        context.Cancellation.ThrowIfCancellationRequested();
     }
     protected override void Dispose(bool disposing)
     {
