@@ -26,15 +26,15 @@ effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
 [Method6 search](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs
 coefficient-domain dynamic-programming trellis for every luma candidate; the
 current method4 warm controls never execute this required algorithm. Functional
-packet/ownership proof and the [current complete-operation confirmation](WARM-VP8-TRELLIS-STATE-PAIR.md)
-measure 2.380× / upper 2.394, 854,968 B/op, with exact packets and reconstructed
+packet/ownership proof and the [current complete-operation short](WARM-VP8-LARGE-BLOCK-ROWS.md)
+measures 2.260× / upper 2.359, 854,968 B/op, with exact packets and reconstructed
 pixels. The effort-4 photograph is now the largest demonstrated gap. Source, depth and quality stay
 frozen: no grid or new image. Other efforts/settings receive no broader
 performance claim.
 
 ## Current qualification and demonstrated gaps
 
-[VP8 trellis state simplification](WARM-VP8-TRELLIS-STATE-PAIR.md) is the latest
+[VP8 large-block row prediction](WARM-VP8-LARGE-BLOCK-ROWS.md) is the latest
 qualified producer: 4,937 Release checks and 616 affected scalar WebP checks per
 OS, plus the same actual private 0.2.0 package and all three usage examples.
 Complete encoder packets, decoded pixels, editing precision, cancellation and
@@ -43,10 +43,10 @@ explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchang
 The [current three-table summary](../docs/benchmark.md) selects valid costs,
 allocations, reference boundaries and confirmation status. Current evidence:
 
-- [Trellis states](WARM-VP8-TRELLIS-STATE-PAIR.md): effort-6 diagram independent
-  2.380× / upper 2.394, exact 6,818 B and 854,968 B/op. Unchanged effort-4
-  [photograph/diagram/alpha shorts](WARM-VP8-TRELLIS-FORWARD-BATCH.md) remain
-  2.541× / 2.486× / 1.584×. No new workspace, table or kernel.
+- [Large-block row prediction](WARM-VP8-LARGE-BLOCK-ROWS.md): photograph
+  independent 2.416× / upper 2.435, exact 17,688 B and 909,696 B/op. Current
+  diagram/alpha/effort-6 trellis shorts are 2.233× / 1.536× / 2.260×. Older
+  affected encoder costs are historical; no new owner, table or cache.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
@@ -87,7 +87,9 @@ clustering changes VP8L/compressed-alpha encoding; prediction/quantization/forwa
 batching changes VP8 encoding; decoder color batching changes VP8 decode rendering.
 Shared small-row prediction changes both VP8 encoder and decoder calling code.
 The later trellis state rewrite affects only method5/6, which effort4 never
-enters; its valid effort4 costs remain. Current anchors above reconcile only their named boundaries. Unchanged unrelated
+enters; its valid effort4 costs carried forward until large-block prediction. The latter
+changes all VP8 encoder source/mode prediction; the four current anchors reconcile
+only those named boundaries. Current anchors above reconcile only their named boundaries. Unchanged unrelated
 paths keep valid evidence. Frozen inputs/settings/native workers, approved baseline
 adjustments, packet/pixel oracles, rounding certificates and unaffected font
 comparisons remain reusable. Regression/package proof is not CPU parity proof.
@@ -107,13 +109,14 @@ scored. The single-coefficient residual shortcut gives only a 0.825% short chang
 it is rejected and actual qualified sources/binaries restored. Per-mode score
 arithmetic is already inlined, so no score-copy trial is needed.
 
-Next try one bounded large-block prediction primitive: dispatch DC/vertical/
-horizontal/true-motion once per block and fill/copy rows, with packed true-motion
-where supported. Preserve the 32-byte border snapshot, missing-edge values,
-saturation, aliases/tails, safe managed arithmetic and portable fallback. Use the
-same photograph short; independently confirm only a material gain. No new grid,
-profile, unrelated audit or proof repeat. Reuse valid unaffected costs and batch
-full qualification only for accepted production changes.
+Large-block row prediction is accepted and qualified. Stop its variants. Source
+analysis still forms sixteen separate scalar 4×4 residual/DCT blocks for luma16.
+The next bounded lead is reusing the existing exact four-adjacent forward kernel,
+allowing independently strided source/prediction views. No new transform kernel.
+Preserve histogram counts, scratch admission and ordered live-token/scalar
+traversal. Use the same photograph short and immutable workers/selectors; confirm
+only a material gain, then batch accepted qualification. No new grid/profile or
+unrelated proof repeat.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)

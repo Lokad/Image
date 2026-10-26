@@ -1,3 +1,8 @@
+using System.Buffers.Binary;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 internal enum Vp8IntraMode : byte { Dc, TrueMotion, Vertical, Horizontal }
@@ -29,18 +34,43 @@ internal static class Vp8BlockPrediction
                 if (hasLeft) { sum += l[p]; count++; }
             }
         }
-        var dc = count == 0 ? 128 : (sum + count / 2) / count;
+        if (mode == Vp8IntraMode.Dc)
+        {
+            destination[..(size * size)].Fill((byte)(count == 0 ? 128 : (sum + count / 2) / count));
+            return;
+        }
+        if (mode == Vp8IntraMode.Vertical || mode == Vp8IntraMode.TrueMotion && !hasLeft)
+        {
+            if (!hasTop) destination[..(size * size)].Fill(mode == Vp8IntraMode.Vertical ? (byte)127 : (byte)129);
+            else for (var y = 0; y < size; y++) t.CopyTo(destination.Slice(y * size, size));
+            return;
+        }
+        if (mode == Vp8IntraMode.Horizontal || !hasTop)
+        {
+            for (var y = 0; y < size; y++) destination.Slice(y * size, size).Fill(hasLeft ? l[y] : (byte)129);
+            return;
+        }
+        // Both borders exist. Signed words hold top + left - corner in
+        // [-255,510]; unsigned saturation exactly matches the scalar clamp.
+        if (Sse2.IsSupported)
+        {
+            var values = size == 16
+                ? Vector128.LoadUnsafe(ref MemoryMarshal.GetReference(t))
+                : Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(t)).AsByte();
+            var low = Sse2.UnpackLow(values, Vector128<byte>.Zero).AsInt16();
+            var high = Sse2.UnpackHigh(values, Vector128<byte>.Zero).AsInt16();
+            for (var y = 0; y < size; y++)
+            {
+                var delta = Vector128.Create((short)(l[y] - corner));
+                var row = Sse2.PackUnsignedSaturate(Sse2.Add(low, delta), Sse2.Add(high, delta));
+                var target = destination.Slice(y * size, size);
+                if (size == 16) row.StoreUnsafe(ref MemoryMarshal.GetReference(target));
+                else row.GetLower().StoreUnsafe(ref MemoryMarshal.GetReference(target));
+            }
+            return;
+        }
         for (var y = 0; y < size; y++)
         for (var x = 0; x < size; x++)
-        {
-            var value = mode switch
-            {
-                Vp8IntraMode.Dc => dc,
-                Vp8IntraMode.Vertical => hasTop ? t[x] : 127,
-                Vp8IntraMode.Horizontal => hasLeft ? l[y] : 129,
-                _ => !hasLeft ? (hasTop ? t[x] : 129) : !hasTop ? l[y] : Math.Clamp(t[x] + l[y] - corner, 0, 255)
-            };
-            destination[y * size + x] = (byte)value;
-        }
+            destination[y * size + x] = (byte)Math.Clamp(t[x] + l[y] - corner, 0, 255);
     }
 }

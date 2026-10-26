@@ -1,5 +1,8 @@
 # Two predecessor states in VP8 trellis
 
+Historical encoder cost: [large-block prediction](WARM-VP8-LARGE-BLOCK-ROWS.md)
+now supplies current affected timings. Exact DP mathematics remains unchanged.
+
 The existing effort-6 diagram independently measures 23.35 ms: 2.380× reference
 time (upper 2.394×), 854,968 B/op and an exact 6,818-byte packet. Elapsed time is
 11.6% below the preceding independent mean; these separate runs do not establish
