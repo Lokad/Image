@@ -73,11 +73,11 @@ def table(rows):
 def render():
     anchors = [
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-decoder-reconstruction-evidence.json', ['observations', -1], 'WARM-VP8-DECODER-RECONSTRUCTION.md', confirmed=True),
-        row('JPEG 4:4:4, forward-only / exact reference', 'warm-jpeg444-entropy-replay-evidence.json', ['observations', -1], 'WARM-JPEG444-ENTROPY-REPLAY.md', confirmed=True),
-        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-vector-records-evidence.json', ['observations', -1], 'WARM-JPEG-VECTOR-RECORDS.md', confirmed=True),
-        row('VP8 RGBA8', 'warm-vp8l-sparse-predictor-evidence.json', ['cases', 'vp8Alpha', -1], 'WARM-VP8L-SPARSE-PREDICTOR.md', verification='Current gap (short; qualified)', current=True),
+        row('JPEG 4:4:4, forward-only / exact reference', 'warm-current-encoder-anchors-evidence.json', ['cases', 'jpeg444', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
+        row('JPEG 4:2:0 from caller RGB samples', 'warm-current-encoder-anchors-evidence.json', ['cases', 'caller420', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 RGBA8', 'warm-current-encoder-anchors-evidence.json', ['cases', 'vp8Alpha', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-sparse-predictor-evidence.json', ['observations', -1], 'WARM-VP8L-SPARSE-PREDICTOR.md', confirmed=True, current=True),
-        row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-png-smallest8-evidence.json', ['observations', -1], 'WARM-CURRENT-PNG-SMALLEST8.md', verification='Gap (short; qualified)'),
+        row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-encoder-anchors-evidence.json', ['cases', 'png8', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('Bilinear resize RGBA16', 'warm-bilinear-word-cache-evidence.json', ['observations', -1], 'WARM-BILINEAR-WORD-CACHE.md', verification='Gap (short; qualified)'),
         row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
         row('Bicubic upscale RGBA16', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
@@ -91,8 +91,9 @@ parity and replacement readiness are open. Compression correctness precedes CPU
 gains. Published0.1.0 remains unchanged.
 
 The cleanup removes fuel, ceiling reservations and unpublished wrappers. Earlier timings describe their frozen producers, **not the cleaned build**.
-Current VP8L has independent cost confirmation; shared VP8 alpha has a current
-short screen on the same qualified library. Parity remains open.
+Current VP8L and VP8 alpha have independent cost confirmations; JPEG444,
+caller-RGB420 and PNG SmallestSize have current short screens on the same
+qualified library. Parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
@@ -100,7 +101,7 @@ defines the remaining finite scope and evidence invalidation.
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
 | Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 4,907 checks/OS; affected scalar/Vector256 and same actual package passed |
-| CPU and allocation measurements after cleanup | VP8L independent; VP8 alpha current short; other required paths pending | Exact packets; full parity open |
+| CPU and allocation measurements after cleanup | [Current encoder anchors](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md); VP8L independent | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

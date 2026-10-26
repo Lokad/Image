@@ -8,14 +8,22 @@ case. Full replacement readiness and independent warm upper≤1× remain open.
 
 [Sparse predictor scoring](WARM-VP8L-SPARSE-PREDICTOR.md) independently confirms
 VP8L at 1.624×/upper 1.648, 48,232,248 B/op and exact 183,812 B. Elapsed is 9.8% lower
-than the preceding independent run, comparing separate quiet runs. Shared VP8 alpha has
-a current short screen at 1.779×/upper 2.697, 24,424,944 B/op and exact 98,590 B. Both remain parity
-gaps; broad short confidence supports no speedup/regression or independent parity
-claim. Earlier affected scorer costs stay historical. Both systems pass 4,907 checks,
+than the preceding independent run, comparing separate quiet runs. Earlier affected
+scorer costs stay historical. Both systems pass 4,907 checks,
 228 affected scalar/five focused Vector256 checks, the same actual package and all three examples.
 No material cases or rasters added. Stop this bounded predictor round and prior
-PopulationSum polishing. Resolve existing JPEG444/callerRGB420/PNGSmallest8
-producer uncertainties before choosing the next substantial demonstrated primitive.
+PopulationSum polishing.
+
+[Current encoder anchors](WARM-CURRENT-ENCODER-ANCHORS.md) resolve the existing
+JPEG444/callerRGB420/PNGSmallest8 producer uncertainty at short ratios
+1.319/1.653/1.417, with exact packets and allocations recorded. VP8 alpha now has
+independent 1.776×/upper 1.789 evidence, 24,424,944 B/op and exact 98,590 B;
+its preceding broad short confidence is superseded. No production input changed;
+the same verified core, qualification and workers were reused without rebuilding
+or repeating package checks. All remain warm 1× gaps. One current 744-sample VP8
+profile identifies matcher construction as the largest exclusive attribution
+(11.7%, not component timing). Inspect one substantial matcher primitive next;
+other named producer uncertainties remain open. Do not repeat these screens.
 
 Retire four named controls: PNG RGBA8 resident/ImageBudget, JPEG RGBA8 420/ImageBudget,
 VP8 alpha/caller work budget32M, and optional JPEG callerRGB420/CompactColor.

@@ -5,8 +5,9 @@ parity and replacement readiness are open. Compression correctness precedes CPU
 gains. Published0.1.0 remains unchanged.
 
 The cleanup removes fuel, ceiling reservations and unpublished wrappers. Earlier timings describe their frozen producers, **not the cleaned build**.
-Current VP8L has independent cost confirmation; shared VP8 alpha has a current
-short screen on the same qualified library. Parity remains open.
+Current VP8L and VP8 alpha have independent cost confirmations; JPEG444,
+caller-RGB420 and PNG SmallestSize have current short screens on the same
+qualified library. Parity remains open.
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
 defines the remaining finite scope and evidence invalidation.
@@ -14,7 +15,7 @@ defines the remaining finite scope and evidence invalidation.
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
 | Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 4,907 checks/OS; affected scalar/Vector256 and same actual package passed |
-| CPU and allocation measurements after cleanup | VP8L independent; VP8 alpha current short; other required paths pending | Exact packets; full parity open |
+| CPU and allocation measurements after cleanup | [Current encoder anchors](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md); VP8L independent | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
@@ -25,11 +26,11 @@ are leads for measurement, not current demonstrated gaps.
 | Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-DECODER-RECONSTRUCTION.md) | 10,046.91 | 5,991.89 | 1.677 / 1.684 | 1,966,591 | Historical independent; remeasure |
-| [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-JPEG444-ENTROPY-REPLAY.md) | 5,049.03 | 3,776.93 | 1.337 / 1.343 | 820,131 | Historical independent; remeasure |
-| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-VECTOR-RECORDS.md) | 2,617.06 | 1,578.04 | 1.658 / 1.669 | 373,421 | Historical independent; remeasure |
-| [VP8 RGBA8](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 94,953.68 | 53,366.70 | 1.779 / 2.697 | 24,424,944 | Current gap (short; qualified) |
+| [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 4,971.54 | 3,769.20 | 1.319 / 1.434 | 820,123 | Current gap (short; qualified) |
+| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 2,606.80 | 1,576.55 | 1.653 / 1.899 | 373,413 | Current gap (short; qualified) |
+| [VP8 RGBA8](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 95,003.17 | 53,483.81 | 1.776 / 1.789 | 24,424,944 | Current gap (independent) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-SPARSE-PREDICTOR.md) | 196,989.06 | 121,270.80 | 1.624 / 1.648 | 48,232,248 | Current gap (independent) |
-| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-PNG-SMALLEST8.md) | 25,360.59 | 17,299.67 | 1.466 / 1.601 | 1,325,678 | Historical short; remeasure |
+| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |
 | [Bilinear resize RGBA16](../benchmarks/WARM-BILINEAR-WORD-CACHE.md) | 534.35 | 418.51 | 1.277 / 1.336 | 290,127 | Historical short; remeasure |
 | [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |
 | [Bicubic upscale RGBA16](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 4,258.22 | 2,871.12 | 1.483 / 1.690 | 5,016,578 | Historical short; remeasure |
