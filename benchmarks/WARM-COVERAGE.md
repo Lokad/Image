@@ -35,7 +35,7 @@ Each existing named case remains required until valid passing evidence applies.
 Add a case only when evidence identifies a distinct required algorithm or public
 boundary omitted from this inventory.
 
-The new APIs are functionally qualified; CPU/reference evidence remains missing.
+The new APIs are functionally qualified; current CPU evidence is summarized below.
 The following finite extension preserves the original 255 cases. Use existing
 original recipes and freeze packet/worker identities before measurement. No new
 quality/filter/grid exploration. Async controls use fresh nonseekable input;
@@ -62,17 +62,13 @@ must return equivalent requested metadata or validate complete coding, with matc
 input delivery and ownership. Do not substitute a normalization/output workload when
 the operation does not require it.
 
-[Read-boundary evidence](WARM-IMAGE-READ.md) now screens all twelve on the frozen
-qualified 0.2.1 build. Baseline420 validation independently passes at0.917× /
-upper0.935; stop this unchanged case. Progressive420 confirms1.053× / upper1.063.
-Dimension probes show2.97–4.65× gaps (each below1µs), PNG16 validation1.75×;
-other validation screens are1.35–1.55×. These costs cover the new boundaries only:
-they do not refresh default decode or complete-container inspection costs.
-Both guards, exact descriptors, independent output/source lifetime and prefix/
-coding-scope checks pass. No production build/full-suite/package proof was repeated.
+[Read-boundary evidence](WARM-IMAGE-READ.md) screens all twelve. Baseline420
+validation independently passes at0.917× / upper0.935; stop it unchanged.
+Progressive420 confirms1.053× / upper1.063. Other non-PNG validation screens remain
+1.35–1.45× gaps. Both guards, exact descriptors, independent output/source lifetime
+and prefix/coding-scope checks pass. These controls do not refresh default decoding.
 
-[Dimension workspace](WARM-PROBE-WORKSPACE.md) supersedes the four probe costs:
-JPEG sync/async confirm3.714×/4.098×; PNG/WebP screen1.783×/1.812×. All allocate
+[Dimension workspace](WARM-PROBE-WORKSPACE.md) lowers all four probes to
 744B/op instead of8680; dimension-only admission is512B instead of8448. Other
 fact selections/header scans retain the larger workspace. Both OS full/scalar
 and SAME actual package/three examples pass. Validation and unrelated paths are
@@ -85,13 +81,6 @@ All retain744B/op/512B admission. Full both-OS5040 checks,98 focused normal/scal
 and SAME actual package/three examples pass. Probe/InspectHeaders timings change;
 validation/Identify/Decode/encoding/editing algorithms and applicable proofs do not.
 
-[PNG16 validation](WARM-PNG-VALIDATION.md) resolves its uncertainty on the current
-qualified producer: independent1.722×/upper1.727,5.091ms,17008B/op. A proposed
-inverse-filter skip has no gain because both frozen PNG8/16 controls use filter0;
-it is removed and the qualified source/binaries restored. No full/package repeat
-or new filter grid. One profile identifies managed literal counting/framing and
-native inflation as the material costs; the existing tools/fixtures remain reusable.
-
 [One-pass PNG validation](WARM-PNG-VALIDATION.md) independently closes the PNG16
 span and async cases:0.990×/upper0.99966 and0.833×/upper0.847. Span elapsed falls
 42.4%; allocation240B/op, async8544B/op. Keep the narrowly passing span unchanged;
@@ -101,10 +90,20 @@ companions remain1.355×/1.345× short gaps. Both OS5041 full checks,137 interna
 allocation increases while admitted peaks decrease; separate storage records
 are current. SIMD classifier trials have no gain and are removed/closed.
 
+[Current read reconciliation](WARM-READ-RECONCILIATION.md) refreshes six existing
+boundaries without production changes. Complete PNG8 headers screen1.365×,
+8528B/op against the labeled original FFmpeg AVIO/header adapter. All nine typed
+source fields and21 frozen RGBA8 controls agree normal/scalar. VP8+alpha Stream
+decode screens1.291×,1966583B/op with exact pixels. Tight PNG8 ordinary/live-token
+decode screens1.370×/1.387×,68224B/op; PNG16 screens1.041×/1.029×,70272B/op.
+All remain gaps; no independent timing confirmation or speedup claim. Current
+production qualification/package proof is reused. These six controls do not
+refresh every Identify/decoder boundary affected by read-policy changes.
+
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls and
-one historical decode cost awaiting confirmation after read changes, and
+[The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls,
+refreshes the VP8 Stream decode cost and thirteen read comparisons, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16

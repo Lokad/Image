@@ -86,7 +86,7 @@ static int exif(Reader *r,uint32_t size)
     }
     skip(r,end-position(r)); return orientation;
 }
-typedef struct { AVCodecParameters *parameters; int alpha,orientation; } Descriptor;
+typedef struct { AVCodecParameters *parameters; int alpha,orientation,color,alpha_rep,components; } Descriptor;
 typedef struct { uint8_t *input,*original; size_t size,last_read_bytes; unsigned last_reads,last_eof_reads,last_seeks,last_length_queries; int cpu; uint64_t completed,observed; } Work;
 static Descriptor inspect(Work *w)
 {
@@ -146,7 +146,9 @@ static Descriptor inspect(Work *w)
         }
         skip(&r,end-position(&r)); skip(&r,4); /* CRC intentionally opaque. */
     }
-    Descriptor d={.parameters=avcodec_parameters_alloc(),.alpha=color==4||color==6||transparent,.orientation=orientation};
+    Descriptor d={.parameters=avcodec_parameters_alloc(),.alpha=color==4||color==6||transparent,.orientation=orientation,
+        .color=color==3?3:color==0||color==4?1:2,.alpha_rep=color==4||color==6?2:transparent?color==3?3:4:1,
+        .components=color==0||color==3?1:color==2?3:color==4?2:4};
     if (!d.parameters) fail("Descriptor allocation failed.");
     d.parameters->codec_type=AVMEDIA_TYPE_VIDEO; d.parameters->codec_id=AV_CODEC_ID_PNG;
     d.parameters->width=(int)width; d.parameters->height=(int)height; d.parameters->bits_per_raw_sample=(int)depth;
@@ -156,16 +158,17 @@ static Descriptor inspect(Work *w)
     return d;
 }
 static void release(Descriptor *d) { avcodec_parameters_free(&d->parameters); }
-static void bytes(const Descriptor *d,uint8_t output[24])
+static void bytes(const Descriptor *d,uint8_t output[36])
 {
-    uint32_t values[]={0,(uint32_t)d->parameters->width,(uint32_t)d->parameters->height,(uint32_t)d->parameters->bits_per_raw_sample,(uint32_t)d->alpha,(uint32_t)d->orientation};
-    for (int i=0;i<6;i++) for (int c=0;c<4;c++) output[i*4+c]=(uint8_t)(values[i]>>(8*c));
+    uint32_t values[]={0,(uint32_t)d->parameters->width,(uint32_t)d->parameters->height,(uint32_t)d->parameters->bits_per_raw_sample,
+        (uint32_t)d->alpha,(uint32_t)d->orientation,(uint32_t)d->color,(uint32_t)d->alpha_rep,(uint32_t)d->components};
+    for (int i=0;i<9;i++) for (int c=0;c<4;c++) output[i*4+c]=(uint8_t)(values[i]>>(8*c));
 }
 static void check(Work *w,const char *path)
 {
-    Descriptor d=inspect(w); uint8_t output[24]; bytes(&d,output); release(&d);
+    Descriptor d=inspect(w); uint8_t output[36]; bytes(&d,output); release(&d);
     if (memcmp(w->input,w->original,w->size)) fail("Source changed.");
-    FILE *f=fopen(path,"wb"); if (!f||fwrite(output,1,24,f)!=24||fclose(f)) fail("Write descriptor failed.");
+    FILE *f=fopen(path,"wb"); if (!f||fwrite(output,1,36,f)!=36||fclose(f)) fail("Write descriptor failed.");
 }
 int main(int argc,char **argv)
 {
@@ -178,12 +181,12 @@ int main(int argc,char **argv)
     w.size=(size_t)length; w.input=av_malloc(w.size); w.original=av_malloc(w.size);
     if (!w.input||!w.original||fread(w.input,1,w.size,f)!=w.size||fclose(f)) fail("Read input failed.");
     memcpy(w.original,w.input,w.size);
-    Descriptor first=inspect(&w),second=inspect(&w); uint8_t a[24],b[24]; bytes(&first,a); bytes(&second,b);
-    if (first.parameters==second.parameters||memcmp(a,b,24)) fail("Live descriptors alias/differ.");
-    first.parameters->width^=1; release(&first); bytes(&second,b); if (memcmp(a,b,24)) fail("Surviving descriptor changed.");
+    Descriptor first=inspect(&w),second=inspect(&w); uint8_t a[36],b[36]; bytes(&first,a); bytes(&second,b);
+    if (first.parameters==second.parameters||memcmp(a,b,36)) fail("Live descriptors alias/differ.");
+    first.parameters->width^=1; release(&first); bytes(&second,b); if (memcmp(a,b,36)) fail("Surviving descriptor changed.");
     unsigned width=second.parameters->width,height=second.parameters->height; int depth=second.parameters->bits_per_raw_sample,alpha=second.alpha,orientation=second.orientation;
     release(&second); check(&w,argv[3]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"png-header-inspect\",\"backend\":\"FFmpeg AVIO/owned descriptor APIs with original bounded header/EXIF adapter\",\"width\":%u,\"height\":%u,\"depth\":%d,\"hasAlpha\":%s,\"orientation\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"conversionThreads\":0,\"threadType\":0,\"activeThreadType\":0,\"outputBytes\":24,\"inputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"freshSeekableStream\":true,\"inputView\":false,\"wholeInputCopy\":false,\"scratchBytes\":8192,\"headerBytes\":32,\"eofChecked\":true,\"callerSourceLeftOpen\":true,\"streamAcquisitionAndReleaseTimed\":true,\"publicParserTimed\":false,\"fullCrcTimed\":false,\"structureMetadataTimed\":true,\"descriptorAcquisitionAndReleaseTimed\":true,\"pixelDecode\":false,\"opaqueSeekEnabled\":true,\"readBytes\":%zu,\"reads\":%u,\"eofReads\":%u,\"seekCalls\":%u,\"lengthQueries\":%u,\"scalarMode\":%s,\"ffmpegVersion\":\"%s\"}\n",width,height,depth,alpha?"true":"false",orientation,w.cpu,w.size,w.completed,w.last_read_bytes,w.last_reads,w.last_eof_reads,w.last_seeks,w.last_length_queries,scalar?"true":"false",av_version_info());
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"png-header-inspect\",\"backend\":\"FFmpeg AVIO/owned descriptor APIs with original bounded header/EXIF adapter\",\"width\":%u,\"height\":%u,\"depth\":%d,\"hasAlpha\":%s,\"orientation\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"conversionThreads\":0,\"threadType\":0,\"activeThreadType\":0,\"outputBytes\":36,\"typedSourceMetadata\":true,\"fuelAccounting\":false,\"inputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"freshSeekableStream\":true,\"inputView\":false,\"wholeInputCopy\":false,\"scratchBytes\":8192,\"headerBytes\":32,\"eofChecked\":true,\"callerSourceLeftOpen\":true,\"streamAcquisitionAndReleaseTimed\":true,\"publicParserTimed\":false,\"fullCrcTimed\":false,\"structureMetadataTimed\":true,\"descriptorAcquisitionAndReleaseTimed\":true,\"pixelDecode\":false,\"opaqueSeekEnabled\":true,\"readBytes\":%zu,\"reads\":%u,\"eofReads\":%u,\"seekCalls\":%u,\"lengthQueries\":%u,\"scalarMode\":%s,\"ffmpegVersion\":\"%s\"}\n",width,height,depth,alpha?"true":"false",orientation,w.cpu,w.size,w.completed,w.last_read_bytes,w.last_reads,w.last_eof_reads,w.last_seeks,w.last_length_queries,scalar?"true":"false",av_version_info());
     fflush(stdout); char line[128];
     while (fgets(line,sizeof(line),stdin)) {
         if (!strcmp(line,"quit\n")) break;
@@ -194,7 +197,7 @@ int main(int argc,char **argv)
         for (uint64_t i=0;i<count;i++) { Descriptor d=inspect(&w); release(&d); }
         uint64_t elapsed=now()-start;
         if (cpu()!=w.cpu||sched_getcpu()!=w.cpu||w.completed-completed!=count) fail("Sample CPU/count differs.");
-        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":0,\"outputBytes\":24,\"cpu\":%d}\n",count,elapsed,w.completed,w.observed,w.cpu); fflush(stdout);
+        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":0,\"outputBytes\":36,\"cpu\":%d}\n",count,elapsed,w.completed,w.observed,w.cpu); fflush(stdout);
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     av_free(w.input); av_free(w.original); return 0;

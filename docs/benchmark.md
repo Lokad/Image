@@ -2,10 +2,9 @@
 
 Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
-published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
-costs pending current confirmation after read-policy changes. The release snapshot
-remains immutable. Twelve new read controls below use qualified 0.2.1 builds.
-These 43 controls do not complete the full CPU-parity objective
+published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
+current-cost screen. The release snapshot remains immutable. Thirteen read
+controls below use qualified 0.2.1 builds. These 44 displayed controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 
 Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
@@ -33,10 +32,12 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 [trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) retain current baseline
 shorts; [color-trial reuse](../benchmarks/WARM-VP8L-COLOR-TRIAL-REUSE.md) supplies the
 four affected VP8L rows. Other paths retain applicable prior proof.
+The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
+Stream decode and four existing tight PNG companions without a speedup claim.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream § | 7,831.60 | 5,985.32 | 1.308 / 1.445 | 1,966,583 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 7,754.22 | 6,004.85 | 1.291 / 1.334 | 1,966,583 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples | 2,594.66 | 1,662.67 | 1.561 / 2.434 | 373,413 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget | 2,697.19 | 1,835.47 | 1.469 / 1.815 | 804,637 | 52,115 / 52,117 |
@@ -101,6 +102,7 @@ and unlisted content/settings are excluded.
 | Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
 | Validate VP8+alpha, span | 7,923.113 | 5,448.818 | 1.454 / 1.595 | 770,092 | Screen gap |
 | Validate PNG16, async nonseekable | 3,001.887 | 3,602.437 | 0.833 / 0.847 | 8,544 | Confirmed pass |
+| Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 
 Probes compare requested dimensions using FFmpeg AVIO/owned descriptors plus an
 original bounded header adapter; they stop before pixel payloads. Validation
@@ -120,6 +122,10 @@ from 8,680 to 744 B/op; later-fact/header scans retain their larger workspace.
 [Completed acquisition](../benchmarks/WARM-PROBE-COMPLETED-READS.md) independently
 reduces JPEG probing elapsed by 46.5% sync / 50.6% async, with unchanged allocation.
 See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
+Complete PNG header inspection uses the explicitly labeled bounded adapter,
+checking structure/Strict EXIF and all nine source fields through EOF while
+skipping IDAT. CRC and pixels are opaque on both sides. Its 21 frozen RGBA8
+controls pass; the timing remains a screen gap, distinct from prefix probing.
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

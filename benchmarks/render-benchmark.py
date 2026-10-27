@@ -21,6 +21,8 @@ def render():
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
+    reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
+    assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
@@ -34,9 +36,11 @@ def render():
     for case in evidence['cases']:
         observation = case['observation']
         color_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
-        updated = color_case or case['id'] in {'case06', 'case10', 'case17', 'case18', 'case19', 'case20'}
-        producer = color if color_case else stored if case['id'] == 'case20' else current
-        if case['id'] == 'case06':
+        updated = color_case or case['id'] in {'case00', 'case06', 'case10', 'case17', 'case18', 'case19', 'case20'}
+        producer = reconciled if case['id'] == 'case00' else color if color_case else stored if case['id'] == 'case20' else current
+        if case['id'] == 'case00':
+            observation = producer['cases']['Vp8Stream'][-1]
+        elif case['id'] == 'case06':
             observation = distortion['baseline']
         elif case['id'] == 'case10':
             observation = trellis['baseline']
@@ -54,7 +58,7 @@ def render():
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
         allocated = observation['managedMemory']['BytesAllocatedPerOperation']
-        label = case['label'] + (' §' if case['id'] == 'case00' else ' ‡' if case['id'] == 'case20' else ' †' if updated else '')
+        label = case['label'] + (' ‡' if case['id'] == 'case20' else ' †' if updated else '')
         if case['kind'] == 'editing':
             label += f' → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
         cells = [label, f'{stats["Mean"] / 1000:,.2f}', f'{native / 1000:,.2f}',
@@ -95,15 +99,23 @@ def render():
         status = 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
+    headers = reconciled['cases']['PngHeaders'][-1]
+    assert headers['receipt']['descriptorExact'] and headers['receipt']['typedSourceMetadataExact']
+    assert headers['receipt']['librarySha256'] == reconciled['producers']['linuxSha256']
+    assert len(headers['managed']['actual']) == 3 and all(q['passed'] for q in headers['quietness'].values())
+    read_rows.append(f'| Inspect PNG8 complete headers, seekable, adapter reference | '
+                     f'{headers["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
+                     f'{min(b["mean"] for b in headers["nativeBrackets"]) / 1000:,.3f} | '
+                     f'{headers["worstBracketRatio"]:.3f} / {headers["conservativeRatioUpper"]:.3f} | '
+                     f'{headers["managedMemory"]["BytesAllocatedPerOperation"]:,} | Screen gap |')
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     return f'''# Lokad.Image benchmarks
 
 Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
-published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
-costs pending current confirmation after read-policy changes. The release snapshot
-remains immutable. Twelve new read controls below use qualified 0.2.1 builds.
-These 43 controls do not complete the full CPU-parity objective
+published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
+current-cost screen. The release snapshot remains immutable. Thirteen read
+controls below use qualified 0.2.1 builds. These 44 displayed controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 
 Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
@@ -131,6 +143,8 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 [trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) retain current baseline
 shorts; [color-trial reuse](../benchmarks/WARM-VP8L-COLOR-TRIAL-REUSE.md) supplies the
 four affected VP8L rows. Other paths retain applicable prior proof.
+The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
+Stream decode and four existing tight PNG companions without a speedup claim.
 
 ''' + codecs + '''
 
@@ -172,6 +186,10 @@ from 8,680 to 744 B/op; later-fact/header scans retain their larger workspace.
 [Completed acquisition](../benchmarks/WARM-PROBE-COMPLETED-READS.md) independently
 reduces JPEG probing elapsed by 46.5% sync / 50.6% async, with unchanged allocation.
 See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
+Complete PNG header inspection uses the explicitly labeled bounded adapter,
+checking structure/Strict EXIF and all nine source fields through EOF while
+skipping IDAT. CRC and pixels are opaque on both sides. Its 21 frozen RGBA8
+controls pass; the timing remains a screen gap, distinct from prefix probing.
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

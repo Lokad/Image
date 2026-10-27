@@ -27,6 +27,7 @@ internal sealed class WarmPngHeaders
             if (proof.GetProperty("timing").GetBoolean() || proof.GetProperty("librarySha256").GetString() != JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location)
                 || proof.GetProperty("inputSha256").GetString() != InputHash || !proof.GetProperty("equivalentMetadataAndValidation").GetBoolean()
                 || !proof.GetProperty("boundedSeekableDeliveryVerified").GetBoolean() || !proof.GetProperty("normalScalarNativeAgree").GetBoolean()
+                || !proof.GetProperty("typedSourceMetadataExact").GetBoolean()
                 || proof.GetProperty("controls").GetArrayLength() != 21) throw new InvalidOperationException("Bounded seekable equivalent-boundary prerequisite differs.");
             using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = document.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = document.RootElement.GetProperty("sourceRevision").GetString() });
@@ -71,8 +72,6 @@ internal sealed class WarmPngHeaders
         if (first != Expected || second != Expected || ReferenceEquals(first, second)) throw new InvalidOperationException("Header descriptors differ or alias.");
         var copy = encoded.ToArray(); var survivor = Inspect(copy); Array.Clear(copy);
         if (survivor != Expected || first != Expected || second != Expected) throw new InvalidOperationException("Surviving metadata aliases source.");
-        var items = 0;
-        for (var p = 8; p < encoded.Length; p = checked(p + 12 + (int)BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(p)))) items++;
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 8448};
         if (Inspect(encoded, exact) != Expected) throw new InvalidOperationException("Exact header admission differs.");
         foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = 8447 } })
@@ -107,8 +106,8 @@ internal sealed class WarmPngHeaders
     private void RequireNative()
     {
         var bytes = File.ReadAllBytes(state.NativeOutput);
-        int[] fields = [0, 513, 259, 8, 1, 1];
-        if (bytes.Length != 24) throw new InvalidOperationException("Native descriptor size differs.");
+        int[] fields = [0, 513, 259, 8, 1, 1, 2, 2, 4];
+        if (bytes.Length != 36) throw new InvalidOperationException("Native descriptor size differs.");
         for (var i = 0; i < fields.Length; i++) if (BinaryPrimitives.ReadInt32LittleEndian(bytes.AsSpan(i * 4)) != fields[i]) throw new InvalidOperationException("Native descriptor differs.");
     }
 
@@ -123,13 +122,13 @@ internal sealed class WarmPngHeaders
             {
                 schemaVersion = 1, name = "WarmStreamIdentify", caseId = "Png8HeadersSeekable", publicBoundary = "InspectHeaders/PngRgba8FreshSeekable",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = encoded.Length, inputSha256 = InputHash,
-                descriptor = Expected, managedOutputBytes = 24, nativeOutputBytes = 24, descriptorExact = true, headerStructure = true, fullCrc = false, pixelDecode = false,
+                descriptor = Expected, managedOutputBytes = 36, nativeOutputBytes = 36, descriptorExact = true, typedSourceMetadataExact = true, headerStructure = true, fullCrc = false, pixelDecode = false,
                 freshSeekableStream = true, opaquePayloadsSkipped = true, inputView = false, fixedWorkspace = 8448, eofChecked = true, callerSourceLeftOpen = true,
                 fixedInputWorkspaceAcquisitionAndReleaseTimed = true, wholeInputCopy = false, streamAcquisitionAndReleaseTimed = true, residentCallbacksCompleteImmediately = true,
                 sourceUnchanged = true, independentOwnedOutput = true, resourceAndCancellationGates = true, preparedEquivalentBoundaryControls = 21, preparation = proof,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmPngHeaders).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same original resident PNG through fresh read-only seekable source exposing no input view, to fresh independent six-field descriptor. Complete public InspectHeaders, fixed8448B local admission/scratch/header storage, actual bounded reads and opaque IDAT seek skipping through EOF, structural/header/EXIF scan, descriptor ownership, source/workspace release are timed. Native fresh FFmpeg AVIO with8192B scratch and original bounded header/EXIF adapter plus fresh owned AVCodecParameters; reads/seek skipping/EOF and all source/workspace/descriptor acquisition/release timed. Public PNG packet parser, CRC and compressed pixels excluded on both sides; parser streaming would buffer the whole input. Resident callbacks immediate. Same caller input left open and unchanged; descriptors survive source/workspace/peer release. No whole-input copy, metadata-block/raster allocation, source view, real I/O or cached descriptor. Startup/IPC/preparation and control hashing excluded. One CPU/thread, normal SIMD, nonconcurrent workstation GC."
+                boundary = "Same original resident PNG through fresh read-only seekable source exposing no input view, to fresh independent nine-field typed source descriptor. Complete public InspectHeaders, fixed8448B local admission/scratch/header storage, actual bounded reads and opaque IDAT seek skipping through EOF, structural/header/EXIF scan, descriptor ownership, source/workspace release are timed. Native fresh FFmpeg AVIO with8192B scratch and original bounded header/EXIF adapter plus fresh owned AVCodecParameters; reads/seek skipping/EOF and all source/workspace/descriptor acquisition/release timed. Public PNG packet parser, CRC and compressed pixels excluded on both sides; parser streaming would buffer the whole input. Resident callbacks immediate. Same caller input left open and unchanged; descriptors survive source/workspace/peer release. No whole-input copy, metadata-block/raster allocation, source view, real I/O or cached descriptor. Startup/IPC/preparation and control hashing excluded. One CPU/thread, normal SIMD, nonconcurrent workstation GC."
             }, EncoderQualityCalibration.Json) + "\n");
         }
         finally { Dispose(); }

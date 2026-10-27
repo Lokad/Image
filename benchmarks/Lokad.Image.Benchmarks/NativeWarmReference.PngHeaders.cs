@@ -32,9 +32,10 @@ internal sealed partial class NativeWarmReference
                 || Ready.GetProperty("codecThreads").GetInt32() != 1 || Ready.GetProperty("conversionThreads").GetInt32() != 0
                 || Ready.GetProperty("threadType").GetInt32() != 0 || Ready.GetProperty("activeThreadType").GetInt32() != 0
                 || Ready.GetProperty("scratchBytes").GetInt32() != 8192 || Ready.GetProperty("headerBytes").GetInt32() != 32
-                || Ready.GetProperty("outputBytes").GetInt32() != 24 || Ready.GetProperty("seekCalls").GetInt32() <= 0
+                || Ready.GetProperty("outputBytes").GetInt32() != 36 || Ready.GetProperty("seekCalls").GetInt32() <= 0
                 || Ready.GetProperty("eofReads").GetInt32() <= 0 || Ready.GetProperty("lengthQueries").GetInt32() <= 0
                 || Ready.GetProperty("readBytes").GetInt32() >= Ready.GetProperty("inputBytes").GetInt32()
+                || !Ready.GetProperty("typedSourceMetadata").GetBoolean() || Ready.GetProperty("fuelAccounting").GetBoolean()
                 || new[] { "scalarMode", "pixelDecode", "wholeInputCopy", "inputView", "publicParserTimed", "fullCrcTimed" }
                     .Any(key => Ready.GetProperty(key).GetBoolean())
                 || new[] { "independentLiveOutputs", "freshSeekableStream", "eofChecked", "callerSourceLeftOpen", "opaqueSeekEnabled",
