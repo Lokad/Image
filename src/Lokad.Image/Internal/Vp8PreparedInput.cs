@@ -7,7 +7,7 @@ namespace Lokad.Image.Internal;
 // The pinned encoder's discrete-range/fixed-point and gamma conventions are
 // intentional here. Tables are generated from mathematics, never imported.
 // Owns normalized preparation planes for the public lossy encoder.
-internal sealed class Vp8PreparedInput : IDisposable
+internal sealed partial class Vp8PreparedInput : IDisposable
 {
     private const int MetadataBytes = 128, ScratchBytes = 1024;
     private const int LumaScale = 220 * 256, ChromaScale = 225 * 256;
@@ -90,7 +90,9 @@ internal sealed class Vp8PreparedInput : IDisposable
             var capacity = checked(result.lumaLength + 2 * result.chromaLength + (hasAlpha ? width * height : 0));
             context.Reserve(capacity + (long)MetadataBytes); result.retainedBytes = capacity + (long)MetadataBytes;
             context.Cancellation.ThrowIfCancellationRequested(); result.storage = new byte[capacity];
-            context.Reserve(ScratchBytes);
+            var vectorChroma = eightBit && !hasAlpha && width >= 16 && Chroma8Supported;
+            var scratchBytes = vectorChroma ? 4096 : ScratchBytes;
+            context.Reserve(scratchBytes);
             try
             {
                 context.Cancellation.ThrowIfCancellationRequested();
@@ -113,11 +115,12 @@ internal sealed class Vp8PreparedInput : IDisposable
                     }
                 }
                 var chromaWidth = (width + 1) / 2; var chromaHeight = (height + 1) / 2; var stride = result.Stride / 2;
+                var prepared = vectorChroma ? PrepareChroma8(bytes, width, height, uPlane, vPlane, stride, linear, knots, context) : 0;
                 for (var y = 0; y < chromaHeight; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
                     var row0 = 2 * y * width * 4; var row1 = Math.Min(2 * y + 1, height - 1) * width * 4;
-                    for (var x = 0; x < chromaWidth; x++)
+                    for (var x = prepared; x < chromaWidth; x++)
                     {
                         var x0 = 2 * x * 4; var x1 = Math.Min(2 * x + 1, width - 1) * 4;
                         var p0 = row0 + x0; var p1 = row0 + x1; var p2 = row1 + x0; var p3 = row1 + x1;
@@ -132,7 +135,7 @@ internal sealed class Vp8PreparedInput : IDisposable
                 }
                 result.Pad();
             }
-            finally { context.Release(ScratchBytes); }
+            finally { context.Release(scratchBytes); }
             return result;
         }
         catch { result.Dispose(); throw; }

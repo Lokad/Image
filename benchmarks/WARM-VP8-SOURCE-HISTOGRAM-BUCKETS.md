@@ -1,6 +1,6 @@
 # SIMD buckets for VP8 source histograms
 
-Historical producer and costs. [Matching-plane analysis](WARM-VP8-SOURCE-IDENTICAL-PLANES.md)
+Historical producer and costs. [Opaque chroma SIMD](WARM-VP8-OPAQUE-CHROMA-GAMMA.md)
 supplies current affected costs and allocations. [Zero-population aggregation](WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md)
 superseded this producer's serial updates; magnitudes, bins and populations remain exact.
 

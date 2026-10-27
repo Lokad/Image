@@ -36,11 +36,11 @@ public sealed class Vp8SourceAnalysisTests
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var sourceBytes = source.Pixels.Length; context.ReserveBorrowed(sourceBytes);
         using var input = Vp8PreparedInput.Create(source, context); input.CleanupTransparentArea();
-        var inputHash = Vp8PreparedInputTests.Hash(input); var before = root.Bytes;
+        var inputHash = Vp8PreparedInputTests.Hash(input); var before = root.Bytes; var beforePeak = root.Peak;
         using var analysis = Vp8SourceAnalysis.Create(input, context);
         Assert.Equal((33, 17, 561), (analysis.Width, analysis.Height, analysis.Count));
         Assert.Equal(records, RecordsHash(analysis)); Assert.Equal((alpha, uv), (analysis.MeanAlpha, analysis.MeanChromaScore));
-        Assert.Equal(before + analysis.CapacityBytes, root.Bytes); Assert.Equal(root.Bytes + 1024, root.Peak);
+        Assert.Equal(before + analysis.CapacityBytes, root.Bytes); Assert.Equal(Math.Max(beforePeak, root.Bytes + 1024), root.Peak);
         Span<byte> packedHistogram = stackalloc byte[1024];
         for (var i = 0; i < 256; i++) BinaryPrimitives.WriteInt32LittleEndian(packedHistogram[(4 * i)..], analysis.Histogram[i]);
         Assert.Equal(histogram, Convert.ToHexStringLower(SHA256.HashData(packedHistogram)));

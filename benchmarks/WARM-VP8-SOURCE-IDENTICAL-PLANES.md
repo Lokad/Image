@@ -1,5 +1,8 @@
 # Skip transforms for exactly matching source planes
 
+These six costs are historical after [opaque chroma SIMD](WARM-VP8-OPAQUE-CHROMA-GAMMA.md).
+The retained source/package/raw identities describe this recorded producer.
+
 The existing effort2 diagram independently measures 4.898 ms: 1.947× reference
 time (upper 1.955×), an exact 7,330-byte packet and unchanged 741,342 B/op.
 Elapsed time is 3.87% below the preceding independent mean; separate runs

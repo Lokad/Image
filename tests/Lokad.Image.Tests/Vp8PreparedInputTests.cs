@@ -60,7 +60,9 @@ public sealed class Vp8PreparedInputTests
         using var input = Vp8PreparedInput.Create(source, context);
         Assert.Equal(expected, Hash(input)); Assert.Equal(original, OriginalPixels.Bytes(source));
         Assert.Equal(sourceBytes + input.CapacityBytes, root.Bytes);
-        Assert.Equal(sourceBytes + input.CapacityBytes + 1024, root.Peak);
+        var scratch = root.Peak - sourceBytes - input.CapacityBytes;
+        Assert.True(scratch is 1024 or 4096);
+        if (depth != 8 || input.HasAlpha || source.Width < 16) Assert.Equal(1024, scratch);
         Padding(input.Y, input.Stride, input.Width, input.Height);
         Padding(input.U, input.Stride / 2, (input.Width + 1) / 2, (input.Height + 1) / 2);
         Padding(input.V, input.Stride / 2, (input.Width + 1) / 2, (input.Height + 1) / 2);
@@ -70,6 +72,27 @@ public sealed class Vp8PreparedInputTests
         Assert.Equal(input.CapacityBytes, root.Bytes); Assert.Equal(expected, Hash(input));
         input.Dispose(); input.Dispose(); Assert.Equal(0, root.Bytes);
         Assert.Throws<ObjectDisposedException>(() => input.Y.Length); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void OpaqueVectorScratchRefusalIsTerminalWithoutSelectingSmallerScalarWorkspace()
+    {
+        if (!System.Runtime.Intrinsics.X86.Avx512F.IsSupported || !System.Runtime.Intrinsics.X86.Avx512BW.IsSupported
+            || !System.Runtime.Intrinsics.X86.Avx512Vbmi.IsSupported) return;
+        using var source = OriginalVp8lControls.Buffer("opaque", 8);
+        long capacity;
+        using (var sizing = new OperationContext(ImageLimits.Default, default))
+        using (var input = Vp8PreparedInput.Create(source, sizing)) capacity = input.CapacityBytes;
+        using var root = new TestMemoryBudget(capacity + 4096); using var caller = root.CreateScope();
+        Assert.True(caller.TryReserve(3072, out var held)); // The scalar workspace would fit.
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        var error = Assert.Throws<ImageLimitException>(() => Vp8PreparedInput.Create(source, context));
+        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
+        Assert.Equal(3072, root.Bytes); Assert.Equal(1, root.Refusals);
+        held.Dispose();
+        using var next = Vp8PreparedInput.Create(source, context); Assert.Equal(capacity, root.Bytes);
+        Assert.Equal(capacity + 4096, root.Peak);
+        next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Theory]
