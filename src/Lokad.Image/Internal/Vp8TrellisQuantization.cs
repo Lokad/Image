@@ -43,16 +43,8 @@ internal static class Vp8TrellisQuantization
         _ = rate.Values; operation.Cancellation.ThrowIfCancellationRequested();
         var fixedLevels = rate.FixedLevels; var variableLevels = rate.VariableLevels; var endOfBlock = rate.EndOfBlock;
         var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
-        Span<byte> scan = stackalloc byte[16]; var at = 0;
-        for (var diagonal = 0; diagonal <= 6; diagonal++)
-        {
-            var low = Math.Max(0, diagonal - 3); var high = Math.Min(3, diagonal);
-            for (var step = low; step <= high; step++)
-            {
-                var x = (diagonal & 1) != 0 ? high - step + low : step;
-                scan[at++] = (byte)((diagonal - x) * 4 + x);
-            }
-        }
+        // RFC6386 section13 diagonal coefficient order; read-only format data.
+        ReadOnlySpan<byte> scan = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
         Span<short> original = stackalloc short[16]; coefficients[..16].CopyTo(original);
         Span<short> nodes = stackalloc short[32]; Span<byte> predecessors = stackalloc byte[32];
         var first = type == 0 ? 1 : 0; var last = first - 1;

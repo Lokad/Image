@@ -80,7 +80,7 @@ def render():
         row('VP8 RGBA8', 'warm-vp8-residual-vector-views-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-RESIDUAL-VECTOR-VIEWS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 opaque photograph', 'warm-vp8-residual-vector-views-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-RESIDUAL-VECTOR-VIEWS.md', confirmed=True, current=True),
         row('VP8 opaque text/diagram', 'warm-vp8-residual-vector-views-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-RESIDUAL-VECTOR-VIEWS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort6 / trellis', 'warm-vp8-residual-vector-views-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-RESIDUAL-VECTOR-VIEWS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 diagram, effort6 / trellis', 'warm-vp8-trellis-scan-data-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-TRELLIS-SCAN-DATA.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
@@ -99,11 +99,12 @@ gains. Published0.1.0 remains unchanged.
 
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
-required paths remain open. Residual-vector views and compiler inlining independently measure 1.996× reference
-time on the existing photograph (upper 2.004×), with exact packets and 809,056 B/op.
-Its 19.42 ms is 9.71% below the preceding independent mean; no paired baseline gain
-is claimed. Other affected encoders have current guarded shorts. The required
-upper ≤1× and remaining named confirmations stay open.
+required paths remain open. Fixed trellis scan geometry independently measures
+1.901× reference time (upper 1.910×), with exact packets and 754,328 B/op. Its
+18.64 ms is 6.50% below the preceding quiet short; no paired baseline gain is
+claimed. Unchanged effort-4 costs carry forward: the photograph remains the largest
+current gap at 1.996× (upper 2.004×), 809,056 B/op. The required upper ≤1× and
+remaining named confirmations stay open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
@@ -111,8 +112,8 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 4,943 checks/OS; 622 affected scalar WebP/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [residual vector views](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 4,943 checks/OS; 622 affected scalar WebP/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [trellis scan geometry](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md), [residual vector views](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

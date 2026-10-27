@@ -5,6 +5,9 @@ The photograph independently measures 19.42 ms: 1.996× reference time (upper
 the preceding independent mean; these separate runs are not a paired baseline
 gain. The required conservative upper ≤1× remains open.
 
+The effort-6 trellis row below is now historical after [fixed scan geometry](WARM-VP8-TRELLIS-SCAN-DATA.md).
+That method5/6-only change does not affect the other four effort-4 observations.
+
 | Quiet one-CPU run | Lokad µs | Reference µs | Ratio / upper | Allocated B/op | Output bytes |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | PhotographLossy8 short | 19,632.11 | 9,732.51 | 2.017 / 2.109 | 809,056 | 17,688 |

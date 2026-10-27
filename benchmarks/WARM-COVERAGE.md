@@ -26,15 +26,15 @@ effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
 [Method6 search](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs
 coefficient-domain dynamic-programming trellis for every luma candidate; the
 current method4 warm controls never execute this required algorithm. Functional
-packet/ownership proof remains exact. The [current complete-operation short](WARM-VP8-RESIDUAL-VECTOR-VIEWS.md)
-measures 2.038× / upper 2.089, 854,968 B/op, with exact packets and reconstructed
-pixels. It is now the largest demonstrated gap. Source, depth and quality stay
+packet/ownership proof remains exact. The [current independent confirmation](WARM-VP8-TRELLIS-SCAN-DATA.md)
+measures 1.901× / upper 1.910, 754,328 B/op, with exact packets and reconstructed
+pixels. Source, depth and quality stay
 frozen: no grid or new image. Other efforts/settings receive no broader
 performance claim.
 
 ## Current qualification and demonstrated gaps
 
-[VP8 residual vector views](WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) is the latest
+[Fixed trellis scan geometry](WARM-VP8-TRELLIS-SCAN-DATA.md) is the latest
 qualified producer: 4,943 Release checks and 622 affected scalar WebP checks per
 OS, plus the same actual private 0.2.0 package and all three usage examples.
 Complete encoder packets, decoded pixels, editing precision, cancellation and
@@ -45,9 +45,13 @@ allocations, reference boundaries and confirmation status. Current evidence:
 
 - [Residual vector views](WARM-VP8-RESIDUAL-VECTOR-VIEWS.md): photograph
   independent 1.996× / upper 2.004, exact 17,688 B and 809,056 B/op. Current
-  diagram/alpha/effort-6 trellis shorts are 1.878× / 1.474× / 2.038×. Observed
+  diagram/alpha effort-4 shorts are 1.878× / 1.474×. Observed
   allocations are retained per row; no new production heap storage. Older affected
   costs are historical. Warm upper≤1× remains open.
+- [Fixed trellis scan geometry](WARM-VP8-TRELLIS-SCAN-DATA.md): effort-6 diagram
+  independently confirms 1.901× / upper 1.910, 754,328 B/op and exact 6,818 B.
+  Only method5/6 enter this routine; valid effort-4 costs carry forward. The
+  photograph remains the largest current demonstrated gap.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
@@ -119,14 +123,10 @@ gives only a 0.488% short difference; rejected source and actual binaries are
 restored exactly. Both systems pass 25 restored normal/scalar checks; prior
 full/package proof carries forward. No additional reconstruction trial.
 
-The existing effort-6 diagram remains the largest demonstrated gap. Its trellis
-routine generates the sixteen-position specification zigzag on every block.
-Next try one bounded reuse of that fixed geometry, preserving exact coefficient/
-DP arithmetic, validation, tails, cancellation and owner lifetimes. Constants must
-come from the public format specification, with no upstream implementation table.
-No new kernel/cache/profile/image/settings grid. Same trellis short, independently
-confirm only a material gain; batch accepted qualification. Completed and rejected
-pricing/emitter experiments remain closed.
+Fixed trellis scan geometry is accepted and fully qualified; stop scan/DP variants.
+Its only invalidated costs are method5/6 trellis, now independently reconciled.
+Effort-4 costs, other codec/edit/text evidence and all unchanged functional proofs
+remain reusable. Completed and rejected pricing/emitter experiments remain closed.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)

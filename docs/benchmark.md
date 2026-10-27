@@ -6,11 +6,12 @@ gains. Published0.1.0 remains unchanged.
 
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
-required paths remain open. Residual-vector views and compiler inlining independently measure 1.996× reference
-time on the existing photograph (upper 2.004×), with exact packets and 809,056 B/op.
-Its 19.42 ms is 9.71% below the preceding independent mean; no paired baseline gain
-is claimed. Other affected encoders have current guarded shorts. The required
-upper ≤1× and remaining named confirmations stay open.
+required paths remain open. Fixed trellis scan geometry independently measures
+1.901× reference time (upper 1.910×), with exact packets and 754,328 B/op. Its
+18.64 ms is 6.50% below the preceding quiet short; no paired baseline gain is
+claimed. Unchanged effort-4 costs carry forward: the photograph remains the largest
+current gap at 1.996× (upper 2.004×), 809,056 B/op. The required upper ≤1× and
+remaining named confirmations stay open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
@@ -18,8 +19,8 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 4,943 checks/OS; 622 affected scalar WebP/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [residual vector views](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 4,943 checks/OS; 622 affected scalar WebP/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [trellis scan geometry](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md), [residual vector views](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
@@ -37,7 +38,7 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8 RGBA8](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 78,731.33 | 53,402.64 | 1.474 / 1.638 | 23,258,168 | Current gap (short; qualified) |
 | [VP8 opaque photograph](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 19,416.18 | 9,726.50 | 1.996 / 2.004 | 809,056 | Current gap (independent) |
 | [VP8 opaque text/diagram](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 10,935.19 | 5,822.51 | 1.878 / 1.976 | 741,121 | Current gap (short; qualified) |
-| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 19,937.03 | 9,780.74 | 2.038 / 2.089 | 754,328 | Current gap (short; qualified) |
+| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 18,642.09 | 9,805.01 | 1.901 / 1.910 | 754,328 | Current gap (independent) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 133,800.97 | 83,340.00 | 1.605 / 2.159 | 29,610,520 | Current gap (short; qualified) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 13,192.85 | 9,685.69 | 1.362 / 1.408 | 45,404,838 | Current gap (independent) |
