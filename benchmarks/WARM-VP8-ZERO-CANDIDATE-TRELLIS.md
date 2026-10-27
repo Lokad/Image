@@ -1,5 +1,8 @@
 # Exact zero-candidate VP8 trellis shortcut
 
+Cost rows are historical after [borrowed VP8 cursors](WARM-VP8-BORROWED-CURSOR.md).
+Exactness and primitive qualification remain applicable.
+
 The existing513×259 opaque diagram/Q75/effort6 independently uses **5.3% less
 elapsed**:15.45ms versus a fresh16.32ms baseline. It remains a **1.574× /
 upper1.583** CPU gap. Complete packets stay exact at6,818B; allocations are

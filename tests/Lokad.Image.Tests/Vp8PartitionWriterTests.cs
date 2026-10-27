@@ -17,13 +17,15 @@ public sealed class Vp8PartitionWriterTests
         for (var sequence = 0; sequence < 8192; sequence++)
         {
             using var writer = new Vp8PartitionWriter(context, 4096);
-            for (var p = 0; p < 128; p++)
+            var cursor = writer.Borrow();
+            try { for (var p = 0; p < 128; p++)
             {
                 state ^= state << 13; state ^= state >> 17; state ^= state << 5;
                 var bit = (int)(state >> 31); var probability = (int)(state & 255);
                 if (sequence < 512) { bit = sequence & 1; probability = sequence >> 1; }
-                writer.Write(bit, probability);
+                cursor.Write(bit != 0, (byte)probability);
             }
+            } finally { cursor.Commit(); }
             writer.Finish(); BinaryPrimitives.WriteInt32LittleEndian(length, writer.Bytes.Length);
             hash.AppendData(length); hash.AppendData(writer.Bytes);
             Assert.Equal(writer.CapacityBytes, root.Bytes);
@@ -41,7 +43,50 @@ public sealed class Vp8PartitionWriterTests
 
     private static void Feed(Vp8PartitionWriter writer, string name, int count)
     {
-        for (var p = 0; p < count; p++) { var symbol = Symbol(name, p); writer.Write(symbol.Bit, symbol.Probability); }
+        var cursor = writer.Borrow();
+        try { for (var p = 0; p < count; p++) { var symbol = Symbol(name, p); cursor.Write(symbol.Bit != 0, (byte)symbol.Probability); } }
+        finally { cursor.Commit(); }
+    }
+
+    private static void Literal(Vp8PartitionWriter writer, int value, int count)
+    {
+        var cursor = writer.Borrow();
+        try { cursor.Literal(value, count); }
+        finally { cursor.Commit(); }
+    }
+
+    [Fact]
+    public void CommittedFragmentsPreserveNativeCarryTerminationAndRetainedCapacity()
+    {
+        using var root = new TestMemoryBudget(1_000_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        foreach (var (name, count, bytes, expected) in new[]
+        {
+            ("mixed", 4096, 731, "1b0e79ec837012005e5e2168c4b5bafefd0f36dc7a4e93195980b5d21dc36cdb"),
+            ("pending-ff-carry", 520, 457, "05fe09c31628d786b3d9b798fda832381dbdccdbb1f90b2fa7a9e75b799bfc52")
+        })
+        foreach (var fragment in new[] { 1, 7, 16, 31, 64, 255 })
+        {
+            using var writer = new Vp8PartitionWriter(context, bytes);
+            for (var start = 0; start < count; start += fragment)
+            {
+                var cursor = writer.Borrow();
+                try
+                {
+                    for (var i = start; i < Math.Min(start + fragment, count); i++)
+                    {
+                        var symbol = Symbol(name, i);
+                        cursor.Write(symbol.Bit != 0, (byte)symbol.Probability);
+                    }
+                }
+                finally { cursor.Commit(); }
+                Assert.Equal(writer.CapacityBytes, root.Bytes);
+            }
+            writer.Finish();
+            Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(writer.Bytes)));
+            Assert.Equal(bytes, writer.Memory.Length);
+            writer.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
     }
 
     // Original symbol controls; native observations are frozen independently.
@@ -67,7 +112,7 @@ public sealed class Vp8PartitionWriterTests
         using var writer = new Vp8PartitionWriter(context, bytes); Feed(writer, name, symbols); writer.Finish();
         Assert.Equal(bytes, writer.Bytes.Length); Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(writer.Bytes)));
         Assert.Equal(writer.CapacityBytes, root.Bytes); Assert.Equal(bytes, writer.Memory.Length);
-        Assert.Throws<InvalidOperationException>(() => writer.Write(0)); writer.Dispose(); writer.Dispose();
+        Assert.Throws<InvalidOperationException>(() => { writer.Borrow(); }); writer.Dispose(); writer.Dispose();
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.Throws<InvalidOperationException>(() => writer.Memory.Length);
     }
 
@@ -98,16 +143,16 @@ public sealed class Vp8PartitionWriterTests
     }
 
     [Fact]
-    public void LocalAndOutputLimitsRemainDistinctAndInvalidSymbolsDoNotChangeTheStream()
+    public void LocalAndOutputLimitsRemainDistinctAndInvalidLiteralsDoNotChangeTheStream()
     {
         using var root = new TestMemoryBudget(1_000_000); using var limited = new OperationContext(new() { MemoryBudget = root, MaxWorkingBytes = 191 }, default);
         using var writer = new Vp8PartitionWriter(limited, 731);
-        var error = Assert.Throws<ImageLimitException>(() => writer.Write(0, 19));
+        var error = Assert.Throws<ImageLimitException>(() => Feed(writer, "mixed", 1));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.Operation), (error.Limit, error.Scope)); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
         using var context = new OperationContext(new() { MemoryBudget = root }, default); using var tiny = new Vp8PartitionWriter(context, 1);
         Assert.Equal(ImageLimitKind.OutputBytes, Assert.Throws<ImageLimitException>(() => tiny.Finish()).Limit); tiny.Dispose(); Assert.Equal(0, root.Bytes);
-        using var next = new Vp8PartitionWriter(context, 2); Assert.Throws<ArgumentOutOfRangeException>(() => next.Write(2));
-        Assert.Throws<ArgumentOutOfRangeException>(() => next.Write(0, 256)); next.Finish(); Assert.Equal(new byte[2], next.Bytes.ToArray());
+        using var next = new Vp8PartitionWriter(context, 2); Assert.Throws<ArgumentOutOfRangeException>(() => Literal(next, 1, 0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Literal(next, 0, 32)); next.Finish(); Assert.Equal(new byte[2], next.Bytes.ToArray());
     }
 
     [Fact]

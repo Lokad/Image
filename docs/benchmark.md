@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
-**‡ stored PNG** retains its unchanged 0.2.1 proof. Eighteen other controls retain
+Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
+**‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Thirteen read
 controls below use qualified 0.2.1 builds. These 44 displayed controls do not
@@ -13,18 +13,18 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, effort2/trellis VP8 and VP8L photograph have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, opaque RGBA16 VP8 and VP8L photograph have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. SIMD scored-plane histograms reduce photograph elapsed
 by 6.4% against a fresh independent baseline, with unchanged allocations and
 exact packets. It remains a1.350× / upper1.371 gap; RGBA8/16/async are current screens.
-The zero-candidate trellis shortcut independently reduces elapsed by5.3%, retaining
-exact packets and allocations; its1.574× / upper1.583 gap remains open.
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
-Effort2 header bounds independently reduce elapsed by5.7% at unchanged741,375B/op
-and exact packets; its1.490× / upper1.518 gap remains open.
+Borrowed arithmetic cursors independently reduce opaque RGBA16 VP8 elapsed by
+6.8%, retaining1,201,552B/op and exact packets; its1.410× / upper1.420 gap remains
+open. The five other affected VP8 rows have current screens, without independent
+speedup/parity claims.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -37,8 +37,8 @@ Source images are 513×259; resize rows state output dimensions. The
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
-[Effort2](../benchmarks/WARM-VP8-EFFORT2-HEADER-BOUND.md) and
-[trellis](../benchmarks/WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) retain current costs;
+[Borrowed VP8 cursors](../benchmarks/WARM-VP8-BORROWED-CURSOR.md) supply all six
+current VP8 encoding rows;
 [scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
 four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes
@@ -55,12 +55,12 @@ Stream decode and four existing tight PNG companions without a speedup claim.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,251.99 | 1,839.51 | 1.224 / 1.446 | 804,644 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search † | 3,772.35 | 2,532.10 | 1.490 / 1.518 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA8 | 73,112.14 | 53,921.86 | 1.356 / 1.981 | 21,353,192 | 98,590 / 98,590 |
-| VP8 opaque photograph | 15,516.03 | 9,706.04 | 1.599 / 1.677 | 809,072 | 17,688 / 17,688 |
-| VP8 opaque text/diagram | 8,407.67 | 5,833.42 | 1.441 / 1.561 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 15,451.13 | 9,816.91 | 1.574 / 1.583 | 754,344 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization | 23,851.31 | 15,554.15 | 1.533 / 1.565 | 1,201,552 | 72,380 / 72,380 |
+| VP8 diagram, effort2 / distortion-only search † | 3,598.28 | 2,509.90 | 1.434 / 1.484 | 741,375 | 7,330 / 7,330 |
+| VP8 RGBA8 † | 71,411.80 | 53,620.68 | 1.332 / 1.437 | 21,353,192 | 98,590 / 98,590 |
+| VP8 opaque photograph † | 15,075.12 | 9,710.51 | 1.552 / 1.603 | 809,072 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 8,210.55 | 5,830.12 | 1.408 / 1.492 | 741,137 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 14,974.25 | 9,821.74 | 1.525 / 1.565 | 754,344 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 21,978.27 | 15,585.15 | 1.410 / 1.420 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 174,761.42 | 121,059.75 | 1.444 / 1.702 | 29,688,704 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 174,544.82 | 121,397.18 | 1.438 / 1.686 | 29,688,704 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 179,408.83 | 120,784.16 | 1.485 / 2.434 | 29,689,088 | 183,812 / 183,812 |

@@ -20,6 +20,8 @@
   packets, signed rounding, bounded scratch and portable fallback.
 - Faster VP8 distortion-only mode selection through exact header-cost bounds,
   preserving packet bytes, strict ties and cancellation checkpoints.
+- Faster VP8 interval coding with stack-local state and borrowed output storage,
+  preserving exact packets, logical-byte admission and per-bit cancellation.
 
 ## 0.2.0 — 2026-10-27
 

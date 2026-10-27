@@ -102,7 +102,7 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 18 unchanged 0.2.0 controls,
+[The current summary](../docs/benchmark.md) retains 14 unchanged 0.2.0 controls,
 refreshes the VP8 Stream decode cost and thirteen read comparisons, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
@@ -113,10 +113,9 @@ not complete the full 267-case goal. [Constant-time distance mapping](WARM-PNG-D
 independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
 samples remain. The [residual-summary trial](VP8-RESIDUAL-SUMMARY-DEFERRED.md)
 remains deferred/removed; its effort2 baseline costs are superseded below.
-[Zero-candidate trellis](WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) independently measures
-1.574×/upper1.583,15.451ms,5.3% less elapsed than its fresh16.322ms baseline.
-Allocations stay754344B/op and packets exact6818B. BothOS5047 full checks,
-21internal/27public scalar and SAME actual package/three examples pass. The earlier
+The [zero-candidate trellis](WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) and
+[effort2 header-bound](WARM-VP8-EFFORT2-HEADER-BOUND.md) primitives remain accepted;
+their earlier costs are historical after borrowed cursors below. The earlier
 [state-collapse trial](VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) remains rejected.
 [The population-window family](VP8L-WINDOW-POPULATIONS-DEFERRED.md) stays closed:
 its short gain does not survive confirmation; occupancy/pair reuse is insufficient.
@@ -127,8 +126,8 @@ independently measures1.350×/upper1.371,112.763ms,6.4% less elapsed than its fr
 async screen1.444/1.438/1.485× with unchanged29688704/29688704/29689088B/op and
 exact183812B packets. BothOS5044 full checks,13internal/27public scalar and SAME
 actual package/three examples pass. Diagram and compressed alpha skip color search.
-Opaque VP8 photograph at1.599× is now the largest displayed encoding point gap,
-followed by trellis at1.574× and opaqueRGBA16 at1.533×. Preserve larger absolute-cost
+Opaque VP8 photograph at1.552× is now the largest displayed encoding point gap,
+followed by trellis at1.525× and VP8L async at1.485×. Preserve larger absolute-cost
 VP8L leads where opportunities are comparable.
 [Horizontal JPEG area filtering](WARM-JPEG-HORIZONTAL-AREA-FILTER.md) independently
 reduces caller-RGB420 elapsed by16.1% against a fresh baseline, to2.030ms and
@@ -138,14 +137,17 @@ BothOS5049 full checks,4 internal/293 public scalar and SAME actual package/thre
 examples pass. Stop this primitive; both named CPU gaps remain open. The bounded
 VP8 quantization-to-pricing audit found only a32-byte reload/absolute-value reuse,
 without a substantial candidate; no production edit or timing followed.
-[Effort2 header bounds](WARM-VP8-EFFORT2-HEADER-BOUND.md) independently reduce
-elapsed by5.7%,4.001ms→3.772ms, unchanged741375B/op and exact7330B packet.
-Its1.490×/upper1.518 gap remains. Count-only evidence identifies52.6% of candidates
-whose header alone cannot win the original-pixel-error metric; skip prediction/
-error calculation while retaining every per-mode cancellation checkpoint and
-strict-less tie decision. This is distinct from the closed RDO header experiment.
-BothOS5049 full checks and the SAME actual package/three examples pass; stop this
-primitive. The current bounded diagnostic/count raw master is retained there.
+[Borrowed VP8 cursors](WARM-VP8-BORROWED-CURSOR.md) independently reduce opaque
+RGBA16 elapsed by6.8%,23.594ms→21.978ms,1.410×/upper1.420. Allocation1201552B/op
+and exact72380B packets remain. Five other affected controls are refreshed screens:
+photograph1.552×,diagram4 1.408×,trellis1.525×,effort2 1.434×,alpha8 1.332×.
+All remain gaps, with exact packets/allocations and idle-v2/native brackets.
+BothOS5050 full checks,47 internal/27 public scalar and SAME actual package/three
+examples pass. Cached stack-local arithmetic and borrowed capacity replace repeated
+class-state traffic; existing logical-byte admission/replacement peaks, per-bit
+cancellation and finally commits remain. No new owner, quota or cache. One existing
+missing confirmation selector was compiled against binary references; all producer,
+harness and native binaries were reused through timing. Stop cursor variants.
 [Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
 independently confirmed gain and is removed; the current baseline stays valid.
 Full samples, allocations, packet sizes and boundaries are in the
@@ -210,6 +212,12 @@ Regression/pixel/reference evidence and timings are separate:
   depth/alpha/stream callers need applicable current evidence before CPU-pass
   claims. Method4/5/6 RDO/trellis, all decoding, other codecs/editing/text and
   applicable unchanged evidence remain valid. No storage/ownership change.
+- Borrowed cursors affect all VP8 partition emission, including every effort,
+  depth/alpha/stream/async/cancelable encoder caller. Six displayed controls are
+  refreshed; other affected named cases need applicable current costs before a
+  CPU-pass claim. VP8L compressed alpha work itself, all decoding, other codecs/
+  editing/text and applicable unchanged evidence remain valid. Physical owned
+  capacity, logical growth admission and output ownership are unchanged.
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.

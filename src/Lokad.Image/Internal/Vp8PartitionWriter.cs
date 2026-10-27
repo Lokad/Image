@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
@@ -25,37 +26,74 @@ internal sealed class Vp8PartitionWriter : IDisposable
         this.context = context; this.maximum = maximum;
     }
 
-    internal void Write(int bit, int probability = 128)
+    // One synchronous borrower per partition. Its local state is committed
+    // before Finish or another borrow, including when encoding throws. The
+    // cursor owns no capacity and never escapes into output delivery.
+    internal Cursor Borrow()
     {
         if (finished || disposed) throw new InvalidOperationException("Partition is closed.");
-        if ((uint)bit > 1 || (uint)probability > 255) throw new ArgumentOutOfRangeException(nameof(bit));
-        context.Cancellation.ThrowIfCancellationRequested(); var boundary = 1 + ((range - 1) * probability >> 8);
-        if (bit == 0) range = boundary;
-        else
-        {
-            value += (uint)boundary; range -= boundary;
-        }
-        if (range < 128)
-        {
-            var shift = BitOperations.LeadingZeroCount((uint)range) - 24;
-            value <<= shift; range <<= shift; pending += shift;
-            // Admit capacity at the original logical byte boundary, even when
-            // its bits are still held in the word. Replacements keep overlap.
-            Ensure(position + ((pending + 7) >> 3));
-            if (pending >= 32)
-            {
-                Carry();
-                BinaryPrimitives.WriteUInt32BigEndian(buffer.AsSpan(position), (uint)(value >> (pending - 24)));
-                position += 4; pending -= 32;
-                value &= (1UL << (pending + 8)) - 1;
-            }
-        }
+        return new Cursor(this);
     }
 
-    internal void Literal(int value, int count)
+    internal ref struct Cursor
     {
-        if ((uint)count > 31 || value < 0 || (uint)value >= 1u << count) throw new ArgumentOutOfRangeException(nameof(value));
-        for (var p = count - 1; p >= 0; p--) Write(value >> p & 1);
+        private readonly Vp8PartitionWriter owner;
+        private readonly CancellationToken cancellation;
+        private Span<byte> buffer;
+        private int position, pending, range;
+        private ulong value;
+
+        internal Cursor(Vp8PartitionWriter owner)
+        {
+            this.owner = owner; cancellation = owner.context.Cancellation;
+            buffer = owner.buffer; position = owner.position; pending = owner.pending;
+            range = owner.range; value = owner.value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void Write(bool bit, byte probability = 128)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var boundary = 1 + ((range - 1) * probability >> 8);
+            if (!bit) range = boundary;
+            else { value += (uint)boundary; range -= boundary; }
+            if (range < 128)
+            {
+                var shift = BitOperations.LeadingZeroCount((uint)range) - 24;
+                value <<= shift; range <<= shift; pending += shift;
+                // Every owned buffer fits maximum/Array.MaxLength. A request
+                // inside it needs no owner call; growth checks the same logical
+                // byte boundary before allocation and preserves overlap.
+                var required = position + ((pending + 7) >> 3);
+                if (required > buffer.Length) Grow(required);
+                if (pending >= 32) PublishWord();
+            }
+        }
+
+        private void Grow(int required)
+        {
+            Commit(); owner.Ensure(required); buffer = owner.buffer;
+        }
+
+        private void PublishWord()
+        {
+            Carry(buffer, position, pending, ref value, cancellation);
+            BinaryPrimitives.WriteUInt32BigEndian(buffer[position..], (uint)(value >> (pending - 24)));
+            position += 4; pending -= 32;
+            value &= (1UL << (pending + 8)) - 1;
+        }
+
+        internal void Literal(int value, int count)
+        {
+            if ((uint)count > 31 || value < 0 || (uint)value >= 1u << count) throw new ArgumentOutOfRangeException(nameof(value));
+            for (var p = count - 1; p >= 0; p--) Write((value >> p & 1) != 0);
+        }
+
+        internal void Commit()
+        {
+            owner.position = position; owner.pending = pending;
+            owner.range = range; owner.value = value;
+        }
     }
 
     internal void Finish()
@@ -64,7 +102,7 @@ internal sealed class Vp8PartitionWriter : IDisposable
         context.Cancellation.ThrowIfCancellationRequested();
         var logical = position + ((pending + 7) >> 3);
         var target = (long)logical + 2 + (logical == 0 && range != 255 ? 1 : 0);
-        Carry();
+        Carry(buffer, position, pending, ref value, context.Cancellation);
         // Publish the pending prefix, its eight residual bits, then the same
         // zero padding/lookahead as the bit-by-bit canonical termination.
         var count = pending + 8; var padding = -count & 7;
@@ -79,7 +117,7 @@ internal sealed class Vp8PartitionWriter : IDisposable
         finished = true;
     }
 
-    private void Carry()
+    private static void Carry(Span<byte> buffer, int position, int pending, ref ulong value, CancellationToken cancellation)
     {
         // At most one carry can escape a pending prefix: the selected interval
         // stays within its previous interval. With pending<=38, the word needs
@@ -89,8 +127,8 @@ internal sealed class Vp8PartitionWriter : IDisposable
         var at = position - 1;
         while (at >= 0)
         {
-            context.Cancellation.ThrowIfCancellationRequested();
-            var incremented = buffer![at] + 1; buffer[at] = unchecked((byte)incremented);
+            cancellation.ThrowIfCancellationRequested();
+            var incremented = buffer[at] + 1; buffer[at] = unchecked((byte)incremented);
             if (incremented < 256) break;
             at--;
         }

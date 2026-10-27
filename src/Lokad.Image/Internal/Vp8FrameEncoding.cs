@@ -39,22 +39,22 @@ internal sealed class Vp8FrameEncoding : IDisposable
         catch { result.Dispose(); throw; }
     }
 
-    private static void Bit(Vp8PartitionWriter writer, bool value, int probability = 128) => writer.Write(value ? 1 : 0, probability);
-    private static void Signed(Vp8PartitionWriter writer, int value, int width)
+    private static void Bit(ref Vp8PartitionWriter.Cursor writer, bool value, byte probability = 128) => writer.Write(value, probability);
+    private static void Signed(ref Vp8PartitionWriter.Cursor writer, int value, int width)
     {
-        Bit(writer, value != 0); if (value != 0) writer.Literal((Math.Abs(value) << 1) | (value < 0 ? 1 : 0), width + 1);
+        Bit(ref writer, value != 0); if (value != 0) writer.Literal((Math.Abs(value) << 1) | (value < 0 ? 1 : 0), width + 1);
     }
     private static int Geometry(int mode) => mode switch { 4 => 5, 5 => 6, 6 => 4, _ => mode };
 
-    private static void SmallMode(Vp8PartitionWriter writer, int mode, int top, int left)
+    private static void SmallMode(ref Vp8PartitionWriter.Cursor writer, int mode, int top, int left)
     {
         var p = Vp8Tables.BlockModeProbabilities.Slice((Geometry(top) * 10 + Geometry(left)) * 9, 9);
-        Bit(writer, mode != 0, p[0]); if (mode == 0) return;
-        Bit(writer, mode != 1, p[1]); if (mode == 1) return;
-        Bit(writer, mode != 2, p[2]); if (mode == 2) return;
-        Bit(writer, mode >= 6, p[3]);
-        if (mode < 6) { Bit(writer, mode != 3, p[4]); if (mode != 3) Bit(writer, mode == 5, p[5]); }
-        else { Bit(writer, mode != 6, p[6]); if (mode != 6) { Bit(writer, mode != 7, p[7]); if (mode != 7) Bit(writer, mode == 9, p[8]); } }
+        Bit(ref writer, mode != 0, p[0]); if (mode == 0) return;
+        Bit(ref writer, mode != 1, p[1]); if (mode == 1) return;
+        Bit(ref writer, mode != 2, p[2]); if (mode == 2) return;
+        Bit(ref writer, mode >= 6, p[3]);
+        if (mode < 6) { Bit(ref writer, mode != 3, p[4]); if (mode != 3) Bit(ref writer, mode == 5, p[5]); }
+        else { Bit(ref writer, mode != 6, p[6]); if (mode != 6) { Bit(ref writer, mode != 7, p[7]); if (mode != 7) Bit(ref writer, mode == 9, p[8]); } }
     }
 
     private static int Band(int position) => position switch
@@ -66,60 +66,67 @@ internal sealed class Vp8FrameEncoding : IDisposable
         4 => [180, 157, 141, 134, 130], _ => [254, 254, 243, 230, 196, 177, 153, 140, 133, 130, 129]
     };
 
-    private static bool Coefficients(Vp8PartitionWriter writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities)
+    private static bool Coefficients(ref Vp8PartitionWriter.Cursor writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities)
     {
         var last = -1; for (var n = first; n < 16; n++) if (levels[n] != 0) last = n;
         var at = ((type * 8 + Band(first)) * 3 + initialContext) * 11;
-        Bit(writer, last >= 0, probabilities[at]); if (last < 0) return false;
+        Bit(ref writer, last >= 0, probabilities[at]); if (last < 0) return false;
         for (var n = first; n <= last; n++)
         {
-            var level = Math.Abs((int)levels[n]); Bit(writer, level != 0, probabilities[at + 1]);
+            var level = Math.Abs((int)levels[n]); Bit(ref writer, level != 0, probabilities[at + 1]);
             if (level == 0) { at = ((type * 8 + Band(n + 1)) * 3) * 11; continue; }
-            Bit(writer, level > 1, probabilities[at + 2]);
+            Bit(ref writer, level > 1, probabilities[at + 2]);
             if (level > 1)
             {
-                Bit(writer, level > 4, probabilities[at + 3]);
-                if (level <= 4) { Bit(writer, level != 2, probabilities[at + 4]); if (level != 2) Bit(writer, level == 4, probabilities[at + 5]); }
+                Bit(ref writer, level > 4, probabilities[at + 3]);
+                if (level <= 4) { Bit(ref writer, level != 2, probabilities[at + 4]); if (level != 2) Bit(ref writer, level == 4, probabilities[at + 5]); }
                 else
                 {
-                    Bit(writer, level > 10, probabilities[at + 6]);
-                    if (level <= 10) Bit(writer, level > 6, probabilities[at + 7]);
-                    else { Bit(writer, level >= 35, probabilities[at + 8]); Bit(writer, level >= (level < 35 ? 19 : 67), probabilities[at + (level < 35 ? 9 : 10)]); }
+                    Bit(ref writer, level > 10, probabilities[at + 6]);
+                    if (level <= 10) Bit(ref writer, level > 6, probabilities[at + 7]);
+                    else { Bit(ref writer, level >= 35, probabilities[at + 8]); Bit(ref writer, level >= (level < 35 ? 19 : 67), probabilities[at + (level < 35 ? 9 : 10)]); }
                     var category = 0; var start = 5; var bits = 1;
                     while (category < 5 && level >= start + (1 << bits)) { start += 1 << bits; bits++; category++; }
                     var p = Category(category); var remainder = level - start;
-                    for (var b = 0; b < p.Length; b++) Bit(writer, (remainder & (1 << (p.Length - 1 - b))) != 0, p[b]);
+                    for (var b = 0; b < p.Length; b++) Bit(ref writer, (remainder & (1 << (p.Length - 1 - b))) != 0, p[b]);
                 }
             }
-            Bit(writer, levels[n] < 0);
-            if (n < 15) { at = ((type * 8 + Band(n + 1)) * 3 + Math.Min(level, 2)) * 11; Bit(writer, n < last, probabilities[at]); }
+            Bit(ref writer, levels[n] < 0);
+            if (n < 15) { at = ((type * 8 + Band(n + 1)) * 3 + Math.Min(level, 2)) * 11; Bit(ref writer, n < last, probabilities[at]); }
         }
         return true;
     }
 
     private void Encode(Vp8FramePlan frame)
     {
-        var h = header!; var t = tokens!; var p = frame.SegmentProbabilities;
-        h.Write(0); h.Write(0); Bit(h, frame.SegmentCount > 1);
+        var h = header!.Borrow(); var t = tokens!.Borrow();
+        try { Encode(frame, ref h, ref t); }
+        finally { h.Commit(); t.Commit(); }
+    }
+
+    private void Encode(Vp8FramePlan frame, ref Vp8PartitionWriter.Cursor h, ref Vp8PartitionWriter.Cursor t)
+    {
+        var p = frame.SegmentProbabilities;
+        h.Write(false); h.Write(false); Bit(ref h, frame.SegmentCount > 1);
         if (frame.SegmentCount > 1)
         {
-            Bit(h, frame.UpdateMap); h.Write(1); h.Write(1); // Updated, absolute segment features.
-            foreach (var q in frame.Quantizers) Signed(h, q, 7);
-            foreach (var level in frame.FilterLevels) Signed(h, level, 6);
+            Bit(ref h, frame.UpdateMap); h.Write(true); h.Write(true); // Updated, absolute segment features.
+            foreach (var q in frame.Quantizers) Signed(ref h, q, 7);
+            foreach (var level in frame.FilterLevels) Signed(ref h, level, 6);
             if (frame.UpdateMap)
             {
                 Span<byte> map = stackalloc byte[3] { p.Root, p.Left, p.Right };
-                foreach (var probability in map) { Bit(h, probability != 255); if (probability != 255) h.Literal(probability, 8); }
+                foreach (var probability in map) { Bit(ref h, probability != 255); if (probability != 255) h.Literal(probability, 8); }
             }
         }
         var maximumFilter = 0; foreach (var level in frame.FilterLevels) maximumFilter = Math.Max(maximumFilter, level);
-        h.Write(0); h.Literal(maximumFilter, 6); h.Literal(0, 3); h.Write(0); // Strong filter, sharpness0, no mode/ref deltas.
+        h.Write(false); h.Literal(maximumFilter, 6); h.Literal(0, 3); h.Write(false); // Strong filter, sharpness0, no mode/ref deltas.
         h.Literal(0, 2); h.Literal(frame.Quantizers[0], 7);
-        var deltas = frame.Deltas; Signed(h, deltas.LumaDc, 4); Signed(h, deltas.WalshDc, 4); Signed(h, deltas.WalshAc, 4); Signed(h, deltas.ChromaDc, 4); Signed(h, deltas.ChromaAc, 4);
-        h.Write(0); // No subsequent frame's entropy refresh.
+        var deltas = frame.Deltas; Signed(ref h, deltas.LumaDc, 4); Signed(ref h, deltas.WalshDc, 4); Signed(ref h, deltas.WalshAc, 4); Signed(ref h, deltas.ChromaDc, 4); Signed(ref h, deltas.ChromaAc, 4);
+        h.Write(false); // No subsequent frame's entropy refresh.
         var probabilities = frame.Probabilities;
-        for (var i = 0; i < 1056; i++) { var changed = probabilities[i] != Vp8Tables.CoefficientProbabilities[i]; Bit(h, changed, Vp8Tables.CoefficientUpdateProbabilities[i]); if (changed) h.Literal(probabilities[i], 8); }
-        Bit(h, frame.UseSkipProbability);
+        for (var i = 0; i < 1056; i++) { var changed = probabilities[i] != Vp8Tables.CoefficientProbabilities[i]; Bit(ref h, changed, Vp8Tables.CoefficientUpdateProbabilities[i]); if (changed) h.Literal(probabilities[i], 8); }
+        Bit(ref h, frame.UseSkipProbability);
         if (frame.UseSkipProbability) h.Literal(frame.SkipProbability, 8);
         var modeTop = new byte[frame.Columns * 4]; var coefficientTop = new byte[frame.Columns * 9];
         Span<byte> modeLeft = stackalloc byte[4]; Span<byte> contexts = stackalloc byte[18];
@@ -128,34 +135,34 @@ internal sealed class Vp8FrameEncoding : IDisposable
             context.Cancellation.ThrowIfCancellationRequested(); var x = index % frame.Columns;
             if (x == 0) { modeLeft.Clear(); contexts[9..].Clear(); }
             var block = frame.Block(index); var modes = frame.SmallModes(index);
-            if (frame.UpdateMap) { Bit(h, block.Segment >= 2, p.Root); Bit(h, (block.Segment & 1) != 0, block.Segment < 2 ? p.Left : p.Right); }
-            if (frame.UseSkipProbability) Bit(h, block.Skipped, frame.SkipProbability);
-            Bit(h, block.Intra16, 145);
+            if (frame.UpdateMap) { Bit(ref h, block.Segment >= 2, p.Root); Bit(ref h, (block.Segment & 1) != 0, block.Segment < 2 ? p.Left : p.Right); }
+            if (frame.UseSkipProbability) Bit(ref h, block.Skipped, frame.SkipProbability);
+            Bit(ref h, block.Intra16, 145);
             if (block.Intra16)
             {
-                var branch = block.LumaMode is 1 or 3; Bit(h, branch, 156); Bit(h, branch ? block.LumaMode == 1 : block.LumaMode == 2, branch ? 128 : 163);
+                var branch = block.LumaMode is 1 or 3; Bit(ref h, branch, 156); Bit(ref h, branch ? block.LumaMode == 1 : block.LumaMode == 2, branch ? (byte)128 : (byte)163);
                 modeTop.AsSpan(x * 4, 4).Fill((byte)block.LumaMode); modeLeft.Fill((byte)block.LumaMode);
             }
             else
             {
                 for (var by = 0; by < 4; by++) for (var bx = 0; bx < 4; bx++)
                 {
-                    var mode = modes[by * 4 + bx]; SmallMode(h, mode, modeTop[x * 4 + bx], modeLeft[by]); modeTop[x * 4 + bx] = modeLeft[by] = mode;
+                    var mode = modes[by * 4 + bx]; SmallMode(ref h, mode, modeTop[x * 4 + bx], modeLeft[by]); modeTop[x * 4 + bx] = modeLeft[by] = mode;
                 }
             }
-            var uv = block.ChromaMode; Bit(h, uv != 0, 142); if (uv != 0) { Bit(h, uv != 2, 114); if (uv != 2) Bit(h, uv == 1, 183); }
+            var uv = block.ChromaMode; Bit(ref h, uv != 0, 142); if (uv != 0) { Bit(ref h, uv != 2, 114); if (uv != 2) Bit(ref h, uv == 1, 183); }
             coefficientTop.AsSpan(x * 9, 9).CopyTo(contexts); var top = contexts[..9]; var left = contexts.Slice(9, 9); var levels = frame.Levels(index);
             if (frame.UseSkipProbability && block.Skipped)
             {
                 ResetAfterSkip(contexts, block.Intra16); top.CopyTo(coefficientTop.AsSpan(x * 9, 9)); continue;
             }
-            if (block.Intra16) top[8] = left[8] = Coefficients(t, levels[..16], 1, 0, top[8] + left[8], probabilities) ? (byte)1 : (byte)0;
+            if (block.Intra16) top[8] = left[8] = Coefficients(ref t, levels[..16], 1, 0, top[8] + left[8], probabilities) ? (byte)1 : (byte)0;
             for (var by = 0; by < 4; by++) for (var bx = 0; bx < 4; bx++)
-                top[bx] = left[by] = Coefficients(t, levels.Slice(16 + (by * 4 + bx) * 16, 16), block.Intra16 ? 0 : 3, block.Intra16 ? 1 : 0, top[bx] + left[by], probabilities) ? (byte)1 : (byte)0;
+                top[bx] = left[by] = Coefficients(ref t, levels.Slice(16 + (by * 4 + bx) * 16, 16), block.Intra16 ? 0 : 3, block.Intra16 ? 1 : 0, top[bx] + left[by], probabilities) ? (byte)1 : (byte)0;
             for (var channel = 0; channel < 2; channel++) for (var by = 0; by < 2; by++) for (var bx = 0; bx < 2; bx++)
             {
                 var a = 4 + channel * 2 + bx; var b = 4 + channel * 2 + by;
-                top[a] = left[b] = Coefficients(t, levels.Slice(272 + (channel * 4 + by * 2 + bx) * 16, 16), 2, 0, top[a] + left[b], probabilities) ? (byte)1 : (byte)0;
+                top[a] = left[b] = Coefficients(ref t, levels.Slice(272 + (channel * 4 + by * 2 + bx) * 16, 16), 2, 0, top[a] + left[b], probabilities) ? (byte)1 : (byte)0;
             }
             top.CopyTo(coefficientTop.AsSpan(x * 9, 9));
         }

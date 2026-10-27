@@ -1,5 +1,8 @@
 # Exact header lower bounds for VP8 distortion search
 
+Cost rows are historical after [borrowed VP8 cursors](WARM-VP8-BORROWED-CURSOR.md).
+Exactness and primitive qualification remain applicable.
+
 The existing 513×259 opaque diagram, Q75/effort2, independently uses **5.7% less
 elapsed**: 3.772 ms versus a fresh 4.001 ms baseline. Its **1.490× / upper 1.518**
 CPU gap remains open. Complete packets remain exact at 7,330 B; allocation stays
