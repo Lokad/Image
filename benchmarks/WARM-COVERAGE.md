@@ -36,7 +36,7 @@ boundary omitted from this inventory.
 
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 27 unchanged 0.2.0 controls and
+[The current summary](../docs/benchmark.md) retains 26 unchanged 0.2.0 controls and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
@@ -44,7 +44,9 @@ NoCompression at 1.052× / upper1.067, exact 1,066,552 B and 1,741,709 B/op.
 Short screens are not independent confirmations; this representative scope does
 not complete the 255-case goal. [Constant-time distance mapping](WARM-PNG-DISTANCE-SYMBOL.md)
 independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
-samples remain. VP8 diagram effort2 at 1.685× is now the largest displayed gap.
+samples remain. [Effort2 baseline refresh](VP8-RESIDUAL-SUMMARY-DEFERRED.md) resolves
+its current short to 1.583×; the proposed summary primitive is deferred/removed.
+Trellis6 at 1.646× is now the largest displayed point gap.
 Full samples, allocations, packet sizes and boundaries are in the
 [immutable release evidence](release-0.2.0-benchmark-evidence.json) and
 [current PNG evidence](warm-png-bulk-stored-evidence.json).
@@ -97,7 +99,8 @@ and their individual reports/raw archives.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted;
-their remaining gaps are below VP8 effort2 at 1.685×, the next displayed control.
+trellis6 at 1.646× is the next displayed control. Do not renew the deferred
+residual-summary mask family without a materially different opportunity.
 Closed source-energy, histogram,
 word/fragment, prediction/quantizer/trellis and other rejected variants stay closed.
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package

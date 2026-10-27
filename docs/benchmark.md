@@ -1,8 +1,8 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-27. **† Compressed PNG rows** use the latest qualified 0.2.1
+Updated 2026-10-27. **† Compressed PNG and VP8 effort2 rows** use the qualified 0.2.1
 development producer; **‡ stored PNG** retains its unchanged 0.2.1 path evidence.
-The other 27 controls retain published 0.2.0 measurements on unchanged paths.
+The other 26 controls retain published 0.2.0 measurements on unchanged paths.
 The original 31-control release evidence remains immutable. Full CPU parity and
 general replacement readiness remain open.
 
@@ -28,6 +28,8 @@ Source images are 513×259; resize rows state output dimensions. The
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
+The [effort2 baseline refresh](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) retains
+a new short on unchanged production; its prototype was deferred and removed.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -37,7 +39,7 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget | 2,697.19 | 1,835.47 | 1.469 / 1.815 | 804,637 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search | 4,224.40 | 2,507.60 | 1.685 / 1.868 | 741,375 | 7,330 / 7,330 |
+| VP8 diagram, effort2 / distortion-only search † | 3,993.94 | 2,523.55 | 1.583 / 1.709 | 741,401 | 7,330 / 7,330 |
 | VP8 RGBA8 | 73,112.14 | 53,921.86 | 1.356 / 1.981 | 21,353,192 | 98,590 / 98,590 |
 | VP8 opaque photograph | 15,516.03 | 9,706.04 | 1.599 / 1.677 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram | 8,407.67 | 5,833.42 | 1.441 / 1.561 | 741,137 | 7,100 / 7,100 |

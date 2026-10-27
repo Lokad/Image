@@ -14,14 +14,18 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
+    distortion = json.loads((ROOT / 'benchmarks/vp8-residual-summary-deferred-evidence.json').read_text(encoding='utf-8'))
+    assert not distortion['productionChanged'] and distortion['restoration']['sourceAndImmutableProducerRestored']
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
     rows = []
     for case in evidence['cases']:
         observation = case['observation']
-        updated = case['id'] in {'case17', 'case18', 'case19', 'case20'}
+        updated = case['id'] in {'case06', 'case17', 'case18', 'case19', 'case20'}
         producer = stored if case['id'] == 'case20' else current
-        if updated:
+        if case['id'] == 'case06':
+            observation = distortion['baseline']
+        elif updated:
             observation = producer['cases'][observation['receipt']['caseId']][-1]
         receipt = observation['receipt']
         stats = observation['managed']['statistics']
@@ -51,9 +55,9 @@ def render():
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     return f'''# Lokad.Image benchmarks
 
-Updated 2026-10-27. **† Compressed PNG rows** use the latest qualified 0.2.1
+Updated 2026-10-27. **† Compressed PNG and VP8 effort2 rows** use the qualified 0.2.1
 development producer; **‡ stored PNG** retains its unchanged 0.2.1 path evidence.
-The other 27 controls retain published 0.2.0 measurements on unchanged paths.
+The other 26 controls retain published 0.2.0 measurements on unchanged paths.
 The original 31-control release evidence remains immutable. Full CPU parity and
 general replacement readiness remain open.
 
@@ -79,6 +83,8 @@ Source images are 513×259; resize rows state output dimensions. The
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
+The [effort2 baseline refresh](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) retains
+a new short on unchanged production; its prototype was deferred and removed.
 
 ''' + codecs + '''
 
