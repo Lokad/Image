@@ -85,7 +85,7 @@ def render():
         row('VP8 opaque RGBA16, including normalization', 'warm-vp8-word-arithmetic-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-WORD-ARITHMETIC.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-rgba16-current-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-RGBA16-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
-        row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-async-webp-current-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-ASYNC-WEBP-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
+        row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-async-webp-confirmation-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-ASYNC-WEBP-CONFIRMATION.md', confirmed=True, current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-encoder-anchors-evidence.json', ['cases', 'png8', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
@@ -109,7 +109,9 @@ a time while preserving canonical packets. Effort2 diagram independently measure
 below the preceding independent mean; these separate runs are not a paired
 baseline gain. Photograph independently measures 16.027 ms, 1.649× (upper 1.655×),
 809,072 B/op and exact 17,688 B. Six existing anchors are reconciled. Allocation
-rises 16–33 B/op; no new buffers or admission model. Required upper ≤1× stays open.
+rises 16–33 B/op; no new buffers or admission model. The existing async VP8L
+control now independently confirms 1.669× (upper 1.731×), 47,675,312 B/op and exact
+183,812 B, resolving its short. Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)

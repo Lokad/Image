@@ -58,9 +58,10 @@ reference boundaries and confirmation status. Current named evidence:
   independent 1.362×; photograph/asymmetric shorts 1.605× / 1.566×.
 - [VP8L RGBA16](WARM-VP8L-RGBA16-CURRENT.md): short 1.548× / upper 1.685,
   47,674,928 B/op, exact 183,812 B.
-- [VP8L nonseekable async output](WARM-ASYNC-WEBP-CURRENT.md): short 1.663× /
-  upper 1.889, 47,675,312 B/op, exact 183,812 B. Awaited delivery/staging/release
-  are timed; callbacks complete immediately. Production proof is reused.
+- [VP8L nonseekable async output](WARM-ASYNC-WEBP-CONFIRMATION.md): independent
+  1.669× / upper 1.731, 47,675,312 B/op, exact 183,812 B. Its12actual/10filtered
+  confirmation resolves the earlier short. Awaited staging/delivery/release is
+  timed; callbacks complete immediately. Unchanged full/package proof is reused.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
   1.543×; 444, RGBA grayscale and caller GRAY8 shorts 1.216× / 1.129× / 1.079×.
 - [VP8 decoder StreamNative8](WARM-VP8-SHARED-SMALL-ROWS.md): short 1.309×,
@@ -129,14 +130,17 @@ preserve canonical bytes, delayed carry, limits, cancellation and ownership.
 Stop word/fragment variants. The earlier per-symbol fragment screen was marginal
 and its qualified producer was restored before this independent wider-state design.
 
-Resolve the existing nonseekable async VP8L short (1.663×/upper 1.889) before
-ranking it against the photograph RDO confirmation. Reuse its prepared worker and
-selector, with no new case or production build. Then select one substantial lead.
-For photograph RDO, existing luma candidates already compute pure residual/header
-lower bounds; investigate ordering their reconstruction by those bounds, retaining
-original mode-index ties and all native decisions. Uniform, cancellable and
-ordered-trellis paths need explicit treatment. First establish bounded equivalence
-and a concrete pruning opportunity; no new profile or workload/settings grid.
+The async VP8L confirmation is the largest current independent point among
+these anchors, narrowly above photograph RDO. The clustering State currently owns
+both original and working full histogram slabs. Original populations are used
+again only for final remapping/output accumulation. Investigate rebuilding one
+tile at a time from borrowed token starts, indexed by pixel-row/tile-column cell.
+Token starts are ordered; replay must preserve every histogram, map, tie and
+complete packet, including copies crossing rows/tiles and empty cells. Keep the
+working slab and retained result ownership, reserve actual index/scratch capacity
+before allocation, and prove geometry/cleanup before one narrow integration.
+No new profile or content/settings grid. Keep RDO candidate ordering as a later
+lead if the confirmed VP8 photograph gap becomes the priority.
 Do not infer a ranking of unconfirmed paths from short screens.
 
 The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)

@@ -1,5 +1,7 @@
 # Current nonseekable async WebP encoding
 
+The cost screen below is superseded by the [current independent confirmation](WARM-ASYNC-WEBP-CONFIRMATION.md). Validator cleanup and its recorded qualification remain useful evidence.
+
 The existing 513×259 RGBA8 lossless-WebP async control measures 201.47 ms,
 1.663× the reference (upper 1.889×), allocating 47,675,312 B/op. This is a guarded
 short with all three actual/filtered samples, not independent parity or a speedup

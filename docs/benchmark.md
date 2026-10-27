@@ -12,7 +12,9 @@ a time while preserving canonical packets. Effort2 diagram independently measure
 below the preceding independent mean; these separate runs are not a paired
 baseline gain. Photograph independently measures 16.027 ms, 1.649× (upper 1.655×),
 809,072 B/op and exact 17,688 B. Six existing anchors are reconciled. Allocation
-rises 16–33 B/op; no new buffers or admission model. Required upper ≤1× stays open.
+rises 16–33 B/op; no new buffers or admission model. The existing async VP8L
+control now independently confirms 1.669× (upper 1.731×), 47,675,312 B/op and exact
+183,812 B, resolving its short. Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
@@ -47,7 +49,7 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8 opaque RGBA16, including normalization](../benchmarks/WARM-VP8-WORD-ARITHMETIC.md) | 24,231.22 | 15,598.42 | 1.553 / 1.590 | 1,201,552 | Current gap (short; qualified) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L RGBA16, including normalization / libwebp exact=1](../benchmarks/WARM-VP8L-RGBA16-CURRENT.md) | 188,991.14 | 122,121.60 | 1.548 / 1.685 | 47,674,928 | Current gap (short; reused qualification) |
-| [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 201,469.36 | 121,148.65 | 1.663 / 1.889 | 47,675,312 | Current gap (short; reused qualification) |
+| [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-ASYNC-WEBP-CONFIRMATION.md) | 202,094.02 | 121,066.36 | 1.669 / 1.731 | 47,675,312 | Current gap (independent) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 133,800.97 | 83,340.00 | 1.605 / 2.159 | 29,610,520 | Current gap (short; qualified) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 13,192.85 | 9,685.69 | 1.362 / 1.408 | 45,404,838 | Current gap (independent) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |
