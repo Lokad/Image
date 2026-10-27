@@ -113,16 +113,20 @@ scored. The single-coefficient residual shortcut gives only a 0.825% short chang
 it is rejected and actual qualified sources/binaries restored. Per-mode score
 arithmetic is already inlined, so no score-copy trial is needed.
 
-Residual vector views/inlining are accepted and fully qualified. Stop residual,
-price, histogram, predictor and forward variants. The largest demonstrated gap is
-now the existing effort-6 diagram. Encoder reconstruction still runs the full
-inverse transform for DC-only or all-zero coefficient blocks. Next assess one
-bounded DC shortcut using the existing saturated row writer, preserving the
-complete pre-write snapshot, exact signed rounding/clamp, aliases and tails. The
-existing 229,504-case frozen inverse oracle includes every signed16 DC value and
-90 alias placements; reuse it. Same trellis short, independent only if material.
-No new kernel/cache/grid/profile or extra image. Prior rejected emitter/table
-experiments remain closed; qualify accepted production in one coherent batch.
+Residual vector views/inlining are accepted and fully qualified. Stop their
+variants. The [DC reconstruction screen](WARM-VP8-DC-RECONSTRUCTION-SCREEN.md)
+gives only a 0.488% short difference; rejected source and actual binaries are
+restored exactly. Both systems pass 25 restored normal/scalar checks; prior
+full/package proof carries forward. No additional reconstruction trial.
+
+The existing effort-6 diagram remains the largest demonstrated gap. Its trellis
+routine generates the sixteen-position specification zigzag on every block.
+Next try one bounded reuse of that fixed geometry, preserving exact coefficient/
+DP arithmetic, validation, tails, cancellation and owner lifetimes. Constants must
+come from the public format specification, with no upstream implementation table.
+No new kernel/cache/profile/image/settings grid. Same trellis short, independently
+confirm only a material gain; batch accepted qualification. Completed and rejected
+pricing/emitter experiments remain closed.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)
