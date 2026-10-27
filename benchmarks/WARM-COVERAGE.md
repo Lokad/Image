@@ -107,6 +107,11 @@ Regression/pixel/reference evidence and timings are separate:
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.
+- Selective probing adds a distinct public acquisition boundary, with no CPU-parity
+  claim yet. Its reader/parser changes affect InspectHeaders timings, which need
+  current confirmation before a pass claim. Identify, pixel codecs, transforms,
+  native workers and their applicable confirmations remain unchanged. The 31
+  displayed comparisons contain no InspectHeaders control.
 
 Frozen inputs/settings/workers, approved native-only adjustments and exact oracles
 remain reusable when unchanged. Retired quota cases cannot be failures or passes.

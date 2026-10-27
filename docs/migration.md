@@ -1,4 +1,11 @@
-# Moving to Lokad.Image 0.2.0
+# Moving to Lokad.Image
+
+Development 0.2.1 adds selective `Probe`/`ProbeAsync`. Use nullable facts and
+`EstablishedFacts`; an unexamined tail is not validated or evidence of absence.
+Actual acquisition has its own bound, distinct from encoded extents. Complete
+Identify/InspectHeaders behavior stays available. See [source metadata](source-metadata.md).
+
+## 0.2.0
 
 Published 0.1.0 packages remain unchanged. The supported scope has expanded;
 general replacement readiness and complete warm CPU parity are not claimed.

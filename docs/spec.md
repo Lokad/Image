@@ -123,6 +123,13 @@ workspace, without retaining image/metadata-sized buffers; it checks framing and
 headers but omits PNG CRC, JPEG table/entropy and WebP pixel validation. All four
 sync/async identification/inspection APIs agree on metadata for valid inputs.
 
+Development 0.2.1 adds `Probe`/`ProbeAsync`: select dimensions, source representation,
+transparency, orientation or animation; stop once those facts are established.
+Null result fields remain unknown. Default dimension probing stops before pixel
+payloads. Probing validates only the examined prefix; it does not establish full
+container, CRC or pixel validity. [Source metadata](source-metadata.md) describes
+acquisition bounds and stream positioning.
+
 Caller streams remain open. Async APIs use actual asynchronous reads/writes,
 without worker-thread offloading; CPU codec work is synchronous. Identify/Decode
 stream buffering is input-bounded and avoids a final exact-length copy. Async

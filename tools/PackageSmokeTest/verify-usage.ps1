@@ -89,6 +89,8 @@ if ((docDecoded.Width, docDecoded.Height, docDecoded.BitDepth) != (thumbnail.Wid
 for (var docY = 0; docY < thumbnail.Height; docY++)
     if (!docDecoded.GetRow16(docY).SequenceEqual(thumbnail.GetRow16(docY)))
         throw new Exception("Bounded output changes pixels.");
+if ((header.Width, header.Height) != (docWidth, docHeight) || header.Orientation != null || header.BytesRead != 29)
+    throw new Exception("Bounded example selective acquisition/unknown facts differ.");
 cancellation.Cancel();
 try
 {

@@ -15,7 +15,9 @@ public enum ImageLimitKind
     MetadataBytes,
     ContainerItems,
     /// <summary>A required buffer exceeds the managed array length limit.</summary>
-    BufferLength
+    BufferLength,
+    /// <summary>A probe exhausted its actual-read allowance, independently of encoded extents.</summary>
+    AcquiredBytes
 }
 
 /// <summary>Feature categories reported by <see cref="UnsupportedImageException.Feature"/>.</summary>

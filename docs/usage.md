@@ -28,6 +28,15 @@ fit. `ResizeToFit` preserves aspect ratio. Choose `ResizeFilter.Nearest` when
 individual samples must be preserved. Bilinear, bicubic and Lanczos3 resizing filter
 straight RGBA through premultiplied color, then return straight RGBA.
 
+## Probe dimensions before downloading pixels
+
+Development 0.2.1 provides selective `Probe`/`ProbeAsync` on seekable and nonseekable
+streams. The default reads dimensions before pixel payloads. The stream stays open
+at the acquired prefix. Unexamined orientation/alpha/animation
+fields are null. Select additional `ImageProbeFacts` when needed; late metadata
+may require more input. Use Identify/InspectHeaders for their stronger complete
+container checks and Decode for pixel validation. See [source metadata](source-metadata.md).
+
 ## Work with 16-bit pixels
 
 Rows contain consecutive red, green, blue and alpha samples. An 8-bit buffer uses
@@ -81,6 +90,9 @@ using var cancellation = new CancellationTokenSource();
 var token = cancellation.Token;
 
 using var input = File.OpenRead("input.png");
+var header = await ImageCodec.ProbeAsync(input,
+    new ImageProbeOptions { Limits = limits, MaxAcquiredBytes = 64 * 1024 }, token);
+input.Position = 0; // This FileStream is seekable; decode starts at the image beginning.
 using var image = ImageCodec.Decode(input,
     new DecodeOptions { ApplyOrientation = true, Limits = limits }, token);
 using var thumbnail = ImageTransforms.ResizeToFit(image, 128, 96,

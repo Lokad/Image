@@ -563,6 +563,18 @@ foreach (var packet in new[] { encoded.ToArray(), jpeg.ToArray(), exampleWebp.To
     using var root = new Lokad.Image.Tooling.TestMemoryBudget(8448);
     if (ImageCodec.InspectHeadersAsync(headers, limits with { MemoryBudget = root }).GetAwaiter().GetResult() != expected || root.Bytes != 0)
         throw new Exception("Package async/shared header inspection differs.");
+    headers.Position = 0;
+    var probeOptions = new ImageProbeOptions { Limits = limits with { MemoryBudget = root } };
+    var probe = ImageCodec.Probe(headers, probeOptions);
+    if ((probe.Width, probe.Height) != (expected.Width, expected.Height)
+        || probe.Orientation is { } knownOrientation && knownOrientation != expected.Orientation
+        || probe.BytesRead > 1024 || probe.BytesTraversed != headers.Position || root.Bytes != 0 || !headers.CanRead)
+        throw new Exception("Package selective probe acquisition/ownership differs.");
+    headers.Position = 0;
+    var allFacts = ImageCodec.ProbeAsync(headers, probeOptions with { Facts = ImageProbeFacts.All }).GetAwaiter().GetResult();
+    if (allFacts.EstablishedFacts != ImageProbeFacts.All || allFacts.SourceColor != expected.SourceColor
+        || allFacts.SourceAlpha != expected.SourceAlpha || allFacts.Orientation != expected.Orientation || root.Bytes != 0)
+        throw new Exception("Package async selective probe metadata/admission differs.");
 }
 static async Task VerifyAsyncOutput(ImageBuffer image)
 {

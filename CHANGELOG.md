@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Selective sync/async PNG/JPEG/WebP probing with explicit unknown facts, bounded
+  acquisition and shared workspace admission, without a decoded raster.
 - Faster stored PNG payload emission, preserving complete packet bytes, flush and
   cancellation boundaries, shared admission and output ownership.
 - Constant-time Deflate distance-code selection for compressed PNG, preserving

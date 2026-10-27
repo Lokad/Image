@@ -11,25 +11,34 @@ internal sealed class InspectionReader : IDisposable
     internal readonly OperationContext Context;
     private int first, last;
     private long acquired;
+    private readonly long? maxAcquiredBytes;
+    internal long BytesRead { get; private set; }
     private bool disposed;
     internal long Position => acquired - (last - first);
+    internal long BytesTraversed => acquired;
 
-    internal InspectionReader(Stream input, OperationContext context, bool asynchronous)
+    internal InspectionReader(Stream input, OperationContext context, bool asynchronous, long? maxAcquiredBytes = null)
     {
-        this.input = input; Context = context; this.asynchronous = asynchronous;
+        this.input = input; Context = context; this.asynchronous = asynchronous; this.maxAcquiredBytes = maxAcquiredBytes;
         context.Reserve(WorkingBytes);
         try { buffer = new byte[8192]; Header = new byte[32]; }
         catch { context.Release(WorkingBytes); throw; }
     }
 
-    private async ValueTask<bool> FillAsync()
+    private async ValueTask<bool> FillAsync(int needed)
     {
         Context.Cancellation.ThrowIfCancellationRequested();
         var requested = (int)Math.Min(buffer.Length, Context.Limits.MaxInputBytes - acquired + 1);
+        if (maxAcquiredBytes is { } maximum)
+        {
+            if (BytesRead == maximum) throw new ImageLimitException(ImageLimitKind.AcquiredBytes, "Probe acquisition limit exceeded.");
+            requested = (int)Math.Min(Math.Min(requested, needed), maximum - BytesRead);
+        }
         var read = asynchronous
             ? await input.ReadAsync(buffer.AsMemory(0, requested), Context.Cancellation).ConfigureAwait(false)
             : input.Read(buffer.AsSpan(0, requested));
         if ((uint)read > requested) throw new ImageDataException("Stream returned an invalid read count.");
+        BytesRead += read;
         if (read > Context.Limits.MaxInputBytes - acquired)
             throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
         Context.Cancellation.ThrowIfCancellationRequested(); acquired += read; first = 0; last = read;
@@ -38,7 +47,7 @@ internal sealed class InspectionReader : IDisposable
 
     internal async ValueTask<int> ByteAsync()
     {
-        if (first == last && !await FillAsync().ConfigureAwait(false)) return -1;
+        if (first == last && !await FillAsync(1).ConfigureAwait(false)) return -1;
         return buffer[first++];
     }
 
@@ -48,7 +57,7 @@ internal sealed class InspectionReader : IDisposable
         var copied = 0;
         while (copied < count)
         {
-            if (first == last && !await FillAsync().ConfigureAwait(false)) throw new ImageDataException("Truncated image header.");
+            if (first == last && !await FillAsync(count - copied).ConfigureAwait(false)) throw new ImageDataException("Truncated image header.");
             var n = Math.Min(count - copied, last - first);
             buffer.AsSpan(first, n).CopyTo(Header.AsSpan(copied)); first += n; copied += n;
         }
@@ -74,7 +83,7 @@ internal sealed class InspectionReader : IDisposable
         {
             while (count != 0)
             {
-                if (!await FillAsync().ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
+                if (!await FillAsync((int)Math.Min(count, buffer.Length)).ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
                 var n = (int)Math.Min(count, last); first = n; count -= n;
             }
         }
@@ -86,7 +95,7 @@ internal sealed class InspectionReader : IDisposable
         {
             while (true)
             {
-                if (first == last && !await FillAsync().ConfigureAwait(false)) throw new ImageDataException("JPEG is missing EOI.");
+                if (first == last && !await FillAsync(buffer.Length).ConfigureAwait(false)) throw new ImageDataException("JPEG is missing EOI.");
                 var n = buffer.AsSpan(first, last - first).IndexOf((byte)255);
                 if (n < 0) { first = last; continue; }
                 first += n + 1; break;
