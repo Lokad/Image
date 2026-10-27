@@ -29,7 +29,7 @@ internal sealed class InspectionReader : IDisposable
         catch { context.Release(capacity + 256); throw; }
     }
 
-    private async ValueTask<bool> FillAsync(int needed)
+    private ValueTask<bool> FillAsync(int needed)
     {
         Context.Cancellation.ThrowIfCancellationRequested();
         var requested = (int)Math.Min(buffer.Length, Context.Limits.MaxInputBytes - acquired + 1);
@@ -38,9 +38,16 @@ internal sealed class InspectionReader : IDisposable
             if (BytesRead == maximum) throw new ImageLimitException(ImageLimitKind.AcquiredBytes, "Probe acquisition limit exceeded.");
             requested = (int)Math.Min(Math.Min(requested, needed), maximum - BytesRead);
         }
-        var read = asynchronous
-            ? await input.ReadAsync(buffer.AsMemory(0, requested), Context.Cancellation).ConfigureAwait(false)
-            : input.Read(buffer.AsSpan(0, requested));
+        if (!asynchronous) return ValueTask.FromResult(CompleteFill(input.Read(buffer.AsSpan(0, requested)), requested));
+        var pending = input.ReadAsync(buffer.AsMemory(0, requested), Context.Cancellation);
+        return pending.IsCompletedSuccessfully ? ValueTask.FromResult(CompleteFill(pending.Result, requested)) : AwaitFillAsync(pending, requested);
+    }
+
+    private async ValueTask<bool> AwaitFillAsync(ValueTask<int> pending, int requested)
+        => CompleteFill(await pending.ConfigureAwait(false), requested);
+
+    private bool CompleteFill(int read, int requested)
+    {
         if ((uint)read > requested) throw new ImageDataException("Stream returned an invalid read count.");
         BytesRead += read;
         if (read > Context.Limits.MaxInputBytes - acquired)
@@ -49,22 +56,48 @@ internal sealed class InspectionReader : IDisposable
         return read != 0;
     }
 
-    internal async ValueTask<int> ByteAsync()
+    internal ValueTask<int> ByteAsync()
     {
-        if (first == last && !await FillAsync(1).ConfigureAwait(false)) return -1;
-        return buffer[first++];
+        if (first != last) return ValueTask.FromResult((int)buffer[first++]);
+        var pending = FillAsync(1);
+        return pending.IsCompletedSuccessfully ? ValueTask.FromResult(pending.Result ? buffer[first++] : -1) : AwaitByteAsync(pending);
     }
 
-    internal async ValueTask ReadAsync(int count)
+    private async ValueTask<int> AwaitByteAsync(ValueTask<bool> pending)
+        => await pending.ConfigureAwait(false) ? buffer[first++] : -1;
+
+    internal ValueTask ReadAsync(int count)
     {
         if ((uint)count > Header.Length) throw new ArgumentOutOfRangeException(nameof(count));
         var copied = 0;
         while (copied < count)
         {
-            if (first == last && !await FillAsync(count - copied).ConfigureAwait(false)) throw new ImageDataException("Truncated image header.");
-            var n = Math.Min(count - copied, last - first);
-            buffer.AsSpan(first, n).CopyTo(Header.AsSpan(copied)); first += n; copied += n;
+            if (first == last)
+            {
+                var pending = FillAsync(count - copied);
+                if (!pending.IsCompletedSuccessfully) return AwaitReadAsync(count, copied, pending);
+                if (!pending.Result) throw new ImageDataException("Truncated image header.");
+            }
+            copied += CopyHeader(count - copied, copied);
         }
+        return ValueTask.CompletedTask;
+    }
+
+    private async ValueTask AwaitReadAsync(int count, int copied, ValueTask<bool> pending)
+    {
+        while (true)
+        {
+            if (!await pending.ConfigureAwait(false)) throw new ImageDataException("Truncated image header.");
+            copied += CopyHeader(count - copied, copied);
+            if (copied == count) return;
+            pending = FillAsync(count - copied);
+        }
+    }
+
+    private int CopyHeader(int remaining, int offset)
+    {
+        var n = Math.Min(remaining, last - first);
+        buffer.AsSpan(first, n).CopyTo(Header.AsSpan(offset)); first += n; return n;
     }
 
     internal async ValueTask SkipAsync(long count)

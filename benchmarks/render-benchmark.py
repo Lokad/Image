@@ -18,7 +18,7 @@ def render():
     trellis = json.loads((ROOT / 'benchmarks/vp8-trellis-state-reduction-rejected-evidence.json').read_text(encoding='utf-8'))
     color = json.loads((ROOT / 'benchmarks/warm-vp8l-color-trial-reuse-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
-    probes = json.loads((ROOT / 'benchmarks/warm-probe-workspace-evidence.json').read_text(encoding='utf-8'))
+    probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not distortion['productionChanged'] and distortion['restoration']['sourceAndImmutableProducerRestored']
@@ -161,6 +161,8 @@ screens, without independent parity claims. JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
 from 8,680 to 744 B/op; later-fact/header scans retain their larger workspace.
+[Completed acquisition](../benchmarks/WARM-PROBE-COMPLETED-READS.md) independently
+reduces JPEG probing elapsed by 46.5% sync / 50.6% async, with unchanged allocation.
 See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
 
 Read allocations use the default null shared budget and warm permitted private

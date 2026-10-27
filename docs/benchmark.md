@@ -89,10 +89,10 @@ and unlisted content/settings are excluded.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Probe PNG dimensions, seekable | 0.218 | 0.122 | 1.783 / 1.987 | 744 | Screen gap |
-| Probe JPEG dimensions, seekable | 0.712 | 0.192 | 3.714 / 3.762 | 744 | Confirmed gap |
-| Probe WebP dimensions, seekable | 0.220 | 0.121 | 1.812 / 2.326 | 744 | Screen gap |
-| Probe JPEG dimensions, async nonseekable | 0.862 | 0.210 | 4.098 / 4.256 | 744 | Confirmed gap |
+| Probe PNG dimensions, seekable | 0.156 | 0.123 | 1.263 / 1.956 | 744 | Screen gap |
+| Probe JPEG dimensions, seekable | 0.381 | 0.192 | 1.988 / 2.031 | 744 | Confirmed gap |
+| Probe WebP dimensions, seekable | 0.159 | 0.123 | 1.289 / 1.550 | 744 | Screen gap |
+| Probe JPEG dimensions, async nonseekable | 0.425 | 0.201 | 2.119 / 2.154 | 744 | Confirmed gap |
 | Validate PNG8, span | 2,136.116 | 1,374.597 | 1.554 / 1.633 | 12,912 | Screen gap |
 | Validate PNG16, span | 5,393.772 | 3,078.068 | 1.752 / 2.252 | 17,008 | Screen gap |
 | Validate indexed Adam7 19×17, span | 5.337 | 3.943 | 1.353 / 1.948 | 1,168 | Screen gap |
@@ -113,6 +113,8 @@ screens, without independent parity claims. JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
 from 8,680 to 744 B/op; later-fact/header scans retain their larger workspace.
+[Completed acquisition](../benchmarks/WARM-PROBE-COMPLETED-READS.md) independently
+reduces JPEG probing elapsed by 46.5% sync / 50.6% async, with unchanged allocation.
 See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
 
 Read allocations use the default null shared budget and warm permitted private

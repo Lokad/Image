@@ -43,6 +43,32 @@ public sealed class ImageProbeTests
     }
 
     [Theory]
+    [InlineData(MetadataProfile.Png8)] [InlineData(MetadataProfile.JpegBaseline420)]
+    [InlineData(MetadataProfile.WebpLosslessAlpha)]
+    public async Task PartialHeadersCanAlternateCompletedAndPendingReads(MetadataProfile profile)
+    {
+        var data = OriginalExif.Attach(OriginalExif.Create(profile, 17, 11), ImageOrientation.Rotate90, false);
+        var expected = ImageCodec.Identify(data);
+        using var root = new TestMemoryBudget(8448);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 8448 };
+        foreach (var seekable in new[] { false, true })
+        {
+            using var input = new ObservedInput(data, true, seekable, chunk: 1, mixed: true);
+            var result = await ImageCodec.ProbeAsync(input, new() { Facts = ImageProbeFacts.All, Limits = limits });
+            Assert.Equal(expected, new ImageInfo(result.Format, result.Width!.Value, result.Height!.Value,
+                result.BitDepth!.Value, result.HasAlpha!.Value, result.Orientation!.Value)
+                { SourceColor = result.SourceColor!.Value, SourceAlpha = result.SourceAlpha!.Value,
+                    SourceComponentCount = result.SourceComponentCount!.Value });
+            Assert.True(input.ImmediateReads > 0); Assert.True(input.PendingReads > 0);
+            Assert.Equal(input.BytesRead, result.BytesRead); Assert.False(input.WasDisposed); Assert.Equal(0, root.Bytes);
+            using var complete = new ObservedInput(data, true, seekable, chunk: 1, mixed: true);
+            Assert.Equal(expected, await ImageCodec.InspectHeadersAsync(complete, limits));
+            Assert.True(complete.ImmediateReads > 0); Assert.True(complete.PendingReads > 0);
+            Assert.False(complete.WasDisposed); Assert.Equal(0, root.Bytes);
+        }
+    }
+
+    [Theory]
     [InlineData(ImageFormat.Png)] [InlineData(ImageFormat.Jpeg)] [InlineData(ImageFormat.WebP)]
     public async Task DimensionAcquisitionDoesNotGrowWithValidPixelPayload(ImageFormat format)
     {
@@ -256,13 +282,14 @@ public sealed class ImageProbeTests
         return output.ToArray();
     }
 
-    private sealed class ObservedInput(byte[] data, bool asynchronous, bool seekable, int chunk = int.MaxValue) : Stream
+    private sealed class ObservedInput(byte[] data, bool asynchronous, bool seekable, int chunk = int.MaxValue, bool mixed = false) : Stream
     {
         private int offset;
         public int Offset => offset;
         public long BytesRead;
         public int Seeks;
         public bool WasDisposed;
+        public int ImmediateReads, PendingReads;
         public Action? DuringAsyncRead;
         private int ReadCore(Span<byte> target)
         {
@@ -276,7 +303,10 @@ public sealed class ImageProbeTests
         public override int Read(byte[] buffer, int offset, int count) => Read(buffer.AsSpan(offset, count));
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
-            Assert.True(asynchronous); await Task.Yield(); DuringAsyncRead?.Invoke();
+            Assert.True(asynchronous);
+            if (mixed && ImmediateReads == PendingReads) ImmediateReads++;
+            else { PendingReads++; await Task.Yield(); }
+            DuringAsyncRead?.Invoke();
             cancellationToken.ThrowIfCancellationRequested(); return ReadCore(buffer.Span);
         }
         public override long Seek(long value, SeekOrigin origin)

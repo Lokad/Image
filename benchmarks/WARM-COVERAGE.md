@@ -78,6 +78,13 @@ fact selections/header scans retain the larger workspace. Both OS full/scalar
 and SAME actual package/three examples pass. Validation and unrelated paths are
 unchanged, including the independently passing baseline420 validator.
 
+[Completed header acquisition](WARM-PROBE-COMPLETED-READS.md) supersedes probe CPU
+costs again: JPEG sync/async independently1.988×/2.119×,46.5%/50.6% less elapsed
+than the preceding independent build; PNG/WebP companions1.263×/1.289× short.
+All retain744B/op/512B admission. Full both-OS5040 checks,98 focused normal/scalar
+and SAME actual package/three examples pass. Probe/InspectHeaders timings change;
+validation/Identify/Decode/encoding/editing algorithms and applicable proofs do not.
+
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls and
@@ -152,11 +159,11 @@ Regression/pixel/reference evidence and timings are separate:
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.
-- Selective probing adds a distinct public acquisition boundary, with no CPU-parity
-  claim yet. Its reader/parser changes affect InspectHeaders timings, which need
-  current confirmation before a pass claim. Identify, pixel codecs, transforms,
-  native workers and their applicable confirmations remain unchanged. The 31
-  displayed comparisons contain no InspectHeaders control.
+- Selective probing adds the explicit prefix boundary measured above; full CPU
+  parity remains open. Reader/parser changes affect InspectHeaders timings, which
+  need current confirmation before a pass claim. Identify, pixel codecs,
+  transforms and native workers remain unchanged. No displayed control measures
+  InspectHeaders; complete inspection is distinct from prefix probing/validation.
 - Optional metadata policy changes read-entry validation and header preflight for
   Identify, Decode (including caller JPEG samples), InspectHeaders and Probe.
   Pixel/packet oracles stay valid, but affected complete-operation timing/allocation
@@ -167,8 +174,10 @@ Regression/pixel/reference evidence and timings are separate:
 - Pixel validation shares PNG row reading, JPEG entropy parsing and VP8L ARGB
   decoding with normal decode. Affected decode costs remain uncertain until
   current confirmation; functional/native-pixel proofs are refreshed. New validation
-  allocation/admission observations are [scoped separately](PIXEL-VALIDATION-STORAGE.md),
-  without CPU or FFmpeg timing claims. Encoding/editing/native workers stay unchanged.
+  allocation/admission observations are [scoped separately](PIXEL-VALIDATION-STORAGE.md).
+  Current validation CPU evidence is in [read boundaries](WARM-IMAGE-READ.md);
+  storage observations themselves contain no timing claims. Encoding/editing/native
+  workers stay unchanged.
 
 Frozen inputs/settings/workers, approved native-only adjustments and exact oracles
 remain reusable when unchanged. Retired quota cases cannot be failures or passes.
@@ -182,9 +191,11 @@ and their individual reports/raw archives.
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an
-uncertain 2.2% short difference does not justify more variants. Before CPU tuning,
-complete the high-priority probing/metadata/validation work. Then reconcile retained
-coverage evidence and establish a substantial distinct opportunity before editing.
+uncertain 2.2% short difference does not justify more variants. The high-priority
+probing/metadata/validation milestones are functionally complete. Reconcile retained
+coverage and affected read evidence; prioritize remaining demonstrated JPEG-probe
+and PNG16-validation gaps before smaller variants. Establish a substantial distinct
+opportunity before editing.
 Keep the VP8L photograph and other larger remaining costs in the queue. Distinguish
 shared work from delivery/normalization, reuse unaffected evidence and verify
 affected companion boundaries on acceptance.

@@ -1,5 +1,8 @@
 # Dimension-probe workspace
 
+The [completed-read round](WARM-PROBE-COMPLETED-READS.md) supersedes CPU costs
+below; the allocation/admission reduction and its qualification remain valid.
+
 Dimension-only probing now uses 256 bytes of scratch instead of 8 KiB in the
 existing header reader. Its admission is 512 bytes instead of 8,448. Other fact
 selections and complete inspection retain the larger buffer. The format parser,
