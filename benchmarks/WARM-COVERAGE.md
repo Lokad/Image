@@ -69,6 +69,11 @@ reference boundaries and confirmation status. Current named evidence:
   approved packet. Lanczos reduction8/16 shorts 1.478× / 1.438×; enlargement8/16
   1.039× / 1.310×. All managed frames exact; existing native bounds pass. Same
   qualified producer and cached workers/selectors; no production changes.
+- [Bicubic cross-axis/streaming](WARM-CURRENT-BICUBIC-CROSS-STREAMING.md): default
+  RGBA8 32×16 independently passes at 0.927× / upper 0.934, exact pixels and
+  199,372 B/op. Stop this named path while unchanged. Constrained RGBA8 32×16
+  and RGBA16 256×519 shorts are gaps at 1.235× / 1.549×, with exact pixels,
+  native bounds and local working limits preserved. No production changes.
 - [VP8 decoder StreamNative8](WARM-VP8-SHARED-SMALL-ROWS.md): short 1.309×,
   exact pixels. Earlier color-renderer timing is historical after predictor changes.
 - [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) and
@@ -162,11 +167,11 @@ async gain and is rejected; actual qualified sources/cores are restored, with
 and four Lanczos screens resolve missing current costs without production tuning;
 shorts are not ranked as independent confirmations.
 
-Next measure the existing bicubic RGBA16 width-down/height-up case under its
-input+output+4 KiB local limit. The cleanup's helper extraction invalidated its
-old CPU evidence; its mixed-axis streaming and constrained workspace are a
-distinct required path. Reuse its inputs, exact oracle, native bounds and cached
-selector. No new grid, broad audit or automatic profile. Keep closed
+The three cached bicubic controls resolve the cross-axis and two deep-support
+workspace paths after cleanup. Next measure the existing PNG RGBA16 SmallestSize
+control: its full16-bit byte ordering/filter/deflate path lacks current costs.
+Reuse the frozen complete-packet reference/settings and qualified producer. No
+new grid, broad audit or automatic profile. Keep closed
 PopulationSum/predictor/cost/slab/math kernels closed and stop confirmed passes.
 
 The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)

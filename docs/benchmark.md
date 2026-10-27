@@ -21,6 +21,10 @@ Five further named costs are refreshed without production changes: shared-root
 JPEG RGBA16 1.462×; Lanczos3 reduction8/16 1.478×/1.438× and enlargement8/16
 1.039×/1.310×. These remain short screens, with exact packets/managed frames and
 unchanged approved native bounds. No independent parity claim follows.
+The existing default-workspace bicubic RGBA8 32×16 reduction independently
+passes at 0.927×, upper 0.934×, with exact pixels and 199,372 B/op. This passing
+scope is precise; its constrained-workspace counterpart and RGBA16 cross-axis
+control remain short gaps at 1.235× and 1.549×.
 Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
@@ -64,6 +68,9 @@ are leads for measurement, not current demonstrated gaps.
 | [Bilinear resize RGBA16](../benchmarks/WARM-CURRENT-EDITING-ANCHORS.md) | 547.29 | 408.78 | 1.339 / 1.426 | 290,124 | Current gap (short; qualified) |
 | [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |
 | [Bicubic upscale RGBA16](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 4,258.22 | 2,871.12 | 1.483 / 1.690 | 5,016,578 | Historical short; remeasure |
+| [Bicubic RGBA16, width down / height up / input+output+4 KiB](../benchmarks/WARM-CURRENT-BICUBIC-CROSS-STREAMING.md) | 1,282.86 | 828.16 | 1.549 / 1.694 | 1,063,410 | Current gap (short; qualified) |
+| [Bicubic RGBA8, 32×16 / input+output+4 KiB](../benchmarks/WARM-CURRENT-BICUBIC-CROSS-STREAMING.md) | 463.48 | 375.32 | 1.235 / 1.437 | 2,185 | Current gap (short; qualified) |
+| [Bicubic RGBA8, 32×16 / default workspace](../benchmarks/WARM-CURRENT-BICUBIC-CROSS-STREAMING.md) | 349.24 | 376.85 | 0.927 / 0.934 | 199,372 | Current parity confirmed |
 | [Lanczos3 reduction RGBA8](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 723.75 | 489.68 | 1.478 / 1.818 | 138,455 | Current gap (short; qualified) |
 | [Lanczos3 reduction RGBA16](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 730.37 | 507.98 | 1.438 / 1.769 | 138,435 | Current gap (short; qualified) |
 | [Lanczos3 enlargement RGBA8](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 4,221.10 | 4,063.92 | 1.039 / 1.101 | 319,038 | Current gap (short; qualified) |

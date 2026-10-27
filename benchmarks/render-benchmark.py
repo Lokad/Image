@@ -93,6 +93,9 @@ def render():
         row('Bilinear resize RGBA16', 'warm-current-editing-anchors-evidence.json', ['cases', 'bilinearDown16', -1], 'WARM-CURRENT-EDITING-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
         row('Bicubic upscale RGBA16', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
+        row('Bicubic RGBA16, width down / height up / input+output+4 KiB', 'warm-current-bicubic-cross-streaming-evidence.json', ['cases', 'TightCross16', -1], 'WARM-CURRENT-BICUBIC-CROSS-STREAMING.md', verification='Current gap (short; qualified)', current=True),
+        row('Bicubic RGBA8, 32×16 / input+output+4 KiB', 'warm-current-bicubic-cross-streaming-evidence.json', ['cases', 'Tight32x16_8', -1], 'WARM-CURRENT-BICUBIC-CROSS-STREAMING.md', verification='Current gap (short; qualified)', current=True),
+        row('Bicubic RGBA8, 32×16 / default workspace', 'warm-current-bicubic-cross-streaming-evidence.json', ['cases', 'Down32x16_8', -1], 'WARM-CURRENT-BICUBIC-CROSS-STREAMING.md', confirmed=True, current=True),
         row('Lanczos3 reduction RGBA8', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Reduce8', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
         row('Lanczos3 reduction RGBA16', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Reduce16', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
         row('Lanczos3 enlargement RGBA8', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
@@ -121,6 +124,10 @@ Five further named costs are refreshed without production changes: shared-root
 JPEG RGBA16 1.462×; Lanczos3 reduction8/16 1.478×/1.438× and enlargement8/16
 1.039×/1.310×. These remain short screens, with exact packets/managed frames and
 unchanged approved native bounds. No independent parity claim follows.
+The existing default-workspace bicubic RGBA8 32×16 reduction independently
+passes at 0.927×, upper 0.934×, with exact pixels and 199,372 B/op. This passing
+scope is precise; its constrained-workspace counterpart and RGBA16 cross-axis
+control remain short gaps at 1.235× and 1.549×.
 Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,

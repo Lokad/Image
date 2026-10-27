@@ -1,5 +1,7 @@
 # Current bicubic evidence reconciliation
 
+This records its named pre-cleanup producers. The cross-axis/32×16 trio now has [current evidence](WARM-CURRENT-BICUBIC-CROSS-STREAMING.md); other costs below retain their recorded producer scope.
+
 Latest: [64-tap byte quotient bounds](#sixty-four-tap-byte-quotient-bounds)
 replace default Down64x32_8 with a qualified short gap at1.134x/upper1.215x,
 31.6% faster. Its preceding independent1.662x result below is historical;
