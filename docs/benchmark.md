@@ -1,8 +1,8 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-27. **† Compressed PNG and VP8 effort2 rows** use the qualified 0.2.1
+Updated 2026-10-27. **† Compressed PNG and VP8 effort2/6 rows** use the qualified 0.2.1
 development producer; **‡ stored PNG** retains its unchanged 0.2.1 path evidence.
-The other 26 controls retain published 0.2.0 measurements on unchanged paths.
+The other 25 controls retain published 0.2.0 measurements on unchanged paths.
 The original 31-control release evidence remains immutable. Full CPU parity and
 general replacement readiness remain open.
 
@@ -28,8 +28,9 @@ Source images are 513×259; resize rows state output dimensions. The
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
-The [effort2 baseline refresh](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) retains
-a new short on unchanged production; its prototype was deferred and removed.
+The [effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
+[trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) baseline refreshes
+retain new shorts on unchanged paths; neither prototype remains in production.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -43,7 +44,7 @@ a new short on unchanged production; its prototype was deferred and removed.
 | VP8 RGBA8 | 73,112.14 | 53,921.86 | 1.356 / 1.981 | 21,353,192 | 98,590 / 98,590 |
 | VP8 opaque photograph | 15,516.03 | 9,706.04 | 1.599 / 1.677 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram | 8,407.67 | 5,833.42 | 1.441 / 1.561 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis | 16,076.88 | 9,769.43 | 1.646 / 1.961 | 754,344 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 15,778.14 | 9,795.02 | 1.611 / 1.658 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization | 23,851.31 | 15,554.15 | 1.533 / 1.565 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 | 192,184.73 | 120,445.40 | 1.596 / 2.147 | 29,688,696 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 | 193,006.68 | 122,663.07 | 1.573 / 2.125 | 29,688,696 | 183,812 / 183,812 |
@@ -84,7 +85,7 @@ WebP uses **libwebp exact=1** to preserve hidden RGB. Defaults/quality numbers
 across encoders are not assumed equivalent. Startup, concurrency, GIF/animation
 and unlisted content/settings are excluded.
 
-[Measurement instructions](../benchmarks/README.md) and the deferred
+[Measurement instructions](../benchmarks/README.md) and the active
 [finite coverage objective](../benchmarks/WARM-COVERAGE.md) retain reproducibility
 and outstanding work. Rebuild this summary with
 `python benchmarks/render-benchmark.py`; verify it with `--check`.

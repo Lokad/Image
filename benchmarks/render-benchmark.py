@@ -15,16 +15,20 @@ def render():
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
     distortion = json.loads((ROOT / 'benchmarks/vp8-residual-summary-deferred-evidence.json').read_text(encoding='utf-8'))
+    trellis = json.loads((ROOT / 'benchmarks/vp8-trellis-state-reduction-rejected-evidence.json').read_text(encoding='utf-8'))
     assert not distortion['productionChanged'] and distortion['restoration']['sourceAndImmutableProducerRestored']
+    assert not trellis['productionChanged'] and trellis['restoration']['sourceAndImmutableProducerRestored']
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
     rows = []
     for case in evidence['cases']:
         observation = case['observation']
-        updated = case['id'] in {'case06', 'case17', 'case18', 'case19', 'case20'}
+        updated = case['id'] in {'case06', 'case10', 'case17', 'case18', 'case19', 'case20'}
         producer = stored if case['id'] == 'case20' else current
         if case['id'] == 'case06':
             observation = distortion['baseline']
+        elif case['id'] == 'case10':
+            observation = trellis['baseline']
         elif updated:
             observation = producer['cases'][observation['receipt']['caseId']][-1]
         receipt = observation['receipt']
@@ -55,9 +59,9 @@ def render():
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     return f'''# Lokad.Image benchmarks
 
-Updated 2026-10-27. **† Compressed PNG and VP8 effort2 rows** use the qualified 0.2.1
+Updated 2026-10-27. **† Compressed PNG and VP8 effort2/6 rows** use the qualified 0.2.1
 development producer; **‡ stored PNG** retains its unchanged 0.2.1 path evidence.
-The other 26 controls retain published 0.2.0 measurements on unchanged paths.
+The other 25 controls retain published 0.2.0 measurements on unchanged paths.
 The original 31-control release evidence remains immutable. Full CPU parity and
 general replacement readiness remain open.
 
@@ -83,8 +87,9 @@ Source images are 513×259; resize rows state output dimensions. The
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
-The [effort2 baseline refresh](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) retains
-a new short on unchanged production; its prototype was deferred and removed.
+The [effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
+[trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) baseline refreshes
+retain new shorts on unchanged paths; neither prototype remains in production.
 
 ''' + codecs + '''
 
@@ -106,7 +111,7 @@ WebP uses **libwebp exact=1** to preserve hidden RGB. Defaults/quality numbers
 across encoders are not assumed equivalent. Startup, concurrency, GIF/animation
 and unlisted content/settings are excluded.
 
-[Measurement instructions](../benchmarks/README.md) and the deferred
+[Measurement instructions](../benchmarks/README.md) and the active
 [finite coverage objective](../benchmarks/WARM-COVERAGE.md) retain reproducibility
 and outstanding work. Rebuild this summary with
 `python benchmarks/render-benchmark.py`; verify it with `--check`.

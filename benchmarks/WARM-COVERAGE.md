@@ -36,7 +36,7 @@ boundary omitted from this inventory.
 
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 26 unchanged 0.2.0 controls and
+[The current summary](../docs/benchmark.md) retains 25 unchanged 0.2.0 controls and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
@@ -46,7 +46,11 @@ not complete the 255-case goal. [Constant-time distance mapping](WARM-PNG-DISTAN
 independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
 samples remain. [Effort2 baseline refresh](VP8-RESIDUAL-SUMMARY-DEFERRED.md) resolves
 its current short to 1.583×; the proposed summary primitive is deferred/removed.
-Trellis6 at 1.646× is now the largest displayed point gap.
+[Trellis baseline refresh](VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) gives 1.611×;
+the state-reduction candidate is rejected and removed. The largest displayed
+point gap is now VP8L async at 1.618×, with related frame/photo paths at
+1.573–1.596× and 132–206 ms per operation. These similar ratios and substantially
+larger absolute costs give the shared VP8L encoding path priority.
 Full samples, allocations, packet sizes and boundaries are in the
 [immutable release evidence](release-0.2.0-benchmark-evidence.json) and
 [current PNG evidence](warm-png-bulk-stored-evidence.json).
@@ -98,9 +102,13 @@ and their individual reports/raw archives.
 ## Next performance work
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
-stop confirmed passing cases. Stored publication and distance mapping are accepted;
-trellis6 at 1.646× is the next displayed control. Do not renew the deferred
-residual-summary mask family without a materially different opportunity.
+stop confirmed passing cases. Stored publication and distance mapping are accepted.
+Prioritize VP8L with one existing RGBA8 attribution and one shared encoding
+primitive at a time. Distinguish shared work from async delivery and 16-bit
+normalization; do not assume all four cases have identical bottlenecks. Reuse
+unaffected evidence and verify affected companion boundaries on acceptance.
+Do not renew the deferred residual-summary or rejected trellis state-reduction
+families without a materially different opportunity.
 Closed source-energy, histogram,
 word/fragment, prediction/quantizer/trellis and other rejected variants stay closed.
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package

@@ -22,5 +22,5 @@ The source, binaries, proofs and raw samples are retained in the mirrored,
 member-verified archive identified by [the evidence](vp8-residual-summary-deferred-evidence.json).
 
 Reuse the fresh 1.583× baseline, rather than treating the release's 1.685× short as
-the current largest gap. The existing trellis control at 1.646× now has priority.
+the current largest gap. Follow [the current queue](WARM-COVERAGE.md) for priority.
 Do not renew this mask family without a materially different opportunity.
