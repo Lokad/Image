@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.2.0 — Unreleased
+## 0.2.0 — 2026-10-27
+
+Published on [NuGet](https://www.nuget.org/packages/Lokad.Image/0.2.0).
 
 - Reference-compatible managed PNG/JPEG/WebP encoding on the declared packet
   controls; fixed-point JPEG and WebP decoding with exact reference sample gates.

@@ -26,8 +26,8 @@ partial-charge semantics. Use direct cooperative cancellation checkpoints.
 IMemoryBudget is the sole shared admission model; do not recreate ImageBudget,
 BudgetedImage, whole-operation ceiling reservations, weak ownership tracking or
 finalizer-backed leases. Breaking cleanup of unpublished APIs is authorized;
-remove obsolete APIs rather than forwarding them. Published 0.1.0 is immutable;
-development targets 0.2.0.
+remove obsolete APIs rather than forwarding them. Published 0.1.0 and 0.2.0
+packages are immutable; subsequent release work requires a new package version.
 Lokad.Image has no production usage. Unpublished APIs and implementations may be
 replaced without compatibility layers; preserve the declared contracts and tests.
 
