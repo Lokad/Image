@@ -14,7 +14,7 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Release pack failed.' }
         [xml]$projectMetadata = Get-Content -LiteralPath (Join-Path $repoRoot 'src/Lokad.Image/Lokad.Image.csproj') -Raw
         $projectVersion = $projectMetadata.Project.PropertyGroup.Version
-        $package = Join-Path $repoRoot "artifacts/nuget/Lokad.Image.$projectVersion.nupkg"
+        $package = Join-Path $repoRoot "artifacts/nugets/Lokad.Image.$projectVersion.nupkg"
     }
     $archive = [IO.Compression.ZipFile]::OpenRead($package)
     try {

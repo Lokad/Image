@@ -34,7 +34,8 @@ replaced without compatibility layers; preserve the declared contracts and tests
 Use `./test.ps1` for offline Release tests, and `./test.ps1 -Differential` for live
 FFmpeg comparisons. Missing FFmpeg must fail the differential suite explicitly.
 Use `--tl:off` for dotnet output. Pack only with `-c Release` and verify the actual
-package with `./tools/PackageSmokeTest/verify-package.ps1`.
+package with `./tools/PackageSmokeTest/verify-package.ps1`. Package output goes
+directly in `artifacts/nugets/`, without a release/version subdirectory.
 
 Use original, deterministic fixture inputs with provenance. Do not copy upstream
 sources, implementation tables, binaries, docs or test corpora into tracked files.
