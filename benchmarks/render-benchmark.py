@@ -1,4 +1,4 @@
-"""Render the current release snapshot from retained evidence; never measure."""
+"""Render current benchmarks from retained evidence; never measure."""
 import json
 import math
 import re
@@ -16,7 +16,7 @@ def render():
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
     distortion = json.loads((ROOT / 'benchmarks/vp8-residual-summary-deferred-evidence.json').read_text(encoding='utf-8'))
     trellis = json.loads((ROOT / 'benchmarks/vp8-trellis-state-reduction-rejected-evidence.json').read_text(encoding='utf-8'))
-    color = json.loads((ROOT / 'benchmarks/warm-vp8l-color-trial-reuse-evidence.json').read_text(encoding='utf-8'))
+    color = json.loads((ROOT / 'benchmarks/warm-vp8l-scored-plane-histograms-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
@@ -53,7 +53,7 @@ def render():
         upper = observation['conservativeRatioUpper']
         assert receipt['librarySha256'] == (producer['producers']['linuxSha256'] if updated else evidence['librarySha256'])
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] == 'case12' or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] == 'case15' or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -115,7 +115,8 @@ Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Thirteen read
-controls below use qualified 0.2.1 builds. These 44 displayed controls do not complete the full CPU-parity objective
+controls below use qualified 0.2.1 builds. These 44 displayed controls do not
+complete the full CPU-parity objective
 or establish general replacement readiness.
 
 Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
@@ -123,10 +124,11 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8 and current VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8 and current VP8L photograph have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
-idle/process guards pass. VP8L RGBA8 measures 1.486× / upper1.507 after exact
-color-trial reuse, with 8 additional allocated B/op and unchanged array capacity.
+idle/process guards pass. SIMD scored-plane histograms reduce photograph elapsed
+by 6.4% against a fresh independent baseline, with unchanged allocations and
+exact packets. It remains a1.350× / upper1.371 gap; RGBA8/16/async are current screens.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -141,7 +143,7 @@ Source images are 513×259; resize rows state output dimensions. The
 settings, boundaries, binaries, samples, package checks and retained raw archives.
 [Effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
 [trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) retain current baseline
-shorts; [color-trial reuse](../benchmarks/WARM-VP8L-COLOR-TRIAL-REUSE.md) supplies the
+shorts; [scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
 four affected VP8L rows. Other paths retain applicable prior proof.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.

@@ -4,7 +4,8 @@ Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Thirteen read
-controls below use qualified 0.2.1 builds. These 44 displayed controls do not complete the full CPU-parity objective
+controls below use qualified 0.2.1 builds. These 44 displayed controls do not
+complete the full CPU-parity objective
 or establish general replacement readiness.
 
 Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
@@ -12,10 +13,11 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8 and current VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8 and current VP8L photograph have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
-idle/process guards pass. VP8L RGBA8 measures 1.486× / upper1.507 after exact
-color-trial reuse, with 8 additional allocated B/op and unchanged array capacity.
+idle/process guards pass. SIMD scored-plane histograms reduce photograph elapsed
+by 6.4% against a fresh independent baseline, with unchanged allocations and
+exact packets. It remains a1.350× / upper1.371 gap; RGBA8/16/async are current screens.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -30,7 +32,7 @@ Source images are 513×259; resize rows state output dimensions. The
 settings, boundaries, binaries, samples, package checks and retained raw archives.
 [Effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
 [trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) retain current baseline
-shorts; [color-trial reuse](../benchmarks/WARM-VP8L-COLOR-TRIAL-REUSE.md) supplies the
+shorts; [scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
 four affected VP8L rows. Other paths retain applicable prior proof.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
@@ -49,10 +51,10 @@ Stream decode and four existing tight PNG companions without a speedup claim.
 | VP8 opaque text/diagram | 8,407.67 | 5,833.42 | 1.441 / 1.561 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,778.14 | 9,795.02 | 1.611 / 1.658 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization | 23,851.31 | 15,554.15 | 1.533 / 1.565 | 1,201,552 | 72,380 / 72,380 |
-| VP8L RGBA8 / libwebp exact=1 † | 181,640.59 | 122,209.08 | 1.486 / 1.507 | 29,688,704 | 183,812 / 183,812 |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 181,852.57 | 122,792.86 | 1.481 / 1.755 | 29,688,704 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 183,748.63 | 121,311.27 | 1.515 / 2.118 | 29,689,088 | 183,812 / 183,812 |
-| VP8L photograph / libwebp exact=1 † | 131,449.38 | 83,064.27 | 1.583 / 2.079 | 20,409,400 | 160,032 / 160,032 |
+| VP8L RGBA8 / libwebp exact=1 † | 174,761.42 | 121,059.75 | 1.444 / 1.702 | 29,688,704 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 174,544.82 | 121,397.18 | 1.438 / 1.686 | 29,688,704 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 179,408.83 | 120,784.16 | 1.485 / 2.434 | 29,689,088 | 183,812 / 183,812 |
+| VP8L photograph / libwebp exact=1 † | 112,763.24 | 83,526.34 | 1.350 / 1.371 | 20,409,400 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
 | PNG RGBA8, SmallestSize9 / native9 † | 22,507.99 | 17,297.84 | 1.301 / 1.350 | 1,325,664 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † | 26,234.53 | 20,109.52 | 1.305 / 1.565 | 3,813,670 | 963,202 / 963,202 |

@@ -8,6 +8,64 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8lReferenceColorTransformTests
 {
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void ScoredPlaneHistogramsMatchSignedByteFloorArithmeticAcrossVectorEdges(bool red)
+    {
+        const int width = 40, height = 9;
+        var pixels = new uint[width * height];
+        for (var i = 0; i < pixels.Length; i++)
+            pixels[i] = unchecked(0x9e3779b9u * (uint)(i + 1)) ^ (uint)(i * 37) << 8;
+        pixels[0] = 0; pixels[41] = 0x7fffffffu; pixels[42] = 0x80000000u; pixels[43] = uint.MaxValue;
+        var original = pixels.ToArray(); var guarded = new int[264]; var expected = new int[256];
+        using var root = new TestMemoryBudget(1);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        static int Signed(int value) { value &= 255; return value < 128 ? value : value - 256; }
+        foreach (var length in new[] { 1, 7, 8, 9, 15, 16, 17, 31, 32, 33 })
+        foreach (var offset in new[] { 1, 3 })
+        for (var coefficient = 0; coefficient < 256; coefficient++)
+        {
+            var gr = coefficient - 384; var gb = coefficient * 73 - 257; var rb = 257 - coefficient * 11;
+            Array.Fill(guarded, -719);
+            for (var bin = 0; bin < 256; bin++) guarded[bin + 4] = expected[bin] = bin % 3;
+            for (var y = 1; y < height - 1; y++)
+            for (var x = offset; x < offset + length; x++)
+            {
+                var pixel = pixels[y * width + x]; var green = Signed((int)(pixel >> 8));
+                var value = red ? (int)(pixel >> 16 & 255) - (int)Math.Floor(Signed(gr) * green / 32d)
+                    : (int)(pixel & 255) - (int)Math.Floor(Signed(gb) * green / 32d)
+                        - (int)Math.Floor(Signed(rb) * Signed((int)(pixel >> 16)) / 32d);
+                expected[(value % 256 + 256) % 256]++;
+            }
+            Vp8lReferenceColorTransform.Histogram(pixels, width, offset, 1, offset + length, height - 1,
+                red, gr, gb, rb, guarded.AsSpan(4, 256), context);
+            Assert.True(expected.AsSpan().SequenceEqual(guarded.AsSpan(4, 256)));
+            Assert.All(guarded.AsSpan(0, 4).ToArray(), value => Assert.Equal(-719, value));
+            Assert.All(guarded.AsSpan(260, 4).ToArray(), value => Assert.Equal(-719, value));
+        }
+        Assert.Equal(original, pixels); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts);
+    }
+
+    [Fact]
+    public void ScoredPlaneHistogramBorrowsStorageWithoutAllocationAndCancelsBeforeAccess()
+    {
+        var pixels = Enumerable.Range(0, 256).Select(i => unchecked((uint)i * 0x9e3779b9u)).ToArray();
+        var histogram = new int[256];
+        using var root = new TestMemoryBudget(1);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        for (var i = 0; i < 32; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, context);
+        var allocated = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 64; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, context);
+        Assert.Equal(allocated, GC.GetAllocatedBytesForCurrentThread());
+        using var cancellation = new CancellationTokenSource();
+        using var canceledContext = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
+        cancellation.Cancel(); var original = histogram.ToArray();
+        var error = Assert.Throws<OperationCanceledException>(() => Vp8lReferenceColorTransform.Histogram([], 32, 1, 1, 32, 7,
+            false, 0, 0, 0, histogram, canceledContext));
+        Assert.Equal(cancellation.Token, error.CancellationToken); Assert.Equal(original, histogram);
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
+    }
+
     private static string Hash(ReadOnlySpan<uint> values)
     {
         var bytes = new byte[values.Length * 4];

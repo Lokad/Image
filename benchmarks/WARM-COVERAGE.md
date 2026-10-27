@@ -115,15 +115,15 @@ samples remain. [Effort2 baseline refresh](VP8-RESIDUAL-SUMMARY-DEFERRED.md) res
 its current short to 1.583×; the proposed summary primitive is deferred/removed.
 [Trellis baseline refresh](VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) gives 1.611×;
 the state-reduction candidate is rejected and removed.
-[The population-window round](VP8L-WINDOW-POPULATIONS-DEFERRED.md) independently
-refreshes unchanged RGBA8 VP8L to 1.590× / upper1.609, with all twelve actuals.
-Its candidate's initial22% short gain does not survive confirmation (0.44% mean
-difference); source and immutable producers are restored. Maintained empty-block
-metadata and pair caching have too little demonstrated reuse to pursue.
-[Exact color-trial reuse](WARM-VP8L-COLOR-TRIAL-REUSE.md) supersedes affected VP8L
-costs: RGBA8 independently measures 1.486× / upper1.507, 181.641 ms and 29,688,704
-B/op, exact 183,812 B. RGBA16/async/photo shorts are 1.481/1.515/1.583×. Diagram
-and compressed-alpha costs remain valid because they skip this color search.
+[The population-window family](VP8L-WINDOW-POPULATIONS-DEFERRED.md) stays closed:
+its short gain does not survive confirmation; occupancy/pair reuse is insufficient.
+[Scored-plane histograms](WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supersede affected
+VP8L costs after [color-trial reuse](WARM-VP8L-COLOR-TRIAL-REUSE.md). Photograph
+independently measures1.350×/upper1.371,112.763ms,6.4% less elapsed than its fresh
+120.536ms baseline. Allocations stay20409400B/op; exact160032B packets. RGBA8/16/
+async screen1.444/1.438/1.485× with unchanged29688704/29688704/29689088B/op and
+exact183812B packets. BothOS5044 full checks,13internal/27public scalar and SAME
+actual package/three examples pass. Diagram and compressed alpha skip color search.
 Trellis6 at 1.611× is the largest displayed encoding point gap, followed by opaque
 VP8 photograph at 1.599×. Preserve larger absolute-cost VP8L leads in the queue.
 [Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
@@ -171,19 +171,23 @@ Regression/pixel/reference evidence and timings are separate:
   color search and normalized VP8 alpha has RedBlueZero, so their costs remain
   valid. Other affected inventory cases need applicable current timings before a
   CPU-pass claim. All decoders, unrelated codecs/editing and native workers remain.
+- SIMD scored-plane histograms affect the same lossless color-search callers;
+  four displayed costs are refreshed above. Other affected named method5/6/opaque
+  callers need applicable current costs before a pass claim. No owned capacity,
+  admission or cancellation boundary changes. Unrelated proofs remain valid.
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.
 - Selective probing adds the explicit prefix boundary measured above; full CPU
   parity remains open. Reader/parser changes affect InspectHeaders timings, which
-  need current confirmation before a pass claim. Identify, pixel codecs,
-  transforms and native workers remain unchanged. No displayed control measures
-  InspectHeaders; complete inspection is distinct from prefix probing/validation.
+  need applicable current evidence before a pass claim. The existing complete
+  seekable PNG header control is now refreshed; it is distinct from prefix
+  probing/validation. Identify, pixel codecs, transforms and native workers remain.
 - Optional metadata policy changes read-entry validation and header preflight for
   Identify, Decode (including caller JPEG samples), InspectHeaders and Probe.
   Pixel/packet oracles stay valid, but affected complete-operation timing/allocation
   evidence needs current confirmation before a pass claim. The displayed VP8
-  stream decode is explicitly historical (§). Encoding/editing contexts, kernels,
+  stream decode now has a current-cost screen. Encoding/editing contexts, kernels,
   ownership and their applicable confirmations remain unchanged; no whole-library
   CPU refresh or new quality/shape matrix is required.
 - Pixel validation shares PNG row reading, JPEG entropy parsing and VP8L ARGB
@@ -207,13 +211,13 @@ Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an
 uncertain 2.2% short difference does not justify more variants. The high-priority
-probing/metadata/validation milestones are functionally complete. Reconcile retained
-coverage and affected read evidence; prioritize remaining demonstrated JPEG-probe
-and substantial encoder gaps before smaller variants. PNG16 span/async validation
-now pass; stop them unchanged. Reconcile the existing bounded-header/native
-descriptor and marked default-decode uncertainties before claiming those paths
-complete. Establish a substantial distinct opportunity before editing.
-Keep the VP8L photograph and other larger remaining costs in the queue. Distinguish
+probing/metadata/validation milestones are functionally complete. The bounded
+read reconciliation is recorded; its six controls remain CPU gaps. PNG16 span/
+async validation pass and stop unchanged. Scored-plane histograms are accepted;
+prioritize substantial VP8 effort6/photograph/effort2 and caller-RGB420 gaps before
+smaller variants or submicrosecond wrappers. Other affected named read/decode
+costs need current evidence before a pass claim; no broad readiness claim follows.
+Establish a substantial distinct opportunity before editing. Distinguish
 shared work from delivery/normalization, reuse unaffected evidence and verify
 affected companion boundaries on acceptance.
 Do not renew the deferred uniform-trellis, population-window/occupancy/pair-cache, residual-summary

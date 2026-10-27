@@ -1,3 +1,5 @@
+using System.Runtime.Intrinsics;
+
 namespace Lokad.Image.Internal;
 
 // The meaningful map can shrink in place, but its complete allocated capacity
@@ -89,6 +91,45 @@ internal static class Vp8lReferenceColorTransform
         return pixel & 0xff00ff00u | (uint)newRed << 16 | (uint)newBlue;
     }
 
+    // RFC 9649 color arithmetic, retaining only the plane being scored.
+    // Vector lanes widen signed channel bytes before multiplication/shift.
+    // Histogram increments remain scalar so repeated bins retain every count.
+    internal static void Histogram(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
+        bool red, int gr, int gb, int rb, Span<int> histogram, OperationContext context)
+    {
+        Span<int> values = stackalloc int[8];
+        var redCoefficient = Vector256.Create((int)unchecked((sbyte)gr));
+        var greenCoefficient = Vector256.Create((int)unchecked((sbyte)gb));
+        var blueCoefficient = Vector256.Create((int)unchecked((sbyte)rb));
+        for (var y = y0; y < y1; y++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var row = working.Slice(y * width + x0, x1 - x0); var x = 0;
+            if (Vector256.IsHardwareAccelerated)
+            {
+                for (; x <= row.Length - 8; x += 8)
+                {
+                    var pixels = Vector256.Create(row.Slice(x, 8));
+                    var green = (pixels << 16).AsInt32() >> 24;
+                    var transformed = red
+                        ? (pixels >>> 16).AsInt32() - (redCoefficient * green >> 5)
+                        : pixels.AsInt32() - (greenCoefficient * green >> 5)
+                            - (blueCoefficient * ((pixels << 8).AsInt32() >> 24) >> 5);
+                    (transformed & Vector256.Create(255)).CopyTo(values);
+                    foreach (var value in values) histogram[value]++;
+                }
+            }
+            for (; x < row.Length; x++)
+            {
+                var pixel = row[x]; var green = (int)unchecked((sbyte)(pixel >> 8));
+                var transformed = red ? (int)(pixel >> 16) - (unchecked((sbyte)gr) * green >> 5)
+                    : (int)pixel - (unchecked((sbyte)gb) * green >> 5)
+                        - (unchecked((sbyte)rb) * unchecked((sbyte)(pixel >> 16)) >> 5);
+                histogram[transformed & 255]++;
+            }
+        }
+    }
+
     private sealed class Search : IDisposable
     {
         private const long ScratchBytes = 3 * 256 * 4L + 2 * 256 * 8L + 128;
@@ -133,15 +174,7 @@ internal static class Vp8lReferenceColorTransform
             var histogram = Histogram; histogram.Clear();
             // This tile remains unchanged during the complete coefficient search.
             // Strided borrowing needs neither a tile copy nor a second image.
-            for (var y = y0; y < y1; y++)
-            {
-                var row = working.Slice(y * width + x0, x1 - x0); context.Cancellation.ThrowIfCancellationRequested();
-                foreach (var pixel in row)
-                {
-                    var transformed = Apply(pixel, gr, gb, rb);
-                    histogram[(int)(red ? transformed >> 16 & 255 : transformed & 255)]++;
-                }
-            }
+            Vp8lReferenceColorTransform.Histogram(working, width, x0, y0, x1, y1, red, gr, gb, rb, histogram, context);
             var cost = Cost(red);
             const long preference = 3 * Vp8lReferenceCost.Scale;
             if (red)

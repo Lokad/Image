@@ -12,8 +12,8 @@
   cancellation boundaries, shared admission and output ownership.
 - Constant-time Deflate distance-code selection for compressed PNG, preserving
   exact packets and portable execution.
-- Reuse repeated lossless WebP color-transform trials in existing scratch storage,
-  preserving exact packets, admission and cancellation.
+- Faster lossless WebP color-transform scoring through trial reuse and safe SIMD,
+  preserving exact packets, scratch capacity, admission and cancellation.
 
 ## 0.2.0 — 2026-10-27
 
