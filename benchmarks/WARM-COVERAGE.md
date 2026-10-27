@@ -111,8 +111,8 @@ NoCompression at 1.052× / upper1.067, exact 1,066,552 B and 1,741,709 B/op.
 Short screens are not independent confirmations; this representative scope does
 not complete the full 267-case goal. [Constant-time distance mapping](WARM-PNG-DISTANCE-SYMBOL.md)
 independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
-samples remain. [Effort2 baseline refresh](VP8-RESIDUAL-SUMMARY-DEFERRED.md) resolves
-its current short to 1.583×; the proposed summary primitive is deferred/removed.
+samples remain. The [residual-summary trial](VP8-RESIDUAL-SUMMARY-DEFERRED.md)
+remains deferred/removed; its effort2 baseline costs are superseded below.
 [Zero-candidate trellis](WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) independently measures
 1.574×/upper1.583,15.451ms,5.3% less elapsed than its fresh16.322ms baseline.
 Allocations stay754344B/op and packets exact6818B. BothOS5047 full checks,
@@ -128,7 +128,7 @@ async screen1.444/1.438/1.485× with unchanged29688704/29688704/29689088B/op and
 exact183812B packets. BothOS5044 full checks,13internal/27public scalar and SAME
 actual package/three examples pass. Diagram and compressed alpha skip color search.
 Opaque VP8 photograph at1.599× is now the largest displayed encoding point gap,
-followed by effort2 at1.583× and trellis at1.574×. Preserve larger absolute-cost
+followed by trellis at1.574× and opaqueRGBA16 at1.533×. Preserve larger absolute-cost
 VP8L leads where opportunities are comparable.
 [Horizontal JPEG area filtering](WARM-JPEG-HORIZONTAL-AREA-FILTER.md) independently
 reduces caller-RGB420 elapsed by16.1% against a fresh baseline, to2.030ms and
@@ -138,6 +138,14 @@ BothOS5049 full checks,4 internal/293 public scalar and SAME actual package/thre
 examples pass. Stop this primitive; both named CPU gaps remain open. The bounded
 VP8 quantization-to-pricing audit found only a32-byte reload/absolute-value reuse,
 without a substantial candidate; no production edit or timing followed.
+[Effort2 header bounds](WARM-VP8-EFFORT2-HEADER-BOUND.md) independently reduce
+elapsed by5.7%,4.001ms→3.772ms, unchanged741375B/op and exact7330B packet.
+Its1.490×/upper1.518 gap remains. Count-only evidence identifies52.6% of candidates
+whose header alone cannot win the original-pixel-error metric; skip prediction/
+error calculation while retaining every per-mode cancellation checkpoint and
+strict-less tie decision. This is distinct from the closed RDO header experiment.
+BothOS5049 full checks and the SAME actual package/three examples pass; stop this
+primitive. The current bounded diagnostic/count raw master is retained there.
 [Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
 independently confirmed gain and is removed; the current baseline stays valid.
 Full samples, allocations, packet sizes and boundaries are in the
@@ -197,6 +205,11 @@ Regression/pixel/reference evidence and timings are separate:
   the displayed diagram6 cost is independently refreshed. Other affected named
   trellis callers need applicable current costs before a pass claim. Method4/
   effort2 bypass trellis, and all other codecs/decoding/editing/text remain.
+- Header lower bounds change distortion-only method0/1/2 small-block encoding.
+  The effort2 diagram is independently refreshed. Other affected named effort/
+  depth/alpha/stream callers need applicable current evidence before CPU-pass
+  claims. Method4/5/6 RDO/trellis, all decoding, other codecs/editing/text and
+  applicable unchanged evidence remain valid. No storage/ownership change.
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.

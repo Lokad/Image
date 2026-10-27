@@ -14,7 +14,7 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
-    distortion = json.loads((ROOT / 'benchmarks/vp8-residual-summary-deferred-evidence.json').read_text(encoding='utf-8'))
+    distortion = json.loads((ROOT / 'benchmarks/warm-vp8-effort2-header-bound-evidence.json').read_text(encoding='utf-8'))
     trellis = json.loads((ROOT / 'benchmarks/warm-vp8-zero-candidate-trellis-evidence.json').read_text(encoding='utf-8'))
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
     color = json.loads((ROOT / 'benchmarks/warm-vp8l-scored-plane-histograms-evidence.json').read_text(encoding='utf-8'))
@@ -28,7 +28,7 @@ def render():
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
-    assert not distortion['productionChanged'] and distortion['restoration']['sourceAndImmutableProducerRestored']
+    assert distortion['productionChanged'] and distortion['independentQuietConfirmationThisPair']
     assert trellis['productionChanged'] and trellis['independentQuietConfirmationThisPair']
     assert jpeg['productionChanged'] and jpeg['independentQuietConfirmationThisPair']
     assert color['version'] == '0.2.1' and color['independentQuietConfirmationThisPair']
@@ -39,11 +39,11 @@ def render():
         observation = case['observation']
         color_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         updated = color_case or case['id'] in {'case00', 'case02', 'case03', 'case06', 'case10', 'case17', 'case18', 'case19', 'case20'}
-        producer = jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else trellis if case['id'] == 'case10' else color if color_case else stored if case['id'] == 'case20' else current
+        producer = distortion if case['id'] == 'case06' else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else trellis if case['id'] == 'case10' else color if color_case else stored if case['id'] == 'case20' else current
         if case['id'] == 'case00':
             observation = producer['cases']['Vp8Stream'][-1]
         elif case['id'] == 'case06':
-            observation = distortion['baseline']
+            observation = distortion['observations'][-1]
         elif case['id'] == 'case10':
             observation = trellis['observations'][-1]
         elif case['id'] in {'case02', 'case03'}:
@@ -57,7 +57,7 @@ def render():
         upper = observation['conservativeRatioUpper']
         assert receipt['librarySha256'] == (producer['producers']['linuxSha256'] if updated else evidence['librarySha256'])
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case10', 'case15'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case06', 'case10', 'case15'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -128,7 +128,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, VP8 trellis and VP8L photograph have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, effort2/trellis VP8 and VP8L photograph have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. SIMD scored-plane histograms reduce photograph elapsed
 by 6.4% against a fresh independent baseline, with unchanged allocations and
@@ -138,6 +138,8 @@ exact packets and allocations; its1.574× / upper1.583 gap remains open.
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
+Effort2 header bounds independently reduce elapsed by5.7% at unchanged741,375B/op
+and exact packets; its1.490× / upper1.518 gap remains open.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -150,7 +152,7 @@ Source images are 513×259; resize rows state output dimensions. The
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
-[Effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
+[Effort2](../benchmarks/WARM-VP8-EFFORT2-HEADER-BOUND.md) and
 [trellis](../benchmarks/WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) retain current costs;
 [scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
 four affected VP8L rows. Other paths retain applicable prior proof.

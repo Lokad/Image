@@ -67,8 +67,13 @@ internal static class Vp8DistortionDecision
             var costs = prices.Slice(8 + (above * 10 + side) * 10, 10); var bestMode = 0; var best = Unselected;
             for (var mode = 0; mode < 10; mode++)
             {
-                context.Cancellation.ThrowIfCancellationRequested(); Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
-                var current = 256L * Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4) + costs[mode] * 11L;
+                context.Cancellation.ThrowIfCancellationRequested();
+                // Pixel error is nonnegative; an equal header cannot win the
+                // strict-less decision either. Keep polling before every mode.
+                var modeHeader = costs[mode] * 11L;
+                if (modeHeader >= best) continue;
+                Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
+                var current = 256L * Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4) + modeHeader;
                 if (current < best) { best = current; bestMode = mode; trial.CopyTo(selected); }
             }
             modes[b] = (byte)bestMode; score += best; header += costs[bestMode];

@@ -18,6 +18,8 @@
   exact packets, validation, cancellation and portable fallback.
 - Faster subsampled JPEG chroma filtering with safe SIMD, preserving exact
   packets, signed rounding, bounded scratch and portable fallback.
+- Faster VP8 distortion-only mode selection through exact header-cost bounds,
+  preserving packet bytes, strict ties and cancellation checkpoints.
 
 ## 0.2.0 — 2026-10-27
 

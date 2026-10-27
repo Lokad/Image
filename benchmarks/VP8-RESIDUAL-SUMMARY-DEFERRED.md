@@ -1,5 +1,8 @@
 # Deferred VP8 residual summary
 
+These costs are historical after [effort2 header bounds](WARM-VP8-EFFORT2-HEADER-BOUND.md).
+The residual-summary prototype remains deferred and removed.
+
 The existing effort2 diagram has a fresh qualified baseline of **3,993.94 µs,
 1.583× reference time**, versus 3,831.38 µs / 1.522× for a shared SIMD residual
 summary. That is only a 4.07% short-screen difference, with overlapping confidence
