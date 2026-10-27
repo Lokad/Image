@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 // Private encoder preparation. One operation-owned allocation contains generated
@@ -180,11 +182,13 @@ internal sealed partial class Vp8RatePlan : IDisposable
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int Band(int position) => position switch
     { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
 
     // Borrowed zigzag levels and integer result only. The enclosing encoder
     // admits block cancellation in batches, without per-block scopes.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal int Residual(ReadOnlySpan<short> levels, int type, int first, int initialContext, out bool nonzero)
     {
         var values = Values;

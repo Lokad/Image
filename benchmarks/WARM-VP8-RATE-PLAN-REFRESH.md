@@ -1,5 +1,8 @@
 # Refresh VP8 prices in their existing owner
 
+Historical encoder cost: [residual vector views](WARM-VP8-RESIDUAL-VECTOR-VIEWS.md)
+now supplies current affected timings. Rate ownership and table words are unchanged.
+
 The photograph independently measures 21.50 ms: 2.214× reference time (upper
 2.222×), 809,056 B/op and an exact 17,688-byte packet. Allocations fall by
 100,640 B/op (11.1%). Elapsed time is 1.91% below the preceding independent mean;

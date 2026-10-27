@@ -26,15 +26,15 @@ effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
 [Method6 search](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs
 coefficient-domain dynamic-programming trellis for every luma candidate; the
 current method4 warm controls never execute this required algorithm. Functional
-packet/ownership proof remains exact. The [current complete-operation short](WARM-VP8-RATE-PLAN-REFRESH.md)
-measures 2.164× / upper 2.255, 854,968 B/op, with exact packets and reconstructed
-pixels. The effort-4 photograph is now the largest demonstrated gap. Source, depth and quality stay
+packet/ownership proof remains exact. The [current complete-operation short](WARM-VP8-RESIDUAL-VECTOR-VIEWS.md)
+measures 2.038× / upper 2.089, 854,968 B/op, with exact packets and reconstructed
+pixels. It is now the largest demonstrated gap. Source, depth and quality stay
 frozen: no grid or new image. Other efforts/settings receive no broader
 performance claim.
 
 ## Current qualification and demonstrated gaps
 
-[VP8 rate-plan refresh](WARM-VP8-RATE-PLAN-REFRESH.md) is the latest
+[VP8 residual vector views](WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) is the latest
 qualified producer: 4,943 Release checks and 622 affected scalar WebP checks per
 OS, plus the same actual private 0.2.0 package and all three usage examples.
 Complete encoder packets, decoded pixels, editing precision, cancellation and
@@ -43,10 +43,11 @@ explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchang
 The [current three-table summary](../docs/benchmark.md) selects valid costs,
 allocations, reference boundaries and confirmation status. Current evidence:
 
-- [Rate-plan refresh](WARM-VP8-RATE-PLAN-REFRESH.md): photograph independent
-  2.214× / upper 2.222, exact 17,688 B and 809,056 B/op (11.1% fewer allocations).
-  Diagram/alpha/effort-6 trellis current shorts are 2.092× / 1.498× / 2.164×.
-  Older affected costs are historical. One operation-owned array, no global cache.
+- [Residual vector views](WARM-VP8-RESIDUAL-VECTOR-VIEWS.md): photograph
+  independent 1.996× / upper 2.004, exact 17,688 B and 809,056 B/op. Current
+  diagram/alpha/effort-6 trellis shorts are 1.878× / 1.474× / 2.038×. Observed
+  allocations are retained per row; no new production heap storage. Older affected
+  costs are historical. Warm upper≤1× remains open.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
@@ -112,15 +113,16 @@ scored. The single-coefficient residual shortcut gives only a 0.825% short chang
 it is rejected and actual qualified sources/binaries restored. Per-mode score
 arithmetic is already inlined, so no score-copy trial is needed.
 
-Rate-plan reuse is accepted and fully qualified. Stop refresh, histogram and
-completed pricing/emitter variants. The unchanged residual-call code still has
-stackalloc scratch and opaque helper calls with constant luma arguments. Next
-assess replacing scratch copies with safe borrowed views of local vectors and
-allowing compiler inlining. Keep exact checks/costs/rounding, portable fallback
-and fixed workspace; no new kernel, table, cache or unsafe code. Use generated
-code to decide whether a single bounded experiment is justified, then the same
-photograph short and independent confirmation if material. No fresh profile or
-settings grid; batch full qualification only for accepted production.
+Residual vector views/inlining are accepted and fully qualified. Stop residual,
+price, histogram, predictor and forward variants. The largest demonstrated gap is
+now the existing effort-6 diagram. Encoder reconstruction still runs the full
+inverse transform for DC-only or all-zero coefficient blocks. Next assess one
+bounded DC shortcut using the existing saturated row writer, preserving the
+complete pre-write snapshot, exact signed rounding/clamp, aliases and tails. The
+existing 229,504-case frozen inverse oracle includes every signed16 DC value and
+90 alias placements; reuse it. Same trellis short, independent only if material.
+No new kernel/cache/grid/profile or extra image. Prior rejected emitter/table
+experiments remain closed; qualify accepted production in one coherent batch.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)
