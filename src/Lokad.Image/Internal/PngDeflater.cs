@@ -79,7 +79,7 @@ internal sealed partial class PngDeflater : Stream
         Put(final ? 1 : 0, 3); Align();
         OutputByte((byte)storedCount); OutputByte((byte)(storedCount >> 8));
         OutputByte((byte)~storedCount); OutputByte((byte)(~storedCount >> 8));
-        for (var at = 0; at < storedCount; at++) OutputByte(history[at]);
+        OutputBytes(history.AsSpan(0, storedCount));
         storedCount = 0;
     }
 
@@ -224,6 +224,18 @@ internal sealed partial class PngDeflater : Stream
     {
         encoded[encodedCount++] = value;
         if (encodedCount == encoded.Length) Flush();
+    }
+    private void OutputBytes(ReadOnlySpan<byte> bytes)
+    {
+        while (!bytes.IsEmpty)
+        {
+            var count = Math.Min(bytes.Length, encoded.Length - encodedCount);
+            bytes[..count].CopyTo(encoded.AsSpan(encodedCount));
+            encodedCount += count; bytes = bytes[count..];
+            // Keep the same publication/cancellation boundary as OutputByte,
+            // including a full pending buffer when the writer throws.
+            if (encodedCount == encoded.Length) Flush();
+        }
     }
     public override void Flush()
     {

@@ -1,24 +1,30 @@
-# Lokad.Image 0.2.0 benchmarks
+# Lokad.Image benchmarks
 
-Release-preparation snapshot, 2026-10-27. All **31 displayed controls** were freshly
-measured using the actual 0.2.0 package DLL on the dedicated quiet Ubuntu 24.04
-x64 VM (AMD EPYC 9V45 96-Core Processor): one pinned CPU per operation, warm
-.NET 10, sequential Release execution, no concurrency. This representative scope
-is not the full performance objective.
-Full CPU parity and general replacement readiness remain open.
+Updated 2026-10-27. **† PNG rows** use the qualified 0.2.1 development producer;
+the other 27 controls retain the published 0.2.0 measurements on unchanged paths.
+The original 31-control release evidence remains immutable. Full CPU parity and
+general replacement readiness remain open.
 
-Each row is a short BenchmarkDotNet run: three warmups and three measured
-iterations, with native brackets before/after and passing idle/process guards.
+Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
+(AMD EPYC 9V45 96-Core Processor): one pinned CPU per operation, warm .NET 10,
+sequential Release execution, no concurrency. This representative scope is not
+the full performance objective.
+
+Stored PNG16 independently confirms 12 measured iterations; other rows are short
+BenchmarkDotNet screens with three. Native brackets before/after and idle/process
+guards pass. The stored control improved from 1,112.30 to 426.14 µs and now measures
+1.052× reference time (upper 1.067×); full parity remains open.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
-including unfiltered managed samples. These screens are a release snapshot, not
-new independent parity confirmations. B/op measures managed allocation, not native
+including unfiltered managed samples. Short screens are not new independent
+parity confirmations. B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
 Operations include normalization, input delivery and independently owned output;
 async encoding includes staging/delivery/release. Fixture preparation is excluded.
 Source images are 513×259; resize rows state output dimensions. The
-[snapshot evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) records exact
-dimensions, settings, boundaries, binaries, samples and retained raw archives.
+[release evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) and
+[stored-PNG round](../benchmarks/WARM-PNG-BULK-STORED.md) record exact dimensions,
+settings, boundaries, binaries, samples, package checks and retained raw archives.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -39,10 +45,10 @@ dimensions, settings, boundaries, binaries, samples and retained raw archives.
 | VP8L async, fresh nonseekable output / libwebp exact=1 | 205,529.71 | 127,025.13 | 1.618 / 2.028 | 29,689,080 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 | 132,270.49 | 83,865.69 | 1.577 / 2.343 | 20,409,392 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
-| PNG RGBA8, SmallestSize9 / native9 | 23,561.24 | 17,667.72 | 1.334 / 1.791 | 1,325,670 | 210,973 / 210,973 |
-| PNG RGBA16, SmallestSize9 / native9 | 27,980.22 | 21,131.37 | 1.324 / 1.679 | 3,813,679 | 963,202 / 963,202 |
-| PNG RGBA8, Fastest1 / native1 | 7,742.49 | 4,352.09 | 1.779 / 1.929 | 1,344,453 | 236,828 / 236,828 |
-| PNG RGBA16, NoCompression0 / native0 | 1,112.30 | 404.21 | 2.752 / 3.317 | 1,741,680 | 1,066,552 / 1,066,552 |
+| PNG RGBA8, SmallestSize9 / native9 † | 23,674.33 | 17,282.01 | 1.370 / 1.558 | 1,325,670 | 210,973 / 210,973 |
+| PNG RGBA16, SmallestSize9 / native9 † | 26,792.89 | 20,088.85 | 1.334 / 1.441 | 3,813,679 | 963,202 / 963,202 |
+| PNG RGBA8, Fastest1 / native1 † | 7,763.44 | 4,359.81 | 1.781 / 1.979 | 1,344,453 | 236,828 / 236,828 |
+| PNG RGBA16, NoCompression0 / native0 † | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

@@ -12,20 +12,28 @@ def render():
     evidence = json.loads((ROOT / 'benchmarks/release-0.2.0-benchmark-evidence.json').read_text(encoding='utf-8'))
     assert evidence['version'] == '0.2.0' and len(evidence['cases']) == 31
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
+    current = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
+    assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
+    assert set(current['cases']) == {'EncodeNoCompression16', 'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
     rows = []
     for case in evidence['cases']:
         observation = case['observation']
+        updated = case['id'] in {'case17', 'case18', 'case19', 'case20'}
+        if updated:
+            observation = current['cases'][observation['receipt']['caseId']][-1]
         receipt = observation['receipt']
         stats = observation['managed']['statistics']
         native = min(b['mean'] for b in observation['nativeBrackets'])
         ratio = observation['worstBracketRatio']
         upper = observation['conservativeRatioUpper']
-        assert receipt['librarySha256'] == evidence['librarySha256']
+        assert receipt['librarySha256'] == (current['producers']['linuxSha256'] if updated else evidence['librarySha256'])
         assert all(g['passed'] for g in observation['quietness'].values())
-        assert 2 <= stats['N'] <= 3 and len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 3
+        samples = 12 if updated and receipt['caseId'] == 'EncodeNoCompression16' else 3
+        assert (8 if samples == 12 else 2) <= stats['N'] <= samples
+        assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
         allocated = observation['managedMemory']['BytesAllocatedPerOperation']
-        label = case['label']
+        label = case['label'] + (' †' if updated else '')
         if case['kind'] == 'editing':
             label += f' → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
         cells = [label, f'{stats["Mean"] / 1000:,.2f}', f'{native / 1000:,.2f}',
@@ -39,27 +47,33 @@ def render():
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
                          *(row for kind, row in rows if kind == 'codec')])
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
-    return f'''# Lokad.Image 0.2.0 benchmarks
+    return f'''# Lokad.Image benchmarks
 
-Release-preparation snapshot, 2026-10-27. All **31 displayed controls** were freshly
-measured using the actual 0.2.0 package DLL on the dedicated quiet Ubuntu 24.04
-x64 VM ({evidence['machine']['cpuModel']}): one pinned CPU per operation, warm
-.NET 10, sequential Release execution, no concurrency. This representative scope
-is not the full performance objective.
-Full CPU parity and general replacement readiness remain open.
+Updated 2026-10-27. **† PNG rows** use the qualified 0.2.1 development producer;
+the other 27 controls retain the published 0.2.0 measurements on unchanged paths.
+The original 31-control release evidence remains immutable. Full CPU parity and
+general replacement readiness remain open.
 
-Each row is a short BenchmarkDotNet run: three warmups and three measured
-iterations, with native brackets before/after and passing idle/process guards.
+Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
+({evidence['machine']['cpuModel']}): one pinned CPU per operation, warm .NET 10,
+sequential Release execution, no concurrency. This representative scope is not
+the full performance objective.
+
+Stored PNG16 independently confirms 12 measured iterations; other rows are short
+BenchmarkDotNet screens with three. Native brackets before/after and idle/process
+guards pass. The stored control improved from 1,112.30 to 426.14 µs and now measures
+1.052× reference time (upper 1.067×); full parity remains open.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
-including unfiltered managed samples. These screens are a release snapshot, not
-new independent parity confirmations. B/op measures managed allocation, not native
+including unfiltered managed samples. Short screens are not new independent
+parity confirmations. B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
 Operations include normalization, input delivery and independently owned output;
 async encoding includes staging/delivery/release. Fixture preparation is excluded.
 Source images are 513×259; resize rows state output dimensions. The
-[snapshot evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) records exact
-dimensions, settings, boundaries, binaries, samples and retained raw archives.
+[release evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) and
+[stored-PNG round](../benchmarks/WARM-PNG-BULK-STORED.md) record exact dimensions,
+settings, boundaries, binaries, samples, package checks and retained raw archives.
 
 ''' + codecs + '''
 
@@ -94,6 +108,6 @@ if __name__ == '__main__':
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'
-        print('Benchmark summary matches the release evidence (two tables).')
+        print('Benchmark summary matches current and retained release evidence (two tables).')
     else:
         output.write_text(text, encoding='utf-8', newline='\n')

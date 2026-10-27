@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 — Unreleased
+
+- Faster stored PNG payload emission, preserving complete packet bytes, flush and
+  cancellation boundaries, shared admission and output ownership.
+
 ## 0.2.0 — 2026-10-27
 
 Published on [NuGet](https://www.nuget.org/packages/Lokad.Image/0.2.0).

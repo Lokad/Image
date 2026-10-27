@@ -4,7 +4,8 @@ The full objective remains independent quiet single-CPU warm performance with a
 conservative ratio upper bound ≤1× for every named material required path, plus
 functional, memory, compression and packaged-consumer correctness. Startup and
 concurrency are excluded. Compression correctness precedes CPU optimization.
-The published 0.2.0 snapshot is the baseline for subsequent performance work.
+The published 0.2.0 snapshot is retained as the baseline; current evidence is
+reconciled in the summary below.
 
 ## Finite checklist
 
@@ -35,11 +36,15 @@ boundary omitted from this inventory.
 
 ## Current evidence
 
-[The release snapshot](../docs/benchmark.md) freshly measures every one of its
-31 displayed controls on the actual package DLL. Short screens are not independent
-confirmations; that representative snapshot does not complete the 255-case goal.
-Full samples, allocations, packet sizes and boundaries are in
-[its evidence](release-0.2.0-benchmark-evidence.json).
+[The current summary](../docs/benchmark.md) retains 27 unchanged 0.2.0 controls and
+refreshes four PNG encoder controls on the qualified 0.2.1 development producer.
+[Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
+NoCompression at 1.052× / upper1.067, exact 1,066,552 B and 1,741,709 B/op.
+Short screens are not independent confirmations; this representative scope does
+not complete the 255-case goal. PNG Fastest remains a short gap at 1.781×.
+Full samples, allocations, packet sizes and boundaries are in the
+[immutable release evidence](release-0.2.0-benchmark-evidence.json) and
+[current PNG evidence](warm-png-bulk-stored-evidence.json).
 
 Existing independent confirmations remain usable where their production path,
 options, inputs, worker and operation boundary are unchanged. In particular,
@@ -66,6 +71,9 @@ Regression/pixel/reference evidence and timings are separate:
   including normalization/async boundaries; opaque VP8 is unaffected.
 - Shared Adler reuse affects every PNG encoding policy/color/depth and sync/async
   delivery caller. PNG decoding, other codecs and editing/text are unchanged.
+- Bulk stored publication changes level0 and the stored fallback in compressed
+  PNG policies. All PNG encoding callers require applicable new costs; four
+  displayed controls are refreshed. Unrelated paths and native oracles remain.
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.
@@ -77,12 +85,12 @@ whole library by default. Older histories remain in
 [the preceding coverage record](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/benchmarks/WARM-COVERAGE.md)
 and their individual reports/raw archives.
 
-## After release
+## Next performance work
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
-stop confirmed passing cases. The next deferred candidate is bulk stored-PNG
-emission into its existing buffer, with exact flush/failure/cancellation behavior.
-No experiment started during release preparation. Closed source-energy, histogram,
+stop confirmed passing cases. Stored publication is accepted; its remaining 5.2%
+gap is below PNG Fastest at 1.781×, which is the next displayed control to attribute.
+Closed source-energy, histogram,
 word/fragment, prediction/quantizer/trellis and other rejected variants stay closed.
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package
 checks for accepted production changes. Preserve complete operation boundaries,

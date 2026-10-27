@@ -1,0 +1,3581 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "SPE1",
+  "version": "0.2.1",
+  "date": "2026-10-27",
+  "productionChanged": true,
+  "independentQuietConfirmationThisPair": true,
+  "warmParityComplete": false,
+  "scope": "One stored-payload emission primitive, level0 and RFC1951 stored fallback. Existing 513x259 RGBA16 level0 complete operation is primary; three existing PNG policy/depth companions reuse cached workers/selectors. No reference or workload changes. Baseline is the published 0.2.0 snapshot; its separate short is not a paired speedup interval.",
+  "baseline": {
+    "evidence": "release-0.2.0-benchmark-evidence.json",
+    "case": "case20",
+    "managedNanoseconds": 1112300.4600694443,
+    "ratio": 2.751766432454616,
+    "allocation": 1741680,
+    "productionSha256": "a6dbe930a66bf1bd5b138cd4518261fb6ecb9e4341794b727367aa28cd9617d4"
+  },
+  "producers": {
+    "windowsSha256": "c112d60e5e72dcd29c4d4fda6725508e8e9e1f1d13dca8226df237d5d040a3c5",
+    "linuxSha256": "8a3f3913a503f4264c050c7df919638189d6a74cc3aa9756a8e5dce6f569647a",
+    "sourceFiles": {
+      "src/Lokad.Image/Internal/PngDeflater.cs": "5110fe12e959ed4ac859080ca7b729e9840f495f6050912c5a08c7932d607c70",
+      "src/Lokad.Image/Internal/PngDeflater.Block.cs": "a4bd9bbf0ace0a915a2c3b4ee3ae73e458300504e9b2e0e591386a65e99de578",
+      "src/Lokad.Image/Lokad.Image.csproj": "c446fca4e73f29df405d384a4b12b5306f62d3148d8b225ca35555291444de7d"
+    },
+    "baseCommit": "ee3bdaff0e5e2890921f7332d6f91f6ebcf07ea1"
+  },
+  "package": {
+    "path": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "sha256": "0d906a691d3ff6cc2a9f9417bdf2ad616badeeaacbedb61eb957b4a4db91f824",
+    "bytes": 360050,
+    "librarySha256": "c112d60e5e72dcd29c4d4fda6725508e8e9e1f1d13dca8226df237d5d040a3c5",
+    "symbolsSha256": "14e50ae96446a8ecd920299804f89e31a1b3d18c6fb48908bac6a05e77a4da61",
+    "sameActualPackageBothPlatforms": true,
+    "privateDevelopmentBuild": true
+  },
+  "qualification": {
+    "perPlatform": {
+      "internal": 1977,
+      "public": 2035,
+      "liveFfmpeg": 947,
+      "scalarInternalPngAdler": 499,
+      "scalarPublicPng": 180,
+      "actualPackageConsumer": true,
+      "allThreeUsageExamples": true
+    },
+    "platforms": [
+      "Windows x64",
+      "Linux x64"
+    ],
+    "noNewTestsOrFixtureImages": true,
+    "equivalence": {
+      "correctnessOnly": true,
+      "comparisonCases": 176,
+      "failureCancellationPairs": 32,
+      "completeBytesAndFlushCallsExact": true,
+      "independentInflationExact": true,
+      "sharedOwnershipCleanupExact": true,
+      "reference": "Own published source at 27fc0425; no external implementation input."
+    }
+  },
+  "attribution": {
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "workloadSamples": 712,
+    "storedBlockSelfSamples": 451,
+    "constructorSelfSamples": 2,
+    "scope": "One one-second capture with the cached sampler; complete-operation warm workload only, instrumented timings discarded. Inclusive stored block includes child CRC/output costs; self share chose payload publication over allocation specialization."
+  },
+  "implementation": "Bounded Span.CopyTo into the existing 4096-byte output buffer; at most two source spans for ring history. Existing flush boundaries, failure-prefix state, cancellation and owned capacities remain. No new allocations, owners, cache, policy or admission path.",
+  "evidenceReuse": "PNG encoder policy/depth/stream callers have changed code and require applicable new timing evidence; four displayed controls refreshed. PNG decode, JPEG, WebP, editing/text and native workers/inputs/settings are unchanged; retain their applicable source-qualified evidence. Older PNG confirmations are not current timing proofs for changed callers.",
+  "cases": {
+    "EncodeNoCompression16": [
+      {
+        "label": "short",
+        "managed": {
+          "statistics": {
+            "OriginalValues": [
+              451746.33147321426,
+              450439.35379464284,
+              448835.49665178574
+            ],
+            "N": 3,
+            "Min": 448835.49665178574,
+            "LowerFence": 447454.299107143,
+            "Q1": 449637.4252232143,
+            "Median": 450439.35379464284,
+            "Mean": 450340.39397321426,
+            "Q3": 451092.8426339285,
+            "UpperFence": 453275.9687499998,
+            "Max": 451746.33147321426,
+            "InterquartileRange": 1455.4174107142026,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 841.7411763923402,
+            "Variance": 2125584.6241030823,
+            "StandardDeviation": 1457.9384843343296,
+            "Skewness": -0.06756381859766702,
+            "Kurtosis": 0.6666666666666633,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 450340.39397321426,
+              "StandardError": 841.7411763923402,
+              "Level": 12,
+              "Margin": 26598.22526442636,
+              "Lower": 423742.1687087879,
+              "Upper": 476938.61923764064
+            },
+            "Percentiles": {
+              "P0": 448835.49665178574,
+              "P25": 449637.4252232143,
+              "P50": 450439.35379464284,
+              "P67": 450883.7262053571,
+              "P80": 451223.54040178563,
+              "P85": 451354.2381696428,
+              "P90": 451484.9359375,
+              "P95": 451615.6337053571,
+              "P100": 451746.33147321426
+            }
+          },
+          "unfilteredActualStatistics": {
+            "OriginalValues": [
+              451748.02008928574,
+              450441.04241071426,
+              448837.18526785716
+            ],
+            "N": 3,
+            "Min": 448837.18526785716,
+            "LowerFence": 447455.9877232142,
+            "Q1": 449639.1138392857,
+            "Median": 450441.04241071426,
+            "Mean": 450342.08258928574,
+            "Q3": 451094.53125,
+            "UpperFence": 453277.6573660715,
+            "Max": 451748.02008928574,
+            "InterquartileRange": 1455.417410714319,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 841.7411763923565,
+            "Variance": 2125584.6241031643,
+            "StandardDeviation": 1457.9384843343578,
+            "Skewness": -0.06756381859770583,
+            "Kurtosis": 0.6666666666666704,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 450342.08258928574,
+              "StandardError": 841.7411763923565,
+              "Level": 12,
+              "Margin": 26598.225264426877,
+              "Lower": 423743.85732485884,
+              "Upper": 476940.30785371264
+            },
+            "Percentiles": {
+              "P0": 448837.18526785716,
+              "P25": 449639.1138392857,
+              "P50": 450441.04241071426,
+              "P67": 450885.41482142854,
+              "P80": 451225.2290178571,
+              "P85": 451355.9267857142,
+              "P90": 451486.62455357146,
+              "P95": 451617.32232142857,
+              "P100": 451748.02008928574
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 448,
+              "Nanoseconds": 202383113
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 448,
+              "Nanoseconds": 201797587
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 448,
+              "Nanoseconds": 201079059
+            }
+          ],
+          "results": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 448,
+              "Nanoseconds": 202382356.5
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 448,
+              "Nanoseconds": 201796830.5
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 448,
+              "Nanoseconds": 201078302.5
+            }
+          ],
+          "rawGc": "// GC:  77 77 77 780285968 448",
+          "rawThreading": "// Threading:  0 0 448"
+        },
+        "nativeBrackets": [
+          {
+            "mean": 422435.4348958333,
+            "standardError": 353.30087953667913,
+            "confidenceLower": 411271.4611666255,
+            "confidenceUpper": 433599.40862504113,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 53983572,
+                "CompletedOperations": 770,
+                "Observed": 36190,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 421746.65625
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 54098336,
+                "CompletedOperations": 898,
+                "Observed": 42206,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 422643.25
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 54133299,
+                "CompletedOperations": 1026,
+                "Observed": 48222,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 422916.3984375
+              }
+            ]
+          },
+          {
+            "mean": 428440.9140625,
+            "standardError": 818.957779388771,
+            "confidenceLower": 402562.62260051287,
+            "confidenceUpper": 454319.20552448713,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 54839950,
+                "CompletedOperations": 1538,
+                "Observed": 72286,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 428437.109375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 54659116,
+                "CompletedOperations": 1666,
+                "Observed": 78302,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 427024.34375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 55022245,
+                "CompletedOperations": 1794,
+                "Observed": 84318,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 429861.2890625
+              }
+            ]
+          }
+        ],
+        "worstBracketRatio": 1.0660573350913658,
+        "conservativeRatioUpper": 1.1847605343306034,
+        "quietness": {
+          "before": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000398334814236,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.36474609375,
+              0.14794921875,
+              0.04443359375
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          },
+          "after": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000334646785632,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0005,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0005,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.38232421875,
+              0.1591796875,
+              0.04931640625
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          }
+        },
+        "receipt": {
+          "schemaVersion": 1,
+          "name": "WarmPng",
+          "caseId": "EncodeNoCompression16",
+          "smoke": false,
+          "nativeSampleCount": 3,
+          "runId": "spe1-EncodeNoCompression16-short",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "jitPolicy": "Tiered compilation disabled; fully optimized JIT before measurement",
+          "sourceIdentity": {
+            "sourceSha256": "7afdda59593c6fbaa3bfdc7b468f5648bc0ffb55aefb8e72b7179a874edaa1a7",
+            "sourceRevision": "aed7dbd8333335e36e2489e4361dab05e178ed4b"
+          },
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "managedOutputBytes": 1066552,
+          "nativeOutputBytes": 1066552,
+          "managedEncodedSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+          "nativeOutputSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+          "interlace": 0,
+          "colorType": 6,
+          "codedDepth": 16,
+          "rasterRecipe": "Existing original RGBA raster, all samples unchanged.",
+          "originalRasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "filter": 0,
+          "compression": "Stored NoCompression / FFmpeg level0; stored Deflate only, filter None, noninterlaced RGBA16",
+          "encoderLevel": 0,
+          "managedEncoderLevel": 0,
+          "nativeEncoderLevel": 0,
+          "storedDeflateBlocksExact": true,
+          "nativePackedTransparencyFilterTimed": false,
+          "nativePackedTransparencyFilter": null,
+          "grayTransparencyKey": null,
+          "grayTransparencyBytes": null,
+          "rgbTransparencyKey": null,
+          "rgbTransparencyBytes": null,
+          "managedIdatBytes": 1063366,
+          "nativeIdatBytes": 1063366,
+          "paletteEntries": null,
+          "transparencyEntries": null,
+          "forwardOnlyOutput": false,
+          "forwardPacketMatchesStock": false,
+          "callerOutputLeftOpen": true,
+          "cancellationCanBeCanceled": false,
+          "cancellationRequested": false,
+          "alreadyCanceledRejected": null,
+          "cancellationBoundary": null,
+          "tightWorkingBytes": null,
+          "tightWorkingBoundaryExact": null,
+          "oneByteBelowRejected": null,
+          "budgetExcludesOptionalFilteredAndReadBuffers": null,
+          "originalInflaterAllowanceBytes": null,
+          "originalTwoRowBytes": null,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "nativeDecodeEndianConversionTimed": false,
+          "nativeEndianRepackingTimed": true,
+          "nativeEndianWorkspaceReused": true,
+          "nativeRgbPackingTimed": false,
+          "nativeRgbWorkspaceReused": false,
+          "nativeGrayPackingTimed": false,
+          "nativeGrayWorkspaceReused": false,
+          "nativeGrayPlaneExtractionTimed": false,
+          "nativeGrayFilterOutputAllocationTimed": false,
+          "nativeGrayAlphaPackingTimed": false,
+          "nativeGrayAlphaWorkspaceReused": false,
+          "nativeGrayAlphaStoragePackingTimed": false,
+          "nativeSampleTargetMilliseconds": "50",
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "nativeExitCode": 0,
+          "librarySha256": "8a3f3913a503f4264c050c7df919638189d6a74cc3aa9756a8e5dce6f569647a",
+          "benchmarkAssemblySha256": "85e25b548f9c599e4d608b75b0f3f2e0317670c2ffe912d102413fa86beab0e4",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm stored RGBA16 PNG FFmpeg worker",
+            "sourceSha256": "cd44251c9193bf66c84c1c76ca58c11207b41a48b1cc8e13160a623cb046e6e2",
+            "buildScriptSha256": "5dfe6564d305e027ba4d950cdeffcc0e7f0279792cd87ff62f66793aa0544d53",
+            "workerSha256": "d2ace6209ba4d03d80b15f98934dfe669517265ad27ef641697c8ee10d0d35b3",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+              "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+              "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+              "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+              "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+              "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+              "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+              "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+              "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+              "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+              "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+              "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+            },
+            "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-store16-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 16,
+            "codedDepth": 16,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 0,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "outputBytes": 1066552,
+            "initialCompletedOperations": 3,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 53983572,
+              "CompletedOperations": 770,
+              "Observed": 36190,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 421746.65625
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 54098336,
+              "CompletedOperations": 898,
+              "Observed": 42206,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 422643.25
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 54133299,
+              "CompletedOperations": 1026,
+              "Observed": 48222,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 422916.3984375
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 54839950,
+              "CompletedOperations": 1538,
+              "Observed": 72286,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 428437.109375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 54659116,
+              "CompletedOperations": 1666,
+              "Observed": 78302,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 427024.34375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 55022245,
+              "CompletedOperations": 1794,
+              "Observed": 84318,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 429861.2890625
+            }
+          ],
+          "boundary": "Warm original RGBA16 to complete owned PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native codec/source/packet wrappers reused; real independent owned packet acquisition/encode/release included. Both NoCompression/level0/filter None/color6, only stored Deflate blocks, exact full RGBA samples. For RGBA16 the native LE-to-BE full-frame sample conversion is timed in every operation into a reused prepared frame; managed row packing/storage is included. IPC/file IO/hashes/validation excluded."
+        },
+        "boundary": "Warm original RGBA16 to complete owned PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native codec/source/packet wrappers reused; real independent owned packet acquisition/encode/release included. Both NoCompression/level0/filter None/color6, only stored Deflate blocks, exact full RGBA samples. For RGBA16 the native LE-to-BE full-frame sample conversion is timed in every operation into a reused prepared frame; managed row packing/storage is included. IPC/file IO/hashes/validation excluded.",
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 1741710
+        }
+      },
+      {
+        "label": "confirm",
+        "managed": {
+          "statistics": {
+            "OriginalValues": [
+              428912.39166666666,
+              425637.12083333335,
+              423949.3770833333,
+              427218.725,
+              428083.9708333333,
+              423834.05625,
+              427090.925,
+              429986.0375,
+              424317.87083333335,
+              424544.96458333335,
+              424611.38125,
+              425461.2916666667
+            ],
+            "N": 12,
+            "Min": 423834.05625,
+            "LowerFence": 420067.9231770835,
+            "Q1": 424488.19114583335,
+            "Median": 425549.20625000005,
+            "Mean": 426137.34270833334,
+            "Q3": 427435.03645833326,
+            "UpperFence": 431855.3044270831,
+            "Max": 429986.0375,
+            "InterquartileRange": 2946.845312499907,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 598.9619152093408,
+            "Variance": 4305064.510454898,
+            "StandardDeviation": 2074.86493788268,
+            "Skewness": 0.47714877261685984,
+            "Kurtosis": 1.6609953516684652,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 426137.34270833334,
+              "StandardError": 598.9619152093408,
+              "Level": 12,
+              "Margin": 2657.58164152174,
+              "Lower": 423479.7610668116,
+              "Upper": 428794.92434985505
+            },
+            "Percentiles": {
+              "P0": 423834.05625,
+              "P25": 424488.19114583335,
+              "P50": 425549.20625000005,
+              "P67": 427138.21099999995,
+              "P80": 427910.9216666667,
+              "P85": 428373.91812499997,
+              "P90": 428829.5495833333,
+              "P95": 429395.53229166666,
+              "P100": 429986.0375
+            }
+          },
+          "unfilteredActualStatistics": {
+            "OriginalValues": [
+              428913.8,
+              425638.5291666667,
+              423950.78541666665,
+              427220.13333333336,
+              428085.37916666665,
+              423835.46458333335,
+              427092.3333333333,
+              429987.44583333336,
+              424319.2791666667,
+              424546.3729166667,
+              424612.78958333336,
+              425462.7
+            ],
+            "N": 12,
+            "Min": 423835.46458333335,
+            "LowerFence": 420069.33151041664,
+            "Q1": 424489.5994791667,
+            "Median": 425550.6145833334,
+            "Mean": 426138.7510416668,
+            "Q3": 427436.4447916667,
+            "UpperFence": 431856.71276041673,
+            "Max": 429987.44583333336,
+            "InterquartileRange": 2946.8453125000233,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 598.9619152093434,
+            "Variance": 4305064.510454935,
+            "StandardDeviation": 2074.864937882689,
+            "Skewness": 0.4771487726167291,
+            "Kurtosis": 1.660995351668387,
+            "ConfidenceInterval": {
+              "N": 12,
+              "Mean": 426138.7510416668,
+              "StandardError": 598.9619152093434,
+              "Level": 12,
+              "Margin": 2657.5816415217514,
+              "Lower": 423481.169400145,
+              "Upper": 428796.33268318855
+            },
+            "Percentiles": {
+              "P0": 423835.46458333335,
+              "P25": 424489.5994791667,
+              "P50": 425550.6145833334,
+              "P67": 427139.61933333334,
+              "P80": 427912.33,
+              "P85": 428375.3264583333,
+              "P90": 428830.9579166667,
+              "P95": 429396.940625,
+              "P100": 429987.44583333336
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 480,
+              "Nanoseconds": 205878624
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 480,
+              "Nanoseconds": 204306494
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 480,
+              "Nanoseconds": 203496377
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 4,
+              "Operations": 480,
+              "Nanoseconds": 205065664
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 5,
+              "Operations": 480,
+              "Nanoseconds": 205480982
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 6,
+              "Operations": 480,
+              "Nanoseconds": 203441023
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 7,
+              "Operations": 480,
+              "Nanoseconds": 205004320
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 8,
+              "Operations": 480,
+              "Nanoseconds": 206393974
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 9,
+              "Operations": 480,
+              "Nanoseconds": 203673254
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 10,
+              "Operations": 480,
+              "Nanoseconds": 203782259
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 11,
+              "Operations": 480,
+              "Nanoseconds": 203814139
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 12,
+              "Operations": 480,
+              "Nanoseconds": 204222096
+            }
+          ],
+          "results": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 480,
+              "Nanoseconds": 205877948
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 480,
+              "Nanoseconds": 204305818
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 480,
+              "Nanoseconds": 203495701
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 4,
+              "Operations": 480,
+              "Nanoseconds": 205064988
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 5,
+              "Operations": 480,
+              "Nanoseconds": 205480306
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 6,
+              "Operations": 480,
+              "Nanoseconds": 203440347
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 7,
+              "Operations": 480,
+              "Nanoseconds": 205003644
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 8,
+              "Operations": 480,
+              "Nanoseconds": 206393298
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 9,
+              "Operations": 480,
+              "Nanoseconds": 203672578
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 10,
+              "Operations": 480,
+              "Nanoseconds": 203781583
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 11,
+              "Operations": 480,
+              "Nanoseconds": 203813463
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 12,
+              "Operations": 480,
+              "Nanoseconds": 204221420
+            }
+          ],
+          "rawGc": "// GC:  82 82 82 836020112 480",
+          "rawThreading": "// Threading:  0 0 480"
+        },
+        "nativeBrackets": [
+          {
+            "mean": 405061.6302083333,
+            "standardError": 189.77798122999437,
+            "confidenceLower": 404219.5892269704,
+            "confidenceUpper": 405903.67118969624,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 52022945,
+                "CompletedOperations": 770,
+                "Observed": 36190,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 406429.2578125
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51778655,
+                "CompletedOperations": 898,
+                "Observed": 42206,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404520.7421875
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51763051,
+                "CompletedOperations": 1026,
+                "Observed": 48222,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404398.8359375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51815611,
+                "CompletedOperations": 1154,
+                "Observed": 54238,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404809.4609375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51765354,
+                "CompletedOperations": 1282,
+                "Observed": 60254,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404416.828125
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51855251,
+                "CompletedOperations": 1410,
+                "Observed": 66270,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 405119.1484375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51786247,
+                "CompletedOperations": 1538,
+                "Observed": 72286,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404580.0546875
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51938126,
+                "CompletedOperations": 1666,
+                "Observed": 78302,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 405766.609375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51901471,
+                "CompletedOperations": 1794,
+                "Observed": 84318,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 405480.2421875
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51758685,
+                "CompletedOperations": 1922,
+                "Observed": 90334,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404364.7265625
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51904786,
+                "CompletedOperations": 2050,
+                "Observed": 96350,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 405506.140625
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51884482,
+                "CompletedOperations": 2178,
+                "Observed": 102366,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 405347.515625
+              }
+            ]
+          },
+          {
+            "mean": 407173.2278645833,
+            "standardError": 1216.9410109333696,
+            "confidenceLower": 401773.68574454536,
+            "confidenceUpper": 412572.76998462126,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51731861,
+                "CompletedOperations": 2690,
+                "Observed": 126430,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404155.1640625
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 52904787,
+                "CompletedOperations": 2818,
+                "Observed": 132446,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 413318.6484375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51956851,
+                "CompletedOperations": 2946,
+                "Observed": 138462,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 405912.8984375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51720974,
+                "CompletedOperations": 3074,
+                "Observed": 144478,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404070.109375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51748816,
+                "CompletedOperations": 3202,
+                "Observed": 150494,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404287.625
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51744400,
+                "CompletedOperations": 3330,
+                "Observed": 156510,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404253.125
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51795838,
+                "CompletedOperations": 3458,
+                "Observed": 162526,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 404654.984375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 52045456,
+                "CompletedOperations": 3586,
+                "Observed": 168542,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 406605.125
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 52010783,
+                "CompletedOperations": 3714,
+                "Observed": 174558,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 406334.2421875
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 51998474,
+                "CompletedOperations": 3842,
+                "Observed": 180574,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 406238.078125
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 52297107,
+                "CompletedOperations": 3970,
+                "Observed": 186590,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 408571.1484375
+              },
+              {
+                "State": "sample",
+                "Operations": 128,
+                "ElapsedNanoseconds": 53462731,
+                "CompletedOperations": 4098,
+                "Observed": 192606,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 1066552,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 417677.5859375
+              }
+            ]
+          }
+        ],
+        "worstBracketRatio": 1.0520308785829955,
+        "conservativeRatioUpper": 1.0672583792753034,
+        "quietness": {
+          "before": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000320493942127,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.11279296875,
+              0.13671875,
+              0.05126953125
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          },
+          "after": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000387168023735,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.302734375,
+              0.1787109375,
+              0.06689453125
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          }
+        },
+        "receipt": {
+          "schemaVersion": 1,
+          "name": "WarmPng",
+          "caseId": "EncodeNoCompression16",
+          "smoke": false,
+          "nativeSampleCount": 12,
+          "runId": "spe1-EncodeNoCompression16-confirm",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "jitPolicy": "Tiered compilation disabled; fully optimized JIT before measurement",
+          "sourceIdentity": {
+            "sourceSha256": "7afdda59593c6fbaa3bfdc7b468f5648bc0ffb55aefb8e72b7179a874edaa1a7",
+            "sourceRevision": "aed7dbd8333335e36e2489e4361dab05e178ed4b"
+          },
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "managedOutputBytes": 1066552,
+          "nativeOutputBytes": 1066552,
+          "managedEncodedSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+          "nativeOutputSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+          "interlace": 0,
+          "colorType": 6,
+          "codedDepth": 16,
+          "rasterRecipe": "Existing original RGBA raster, all samples unchanged.",
+          "originalRasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "filter": 0,
+          "compression": "Stored NoCompression / FFmpeg level0; stored Deflate only, filter None, noninterlaced RGBA16",
+          "encoderLevel": 0,
+          "managedEncoderLevel": 0,
+          "nativeEncoderLevel": 0,
+          "storedDeflateBlocksExact": true,
+          "nativePackedTransparencyFilterTimed": false,
+          "nativePackedTransparencyFilter": null,
+          "grayTransparencyKey": null,
+          "grayTransparencyBytes": null,
+          "rgbTransparencyKey": null,
+          "rgbTransparencyBytes": null,
+          "managedIdatBytes": 1063366,
+          "nativeIdatBytes": 1063366,
+          "paletteEntries": null,
+          "transparencyEntries": null,
+          "forwardOnlyOutput": false,
+          "forwardPacketMatchesStock": false,
+          "callerOutputLeftOpen": true,
+          "cancellationCanBeCanceled": false,
+          "cancellationRequested": false,
+          "alreadyCanceledRejected": null,
+          "cancellationBoundary": null,
+          "tightWorkingBytes": null,
+          "tightWorkingBoundaryExact": null,
+          "oneByteBelowRejected": null,
+          "budgetExcludesOptionalFilteredAndReadBuffers": null,
+          "originalInflaterAllowanceBytes": null,
+          "originalTwoRowBytes": null,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "nativeDecodeEndianConversionTimed": false,
+          "nativeEndianRepackingTimed": true,
+          "nativeEndianWorkspaceReused": true,
+          "nativeRgbPackingTimed": false,
+          "nativeRgbWorkspaceReused": false,
+          "nativeGrayPackingTimed": false,
+          "nativeGrayWorkspaceReused": false,
+          "nativeGrayPlaneExtractionTimed": false,
+          "nativeGrayFilterOutputAllocationTimed": false,
+          "nativeGrayAlphaPackingTimed": false,
+          "nativeGrayAlphaWorkspaceReused": false,
+          "nativeGrayAlphaStoragePackingTimed": false,
+          "nativeSampleTargetMilliseconds": "50",
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "nativeExitCode": 0,
+          "librarySha256": "8a3f3913a503f4264c050c7df919638189d6a74cc3aa9756a8e5dce6f569647a",
+          "benchmarkAssemblySha256": "85e25b548f9c599e4d608b75b0f3f2e0317670c2ffe912d102413fa86beab0e4",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm stored RGBA16 PNG FFmpeg worker",
+            "sourceSha256": "cd44251c9193bf66c84c1c76ca58c11207b41a48b1cc8e13160a623cb046e6e2",
+            "buildScriptSha256": "5dfe6564d305e027ba4d950cdeffcc0e7f0279792cd87ff62f66793aa0544d53",
+            "workerSha256": "d2ace6209ba4d03d80b15f98934dfe669517265ad27ef641697c8ee10d0d35b3",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+              "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+              "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+              "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+              "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+              "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+              "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+              "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+              "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+              "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+              "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+              "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+            },
+            "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-store16-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 16,
+            "codedDepth": 16,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 0,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "outputBytes": 1066552,
+            "initialCompletedOperations": 3,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 52022945,
+              "CompletedOperations": 770,
+              "Observed": 36190,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 406429.2578125
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51778655,
+              "CompletedOperations": 898,
+              "Observed": 42206,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404520.7421875
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51763051,
+              "CompletedOperations": 1026,
+              "Observed": 48222,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404398.8359375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51815611,
+              "CompletedOperations": 1154,
+              "Observed": 54238,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404809.4609375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51765354,
+              "CompletedOperations": 1282,
+              "Observed": 60254,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404416.828125
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51855251,
+              "CompletedOperations": 1410,
+              "Observed": 66270,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 405119.1484375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51786247,
+              "CompletedOperations": 1538,
+              "Observed": 72286,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404580.0546875
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51938126,
+              "CompletedOperations": 1666,
+              "Observed": 78302,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 405766.609375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51901471,
+              "CompletedOperations": 1794,
+              "Observed": 84318,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 405480.2421875
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51758685,
+              "CompletedOperations": 1922,
+              "Observed": 90334,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404364.7265625
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51904786,
+              "CompletedOperations": 2050,
+              "Observed": 96350,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 405506.140625
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51884482,
+              "CompletedOperations": 2178,
+              "Observed": 102366,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 405347.515625
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51731861,
+              "CompletedOperations": 2690,
+              "Observed": 126430,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404155.1640625
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 52904787,
+              "CompletedOperations": 2818,
+              "Observed": 132446,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 413318.6484375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51956851,
+              "CompletedOperations": 2946,
+              "Observed": 138462,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 405912.8984375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51720974,
+              "CompletedOperations": 3074,
+              "Observed": 144478,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404070.109375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51748816,
+              "CompletedOperations": 3202,
+              "Observed": 150494,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404287.625
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51744400,
+              "CompletedOperations": 3330,
+              "Observed": 156510,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404253.125
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51795838,
+              "CompletedOperations": 3458,
+              "Observed": 162526,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 404654.984375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 52045456,
+              "CompletedOperations": 3586,
+              "Observed": 168542,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 406605.125
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 52010783,
+              "CompletedOperations": 3714,
+              "Observed": 174558,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 406334.2421875
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 51998474,
+              "CompletedOperations": 3842,
+              "Observed": 180574,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 406238.078125
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 52297107,
+              "CompletedOperations": 3970,
+              "Observed": 186590,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 408571.1484375
+            },
+            {
+              "State": "sample",
+              "Operations": 128,
+              "ElapsedNanoseconds": 53462731,
+              "CompletedOperations": 4098,
+              "Observed": 192606,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 1066552,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 417677.5859375
+            }
+          ],
+          "boundary": "Warm original RGBA16 to complete owned PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native codec/source/packet wrappers reused; real independent owned packet acquisition/encode/release included. Both NoCompression/level0/filter None/color6, only stored Deflate blocks, exact full RGBA samples. For RGBA16 the native LE-to-BE full-frame sample conversion is timed in every operation into a reused prepared frame; managed row packing/storage is included. IPC/file IO/hashes/validation excluded."
+        },
+        "boundary": "Warm original RGBA16 to complete owned PNG: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray. Native codec/source/packet wrappers reused; real independent owned packet acquisition/encode/release included. Both NoCompression/level0/filter None/color6, only stored Deflate blocks, exact full RGBA samples. For RGBA16 the native LE-to-BE full-frame sample conversion is timed in every operation into a reused prepared frame; managed row packing/storage is included. IPC/file IO/hashes/validation excluded.",
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 1741709
+        }
+      }
+    ],
+    "EncodeFast8": [
+      {
+        "label": "short",
+        "managed": {
+          "statistics": {
+            "OriginalValues": [
+              7805235.546875,
+              7727046.859375,
+              7758043.453125
+            ],
+            "N": 3,
+            "Min": 7727046.859375,
+            "LowerFence": 7683903.640625,
+            "Q1": 7742545.15625,
+            "Median": 7758043.453125,
+            "Mean": 7763441.953125,
+            "Q3": 7781639.5,
+            "UpperFence": 7840281.015625,
+            "Max": 7805235.546875,
+            "InterquartileRange": 39094.34375,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 22731.956690458657,
+            "Variance": 1550225564.930664,
+            "StandardDeviation": 39372.90394332966,
+            "Skewness": 0.1345343928455129,
+            "Kurtosis": 0.6666666666666665,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 7763441.953125,
+              "StandardError": 22731.956690458657,
+              "Level": 12,
+              "Margin": 718308.3371843771,
+              "Lower": 7045133.615940623,
+              "Upper": 8481750.290309377
+            },
+            "Percentiles": {
+              "P0": 7727046.859375,
+              "P25": 7742545.15625,
+              "P50": 7758043.453125,
+              "P67": 7774088.765000001,
+              "P80": 7786358.709375,
+              "P85": 7791077.918749999,
+              "P90": 7795797.128125001,
+              "P95": 7800516.337499999,
+              "P100": 7805235.546875
+            }
+          },
+          "unfilteredActualStatistics": {
+            "OriginalValues": [
+              7805240.09375,
+              7727051.40625,
+              7758048
+            ],
+            "N": 3,
+            "Min": 7727051.40625,
+            "LowerFence": 7683908.1875,
+            "Q1": 7742549.703125,
+            "Median": 7758048,
+            "Mean": 7763446.5,
+            "Q3": 7781644.046875,
+            "UpperFence": 7840285.5625,
+            "Max": 7805240.09375,
+            "InterquartileRange": 39094.34375,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 22731.956690458657,
+            "Variance": 1550225564.930664,
+            "StandardDeviation": 39372.90394332966,
+            "Skewness": 0.1345343928455129,
+            "Kurtosis": 0.6666666666666665,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 7763446.5,
+              "StandardError": 22731.956690458657,
+              "Level": 12,
+              "Margin": 718308.3371843771,
+              "Lower": 7045138.162815623,
+              "Upper": 8481754.837184377
+            },
+            "Percentiles": {
+              "P0": 7727051.40625,
+              "P25": 7742549.703125,
+              "P50": 7758048,
+              "P67": 7774093.311875001,
+              "P80": 7786363.25625,
+              "P85": 7791082.465625,
+              "P90": 7795801.675,
+              "P95": 7800520.884375,
+              "P100": 7805240.09375
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 32,
+              "Nanoseconds": 249767683
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 32,
+              "Nanoseconds": 247265645
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 32,
+              "Nanoseconds": 248257536
+            }
+          ],
+          "results": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 32,
+              "Nanoseconds": 249767537.5
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 32,
+              "Nanoseconds": 247265499.5
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 32,
+              "Nanoseconds": 248257390.5
+            }
+          ],
+          "rawGc": "// GC:  2 2 2 43022480 32",
+          "rawThreading": "// Threading:  0 0 32"
+        },
+        "nativeBrackets": [
+          {
+            "mean": 4359808.375,
+            "standardError": 2313.071421236185,
+            "confidenceLower": 4286717.505216923,
+            "confidenceUpper": 4432899.244783077,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 16,
+                "ElapsedNanoseconds": 69804409,
+                "CompletedOperations": 98,
+                "Observed": 1862,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 236828,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 4362775.5625
+              },
+              {
+                "State": "sample",
+                "Operations": 16,
+                "ElapsedNanoseconds": 69684017,
+                "CompletedOperations": 114,
+                "Observed": 2166,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 236828,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 4355251.0625
+              },
+              {
+                "State": "sample",
+                "Operations": 16,
+                "ElapsedNanoseconds": 69782376,
+                "CompletedOperations": 130,
+                "Observed": 2470,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 236828,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 4361398.5
+              }
+            ]
+          },
+          {
+            "mean": 4365259.958333333,
+            "standardError": 967.4264536089352,
+            "confidenceLower": 4334690.197150756,
+            "confidenceUpper": 4395829.71951591,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 16,
+                "ElapsedNanoseconds": 69874916,
+                "CompletedOperations": 194,
+                "Observed": 3686,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 236828,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 4367182.25
+              },
+              {
+                "State": "sample",
+                "Operations": 16,
+                "ElapsedNanoseconds": 69825731,
+                "CompletedOperations": 210,
+                "Observed": 3990,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 236828,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 4364108.1875
+              },
+              {
+                "State": "sample",
+                "Operations": 16,
+                "ElapsedNanoseconds": 69831831,
+                "CompletedOperations": 226,
+                "Observed": 4294,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 236828,
+                "CpuElapsedNanoseconds": null,
+                "NanosecondsPerOperation": 4364489.4375
+              }
+            ]
+          }
+        ],
+        "worstBracketRatio": 1.7806842148480895,
+        "conservativeRatioUpper": 1.9786129659493787,
+        "quietness": {
+          "before": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000334543175995,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0005,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0005,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.2783203125,
+              0.17529296875,
+              0.06640625
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          },
+          "after": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000328009016812,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0030015007503751876,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.002,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0030015007503751876,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.45654296875,
+              0.21875,
+              0.08203125
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          }
+        },
+        "receipt": {
+          "schemaVersion": 1,
+          "name": "WarmPng",
+          "caseId": "EncodeFast8",
+          "smoke": false,
+          "nativeSampleCount": 3,
+          "runId": "spe1-EncodeFast8-short",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "jitPolicy": "Tiered compilation disabled; fully optimized JIT before measurement",
+          "sourceIdentity": {
+            "sourceSha256": "7afdda59593c6fbaa3bfdc7b468f5648bc0ffb55aefb8e72b7179a874edaa1a7",
+            "sourceRevision": "aed7dbd8333335e36e2489e4361dab05e178ed4b"
+          },
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "managedOutputBytes": 236828,
+          "nativeOutputBytes": 236828,
+          "managedEncodedSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+          "nativeOutputSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+          "interlace": 0,
+          "colorType": 6,
+          "codedDepth": 8,
+          "rasterRecipe": "Existing original RGBA raster, all samples unchanged.",
+          "originalRasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "filter": 0,
+          "compression": "Safe managed greedy level1 / FFmpeg fast level1; complete row packing/compression/output timed; exact full RGBA8, filter None, complete-packet size gate",
+          "encoderLevel": 1,
+          "managedEncoderLevel": 1,
+          "nativeEncoderLevel": 1,
+          "storedDeflateBlocksExact": false,
+          "nativePackedTransparencyFilterTimed": false,
+          "nativePackedTransparencyFilter": null,
+          "grayTransparencyKey": null,
+          "grayTransparencyBytes": null,
+          "rgbTransparencyKey": null,
+          "rgbTransparencyBytes": null,
+          "managedIdatBytes": 236066,
+          "nativeIdatBytes": 236066,
+          "paletteEntries": null,
+          "transparencyEntries": null,
+          "forwardOnlyOutput": false,
+          "forwardPacketMatchesStock": false,
+          "callerOutputLeftOpen": true,
+          "cancellationCanBeCanceled": false,
+          "cancellationRequested": false,
+          "alreadyCanceledRejected": null,
+          "cancellationBoundary": null,
+          "tightWorkingBytes": null,
+          "tightWorkingBoundaryExact": null,
+          "oneByteBelowRejected": null,
+          "budgetExcludesOptionalFilteredAndReadBuffers": null,
+          "originalInflaterAllowanceBytes": null,
+          "originalTwoRowBytes": null,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "nativeDecodeEndianConversionTimed": false,
+          "nativeEndianRepackingTimed": false,
+          "nativeEndianWorkspaceReused": false,
+          "nativeRgbPackingTimed": false,
+          "nativeRgbWorkspaceReused": false,
+          "nativeGrayPackingTimed": false,
+          "nativeGrayWorkspaceReused": false,
+          "nativeGrayPlaneExtractionTimed": false,
+          "nativeGrayFilterOutputAllocationTimed": false,
+          "nativeGrayAlphaPackingTimed": false,
+          "nativeGrayAlphaWorkspaceReused": false,
+          "nativeGrayAlphaStoragePackingTimed": false,
+          "nativeSampleTargetMilliseconds": "50",
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "nativeExitCode": 0,
+          "librarySha256": "8a3f3913a503f4264c050c7df919638189d6a74cc3aa9756a8e5dce6f569647a",
+          "benchmarkAssemblySha256": "85e25b548f9c599e4d608b75b0f3f2e0317670c2ffe912d102413fa86beab0e4",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm Fastest RGBA8/16 PNG FFmpeg worker",
+            "sourceSha256": "cbb2950e1bfeb730445c70ffb972f58c9fc050105f3832f4d6d521907ccb79d3",
+            "buildScriptSha256": "7fa3df6703f2977765c20563ae807402d64a4b14b8a531edcf357c1ebd133240",
+            "workerSha256": "18e42d7b6e923670ae91f1c8b3123fe514b47ee475dc9de2de7a5faeb6e85fc5",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+              "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+              "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+              "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+              "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+              "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+              "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+              "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+              "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+              "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+              "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+              "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+            },
+            "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-fast16-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "codedDepth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 1,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "outputBytes": 236828,
+            "initialCompletedOperations": 3,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 16,
+              "ElapsedNanoseconds": 69804409,
+              "CompletedOperations": 98,
+              "Observed": 1862,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 236828,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 4362775.5625
+            },
+            {
+              "State": "sample",
+              "Operations": 16,
+              "ElapsedNanoseconds": 69684017,
+              "CompletedOperations": 114,
+              "Observed": 2166,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 236828,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 4355251.0625
+            },
+            {
+              "State": "sample",
+              "Operations": 16,
+              "ElapsedNanoseconds": 69782376,
+              "CompletedOperations": 130,
+              "Observed": 2470,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 236828,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 4361398.5
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 16,
+              "ElapsedNanoseconds": 69874916,
+              "CompletedOperations": 194,
+              "Observed": 3686,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 236828,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 4367182.25
+            },
+            {
+              "State": "sample",
+              "Operations": 16,
+              "ElapsedNanoseconds": 69825731,
+              "CompletedOperations": 210,
+              "Observed": 3990,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 236828,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 4364108.1875
+            },
+            {
+              "State": "sample",
+              "Operations": 16,
+              "ElapsedNanoseconds": 69831831,
+              "CompletedOperations": 226,
+              "Observed": 4294,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 236828,
+              "CpuElapsedNanoseconds": null,
+              "NanosecondsPerOperation": 4364489.4375
+            }
+          ],
+          "boundary": "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Managed level1/native level1/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
+        },
+        "boundary": "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Managed level1/native level1/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded.",
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 1344453
+        }
+      }
+    ],
+    "EncodeSmallest8": [
+      {
+        "label": "short",
+        "managed": {
+          "statistics": {
+            "OriginalValues": [
+              23818929.875,
+              23662228.75,
+              23541842.75
+            ],
+            "N": 3,
+            "Min": 23541842.75,
+            "LowerFence": 23394220.40625,
+            "Q1": 23602035.75,
+            "Median": 23662228.75,
+            "Mean": 23674333.791666668,
+            "Q3": 23740579.3125,
+            "UpperFence": 23948394.65625,
+            "Max": 23818929.875,
+            "InterquartileRange": 138543.5625,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 80216.82644662779,
+            "Variance": 19304217735.50521,
+            "StandardDeviation": 138939.61902749413,
+            "Skewness": 0.08646314362577669,
+            "Kurtosis": 0.6666666666666634,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 23674333.791666668,
+              "StandardError": 80216.82644662779,
+              "Level": 12,
+              "Margin": 2534775.8665786185,
+              "Lower": 21139557.925088048,
+              "Upper": 26209109.658245288
+            },
+            "Percentiles": {
+              "P0": 23541842.75,
+              "P25": 23602035.75,
+              "P50": 23662228.75,
+              "P67": 23715507.1325,
+              "P80": 23756249.425,
+              "P85": 23771919.537499998,
+              "P90": 23787589.65,
+              "P95": 23803259.762500003,
+              "P100": 23818929.875
+            }
+          },
+          "unfilteredActualStatistics": {
+            "OriginalValues": [
+              23818929.875,
+              23662228.75,
+              23541842.75
+            ],
+            "N": 3,
+            "Min": 23541842.75,
+            "LowerFence": 23394220.40625,
+            "Q1": 23602035.75,
+            "Median": 23662228.75,
+            "Mean": 23674333.791666668,
+            "Q3": 23740579.3125,
+            "UpperFence": 23948394.65625,
+            "Max": 23818929.875,
+            "InterquartileRange": 138543.5625,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 80216.82644662779,
+            "Variance": 19304217735.50521,
+            "StandardDeviation": 138939.61902749413,
+            "Skewness": 0.08646314362577669,
+            "Kurtosis": 0.6666666666666634,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 23674333.791666668,
+              "StandardError": 80216.82644662779,
+              "Level": 12,
+              "Margin": 2534775.8665786185,
+              "Lower": 21139557.925088048,
+              "Upper": 26209109.658245288
+            },
+            "Percentiles": {
+              "P0": 23541842.75,
+              "P25": 23602035.75,
+              "P50": 23662228.75,
+              "P67": 23715507.1325,
+              "P80": 23756249.425,
+              "P85": 23771919.537499998,
+              "P90": 23787589.65,
+              "P95": 23803259.762500003,
+              "P100": 23818929.875
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 8,
+              "Nanoseconds": 190551439
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 8,
+              "Nanoseconds": 189297830
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 8,
+              "Nanoseconds": 188334742
+            }
+          ],
+          "results": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 8,
+              "Nanoseconds": 190551439
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 8,
+              "Nanoseconds": 189297830
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 8,
+              "Nanoseconds": 188334742
+            }
+          ],
+          "rawGc": "// GC:  0 0 0 10605360 8",
+          "rawThreading": "// Threading:  0 0 8"
+        },
+        "nativeBrackets": [
+          {
+            "mean": 17307718.25,
+            "standardError": 2337.240177181912,
+            "confidenceLower": 17233863.67038184,
+            "confidenceUpper": 17381572.82961816,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 69227778,
+                "CompletedOperations": 26,
+                "Observed": 4680,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 210973,
+                "CpuElapsedNanoseconds": 69060901,
+                "NanosecondsPerOperation": 17306944.5
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 69248390,
+                "CompletedOperations": 30,
+                "Observed": 5400,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 210973,
+                "CpuElapsedNanoseconds": 69123269,
+                "NanosecondsPerOperation": 17312097.5
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 69216451,
+                "CompletedOperations": 34,
+                "Observed": 6120,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 210973,
+                "CpuElapsedNanoseconds": 69110515,
+                "NanosecondsPerOperation": 17304112.75
+              }
+            ]
+          },
+          {
+            "mean": 17282008.083333332,
+            "standardError": 14522.344723113567,
+            "confidenceLower": 16823115.721706737,
+            "confidenceUpper": 17740900.444959927,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 69054361,
+                "CompletedOperations": 50,
+                "Observed": 9000,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 210973,
+                "CpuElapsedNanoseconds": 69002382,
+                "NanosecondsPerOperation": 17263590.25
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 69087070,
+                "CompletedOperations": 54,
+                "Observed": 9720,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 210973,
+                "CpuElapsedNanoseconds": 69037566,
+                "NanosecondsPerOperation": 17271767.5
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 69242666,
+                "CompletedOperations": 58,
+                "Observed": 10440,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 210973,
+                "CpuElapsedNanoseconds": 69142535,
+                "NanosecondsPerOperation": 17310666.5
+              }
+            ]
+          }
+        ],
+        "worstBracketRatio": 1.3698832726792933,
+        "conservativeRatioUpper": 1.5579224497890052,
+        "quietness": {
+          "before": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000376685056835,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.38623046875,
+              0.2109375,
+              0.0810546875
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          },
+          "after": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000369370914996,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0005,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.0,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0005,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.400390625,
+              0.22021484375,
+              0.0859375
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          }
+        },
+        "receipt": {
+          "schemaVersion": 1,
+          "name": "WarmPng",
+          "caseId": "EncodeSmallest8",
+          "smoke": false,
+          "nativeSampleCount": 3,
+          "runId": "spe1-EncodeSmallest8-short",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "jitPolicy": "Tiered compilation disabled; fully optimized JIT before measurement",
+          "sourceIdentity": {
+            "sourceSha256": "7afdda59593c6fbaa3bfdc7b468f5648bc0ffb55aefb8e72b7179a874edaa1a7",
+            "sourceRevision": "aed7dbd8333335e36e2489e4361dab05e178ed4b"
+          },
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "managedOutputBytes": 210973,
+          "nativeOutputBytes": 210973,
+          "managedEncodedSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+          "nativeOutputSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+          "interlace": 0,
+          "colorType": 6,
+          "codedDepth": 8,
+          "rasterRecipe": "Existing original RGBA raster, all samples unchanged.",
+          "originalRasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "filter": 0,
+          "compression": "Safe managed SmallestSize level9 / FFmpeg level9; full RGBA8 packing/compression/output timed; exact samples/alpha/hidden RGB and complete-packet size gate; filter None",
+          "encoderLevel": 9,
+          "managedEncoderLevel": 9,
+          "nativeEncoderLevel": 9,
+          "storedDeflateBlocksExact": false,
+          "nativePackedTransparencyFilterTimed": false,
+          "nativePackedTransparencyFilter": null,
+          "grayTransparencyKey": null,
+          "grayTransparencyBytes": null,
+          "rgbTransparencyKey": null,
+          "rgbTransparencyBytes": null,
+          "managedIdatBytes": 210283,
+          "nativeIdatBytes": 210283,
+          "paletteEntries": null,
+          "transparencyEntries": null,
+          "forwardOnlyOutput": false,
+          "forwardPacketMatchesStock": false,
+          "callerOutputLeftOpen": true,
+          "cancellationCanBeCanceled": false,
+          "cancellationRequested": false,
+          "alreadyCanceledRejected": null,
+          "cancellationBoundary": null,
+          "tightWorkingBytes": null,
+          "tightWorkingBoundaryExact": null,
+          "oneByteBelowRejected": null,
+          "budgetExcludesOptionalFilteredAndReadBuffers": null,
+          "originalInflaterAllowanceBytes": null,
+          "originalTwoRowBytes": null,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "nativeDecodeEndianConversionTimed": false,
+          "nativeEndianRepackingTimed": false,
+          "nativeEndianWorkspaceReused": false,
+          "nativeRgbPackingTimed": false,
+          "nativeRgbWorkspaceReused": false,
+          "nativeGrayPackingTimed": false,
+          "nativeGrayWorkspaceReused": false,
+          "nativeGrayPlaneExtractionTimed": false,
+          "nativeGrayFilterOutputAllocationTimed": false,
+          "nativeGrayAlphaPackingTimed": false,
+          "nativeGrayAlphaWorkspaceReused": false,
+          "nativeGrayAlphaStoragePackingTimed": false,
+          "nativeSampleTargetMilliseconds": "50",
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "nativeExitCode": 0,
+          "librarySha256": "8a3f3913a503f4264c050c7df919638189d6a74cc3aa9756a8e5dce6f569647a",
+          "benchmarkAssemblySha256": "85e25b548f9c599e4d608b75b0f3f2e0317670c2ffe912d102413fa86beab0e4",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm PNG FFmpeg worker",
+            "sourceSha256": "a75eaefa6dc3de3728c7c3959b772108b5b97cb97e672f6543433a2a3307f529",
+            "buildScriptSha256": "8d13f8aa6f71f9b80fde29be46aa87d4eab2cb724d738b776827d63b85ef14bf",
+            "workerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+              "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+              "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+              "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+              "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+              "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+              "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+              "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+              "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+              "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+              "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+              "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+            },
+            "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-smallest8-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "codedDepth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 9,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "packedTransparencyFilterTimed": false,
+            "filterThreads": 0,
+            "scalarMode": false,
+            "cpuFlags": 8377307,
+            "outputBytes": 210973,
+            "initialCompletedOperations": 3,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 69227778,
+              "CompletedOperations": 26,
+              "Observed": 4680,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 210973,
+              "CpuElapsedNanoseconds": 69060901,
+              "NanosecondsPerOperation": 17306944.5
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 69248390,
+              "CompletedOperations": 30,
+              "Observed": 5400,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 210973,
+              "CpuElapsedNanoseconds": 69123269,
+              "NanosecondsPerOperation": 17312097.5
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 69216451,
+              "CompletedOperations": 34,
+              "Observed": 6120,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 210973,
+              "CpuElapsedNanoseconds": 69110515,
+              "NanosecondsPerOperation": 17304112.75
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 69054361,
+              "CompletedOperations": 50,
+              "Observed": 9000,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 210973,
+              "CpuElapsedNanoseconds": 69002382,
+              "NanosecondsPerOperation": 17263590.25
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 69087070,
+              "CompletedOperations": 54,
+              "Observed": 9720,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 210973,
+              "CpuElapsedNanoseconds": 69037566,
+              "NanosecondsPerOperation": 17271767.5
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 69242666,
+              "CompletedOperations": 58,
+              "Observed": 10440,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 210973,
+              "CpuElapsedNanoseconds": 69142535,
+              "NanosecondsPerOperation": 17310666.5
+            }
+          ],
+          "boundary": "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Managed level9/native level9/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
+        },
+        "boundary": "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Managed level9/native level9/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded.",
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 1325670
+        }
+      }
+    ],
+    "EncodeSmallest16": [
+      {
+        "label": "short",
+        "managed": {
+          "statistics": {
+            "OriginalValues": [
+              26710106.14285714,
+              26835660.42857143,
+              26832913.42857143
+            ],
+            "N": 3,
+            "Min": 26710106.14285714,
+            "LowerFence": 26677344.071428567,
+            "Q1": 26771509.785714284,
+            "Median": 26832913.42857143,
+            "Mean": 26792893.333333332,
+            "Q3": 26834286.92857143,
+            "UpperFence": 26928452.64285715,
+            "Max": 26835660.42857143,
+            "InterquartileRange": 62777.14285714552,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 41401.19033093902,
+            "Variance": 5142175682.4559145,
+            "StandardDeviation": 71708.96514701571,
+            "Skewness": -0.38426484172998915,
+            "Kurtosis": 0.6666666666666401,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 26792893.333333332,
+              "StandardError": 41401.19033093902,
+              "Level": 12,
+              "Margin": 1308238.4675030226,
+              "Lower": 25484654.86583031,
+              "Upper": 28101131.800836354
+            },
+            "Percentiles": {
+              "P0": 26710106.14285714,
+              "P25": 26771509.785714284,
+              "P50": 26832913.42857143,
+              "P67": 26833847.40857143,
+              "P80": 26834561.62857143,
+              "P85": 26834836.328571428,
+              "P90": 26835111.028571427,
+              "P95": 26835385.72857143,
+              "P100": 26835660.42857143
+            }
+          },
+          "unfilteredActualStatistics": {
+            "OriginalValues": [
+              26710106.14285714,
+              26835660.42857143,
+              26832913.42857143
+            ],
+            "N": 3,
+            "Min": 26710106.14285714,
+            "LowerFence": 26677344.071428567,
+            "Q1": 26771509.785714284,
+            "Median": 26832913.42857143,
+            "Mean": 26792893.333333332,
+            "Q3": 26834286.92857143,
+            "UpperFence": 26928452.64285715,
+            "Max": 26835660.42857143,
+            "InterquartileRange": 62777.14285714552,
+            "LowerOutliers": [],
+            "UpperOutliers": [],
+            "AllOutliers": [],
+            "StandardError": 41401.19033093902,
+            "Variance": 5142175682.4559145,
+            "StandardDeviation": 71708.96514701571,
+            "Skewness": -0.38426484172998915,
+            "Kurtosis": 0.6666666666666401,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 26792893.333333332,
+              "StandardError": 41401.19033093902,
+              "Level": 12,
+              "Margin": 1308238.4675030226,
+              "Lower": 25484654.86583031,
+              "Upper": 28101131.800836354
+            },
+            "Percentiles": {
+              "P0": 26710106.14285714,
+              "P25": 26771509.785714284,
+              "P50": 26832913.42857143,
+              "P67": 26833847.40857143,
+              "P80": 26834561.62857143,
+              "P85": 26834836.328571428,
+              "P90": 26835111.028571427,
+              "P95": 26835385.72857143,
+              "P100": 26835660.42857143
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 7,
+              "Nanoseconds": 186970743
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 7,
+              "Nanoseconds": 187849623
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 7,
+              "Nanoseconds": 187830394
+            }
+          ],
+          "results": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 7,
+              "Nanoseconds": 186970743
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 7,
+              "Nanoseconds": 187849623
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 4,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 7,
+              "Nanoseconds": 187830394
+            }
+          ],
+          "rawGc": "// GC:  0 0 0 26695752 7",
+          "rawThreading": "// Threading:  0 0 7"
+        },
+        "nativeBrackets": [
+          {
+            "mean": 20088846.25,
+            "standardError": 11472.755391397193,
+            "confidenceLower": 19726318.027712096,
+            "confidenceUpper": 20451374.472287904,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 80434936,
+                "CompletedOperations": 26,
+                "Observed": 3978,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 963202,
+                "CpuElapsedNanoseconds": 80302133,
+                "NanosecondsPerOperation": 20108734
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 80275965,
+                "CompletedOperations": 30,
+                "Observed": 4590,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 963202,
+                "CpuElapsedNanoseconds": 80152345,
+                "NanosecondsPerOperation": 20068991.25
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 80355254,
+                "CompletedOperations": 34,
+                "Observed": 5202,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 963202,
+                "CpuElapsedNanoseconds": 80205802,
+                "NanosecondsPerOperation": 20088813.5
+              }
+            ]
+          },
+          {
+            "mean": 20088907.916666668,
+            "standardError": 18539.36387928699,
+            "confidenceLower": 19503081.548003193,
+            "confidenceUpper": 20674734.285330143,
+            "samples": [
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 80211126,
+                "CompletedOperations": 50,
+                "Observed": 7650,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 963202,
+                "CpuElapsedNanoseconds": 80134072,
+                "NanosecondsPerOperation": 20052781.5
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 80398961,
+                "CompletedOperations": 54,
+                "Observed": 8262,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 963202,
+                "CpuElapsedNanoseconds": 80305482,
+                "NanosecondsPerOperation": 20099740.25
+              },
+              {
+                "State": "sample",
+                "Operations": 4,
+                "ElapsedNanoseconds": 80456808,
+                "CompletedOperations": 58,
+                "Observed": 8874,
+                "OutputStride": 0,
+                "Cpu": 0,
+                "OutputBytes": 963202,
+                "CpuElapsedNanoseconds": 80295516,
+                "NanosecondsPerOperation": 20114202
+              }
+            ]
+          }
+        ],
+        "worstBracketRatio": 1.3337198662333996,
+        "conservativeRatioUpper": 1.4408559863563442,
+        "quietness": {
+          "before": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000301670981571,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.013,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.002,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.013,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.4931640625,
+              0.24658203125,
+              0.09619140625
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          },
+          "after": {
+            "protocol": "exclusive-vm-idle-v2",
+            "sampleSeconds": 5.000347831984982,
+            "cpuSamples": {
+              "cpu": {
+                "cpuBusyFraction": 0.0045090180360721445,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              },
+              "cpu0": {
+                "cpuBusyFraction": 0.003992015968063872,
+                "ioWaitFraction": 0.0,
+                "stealFraction": 0.0
+              }
+            },
+            "overlappingJobsBefore": [],
+            "overlappingJobsAfter": [],
+            "loadAverageDiagnosticOnly": true,
+            "cpuBusyFraction": 0.0045090180360721445,
+            "ioWaitFraction": 0.0,
+            "stealFraction": 0.0,
+            "loadAverage": [
+              0.93310546875,
+              0.3525390625,
+              0.13232421875
+            ],
+            "passed": true,
+            "thresholds": {
+              "maxCpuBusyFraction": 0.05,
+              "maxIoWaitFraction": 0.01,
+              "maxStealFraction": 0.01
+            },
+            "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+          }
+        },
+        "receipt": {
+          "schemaVersion": 1,
+          "name": "WarmPng",
+          "caseId": "EncodeSmallest16",
+          "smoke": false,
+          "nativeSampleCount": 3,
+          "runId": "spe1-EncodeSmallest16-short",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "cpu": 0,
+          "managedAffinityCount": 1,
+          "processorCount": 1,
+          "serverGc": false,
+          "gcConfiguration": {
+            "ServerGC": false,
+            "ConcurrentGC": false,
+            "RetainVM": false,
+            "NoAffinitize": false,
+            "GCCpuGroup": false,
+            "GCLargePages": false,
+            "LOHThreshold": 85000,
+            "HeapCount": 1,
+            "MaxHeapCount": 0,
+            "GCHeapAffinitizeMask": 0,
+            "GCHeapAffinitizeRanges": "",
+            "GCHighMemPercent": 90,
+            "GCGen0MaxBudget": 134217728,
+            "GCHeapHardLimit": 0,
+            "GCHeapHardLimitPercent": 0,
+            "GCRegionRange": 33532829696,
+            "GCRegionSize": 0,
+            "UOHWaitBGCSizeIncPercent": 200,
+            "GCHeapHardLimitSOH": 0,
+            "GCHeapHardLimitLOH": 0,
+            "GCHeapHardLimitPOH": 0,
+            "GCHeapHardLimitSOHPercent": 0,
+            "GCHeapHardLimitLOHPercent": 0,
+            "GCHeapHardLimitPOHPercent": 0,
+            "GCConserveMem": 0,
+            "GCName": "",
+            "GCPath": "",
+            "GCDynamicAdaptationMode": 1,
+            "GCDTargetTCP": 0,
+            "GCDGen0GrowthPercent": 0,
+            "GCDGen0GrowthMinFactor": 0,
+            "GCDGen0GrowthMaxFactor": 0
+          },
+          "runtime": ".NET 10.0.8",
+          "platform": "linux-x64",
+          "jitPolicy": "Tiered compilation disabled; fully optimized JIT before measurement",
+          "sourceIdentity": {
+            "sourceSha256": "7afdda59593c6fbaa3bfdc7b468f5648bc0ffb55aefb8e72b7179a874edaa1a7",
+            "sourceRevision": "aed7dbd8333335e36e2489e4361dab05e178ed4b"
+          },
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "managedOutputBytes": 963202,
+          "nativeOutputBytes": 963202,
+          "managedEncodedSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "nativeOutputSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "interlace": 0,
+          "colorType": 6,
+          "codedDepth": 16,
+          "rasterRecipe": "Existing original RGBA raster, all samples unchanged.",
+          "originalRasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "filter": 0,
+          "compression": "Safe managed SmallestSize level9 / FFmpeg level9; full RGBA16 packing/compression/output timed; exact samples/alpha/hidden RGB and complete-packet size gate; filter None",
+          "encoderLevel": 9,
+          "managedEncoderLevel": 9,
+          "nativeEncoderLevel": 9,
+          "storedDeflateBlocksExact": false,
+          "nativePackedTransparencyFilterTimed": false,
+          "nativePackedTransparencyFilter": null,
+          "grayTransparencyKey": null,
+          "grayTransparencyBytes": null,
+          "rgbTransparencyKey": null,
+          "rgbTransparencyBytes": null,
+          "managedIdatBytes": 960316,
+          "nativeIdatBytes": 960316,
+          "paletteEntries": null,
+          "transparencyEntries": null,
+          "forwardOnlyOutput": false,
+          "forwardPacketMatchesStock": false,
+          "callerOutputLeftOpen": true,
+          "cancellationCanBeCanceled": false,
+          "cancellationRequested": false,
+          "alreadyCanceledRejected": null,
+          "cancellationBoundary": null,
+          "tightWorkingBytes": null,
+          "tightWorkingBoundaryExact": null,
+          "oneByteBelowRejected": null,
+          "budgetExcludesOptionalFilteredAndReadBuffers": null,
+          "originalInflaterAllowanceBytes": null,
+          "originalTwoRowBytes": null,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "nativeDecodeEndianConversionTimed": false,
+          "nativeEndianRepackingTimed": true,
+          "nativeEndianWorkspaceReused": true,
+          "nativeRgbPackingTimed": false,
+          "nativeRgbWorkspaceReused": false,
+          "nativeGrayPackingTimed": false,
+          "nativeGrayWorkspaceReused": false,
+          "nativeGrayPlaneExtractionTimed": false,
+          "nativeGrayFilterOutputAllocationTimed": false,
+          "nativeGrayAlphaPackingTimed": false,
+          "nativeGrayAlphaWorkspaceReused": false,
+          "nativeGrayAlphaStoragePackingTimed": false,
+          "nativeSampleTargetMilliseconds": "50",
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "nativeExitCode": 0,
+          "librarySha256": "8a3f3913a503f4264c050c7df919638189d6a74cc3aa9756a8e5dce6f569647a",
+          "benchmarkAssemblySha256": "85e25b548f9c599e4d608b75b0f3f2e0317670c2ffe912d102413fa86beab0e4",
+          "nativeBuild": {
+            "schemaVersion": 1,
+            "project": "Lokad.Image",
+            "purpose": "Original development-only warm PNG FFmpeg worker",
+            "sourceSha256": "a75eaefa6dc3de3728c7c3959b772108b5b97cb97e672f6543433a2a3307f529",
+            "buildScriptSha256": "8d13f8aa6f71f9b80fde29be46aa87d4eab2cb724d738b776827d63b85ef14bf",
+            "workerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+            "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+            "flags": [
+              "-std=c11",
+              "-O3",
+              "-Wall",
+              "-Wextra",
+              "-Werror"
+            ],
+            "staticArchives": {
+              "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+              "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+              "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+              "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+              "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+              "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+              "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+              "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+              "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+              "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+              "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+              "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+              "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+            },
+            "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+          },
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-smallest16-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 16,
+            "codedDepth": 16,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 9,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "packedTransparencyFilterTimed": false,
+            "filterThreads": 0,
+            "scalarMode": false,
+            "cpuFlags": 8377307,
+            "outputBytes": 963202,
+            "initialCompletedOperations": 3,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          },
+          "nativeBefore": [
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 80434936,
+              "CompletedOperations": 26,
+              "Observed": 3978,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 963202,
+              "CpuElapsedNanoseconds": 80302133,
+              "NanosecondsPerOperation": 20108734
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 80275965,
+              "CompletedOperations": 30,
+              "Observed": 4590,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 963202,
+              "CpuElapsedNanoseconds": 80152345,
+              "NanosecondsPerOperation": 20068991.25
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 80355254,
+              "CompletedOperations": 34,
+              "Observed": 5202,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 963202,
+              "CpuElapsedNanoseconds": 80205802,
+              "NanosecondsPerOperation": 20088813.5
+            }
+          ],
+          "nativeAfter": [
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 80211126,
+              "CompletedOperations": 50,
+              "Observed": 7650,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 963202,
+              "CpuElapsedNanoseconds": 80134072,
+              "NanosecondsPerOperation": 20052781.5
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 80398961,
+              "CompletedOperations": 54,
+              "Observed": 8262,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 963202,
+              "CpuElapsedNanoseconds": 80305482,
+              "NanosecondsPerOperation": 20099740.25
+            },
+            {
+              "State": "sample",
+              "Operations": 4,
+              "ElapsedNanoseconds": 80456808,
+              "CompletedOperations": 58,
+              "Observed": 8874,
+              "OutputStride": 0,
+              "Cpu": 0,
+              "OutputBytes": 963202,
+              "CpuElapsedNanoseconds": 80295516,
+              "NanosecondsPerOperation": 20114202
+            }
+          ],
+          "boundary": "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Managed level9/native level9/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded."
+        },
+        "boundary": "Warm RGBA input to complete owned PNG: fresh managed MemoryStream (creation, growth, encode and disposal included; no redundant ToArray); native codec context/packet wrapper reused, real independently owned packet acquisition, encode and release included. Managed level9/native level9/filter None. For RGBA16, native LE-to-BE full-frame sample conversion runs inside every operation, using a reused prepared frame; managed conversion/row storage is included in public EncodePng. IPC, file IO, hashes and validation excluded.",
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 3813679
+        }
+      }
+    ]
+  },
+  "rawArchive": {
+    "file": "png-bulk-stored-qualified.tar.xz",
+    "sha256": "feab8270a47d65287ee3a677f68467a80ce73a707607a64f7345bd2a947d3df4",
+    "bytes": 870744,
+    "members": 63
+  }
+}
