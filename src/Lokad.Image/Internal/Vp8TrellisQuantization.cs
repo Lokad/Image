@@ -1,3 +1,6 @@
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 // Private coefficient-domain rate/distortion search. RFC6386 sections11/13/14
@@ -25,6 +28,22 @@ internal static class Vp8TrellisQuantization
     { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
 
     private static int Index(int type, int position, int context) => (type * 8 + Band(position)) * 3 + context;
+    // Product in [0,65535] proves both existing level candidates zero:
+    // product>>17 == (product+65536)>>17 == 0. No terminal can then be nonzero.
+    // The caller has already checked DCT bounds, layout and cancellation.
+    internal static bool ZeroCandidates(ReadOnlySpan<short> coefficients, ReadOnlySpan<int> reciprocals,
+        ReadOnlySpan<int> sharpening, int first)
+    {
+        var absolute = Avx2.Abs(Vector256.Create(coefficients)).AsInt16();
+        var low = (Avx2.ConvertToVector256Int32(absolute.GetLower()) + Vector256.Create(sharpening))
+            * Vector256.Create(reciprocals);
+        var high = (Avx2.ConvertToVector256Int32(absolute.GetUpper()) + Vector256.Create(sharpening[8..]))
+            * Vector256.Create(reciprocals[8..]);
+        var outside = low.AsUInt32() >>> 16;
+        if (first != 0) outside = outside.WithElement(0, 0u);
+        return Vector256.EqualsAll(outside | (high.AsUInt32() >>> 16), Vector256<uint>.Zero);
+    }
+
     // Raster coefficients become dequantized raster coefficients; levels use
     // zigzag order. I16 AC preserves both DC slots. The transform domain here
     // is DCT only (not the larger Y2 Walsh domain). Tails remain untouched.
@@ -43,11 +62,17 @@ internal static class Vp8TrellisQuantization
         _ = rate.Values; operation.Cancellation.ThrowIfCancellationRequested();
         var fixedLevels = rate.FixedLevels; var variableLevels = rate.VariableLevels; var endOfBlock = rate.EndOfBlock;
         var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
+        var first = type == 0 ? 1 : 0;
+        if (Avx2.IsSupported && ZeroCandidates(coefficients, reciprocals, sharpening, first))
+        {
+            coefficients.Slice(first, 16 - first).Clear(); levels.Slice(first, 16 - first).Clear();
+            return false;
+        }
         // RFC6386 section13 diagonal coefficient order; read-only format data.
         ReadOnlySpan<byte> scan = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
         Span<short> original = stackalloc short[16]; coefficients[..16].CopyTo(original);
         Span<short> nodes = stackalloc short[32]; Span<byte> predecessors = stackalloc byte[32];
-        var first = type == 0 ? 1 : 0; var last = first - 1;
+        var last = first - 1;
         var threshold = steps[1] * steps[1] / 4;
         for (var n = 15; n >= first; n--) if (original[scan[n]] * original[scan[n]] > threshold) { last = n; break; }
         if (last < 15) last++;

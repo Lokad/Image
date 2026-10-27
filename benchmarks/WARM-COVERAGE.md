@@ -113,8 +113,11 @@ not complete the full 267-case goal. [Constant-time distance mapping](WARM-PNG-D
 independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
 samples remain. [Effort2 baseline refresh](VP8-RESIDUAL-SUMMARY-DEFERRED.md) resolves
 its current short to 1.583×; the proposed summary primitive is deferred/removed.
-[Trellis baseline refresh](VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) gives 1.611×;
-the state-reduction candidate is rejected and removed.
+[Zero-candidate trellis](WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) independently measures
+1.574×/upper1.583,15.451ms,5.3% less elapsed than its fresh16.322ms baseline.
+Allocations stay754344B/op and packets exact6818B. BothOS5047 full checks,
+21internal/27public scalar and SAME actual package/three examples pass. The earlier
+[state-collapse trial](VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) remains rejected.
 [The population-window family](VP8L-WINDOW-POPULATIONS-DEFERRED.md) stays closed:
 its short gain does not survive confirmation; occupancy/pair reuse is insufficient.
 [Scored-plane histograms](WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supersede affected
@@ -124,8 +127,9 @@ independently measures1.350×/upper1.371,112.763ms,6.4% less elapsed than its fr
 async screen1.444/1.438/1.485× with unchanged29688704/29688704/29689088B/op and
 exact183812B packets. BothOS5044 full checks,13internal/27public scalar and SAME
 actual package/three examples pass. Diagram and compressed alpha skip color search.
-Trellis6 at 1.611× is the largest displayed encoding point gap, followed by opaque
-VP8 photograph at 1.599×. Preserve larger absolute-cost VP8L leads in the queue.
+Opaque VP8 photograph at1.599× is now the largest displayed encoding point gap,
+followed by effort2 at1.583× and trellis at1.574×. Preserve larger absolute-cost
+VP8L leads where opportunities are comparable.
 [Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
 independently confirmed gain and is removed; the current baseline stays valid.
 Full samples, allocations, packet sizes and boundaries are in the
@@ -175,6 +179,10 @@ Regression/pixel/reference evidence and timings are separate:
   four displayed costs are refreshed above. Other affected named method5/6/opaque
   callers need applicable current costs before a pass claim. No owned capacity,
   admission or cancellation boundary changes. Unrelated proofs remain valid.
+- Whole-block zero-candidate preflight changes method5/6 luma-trellis encoding;
+  the displayed diagram6 cost is independently refreshed. Other affected named
+  trellis callers need applicable current costs before a pass claim. Method4/
+  effort2 bypass trellis, and all other codecs/decoding/editing/text remain.
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.
@@ -214,7 +222,7 @@ uncertain 2.2% short difference does not justify more variants. The high-priorit
 probing/metadata/validation milestones are functionally complete. The bounded
 read reconciliation is recorded; its six controls remain CPU gaps. PNG16 span/
 async validation pass and stop unchanged. Scored-plane histograms are accepted;
-prioritize substantial VP8 effort6/photograph/effort2 and caller-RGB420 gaps before
+prioritize substantial VP8 photograph/effort2 and caller-RGB420 gaps before
 smaller variants or submicrosecond wrappers. Other affected named read/decode
 costs need current evidence before a pass claim; no broad readiness claim follows.
 Establish a substantial distinct opportunity before editing. Distinguish

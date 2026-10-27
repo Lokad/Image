@@ -13,11 +13,13 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8 and current VP8L photograph have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, VP8 trellis and VP8L photograph have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. SIMD scored-plane histograms reduce photograph elapsed
 by 6.4% against a fresh independent baseline, with unchanged allocations and
 exact packets. It remains a1.350× / upper1.371 gap; RGBA8/16/async are current screens.
+The zero-candidate trellis shortcut independently reduces elapsed by5.3%, retaining
+exact packets and allocations; its1.574× / upper1.583 gap remains open.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -31,8 +33,8 @@ Source images are 513×259; resize rows state output dimensions. The
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
 [Effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
-[trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) retain current baseline
-shorts; [scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
+[trellis](../benchmarks/WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) retain current costs;
+[scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
 four affected VP8L rows. Other paths retain applicable prior proof.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
@@ -49,7 +51,7 @@ Stream decode and four existing tight PNG companions without a speedup claim.
 | VP8 RGBA8 | 73,112.14 | 53,921.86 | 1.356 / 1.981 | 21,353,192 | 98,590 / 98,590 |
 | VP8 opaque photograph | 15,516.03 | 9,706.04 | 1.599 / 1.677 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram | 8,407.67 | 5,833.42 | 1.441 / 1.561 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 15,778.14 | 9,795.02 | 1.611 / 1.658 | 754,344 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 15,451.13 | 9,816.91 | 1.574 / 1.583 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization | 23,851.31 | 15,554.15 | 1.533 / 1.565 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 174,761.42 | 121,059.75 | 1.444 / 1.702 | 29,688,704 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 174,544.82 | 121,397.18 | 1.438 / 1.686 | 29,688,704 | 183,812 / 183,812 |

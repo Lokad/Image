@@ -14,6 +14,8 @@
   exact packets and portable execution.
 - Faster lossless WebP color-transform scoring through trial reuse and safe SIMD,
   preserving exact packets, scratch capacity, admission and cancellation.
+- Skip VP8 luma trellis searches whose candidate levels are all zero, preserving
+  exact packets, validation, cancellation and portable fallback.
 
 ## 0.2.0 — 2026-10-27
 

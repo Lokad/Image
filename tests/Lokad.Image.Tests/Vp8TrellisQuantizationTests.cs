@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Security.Cryptography;
+using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
 
@@ -7,6 +8,60 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8TrellisQuantizationTests
 {
+    [Theory]
+    [InlineData(0)] [InlineData(1)]
+    public void ZeroCandidateCertificateMatchesWrappedIntegerProductsAndKeepsBorrowedTails(int first)
+    {
+        if (!Avx2.IsSupported) return; // The production caller keeps its scalar search.
+        var coefficients = new short[20]; var reciprocals = new int[20]; var sharpening = new int[20];
+        int[] boundaries = [int.MinValue, -65537, -65536, -1, 0, 1, 65534, 65535, 65536, 65537, 131071, 131072, int.MaxValue];
+        foreach (var offset in new[] { 1, 3 })
+        foreach (var value in boundaries)
+        foreach (var bias in new[] { -1, 0, 1, int.MinValue, int.MaxValue })
+        for (var lane = 0; lane < 16; lane++)
+        {
+            Array.Fill(coefficients, (short)1); Array.Fill(reciprocals, 1000); Array.Clear(sharpening);
+            coefficients[offset + lane] = -1; reciprocals[offset + lane] = value; sharpening[offset + lane] = bias;
+            var expected = true;
+            for (var p = first; p < 16; p++)
+            {
+                var product = unchecked((uint)(((long)Math.Abs((int)coefficients[offset + p]) + sharpening[offset + p]) * reciprocals[offset + p]));
+                if (product > 65535) expected = false;
+            }
+            var original = coefficients.ToArray(); var oldReciprocals = reciprocals.ToArray(); var oldSharpening = sharpening.ToArray();
+            Assert.Equal(expected, Vp8TrellisQuantization.ZeroCandidates(coefficients.AsSpan(offset, 17),
+                reciprocals.AsSpan(offset, 17), sharpening.AsSpan(offset, 17), first));
+            Assert.Equal(original, coefficients); Assert.Equal(oldReciprocals, reciprocals); Assert.Equal(oldSharpening, sharpening);
+        }
+        for (var i = 0; i < 32; i++) _ = Vp8TrellisQuantization.ZeroCandidates(coefficients, reciprocals, sharpening, first);
+        var before = GC.GetAllocatedBytesForCurrentThread();
+        for (var i = 0; i < 64; i++) _ = Vp8TrellisQuantization.ZeroCandidates(coefficients, reciprocals, sharpening, first);
+        Assert.Equal(before, GC.GetAllocatedBytesForCurrentThread());
+    }
+
+    [Fact]
+    public void ZeroCandidateSearchPreservesValidationAndCancellationBeforeMutation()
+    {
+        using var input = new Inputs(0);
+        var coefficients = Enumerable.Repeat((short)1, 18).ToArray(); var levels = Enumerable.Repeat((short)77, 18).ToArray();
+        var weights = new ushort[16]; Vp8TrellisQuantization.Weights(weights);
+        using var cancellation = new CancellationTokenSource();
+        using var operation = new OperationContext(new() { MemoryBudget = input.Root }, cancellation.Token);
+        var oldCoefficients = coefficients.ToArray(); var oldLevels = levels.ToArray(); var retained = input.Root.Bytes;
+        cancellation.Cancel();
+        void Apply(short[] destination)
+        {
+            _ = Vp8TrellisQuantization.Apply(coefficients, destination, input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma),
+                input.Rate, weights, 3, 0, 1, operation);
+        }
+        var error = Assert.Throws<OperationCanceledException>(() => Apply(levels));
+        Assert.Equal(cancellation.Token, error.CancellationToken);
+        weights[0]--; Assert.Throws<ArgumentException>(() => Apply(levels)); weights[0]++;
+        coefficients[15] = 2041; Assert.Throws<ArgumentOutOfRangeException>(() => Apply(levels)); coefficients[15] = 1;
+        Assert.Throws<ArgumentException>(() => Apply(coefficients));
+        Assert.Equal(oldCoefficients, coefficients); Assert.Equal(oldLevels, levels); Assert.Equal(retained, input.Root.Bytes);
+    }
+
     private sealed class Inputs : IDisposable
     {
         internal readonly TestMemoryBudget Root = new(16_000_000);
