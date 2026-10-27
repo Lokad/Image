@@ -1,3 +1,7 @@
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 // Encoder analysis policy, not a bitstream alphabet: unquantized coefficients
@@ -15,6 +19,16 @@ internal static class Vp8SourceHistogram
     internal static void AddBlock(ReadOnlySpan<short> coefficients, Span<int> population)
     {
         if (coefficients.Length < 16 || population.Length < 32) throw new ArgumentException("Analysis requires16coefficients and32buckets.");
+        if (Avx2.IsSupported && !MemoryMarshal.AsBytes(coefficients[..16]).Overlaps(MemoryMarshal.AsBytes(population[..32])))
+        {
+            // Unsigned magnitude also represents Abs(short.MinValue) exactly.
+            // Keep scalar increments: repeated buckets must accumulate in order.
+            var magnitudes = Avx2.Abs(Vector256.Create(coefficients)).AsUInt16();
+            var values = Avx2.Min(Avx2.ShiftRightLogical(magnitudes, 3), Vector256.Create((ushort)31));
+            Span<ushort> buckets = stackalloc ushort[16]; values.CopyTo(buckets);
+            for (var p = 0; p < 16; p++) population[buckets[p]]++;
+            return;
+        }
         for (var p = 0; p < 16; p++)
         {
             var bucket = Math.Min(31, Math.Abs((int)coefficients[p]) >> 3);

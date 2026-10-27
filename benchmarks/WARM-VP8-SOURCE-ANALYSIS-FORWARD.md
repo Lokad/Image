@@ -1,5 +1,8 @@
 # Batched forward transforms in VP8 source analysis
 
+Historical encoder cost: [source histogram buckets](WARM-VP8-SOURCE-HISTOGRAM-BUCKETS.md)
+now supplies current affected timings. Forward/source mathematics stays exact.
+
 The photograph independently measures 22.62 ms: 2.341× reference time (upper
 2.361×), 909,696 B/op and an exact 17,688-byte packet. Elapsed time is 3.58% below
 the preceding independent mean; these separate runs are not a paired baseline

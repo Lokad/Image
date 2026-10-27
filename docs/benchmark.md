@@ -6,9 +6,9 @@ gains. Published0.1.0 remains unchanged.
 
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
-required paths remain open. Source-analysis DCT batching independently measures 2.341× reference time on the
-existing photograph, with exact packets and unchanged allocations. Its 22.62 ms
-is 3.58% below the preceding independent mean; no paired baseline gain is claimed.
+required paths remain open. Source-histogram SIMD buckets independently measure 2.269× reference time on the
+existing photograph, with exact packets and unchanged allocations. Its 21.92 ms
+is 3.10% below the preceding independent mean; no paired baseline gain is claimed.
 Diagram, alpha and effort-6 trellis have current guarded shorts. Other required
 confirmations remain open.
 
@@ -18,8 +18,8 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md) | 4,937 checks/OS; 616 affected scalar WebP/OS and same actual package passed |
-| CPU and allocation measurements after cleanup | [source-analysis batching](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-BUCKETS.md) | 4,938 checks/OS; 617 affected scalar WebP/OS and same actual package passed |
+| CPU and allocation measurements after cleanup | [source histograms](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-BUCKETS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
@@ -34,10 +34,10 @@ are leads for measurement, not current demonstrated gaps.
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 2,432.58 | 1,576.20 | 1.543 / 1.556 | 373,413 | Current gap (independent) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,585.89 | 1,405.11 | 1.129 / 1.256 | 155,436 | Current gap (short; qualified) |
 | [JPEG from caller GRAY8, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 | Current gap (short; qualified) |
-| [VP8 RGBA8](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md) | 82,233.44 | 53,529.53 | 1.536 / 1.757 | 23,358,400 | Current gap (short; qualified) |
-| [VP8 opaque photograph](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md) | 22,623.48 | 9,664.54 | 2.341 / 2.361 | 909,696 | Current gap (independent) |
-| [VP8 opaque text/diagram](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md) | 12,478.68 | 5,927.85 | 2.105 / 2.247 | 841,608 | Current gap (short; qualified) |
-| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-SOURCE-ANALYSIS-FORWARD.md) | 21,758.77 | 9,810.60 | 2.218 / 2.366 | 854,968 | Current gap (short; qualified) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-BUCKETS.md) | 79,864.89 | 53,231.62 | 1.500 / 1.760 | 23,358,400 | Current gap (short; qualified) |
+| [VP8 opaque photograph](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-BUCKETS.md) | 21,922.94 | 9,664.04 | 2.269 / 2.279 | 909,696 | Current gap (independent) |
+| [VP8 opaque text/diagram](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-BUCKETS.md) | 12,541.21 | 5,825.43 | 2.153 / 2.315 | 841,608 | Current gap (short; qualified) |
+| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-BUCKETS.md) | 21,500.14 | 9,804.38 | 2.193 / 2.276 | 854,968 | Current gap (short; qualified) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 133,800.97 | 83,340.00 | 1.605 / 2.159 | 29,610,520 | Current gap (short; qualified) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 13,192.85 | 9,685.69 | 1.362 / 1.408 | 45,404,838 | Current gap (independent) |

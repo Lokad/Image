@@ -7,6 +7,16 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8SourceHistogramTests
 {
+    [Fact]
+    public void OverlappingPopulationPreservesSequentialCoefficientFeedback()
+    {
+        var population = new int[33]; population[0] = 16; population[2] = 7; population[32] = 147;
+        var coefficients = System.Runtime.InteropServices.MemoryMarshal.Cast<int, short>(population.AsSpan())[..16];
+        Vp8SourceHistogram.AddBlock(coefficients, population);
+        var expected = new int[33]; expected[0] = 30; expected[1] = 1; expected[2] = 8; expected[32] = 147;
+        Assert.Equal(expected, population);
+    }
+
     // Peak/last are directly observed native summaries. Raw scores freeze the
     // separately inspected scalar analysis policy, including uncapped values.
     public static IEnumerable<object[]> Populations()
