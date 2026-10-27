@@ -36,7 +36,7 @@ boundary omitted from this inventory.
 
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 25 unchanged 0.2.0 controls and
+[The current summary](../docs/benchmark.md) retains 24 unchanged 0.2.0 controls and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
@@ -51,6 +51,11 @@ the state-reduction candidate is rejected and removed. The largest displayed
 point gap is now VP8L async at 1.618×, with related frame/photo paths at
 1.573–1.596× and 132–206 ms per operation. These similar ratios and substantially
 larger absolute costs give the shared VP8L encoding path priority.
+[The population-window round](VP8L-WINDOW-POPULATIONS-DEFERRED.md) independently
+refreshes unchanged RGBA8 VP8L to 1.590× / upper1.609, with all twelve actuals.
+Its candidate's initial22% short gain does not survive confirmation (0.44% mean
+difference); source and immutable producers are restored. Maintained empty-block
+metadata and pair caching have too little demonstrated reuse to pursue.
 Full samples, allocations, packet sizes and boundaries are in the
 [immutable release evidence](release-0.2.0-benchmark-evidence.json) and
 [current PNG evidence](warm-png-bulk-stored-evidence.json).
@@ -107,7 +112,8 @@ Prioritize VP8L with one existing RGBA8 attribution and one shared encoding
 primitive at a time. Distinguish shared work from async delivery and 16-bit
 normalization; do not assume all four cases have identical bottlenecks. Reuse
 unaffected evidence and verify affected companion boundaries on acceptance.
-Do not renew the deferred residual-summary or rejected trellis state-reduction
+Do not renew the deferred population-window/occupancy/pair-cache, residual-summary
+or rejected trellis state-reduction
 families without a materially different opportunity.
 Closed source-energy, histogram,
 word/fragment, prediction/quantizer/trellis and other rejected variants stay closed.

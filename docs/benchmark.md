@@ -1,8 +1,8 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-27. **† Compressed PNG and VP8 effort2/6 rows** use the qualified 0.2.1
+Updated 2026-10-27. **† Compressed PNG, VP8 effort2/6 and VP8L RGBA8 rows** use the qualified 0.2.1
 development producer; **‡ stored PNG** retains its unchanged 0.2.1 path evidence.
-The other 25 controls retain published 0.2.0 measurements on unchanged paths.
+The other 24 controls retain published 0.2.0 measurements on unchanged paths.
 The original 31-control release evidence remains immutable. Full CPU parity and
 general replacement readiness remain open.
 
@@ -11,7 +11,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16 and Fastest PNG8 independently confirm 12 measured iterations each;
+Stored PNG16, Fastest PNG8 and the unchanged VP8L RGBA8 baseline have 12 measured iterations each;
 other rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Stored PNG16 improved from 1,112.30 to 426.14 µs;
 Fastest PNG8 from 7,763.44 to 6,450.06 µs. Their ratios are 1.052× and 1.471×;
@@ -31,6 +31,9 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 The [effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
 [trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) baseline refreshes
 retain new shorts on unchanged paths; neither prototype remains in production.
+The [VP8L population round](../benchmarks/VP8L-WINDOW-POPULATIONS-DEFERRED.md)
+adds independent unchanged-producer evidence; its apparent short gain did not
+survive confirmation, so the candidate is removed.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -46,7 +49,7 @@ retain new shorts on unchanged paths; neither prototype remains in production.
 | VP8 opaque text/diagram | 8,407.67 | 5,833.42 | 1.441 / 1.561 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,778.14 | 9,795.02 | 1.611 / 1.658 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization | 23,851.31 | 15,554.15 | 1.533 / 1.565 | 1,201,552 | 72,380 / 72,380 |
-| VP8L RGBA8 / libwebp exact=1 | 192,184.73 | 120,445.40 | 1.596 / 2.147 | 29,688,696 | 183,812 / 183,812 |
+| VP8L RGBA8 / libwebp exact=1 † | 193,847.00 | 121,923.04 | 1.590 / 1.609 | 29,688,696 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 | 193,006.68 | 122,663.07 | 1.573 / 2.125 | 29,688,696 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 | 205,529.71 | 127,025.13 | 1.618 / 2.028 | 29,689,080 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 | 132,270.49 | 83,865.69 | 1.577 / 2.343 | 20,409,392 | 160,032 / 160,032 |

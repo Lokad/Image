@@ -16,19 +16,23 @@ def render():
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
     distortion = json.loads((ROOT / 'benchmarks/vp8-residual-summary-deferred-evidence.json').read_text(encoding='utf-8'))
     trellis = json.loads((ROOT / 'benchmarks/vp8-trellis-state-reduction-rejected-evidence.json').read_text(encoding='utf-8'))
+    populations = json.loads((ROOT / 'benchmarks/vp8l-window-populations-deferred-evidence.json').read_text(encoding='utf-8'))
     assert not distortion['productionChanged'] and distortion['restoration']['sourceAndImmutableProducerRestored']
     assert not trellis['productionChanged'] and trellis['restoration']['sourceAndImmutableProducerRestored']
+    assert not populations['productionChanged'] and populations['restoration']['sourceAndImmutableProducerRestored']
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
     rows = []
     for case in evidence['cases']:
         observation = case['observation']
-        updated = case['id'] in {'case06', 'case10', 'case17', 'case18', 'case19', 'case20'}
+        updated = case['id'] in {'case06', 'case10', 'case12', 'case17', 'case18', 'case19', 'case20'}
         producer = stored if case['id'] == 'case20' else current
         if case['id'] == 'case06':
             observation = distortion['baseline']
         elif case['id'] == 'case10':
             observation = trellis['baseline']
+        elif case['id'] == 'case12':
+            observation = populations['baseline']
         elif updated:
             observation = producer['cases'][observation['receipt']['caseId']][-1]
         receipt = observation['receipt']
@@ -38,7 +42,7 @@ def render():
         upper = observation['conservativeRatioUpper']
         assert receipt['librarySha256'] == (producer['producers']['linuxSha256'] if updated else evidence['librarySha256'])
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] == 'case12' or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -59,9 +63,9 @@ def render():
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     return f'''# Lokad.Image benchmarks
 
-Updated 2026-10-27. **† Compressed PNG and VP8 effort2/6 rows** use the qualified 0.2.1
+Updated 2026-10-27. **† Compressed PNG, VP8 effort2/6 and VP8L RGBA8 rows** use the qualified 0.2.1
 development producer; **‡ stored PNG** retains its unchanged 0.2.1 path evidence.
-The other 25 controls retain published 0.2.0 measurements on unchanged paths.
+The other 24 controls retain published 0.2.0 measurements on unchanged paths.
 The original 31-control release evidence remains immutable. Full CPU parity and
 general replacement readiness remain open.
 
@@ -70,7 +74,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16 and Fastest PNG8 independently confirm 12 measured iterations each;
+Stored PNG16, Fastest PNG8 and the unchanged VP8L RGBA8 baseline have 12 measured iterations each;
 other rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Stored PNG16 improved from 1,112.30 to 426.14 µs;
 Fastest PNG8 from 7,763.44 to 6,450.06 µs. Their ratios are 1.052× and 1.471×;
@@ -90,6 +94,9 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 The [effort2](../benchmarks/VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
 [trellis](../benchmarks/VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) baseline refreshes
 retain new shorts on unchanged paths; neither prototype remains in production.
+The [VP8L population round](../benchmarks/VP8L-WINDOW-POPULATIONS-DEFERRED.md)
+adds independent unchanged-producer evidence; its apparent short gain did not
+survive confirmation, so the candidate is removed.
 
 ''' + codecs + '''
 
