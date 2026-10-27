@@ -85,6 +85,13 @@ All retain744B/op/512B admission. Full both-OS5040 checks,98 focused normal/scal
 and SAME actual package/three examples pass. Probe/InspectHeaders timings change;
 validation/Identify/Decode/encoding/editing algorithms and applicable proofs do not.
 
+[PNG16 validation](WARM-PNG-VALIDATION.md) resolves its uncertainty on the current
+qualified producer: independent1.722×/upper1.727,5.091ms,17008B/op. A proposed
+inverse-filter skip has no gain because both frozen PNG8/16 controls use filter0;
+it is removed and the qualified source/binaries restored. No full/package repeat
+or new filter grid. One profile identifies managed literal counting/framing and
+native inflation as the material costs; the existing tools/fixtures remain reusable.
+
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls and

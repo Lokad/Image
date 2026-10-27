@@ -94,7 +94,7 @@ and unlisted content/settings are excluded.
 | Probe WebP dimensions, seekable | 0.159 | 0.123 | 1.289 / 1.550 | 744 | Screen gap |
 | Probe JPEG dimensions, async nonseekable | 0.425 | 0.201 | 2.119 / 2.154 | 744 | Confirmed gap |
 | Validate PNG8, span | 2,136.116 | 1,374.597 | 1.554 / 1.633 | 12,912 | Screen gap |
-| Validate PNG16, span | 5,393.772 | 3,078.068 | 1.752 / 2.252 | 17,008 | Screen gap |
+| Validate PNG16, span | 5,090.509 | 2,956.512 | 1.722 / 1.727 | 17,008 | Confirmed gap |
 | Validate indexed Adam7 19×17, span | 5.337 | 3.943 | 1.353 / 1.948 | 1,168 | Screen gap |
 | Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
@@ -108,7 +108,8 @@ compares complete coding and source metadata against FFmpeg natural-frame decode
 plus an original metadata adapter, without RGBA normalization or caller raster
 copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420 validation passes
-independently; progressive420 remains a confirmed gap. Other validation rows are short
+independently; progressive420 and [PNG16 validation](../benchmarks/WARM-PNG-VALIDATION.md)
+remain confirmed gaps. Other validation rows are short
 screens, without independent parity claims. JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
