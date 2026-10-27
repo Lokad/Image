@@ -1,5 +1,7 @@
 # Exact word-based VP8 interval coding
 
+Compressed-alpha cost rows below are historical after [indexed histogram replay](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md). Opaque VP8 evidence remains valid.
+
 Effort2 diagram independently measures 4.028 ms: 1.603× reference time (upper
 1.614×), exact 7,330 B and 741,375 B/op. Elapsed is 6.53% below the preceding
 independent mean; separate runs are not a paired baseline gain. Photograph

@@ -50,14 +50,15 @@ internal static class Vp8lReferenceClustering
         private readonly OperationContext context;
         private readonly Vp8lHistogramLayout layout;
         private readonly int tiles, quality, threshold;
-        private readonly int[] original, working, slots;
+        private readonly int[] working, slots, rowTokens, rowPositions;
         private readonly Stats[] originals, items;
         private readonly Pair[] pool;
-        private int count, pairs;
-        internal State(int tiles, Vp8lHistogramLayout layout, OperationContext context, int quality, int threshold)
+        private int count, pairs, originalSlot;
+        internal State(int tiles, int rowCells, Vp8lHistogramLayout layout, OperationContext context, int quality, int threshold)
         {
             this.quality = quality; this.threshold = threshold; this.tiles = tiles; this.layout = layout; this.context = context;
-            original = new int[tiles * layout.Total]; working = new int[original.Length];
+            working = new int[tiles * layout.Total];
+            rowTokens = new int[rowCells]; rowTokens.AsSpan().Fill(-1); rowPositions = new int[rowCells];
             slots = new int[tiles]; originals = new Stats[tiles]; items = new Stats[tiles];
             pool = new Pair[PairCapacity(tiles, threshold)];
         }
@@ -83,24 +84,28 @@ internal static class Vp8lReferenceClustering
 
         internal void Fill(ReadOnlySpan<Vp8lToken> tokens, int width, int height, int bits)
         {
-            var columns = (width + (1 << bits) - 1) >> bits; var position = 0;
+            var columns = (width + (1 << bits) - 1) >> bits; var position = 0; var lastCell = -1;
             for (var i = 0; i < tokens.Length; i++)
             {
                 if (tokens[i].Length > (long)width * height - position) throw new ArgumentException("Tokens exceed their image.", nameof(tokens));
-                var tile = (position / width >> bits) * columns + (position % width >> bits);
-                layout.Fill(tokens.Slice(i, 1), width, true, original.AsSpan(tile * layout.Total, layout.Total), context);
+                var row = position / width; var column = position % width >> bits;
+                var tile = (row >> bits) * columns + column; var cell = row * columns + column;
+                // Starts within a pixel-row/tile-column cell are contiguous.
+                // Retain only its first index and absolute pixel position.
+                if (cell != lastCell) { rowTokens[cell] = i; rowPositions[cell] = position; lastCell = cell; }
+                layout.Fill(tokens.Slice(i, 1), width, true, working.AsSpan(tile * layout.Total, layout.Total), context);
                 // Every token contributes a green symbol to its start tile.
                 // Reuse the pending stats' Used field to avoid scanning empty tiles.
                 originals[tile].Used = 1;
                 position += tokens[i].Length;
             }
             if (position != width * height) throw new ArgumentException("Tokens do not cover their image.", nameof(tokens));
-            context.Cancellation.ThrowIfCancellationRequested(); original.CopyTo(working, 0);
+            context.Cancellation.ThrowIfCancellationRequested();
             for (var tile = 0; tile < tiles; tile++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 if (originals[tile].Used == 0) continue;
-                var stats = Initial(original.AsSpan(tile * layout.Total, layout.Total)); originals[tile] = items[tile] = stats;
+                var stats = Initial(working.AsSpan(tile * layout.Total, layout.Total)); originals[tile] = items[tile] = stats;
                 if (stats.Used != 0) slots[count++] = tile;
             }
         }
@@ -109,7 +114,7 @@ internal static class Vp8lReferenceClustering
         {
             context.Cancellation.ThrowIfCancellationRequested(); pair = default; if (maximum <= 0) return false;
             var a = items[aSlot]; var b = fromOriginal ? originals[bSlot] : items[bSlot];
-            var bCounts = fromOriginal ? original : working;
+            var bStart = (fromOriginal ? originalSlot : bSlot) * layout.Total;
             for (var bank = 0; bank < 5; bank++)
             {
                 context.Cancellation.ThrowIfCancellationRequested(); var flag = 1 << bank; long cost;
@@ -119,7 +124,7 @@ internal static class Vp8lReferenceClustering
                 {
                     var start = Start(bank); var size = Size(bank);
                     cost = Vp8lReferenceEntropy.PopulationSum(working.AsSpan(aSlot * layout.Total + start, size),
-                        bCounts.AsSpan(bSlot * layout.Total + start, size), context);
+                        working.AsSpan(bStart + start, size), context);
                 }
                 pair.Set(bank, cost); pair.Total += cost; if (pair.Total >= maximum) return false;
             }
@@ -258,19 +263,50 @@ internal static class Vp8lReferenceClustering
             }
         }
 
-        internal Vp8lHistogramPlan Finish(bool lowEffort, int columns, int bits)
+        // Tokens stay borrowed and unchanged until Build returns. Reconstruct
+        // one original tile into an already owned, non-live working slot.
+        private void Replay(ReadOnlySpan<Vp8lToken> tokens, int width, int height, int columns, int bits, int tile)
+        {
+            var counts = working.AsSpan(originalSlot * layout.Total, layout.Total); counts.Clear();
+            var column = tile % columns; var top = (tile / columns) << bits;
+            var bottom = Math.Min(height, top + (1 << bits)); var right = Math.Min(width, (column + 1) << bits);
+            for (var row = top; row < bottom; row++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var cell = row * columns + column; var index = rowTokens[cell];
+                if (index < 0) continue;
+                var position = rowPositions[cell]; var end = row * width + right;
+                while (index < tokens.Length && position < end)
+                {
+                    layout.Fill(tokens.Slice(index, 1), width, true, counts, context);
+                    position += tokens[index++].Length;
+                }
+            }
+        }
+
+        internal Vp8lHistogramPlan Finish(bool lowEffort, int columns, int bits, ReadOnlySpan<Vp8lToken> tokens, int width, int height)
         {
             var useBins = count > (lowEffort ? 8 : 128) && quality < 100;
             if (useBins) { if (lowEffort) MergeLowBins(); else MergeBins(); }
             if (!(lowEffort && useBins) && Sample()) Greedy();
+            var replay = count < tiles;
+            if (replay)
+            {
+                // Originals' Bin is unused by merge scoring. Mark the final
+                // live slots without changing their costs/trivial/Used fields.
+                for (var group = 0; group < count; group++) originals[slots[group]].Bin = 1;
+                while (originals[originalSlot].Bin != 0) originalSlot++;
+            }
             var result = new Vp8lHistogramPlan(context, layout, count, tiles, columns, bits);
             try
             {
-                var map = result.WritableMap;
+                var map = result.WritableMap; var output = result.WritablePopulations;
                 for (var tile = 0; tile < tiles; tile++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
                     if (originals[tile].Used == 0) { map[tile] = tile == 0 ? 0 : map[tile - 1]; continue; }
+                    if (replay) Replay(tokens, width, height, columns, bits, tile);
+                    else originalSlot = tile; // No merge: working still contains every original.
                     long best = long.MaxValue;
                     for (var group = 0; group < count; group++)
                     {
@@ -278,14 +314,8 @@ internal static class Vp8lReferenceClustering
                         if (Evaluate(slot, tile, true, Limit(items[slot].Total, best), out var costs))
                         { best = costs.Total - items[slot].Total; map[tile] = group; }
                     }
-                }
-                var output = result.WritablePopulations;
-                for (var tile = 0; tile < tiles; tile++)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    if (originals[tile].Used == 0) continue;
                     var start = map[tile] * layout.Total;
-                    for (var i = 0; i < layout.Total; i++) output[start + i] += original[tile * layout.Total + i];
+                    for (var i = 0; i < layout.Total; i++) output[start + i] += working[originalSlot * layout.Total + i];
                 }
                 return result;
             }
@@ -305,14 +335,17 @@ internal static class Vp8lReferenceClustering
         // The preceding analysis selects tile bits to keep this finite bound.
         if (tiles > 2600) throw new ArgumentException("Histogram tiling exceeds the analyzed bound.", nameof(tileBits));
         var layout = new Vp8lHistogramLayout(cacheBits); var pairCapacity = PairCapacity(tiles, threshold);
-        // Two flat count slabs, two conservative metadata allowances, index
-        // slots and a fixed pair pool. Paired costs need no sum scratch.
-        var reserved = tiles * (layout.Total * 8L + 192) + pairCapacity * 64L + 512;
+        // One count slab, two row-cell indexes, metadata/index slots and a
+        // fixed pair pool. Row cells<=tiles*2^bits, so both indexes together
+        // use at most1024words/tile, less than the removed1088+-word slab.
+        // Replay reuses a non-live working slot; paired costs need no scratch.
+        var rowCells = columns * height;
+        var reserved = tiles * (layout.Total * 4L + 192) + rowCells * 8L + pairCapacity * 64L + 512;
         context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
         try
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var state = new State(tiles, layout, context, quality, threshold);
-            state.Fill(tokens, width, height, tileBits); return state.Finish(lowEffort, columns, tileBits);
+            context.Cancellation.ThrowIfCancellationRequested(); var state = new State(tiles, rowCells, layout, context, quality, threshold);
+            state.Fill(tokens, width, height, tileBits); return state.Finish(lowEffort, columns, tileBits, tokens, width, height);
         }
         finally { context.Release(reserved); }
     }

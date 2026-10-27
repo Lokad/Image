@@ -33,6 +33,87 @@ public sealed class Vp8lReferenceClusteringTests
         finally { context.Release(pixels.Length * 4L); }
     }
 
+    [Fact]
+    public void IndexedWorkspaceFitsSharedCapacityThatCannotHoldTheOriginalSlab()
+    {
+        // This existing sparse four-tile layout needs24,208B at its ownership
+        // peak, including the retained plan. Two full slabs alone need34,816B.
+        using var root = new TestMemoryBudget(24_208);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using (var plan = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context))
+        {
+            Assert.Equal(24_208, root.Peak);
+            Assert.Equal((plan.Populations.Length + plan.Map.Length) * 4L, root.Bytes);
+        }
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
+        using var held = root.CreateScope(); Assert.True(held.TryReserve(1, out var reservation));
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context));
+        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
+        Assert.Equal(1, root.Bytes); Assert.Equal(1, root.Refusals); reservation.Dispose();
+        using var later = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context);
+        later.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Theory]
+    [InlineData(1, 1, 9)]
+    [InlineData(17, 37, 2)]
+    [InlineData(33, 9, 3)]
+    [InlineData(5, 513, 7)]
+    [InlineData(17, 1025, 9)]
+    public void CrossRowCopiesAndEmptyCellsRetainEveryPopulationAndIndependentResult(int width, int height, int bits)
+    {
+        var values = new List<Vp8lToken>(); var position = 0; uint state = 0x31415926;
+        while (position < width * height)
+        {
+            state ^= state << 13; state ^= state >> 17; state ^= state << 5;
+            var token = (values.Count % 3) switch
+            {
+                0 => Vp8lToken.Literal(state),
+                1 => Vp8lToken.Cached(0),
+                _ => Vp8lToken.Copy(Math.Min(width * height - position,
+                    values.Count % 7 == 6 ? width * 4 + 7 : 1 + (int)(state & 255)), 1)
+            };
+            values.Add(token); position += token.Length;
+        }
+        var tokens = values.ToArray(); var layout = new Vp8lHistogramLayout(2);
+        using var root = new TestMemoryBudget(1_000_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        var expected = new int[layout.Total]; layout.Fill(tokens, width, true, expected, context);
+        using var plan = Vp8lReferenceClustering.Build(tokens, width, height, bits, 2, false, context);
+        var actual = new int[layout.Total];
+        for (var group = 0; group < plan.GroupCount; group++)
+            for (var i = 0; i < actual.Length; i++) actual[i] += plan.Populations[group * layout.Total + i];
+        Assert.Equal(expected, actual);
+        Assert.All(plan.Map.ToArray(), group => Assert.InRange(group, 0, plan.GroupCount - 1));
+        var hash = Hash(plan.Populations); Array.Clear(tokens); Assert.Equal(hash, Hash(plan.Populations));
+        plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void DistinctConstantTilesKeepAllLiveWorkingSlotsWithoutReplay()
+    {
+        // Four original constant RGBA tiles; separating their alphabets is
+        // cheaper than merging256samples per channel at quality100.
+        uint[] colors = [0xff000000u, 0xaa555555u, 0x55aaaaaau, 0x00ffffffu];
+        var tokens = new Vp8lToken[32 * 32];
+        for (var y = 0; y < 32; y++) for (var x = 0; x < 32; x++)
+            tokens[y * 32 + x] = Vp8lToken.Literal(colors[y / 16 * 2 + x / 16]);
+        using var root = new TestMemoryBudget(100_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var plan = Vp8lReferenceClustering.Build(tokens, 32, 32, 4, 0, false, context, 100);
+        Assert.Equal(4, plan.GroupCount); Assert.Equal(new[] { 0, 1, 2, 3 }, plan.Map.ToArray());
+        var layout = new Vp8lHistogramLayout(0);
+        for (var tile = 0; tile < 4; tile++)
+        {
+            var expected = new int[layout.Total];
+            var pixel = colors[tile]; expected[(int)(pixel >> 8 & 255)] = 256;
+            expected[layout.Red + (int)(pixel >> 16 & 255)] = 256;
+            expected[layout.Blue + (int)(pixel & 255)] = 256; expected[layout.Alpha + (int)(pixel >> 24)] = 256;
+            Assert.Equal(expected, plan.Populations.Slice(tile * layout.Total, layout.Total).ToArray());
+        }
+        plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     // Final coded-token populations and expanded native maps from the existing
     // asymmetric method4/method0/method1 packets; no reference data enters production.
     [Theory]

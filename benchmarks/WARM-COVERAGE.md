@@ -38,9 +38,9 @@ independently measures 1.649× / upper 1.655. Other settings receive no broader 
 
 ## Current qualification and costs
 
-[Word interval coder](WARM-VP8-WORD-ARITHMETIC.md) is the latest
-qualified producer: 4,950 Release checks (1,968 internal, 2,035 public, 947 live)
-and 629 scalar WebP checks per OS. The same actual private 0.2.0 package and all
+[Indexed histogram replay](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) is the latest
+qualified producer: 4,957 Release checks (1,975 internal, 2,035 public, 947 live)
+and 636 scalar WebP checks per OS. The same actual private 0.2.0 package and all
 three usage examples pass both systems. Published 0.1.0 stays unchanged.
 Complete packets, decoded/editing pixels, cancellation and explicit shared
 admission/ownership remain gates, separately from performance qualification.
@@ -48,20 +48,18 @@ admission/ownership remain gates, separately from performance qualification.
 The [three-table summary](../docs/benchmark.md) selects valid costs, allocations,
 reference boundaries and confirmation status. Current named evidence:
 
-- VP8 [six reconciled anchors](WARM-VP8-WORD-ARITHMETIC.md): effort2 diagram
+- VP8 [five unchanged opaque anchors](WARM-VP8-WORD-ARITHMETIC.md): effort2 diagram
   independent 1.603× / upper 1.614; photograph effort4 independent 1.649× / upper
   1.655. Diagram4/trellis6/opaque16 shorts are 1.492× / 1.635× / 1.553×.
-  Alpha's wide short is resolved by one cached independent 1.385× / upper 1.395.
-  Packets are unchanged; B/op rises16–33. The same logical-byte admission,
-  replacement overlap, awaited delivery and prior opaque8 preparation remain.
-- [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
-  independent 1.362×; photograph/asymmetric shorts 1.605× / 1.566×.
-- [VP8L RGBA16](WARM-VP8L-RGBA16-CURRENT.md): short 1.548× / upper 1.685,
-  47,674,928 B/op, exact 183,812 B.
-- [VP8L nonseekable async output](WARM-ASYNC-WEBP-CONFIRMATION.md): independent
-  1.669× / upper 1.731, 47,675,312 B/op, exact 183,812 B. Its12actual/10filtered
-  confirmation resolves the earlier short. Awaited staging/delivery/release is
-  timed; callbacks complete immediately. Unchanged full/package proof is reused.
+  Alpha costs are superseded below; unchanged opaque paths keep valid evidence.
+- [Indexed VP8L and alpha](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md): diagram
+  independent 1.166× / upper 1.204, 27,419,167 B/op, exact 7,234 B. Photograph /
+  asymmetric8 / asymmetric16 / VP8 alpha shorts are 1.625× / 1.584× / 1.600× /
+  1.377×; their allocations are 20,410,208 / 29,688,696 / 29,688,696 / 21,353,192 B/op.
+- VP8L nonseekable async output independently confirms 1.622× / upper 1.641,
+  29,689,080 B/op, exact 183,812 B. Allocation falls 37.73%; its 12 actual/filtered
+  samples and both brackets remain. Awaited staging/delivery/release is timed;
+  callbacks complete immediately. No new input/settings grid or source pixel change.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
   1.543×; 444, RGBA grayscale and caller GRAY8 shorts 1.216× / 1.129× / 1.079×.
 - [VP8 decoder StreamNative8](WARM-VP8-SHARED-SMALL-ROWS.md): short 1.309×,
@@ -108,6 +106,10 @@ Other affected observations stay historical. The word interval coder changes
 VP8 partition encoding across efforts/depths/alpha and sync/async output; six
 existing anchors replace preceding costs. Decision, transform and pixel math
 stay exact. Decoder, other codecs and edit/text paths keep valid evidence.
+Indexed histogram replay changes VP8L and compressed VP8 alpha callers, including
+stream/async and normalization boundaries. Six affected anchors replace their
+preceding costs; other affected observations remain historical. Opaque VP8 is
+unaffected. Regression/package proof and unchanged reference oracles carry forward.
 Frozen inputs/settings/workers, approved native-only adjustments, pixel/packet
 oracles and unaffected font comparisons remain reusable. Regression/package
 proof does not establish CPU parity.
@@ -130,17 +132,19 @@ preserve canonical bytes, delayed carry, limits, cancellation and ownership.
 Stop word/fragment variants. The earlier per-symbol fragment screen was marginal
 and its qualified producer was restored before this independent wider-state design.
 
-The async VP8L confirmation is the largest current independent point among
-these anchors, narrowly above photograph RDO. The clustering State currently owns
-both original and working full histogram slabs. Original populations are used
-again only for final remapping/output accumulation. Investigate rebuilding one
-tile at a time from borrowed token starts, indexed by pixel-row/tile-column cell.
-Token starts are ordered; replay must preserve every histogram, map, tie and
-complete packet, including copies crossing rows/tiles and empty cells. Keep the
-working slab and retained result ownership, reserve actual index/scratch capacity
-before allocation, and prove geometry/cleanup before one narrow integration.
-No new profile or content/settings grid. Keep RDO candidate ordering as a later
-lead if the confirmed VP8 photograph gap becomes the priority.
+Indexed histogram replay is accepted and qualified. The original full slab/copy
+is removed; compact row-cell indexes replay into a non-live working slot, or use
+unchanged working originals when no merge happened. Exact native maps/populations,
+packets, clipped/copy-crossing geometry, retained results and tight shared
+admission/refusal/cancellation cleanup pass. Stop slab/index/replay variants.
+
+The unchanged VP8 photograph RDO point 1.649× is now the largest selected
+independent point, ahead of async VP8L 1.622×. Investigate one substantial exact
+pruning/candidate-ordering lead in actual Luma4 callers. Every candidate already
+computes pure residual/header lower bounds; an equivalent reconstruction order
+must preserve original mode-index ties, uniform/cancellable/trellis behavior and
+all native decisions. Establish bounded equivalence and a concrete pruning
+opportunity before integration. No automatic profile or content/settings grid.
 Do not infer a ranking of unconfirmed paths from short screens.
 
 The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)

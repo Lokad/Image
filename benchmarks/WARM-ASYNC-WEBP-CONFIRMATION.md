@@ -1,5 +1,7 @@
 # Current async lossless WebP confirmation
 
+End-to-end costs below are historical after [indexed histogram replay](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md). Recorded pixel/packet/ownership proofs remain useful.
+
 The existing 513×259 RGBA8 nonseekable async control independently measures
 202.09 ms: 1.669× reference time, conservative upper 1.731×, unchanged
 47,675,312 B/op and an exact 183,812-byte packet. This resolves the preceding

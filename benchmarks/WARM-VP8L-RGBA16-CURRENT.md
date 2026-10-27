@@ -1,5 +1,7 @@
 # Current RGBA16 lossless-WebP screen
 
+End-to-end costs below are historical after [indexed histogram replay](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md). Recorded pixel/packet/ownership proofs remain useful.
+
 The existing 513×259 asymmetric RGBA16 control measures 188.99 ms, 1.548× the
 reference (conservative upper 1.685×), allocating 47,674,928 B/op. This is one
 guarded short, with all three actual and filtered samples retained. It is a

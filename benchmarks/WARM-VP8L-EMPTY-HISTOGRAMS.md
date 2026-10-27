@@ -1,7 +1,9 @@
 # Exact empty spatial histogram pruning
 
-Unchanged VP8L cost evidence remains valid. VP8 encoder anchors and the latest
-qualification are recorded in [uniform prediction reuse](WARM-VP8-UNIFORM-PREDICTIONS.md).
+End-to-end costs below are historical after [indexed histogram replay](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md). Recorded pixel/packet/ownership proofs remain useful.
+
+This report records its producer. Later qualification and current affected costs
+are recorded in [indexed histogram replay](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md).
 
 The existing 513×259 text/diagram lossless WebP control independently confirms
 13.19 ms, 1.362× reference time / upper 1.408×, with the exact 7,234-byte packet.
