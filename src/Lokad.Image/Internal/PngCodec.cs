@@ -133,20 +133,7 @@ internal static class PngCodec
         var compressed = context.RentPixels(compressedStorage, header.CompressedLength);
         try
         {
-            int source = 8, target = 0;
-            while (source < data.Length)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var length = (int)BinaryPrimitives.ReadUInt32BigEndian(data[source..]);
-                if (data.Slice(source + 4, 4).SequenceEqual("IDAT"u8))
-                    for (var offset = 0; offset < length;)
-                    {
-                        var count = Math.Min(65536, length - offset); context.Cancellation.ThrowIfCancellationRequested();
-                        data.Slice(source + 8 + offset, count).CopyTo(compressed.AsSpan(target));
-                        target += count; offset += count;
-                    }
-                source += length + 12;
-            }
+            CopyCompressed(data, compressed, context);
             var filteredLength = FilteredLength(header);
             var rowBytes = ((long)header.Info.Width * Channels(header.ColorType) * header.Depth + 7) / 8;
             var pixelBytes = (long)header.Info.Width * header.Info.Height * (header.Depth == 16 ? 8 : 4);
@@ -224,7 +211,7 @@ internal static class PngCodec
                 else streamLength = ZlibFraming.Validate(compressed, filteredLength, context);
                 // BCL inflater workspace is admitted until its streams are disposed.
                 context.Reserve(256 * 1024);
-                try { return DecodeRaster(header, compressed, streamLength, context, useFiltered ? filtered : null); }
+                try { return ReadRaster(header, compressed, streamLength, context, useFiltered ? filtered : null)!; }
                 finally { context.Release(256 * 1024); }
             }
             finally
@@ -237,6 +224,46 @@ internal static class PngCodec
         {
             context.ReturnPixels(compressedStorage, compressed);
             context.Release(header.CompressedLength + (long)header.Palette.Length + header.Transparency.Length);
+        }
+    }
+
+    internal static ImageInfo ValidatePixels(ReadOnlySpan<byte> data, OperationContext context, ImageMetadataPolicy metadataPolicy)
+    {
+        var header = Scan(data, context, metadataPolicy);
+        context.Reserve(header.CompressedLength);
+        var compressed = context.RentPixels(compressedStorage, header.CompressedLength);
+        try
+        {
+            CopyCompressed(data, compressed, context);
+            var streamLength = ZlibFraming.Validate(compressed, FilteredLength(header), context);
+            context.Reserve(256 * 1024);
+            try { ReadRaster(header, compressed, streamLength, context, validateOnly: true); }
+            finally { context.Release(256 * 1024); }
+            return header.Info;
+        }
+        finally
+        {
+            context.ReturnPixels(compressedStorage, compressed);
+            context.Release(header.CompressedLength + (long)header.Palette.Length + header.Transparency.Length);
+        }
+    }
+
+    // Scan has already validated chunk extents, ordering, CRCs and total IDAT length.
+    private static void CopyCompressed(ReadOnlySpan<byte> data, byte[] compressed, OperationContext context)
+    {
+        int source = 8, target = 0;
+        while (source < data.Length)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var length = (int)BinaryPrimitives.ReadUInt32BigEndian(data[source..]);
+            if (data.Slice(source + 4, 4).SequenceEqual("IDAT"u8))
+                for (var offset = 0; offset < length;)
+                {
+                    var count = Math.Min(65536, length - offset); context.Cancellation.ThrowIfCancellationRequested();
+                    data.Slice(source + 8 + offset, count).CopyTo(compressed.AsSpan(target));
+                    target += count; offset += count;
+                }
+            source += length + 12;
         }
     }
 
@@ -255,11 +282,12 @@ internal static class PngCodec
         }
     }
 
-    private static ImageBuffer DecodeRaster(Header header, byte[] compressed, int streamLength, OperationContext context, byte[]? filtered = null)
+    private static ImageBuffer? ReadRaster(Header header, byte[] compressed, int streamLength, OperationContext context,
+        byte[]? filtered = null, bool validateOnly = false)
     {
         using var zlib = new PngInflatedReader(compressed, streamLength, filtered);
-        var result = ImageBuffer.AllocateForOverwrite(header.Info.Width, header.Info.Height, header.Depth == 16 ? 16 : 8, context);
-        result.Orientation = header.Info.Orientation;
+        var result = validateOnly ? null : ImageBuffer.AllocateForOverwrite(header.Info.Width, header.Info.Height, header.Depth == 16 ? 16 : 8, context);
+        if (result is not null) result.Orientation = header.Info.Orientation;
         uint adlerA = 1, adlerB = 0;
         var bufferedBytes = 0;
         try
@@ -277,17 +305,17 @@ internal static class PngCodec
         }
         catch (InvalidDataException exception)
         {
-            result.Dispose();
+            result?.Dispose();
             throw new ImageDataException("Invalid PNG compressed data.", exception);
         }
-        catch { result.Dispose(); throw; }
+        catch { result?.Dispose(); throw; }
         finally { zlib.Dispose(); context.Release(bufferedBytes); }
         return result;
 
         void ReadPass(int startX, int startY, int stepX, int stepY)
         {
-            var width = startX >= result.Width ? 0 : (result.Width - startX + stepX - 1) / stepX;
-            var height = startY >= result.Height ? 0 : (result.Height - startY + stepY - 1) / stepY;
+            var width = startX >= header.Info.Width ? 0 : (header.Info.Width - startX + stepX - 1) / stepX;
+            var height = startY >= header.Info.Height ? 0 : (header.Info.Height - startY + stepY - 1) / stepY;
             if (width == 0 || height == 0) return;
             var channels = Channels(header.ColorType);
             var rowBytes = (int)(((long)width * channels * header.Depth + 7) / 8);
@@ -314,7 +342,19 @@ internal static class PngCodec
                     ReadExactly(zlib, row, context.Cancellation);
                     Adler32.Append(row, ref adlerA, ref adlerB, context.Cancellation);
                     Unfilter(row, previous, bytesPerPixel, filter, context.Cancellation);
-                    if (header.ColorType == 6 && stepX == 1)
+                    if (result is null)
+                    {
+                        // Unfiltering is needed for indexed validity even though
+                        // channel conversion and placement cannot reject other samples.
+                        if (header.ColorType == 3)
+                            for (var x = 0; x < width; x++)
+                            {
+                                if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                                if (Sample(row, x, header.Depth) >= header.Palette.Length / 3)
+                                    throw new ImageDataException("PNG palette index out of range.");
+                            }
+                    }
+                    else if (header.ColorType == 6 && stepX == 1)
                     {
                         // RGBA already has the destination channels and precision.
                         // Dense Adam7 rows also qualify; sparse passes keep mapping.

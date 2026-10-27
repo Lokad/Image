@@ -120,6 +120,13 @@ orientation without constructing a pixel buffer. `ImageInfo.OrientedWidth` and
 `OrientedHeight` describe the displayed dimensions. Identification does not
 validate the complete compressed pixel payload. Decode performs that work.
 
+Use `ImageCodec.ValidatePixels(encodedBytes)` or
+`await ImageCodec.ValidatePixelsAsync(input, limits, token)` when pixel-coding
+validity is needed without a retained raster. Results describe coded dimensions
+and pending orientation. These operations use codec-dependent memory, read streams
+through EOF and leave them open. Pass `metadataPolicy: ImageMetadataPolicy.IgnoreInvalid`
+explicitly when needed. Use Decode directly when the pixels are needed.
+
 `Decode(Stream)` reads through EOF into private storage and decodes its acquired
 prefix without a final encoded-input copy. Returned pixels own separate storage.
 Actual retained input capacity counts toward the working limit.

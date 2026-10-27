@@ -123,6 +123,16 @@ workspace, without retaining image/metadata-sized buffers; it checks framing and
 headers but omits PNG CRC, JPEG table/entropy and WebP pixel validation. All four
 sync/async identification/inspection APIs agree on metadata for valid inputs.
 
+Development 0.2.1 adds `ValidatePixels` (span/stream) and `ValidatePixelsAsync`:
+complete container and pixel-coding validation without a returned raster. Results
+retain coded metadata/orientation; no reorientation or color conversion is applied.
+PNG checks inflated rows, filters, palette indices and checksum; JPEG checks all
+entropy/tables/progression and supported transforms; WebP decodes required pixel
+history/planes and alpha coding. Animation stays unsupported. This is not fixed-space
+inspection: PNG retains compressed IDAT and row/inflater scratch, JPEG coefficients,
+and WebP its required history/planes. Local/shared storage bounds reflect actual
+work rather than an unallocated result; validation can fit where decoding cannot.
+
 Development 0.2.1 adds `Probe`/`ProbeAsync`: select dimensions, source representation,
 transparency, orientation or animation; stop once those facts are established.
 Null result fields remain unknown. Default dimension probing stops before pixel
@@ -136,7 +146,7 @@ the last usable orientation, preserving required container/pixel checks and limi
 See [metadata policy](source-metadata.md); reorientation remains opt-in.
 
 Caller streams remain open. Async APIs use actual asynchronous reads/writes,
-without worker-thread offloading; CPU codec work is synchronous. Identify/Decode
+without worker-thread offloading; CPU codec work is synchronous. Identify/Decode/ValidatePixels
 stream buffering is input-bounded and avoids a final exact-length copy. Async
 encoding retains staging or prepared partitions until actual writes finish.
 Preparation failure leaves output untouched; delivery/synchronous failure may leave

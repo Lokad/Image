@@ -115,6 +115,10 @@ WebP uses **libwebp exact=1** to preserve hidden RGB. Defaults/quality numbers
 across encoders are not assumed equivalent. Startup, concurrency, GIF/animation
 and unlisted content/settings are excluded.
 
+[Pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md) compares
+allocations/admitted peaks with decode-and-dispose on five declared controls;
+it does not yet have warm reference CPU qualification.
+
 [Measurement instructions](../benchmarks/README.md) and the active
 [finite coverage objective](../benchmarks/WARM-COVERAGE.md) retain reproducibility
 and outstanding work. Rebuild this summary with

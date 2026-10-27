@@ -50,6 +50,13 @@ admission; no hypothetical raster allocation or managed raster-size ceiling appl
 No encoded or metadata buffer survives the call. Probing does not validate CRCs,
 pixel syntax, complete containers or unvisited conflicting metadata.
 
+`ValidatePixels`/`ValidatePixelsAsync` establish pixel-coding validity and return
+the same coded `ImageInfo` as complete identification, without retaining RGBA.
+They still require codec-dependent storage and preserve metadata policy, resource
+limits and cancellation. Stream routes acquire through EOF and stay open; async
+acquisition is awaited before releasing storage. Validation omits final sample
+conversion/reorientation and does not replace Decode when pixels are needed.
+
 All read routes default to `ImageMetadataPolicy.Strict`: EXIF header/IFD0 orientation
 errors, duplicate chunks/fields and misplaced PNG EXIF fail. Opt into `IgnoreInvalid`
 on DecodeOptions, JpegDecodeOptions or ImageProbeOptions. Identify/InspectHeaders

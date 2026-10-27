@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "version": "0.2.1",
+  "measurementKind": "Functional allocation/admission checks, not CPU timing or FFmpeg parity",
+  "sourceParentCommit": "a5178d6f5b7a663a771cdb12e1308253e13b2031",
+  "boundary": "One resident borrowed encoded span to coded metadata, or decode-and-dispose of an independently owned raster. Input/option/root preparation excluded; library work, ownership release and TestMemoryBudget scope/reservation allocations included. Each path warmed once. No elapsed time measured.",
+  "fixtureRecipe": "OriginalExif.Create(profile,513,259), original asymmetric-v1 samples; first source alpha zero for non-JPEG. Default encoder settings as defined in tools/Shared/OriginalExif.cs. Compressed inputs and source representations are fixed by the recorded hashes.",
+  "cases": {
+    "Png16": {
+      "profile": "Png16",
+      "width": 513,
+      "height": 259,
+      "encodedBytes": 963200,
+      "encodedSha256": "0215cd8aa83ba2c5bd723a5a5807e3168b22407b3a6d46bac954e2c2b4c47ea8",
+      "decode": {
+        "allocatedBytes": 3095504,
+        "peakAdmittedBytes": 3364989
+      },
+      "validate": {
+        "allocatedBytes": 977696,
+        "peakAdmittedBytes": 1238858
+      },
+      "host": "TestMemoryBudget adapter included; synchronous borrowed span; no timing"
+    },
+    "JpegBaseline420": {
+      "profile": "JpegBaseline420",
+      "width": 513,
+      "height": 259,
+      "encodedBytes": 65163,
+      "encodedSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+      "decode": {
+        "allocatedBytes": 1619240,
+        "peakAdmittedBytes": 1014706
+      },
+      "validate": {
+        "allocatedBytes": 872096,
+        "peakAdmittedBytes": 871090
+      },
+      "host": "TestMemoryBudget adapter included; synchronous borrowed span; no timing"
+    },
+    "WebpLossyAlpha": {
+      "profile": "WebpLossyAlpha",
+      "width": 513,
+      "height": 259,
+      "encodedBytes": 115542,
+      "encodedSha256": "183b90c4faff3b575ae98cb770d5d3fb3a9066fbf815dba04cdb4b392ea1af71",
+      "decode": {
+        "allocatedBytes": 1966392,
+        "peakAdmittedBytes": 1411931
+      },
+      "validate": {
+        "allocatedBytes": 770256,
+        "peakAdmittedBytes": 751800
+      },
+      "host": "TestMemoryBudget adapter included; synchronous borrowed span; no timing"
+    },
+    "WebpLosslessAlpha": {
+      "profile": "WebpLosslessAlpha",
+      "width": 513,
+      "height": 259,
+      "encodedBytes": 183310,
+      "encodedSha256": "db796bb9ad5d480eb273db8ae966d4fa1a8f5995bceaa724475c09d6201dbfb7",
+      "decode": {
+        "allocatedBytes": 1217192,
+        "peakAdmittedBytes": 1063480
+      },
+      "validate": {
+        "allocatedBytes": 685544,
+        "peakAdmittedBytes": 623292
+      },
+      "host": "TestMemoryBudget adapter included; synchronous borrowed span; no timing"
+    },
+    "Png8": {
+      "profile": "Png8",
+      "width": 513,
+      "height": 259,
+      "encodedBytes": 210972,
+      "encodedSha256": "f222f46cd50138623a14862e7a54c795d35ff6acef5daea1b5cef9331e99bd7e",
+      "decode": {
+        "allocatedBytes": 1278440,
+        "peakAdmittedBytes": 1547917
+      },
+      "validate": {
+        "allocatedBytes": 223568,
+        "peakAdmittedBytes": 484722
+      },
+      "host": "TestMemoryBudget adapter included; synchronous borrowed span; no timing"
+    }
+  },
+  "proofs": {
+    "systems": [
+      "Windows",
+      "Linux"
+    ],
+    "fullTestsPerOs": [
+      1977,
+      2113,
+      947
+    ],
+    "focusedTestsPerOs": 29,
+    "scalarTestsPerOs": 66,
+    "allocationAndPeakRecordsIdenticalNormalScalarBothOs": true,
+    "sameActualPackageAndThreeUsageExamplesBothOs": true
+  },
+  "producers": {
+    "windowsSha256": "4145f84323649d1203cfc300de91aa6958851f4cca8412030abde46b0f9c54d2",
+    "linuxSha256": "1884b4592a38dceb3e7bef5843350ed9b0133bdc5844a29c482ed2b38d522481",
+    "packageSha256": "0b1829bfe4e710ae03e07cf3ea978ee8e43de7249072f5b75cc585fc5029e9c3"
+  },
+  "sourceFiles": {
+    "src/Lokad.Image/ImageCodec.Validation.cs": "00f59ffe3bd39a5fde894a46ca961e1e6090022fb6d534f1d8751feb0c27a332",
+    "src/Lokad.Image/Internal/JpegDecoder.cs": "4cd46ffd2acbe21191b1843ef536324dd8f05abe4170740ef626967e3e07b7c6",
+    "src/Lokad.Image/Internal/PngCodec.cs": "d74d5fe2701fbdd9b3a5e6de426c3ef951fcafc4e9f5aaa17b3ff277568ce649",
+    "src/Lokad.Image/Internal/WebpAlpha.cs": "5dd19a9c1936b80a8df6f530eb737f73ec700477e551e61695d3e5850401d026",
+    "src/Lokad.Image/Internal/WebpCodec.cs": "6c87c3acbed829dac3ffe4c94480c82f9a6192e50fa783df31623cf0e936a31f",
+    "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "4e049848328361146c604055c919abfdaaffda022ad3265921d25e0922335e0d",
+    "tests/Lokad.Image.PublicApi.Tests/PixelValidationMemoryTests.cs": "32fc7067141705b9875b818ab47da7ff3d60d031c7edf639fbe897f07372b25a",
+    "tests/Lokad.Image.PublicApi.Tests/PixelValidationTests.cs": "70823f795bd4f3c48f214c33a079f39d977c2a7cee7f8fc916100db0059d5901"
+  },
+  "rawArchive": {
+    "file": "pixel-validation-qualified.tar.xz",
+    "sha256": "b5620eaa21404e2e50ac4997bda4de9bc3621d3a13eb24a89201329cb57e2d36",
+    "bytes": 994216,
+    "members": 42
+  }
+}

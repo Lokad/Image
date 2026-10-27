@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Pixel-coding validation without a retained raster, with span/sync/async inputs,
+  codec-dependent memory admission and the same required validity checks as decoding.
 - Selective sync/async PNG/JPEG/WebP probing with explicit unknown facts, bounded
   acquisition and shared workspace admission, without a decoded raster.
 - Explicit permissive EXIF handling across read APIs, preserving valid orientation,

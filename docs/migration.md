@@ -8,6 +8,10 @@ tolerates unusable EXIF across read routes; strict remains the default. Permissi
 orientation probing may traverse the entire container to resolve overrides.
 See [source metadata](source-metadata.md).
 
+`ValidatePixels`/`ValidatePixelsAsync` add complete coding validation without an
+owned output image. They return coded source metadata and keep the same limits,
+cancellation and metadata-policy controls; memory remains codec-dependent.
+
 ## 0.2.0
 
 Published 0.1.0 packages remain unchanged. The supported scope has expanded;

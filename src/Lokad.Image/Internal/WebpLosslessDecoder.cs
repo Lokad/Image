@@ -26,6 +26,39 @@ internal ref struct WebpLosslessDecoder
 
     public ImageBuffer Decode()
     {
+        var pixels = DecodePixels();
+        try
+        {
+            var result = ImageBuffer.Allocate(width, height, 8, context);
+            try
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var row = result.GetRow8(y);
+                    for (var x = 0; x < width; x++)
+                    {
+                        var pixel = pixels[y * width + x];
+                        row[x * 4] = (byte)(pixel >> 16); row[x * 4 + 1] = (byte)(pixel >> 8);
+                        row[x * 4 + 2] = (byte)pixel; row[x * 4 + 3] = (byte)(pixel >> 24);
+                    }
+                }
+                return result;
+            }
+            catch { result.Dispose(); throw; }
+        }
+        finally { context.Release(pixels.Length * 4L + 32 + 512); }
+    }
+
+    internal void ValidatePixels()
+    {
+        var pixels = DecodePixels();
+        context.Release(pixels.Length * 4L + 32 + 512);
+        context.Cancellation.ThrowIfCancellationRequested();
+    }
+
+    private uint[] DecodePixels()
+    {
         context.Reserve(512); // Four transform descriptors and fixed parser scratch.
         var transforms = new Transform[4]; var count = 0; var seen = 0; var codedWidth = width;
         while (reader.Read(1) != 0)
@@ -76,24 +109,7 @@ internal ref struct WebpLosslessDecoder
             context.Release(transform.Data.Length == 0 ? 0 : transform.Data.Length * 4L + 32);
             transform.Data = [];
         }
-        var result = ImageBuffer.Allocate(width, height, 8, context);
-        try
-        {
-            for (var y = 0; y < height; y++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var row = result.GetRow8(y);
-                for (var x = 0; x < width; x++)
-                {
-                    var pixel = pixels[y * width + x];
-                    row[x * 4] = (byte)(pixel >> 16); row[x * 4 + 1] = (byte)(pixel >> 8);
-                    row[x * 4 + 2] = (byte)pixel; row[x * 4 + 3] = (byte)(pixel >> 24);
-                }
-            }
-            context.Release(pixels.Length * 4L + 32 + 512);
-            return result;
-        }
-        catch { result.Dispose(); throw; }
+        return pixels;
     }
 
     private uint[] ReadImage(int imageWidth, int imageHeight, bool spatial)

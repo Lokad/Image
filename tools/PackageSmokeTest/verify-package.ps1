@@ -575,6 +575,16 @@ foreach (var packet in new[] { encoded.ToArray(), jpeg.ToArray(), exampleWebp.To
     if (allFacts.EstablishedFacts != ImageProbeFacts.All || allFacts.SourceColor != expected.SourceColor
         || allFacts.SourceAlpha != expected.SourceAlpha || allFacts.Orientation != expected.Orientation || root.Bytes != 0)
         throw new Exception("Package async selective probe metadata/admission differs.");
+    using var validationRoot = new Lokad.Image.Tooling.TestMemoryBudget(4*1024*1024);
+    var validationLimits = new ImageLimits { MaxWorkingBytes = 4*1024*1024, MemoryBudget = validationRoot };
+    if (ImageCodec.ValidatePixels(packet, validationLimits) != expected || validationRoot.Bytes != 0)
+        throw new Exception("Package span pixel validation metadata/admission differs.");
+    headers.Position = 0;
+    if (ImageCodec.ValidatePixels(headers, validationLimits) != expected || validationRoot.Bytes != 0 || headers.Position != headers.Length)
+        throw new Exception("Package stream pixel validation differs.");
+    headers.Position = 0;
+    if ((await ImageCodec.ValidatePixelsAsync(headers, validationLimits)) != expected || validationRoot.Bytes != 0 || !headers.CanRead)
+        throw new Exception("Package async pixel validation ownership/admission differs.");
 }
 static async Task VerifyAsyncOutput(ImageBuffer image)
 {
@@ -736,6 +746,9 @@ using (var optionalRoot = new Lokad.Image.Tooling.TestMemoryBudget(1024*1024))
     var optionalPolicy = ImageMetadataPolicy.IgnoreInvalid;
     if (ImageCodec.Identify(unusableExif, optionalLimits, default, optionalPolicy).Orientation != ImageOrientation.Normal)
         throw new Exception("Package permissive span identification differs.");
+    if (ImageCodec.ValidatePixels(unusableExif, optionalLimits, metadataPolicy: optionalPolicy).Orientation != ImageOrientation.Normal
+        || optionalRoot.Bytes != 0)
+        throw new Exception("Package permissive pixel validation differs.");
     using var optionalInput = new MemoryStream(unusableExif);
     if ((await ImageCodec.IdentifyAsync(optionalInput, optionalLimits, default, optionalPolicy)).Orientation != ImageOrientation.Normal)
         throw new Exception("Package permissive async identification differs.");

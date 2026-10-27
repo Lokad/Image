@@ -11,7 +11,8 @@ reconciled in the summary below.
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
 names 257 controls. Remove four retired boundaries and add two distinct required
-algorithms: **255 required cases**, not an expanding shape/depth/settings grid.
+algorithms: **255 existing required cases**. Twelve named controls below cover
+the newly added read boundaries: **267 total**, without a shape/depth/settings grid.
 
 Retired: PNG resident ImageBudget quota, JPEG420 ImageBudget quota, VP8 caller work
 budget32M and optional JPEG CompactColor. Their APIs/encoders no longer exist.
@@ -34,15 +35,43 @@ Each existing named case remains required until valid passing evidence applies.
 Add a case only when evidence identifies a distinct required algorithm or public
 boundary omitted from this inventory.
 
+The new APIs are functionally qualified; CPU/reference evidence remains missing.
+The following finite extension preserves the original 255 cases. Use existing
+original recipes and freeze packet/worker identities before measurement. No new
+quality/filter/grid exploration. Async controls use fresh nonseekable input;
+other probing uses fresh seekable input and validation uses a borrowed encoded span.
+
+| New control | Existing input | Distinct required work/boundary |
+| --- | --- | --- |
+| ProbeDimensionsPng | OriginalExif PNG8, 513×259 | IHDR prefix acquisition, without raster/tail validation |
+| ProbeDimensionsJpeg | OriginalExif baseline420, 513×259 | SOF acquisition before compressed scans |
+| ProbeDimensionsWebp | OriginalExif VP8L alpha, 513×259 | RIFF/VP8 dimension header acquisition |
+| ProbeDimensionsJpegAsync | Same JPEG | Actual async prefix acquisition and ownership |
+| ValidatePng8 | OriginalExif PNG8, 513×259 | Inflated rows/filter/checksum without RGBA |
+| ValidatePng16 | OriginalExif PNG16, 513×259 | Required 16-bit row/workspace boundary |
+| ValidateIndexedAdam7 | AuthoredPng c3-d4-adam7-all-filters, 19×17 | Seven passes and palette-index validity |
+| ValidateJpegBaseline420 | OriginalExif baseline420, 513×259 | Huffman/coefficient validation without inverse/render planes |
+| ValidateJpegProgressive420 | OriginalExif progressive420, 513×259 | Distinct spectral/refinement/progression checks |
+| ValidateVp8lAlpha | OriginalExif VP8L alpha, 513×259 | Required ARGB history/inverse transforms without RGBA copy |
+| ValidateVp8Alpha | OriginalExif lossy alpha, 513×259 | VP8 planes plus compressed-ALPH coding |
+| ValidatePng16Async | Same PNG16 | Complete asynchronous acquisition, retained input capacity and cleanup |
+
+Validation is optional for replacement readiness; its supported public boundaries
+still need explicit CPU evidence before full performance completion. Native operations
+must return equivalent requested metadata or validate complete coding, with matching
+input delivery and ownership. Do not substitute a normalization/output workload when
+the operation does not require it. Establish these references before assuming gaps.
+
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 21 unchanged 0.2.0 controls and
+[The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls and
+one historical decode cost awaiting confirmation after read changes, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
 NoCompression at 1.052× / upper1.067, exact 1,066,552 B and 1,741,709 B/op.
 Short screens are not independent confirmations; this representative scope does
-not complete the 255-case goal. [Constant-time distance mapping](WARM-PNG-DISTANCE-SYMBOL.md)
+not complete the full 267-case goal. [Constant-time distance mapping](WARM-PNG-DISTANCE-SYMBOL.md)
 independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
 samples remain. [Effort2 baseline refresh](VP8-RESIDUAL-SUMMARY-DEFERRED.md) resolves
 its current short to 1.583×; the proposed summary primitive is deferred/removed.
@@ -119,6 +148,11 @@ Regression/pixel/reference evidence and timings are separate:
   stream decode is explicitly historical (§). Encoding/editing contexts, kernels,
   ownership and their applicable confirmations remain unchanged; no whole-library
   CPU refresh or new quality/shape matrix is required.
+- Pixel validation shares PNG row reading, JPEG entropy parsing and VP8L ARGB
+  decoding with normal decode. Affected decode costs remain uncertain until
+  current confirmation; functional/native-pixel proofs are refreshed. New validation
+  allocation/admission observations are [scoped separately](PIXEL-VALIDATION-STORAGE.md),
+  without CPU or FFmpeg timing claims. Encoding/editing/native workers stay unchanged.
 
 Frozen inputs/settings/workers, approved native-only adjustments and exact oracles
 remain reusable when unchanged. Retired quota cases cannot be failures or passes.

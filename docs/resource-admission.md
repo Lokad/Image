@@ -7,6 +7,11 @@ the package supplies no governor, independent allowance or cumulative CPU quota.
 inputs as well as results and temporary capacity. Shared admission charges owned
 storage/copies, not caller-owned input storage again.
 
+`ValidatePixels` retains no raster charge. It still admits substantial codec
+storage (PNG compressed input/rows/inflater, JPEG coefficients, WebP planes/history).
+Stream acquisition stays charged through validation; successful metadata results
+contain only scalar facts. Its memory bounds can therefore differ from Decode's.
+
 `IMemoryScope` starts empty and shares its ancestor's allowance. Reserve capacity
 before allocating, including old/new overlap during replacement. `TryReserve` and
 `TryResize` accept zero, reject negative values, and leave accounting unchanged on

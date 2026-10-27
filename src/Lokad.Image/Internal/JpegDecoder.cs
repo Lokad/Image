@@ -42,7 +42,15 @@ internal ref partial struct JpegDecoder
         progressive = false; frameSeen = false; scanSeen = false; rgb = false;
     }
 
-    public ImageBuffer Decode()
+    public ImageBuffer Decode() => DecodeCore(validateOnly: false)!;
+
+    internal ImageInfo ValidatePixels()
+    {
+        DecodeCore(validateOnly: true);
+        return info;
+    }
+
+    private ImageBuffer? DecodeCore(bool validateOnly)
     {
         var adobeTransform = -1;
         try
@@ -56,6 +64,15 @@ internal ref partial struct JpegDecoder
                     if (!scanSeen) throw new ImageDataException("JPEG has no pixel scans.");
                     foreach (var component in components)
                         if (component.Approximation[0] < 0) throw new ImageDataException("JPEG component is missing a DC scan.");
+                    if (validateOnly)
+                    {
+                        // Sampling is checked in ReadFrame; entropy/table/progression
+                        // validity is complete. Rendering adds only the color-transform
+                        // support check, then total fixed-point arithmetic and placement.
+                        _ = ResolveSampleColorSpace(JpegColorSpace.Auto, adobeTransform);
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        return null;
+                    }
                     if (components.Length == 4) return RenderCmyk(adobeTransform);
                     if (adobeTransform == 2) throw UnsupportedColorTransform();
                     return Render();

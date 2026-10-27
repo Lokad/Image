@@ -3,6 +3,21 @@ namespace Lokad.Image.Internal;
 /// <summary>Owned RFC 9649 section 2.7.1.2 alpha decoding and inverse filtering.</summary>
 internal static class WebpAlpha
 {
+    internal static void ValidatePixels(ReadOnlySpan<byte> payload, int width, int height, OperationContext context)
+    {
+        if (payload.Length == 0) throw new ImageDataException("Missing WebP alpha header.");
+        var compression = payload[0] & 3; var preprocessing = payload[0] >> 4 & 3;
+        if (compression > 1 || preprocessing > 1) throw new UnsupportedImageException(UnsupportedImageFeature.AlphaCoding, "Unsupported WebP alpha coding.", ImageFormat.WebP);
+        if (compression == 0)
+        {
+            if (payload.Length != (long)width * height + 1) throw new ImageDataException("WebP raw alpha size differs from the raster.");
+        }
+        else new WebpLosslessDecoder(payload[1..], width, height, context, header: false).ValidatePixels();
+        // All two-bit filter values are defined; inverse filtering is total byte
+        // arithmetic and cannot make successfully decoded residues invalid.
+        context.Cancellation.ThrowIfCancellationRequested();
+    }
+
     public static byte[] Decode(ReadOnlySpan<byte> payload, int width, int height, OperationContext context)
     {
         if (payload.Length == 0) throw new ImageDataException("Missing WebP alpha header.");

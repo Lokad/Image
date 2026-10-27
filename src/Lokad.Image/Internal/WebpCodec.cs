@@ -4,6 +4,31 @@ namespace Lokad.Image.Internal;
 
 internal static class WebpCodec
 {
+    internal static ImageInfo ValidatePixels(ReadOnlySpan<byte> data, OperationContext context, ImageMetadataPolicy metadataPolicy)
+    {
+        var info = ContainerHeaders.WebP(data, context, metadataPolicy);
+        ReadOnlySpan<byte> alphaPayload = default;
+        for (var position = 12; position < data.Length;)
+        {
+            var length = (int)BinaryPrimitives.ReadUInt32LittleEndian(data[(position + 4)..]);
+            if (data.Slice(position, 4).SequenceEqual("VP8L"u8))
+            {
+                new WebpLosslessDecoder(data.Slice(position + 8, length), info.Width, info.Height, context).ValidatePixels();
+                return info;
+            }
+            if (data.Slice(position, 4).SequenceEqual("ALPH"u8)) alphaPayload = data.Slice(position + 8, length);
+            if (data.Slice(position, 4).SequenceEqual("VP8 "u8))
+            {
+                var planes = new Vp8Decoder(data.Slice(position + 8, length), context).DecodePlanes();
+                if (!alphaPayload.IsEmpty) WebpAlpha.ValidatePixels(alphaPayload, info.Width, info.Height, context);
+                context.Release(planes.MemoryBytes);
+                return info;
+            }
+            position += 8 + length + (length & 1);
+        }
+        throw new ImageDataException("WebP pixel chunk is missing.");
+    }
+
     public static ImageBuffer Decode(ReadOnlySpan<byte> data, OperationContext context,
         ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
