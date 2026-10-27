@@ -1,5 +1,7 @@
 # Current encoder cost anchors
 
+PNG encoding costs below are superseded by the [shared checksum round](WARM-PNG-SHARED-ADLER.md). Unchanged codec paths retain their recorded scope.
+
 These existing 513×259 controls retain frozen inputs/reference settings and
 complete independent output ownership. Normalization is timed where required;
 the caller-RGB boundary borrows identical packed samples on both subjects. One

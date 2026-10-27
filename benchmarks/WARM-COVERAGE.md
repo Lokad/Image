@@ -38,9 +38,9 @@ independently measures 1.590× / upper 1.610. Other settings receive no broader 
 
 ## Current qualification and costs
 
-[Signed coefficient validation](WARM-VP8-SIGNED-DOMAIN-GUARD.md) is the latest
+[Shared PNG checksum](WARM-PNG-SHARED-ADLER.md) is the latest
 qualified producer: 4,959 Release checks (1,977 internal, 2,035 public, 947 live)
-and 638 scalar WebP checks per OS. The same actual private 0.2.0 package and all
+and 499 internal plus 180 public scalar PNG checks per OS. The same actual private 0.2.0 package and all
 three usage examples pass both systems. Published 0.1.0 stays unchanged.
 Complete packets, decoded/editing pixels, cancellation and explicit shared
 admission/ownership remain gates, separately from performance qualification.
@@ -76,9 +76,13 @@ reference boundaries and confirmation status. Current named evidence:
   native bounds and local working limits preserved. No production changes.
 - [VP8 decoder StreamNative8](WARM-VP8-SHARED-SMALL-ROWS.md): short 1.309×,
   exact pixels. Earlier color-renderer timing is historical after predictor changes.
-- [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) and
-  [RGBA16 bilinear reduction](WARM-CURRENT-EDITING-ANCHORS.md): shorts
-  1.417× / 1.339×, exact packets/managed words and approved native-only bounds.
+- [PNG checksum callers](WARM-PNG-SHARED-ADLER.md): RGBA16 SmallestSize independently
+  confirms 1.336× / upper 1.360, 3,813,679 B/op and exact 963,202 B. RGBA8
+  SmallestSize / Fastest and RGBA16 NoCompression shorts are 1.396× / 1.760× /
+  2.754×, all complete canonical packets exact. NoCompression is now the largest
+  observed current multiple; unconfirmed shorts remain separately labeled.
+- [RGBA16 bilinear reduction](WARM-CURRENT-EDITING-ANCHORS.md): short 1.339×,
+  exact managed words and approved native-only bounds.
 
 These are gaps, not broad parity claims. Shorts are not independent confirmations.
 Complete operations include normalization, equivalent delivery, fresh output
@@ -126,6 +130,10 @@ VP8 quantization callers across efforts/depths/alpha and stream/async output.
 Six affected anchors replace preceding costs; other affected costs are historical.
 VP8L-only encoding, decoders, other codecs and editing/text remain unchanged.
 Regression/package proof and unchanged reference oracles carry forward.
+PNG encoder checksum callers now reuse the unchanged shared Adler32 kernel.
+All PNG encoding policies/colors/depths and stream/async callers are affected;
+four named anchors replace older costs. Other affected observations remain
+historical. PNG decoders, other codecs and editing/text keep applicable evidence.
 Frozen inputs/settings/workers, approved native-only adjustments, pixel/packet
 oracles and unaffected font comparisons remain reusable. Regression/package
 proof does not establish CPU parity.
@@ -168,10 +176,13 @@ and four Lanczos screens resolve missing current costs without production tuning
 shorts are not ranked as independent confirmations.
 
 The three cached bicubic controls resolve the cross-axis and two deep-support
-workspace paths after cleanup. Next measure the existing PNG RGBA16 SmallestSize
-control: its full16-bit byte ordering/filter/deflate path lacks current costs.
-Reuse the frozen complete-packet reference/settings and qualified producer. No
-new grid, broad audit or automatic profile. Keep closed
+workspace paths after cleanup. The PNG16 measurement and shared checksum round
+expose the larger NoCompression gap at 2.754×. Prioritize one stored Deflate
+payload-emission primitive: copy contiguous/ring segments into the existing
+encoded buffer in bulk, retaining exact row/block selection, bit alignment,
+4 KiB flush/write-failure prefixes and cancellation. No new storage or owner.
+Prove segmentation, then one existing stored16 short; confirm only a meaningful
+result. No new grid, broad audit or automatic profile. Keep closed
 PopulationSum/predictor/cost/slab/math kernels closed and stop confirmed passes.
 
 The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)

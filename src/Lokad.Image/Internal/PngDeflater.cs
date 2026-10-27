@@ -48,8 +48,7 @@ internal sealed partial class PngDeflater : Stream
             count = Math.Min(count, history.Length - offset);
             if (count == 0) throw new InvalidOperationException("PNG history did not advance.");
             data[..count].CopyTo(history.AsSpan(offset));
-            foreach (var value in data[..count])
-            { adlerA = (adlerA + value) % 65521; adlerB = (adlerB + adlerA) % 65521; }
+            Adler32.Append(data[..count], ref adlerA, ref adlerB, context.Cancellation);
             filled += count; data = data[count..]; Process(false);
         }
     }
@@ -70,8 +69,7 @@ internal sealed partial class PngDeflater : Stream
         {
             var count = Math.Min(data.Length, 65531 - storedCount);
             data[..count].CopyTo(history.AsSpan(storedCount));
-            foreach (var value in data[..count])
-            { adlerA = (adlerA + value) % 65521; adlerB = (adlerB + adlerA) % 65521; }
+            Adler32.Append(data[..count], ref adlerA, ref adlerB, context.Cancellation);
             storedCount += count; data = data[count..];
             if (storedCount == 65531) StoredBlock(false);
         }

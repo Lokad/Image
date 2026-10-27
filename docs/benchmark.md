@@ -4,28 +4,14 @@ Updated 2026-10-27. Development0.2.0 remains under qualification; warm single-CP
 parity and replacement readiness are open. Compression correctness precedes CPU
 gains. Published0.1.0 remains unchanged.
 
-Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
-Current independent confirmations and short screens are labeled below; other
-required paths remain open. Indexed VP8L tile reconstruction removes a full
-histogram slab and copy while preserving exact packets. Async allocation falls
-37.73% to 29,689,080 B/op; independent cost is 1.622× (upper 1.641×), exact 183,812 B.
-Diagram independently measures 11.12 ms, 1.166× (upper 1.204×), 27,419,167 B/op and
-exact 7,234 B: 15.68% less elapsed than its preceding independent mean. Separate
-runs are not paired baseline gains. Exact signed VP8 coefficient validation now
-confirms 15.483 ms for the photograph, 1.590× (upper 1.610×), 809,072 B/op and
-exact 17,688 B: 3.40% below its preceding independent mean. Six affected VP8
-anchors are reconciled. Lossless photograph now independently confirms 1.599×
-(upper 1.629×), 20,410,208 B/op and exact 160,032 B, without a production change.
-Async VP8L 1.622× remains the largest selected independent gap.
-Five further named costs are refreshed without production changes: shared-root
-JPEG RGBA16 1.462×; Lanczos3 reduction8/16 1.478×/1.438× and enlargement8/16
-1.039×/1.310×. These remain short screens, with exact packets/managed frames and
-unchanged approved native bounds. No independent parity claim follows.
-The existing default-workspace bicubic RGBA8 32×16 reduction independently
-passes at 0.927×, upper 0.934×, with exact pixels and 199,372 B/op. This passing
-scope is precise; its constrained-workspace counterpart and RGBA16 cross-axis
-control remain short gaps at 1.235× and 1.549×.
-Required upper ≤1× stays open.
+Current independent confirmations and short screens are labeled below;
+pre-cleanup costs describe their recorded producers. Full warm upper ≤1× stays
+open. The largest newly observed gap is PNG16 NoCompression at 2.754× (short).
+PNG16 SmallestSize independently measures 1.336×, upper 1.360×, with its exact
+963,202 B packet and 3,813,679 B/op after reusing the shared checksum kernel.
+The named default-workspace bicubic RGBA8 513×259→32×16 path independently
+passes at 0.927×, upper 0.934×. Its result does not qualify other geometries or
+memory boundaries. Other unchanged paths retain applicable evidence.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
@@ -33,10 +19,10 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 4,959 checks/OS; 638 affected scalar WebP/OS and same actual package passed |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 4,959 checks/OS; 499 internal + 180 public scalar PNG checks/OS; same actual package passed |
 | Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
 | Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current qualified short gap |
-| CPU and allocation measurements after cleanup | [VP8 signed guard](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [indexed histogram replay](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; async VP8L allocation falls 37.73%; actual capacity admission and retained ownership remain |
+| CPU and allocation measurements after cleanup | [shared PNG checksum](../benchmarks/WARM-PNG-SHARED-ADLER.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [indexed histogram replay](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets/pixels, actual capacity admission and retained ownership remain |
 | Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
 
 This table selects current paths; unlisted inventory costs still need applicable evidence.
@@ -64,7 +50,10 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 197,779.35 | 121,909.14 | 1.622 / 1.641 | 29,689,080 | Current gap (independent) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md) | 132,699.99 | 82,971.84 | 1.599 / 1.629 | 20,410,208 | Current gap (independent) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 11,123.58 | 9,542.18 | 1.166 / 1.204 | 27,419,167 | Current gap (independent) |
-| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |
+| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 24,339.75 | 17,435.14 | 1.396 / 1.938 | 1,325,670 | Current gap (short; qualified) |
+| [PNG RGBA16, SmallestSize9 / native9](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 26,830.88 | 20,076.88 | 1.336 / 1.360 | 3,813,679 | Current gap (independent) |
+| [PNG RGBA8, Fastest1 / native1](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 7,950.16 | 4,516.53 | 1.760 / 2.620 | 1,344,453 | Current gap (short; qualified) |
+| [PNG RGBA16, NoCompression0 / native0](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 1,158.17 | 420.57 | 2.754 / 2.935 | 1,741,683 | Current gap (short; qualified) |
 | [Bilinear resize RGBA16](../benchmarks/WARM-CURRENT-EDITING-ANCHORS.md) | 547.29 | 408.78 | 1.339 / 1.426 | 290,124 | Current gap (short; qualified) |
 | [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |
 | [Bicubic upscale RGBA16](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 4,258.22 | 2,871.12 | 1.483 / 1.690 | 5,016,578 | Historical short; remeasure |

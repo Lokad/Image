@@ -1,7 +1,7 @@
 namespace Lokad.Image.Internal;
 
 // Independent spatial population clustering. Tile syntax is RFC 9649 section
-// 5.2.3; deterministic merge decisions use the admitted integer entropy model.
+// 3.7.2.2; deterministic merge decisions use the admitted integer entropy model.
 internal static class Vp8lReferenceClustering
 {
     private const int SamplingPairs = 9;
