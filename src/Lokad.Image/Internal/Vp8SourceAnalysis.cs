@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Private source-only analysis, before reconstruction and rate/distortion search.
@@ -40,6 +42,22 @@ internal sealed class Vp8SourceAnalysis : IDisposable
         else for (var p = 0; p < size; p++) left[p] = plane[(y + p) * stride + x - 1];
         var corner = x != 0 && y != 0 ? plane[(y - 1) * stride + x - 1] : (byte)0;
         Vp8BlockPrediction.Fill(size, mode, top, left, corner, prediction);
+        // An exact match has only bin0 coefficients, including the forward
+        // transform's unit rounding bias. Preserve sequential feedback when
+        // the caller's histogram aliases either borrowed pixel buffer.
+        var matches = population.Length >= 32
+            && !MemoryMarshal.AsBytes(population[..32]).Overlaps(plane)
+            && !MemoryMarshal.AsBytes(population[..32]).Overlaps(prediction[..(size * size)]);
+        if (matches)
+        {
+            for (var row = 0; row < size; row++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                if (plane.Slice((y + row) * stride + x, size).SequenceEqual(prediction.Slice(row * size, size))) continue;
+                matches = false; break;
+            }
+            if (matches) { population[0] += size * size; return; }
+        }
         Span<short> residual = stackalloc short[16]; Span<short> coefficients = stackalloc short[64];
         // Existing four-block arithmetic consumes strided source and compact
         // prediction directly. Extra96 stack bytes fit ScratchBytes; live tokens

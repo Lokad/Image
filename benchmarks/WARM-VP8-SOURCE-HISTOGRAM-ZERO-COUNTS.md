@@ -1,5 +1,8 @@
 # Combine zero-bucket population updates
 
+These six costs are historical after [matching-plane analysis](WARM-VP8-SOURCE-IDENTICAL-PLANES.md).
+The retained source/package/raw identities describe this recorded producer.
+
 The existing effort2 diagram independently measures 5.095 ms: 2.020× reference
 time (upper 2.028×), an exact 7,330-byte packet and unchanged 741,342 B/op.
 Elapsed time is 5.18% below the preceding independent mean; separate runs

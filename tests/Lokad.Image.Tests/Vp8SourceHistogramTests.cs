@@ -8,6 +8,40 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8SourceHistogramTests
 {
     [Fact]
+    public void ExactPredictionMatchesRetainForwardBiasAndLiteralAnalysisPopulations()
+    {
+        var residual = new short[16]; var coefficients = new short[17]; coefficients[16] = 147;
+        Vp8ForwardTransform.Dct(residual, coefficients);
+        short[] expected = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 147];
+        Assert.Equal(expected, coefficients);
+        var population = new int[32]; Vp8SourceHistogram.AddBlock(coefficients, population);
+        Assert.Equal(16, population[0]); Assert.Equal(16, population.Sum());
+        using var root = new TestMemoryBudget(16_000_000);
+        using var image = ImageBuffer.Create(48, 48, 8, new() { MemoryBudget = root });
+        for (var y = 0; y < image.Height; y++)
+        {
+            var row = image.GetRow8(y);
+            for (var p = 3; p < row.Length; p += 4) row[p] = 255;
+        }
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var input = Vp8PreparedInput.Create(image, context);
+        var sourceHash = Vp8PreparedInputTests.Hash(input); var retained = root.Bytes;
+        var prediction = new byte[256]; context.Reserve(1024);
+        try
+        {
+            foreach (var mode in new[] { Vp8IntraMode.Dc, Vp8IntraMode.TrueMotion })
+            {
+                var measured = Vp8SourceAnalysis.Measure(input, 1, 1, mode, prediction, population, context);
+                Assert.Equal(new Vp8SourceHistogram.Shape(256, 0), measured.Luma);
+                Assert.Equal(new Vp8SourceHistogram.Shape(128, 0), measured.Chroma);
+                Assert.Equal(128, population[0]); Assert.Equal(128, population.Sum());
+            }
+        }
+        finally { context.Release(1024); }
+        Assert.Equal(sourceHash, Vp8PreparedInputTests.Hash(input)); Assert.Equal(retained, root.Bytes);
+    }
+
+    [Fact]
     public void AllZeroLaneMasksPreserveCollisionsWraparoundAndBorrowedTails()
     {
         var coefficients = new short[17]; coefficients[16] = 147;

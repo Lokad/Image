@@ -77,12 +77,12 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-source-histogram-zero-counts-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md', confirmed=True, current=True),
-        row('VP8 RGBA8', 'warm-vp8-source-histogram-zero-counts-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque photograph', 'warm-vp8-source-histogram-zero-counts-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque text/diagram', 'warm-vp8-source-histogram-zero-counts-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort6 / trellis', 'warm-vp8-source-histogram-zero-counts-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque RGBA16, including normalization', 'warm-vp8-source-histogram-zero-counts-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-source-identical-planes-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-SOURCE-IDENTICAL-PLANES.md', confirmed=True, current=True),
+        row('VP8 RGBA8', 'warm-vp8-source-identical-planes-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-SOURCE-IDENTICAL-PLANES.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque photograph', 'warm-vp8-source-identical-planes-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-SOURCE-IDENTICAL-PLANES.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque text/diagram', 'warm-vp8-source-identical-planes-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-SOURCE-IDENTICAL-PLANES.md', verification='Current gap (short; confidence open)', current=True),
+        row('VP8 diagram, effort6 / trellis', 'warm-vp8-source-identical-planes-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-SOURCE-IDENTICAL-PLANES.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque RGBA16, including normalization', 'warm-vp8-source-identical-planes-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-SOURCE-IDENTICAL-PLANES.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-rgba16-current-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-RGBA16-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
         row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-async-webp-current-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-ASYNC-WEBP-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
@@ -104,13 +104,12 @@ gains. Published0.1.0 remains unchanged.
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
 required paths remain open. The previously unmeasured distortion-only VP8 search
-exposed a 3.615× gap. After exact squared groups, redundant-pass removal,
-four-block transforms and zero-population aggregation, it independently measures
-2.020× (upper 2.028×), 741,342 B/op and an exact 7,330-byte packet. Its 5.095 ms
-is 5.18% below the preceding independent mean; these separate runs are not a
-paired baseline gain. Six affected VP8 anchors are reconciled. A first candidate's
-RGBA16 regression was resolved against a fresh cached baseline before acceptance.
-The effort2 case remains the largest confirmed gap; required upper ≤1× stays open.
+exposed a 3.615× gap. After exact metrics, pass/transform reuse and source-analysis
+shortcuts, it independently measures 1.947× (upper 1.955×), 741,342 B/op and an
+exact 7,330-byte packet. Its 4.898 ms is 3.87% below the preceding independent
+mean; these separate runs are not a paired baseline gain. Six affected VP8 anchors
+are reconciled; the RDO diagram short retains wide uncertainty. The effort2 case
+remains the largest confirmed gap; required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
@@ -118,10 +117,10 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 4,946 checks/OS; 625 affected scalar WebP/OS and same actual package passed |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SOURCE-IDENTICAL-PLANES.md) | 4,947 checks/OS; 626 affected scalar WebP/OS and same actual package passed |
 | Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
 | Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current independent gap |
-| CPU and allocation measurements after cleanup | [zero populations](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
+| CPU and allocation measurements after cleanup | [matching planes](../benchmarks/WARM-VP8-SOURCE-IDENTICAL-PLANES.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

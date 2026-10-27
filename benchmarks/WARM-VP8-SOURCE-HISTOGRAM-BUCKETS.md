@@ -1,8 +1,8 @@
 # SIMD buckets for VP8 source histograms
 
-Historical producer and costs. [Zero-population aggregation](WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md)
-supplies current affected costs and allocations. Magnitudes, bins and population
-results remain exact; its sparse updates supersede this producer's serial loop.
+Historical producer and costs. [Matching-plane analysis](WARM-VP8-SOURCE-IDENTICAL-PLANES.md)
+supplies current affected costs and allocations. [Zero-population aggregation](WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md)
+superseded this producer's serial updates; magnitudes, bins and populations remain exact.
 
 The photograph independently measures 21.92 ms: 2.269× reference time (upper
 2.279×), 909,696 B/op and an exact 17,688-byte packet. Elapsed time is 3.10% below
