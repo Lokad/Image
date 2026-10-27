@@ -31,6 +31,13 @@ public sealed class Vp8lPredictionCostTests
         return result;
     }
 
+    internal static long PreparedCost(ReadOnlySpan<int> current, ReadOnlySpan<int> previous, OperationContext context)
+    {
+        Span<long> products = stackalloc long[1024]; Span<long> baselines = stackalloc long[4];
+        Vp8lReferenceCost.PreparePrediction(current, previous, products, baselines, context);
+        return Vp8lReferenceCost.Prediction(current, previous, products, baselines, context);
+    }
+
     [Fact]
     public void GeneralFourPlaneHistogramsKeepIndependentCostsAndBorrowedInputs()
     {
@@ -44,7 +51,7 @@ public sealed class Vp8lPredictionCostTests
                 current[i] = Next(sample % 5); previous[i] = Next((sample / 5) % 5);
             }
             var before = current.ToArray(); var prior = previous.ToArray();
-            Assert.Equal(Expected(current, previous), Vp8lReferenceCost.Prediction(current, previous, context));
+            Assert.Equal(Expected(current, previous), PreparedCost(current, previous, context));
             Assert.Equal(before, current); Assert.Equal(prior, previous);
         }
         int Next(int density)
@@ -70,8 +77,45 @@ public sealed class Vp8lPredictionCostTests
             var a = Enumerable.Repeat(12345, 1026).ToArray(); var b = a.ToArray();
             current.CopyTo(a, 1); previous.CopyTo(b, 1);
             Assert.Equal(Expected(current, previous),
-                Vp8lReferenceCost.Prediction(a.AsSpan(1, 1024), b.AsSpan(1, 1024), context));
+                PreparedCost(a.AsSpan(1, 1024), b.AsSpan(1, 1024), context));
             Assert.Equal(12345, a[0]); Assert.Equal(12345, b[^1]);
+        }
+    }
+
+    [Fact]
+    public void OnePreparedHistoryPricesFourteenDifferentCandidatesWithoutChangingBorrowedStorage()
+    {
+        using var context = new OperationContext(ImageLimits.Default, default);
+        var previous = new int[1024];
+        for (var i = 0; i < previous.Length; i++) previous[i] = i % 7 == 0 ? 65536 : i % 7 == 1 ? 257 : 0;
+        var original = previous.ToArray();
+        foreach (var total in new[] { 0, 1, 64, 257, 65536, 1 << 27 })
+        {
+            var candidates = new int[14][];
+            for (var mode = 0; mode < 14; mode++)
+            {
+                var candidate = candidates[mode] = new int[1024];
+                for (var plane = 0; plane < 4; plane++)
+                {
+                    var at = plane * 256 + ((mode * 17 + plane * 3) & 255);
+                    var first = (int)((long)total * mode / 14);
+                    candidate[at] = first; candidate[plane * 256 + ((at + 1) & 255)] = total - first;
+                }
+            }
+            var products = Enumerable.Repeat(-31337L, 1026).ToArray();
+            var baselines = Enumerable.Repeat(-31337L, 6).ToArray();
+            Vp8lReferenceCost.PreparePrediction(candidates[0], previous, products.AsSpan(1, 1024), baselines.AsSpan(1, 4), context);
+            var productSnapshot = products.ToArray(); var baselineSnapshot = baselines.ToArray();
+            foreach (var candidate in candidates)
+            {
+                var before = candidate.ToArray();
+                Assert.Equal(Expected(candidate, previous), Vp8lReferenceCost.Prediction(candidate, previous,
+                    products.AsSpan(1, 1024), baselines.AsSpan(1, 4), context));
+                Assert.Equal(before, candidate);
+            }
+            Assert.Equal(original, previous); Assert.Equal(productSnapshot, products); Assert.Equal(baselineSnapshot, baselines);
+            Assert.Equal(-31337, products[0]); Assert.Equal(-31337, products[^1]);
+            Assert.Equal(-31337, baselines[0]); Assert.Equal(-31337, baselines[^1]);
         }
     }
 
@@ -83,14 +127,15 @@ public sealed class Vp8lPredictionCostTests
         using var root = new TestMemoryBudget(0);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         long checksum = 0;
-        for (var i = 0; i < 512; i++) checksum ^= Vp8lReferenceCost.Prediction(current, previous, context);
+        for (var i = 0; i < 512; i++) checksum ^= PreparedCost(current, previous, context);
         var before = GC.GetAllocatedBytesForCurrentThread();
-        for (var i = 0; i < 512; i++) checksum ^= Vp8lReferenceCost.Prediction(current, previous, context);
+        for (var i = 0; i < 512; i++) checksum ^= PreparedCost(current, previous, context);
         Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before); Assert.Equal(0, checksum);
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
         using var cancellation = new CancellationTokenSource();
         using var canceled = new OperationContext(ImageLimits.Default, cancellation.Token); cancellation.Cancel();
-        var error = Assert.Throws<OperationCanceledException>(() => Vp8lReferenceCost.Prediction([], [], canceled));
+        var error = Assert.Throws<OperationCanceledException>(() => Vp8lReferenceCost.Prediction([], [], [], [], canceled));
         Assert.Equal(cancellation.Token, error.CancellationToken);
+        Assert.Throws<OperationCanceledException>(() => Vp8lReferenceCost.PreparePrediction([], [], [], [], canceled));
     }
 }

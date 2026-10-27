@@ -13,11 +13,12 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, opaque RGBA16 VP8 and VP8L photograph have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, opaque RGBA16 VP8 and VP8L RGBA8 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
-idle/process guards pass. SIMD scored-plane histograms reduce photograph elapsed
-by 6.4% against a fresh independent baseline, with unchanged allocations and
-exact packets. It remains a1.350× / upper1.371 gap; RGBA8/16/async are current screens.
+idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
+elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
+It remains a1.332× / upper1.360 gap. Allocation rises by8,224B/op for one reusable
+8KiB analysis buffer; RGBA16/async/photograph have current screens.
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
@@ -39,7 +40,7 @@ Source images are 513×259; resize rows state output dimensions. The
 settings, boundaries, binaries, samples, package checks and retained raw archives.
 [Borrowed VP8 cursors](../benchmarks/WARM-VP8-BORROWED-CURSOR.md) supply all six
 current VP8 encoding rows;
-[scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
+[shared-history predictor pricing](../benchmarks/WARM-VP8L-PREPARED-PREDICTION-COST.md) supplies the
 four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes
 caller RGB420 and governed RGBA16; other subsampled encoder costs need current
@@ -61,10 +62,10 @@ Stream decode and four existing tight PNG companions without a speedup claim.
 | VP8 opaque text/diagram † | 8,210.55 | 5,830.12 | 1.408 / 1.492 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 14,974.25 | 9,821.74 | 1.525 / 1.565 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 21,978.27 | 15,585.15 | 1.410 / 1.420 | 1,201,552 | 72,380 / 72,380 |
-| VP8L RGBA8 / libwebp exact=1 † | 174,761.42 | 121,059.75 | 1.444 / 1.702 | 29,688,704 | 183,812 / 183,812 |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 174,544.82 | 121,397.18 | 1.438 / 1.686 | 29,688,704 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 179,408.83 | 120,784.16 | 1.485 / 2.434 | 29,689,088 | 183,812 / 183,812 |
-| VP8L photograph / libwebp exact=1 † | 112,763.24 | 83,526.34 | 1.350 / 1.371 | 20,409,400 | 160,032 / 160,032 |
+| VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 161,904.66 | 120,988.24 | 1.338 / 1.923 | 29,696,928 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 162,750.37 | 120,441.78 | 1.351 / 1.431 | 29,697,312 | 183,812 / 183,812 |
+| VP8L photograph / libwebp exact=1 † | 109,137.75 | 82,564.36 | 1.322 / 1.411 | 20,417,624 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
 | PNG RGBA8, SmallestSize9 / native9 † | 22,507.99 | 17,297.84 | 1.301 / 1.350 | 1,325,664 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † | 26,234.53 | 20,109.52 | 1.305 / 1.565 | 3,813,670 | 963,202 / 963,202 |

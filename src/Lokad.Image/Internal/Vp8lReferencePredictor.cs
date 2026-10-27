@@ -44,6 +44,7 @@ internal static class Vp8lReferencePredictor
         private readonly bool greenOnly;
         private int[]? data;
         private byte[]? maps;
+        private long[]? products;
         private readonly int[] offsets;
         private readonly int[] columns;
 
@@ -55,12 +56,13 @@ internal static class Vp8lReferencePredictor
             for (var bits = minBits; bits <= maxBits; bits++) mapLength += Ceil(width, bits) * Ceil(height, bits);
             // Flat reusable level histograms, accumulated counts, mode counts and
             // candidate maps; the coarse allowance covers the small owner arrays.
-            reserved = levels * LevelSize * 4L + mapLength + 512;
+            reserved = levels * LevelSize * 4L + mapLength + (greenOnly ? 0 : 1024 * sizeof(long)) + 512;
             context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
             try
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 data = new int[levels * LevelSize]; maps = new byte[mapLength];
+                if (!greenOnly) products = new long[1024];
                 offsets = new int[levels]; columns = new int[levels];
                 var offset = 0;
                 for (var level = 0; level < levels; level++)
@@ -129,11 +131,15 @@ internal static class Vp8lReferencePredictor
             }
             var tx = x0 >> bits; var ty = y0 >> bits; var tile = ty * columns[level] + tx;
             var modes = Map(level); var history = History(level); var chosen = 0; var best = long.MaxValue;
+            // Children have finished before pricing starts. One admitted 8KiB
+            // product array is reused by every completed visit, not per level.
+            Span<long> baselines = stackalloc long[4];
+            if (!greenOnly) Vp8lReferenceCost.PreparePrediction(histogram[..1024], history, products, baselines, context);
             for (var mode = 0; mode < 14; mode++)
             {
                 var candidate = histogram.Slice(mode * 1024, 1024);
                 var cost = greenOnly ? Vp8lReferenceCost.PredictionGreen(candidate, history, context)
-                    : Vp8lReferenceCost.Prediction(candidate, history, context);
+                    : Vp8lReferenceCost.Prediction(candidate, history, products, baselines, context);
                 if (tx != 0 && modes[tile - 1] == mode) cost -= 15 * Vp8lReferenceCost.Scale;
                 if (ty != 0 && modes[tile - columns[level]] == mode) cost -= 15 * Vp8lReferenceCost.Scale;
                 if (cost < best) { best = cost; chosen = mode; }
@@ -189,7 +195,7 @@ internal static class Vp8lReferencePredictor
         public void Dispose()
         {
             if (Interlocked.Exchange(ref data, null) is null) return;
-            maps = null; context.Release(reserved);
+            maps = null; products = null; context.Release(reserved);
         }
     }
 

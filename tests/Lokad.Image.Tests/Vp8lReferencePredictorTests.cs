@@ -138,6 +138,21 @@ public sealed class Vp8lReferencePredictorTests
     }
 
     [Fact]
+    public void PreparedHistoryCapacityIsAdmittedBeforeAllocationAndLaterSuccessReleasesIt()
+    {
+        var rgba = HiddenRgb(); using var root = new TestMemoryBudget(200_000);
+        using var limited = new OperationContext(new() { MemoryBudget = root, MaxWorkingBytes = 64 * 1024 }, default);
+        var pixels = Working(rgba, false, limited); var original = pixels.ToArray(); var attempts = root.GrowthAttempts;
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, limited));
+        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.Operation), (error.Limit, error.Scope));
+        Assert.Equal(attempts, root.GrowthAttempts); Assert.Equal(rgba.Length, root.Bytes); Assert.Equal(original, pixels);
+        using var later = new OperationContext(new() { MemoryBudget = root }, default);
+        using var next = Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, later);
+        Assert.Equal("7416018eeb4d196de281306b2952d9cae631dd8148e419555a311e44d6bcd106", Hash(pixels));
+        next.Dispose(); Assert.Equal(rgba.Length, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
     public void CancellationAtRowAdmissionReleasesAnalysisFirstAndRefundsRowsAndModes()
     {
         var rgba = HiddenRgb();

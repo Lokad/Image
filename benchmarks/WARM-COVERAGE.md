@@ -119,16 +119,21 @@ their earlier costs are historical after borrowed cursors below. The earlier
 [state-collapse trial](VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) remains rejected.
 [The population-window family](VP8L-WINDOW-POPULATIONS-DEFERRED.md) stays closed:
 its short gain does not survive confirmation; occupancy/pair reuse is insufficient.
-[Scored-plane histograms](WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supersede affected
-VP8L costs after [color-trial reuse](WARM-VP8L-COLOR-TRIAL-REUSE.md). Photograph
-independently measures1.350×/upper1.371,112.763ms,6.4% less elapsed than its fresh
-120.536ms baseline. Allocations stay20409400B/op; exact160032B packets. RGBA8/16/
-async screen1.444/1.438/1.485× with unchanged29688704/29688704/29689088B/op and
-exact183812B packets. BothOS5044 full checks,13internal/27public scalar and SAME
-actual package/three examples pass. Diagram and compressed alpha skip color search.
-Opaque VP8 photograph at1.552× is now the largest displayed encoding point gap,
-followed by trellis at1.525× and VP8L async at1.485×. Preserve larger absolute-cost
-VP8L leads where opportunities are comparable.
+[Scored-plane histograms](WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) and
+[color-trial reuse](WARM-VP8L-COLOR-TRIAL-REUSE.md) remain accepted primitives;
+their affected costs are historical after
+[shared-history predictor pricing](WARM-VP8L-PREPARED-PREDICTION-COST.md).
+RGBA8 independently measures161.623ms versus a fresh174.600ms baseline,
+**7.4% less elapsed**,1.332×/upper1.360. Allocation rises29688704→29696928B/op
+for one8KiB reusable analysis buffer plus overhead; exact183812B packets remain.
+Current RGBA16/async/photograph screens are1.338/1.351/1.322× with29696928/
+29697312/20417624B/op and exact183812/183812/160032B packets. They are current
+costs, not independent gain/parity confirmations. BothOS5052 full checks,
+15internal/27public scalar and SAME actual package/three examples pass.
+Diagram4 skips prediction; compressed VP8 alpha uses the unchanged green-only
+pricing path. VP8 photograph1.552× and trellis1.525× remain the largest displayed
+encoding point gaps; PNGFastest1.471× follows. Prefer substantial absolute-cost
+VP8L opportunities where evidenced; do not reopen confirmed passing cases.
 [Horizontal JPEG area filtering](WARM-JPEG-HORIZONTAL-AREA-FILTER.md) independently
 reduces caller-RGB420 elapsed by16.1% against a fresh baseline, to2.030ms and
 1.283×/upper1.294. Allocation373416B/op and exact packet boundary remain.
@@ -271,3 +276,10 @@ word/fragment, prediction/quantizer/trellis and other rejected variants stay clo
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package
 checks for accepted production changes. Preserve complete operation boundaries,
 exact pixels/packets, shared admission and quiet-VM confidence requirements.
+- Prepared predictor pricing changes generic four-plane lossless prediction,
+  including method4/5/6, normalization and stream/async callers that select it.
+  Four displayed controls are refreshed; other affected named controls need
+  applicable current costs before CPU-pass claims. One8KiB product array is
+  admitted with the existing analysis owner and released before row application.
+  Green-only alpha pricing, paths skipping prediction, all decoding, other codecs,
+  editing/text and their applicable unchanged confirmations remain valid.

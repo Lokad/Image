@@ -40,7 +40,23 @@ internal static partial class Vp8lReferenceCost
         return -(weighted + 5) / 10;
     }
 
-    internal static long Prediction(ReadOnlySpan<int> current, ReadOnlySpan<int> previous, OperationContext context)
+    // Every mode in a tile has the same per-plane population and prior history.
+    // Prepare those common terms once. Storage is supplied by the enclosing
+    // analysis owner; this routine neither owns nor allocates it.
+    internal static void PreparePrediction(ReadOnlySpan<int> firstMode, ReadOnlySpan<int> previous,
+        Span<long> products, Span<long> baselines, OperationContext context)
+    {
+        context.Cancellation.ThrowIfCancellationRequested();
+        for (var plane = 0; plane < 4; plane++)
+        {
+            var offset = plane * 256; var count = 0;
+            foreach (var value in firstMode.Slice(offset, 256)) count += value;
+            baselines[plane] = Vp8lColorCost.Prepare(previous.Slice(offset, 256), count, products.Slice(offset, 256));
+        }
+    }
+
+    internal static long Prediction(ReadOnlySpan<int> current, ReadOnlySpan<int> previous,
+        ReadOnlySpan<long> products, ReadOnlySpan<long> baselines, OperationContext context)
     {
         context.Cancellation.ThrowIfCancellationRequested();
         long cost = 0;
@@ -48,8 +64,39 @@ internal static partial class Vp8lReferenceCost
         {
             var tile = current.Slice(plane * 256, 256);
             var prior = previous.Slice(plane * 256, 256);
-            cost += SmallResidualBias(tile) + PredictionEntropy(tile, prior);
+            cost += SmallResidualBias(tile) + PreparedPredictionEntropy(tile, prior, products.Slice(plane * 256, 256), baselines[plane]);
         }
+        return cost;
+    }
+
+    // The baseline already includes -sum(SLog(previous)), SLog(tile count)
+    // and SLog(tile count + prior count). Only nonzero current bins change it:
+    // subtract SLog(current)+SLog(current+previous)-SLog(previous), exactly.
+    private static long PreparedPredictionEntropy(ReadOnlySpan<int> current, ReadOnlySpan<int> previous,
+        ReadOnlySpan<long> products, long cost)
+    {
+        if (Vector256.IsHardwareAccelerated)
+        {
+            var width = Vector512.IsHardwareAccelerated ? 16 : 8;
+            for (var start = 0; start < 256; start += width)
+            {
+                var active = Vector512.IsHardwareAccelerated
+                    ? (uint)Vector512.Equals(Vector512.Create(current.Slice(start, 16)), Vector512<int>.Zero).ExtractMostSignificantBits() ^ 0xffffu
+                    : Vector256.Equals(Vector256.Create(current.Slice(start, 8)), Vector256<int>.Zero).ExtractMostSignificantBits() ^ 0xffu;
+                while (active != 0)
+                {
+                    var symbol = start + BitOperations.TrailingZeroCount(active); var count = current[symbol];
+                    cost -= SLog(count) + SLog(count + previous[symbol]) - products[symbol];
+                    active &= active - 1;
+                }
+            }
+        }
+        else
+            for (var symbol = 0; symbol < 256; symbol++)
+            {
+                var count = current[symbol];
+                if (count != 0) cost -= SLog(count) + SLog(count + previous[symbol]) - products[symbol];
+            }
         return cost;
     }
 

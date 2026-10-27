@@ -39,7 +39,7 @@ public sealed class Vp8lGreenPredictionCostTests
         {
             Input(current, populations[test % populations.Length], active[(test / 3) % active.Length], test & 255);
             Input(previous, histories[test % histories.Length], active[(test / 7) % active.Length], (test >> 3) & 255);
-            var wanted = Vp8lReferenceCost.Prediction(current, previous, generic);
+            var wanted = Vp8lPredictionCostTests.PreparedCost(current, previous, generic);
             var actual = Vp8lReferenceCost.PredictionGreen(current, previous, specialized);
             Assert.Equal(wanted, actual);
             hash.AppendData(MemoryMarshal.AsBytes(current.AsSpan()));
@@ -66,7 +66,7 @@ public sealed class Vp8lGreenPredictionCostTests
 Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
         Assert.Equal(first, current); Assert.Equal(second, previous); Assert.False(root.IsDisposed);
         using var next = new OperationContext(new() { MemoryBudget = root }, default);
-        Assert.Equal(Vp8lReferenceCost.Prediction(current, previous, next), Vp8lReferenceCost.PredictionGreen(current, previous, next));
+        Assert.Equal(Vp8lPredictionCostTests.PreparedCost(current, previous, next), Vp8lReferenceCost.PredictionGreen(current, previous, next));
 Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

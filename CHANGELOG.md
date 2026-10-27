@@ -14,6 +14,8 @@
   exact packets and portable execution.
 - Faster lossless WebP color-transform scoring through trial reuse and safe SIMD,
   preserving exact packets, scratch capacity, admission and cancellation.
+- Faster lossless WebP predictor scoring by sharing exact history terms across
+  candidate modes, with one admitted 8 KiB buffer and unchanged packet bytes.
 - Skip VP8 luma trellis searches whose candidate levels are all zero, preserving
   exact packets, validation, cancellation and portable fallback.
 - Faster subsampled JPEG chroma filtering with safe SIMD, preserving exact
