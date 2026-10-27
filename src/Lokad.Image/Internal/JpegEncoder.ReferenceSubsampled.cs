@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -58,6 +59,10 @@ internal static partial class JpegEncoder
                 lastY = Math.Max(lastY, plan.Source(plan.Count - 1));
             }
             var columns = lastX - firstX + 1;
+            // Selectors/weights are reused across all initialized tile rows.
+            // The384-byte plan fits the existing admitted8-KiB MCU workspace.
+            var vectorFilter = Avx512BW.IsSupported && BitConverter.IsLittleEndian && columns >= 16;
+            var horizontalFilter = vectorFilter ? new JpegReferenceHorizontalFilter(horizontalPlans, firstX, pair) : default;
             for (var sy = firstY; sy <= lastY; sy++)
             {
                 var row = pixels.Slice((sy - firstY) * stride, columns);
@@ -85,7 +90,8 @@ internal static partial class JpegEncoder
             {
                 var rowPixels = pixels.Slice(row * stride, stride);
                 JpegReferenceColor.MatrixChromaRow(rowPixels, columns, pair);
-                for (var x = 0; x < 8; x++)
+                if (vectorFilter) horizontalFilter.Apply(rowPixels[..columns], horizontalChroma);
+                else for (var x = 0; x < 8; x++)
                 {
                     var plan = horizontalPlans[x]; var sumU = 0; var sumV = 0;
                     for (var tap = 0; tap < plan.Count; tap++)

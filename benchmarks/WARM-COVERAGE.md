@@ -102,7 +102,7 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls,
+[The current summary](../docs/benchmark.md) retains 18 unchanged 0.2.0 controls,
 refreshes the VP8 Stream decode cost and thirteen read comparisons, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
@@ -130,6 +130,14 @@ actual package/three examples pass. Diagram and compressed alpha skip color sear
 Opaque VP8 photograph at1.599× is now the largest displayed encoding point gap,
 followed by effort2 at1.583× and trellis at1.574×. Preserve larger absolute-cost
 VP8L leads where opportunities are comparable.
+[Horizontal JPEG area filtering](WARM-JPEG-HORIZONTAL-AREA-FILTER.md) independently
+reduces caller-RGB420 elapsed by16.1% against a fresh baseline, to2.030ms and
+1.283×/upper1.294. Allocation373416B/op and exact packet boundary remain.
+Governed RGBA16 screens2.252ms/1.224×,804644B/op with unchanged1704856B root peak.
+BothOS5049 full checks,4 internal/293 public scalar and SAME actual package/three
+examples pass. Stop this primitive; both named CPU gaps remain open. The bounded
+VP8 quantization-to-pricing audit found only a32-byte reload/absolute-value reuse,
+without a substantial candidate; no production edit or timing followed.
 [Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
 independently confirmed gain and is removed; the current baseline stays valid.
 Full samples, allocations, packet sizes and boundaries are in the
@@ -156,6 +164,12 @@ Regression/pixel/reference evidence and timings are separate:
   exact arithmetic but changed code layout; older costs require measurement.
 - JPEG inverse/color changes invalidate decoder/caller output costs. JPEG entropy,
   MCU normalization and record replay affect encoding only.
+- Horizontal area filtering changes AVX-512BW subsampled JPEG420/422 encoding,
+  including caller samples,8/16-bit normalization, stream/async, restart and
+  cancelable callers. Caller-RGB420 and governed RGBA16 costs are refreshed;
+  other affected inventory paths need applicable current evidence before a CPU
+  pass claim. Grayscale/444, scalar/tiny edges, all decoding and other codecs/
+  editing/text remain unchanged; packet and functional proofs stay valid.
 - VP8 shared prediction changes encoder and decoder callers. Source analysis,
   quantization, reconstruction, interval coding and signed-domain checks affect
   their encoder effort/depth/alpha/stream/async callers, not unrelated codecs.

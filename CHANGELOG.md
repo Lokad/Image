@@ -16,6 +16,8 @@
   preserving exact packets, scratch capacity, admission and cancellation.
 - Skip VP8 luma trellis searches whose candidate levels are all zero, preserving
   exact packets, validation, cancellation and portable fallback.
+- Faster subsampled JPEG chroma filtering with safe SIMD, preserving exact
+  packets, signed rounding, bounded scratch and portable fallback.
 
 ## 0.2.0 — 2026-10-27
 

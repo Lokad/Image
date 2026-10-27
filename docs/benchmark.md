@@ -1,7 +1,7 @@
 # Lokad.Image benchmarks
 
 Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
-**‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
+**‡ stored PNG** retains its unchanged 0.2.1 proof. Eighteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Thirteen read
 controls below use qualified 0.2.1 builds. These 44 displayed controls do not
@@ -13,13 +13,16 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, VP8 trellis and VP8L photograph have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, VP8 trellis and VP8L photograph have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. SIMD scored-plane histograms reduce photograph elapsed
 by 6.4% against a fresh independent baseline, with unchanged allocations and
 exact packets. It remains a1.350× / upper1.371 gap; RGBA8/16/async are current screens.
 The zero-candidate trellis shortcut independently reduces elapsed by5.3%, retaining
 exact packets and allocations; its1.574× / upper1.583 gap remains open.
+Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
+16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
+upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -36,6 +39,9 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 [trellis](../benchmarks/WARM-VP8-ZERO-CANDIDATE-TRELLIS.md) retain current costs;
 [scored-plane histograms](../benchmarks/WARM-VP8L-SCORED-PLANE-HISTOGRAMS.md) supply the
 four affected VP8L rows. Other paths retain applicable prior proof.
+[JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes
+caller RGB420 and governed RGBA16; other subsampled encoder costs need current
+evidence before a pass claim. Grayscale/4:4:4 and decoding paths are unchanged.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
 
@@ -43,8 +49,8 @@ Stream decode and four existing tight PNG companions without a speedup claim.
 | --- | ---: | ---: | ---: | ---: | ---: |
 | WebP VP8 + alpha, fresh seekable Stream † | 7,754.22 | 6,004.85 | 1.291 / 1.334 | 1,966,583 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
-| JPEG 4:2:0 from caller RGB samples | 2,594.66 | 1,662.67 | 1.561 / 2.434 | 373,413 | 52,091 / 52,093 |
-| JPEG RGBA16 4:2:0 / caller IMemoryBudget | 2,697.19 | 1,835.47 | 1.469 / 1.815 | 804,637 | 52,115 / 52,117 |
+| JPEG 4:2:0 from caller RGB samples † | 2,030.36 | 1,582.17 | 1.283 / 1.294 | 373,416 | 52,091 / 52,093 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,251.99 | 1,839.51 | 1.224 / 1.446 | 804,644 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,993.94 | 2,523.55 | 1.583 / 1.709 | 741,401 | 7,330 / 7,330 |
