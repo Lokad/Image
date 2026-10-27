@@ -59,6 +59,8 @@ B/op, exact 183,812 B. RGBA16/async/photo shorts are 1.481/1.515/1.583×. Diagra
 and compressed-alpha costs remain valid because they skip this color search.
 Trellis6 at 1.611× is now the largest displayed point gap, followed by opaque
 VP8 photograph at 1.599×. Preserve larger absolute-cost VP8L leads in the queue.
+[Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
+independently confirmed gain and is removed; the current baseline stays valid.
 Full samples, allocations, packet sizes and boundaries are in the
 [immutable release evidence](release-0.2.0-benchmark-evidence.json) and
 [current PNG evidence](warm-png-bulk-stored-evidence.json).
@@ -117,12 +119,14 @@ and their individual reports/raw archives.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
-Next prioritize the existing trellis6 diagram. Reuse its valid attribution and
-immutable workers; establish one substantial distinct opportunity before editing.
+Next prioritize the existing trellis6 diagram. All production callers supply the
+same fixed importance model: investigate redundant setup/validation rather than
+renewing the deferred uniform-boundary guard. Reuse valid attribution and immutable
+workers; establish one substantial distinct opportunity before editing.
 Keep the VP8L photograph and other larger remaining costs in the queue. Distinguish
 shared work from delivery/normalization, reuse unaffected evidence and verify
 affected companion boundaries on acceptance.
-Do not renew the deferred population-window/occupancy/pair-cache, residual-summary
+Do not renew the deferred uniform-trellis, population-window/occupancy/pair-cache, residual-summary
 or rejected trellis state-reduction
 families without a materially different opportunity.
 Closed source-energy, histogram,
