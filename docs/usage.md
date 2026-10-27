@@ -1,6 +1,6 @@
 # Using Lokad.Image
 
-These examples target .NET 10. See [SPEC.md](../SPEC.md) for supported codec
+These examples target .NET 10. See [SPEC.md](spec.md) for supported codec
 profiles and the exact pixel, metadata and failure contracts.
 
 ## Decode, crop and resize
@@ -58,8 +58,8 @@ RGB when its rounded output alpha is zero. Resizing to the current dimensions
 copies the samples without filtering. PNG encoding preserves 8/16-bit source
 precision. JPEG and WebP encoding reduce 16-bit input to 8-bit once. JPEG requires
 an explicit `BackgroundRgb` for transparent input; flattening and depth reduction
-share that rounding. WebP encoding defaults to lossless; the README demonstrates
-the explicit lossy options.
+share that rounding. WebP encoding defaults to lossless; set
+`WebpEncodeOptions.Lossless = false` explicitly for lossy encoding.
 
 ## Bound an operation and pass cancellation
 
@@ -124,8 +124,9 @@ EOF, seeking over opaque payloads when possible and otherwise draining them.
 PNG CRCs and compressed pixels are not validated; `Identify` retains its fuller
 container checks. Configured limits and cancellation still apply. Input stays open.
 
-`EncodePngAsync`, `EncodeJpegAsync` and `EncodeWebpAsync` stage encoded bytes within
-working/output limits, then write asynchronously. They leave output open and
+`EncodePngAsync`, `EncodeJpegAsync` and lossless `EncodeWebpAsync` stage encoded
+bytes within working/output limits; lossy WebP delivers prepared partitions.
+All write asynchronously, leave output open and
 use the same memory-admission root. The JPEG sample overload accepts borrowed
 `ReadOnlyMemory<byte>` gray/RGB samples with the same stride/quality controls.
 Keep source storage stable until completion. No final `ToArray` copy is needed;
@@ -148,7 +149,7 @@ to check positioned overflow. Render with `ImageDrawing.DrawText(canvas, layout,
 x, y, RgbaColor.From8(20, 40, 60))`; destinations clip and preserve canvas precision.
 Styles come from supplied faces. Add `Shaping = TextShaping.OpenType` for supported
 Latin/Hebrew/Arabic shaping and bidirectional layout; `Direction` selects paragraph
-direction and `Alignment` controls line alignment. The default selects logical left-to-right layout. [SPEC.md](../SPEC.md#supplied-truetype-fonts) defines supported font
+direction and `Alignment` controls line alignment. The default selects logical left-to-right layout. [The contract](spec.md#supplied-fonts-and-text) defines supported font
 tables, wrapping and admission.
 
 For a constrained area, call `TextLayout.TryFit(font, text, 240, 80, out var fitted,
@@ -159,7 +160,7 @@ The largest fitting grid candidate is returned; false/null means none fits.
 Trials share admission and release rejected storage. Resource failure or
 cancellation terminates the call rather than trying a smaller candidate.
 
-For cooperative memory admission in 0.2.0 development, set
+For cooperative memory admission, set
 `new ImageLimits { MemoryBudget = callerAdapter }` and pass these limits through
 codec/text options and editing calls. The adapter implements Lokad.Image's
 `IMemoryBudget`/`IMemoryScope`/`IMemoryReservation` interfaces against the caller's

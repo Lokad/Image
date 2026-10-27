@@ -17,7 +17,7 @@ Direct zscale reproduces every audit value and output byte on Windows and Linux.
 in the interior. Primary-source inspection confirms that FFmpeg forwards the
 bicubic parameters to zimg, whose boundary tap positions reflect back into the
 image before clamping. Lokad.Image extends the edge pixel, as specified in
-[SPEC.md](../SPEC.md). The remaining interior alpha difference prevents exact
+[SPEC.md](../docs/spec.md). The remaining interior alpha difference prevents exact
 matching even independently of the boundary issue. Source insights were used
 without copying upstream implementation or tables. See the pinned
 [FFmpeg wrapper](https://github.com/FFmpeg/FFmpeg/blob/9047fa1b084f76b1b4d065af2d743df1b40dfb56/libavfilter/vf_zscale.c)

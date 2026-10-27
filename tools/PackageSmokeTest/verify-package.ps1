@@ -33,7 +33,7 @@ try {
             }
         }
         if (-not ($archive.Entries.FullName -contains 'lib/net10.0/Lokad.Image.dll')) { throw 'Library DLL missing.' }
-        foreach ($document in @('README.md', 'SPEC.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/codec-parity.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/usage.md', 'docs/migration.md', 'docs/cleanup-qualification.md')) {
+        foreach ($document in @('README.md', 'docs/spec.md', 'LICENSE.txt', 'icon.png', 'docs/resource-admission.md', 'docs/codec-parity.md', 'docs/lanczos3-fma-certificate.md', 'docs/jpeg-inverse-rounding.md', 'docs/usage.md', 'docs/migration.md', 'docs/text-compatibility.md', 'docs/source-metadata.md')) {
             $entry = $archive.GetEntry($document)
             if ($null -eq $entry) { throw "Package document missing: $document" }
             $bytes = [IO.MemoryStream]::new()

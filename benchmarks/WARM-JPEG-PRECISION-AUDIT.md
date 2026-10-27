@@ -23,7 +23,7 @@ An independent baseline entropy reader attributes 119,317 excess coded bits to
 luma and 53,884 to chroma. Managed RGB luma has 95,106 nonzero AC coefficients
 versus 76,924; chroma has 21,062 versus 8,991. Its low-frequency quantizers are
 substantially finer than the reference's. The grayscale quantization tables match
-exactly. The [existing quantization formula](../SPEC.md) is an explicit API policy;
+exactly. The [existing quantization formula](../docs/spec.md) is an explicit API policy;
 an alternative must preserve that policy rather than silently replace it.
 
 Two untimed coefficient experiments bound the next step. A minimum quantizer of10

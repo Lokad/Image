@@ -17,7 +17,7 @@ and projected raster match the previous retained correctness diagnostic exactly.
 No additional original image, depth/key/filter grid or production tuning is needed.
 
 The pinned FFmpeg decoder ignores one-bit transparency. The existing
-[SPEC reference policy](../SPEC.md) supplies exact alpha through its public
+[SPEC reference policy](../docs/spec.md) supplies exact alpha through its public
 `colorkey=white:similarity=0.01:blend=0` filter after full MONOBLACK-to-RGBA
 conversion. This is an explicitly corrected reference pipeline. The raw decoder
 failure remains [unscored](WARM-PNG-PACKED-TRANSPARENCY.md).

@@ -1,97 +1,79 @@
-# Benchmark state
+# Lokad.Image 0.2.0 benchmarks
 
-Updated 2026-10-27. Development0.2.0 remains under qualification; warm single-CPU
-parity and replacement readiness are open. Compression correctness precedes CPU
-gains. Published0.1.0 remains unchanged.
+Release-preparation snapshot, 2026-10-27. All **31 displayed controls** were freshly
+measured using the actual 0.2.0 package DLL on the dedicated quiet Ubuntu 24.04
+x64 VM (AMD EPYC 9V45 96-Core Processor): one pinned CPU per operation, warm
+.NET 10, sequential Release execution, no concurrency. This representative scope
+is not the full performance objective.
+Full CPU parity and general replacement readiness remain open.
 
-Current independent confirmations and short screens are labeled below;
-pre-cleanup costs describe their recorded producers. Full warm upper ≤1× stays
-open. The largest newly observed gap is PNG16 NoCompression at 2.754× (short).
-PNG16 SmallestSize independently measures 1.336×, upper 1.360×, with its exact
-963,202 B packet and 3,813,679 B/op after reusing the shared checksum kernel.
-The named default-workspace bicubic RGBA8 513×259→32×16 path independently
-passes at 0.927×, upper 0.934×. Its result does not qualify other geometries or
-memory boundaries. Other unchanged paths retain applicable evidence.
+Each row is a short BenchmarkDotNet run: three warmups and three measured
+iterations, with native brackets before/after and passing idle/process guards.
+Ratio uses the faster native bracket; upper is the conservative confidence bound
+including unfiltered managed samples. These screens are a release snapshot, not
+new independent parity confirmations. B/op measures managed allocation, not native
+allocation, peak live memory or cooperative-admission charges.
 
-The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
-raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
-defines the remaining finite scope and evidence invalidation.
+Operations include normalization, input delivery and independently owned output;
+async encoding includes staging/delivery/release. Fixture preparation is excluded.
+Source images are 513×259; resize rows state output dimensions. The
+[snapshot evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) records exact
+dimensions, settings, boundaries, binaries, samples and retained raw archives.
 
-| Current qualification | Evidence | Status |
-| --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 4,959 checks/OS; 499 internal + 180 public scalar PNG checks/OS; same actual package passed |
-| Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
-| Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current qualified short gap |
-| CPU and allocation measurements after cleanup | [shared PNG checksum](../benchmarks/WARM-PNG-SHARED-ADLER.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [indexed histogram replay](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets/pixels, actual capacity admission and retained ownership remain |
-| Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
+| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| WebP VP8 + alpha, fresh seekable Stream | 7,831.60 | 5,985.32 | 1.308 / 1.445 | 1,966,583 | — |
+| JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
+| JPEG 4:2:0 from caller RGB samples | 2,594.66 | 1,662.67 | 1.561 / 2.434 | 373,413 | 52,091 / 52,093 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget | 2,697.19 | 1,835.47 | 1.469 / 1.815 | 804,637 | 52,115 / 52,117 |
+| JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
+| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
+| VP8 diagram, effort2 / distortion-only search | 4,224.40 | 2,507.60 | 1.685 / 1.868 | 741,375 | 7,330 / 7,330 |
+| VP8 RGBA8 | 73,112.14 | 53,921.86 | 1.356 / 1.981 | 21,353,192 | 98,590 / 98,590 |
+| VP8 opaque photograph | 15,516.03 | 9,706.04 | 1.599 / 1.677 | 809,072 | 17,688 / 17,688 |
+| VP8 opaque text/diagram | 8,407.67 | 5,833.42 | 1.441 / 1.561 | 741,137 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis | 16,076.88 | 9,769.43 | 1.646 / 1.961 | 754,344 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization | 23,851.31 | 15,554.15 | 1.533 / 1.565 | 1,201,552 | 72,380 / 72,380 |
+| VP8L RGBA8 / libwebp exact=1 | 192,184.73 | 120,445.40 | 1.596 / 2.147 | 29,688,696 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 | 193,006.68 | 122,663.07 | 1.573 / 2.125 | 29,688,696 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 | 205,529.71 | 127,025.13 | 1.618 / 2.028 | 29,689,080 | 183,812 / 183,812 |
+| VP8L photograph / libwebp exact=1 | 132,270.49 | 83,865.69 | 1.577 / 2.343 | 20,409,392 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
+| PNG RGBA8, SmallestSize9 / native9 | 23,561.24 | 17,667.72 | 1.334 / 1.791 | 1,325,670 | 210,973 / 210,973 |
+| PNG RGBA16, SmallestSize9 / native9 | 27,980.22 | 21,131.37 | 1.324 / 1.679 | 3,813,679 | 963,202 / 963,202 |
+| PNG RGBA8, Fastest1 / native1 | 7,742.49 | 4,352.09 | 1.779 / 1.929 | 1,344,453 | 236,828 / 236,828 |
+| PNG RGBA16, NoCompression0 / native0 | 1,112.30 | 404.21 | 2.752 / 3.317 | 1,741,680 | 1,066,552 / 1,066,552 |
 
-This table selects current paths; unlisted inventory costs still need applicable evidence.
-B/op is managed allocation, distinct
-from peak cooperative admission and native allocation. Ratios use the faster native
-bracket; upper is the recorded conservative confidence bound. Historical shorts
-are leads for measurement, not current demonstrated gaps.
+Packets pass existing complete-byte gates; color JPEG differs only by the approved
+two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha
+gates remain enforced. [Codec parity](codec-parity.md) gives the broader frozen
+control scope. These measurements make no arbitrary-content compression claim.
 
-| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
-| --- | ---: | ---: | ---: | ---: | --- |
-| [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | 7,838.48 | 5,987.65 | 1.309 / 1.337 | 1,966,583 | Current gap (short; qualified) |
-| [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 4,599.19 | 3,783.31 | 1.216 / 1.414 | 820,123 | Current gap (short; qualified) |
-| [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 2,432.58 | 1,576.20 | 1.543 / 1.556 | 373,413 | Current gap (independent) |
-| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 2,683.55 | 1,835.62 | 1.462 / 1.654 | 804,637 | Current gap (short; qualified) |
-| [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,585.89 | 1,405.11 | 1.129 / 1.256 | 155,436 | Current gap (short; qualified) |
-| [JPEG from caller GRAY8, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 | Current gap (short; qualified) |
-| [VP8 diagram, effort2 / distortion-only search](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 3,994.60 | 2,514.65 | 1.589 / 1.725 | 741,375 | Current gap (short; qualified) |
-| [VP8 RGBA8](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 73,032.84 | 53,592.72 | 1.363 / 1.590 | 21,353,192 | Current gap (short; qualified) |
-| [VP8 opaque photograph](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 15,482.66 | 9,736.58 | 1.590 / 1.610 | 809,072 | Current gap (independent) |
-| [VP8 opaque text/diagram](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 8,373.77 | 5,828.09 | 1.437 / 1.567 | 741,137 | Current gap (short; qualified) |
-| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 15,753.29 | 9,807.69 | 1.606 / 1.856 | 754,344 | Current gap (short; qualified) |
-| [VP8 opaque RGBA16, including normalization](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 23,860.60 | 15,457.08 | 1.544 / 1.571 | 1,201,552 | Current gap (short; qualified) |
-| [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 191,999.87 | 121,216.12 | 1.584 / 2.263 | 29,688,696 | Current gap (short; qualified) |
-| [VP8L RGBA16, including normalization / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 193,837.99 | 121,180.27 | 1.600 / 1.847 | 29,688,696 | Current gap (short; qualified) |
-| [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 197,779.35 | 121,909.14 | 1.622 / 1.641 | 29,689,080 | Current gap (independent) |
-| [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md) | 132,699.99 | 82,971.84 | 1.599 / 1.629 | 20,410,208 | Current gap (independent) |
-| [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 11,123.58 | 9,542.18 | 1.166 / 1.204 | 27,419,167 | Current gap (independent) |
-| [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 24,339.75 | 17,435.14 | 1.396 / 1.938 | 1,325,670 | Current gap (short; qualified) |
-| [PNG RGBA16, SmallestSize9 / native9](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 26,830.88 | 20,076.88 | 1.336 / 1.360 | 3,813,679 | Current gap (independent) |
-| [PNG RGBA8, Fastest1 / native1](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 7,950.16 | 4,516.53 | 1.760 / 2.620 | 1,344,453 | Current gap (short; qualified) |
-| [PNG RGBA16, NoCompression0 / native0](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 1,158.17 | 420.57 | 2.754 / 2.935 | 1,741,683 | Current gap (short; qualified) |
-| [Bilinear resize RGBA16](../benchmarks/WARM-CURRENT-EDITING-ANCHORS.md) | 547.29 | 408.78 | 1.339 / 1.426 | 290,124 | Current gap (short; qualified) |
-| [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |
-| [Bicubic upscale RGBA16](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 4,258.22 | 2,871.12 | 1.483 / 1.690 | 5,016,578 | Historical short; remeasure |
-| [Bicubic RGBA16, width down / height up / input+output+4 KiB](../benchmarks/WARM-CURRENT-BICUBIC-CROSS-STREAMING.md) | 1,282.86 | 828.16 | 1.549 / 1.694 | 1,063,410 | Current gap (short; qualified) |
-| [Bicubic RGBA8, 32×16 / input+output+4 KiB](../benchmarks/WARM-CURRENT-BICUBIC-CROSS-STREAMING.md) | 463.48 | 375.32 | 1.235 / 1.437 | 2,185 | Current gap (short; qualified) |
-| [Bicubic RGBA8, 32×16 / default workspace](../benchmarks/WARM-CURRENT-BICUBIC-CROSS-STREAMING.md) | 349.24 | 376.85 | 0.927 / 0.934 | 199,372 | Current parity confirmed |
-| [Lanczos3 reduction RGBA8](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 723.75 | 489.68 | 1.478 / 1.818 | 138,455 | Current gap (short; qualified) |
-| [Lanczos3 reduction RGBA16](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 730.37 | 507.98 | 1.438 / 1.769 | 138,435 | Current gap (short; qualified) |
-| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 4,221.10 | 4,063.92 | 1.039 / 1.101 | 319,038 | Current gap (short; qualified) |
-| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 5,131.20 | 3,917.07 | 1.310 / 1.533 | 4,583,983 | Current gap (short; qualified) |
+| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
+| --- | ---: | ---: | ---: | ---: |
+| Bilinear resize RGBA16 → 256×129 | 543.06 | 417.56 | 1.301 / 1.411 | 290,128 |
+| Bicubic resize RGBA8 → 256×129 | 668.47 | 432.43 | 1.546 / 2.457 | 332,183 |
+| Bicubic upscale RGBA16 → 1027×519 | 4,140.75 | 2,874.80 | 1.440 / 1.709 | 5,016,594 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB → 256×519 | 1,275.98 | 819.97 | 1.556 / 1.640 | 1,063,410 |
+| Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
+| Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
+| Lanczos3 reduction RGBA8 → 256×129 | 726.29 | 491.22 | 1.479 / 2.222 | 138,455 |
+| Lanczos3 reduction RGBA16 → 256×129 | 729.03 | 505.81 | 1.441 / 1.745 | 138,435 |
+| Lanczos3 enlargement RGBA8 → 1027×519 | 4,217.30 | 4,129.35 | 1.021 / 1.137 | 319,038 |
+| Lanczos3 enlargement RGBA16 → 1027×519 | 5,395.65 | 4,106.76 | 1.314 / 1.571 | 4,583,983 |
 
-Complete encoder packets remain the acceptance boundary; metadata differences
-are limited to the approved JPEG attribution COM. These are the named controls,
-not broad arbitrary-content/settings compression claims.
+Resize references use FFmpeg or its explicitly labeled zimg/zscale backend with
+the approved halo, alpha and packing boundary. Managed pixels stay exact; native
+rounding tolerances remain the frozen per-case bounds in the evidence. Tight
+bicubic rows allow only input + output + 4 KiB local workspace.
 
-| Frozen packet scope | Lokad.Image bytes | Reference bytes | Verification |
-| --- | ---: | ---: | --- |
-| PNG,14depth/color/policy controls | Identical | Identical | Complete raw packets |
-| JPEG RGBA8,444 /422 /420 | 133039 /71166 /52091 | 133041 /71168 /52093 | Exact except approved COM |
-| JPEG gray8, Q69 | 58910 | 58910 | Complete raw packet; SIMD libjpeg-turbo |
-| VP8L photograph / diagram | 160032 /7234 | 160032 /7234 | Exact=1; complete raw packets |
-| VP8 photograph / diagram, Q75/method4 | 17688 /7100 | 17688 /7100 | Complete raw packets |
+References are pinned FFmpeg n8.1 and its libwebp 1.6.0 backend. Grayscale JPEG
+uses the approved standalone **SIMD libjpeg-turbo 3.1.4.1** exception; lossless
+WebP uses **libwebp exact=1** to preserve hidden RGB. Defaults/quality numbers
+across encoders are not assumed equivalent. Startup, concurrency, GIF/animation
+and unlisted content/settings are excluded.
 
-[Codec parity](codec-parity.md) records the full packet identities and producer
-scope: JPEG10controls, PNG14, VP8L19selected+2forced, VP8 twenty513×259identities
-plus the large retry control. Decoder exactness and editing oracle requirements
-remain separate. A timing pass,5%IDAT tolerance or equal numeric qualities cannot
-replace packet equality.
-
-Reference operations include normalization, input delivery and independent output
-ownership. FFmpeg is pinned; grayscale encoding uses the approved explicitly
-labeled SIMD libjpeg-turbo3.1.4.1 reference; VP8L uses libwebp exact=1; bicubic uses
-zimg, FFmpeg's zscale backend, with the approved full halo/alpha/packing boundary.
-Native-only resize tolerances remain in the retained reports; managed pixels
-stay exact. GIF/animation, startup, concurrency and arbitrary profiles are excluded.
-
-Use the exclusive quiet VM, versioned idle/process guard and sequential Release
-jobs. Screen narrowly; independently confirm promising cases and stop passing
-ones. Reuse immutable builds and unchanged qualification. Historical experiments,
-failed guards and rejected candidates stay retained; none silently becomes current
-evidence. Regenerate with `python benchmarks/render-benchmark.py`, then `--check`.
+[Measurement instructions](../benchmarks/README.md) and the deferred
+[finite coverage objective](../benchmarks/WARM-COVERAGE.md) retain reproducibility
+and outstanding work. Rebuild this summary with
+`python benchmarks/render-benchmark.py`; verify it with `--check`.

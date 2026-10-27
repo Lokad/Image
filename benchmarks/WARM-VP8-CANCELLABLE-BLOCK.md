@@ -29,7 +29,7 @@ every decision/work increment. A finally publishes exactly the completed work an
 scalar cursor even after cancellation, without a cleanup poll. Initial cancellation
 consumes nothing. Short/tight/invalid states keep the original reader; the original
 noncancelable helper remains unchanged. No heap/table/cache/root/admission is added.
-The [proof](../docs/vp8-cancellable-block.md) states the bounded prefix and ownership
+The [proof](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/vp8-cancellable-block.md) states the bounded prefix and ownership
 requirements; no cancellation granularity or pixel precision is relaxed.
 
 Both OSes pass **4,484 Release tests**: 1,660 internal + 1,892 public + 932 live FFmpeg,

@@ -179,7 +179,7 @@ for pattern in ("png-rgba8-plain.png", "jpeg-ffmpeg-YCbCr444-9x7.jpg", "webp-*.w
     capabilities.append({"fixture": fixture.name, "inputSha256": digest(fixture),
                          "decodedBytes": len(decoded), "decodedSha256": hashlib.sha256(decoded).hexdigest()})
 normalization_checks = []
-# Original point controls for SPEC.md's JPEG background/depth equation. This
+# Original point controls for the JPEG background/depth contract. This
 # verifies the required geq filter and both normal/scalar byte conversions.
 for depth in (8, 16):
     maximum = (1 << depth) - 1

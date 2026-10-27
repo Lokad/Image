@@ -1,10 +1,10 @@
 # Development benchmarks
 
-[Current state](../docs/benchmark.md) gives allocations, exact packet scope and
-qualification in three tables. [Finite coverage](WARM-COVERAGE.md) defines outstanding
-required paths; [historical inventory](../docs/benchmark-pre-cleanup.md) preserves
+[Current state](../docs/benchmark.md) gives the release snapshot, allocations and
+exact packet scope. [Finite coverage](WARM-COVERAGE.md) defines outstanding
+required paths; [historical inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md) preserves
 individual controls/reports. Earlier reports describe their recorded producers,
-settings and targets, not current0.2.0 proof. Raw evidence and rejected trials stay.
+settings and targets, not current 0.2.0 proof. Raw evidence and rejected trials stay.
 
 Run performance only on the dedicated quiet VM, sequential Release and one CPU
 per operation. Use tools/WarmReference/capture-vm-environment.py's versioned

@@ -1,183 +1,99 @@
-"""Render the current warm comparison from retained evidence; never run a benchmark."""
+"""Render the current release snapshot from retained evidence; never measure."""
 import json
 import math
 import re
-import statistics
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def read(name):
-    return json.loads((ROOT / 'benchmarks' / name).read_text(encoding='utf-8'))
-
-
-def select(value, path):
-    for key in path:
-        value = value[key]
-    return value
-
-
-def row(label, name, path, report, confirmed=False, verification=None, current=False):
-    evidence = read(name)
-    observation = select(evidence, path)
-    if 'quietnessBefore' not in observation and 'quietness' not in observation and len(path) >= 2 and path[-2] == 'cases':
-        parent = select(evidence, path[:-2])
-        if 'quietnessBefore' in parent:
-            observation = {**observation, 'quietnessBefore': parent['quietnessBefore'], 'quietnessAfter': parent['quietnessAfter']}
-    stats = observation.get('managedStatistics') or observation['managed']['statistics']
-    if 'nativeBrackets' in observation:
-        native = min(b['mean'] for b in observation['nativeBrackets'])
-    else:
-        native = min(statistics.mean(s.get('NanosecondsPerOperation', s.get('ElapsedNanoseconds', 0) / s.get('Operations', 1))
-                                     for s in observation[side]) for side in ('nativeBefore', 'nativeAfter'))
-    assert native > 0 and stats['Mean'] > 0
-    ratio, upper = observation['worstBracketRatio'], observation['conservativeRatioUpper']
-    assert abs(stats['Mean'] / native - ratio) < 1e-9
-    if 'quietness' in observation:
-        quiet = all(g['passed'] for g in observation['quietness'].values())
-    elif 'quietnessBefore' in observation:
-        quiet = observation['quietnessBefore']['passed'] and observation['quietnessAfter']['passed']
-    else:
-        quiet = None  # Older grouped evidence has no guards attached to each observation.
-    if confirmed:
-        assert quiet
-        assert evidence.get('independentQuietConfirmationThisPair') or observation.get('certifiedThisPair')
-    if verification:
-        assert not confirmed and quiet
-    memory = observation.get('managedMemory')
-    if memory:
-        allocated = memory['BytesAllocatedPerOperation']
-    else:
-        gc = observation['managed']['rawGc']
-        match = re.fullmatch(r'// GC:\s+\d+\s+\d+\s+\d+\s+(\d+)\s+(\d+)', gc)
-        assert match, gc
-        allocated = math.ceil(int(match[1]) / int(match[2]))
-    assert allocated >= 0
-    status = 'Historical independent; remeasure' if confirmed else 'Historical short; remeasure'
-    if current:
-        if confirmed:
-            status = 'Current parity confirmed' if upper <= 1 else ('Current gap (independent)' if ratio > 1 else 'Current confidence open')
-        else:
-            assert verification
-            status = verification
-    return f'| [{label}](../benchmarks/{report}) | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {ratio:.3f} / {upper:.3f} | {allocated:,} | {status} |'
-
-
-def table(rows):
-    return '\n'.join(['| Operation / fixed profile | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |',
-                      '| --- | ---: | ---: | ---: | ---: | --- |', *rows])
-
-
 def render():
-    anchors = [
-        row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-shared-small-rows-evidence.json', ['cases', 'vp8-stream', -1], 'WARM-VP8-SHARED-SMALL-ROWS.md', verification='Current gap (short; qualified)', current=True),
-        row('JPEG 4:4:4, forward-only / exact reference', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'jpeg444', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
-        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'JpegShared16', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
-        row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 RGBA8', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque photograph', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', confirmed=True, current=True),
-        row('VP8 opaque text/diagram', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort6 / trellis', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque RGBA16, including normalization', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', confirmed=True, current=True),
-        row('VP8L photograph / libwebp exact=1', 'warm-vp8l-photograph-confirmation-evidence.json', ['observations', -1], 'WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md', confirmed=True, current=True),
-        row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', confirmed=True, current=True),
-        row('PNG RGBA8, SmallestSize9 / native9', 'warm-png-shared-adler-evidence.json', ['cases', 'EncodeSmallest8', -1], 'WARM-PNG-SHARED-ADLER.md', verification='Current gap (short; qualified)', current=True),
-        row('PNG RGBA16, SmallestSize9 / native9', 'warm-png-shared-adler-evidence.json', ['cases', 'EncodeSmallest16', -1], 'WARM-PNG-SHARED-ADLER.md', confirmed=True, current=True),
-        row('PNG RGBA8, Fastest1 / native1', 'warm-png-shared-adler-evidence.json', ['cases', 'EncodeFast8', -1], 'WARM-PNG-SHARED-ADLER.md', verification='Current gap (short; qualified)', current=True),
-        row('PNG RGBA16, NoCompression0 / native0', 'warm-png-shared-adler-evidence.json', ['cases', 'EncodeNoCompression16', -1], 'WARM-PNG-SHARED-ADLER.md', verification='Current gap (short; qualified)', current=True),
-        row('Bilinear resize RGBA16', 'warm-current-editing-anchors-evidence.json', ['cases', 'bilinearDown16', -1], 'WARM-CURRENT-EDITING-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
-        row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic upscale RGBA16', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Bicubic RGBA16, width down / height up / input+output+4 KiB', 'warm-current-bicubic-cross-streaming-evidence.json', ['cases', 'TightCross16', -1], 'WARM-CURRENT-BICUBIC-CROSS-STREAMING.md', verification='Current gap (short; qualified)', current=True),
-        row('Bicubic RGBA8, 32×16 / input+output+4 KiB', 'warm-current-bicubic-cross-streaming-evidence.json', ['cases', 'Tight32x16_8', -1], 'WARM-CURRENT-BICUBIC-CROSS-STREAMING.md', verification='Current gap (short; qualified)', current=True),
-        row('Bicubic RGBA8, 32×16 / default workspace', 'warm-current-bicubic-cross-streaming-evidence.json', ['cases', 'Down32x16_8', -1], 'WARM-CURRENT-BICUBIC-CROSS-STREAMING.md', confirmed=True, current=True),
-        row('Lanczos3 reduction RGBA8', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Reduce8', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
-        row('Lanczos3 reduction RGBA16', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Reduce16', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
-        row('Lanczos3 enlargement RGBA8', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
-        row('Lanczos3 enlargement RGBA16', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
-    ]
-    return """# Benchmark state
+    evidence = json.loads((ROOT / 'benchmarks/release-0.2.0-benchmark-evidence.json').read_text(encoding='utf-8'))
+    assert evidence['version'] == '0.2.0' and len(evidence['cases']) == 31
+    assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
+    rows = []
+    for case in evidence['cases']:
+        observation = case['observation']
+        receipt = observation['receipt']
+        stats = observation['managed']['statistics']
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        ratio = observation['worstBracketRatio']
+        upper = observation['conservativeRatioUpper']
+        assert receipt['librarySha256'] == evidence['librarySha256']
+        assert all(g['passed'] for g in observation['quietness'].values())
+        assert 2 <= stats['N'] <= 3 and len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 3
+        assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
+        allocated = observation['managedMemory']['BytesAllocatedPerOperation']
+        label = case['label']
+        if case['kind'] == 'editing':
+            label += f' → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
+        cells = [label, f'{stats["Mean"] / 1000:,.2f}', f'{native / 1000:,.2f}',
+                 f'{ratio:.3f} / {upper:.3f}', f'{allocated:,}']
+        if case['kind'] == 'codec':
+            packet = f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,}' if case['operation'] == 'encode' else '—'
+            cells.append(packet)
+        rows.append((case['kind'], '| ' + ' | '.join(cells) + ' |'))
+    header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
+    separator = '| --- | ---: | ---: | ---: | ---: |'
+    codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
+                         *(row for kind, row in rows if kind == 'codec')])
+    editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
+    return f'''# Lokad.Image 0.2.0 benchmarks
 
-Updated 2026-10-27. Development0.2.0 remains under qualification; warm single-CPU
-parity and replacement readiness are open. Compression correctness precedes CPU
-gains. Published0.1.0 remains unchanged.
+Release-preparation snapshot, 2026-10-27. All **31 displayed controls** were freshly
+measured using the actual 0.2.0 package DLL on the dedicated quiet Ubuntu 24.04
+x64 VM ({evidence['machine']['cpuModel']}): one pinned CPU per operation, warm
+.NET 10, sequential Release execution, no concurrency. This representative scope
+is not the full performance objective.
+Full CPU parity and general replacement readiness remain open.
 
-Current independent confirmations and short screens are labeled below;
-pre-cleanup costs describe their recorded producers. Full warm upper ≤1× stays
-open. The largest newly observed gap is PNG16 NoCompression at 2.754× (short).
-PNG16 SmallestSize independently measures 1.336×, upper 1.360×, with its exact
-963,202 B packet and 3,813,679 B/op after reusing the shared checksum kernel.
-The named default-workspace bicubic RGBA8 513×259→32×16 path independently
-passes at 0.927×, upper 0.934×. Its result does not qualify other geometries or
-memory boundaries. Other unchanged paths retain applicable evidence.
+Each row is a short BenchmarkDotNet run: three warmups and three measured
+iterations, with native brackets before/after and passing idle/process guards.
+Ratio uses the faster native bracket; upper is the conservative confidence bound
+including unfiltered managed samples. These screens are a release snapshot, not
+new independent parity confirmations. B/op measures managed allocation, not native
+allocation, peak live memory or cooperative-admission charges.
 
-The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
-raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
-defines the remaining finite scope and evidence invalidation.
+Operations include normalization, input delivery and independently owned output;
+async encoding includes staging/delivery/release. Fixture preparation is excluded.
+Source images are 513×259; resize rows state output dimensions. The
+[snapshot evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) records exact
+dimensions, settings, boundaries, binaries, samples and retained raw archives.
 
-| Current qualification | Evidence | Status |
-| --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-PNG-SHARED-ADLER.md) | 4,959 checks/OS; 499 internal + 180 public scalar PNG checks/OS; same actual package passed |
-| Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
-| Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current qualified short gap |
-| CPU and allocation measurements after cleanup | [shared PNG checksum](../benchmarks/WARM-PNG-SHARED-ADLER.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [indexed histogram replay](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets/pixels, actual capacity admission and retained ownership remain |
-| Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
+''' + codecs + '''
 
-This table selects current paths; unlisted inventory costs still need applicable evidence.
-B/op is managed allocation, distinct
-from peak cooperative admission and native allocation. Ratios use the faster native
-bracket; upper is the recorded conservative confidence bound. Historical shorts
-are leads for measurement, not current demonstrated gaps.
+Packets pass existing complete-byte gates; color JPEG differs only by the approved
+two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha
+gates remain enforced. [Codec parity](codec-parity.md) gives the broader frozen
+control scope. These measurements make no arbitrary-content compression claim.
 
-""" + table(anchors) + """
+''' + editing + '''
 
-Complete encoder packets remain the acceptance boundary; metadata differences
-are limited to the approved JPEG attribution COM. These are the named controls,
-not broad arbitrary-content/settings compression claims.
+Resize references use FFmpeg or its explicitly labeled zimg/zscale backend with
+the approved halo, alpha and packing boundary. Managed pixels stay exact; native
+rounding tolerances remain the frozen per-case bounds in the evidence. Tight
+bicubic rows allow only input + output + 4 KiB local workspace.
 
-| Frozen packet scope | Lokad.Image bytes | Reference bytes | Verification |
-| --- | ---: | ---: | --- |
-| PNG,14depth/color/policy controls | Identical | Identical | Complete raw packets |
-| JPEG RGBA8,444 /422 /420 | 133039 /71166 /52091 | 133041 /71168 /52093 | Exact except approved COM |
-| JPEG gray8, Q69 | 58910 | 58910 | Complete raw packet; SIMD libjpeg-turbo |
-| VP8L photograph / diagram | 160032 /7234 | 160032 /7234 | Exact=1; complete raw packets |
-| VP8 photograph / diagram, Q75/method4 | 17688 /7100 | 17688 /7100 | Complete raw packets |
+References are pinned FFmpeg n8.1 and its libwebp 1.6.0 backend. Grayscale JPEG
+uses the approved standalone **SIMD libjpeg-turbo 3.1.4.1** exception; lossless
+WebP uses **libwebp exact=1** to preserve hidden RGB. Defaults/quality numbers
+across encoders are not assumed equivalent. Startup, concurrency, GIF/animation
+and unlisted content/settings are excluded.
 
-[Codec parity](codec-parity.md) records the full packet identities and producer
-scope: JPEG10controls, PNG14, VP8L19selected+2forced, VP8 twenty513×259identities
-plus the large retry control. Decoder exactness and editing oracle requirements
-remain separate. A timing pass,5%IDAT tolerance or equal numeric qualities cannot
-replace packet equality.
-
-Reference operations include normalization, input delivery and independent output
-ownership. FFmpeg is pinned; grayscale encoding uses the approved explicitly
-labeled SIMD libjpeg-turbo3.1.4.1 reference; VP8L uses libwebp exact=1; bicubic uses
-zimg, FFmpeg's zscale backend, with the approved full halo/alpha/packing boundary.
-Native-only resize tolerances remain in the retained reports; managed pixels
-stay exact. GIF/animation, startup, concurrency and arbitrary profiles are excluded.
-
-Use the exclusive quiet VM, versioned idle/process guard and sequential Release
-jobs. Screen narrowly; independently confirm promising cases and stop passing
-ones. Reuse immutable builds and unchanged qualification. Historical experiments,
-failed guards and rejected candidates stay retained; none silently becomes current
-evidence. Regenerate with `python benchmarks/render-benchmark.py`, then `--check`.
-"""
+[Measurement instructions](../benchmarks/README.md) and the deferred
+[finite coverage objective](../benchmarks/WARM-COVERAGE.md) retain reproducibility
+and outstanding work. Rebuild this summary with
+`python benchmarks/render-benchmark.py`; verify it with `--check`.
+'''
 
 
 if __name__ == '__main__':
     text = render()
+    assert len(re.findall(r'^\| ---', text, re.M)) == 2
     output = ROOT / 'docs/benchmark.md'
-    assert len(re.findall(r'^\| ---', text, re.M)) == 3
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'
-        print('Benchmark summary matches retained evidence (three tables).')
+        print('Benchmark summary matches the release evidence (two tables).')
     else:
         output.write_text(text, encoding='utf-8', newline='\n')

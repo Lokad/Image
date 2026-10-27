@@ -43,7 +43,7 @@ intervals against the faster native bracket's lower bound.
 The unfiltered FFmpeg decoder fails the gray1/key1 and gray2/key1 alpha checks;
 those comparisons are retained **unscored**, with no timing claim. Its gray1/key1
 color-key diagnostic is exact, including white RGB under alpha zero. The existing
-[SPEC reference policy](../SPEC.md) already defines that exact correction; this
+[SPEC reference policy](../docs/spec.md) already defines that exact correction; this
 round's verified zero-key timing needs no correction. The native adapter admits
 only the verified gray2/key0 packed transparency case, preserving other refusals.
 

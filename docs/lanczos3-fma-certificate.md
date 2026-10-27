@@ -42,5 +42,5 @@ Hardware without the required AVX512F/DQ/VL, AVX2 and FMA support uses the integ
 kernel. Focused tests check actual conversion/FMA envelopes against BigInteger,
 half ties, clipping, negative/tiny alpha, long support, cancellation, shared-root
 refusal/retained results and tight local limits. The four original full frames
-remain the separate exact-pixel qualification gates. See the
+remain separate exact-pixel checks. See the
 [benchmark state](benchmark.md) for measured scope and remaining parity gaps.

@@ -24,7 +24,7 @@ settle. Tight work and live tokens retain the original paths. Long prefixes use
 the original canonical decoder; every exit publishes exact work/cache/cursor
 state. Error order, checksum position, overlapping copies and pixel precision
 are unchanged. No buffer, table, cache, owner or shared allowance is added.
-The [proof](../docs/deflate-materialized-cursor.md) explains failure prefixes and
+The [proof](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/deflate-materialized-cursor.md) explains failure prefixes and
 the 47-bit refill bound. This is a complete-block strategy, distinct from earlier
 literal-only batching and already accepted local-work accounting.
 

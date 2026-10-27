@@ -29,7 +29,7 @@ independent single-CPU warm parity gates. Required complete sizes remain17,688/
 stay inside both operation boundaries. Stop a failed byte/quality screen before
 scored timing; reuse valid reference evidence and immutable builds.
 
-Production remains unchanged. The [current package qualification](../docs/text-default-instance-qualification.md)
+Production remains unchanged. The [current package qualification](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/text-default-instance-qualification.md)
 is reused, with zero core/harness/native/selector rebuilds and no allocation claim.
 The finite checklist remains256 cases; every remaining size/performance gate stays
 open. [Numeric observations](vp8-activity-audit-evidence.json) retain source identities,

@@ -46,11 +46,5 @@ storage never enters those caches. Other calls retain bounded idle caches.
 Inspection uses fixed8448-byte workspace without a raster; Identify/Decode stream
 buffers retain actual capacity through parsing, avoiding a final encoded copy.
 Async encoding retains staged chunks/prepared partitions through actual delivery.
-Returned results have independent lifetimes. See [SPEC](../SPEC.md) for codec,
+Returned results have independent lifetimes. See [SPEC](spec.md) for codec,
 stream validation and pixel details and [migration](migration.md) for0.2 API removals.
-
-Focused tests cover aggregate/nested admission, retained outputs/fonts/layouts,
-replacement overlap, refusal/cancellation cleanup, real suspended I/O users and
-successful subsequent calls after release. [Cleanup qualification](cleanup-qualification.md)
-records the ownership cleanup milestone. [Benchmark state](benchmark.md) selects
-current Windows/Linux/package checks and distinguishes historical cost evidence.

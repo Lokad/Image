@@ -2,7 +2,7 @@
 
 Four required paths now have quiet three-iteration screens on the existing
 513×259 RGBA8/16 inputs. Production is unchanged from the
-[functional qualification](../docs/lanczos3-qualification.md). All four remain
+[functional qualification](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/lanczos3-qualification.md). All four remain
 material gaps against the **≤1× independently confirmed** target; no long
 confirmation was run above one.
 

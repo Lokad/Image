@@ -5,7 +5,7 @@ The production package has no NuGet dependencies, unsafe code, native bindings,
 subprocess codecs or vendored sources. External reference checkouts and tools
 belong in the ignored `external/` directory and are never build inputs.
 
-`SPEC.md` defines the target contract and current support. Keep it and README
+`docs/spec.md` defines the target contract and current support. Keep it and README
 accurate as features land. Required targets are still PNG/JPEG/WebP decode and
 encode, 8/16-bit editing, orientation, crop, resize, flips and quarter turns.
 Required extensions include supplied-TrueType text rendering/measurement, drawing
@@ -71,3 +71,10 @@ coverage. The fuel, ownership and bicubic cleanup is complete; keep useful
 measured kernels and portable fallbacks. Qualify accepted production changes
 on Windows/Linux and through the actual Release-package consumer. Historical
 benchmark evidence is retained, not current proof.
+
+Keep docs/ focused on the supported contract, usage, migration and lasting design
+guidance. Keep codec parity in one concise case table and benchmark.md as the
+current release comparison. Experiment/qualification histories belong in
+benchmarks/ or Git history, with cited raw evidence retained. A release refresh
+must measure every displayed comparison on the actual immutable package DLL;
+do not substitute historical costs or claim full parity from short screens.
