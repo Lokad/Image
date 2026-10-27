@@ -7,7 +7,8 @@ internal sealed partial class NativeWarmReference
     public NativeWarmReference(JpegBenchmarkCase state, int cpu, ImageInfo expected, string publicBoundary)
     {
         if (publicBoundary != "InspectHeaders/PngRgba8FreshSeekable"
-            || expected != new ImageInfo(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal))
+            || expected != new ImageInfo(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal)
+                { SourceColor = SourceColorModel.Rgb, SourceAlpha = SourceAlphaRepresentation.Channel, SourceComponentCount = 4 })
             throw new ArgumentOutOfRangeException(nameof(publicBoundary));
         Executable = Path.Combine(state.Root, "external/warm-reference/ffmpeg-png-headers-warm");
         using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external/warm-reference/png-headers-identity.json"))))

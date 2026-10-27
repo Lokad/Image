@@ -33,3 +33,10 @@ history. The former long narrative and retired experiment recipes remain in
 Tool sources and fixture provenance remain beside their respective projects.
 Published packages and cited raw masters are retained; no arbitrary checkout-size
 ceiling blocks routine verification.
+
+[New read controls](WARM-IMAGE-READ.md) use `--prepare-warm-image-read` after
+`tools/WarmReference/build-image-read-linux.sh`, then the existing `--warm-short`
+or `--warm-confirm --warm-family Read --warm-cases CASE --warm-cpu 0` workflow.
+Preparation verifies all twelve declared controls; measurement selects one to
+three names. Native header adapters are labeled explicitly; validation omits
+RGBA normalization/output copies on both sides.

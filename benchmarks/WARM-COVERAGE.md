@@ -60,7 +60,16 @@ Validation is optional for replacement readiness; its supported public boundarie
 still need explicit CPU evidence before full performance completion. Native operations
 must return equivalent requested metadata or validate complete coding, with matching
 input delivery and ownership. Do not substitute a normalization/output workload when
-the operation does not require it. Establish these references before assuming gaps.
+the operation does not require it.
+
+[Read-boundary evidence](WARM-IMAGE-READ.md) now screens all twelve on the frozen
+qualified 0.2.1 build. Baseline420 validation independently passes at0.917× /
+upper0.935; stop this unchanged case. Progressive420 confirms1.053× / upper1.063.
+Dimension probes show2.97–4.65× gaps (each below1µs), PNG16 validation1.75×;
+other validation screens are1.35–1.55×. These costs cover the new boundaries only:
+they do not refresh default decode or complete-container inspection costs.
+Both guards, exact descriptors, independent output/source lifetime and prefix/
+coding-scope checks pass. No production build/full-suite/package proof was repeated.
 
 ## Current evidence
 

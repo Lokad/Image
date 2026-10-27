@@ -17,6 +17,8 @@ def render():
     distortion = json.loads((ROOT / 'benchmarks/vp8-residual-summary-deferred-evidence.json').read_text(encoding='utf-8'))
     trellis = json.loads((ROOT / 'benchmarks/vp8-trellis-state-reduction-rejected-evidence.json').read_text(encoding='utf-8'))
     color = json.loads((ROOT / 'benchmarks/warm-vp8l-color-trial-reuse-evidence.json').read_text(encoding='utf-8'))
+    reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
+    assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert not distortion['productionChanged'] and distortion['restoration']['sourceAndImmutableProducerRestored']
     assert not trellis['productionChanged'] and trellis['restoration']['sourceAndImmutableProducerRestored']
     assert color['version'] == '0.2.1' and color['independentQuietConfirmationThisPair']
@@ -60,13 +62,40 @@ def render():
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
                          *(row for kind, row in rows if kind == 'codec')])
     editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
+    read_labels = ['Probe PNG dimensions, seekable', 'Probe JPEG dimensions, seekable',
+                   'Probe WebP dimensions, seekable', 'Probe JPEG dimensions, async nonseekable',
+                   'Validate PNG8, span', 'Validate PNG16, span', 'Validate indexed Adam7 19×17, span',
+                   'Validate JPEG baseline420, span', 'Validate JPEG progressive420, span',
+                   'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
+                   'Validate PNG16, async nonseekable']
+    read_rows = []
+    for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
+        observation = observations[-1]
+        receipt = observation['receipt']
+        assert receipt['librarySha256'] == reads['producers']['linuxSha256']
+        assert receipt['descriptorExact'] and receipt['prefixAndCodingScopesVerified']
+        assert all(q['passed'] for q in observation['quietness'].values())
+        confirmed = reads['status'][case].startswith('confirmed-')
+        samples = 12 if confirmed else 3
+        assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
+        assert len(observation['managed']['actual']) == samples
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        stats = observation['managed']['statistics']
+        ratio, upper = observation['worstBracketRatio'], observation['conservativeRatioUpper']
+        assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
+        assert (upper <= 1) == (reads['status'][case] == 'confirmed-pass')
+        status = 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
+        read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
+                         f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
+    read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     return f'''# Lokad.Image benchmarks
 
 Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
 published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
 costs pending current confirmation after read-policy changes. The release snapshot
-remains immutable. These 31 controls do not complete the full CPU-parity objective
+remains immutable. Twelve new read controls below use the qualified 0.2.1 build.
+These 43 controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 
 Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
@@ -115,9 +144,21 @@ WebP uses **libwebp exact=1** to preserve hidden RGB. Defaults/quality numbers
 across encoders are not assumed equivalent. Startup, concurrency, GIF/animation
 and unlisted content/settings are excluded.
 
-[Pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md) compares
-allocations/admitted peaks with decode-and-dispose on five declared controls;
-it does not yet have warm reference CPU qualification.
+''' + read_table + '''
+
+Probes compare requested dimensions using FFmpeg AVIO/owned descriptors plus an
+original bounded header adapter; they stop before pixel payloads. Validation
+compares complete coding and source metadata against FFmpeg natural-frame decode
+plus an original metadata adapter, without RGBA normalization or caller raster
+copies. Async uses resident immediate callbacks and includes acquisition/EOF and
+cleanup. Inputs are 513×259 except indexed Adam7. Baseline420 validation passes
+independently; progressive420 remains a confirmed gap. Other new rows are short
+screens, without independent parity claims. See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
+
+Read allocations use the default null shared budget and warm permitted private
+pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)
+separately compares allocations/admitted peaks with decode-and-dispose on five
+declared controls; these figures measure different ownership/accounting settings.
 
 [Measurement instructions](../benchmarks/README.md) and the active
 [finite coverage objective](../benchmarks/WARM-COVERAGE.md) retain reproducibility
@@ -128,10 +169,10 @@ and outstanding work. Rebuild this summary with
 
 if __name__ == '__main__':
     text = render()
-    assert len(re.findall(r'^\| ---', text, re.M)) == 2
+    assert len(re.findall(r'^\| ---', text, re.M)) == 3
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'
-        print('Benchmark summary matches current and retained release evidence (two tables).')
+        print('Benchmark summary matches current and retained release evidence (three tables).')
     else:
         output.write_text(text, encoding='utf-8', newline='\n')

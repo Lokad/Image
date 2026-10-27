@@ -4,7 +4,8 @@ Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
 published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
 costs pending current confirmation after read-policy changes. The release snapshot
-remains immutable. These 31 controls do not complete the full CPU-parity objective
+remains immutable. Twelve new read controls below use the qualified 0.2.1 build.
+These 43 controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 
 Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
@@ -86,9 +87,34 @@ WebP uses **libwebp exact=1** to preserve hidden RGB. Defaults/quality numbers
 across encoders are not assumed equivalent. Startup, concurrency, GIF/animation
 and unlisted content/settings are excluded.
 
-[Pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md) compares
-allocations/admitted peaks with decode-and-dispose on five declared controls;
-it does not yet have warm reference CPU qualification.
+| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Probe PNG dimensions, seekable | 0.366 | 0.123 | 2.967 / 5.254 | 8,680 | Screen gap |
+| Probe JPEG dimensions, seekable | 0.892 | 0.200 | 4.463 / 6.112 | 8,680 | Screen gap |
+| Probe WebP dimensions, seekable | 0.365 | 0.123 | 2.970 / 5.519 | 8,680 | Screen gap |
+| Probe JPEG dimensions, async nonseekable | 0.956 | 0.205 | 4.653 / 6.000 | 8,680 | Screen gap |
+| Validate PNG8, span | 2,136.116 | 1,374.597 | 1.554 / 1.633 | 12,912 | Screen gap |
+| Validate PNG16, span | 5,393.772 | 3,078.068 | 1.752 / 2.252 | 17,008 | Screen gap |
+| Validate indexed Adam7 19×17, span | 5.337 | 3.943 | 1.353 / 1.948 | 1,168 | Screen gap |
+| Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
+| Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
+| Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
+| Validate VP8+alpha, span | 7,923.113 | 5,448.818 | 1.454 / 1.595 | 770,092 | Screen gap |
+| Validate PNG16, async nonseekable | 5,142.528 | 3,616.393 | 1.422 / 1.853 | 25,312 | Screen gap |
+
+Probes compare requested dimensions using FFmpeg AVIO/owned descriptors plus an
+original bounded header adapter; they stop before pixel payloads. Validation
+compares complete coding and source metadata against FFmpeg natural-frame decode
+plus an original metadata adapter, without RGBA normalization or caller raster
+copies. Async uses resident immediate callbacks and includes acquisition/EOF and
+cleanup. Inputs are 513×259 except indexed Adam7. Baseline420 validation passes
+independently; progressive420 remains a confirmed gap. Other new rows are short
+screens, without independent parity claims. See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
+
+Read allocations use the default null shared budget and warm permitted private
+pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)
+separately compares allocations/admitted peaks with decode-and-dispose on five
+declared controls; these figures measure different ownership/accounting settings.
 
 [Measurement instructions](../benchmarks/README.md) and the active
 [finite coverage objective](../benchmarks/WARM-COVERAGE.md) retain reproducibility
