@@ -252,7 +252,7 @@ internal sealed class Vp8FramePlan : IDisposable
                     if (index != 0 && (index + 1) % (Math.Max(Count >> 3, 96) + 1) == 0)
                     {
                         Vp8TokenStatistics.Update(statistics, rate.Entropy, probabilities, out _);
-                        var next = Vp8RatePlan.Create(probabilities, context); rate.Dispose(); rate = next;
+                        rate.Refresh(probabilities);
                     }
                     for (var yy = 0; yy < 16; yy++) input.Y.Slice((y * 16 + yy) * input.Stride + x * 16, 16).CopyTo(source.Slice(yy * 16, 16));
                     for (var yy = 0; yy < 8; yy++)

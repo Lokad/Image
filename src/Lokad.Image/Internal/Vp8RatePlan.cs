@@ -150,19 +150,34 @@ internal sealed partial class Vp8RatePlan : IDisposable
                     for (var mode = 0; mode < 10; mode++)
                         values[ModesAt + 8 + (top * 10 + left) * 10 + mode] = (ushort)SmallMode(mode, p, entropy);
                 }
-                for (var index = 0; index < 96; index++)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested(); var p = probabilities.Slice(index * 11, 11); var extra = index % 3 == 0 ? 0 : Bit(entropy, true, p[0]);
-                    values[EobAt + index * 2] = (ushort)Bit(entropy, false, p[0]);
-                    values[EobAt + index * 2 + 1] = (ushort)Bit(entropy, true, p[0]);
-                    for (var level = 0; level < 68; level++)
-                        values[LevelsAt + index * 68 + level] = (ushort)(extra + VariableCost(level, p, entropy));
-                }
+                FillCoefficientCosts(values, probabilities, context);
                 return result;
             }
             finally { context.Release(1024); }
         }
         catch { result.Dispose(); throw; }
+    }
+
+    // The frame borrows no table view across probability updates. Keep its
+    // operation-owned capacity and invariant prices; no cache or new allowance.
+    internal void Refresh(ReadOnlySpan<byte> probabilities)
+    {
+        if (probabilities.Length != 1056) throw new ArgumentException("VP8 requires 1,056 coefficient probabilities.", nameof(probabilities));
+        _ = Values; context.Cancellation.ThrowIfCancellationRequested();
+        FillCoefficientCosts(storage!, probabilities, context);
+    }
+
+    private static void FillCoefficientCosts(Span<ushort> values, ReadOnlySpan<byte> probabilities, OperationContext context)
+    {
+        ReadOnlySpan<ushort> entropy = values[..FixedAt];
+        for (var index = 0; index < 96; index++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); var p = probabilities.Slice(index * 11, 11); var extra = index % 3 == 0 ? 0 : Bit(entropy, true, p[0]);
+            values[EobAt + index * 2] = (ushort)Bit(entropy, false, p[0]);
+            values[EobAt + index * 2 + 1] = (ushort)Bit(entropy, true, p[0]);
+            for (var level = 0; level < 68; level++)
+                values[LevelsAt + index * 68 + level] = (ushort)(extra + VariableCost(level, p, entropy));
+        }
     }
 
     private static int Band(int position) => position switch

@@ -7,6 +7,55 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8RatePlanTests
 {
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void RefreshMatchesFreshTablesWithoutAllocationOrAdmissionWhenRootIsFull(int profile)
+    {
+        var probabilities = profile switch
+        {
+            0 => Vp8Tables.CoefficientProbabilities.ToArray(), 1 => ArithmeticProbabilities(),
+            _ => Enumerable.Repeat(profile == 2 ? (byte)0 : (byte)255, 1056).ToArray()
+        };
+        using var root = new TestMemoryBudget(21_216); using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var plan = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, context);
+        var before = plan.Values.ToArray(); var prefix = before.Length - plan.EndOfBlock.Length - plan.VariableLevels.Length;
+        Assert.True(root.TryReserve(1024, out var caller));
+        using (caller)
+        {
+            using var expectedContext = new OperationContext(new(), default);
+            using var expected = Vp8RatePlan.Create(probabilities, expectedContext);
+            var attempts = root.Attempts; var allocated = GC.GetAllocatedBytesForCurrentThread();
+            plan.Refresh(probabilities);
+            allocated = GC.GetAllocatedBytesForCurrentThread() - allocated;
+            Assert.Equal(0, allocated); Assert.Equal(attempts, root.Attempts);
+            Assert.Equal(21_216, root.Bytes); Assert.Equal(21_216, root.Peak); Assert.Equal(20_192, plan.CapacityBytes);
+            Assert.True(plan.Values[..prefix].SequenceEqual(before.AsSpan(0, prefix)));
+            Assert.True(plan.Values.SequenceEqual(expected.Values));
+            probabilities.AsSpan().Fill(99); Assert.True(plan.Values.SequenceEqual(expected.Values));
+        }
+        plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void InvalidOrPreCanceledRefreshKeepsOwnedTablesAndReleaseAllowsLaterOperations()
+    {
+        using var root = new TestMemoryBudget(21_216); using var cancellation = new CancellationTokenSource();
+        using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
+        using var plan = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, context);
+        var before = plan.Values.ToArray(); var attempts = root.Attempts;
+        Assert.Throws<ArgumentException>(() => plan.Refresh(new byte[1055]));
+        cancellation.Cancel(); Assert.Throws<OperationCanceledException>(() => plan.Refresh(ArithmeticProbabilities()));
+        Assert.True(plan.Values.SequenceEqual(before)); Assert.Equal(attempts, root.Attempts);
+        Assert.Equal(plan.CapacityBytes, root.Bytes); plan.Dispose(); Assert.Equal(0, root.Bytes);
+        Assert.Throws<ObjectDisposedException>(() => plan.Refresh(Vp8Tables.CoefficientProbabilities));
+        using var laterContext = new OperationContext(new() { MemoryBudget = root }, default);
+        using var later = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, laterContext);
+        Assert.True(later.Values.SequenceEqual(before)); later.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     private static byte[] ArithmeticProbabilities() => Enumerable.Range(0, 1056)
         .Select(p => (byte)((37 * p + 17 * (p / 11) + p / 33) & 255)).ToArray();
 
