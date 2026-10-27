@@ -8,6 +8,26 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8SourceHistogramTests
 {
     [Fact]
+    public void AllZeroLaneMasksPreserveCollisionsWraparoundAndBorrowedTails()
+    {
+        var coefficients = new short[17]; coefficients[16] = 147;
+        var actual = new int[33]; var expected = new int[33];
+        for (var mask = 0; mask < 65536; mask++)
+        {
+            for (var bin = 0; bin < actual.Length; bin++) actual[bin] = expected[bin] = int.MaxValue - bin % 5;
+            for (var p = 0; p < 16; p++)
+            {
+                var bucket = (mask & (1 << p)) == 0 ? 0 : 1 + (p * 7 + (mask >> 8)) % 31;
+                coefficients[p] = bucket == 0 ? (short)((p & 1) == 0 ? -7 : 7) : (short)((p & 1) == 0 ? -bucket * 8 : bucket * 8);
+                expected[bucket] = unchecked(expected[bucket] + 1);
+            }
+            Vp8SourceHistogram.AddBlock(coefficients, actual);
+            if (!actual.AsSpan().SequenceEqual(expected)) Assert.Equal(expected, actual);
+        }
+        Assert.Equal(147, coefficients[16]);
+    }
+
+    [Fact]
     public void OverlappingPopulationPreservesSequentialCoefficientFeedback()
     {
         var population = new int[33]; population[0] = 16; population[2] = 7; population[32] = 147;

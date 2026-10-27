@@ -7,12 +7,13 @@ gains. Published0.1.0 remains unchanged.
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
 required paths remain open. The previously unmeasured distortion-only VP8 search
-exposed a 3.615× gap. After exact squared groups, redundant-pass removal and
-reuse of four-block transforms, it independently measures 2.145× (upper 2.206×),
-741,342 B/op and an exact 7,330-byte packet. Its 5.37 ms is 7.78% below the
-preceding independent mean; these separate
-runs are not a paired baseline gain. It remains the largest confirmed gap. The
-five unaffected VP8 costs carry forward; the required upper ≤1× stays open.
+exposed a 3.615× gap. After exact squared groups, redundant-pass removal,
+four-block transforms and zero-population aggregation, it independently measures
+2.020× (upper 2.028×), 741,342 B/op and an exact 7,330-byte packet. Its 5.095 ms
+is 5.18% below the preceding independent mean; these separate runs are not a
+paired baseline gain. Six affected VP8 anchors are reconciled. A first candidate's
+RGBA16 regression was resolved against a fresh cached baseline before acceptance.
+The effort2 case remains the largest confirmed gap; required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
 raw links and baseline exceptions; [coverage](../benchmarks/WARM-COVERAGE.md)
@@ -20,10 +21,10 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-DISTORTION-TRANSFORM-REUSE.md) | 4,945 checks/OS; 624 affected scalar WebP/OS and same actual package passed |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 4,946 checks/OS; 625 affected scalar WebP/OS and same actual package passed |
 | Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
 | Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current independent gap |
-| CPU and allocation measurements after cleanup | [transform reuse](../benchmarks/WARM-VP8-DISTORTION-TRANSFORM-REUSE.md), [squared groups](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | Exact packets; other required paths and full parity open |
+| CPU and allocation measurements after cleanup | [zero populations](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
@@ -38,12 +39,12 @@ are leads for measurement, not current demonstrated gaps.
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 2,432.58 | 1,576.20 | 1.543 / 1.556 | 373,413 | Current gap (independent) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,585.89 | 1,405.11 | 1.129 / 1.256 | 155,436 | Current gap (short; qualified) |
 | [JPEG from caller GRAY8, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 | Current gap (short; qualified) |
-| [VP8 diagram, effort2 / distortion-only search](../benchmarks/WARM-VP8-DISTORTION-TRANSFORM-REUSE.md) | 5,373.40 | 2,504.79 | 2.145 / 2.206 | 741,342 | Current gap (independent) |
-| [VP8 RGBA8](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md) | 76,876.39 | 53,507.96 | 1.437 / 1.514 | 23,258,168 | Current gap (short; qualified) |
-| [VP8 opaque photograph](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md) | 17,948.88 | 9,710.55 | 1.848 / 1.969 | 809,056 | Current gap (reused short; qualified) |
-| [VP8 opaque text/diagram](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md) | 10,276.48 | 5,837.16 | 1.761 / 1.807 | 741,121 | Current gap (short; qualified) |
-| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md) | 17,452.62 | 9,806.85 | 1.780 / 2.621 | 754,328 | Current gap (short; confidence open) |
-| [VP8 opaque RGBA16, including normalization](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md) | 26,830.90 | 15,618.90 | 1.718 / 1.783 | 1,201,536 | Current gap (short; qualified) |
+| [VP8 diagram, effort2 / distortion-only search](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 5,095.24 | 2,522.61 | 2.020 / 2.028 | 741,342 | Current gap (independent) |
+| [VP8 RGBA8](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 76,733.96 | 53,568.38 | 1.432 / 1.501 | 23,258,168 | Current gap (short; qualified) |
+| [VP8 opaque photograph](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 17,641.56 | 9,714.43 | 1.816 / 1.885 | 809,056 | Current gap (short; qualified) |
+| [VP8 opaque text/diagram](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 9,870.29 | 5,812.36 | 1.698 / 1.752 | 741,121 | Current gap (short; qualified) |
+| [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 17,208.25 | 9,823.48 | 1.752 / 1.828 | 754,328 | Current gap (short; qualified) |
+| [VP8 opaque RGBA16, including normalization](../benchmarks/WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md) | 26,839.08 | 15,604.39 | 1.720 / 1.796 | 1,201,536 | Current gap (short; qualified) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L RGBA16, including normalization / libwebp exact=1](../benchmarks/WARM-VP8L-RGBA16-CURRENT.md) | 188,991.14 | 122,121.60 | 1.548 / 1.685 | 47,674,928 | Current gap (short; reused qualification) |
 | [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 201,469.36 | 121,148.65 | 1.663 / 1.889 | 47,675,312 | Current gap (short; reused qualification) |

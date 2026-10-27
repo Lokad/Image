@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -22,11 +23,27 @@ internal static class Vp8SourceHistogram
         if (Avx2.IsSupported && !MemoryMarshal.AsBytes(coefficients[..16]).Overlaps(MemoryMarshal.AsBytes(population[..32])))
         {
             // Unsigned magnitude also represents Abs(short.MinValue) exactly.
-            // Keep scalar increments: repeated buckets must accumulate in order.
             var magnitudes = Avx2.Abs(Vector256.Create(coefficients)).AsUInt16();
             var values = Avx2.Min(Avx2.ShiftRightLogical(magnitudes, 3), Vector256.Create((ushort)31));
+            var zeroBytes = (uint)Avx2.MoveMask(Avx2.CompareEqual(values, Vector256<ushort>.Zero).AsByte());
+            if (zeroBytes == uint.MaxValue) { population[0] += 16; return; }
             Span<ushort> buckets = stackalloc ushort[16]; values.CopyTo(buckets);
-            for (var p = 0; p < 16; p++) population[buckets[p]]++;
+            var zeroCount = BitOperations.PopCount(zeroBytes) >> 1;
+            // Keep straight updates when fewer than half the lanes are zero.
+            if (zeroCount < 8)
+            {
+                for (var p = 0; p < 16; p++) population[buckets[p]]++;
+                return;
+            }
+            // Coefficients cannot alias populations here. Combine repeated
+            // zero-bucket writes, keeping modulo-int counts and borrowed tails.
+            population[0] += zeroCount;
+            for (var pending = ~zeroBytes; pending != 0;)
+            {
+                var at = BitOperations.TrailingZeroCount(pending);
+                population[buckets[at >> 1]]++;
+                pending &= ~(3u << at);
+            }
             return;
         }
         for (var p = 0; p < 16; p++)

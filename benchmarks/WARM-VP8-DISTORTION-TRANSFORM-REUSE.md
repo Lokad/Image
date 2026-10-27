@@ -1,5 +1,8 @@
 # Reuse four-block transforms in distortion-only reconstruction
 
+These costs are historical after [zero-population aggregation](WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md).
+The retained identities and qualification describe this recorded producer.
+
 The existing effort2 diagram independently measures 5.37 ms: 2.145× reference
 time (upper 2.206×), an exact 7,330-byte packet and unchanged 741,342 B/op.
 Elapsed time is 7.78% below the preceding independent mean; separate runs

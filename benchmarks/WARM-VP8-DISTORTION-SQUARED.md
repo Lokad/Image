@@ -1,8 +1,8 @@
 # Exact squared groups for distortion-only VP8 search
 
-The effort2 costs below are historical after [decision-pass reuse](WARM-VP8-DISTORTION-PASS-REUSE.md)
-and [selected-transform reuse](WARM-VP8-DISTORTION-TRANSFORM-REUSE.md).
-The other five named anchors remain valid: that later change touches only method2.
+All six costs below are historical after [zero-population aggregation](WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md).
+Earlier [decision-pass reuse](WARM-VP8-DISTORTION-PASS-REUSE.md) and
+[selected-transform reuse](WARM-VP8-DISTORTION-TRANSFORM-REUSE.md) changed only effort2 costs.
 The source, package and raw identities below describe this recorded producer.
 
 The effort2 diagram independently measures 7.85 ms: 3.128× reference time

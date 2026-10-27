@@ -1,7 +1,8 @@
 # SIMD buckets for VP8 source histograms
 
-Historical encoder cost: [rate-plan refresh](WARM-VP8-RATE-PLAN-REFRESH.md) now
-supplies current affected costs and allocations. Histogram arithmetic is unchanged.
+Historical producer and costs. [Zero-population aggregation](WARM-VP8-SOURCE-HISTOGRAM-ZERO-COUNTS.md)
+supplies current affected costs and allocations. Magnitudes, bins and population
+results remain exact; its sparse updates supersede this producer's serial loop.
 
 The photograph independently measures 21.92 ms: 2.269× reference time (upper
 2.279×), 909,696 B/op and an exact 17,688-byte packet. Elapsed time is 3.10% below
