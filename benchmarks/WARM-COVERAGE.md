@@ -41,14 +41,14 @@ they price original prediction distortion before reconstructing selected modes.
 The current method4 RDO and method6 trellis controls never execute this required
 search algorithm. This one existing functional control is promoted to the warm
 checklist; no new source or effort/settings sweep. Its [current independent
-confirmation](WARM-VP8-DISTORTION-SQUARED.md) measures 3.128× / upper 3.148,
-741,257 B/op and an exact packet. This largest demonstrated gap takes priority.
+confirmation](WARM-VP8-DISTORTION-PASS-REUSE.md) measures 2.314× / upper 2.325,
+741,342 B/op and an exact packet. This largest demonstrated gap takes priority.
 Other low-effort settings receive no broader throughput claim.
 
 ## Current qualification and demonstrated gaps
 
-[Squared groups](WARM-VP8-DISTORTION-SQUARED.md) is the latest
-qualified producer: 4,944 Release checks and 623 affected scalar WebP checks per
+[Decision-pass reuse](WARM-VP8-DISTORTION-PASS-REUSE.md) is the latest
+qualified producer: 4,945 Release checks and 624 affected scalar WebP checks per
 OS, plus the same actual private 0.2.0 package and all three usage examples.
 Complete encoder packets, decoded pixels, editing precision, cancellation and
 explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchanged.
@@ -56,13 +56,17 @@ explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchang
 The [current three-table summary](../docs/benchmark.md) selects valid costs,
 allocations, reference boundaries and confirmation status. Current evidence:
 
-- [Squared groups](WARM-VP8-DISTORTION-SQUARED.md): effort2 diagram independently
-  confirms 3.128× / upper 3.148, exact 7,330 B and 741,257 B/op. Current RDO
+- [Decision-pass reuse](WARM-VP8-DISTORTION-PASS-REUSE.md): effort2 diagram
+  independently confirms 2.314× / upper 2.325, exact 7,330 B and 741,342 B/op.
+  Only method2 plan preparation changes; its first complete decision already
+  equals the redundant second pass. Methods0/1 retain both passes. The five
+  unchanged [squared-group anchors](WARM-VP8-DISTORTION-SQUARED.md) carry forward.
+  Current RDO
   photograph short is 1.848× / upper 1.969, reusing the exact earlier candidate/
   harness/input pair. Diagram/alpha effort4 shorts are 1.761× / 1.437×. Effort6
   diagram is 1.780× / upper 2.621, explicitly uncertain. Opaque RGBA16 is 1.718×.
-  All packet sizes and allocations are unchanged. Six named anchors reconcile
-  affected costs; other affected observations remain historical.
+  Their packet sizes and allocations are unchanged. These six named anchors
+  reconcile affected costs; other affected observations remain historical.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [VP8L RGBA16 normalization](WARM-VP8L-RGBA16-CURRENT.md): current short
@@ -163,11 +167,19 @@ on this distinct path, without a variant sweep or production rebuild. It now has
 independent 3.128× evidence, full qualification and six reconciled anchors. The
 original RDO screen remains marginal; no RDO speedup is inferred from it.
 
-Next obtain one bounded attribution on `DiagramLossyDistortion8`, whose search
-is distinct from the older RDO photograph trace. Reuse immutable production/
-harness/worker/selector artifacts; discard instrumented timings. Prioritize a
-substantial primitive in this 3.128× path before smaller gaps. No squared variants
-or new image/settings grid.
+The bounded effort2 attribution and caller review then exposed a redundant full
+decision pass. Its removal is accepted and qualified: 25.76% less elapsed than
+the preceding independent mean, without a paired baseline gain claim. Existing
+native statistics/final-decision hashes and complete packets stay exact. Stop
+pass-reuse variants; do not apply this proof to methods0/1, which use mode hints.
+
+Prioritize one substantial unattempted primitive in this 2.314× path, using the
+retained attribution and actual callers before smaller gaps. Reuse immutable
+production/harness/worker/selectors; no automatic new profile, squared variants
+or image/settings grid. Existing selected-mode reconstruction still gathers
+scalar transform inputs; input preparation is a separate sampled cost. Examine
+one lead at a time and stop variants that do not offer material complete-operation
+gains.
 No full/package repetition when production inputs are unchanged. Refresh
 only affected validation receipts before replay; benchmark-only repairs do not
 invalidate earlier valid measured producer/harness pairs.

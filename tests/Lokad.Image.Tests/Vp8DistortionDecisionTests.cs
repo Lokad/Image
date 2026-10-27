@@ -9,6 +9,48 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8DistortionDecisionTests
 {
+    [Fact]
+    public void MethodTwoDecisionIgnoresPriorLumaAndChromaHints()
+    {
+        using var root = new TestMemoryBudget(16_000_000);
+        using var image = OriginalVp8lControls.Buffer("diagram", 8, root);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var input = Vp8PreparedInput.Create(image, context);
+        using var analysis = Vp8SourceAnalysis.Create(input, context, 2);
+        using var segments = Vp8SourceSegments.Create(analysis, 75, false, context);
+        using var quantization = Vp8QuantizationPlan.Create(segments, analysis.MeanChromaScore, context, 2);
+        using var rate = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, context);
+        var source = new byte[384]; var edges = new byte[71]; Array.Fill(edges, (byte)127);
+        var incoming = new byte[8]; var diffusion = new sbyte[8]; uint state = 0x63869e37;
+        context.Reserve(Vp8DistortionDecision.ScratchBytes);
+        try
+        {
+            for (var sample = 0; sample < 4; sample++)
+            {
+                for (var p = 0; p < source.Length; p++)
+                {
+                    state ^= state << 13; state ^= state >> 17; state ^= state << 5;
+                    source[p] = sample switch { 0 => (byte)128, 1 => (byte)(p * 13), 2 => (byte)((p & 1) * 255), _ => (byte)state };
+                }
+                Vp8MacroblockScore? expectedScore = null; byte[]? expected = null;
+                foreach (var lumaHint in new[] { false, true })
+                for (var uvHint = 0; uvHint < 4; uvHint++)
+                {
+                    var pixels = new byte[384]; var levels = new short[400]; var modes = new byte[16]; var errors = new sbyte[14];
+                    var score = Vp8DistortionDecision.Select(source, edges, incoming, diffusion, true, true,
+                        2, lumaHint, uvHint, 256L * 510 * 8 * 1024 / (analysis.Width * analysis.Height), true,
+                        quantization.Matrix(0, Vp8CoefficientPlane.Luma), quantization.Matrix(0, Vp8CoefficientPlane.Walsh),
+                        quantization.Matrix(0, Vp8CoefficientPlane.Chroma), quantization.Costs(0), rate,
+                        pixels, levels, modes, errors, context);
+                    byte[] result = [.. pixels, .. MemoryMarshal.AsBytes(levels.AsSpan()).ToArray(), .. modes, .. MemoryMarshal.AsBytes(errors.AsSpan()).ToArray()];
+                    if (expectedScore is null) { expectedScore = score; expected = result; }
+                    else { Assert.Equal(expectedScore.Value, score); Assert.Equal(expected, result); }
+                }
+            }
+        }
+        finally { context.Release(Vp8DistortionDecision.ScratchBytes); }
+    }
+
     private static string Hash(ReadOnlySpan<byte> bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
     private static void Before(Span<byte> bytes, int call, int x, int y, int segment, bool intra16, int mode, int uv,
         ReadOnlySpan<byte> source, ReadOnlySpan<byte> edges, ReadOnlySpan<byte> contexts, ReadOnlySpan<sbyte> diffusion)

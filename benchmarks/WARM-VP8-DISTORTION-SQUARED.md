@@ -1,5 +1,9 @@
 # Exact squared groups for distortion-only VP8 search
 
+The effort2 costs below are historical after [decision-pass reuse](WARM-VP8-DISTORTION-PASS-REUSE.md).
+The other five named anchors remain valid: that later change touches only method2.
+The source, package and raw identities below describe this recorded producer.
+
 The effort2 diagram independently measures 7.85 ms: 3.128× reference time
 (upper 3.148×), 741,257 B/op and an exact 7,330-byte packet. Elapsed time is
 13.20% below its preceding quiet short; these are not a paired baseline gain.
@@ -49,4 +53,4 @@ compilation; the measured harness bytes were reused for confirmation.
 [Evidence](warm-vp8-distortion-squared-evidence.json) retains all identities,
 reuse, failures, samples and the mirrored, member-verified raw archive. Unchanged
 decoder/other-codec/edit/text proof carries forward. Full255case warm parity and
-replacement readiness remain open; prioritize this3.128×path before smaller gaps.
+replacement readiness remain open; use the current effort2 confirmation above.

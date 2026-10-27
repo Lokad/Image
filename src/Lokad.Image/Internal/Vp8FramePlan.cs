@@ -159,7 +159,10 @@ internal sealed class Vp8FramePlan : IDisposable
         using var rate = Vp8RatePlan.Create(probabilities!, context);
         var headerCost = SegmentHeaderCost(counts, rate.Entropy); var skipped = 0;
         var statisticsCount = method == 0 ? Math.Min(Count, Count > 200 ? Count >> 2 : 50) : Count;
-        for (var pass = 0; pass < 2; pass++)
+        // Method2 ignores initial mode hints and resets spatial state each pass.
+        // The statistics update changes coefficient probabilities, not its mode
+        // prices, so its first complete decision is already the final result.
+        for (var pass = 0; pass < (method == 2 ? 1 : 2); pass++)
         {
             context.Cancellation.ThrowIfCancellationRequested(); yTop.AsSpan().Fill(127); uvTop.AsSpan().Fill(127); modeTop.AsSpan().Clear();
             coefficientTop.AsSpan().Clear(); contexts.Clear(); var count = pass == 0 ? statisticsCount : Count;
