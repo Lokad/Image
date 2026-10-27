@@ -53,9 +53,11 @@ reference boundaries and confirmation status. Current named evidence:
   trellis6 / opaque16 / alpha shorts are 1.589× / 1.437× / 1.606× / 1.544× / 1.363×.
   All retain exact packets and unchanged allocation. Other affected costs are historical.
 - [Indexed VP8L and alpha](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md): diagram
-  independent 1.166× / upper 1.204, 27,419,167 B/op, exact 7,234 B. Photograph /
-  asymmetric8 / asymmetric16 shorts are 1.625× / 1.584× / 1.600×;
-  their allocations are 20,410,208 / 29,688,696 / 29,688,696 B/op.
+  independent 1.166× / upper 1.204, 27,419,167 B/op, exact 7,234 B. Asymmetric8 /
+  asymmetric16 shorts are 1.584× / 1.600×, both 29,688,696 B/op.
+- [Lossless photograph confirmation](WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md):
+  independent 1.599× / upper 1.629, 20,410,208 B/op, exact 160,032 B. Same
+  qualified immutable producer and cached worker/selector; no production changes.
 - VP8L nonseekable async output independently confirms 1.622× / upper 1.641,
   29,689,080 B/op, exact 183,812 B. Allocation falls 37.73%; its 12 actual/filtered
   samples and both brackets remain. Awaited staging/delivery/release is timed;
@@ -148,11 +150,15 @@ opportunity. Signed coefficient validation is accepted; its exhaustive signed16
 proof, native oracles and six anchors pass. Stop guard variants and closed math
 kernel retuning.
 
-Async VP8L 1.622× / upper 1.641 is the largest selected independent point. Resolve
-the existing lossless photograph short uncertainty before assuming optimization
-or ranking it against confirmed paths. Reuse the qualified build and existing
-worker/settings for one independent confirmation. No automatic profile or
-content/settings grid; stop confirmed passing cases.
+Async VP8L 1.622× / upper 1.641 is the largest selected independent point. The
+lossless photograph uncertainty is resolved at 1.599×. Retained attribution
+identifies color-candidate histogram construction: current Score transforms all
+channels before selecting just red or blue. Bound one exact channel/vector
+histogram primitive, preserving signed-byte coefficients, separate arithmetic
+shifts, wrap, histogram populations and candidate ties. Prove math first, then
+one integration/async short; confirm only a meaningful result. Do not retune
+closed PopulationSum/predictor/cost/slab paths. No automatic profile or new grid;
+stop confirmed passing cases.
 
 The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)
 and individual reports retain accepted/rejected history. Preserve cited archives,

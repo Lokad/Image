@@ -1,6 +1,6 @@
 # Exact indexed VP8L histogram reconstruction
 
-The VP8-plus-alpha cost row is superseded by [coefficient-domain validation](WARM-VP8-SIGNED-DOMAIN-GUARD.md). VP8L-only costs and the ownership proof remain valid.
+The VP8-plus-alpha cost row is superseded by [coefficient-domain validation](WARM-VP8-SIGNED-DOMAIN-GUARD.md); the photograph short now has an [independent confirmation](WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md). Other VP8L-only costs and the ownership proof remain valid.
 
 The existing async control independently measures 197.78 ms, 1.622× reference
 (upper 1.641×), exact 183,812 B and 29,689,080 B/op. Allocation falls 37.73% from

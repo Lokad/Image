@@ -86,7 +86,7 @@ def render():
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', confirmed=True, current=True),
-        row('VP8L photograph / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8L photograph / libwebp exact=1', 'warm-vp8l-photograph-confirmation-evidence.json', ['observations', -1], 'WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md', confirmed=True, current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', confirmed=True, current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-encoder-anchors-evidence.json', ['cases', 'png8', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('Bilinear resize RGBA16', 'warm-current-editing-anchors-evidence.json', ['cases', 'bilinearDown16', -1], 'WARM-CURRENT-EDITING-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
@@ -111,8 +111,9 @@ exact 7,234 B: 15.68% less elapsed than its preceding independent mean. Separate
 runs are not paired baseline gains. Exact signed VP8 coefficient validation now
 confirms 15.483 ms for the photograph, 1.590× (upper 1.610×), 809,072 B/op and
 exact 17,688 B: 3.40% below its preceding independent mean. Six affected VP8
-anchors are reconciled. Async VP8L 1.622× is the largest selected independent gap;
-the lossless photograph short still needs confirmation before ranking it.
+anchors are reconciled. Lossless photograph now independently confirms 1.599×
+(upper 1.629×), 20,410,208 B/op and exact 160,032 B, without a production change.
+Async VP8L 1.622× remains the largest selected independent gap.
 Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,

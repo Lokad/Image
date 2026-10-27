@@ -41,6 +41,6 @@ attribution supplies the lead, separately from the closed quantization kernels.
 producer/package identities and the mirrored, member-verified raw master.
 Six affected VP8 anchors replace preceding costs; other affected stream/async
 observations remain historical. VP8L-only encoding, decoders, other codecs and
-editing/text keep applicable evidence. Stop domain-guard variants. Resolve
-uncertainty in the existing lossless photograph measurement next; full 255-path
-warm parity and replacement readiness remain open.
+editing/text keep applicable evidence. Stop domain-guard variants. The subsequent
+[lossless photograph confirmation](WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md) changes no
+production code; full 255-path warm parity and replacement readiness remain open.

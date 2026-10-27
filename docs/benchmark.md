@@ -14,8 +14,9 @@ exact 7,234 B: 15.68% less elapsed than its preceding independent mean. Separate
 runs are not paired baseline gains. Exact signed VP8 coefficient validation now
 confirms 15.483 ms for the photograph, 1.590× (upper 1.610×), 809,072 B/op and
 exact 17,688 B: 3.40% below its preceding independent mean. Six affected VP8
-anchors are reconciled. Async VP8L 1.622× is the largest selected independent gap;
-the lossless photograph short still needs confirmation before ranking it.
+anchors are reconciled. Lossless photograph now independently confirms 1.599×
+(upper 1.629×), 20,410,208 B/op and exact 160,032 B, without a production change.
+Async VP8L 1.622× remains the largest selected independent gap.
 Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
@@ -52,7 +53,7 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 191,999.87 | 121,216.12 | 1.584 / 2.263 | 29,688,696 | Current gap (short; qualified) |
 | [VP8L RGBA16, including normalization / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 193,837.99 | 121,180.27 | 1.600 / 1.847 | 29,688,696 | Current gap (short; qualified) |
 | [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 197,779.35 | 121,909.14 | 1.622 / 1.641 | 29,689,080 | Current gap (independent) |
-| [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 134,828.31 | 82,982.42 | 1.625 / 1.945 | 20,410,208 | Current gap (short; qualified) |
+| [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-PHOTOGRAPH-CONFIRMATION.md) | 132,699.99 | 82,971.84 | 1.599 / 1.629 | 20,410,208 | Current gap (independent) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 11,123.58 | 9,542.18 | 1.166 / 1.204 | 27,419,167 | Current gap (independent) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |
 | [Bilinear resize RGBA16](../benchmarks/WARM-CURRENT-EDITING-ANCHORS.md) | 547.29 | 408.78 | 1.339 / 1.426 | 290,124 | Current gap (short; qualified) |
