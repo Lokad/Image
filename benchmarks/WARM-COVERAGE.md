@@ -4,7 +4,7 @@ The full objective remains independent quiet single-CPU warm performance with a
 conservative ratio upper bound ≤1× for every named material required path, plus
 functional, memory, compression and packaged-consumer correctness. Startup and
 concurrency are excluded. Compression correctness precedes CPU optimization.
-Performance work is paused for 0.2.0 release preparation.
+The published 0.2.0 snapshot is the baseline for subsequent performance work.
 
 ## Finite checklist
 
