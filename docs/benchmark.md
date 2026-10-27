@@ -17,6 +17,10 @@ exact 17,688 B: 3.40% below its preceding independent mean. Six affected VP8
 anchors are reconciled. Lossless photograph now independently confirms 1.599×
 (upper 1.629×), 20,410,208 B/op and exact 160,032 B, without a production change.
 Async VP8L 1.622× remains the largest selected independent gap.
+Five further named costs are refreshed without production changes: shared-root
+JPEG RGBA16 1.462×; Lanczos3 reduction8/16 1.478×/1.438× and enlargement8/16
+1.039×/1.310×. These remain short screens, with exact packets/managed frames and
+unchanged approved native bounds. No independent parity claim follows.
 Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
@@ -42,6 +46,7 @@ are leads for measurement, not current demonstrated gaps.
 | [WebP VP8 + alpha, fresh seekable Stream](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | 7,838.48 | 5,987.65 | 1.309 / 1.337 | 1,966,583 | Current gap (short; qualified) |
 | [JPEG 4:4:4, forward-only / exact reference](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 4,599.19 | 3,783.31 | 1.216 / 1.414 | 820,123 | Current gap (short; qualified) |
 | [JPEG 4:2:0 from caller RGB samples](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 2,432.58 | 1,576.20 | 1.543 / 1.556 | 373,413 | Current gap (independent) |
+| [JPEG RGBA16 4:2:0 / caller IMemoryBudget](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 2,683.55 | 1,835.62 | 1.462 / 1.654 | 804,637 | Current gap (short; qualified) |
 | [JPEG grayscale, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,585.89 | 1,405.11 | 1.129 / 1.256 | 155,436 | Current gap (short; qualified) |
 | [JPEG from caller GRAY8, standalone SIMD libjpeg-turbo](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md) | 1,162.42 | 1,077.77 | 1.079 / 1.416 | 155,438 | Current gap (short; qualified) |
 | [VP8 diagram, effort2 / distortion-only search](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 3,994.60 | 2,514.65 | 1.589 / 1.725 | 741,375 | Current gap (short; qualified) |
@@ -59,8 +64,10 @@ are leads for measurement, not current demonstrated gaps.
 | [Bilinear resize RGBA16](../benchmarks/WARM-CURRENT-EDITING-ANCHORS.md) | 547.29 | 408.78 | 1.339 / 1.426 | 290,124 | Current gap (short; qualified) |
 | [Bicubic resize RGBA8](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 635.08 | 416.65 | 1.524 / 1.610 | 332,178 | Historical short; remeasure |
 | [Bicubic upscale RGBA16](../benchmarks/WARM-BICUBIC-BYTE-EMITTER.md) | 4,258.22 | 2,871.12 | 1.483 / 1.690 | 5,016,578 | Historical short; remeasure |
-| [Lanczos3 reduction RGBA8](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) | 758.75 | 490.07 | 1.548 / 1.646 | 138,466 | Historical short; remeasure |
-| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-LANCZOS3-CERTIFIED-FMA.md) | 5,248.30 | 3,935.96 | 1.333 / 1.459 | 4,584,270 | Historical short; remeasure |
+| [Lanczos3 reduction RGBA8](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 723.75 | 489.68 | 1.478 / 1.818 | 138,455 | Current gap (short; qualified) |
+| [Lanczos3 reduction RGBA16](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 730.37 | 507.98 | 1.438 / 1.769 | 138,435 | Current gap (short; qualified) |
+| [Lanczos3 enlargement RGBA8](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 4,221.10 | 4,063.92 | 1.039 / 1.101 | 319,038 | Current gap (short; qualified) |
+| [Lanczos3 enlargement RGBA16](../benchmarks/WARM-CURRENT-JPEG-ROOT-LANCZOS.md) | 5,131.20 | 3,917.07 | 1.310 / 1.533 | 4,583,983 | Current gap (short; qualified) |
 
 Complete encoder packets remain the acceptance boundary; metadata differences
 are limited to the approved JPEG attribution COM. These are the named controls,

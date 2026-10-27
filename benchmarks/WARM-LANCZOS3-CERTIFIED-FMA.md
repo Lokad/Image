@@ -1,5 +1,7 @@
 # Certified Lanczos3 FMA accumulation
 
+Cost rows below are historical after [current Lanczos measurements](WARM-CURRENT-JPEG-ROOT-LANCZOS.md). The mathematical certificate and exact oracle remain applicable.
+
 The four existing complete Lanczos3 operations improve **13.6%–23.8%**
 and allocate less, with every original managed output exact. All remain measured
 parity gaps; no independent long confirmation is run above the target.

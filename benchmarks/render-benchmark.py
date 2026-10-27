@@ -75,6 +75,7 @@ def render():
         row('WebP VP8 + alpha, fresh seekable Stream', 'warm-vp8-shared-small-rows-evidence.json', ['cases', 'vp8-stream', -1], 'WARM-VP8-SHARED-SMALL-ROWS.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG 4:4:4, forward-only / exact reference', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'jpeg444', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
+        row('JPEG RGBA16 4:2:0 / caller IMemoryBudget', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'JpegShared16', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
@@ -92,8 +93,10 @@ def render():
         row('Bilinear resize RGBA16', 'warm-current-editing-anchors-evidence.json', ['cases', 'bilinearDown16', -1], 'WARM-CURRENT-EDITING-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
         row('Bicubic resize RGBA8', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Down8', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
         row('Bicubic upscale RGBA16', 'warm-bicubic-byte-emitter-evidence.json', ['cases', 'Up16', -1], 'WARM-BICUBIC-BYTE-EMITTER.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 reduction RGBA8', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Reduce8', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
-        row('Lanczos3 enlargement RGBA16', 'warm-lanczos3-certified-fma-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-LANCZOS3-CERTIFIED-FMA.md', verification='Gap (short; qualified)'),
+        row('Lanczos3 reduction RGBA8', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Reduce8', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
+        row('Lanczos3 reduction RGBA16', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Reduce16', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
+        row('Lanczos3 enlargement RGBA8', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Enlarge8', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
+        row('Lanczos3 enlargement RGBA16', 'warm-current-jpeg-root-lanczos-evidence.json', ['cases', 'Enlarge16', -1], 'WARM-CURRENT-JPEG-ROOT-LANCZOS.md', verification='Current gap (short; qualified)', current=True),
     ]
     return """# Benchmark state
 
@@ -114,6 +117,10 @@ exact 17,688 B: 3.40% below its preceding independent mean. Six affected VP8
 anchors are reconciled. Lossless photograph now independently confirms 1.599×
 (upper 1.629×), 20,410,208 B/op and exact 160,032 B, without a production change.
 Async VP8L 1.622× remains the largest selected independent gap.
+Five further named costs are refreshed without production changes: shared-root
+JPEG RGBA16 1.462×; Lanczos3 reduction8/16 1.478×/1.438× and enlargement8/16
+1.039×/1.310×. These remain short screens, with exact packets/managed frames and
+unchanged approved native bounds. No independent parity claim follows.
 Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,

@@ -64,6 +64,11 @@ reference boundaries and confirmation status. Current named evidence:
   callbacks complete immediately. No new input/settings grid or source pixel change.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
   1.543×; 444, RGBA grayscale and caller GRAY8 shorts 1.216× / 1.129× / 1.079×.
+- [JPEG shared-root RGBA16 and Lanczos](WARM-CURRENT-JPEG-ROOT-LANCZOS.md): JPEG
+  4:2:0 short 1.462× / upper 1.654, 804,637 B/op, 1,704,856 B root peak, exact
+  approved packet. Lanczos reduction8/16 shorts 1.478× / 1.438×; enlargement8/16
+  1.039× / 1.310×. All managed frames exact; existing native bounds pass. Same
+  qualified producer and cached workers/selectors; no production changes.
 - [VP8 decoder StreamNative8](WARM-VP8-SHARED-SMALL-ROWS.md): short 1.309×,
   exact pixels. Earlier color-renderer timing is historical after predictor changes.
 - [PNG SmallestSize8](WARM-CURRENT-ENCODER-ANCHORS.md) and
@@ -150,15 +155,19 @@ opportunity. Signed coefficient validation is accepted; its exhaustive signed16
 proof, native oracles and six anchors pass. Stop guard variants and closed math
 kernel retuning.
 
-Async VP8L 1.622× / upper 1.641 is the largest selected independent point. The
-lossless photograph uncertainty is resolved at 1.599×. Retained attribution
-identifies color-candidate histogram construction: current Score transforms all
-channels before selecting just red or blue. Bound one exact channel/vector
-histogram primitive, preserving signed-byte coefficients, separate arithmetic
-shifts, wrap, histogram populations and candidate ties. Prove math first, then
-one integration/async short; confirm only a meaningful result. Do not retune
-closed PopulationSum/predictor/cost/slab paths. No automatic profile or new grid;
-stop confirmed passing cases.
+Async VP8L 1.622× / upper 1.641 remains the largest selected independent point.
+The exact vector color-histogram trial had no meaningful complete-operation
+async gain and is rejected; actual qualified sources/cores are restored, with
+49 focused normal/scalar checks per OS. Stop these variants. The new JPEG root
+and four Lanczos screens resolve missing current costs without production tuning;
+shorts are not ranked as independent confirmations.
+
+Next measure the existing bicubic RGBA16 width-down/height-up case under its
+input+output+4 KiB local limit. The cleanup's helper extraction invalidated its
+old CPU evidence; its mixed-axis streaming and constrained workspace are a
+distinct required path. Reuse its inputs, exact oracle, native bounds and cached
+selector. No new grid, broad audit or automatic profile. Keep closed
+PopulationSum/predictor/cost/slab/math kernels closed and stop confirmed passes.
 
 The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)
 and individual reports retain accepted/rejected history. Preserve cited archives,
