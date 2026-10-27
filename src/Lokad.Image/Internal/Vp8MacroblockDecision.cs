@@ -1,4 +1,8 @@
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -30,9 +34,22 @@ internal static class Vp8MacroblockDecision
         Vp8ForwardTransform.Dct(residual, coefficients);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool Flat(ReadOnlySpan<short> levels, int blocks, int limit)
     {
         var count = 0;
+        if (Avx2.IsSupported)
+        {
+            for (var block = 0; block < blocks; block++)
+            {
+                var values = Vector256.Create(levels.Slice(block * 16, 16));
+                var zeroBytes = (uint)Avx2.MoveMask(Avx2.CompareEqual(values, Vector256<short>.Zero).AsByte());
+                // Each nonzero short contributes two bits; discard the DC pair.
+                count += BitOperations.PopCount(~zeroBytes & 0xfffffffcu) >> 1;
+                if (count > limit && count != 0) return false;
+            }
+            return true;
+        }
         for (var block = 0; block < blocks; block++) for (var p = 1; p < 16; p++)
             if (levels[block * 16 + p] != 0 && ++count > limit) return false;
         return true;

@@ -1,5 +1,8 @@
 # Current opaque RGBA16 VP8 screen
 
+This producer's timing is now historical after [flat-coefficient counting](WARM-VP8-FLAT-COUNTS.md).
+Its packet/normalization proof remains; the current cost is reconciled there.
+
 The existing 513×259 asymmetric RGBA16 control with opaque alpha measures
 28.83 ms: 1.850× the reference (upper 1.941×), allocating 1,201,536 B/op. Both
 complete packets are exactly 72,380 bytes at frozen quality75/effort4. This is

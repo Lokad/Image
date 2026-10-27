@@ -1,5 +1,8 @@
 # Fixed zigzag geometry in VP8 trellis
 
+The timing below is historical after [flat-coefficient counting](WARM-VP8-FLAT-COUNTS.md).
+Exact scan/packet proof remains; current affected costs are reconciled there.
+
 The existing effort-6 diagram independently measures 18.64 ms: 1.901× reference
 time (upper 1.910×), 754,328 B/op and an exact 6,818-byte packet. Elapsed time is
 6.50% below the preceding quiet short; these runs are not a paired baseline gain.
