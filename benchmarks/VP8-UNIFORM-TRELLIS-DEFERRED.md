@@ -19,4 +19,4 @@ The qualified color-trial source and producers are restored, with matching Linux
 DLL/PDB/XML; its actual private 0.2.1 package is unchanged. [The evidence](vp8-uniform-trellis-deferred-evidence.json)
 retains samples, identities, proofs and the mirrored member-verified raw archive.
 The [current benchmark](../docs/benchmark.md) continues to show the qualified
-baseline. Next investigate redundant setup/validation of the fixed trellis model.
+baseline. The later [fixed-importance trial](VP8-FIXED-IMPORTANCE-DEFERRED.md) is also deferred.

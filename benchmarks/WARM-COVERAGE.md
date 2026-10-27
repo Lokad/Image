@@ -119,10 +119,10 @@ and their individual reports/raw archives.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
-Next prioritize the existing trellis6 diagram. All production callers supply the
-same fixed importance model: investigate redundant setup/validation rather than
-renewing the deferred uniform-boundary guard. Reuse valid attribution and immutable
-workers; establish one substantial distinct opportunity before editing.
+The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an
+uncertain 2.2% short difference does not justify more variants. Before CPU tuning,
+complete the high-priority probing/metadata/validation work. Then reconcile retained
+coverage evidence and establish a substantial distinct opportunity before editing.
 Keep the VP8L photograph and other larger remaining costs in the queue. Distinguish
 shared work from delivery/normalization, reuse unaffected evidence and verify
 affected companion boundaries on acceptance.
