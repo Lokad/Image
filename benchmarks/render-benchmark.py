@@ -82,6 +82,7 @@ def render():
         row('VP8 opaque text/diagram', 'warm-vp8-residual-vector-views-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-RESIDUAL-VECTOR-VIEWS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 diagram, effort6 / trellis', 'warm-vp8-trellis-scan-data-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-TRELLIS-SCAN-DATA.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-rgba16-current-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-RGBA16-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-encoder-anchors-evidence.json', ['cases', 'png8', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),

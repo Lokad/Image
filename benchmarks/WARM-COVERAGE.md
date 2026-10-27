@@ -54,6 +54,9 @@ allocations, reference boundaries and confirmation status. Current evidence:
   photograph remains the largest current demonstrated gap.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
+- [VP8L RGBA16 normalization](WARM-VP8L-RGBA16-CURRENT.md): current short
+  1.548× / upper 1.685, 47,674,928 B/op and exact 183,812 B. No production or
+  reference change; existing full/scalar/package proof reused without repeats.
 - [JPEG paired entropy](WARM-JPEG-PAIRED-ENTROPY.md): caller RGB420 independent
   1.543×; 444, RGBA grayscale and caller GRAY8 shorts 1.216× / 1.129× / 1.079×.
 - [VP8 decoder calling-cost reconciliation](WARM-VP8-SHARED-SMALL-ROWS.md):
@@ -127,6 +130,13 @@ Fixed trellis scan geometry is accepted and fully qualified; stop scan/DP varian
 Its only invalidated costs are method5/6 trellis, now independently reconciled.
 Effort-4 costs, other codec/edit/text evidence and all unchanged functional proofs
 remain reusable. Completed and rejected pricing/emitter experiments remain closed.
+
+The RGBA16 lossless-WebP boundary now has a guarded current short; it remains a
+gap, without an independent parity claim. Next resolve the existing
+`EncodeWebpAsync` fresh nonseekable-output control: its actual asynchronous
+storage lifetime and delivery boundary are distinct from the resident synchronous
+case. Reuse the qualified build and original input/settings/worker; no new image,
+profile or grid. No full/package repetition when production inputs are unchanged.
 
 Useful rejected screens and earlier accepted rounds remain linked in the
 [prior coverage checkpoint](https://github.com/lokad/image/blob/0bd4a507cd87dcf85bfec4f9ac0a38c49174b86b/benchmarks/WARM-COVERAGE.md)

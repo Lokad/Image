@@ -40,6 +40,7 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8 opaque text/diagram](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 10,935.19 | 5,822.51 | 1.878 / 1.976 | 741,121 | Current gap (short; qualified) |
 | [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 18,642.09 | 9,805.01 | 1.901 / 1.910 | 754,328 | Current gap (independent) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
+| [VP8L RGBA16, including normalization / libwebp exact=1](../benchmarks/WARM-VP8L-RGBA16-CURRENT.md) | 188,991.14 | 122,121.60 | 1.548 / 1.685 | 47,674,928 | Current gap (short; reused qualification) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 133,800.97 | 83,340.00 | 1.605 / 2.159 | 29,610,520 | Current gap (short; qualified) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 13,192.85 | 9,685.69 | 1.362 / 1.408 | 45,404,838 | Current gap (independent) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |
