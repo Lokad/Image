@@ -9,10 +9,15 @@ public static partial class ImageCodec
     /// this is the full Identify contract, not a header-only inspection.</remarks>
     public static ValueTask<ImageInfo> IdentifyAsync(Stream input, ImageLimits? limits = null,
         CancellationToken cancellationToken = default)
+        => IdentifyAsync(input, limits, cancellationToken, ImageMetadataPolicy.Strict);
+
+    /// <summary>Asynchronously acquire a complete image with explicit optional-metadata handling.</summary>
+    public static ValueTask<ImageInfo> IdentifyAsync(Stream input, ImageLimits? limits,
+        CancellationToken cancellationToken, ImageMetadataPolicy metadataPolicy)
     {
-        var context = new OperationContext(limits ?? ImageLimits.Default, cancellationToken);
+        var context = ReadContext(limits ?? ImageLimits.Default, cancellationToken, metadataPolicy);
         ArgumentNullException.ThrowIfNull(input);
-        return IdentifyFromStreamAsync(input, context);
+        return IdentifyFromStreamAsync(input, context, metadataPolicy);
     }
 
     /// <summary>Read through EOF asynchronously and decode into an independently owned image. Leaves input open.</summary>
@@ -22,16 +27,16 @@ public static partial class ImageCodec
         CancellationToken cancellationToken = default)
     {
         options ??= new DecodeOptions();
-        var context = new OperationContext(options.Limits, cancellationToken);
+        var context = ReadContext(options.Limits, cancellationToken, options.MetadataPolicy);
         ArgumentNullException.ThrowIfNull(input);
         return DecodeFromStreamAsync(input, options, context);
     }
 
-    private static async ValueTask<ImageInfo> IdentifyFromStreamAsync(Stream input, OperationContext context)
+    private static async ValueTask<ImageInfo> IdentifyFromStreamAsync(Stream input, OperationContext context, ImageMetadataPolicy metadataPolicy)
     {
         using var execution = context;
         using var data = await IdentificationInput.ReadAsync(input, context).ConfigureAwait(false);
-        try { return IdentifyCore(data.Span, context); }
+        try { return IdentifyCore(data.Span, context, metadataPolicy); }
         finally { context.Release(data.Capacity); }
     }
 

@@ -40,4 +40,5 @@ public sealed record DecodeOptions
 {
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
     public bool ApplyOrientation { get; init; }
+    public ImageMetadataPolicy MetadataPolicy { get; init; }
 }

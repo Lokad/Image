@@ -19,6 +19,7 @@ public sealed record ImageProbeOptions
 {
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
     public ImageProbeFacts Facts { get; init; } = ImageProbeFacts.Dimensions;
+    public ImageMetadataPolicy MetadataPolicy { get; init; }
     /// <summary>Maximum bytes actually read, excluding seeks; refusal does not read past this bound.</summary>
     public long MaxAcquiredBytes { get; init; } = 1024 * 1024;
 }

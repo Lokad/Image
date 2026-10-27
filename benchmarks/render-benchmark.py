@@ -46,7 +46,7 @@ def render():
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
         allocated = observation['managedMemory']['BytesAllocatedPerOperation']
-        label = case['label'] + (' ‡' if case['id'] == 'case20' else ' †' if updated else '')
+        label = case['label'] + (' §' if case['id'] == 'case00' else ' ‡' if case['id'] == 'case20' else ' †' if updated else '')
         if case['kind'] == 'editing':
             label += f' → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
         cells = [label, f'{stats["Mean"] / 1000:,.2f}', f'{native / 1000:,.2f}',
@@ -63,8 +63,9 @@ def render():
     return f'''# Lokad.Image benchmarks
 
 Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
-**‡ stored PNG** retains its unchanged 0.2.1 proof. The other 21 controls retain
-published 0.2.0 measurements on unchanged paths. The original release snapshot
+**‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
+published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
+costs pending current confirmation after read-policy changes. The release snapshot
 remains immutable. These 31 controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 

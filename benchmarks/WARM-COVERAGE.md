@@ -112,6 +112,13 @@ Regression/pixel/reference evidence and timings are separate:
   current confirmation before a pass claim. Identify, pixel codecs, transforms,
   native workers and their applicable confirmations remain unchanged. The 31
   displayed comparisons contain no InspectHeaders control.
+- Optional metadata policy changes read-entry validation and header preflight for
+  Identify, Decode (including caller JPEG samples), InspectHeaders and Probe.
+  Pixel/packet oracles stay valid, but affected complete-operation timing/allocation
+  evidence needs current confirmation before a pass claim. The displayed VP8
+  stream decode is explicitly historical (§). Encoding/editing contexts, kernels,
+  ownership and their applicable confirmations remain unchanged; no whole-library
+  CPU refresh or new quality/shape matrix is required.
 
 Frozen inputs/settings/workers, approved native-only adjustments and exact oracles
 remain reusable when unchanged. Retired quota cases cannot be failures or passes.

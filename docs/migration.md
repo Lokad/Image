@@ -3,7 +3,10 @@
 Development 0.2.1 adds selective `Probe`/`ProbeAsync`. Use nullable facts and
 `EstablishedFacts`; an unexamined tail is not validated or evidence of absence.
 Actual acquisition has its own bound, distinct from encoded extents. Complete
-Identify/InspectHeaders behavior stays available. See [source metadata](source-metadata.md).
+Identify/InspectHeaders behavior stays available. Optional `ImageMetadataPolicy.IgnoreInvalid`
+tolerates unusable EXIF across read routes; strict remains the default. Permissive
+orientation probing may traverse the entire container to resolve overrides.
+See [source metadata](source-metadata.md).
 
 ## 0.2.0
 

@@ -6,21 +6,22 @@ namespace Lokad.Image.Internal;
 // RFC9649 RIFF/VP8 headers and CIPA Exif IFD0. Pixel syntax and PNG CRCs are opaque.
 internal static class StreamInspection
 {
-    internal static async ValueTask<ImageInfo> InspectAsync(InspectionReader r, ProbeState? probe = null)
+    internal static async ValueTask<ImageInfo> InspectAsync(InspectionReader r, ProbeState? probe = null,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         await r.ReadAsync(2).ConfigureAwait(false);
         if (r.Header[0] == 137 && r.Header[1] == 80)
         {
             await r.ReadAsync(6).ConfigureAwait(false);
             if (!r.Header.AsSpan(0, 6).SequenceEqual(PngCodec.Signature[2..])) throw new ImageDataException("Invalid PNG signature.");
-            return await PngAsync(r, probe).ConfigureAwait(false);
+            return await PngAsync(r, probe, metadataPolicy).ConfigureAwait(false);
         }
-        if (r.Header[0] == 255 && r.Header[1] == 216) return await JpegAsync(r, probe).ConfigureAwait(false);
+        if (r.Header[0] == 255 && r.Header[1] == 216) return await JpegAsync(r, probe, metadataPolicy).ConfigureAwait(false);
         if (r.Header[0] == 'R' && r.Header[1] == 'I')
         {
             await r.ReadAsync(10).ConfigureAwait(false);
             if (!r.Header.AsSpan(0, 2).SequenceEqual("FF"u8) || !r.Header.AsSpan(6, 4).SequenceEqual("WEBP"u8)) throw new ImageDataException("Invalid WebP RIFF header.");
-            return await WebpAsync(r, BinaryPrimitives.ReadUInt32LittleEndian(r.Header.AsSpan(2)) + 8L, probe).ConfigureAwait(false);
+            return await WebpAsync(r, BinaryPrimitives.ReadUInt32LittleEndian(r.Header.AsSpan(2)) + 8L, probe, metadataPolicy).ConfigureAwait(false);
         }
         throw new UnsupportedImageException(UnsupportedImageFeature.Format, "Expected a still PNG, JPEG or WebP image.");
     }
@@ -53,7 +54,7 @@ internal static class StreamInspection
         foreach (var b in type) if (b is not (>= 65 and <= 90) and not (>= 97 and <= 122)) throw new ImageDataException("Invalid PNG chunk name.");
     }
 
-    private static async ValueTask<ImageInfo> PngAsync(InspectionReader r, ProbeState? probe)
+    private static async ValueTask<ImageInfo> PngAsync(InspectionReader r, ProbeState? probe, ImageMetadataPolicy metadataPolicy)
     {
         int items = 0, width = 0, height = 0, depth = 0, color = 0, palette = 0;
         long metadata = 0, compressed = 0;
@@ -107,7 +108,7 @@ internal static class StreamInspection
                 // In a valid PNG these facts are settled before the first IDAT.
                 if (probe is not null)
                 {
-                    if (!exif && probe.WantsOrientation) probe.Orientation();
+                    if (!exif && probe.WantsOrientation && metadataPolicy == ImageMetadataPolicy.Strict) probe.Orientation();
                     probe.Reached(ImageProbeFacts.Animation);
                     if (probe.Reached(ImageProbeFacts.Transparency))
                         return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
@@ -140,9 +141,9 @@ internal static class StreamInspection
                 Metadata(r, size, ref metadata);
                 if (type == Four("eXIf"u8) && (probe is null || probe.WantsOrientation))
                 {
-                    if (exif || data) throw new ImageDataException("Duplicate or misplaced PNG EXIF chunk.");
-                    orientation = await ExifAsync(r, size, true).ConfigureAwait(false); exif = true;
-                    probe?.Orientation();
+                    if ((exif || data) && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate or misplaced PNG EXIF chunk.");
+                    orientation = (await ExifAsync(r, size, true, metadataPolicy).ConfigureAwait(false)) ?? orientation; exif = true;
+                    if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
                     if (probe?.Reached(0) == true) return ImageSourceMetadata.Png(width, height, depth, color, transparency, orientation);
                 }
             }
@@ -151,7 +152,7 @@ internal static class StreamInspection
         }
     }
 
-    private static async ValueTask<ImageInfo> JpegAsync(InspectionReader r, ProbeState? probe)
+    private static async ValueTask<ImageInfo> JpegAsync(InspectionReader r, ProbeState? probe, ImageMetadataPolicy metadataPolicy)
     {
         int items = 0, width = 0, height = 0; long metadata = 0;
         bool frame = false, scan = false, scanSeen = false, exif = false;
@@ -215,9 +216,9 @@ internal static class StreamInspection
                     await r.ReadAsync(6).ConfigureAwait(false);
                     if (r.Header.AsSpan(0, 6).SequenceEqual("Exif\0\0"u8))
                     {
-                        if (exif) throw new ImageDataException("Duplicate JPEG EXIF.");
-                        orientation = await ExifAsync(r, size - 6, false).ConfigureAwait(false); exif = true;
-                        probe?.Orientation();
+                        if (exif && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate JPEG EXIF.");
+                        orientation = (await ExifAsync(r, size - 6, false, metadataPolicy).ConfigureAwait(false)) ?? orientation; exif = true;
+                        if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
                         if (frame && probe?.Reached(0) == true) return source.Info(width, height, orientation);
                     }
                 }
@@ -226,7 +227,7 @@ internal static class StreamInspection
         }
     }
 
-    private static async ValueTask<ImageInfo> WebpAsync(InspectionReader r, long end, ProbeState? probe)
+    private static async ValueTask<ImageInfo> WebpAsync(InspectionReader r, long end, ProbeState? probe, ImageMetadataPolicy metadataPolicy)
     {
         if (end < 12) throw new ImageDataException("Invalid WebP RIFF length."); r.DeclaredEnd(end);
         int items = 0, width = 0, height = 0, canvasW = 0, canvasH = 0; long metadata = 0;
@@ -285,9 +286,9 @@ internal static class StreamInspection
                 Metadata(r, size, ref metadata);
                 if (type == Four("EXIF"u8) && (probe is null || probe.WantsOrientation))
                 {
-                    if (!extended || exif || (flags & 8) == 0) throw new ImageDataException("Invalid WebP EXIF chunk.");
-                    orientation = await ExifAsync(r, size, true).ConfigureAwait(false); exif = true;
-                    probe?.Orientation();
+                    if (!extended || exif && metadataPolicy == ImageMetadataPolicy.Strict || (flags & 8) == 0) throw new ImageDataException("Invalid WebP EXIF chunk.");
+                    orientation = (await ExifAsync(r, size, true, metadataPolicy).ConfigureAwait(false)) ?? orientation; exif = true;
+                    if (metadataPolicy == ImageMetadataPolicy.Strict) probe?.Orientation();
                     if (pixels && probe?.Reached(0) == true) return ImageSourceMetadata.Webp(width, height, alpha, lossless, alphaChunk, orientation);
                 }
                 else if (type == Four("ICCP"u8))
@@ -313,42 +314,71 @@ internal static class StreamInspection
         if (!pixels || extended && (width != canvasW || height != canvasH)) throw new ImageDataException("Invalid WebP canvas geometry.");
         if (extended && (((flags & 8) != 0) != exif || ((flags & 32) != 0) != icc || ((flags & 4) != 0) != xmp || !lossless && alpha != alphaChunk)) throw new ImageDataException("WebP feature flags disagree with chunks.");
         Dimensions(r, width, height); await r.EndAsync().ConfigureAwait(false);
+        if (probe?.WantsOrientation == true) probe.Orientation();
         probe?.Animation(false); probe?.Reached(ImageProbeFacts.All);
         return ImageSourceMetadata.Webp(width, height, alpha, lossless, alphaChunk, orientation);
     }
 
-    private static async ValueTask<ImageOrientation> ExifAsync(InspectionReader r, long length, bool optionalPrefix)
+    private static async ValueTask<ImageOrientation?> ExifAsync(InspectionReader r, long length, bool optionalPrefix,
+        ImageMetadataPolicy metadataPolicy)
     {
         var end = r.Position + length;
-        if (length < 8) throw new ImageDataException("Truncated EXIF header.");
+        try { return await ParseExifAsync(r, length, optionalPrefix, metadataPolicy).ConfigureAwait(false); }
+        catch (InvalidExifException exception)
+        {
+            if (metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException(exception.Message, exception);
+            // Only EXIF semantic errors are optional. Reads/seeks still prove the
+            // outer payload exists; their truncation, limit and cancellation failures escape.
+            await r.SkipAsync(end - r.Position).ConfigureAwait(false);
+            return null;
+        }
+    }
+
+    private static async ValueTask<ImageOrientation?> ParseExifAsync(InspectionReader r, long length, bool optionalPrefix,
+        ImageMetadataPolicy metadataPolicy)
+    {
+        var end = r.Position + length;
+        if (length < 8) throw new InvalidExifException("Truncated EXIF header.");
         await r.ReadAsync(8).ConfigureAwait(false);
         bool little; uint offset;
         if (optionalPrefix && r.Header.AsSpan(0, 6).SequenceEqual("Exif\0\0"u8))
         {
-            if (length < 14) throw new ImageDataException("Truncated EXIF header.");
+            if (length < 14) throw new InvalidExifException("Truncated EXIF header.");
             little = ByteOrder(r.Header.AsSpan(6, 2));
             await r.ReadAsync(6).ConfigureAwait(false);
-            if (U16(r.Header, little) != 42) throw new ImageDataException("Invalid TIFF identifier.");
+            if (U16(r.Header, little) != 42) throw new InvalidExifException("Invalid TIFF identifier.");
             offset = U32(r.Header.AsSpan(2), little);
         }
         else
         {
             little = ByteOrder(r.Header.AsSpan(0, 2));
-            if (U16(r.Header.AsSpan(2), little) != 42) throw new ImageDataException("Invalid TIFF identifier.");
+            if (U16(r.Header.AsSpan(2), little) != 42) throw new InvalidExifException("Invalid TIFF identifier.");
             offset = U32(r.Header.AsSpan(4), little);
         }
-        if (offset < 8 || offset - 8L > end - r.Position - 2) throw new ImageDataException("Invalid EXIF directory offset.");
+        if (offset < 8 || offset - 8L > end - r.Position - 2) throw new InvalidExifException("Invalid EXIF directory offset.");
         await r.SkipAsync(offset - 8L).ConfigureAwait(false); await r.ReadAsync(2).ConfigureAwait(false);
         var count = U16(r.Header, little);
-        if (count * 12L + 4 > end - r.Position) throw new ImageDataException("Truncated EXIF directory.");
+        var truncated = count * 12L + 4 > end - r.Position;
+        if (truncated && metadataPolicy == ImageMetadataPolicy.Strict) throw new InvalidExifException("Truncated EXIF directory.");
         if (count > r.Context.Limits.MaxContainerItems) throw new ImageLimitException(ImageLimitKind.ContainerItems, "EXIF directory entry count limit exceeded.");
-        var found = false; var orientation = ImageOrientation.Normal;
+        if (truncated) throw new InvalidExifException("Truncated EXIF directory.");
+        var found = false; ImageOrientation? orientation = null;
         for (var i = 0; i < count; i++)
         {
             r.Context.Cancellation.ThrowIfCancellationRequested(); await r.ReadAsync(12).ConfigureAwait(false);
             if (U16(r.Header, little) != 0x0112) continue;
-            if (found || U16(r.Header.AsSpan(2), little) != 3 || U32(r.Header.AsSpan(4), little) != 1) throw new ImageDataException("Invalid EXIF orientation field.");
-            var value = U16(r.Header.AsSpan(8), little); if (value is < 1 or > 8) throw new ImageDataException("Invalid EXIF orientation value.");
+            if (found && metadataPolicy == ImageMetadataPolicy.Strict) throw new InvalidExifException("Duplicate EXIF orientation field.");
+            if (U16(r.Header.AsSpan(2), little) != 3 || U32(r.Header.AsSpan(4), little) != 1)
+            {
+                if (metadataPolicy == ImageMetadataPolicy.Strict) throw new InvalidExifException("Invalid EXIF orientation field.");
+                continue;
+            }
+            var value = U16(r.Header.AsSpan(8), little);
+            if (value is < 1 or > 8)
+            {
+                if (metadataPolicy == ImageMetadataPolicy.Strict) throw new InvalidExifException("Invalid EXIF orientation value.");
+                continue;
+            }
             orientation = (ImageOrientation)value; found = true;
         }
         await r.SkipAsync(end - r.Position).ConfigureAwait(false);
@@ -356,5 +386,7 @@ internal static class StreamInspection
     }
 
     private static bool ByteOrder(ReadOnlySpan<byte> bytes)
-        => bytes.SequenceEqual("II"u8) ? true : bytes.SequenceEqual("MM"u8) ? false : throw new ImageDataException("Invalid EXIF byte order.");
+        => bytes.SequenceEqual("II"u8) ? true : bytes.SequenceEqual("MM"u8) ? false : throw new InvalidExifException("Invalid EXIF byte order.");
+
+    private sealed class InvalidExifException(string message) : Exception(message);
 }

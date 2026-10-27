@@ -49,3 +49,18 @@ limits apply to the examined prefix. The fixed 8,448-byte workspace uses shared
 admission; no hypothetical raster allocation or managed raster-size ceiling applies.
 No encoded or metadata buffer survives the call. Probing does not validate CRCs,
 pixel syntax, complete containers or unvisited conflicting metadata.
+
+All read routes default to `ImageMetadataPolicy.Strict`: EXIF header/IFD0 orientation
+errors, duplicate chunks/fields and misplaced PNG EXIF fail. Opt into `IgnoreInvalid`
+on DecodeOptions, JpegDecodeOptions or ImageProbeOptions. Identify/InspectHeaders
+and their async counterparts have explicit `(input, limits, cancellationToken,
+metadataPolicy)` overloads; existing overloads remain strict.
+
+Permissive mode ignores unusable EXIF directories/fields, accepts duplicate and
+misplaced EXIF, and uses the last usable orientation. Missing/invalid fields do not
+erase a previous usable value; no usable value means Normal. All eight valid
+orientations retain their meaning; reorientation remains opt-in. Requested permissive
+orientation probing traverses the container to resolve later overrides. Both policies
+ignore unrelated tags/links without recursion or aliased-payload copies and skip unused
+text/ICC without decompression. Outer lengths/framing, required coding, promised
+checksums, WebP feature flags, resource refusal and cancellation remain mandatory.

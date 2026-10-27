@@ -130,6 +130,11 @@ payloads. Probing validates only the examined prefix; it does not establish full
 container, CRC or pixel validity. [Source metadata](source-metadata.md) describes
 acquisition bounds and stream positioning.
 
+Read operations default to strict EXIF header/IFD0 orientation checks. Explicit
+`ImageMetadataPolicy.IgnoreInvalid` tolerates unusable optional EXIF and selects
+the last usable orientation, preserving required container/pixel checks and limits.
+See [metadata policy](source-metadata.md); reorientation remains opt-in.
+
 Caller streams remain open. Async APIs use actual asynchronous reads/writes,
 without worker-thread offloading; CPU codec work is synchronous. Identify/Decode
 stream buffering is input-bounded and avoids a final exact-length copy. Async

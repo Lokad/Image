@@ -15,6 +15,7 @@ public enum JpegCmykInversion { Auto, None, Invert }
 public sealed record JpegDecodeOptions
 {
     public ImageLimits Limits { get; init; } = ImageLimits.Default;
+    public ImageMetadataPolicy MetadataPolicy { get; init; }
     /// <summary>Auto uses component count, Adobe declarations and RGB component IDs.</summary>
     public JpegColorSpace SourceColorSpace { get; init; }
     /// <summary>Auto inverts Adobe APP14 transform 0/2 CMYK values; untagged data is not inverted.</summary>

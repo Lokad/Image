@@ -29,10 +29,10 @@ public static partial class ImageCodec
         options ??= new();
         if (options.Facts == 0 || (options.Facts & ~ImageProbeFacts.All) != 0 || options.MaxAcquiredBytes < 1)
             throw new ArgumentOutOfRangeException(nameof(options));
-        using var context = new OperationContext(options.Limits, cancellationToken);
+        using var context = ReadContext(options.Limits, cancellationToken, options.MetadataPolicy);
         using var reader = new InspectionReader(input, context, asynchronous, options.MaxAcquiredBytes);
         var state = new ProbeState(options.Facts);
-        var info = await StreamInspection.InspectAsync(reader, state).ConfigureAwait(false);
+        var info = await StreamInspection.InspectAsync(reader, state, options.MetadataPolicy).ConfigureAwait(false);
         return state.Result(info, reader);
     }
 }

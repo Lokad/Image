@@ -1,8 +1,9 @@
 # Lokad.Image benchmarks
 
 Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
-**‡ stored PNG** retains its unchanged 0.2.1 proof. The other 21 controls retain
-published 0.2.0 measurements on unchanged paths. The original release snapshot
+**‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
+published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
+costs pending current confirmation after read-policy changes. The release snapshot
 remains immutable. These 31 controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -34,7 +35,7 @@ four affected VP8L rows. Other paths retain applicable prior proof.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream | 7,831.60 | 5,985.32 | 1.308 / 1.445 | 1,966,583 | — |
+| WebP VP8 + alpha, fresh seekable Stream § | 7,831.60 | 5,985.32 | 1.308 / 1.445 | 1,966,583 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples | 2,594.66 | 1,662.67 | 1.561 / 2.434 | 373,413 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget | 2,697.19 | 1,835.47 | 1.469 / 1.815 | 804,637 | 52,115 / 52,117 |

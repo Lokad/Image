@@ -9,7 +9,8 @@ namespace Lokad.Image.Internal;
 // when returning metadata. No intermediate decoder Header is materialized.
 internal static class PngIdentifier
 {
-    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context)
+    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         if (!data.StartsWith(PngCodec.Signature)) throw new ImageDataException("Invalid PNG signature.");
         int position = 8, items = 0, width = 0, height = 0, color = 0, depth = 0, interlace = 0;
@@ -100,8 +101,8 @@ internal static class PngIdentifier
                 metadataBytes += length;
                 if (type.SequenceEqual("eXIf"u8))
                 {
-                    if (exifSeen || dataSeen) throw new ImageDataException("Duplicate or misplaced PNG EXIF chunk.");
-                    orientation = ExifOrientation.Read(payload, context); exifSeen = true;
+                    if ((exifSeen || dataSeen) && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate or misplaced PNG EXIF chunk.");
+                    orientation = ExifOrientation.Read(payload, context, metadataPolicy) ?? orientation; exifSeen = true;
                 }
                 // Ancillary payloads are validated structurally and skipped, never inflated.
             }

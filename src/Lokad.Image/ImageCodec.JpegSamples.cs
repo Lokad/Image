@@ -37,7 +37,7 @@ public static partial class ImageCodec
         CancellationToken cancellationToken = default)
     {
         options ??= new JpegDecodeOptions();
-        using var context = InputContext(input.Length, options.Limits, cancellationToken);
+        using var context = InputContext(input.Length, options.Limits, cancellationToken, options.MetadataPolicy);
         if (!Enum.IsDefined(format)) throw new ArgumentOutOfRangeException(nameof(format));
         if (!Enum.IsDefined(options.SourceColorSpace)) throw new ArgumentOutOfRangeException(nameof(options));
         if (!Enum.IsDefined(options.CmykInversion)) throw new ArgumentOutOfRangeException(nameof(options));
@@ -48,6 +48,6 @@ public static partial class ImageCodec
         // The caller-supplied span counts toward the same live-memory allowance
         // as encoded input and codec workspace, including any supplied padding.
         context.ReserveBorrowed(destination.Length);
-        return new JpegDecoder(input, context).DecodeSamples(destination, format, stride, options);
+        return new JpegDecoder(input, context, options.MetadataPolicy).DecodeSamples(destination, format, stride, options);
     }
 }

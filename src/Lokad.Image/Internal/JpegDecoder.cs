@@ -30,10 +30,11 @@ internal ref partial struct JpegDecoder
         public ushort[]? FrozenQuantization;
     }
 
-    public JpegDecoder(ReadOnlySpan<byte> data, OperationContext context)
+    public JpegDecoder(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         this.data = data; this.context = context;
-        info = ContainerHeaders.Jpeg(data, context);
+        info = ContainerHeaders.Jpeg(data, context, metadataPolicy);
         context.Reserve(1024); // Fixed parser references and component descriptors.
         quantization = new ushort[4][]; quantizationPrecision = new byte[4];
         dcTables = new JpegHuffman[4]; acTables = new JpegHuffman[4];

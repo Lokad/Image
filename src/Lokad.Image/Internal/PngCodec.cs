@@ -20,9 +20,10 @@ internal static class PngCodec
     private sealed record Header(ImageInfo Info, int ColorType, int Depth, int Interlace,
         byte[] Palette, byte[] Transparency, int CompressedLength);
 
-    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context) => PngIdentifier.Identify(data, context);
+    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict) => PngIdentifier.Identify(data, context, metadataPolicy);
 
-    private static Header Scan(ReadOnlySpan<byte> data, OperationContext context)
+    private static Header Scan(ReadOnlySpan<byte> data, OperationContext context, ImageMetadataPolicy metadataPolicy)
     {
         if (!data.StartsWith(Signature)) throw new ImageDataException("Invalid PNG signature.");
         int position = 8, items = 0, width = 0, height = 0, color = 0, depth = 0, interlace = 0;
@@ -115,8 +116,8 @@ internal static class PngCodec
                 metadataBytes += length;
                 if (type.SequenceEqual("eXIf"u8))
                 {
-                    if (exifSeen || dataSeen) throw new ImageDataException("Duplicate or misplaced PNG EXIF chunk.");
-                    orientation = ExifOrientation.Read(payload, context); exifSeen = true;
+                    if ((exifSeen || dataSeen) && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate or misplaced PNG EXIF chunk.");
+                    orientation = ExifOrientation.Read(payload, context, metadataPolicy) ?? orientation; exifSeen = true;
                 }
                 // Ancillary payloads are validated structurally and skipped, never inflated.
             }
@@ -124,9 +125,10 @@ internal static class PngCodec
         throw new ImageDataException("PNG is missing IEND.");
     }
 
-    public static ImageBuffer Decode(ReadOnlySpan<byte> data, OperationContext context)
+    public static ImageBuffer Decode(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
-        var header = Scan(data, context);
+        var header = Scan(data, context, metadataPolicy);
         context.Reserve(header.CompressedLength);
         var compressed = context.RentPixels(compressedStorage, header.CompressedLength);
         try

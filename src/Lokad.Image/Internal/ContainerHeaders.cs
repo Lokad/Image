@@ -4,7 +4,8 @@ namespace Lokad.Image.Internal;
 
 internal static class ContainerHeaders
 {
-    public static ImageInfo Jpeg(ReadOnlySpan<byte> data, OperationContext context)
+    public static ImageInfo Jpeg(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         int position = 2, items = 0, metadata = 0, width = 0, height = 0;
         bool frame = false, scan = false, exif = false, scanSeen = false;
@@ -65,15 +66,16 @@ internal static class ContainerHeaders
                 source.Application(marker, payload);
                 if (marker == 0xE1 && payload.StartsWith("Exif\0\0"u8))
                 {
-                    if (exif) throw new ImageDataException("Duplicate JPEG EXIF.");
-                    orientation = ExifOrientation.Read(payload, context); exif = true;
+                    if (exif && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate JPEG EXIF.");
+                    orientation = ExifOrientation.Read(payload, context, metadataPolicy) ?? orientation; exif = true;
                 }
             }
         }
         throw new ImageDataException("JPEG is missing EOI.");
     }
 
-    public static ImageInfo WebP(ReadOnlySpan<byte> data, OperationContext context)
+    public static ImageInfo WebP(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         if (data.Length < 12 || !data.StartsWith("RIFF"u8) || !data.Slice(8, 4).SequenceEqual("WEBP"u8)
             || (long)BinaryPrimitives.ReadUInt32LittleEndian(data[4..]) + 8 != data.Length)
@@ -137,8 +139,8 @@ internal static class ContainerHeaders
                 metadata += payload.Length;
                 if (type.SequenceEqual("EXIF"u8))
                 {
-                    if (!extended || exif || (featureFlags & 8) == 0) throw new ImageDataException("Invalid WebP EXIF chunk.");
-                    orientation = ExifOrientation.Read(payload, context); exif = true;
+                    if (!extended || exif && metadataPolicy == ImageMetadataPolicy.Strict || (featureFlags & 8) == 0) throw new ImageDataException("Invalid WebP EXIF chunk.");
+                    orientation = ExifOrientation.Read(payload, context, metadataPolicy) ?? orientation; exif = true;
                 }
                 else if (type.SequenceEqual("ICCP"u8))
                 {

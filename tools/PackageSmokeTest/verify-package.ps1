@@ -727,6 +727,33 @@ try
 }
 catch (ImageLimitException) { }
 if (!rejectedMetadata.CanRead) throw new Exception("Package consumer EXIF failure closed its input stream.");
+var unusableExif = metadataBytes.ToArray(); unusableExif[12 + 18 + 63*12] = 9;
+try { ImageCodec.Identify(unusableExif); throw new Exception("Package default EXIF policy is not strict."); }
+catch (ImageDataException) { }
+using (var optionalRoot = new Lokad.Image.Tooling.TestMemoryBudget(1024*1024))
+{
+    var optionalLimits = new ImageLimits { MemoryBudget = optionalRoot };
+    var optionalPolicy = ImageMetadataPolicy.IgnoreInvalid;
+    if (ImageCodec.Identify(unusableExif, optionalLimits, default, optionalPolicy).Orientation != ImageOrientation.Normal)
+        throw new Exception("Package permissive span identification differs.");
+    using var optionalInput = new MemoryStream(unusableExif);
+    if ((await ImageCodec.IdentifyAsync(optionalInput, optionalLimits, default, optionalPolicy)).Orientation != ImageOrientation.Normal)
+        throw new Exception("Package permissive async identification differs.");
+    optionalInput.Position = 0;
+    if ((await ImageCodec.InspectHeadersAsync(optionalInput, optionalLimits, default, optionalPolicy)).Orientation != ImageOrientation.Normal)
+        throw new Exception("Package permissive header inspection differs.");
+    optionalInput.Position = 0;
+    if ((await ImageCodec.ProbeAsync(optionalInput, new() { Limits = optionalLimits, MetadataPolicy = optionalPolicy, Facts = ImageProbeFacts.All })).Orientation != ImageOrientation.Normal)
+        throw new Exception("Package permissive probing differs.");
+    using (var optionalPixels = ImageCodec.Decode(unusableExif, new() { Limits = optionalLimits, MetadataPolicy = optionalPolicy }))
+        if (!optionalPixels.GetRow8(0).SequenceEqual(opaque.GetRow8(0)) || optionalPixels.Orientation != ImageOrientation.Normal)
+            throw new Exception("Package permissive pixels differ.");
+    var optionalSamples = new byte[64];
+    if (ImageCodec.DecodeJpeg(unusableExif, optionalSamples, JpegSampleFormat.Grayscale,
+        options: new() { Limits = optionalLimits, MetadataPolicy = optionalPolicy }).Orientation != ImageOrientation.Normal
+        || optionalSamples.Any(value => value != 123) || optionalRoot.Bytes != 0 || !optionalInput.CanRead)
+        throw new Exception("Package permissive caller samples/admission/ownership differ.");
+}
 using var webp = new MemoryStream();
 ImageCodec.EncodeWebp(flipped, webp, new WebpEncodeOptions { Effort = 6 });
 using var webpPixels = ImageCodec.Decode(webp.ToArray());

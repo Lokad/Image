@@ -10,7 +10,8 @@ namespace Lokad.Image.Internal;
 // are opaque; only marker framing/stuffing and complete EOI/EOF are inspected.
 internal static class JpegIdentifier
 {
-    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context)
+    public static ImageInfo Identify(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         int position = 2, items = 0, metadata = 0, width = 0, height = 0;
         bool frame = false, scan = false, exif = false, scanSeen = false;
@@ -92,8 +93,8 @@ position += plain;
                 source.Application(marker, payload);
                 if (marker == 0xE1 && payload.StartsWith("Exif\0\0"u8))
                 {
-                    if (exif) throw new ImageDataException("Duplicate JPEG EXIF.");
-                    orientation = ExifOrientation.Read(payload, context); exif = true;
+                    if (exif && metadataPolicy == ImageMetadataPolicy.Strict) throw new ImageDataException("Duplicate JPEG EXIF.");
+                    orientation = ExifOrientation.Read(payload, context, metadataPolicy) ?? orientation; exif = true;
                 }
             }
         }

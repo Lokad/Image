@@ -4,9 +4,10 @@ namespace Lokad.Image.Internal;
 
 internal static class WebpCodec
 {
-    public static ImageBuffer Decode(ReadOnlySpan<byte> data, OperationContext context)
+    public static ImageBuffer Decode(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
-        var info = ContainerHeaders.WebP(data, context);
+        var info = ContainerHeaders.WebP(data, context, metadataPolicy);
         ReadOnlySpan<byte> alphaPayload = default;
         for (var position = 12; position < data.Length;)
         {
