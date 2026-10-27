@@ -6,20 +6,31 @@ namespace Lokad.Image.Internal;
 // checksum decisions are published only after framing, or replayed by the
 // original reader when this output cannot certify the complete raster. Row
 // reconstruction remains after its per-row cancellation checkpoint.
-internal sealed class PngRgbaInflation
+internal sealed class PngRowInflation
 {
     internal const int MaxRows = 65536;
-    private readonly ImageBuffer result;
-    private readonly byte[] history = new byte[65536];
+    internal const int HistoryBytes = 65536;
+    private readonly ImageBuffer? result;
+    private readonly byte[] history;
     private readonly byte[] filters, previous;
+    private readonly int rowBytes, rowCount;
     private int position, consumed, rowOffset = -1, rowIndex, filter;
     private uint adlerA = 1, adlerB;
     private bool valid = true;
 
-    public PngRgbaInflation(ImageBuffer result)
+    public PngRowInflation(ImageBuffer result)
     {
-        this.result = result;
+        this.result = result; rowBytes = result.Stride; rowCount = result.Height;
+        history = new byte[HistoryBytes];
         filters = new byte[result.Height]; previous = new byte[result.Stride];
+    }
+
+    // The operation owns and admits this history; no raster or row copies escape.
+    public PngRowInflation(int rowBytes, int rowCount, byte[] history)
+    {
+        if (history.Length != HistoryBytes) throw new ArgumentException("Expected bounded Deflate history.", nameof(history));
+        this.rowBytes = rowBytes; this.rowCount = rowCount; this.history = history;
+        filters = previous = [];
     }
 
     public Span<byte> Writable
@@ -74,12 +85,13 @@ internal sealed class PngRgbaInflation
     public bool Finish(uint checksum)
     {
         Consume();
-        return valid && rowIndex == result.Height && rowOffset == -1
+        return valid && rowIndex == rowCount && rowOffset == -1
             && (adlerB << 16 | adlerA) == checksum;
     }
 
     public void DecodeRows(OperationContext context)
     {
+        var result = this.result ?? throw new InvalidOperationException("Validation has no retained raster.");
         for (var y = 0; y < result.Height; y++)
         {
             context.Cancellation.ThrowIfCancellationRequested();
@@ -106,13 +118,13 @@ internal sealed class PngRgbaInflation
             if (rowOffset == -1)
             {
                 filter = bytes[0]; bytes = bytes[1..]; rowOffset = 0;
-                if (filter > 4 || rowIndex >= result.Height) { valid = false; return; }
-                filters[rowIndex] = (byte)filter;
+                if (filter > 4 || rowIndex >= rowCount) { valid = false; return; }
+                if (result is not null) filters[rowIndex] = (byte)filter;
             }
-            var count = Math.Min(result.Stride - rowOffset, bytes.Length);
-            bytes[..count].CopyTo(result.Pixels.Slice(rowIndex * result.Stride + rowOffset, count));
+            var count = Math.Min(rowBytes - rowOffset, bytes.Length);
+            if (result is not null) bytes[..count].CopyTo(result.Pixels.Slice(rowIndex * rowBytes + rowOffset, count));
             bytes = bytes[count..]; rowOffset += count;
-            if (rowOffset != result.Stride) continue;
+            if (rowOffset != rowBytes) continue;
             rowOffset = -1; rowIndex++;
         }
     }

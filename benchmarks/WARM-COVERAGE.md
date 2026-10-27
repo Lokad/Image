@@ -92,6 +92,15 @@ it is removed and the qualified source/binaries restored. No full/package repeat
 or new filter grid. One profile identifies managed literal counting/framing and
 native inflation as the material costs; the existing tools/fixtures remain reusable.
 
+[One-pass PNG validation](WARM-PNG-VALIDATION.md) independently closes the PNG16
+span and async cases:0.990×/upper0.99966 and0.833×/upper0.847. Span elapsed falls
+42.4%; allocation240B/op, async8544B/op. Keep the narrowly passing span unchanged;
+its first upper1.00108 is retained alongside the bounded repeat. PNG8/indexed
+companions remain1.355×/1.345× short gaps. Both OS5041 full checks,137 internal/
+88 public scalar and SAME actual package/three examples pass. Caller-budget
+allocation increases while admitted peaks decrease; separate storage records
+are current. SIMD classifier trials have no gain and are removed/closed.
+
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls and
@@ -201,8 +210,10 @@ The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an
 uncertain 2.2% short difference does not justify more variants. The high-priority
 probing/metadata/validation milestones are functionally complete. Reconcile retained
 coverage and affected read evidence; prioritize remaining demonstrated JPEG-probe
-and PNG16-validation gaps before smaller variants. Establish a substantial distinct
-opportunity before editing.
+and substantial encoder gaps before smaller variants. PNG16 span/async validation
+now pass; stop them unchanged. Reconcile the existing bounded-header/native
+descriptor and marked default-decode uncertainties before claiming those paths
+complete. Establish a substantial distinct opportunity before editing.
 Keep the VP8L photograph and other larger remaining costs in the queue. Distinguish
 shared work from delivery/normalization, reuse unaffected evidence and verify
 affected companion boundaries on acceptance.

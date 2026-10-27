@@ -172,7 +172,7 @@ internal static class PngCodec
                         context.Release(filteredBytes); filteredBytes = 0;
                     }
                 }
-                else if (header.Interlace == 0 && header.ColorType == 6 && header.Info.Height <= PngRgbaInflation.MaxRows
+                else if (header.Interlace == 0 && header.ColorType == 6 && header.Info.Height <= PngRowInflation.MaxRows
                     && context.RemainingWorkingBytes >= pixelBytes + rowBytes * 2 + 256 * 1024L)
                 {
                     // Admit exactly the old result/rows/inflater peak. Its 4-KiB
@@ -184,8 +184,8 @@ internal static class PngCodec
                     try
                     {
                         speculative = ImageBuffer.AllocateForOverwrite(header.Info.Width, header.Info.Height, header.Depth, context);
-                        var output = new PngRgbaInflation(speculative);
-                        streamLength = ZlibFraming.ValidateAndInflateRgba(compressed, filteredLength, context, output, out var completeTrees);
+                        var output = new PngRowInflation(speculative);
+                        streamLength = ZlibFraming.ValidateAndInflateRows(compressed, filteredLength, context, output, out var completeTrees);
                         if (completeTrees && output.Finish(BinaryPrimitives.ReadUInt32BigEndian(compressed.AsSpan(streamLength - 4))))
                         {
                             context.Reserve(4096);
@@ -235,7 +235,36 @@ internal static class PngCodec
         try
         {
             CopyCompressed(data, compressed, context);
-            var streamLength = ZlibFraming.Validate(compressed, FilteredLength(header), context);
+            int streamLength;
+            var rowBytes = ((long)header.Info.Width * Channels(header.ColorType) * header.Depth + 7) / 8;
+            if (header.Interlace == 0 && header.ColorType != 3 && rowBytes <= int.MaxValue)
+            {
+                // All non-indexed sample values are representable. The existing
+                // streaming walk can certify row filters and Adler without a
+                // second inflation or any retained raster.
+                context.Reserve(PngRowInflation.HistoryBytes);
+                byte[]? history = null;
+                try
+                {
+                    history = context.RentPixels(compressedStorage, PngRowInflation.HistoryBytes);
+                    var rows = new PngRowInflation((int)rowBytes, header.Info.Height, history);
+                    streamLength = ZlibFraming.ValidateAndInflateRows(compressed, FilteredLength(header), context, rows, out var completeTrees);
+                    if (completeTrees && rows.Finish(BinaryPrimitives.ReadUInt32BigEndian(compressed.AsSpan(streamLength - 4))))
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        return header.Info;
+                    }
+                }
+                finally
+                {
+                    if (history is not null) context.ReturnPixels(compressedStorage, history);
+                    context.Release(PngRowInflation.HistoryBytes);
+                }
+                // Incomplete trees and uncertain rows/checksums retain BCL
+                // acceptance/error precedence. History is released first;
+                // admission refusal is terminal and never reaches this path.
+            }
+            else streamLength = ZlibFraming.Validate(compressed, FilteredLength(header), context);
             context.Reserve(256 * 1024);
             try { ReadRaster(header, compressed, streamLength, context, validateOnly: true); }
             finally { context.Release(256 * 1024); }

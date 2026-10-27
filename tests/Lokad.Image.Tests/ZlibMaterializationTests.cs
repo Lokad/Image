@@ -146,11 +146,21 @@ public sealed partial class ZlibMaterializationTests
             using var cancellation = new CancellationTokenSource();
             var token = cancelable ? cancellation.Token : default;
             using var image = ImageBuffer.Create(257, raw.Length / rowLength, depth);
-            var output = new PngRgbaInflation(image);
+            var output = new PngRowInflation(image);
             var context = new OperationContext(ImageLimits.Default, token);
             var counted = new OperationContext(ImageLimits.Default, token);
-            Assert.Equal(encoded.Length, ZlibFraming.ValidateAndInflateRgba(encoded, raw.Length, context, output, out var complete));
+            Assert.Equal(encoded.Length, ZlibFraming.ValidateAndInflateRows(encoded, raw.Length, context, output, out var complete));
             Assert.True(complete); Assert.True(output.Finish(System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(encoded.Length - 4))));
+            // The same independently expanded history must certify rows without
+            // retaining a raster, including maximum-distance slides and overlaps.
+            var history = Enumerable.Repeat((byte)165, PngRowInflation.HistoryBytes).ToArray();
+            var validation = new PngRowInflation(rowBytes, raw.Length / rowLength, history);
+            using var validationContext = new OperationContext(ImageLimits.Default, token);
+            Assert.Equal(encoded.Length, ZlibFraming.ValidateAndInflateRows(encoded, raw.Length, validationContext, validation, out var validationComplete));
+            Assert.True(validationComplete);
+            var checksum = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(encoded.Length - 4));
+            Assert.True(validation.Finish(checksum)); Assert.False(validation.Finish(checksum ^ 1));
+            Assert.Equal(context.RemainingWorkingBytes, validationContext.RemainingWorkingBytes);
             Assert.Equal(encoded.Length, ZlibFraming.Validate(encoded, raw.Length, counted));
             Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);
             output.DecodeRows(new OperationContext(ImageLimits.Default, token));
@@ -178,9 +188,9 @@ public sealed partial class ZlibMaterializationTests
             var context = new OperationContext(limits, token);
             var counted = new OperationContext(limits, token);
             using var image = ImageBuffer.Create(1, 5, 8);
-            var output = new PngRgbaInflation(image); var input = encoded[..length];
+            var output = new PngRowInflation(image); var input = encoded[..length];
             int end = -1, countedEnd = -1;
-            var actual = Record.Exception(() => end = ZlibFraming.ValidateAndInflateRgba(input, raw.Length, context, output, out _));
+            var actual = Record.Exception(() => end = ZlibFraming.ValidateAndInflateRows(input, raw.Length, context, output, out _));
             var expected = Record.Exception(() => countedEnd = ZlibFraming.Validate(input, raw.Length, counted));
             Assert.Equal(expected?.GetType(), actual?.GetType()); Assert.Equal(expected?.Message, actual?.Message);
             Assert.Equal(countedEnd, end);             Assert.Equal(counted.RemainingWorkingBytes, context.RemainingWorkingBytes);

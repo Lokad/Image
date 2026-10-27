@@ -121,6 +121,31 @@ public sealed class PixelValidationTests
         }
     }
 
+    [Fact]
+    public void PngValidationCrossesHistorySlidesAndRejectsLateRowAndChecksumErrors()
+    {
+        var frame = new AuthoredPng.Frame("validation-sliding-rows", 6, 16, 97, 131, false);
+        var filtered = AuthoredPng.FilteredRows(frame);
+        Assert.True(filtered.Length > 65536);
+        var valid = AuthoredPng.Wrap(frame, AuthoredPng.StoredZlib(filtered));
+        var original = valid.ToArray();
+        using var root = new TestMemoryBudget(512 * 1024);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 512 * 1024 };
+        Assert.Equal(ImageCodec.Identify(valid), ImageCodec.ValidatePixels(valid, limits));
+        Assert.Equal(0, root.Bytes); Assert.Equal(original, valid);
+        var late = filtered.ToArray(); late[100 * (frame.Width * 8 + 1)] = 5;
+        var badChecksum = AuthoredPng.StoredZlib(filtered); badChecksum[^1] ^= 1;
+        foreach (var data in new[] { AuthoredPng.Wrap(frame, AuthoredPng.StoredZlib(late)), AuthoredPng.Wrap(frame, badChecksum) })
+        {
+            _ = ImageCodec.Identify(data);
+            Assert.Throws<ImageDataException>(() => ImageCodec.ValidatePixels(data, limits));
+            Assert.Equal(nameof(ImageDataException), DecodeOutcome(data));
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+        Assert.Equal(ImageCodec.Identify(valid), ImageCodec.ValidatePixels(valid, limits));
+        Assert.Equal(0, root.Bytes);
+    }
+
     [Theory]
     [InlineData(MetadataProfile.Png8)] [InlineData(MetadataProfile.JpegBaseline420)] [InlineData(MetadataProfile.WebpLosslessAlpha)]
     public void BoundedTruncationAndPayloadMutationsAgreeWithDecode(MetadataProfile profile)

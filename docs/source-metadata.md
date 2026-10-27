@@ -57,6 +57,8 @@ They still require codec-dependent storage and preserve metadata policy, resourc
 limits and cancellation. Stream routes acquire through EOF and stay open; async
 acquisition is awaited before releasing storage. Validation omits final sample
 conversion/reorientation and does not replace Decode when pixels are needed.
+Common nonindexed, noninterlaced PNG validation uses 64 KiB of history instead
+of retaining a full filtered raster; other paths retain codec-dependent workspace.
 
 All read routes default to `ImageMetadataPolicy.Strict`: EXIF header/IFD0 orientation
 errors, duplicate chunks/fields and misplaced PNG EXIF fail. Opt into `IgnoreInvalid`

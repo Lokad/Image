@@ -1,31 +1,36 @@
-# PNG16 pixel-validation cost
+# Streaming PNG pixel validation
 
-The existing 513×259 RGBA16 control independently measures **5,090.51 µs** versus
-FFmpeg's **2,956.51 µs**: **1.722× / upper1.727**, 17,008 managed B/op. All twelve
-actuals, exact descriptors, equivalent complete boundaries, native brackets and
-both quiet guards pass. This confirms a gap; the full ≤1× objective remains open.
-[Evidence](png-validation-current-evidence.json) retains inputs and samples.
+The existing row inflater now validates common nonindexed, noninterlaced PNG in
+one Deflate walk, without a raster or second native inflation. The operation
+admits 64 KiB of history before allocation through its existing pool/root rules.
+Filters, row counts, Deflate validity, CRC and Adler remain checked. Indexed/
+Adam7 and incomplete-tree or uncertain acceptance cases retain the original
+reader; history is released before correctness replay. Admission refusal stays
+terminal. Actual decoding still reconstructs exact pixels with the same engine.
 
-Skipping inverse row filtering was tested and removed: its short measures
-5,097.24 µs with unchanged allocation. Both frozen PNG8/16 packets use filter 0
-on all 259 rows, so inverse filtering was already a no-op. No independent timing
-confirmation, full-suite/package repeat, filter grid or further variant follows.
-The original source and exact qualified production binaries are restored.
+The fixed 513×259 PNG16 span control independently measures **2,933.20 µs**,
+**42.4% less elapsed**, versus the preceding confirmed 5,090.51 µs. Its bounded
+repeat passes at **0.990× / upper0.99966**; the earlier independent upper1.00108
+is retained. This margin is narrow. Async confirms0.833× / upper0.847. Stop these
+two passing cases unchanged. PNG8 remains a1.355× short gap; indexed Adam7 is
+unchanged at1.345× short. The full267-path ≤1× objective remains open.
 
-A six-second CPU profile of the warmed qualified producer yields 5,985 samples:
-native BCL inflation accounts for about 45.8%, `ReadLiteralRun` 39.3%, `CountBlock`
-5.2%, CRC 3.2% and Adler 0.6%. This is approximate self attribution, without a
-new timing claim. The two Deflate walks and literal counting are material;
-inverse filtering is not a useful optimization on this control.
+Warm default-null-budget allocation falls from17,008 to**240 B/op** for PNG16
+span and to8,544 B/op for async. Caller-budget calls bypass pools: their fresh
+managed allocation increases while admitted peaks decrease. The
+[governed storage table](PIXEL-VALIDATION-STORAGE.md) reports those separate costs.
+[Evidence](warm-png-streaming-validation-evidence.json) retains every actual,
+native bracket, quiet guard, descriptor/input/ownership proof and producer.
 
-The existing actual-package/Windows/Linux qualification remains applicable:
-5,040 checks per OS, 98 focused normal/scalar checks and the SAME private package
-plus three usage examples. The rejected candidate passed 87 focused checks per
-OS and all twelve reference preparations. Production, packet/pixel oracles,
-admission/ownership and unrelated valid confirmations are unchanged.
+Both platforms pass5,041 Release checks each, including947 live comparisons,
+plus137 internal and88 public scalar checks. Maximum/overlapping history distances
+cross64KiB slides; both depths, cancellation modes, all legal PNG color/filter/
+Adam7 fixtures, late row/checksum errors and shared cleanup/recovery pass. The
+SAME actual private0.2.1 package and three usage examples pass both systems.
+One production build per OS and unchanged native/harness/selectors serve the round.
 
-The mirrored, member-verified raw archives named in the evidence retain the
-baseline, rejected source/binaries/screen, filter inspection and CPU profile,
-including its exact runtime, source, perf map and samples. The next opportunity
-is a bounded literal-count scanning strategy, preserving exact cursor, prefix,
-failure and cancellation behavior without new ownership or full-frame storage.
+The [two-walk baseline/profile](png-validation-current-evidence.json) motivated
+this change; its CPU attribution is superseded for the fused path. An inverse-
+filter skip and [two SIMD classifiers](png-literal8-scanners-deferred-evidence.json)
+had no gain and are removed. Keep those families closed. Cited mirrored raw
+masters retain source, binaries, scripts, all observations and reproducers.

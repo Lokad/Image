@@ -129,7 +129,8 @@ retain coded metadata/orientation; no reorientation or color conversion is appli
 PNG checks inflated rows, filters, palette indices and checksum; JPEG checks all
 entropy/tables/progression and supported transforms; WebP decodes required pixel
 history/planes and alpha coding. Animation stays unsupported. This is not fixed-space
-inspection: PNG retains compressed IDAT and row/inflater scratch, JPEG coefficients,
+inspection: PNG retains compressed IDAT and bounded history; indexed/Adam7 and
+compatibility paths also need row/inflater storage. JPEG retains coefficients,
 and WebP its required history/planes. Local/shared storage bounds reflect actual
 work rather than an unallocated result; validation can fit where decoding cannot.
 

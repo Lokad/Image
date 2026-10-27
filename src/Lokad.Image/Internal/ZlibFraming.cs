@@ -17,9 +17,9 @@ internal static partial class ZlibFraming
         OperationContext context, out bool completeTrees)
         => Walk(data, destination.Length, context, destination, out completeTrees);
 
-    internal static int ValidateAndInflateRgba(ReadOnlySpan<byte> data, long expectedBytes,
-        OperationContext context, PngRgbaInflation destination, out bool completeTrees)
-        => WalkRgba(data, expectedBytes, context, destination, out completeTrees);
+    internal static int ValidateAndInflateRows(ReadOnlySpan<byte> data, long expectedBytes,
+        OperationContext context, PngRowInflation destination, out bool completeTrees)
+        => WalkRows(data, expectedBytes, context, destination, out completeTrees);
 
     private static int Walk(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context,
         Span<byte> destination, out bool completeTrees)
@@ -173,8 +173,8 @@ internal static partial class ZlibFraming
         finally { context.Release(4096); }
     }
 
-    private static int WalkRgba(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context,
-        PngRgbaInflation destination, out bool completeTrees)
+    private static int WalkRows(ReadOnlySpan<byte> data, long expectedBytes, OperationContext context,
+        PngRowInflation destination, out bool completeTrees)
     {
         completeTrees = true;
         if (data.Length < 6 || (data[0] & 15) != 8 || data[0] >> 4 > 7
@@ -353,7 +353,7 @@ internal static partial class ZlibFraming
 
     private static long InflateStreamingBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
         scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
-        long output, long expectedBytes, int window, PngRgbaInflation destination)
+        long output, long expectedBytes, int window, PngRowInflation destination)
     {
         // Decode the same framing symbols and retain their exact charges. The
         // rolling output only reconstructs private rows; it cannot publish a
