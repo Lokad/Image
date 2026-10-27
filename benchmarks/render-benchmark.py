@@ -77,7 +77,7 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-distortion-pass-reuse-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-DISTORTION-PASS-REUSE.md', confirmed=True, current=True),
+        row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-distortion-transform-reuse-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-DISTORTION-TRANSFORM-REUSE.md', confirmed=True, current=True),
         row('VP8 RGBA8', 'warm-vp8-distortion-squared-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-DISTORTION-SQUARED.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 opaque photograph', 'warm-vp8-distortion-squared-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-DISTORTION-SQUARED.md', verification='Current gap (reused short; qualified)', current=True),
         row('VP8 opaque text/diagram', 'warm-vp8-distortion-squared-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-DISTORTION-SQUARED.md', verification='Current gap (short; qualified)', current=True),
@@ -104,9 +104,10 @@ gains. Published0.1.0 remains unchanged.
 Pre-cleanup costs describe their frozen producers, **not the cleaned build**.
 Current independent confirmations and short screens are labeled below; other
 required paths remain open. The previously unmeasured distortion-only VP8 search
-exposed a 3.615× gap. After exact squared groups and redundant-pass removal, it
-independently measures 2.314× (upper 2.325×), 741,342 B/op and an exact 7,330-byte
-packet. Its 5.83 ms is 25.76% below the preceding independent mean; these separate
+exposed a 3.615× gap. After exact squared groups, redundant-pass removal and
+reuse of four-block transforms, it independently measures 2.145× (upper 2.206×),
+741,342 B/op and an exact 7,330-byte packet. Its 5.37 ms is 7.78% below the
+preceding independent mean; these separate
 runs are not a paired baseline gain. It remains the largest confirmed gap. The
 five unaffected VP8 costs carry forward; the required upper ≤1× stays open.
 
@@ -116,10 +117,10 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-DISTORTION-PASS-REUSE.md) | 4,945 checks/OS; 624 affected scalar WebP/OS and same actual package passed |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-DISTORTION-TRANSFORM-REUSE.md) | 4,945 checks/OS; 624 affected scalar WebP/OS and same actual package passed |
 | Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
 | Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current independent gap |
-| CPU and allocation measurements after cleanup | [decision-pass reuse](../benchmarks/WARM-VP8-DISTORTION-PASS-REUSE.md), [squared groups](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | Exact packets; other required paths and full parity open |
+| CPU and allocation measurements after cleanup | [transform reuse](../benchmarks/WARM-VP8-DISTORTION-TRANSFORM-REUSE.md), [squared groups](../benchmarks/WARM-VP8-DISTORTION-SQUARED.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct

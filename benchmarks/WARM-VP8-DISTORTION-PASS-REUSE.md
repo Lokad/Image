@@ -1,10 +1,13 @@
 # Reuse the completed effort2 decision pass
 
+These effort2 costs are historical after [selected-transform reuse](WARM-VP8-DISTORTION-TRANSFORM-REUSE.md).
+The retained source/package/raw identities describe this recorded producer.
+
 The existing effort2 diagram independently measures 5.83 ms: 2.314× reference
 time (upper 2.325×), an exact 7,330-byte packet and observed 741,342 B/op.
 Elapsed time is 25.76% below the preceding independent mean; these separate runs
 are not a paired baseline gain. All 12 actual/filtered samples remain and both
-idle-v2 guards pass. It remains the largest current confirmed gap.
+idle-v2 guards pass. It was the largest confirmed gap for this producer.
 
 | Quiet one-CPU run | Lokad µs | Reference µs | Ratio / upper | Allocated B/op | Output bytes |
 | --- | ---: | ---: | ---: | ---: | ---: |

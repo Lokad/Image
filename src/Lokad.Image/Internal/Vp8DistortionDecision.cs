@@ -34,8 +34,9 @@ internal static class Vp8DistortionDecision
     {
         context.Cancellation.ThrowIfCancellationRequested(); Predict16(neighbors, top, left, mode, pixels);
         Span<short> coefficients = stackalloc short[256]; Span<short> dc = stackalloc short[16]; Span<short> walsh = stackalloc short[16];
-        for (var b = 0; b < 16; b++)
-        { Vp8MacroblockDecision.Transform(source, pixels, Block(b), coefficients.Slice(b * 16, 16)); dc[b] = coefficients[b * 16]; }
+        for (var b = 0; b < 16; b += 4)
+            Vp8ForwardTransform.DctFourBlocks(source[Block(b)..], pixels[Block(b)..], 16, 16, coefficients.Slice(b * 16, 64));
+        for (var b = 0; b < 16; b++) dc[b] = coefficients[b * 16];
         Vp8ForwardTransform.WalshDc(dc, walsh);
         var nz = Vp8BlockQuantization.Apply(walsh, levels[..16], walshMatrix) ? 1u << 24 : 0;
         for (var b = 0; b < 16; b++)
@@ -89,7 +90,8 @@ internal static class Vp8DistortionDecision
     {
         context.Cancellation.ThrowIfCancellationRequested(); PredictUv(neighbors, top, left, mode, pixels);
         Span<short> coefficients = stackalloc short[128];
-        for (var b = 0; b < 8; b++) Vp8MacroblockDecision.Transform(source, pixels, UvBlock(b), coefficients.Slice(b * 16, 16));
+        Vp8ForwardTransform.DctFourBlocks(source, pixels, 16, 16, coefficients, 64);
+        Vp8ForwardTransform.DctFourBlocks(source[64..], pixels[64..], 16, 16, coefficients[32..], 64);
         errors[..14].Clear();
         if (correctDc) Vp8MacroblockDecision.CorrectDc(coefficients, diffusion, errors, matrix);
         // Unlike the RDO UV selector, distortion-only reconstruction does not
