@@ -1,5 +1,8 @@
 # Deferred VP8L population windows
 
+The end-to-end baseline below is superseded by
+[exact color-trial reuse](WARM-VP8L-COLOR-TRIAL-REUSE.md); its proofs and verdict remain.
+
 The existing RGBA8 control has an independent qualified baseline of **193,847 µs,
 1.590× reference time / upper1.609**, with 29,688,696 B/op and exact 183,812-byte
 packets. This uses the unchanged accepted producer and all twelve actual samples.

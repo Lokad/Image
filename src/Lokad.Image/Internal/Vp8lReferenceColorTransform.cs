@@ -92,10 +92,12 @@ internal static class Vp8lReferenceColorTransform
     private sealed class Search : IDisposable
     {
         private const long ScratchBytes = 3 * 256 * 4L + 2 * 256 * 8L + 128;
+        private const int TrialCapacity = 64;
         private readonly OperationContext context;
         private int[]? counts;
         private long[]? products;
         private long redBaseCost, blueBaseCost;
+        private int cachedTrials;
         private Span<long> RedProducts => products.AsSpan(0, 256);
         private Span<long> BlueProducts => products.AsSpan(256, 256);
         private Span<int> Histogram => counts.AsSpan(0, 256);
@@ -120,7 +122,15 @@ internal static class Vp8lReferenceColorTransform
         private long Score(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
             uint previousX, uint previousY, bool red, int gr, int gb, int rb)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var histogram = Histogram; histogram.Clear();
+            context.Cancellation.ThrowIfCancellationRequested();
+            // The opposite plane's products are unused during this phase.
+            // Borrow them for exact trial results, resetting before either
+            // history/preferences or the active color plane can change.
+            var trials = red ? BlueProducts : RedProducts;
+            var key = red ? gr : ((long)gb << 32) | (uint)rb;
+            for (var i = 0; i < cachedTrials; i++)
+                if (trials[i] == key) return trials[TrialCapacity + i];
+            var histogram = Histogram; histogram.Clear();
             // This tile remains unchanged during the complete coefficient search.
             // Strided borrowing needs neither a tile copy nor a second image.
             for (var y = y0; y < y1; y++)
@@ -149,6 +159,11 @@ internal static class Vp8lReferenceColorTransform
                 if (gb == 0) cost -= preference;
                 if (rb == 0) cost -= preference;
             }
+            if (cachedTrials < TrialCapacity)
+            {
+                trials[cachedTrials] = key; trials[TrialCapacity + cachedTrials] = cost;
+                cachedTrials++;
+            }
             return cost;
         }
 
@@ -168,7 +183,7 @@ internal static class Vp8lReferenceColorTransform
                 // coefficient trials. Charge and prepare each history once.
                 var population = (x1 - x0) * (y1 - y0);
                 context.Cancellation.ThrowIfCancellationRequested(); redBaseCost = Vp8lColorCost.Prepare(RedHistory, population, RedProducts);
-                context.Cancellation.ThrowIfCancellationRequested(); blueBaseCost = Vp8lColorCost.Prepare(BlueHistory, population, BlueProducts);
+                cachedTrials = 0;
                 var bestGr = 0;
                 var bestRedCost = Score(working, width, x0, y0, x1, y1, previousX, previousY, true, 0, 0, 0);
                 for (var level = 0; level < 4 + ((7 * quality) >> 8); level++)
@@ -181,6 +196,8 @@ internal static class Vp8lReferenceColorTransform
                         if (cost < bestRedCost) { bestRedCost = cost; bestGr = candidate; }
                     }
                 }
+                context.Cancellation.ThrowIfCancellationRequested(); blueBaseCost = Vp8lColorCost.Prepare(BlueHistory, population, BlueProducts);
+                cachedTrials = 0;
                 var bestGb = 0; var bestRb = 0;
                 var bestBlueCost = Score(working, width, x0, y0, x1, y1, previousX, previousY, false, 0, 0, 0);
                 var iterations = quality < 25 ? 1 : quality > 50 ? 7 : 4;

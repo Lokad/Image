@@ -36,7 +36,7 @@ boundary omitted from this inventory.
 
 ## Current evidence
 
-[The current summary](../docs/benchmark.md) retains 24 unchanged 0.2.0 controls and
+[The current summary](../docs/benchmark.md) retains 21 unchanged 0.2.0 controls and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
@@ -47,15 +47,18 @@ independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
 samples remain. [Effort2 baseline refresh](VP8-RESIDUAL-SUMMARY-DEFERRED.md) resolves
 its current short to 1.583×; the proposed summary primitive is deferred/removed.
 [Trellis baseline refresh](VP8-TRELLIS-STATE-REDUCTION-REJECTED.md) gives 1.611×;
-the state-reduction candidate is rejected and removed. The largest displayed
-point gap is now VP8L async at 1.618×, with related frame/photo paths at
-1.573–1.596× and 132–206 ms per operation. These similar ratios and substantially
-larger absolute costs give the shared VP8L encoding path priority.
+the state-reduction candidate is rejected and removed.
 [The population-window round](VP8L-WINDOW-POPULATIONS-DEFERRED.md) independently
 refreshes unchanged RGBA8 VP8L to 1.590× / upper1.609, with all twelve actuals.
 Its candidate's initial22% short gain does not survive confirmation (0.44% mean
 difference); source and immutable producers are restored. Maintained empty-block
 metadata and pair caching have too little demonstrated reuse to pursue.
+[Exact color-trial reuse](WARM-VP8L-COLOR-TRIAL-REUSE.md) supersedes affected VP8L
+costs: RGBA8 independently measures 1.486× / upper1.507, 181.641 ms and 29,688,704
+B/op, exact 183,812 B. RGBA16/async/photo shorts are 1.481/1.515/1.583×. Diagram
+and compressed-alpha costs remain valid because they skip this color search.
+Trellis6 at 1.611× is now the largest displayed point gap, followed by opaque
+VP8 photograph at 1.599×. Preserve larger absolute-cost VP8L leads in the queue.
 Full samples, allocations, packet sizes and boundaries are in the
 [immutable release evidence](release-0.2.0-benchmark-evidence.json) and
 [current PNG evidence](warm-png-bulk-stored-evidence.json).
@@ -93,6 +96,12 @@ Regression/pixel/reference evidence and timings are separate:
 - Constant-time distance symbols affect compressed PNG policies, including stream/
   async callers; three displayed controls are refreshed. Stored level0 is unchanged
   and keeps its independent proof. This does not invalidate unrelated code paths.
+- Exact color-trial reuse changes lossless color-search encoding, including
+  normalization, stream/async and applicable method5/6 prediction families with
+  nonzero red/blue. Four displayed callers are refreshed. Diagram4 skips prediction/
+  color search and normalized VP8 alpha has RedBlueZero, so their costs remain
+  valid. Other affected inventory cases need applicable current timings before a
+  CPU-pass claim. All decoders, unrelated codecs/editing and native workers remain.
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.
@@ -108,10 +117,11 @@ and their individual reports/raw archives.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
-Prioritize VP8L with one existing RGBA8 attribution and one shared encoding
-primitive at a time. Distinguish shared work from async delivery and 16-bit
-normalization; do not assume all four cases have identical bottlenecks. Reuse
-unaffected evidence and verify affected companion boundaries on acceptance.
+Next prioritize the existing trellis6 diagram. Reuse its valid attribution and
+immutable workers; establish one substantial distinct opportunity before editing.
+Keep the VP8L photograph and other larger remaining costs in the queue. Distinguish
+shared work from delivery/normalization, reuse unaffected evidence and verify
+affected companion boundaries on acceptance.
 Do not renew the deferred population-window/occupancy/pair-cache, residual-summary
 or rejected trellis state-reduction
 families without a materially different opportunity.
