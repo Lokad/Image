@@ -81,6 +81,7 @@ def render():
         row('VP8 opaque photograph', 'warm-vp8-residual-vector-views-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-RESIDUAL-VECTOR-VIEWS.md', confirmed=True, current=True),
         row('VP8 opaque text/diagram', 'warm-vp8-residual-vector-views-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-RESIDUAL-VECTOR-VIEWS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8 diagram, effort6 / trellis', 'warm-vp8-trellis-scan-data-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-TRELLIS-SCAN-DATA.md', confirmed=True, current=True),
+        row('VP8 opaque RGBA16, including normalization', 'warm-vp8-opaque-rgba16-current-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-OPAQUE-RGBA16-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-rgba16-current-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-RGBA16-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
         row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-async-webp-current-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-ASYNC-WEBP-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),

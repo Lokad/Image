@@ -52,6 +52,9 @@ allocations, reference boundaries and confirmation status. Current evidence:
   independently confirms 1.901× / upper 1.910, 754,328 B/op and exact 6,818 B.
   Only method5/6 enter this routine; valid effort-4 costs carry forward. The
   photograph remains the largest current demonstrated gap.
+- [VP8 opaque RGBA16 normalization](WARM-VP8-OPAQUE-RGBA16-CURRENT.md): current
+  short 1.850× / upper 1.941, 1,201,536 B/op and exact 72,380 B. Full normalization
+  and fresh packet ownership are timed; no compressed alpha. No producer change.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [VP8L RGBA16 normalization](WARM-VP8L-RGBA16-CURRENT.md): current short
@@ -117,7 +120,7 @@ binaries/sources restored exactly. Two extreme-probability admission tests remai
 passing normally/scalar on both OS. Existing full/package proof is reused.
 
 Forward batching and two-state trellis scoring are accepted and fully qualified.
-Stop their variants. The [current photograph trace](WARM-VP8-CURRENT-PHOTO-PROFILE.md)
+Stop their variants. The [retained photograph trace](WARM-VP8-CURRENT-PHOTO-PROFILE.md)
 resolves changed attribution after shared prediction: 97/706 exclusive residual
 samples and 42/706 large-block prediction samples. Instrumented timings are not
 scored. The single-coefficient residual shortcut gives only a 0.825% short change;
@@ -135,12 +138,13 @@ Its only invalidated costs are method5/6 trellis, now independently reconciled.
 Effort-4 costs, other codec/edit/text evidence and all unchanged functional proofs
 remain reusable. Completed and rejected pricing/emitter experiments remain closed.
 
-The RGBA16 and fresh nonseekable async lossless-WebP boundaries now have guarded
-current shorts; both remain gaps, without independent parity claims. Next resolve
-the existing VP8 `EncodeOpaque16` control: full 16-bit normalization and omission
-of compressed alpha distinguish it from the current RGBA8+alpha control. Reuse the
-qualified build and original input/settings/worker/selector; no new image, profile
-or grid. No full/package repetition when production inputs are unchanged. Refresh
+The lossless RGBA16, nonseekable async and opaque VP8 RGBA16 boundaries now have
+guarded current shorts; each remains a gap, without independent parity claims.
+The photograph remains the largest current confirmed gap. Its earlier trace
+predates accepted prediction, source analysis, histogram, rate-refresh and residual
+changes. Before another substantial primitive, refresh only that bounded attribution
+using the same input/operation; discard instrumented times. Completed sweeps stay
+closed. No full/package repetition when production inputs are unchanged. Refresh
 only affected validation receipts before replay; benchmark-only repairs do not
 invalidate earlier valid measured producer/harness pairs.
 

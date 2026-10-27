@@ -40,6 +40,7 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8 opaque photograph](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 19,416.18 | 9,726.50 | 1.996 / 2.004 | 809,056 | Current gap (independent) |
 | [VP8 opaque text/diagram](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md) | 10,935.19 | 5,822.51 | 1.878 / 1.976 | 741,121 | Current gap (short; qualified) |
 | [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 18,642.09 | 9,805.01 | 1.901 / 1.910 | 754,328 | Current gap (independent) |
+| [VP8 opaque RGBA16, including normalization](../benchmarks/WARM-VP8-OPAQUE-RGBA16-CURRENT.md) | 28,827.63 | 15,583.45 | 1.850 / 1.941 | 1,201,536 | Current gap (short; reused qualification) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L RGBA16, including normalization / libwebp exact=1](../benchmarks/WARM-VP8L-RGBA16-CURRENT.md) | 188,991.14 | 122,121.60 | 1.548 / 1.685 | 47,674,928 | Current gap (short; reused qualification) |
 | [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 201,469.36 | 121,148.65 | 1.663 / 1.889 | 47,675,312 | Current gap (short; reused qualification) |

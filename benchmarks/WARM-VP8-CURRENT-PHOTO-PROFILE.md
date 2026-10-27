@@ -1,5 +1,9 @@
 # Current VP8 photograph attribution
 
+This retained trace describes the two-state-trellis producer. Later accepted
+prediction, source-analysis, histogram, rate-refresh and residual changes
+supersede its cost attribution; it is historical, not a current hotspot ranking.
+
 One bounded trace on the qualified two-state-trellis build reuses the frozen
 effort-4 photograph, complete operation, harness, native worker and sampler.
 Both idle guards pass; packets, reconstruction, borrowed source and independent
@@ -24,7 +28,7 @@ binaries, raw samples and restoration checks. Stop residual-pricing variants.
 
 Generated `Luma4` code already inlines per-mode score arithmetic; its remaining
 `Price`/`Add` calls occur after block selection. This does not justify a score-copy
-trial. Large-block prediction still dispatches modes per pixel: the next bounded
-candidate will dispatch once and fill/copy rows, preserving its border snapshot,
-missing-edge rules, true-motion clamping, tails and portable fallback. No new
-images, settings, cache, admission owner or benchmark grid is needed.
+trial. The identified large-block prediction lead subsequently became the accepted
+[row dispatch change](WARM-VP8-LARGE-BLOCK-ROWS.md), preserving border snapshots,
+missing-edge rules, true-motion clamping, tails and the portable fallback. That
+round is closed; this old trace does not justify another prediction variant.
