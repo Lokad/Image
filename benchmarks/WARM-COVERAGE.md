@@ -26,8 +26,8 @@ effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
 [Method6 search](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs
 coefficient-domain dynamic-programming trellis for every luma candidate; the
 current method4 warm controls never execute this required algorithm. Functional
-packet/ownership proof remains exact. The [current guarded short](WARM-VP8-FLAT-COUNTS.md)
-measures 1.867× / upper 1.914, 754,328 B/op, with exact packets and reconstructed
+packet/ownership proof remains exact. The [current guarded short](WARM-VP8-DISTORTION-SQUARED.md)
+measures 1.780× / upper 2.621, 754,328 B/op, with exact packets and reconstructed
 pixels. Source, depth and quality stay
 frozen: no grid or new image. Other efforts/settings receive no broader
 performance claim.
@@ -40,13 +40,15 @@ The [caller review](WARM-VP8-SQUARED-METRIC-SCREEN.md) identifies
 they price original prediction distortion before reconstructing selected modes.
 The current method4 RDO and method6 trellis controls never execute this required
 search algorithm. This one existing functional control is promoted to the warm
-checklist; no new source or effort/settings sweep. It is **unmeasured**, not an
-assumed gap or pass. Other low-effort settings receive no broader throughput claim.
+checklist; no new source or effort/settings sweep. Its [current independent
+confirmation](WARM-VP8-DISTORTION-SQUARED.md) measures 3.128× / upper 3.148,
+741,257 B/op and an exact packet. This largest demonstrated gap takes priority.
+Other low-effort settings receive no broader throughput claim.
 
 ## Current qualification and demonstrated gaps
 
-[Flat-coefficient counting](WARM-VP8-FLAT-COUNTS.md) is the latest
-qualified producer: 4,943 Release checks and 622 affected scalar WebP checks per
+[Squared groups](WARM-VP8-DISTORTION-SQUARED.md) is the latest
+qualified producer: 4,944 Release checks and 623 affected scalar WebP checks per
 OS, plus the same actual private 0.2.0 package and all three usage examples.
 Complete encoder packets, decoded pixels, editing precision, cancellation and
 explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchanged.
@@ -54,12 +56,13 @@ explicit admission/ownership remain acceptance gates. Published 0.1.0 is unchang
 The [current three-table summary](../docs/benchmark.md) selects valid costs,
 allocations, reference boundaries and confirmation status. Current evidence:
 
-- [Flat-coefficient counting](WARM-VP8-FLAT-COUNTS.md): photograph independently
-  confirms 1.873× / upper 1.877, exact 17,688 B and 809,056 B/op. Diagram/alpha
-  effort-4 shorts are 1.835× / 1.461×; effort-6 diagram is 1.867× / upper 1.914,
-  754,328 B/op and exact 6,818 B. Opaque RGBA16 is 1.792× / upper 1.973,
-  1,201,536 B/op and exact 72,380 B. Allocations are unchanged. These five anchors
-  reconcile affected costs; prior observations on those paths are historical.
+- [Squared groups](WARM-VP8-DISTORTION-SQUARED.md): effort2 diagram independently
+  confirms 3.128× / upper 3.148, exact 7,330 B and 741,257 B/op. Current RDO
+  photograph short is 1.848× / upper 1.969, reusing the exact earlier candidate/
+  harness/input pair. Diagram/alpha effort4 shorts are 1.761× / 1.437×. Effort6
+  diagram is 1.780× / upper 2.621, explicitly uncertain. Opaque RGBA16 is 1.718×.
+  All packet sizes and allocations are unchanged. Six named anchors reconcile
+  affected costs; other affected observations remain historical.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric VP8L shorts 1.605× / 1.566×.
 - [VP8L RGBA16 normalization](WARM-VP8L-RGBA16-CURRENT.md): current short
@@ -149,16 +152,22 @@ guarded current shorts; each remains a gap, without independent parity claims.
 One bounded pre-change photograph trace selected flatness counting (47/717
 exclusive samples). That primitive is accepted and closed. Its instrumented times
 are discarded; the trace is not a post-change hotspot ranking. The photograph
-remains the largest current confirmed gap. The [squared-metric screen](WARM-VP8-SQUARED-METRIC-SCREEN.md)
-gives only a 1.34% short difference within uncertainty; reject it and stop metric
-variants. Actual qualified sources/cores are restored byte exactly. Both systems
-pass 53 restored focused checks normally/scalar, including the retained rectangle/
-stride/overlap contract test. Existing full/package proof remains valid.
+was the largest confirmed gap before the missing search path was measured. The
+[squared-metric screen](WARM-VP8-SQUARED-METRIC-SCREEN.md) originally showed only a
+1.34% short difference within uncertainty. Actual qualified sources/cores were
+restored byte exactly; 53 focused checks passed normally/scalar on both systems.
 
-Next prepare only the missing effort2 worker/dispatch and measure
-`DiagramLossyDistortion8` with exact frozen packet/reconstruction/ownership gates,
-one CPU and the unchanged production build. Resolve that uncertainty before
-assuming another optimization is needed. No new profile or image/settings grid.
+The new distortion-only search baseline then exposed a 3.615× gap. That material
+new evidence justified rescreening the exact already-verified squared candidate
+on this distinct path, without a variant sweep or production rebuild. It now has
+independent 3.128× evidence, full qualification and six reconciled anchors. The
+original RDO screen remains marginal; no RDO speedup is inferred from it.
+
+Next obtain one bounded attribution on `DiagramLossyDistortion8`, whose search
+is distinct from the older RDO photograph trace. Reuse immutable production/
+harness/worker/selector artifacts; discard instrumented timings. Prioritize a
+substantial primitive in this 3.128× path before smaller gaps. No squared variants
+or new image/settings grid.
 No full/package repetition when production inputs are unchanged. Refresh
 only affected validation receipts before replay; benchmark-only repairs do not
 invalidate earlier valid measured producer/harness pairs.

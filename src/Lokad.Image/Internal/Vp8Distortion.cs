@@ -52,16 +52,50 @@ internal static class Vp8Distortion
         if (sum != 256) throw new ArgumentException("Texture importance must sum to256.");
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static int Squared(ReadOnlySpan<byte> a, int aStride, ReadOnlySpan<byte> b, int bStride, int width, int height)
     {
         Check(a, aStride, width, height); Check(b, bStride, width, height);
-        var sum = 0;
-        for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
+        var sum = 0; var y = 0;
+        if (Avx2.IsSupported && width is 4 or 16)
+        {
+            var totals = Vector256<int>.Zero;
+            if (width == 4)
+            {
+                for (; y + 4 <= height; y += 4)
+                    totals = Avx2.Add(totals, SquaredGroup(PackFourRows(a[(y * aStride)..], aStride),
+                        PackFourRows(b[(y * bStride)..], bStride)));
+            }
+            else
+            {
+                for (; y < height; y++)
+                    totals = Avx2.Add(totals, SquaredGroup(Vector128.Create(a.Slice(y * aStride, 16)),
+                        Vector128.Create(b.Slice(y * bStride, 16))));
+            }
+            sum = Vector256.Sum(totals);
+        }
+        for (; y < height; y++) for (var x = 0; x < width; x++)
         {
             var difference = a[y * aStride + x] - b[y * bStride + x]; sum += difference * difference;
         }
         return sum;
     }
+
+    // Differences fit signed16; the full16x16 sum is at most16*16*255*255.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector256<int> SquaredGroup(Vector128<byte> a, Vector128<byte> b)
+    {
+        var difference = Avx2.Subtract(Avx2.ConvertToVector256Int16(a), Avx2.ConvertToVector256Int16(b));
+        return Avx2.MultiplyAddAdjacent(difference, difference);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector128<byte> PackFourRows(ReadOnlySpan<byte> pixels, int stride)
+        => Vector128.Create(
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels[..4]),
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(stride, 4)),
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(2 * stride, 4)),
+            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(3 * stride, 4))).AsByte();
 
     // Factor the sequency Hadamard basis from reversed two-bit Gray-code
     // parity. Unlike forwardY2, this has no half-scale or rounding.
@@ -93,12 +127,7 @@ internal static class Vp8Distortion
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector256<short> TextureSpectrum(ReadOnlySpan<byte> pixels, int stride)
     {
-        var packed = Vector128.Create(
-            BinaryPrimitives.ReadUInt32LittleEndian(pixels[..4]),
-            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(stride, 4)),
-            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(2 * stride, 4)),
-            BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(3 * stride, 4)));
-        var values = Avx2.ConvertToVector256Int16(packed.AsByte());
+        var values = Avx2.ConvertToVector256Int16(PackFourRows(pixels, stride));
         var swap = Avx2.ShuffleLow(Avx2.ShuffleHigh(values, 0xb1), 0xb1);
         values = Avx2.Blend(Avx2.Add(values, swap), Avx2.Subtract(swap, values), 0xaa);
         swap = Avx2.ShuffleLow(Avx2.ShuffleHigh(values, 0x4e), 0x4e);

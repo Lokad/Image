@@ -1,5 +1,9 @@
 # Bounded VP8 squared-metric screen
 
+The later [distortion-only search measurement](WARM-VP8-DISTORTION-SQUARED.md)
+exposed a larger gap and justified adopting this exact candidate on that distinct
+path. The RDO-only decision below remains its historical screening result.
+
 The same photograph measures 17.95 ms in one short: 1.848× reference time
 (upper 1.969×), 809,056 B/op and an exact 17,688-byte packet. Its 1.34% elapsed
 difference from the preceding independent mean is within uncertainty. The SIMD

@@ -53,6 +53,9 @@ For an isolated binary-reference harness, set `LOKAD_IMAGE_WARM_PROJECT` to its
 existing `.csproj` and launch that harness's DLL for preparation. This overrides
 the default repository project and avoids rebuilding production dependencies.
 Reuse its completed child and verify actual selected assembly hashes afterward.
+Use the normal generated-project restore/build for a missing selector: redirected
+reference/assets files require it. The binary-reference harness prevents a
+production rebuild; suppressing its project-reference build leaves those files missing.
 
 A new fixed selection can be prepared with the existing script, for example:
 
@@ -113,6 +116,10 @@ linked case report to preserve exact input, packing and ownership boundaries.
   checked effort substitutions. Original effort4 source/worker/identity stay
   unchanged; the generated source and worker stay ignored. Require the frozen
   complete 6,818-byte packet, exact reconstructed pixels and independent outputs.
+- `DiagramLossyDistortion8` reuses the diagram at Q75/effort2 to exercise the
+  distinct distortion-only search. Build with `build-webp-distortion-linux.sh`;
+  the three checked effort substitutions retain the effort4/6 workers unchanged.
+  Require the frozen complete 7,330-byte packet and exact reconstructed pixels.
 - Single-component grayscale JPEG encoding explicitly uses SIMD-enabled standalone
   libjpeg-turbo 3.1.4.1 (`build-libjpeg-gray-linux.sh`), the approved tooling-only
   exception. Include flattening, BT.601 normalization, encoding and fresh packet

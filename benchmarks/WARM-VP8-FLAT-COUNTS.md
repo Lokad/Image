@@ -1,5 +1,8 @@
 # Exact VP8 flat-coefficient counting
 
+These costs are historical after [squared groups](WARM-VP8-DISTORTION-SQUARED.md).
+The flatness proof remains; affected current costs are reconciled there.
+
 The photograph independently measures 18.19 ms, 1.873× reference time (upper
 1.877×), 809,056 B/op and an exact 17,688-byte packet. Elapsed time is 6.30%
 below the preceding independent mean; these separate runs are not a paired
