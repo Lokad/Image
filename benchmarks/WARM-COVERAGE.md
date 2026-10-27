@@ -25,22 +25,22 @@ Its [frozen packet](../tools/Shared/OriginalVp8Controls.cs) is 6,818 B, SHA256
 `3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee`.
 [Method6](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs coefficient
 dynamic-programming trellis for each luma candidate; method4 never exercises it.
-The current guarded short is 1.652× / upper 1.786, 754,328 B/op, exact packets and
+The current guarded short is 1.635× / upper 1.968, 754,344 B/op, exact packets and
 pixels. It is not an independent confirmation or a broader effort/settings claim.
 
 `DiagramLossyDistortion8`: same existing diagram, Q75/effort2. Frozen packet:
 7,330 B, SHA256 `325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b`.
 `Vp8FramePlan.PrepareDistortion` / `Vp8DistortionDecision.Select` price original
 prediction errors before selected-mode reconstruction. Method4 RDO and method6
-trellis do not run this distinct algorithm. Its [current independent result](WARM-VP8-SINGLE-BLOCK-RECONSTRUCTION.md)
-is 1.716× / upper 1.727, 741,342 B/op and an exact packet. Photograph effort4
-independently measures 1.705× / upper 1.721. Other settings receive no broader claim.
+trellis do not run this distinct algorithm. Its [current independent result](WARM-VP8-WORD-ARITHMETIC.md)
+is 1.603× / upper 1.614, 741,375 B/op and an exact packet. Photograph effort4
+independently measures 1.649× / upper 1.655. Other settings receive no broader claim.
 
 ## Current qualification and costs
 
-[Single-block reconstruction](WARM-VP8-SINGLE-BLOCK-RECONSTRUCTION.md) is the latest
-qualified producer: 4,949 Release checks (1,967 internal, 2,035 public, 947 live)
-and 628 scalar WebP checks per OS. The same actual private 0.2.0 package and all
+[Word interval coder](WARM-VP8-WORD-ARITHMETIC.md) is the latest
+qualified producer: 4,950 Release checks (1,968 internal, 2,035 public, 947 live)
+and 629 scalar WebP checks per OS. The same actual private 0.2.0 package and all
 three usage examples pass both systems. Published 0.1.0 stays unchanged.
 Complete packets, decoded/editing pixels, cancellation and explicit shared
 admission/ownership remain gates, separately from performance qualification.
@@ -48,11 +48,12 @@ admission/ownership remain gates, separately from performance qualification.
 The [three-table summary](../docs/benchmark.md) selects valid costs, allocations,
 reference boundaries and confirmation status. Current named evidence:
 
-- VP8 [six reconciled anchors](WARM-VP8-SINGLE-BLOCK-RECONSTRUCTION.md): effort2
-  diagram independent 1.716× / upper 1.727; photograph effort4 independent 1.705× /
-  upper 1.721. Diagram4/trellis6/alpha4/opaque16 shorts are 1.528× / 1.652× / 1.442× /
-  1.718×. Packets and B/op are unchanged. Reconstruction adds no admission/owner;
-  prior eligible opaque8 preparation still admits 4 KiB, without fallback.
+- VP8 [six reconciled anchors](WARM-VP8-WORD-ARITHMETIC.md): effort2 diagram
+  independent 1.603× / upper 1.614; photograph effort4 independent 1.649× / upper
+  1.655. Diagram4/trellis6/opaque16 shorts are 1.492× / 1.635× / 1.553×.
+  Alpha's wide short is resolved by one cached independent 1.385× / upper 1.395.
+  Packets are unchanged; B/op rises16–33. The same logical-byte admission,
+  replacement overlap, awaited delivery and prior opaque8 preparation remain.
 - [VP8L empty spatial histograms](WARM-VP8L-EMPTY-HISTOGRAMS.md): diagram
   independent 1.362×; photograph/asymmetric shorts 1.605× / 1.566×.
 - [VP8L RGBA16](WARM-VP8L-RGBA16-CURRENT.md): short 1.548× / upper 1.685,
@@ -102,8 +103,10 @@ observations remain historical.
 Method2 pass reuse and methods0/1/2 selected-transform reuse did not affect RDO
 or trellis. Single-block inverse reconstruction changes encoder searches/selected
 reconstruction across required efforts; its six anchors replace preceding costs.
-Other affected observations stay historical. Paired behavior/scalar math remain
-unchanged. Decoder, other codec and edit/text paths keep valid evidence.
+Other affected observations stay historical. The word interval coder changes
+VP8 partition encoding across efforts/depths/alpha and sync/async output; six
+existing anchors replace preceding costs. Decision, transform and pixel math
+stay exact. Decoder, other codecs and edit/text paths keep valid evidence.
 Frozen inputs/settings/workers, approved native-only adjustments, pixel/packet
 oracles and unaffected font comparisons remain reusable. Regression/package
 proof does not establish CPU parity.
@@ -118,16 +121,25 @@ source/core was restored before this accepted reconstruction round.
 A bounded current photograph attribution (730 samples) has Luma4 self216,
 reconstruction49 and partition writing54 samples. Instrumented times are discarded;
 these shares precede the accepted reconstruction change. Its proof/raw trace is
-retained with [the round](WARM-VP8-SINGLE-BLOCK-RECONSTRUCTION.md).
+retained with [the reconstruction round](WARM-VP8-SINGLE-BLOCK-RECONSTRUCTION.md).
 
-Next inspect bit-at-a-time partition normalization as one distinct primitive,
-using retained attribution and actual callers. Prove grouped bit emission against
-existing native symbol/packet controls before a narrow complete-operation screen.
-Preserve carry propagation, termination, output/memory bounds, direct cancellation
-and admission refusal. Do not repeat reconstruction or automatic profiling.
+Word interval publication is accepted and qualified. Fifteen native controls,
+1,048,576 private state comparisons and8,192 frozen complete seeded partitions
+preserve canonical bytes, delayed carry, limits, cancellation and ownership.
+Stop word/fragment variants. The earlier per-symbol fragment screen was marginal
+and its qualified producer was restored before this independent wider-state design.
+
+Resolve the existing nonseekable async VP8L short (1.663×/upper 1.889) before
+ranking it against the photograph RDO confirmation. Reuse its prepared worker and
+selector, with no new case or production build. Then select one substantial lead.
+For photograph RDO, existing luma candidates already compute pure residual/header
+lower bounds; investigate ordering their reconstruction by those bounds, retaining
+original mode-index ties and all native decisions. Uniform, cancellable and
+ordered-trellis paths need explicit treatment. First establish bounded equivalence
+and a concrete pruning opportunity; no new profile or workload/settings grid.
 Do not infer a ranking of unconfirmed paths from short screens.
 
-The [preceding checkpoint](https://github.com/lokad/image/blob/b11c6cfcf59947ab5b66e9fcb18597113814f725/benchmarks/WARM-COVERAGE.md)
+The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)
 and individual reports retain accepted/rejected history. Preserve cited archives,
 source/native/fixture identities, failed guards and release packages; current
 summaries need not repeat the historical narrative.

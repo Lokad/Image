@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Security.Cryptography;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
@@ -6,6 +7,34 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8PartitionWriterTests
 {
+    [Fact]
+    public void AllProbabilitiesAndOriginalSeededSymbolsRetainCompleteBytesAndOwnership()
+    {
+        using var root = new TestMemoryBudget(1_000_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        Span<byte> length = stackalloc byte[4]; uint state = 0x31415926;
+        for (var sequence = 0; sequence < 8192; sequence++)
+        {
+            using var writer = new Vp8PartitionWriter(context, 4096);
+            for (var p = 0; p < 128; p++)
+            {
+                state ^= state << 13; state ^= state >> 17; state ^= state << 5;
+                var bit = (int)(state >> 31); var probability = (int)(state & 255);
+                if (sequence < 512) { bit = sequence & 1; probability = sequence >> 1; }
+                writer.Write(bit, probability);
+            }
+            writer.Finish(); BinaryPrimitives.WriteInt32LittleEndian(length, writer.Bytes.Length);
+            hash.AppendData(length); hash.AppendData(writer.Bytes);
+            Assert.Equal(writer.CapacityBytes, root.Bytes);
+            writer.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+        // Frozen from the original bit-by-bit integer definition, independently
+        // checked against the fifteen native controls below. No upstream corpus.
+        Assert.Equal("67a28cdc34771e134794754305c2c1727e88b7746566c00bb4beafddcdc384b2",
+            Convert.ToHexStringLower(hash.GetHashAndReset()));
+    }
+
     private static (int Bit, int Probability) Symbol(string name, int index) => name.StartsWith("mixed", StringComparison.Ordinal)
         ? ((index * 13 + (index >> 2)) & 1, (index * 73 + 19 * (index >> 3)) & 255)
         : name == "pending-ff-carry" ? index < 512 ? (1, 255) : (0, 0) : (0, 128);

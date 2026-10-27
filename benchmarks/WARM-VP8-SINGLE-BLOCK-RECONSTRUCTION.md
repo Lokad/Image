@@ -1,5 +1,7 @@
 # Exact single-block VP8 reconstruction
 
+End-to-end costs are historical after the [word interval coder](WARM-VP8-WORD-ARITHMETIC.md). Reconstruction pixel and ownership proofs remain valid.
+
 The existing photograph Q75/effort4 independently measures 16.56 ms: 1.705×
 reference time (upper 1.721×), exact 17,688 B and unchanged 809,056 B/op. Elapsed
 is 3.06% below the preceding independent mean; separate runs are not a paired

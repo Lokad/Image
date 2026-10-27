@@ -1,14 +1,18 @@
+using System.Buffers.Binary;
+using System.Numerics;
+
 namespace Lokad.Image.Internal;
 
-// Owned RFC6386 section7.2 interval stream. Normalization is expressed directly
-// in bits; canonical termination is pinned by original native symbol controls.
+// Owned RFC6386 section7.2 interval stream. A bounded word retains pending
+// arithmetic bits; canonical termination is pinned by original native controls.
 // No implementation tables, native calls or buffers from the caller are retained.
 internal sealed class Vp8PartitionWriter : IDisposable
 {
     private readonly OperationContext context;
     private readonly int maximum;
     private byte[]? buffer;
-    private int position, used, bottom, range = 255;
+    private int position, pending, range = 255;
+    private ulong value;
     private long capacity;
     private bool finished, disposed;
     internal long CapacityBytes => capacity;
@@ -29,20 +33,23 @@ internal sealed class Vp8PartitionWriter : IDisposable
         if (bit == 0) range = boundary;
         else
         {
-            bottom += boundary; range -= boundary;
-            if (bottom >= 256)
+            value += (uint)boundary; range -= boundary;
+        }
+        if (range < 128)
+        {
+            var shift = BitOperations.LeadingZeroCount((uint)range) - 24;
+            value <<= shift; range <<= shift; pending += shift;
+            // Admit capacity at the original logical byte boundary, even when
+            // its bits are still held in the word. Replacements keep overlap.
+            Ensure(position + ((pending + 7) >> 3));
+            if (pending >= 32)
             {
-                bottom -= 256; var at = position - 1; var increment = used == 0 ? 1 : 1 << (8 - used);
-                while (at >= 0)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested(); var value = buffer![at] + increment; buffer[at] = unchecked((byte)value);
-                    if (value < 256) break;
-                    at--; increment = 1;
-                }
-                if (at < 0) throw new InvalidOperationException("Arithmetic interval escaped its initial range.");
+                Carry();
+                BinaryPrimitives.WriteUInt32BigEndian(buffer.AsSpan(position), (uint)(value >> (pending - 24)));
+                position += 4; pending -= 32;
+                value &= (1UL << (pending + 8)) - 1;
             }
         }
-        while (range < 128) { Append(bottom >> 7); bottom = bottom * 2 & 255; range *= 2; }
     }
 
     internal void Literal(int value, int count)
@@ -55,24 +62,47 @@ internal sealed class Vp8PartitionWriter : IDisposable
     {
         if (finished || disposed) throw new InvalidOperationException("Partition is closed.");
         context.Cancellation.ThrowIfCancellationRequested();
-        // No emitted bits after an actual interval update is distinct from the
-        // pristine empty stream. Do not blindly remove one lookahead byte.
-        var target = position + 2 + (position == 0 && range != 255 ? 1 : 0);
-        for (var p = 7; p >= 0; p--) Append(bottom >> p & 1);
-        while (used != 0 || position < target) Append(0);
+        var logical = position + ((pending + 7) >> 3);
+        var target = (long)logical + 2 + (logical == 0 && range != 255 ? 1 : 0);
+        Carry();
+        // Publish the pending prefix, its eight residual bits, then the same
+        // zero padding/lookahead as the bit-by-bit canonical termination.
+        var count = pending + 8; var padding = -count & 7;
+        value <<= padding; count += padding;
+        while (count != 0)
+        {
+            Ensure((long)position + 1); count -= 8;
+            buffer![position++] = unchecked((byte)(value >> count));
+        }
+        while (position < target) { Ensure((long)position + 1); buffer![position++] = 0; }
+        pending = 0;
         finished = true;
     }
 
-    private void Append(int bit)
+    private void Carry()
     {
-        if (used == 0)
+        // At most one carry can escape a pending prefix: the selected interval
+        // stays within its previous interval. With pending<=38, the word needs
+        // at most47bits, including that carry and the eight residual bits.
+        var width = pending + 8;
+        if ((value >> width) == 0) return;
+        var at = position - 1;
+        while (at >= 0)
         {
-            if (position >= maximum || position == Array.MaxLength)
-                throw new ImageLimitException(position >= maximum ? ImageLimitKind.OutputBytes : ImageLimitKind.BufferLength, "VP8 partition exceeds its output limit.");
-            if (buffer is null || position == buffer.Length) Grow();
-            buffer![position++] = 0;
+            context.Cancellation.ThrowIfCancellationRequested();
+            var incremented = buffer![at] + 1; buffer[at] = unchecked((byte)incremented);
+            if (incremented < 256) break;
+            at--;
         }
-        buffer![position - 1] |= (byte)(bit << (7 - used)); used = (used + 1) & 7;
+        if (at < 0) throw new InvalidOperationException("Arithmetic interval escaped its initial range.");
+        value &= (1UL << width) - 1;
+    }
+
+    private void Ensure(long required)
+    {
+        if (required > maximum || required > Array.MaxLength)
+            throw new ImageLimitException(required > maximum ? ImageLimitKind.OutputBytes : ImageLimitKind.BufferLength, "VP8 partition exceeds its output limit.");
+        if (buffer is null || required > buffer.Length) Grow();
     }
 
     private void Grow()
