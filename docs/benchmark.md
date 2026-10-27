@@ -20,8 +20,9 @@ defines the remaining finite scope and evidence invalidation.
 | --- | --- | --- |
 | Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-FLAT-COUNTS.md) | 4,943 checks/OS; 622 affected scalar WebP/OS and same actual package passed |
 | Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
+| Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; unmeasured |
 | CPU and allocation measurements after cleanup | [flat-coefficient counting](../benchmarks/WARM-VP8-FLAT-COUNTS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
-| Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
+| Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
 
 Current screens are labeled; other cost anchors remain **pre-cleanup**. B/op is managed allocation, distinct
 from peak cooperative admission and native allocation. Ratios use the faster native

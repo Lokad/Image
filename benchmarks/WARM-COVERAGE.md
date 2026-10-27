@@ -4,8 +4,8 @@ Updated 2026-10-27. Full replacement readiness and independent warm upper ≤1×
 remain open. Compression correctness takes priority over CPU gains.
 
 The finite checklist is the [fixed inventory](../docs/benchmark-pre-cleanup.md):
-257 named controls, minus these four retired boundaries, plus the one distinct
-trellis path below: 254 required named cases. The earlier 253 remain required.
+257 named controls, minus these four retired boundaries, plus the two distinct
+algorithm paths below: 255 required named cases. The earlier 254 remain required.
 
 - PNG RGBA8 resident / ImageBudget quota.
 - JPEG RGBA8 4:2:0 / ImageBudget quota.
@@ -18,7 +18,7 @@ admission. Keep existing images, dimensions, depths, filters, quality settings a
 approved references; add a case only for a demonstrated distinct omitted required
 algorithm or public boundary. No replacement quota benchmark or settings grid.
 
-## One required algorithm omitted from the earlier inventory
+## Required algorithms omitted from the earlier inventory
 
 `DiagramLossyTrellis8`: the existing 513×259 opaque RGBA8 diagram, quality75,
 effort6. Its [frozen complete packet](../tools/Shared/OriginalVp8Controls.cs) is
@@ -31,6 +31,17 @@ measures 1.867× / upper 1.914, 754,328 B/op, with exact packets and reconstruct
 pixels. Source, depth and quality stay
 frozen: no grid or new image. Other efforts/settings receive no broader
 performance claim.
+
+`DiagramLossyDistortion8`: the same existing 513×259 opaque RGBA8 diagram,
+quality75/effort2. Its already frozen packet is 7,330 B, SHA256
+`325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b`.
+The [caller review](WARM-VP8-SQUARED-METRIC-SCREEN.md) identifies
+`Vp8FramePlan.PrepareDistortion` and `Vp8DistortionDecision.Select` for methods0/1/2:
+they price original prediction distortion before reconstructing selected modes.
+The current method4 RDO and method6 trellis controls never execute this required
+search algorithm. This one existing functional control is promoted to the warm
+checklist; no new source or effort/settings sweep. It is **unmeasured**, not an
+assumed gap or pass. Other low-effort settings receive no broader throughput claim.
 
 ## Current qualification and demonstrated gaps
 
@@ -138,10 +149,17 @@ guarded current shorts; each remains a gap, without independent parity claims.
 One bounded pre-change photograph trace selected flatness counting (47/717
 exclusive samples). That primitive is accepted and closed. Its instrumented times
 are discarded; the trace is not a post-change hotspot ranking. The photograph
-remains the largest current confirmed gap. Next assess the existing scalar squared
-pixel metric as one substantial primitive, preserving its exact sums, bounds,
-portable fallback and complete-operation boundary. No new profile or image/settings
-grid is needed. No full/package repetition when production inputs are unchanged. Refresh
+remains the largest current confirmed gap. The [squared-metric screen](WARM-VP8-SQUARED-METRIC-SCREEN.md)
+gives only a 1.34% short difference within uncertainty; reject it and stop metric
+variants. Actual qualified sources/cores are restored byte exactly. Both systems
+pass 53 restored focused checks normally/scalar, including the retained rectangle/
+stride/overlap contract test. Existing full/package proof remains valid.
+
+Next prepare only the missing effort2 worker/dispatch and measure
+`DiagramLossyDistortion8` with exact frozen packet/reconstruction/ownership gates,
+one CPU and the unchanged production build. Resolve that uncertainty before
+assuming another optimization is needed. No new profile or image/settings grid.
+No full/package repetition when production inputs are unchanged. Refresh
 only affected validation receipts before replay; benchmark-only repairs do not
 invalidate earlier valid measured producer/harness pairs.
 

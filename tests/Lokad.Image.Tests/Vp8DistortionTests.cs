@@ -8,6 +8,34 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8DistortionTests
 {
     [Fact]
+    public void SquaredMetricPreservesAllSupportedRectanglesStridesTailsAndOverlaps()
+    {
+        var storage = new byte[1024]; uint state = 0x63869e37;
+        for (var p = 0; p < storage.Length; p++)
+        { state ^= state << 13; state ^= state >> 17; state ^= state << 5; storage[p] = (byte)state; }
+        var original = storage.ToArray();
+        for (var height = 1; height <= 16; height++)
+        for (var width = 1; width <= 16; width++)
+        foreach (var padding in new[] { 0, 3, 11 })
+        foreach (var offset in new[] { 0, 1, 7 })
+        {
+            var aStride = width + padding; var bStride = width + padding + 5;
+            var a = storage.AsSpan(offset, (height - 1) * aStride + width);
+            var b = storage.AsSpan(3 + offset, (height - 1) * bStride + width);
+            var expected = 0;
+            for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
+            {
+                var difference = (int)a[y * aStride + x] - b[y * bStride + x];
+                expected += difference * difference;
+            }
+            Assert.Equal(expected, Vp8Distortion.Squared(a, aStride, b, bStride, width, height));
+            Assert.Equal(expected, Vp8Distortion.Squared(b, bStride, a, aStride, width, height));
+            Assert.Equal(0, Vp8Distortion.Squared(a, aStride, a, aStride, width, height));
+        }
+        Assert.Equal(original, storage);
+    }
+
+    [Fact]
     public void OriginalByteDomainRetainsEverySpectralMagnitudeAndFrozenWeightedEnergy()
     {
         var pixels = new byte[128]; var zero = new byte[16];

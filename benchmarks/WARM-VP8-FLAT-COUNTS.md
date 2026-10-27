@@ -40,5 +40,5 @@ were reused. Published 0.1.0 is unchanged.
 [Evidence](warm-vp8-flat-counts-evidence.json) retains the diagnostic trace,
 identities, samples, qualification and mirrored, member-verified raw archive.
 Older affected VP8 costs are historical. Unchanged decoder/VP8L/JPEG/PNG/edit/text
-proof remains reusable. Stop flatness variants; full 254-case warm parity and
-replacement readiness remain open.
+proof remains reusable. Stop flatness variants; full warm parity and replacement
+readiness remain open under the current [finite checklist](WARM-COVERAGE.md).
