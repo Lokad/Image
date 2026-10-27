@@ -76,3 +76,10 @@ removing stale work-limit, matched-dB and IDAT-only acceptance claims. Historica
 recipes remain linked at their Git checkpoint; adapters, verifiers and cited raw
 evidence remain available. This documentation pass changes no production inputs,
 so valid cross-platform, scalar and actual-package qualification is reused.
+
+The [benchmark validation follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md)
+deletes ten empty limit-refusal cases left after fuel removal, updates six typed
+metadata expectations, fixes JPEG sink-failure injection for short packets, and
+requires complete async VP8L packet equality. Existing validators pass nine groups
+on Windows and eleven on Linux; the extra JPEG preparations pin the Linux oracle.
+Production is unchanged, so its full/scalar/package qualification is reused.

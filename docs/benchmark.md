@@ -20,6 +20,7 @@ defines the remaining finite scope and evidence invalidation.
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
 | Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 4,943 checks/OS; 622 affected scalar WebP/OS and same actual package passed |
+| Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
 | CPU and allocation measurements after cleanup | [trellis scan geometry](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md), [residual vector views](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
@@ -41,6 +42,7 @@ are leads for measurement, not current demonstrated gaps.
 | [VP8 diagram, effort6 / trellis](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 18,642.09 | 9,805.01 | 1.901 / 1.910 | 754,328 | Current gap (independent) |
 | [VP8L RGBA8 / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 191,649.39 | 122,403.16 | 1.566 / 1.827 | 47,674,928 | Current gap (short; qualified) |
 | [VP8L RGBA16, including normalization / libwebp exact=1](../benchmarks/WARM-VP8L-RGBA16-CURRENT.md) | 188,991.14 | 122,121.60 | 1.548 / 1.685 | 47,674,928 | Current gap (short; reused qualification) |
+| [VP8L async, fresh nonseekable output / libwebp exact=1](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 201,469.36 | 121,148.65 | 1.663 / 1.889 | 47,675,312 | Current gap (short; reused qualification) |
 | [VP8L photograph / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 133,800.97 | 83,340.00 | 1.605 / 2.159 | 29,610,520 | Current gap (short; qualified) |
 | [VP8L text/diagram / libwebp exact=1](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md) | 13,192.85 | 9,685.69 | 1.362 / 1.408 | 45,404,838 | Current gap (independent) |
 | [PNG RGBA8, SmallestSize9 / native9](../benchmarks/WARM-CURRENT-ENCODER-ANCHORS.md) | 24,517.23 | 17,302.12 | 1.417 / 1.498 | 1,325,670 | Current gap (short; qualified) |

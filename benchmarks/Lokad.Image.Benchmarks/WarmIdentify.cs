@@ -22,9 +22,12 @@ public class WarmIdentify
     private string proofHash = "";
     private int cpu, sampleCount;
     private bool smoke, ready;
-    private static readonly ImageInfo PngExpected = new(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal);
-    private static readonly ImageInfo JpegExpected = new(ImageFormat.Jpeg, 513, 259, 8, false, ImageOrientation.Normal);
-    private static readonly ImageInfo WebpExpected = new(ImageFormat.WebP, 513, 259, 8, true, ImageOrientation.Normal);
+    private static readonly ImageInfo PngExpected = new(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal)
+        { SourceColor = SourceColorModel.Rgb, SourceAlpha = SourceAlphaRepresentation.Channel, SourceComponentCount = 4 };
+    private static readonly ImageInfo JpegExpected = new(ImageFormat.Jpeg, 513, 259, 8, false, ImageOrientation.Normal)
+        { SourceColor = SourceColorModel.Unknown, SourceAlpha = SourceAlphaRepresentation.None, SourceComponentCount = 3 };
+    private static readonly ImageInfo WebpExpected = new(ImageFormat.WebP, 513, 259, 8, true, ImageOrientation.Normal)
+        { SourceColor = SourceColorModel.Rgb, SourceAlpha = SourceAlphaRepresentation.Channel, SourceComponentCount = 4 };
     private bool Webp => Case == WarmIdentifyCase.Webp8;
     private bool Jpeg => Case == WarmIdentifyCase.Jpeg8;
     private ImageInfo Expected => Webp ? WebpExpected : Jpeg ? JpegExpected : PngExpected;
@@ -112,7 +115,7 @@ public class WarmIdentify
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length};
         if (ImageCodec.Identify(encoded, exact) != Expected) throw new InvalidOperationException("Exact Identify admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 } })
         {
             try { ImageCodec.Identify(encoded, limits); throw new InvalidOperationException("Identify accepted an insufficient limit."); }
             catch (ImageLimitException) { }
@@ -148,7 +151,7 @@ public class WarmIdentify
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length };
         if (ImageCodec.Identify(encoded, exact) != Expected) throw new InvalidOperationException("JPEG input/working admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 } })
         {
             try { ImageCodec.Identify(encoded, limits); throw new InvalidOperationException("JPEG Identify accepted insufficient limits."); }
             catch (ImageLimitException) { }
@@ -175,7 +178,7 @@ public class WarmIdentify
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = encoded.Length };
         if (ImageCodec.Identify(encoded, exact) != Expected) throw new InvalidOperationException("WebP input/working admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 }, exact with { } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = encoded.Length - 1 } })
         {
             try { ImageCodec.Identify(encoded, limits); throw new InvalidOperationException("WebP Identify accepted insufficient limits."); }
             catch (ImageLimitException) { }

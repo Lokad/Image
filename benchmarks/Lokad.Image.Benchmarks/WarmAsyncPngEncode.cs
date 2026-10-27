@@ -76,7 +76,7 @@ internal sealed class WarmAsyncPngEncode
         {
             using var output = new NonSeekableAsyncOutput(); Encode(output, image: transient); transient.Dispose(); RequireManaged(output);
         }
-        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { } })
+        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 } })
         {
             using var output = new NonSeekableAsyncOutput();
             try { Encode(output, new PngEncodeOptions { Limits = limits }); throw new InvalidOperationException("Encoder accepted insufficient admission."); }

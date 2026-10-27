@@ -103,7 +103,7 @@ internal sealed class WarmAsyncJpegEncode
         {
             using var output = new NonSeekableAsyncOutput(); Encode(output, image: transient); transient.Dispose(); RequireManaged(output);
         }
-        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { } })
+        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 } })
         {
             using var output = new NonSeekableAsyncOutput();
             try { Encode(output, profileOptions with { Limits = limits }); throw new InvalidOperationException("Encoder accepted insufficient admission."); }
@@ -121,10 +121,12 @@ internal sealed class WarmAsyncJpegEncode
             try { Encode(output, cancellation: canceled.Token); throw new InvalidOperationException("Encoder continued after delivery cancellation."); }
             catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token && output.AsyncWrites == 1 && output.Count > 0) { }
         }
-        using (var failed = new NonSeekableAsyncOutput { FailOnWrite = 2 })
+        var failureWrite = expected.Length > 64 * 1024 ? 2 : 1;
+        using (var failed = new NonSeekableAsyncOutput { FailOnWrite = failureWrite })
         {
             try { Encode(failed); throw new InvalidOperationException("Encoder ignored sink failure."); }
-            catch (IOException) when (failed.AsyncWrites == 2 && failed.Count > 0) { }
+            catch (IOException) when (failed.AsyncWrites == failureWrite
+                && (failureWrite == 1 ? failed.Count == 0 : failed.Count > 0)) { }
         }
         using var recovered = new NonSeekableAsyncOutput(); Encode(recovered); RequireManaged(recovered);
         if ((sampleInput ? JpegBenchmarkCase.Hash(pixels) != InputHash : !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(pixels)) || !survivor.AsSpan().SequenceEqual(expected))

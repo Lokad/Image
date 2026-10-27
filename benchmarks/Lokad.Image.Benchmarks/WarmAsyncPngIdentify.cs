@@ -6,7 +6,8 @@ using Lokad.Image.Tooling;
 internal sealed class WarmAsyncPngIdentify
 {
     private const string InputHash = "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f";
-    private static readonly ImageInfo Expected = new(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal);
+    private static readonly ImageInfo Expected = new(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal)
+        { SourceColor = SourceColorModel.Rgb, SourceAlpha = SourceAlphaRepresentation.Channel, SourceComponentCount = 4 };
     private JpegBenchmarkCase state = null!;
     private NativeWarmReference native = null!;
     private byte[] encoded = [];
@@ -57,7 +58,7 @@ internal sealed class WarmAsyncPngIdentify
         if (first != Expected || second != Expected || ReferenceEquals(first, second)) throw new InvalidOperationException("Async descriptors differ or alias.");
         var copy = encoded.ToArray(); var survivor = Inspect(copy); Array.Clear(copy);
         if (survivor != Expected || first != Expected || second != Expected) throw new InvalidOperationException("Surviving metadata aliases source.");
-        foreach (var limits in new[] { ImageLimits.Default with { MaxInputBytes = encoded.Length - 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { } })
+        foreach (var limits in new[] { ImageLimits.Default with { MaxInputBytes = encoded.Length - 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 } })
         {
             try { Inspect(encoded, limits); throw new InvalidOperationException("Async reader accepted insufficient admission."); }
             catch (ImageLimitException) { }

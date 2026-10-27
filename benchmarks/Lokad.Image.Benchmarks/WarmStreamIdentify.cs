@@ -24,7 +24,8 @@ public class WarmStreamIdentify
     private string proofHash = "";
     private int cpu, sampleCount;
     private bool smoke, ready;
-    private static readonly ImageInfo Expected = new(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal);
+    private static readonly ImageInfo Expected = new(ImageFormat.Png, 513, 259, 8, true, ImageOrientation.Normal)
+        { SourceColor = SourceColorModel.Rgb, SourceAlpha = SourceAlphaRepresentation.Channel, SourceComponentCount = 4 };
     private const string InputHash = "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f";
 
     public static WarmStreamIdentifyCase[] SelectedCases()
@@ -112,7 +113,7 @@ public class WarmStreamIdentify
         var trailing = new byte[encoded.Length + 1]; encoded.CopyTo(trailing, 0); Reject(trailing);
         var exact = ImageLimits.Default with { MaxInputBytes = encoded.Length, MaxWorkingBytes = 262144 + encoded.Length + 8192};
         if (Inspect(encoded, exact) != Expected) throw new InvalidOperationException("Exact Identify admission differs.");
-        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = exact.MaxWorkingBytes - 1 }, exact with { } })
+        foreach (var limits in new[] { exact with { MaxInputBytes = encoded.Length - 1 }, exact with { MaxWorkingBytes = exact.MaxWorkingBytes - 1 } })
         {
             try { Inspect(encoded, limits); throw new InvalidOperationException("Identify accepted an insufficient limit."); }
             catch (ImageLimitException) { }

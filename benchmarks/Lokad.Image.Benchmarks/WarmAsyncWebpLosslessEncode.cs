@@ -74,7 +74,7 @@ internal sealed class WarmAsyncWebpLosslessEncode
         {
             using var output = new NonSeekableAsyncOutput(); Encode(output, image: transient); transient.Dispose(); RequireManaged(output);
         }
-        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 }, ImageLimits.Default with { } })
+        foreach (var limits in new[] { ImageLimits.Default with { MaxOutputBytes = 1 }, ImageLimits.Default with { MaxWorkingBytes = 1 } })
         {
             using var output = new NonSeekableAsyncOutput();
             try { Encode(output, new WebpEncodeOptions { Lossless = true, Effort = 4, Limits = limits }); throw new InvalidOperationException("Encoder accepted insufficient admission."); }
@@ -114,6 +114,8 @@ internal sealed class WarmAsyncWebpLosslessEncode
     private void RequireNative()
     {
         var packet = File.ReadAllBytes(state.NativeOutput); nativeBytes = packet.Length;
+        if (!packet.AsSpan().SequenceEqual(expected))
+            throw new InvalidOperationException("Complete managed/native async VP8L packets differ.");
         if (JpegBenchmarkCase.Hash(packet) != "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde")
             throw new InvalidOperationException("Frozen native exact VP8L packet differs.");
         using var decoded = ImageCodec.Decode(packet);
@@ -134,7 +136,7 @@ internal sealed class WarmAsyncWebpLosslessEncode
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = pixels.Length, inputSha256 = RasterHash,
                 width = 513, height = 259, depth = 8, lossless = true, effort = 4, nativeCompressionQuality = 75, exactRgb = true, baselineBackend = "libwebp exact=1 (FFmpeg encoder backend)",
                 managedOutputBytes = expected.Length, managedOutputSha256 = JpegBenchmarkCase.Hash(expected), nativeOutputBytes = nativeBytes, nativeOutputSha256 = "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
-                managedSnapshotExact = true, allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, freshNonSeekableOutput = true, writeAsyncCallsVerified = true,
+                completePacketExact = true, managedSnapshotExact = true, allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, freshNonSeekableOutput = true, writeAsyncCallsVerified = true,
                 syncWrites = 0, seekOrLengthQueries = 0, callerOutputLeftOpen = true, noCallerFlushRequired = true,
                 completeEncodeStagingDeliveryAndReleaseTimed = true, outputAcquisitionGrowthAndReleaseTimed = true, noFinalSnapshotCopyTimed = true,
                 residentCallbacksCompleteImmediately = true, sourceUnchanged = true, independentOwnedOutput = true, survivingOutputAfterSourceDisposal = true,

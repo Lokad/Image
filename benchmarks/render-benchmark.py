@@ -83,6 +83,7 @@ def render():
         row('VP8 diagram, effort6 / trellis', 'warm-vp8-trellis-scan-data-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-TRELLIS-SCAN-DATA.md', confirmed=True, current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-rgba16-current-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-RGBA16-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
+        row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-async-webp-current-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-ASYNC-WEBP-CURRENT.md', verification='Current gap (short; reused qualification)', current=True),
         row('VP8L photograph / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'PhotographLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L text/diagram / libwebp exact=1', 'warm-vp8l-empty-histograms-evidence.json', ['cases', 'DiagramLossless8', -1], 'WARM-VP8L-EMPTY-HISTOGRAMS.md', confirmed=True, current=True),
         row('PNG RGBA8, SmallestSize9 / native9', 'warm-current-encoder-anchors-evidence.json', ['cases', 'png8', -1], 'WARM-CURRENT-ENCODER-ANCHORS.md', verification='Current gap (short; qualified)', current=True),
@@ -114,6 +115,7 @@ defines the remaining finite scope and evidence invalidation.
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
 | Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md) | 4,943 checks/OS; 622 affected scalar WebP/OS and same actual package passed |
+| Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
 | CPU and allocation measurements after cleanup | [trellis scan geometry](../benchmarks/WARM-VP8-TRELLIS-SCAN-DATA.md), [residual vector views](../benchmarks/WARM-VP8-RESIDUAL-VECTOR-VIEWS.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [empty spatial histograms](../benchmarks/WARM-VP8L-EMPTY-HISTOGRAMS.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; other required paths and full parity open |
 | Full warm target | Independent quiet upper≤1× for each required path, one CPU/operation | Open |
 
