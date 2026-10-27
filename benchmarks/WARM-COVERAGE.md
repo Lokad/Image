@@ -25,22 +25,22 @@ Its [frozen packet](../tools/Shared/OriginalVp8Controls.cs) is 6,818 B, SHA256
 `3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee`.
 [Method6](../src/Lokad.Image/Internal/Vp8MacroblockDecision.cs) runs coefficient
 dynamic-programming trellis for each luma candidate; method4 never exercises it.
-The current guarded short is 1.635× / upper 1.968, 754,344 B/op, exact packets and
+The current guarded short is 1.606× / upper 1.856, 754,344 B/op, exact packets and
 pixels. It is not an independent confirmation or a broader effort/settings claim.
 
 `DiagramLossyDistortion8`: same existing diagram, Q75/effort2. Frozen packet:
 7,330 B, SHA256 `325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b`.
 `Vp8FramePlan.PrepareDistortion` / `Vp8DistortionDecision.Select` price original
 prediction errors before selected-mode reconstruction. Method4 RDO and method6
-trellis do not run this distinct algorithm. Its [current independent result](WARM-VP8-WORD-ARITHMETIC.md)
-is 1.603× / upper 1.614, 741,375 B/op and an exact packet. Photograph effort4
-independently measures 1.649× / upper 1.655. Other settings receive no broader claim.
+trellis do not run this distinct algorithm. Its [current qualified short](WARM-VP8-SIGNED-DOMAIN-GUARD.md)
+is 1.589× / upper 1.725, 741,375 B/op and an exact packet. Photograph effort4
+independently measures 1.590× / upper 1.610. Other settings receive no broader claim.
 
 ## Current qualification and costs
 
-[Indexed histogram replay](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) is the latest
-qualified producer: 4,957 Release checks (1,975 internal, 2,035 public, 947 live)
-and 636 scalar WebP checks per OS. The same actual private 0.2.0 package and all
+[Signed coefficient validation](WARM-VP8-SIGNED-DOMAIN-GUARD.md) is the latest
+qualified producer: 4,959 Release checks (1,977 internal, 2,035 public, 947 live)
+and 638 scalar WebP checks per OS. The same actual private 0.2.0 package and all
 three usage examples pass both systems. Published 0.1.0 stays unchanged.
 Complete packets, decoded/editing pixels, cancellation and explicit shared
 admission/ownership remain gates, separately from performance qualification.
@@ -48,14 +48,14 @@ admission/ownership remain gates, separately from performance qualification.
 The [three-table summary](../docs/benchmark.md) selects valid costs, allocations,
 reference boundaries and confirmation status. Current named evidence:
 
-- VP8 [five unchanged opaque anchors](WARM-VP8-WORD-ARITHMETIC.md): effort2 diagram
-  independent 1.603× / upper 1.614; photograph effort4 independent 1.649× / upper
-  1.655. Diagram4/trellis6/opaque16 shorts are 1.492× / 1.635× / 1.553×.
-  Alpha costs are superseded below; unchanged opaque paths keep valid evidence.
+- VP8 [six reconciled anchors](WARM-VP8-SIGNED-DOMAIN-GUARD.md): photograph effort4
+  independent 1.590× / upper 1.610, 809,072 B/op, exact 17,688 B. Effort2 / diagram4 /
+  trellis6 / opaque16 / alpha shorts are 1.589× / 1.437× / 1.606× / 1.544× / 1.363×.
+  All retain exact packets and unchanged allocation. Other affected costs are historical.
 - [Indexed VP8L and alpha](WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md): diagram
   independent 1.166× / upper 1.204, 27,419,167 B/op, exact 7,234 B. Photograph /
-  asymmetric8 / asymmetric16 / VP8 alpha shorts are 1.625× / 1.584× / 1.600× /
-  1.377×; their allocations are 20,410,208 / 29,688,696 / 29,688,696 / 21,353,192 B/op.
+  asymmetric8 / asymmetric16 shorts are 1.625× / 1.584× / 1.600×;
+  their allocations are 20,410,208 / 29,688,696 / 29,688,696 B/op.
 - VP8L nonseekable async output independently confirms 1.622× / upper 1.641,
   29,689,080 B/op, exact 183,812 B. Allocation falls 37.73%; its 12 actual/filtered
   samples and both brackets remain. Awaited staging/delivery/release is timed;
@@ -109,7 +109,11 @@ stay exact. Decoder, other codecs and edit/text paths keep valid evidence.
 Indexed histogram replay changes VP8L and compressed VP8 alpha callers, including
 stream/async and normalization boundaries. Six affected anchors replace their
 preceding costs; other affected observations remain historical. Opaque VP8 is
-unaffected. Regression/package proof and unchanged reference oracles carry forward.
+unaffected by that change. Signed coefficient validation subsequently changes
+VP8 quantization callers across efforts/depths/alpha and stream/async output.
+Six affected anchors replace preceding costs; other affected costs are historical.
+VP8L-only encoding, decoders, other codecs and editing/text remain unchanged.
+Regression/package proof and unchanged reference oracles carry forward.
 Frozen inputs/settings/workers, approved native-only adjustments, pixel/packet
 oracles and unaffected font comparisons remain reusable. Regression/package
 proof does not establish CPU parity.
@@ -138,14 +142,17 @@ unchanged working originals when no merge happened. Exact native maps/population
 packets, clipped/copy-crossing geometry, retained results and tight shared
 admission/refusal/cancellation cleanup pass. Stop slab/index/replay variants.
 
-The unchanged VP8 photograph RDO point 1.649× is now the largest selected
-independent point, ahead of async VP8L 1.622×. Investigate one substantial exact
-pruning/candidate-ordering lead in actual Luma4 callers. Every candidate already
-computes pure residual/header lower bounds; an equivalent reconstruction order
-must preserve original mode-index ties, uniform/cancellable/trellis behavior and
-all native decisions. Establish bounded equivalence and a concrete pruning
-opportunity before integration. No automatic profile or content/settings grid.
-Do not infer a ranking of unconfirmed paths from short screens.
+The bounded candidate-ordering probe is closed without integration: additional
+reconstruction pruning did not establish a substantial complete-operation
+opportunity. Signed coefficient validation is accepted; its exhaustive signed16
+proof, native oracles and six anchors pass. Stop guard variants and closed math
+kernel retuning.
+
+Async VP8L 1.622× / upper 1.641 is the largest selected independent point. Resolve
+the existing lossless photograph short uncertainty before assuming optimization
+or ranking it against confirmed paths. Reuse the qualified build and existing
+worker/settings for one independent confirmation. No automatic profile or
+content/settings grid; stop confirmed passing cases.
 
 The [preceding checkpoint](https://github.com/lokad/image/blob/0defdc0e7e0e984497c0815f5dc1e759ba6bacf7/benchmarks/WARM-COVERAGE.md)
 and individual reports retain accepted/rejected history. Preserve cited archives,

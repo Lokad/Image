@@ -46,9 +46,18 @@ internal static class Vp8BlockQuantization
         var matrixBytes = MemoryMarshal.AsBytes(matrix.Values);
         if (matrixBytes.Overlaps(MemoryMarshal.AsBytes(coefficients)) || matrixBytes.Overlaps(MemoryMarshal.AsBytes(levels)))
             throw new ArgumentException("Output buffers must not overlap borrowed matrix storage.");
+        if (Avx2.IsSupported)
+        {
+            // Signed comparisons also reject Int16.MinValue without an absolute-value overflow.
+            var input = Vector256.Create(coefficients);
+            var invalid = Avx2.Or(Avx2.CompareGreaterThan(input, Vector256.Create((short)16320)),
+                Avx2.CompareGreaterThan(Vector256.Create((short)-16320), input));
+            if (Avx2.MoveMask(invalid.AsByte()) != 0)
+                throw new ArgumentOutOfRangeException(nameof(coefficients), "Coefficient exceeds the VP8 transform domain.");
+            return ApplyVectors(coefficients, levels, matrix);
+        }
         for (var p = 0; p < 16; p++)
             if (coefficients[p] is < -16320 or > 16320) throw new ArgumentOutOfRangeException(nameof(coefficients), "Coefficient exceeds the VP8 transform domain.");
-        if (Avx2.IsSupported) return ApplyVectors(coefficients, levels, matrix);
         var nonzero = false;
         for (var p = 0; p < 16; p++)
         {

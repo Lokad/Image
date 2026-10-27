@@ -77,12 +77,12 @@ def render():
         row('JPEG 4:2:0 from caller RGB samples', 'warm-jpeg-paired-entropy-evidence.json', ['observations', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', confirmed=True, current=True),
         row('JPEG grayscale, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'gray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
         row('JPEG from caller GRAY8, standalone SIMD libjpeg-turbo', 'warm-jpeg-paired-entropy-evidence.json', ['cases', 'callerGray', -1], 'WARM-JPEG-PAIRED-ENTROPY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-word-arithmetic-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-WORD-ARITHMETIC.md', confirmed=True, current=True),
-        row('VP8 RGBA8', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque photograph', 'warm-vp8-word-arithmetic-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-WORD-ARITHMETIC.md', confirmed=True, current=True),
-        row('VP8 opaque text/diagram', 'warm-vp8-word-arithmetic-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-WORD-ARITHMETIC.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 diagram, effort6 / trellis', 'warm-vp8-word-arithmetic-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-WORD-ARITHMETIC.md', verification='Current gap (short; qualified)', current=True),
-        row('VP8 opaque RGBA16, including normalization', 'warm-vp8-word-arithmetic-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-WORD-ARITHMETIC.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 diagram, effort2 / distortion-only search', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'DiagramLossyDistortion8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 RGBA8', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'vp8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque photograph', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'PhotographLossy8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', confirmed=True, current=True),
+        row('VP8 opaque text/diagram', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'DiagramLossy8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 diagram, effort6 / trellis', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'DiagramLossyTrellis8', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
+        row('VP8 opaque RGBA16, including normalization', 'warm-vp8-signed-domain-guard-evidence.json', ['cases', 'EncodeOpaque16', -1], 'WARM-VP8-SIGNED-DOMAIN-GUARD.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA8 / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'vp8l', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L RGBA16, including normalization / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'Encode16', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', verification='Current gap (short; qualified)', current=True),
         row('VP8L async, fresh nonseekable output / libwebp exact=1', 'warm-vp8l-indexed-histogram-replay-evidence.json', ['cases', 'AsyncNonSeekable', -1], 'WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md', confirmed=True, current=True),
@@ -108,8 +108,11 @@ histogram slab and copy while preserving exact packets. Async allocation falls
 37.73% to 29,689,080 B/op; independent cost is 1.622× (upper 1.641×), exact 183,812 B.
 Diagram independently measures 11.12 ms, 1.166× (upper 1.204×), 27,419,167 B/op and
 exact 7,234 B: 15.68% less elapsed than its preceding independent mean. Separate
-runs are not paired baseline gains. Six affected anchors are reconciled. The
-unchanged photograph RDO point 1.649× remains the largest selected independent gap.
+runs are not paired baseline gains. Exact signed VP8 coefficient validation now
+confirms 15.483 ms for the photograph, 1.590× (upper 1.610×), 809,072 B/op and
+exact 17,688 B: 3.40% below its preceding independent mean. Six affected VP8
+anchors are reconciled. Async VP8L 1.622× is the largest selected independent gap;
+the lossless photograph short still needs confirmation before ranking it.
 Required upper ≤1× stays open.
 
 The [complete historical inventory](benchmark-pre-cleanup.md) retains all257cases,
@@ -118,10 +121,10 @@ defines the remaining finite scope and evidence invalidation.
 
 | Current qualification | Evidence | Status |
 | --- | --- | --- |
-| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md) | 4,957 checks/OS; 636 affected scalar WebP/OS and same actual package passed |
+| Packet/pixel/memory/cancellation regression | [Current qualification](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md) | 4,959 checks/OS; 638 affected scalar WebP/OS and same actual package passed |
 | Benchmark delivery/inspection validation | [Cleanup follow-up](../benchmarks/WARM-ASYNC-WEBP-CURRENT.md) | 9 Windows / 11 Linux groups; production qualification reused |
-| Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current independent gap |
-| CPU and allocation measurements after cleanup | [word interval coder](../benchmarks/WARM-VP8-WORD-ARITHMETIC.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [indexed histogram replay](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; async VP8L allocation falls 37.73%; actual capacity admission and retained ownership remain |
+| Additional required search algorithm | [Distortion-only VP8 scope](../benchmarks/WARM-COVERAGE.md) | Existing diagram, Q75/effort2; current qualified short gap |
+| CPU and allocation measurements after cleanup | [VP8 signed guard](../benchmarks/WARM-VP8-SIGNED-DOMAIN-GUARD.md), [JPEG append](../benchmarks/WARM-JPEG-PAIRED-ENTROPY.md), [indexed histogram replay](../benchmarks/WARM-VP8L-INDEXED-HISTOGRAM-REPLAY.md), [shared prediction rows](../benchmarks/WARM-VP8-SHARED-SMALL-ROWS.md) | Exact packets; async VP8L allocation falls 37.73%; actual capacity admission and retained ownership remain |
 | Full warm target | Independent quiet upper≤1× for all 255 named required paths, one CPU/operation | Open |
 
 This table selects current paths; unlisted inventory costs still need applicable evidence.

@@ -163,13 +163,18 @@ public sealed class Vp8BlockQuantizationTests
     }
 
     [Theory]
-    [InlineData(-16321)] [InlineData(16321)]
+    [InlineData(short.MinValue)] [InlineData(-16321)] [InlineData(16321)] [InlineData(short.MaxValue)]
     public void InvalidTransformRangeFailsBeforeMutatingEitherBuffer(short invalid)
     {
-        var coefficients = new short[18]; coefficients[15] = invalid; var original = coefficients.ToArray();
-        var levels = Enumerable.Repeat((short)77, 18).ToArray(); var values = new int[80]; MinimumStep(values);
-        Assert.Throws<ArgumentOutOfRangeException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
-        Assert.Equal(original, coefficients); Assert.All(levels, value => Assert.Equal((short)77, value));
+        var values = new int[80]; MinimumStep(values);
+        for (var position = 0; position < 16; position++)
+        {
+            var coefficients = Enumerable.Repeat((short)4, 18).ToArray(); coefficients[position] = invalid;
+            var original = coefficients.ToArray(); var levels = Enumerable.Repeat((short)77, 18).ToArray();
+            var failure = Assert.Throws<ArgumentOutOfRangeException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
+            Assert.Equal("coefficients", failure.ParamName);
+            Assert.Equal(original, coefficients); Assert.All(levels, value => Assert.Equal((short)77, value));
+        }
     }
 
     [Fact]

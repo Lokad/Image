@@ -1,5 +1,7 @@
 # Exact indexed VP8L histogram reconstruction
 
+The VP8-plus-alpha cost row is superseded by [coefficient-domain validation](WARM-VP8-SIGNED-DOMAIN-GUARD.md). VP8L-only costs and the ownership proof remain valid.
+
 The existing async control independently measures 197.78 ms, 1.622× reference
 (upper 1.641×), exact 183,812 B and 29,689,080 B/op. Allocation falls 37.73% from
 47,675,312 B/op; elapsed is 2.13% below the preceding independent mean. Diagram
