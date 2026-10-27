@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Lokad.Image.Internal;
 
 internal sealed partial class PngDeflater
@@ -16,8 +18,8 @@ internal sealed partial class PngDeflater
     private static int DistanceSymbol(int distance)
     {
         if (distance <= 4) return distance - 1;
-        var extra = 1;
-        while (distance > 4 << extra) extra++;
+        // RFC1951 section3.2.5: each doubling has two equal-width ranges.
+        var extra = BitOperations.Log2((uint)(distance - 1)) - 1;
         return extra * 2 + ((distance - 1) >> extra);
     }
     private static int LengthExtra(int symbol) => symbol is >= 265 and < 285 ? (symbol - 261) / 4 : 0;

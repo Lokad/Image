@@ -1,7 +1,8 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-27. **† PNG rows** use the qualified 0.2.1 development producer;
-the other 27 controls retain the published 0.2.0 measurements on unchanged paths.
+Updated 2026-10-27. **† Compressed PNG rows** use the latest qualified 0.2.1
+development producer; **‡ stored PNG** retains its unchanged 0.2.1 path evidence.
+The other 27 controls retain published 0.2.0 measurements on unchanged paths.
 The original 31-control release evidence remains immutable. Full CPU parity and
 general replacement readiness remain open.
 
@@ -10,10 +11,11 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16 independently confirms 12 measured iterations; other rows are short
-BenchmarkDotNet screens with three. Native brackets before/after and idle/process
-guards pass. The stored control improved from 1,112.30 to 426.14 µs and now measures
-1.052× reference time (upper 1.067×); full parity remains open.
+Stored PNG16 and Fastest PNG8 independently confirm 12 measured iterations each;
+other rows are short BenchmarkDotNet screens with three. Native brackets and
+idle/process guards pass. Stored PNG16 improved from 1,112.30 to 426.14 µs;
+Fastest PNG8 from 7,763.44 to 6,450.06 µs. Their ratios are 1.052× and 1.471×;
+full parity remains open.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -23,7 +25,8 @@ Operations include normalization, input delivery and independently owned output;
 async encoding includes staging/delivery/release. Fixture preparation is excluded.
 Source images are 513×259; resize rows state output dimensions. The
 [release evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) and
-[stored-PNG round](../benchmarks/WARM-PNG-BULK-STORED.md) record exact dimensions,
+[stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
+[distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
@@ -45,10 +48,10 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 | VP8L async, fresh nonseekable output / libwebp exact=1 | 205,529.71 | 127,025.13 | 1.618 / 2.028 | 29,689,080 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 | 132,270.49 | 83,865.69 | 1.577 / 2.343 | 20,409,392 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
-| PNG RGBA8, SmallestSize9 / native9 † | 23,674.33 | 17,282.01 | 1.370 / 1.558 | 1,325,670 | 210,973 / 210,973 |
-| PNG RGBA16, SmallestSize9 / native9 † | 26,792.89 | 20,088.85 | 1.334 / 1.441 | 3,813,679 | 963,202 / 963,202 |
-| PNG RGBA8, Fastest1 / native1 † | 7,763.44 | 4,359.81 | 1.781 / 1.979 | 1,344,453 | 236,828 / 236,828 |
-| PNG RGBA16, NoCompression0 / native0 † | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
+| PNG RGBA8, SmallestSize9 / native9 † | 22,507.99 | 17,297.84 | 1.301 / 1.350 | 1,325,664 | 210,973 / 210,973 |
+| PNG RGBA16, SmallestSize9 / native9 † | 26,234.53 | 20,109.52 | 1.305 / 1.565 | 3,813,670 | 963,202 / 963,202 |
+| PNG RGBA8, Fastest1 / native1 † | 6,450.06 | 4,385.76 | 1.471 / 1.504 | 1,344,586 | 236,828 / 236,828 |
+| PNG RGBA16, NoCompression0 / native0 ‡ | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

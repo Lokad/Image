@@ -4,6 +4,8 @@
 
 - Faster stored PNG payload emission, preserving complete packet bytes, flush and
   cancellation boundaries, shared admission and output ownership.
+- Constant-time Deflate distance-code selection for compressed PNG, preserving
+  exact packets and portable execution.
 
 ## 0.2.0 — 2026-10-27
 

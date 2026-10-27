@@ -37,14 +37,19 @@ boundary omitted from this inventory.
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 27 unchanged 0.2.0 controls and
-refreshes four PNG encoder controls on the qualified 0.2.1 development producer.
+refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
+retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
 NoCompression at 1.052× / upper1.067, exact 1,066,552 B and 1,741,709 B/op.
 Short screens are not independent confirmations; this representative scope does
-not complete the 255-case goal. PNG Fastest remains a short gap at 1.781×.
+not complete the 255-case goal. [Constant-time distance mapping](WARM-PNG-DISTANCE-SYMBOL.md)
+independently measures PNG Fastest at 1.471× / upper1.504; all twelve actual
+samples remain. VP8 diagram effort2 at 1.685× is now the largest displayed gap.
 Full samples, allocations, packet sizes and boundaries are in the
 [immutable release evidence](release-0.2.0-benchmark-evidence.json) and
 [current PNG evidence](warm-png-bulk-stored-evidence.json).
+The [distance-symbol evidence](warm-png-distance-symbol-evidence.json) replaces
+compressed-PNG costs; stored level0 never calls that mapping.
 
 Existing independent confirmations remain usable where their production path,
 options, inputs, worker and operation boundary are unchanged. In particular,
@@ -74,6 +79,9 @@ Regression/pixel/reference evidence and timings are separate:
 - Bulk stored publication changes level0 and the stored fallback in compressed
   PNG policies. All PNG encoding callers require applicable new costs; four
   displayed controls are refreshed. Unrelated paths and native oracles remain.
+- Constant-time distance symbols affect compressed PNG policies, including stream/
+  async callers; three displayed controls are refreshed. Stored level0 is unchanged
+  and keeps its independent proof. This does not invalidate unrelated code paths.
 - Release documentation and package-document changes do not invalidate unchanged
   production behavior or applicable performance proofs. The release snapshot uses
   the exact packaged DLL and refreshes actual producer-bound frame/async proofs.
@@ -88,8 +96,8 @@ and their individual reports/raw archives.
 ## Next performance work
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
-stop confirmed passing cases. Stored publication is accepted; its remaining 5.2%
-gap is below PNG Fastest at 1.781×, which is the next displayed control to attribute.
+stop confirmed passing cases. Stored publication and distance mapping are accepted;
+their remaining gaps are below VP8 effort2 at 1.685×, the next displayed control.
 Closed source-energy, histogram,
 word/fragment, prediction/quantizer/trellis and other rejected variants stay closed.
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package
