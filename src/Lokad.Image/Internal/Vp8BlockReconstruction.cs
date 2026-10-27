@@ -14,6 +14,19 @@ internal static partial class Vp8BlockReconstruction
         var blocks = pair ? 2 : 1; var width = blocks * 4;
         if (coefficients.Length < blocks * 16 || stride < width || (long)stride * 3 + width > pixels.Length)
             throw new ArgumentException("Reconstruction requires complete coefficient blocks and four pixel rows.");
+        // AddVector loads the entire single block before publishing any pixel,
+        // so even aliased views need no intervening copy. Pairs must snapshot
+        // both blocks before the first block can overwrite the second input.
+        if (!pair && System.Runtime.Intrinsics.X86.Sse41.IsSupported)
+        {
+            AddVector(coefficients, pixels, stride);
+            return;
+        }
+        AddSnapshot(coefficients, pixels, stride, blocks);
+    }
+
+    private static void AddSnapshot(ReadOnlySpan<short> coefficients, Span<byte> pixels, int stride, int blocks)
+    {
         Span<short> snapshot = stackalloc short[32]; coefficients[..(blocks * 16)].CopyTo(snapshot);
         if (System.Runtime.Intrinsics.X86.Sse41.IsSupported)
         {

@@ -8,6 +8,24 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8ReconstructionVectorTests
 {
     [Fact]
+    public void CompactPixelsMayOverlapAnyPartOfTheSingleCoefficientBlock()
+    {
+        var storage = new byte[96];
+        for (var sample = 0; sample < 64; sample++)
+        for (var pixelOffset = 0; pixelOffset <= 33; pixelOffset++)
+        {
+            for (var i = 0; i < storage.Length; i++) storage[i] = (byte)(sample * 73 + i * 29);
+            var coefficients = MemoryMarshal.Cast<byte, short>(storage.AsSpan(17, 32)).ToArray();
+            var expected = storage.ToArray();
+            Vp8Transforms.InverseDct(coefficients);
+            for (var i = 0; i < 16; i++)
+                expected[pixelOffset + i] = (byte)Math.Clamp(expected[pixelOffset + i] + coefficients[i], 0, 255);
+            Vp8BlockReconstruction.Add(MemoryMarshal.Cast<byte, short>(storage.AsSpan(17, 32)), storage.AsSpan(pixelOffset), 4);
+            Assert.Equal(expected, storage);
+        }
+    }
+
+    [Fact]
     public void OriginalSigned16DomainRetainsColumnWrapAndPixelClamp()
     {
         var initialPixels = new byte[144]; var pixels = new byte[144];

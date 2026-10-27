@@ -60,8 +60,8 @@ internal static partial class Vp8BlockReconstruction
         BinaryPrimitives.WriteUInt32LittleEndian(row, pixels.AsUInt32().GetElement(0));
     }
 
-    // Caller has already snapshotted every coefficient block before any pixel
-    // publication. Four complete rows and16coefficients are borrowed here.
+    // All sixteen coefficients are loaded before any pixel publication. Pair
+    // callers additionally snapshot both blocks before reconstructing either.
     private static void AddVector(ReadOnlySpan<short> coefficients, Span<byte> pixels, int stride)
     {
         Line(Row(coefficients[..4]), Row(coefficients.Slice(4, 4)), Row(coefficients.Slice(8, 4)), Row(coefficients.Slice(12, 4)),
@@ -70,6 +70,23 @@ internal static partial class Vp8BlockReconstruction
         Transpose(ref a, ref b, ref c, ref d);
         Line(a, b, c, d, out a, out b, out c, out d);
         Transpose(ref a, ref b, ref c, ref d);
+        if (stride == 4)
+        {
+            // Compact RDO predictions occupy one complete vector. Round and
+            // clamp in the same order as Write, using one pixel load/store.
+            var rounding = Vector128.Create(4);
+            a = Sse2.ShiftRightArithmetic(Sse2.Add(a, rounding), 3);
+            b = Sse2.ShiftRightArithmetic(Sse2.Add(b, rounding), 3);
+            c = Sse2.ShiftRightArithmetic(Sse2.Add(c, rounding), 3);
+            d = Sse2.ShiftRightArithmetic(Sse2.Add(d, rounding), 3);
+            var prediction = Vector128.Create(pixels[..16]);
+            var first = Sse2.Add(Sse2.PackSignedSaturate(a, b),
+                Sse2.UnpackLow(prediction, Vector128<byte>.Zero).AsInt16());
+            var second = Sse2.Add(Sse2.PackSignedSaturate(c, d),
+                Sse2.UnpackHigh(prediction, Vector128<byte>.Zero).AsInt16());
+            Sse2.PackUnsignedSaturate(first, second).CopyTo(pixels);
+            return;
+        }
         Write(a, pixels[..4]); Write(b, pixels.Slice(stride, 4));
         Write(c, pixels.Slice(2 * stride, 4)); Write(d, pixels.Slice(3 * stride, 4));
     }

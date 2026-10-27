@@ -1,5 +1,7 @@
 # Exact parallel opaque chroma preparation
 
+End-to-end costs are historical after [single-block reconstruction](WARM-VP8-SINGLE-BLOCK-RECONSTRUCTION.md). The preparation proof below remains valid.
+
 The existing effort2 diagram independently measures 4.339 ms: 1.720× reference
 time (upper 1.734×), exact 7,330 B and unchanged 741,342 B/op. Elapsed time is
 11.43% below the preceding independent mean; separate runs are not a
