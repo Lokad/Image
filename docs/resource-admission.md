@@ -48,7 +48,8 @@ storage are approximate; allow runtime/collection headroom. Calls with a shared
 root bypass uncharged global pixel/coefficient/input/output pools. Caller-root
 storage never enters those caches. Other calls retain bounded idle caches.
 
-Inspection uses fixed8448-byte workspace without a raster; Identify/Decode stream
+Dimension-only probes admit512 bytes; other probing and complete header inspection
+use8448-byte workspace without a raster. Identify/Decode stream
 buffers retain actual capacity through parsing, avoiding a final encoded copy.
 Async encoding retains staged chunks/prepared partitions through actual delivery.
 Returned results have independent lifetimes. See [SPEC](spec.md) for codec,

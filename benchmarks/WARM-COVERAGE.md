@@ -71,6 +71,13 @@ they do not refresh default decode or complete-container inspection costs.
 Both guards, exact descriptors, independent output/source lifetime and prefix/
 coding-scope checks pass. No production build/full-suite/package proof was repeated.
 
+[Dimension workspace](WARM-PROBE-WORKSPACE.md) supersedes the four probe costs:
+JPEG sync/async confirm3.714×/4.098×; PNG/WebP screen1.783×/1.812×. All allocate
+744B/op instead of8680; dimension-only admission is512B instead of8448. Other
+fact selections/header scans retain the larger workspace. Both OS full/scalar
+and SAME actual package/three examples pass. Validation and unrelated paths are
+unchanged, including the independently passing baseline420 validator.
+
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 20 unchanged 0.2.0 controls and
@@ -95,7 +102,7 @@ metadata and pair caching have too little demonstrated reuse to pursue.
 costs: RGBA8 independently measures 1.486× / upper1.507, 181.641 ms and 29,688,704
 B/op, exact 183,812 B. RGBA16/async/photo shorts are 1.481/1.515/1.583×. Diagram
 and compressed-alpha costs remain valid because they skip this color search.
-Trellis6 at 1.611× is now the largest displayed point gap, followed by opaque
+Trellis6 at 1.611× is the largest displayed encoding point gap, followed by opaque
 VP8 photograph at 1.599×. Preserve larger absolute-cost VP8L leads in the queue.
 [Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
 independently confirmed gain and is removed; the current baseline stays valid.

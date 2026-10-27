@@ -17,12 +17,16 @@ internal sealed class InspectionReader : IDisposable
     internal long Position => acquired - (last - first);
     internal long BytesTraversed => acquired;
 
-    internal InspectionReader(Stream input, OperationContext context, bool asynchronous, long? maxAcquiredBytes = null)
+    internal InspectionReader(Stream input, OperationContext context, bool asynchronous, long? maxAcquiredBytes = null,
+        bool dimensionsOnly = false)
     {
         this.input = input; Context = context; this.asynchronous = asynchronous; this.maxAcquiredBytes = maxAcquiredBytes;
-        context.Reserve(WorkingBytes);
-        try { buffer = new byte[8192]; Header = new byte[32]; }
-        catch { context.Release(WorkingBytes); throw; }
+        // Dimension probes stop before scans and need only small header reads.
+        // Keep the larger scratch for complete inspection and late-metadata scans.
+        var capacity = dimensionsOnly ? 256 : 8192;
+        context.Reserve(capacity + 256);
+        try { buffer = new byte[capacity]; Header = new byte[32]; }
+        catch { context.Release(capacity + 256); throw; }
     }
 
     private async ValueTask<bool> FillAsync(int needed)
@@ -118,5 +122,5 @@ internal sealed class InspectionReader : IDisposable
         if (end > Context.Limits.MaxInputBytes) throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
     }
 
-    public void Dispose() { if (!disposed) { disposed = true; Context.Release(WorkingBytes); } }
+    public void Dispose() { if (!disposed) { disposed = true; Context.Release(buffer.Length + 256); } }
 }

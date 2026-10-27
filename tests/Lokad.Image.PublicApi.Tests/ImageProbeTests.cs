@@ -5,7 +5,7 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class ImageProbeTests
 {
-    private const int Workspace = 8448;
+    private const int Workspace = 512;
 
     [Theory]
     [InlineData(MetadataProfile.Png8)] [InlineData(MetadataProfile.Png16)]
@@ -224,6 +224,12 @@ public sealed class ImageProbeTests
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.False(canceled.WasDisposed);
         using var success = new ObservedInput(data, true, false);
         Assert.Equal(17, (await Run(success, true, options)).Width); Assert.Equal(0, root.Bytes);
+        // Asking for facts after the pixel payload retains the larger scan workspace.
+        using var complete = new ObservedInput(data, true, false);
+        var fullFailure = await Assert.ThrowsAsync<ImageLimitException>(() => Run(complete, true,
+            options with { Facts = ImageProbeFacts.All }).AsTask());
+        Assert.Equal(ImageLimitScope.Operation, fullFailure.Scope);
+        Assert.Equal(0, complete.BytesRead); Assert.Equal(0, root.Bytes);
     }
 
     [Fact]

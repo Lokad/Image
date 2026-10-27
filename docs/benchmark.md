@@ -4,7 +4,7 @@ Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
 published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
 costs pending current confirmation after read-policy changes. The release snapshot
-remains immutable. Twelve new read controls below use the qualified 0.2.1 build.
+remains immutable. Twelve new read controls below use qualified 0.2.1 builds.
 These 43 controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -14,7 +14,7 @@ sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
 Stored PNG16, Fastest PNG8 and current VP8L RGBA8 have 12 measured iterations each;
-other rows are short BenchmarkDotNet screens with three. Native brackets and
+other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. VP8L RGBA8 measures 1.486× / upper1.507 after exact
 color-trial reuse, with 8 additional allocated B/op and unchanged array capacity.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -89,10 +89,10 @@ and unlisted content/settings are excluded.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Probe PNG dimensions, seekable | 0.366 | 0.123 | 2.967 / 5.254 | 8,680 | Screen gap |
-| Probe JPEG dimensions, seekable | 0.892 | 0.200 | 4.463 / 6.112 | 8,680 | Screen gap |
-| Probe WebP dimensions, seekable | 0.365 | 0.123 | 2.970 / 5.519 | 8,680 | Screen gap |
-| Probe JPEG dimensions, async nonseekable | 0.956 | 0.205 | 4.653 / 6.000 | 8,680 | Screen gap |
+| Probe PNG dimensions, seekable | 0.218 | 0.122 | 1.783 / 1.987 | 744 | Screen gap |
+| Probe JPEG dimensions, seekable | 0.712 | 0.192 | 3.714 / 3.762 | 744 | Confirmed gap |
+| Probe WebP dimensions, seekable | 0.220 | 0.121 | 1.812 / 2.326 | 744 | Screen gap |
+| Probe JPEG dimensions, async nonseekable | 0.862 | 0.210 | 4.098 / 4.256 | 744 | Confirmed gap |
 | Validate PNG8, span | 2,136.116 | 1,374.597 | 1.554 / 1.633 | 12,912 | Screen gap |
 | Validate PNG16, span | 5,393.772 | 3,078.068 | 1.752 / 2.252 | 17,008 | Screen gap |
 | Validate indexed Adam7 19×17, span | 5.337 | 3.943 | 1.353 / 1.948 | 1,168 | Screen gap |
@@ -108,8 +108,12 @@ compares complete coding and source metadata against FFmpeg natural-frame decode
 plus an original metadata adapter, without RGBA normalization or caller raster
 copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420 validation passes
-independently; progressive420 remains a confirmed gap. Other new rows are short
-screens, without independent parity claims. See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
+independently; progressive420 remains a confirmed gap. Other validation rows are short
+screens, without independent parity claims. JPEG probing has twelve-actual gap
+confirmations; PNG/WebP probing remains screened. The
+[workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
+from 8,680 to 744 B/op; later-fact/header scans retain their larger workspace.
+See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

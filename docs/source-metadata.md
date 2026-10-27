@@ -45,7 +45,8 @@ of pixel data; JPEG color declarations may occur after scans.
 excluding seeks; exhaustion reports `ImageLimitKind.AcquiredBytes` without reading
 past the cap. `ImageLimits.MaxInputBytes` separately bounds declared/traversed
 encoded extents; unvisited tails have unknown length. Metadata/item/dimension/pixel
-limits apply to the examined prefix. The fixed 8,448-byte workspace uses shared
+limits apply to the examined prefix. Dimension-only probes use 512 bytes of
+admitted workspace; other fact selections use 8,448 bytes. Both use shared
 admission; no hypothetical raster allocation or managed raster-size ceiling applies.
 No encoded or metadata buffer survives the call. Probing does not validate CRCs,
 pixel syntax, complete containers or unvisited conflicting metadata.

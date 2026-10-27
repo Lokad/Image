@@ -18,7 +18,9 @@ def render():
     trellis = json.loads((ROOT / 'benchmarks/vp8-trellis-state-reduction-rejected-evidence.json').read_text(encoding='utf-8'))
     color = json.loads((ROOT / 'benchmarks/warm-vp8l-color-trial-reuse-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
+    probes = json.loads((ROOT / 'benchmarks/warm-probe-workspace-evidence.json').read_text(encoding='utf-8'))
     assert not reads['productionChanged'] and len(reads['cases']) == 12
+    assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not distortion['productionChanged'] and distortion['restoration']['sourceAndImmutableProducerRestored']
     assert not trellis['productionChanged'] and trellis['restoration']['sourceAndImmutableProducerRestored']
     assert color['version'] == '0.2.1' and color['independentQuietConfirmationThisPair']
@@ -70,12 +72,14 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
+        producer = probes if case in probes['cases'] else reads
+        observations = producer['cases'][case]
         observation = observations[-1]
         receipt = observation['receipt']
-        assert receipt['librarySha256'] == reads['producers']['linuxSha256']
+        assert receipt['librarySha256'] == producer['producers']['linuxSha256']
         assert receipt['descriptorExact'] and receipt['prefixAndCodingScopesVerified']
         assert all(q['passed'] for q in observation['quietness'].values())
-        confirmed = reads['status'][case].startswith('confirmed-')
+        confirmed = producer['status'][case].startswith('confirmed-')
         samples = 12 if confirmed else 3
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert len(observation['managed']['actual']) == samples
@@ -83,7 +87,7 @@ def render():
         stats = observation['managed']['statistics']
         ratio, upper = observation['worstBracketRatio'], observation['conservativeRatioUpper']
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
-        assert (upper <= 1) == (reads['status'][case] == 'confirmed-pass')
+        assert (upper <= 1) == (producer['status'][case] == 'confirmed-pass')
         status = 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
@@ -94,7 +98,7 @@ Updated 2026-10-27. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Twenty other controls retain
 published 0.2.0 measurements on unchanged paths. **§ Decode** retains historical
 costs pending current confirmation after read-policy changes. The release snapshot
-remains immutable. Twelve new read controls below use the qualified 0.2.1 build.
+remains immutable. Twelve new read controls below use qualified 0.2.1 builds.
 These 43 controls do not complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -104,7 +108,7 @@ sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
 Stored PNG16, Fastest PNG8 and current VP8L RGBA8 have 12 measured iterations each;
-other rows are short BenchmarkDotNet screens with three. Native brackets and
+other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. VP8L RGBA8 measures 1.486× / upper1.507 after exact
 color-trial reuse, with 8 additional allocated B/op and unchanged array capacity.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -152,8 +156,12 @@ compares complete coding and source metadata against FFmpeg natural-frame decode
 plus an original metadata adapter, without RGBA normalization or caller raster
 copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420 validation passes
-independently; progressive420 remains a confirmed gap. Other new rows are short
-screens, without independent parity claims. See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
+independently; progressive420 remains a confirmed gap. Other validation rows are short
+screens, without independent parity claims. JPEG probing has twelve-actual gap
+confirmations; PNG/WebP probing remains screened. The
+[workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
+from 8,680 to 744 B/op; later-fact/header scans retain their larger workspace.
+See [read boundaries and raw evidence](../benchmarks/WARM-IMAGE-READ.md).
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

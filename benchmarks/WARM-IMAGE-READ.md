@@ -4,6 +4,8 @@ Twelve named controls qualify the new read boundaries, without a settings grid.
 The [current summary](../docs/benchmark.md) gives times, allocations and status;
 [evidence](warm-image-read-evidence.json) retains every sample and identity.
 No production code changed in this round.
+The subsequent [dimension-workspace round](WARM-PROBE-WORKSPACE.md) supersedes
+only the four probe costs/admission figures below; validation evidence is unchanged.
 
 Dimension probes use fresh seekable sources for PNG/JPEG/WebP and a nonseekable
 async JPEG source. They return independent requested dimensions, stop before
