@@ -586,6 +586,13 @@ need applicable current costs before CPU-pass claims. Methods0–4, other codecs
 decoders, editing/text and passing resize cases retain applicable unchanged proof.
 No path or parity pass is added; the full268 objective remains open.
 
+[TightCross16 confirmation](CURRENT-BICUBIC-CROSS16-COST.md) resolves the wide
+short-screen confidence:1.570× / upper1.580,1,285.382µs,1,063,410B/op. All twelve
+actuals and exact pixels/native bounds/owners/guards pass. No gain/regression
+claim against earlier screens. Current immutable TGV1 producer and cached
+selector/worker/fixture are reused with zero builds or repeated qualification;
+CrossWord/math/dispatch source pins preserve applicable attribution. No new path.
+
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an
