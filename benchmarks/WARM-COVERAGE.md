@@ -32,8 +32,9 @@ Added, using the existing 513×259 diagram and frozen settings:
   horizontal flip, R=16x/G=16y/B=8(x+y)/A=65535. Bounded content admission and
   per-row byte prediction are distinct from the existing None-filter encoder
   controls. Functional size <2 MiB and every sample exact are qualified;
-  the complete-operation comparison independently confirms a 2.728× / upper2.802
-  gap, 3,405,048B/op. Native level6/pred=mixed is frozen explicitly;
+  the current complete-operation comparison independently confirms a 1.691× /
+  upper1.727 gap, 3,402,944B/op after exact SIMD row prediction. Native
+  level6/pred=mixed is frozen explicitly;
   these packets have a size/pixel gate, not a byte-identity target. No extra grid.
 
 Remaining inventory includes named inspection/Identify stream and resident
@@ -521,11 +522,14 @@ functionally closed: all six opaque geometries are below 574 KB, exact samples,
 both-OS full/scalar and same actual package checks pass. Its four displayed
 existing encoder costs are current; all remain gaps. Other affected PNG encoder
 costs need reconciliation before pass claims. The new predictive algorithm's
-[current evidence](PREDICTIVE-PNG-CURRENT.md) confirms the largest displayed gap:
-2.728× / upper2.802, with identical573,041-byte packets. A six-second profile has
-39.82% of samples in row scoring/Paeth and58.92% in Deflate search/insertion.
-Prioritize one substantial row-scoring SIMD trial; keep Deflate a separate
-primitive. Decoder,
+[SIMD row prediction](WARM-PNG-SIMD-ROW-PREDICTION.md) reduces elapsed37.92% against
+a fresh independent baseline (38.12% all actuals), unchanged3,402,944B/op and exact
+573,041-byte packets. Full both-OS5,065, affected scalar andsameactualpackage pass.
+Its1.691× / upper1.727 remains the largest material codec gap. The preceding
+profile attributes58.92% to untouched Deflate search/insertion; it supports one
+separate bounded longest-match comparison trial. Preserve dictionary order,
+first mismatch,258-byte bound,ring edges,cancellation andallpacket gates. Higher
+JPEG probe ratios remain open at submicrosecond costs. Decoder,
 inspection, other-codec and editing algorithms retain applicable evidence.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and

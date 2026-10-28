@@ -26,7 +26,7 @@ def render():
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
     current_reconciliation = json.loads((ROOT / 'benchmarks/current-png-vp8-reconciliation-evidence.json').read_text(encoding='utf-8'))
     png_prediction = json.loads((ROOT / 'benchmarks/png-predictable-compression-evidence.json').read_text(encoding='utf-8'))
-    predictive_cost = json.loads((ROOT / 'benchmarks/predictive-png-current-evidence.json').read_text(encoding='utf-8'))
+    predictive_cost = json.loads((ROOT / 'benchmarks/warm-png-simd-row-prediction-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -50,7 +50,7 @@ def render():
     assert not current_reconciliation['productionChanged'] and current_reconciliation['allBuilds'] == 0
     assert png_prediction['productionChanged'] and png_prediction['qualification']['actualPackageBothOs']
     assert set(png_prediction['cases']) == {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeFast8', 'EncodeNoCompression16'}
-    assert not predictive_cost['productionChanged'] and predictive_cost['independentQuietConfirmation']
+    assert predictive_cost['productionChanged'] and predictive_cost['independentQuietConfirmationThisPair']
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
     assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
@@ -296,11 +296,13 @@ PNG Fastest retains its applicable independent gap.
 remain below574KB with every sample exact. BothOS5,063 checks, affected scalar
 checks and the same actual package/three examples pass. Four displayed encoder
 costs are refreshed below with unchanged exact packets; each remains a CPU gap.
-The distinct [predictive control](../benchmarks/PREDICTIVE-PNG-CURRENT.md) independently
-confirms2.728× / upper2.802,3,405,048B/op, with identical573,041-byte packets.
-Its six-second profile supports one substantial row-scoring SIMD trial.
-Other affected PNG encoder costs remain prior-production; unchanged decoder/
-other-codec/editing proofs apply.
+[SIMD row prediction](../benchmarks/WARM-PNG-SIMD-ROW-PREDICTION.md) reduces the
+predictive control's elapsed time by37.92% against a fresh independent baseline,
+38.12% across all actuals, with unchanged3,402,944B/op and exact573,041-byte packets.
+It remains1.691× / upper1.727. BothOS5,065 full checks, affected scalar and the same
+actual package/three examples pass. The four displayed None/stored paths retain
+their applicable costs; other affected predictive-input costs need current evidence.
+Deflate search is the next separate primitive; decoder/other-codec/editing proofs apply.
 [Closed coefficient trials](../benchmarks/WARM-VP8-COEFFICIENT-TRIALS.md) retain
 rejected VP8 experiments; their costs do not replace accepted-production evidence.
 

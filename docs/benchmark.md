@@ -90,11 +90,13 @@ PNG Fastest retains its applicable independent gap.
 remain below574KB with every sample exact. BothOS5,063 checks, affected scalar
 checks and the same actual package/three examples pass. Four displayed encoder
 costs are refreshed below with unchanged exact packets; each remains a CPU gap.
-The distinct [predictive control](../benchmarks/PREDICTIVE-PNG-CURRENT.md) independently
-confirms2.728× / upper2.802,3,405,048B/op, with identical573,041-byte packets.
-Its six-second profile supports one substantial row-scoring SIMD trial.
-Other affected PNG encoder costs remain prior-production; unchanged decoder/
-other-codec/editing proofs apply.
+[SIMD row prediction](../benchmarks/WARM-PNG-SIMD-ROW-PREDICTION.md) reduces the
+predictive control's elapsed time by37.92% against a fresh independent baseline,
+38.12% across all actuals, with unchanged3,402,944B/op and exact573,041-byte packets.
+It remains1.691× / upper1.727. BothOS5,065 full checks, affected scalar and the same
+actual package/three examples pass. The four displayed None/stored paths retain
+their applicable costs; other affected predictive-input costs need current evidence.
+Deflate search is the next separate primitive; decoder/other-codec/editing proofs apply.
 [Closed coefficient trials](../benchmarks/WARM-VP8-COEFFICIENT-TRIALS.md) retain
 rejected VP8 experiments; their costs do not replace accepted-production evidence.
 
@@ -122,7 +124,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | PNG RGBA16, SmallestSize9 / native9 † | 26,359.88 | 20,077.47 | 1.313 / 1.422 | 3,813,670 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,321.82 | 4,366.98 | 1.448 / 1.460 | 1,344,453 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 443.91 | 421.09 | 1.054 / 1.090 | 1,741,712 | 1,066,552 / 1,066,552 |
-| PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 1,190,543.10 | 436,360.64 | 2.728 / 2.802 | 3,405,048 | 573,041 / 573,041 |
+| PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 686,596.68 | 405,977.51 | 1.691 / 1.727 | 3,402,944 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,297.81 | 1,009.85 | 1.285 / 1.304 | 757,319 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
