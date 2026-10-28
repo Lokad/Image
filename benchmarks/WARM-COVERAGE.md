@@ -609,6 +609,10 @@ affected companion boundaries on acceptance.
 Do not renew the deferred uniform-trellis, population-window/occupancy/pair-cache, residual-summary
 or rejected trellis state-reduction
 families without a materially different opportunity.
+The [CrossWord horizontal-pair trial](BICUBIC-HORIZONTAL-PAIR-REJECTED.md)
+also fails its5% screen gate and is fully restored. Its exact-pixel/ownership
+checks pass; no variants or repeated full/package qualification. Keep the
+independent TightCross16 confirmation current and close this pairing family.
 Closed source-energy, histogram,
 word/fragment, prediction/quantizer/trellis and other rejected variants stay closed.
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package
