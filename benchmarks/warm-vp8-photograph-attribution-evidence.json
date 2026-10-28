@@ -1,0 +1,425 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-10-28",
+  "round": "VPH2",
+  "productionChanged": false,
+  "diagnosticOnly": true,
+  "noTimingClaim": true,
+  "scope": "Existing513x259 opaque photograph,Q75/effort4;one6-second workload-only trace after setup/warmup on current33ad core. Frozen17688-byte complete packet and independently owned output.",
+  "summary": {
+    "profilingOnly": true,
+    "noTimingClaim": true,
+    "productionSha256": "33ad385fafc84f3abc14c3d837e8259403d2abd20e9c6324431baafa0a5a89b2",
+    "seconds": 6,
+    "samples": 5927,
+    "methods": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,bool,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+        "samples": 1038,
+        "fraction": 0.17513075755019403
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+        "samples": 477,
+        "fraction": 0.08047916315167876
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "samples": 397,
+        "fraction": 0.06698160958326303
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        "samples": 347,
+        "fraction": 0.05854563860300321
+      },
+      {
+        "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::QuantizedLevels(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,int32)[Optimized]",
+        "samples": 328,
+        "fraction": 0.05533996963050447
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ApplyVectors(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+        "samples": 316,
+        "fraction": 0.05331533659524211
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,class Lokad.Image.Internal.OperationContext,bool,int32&,uint32&,int32&)[Optimized]",
+        "samples": 272,
+        "fraction": 0.045891682132613465
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]",
+        "samples": 245,
+        "fraction": 0.04133625780327316
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallBlock(valuetype Lokad.Image.Internal.Vp8SmallIntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 235,
+        "fraction": 0.03964906360722119
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Energy(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        "samples": 220,
+        "fraction": 0.03711827231314324
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Transform(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
+        "samples": 213,
+        "fraction": 0.035937236375906866
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Chroma(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,bool)[Optimized]",
+        "samples": 162,
+        "fraction": 0.02733254597604184
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::Apply(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+        "samples": 148,
+        "fraction": 0.02497047410156909
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallPrepared(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "samples": 142,
+        "fraction": 0.023958157583937913
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8PreparedInput [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::Create(class Lokad.Image.ImageBuffer,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 117,
+        "fraction": 0.019740172093807996
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Dct(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "samples": 85,
+        "fraction": 0.014341150666441708
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourPredictions(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "samples": 80,
+        "fraction": 0.013497553568415725
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockPrediction::Fill(int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 75,
+        "fraction": 0.012653956470389742
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Check(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32)[Optimized]",
+        "samples": 73,
+        "fraction": 0.01231651763117935
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::CollectPlane(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 71,
+        "fraction": 0.011979078791968956
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Texture16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        "samples": 63,
+        "fraction": 0.010629323435127383
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::WalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "samples": 61,
+        "fraction": 0.01029188459591699
+      },
+      {
+        "method": "Native or unresolved",
+        "samples": 59,
+        "fraction": 0.009954445756706598
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::VariableCost(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        "samples": 57,
+        "fraction": 0.009617006917496203
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint16> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::get_Values()[Optimized]",
+        "samples": 56,
+        "fraction": 0.009448287497891008
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::SmallMode(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,int32,int32,int32)[Optimized]",
+        "samples": 48,
+        "fraction": 0.008098532141049435
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::Add(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,bool)[Optimized]",
+        "samples": 48,
+        "fraction": 0.008098532141049435
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Encode(class Lokad.Image.Internal.Vp8FramePlan,valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&)[Optimized]",
+        "samples": 41,
+        "fraction": 0.006917496203813059
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Band(int32)[Optimized]",
+        "samples": 40,
+        "fraction": 0.0067487767842078624
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Prepare(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8QuantizationPlan,bool,int32)[Optimized]",
+        "samples": 34,
+        "fraction": 0.005736460266576683
+      },
+      {
+        "method": "instance valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision+Metric::Price(int32)[Optimized]",
+        "samples": 34,
+        "fraction": 0.005736460266576683
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourBlocks(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
+        "samples": 30,
+        "fraction": 0.005061582588155897
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Diffuse(int16&,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+        "samples": 28,
+        "fraction": 0.004724143748945504
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.Vp8SourceHistogram/Shape [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::Describe(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]",
+        "samples": 27,
+        "fraction": 0.004555424329340307
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Band(int32)[Optimized]",
+        "samples": 26,
+        "fraction": 0.00438670490973511
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,bool,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]",
+        "samples": 22,
+        "fraction": 0.0037118272313143245
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::FixedCost(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        "samples": 21,
+        "fraction": 0.0035431078117091276
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PrepareChroma8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 19,
+        "fraction": 0.003205668972498735
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::WriteWalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "samples": 19,
+        "fraction": 0.003205668972498735
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::CheckWeights(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        "samples": 16,
+        "fraction": 0.0026995107136831447
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter+Cursor::PublishWord()[Optimized]",
+        "samples": 14,
+        "fraction": 0.002362071874472752
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::CorrectDc(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,valuetype [System.Runtime]System.Span`1<int8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+        "samples": 12,
+        "fraction": 0.0020246330352623586
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::FillCoefficientCosts(valuetype [System.Runtime]System.Span`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 11,
+        "fraction": 0.0018559136156571622
+      },
+      {
+        "method": "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        "samples": 11,
+        "fraction": 0.0018559136156571622
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Update(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,bool&)[Optimized]",
+        "samples": 10,
+        "fraction": 0.0016871941960519656
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::EntropyCost(int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        "samples": 10,
+        "fraction": 0.0016871941960519656
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::get_Storage()[Optimized]",
+        "samples": 10,
+        "fraction": 0.0016871941960519656
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter::Carry(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,uint64&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "samples": 9,
+        "fraction": 0.001518474776446769
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8SourceAnalysis [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::Create(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.OperationContext,int32,int32)[Optimized]",
+        "samples": 8,
+        "fraction": 0.0013497553568415724
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Geometry(int32)[Optimized]",
+        "samples": 8,
+        "fraction": 0.0013497553568415724
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8Transforms::InverseWalsh(valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "samples": 8,
+        "fraction": 0.0013497553568415724
+      },
+      {
+        "method": "instance valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision+Metric::Add(valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric)[Optimized]",
+        "samples": 7,
+        "fraction": 0.001181035937236376
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.Vp8MacroblockScore [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Select(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext,bool,int32)[Optimized]",
+        "samples": 6,
+        "fraction": 0.0010123165176311793
+      },
+      {
+        "method": "instance valuetype Lokad.Image.Internal.Vp8FrameBlock [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Block(int32)[Optimized]",
+        "samples": 2,
+        "fraction": 0.0003374388392103931
+      },
+      {
+        "method": "valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::Category(int32)[Optimized]",
+        "samples": 2,
+        "fraction": 0.0003374388392103931
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::get_Storage()[Optimized]",
+        "samples": 2,
+        "fraction": 0.0003374388392103931
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8RatePlan [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::Create(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016871941960519654
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.Vp8SourceSegments::get_Map()[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016871941960519654
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::Reduce(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,bool,int32,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016871941960519654
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8PartitionWriter+Cursor::Literal(int32,int32)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016871941960519654
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.Vp8SourceSegments/Clustering [Lokad.Image] Lokad.Image.Internal.Vp8SourceSegments::Cluster(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.Vp8SourceSegments/Segment>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016871941960519654
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::get_UpdateMap()[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016871941960519654
+      },
+      {
+        "method": "instance valuetype Lokad.Image.Internal.Vp8QuantizationMatrix [Lokad.Image] Lokad.Image.Internal.Vp8QuantizationPlan::Matrix(int32,valuetype Lokad.Image.Internal.Vp8CoefficientPlane)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016871941960519654
+      }
+    ]
+  },
+  "productionSha256": "33ad385fafc84f3abc14c3d837e8259403d2abd20e9c6324431baafa0a5a89b2",
+  "benchmarkSha256": "2221147d5c6d29177f93e88ebad3b7cc1aa8d533c2c098677ccf8367c02d2c22",
+  "profileHostSha256": "7b7cb66178d765ad00d57950d142a689da6fdd151c508c74c0f9fdffe2ea39aa",
+  "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+  "completePacketExact": true,
+  "sourceUnchanged": true,
+  "independentOwnedOutput": true,
+  "quietness": {
+    "before": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.0002986148465425,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.123046875,
+        0.26513671875,
+        0.17236328125
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    },
+    "after": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.000305294059217,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0005,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0005,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.30517578125,
+        0.30078125,
+        0.185546875
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    }
+  },
+  "workflow": {
+    "hostProductionHarnessNativeBuilds": 0,
+    "testsPackageRepeated": false,
+    "cachedHostAndImmutableCurrentRuntimeReused": true
+  },
+  "disposition": "Current attribution retained. No distinct substantial candidate established by this bounded source review; existing reconstruction/quantization/rate and rejected families stay closed. Defer another photograph variant; next audit PNGFastest,similar ratio.",
+  "rawArchive": {
+    "file": "vp8-photograph-current-attribution.tar.xz",
+    "sha256": "bf3c5a9810d81177984ea223d386876b9463229bff595d2a894f686e18780912",
+    "bytes": 2160344,
+    "members": 46,
+    "mirrored": true,
+    "allMembersVerified": true
+  }
+}

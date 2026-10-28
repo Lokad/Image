@@ -263,7 +263,16 @@ the DP loop accounts for23.0% of all samples, but the trial screen is15.0% slowe
 with exact packets and unchanged allocation. Qualified source/binaries are restored
 on both OS; no confirmation/full/package repeat. Close this arithmetic family.
 Next resolve the photograph's attribution after accepted texture pruning before
-selecting one distinct substantial primitive. Do not reopen closed state-collapse/
+selecting one distinct substantial primitive. That
+[current photograph attribution](warm-vp8-photograph-attribution-evidence.json)
+is now retained:5927workload samples,Luma4self17.5%,quantization10.9%,
+reconstruction8.0%;exact17688B packet,quiet guards,no builds or timing claim.
+This bounded review establishes no distinct substantial candidate. Defer further
+photograph variants. A bounded
+[PNGFastest count replay](png-fast-match-counts-evidence.json) finds94.1% selected
+copies shorter than8bytes,3.33extension comparisons per attempt,exact236828B
+packet. No substantial bulk match-extension lead is established; no production
+candidate or timing run. Next inspect the existing effort2 fast VP8 path. Do not reopen closed state-collapse/
 uniform/scan/batch families or repeat unchanged profiles.
 
 ## Evidence invalidation
