@@ -257,8 +257,14 @@ builds. Bulk byte-plane color costs change; selectedJPEG420 refreshed,other affe
 controls need current proof before pass claims. Largest remaining ratios prioritize
 VP8trellis1.519/photo1.479/PNGFastest1.471. A bounded current6second VP8profile
 (5912samples,exact6818B packet) places40.7% in Apply;one hostbuild,no production/
-native rebuild or gain claim. Inspect its instruction offsets;do not reopen closed
-state-collapse/uniform/scan/batch families or repeat unchanged profiles.
+native rebuild or gain claim. Instruction attribution and one
+[quadratic distortion trial](VP8-QUADRATIC-DISTORTION-REJECTED.md) are complete:
+the DP loop accounts for23.0% of all samples, but the trial screen is15.0% slower
+with exact packets and unchanged allocation. Qualified source/binaries are restored
+on both OS; no confirmation/full/package repeat. Close this arithmetic family.
+Next resolve the photograph's attribution after accepted texture pruning before
+selecting one distinct substantial primitive. Do not reopen closed state-collapse/
+uniform/scan/batch families or repeat unchanged profiles.
 
 ## Evidence invalidation
 
