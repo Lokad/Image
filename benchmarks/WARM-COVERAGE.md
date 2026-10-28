@@ -198,7 +198,18 @@ nonseekable async independently1.238×/upper1.271,8400B/op. Its uncertain wide
 short is retained and resolved by one12actual observation. All21controls per
 boundary pass managed normal/scalar; async also native normal/scalar/ReadAsync-
 only gates. No production/full/package repeat. Both remain gaps; no optimization
-follows. Resident proofs remain applicable; named default decoders stay pending.
+follows. Resident proofs remain applicable; the three named default decoders are reconciled below.
+
+[Current default decoders](CURRENT-DEFAULT-DECODERS.md) reconcile three existing
+boundaries on the same immutable0.2.1core: JPEG420 screens6.018×/upper20.175,
+757166B/op; VP8L resident1.425×/upper3.692,1216162B/op; VP8L fresh seekable
+stream1.304×/upper1.578,1216190B/op. Every managed/native sample is exact,
+including normal/scalar and lossless hiddenRGB. Frozen packets/reference settings
+are unchanged; JPEG's old pre-parity managed hash is refreshed after four-way
+exact validation. All3actuals/native brackets/idle-v2 are retained; these clear
+screen gaps need no extra confirmation. No production/harness/worker/selector
+build or full/package repeat. The new materialJPEG gap takes priority for one
+bounded current profile. Other sampling/depth/policies/boundaries stay required.
 
 ## Evidence invalidation
 

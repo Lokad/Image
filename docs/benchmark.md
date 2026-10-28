@@ -4,7 +4,8 @@ Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
-controls below use qualified 0.2.1 builds. These 49 displayed controls do not
+controls below use qualified 0.2.1 builds. Three default decoder screens also use
+the current immutable core. These 52 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -49,6 +50,14 @@ caller RGB420 and governed RGBA16; other subsampled encoder costs need current
 evidence before a pass claim. Grayscale/4:4:4 and decoding paths are unchanged.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
+The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
+screens JPEG420 at6.018×,757,166B/op and VP8L resident/Stream at1.425×/1.304×,
+1,216,162/1,216,190B/op. These are clear short-screen gaps, with wide retained
+confidence bounds, exact managed/native pixels and all quiet guards passing.
+The frozen packets/settings and owned-output boundaries stay fixed. JPEG's old
+pre-parity managed hash is refreshed only after exact normal/scalar comparison.
+Its larger material gap takes priority for investigation; no production build or
+optimization, independent speedup/pass claim or full/package repetition occurs.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -73,6 +82,9 @@ Stream decode and four existing tight PNG companions without a speedup claim.
 | PNG RGBA16, SmallestSize9 / native9 † | 26,234.53 | 20,109.52 | 1.305 / 1.565 | 3,813,670 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,450.06 | 4,385.76 | 1.471 / 1.504 | 1,344,586 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
+| JPEG baseline420, resident decode † | 6,191.13 | 1,028.72 | 6.018 / 20.175 | 757,166 | — |
+| VP8L RGBA8, resident decode † | 4,314.08 | 3,028.30 | 1.425 / 3.692 | 1,216,162 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

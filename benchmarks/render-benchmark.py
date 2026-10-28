@@ -26,6 +26,8 @@ def render():
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
+    decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
+    assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
     assert not resident_other['productionChanged'] and resident_other['independentQuietConfirmation']
@@ -78,6 +80,21 @@ def render():
             packet = f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,}' if case['operation'] == 'encode' else '—'
             cells.append(packet)
         rows.append((case['kind'], '| ' + ' | '.join(cells) + ' |'))
+    for case, label in [('Jpeg420', 'JPEG baseline420, resident decode'),
+                        ('WebpResident', 'VP8L RGBA8, resident decode'),
+                        ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
+        observation = decoders['cases'][case][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert decoders['status'][case] == 'screen-gap' and len(observation['managed']['actual']) == 3
+        assert receipt['librarySha256'] == decoders['producers']['linuxSha256']
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 3
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        assert math.isclose(stats['Mean'] / native, observation['worstBracketRatio'], rel_tol=1e-12)
+        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -158,7 +175,8 @@ Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
-controls below use qualified 0.2.1 builds. These 49 displayed controls do not
+controls below use qualified 0.2.1 builds. Three default decoder screens also use
+the current immutable core. These 52 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -203,6 +221,14 @@ caller RGB420 and governed RGBA16; other subsampled encoder costs need current
 evidence before a pass claim. Grayscale/4:4:4 and decoding paths are unchanged.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
+The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
+screens JPEG420 at6.018×,757,166B/op and VP8L resident/Stream at1.425×/1.304×,
+1,216,162/1,216,190B/op. These are clear short-screen gaps, with wide retained
+confidence bounds, exact managed/native pixels and all quiet guards passing.
+The frozen packets/settings and owned-output boundaries stay fixed. JPEG's old
+pre-parity managed hash is refreshed only after exact normal/scalar comparison.
+Its larger material gap takes priority for investigation; no production build or
+optimization, independent speedup/pass claim or full/package repetition occurs.
 
 ''' + codecs + '''
 
