@@ -171,6 +171,12 @@ The shared-Adler producer is qualified on Windows/Linux with 4,959 checks per OS
 affected scalar coverage and the same actual package/three consumer examples;
 [the report](WARM-PNG-SHARED-ADLER.md) retains that source proof.
 
+[Rolling dictionary hash reuse](PNG-ROLLING-HASH-REJECTED.md) is rejected:
+its exact count replay does not translate into a material complete-operation
+screen gain (0.7%,below5% gate,+16B/op). Production/source/binaries and the actual
+package are restored; no confirmation/full/package repeat. Prior applicable
+PNG evidence remains valid. Keep this family closed without a distinct lead.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
