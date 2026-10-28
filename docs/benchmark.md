@@ -6,7 +6,7 @@ prediction. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 52 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 53 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -15,7 +15,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -44,7 +44,7 @@ allocation, peak live memory or cooperative-admission charges.
 
 Operations include normalization, input delivery and independently owned output;
 async encoding includes staging/delivery/release. Fixture preparation is excluded.
-Source images are 513×259; resize rows state output dimensions. The
+Source images are 513×259 except the named 3000² predictive PNG; resize rows state output dimensions. The
 [release evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) and
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
@@ -90,8 +90,11 @@ PNG Fastest retains its applicable independent gap.
 remain below574KB with every sample exact. BothOS5,063 checks, affected scalar
 checks and the same actual package/three examples pass. Four displayed encoder
 costs are refreshed below with unchanged exact packets; each remains a CPU gap.
-The distinct predictive path still needs CPU evidence; other affected PNG encoder
-costs remain prior-production. Unchanged decoder/other-codec/editing proofs apply.
+The distinct [predictive control](../benchmarks/PREDICTIVE-PNG-CURRENT.md) independently
+confirms2.728× / upper2.802,3,405,048B/op, with identical573,041-byte packets.
+Its six-second profile supports one substantial row-scoring SIMD trial.
+Other affected PNG encoder costs remain prior-production; unchanged decoder/
+other-codec/editing proofs apply.
 [Closed coefficient trials](../benchmarks/WARM-VP8-COEFFICIENT-TRIALS.md) retain
 rejected VP8 experiments; their costs do not replace accepted-production evidence.
 
@@ -119,6 +122,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | PNG RGBA16, SmallestSize9 / native9 † | 26,359.88 | 20,077.47 | 1.313 / 1.422 | 3,813,670 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,321.82 | 4,366.98 | 1.448 / 1.460 | 1,344,453 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 443.91 | 421.09 | 1.054 / 1.090 | 1,741,712 | 1,066,552 / 1,066,552 |
+| PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 1,190,543.10 | 436,360.64 | 2.728 / 2.802 | 3,405,048 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,297.81 | 1,009.85 | 1.285 / 1.304 | 757,319 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |

@@ -35,6 +35,9 @@ verify with `--check` after accepted rounds. Archived reports/raw JSON are immut
 history. The former long narrative and retired experiment recipes remain in
 [39402e7](https://github.com/lokad/image/blob/39402e74e0f95c82ab209e5a950066a206c2af65/benchmarks/README.md).
 Tool sources and fixture provenance remain beside their respective projects.
+The single [predictive PNG control](PREDICTIVE-PNG-CURRENT.md) has its own compact
+preparation command and frozen mixed-prediction reference; original None workers
+remain unchanged.
 Published packages and cited raw masters are retained; no arbitrary checkout-size
 ceiling blocks routine verification.
 

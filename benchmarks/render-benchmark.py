@@ -26,6 +26,7 @@ def render():
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
     current_reconciliation = json.loads((ROOT / 'benchmarks/current-png-vp8-reconciliation-evidence.json').read_text(encoding='utf-8'))
     png_prediction = json.loads((ROOT / 'benchmarks/png-predictable-compression-evidence.json').read_text(encoding='utf-8'))
+    predictive_cost = json.loads((ROOT / 'benchmarks/predictive-png-current-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -49,6 +50,7 @@ def render():
     assert not current_reconciliation['productionChanged'] and current_reconciliation['allBuilds'] == 0
     assert png_prediction['productionChanged'] and png_prediction['qualification']['actualPackageBothOs']
     assert set(png_prediction['cases']) == {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeFast8', 'EncodeNoCompression16'}
+    assert not predictive_cost['productionChanged'] and predictive_cost['independentQuietConfirmation']
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
     assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
@@ -99,6 +101,17 @@ def render():
             packet = f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,}' if case['operation'] == 'encode' else '—'
             cells.append(packet)
         rows.append((case['kind'], '| ' + ' | '.join(cells) + ' |'))
+    predicted = predictive_cost['cases']['EncodePredictable16'][-1]
+    receipt, stats = predicted['receipt'], predicted['managed']['statistics']
+    assert receipt['librarySha256'] == predictive_cost['producers']['linuxSha256']
+    assert len(predicted['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in predicted['quietness'].values()) and receipt['allRgbaSamplesExact']
+    native = min(b['mean'] for b in predicted['nativeBrackets'])
+    assert math.isclose(stats['Mean'] / native, predicted['worstBracketRatio'], rel_tol=1e-12)
+    rows.append(('codec', f'| PNG predictable RGBA16 3000², Optimal6 / mixed6 † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                 f'{predicted["worstBracketRatio"]:.3f} / {predicted["conservativeRatioUpper"]:.3f} | '
+                 f'{predicted["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
+                 f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     for case, label in [('Jpeg420', 'JPEG baseline420, resident decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
                         ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
@@ -199,7 +212,7 @@ prediction. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 52 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 53 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -208,7 +221,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -237,7 +250,7 @@ allocation, peak live memory or cooperative-admission charges.
 
 Operations include normalization, input delivery and independently owned output;
 async encoding includes staging/delivery/release. Fixture preparation is excluded.
-Source images are 513×259; resize rows state output dimensions. The
+Source images are 513×259 except the named 3000² predictive PNG; resize rows state output dimensions. The
 [release evidence](../benchmarks/release-0.2.0-benchmark-evidence.json) and
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
@@ -283,8 +296,11 @@ PNG Fastest retains its applicable independent gap.
 remain below574KB with every sample exact. BothOS5,063 checks, affected scalar
 checks and the same actual package/three examples pass. Four displayed encoder
 costs are refreshed below with unchanged exact packets; each remains a CPU gap.
-The distinct predictive path still needs CPU evidence; other affected PNG encoder
-costs remain prior-production. Unchanged decoder/other-codec/editing proofs apply.
+The distinct [predictive control](../benchmarks/PREDICTIVE-PNG-CURRENT.md) independently
+confirms2.728× / upper2.802,3,405,048B/op, with identical573,041-byte packets.
+Its six-second profile supports one substantial row-scoring SIMD trial.
+Other affected PNG encoder costs remain prior-production; unchanged decoder/
+other-codec/editing proofs apply.
 [Closed coefficient trials](../benchmarks/WARM-VP8-COEFFICIENT-TRIALS.md) retain
 rejected VP8 experiments; their costs do not replace accepted-production evidence.
 

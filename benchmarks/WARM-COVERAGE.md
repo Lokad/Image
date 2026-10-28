@@ -32,8 +32,8 @@ Added, using the existing 513×259 diagram and frozen settings:
   horizontal flip, R=16x/G=16y/B=8(x+y)/A=65535. Bounded content admission and
   per-row byte prediction are distinct from the existing None-filter encoder
   controls. Functional size <2 MiB and every sample exact are qualified;
-  equivalent complete-operation native comparison and CPU confirmation remain
-  outstanding. Freeze the reference prediction policy explicitly before timing;
+  the complete-operation comparison independently confirms a 2.728× / upper2.802
+  gap, 3,405,048B/op. Native level6/pred=mixed is frozen explicitly;
   these packets have a size/pixel gate, not a byte-identity target. No extra grid.
 
 Remaining inventory includes named inspection/Identify stream and resident
@@ -520,8 +520,12 @@ The high-priority [predictable PNG regression](PNG-PREDICTABLE-COMPRESSION.md) i
 functionally closed: all six opaque geometries are below 574 KB, exact samples,
 both-OS full/scalar and same actual package checks pass. Its four displayed
 existing encoder costs are current; all remain gaps. Other affected PNG encoder
-costs need reconciliation before pass claims. Resolve the one new predictive
-algorithm's CPU boundary above, then resume ranked substantial gaps. Decoder,
+costs need reconciliation before pass claims. The new predictive algorithm's
+[current evidence](PREDICTIVE-PNG-CURRENT.md) confirms the largest displayed gap:
+2.728× / upper2.802, with identical573,041-byte packets. A six-second profile has
+39.82% of samples in row scoring/Paeth and58.92% in Deflate search/insertion.
+Prioritize one substantial row-scoring SIMD trial; keep Deflate a separate
+primitive. Decoder,
 inspection, other-codec and editing algorithms retain applicable evidence.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
