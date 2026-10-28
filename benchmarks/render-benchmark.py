@@ -30,6 +30,7 @@ def render():
     down8_cost = json.loads((ROOT / 'benchmarks/current-bicubic-down8-cost-evidence.json').read_text(encoding='utf-8'))
     horizontal_cost = json.loads((ROOT / 'benchmarks/warm-bicubic-horizontal-taps-evidence.json').read_text(encoding='utf-8'))
     word_publication = json.loads((ROOT / 'benchmarks/warm-bicubic-shared-word-publication-evidence.json').read_text(encoding='utf-8'))
+    byte_zero_taps = json.loads((ROOT / 'benchmarks/warm-bicubic-zero-taps-evidence.json').read_text(encoding='utf-8'))
     cross16_cost = json.loads((ROOT / 'benchmarks/bicubic-word-guard-vector-rejected-evidence.json').read_text(encoding='utf-8'))
     assert not down8_cost['productionChanged'] and down8_cost['independentQuietConfirmation']
     assert down8_cost['preparation']['productionSha256'] == predictive_cost['producers']['linuxSha256']
@@ -40,7 +41,9 @@ def render():
     assert word_publication['status']['VerticalUp16'] == 'confirmed-pass'
     assert word_publication['cases']['VerticalUp16'][-1]['conservativeRatioUpper'] <= 1
     assert horizontal_cost['baselineReference']['librarySha256'] == down8_cost['preparation']['productionSha256']
-    editing_costs = {'case22': horizontal_cost['cases']['Down8'][-1],
+    assert byte_zero_taps['qualification']['sameActualPackageBothOs']
+    assert byte_zero_taps['sourceScope']['otherCachedSourceUnchanged']
+    editing_costs = {'case22': byte_zero_taps['cases']['Down8'][-1],
                      'case23': word_publication['cases']['Up16'][-1],
                      'case24': cross16_cost['freshBaselineShort']}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
@@ -106,13 +109,13 @@ def render():
         ratio = observation['worstBracketRatio']
         upper = observation['conservativeRatioUpper']
         if case['id'] in editing_costs:
-            editing_producer = horizontal_cost if case['id'] == 'case22' else word_publication if case['id'] == 'case23' else predictive_cost
+            editing_producer = byte_zero_taps if case['id'] == 'case22' else word_publication if case['id'] == 'case23' else predictive_cost
             expected_library = editing_producer['producers']['linuxSha256']
         else:
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12', 'case22', 'case23'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12', 'case23'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -247,7 +250,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows, VP8L RGBA8 encode and bicubic Down8/Up16 have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows, VP8L RGBA8 encode and bicubic Up16 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -273,9 +276,11 @@ The current producer passes 5,074 checks on each platform and the same actual
 package/three examples, including exact bicubic pixels and shared ownership.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
-parity confirmations. [Bounded bicubic horizontal filtering](../benchmarks/WARM-BICUBIC-HORIZONTAL-TAPS.md)
-reduces Down8 elapsed by 11.5% filtered / 13.1% all actuals; its 1.339× / upper
-1.347 gap remains, 332,186 B/op with unchanged storage.
+parity confirmations. [Byte zero-tap trimming](../benchmarks/WARM-BICUBIC-ZERO-TAPS.md)
+reduces HorizontalUp8 elapsed by16.2% filtered/16.1% all actuals in an independent
+pair:1.171× / upper1.193, unchanged1,930,356B/op. All six changed byte paths have
+current costs; Down8 now has a1.374× / upper1.441 screen,332,188B/op. This screen
+makes no gain/regression claim. Horizontal8 confirms upper1.008, still a gap.
 [Shared word publication](../benchmarks/WARM-BICUBIC-SHARED-WORD-PUBLICATION.md)
 reduces Up16 elapsed by 15.1% in a fresh independent pair, retaining exact pixels:
 1.221× / upper 1.234, 5,016,602 B/op (measured +8 B/op; no new owned buffer).
@@ -286,8 +291,8 @@ current costs. TightCross16 uses the
 1.522× / upper 1.652, 1,063,404 B/op; rejected candidate costs are excluded.
 The unchanged TightCross16 follow-up reuses qualification and makes no gain/regression claim.
 The [cached-path reconciliation](../benchmarks/CURRENT-BICUBIC-CACHED-COSTS.md)
-retains applicable byte/mixed-word costs and exact-half qualifications; shared
-word publication supersedes its regular-word rows with the current results.
+retains mixed-axis costs and exact-half qualifications; byte zero-tap trimming
+and shared word publication supersede its other rows with current results.
 B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 

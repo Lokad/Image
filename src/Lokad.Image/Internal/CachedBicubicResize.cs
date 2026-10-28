@@ -219,11 +219,16 @@ internal static class CachedBicubicResize
         ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,int firstY,OperationContext context)
     {
         var destination=result.GetRow8(y);
+        // Drop exact zero end weights once per row; retain the full spans for
+        // original-order replay and keep all nonzero taps in their stored order.
+        var firstTap=0;var lastTap=vertical.Length;
+        while(firstTap<lastTap && vertical[firstTap]==0)firstTap++;
+        while(lastTap>firstTap && vertical[lastTap-1]==0)lastTap--;
         for(var x=0;x+1<result.Width;x+=2)
         {
             context.Cancellation.ThrowIfCancellationRequested();
             var sum=Vector512<double>.Zero;
-            for(var t=0;t<vertical.Length;t++)
+            for(var t=firstTap;t<lastTap;t++)
                 sum=Avx512F.Add(sum,Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cached.Slice(rows[t]+x*4,8))),Vector512.Create(vertical[t])));
             var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
             var a0=sum.GetElement(3);var a1=sum.GetElement(7);

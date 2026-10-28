@@ -413,17 +413,18 @@ foreach (var (cachedDepth, cachedHash) in new[]
     if (cachedDepth == 8) cachedSource.GetRow8(0)[3] = cachedSource.GetRow8(0)[513 * 4 - 1] = 0;
     else cachedSource.GetRow16(0)[3] = cachedSource.GetRow16(0)[513 * 4 - 1] = 0;
     var cachedBefore = Lokad.Image.Tooling.OriginalPixels.Bytes(cachedSource);
-    if (cachedDepth == 16)
+    var cachedEnlargementHeight = cachedDepth == 16 ? 519 : 259;
+    var cachedEnlargementHash = cachedDepth == 16
+        ? "c17909e129d3a6775ebd3c863c5fce3e8c3fedfd0f9cb5aefd6eda4a68e993c0"
+        : "ef9e67095fcbc4a0d9a4fb2591577e9141a188e6b6323a44073cfd2ea41b7724";
+    using (var cachedEnlarged = ImageTransforms.Resize(cachedSource, 1027, cachedEnlargementHeight, ResizeFilter.Bicubic, cachedLimits))
     {
-        using (var cachedEnlarged = ImageTransforms.Resize(cachedSource, 1027, 519, ResizeFilter.Bicubic, cachedLimits))
-        {
-            if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(
-                Lokad.Image.Tooling.OriginalPixels.Bytes(cachedEnlarged))) != "c17909e129d3a6775ebd3c863c5fce3e8c3fedfd0f9cb5aefd6eda4a68e993c0"
-                || cachedRoot.Bytes != (513L * 259 + 1027L * 519) * 8)
-                throw new Exception("Package cached word enlargement pixels or retained charge differ.");
-        }
-        if (cachedRoot.Bytes != 513L * 259 * 8) throw new Exception("Package cached word enlargement charge was not released.");
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(
+            Lokad.Image.Tooling.OriginalPixels.Bytes(cachedEnlarged))) != cachedEnlargementHash
+            || cachedRoot.Bytes != (513L * 259 + 1027L * cachedEnlargementHeight) * 4 * (cachedDepth / 8))
+            throw new Exception("Package cached enlargement pixels or retained charge differ.");
     }
+    if (cachedRoot.Bytes != 513L * 259 * 4 * (cachedDepth / 8)) throw new Exception("Package cached enlargement charge was not released.");
     using var cachedFirst = ImageTransforms.Resize(cachedSource, 256, 129, ResizeFilter.Bicubic, cachedLimits);
     using var cachedSecond = ImageTransforms.Resize(cachedSource, 256, 129, ResizeFilter.Bicubic, cachedLimits);
     if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(

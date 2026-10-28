@@ -566,6 +566,16 @@ The native-only low-alpha RGB≤2 qualification is retained for VerticalUp16;
 managed pixels stay exact. Byte/mixed-word and other algorithms remain unchanged.
 These existing inventory paths add no workload grid; the full268 objective remains.
 
+[Byte zero-tap trimming](WARM-BICUBIC-ZERO-TAPS.md) independently reduces
+HorizontalUp8 elapsed by16.2% filtered/16.1% all actuals, unchanged1,930,356B/op.
+All six changed default-byte paths have current costs: Down8,Up8,Horizontal8,
+Vertical8,HorizontalUp8,VerticalUp8. All remain gaps; Horizontal8's independently
+confirmed upper1.008 is not a pass. Existing rational-half/native qualifications
+remain exact and unchanged. Full5,074perOS,89focusednormal/scalar andSAMEactual
+package/threeexamples pass. Word publication, including passing VerticalUp16,
+mixed-word/tight/wide kernels and other algorithms retain applicable evidence.
+This supersedes earlier byte-publication costs without expanding the inventory.
+
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an

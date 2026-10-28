@@ -16,7 +16,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows, VP8L RGBA8 encode and bicubic Down8/Up16 have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows, VP8L RGBA8 encode and bicubic Up16 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -42,9 +42,11 @@ The current producer passes 5,074 checks on each platform and the same actual
 package/three examples, including exact bicubic pixels and shared ownership.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
-parity confirmations. [Bounded bicubic horizontal filtering](../benchmarks/WARM-BICUBIC-HORIZONTAL-TAPS.md)
-reduces Down8 elapsed by 11.5% filtered / 13.1% all actuals; its 1.339× / upper
-1.347 gap remains, 332,186 B/op with unchanged storage.
+parity confirmations. [Byte zero-tap trimming](../benchmarks/WARM-BICUBIC-ZERO-TAPS.md)
+reduces HorizontalUp8 elapsed by16.2% filtered/16.1% all actuals in an independent
+pair:1.171× / upper1.193, unchanged1,930,356B/op. All six changed byte paths have
+current costs; Down8 now has a1.374× / upper1.441 screen,332,188B/op. This screen
+makes no gain/regression claim. Horizontal8 confirms upper1.008, still a gap.
 [Shared word publication](../benchmarks/WARM-BICUBIC-SHARED-WORD-PUBLICATION.md)
 reduces Up16 elapsed by 15.1% in a fresh independent pair, retaining exact pixels:
 1.221× / upper 1.234, 5,016,602 B/op (measured +8 B/op; no new owned buffer).
@@ -55,8 +57,8 @@ current costs. TightCross16 uses the
 1.522× / upper 1.652, 1,063,404 B/op; rejected candidate costs are excluded.
 The unchanged TightCross16 follow-up reuses qualification and makes no gain/regression claim.
 The [cached-path reconciliation](../benchmarks/CURRENT-BICUBIC-CACHED-COSTS.md)
-retains applicable byte/mixed-word costs and exact-half qualifications; shared
-word publication supersedes its regular-word rows with the current results.
+retains mixed-axis costs and exact-half qualifications; byte zero-tap trimming
+and shared word publication supersede its other rows with current results.
 B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
@@ -157,7 +159,7 @@ control scope. These measurements make no arbitrary-content compression claim.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
 | Bilinear resize RGBA16 → 256×129 | 543.06 | 417.56 | 1.301 / 1.411 | 290,128 |
-| Bicubic resize RGBA8 † → 256×129 | 560.31 | 418.31 | 1.339 / 1.347 | 332,186 |
+| Bicubic resize RGBA8 † → 256×129 | 572.97 | 417.08 | 1.374 / 1.441 | 332,188 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,263.40 | 829.93 | 1.522 / 1.652 | 1,063,404 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
