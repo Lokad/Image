@@ -106,10 +106,10 @@ internal static partial class ZlibFraming
                             distanceLookup, destination, output, expectedBytes, window);
                         continue;
                     }
-                    if (expectedBytes == destination.Length && reader.CanInflateMaterializedCursor())
+                    if (expectedBytes == destination.Length && reader.CanInflateCursor())
                     {
-                        output = reader.InflateMaterializedCursor(literals, distances, literalLookup,
-                            distanceLookup, destination, (int)output, window);
+                        output = reader.InflateCursor(literals, distances, literalLookup,
+                            distanceLookup, destination, (int)output, window, destination.Length, int.MaxValue, out _);
                         continue;
                     }
                     while (true)
@@ -245,8 +245,11 @@ internal static partial class ZlibFraming
                 BuildLiteralLookup(literals, literalLookup, context); BuildDistanceLookup(distances, distanceLookup, context);
                 {
                     output = completeTrees
-                        ? InflateStreamingBlock(ref reader, literals, distances, literalLookup, distanceLookup,
-                            output, expectedBytes, window, destination)
+                        ? reader.CanInflateCursor()
+                            ? InflateStreamingCursor(ref reader, literals, distances, literalLookup, distanceLookup,
+                                output, expectedBytes, window, destination)
+                            : InflateStreamingBlock(ref reader, literals, distances, literalLookup, distanceLookup,
+                                output, expectedBytes, window, destination)
                         : CountBlock(ref reader, literals, distances, literalLookup, distanceLookup,
                             output, expectedBytes, window);
                 }
@@ -348,6 +351,23 @@ internal static partial class ZlibFraming
             }
             if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
             output += length;
+        }
+    }
+
+    private static long InflateStreamingCursor(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
+        scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
+        long output, long expectedBytes, int window, PngRowInflation destination)
+    {
+        while (true)
+        {
+            var history = destination.BorrowHistory(out var start);
+            var expected = start + (int)Math.Min(history.Length - start, expectedBytes - output);
+            // After a slide at least 32 KiB precedes start, so a local distance
+            // check is equivalent to the global check for every zlib window.
+            var end = reader.InflateCursor(literals, distances, literalLookup, distanceLookup,
+                history, start, window, expected, history.Length - 257, out var ended);
+            destination.Advance(end - start); output += end - start;
+            if (ended) return output;
         }
     }
 

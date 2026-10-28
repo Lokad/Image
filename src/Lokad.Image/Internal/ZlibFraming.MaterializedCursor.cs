@@ -7,16 +7,19 @@ internal static partial class ZlibFraming
 {
     private ref partial struct Bits
     {
-        public readonly bool CanInflateMaterializedCursor() => !cancellation.CanBeCanceled;
+        public readonly bool CanInflateCursor() => !cancellation.CanBeCanceled;
 
-        public int InflateMaterializedCursor(scoped Huffman literals, scoped Huffman distances,
+        public int InflateCursor(scoped Huffman literals, scoped Huffman distances,
             scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
-            scoped Span<byte> destination, int output, int window)
+            scoped Span<byte> destination, int output, int window, int expected, int stop, out bool ended)
         {
+            ended = false;
             var bytes = data; var cached = buffer; var bits = available;
             var offset = position;             try
             {
-                while (true)
+                // A streaming slab stops with room for the largest next token.
+                // Materialized output uses int.MaxValue and ends only on EOB.
+                while (output < stop)
                 {
                     FillCursor(bytes, ref cached, ref bits, ref offset, 9);
                     var entry = literalLookup[(int)(cached & 511)];
@@ -33,10 +36,10 @@ internal static partial class ZlibFraming
                         buffer = cached; available = bits; position = offset;                         try { symbol = DecodeLongLiteral(ref this, literals); }
                         finally { cached = buffer; bits = available; offset = position; }
                     }
-                    if (symbol == 256) return output;
+                    if (symbol == 256) { ended = true; return output; }
                     if (symbol < 256)
                     {
-                        if (output == destination.Length) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                        if (output == expected) throw new ImageDataException("PNG contains excess decompressed pixels.");
                         destination[output++] = (byte)symbol;
                         continue;
                     }
@@ -71,7 +74,7 @@ internal static partial class ZlibFraming
                             + ReadCursor(bytes, ref cached, ref bits, ref offset, extra);
                     }
                     if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
-                    if (length > destination.Length - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                    if (length > expected - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
                     if (distance == 1) destination.Slice(output, length).Fill(destination[output - 1]);
                     else
                     {
@@ -88,6 +91,7 @@ internal static partial class ZlibFraming
                 }
             }
             finally { buffer = cached; available = bits; position = offset; }
+            return output;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

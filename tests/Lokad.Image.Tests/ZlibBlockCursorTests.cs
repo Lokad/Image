@@ -5,6 +5,52 @@ namespace Lokad.Image.Tests;
 
 public sealed partial class ZlibMaterializationTests
 {
+    [Fact]
+    public void FullHistorySlabThenEmptyFinalBlockKeepsExactEndAndFailures()
+    {
+        // Original RGB8-sized None rows. Stored history and maximum-distance
+        // copies end exactly at 64 KiB, followed by a separate empty block.
+        var raw = new byte[65536];
+        for (var i = 0; i < 32768; i++) raw[i] = i % 256 == 0 ? (byte)0 : (byte)(73 * i + 19);
+        raw.AsSpan(0, 32768).CopyTo(raw.AsSpan(32768));
+        var bits = new Writer(); bits.Number(0, 3); bits.Align();
+        bits.Number(32768, 16); bits.Number(32768 ^ 65535, 16);
+        foreach (var value in raw.AsSpan(0, 32768)) bits.Number(value, 8);
+        bits.Number(0, 1); bits.Number(1, 2);
+        for (var i = 0; i < 127; i++)
+        {
+            bits.Code(197, 8); bits.Code(29, 5); bits.Number(8191, 13);
+        }
+        bits.Literal(raw[^2]); bits.Literal(raw[^1]); bits.Code(0, 7);
+        bits.Number(1, 1); bits.Number(1, 2); bits.Code(0, 7);
+        var encoded = Envelope(bits, raw); var original = encoded.ToArray();
+        Assert.Equal(raw, Inflate(encoded));
+        using var cancellation = new CancellationTokenSource();
+        foreach (var cut in Enumerable.Range(0, 11))
+        foreach (var size in new[] { raw.Length - 1, raw.Length, raw.Length + 1 })
+        foreach (var cancelable in new[] { false, true })
+        {
+            var input = encoded[..(encoded.Length - cut)];
+            using var root = new TestMemoryBudget(4096);
+            var limits = ImageLimits.Default with { MaxWorkingBytes = 4096, MemoryBudget = root };
+            using var context = new OperationContext(limits, cancelable ? cancellation.Token : default);
+            using var reference = new OperationContext(limits, default);
+            var rows = new PngRowInflation(255, 256, new byte[PngRowInflation.HistoryBytes]);
+            int end = -1, countedEnd = -1;
+            var actual = Record.Exception(() => end = ZlibFraming.ValidateAndInflateRows(input, size, context, rows, out _));
+            var expected = Record.Exception(() => countedEnd = ZlibFraming.Validate(input, size, reference));
+            Assert.Equal(expected?.GetType(), actual?.GetType()); Assert.Equal(expected?.Message, actual?.Message);
+            Assert.Equal(countedEnd, end);
+            if (actual is null)
+            {
+                Assert.Equal(encoded.Length, end);
+                Assert.True(rows.Finish(System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(encoded.AsSpan(encoded.Length - 4))));
+            }
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+            Assert.Equal(4096, context.RemainingWorkingBytes);
+        }
+        Assert.Equal(original, encoded);
+    }
 
     [Fact]
     public void MaterializedCursorMatchesOriginalAcrossBlockPhasesMatchesFailuresAndEveryTruncation()

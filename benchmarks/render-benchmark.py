@@ -23,7 +23,7 @@ def render():
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
-    png8_validation = json.loads((ROOT / 'benchmarks/current-png8-validation-evidence.json').read_text(encoding='utf-8'))
+    png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -42,7 +42,8 @@ def render():
     assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
-    assert not png8_validation['productionChanged'] and png8_validation['independentQuietConfirmation']
+    assert png_cursor['productionChanged'] and png_cursor['independentQuietConfirmationThisPair']
+    assert set(png_cursor['cases']) == {'ValidatePng8', 'ValidatePng16', 'ValidatePng16Async'}
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
     assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
@@ -122,7 +123,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = png8_validation if case == 'ValidatePng8' else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads
+        producer = png_cursor if case in png_cursor['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads
         observations = producer['cases'][case]
         observation = observations[-1]
         receipt = observation['receipt']
@@ -242,7 +243,8 @@ four affected VP8L rows. Other paths retain applicable prior proof.
 caller RGB420 and governed RGBA16; other subsampled encoder costs need current
 evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
-Stream decode and four existing tight PNG companions without a speedup claim.
+Stream decode. Its four tight PNG decoder costs are prior-production after the
+shared cursor change below; their correctness proof remains applicable.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
 retains the VP8L Stream screen at1.304×,1,216,190B/op. A
 [resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
@@ -289,13 +291,15 @@ copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
 validation pass independently; PNG8 and progressive420 remain confirmed gaps. Other
 validation rows are short screens, without independent parity claims. The
-[streaming PNG validator](../benchmarks/WARM-PNG-VALIDATION.md) reduces PNG16 elapsed
-by42.4% and warm span allocation from17,008 to240B/op. Its repeat passes with a
-narrow upper0.99966; the preceding upper1.00108 is retained in the evidence.
-The [PNG8 follow-up](../benchmarks/current-png8-validation-evidence.json) confirms
-1.349× / upper 1.354 and 240 B/op on the same immutable build and frozen packet,
-without a gain claim. Its profile identifies streaming Deflate/history handling
-as the next substantial lead.
+[shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) reduces PNG8
+validation elapsed by 22.85% filtered / 22.87% all actuals against a fresh baseline,
+with unchanged 240 B/op. Its 1.042× / upper 1.052 gap remains. PNG16 span and async
+are refreshed on this producer and pass with upper 0.974/0.817, 240/8,544 B/op.
+Both platforms pass 5,057 full checks, affected scalar tests and the same actual
+package/three examples. No storage or admission boundary is added. Other affected
+PNG decoder costs need current evidence before pass claims. The
+[preceding streaming validator](../benchmarks/WARM-PNG-VALIDATION.md) retains
+the earlier workspace and allocation improvements; its timing is historical.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

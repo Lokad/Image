@@ -40,6 +40,13 @@ internal sealed class PngRowInflation
 
     public void Advance(int count) => position += count;
 
+    // Borrow the existing history through one cursor call. The caller reserves
+    // room for a maximal token before returning here to consume/slide/resume.
+    public Span<byte> BorrowHistory(out int start)
+    {
+        EnsureSpace(); start = position; return history;
+    }
+
     public void Literal(byte value)
     {
         EnsureSpace(); history[position++] = value;

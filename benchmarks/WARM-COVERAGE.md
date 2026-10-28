@@ -81,9 +81,9 @@ All retain744B/op/512B admission. Full both-OS5040 checks,98 focused normal/scal
 and SAME actual package/three examples pass. Probe/InspectHeaders timings change;
 validation/Identify/Decode/encoding/editing algorithms and applicable proofs do not.
 
-[One-pass PNG validation](WARM-PNG-VALIDATION.md) independently closes the PNG16
-span and async cases:0.990×/upper0.99966 and0.833×/upper0.847. Span elapsed falls
-42.4%; allocation240B/op, async8544B/op. Keep the narrowly passing span unchanged;
+[Previous one-pass PNG validation](WARM-PNG-VALIDATION.md) independently closed the PNG16
+span and async cases:0.990×/upper0.99966 and0.833×/upper0.847. Span elapsed fell
+42.4%; allocation240B/op, async8544B/op. These costs are superseded below;
 its first upper1.00108 is retained alongside the bounded repeat. PNG8/indexed
 companions remain1.355×/1.345× short gaps. Both OS5041 full checks,137 internal/
 88 public scalar and SAME actual package/three examples pass. Caller-budget
@@ -96,22 +96,32 @@ boundaries without production changes. Complete PNG8 headers screen1.365×,
 source fields and21 frozen RGBA8 controls agree normal/scalar. VP8+alpha Stream
 decode screens1.291×,1966583B/op with exact pixels. Tight PNG8 ordinary/live-token
 decode screens1.370×/1.387×,68224B/op; PNG16 screens1.041×/1.029×,70272B/op.
-All remain gaps; no independent timing confirmation or speedup claim. Current
-production qualification/package proof is reused. These six controls do not
+All remained gaps; no independent timing confirmation or speedup claim. The
+four PNG decode costs are prior-production after the shared cursor below.
+Current production qualification/package proof is reused. These six controls do not
 refresh every Identify/decoder boundary affected by read-policy changes.
 
 ## Current evidence
 
-[Current PNG8 validation](current-png8-validation-evidence.json) independently
-confirms the existing span case at 1.349× / upper 1.354, 1.861 ms and 240 B/op.
-The 210,972-byte packet, all source metadata and coding/ownership scope remain
-exact. Twelve actual/filtered samples and both native/idle-v2 brackets pass.
-Unchanged JCP1 build/worker/selector/package proof are reused. One cached-tool
-metadata preparation refreshes twelve short correctness controls without changing
-the seven inputs. A tiny profile host adds no production/harness/native build.
-Its 5,988 post-warmup samples identify streaming decoding/history handling as the
-next substantial lead; CRC/Adler total under 3%. Shared PNG16 validation passes
-must be reconciled if that path changes; no new workload grid is needed.
+[Shared PNG Deflate cursor](WARM-PNG-STREAMING-CURSOR.md) independently reduces
+PNG8 span validation from 1.862 ms to 1.437 ms: 22.85% less filtered elapsed and
+22.87% using all actuals, with unchanged 240 B/op. The 1.042× / upper 1.052 gap
+remains. Both PNG16 validation cases are refreshed on the accepted producer:
+span upper 0.974 and async upper 0.817, at 240/8,544 B/op. Stop these passing
+cases unchanged. Complete coding, all nine source fields, frozen input bytes,
+ownership and quiet/native guards pass. Both platforms pass 5,057 full checks,
+focused normal/scalar and 212 scalar public PNG checks, plus the same actual
+Release package and three examples. No storage/admission boundary is added.
+
+The shared cursor changes noncancellable streaming PNG validation/fused RGBA
+decode and full materialization; the cancellable token decoder stays unchanged
+but gains a dispatch check. Other PNG decoder CPU evidence is prior-production
+until reconciled, including the four tight companions above. Existing functional
+proof remains exact. Counting-only indexed/interlaced validation, encoders,
+inspection, other codecs, editing/text and applicable confirmations are unchanged.
+The [preceding PNG8 confirmation/profile](current-png8-validation-evidence.json)
+retains the diagnostic lead and immutable pre-change producer. No new input or
+settings grid, repeated profile or harness/native/selector build was needed.
 
 The [JPEG AC publication trial](JPEG-BASELINE-AC-PUBLICATION-REJECTED.md) missed
 its 5% screen gate at 1.49%. Qualified code/producers were restored, actual package
@@ -136,8 +146,9 @@ This is a cost confirmation, without a speedup or regression claim.
 [Current JPEG420 attribution](current-jpeg420-decode-attribution-evidence.json)
 uses the same qualified build and cached host: 5,630 samples after warmup,
 inverse AVX2 32.7% and plain-baseline AC entropy 29.8%. No timing/build/package
-repeat. The older profile predates accepted inverse/chroma/color changes. One
-column-only cosine-symmetry candidate is next; exact arithmetic and pixels first.
+repeat. The older profile predates accepted inverse/chroma/color changes. Paired
+columns were accepted above; the later AC publication screen was rejected.
+These profiles are retained diagnostics rather than current component costs.
 
 [Current VP8 photograph confirmation](current-vp8-photograph-encoding-evidence.json)
 resolves the wide screen at 1.467× / upper 1.501, 14.261 ms and 809,072 B/op;
