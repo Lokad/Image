@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Reflection;
 using System.Security.Cryptography;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
@@ -22,12 +23,17 @@ public sealed class PngDeflaterMatchPacketTests
         var inputHash = repeated ? "8af1885ac7ec8c69b6b4a70bd2438b69e9657ae9db61055afe20d32b08ed9714"
             : "78f54937c38b32d81ab871a11c49e7aa18d344d28c06960516782e4260885401";
         Assert.Equal(inputHash, Hash(data));
+        foreach (var origin in new[] { 0L, 1L << 40 })
         foreach (var chunk in new[] { 1, 262, 65521 })
         {
             using var context = new OperationContext(ImageLimits.Default, default);
             using var output = new MemoryStream();
             using (var compressor = new PngDeflater(output, context, level))
             {
+                // Translate logical coordinates without allocating a huge input.
+                // Ring offsets, reserved window origins and exact packets agree.
+                foreach (var field in new[] { "position", "filled", "windowOrigin", "blockStart" })
+                    typeof(PngDeflater).GetField(field, BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(compressor, origin);
                 for (var offset = 0; offset < data.Length; offset += chunk)
                     compressor.Write(data.AsSpan(offset, Math.Min(chunk, data.Length - offset)));
                 compressor.Complete();
