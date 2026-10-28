@@ -189,6 +189,9 @@ internal static class Vp8MacroblockDecision
                 if (bestMode >= 0 && (rateCost + header) * costs.Luma4 >= best.Total) continue;
                 Vp8BlockReconstruction.Add(candidate, trial, 4);
                 var distortion = Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
+                // Texture is nonnegative. Once rate plus reconstructed SSD
+                // cannot win, its two spectral transforms cannot change that.
+                if (bestMode >= 0 && (rateCost + header) * costs.Luma4 + 256L * distortion >= best.Total) continue;
                 var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, Vp8Distortion.Texture4(source[offset..], 16, trial, 4, weights));
                 var score = new Metric(distortion, texture, header, rateCost).Price(costs.Luma4);
                 if (uniform) { uniformScore = score; uniformFlat = Flat(trialLevels, 1, 3); }

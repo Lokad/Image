@@ -24,6 +24,8 @@
   preserving packet bytes, strict ties and cancellation checkpoints.
 - Faster VP8 interval coding with stack-local state and borrowed output storage,
   preserving exact packets, logical-byte admission and per-bit cancellation.
+- Skip losing VP8 texture scores using reconstructed-pixel error bounds,
+  preserving exact decisions, cancellation and memory ownership.
 
 ## 0.2.0 — 2026-10-27
 

@@ -14,7 +14,8 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
-    vp8 = json.loads((ROOT / 'benchmarks/warm-vp8-borrowed-cursor-evidence.json').read_text(encoding='utf-8'))
+    vp8_prior = json.loads((ROOT / 'benchmarks/warm-vp8-borrowed-cursor-evidence.json').read_text(encoding='utf-8'))
+    vp8 = json.loads((ROOT / 'benchmarks/warm-vp8-texture-distortion-bound-evidence.json').read_text(encoding='utf-8'))
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
     vp8l = json.loads((ROOT / 'benchmarks/warm-vp8l-prepared-prediction-cost-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
@@ -41,9 +42,9 @@ def render():
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
-        producer = vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        producer = vp8_prior if case['id'] == 'case06' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if vp8_case:
-            observation = vp8['cases'][vp8_cases[case['id']]][-1]
+            observation = producer['cases'][vp8_cases[case['id']]][-1]
         elif case['id'] == 'case00':
             observation = producer['cases']['Vp8Stream'][-1]
         elif case['id'] in {'case02', 'case03'}:
@@ -57,7 +58,7 @@ def render():
         upper = observation['conservativeRatioUpper']
         assert receipt['librarySha256'] == (producer['producers']['linuxSha256'] if updated else evidence['librarySha256'])
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case11', 'case12'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case08', 'case12'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -128,7 +129,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, opaque RGBA16 VP8 and VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, VP8 photograph and VP8L RGBA8 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -137,10 +138,11 @@ It remains a1.332× / upper1.360 gap. Allocation rises by8,224B/op for one reusa
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
-Borrowed arithmetic cursors independently reduce opaque RGBA16 VP8 elapsed by
-6.8%, retaining1,201,552B/op and exact packets; its1.410× / upper1.420 gap remains
-open. The five other affected VP8 rows have current screens, without independent
-speedup/parity claims.
+Reconstructed-error bounds independently reduce VP8 photograph elapsed by4.3%,
+retaining809,072B/op and exact packets; its1.479× / upper1.483 gap remains open.
+Four other affected VP8 rows have current screens, without independent gain/pass
+claims. Effort2 keeps its unchanged borrowed-cursor evidence. Current alpha
+allocation includes the prior predictor owner's16B layout overhead increase.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -153,8 +155,9 @@ Source images are 513×259; resize rows state output dimensions. The
 [stored publication](../benchmarks/WARM-PNG-BULK-STORED.md) and
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
-[Borrowed VP8 cursors](../benchmarks/WARM-VP8-BORROWED-CURSOR.md) supply all six
-current VP8 encoding rows;
+[VP8 texture bounds](../benchmarks/WARM-VP8-TEXTURE-DISTORTION-BOUND.md) supply five
+current VP8 encoding rows; unchanged effort2 retains
+[borrowed-cursor evidence](../benchmarks/WARM-VP8-BORROWED-CURSOR.md).
 [shared-history predictor pricing](../benchmarks/WARM-VP8L-PREPARED-PREDICTION-COST.md) supplies the
 four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes

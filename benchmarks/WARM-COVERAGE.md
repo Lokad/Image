@@ -131,7 +131,7 @@ Current RGBA16/async/photograph screens are1.338/1.351/1.322× with29696928/
 costs, not independent gain/parity confirmations. BothOS5052 full checks,
 15internal/27public scalar and SAME actual package/three examples pass.
 Diagram4 skips prediction; compressed VP8 alpha uses the unchanged green-only
-pricing path. VP8 photograph1.552× and trellis1.525× remain the largest displayed
+pricing path. VP8 trellis1.519× and photograph1.479× remain the largest displayed
 encoding point gaps; PNGFastest1.471× follows. Prefer substantial absolute-cost
 VP8L opportunities where evidenced; do not reopen confirmed passing cases.
 [Horizontal JPEG area filtering](WARM-JPEG-HORIZONTAL-AREA-FILTER.md) independently
@@ -142,17 +142,18 @@ BothOS5049 full checks,4 internal/293 public scalar and SAME actual package/thre
 examples pass. Stop this primitive; both named CPU gaps remain open. The bounded
 VP8 quantization-to-pricing audit found only a32-byte reload/absolute-value reuse,
 without a substantial candidate; no production edit or timing followed.
-[Borrowed VP8 cursors](WARM-VP8-BORROWED-CURSOR.md) independently reduce opaque
-RGBA16 elapsed by6.8%,23.594ms→21.978ms,1.410×/upper1.420. Allocation1201552B/op
-and exact72380B packets remain. Five other affected controls are refreshed screens:
-photograph1.552×,diagram4 1.408×,trellis1.525×,effort2 1.434×,alpha8 1.332×.
-All remain gaps, with exact packets/allocations and idle-v2/native brackets.
-BothOS5050 full checks,47 internal/27 public scalar and SAME actual package/three
-examples pass. Cached stack-local arithmetic and borrowed capacity replace repeated
-class-state traffic; existing logical-byte admission/replacement peaks, per-bit
-cancellation and finally commits remain. No new owner, quota or cache. One existing
-missing confirmation selector was compiled against binary references; all producer,
-harness and native binaries were reused through timing. Stop cursor variants.
+[Borrowed VP8 cursors](WARM-VP8-BORROWED-CURSOR.md) remain accepted. Their
+method0/1/2 effort2 evidence remains current; affected RDO costs are superseded by
+[exact texture lower bounds](WARM-VP8-TEXTURE-DISTORTION-BOUND.md). Photograph
+independently measures14.373ms versus a fresh15.013ms baseline,**4.3% lower**,
+1.479×/upper1.483,809072B/op unchanged and exact17688B. Four current screens:
+diagram4 1.405×,trellis1.519×,alpha8 1.307×,opaque16 1.331×. All retain exact
+packets and quiet/native brackets. Alpha allocation21353208B/op also reconciles
+the prior predictor owner's16B overhead increase; other allocations are unchanged.
+BothOS5052 full checks,21internal/27public scalar and SAME actual package/three
+examples pass. After existing rate pruning,reconstruction and SSD,the nonnegative
+texture term cannot save a losing candidate; skip only those spectral transforms.
+No new storage,owner,quota or cancellation change. Stop this primitive.
 [Uniform-boundary trellis reuse](VP8-UNIFORM-TRELLIS-DEFERRED.md) has no material
 independently confirmed gain and is removed; the current baseline stays valid.
 Full samples, allocations, packet sizes and boundaries are in the
@@ -283,3 +284,12 @@ exact pixels/packets, shared admission and quiet-VM confidence requirements.
   admitted with the existing analysis owner and released before row application.
   Green-only alpha pricing, paths skipping prediction, all decoding, other codecs,
   editing/text and their applicable unchanged confirmations remain valid.
+- Reconstructed-SSD texture bounds change method3/4/5/6 Luma4 RDO encoding,
+  including depth/alpha/stream/async/cancelable callers. Five displayed controls
+  are refreshed; other affected named cases need applicable current costs before
+  CPU-pass claims. Method0/1/2 is unchanged and retains effort2 evidence. No owned
+  capacity or cancellation boundary changes; VP8L/other codecs/decoders/editing/
+  text and their applicable unchanged proofs remain valid. The prior predictor
+  Analysis owner also gained a reference field on green-only calls; the current
+  alpha row reconciles its16B allocation increase,without changing green-only
+  arithmetic or admitted capacity.
