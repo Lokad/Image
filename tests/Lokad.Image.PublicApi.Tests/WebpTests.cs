@@ -135,6 +135,20 @@ public sealed class WebpTests
             decoded.GetRow8(0).Slice(x * 4, 4).ToArray());
     }
 
+    [Fact]
+    public void EntropyGroupsResumeAfterCopyAcrossTilesAndRows()
+    {
+        using var decoded = ImageCodec.Decode(AuthoredWebp.EntropyGroupsWithCrossingCopy());
+        Assert.Equal((9, 6), (decoded.Width, decoded.Height));
+        for (var y = 0; y < 6; y++)
+        for (var x = 0; x < 9; x++)
+        {
+            var secondGroup = y * 9 + x >= 39 && ((y / 4 * 3 + x / 4) & 1) != 0;
+            Assert.Equal(secondGroup ? new byte[] { 40, 50, 60, 255 } : new byte[] { 20, 12, 30, 255 },
+                decoded.GetRow8(y).Slice(x * 4, 4).ToArray());
+        }
+    }
+
     [Theory]
     [InlineData(false)] [InlineData(true)]
     public void CodeLengthRepeatsAndTokenLimitsHaveExplicitPixels(bool defaultEight)

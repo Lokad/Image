@@ -84,7 +84,7 @@ public sealed class WebpFfmpegTests
     {
         var fixtures = new List<byte[]> { AuthoredWebp.ColorTransform(), AuthoredWebp.SubtractGreen(), AuthoredWebp.CachedColor(),
             AuthoredWebp.BackwardReference(), AuthoredWebp.EntropyGroups(), AuthoredWebp.DuplicateSimpleSymbols(),
-            AuthoredWebp.CodeLengthRepeats(false), AuthoredWebp.CodeLengthRepeats(true) };
+            AuthoredWebp.CodeLengthRepeats(false), AuthoredWebp.CodeLengthRepeats(true), AuthoredWebp.EntropyGroupsWithCrossingCopy() };
         fixtures.Add(AuthoredWebp.OrientedPalette(false)); fixtures.Add(AuthoredWebp.OrientedPalette(true));
         foreach (var cacheBits in Enumerable.Range(2, 10)) fixtures.Add(AuthoredWebp.CachedColor(cacheBits));
         foreach (var groups in new[] { 16, 256 }) fixtures.Add(AuthoredWebp.EntropyGroups(groups));

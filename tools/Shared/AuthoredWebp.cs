@@ -106,6 +106,21 @@ internal static class AuthoredWebp
         return Container(8, 1, bits.Finish(), false);
     }
 
+    public static byte[] EntropyGroupsWithCrossingCopy()
+    {
+        // A 3x2 map of four-pixel tiles, including a partial rightmost tile.
+        var bits = new Bits(); bits.Write(0, 1); bits.Write(0, 1); bits.Write(1, 1); bits.Write(0, 3);
+        bits.Write(0, 1); Simple(bits, 0, 1); Simple(bits, 0); Simple(bits, 0); Simple(bits, 255); Simple(bits, 0);
+        foreach (var group in new[] { 0, 1, 0, 1, 0, 1 }) bits.Write(group, 1);
+        SparseTree(bits, 280, 12, 266); Simple(bits, 20); Simple(bits, 30); Simple(bits, 255); Simple(bits, 1);
+        Simple(bits, 50); Simple(bits, 40); Simple(bits, 60); Simple(bits, 255); Simple(bits, 1);
+        bits.Write(0, 1); bits.Write(0, 1); bits.Write(0, 1); // Three literal pixels.
+        bits.Write(1, 1); bits.Write(3, 4); // Length prefix 10: copy 36 previous pixels, ending at (3,4).
+        for (var position = 39; position < 54; position++)
+            if (((position / 9 / 4 * 3 + position % 9 / 4) & 1) == 0) bits.Write(0, 1);
+        return Container(9, 6, bits.Finish(), false);
+    }
+
     public static byte[] DuplicateSimpleSymbols()
     {
         var bits = new Bits(); bits.Write(0, 1); bits.Write(0, 1); bits.Write(0, 1);
