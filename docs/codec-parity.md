@@ -1,13 +1,13 @@
 # Codec reference parity
 
-Lokad.Image 0.2.0 compares complete encoded packets and decoded samples on the
+Lokad.Image compares complete encoded packets and decoded samples on the
 fixed controls below. These are tested content/settings scopes, not universal
 byte-identity or speed claims. Inputs are original deterministic fixtures; no
 reference implementation, packet or implementation table is a production input.
 
 | Case | Verified scope and result | Reproducible evidence |
 | --- | --- | --- |
-| PNG encode | 14 complete packets exact: 513×259 gray/RGB/gray-alpha/RGBA, 8/16-bit Optimal; RGBA8/16 also stored/Fastest/SmallestSize. Includes metadata, chunks and checksums. | [Controls/settings](../benchmarks/png-byte-parity-evidence.json) |
+| PNG encode | 14 complete packets exact: 513×259 gray/RGB/gray-alpha/RGBA, 8/16-bit Optimal; RGBA8/16 also stored/Fastest/SmallestSize. Includes metadata, chunks and checksums. In 0.2.1 development, the separate 3000² RGBA16 gradient and its five flips/rotations are lossless below 2 MiB; these new controls require size bounds, not reference packet identity. | [Packet controls](../benchmarks/png-byte-parity-evidence.json), [predictable-content regression](../tests/Lokad.Image.PublicApi.Tests/PngPredictableCompressionTests.cs) |
 | JPEG color encode | 4:4:4/4:2:2/4:2:0 RGBA8/16 and 4:2:0 row-restart33: complete packets exact except the COM replacement below; direct caller RGB and stream delivery share the encoder. Frozen color quality 85 → reference qscale 5. | [Controls/settings](../benchmarks/jpeg-byte-parity-evidence.json) |
 | JPEG grayscale encode | Complete 58,910/58,942-byte RGBA8/16 packets and 61,152-byte 8-bit restart3 packet exact; quality 69, SIMD libjpeg-turbo 3.1.4.1. Caller GRAY8 shares this encoder. | [Controls/settings](../benchmarks/jpeg-byte-parity-evidence.json) |
 | WebP lossless encode | 19 selected plus two forced packet identities exact, including 160,032-byte photograph, 7,234-byte diagram, alpha/hidden RGB, palettes, effort and 8/16 normalization controls. libwebp 1.6.0, quality 75, matching method, exact=1, one CPU. Native supports axes through 16,383; managed 16,384-axis cases have functional coverage only. | [Controls/settings](../benchmarks/vp8l-byte-parity-evidence.json) |

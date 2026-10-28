@@ -1,7 +1,8 @@
 # Lokad.Image benchmarks
 
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
-**‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
+**‡ stored PNG**, like the other three PNG encoding rows, is refreshed after row
+prediction. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -84,6 +85,16 @@ encoding and unrelated paths retain applicable proof. Packet/settings and owned
 output boundaries stay fixed. VP8 companions are now independently confirmed;
 PNG Fastest retains its applicable independent gap.
 
+[Predictable-content PNG](../benchmarks/PNG-PREDICTABLE-COMPRESSION.md) reduces the
+3000² RGBA16 gradient from29,375,876 to511,771 bytes; all six tested orientations
+remain below574KB with every sample exact. BothOS5,063 checks, affected scalar
+checks and the same actual package/three examples pass. Four displayed encoder
+costs are refreshed below with unchanged exact packets; each remains a CPU gap.
+The distinct predictive path still needs CPU evidence; other affected PNG encoder
+costs remain prior-production. Unchanged decoder/other-codec/editing proofs apply.
+[Closed coefficient trials](../benchmarks/WARM-VP8-COEFFICIENT-TRIALS.md) retain
+rejected VP8 experiments; their costs do not replace accepted-production evidence.
+
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -104,10 +115,10 @@ PNG Fastest retains its applicable independent gap.
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 162,750.37 | 120,441.78 | 1.351 / 1.431 | 29,697,312 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 † | 109,137.75 | 82,564.36 | 1.322 / 1.411 | 20,417,624 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
-| PNG RGBA8, SmallestSize9 / native9 † | 22,507.99 | 17,297.84 | 1.301 / 1.350 | 1,325,664 | 210,973 / 210,973 |
-| PNG RGBA16, SmallestSize9 / native9 † | 26,234.53 | 20,109.52 | 1.305 / 1.565 | 3,813,670 | 963,202 / 963,202 |
-| PNG RGBA8, Fastest1 / native1 † | 6,450.06 | 4,385.76 | 1.471 / 1.504 | 1,344,586 | 236,828 / 236,828 |
-| PNG RGBA16, NoCompression0 / native0 ‡ | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
+| PNG RGBA8, SmallestSize9 / native9 † | 22,323.44 | 17,315.98 | 1.289 / 1.563 | 1,325,664 | 210,973 / 210,973 |
+| PNG RGBA16, SmallestSize9 / native9 † | 26,359.88 | 20,077.47 | 1.313 / 1.422 | 3,813,670 | 963,202 / 963,202 |
+| PNG RGBA8, Fastest1 / native1 † | 6,321.82 | 4,366.98 | 1.448 / 1.460 | 1,344,453 | 236,828 / 236,828 |
+| PNG RGBA16, NoCompression0 / native0 ‡ | 443.91 | 421.09 | 1.054 / 1.090 | 1,741,712 | 1,066,552 / 1,066,552 |
 | JPEG baseline420, resident decode † | 1,297.81 | 1,009.85 | 1.285 / 1.304 | 757,319 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |

@@ -12,6 +12,11 @@ See [source metadata](source-metadata.md).
 owned output image. They return coded source metadata and keep the same limits,
 cancellation and metadata-policy controls; memory remains codec-dependent.
 
+PNG compression now predicts rows for strongly predictable content, including
+large RGBA16 gradients after exact flips and quarter turns. Samples and hidden RGB
+remain lossless; prediction admits two additional row buffers. Existing declared
+packet controls remain unchanged; other encoded byte sequences may change.
+
 ## 0.2.0
 
 Published 0.1.0 packages remain unchanged. The supported scope has expanded;

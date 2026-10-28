@@ -70,6 +70,9 @@ try {
     $pixelFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPixels.cs'))
     $vp8lFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8lControls.cs'))
     $vp8FixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8Controls.cs'))
+    $pngGradientPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPngGradient.cs'))
+    $pngOraclePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/IndependentRgbaPng.cs'))
+    $pngConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/PngCompressionConsumer.cs'))
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -90,6 +93,9 @@ try {
     <Compile Include="$pixelFixturePath" Link="OriginalPixels.cs" />
     <Compile Include="$vp8lFixturePath" Link="OriginalVp8lControls.cs" />
     <Compile Include="$vp8FixturePath" Link="OriginalVp8Controls.cs" />
+    <Compile Include="$pngGradientPath" Link="OriginalPngGradient.cs" />
+    <Compile Include="$pngOraclePath" Link="IndependentRgbaPng.cs" />
+    <Compile Include="$pngConsumerPath" Link="PngCompressionConsumer.cs" />
   </ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath (Join-Path $consumer 'Consumer.csproj') -Encoding utf8
@@ -270,6 +276,7 @@ foreach (var referenceSampling in new[] { JpegSampling.YCbCr444, JpegSampling.YC
 }
 await Lokad.Image.Tooling.CooperativeMemoryConsumer.Verify();
 Lokad.Image.Tooling.TextShapingConsumer.Verify();
+Lokad.Image.Tooling.PngCompressionConsumer.Verify();
 if (Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(
     File.ReadAllBytes(typeof(ImageBuffer).Assembly.Location))).ToLowerInvariant() != args[4])
     throw new Exception("Package consumer loaded a different assembly.");

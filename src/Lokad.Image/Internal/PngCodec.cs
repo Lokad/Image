@@ -1455,7 +1455,7 @@ internal static class PngCodec
         }
     }
 
-    private static int Paeth(int left, int up, int upperLeft)
+    internal static int Paeth(int left, int up, int upperLeft)
     {
         var predicted = left + up - upperLeft;
         var a = Math.Abs(predicted - left); var b = Math.Abs(predicted - up); var c = Math.Abs(predicted - upperLeft);
@@ -1522,6 +1522,14 @@ internal static class PngCodec
         // Establish row/chunk and compressor owners before writing the signature.
         context.Reserve(rowBytes + 65536L);
         var row = new byte[rowBytes];
+        var predict = level != 0 && PngRowPrediction.Useful(source, color, context.Cancellation);
+        byte[] previous = [], filteredRow = [];
+        if (predict)
+        {
+            context.Reserve(rowBytes * 2L);
+            context.Cancellation.ThrowIfCancellationRequested();
+            previous = new byte[rowBytes]; filteredRow = new byte[rowBytes];
+        }
         using var chunks = new IdatWriter(output, 4096, false);
         using var deflater = new PngDeflater(chunks, context, level);
         output.Write(Signature);
@@ -1589,7 +1597,13 @@ internal static class PngCodec
                     if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
                 }
             }
-            deflater.WriteRow(row);
+            if (predict)
+            {
+                var filter = PngRowPrediction.Apply(row, previous, filteredRow, Channels(color) * (source.BitDepth / 8), context.Cancellation);
+                deflater.WriteRow(filter == 0 ? row : filteredRow, filter);
+                (row, previous) = (previous, row);
+            }
+            else deflater.WriteRow(row);
         }
         deflater.Complete();
         chunks.Flush();

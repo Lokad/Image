@@ -1,8 +1,9 @@
 # Lokad.Image supported contract
 
-Lokad.Image 0.2.0 is an independently implemented, safe C#/.NET 10 still-image
+Lokad.Image is an independently implemented, safe C#/.NET 10 still-image
 library. The production package has no dependencies, unsafe code, native bindings,
-subprocess codecs or vendored sources. Published 0.1.0 packages are immutable.
+subprocess codecs or vendored sources. Published 0.1.0/0.2.0 packages are immutable;
+development targets 0.2.1.
 
 ## Formats
 
@@ -17,6 +18,12 @@ encoding, indexed/Adam7 PNG encoding and metadata round-tripping are unsupported
 ICC color conversion is not implemented. EXIF reorientation is opt-in; no codec
 silently applies color management. [Codec parity](codec-parity.md) names tested
 reference controls; it does not promise byte identity for arbitrary inputs/settings.
+
+Compressed PNG uses lossless row prediction when bounded sampling finds a strong
+residual reduction. Predictable 8/16-bit content keeps every sample, including
+transparent RGB; prediction uses two additional packed rows of workspace. The
+declared PNG packet controls retain their None-filter bytes. Encoded bytes outside
+those controls are not a stable contract.
 
 JPEG quality is 1–100 (default 85), sampling defaults to 4:2:0. Color quality maps
 to reference qscale `1 + (100 - Quality) * 30 / 99`; grayscale has its own quantizers.

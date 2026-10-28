@@ -27,7 +27,8 @@ ImageCodec.EncodePng(thumbnail, output);
 
 Dispose images, fonts and layouts after their final users; caller streams stay open.
 Operations support finite [resource limits and shared admission](docs/resource-admission.md)
-and cooperative cancellation. PNG retains 8/16-bit precision; JPEG/WebP encode at
+and cooperative cancellation. PNG retains 8/16-bit precision and predicts rows
+for compact encoding of gradients and other predictable content. JPEG/WebP encode at
 8 bits. WebP defaults to lossless. Transparent JPEG input needs explicit
 `JpegEncodeOptions.BackgroundRgb`.
 

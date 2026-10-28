@@ -25,6 +25,7 @@ def render():
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
     current_reconciliation = json.loads((ROOT / 'benchmarks/current-png-vp8-reconciliation-evidence.json').read_text(encoding='utf-8'))
+    png_prediction = json.loads((ROOT / 'benchmarks/png-predictable-compression-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -46,6 +47,8 @@ def render():
     assert png_cursor['productionChanged'] and png_cursor['independentQuietConfirmationThisPair']
     assert set(png_cursor['cases']) == {'ValidatePng8', 'ValidatePng16', 'ValidatePng16Async'}
     assert not current_reconciliation['productionChanged'] and current_reconciliation['allBuilds'] == 0
+    assert png_prediction['productionChanged'] and png_prediction['qualification']['actualPackageBothOs']
+    assert set(png_prediction['cases']) == {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeFast8', 'EncodeNoCompression16'}
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
     assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
@@ -65,6 +68,8 @@ def render():
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
         producer = current_reconciliation if case['id'] in {'case09', 'case11'} else trellis if case['id'] == 'case10' else photograph if case['id'] == 'case08' else alpha if case['id'] == 'case07' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        if case['id'] in {'case17', 'case18', 'case19', 'case20'}:
+            producer = png_prediction
         if vp8_case:
             observation = producer['cases'][vp8_cases[case['id']]][-1]
         elif case['id'] == 'case00':
@@ -189,7 +194,8 @@ def render():
     return f'''# Lokad.Image benchmarks
 
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
-**‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
+**‡ stored PNG**, like the other three PNG encoding rows, is refreshed after row
+prediction. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -271,6 +277,16 @@ JPEG inverse-render costs need current evidence before pass claims; validation,
 encoding and unrelated paths retain applicable proof. Packet/settings and owned
 output boundaries stay fixed. VP8 companions are now independently confirmed;
 PNG Fastest retains its applicable independent gap.
+
+[Predictable-content PNG](../benchmarks/PNG-PREDICTABLE-COMPRESSION.md) reduces the
+3000² RGBA16 gradient from29,375,876 to511,771 bytes; all six tested orientations
+remain below574KB with every sample exact. BothOS5,063 checks, affected scalar
+checks and the same actual package/three examples pass. Four displayed encoder
+costs are refreshed below with unchanged exact packets; each remains a CPU gap.
+The distinct predictive path still needs CPU evidence; other affected PNG encoder
+costs remain prior-production. Unchanged decoder/other-codec/editing proofs apply.
+[Closed coefficient trials](../benchmarks/WARM-VP8-COEFFICIENT-TRIALS.md) retain
+rejected VP8 experiments; their costs do not replace accepted-production evidence.
 
 
 ''' + codecs + '''

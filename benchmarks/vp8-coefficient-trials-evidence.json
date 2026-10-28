@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-10-28",
+  "rounds": [
+    "CHB1",
+    "CT1"
+  ],
+  "acceptedProductionChanges": false,
+  "scope": "Existing 513x259 opaque RGBA16 VP8 method4 complete-operation control; identical 72380-byte reference packets and exact normalized pixels, warm CPU0. No workload expansion.",
+  "headroomShort": {
+    "meanMicroseconds": 21108.984703703703,
+    "filteredN": 3,
+    "actualN": 3,
+    "allActualMeanMicroseconds": 21108.984703703703,
+    "ratio": 1.3516581093968885,
+    "upper": 1.4724115060903222,
+    "allocatedBytes": 1201552,
+    "encodedBytes": 72380,
+    "producerSha256": "dba01dc39a0822034c26cd72fee099c7eaa9eac6a7354a56cd88270eb8c58996"
+  },
+  "tokenShort": {
+    "meanMicroseconds": 20692.170814814817,
+    "filteredN": 3,
+    "actualN": 3,
+    "allActualMeanMicroseconds": 20692.170814814817,
+    "ratio": 1.3266748050694572,
+    "upper": 1.5553880210378626,
+    "allocatedBytes": 2331536,
+    "encodedBytes": 72380,
+    "producerSha256": "8091ede0b2093be02d7822ba07fb4b59b131707ede7588dd1c85f9f944a913fd"
+  },
+  "tokenIndependentBaseline": {
+    "meanMicroseconds": 20677.75267,
+    "filteredN": 10,
+    "actualN": 12,
+    "allActualMeanMicroseconds": 20704.734508333335,
+    "ratio": 1.3246984477790167,
+    "upper": 1.3413677473642691,
+    "allocatedBytes": 1201552,
+    "encodedBytes": 72380,
+    "producerSha256": "49c3730ef5500104a705df2297f0353244d4f4cfb41c52f35c176e865a5a09a1"
+  },
+  "tokenIndependentCandidate": {
+    "meanMicroseconds": 20426.792601851856,
+    "filteredN": 12,
+    "actualN": 12,
+    "allActualMeanMicroseconds": 20426.792601851856,
+    "ratio": 1.3105019826645332,
+    "upper": 1.3190596693443561,
+    "allocatedBytes": 2331536,
+    "encodedBytes": 72380,
+    "producerSha256": "8091ede0b2093be02d7822ba07fb4b59b131707ede7588dd1c85f9f944a913fd"
+  },
+  "filteredElapsedReduction": 0.012136718731153406,
+  "allActualElapsedReduction": 0.013424074883433668,
+  "tokenFrameCapacityBytes": {
+    "baseline": 461396,
+    "candidate": 1598132
+  },
+  "decision": "Reject CHB1 below its 5% short gate. Reject CT1: 1.21% independently measured elapsed reduction does not justify nearly doubled allocation and increased admitted frame capacity. Both prototypes and their dedicated tests removed; qualified PSC1 source and actual producer restored before the subsequent PNG work. No variants or repeated full/package proof.",
+  "archives": [
+    {
+      "file": "coefficient-headroom-rejected.tar.xz",
+      "sha256": "7beedeb8c1cb922e46347c925ea289f7c747647cf0791571b29ccaf0e723195d",
+      "bytes": 1837908,
+      "members": 130,
+      "mirrored": true,
+      "allMembersVerified": true
+    },
+    {
+      "file": "coefficient-token-retention-rejected.tar.xz",
+      "sha256": "6b95cecb209e733e123e76eecc4cd312105708738e7c5b81581aa7d6db791779",
+      "bytes": 1887192,
+      "members": 157,
+      "mirrored": true,
+      "allMembersVerified": true
+    }
+  ]
+}

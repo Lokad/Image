@@ -53,9 +53,9 @@ internal sealed partial class PngDeflater : Stream
         }
     }
 
-    internal void WriteRow(ReadOnlySpan<byte> row)
+    internal void WriteRow(ReadOnlySpan<byte> row, byte filter = 0)
     {
-        WriteByte(0); Write(row);
+        WriteByte(filter); Write(row);
         // A PNG scanline, including its filter byte, is one reference input
         // boundary. Flush stored data only after the entire row, never after
         // its separately written filter byte. Generic writes fill fixed blocks.

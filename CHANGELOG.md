@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Adaptive lossless PNG row prediction for predictable content, including
+  full-precision 16-bit gradients after flips and rotations; existing declared
+  reference packet controls remain unchanged.
 - Pixel-coding validation without a retained raster, with span/sync/async inputs,
   codec-dependent memory admission and the same required validity checks as decoding.
 - Selective sync/async PNG/JPEG/WebP probing with explicit unknown facts, bounded

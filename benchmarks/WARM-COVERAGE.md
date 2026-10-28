@@ -12,7 +12,9 @@ reconciled in the summary below.
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
 names 257 controls. Remove four retired boundaries and add two distinct required
 algorithms: **255 existing required cases**. Twelve named controls below cover
-the newly added read boundaries: **267 total**, without a shape/depth/settings grid.
+the newly added read boundaries: 267 cases. One newly required predictive PNG
+algorithm below brings the finite inventory to **268 total**, without a
+shape/depth/settings grid.
 
 Retired: PNG resident ImageBudget quota, JPEG420 ImageBudget quota, VP8 caller work
 budget32M and optional JPEG CompactColor. Their APIs/encoders no longer exist.
@@ -26,6 +28,13 @@ Added, using the existing 513×259 diagram and frozen settings:
 - `DiagramLossyDistortion8`, Q75/effort2: original-prediction-error mode selection
   before selected reconstruction, distinct from RDO/trellis. Exact 7,330-byte packet,
   SHA256 `325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b`.
+- `EncodePredictable16`: default Optimal, original 3000² RGBA16 gradient after
+  horizontal flip, R=16x/G=16y/B=8(x+y)/A=65535. Bounded content admission and
+  per-row byte prediction are distinct from the existing None-filter encoder
+  controls. Functional size <2 MiB and every sample exact are qualified;
+  equivalent complete-operation native comparison and CPU confirmation remain
+  outstanding. Freeze the reference prediction policy explicitly before timing;
+  these packets have a size/pixel gate, not a byte-identity target. No extra grid.
 
 Remaining inventory includes named inspection/Identify stream and resident
 boundaries; codec policies, normalization, caller gray/RGB/CMYK and CMYK/YCCK/411/410;
@@ -507,6 +516,14 @@ and their individual reports/raw archives.
 
 ## Next performance work
 
+The high-priority [predictable PNG regression](PNG-PREDICTABLE-COMPRESSION.md) is
+functionally closed: all six opaque geometries are below 574 KB, exact samples,
+both-OS full/scalar and same actual package checks pass. Its four displayed
+existing encoder costs are current; all remain gaps. Other affected PNG encoder
+costs need reconciliation before pass claims. Resolve the one new predictive
+algorithm's CPU boundary above, then resume ranked substantial gaps. Decoder,
+inspection, other-codec and editing algorithms retain applicable evidence.
+
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an
@@ -528,6 +545,10 @@ word/fragment, prediction/quantizer/trellis and other rejected variants stay clo
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package
 checks for accepted production changes. Preserve complete operation boundaries,
 exact pixels/packets, shared admission and quiet-VM confidence requirements.
+- [CHB1/CT1 coefficient trials](WARM-VP8-COEFFICIENT-TRIALS.md) are closed and
+  reverted. Headroom missed its 5% screen gate; retained tokens independently
+  saved only 1.21% elapsed while allocation grew from 1,201,552 to 2,331,536 B/op.
+  Do not renew either family without materially different evidence.
 - Prepared predictor pricing changes generic four-plane lossless prediction,
   including method4/5/6, normalization and stream/async callers that select it.
   Four displayed controls are refreshed; other affected named controls need
