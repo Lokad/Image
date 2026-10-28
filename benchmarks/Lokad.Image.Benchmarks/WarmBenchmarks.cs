@@ -72,6 +72,8 @@ internal static class WarmBenchmarks
                     new MsBuildArgument("/p:NuGetAudit=false"), new MsBuildArgument("/p:RestoreIgnoreFailedSources=true")]);
             if (!smoke) job = job.WithIterationTime(TimeInterval.FromMilliseconds(200));
             if (confirm) job = job.WithIterationCount(12);
+            if (!smoke && family == "Png" && selection == "EncodePredictable16")
+                job = job.WithInvocationCount(4).WithUnrollFactor(1);
             var config = ManualConfig.Create(DefaultConfig.Instance).AddJob(job).AddExporter(JsonExporter.Full)
                 .WithOptions(ConfigOptions.KeepBenchmarkFiles);
             var summaries = BenchmarkSwitcher.FromTypes([type])

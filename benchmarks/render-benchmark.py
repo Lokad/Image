@@ -26,7 +26,7 @@ def render():
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
     current_reconciliation = json.loads((ROOT / 'benchmarks/current-png-vp8-reconciliation-evidence.json').read_text(encoding='utf-8'))
     png_prediction = json.loads((ROOT / 'benchmarks/png-predictable-compression-evidence.json').read_text(encoding='utf-8'))
-    predictive_cost = json.loads((ROOT / 'benchmarks/warm-png-simd-row-prediction-evidence.json').read_text(encoding='utf-8'))
+    predictive_cost = json.loads((ROOT / 'benchmarks/warm-png-word-match-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -70,7 +70,9 @@ def render():
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
         producer = current_reconciliation if case['id'] in {'case09', 'case11'} else trellis if case['id'] == 'case10' else photograph if case['id'] == 'case08' else alpha if case['id'] == 'case07' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
-        if case['id'] in {'case17', 'case18', 'case19', 'case20'}:
+        if case['id'] in {'case17', 'case18'}:
+            producer = predictive_cost
+        elif case['id'] in {'case19', 'case20'}:
             producer = png_prediction
         if vp8_case:
             observation = producer['cases'][vp8_cases[case['id']]][-1]
@@ -207,8 +209,9 @@ def render():
     return f'''# Lokad.Image benchmarks
 
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
-**‡ stored PNG**, like the other three PNG encoding rows, is refreshed after row
-prediction. Fourteen other controls retain
+**‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
+SmallestSize and predictive PNG are refreshed after bounded match scanning.
+Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -223,7 +226,9 @@ the full performance objective.
 
 Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
-idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
+idle/process guards pass. Predictive PNG16 uses four complete sequential operations
+per iteration/native sample to resolve execution-rate shifts; costs are per operation.
+Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
 It remains a1.332× / upper1.360 gap. Allocation rises by8,224B/op for one reusable
 8KiB analysis buffer; RGBA16/async/photograph have current screens.
@@ -296,13 +301,15 @@ PNG Fastest retains its applicable independent gap.
 remain below574KB with every sample exact. BothOS5,063 checks, affected scalar
 checks and the same actual package/three examples pass. Four displayed encoder
 costs are refreshed below with unchanged exact packets; each remains a CPU gap.
-[SIMD row prediction](../benchmarks/WARM-PNG-SIMD-ROW-PREDICTION.md) reduces the
-predictive control's elapsed time by37.92% against a fresh independent baseline,
-38.12% across all actuals, with unchanged3,402,944B/op and exact573,041-byte packets.
-It remains1.691× / upper1.727. BothOS5,065 full checks, affected scalar and the same
-actual package/three examples pass. The four displayed None/stored paths retain
-their applicable costs; other affected predictive-input costs need current evidence.
-Deflate search is the next separate primitive; decoder/other-codec/editing proofs apply.
+[Bounded word matching](../benchmarks/WARM-PNG-WORD-MATCH.md) halves predictive PNG
+elapsed in a fresh matched pair, with unchanged allocation and exact573,041-byte
+packets. A variance-controlled confirmation establishes0.941× / upper0.979; stop
+this control unchanged. Batched3,402,572B/op amortizes measurement overhead and
+does not establish an allocation reduction. BothOS5,070 checks, affected scalar
+and the same actual package/three examples pass. SmallestSize8/16 have current
+1.330×/1.324× screens; no paired gain/regression claim follows. Other affected
+level6/9 PNG encoder costs need current evidence. Fastest/stored, decoding,
+other-codec and editing paths retain applicable proofs.
 [Closed coefficient trials](../benchmarks/WARM-VP8-COEFFICIENT-TRIALS.md) retain
 rejected VP8 experiments; their costs do not replace accepted-production evidence.
 

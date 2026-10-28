@@ -39,7 +39,10 @@ internal sealed class WarmPredictablePngEncode
             using (var input = File.Create(state.Input))
                 for (var y = 0; y < source.Height; y++) input.Write(MemoryMarshal.AsBytes(source.GetRow16(y)));
             native = new NativeWarmReference(state, cpu, predictablePngSize: 3000);
-            RequireNative(); before = native.Measure(smoke, sampleCount: count); ready = true;
+            // Long single operations exposed execution-rate shifts between
+            // samples. Four complete operations bound that measurement noise;
+            // the smoke path still executes one operation and makes no claim.
+            RequireNative(); before = native.Measure(smoke, fixedCount: 4, sampleCount: count); ready = true;
         }
         catch { Dispose(); throw; }
     }
@@ -102,6 +105,7 @@ internal sealed class WarmPredictablePngEncode
                 sourceUnchanged = true, independentOwnedOutput = true, preparedBoundary = proof,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmPng).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
+                nativeOperationsPerSample = before[0].Operations,
                 boundary = "Identical borrowed resident RGBA64LE to a complete fresh independently owned PNG. Managed public EncodePng includes wire-byte packing, bounded probe, row prediction, Deflate and MemoryStream acquisition/growth/disposal; no final snapshot copy. Native pinned FFmpeg n8.1 level6/pred=mixed includes LE-to-BE conversion into a prepared frame and fresh independently owned packet acquisition/encode/release; reusable codec/frame/wrappers. One CPU/thread, optimized JIT, nonconcurrent workstation GC. Preparation, IO, IPC, hashing, correctness decoding and startup excluded. Exact pixels and <2MiB gate; packet identity is observed, not required for this new practical-compression control."
             }, EncoderQualityCalibration.Json) + "\n");
         }

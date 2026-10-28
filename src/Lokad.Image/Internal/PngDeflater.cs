@@ -1,3 +1,6 @@
+using System.Buffers.Binary;
+using System.Numerics;
+
 namespace Lokad.Image.Internal;
 
 // Independent RFC1950/1951 streaming stored/greedy/lazy encoder. Only a bounded history,
@@ -161,7 +164,9 @@ internal sealed partial class PngDeflater : Stream
                         && Byte(prior) == Byte(position) && Byte(prior + 1) == Byte(position + 1))
                     {
                         var found = 2;
-                        while (found < available && Byte(prior + found) == Byte(position + found)) found++;
+                        var prefix = Math.Min(8, available);
+                        while (found < prefix && Byte(prior + found) == Byte(position + found)) found++;
+                        if (found == 8 && found < available) found = MatchLength(history, prior, position, found, available);
                         context.Cancellation.ThrowIfCancellationRequested();
                         if (found > best) { best = found; start = prior; if (found >= enough) break; }
                     }
@@ -189,6 +194,29 @@ internal sealed partial class PngDeflater : Stream
     {
         tokens[tokenCount++] = token;
         if (tokenCount == TokenCapacity) Block(false);
+    }
+
+    // The caller verified the prefix. Input history is immutable during search,
+    // including overlapping matches. Split at either 64KiB ring edge so every
+    // word is bounded by both the retained array and the <=258-byte lookahead.
+    internal static int MatchLength(ReadOnlySpan<byte> history, long prior, long current, int found, int available)
+    {
+        while (found < available)
+        {
+            var leftOffset = (int)((prior + found) & (2 * Window - 1));
+            var rightOffset = (int)((current + found) & (2 * Window - 1));
+            var count = Math.Min(available - found, Math.Min(2 * Window - leftOffset, 2 * Window - rightOffset));
+            var left = history.Slice(leftOffset, count); var right = history.Slice(rightOffset, count); var i = 0;
+            for (; i <= count - 8; i += 8)
+            {
+                var different = BinaryPrimitives.ReadUInt64LittleEndian(left.Slice(i, 8))
+                    ^ BinaryPrimitives.ReadUInt64LittleEndian(right.Slice(i, 8));
+                if (different != 0) return found + i + (BitOperations.TrailingZeroCount(different) >> 3);
+            }
+            for (; i < count; i++) if (left[i] != right[i]) return found + i;
+            found += count;
+        }
+        return found;
     }
 
     internal void Complete()

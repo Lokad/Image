@@ -32,8 +32,9 @@ Added, using the existing 513×259 diagram and frozen settings:
   horizontal flip, R=16x/G=16y/B=8(x+y)/A=65535. Bounded content admission and
   per-row byte prediction are distinct from the existing None-filter encoder
   controls. Functional size <2 MiB and every sample exact are qualified;
-  the current complete-operation comparison independently confirms a 1.691× /
-  upper1.727 gap, 3,402,944B/op after exact SIMD row prediction. Native
+  the current complete-operation comparison independently passes at0.941× /
+  upper0.979 after bounded word matching,3,402,572B/op with four-operation
+  batches. Stop this control unchanged. Native
   level6/pred=mixed is frozen explicitly;
   these packets have a size/pixel gate, not a byte-identity target. No extra grid.
 
@@ -522,14 +523,15 @@ functionally closed: all six opaque geometries are below 574 KB, exact samples,
 both-OS full/scalar and same actual package checks pass. Its four displayed
 existing encoder costs are current; all remain gaps. Other affected PNG encoder
 costs need reconciliation before pass claims. The new predictive algorithm's
-[SIMD row prediction](WARM-PNG-SIMD-ROW-PREDICTION.md) reduces elapsed37.92% against
-a fresh independent baseline (38.12% all actuals), unchanged3,402,944B/op and exact
-573,041-byte packets. Full both-OS5,065, affected scalar andsameactualpackage pass.
-Its1.691× / upper1.727 remains the largest material codec gap. The preceding
-profile attributes58.92% to untouched Deflate search/insertion; it supports one
-separate bounded longest-match comparison trial. Preserve dictionary order,
-first mismatch,258-byte bound,ring edges,cancellation andallpacket gates. Higher
-JPEG probe ratios remain open at submicrosecond costs. Decoder,
+[bounded word matching](WARM-PNG-WORD-MATCH.md) halves elapsed against a fresh
+independent baseline, preserving allocation,exact573,041-byte packets andallgates.
+A four-complete-operation confirmation resolves execution-rate uncertainty at
+0.941× / upper0.979; stop predictive PNG unchanged. Two single-operation
+confirmations with wider bounds andone invalid/excluded selector run are retained.
+BothOS5,070, affected scalar andsameactualpackage pass. SmallestSize8/16 current
+screens remain1.330×/1.324×; no gain/regression orpass claim. Other affectedlevel6/9
+PNG encoder costs need evidence beforepassclaims. Resume remainingmaterialgaps;
+higherJPEGprobe ratios remainopenatsubmicrosecondcosts. Decoder,
 inspection, other-codec and editing algorithms retain applicable evidence.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
