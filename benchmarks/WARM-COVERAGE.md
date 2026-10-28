@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current Lanczos3 byte reduction](CURRENT-LANCZOS3-REDUCE8-COST.md) independently
+confirms the existing513×259RGBA8→256×129 path at1.500× / upper1.511,
+138,451B/op. Exact managed/native pixels, source/independent ownership and quiet
+guards pass. This unchanged-path cost confirmation reuses current Windows/Linux
+and actual-package qualification. One small selector build, no production,
+harness/native build or new control. Other Lanczos rows retain release screens;
+no general Lanczos CPU-pass claim follows.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
