@@ -1,4 +1,7 @@
+using System.Buffers.Binary;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -39,6 +42,45 @@ internal sealed partial class Vp8PreparedInput : IDisposable
 
     private static int Sample(ReadOnlySpan<byte> bytes, ReadOnlySpan<ushort> words, bool eightBit, int index)
         => eightBit ? bytes[index] : (words[index] + 128) / 257;
+
+    private static bool HasAlpha8(ReadOnlySpan<byte> row)
+    {
+        var hasAlpha = false; var at = 0;
+        if (Avx2.IsSupported)
+        {
+            var mask = Vector256.Create(0xff000000u);
+            for (; at <= row.Length - 32; at += 32)
+            {
+                var pixels = Vector256.Create(MemoryMarshal.Cast<byte, uint>(row.Slice(at, 32)));
+                hasAlpha |= Avx2.MoveMask(Avx2.CompareEqual(Avx2.And(pixels, mask), mask).AsByte()) != -1;
+            }
+        }
+        for (; at < row.Length; at += 4) hasAlpha |= row[at + 3] != 255;
+        return hasAlpha;
+    }
+
+    // Eight RGBA pixels share the original Q16 matrix and half-up rounding.
+    // At most235 fits both narrowing steps; write only the eight owned Y slots.
+    // The scalar loop below handles short rows, tails and other representations.
+    private static int PrepareLuma8(ReadOnlySpan<byte> row, Span<byte> luma)
+    {
+        if (!Avx2.IsSupported) return 0;
+        var mask = Vector256.Create(255u); var bias = Vector256.Create((uint)((16 << 16) + (1 << 15)));
+        var red = Vector256.Create((uint)Yr); var green = Vector256.Create((uint)Yg); var blue = Vector256.Create((uint)Yb);
+        var x = 0;
+        for (; x <= luma.Length - 8; x += 8)
+        {
+            var pixels = Vector256.Create(MemoryMarshal.Cast<byte, uint>(row.Slice(x * 4, 32)));
+            var r = Avx2.MultiplyLow(Avx2.And(pixels, mask), red);
+            var g = Avx2.MultiplyLow(Avx2.And(Avx2.ShiftRightLogical(pixels, 8), mask), green);
+            var b = Avx2.MultiplyLow(Avx2.And(Avx2.ShiftRightLogical(pixels, 16), mask), blue);
+            var values = Avx2.ShiftRightLogical(Avx2.Add(Avx2.Add(r, g), Avx2.Add(b, bias)), 16);
+            var words = Vector128.Narrow(values.GetLower(), values.GetUpper());
+            var packed = Vector128.Narrow(words, Vector128<ushort>.Zero);
+            BinaryPrimitives.WriteUInt64LittleEndian(luma[x..], packed.AsUInt64().GetElement(0));
+        }
+        return x;
+    }
 
     // Four linear samples use twelve-bit values. Thirty-three inverse knots
     // have seven fractional input bits; interpolation preserves a factor four
@@ -81,8 +123,9 @@ internal sealed partial class Vp8PreparedInput : IDisposable
         for (var y = 0; y < height; y++)
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            for (var x = 0; x < width; x++)
-                hasAlpha |= Sample(bytes, words, eightBit, (y * width + x) * 4 + 3) != 255;
+            if (eightBit) hasAlpha |= HasAlpha8(bytes.Slice(y * width * 4, width * 4));
+            else for (var x = 0; x < width; x++)
+                hasAlpha |= Sample(bytes, words, false, (y * width + x) * 4 + 3) != 255;
         }
         var result = new Vp8PreparedInput(context, width, height, hasAlpha);
         try
@@ -106,7 +149,9 @@ internal sealed partial class Vp8PreparedInput : IDisposable
                 for (var y = 0; y < height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    for (var x = 0; x < width; x++)
+                    var preparedLuma = eightBit && !hasAlpha
+                        ? PrepareLuma8(bytes.Slice(y * width * 4, width * 4), yPlane.Slice(y * result.Stride, width)) : 0;
+                    for (var x = preparedLuma; x < width; x++)
                     {
                         var p = (y * width + x) * 4;
                         var r = Sample(bytes, words, eightBit, p); var g = Sample(bytes, words, eightBit, p + 1); var b = Sample(bytes, words, eightBit, p + 2);

@@ -75,6 +75,36 @@ public sealed class Vp8PreparedInputTests
     }
 
     [Fact]
+    public void BytePackingAndOpacityAtEveryLaneAgreeWithScalarWordPreparation()
+    {
+        foreach (var width in new[] { 1, 7, 8, 9, 15, 16, 17, 33 })
+        {
+            using var bytes = ImageBuffer.Create(width, 3, 8);
+            using var words = ImageBuffer.Create(width, 3, 16);
+            var original = OriginalPixels.Generate(width, 3, 8);
+            for (var at = 3; at < original.Length; at += 4) original[at] = 255;
+            for (var transparent = -1; transparent < width * 3; transparent++)
+            {
+                if (transparent >= 0) original[transparent * 4 + 3] = 254;
+                for (var y = 0; y < 3; y++)
+                {
+                    original.AsSpan(y * width * 4, width * 4).CopyTo(bytes.GetRow8(y));
+                    var row = words.GetRow16(y);
+                    for (var x = 0; x < row.Length; x++) row[x] = (ushort)(original[y * width * 4 + x] * 257);
+                }
+                using var context = new OperationContext(ImageLimits.Default, default);
+                using var a = Vp8PreparedInput.Create(bytes, context);
+                using var b = Vp8PreparedInput.Create(words, context);
+                Assert.Equal(transparent >= 0, a.HasAlpha);
+                Assert.Equal(b.HasAlpha, a.HasAlpha);
+                Assert.True(a.Y.SequenceEqual(b.Y)); Assert.True(a.U.SequenceEqual(b.U)); Assert.True(a.V.SequenceEqual(b.V));
+                Assert.True(a.Alpha.SequenceEqual(b.Alpha));
+                if (transparent >= 0) original[transparent * 4 + 3] = 255;
+            }
+        }
+    }
+
+    [Fact]
     public void OpaqueVectorScratchRefusalIsTerminalWithoutSelectingSmallerScalarWorkspace()
     {
         if (!System.Runtime.Intrinsics.X86.Avx512F.IsSupported || !System.Runtime.Intrinsics.X86.Avx512BW.IsSupported

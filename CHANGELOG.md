@@ -26,6 +26,8 @@
   preserving exact packets, logical-byte admission and per-bit cancellation.
 - Skip losing VP8 texture scores using reconstructed-pixel error bounds,
   preserving exact decisions, cancellation and memory ownership.
+- SIMD alpha inspection and opaque luma preparation for 8-bit VP8 input,
+  preserving exact packets, bounded workspace and portable fallback.
 
 ## 0.2.0 — 2026-10-27
 

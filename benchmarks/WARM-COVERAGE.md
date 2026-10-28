@@ -254,8 +254,8 @@ RGB/RGBA packing/padding and fallback. BothOS5054full,SAME package/three example
 8color normal/scalar,293public JPEG normal/scalar and15AVX2-disabled controls pass.
 Baseline/focused proof reused;zero baseline retiming or harness/native/selector
 builds. Bulk byte-plane color costs change; selectedJPEG420 refreshed,other affected
-controls need current proof before pass claims. Largest remaining ratios prioritize
-VP8trellis1.519/photo1.479/PNGFastest1.471. A bounded current6second VP8profile
+controls need current proof before pass claims. The subsequent VP8 input round
+below supersedes earlier VP8 encoding costs. A bounded pre-input6second VP8profile
 (5912samples,exact6818B packet) places40.7% in Apply;one hostbuild,no production/
 native rebuild or gain claim. Instruction attribution and one
 [quadratic distortion trial](VP8-QUADRATIC-DISTORTION-REJECTED.md) are complete:
@@ -272,12 +272,33 @@ photograph variants. A bounded
 [PNGFastest count replay](png-fast-match-counts-evidence.json) finds94.1% selected
 copies shorter than8bytes,3.33extension comparisons per attempt,exact236828B
 packet. No substantial bulk match-extension lead is established; no production
-candidate or timing run. Next inspect the existing effort2 fast VP8 path. Do not reopen closed state-collapse/
+candidate or timing run. Do not reopen closed state-collapse/
 uniform/scan/batch families or repeat unchanged profiles.
+
+[SIMD VP8 input preparation](WARM-VP8-SIMD-INPUT.md) independently reduces the
+effort 2 diagram's mean by 13.2% using all actual samples (14.3% filtered), to
+3.382 ms, 1.345× / upper 1.423; 741,375 B/op and an exact 7,330 B packet.
+The earlier independent 5.4% pair overlapped; one final reverse-order pair
+separates filtered and unfiltered intervals. All observations and material native
+drift remain retained. Five other displayed VP8 controls have wide short bounds,
+without gain/regression claims. Both systems pass 5,055 full checks, 14 preparation
+normal/scalar controls, 27 scalar public packet controls, the SAME actual package
+and three examples. AVX2 alpha/luma preserves Q16 math, tails, padding, portable
+fallback, row cancellation and capacity; no owner or storage is added.
+Stop this primitive. Resolve material wide companion measurements before choosing
+the next opportunity; the full 267-path warm upper ≤1× objective remains.
 
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
+
+- SIMD RGBA8 VP8 alpha scanning and opaque luma change preparation costs across
+  efforts 0–6 and normalization/stream/async/cancelable callers. Shared Create layout
+  also changes; opaque16 is refreshed though its scalar math remains. All six
+  displayed VP8 encoding controls are current; other affected inventory cases
+  need applicable current costs before a CPU-pass claim. VP8 decoding,
+  VP8L/PNG/JPEG/editing/text and applicable unchanged confirmations remain valid.
+  No new owned capacity is introduced.
 
 - Fuel/ownership cleanup changed polling, codec framing and nested callers. Earlier
   end-to-end costs do not establish current performance. Bicubic extraction kept
