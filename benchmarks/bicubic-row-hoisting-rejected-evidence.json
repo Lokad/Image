@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-10-28",
+  "version": "0.2.1",
+  "round": "BRH1",
+  "status": "rejected-restored",
+  "productionChanged": false,
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "case": "WarmBicubicResize/TightCross16",
+  "candidate": {
+    "librarySha256": "e17cc4a92a84d73e24db454a2af1dbfecc426dd295804c521f4ec3b049c34880",
+    "sourceSha256": "e39c0790b6ad6c76906fccaf35bc0118be514e879fc1a7db3488bf96661c98d4",
+    "microseconds": 1362.6605520833332,
+    "worstBracketRatio": 1.572051404518614,
+    "conservativeRatioUpper": 1.7136024634768003,
+    "allocatedBytes": 1063410,
+    "actuals": [
+      1367698.3875,
+      1361065.09375,
+      1359218.175
+    ],
+    "nativeBrackets": [
+      {
+        "mean": 866804.0677083334,
+        "standardError": 763.3812671342557,
+        "confidenceLower": 842681.9414831384,
+        "confidenceUpper": 890926.1939335284,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 64,
+            "ElapsedNanoseconds": 55401538,
+            "CompletedOperations": 387,
+            "Observed": 59985,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 865649.03125
+          },
+          {
+            "State": "sample",
+            "Operations": 64,
+            "ElapsedNanoseconds": 55567761,
+            "CompletedOperations": 451,
+            "Observed": 69905,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 868246.265625
+          },
+          {
+            "State": "sample",
+            "Operations": 64,
+            "ElapsedNanoseconds": 55457082,
+            "CompletedOperations": 515,
+            "Observed": 79825,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 866516.90625
+          }
+        ]
+      },
+      {
+        "mean": 897842.171875,
+        "standardError": 891.5258213425132,
+        "confidenceLower": 869670.7989040903,
+        "confidenceUpper": 926013.5448459097,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 64,
+            "ElapsedNanoseconds": 57575682,
+            "CompletedOperations": 771,
+            "Observed": 119505,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 899620.03125
+          },
+          {
+            "State": "sample",
+            "Operations": 64,
+            "ElapsedNanoseconds": 57412544,
+            "CompletedOperations": 835,
+            "Observed": 129425,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 897071
+          },
+          {
+            "State": "sample",
+            "Operations": 64,
+            "ElapsedNanoseconds": 57397471,
+            "CompletedOperations": 899,
+            "Observed": 139345,
+            "OutputStride": 2048,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 896835.484375
+          }
+        ]
+      }
+    ]
+  },
+  "applicableBaseline": {
+    "evidence": "bicubic-word-guard-vector-rejected-evidence.json",
+    "path": "freshBaselineShort",
+    "microseconds": 1263.4009027778
+  },
+  "correctness": {
+    "exactManagedPixels": true,
+    "nativeRgbAlphaMaximum": 1,
+    "nativeRgbAlphaRmseMaximum": 0.25,
+    "sourceOwnershipQuietnessPassed": true,
+    "windowsLinuxNormalScalarPublicCasesEach": 16
+  },
+  "restoration": {
+    "sourceSha256": "e347f0d8d86eda8b31778cc328345324d6469d7520f01deff9b08dfbf8883c79",
+    "linuxSha256": "7640836693491912a9f344441ef9cc2619181d3ca785b9d517aa1d57c953fba7",
+    "windowsSha256": "1a5020c773e22630d0b8575dddc1996fba439e446d1092823da5b914cba0ab0e",
+    "packageSha256": "3888290114133bee362833275ed42cb9b80b44500cbdb86a1c86c4e185574743",
+    "fullPackageQualificationReused": true
+  },
+  "rawArchive": {
+    "file": "bicubic-row-hoisting-rejected.tar.xz",
+    "sha256": "0a7119f711b3dbd936748a9fb8af464952e1049da333a71327d27306bb762e3e",
+    "bytes": 1328892,
+    "members": 114,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "decision": "Fails the 5 percent whole-operation screen gate. No variants or independent confirmation; original production restored. Full observations, selectors, producers and restoration are in the cited raw archive."
+}
