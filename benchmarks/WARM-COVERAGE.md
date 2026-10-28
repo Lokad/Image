@@ -593,6 +593,19 @@ claim against earlier screens. Current immutable TGV1 producer and cached
 selector/worker/fixture are reused with zero builds or repeated qualification;
 CrossWord/math/dispatch source pins preserve applicable attribution. No new path.
 
+[Ordinary quantization caller invariants](WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md)
+supersedes the earlier six displayed VP8 encode costs. Photograph independently
+improves by 6.93% filtered / 6.90% all actuals: 1.433× / upper 1.438, unchanged
+809,072 B/op and exact 17,688-byte packet. Five affected companions have current
+short screens; all remain gaps, with unchanged allocations and packets. Other
+method0–6/depth/alpha/stream/async paths selecting ordinary quantization need
+applicable current costs before CPU-pass claims. Full 5,065 perOS, 41 focused
+normal/scalar, 27 public scalar and SAME actual package/three examples pass.
+Nine unreachable private invalid-input test rows go; all public/live checks,
+native hashes and 73,504 arithmetic blocks stay. Other codecs, decoding, editing/
+text and passing resize paths retain applicable unchanged evidence. No new path
+or parity pass; the full 268-path objective remains open.
+
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an

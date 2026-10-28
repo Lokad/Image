@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
@@ -31,26 +30,6 @@ public sealed class Vp8BlockQuantizationTests
         }
     }
 
-    [Theory]
-    [InlineData(8, 16384)]
-    [InlineData(-12, 10923)]
-    public void ReconstructionOnePastSignedWordEndpointsKeepsTheExactValidPrefix(short input, int step)
-    {
-        int[] order = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
-        for (var position = 0; position < 16; position++)
-        {
-            var values = new int[80]; var coefficients = Enumerable.Repeat((short)4, 16).ToArray();
-            var levels = Enumerable.Repeat((short)29999, 16).ToArray();
-            for (var p = 0; p < 16; p++) { values[p] = 1; values[16 + p] = 32768; }
-            values[position] = step; coefficients[position] = input;
-            Assert.Throws<OverflowException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
-            for (var p = 0; p < 16; p++)
-            {
-                Assert.Equal(p == position ? input : p < position ? (short)1 : (short)4, coefficients[p]);
-                Assert.Equal(order[p] < position ? (short)1 : (short)29999, levels[p]);
-            }
-        }
-    }
 
     private static void MinimumStep(Span<int> values)
     {
@@ -162,29 +141,7 @@ public sealed class Vp8BlockQuantizationTests
         Assert.Equal(original, Vp8PreparedInputTests.Hash(input)); Assert.Equal(retained, root.Bytes);
     }
 
-    [Theory]
-    [InlineData(short.MinValue)] [InlineData(-16321)] [InlineData(16321)] [InlineData(short.MaxValue)]
-    public void InvalidTransformRangeFailsBeforeMutatingEitherBuffer(short invalid)
-    {
-        var values = new int[80]; MinimumStep(values);
-        for (var position = 0; position < 16; position++)
-        {
-            var coefficients = Enumerable.Repeat((short)4, 18).ToArray(); coefficients[position] = invalid;
-            var original = coefficients.ToArray(); var levels = Enumerable.Repeat((short)77, 18).ToArray();
-            var failure = Assert.Throws<ArgumentOutOfRangeException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
-            Assert.Equal("coefficients", failure.ParamName);
-            Assert.Equal(original, coefficients); Assert.All(levels, value => Assert.Equal((short)77, value));
-        }
-    }
 
-    [Fact]
-    public void OverlappingCallerBuffersFailBeforeAnyMutation()
-    {
-        var data = Enumerable.Range(0, 32).Select(i => (short)i).ToArray(); var original = data.ToArray();
-        var values = new int[80]; MinimumStep(values);
-        Assert.Throws<ArgumentException>(() => Vp8BlockQuantization.Apply(data.AsSpan(0, 18), data.AsSpan(8, 18), new(values)));
-        Assert.Equal(original, data);
-    }
 
     [Fact]
     public void EntireCoefficientDomainAndInt32BoundariesRetainFrozenScalarLevels()
@@ -249,42 +206,7 @@ public sealed class Vp8BlockQuantizationTests
         Assert.Equal((30000, -30000, 97, -98), ((int)coefficients[16], (int)coefficients[17], (int)levels[16], (int)levels[17]));
     }
 
-    [Fact]
-    public void CheckedReconstructionPublishesOnlyTheValidPrefix()
-    {
-        foreach (var position in Enumerable.Range(0, 16))
-        foreach (var step in new[] { int.MinValue, int.MaxValue, 65536, -65536, 32768, -32769 })
-        {
-            var coefficients = new short[16]; var levels = Enumerable.Repeat((short)29999, 16).ToArray(); var values = new int[80];
-            for (var p = 0; p < 16; p++)
-            {
-                coefficients[p] = (short)(p % 2 == 0 ? 1000 : -1000);
-                values[p] = p == position ? step : 1; values[16 + p] = 32768;
-            }
-            Assert.Throws<OverflowException>(() => Vp8BlockQuantization.Apply(coefficients, levels, new(values)));
-            for (var p = 0; p < 16; p++)
-            {
-                Assert.Equal((short)((p < position ? 250 : 1000) * (p % 2 == 0 ? 1 : -1)), coefficients[p]);
-                var x = p & 3; var y = p >> 2; var d = x + y;
-                var before = d < 4 ? d * (d + 1) / 2 : 16 - (7 - d) * (8 - d) / 2;
-                var rank = before + ((d & 1) != 0 ? Math.Min(3, d) - x : x - Math.Max(0, d - 3));
-                Assert.Equal((short)(p < position ? (p % 2 == 0 ? 250 : -250) : 29999), levels[rank]);
-            }
-        }
-    }
 
-    [Fact]
-    public void OutputAliasingBorrowedMatrixFailsBeforeAnyMutation()
-    {
-        var values = new int[96]; MinimumStep(values); var saved = values.ToArray();
-        var ordinary = Enumerable.Repeat((short)77, 18).ToArray(); var original = ordinary.ToArray();
-        Assert.Throws<ArgumentException>(() => Vp8BlockQuantization.Apply(
-            MemoryMarshal.Cast<int, short>(values.AsSpan()).Slice(0, 18), ordinary, new(values.AsSpan(0, 80))));
-        Assert.Equal(saved, values); Assert.Equal(original, ordinary);
-        Assert.Throws<ArgumentException>(() => Vp8BlockQuantization.Apply(
-            ordinary, MemoryMarshal.Cast<int, short>(values.AsSpan()).Slice(32, 18), new(values.AsSpan(0, 80))));
-        Assert.Equal(saved, values); Assert.Equal(original, ordinary);
-    }
 
     [Fact]
     public void WarmQuantizationDoesNotAllocate()

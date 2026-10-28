@@ -18,6 +18,10 @@ def render():
     trellis = json.loads((ROOT / 'benchmarks/warm-vp8-trellis-caller-invariants-evidence.json').read_text(encoding='utf-8'))
     photograph = json.loads((ROOT / 'benchmarks/current-vp8-photograph-encoding-evidence.json').read_text(encoding='utf-8'))
     alpha = json.loads((ROOT / 'benchmarks/current-vp8-alpha8-encoding-evidence.json').read_text(encoding='utf-8'))
+    vp8_quantization = json.loads((ROOT / 'benchmarks/warm-vp8-quantization-caller-invariants-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_quantization['qualification']['sameActualPackageBothOs']
+    assert vp8_quantization['sourceScope']['quantizedLevelArithmeticUnchanged']
+    assert len(vp8_quantization['cases']) == 6
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
     vp8l = json.loads((ROOT / 'benchmarks/warm-vp8l-prepared-prediction-cost-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
@@ -91,7 +95,7 @@ def render():
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
-        producer = current_reconciliation if case['id'] in {'case09', 'case11'} else trellis if case['id'] == 'case10' else photograph if case['id'] == 'case08' else alpha if case['id'] == 'case07' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] in {'case17', 'case18'}:
             producer = predictive_cost
         elif case['id'] in {'case19', 'case20'}:
@@ -118,7 +122,7 @@ def render():
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12', 'case23', 'case24'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case08', 'case12', 'case23', 'case24'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -253,7 +257,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows, VP8L RGBA8 encode and bicubic Up16/TightCross16 have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph, VP8L RGBA8 encode and bicubic Up16/TightCross16 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -264,22 +268,18 @@ It remains a1.332× / upper1.360 gap. Allocation rises by8,224B/op for one reusa
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
-SIMD input preparation reduces VP8 effort2 elapsed by13.2% using all actuals in
-the final independent comparison (14.3% filtered);1.345× / upper1.423 remains open,
-with741,375B/op and exact packets. An earlier independent pair gives5.4% with
-overlapping intervals; both pairs and the material native drift remain recorded.
-[Trellis caller invariants](../benchmarks/WARM-VP8-TRELLIS-CALLER-INVARIANTS.md)
-reduce effort6 elapsed by4.98% filtered/5.14% all actuals in a fresh independent
-pair, retaining754,344B/op and the exact6,818B packet. Its1.439× / upper1.451 gap
-remains. Other changed effort5/6 callers need applicable current costs before CPU-pass claims.
-VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
-17,688-byte packet. VP8 alpha confirms 1.296× / upper 1.306, 21,353,208 B/op and
-an exact 98,590-byte packet. These follow-ups reuse the immutable build and package
-proof. Opaque RGBA16 and diagram4 now confirm 1.412× / upper 1.417 and
-1.368× / upper 1.374, retaining exact 72,380/7,100-byte packets and
-1,201,552/741,137 B/op. These cost confirmations make no gain/regression claim.
-The current producer passes 5,074 checks on each platform and the same actual
-package/three examples, including exact bicubic pixels and shared ownership.
+[Quantization caller invariants](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md)
+reduce VP8 photograph elapsed by 6.93% filtered / 6.90% all actuals against a fresh
+independent baseline: 1.433× / upper 1.438, unchanged 809,072 B/op and exact
+17,688-byte packet. All six affected displayed encodes have current costs;
+the five companions are short screens and remain gaps, with unchanged allocations
+and packets. Unmatched screens establish no causal gain or regression.
+Other affected method0–6 boundaries need applicable current costs before CPU-pass claims.
+Earlier input preparation and trellis gains remain in the linked history.
+The current producer passes 5,065 checks on each platform, plus 41 focused
+normal/scalar and 27 public scalar cases, and the same actual package/three examples.
+Nine tests solely for unreachable private invalid inputs were removed; public/live
+coverage, exact bicubic pixels and shared ownership remain.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. [Byte zero-tap trimming](../benchmarks/WARM-BICUBIC-ZERO-TAPS.md)
