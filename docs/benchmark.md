@@ -3,8 +3,8 @@
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
-current-cost screen. The release snapshot remains immutable. Sixteen read
-controls below use qualified 0.2.1 builds. These 47 displayed controls do not
+current-cost screen. The release snapshot remains immutable. Eighteen read
+controls below use qualified 0.2.1 builds. These 49 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -121,6 +121,8 @@ and unlisted content/settings are excluded.
 | Identify PNG8 complete container, resident, adapter reference | 16.133 | 13.073 | 1.234 / 1.312 | 96 | Screen gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |
 | Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |
+| Identify PNG8, fresh seekable Stream, adapter reference | 22.674 | 15.915 | 1.425 / 1.535 | 192 | Screen gap |
+| Identify PNG8, async nonseekable, adapter reference | 26.586 | 21.477 | 1.238 / 1.271 | 8,400 | Confirmed gap |
 
 Probes compare requested dimensions using FFmpeg AVIO/owned descriptors plus an
 original bounded header adapter; they stop before pixel payloads. Validation
@@ -152,7 +154,11 @@ current screen gap.
 passes independently with all nine metadata facts,96B/op each. JPEG retains the
 explicit canonical-header adapter; WebP includes public-parser packet buffering
 and EOF flush. These frozen packet results are not general codec speed claims.
-Other stream/async Identify boundaries remain pending.
+[PNG stream Identify](../benchmarks/CURRENT-PNG-STREAM-IDENTIFY.md) retains complete
+acquisition/EOF/ownership and all nine facts. Seekable is a screen gap; async has
+one independent gap confirmation resolving its wide short interval. Existing
+same-packet/delivery controls pass normal/scalar. Other default decoder boundaries
+remain pending; these results do not imply a general read-API pass.
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

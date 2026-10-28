@@ -89,6 +89,7 @@ public class WarmStreamIdentify
             || !proof.GetProperty("invalidDeflateAcceptedWithoutPixelDecode").GetBoolean()
             || !proof.GetProperty("changedMetadataObserved").GetBoolean() || !proof.GetProperty("nativeLiveDescriptorsIndependent").GetBoolean())
             throw new InvalidOperationException("Missing current equivalent-boundary prerequisite.");
+        if (!proof.GetProperty("typedSourceMetadataExact").GetBoolean()) throw new InvalidOperationException("Stream Identify needs all nine source metadata fields.");
         var controls = proof.GetProperty("controls").EnumerateArray().ToArray();
         if (controls.Length != 21 || controls.Select(c => c.GetProperty("name").GetString()).Distinct().Count() != 21
             || controls.Any(c => !c.GetProperty("managedAndNativeAgree").GetBoolean())
@@ -158,14 +159,14 @@ public class WarmStreamIdentify
     }
     private static byte[] Bytes(ImageInfo info)
     {
-        var result = new byte[24]; int[] values = [(int)info.Format, info.Width, info.Height, info.BitDepth, info.HasAlpha ? 1 : 0, (int)info.Orientation];
+        var result = new byte[36]; int[] values = [(int)info.Format, info.Width, info.Height, info.BitDepth, info.HasAlpha ? 1 : 0, (int)info.Orientation, (int)info.SourceColor, (int)info.SourceAlpha, info.SourceComponentCount];
         for (var i = 0; i < values.Length; i++) BinaryPrimitives.WriteInt32LittleEndian(result.AsSpan(4 * i), values[i]);
         return result;
     }
     private void RequireNativeOutput()
     {
         if (!File.ReadAllBytes(state.NativeOutput).AsSpan().SequenceEqual(descriptor))
-            throw new InvalidOperationException("Native owned descriptor differs from all six public metadata fields.");
+            throw new InvalidOperationException("Native owned descriptor differs from all nine public metadata fields.");
     }
     [Benchmark]
     public ImageInfo Managed()
@@ -197,11 +198,11 @@ public class WarmStreamIdentify
                 gcConfiguration = GC.GetConfigurationVariables(), runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
                 sourceIdentity, nativeSampleTargetMilliseconds = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_NATIVE_SAMPLE_MS") ?? "200",
                 inputBytes = encoded.Length, inputSha256 = InputHash, outputSha256 = JpegBenchmarkCase.Hash(descriptor), descriptor = Expected,
-                descriptorExact = true, freshStreamControlsExact = true, freshSeekableStream = true, inputView = false, inputCopyTimed = true, eofChecked = true, callerSourceLeftOpen = true, streamAcquisitionAndReleaseTimed = true, preparedEquivalentBoundaryControls = 21, preparedProofSha256 = proofHash,
+                descriptorExact = true, typedSourceMetadataExact = true, descriptorFields = 9, freshStreamControlsExact = true, freshSeekableStream = true, inputView = false, inputCopyTimed = true, eofChecked = true, callerSourceLeftOpen = true, streamAcquisitionAndReleaseTimed = true, preparedEquivalentBoundaryControls = 21, preparedProofSha256 = proofHash,
                 invalidDeflateAcceptedWithoutPixelDecode = true, changedMetadataObserved = true, sourceUnchanged = true, independentOwnedOutput = true, nativeExitCode = 0,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmStreamIdentify).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = "One existing218775-byte original PNG (513x259) through a fresh seekable non-exposed MemoryStream to a fresh independently owned ImageInfo. Stream wrapper/input buffering/copies/EOF and wrapper disposal timed; caller remains open during Identify. Default limits; complete original public ReadInput+PNG structural/metadata/CRC scan, no pixel inflation. FFmpeg fresh custom AVIO context/scratch, length query, exact owned input acquisition/full reads/EOF, original public PNG parser+CRC/full metadata adapter, descriptor materialization/independent ownership and all input/AVIO/descriptor release timed. Original source/parser/codec context reused, input/output owners never cached. Exact six fields,21 same-packet controls and direct fresh non-exposed Stream/EOF/caller lifetime/owner/changedwidth/invalid Deflate/exact input/working limits/cancellation gates. One CPU, normal SIMD, nonconcurrent workstation GC; startup, IPC, I/O, generation/hashing/preparation/validation excluded. Same one packet as resident C01; no Stream format/depth grid."
+                boundary = "One existing218775-byte original PNG (513x259) through a fresh seekable non-exposed MemoryStream to a fresh independently owned ImageInfo. Stream wrapper/input buffering/copies/EOF and wrapper disposal timed; caller remains open during Identify. Default limits; complete original public ReadInput+PNG structural/metadata/CRC scan, no pixel inflation. FFmpeg fresh custom AVIO context/scratch, length query, exact owned input acquisition/full reads/EOF, original public PNG parser+CRC/full metadata adapter, descriptor materialization/independent ownership and all input/AVIO/descriptor release timed. Original source/parser/codec context reused, input/output owners never cached. Exact nine fields,21 same-packet controls and direct fresh non-exposed Stream/EOF/caller lifetime/owner/changedwidth/invalid Deflate/exact input/working limits/cancellation gates. One CPU, normal SIMD, nonconcurrent workstation GC; startup, IPC, I/O, generation/hashing/preparation/validation excluded. Same one packet as resident C01; no Stream format/depth grid."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); state?.Dispose(); ready = false; }

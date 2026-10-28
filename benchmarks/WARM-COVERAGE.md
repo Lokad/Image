@@ -103,7 +103,7 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 14 unchanged 0.2.0 controls,
-refreshes the VP8 Stream decode cost and sixteen read comparisons, and
+refreshes the VP8 Stream decode cost and eighteen read comparisons, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
@@ -190,7 +190,15 @@ passes the existing two controls with9source facts:JPEG0.420×/upper0.426 and
 WebP0.00436×/upper0.00483,96B/op each. All21controls percodec pass normal/scalar;
 complete projection/parser buffering and fresh ownership remain timed. These
 replace earlier6field timing proof; stop both passing cases. Production/DLL/
-package/full proofs remain unchanged. Stream/async Identify is still pending.
+package/full proofs remain unchanged. Stream/async is reconciled below.
+
+[Complete-stream PNG Identify](CURRENT-PNG-STREAM-IDENTIFY.md) now checks9facts
+with current delivery/EOF/ownership:seekable screens1.425×/upper1.535,192B/op;
+nonseekable async independently1.238×/upper1.271,8400B/op. Its uncertain wide
+short is retained and resolved by one12actual observation. All21controls per
+boundary pass managed normal/scalar; async also native normal/scalar/ReadAsync-
+only gates. No production/full/package repeat. Both remain gaps; no optimization
+follows. Resident proofs remain applicable; named default decoders stay pending.
 
 ## Evidence invalidation
 

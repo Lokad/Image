@@ -27,7 +27,7 @@ internal sealed class WarmAsyncPngIdentify
             if (proof.GetProperty("timing").GetBoolean() || proof.GetProperty("librarySha256").GetString() != JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location)
                 || proof.GetProperty("inputSha256").GetString() != InputHash || !proof.GetProperty("equivalentMetadataAndValidation").GetBoolean()
                 || !proof.GetProperty("nonSeekableAsyncDeliveryVerified").GetBoolean() || !proof.GetProperty("normalScalarNativeAgree").GetBoolean()
-                || proof.GetProperty("controls").GetArrayLength() != 21) throw new InvalidOperationException("Nonseekable async equivalent-boundary prerequisite differs.");
+                || !proof.GetProperty("typedSourceMetadataExact").GetBoolean() || proof.GetProperty("controls").GetArrayLength() != 21) throw new InvalidOperationException("Nonseekable async equivalent-boundary prerequisite differs.");
             using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = document.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = document.RootElement.GetProperty("sourceRevision").GetString() });
             Validate(); File.WriteAllBytes(state.Input, encoded);
@@ -78,8 +78,8 @@ internal sealed class WarmAsyncPngIdentify
     private void RequireNative()
     {
         var bytes = File.ReadAllBytes(state.NativeOutput);
-        int[] fields = [0, 513, 259, 8, 1, 1];
-        if (bytes.Length != 24) throw new InvalidOperationException("Native descriptor size differs.");
+        int[] fields = [0, 513, 259, 8, 1, 1, 2, 2, 4];
+        if (bytes.Length != 36) throw new InvalidOperationException("Native descriptor size differs.");
         for (var i = 0; i < fields.Length; i++) if (BinaryPrimitives.ReadInt32LittleEndian(bytes.AsSpan(i * 4)) != fields[i]) throw new InvalidOperationException("Native descriptor differs.");
     }
 
@@ -94,13 +94,13 @@ internal sealed class WarmAsyncPngIdentify
             {
                 schemaVersion = 1, name = "WarmStreamIdentify", caseId = "Png8AsyncNonSeekable", publicBoundary = "AsyncStreamIdentify/PngRgba8FreshNonSeekable",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = encoded.Length, inputSha256 = InputHash,
-                descriptor = Expected, managedOutputBytes = 24, nativeOutputBytes = 24, descriptorExact = true, fullStructureAndCrc = true, pixelDecode = false,
+                descriptor = Expected, managedOutputBytes = 36, nativeOutputBytes = 36, descriptorExact = true, typedSourceMetadataExact = true, descriptorFields = 9, fullStructureAndCrc = true, pixelDecode = false,
                 freshNonSeekableStream = true, readAsyncCallsVerified = true, syncReads = 0, seekOrLengthQueries = 0, eofChecked = true, callerSourceLeftOpen = true,
                 privateInputAcquisitionGrowthAndReleaseTimed = true, streamAcquisitionAndReleaseTimed = true, residentCallbacksCompleteImmediately = true,
                 sourceUnchanged = true, independentOwnedOutput = true, resourceAndCancellationGates = true, preparedEquivalentBoundaryControls = 21, preparation = proof,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmAsyncPngIdentify).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same resident original PNG through fresh nonseekable read-only source to a fresh independently owned six-field metadata descriptor. Managed IdentifyAsync performs actual ReadAsync calls through EOF, bounded private input acquisition/growth/copies/release and complete PNG structural/EXIF/CRC validation without pixel decode. Native FFmpeg fresh nonseekable AVIO callbacks, private input acquisition/growth/copies/EOF, public PNG parser/CRC with original structural/metadata compatibility adapter, independent descriptor acquisition/release and all source/AVIO/staging release are timed. Sources expose no length/seek/input view and callbacks complete immediately on both sides; no forced scheduling or real I/O. Parser/context and released private storage may be reused; encoded content/descriptors are not cached. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, preparation and checks excluded."
+                boundary = "Same resident original PNG through fresh nonseekable read-only source to a fresh independently owned nine-field metadata descriptor. Managed IdentifyAsync performs actual ReadAsync calls through EOF, bounded private input acquisition/growth/copies/release and complete PNG structural/EXIF/CRC validation without pixel decode. Native FFmpeg fresh nonseekable AVIO callbacks, private input acquisition/growth/copies/EOF, public PNG parser/CRC with original structural/metadata compatibility adapter, independent descriptor acquisition/release and all source/AVIO/staging release are timed. Sources expose no length/seek/input view and callbacks complete immediately on both sides; no forced scheduling or real I/O. Parser/context and released private storage may be reused; encoded content/descriptors are not cached. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, preparation and checks excluded."
             }, EncoderQualityCalibration.Json) + "\n");
         }
         finally { Dispose(); }

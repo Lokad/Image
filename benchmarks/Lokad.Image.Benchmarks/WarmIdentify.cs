@@ -67,7 +67,7 @@ public class WarmIdentify
             ValidateManaged();
             RequirePreparationProof();
             File.WriteAllBytes(state.Input, encoded);
-            native = new NativeWarmReference(state, cpu, Expected, sourceMetadata: true);
+            native = new NativeWarmReference(state, cpu, Expected);
             if (proof.GetProperty("nativeBuild").GetProperty("workerSha256").GetString() != native.BuildIdentity.GetProperty("workerSha256").GetString()
                 || proof.GetProperty("nativeBuild").GetProperty("sourceSha256").GetString() != native.BuildIdentity.GetProperty("sourceSha256").GetString())
                 throw new InvalidOperationException("Prepared equivalent-boundary worker differs from the measured worker.");

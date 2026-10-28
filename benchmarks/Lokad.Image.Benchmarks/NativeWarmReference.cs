@@ -16,15 +16,13 @@ internal sealed partial class NativeWarmReference : IDisposable
     public JsonElement BuildIdentity { get; }
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public NativeWarmReference(JpegBenchmarkCase state, int cpu, Lokad.Image.ImageInfo expected, bool stream = false, bool nonSeekable = false,
-        bool sourceMetadata = false)
+    public NativeWarmReference(JpegBenchmarkCase state, int cpu, Lokad.Image.ImageInfo expected, bool stream = false, bool nonSeekable = false)
     {
         var jpeg = expected.Format == Lokad.Image.ImageFormat.Jpeg;
         var webp = expected.Format == Lokad.Image.ImageFormat.WebP;
         if (!jpeg && !webp && expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("PNG/JPEG/WebP Identify only.", nameof(expected));
         if (stream && expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("Fresh Stream Identify uses the existing PNG only.", nameof(stream));
         if (nonSeekable && !stream) throw new ArgumentException("Nonseekable Identify requires Stream delivery.", nameof(nonSeekable));
-        if (sourceMetadata && stream) throw new ArgumentException("Typed source metadata currently qualifies resident inspection only.", nameof(sourceMetadata));
         var kind = nonSeekable ? "png-nonseekable" : stream ? "png-stream" : webp ? "webp" : jpeg ? "jpeg" : "png";
         Executable = Path.Combine(state.Root, "external", "warm-reference", "ffmpeg-" + kind + "-identify-warm");
         using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external", "warm-reference", kind + "-identify-identity.json"))))
@@ -47,10 +45,10 @@ internal sealed partial class NativeWarmReference : IDisposable
                 || Ready.GetProperty("orientation").GetInt32() != (int)expected.Orientation
                 || Ready.GetProperty("cpu").GetInt32() != cpu || Ready.GetProperty("affinityCount").GetInt32() != 1
                 || Ready.GetProperty("codecThreads").GetInt32() != 1 || Ready.GetProperty("threadType").GetInt32() != 0
-                || Ready.GetProperty("activeThreadType").GetInt32() != 0 || Ready.GetProperty("outputBytes").GetInt32() != (sourceMetadata ? 36 : 24)
-                || (sourceMetadata && (Ready.GetProperty("sourceColor").GetInt32() != (int)expected.SourceColor
+                || Ready.GetProperty("activeThreadType").GetInt32() != 0 || Ready.GetProperty("outputBytes").GetInt32() != 36
+                || (Ready.GetProperty("sourceColor").GetInt32() != (int)expected.SourceColor
                     || Ready.GetProperty("sourceAlpha").GetInt32() != (int)expected.SourceAlpha
-                    || Ready.GetProperty("sourceComponentCount").GetInt32() != expected.SourceComponentCount))
+                    || Ready.GetProperty("sourceComponentCount").GetInt32() != expected.SourceComponentCount)
                 || Ready.GetProperty("pixelDecode").GetBoolean() || Ready.GetProperty("scalarMode").GetBoolean()
                 || (nonSeekable && (Ready.GetProperty("freshSeekableStream").GetBoolean() || Ready.GetProperty("inputLengthQueryTimed").GetBoolean()
                     || !Ready.GetProperty("freshNonSeekableStream").GetBoolean() || !Ready.GetProperty("privateInputGrowthTimed").GetBoolean() || !Ready.GetProperty("residentCallbacksImmediate").GetBoolean()))
