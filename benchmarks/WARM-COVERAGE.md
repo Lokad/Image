@@ -537,7 +537,7 @@ inspection, other-codec and editing algorithms retain applicable evidence.
 [Bicubic horizontal tap views](WARM-BICUBIC-HORIZONTAL-TAPS.md) are accepted:
 Down8 independently improves by 11.5% filtered / 13.1% all-actual elapsed, retaining
 exact pixels and unchanged storage. Its 1.339× / upper 1.347 gap stays open;
-Up16 has a current 1.453× / upper 1.654 screen. Both platforms pass 5,074 checks
+Up16's DHP1 screen is superseded by shared word publication below. Both platforms pass 5,074 checks
 and the same actual package/three examples, including cached 8/16-bit pixels,
 admission refusal/recovery and retained-output ownership.
 
@@ -553,6 +553,18 @@ shape/depth/filter grid. Mixed8/16 select earlier column
 kernels; vertical axes copy decoded rows; tight-workspace, wider-support and
 word-horizontal-enlargement paths leave before the changed loop. Other codecs,
 filters, text and read boundaries retain applicable unchanged confirmations.
+
+[Shared word publication](WARM-BICUBIC-SHARED-WORD-PUBLICATION.md) removes 43
+duplicated normalization/packing lines and reuses the qualified word-pair helper.
+Up16 independently falls by 15.1%, retaining exact pixels, at 1.221× / upper1.234;
+measured5,016,602B/op (+8), with no new owned buffer. The five affected default
+word paths all have current costs: Up16,Down16,Horizontal16,Vertical16,VerticalUp16.
+**VerticalUp16 independently passes at0.964× / upper0.973; stop it unchanged.**
+Down16 confirms1.044× / upper1.050; horizontal/vertical reduction remain screen
+gaps. BothOS5,074,89focusednormal/scalar andSAMEactualpackage/3examples pass.
+The native-only low-alpha RGB≤2 qualification is retained for VerticalUp16;
+managed pixels stay exact. Byte/mixed-word and other algorithms remain unchanged.
+These existing inventory paths add no workload grid; the full268 objective remains.
 
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.

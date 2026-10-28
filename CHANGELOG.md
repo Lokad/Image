@@ -9,7 +9,7 @@
   residual bytes, portable fallback and unchanged admitted workspace.
 - Faster bounded Deflate match scans for PNG Optimal/SmallestSize, preserving
   complete packets, dictionary order, ring boundaries and cancellation.
-- Faster bicubic horizontal filtering with borrowed vector views, preserving
+- Faster bicubic filtering and shared guarded word publication, preserving
   exact 8/16-bit pixels, arithmetic order and admitted workspace.
 - Pixel-coding validation without a retained raster, with span/sync/async inputs,
   codec-dependent memory admission and the same required validity checks as decoding.

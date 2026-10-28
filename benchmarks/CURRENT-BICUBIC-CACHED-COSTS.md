@@ -1,5 +1,9 @@
 # Current cached bicubic costs
 
+This is the DHP1 snapshot. [Shared word publication](WARM-BICUBIC-SHARED-WORD-PUBLICATION.md)
+supersedes Down16/Up16/Horizontal16 costs and qualifies the word vertical axes.
+Its byte and mixed-word paths remain unchanged; their costs below still apply.
+
 All nine existing controls affected by DHP1 now have current costs on the same
 qualified producer. Inputs remain the original 513×259 RGBA8/16 raster, default
 workspace; output dimensions appear below. These are complete warm one-CPU

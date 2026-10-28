@@ -26,8 +26,6 @@ internal static class CachedBicubicResize
         var width=result.Width;
         var wide16=source.BitDepth==16;
         var sampleBytes=wide16?2:1;
-        var maximum=wide16?65535d:255d;
-        var alphaMargin=wide16?1e-4:1e-6;
         var cacheWidth=(long)width+(mixed?(width&1):0);
         var elements=cacheWidth*64+(long)width*17+(long)source.Width*4;
         var indexElements=(long)width*17;
@@ -203,50 +201,10 @@ internal static class CachedBicubicResize
                     for(var t=0;t<count;t++)
                         sum=Avx512F.Add(sum,Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(storage.AsSpan(rows[t]+x*4,8))),Vector512.Create(vertical[t])));
                     var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
-                    var a0=sum.GetElement(3);var a1=sum.GetElement(7);
-                    var values=Avx512F.Divide(sum,Vector512.Create(Vector256.Create(a0,a0,a0,n0),Vector256.Create(a1,a1,a1,n1)));
-                    // At most 16 taps per axis, each bounded by one in magnitude.
-                    // 2^-40*256 bounds both accumulation orders' absolute error
-                    // per unit sample, including products and normalization sums.
-                    // With normalization >= .5 and rounded alpha >= 1, byte
-                    // margins 1e-6 (alpha) and 1e-4 (color) cover thresholds.
-                    // Word alpha uses 1e-4; color error is below 2.0001/alphaSum
-                    // at every threshold in [0,65535]. A reciprocal of the lower
-                    // power of two conservatively bounds that quotient.
-                    // Tiny alpha and ambiguous quantization retain the original
-                    // binary64 order and exact tiny-alpha arithmetic.
-                    // Positive alpha and finite, bounded integer samples make
-                    // all color ratios finite. Compare the eight quantization
-                    // distances together, retaining the same scalar margins.
-                    var fractional=Avx512F.Subtract(values,Avx512F.RoundScale(values,1));
-                    var delta=Avx512F.Subtract(fractional,Vector512.Create(.5));
-                    var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
-                    var colorMargin0=wide16?2.0001*ReciprocalLowerPower(a0):1e-4;
-                    var colorMargin1=wide16?2.0001*ReciprocalLowerPower(a1):1e-4;
-                    var margins=Vector512.Create(colorMargin0,colorMargin0,colorMargin0,alphaMargin,
-                        colorMargin1,colorMargin1,colorMargin1,alphaMargin);
-                    var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
-                        Avx512F.CompareLessThanOrEqual(values,Vector512.Create(maximum)).AsInt64());
-                    var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
-                    if(n0<.5 || n1<.5 || !(values.GetElement(3)>=1+alphaMargin && values.GetElement(7)>=1+alphaMargin)
-                        || Vector512.ExtractMostSignificantBits(ambiguous)!=0)
+                    if(!BicubicMath.TryWriteWordPair(sum,n0,n1,destination.Slice(x*8,16)))
                     {
                         Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,context);
                         Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,context);
-                        continue;
-                    }
-                    var clipped=Avx512F.Min(Vector512.Create(maximum),Avx512F.Max(Vector512<double>.Zero,values));
-                    var ints=Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped,0));
-                    if(wide16)
-                    {
-                        var packed=Sse41.PackUnsignedSaturate(ints.GetLower(),ints.GetUpper());
-                        MemoryMarshal.Write(destination.Slice(x*8,16),in packed);
-                    }
-                    else
-                    {
-                        var shorts=Sse2.PackSignedSaturate(ints.GetLower(),ints.GetUpper());
-                        var packed=Sse2.PackUnsignedSaturate(shorts,Vector128<short>.Zero).AsUInt64().GetElement(0);
-                        BinaryPrimitives.WriteUInt64LittleEndian(destination.Slice(x*4,8),packed);
                     }
                 }
                 if((width&1)!=0)Original(source,result,width-1,y,weights,offsets,counts,vertical[..count],first,context);
