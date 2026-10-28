@@ -27,8 +27,8 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
-    jpeg_inverse = json.loads((ROOT / 'benchmarks/warm-jpeg-simd-inverse-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_inverse['productionChanged'] and jpeg_inverse['independentQuietConfirmationThisPair']
+    jpeg_chroma = json.loads((ROOT / 'benchmarks/warm-jpeg-quarter-chroma-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_chroma['productionChanged'] and jpeg_chroma['independentQuietConfirmationThisPair']
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
@@ -85,7 +85,7 @@ def render():
     for case, label in [('Jpeg420', 'JPEG baseline420, resident decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
                         ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
-        producer = jpeg_inverse if case == 'Jpeg420' else decoders
+        producer = jpeg_chroma if case == 'Jpeg420' else decoders
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         samples = 12 if case == 'Jpeg420' else 3
@@ -228,16 +228,16 @@ The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes V
 Stream decode and four existing tight PNG companions without a speedup claim.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
 supplies VP8L resident/Stream screens at1.425×/1.304×,1,216,162/1,216,190B/op.
-[Exact inverse-matrix SIMD](../benchmarks/WARM-JPEG-SIMD-INVERSE.md) independently
-reduces JPEG420 decode from6.086ms to3.965ms (34.8% less), retaining exact pixels.
-Its3.936×/upper3.992 gap remains. Reported allocation rises102B/op to757,268;
-explicit scratch/table capacities and owned heap storage stay unchanged. BothOS
-pass5054full checks, affected scalar checks and SAME actual package/three consumer
-examples. Other affected JPEG decoder costs need current evidence before pass
-claims; validation skips inverse rendering and retains its applicable proof.
-Frozen packets/settings and owned-output boundaries stay fixed. Next is exact
-quarter-phase chroma expansion; the prechange profile is diagnostic evidence,
-without postchange component-cost claims.
+[Integer quarter-phase chroma](../benchmarks/WARM-JPEG-QUARTER-CHROMA.md)
+independently reduces JPEG420 decode from3.965ms to2.095ms (47.2% less), retaining
+exact pixels. Its2.079×/upper2.241 gap remains. Reported allocation rises30B/op to
+757,298;64B stack tiles and owned capacity stay unchanged. BothOS pass5054full
+checks and SAME actual package/three consumer examples; existing293public JPEG
+scalar checks perOS and unchanged inverse proof are reused. Other affected420/422
+decoder costs need current evidence before pass claims; validation,encoding and
+other codecs/editing/text retain applicable unchanged proof. Frozen packet/
+settings and owned-output boundaries stay fixed. One current diagnostic profile
+prioritizes SIMD chroma tiles; it introduces no extra performance control.
 
 ''' + codecs + '''
 

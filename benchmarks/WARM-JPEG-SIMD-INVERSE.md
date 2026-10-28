@@ -1,5 +1,8 @@
 # Exact JPEG inverse-matrix SIMD
 
+Selected JPEG420 costs are superseded by [integer chroma expansion](WARM-JPEG-QUARTER-CHROMA.md).
+The inverse arithmetic and its qualification remain applicable.
+
 The existing JPEG420 decode independently falls from6.086ms to3.965ms,
 **34.8% less elapsed**. Exact reference pixels remain; **3.936×/upper3.992**
 is still a gap to the warm single-CPU≤1× objective.

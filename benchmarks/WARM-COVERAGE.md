@@ -223,6 +223,18 @@ inverse/render,keeping its baseline420 pass; Identify/encoding/other codecs and
 editing/text retain applicable unchanged proof. Next:one exact quarter-phase
 half-resolution chroma-expansion primitive,no inverse variants or workload grid.
 
+[Integer quarter-phase JPEG chroma](WARM-JPEG-QUARTER-CHROMA.md) independently
+reduces the sameJPEG420 decode47.2% (3965.366→2095.452µs),2.079×/upper2.241,still
+open. Reported757268→757298B/op,unchanged64B tiles/owned capacity. Centered1/3
+weights and shared clamped indices keep exact normal/scalar pixels. BothOS5054
+full checks and SAME actual package/three examples pass;293public scalar checks
+perOS and unchanged inverse proof are reused. No baseline retiming/harness/native/
+selector builds. A current6second/5780sample diagnostic,zero hostbuilds,places
+chroma22.4%,ACentropy20.2%,inverse kernel19.6% plusentry3.4%,color19.3%. Next:one
+SIMD chroma tile with integer edge/tail/single-pixel fallback. Only420/422YCbCr
+RGB/RGBA costs change; luma-only/444/411/410/directRGB/CMYK/YCCK and unrelated
+paths retain applicable unchanged proofs. No extra image/control or profile repeat.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
