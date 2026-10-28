@@ -23,7 +23,9 @@ def render():
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
+    resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
+    assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
     assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
@@ -113,14 +115,24 @@ def render():
                      f'{min(b["mean"] for b in headers["nativeBrackets"]) / 1000:,.3f} | '
                      f'{headers["worstBracketRatio"]:.3f} / {headers["conservativeRatioUpper"]:.3f} | '
                      f'{headers["managedMemory"]["BytesAllocatedPerOperation"]:,} | Screen gap |')
+    identified = resident['cases']['PngResident'][-1]
+    assert identified['receipt']['descriptorExact'] and identified['receipt']['typedSourceMetadataExact']
+    assert identified['receipt']['descriptorFields'] == 9 and identified['receipt']['nativeReady']['outputBytes'] == 36
+    assert identified['receipt']['librarySha256'] == resident['producers']['linuxSha256']
+    assert len(identified['managed']['actual']) == 3 and all(q['passed'] for q in identified['quietness'].values())
+    read_rows.append(f'| Identify PNG8 complete container, resident, adapter reference | '
+                     f'{identified["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
+                     f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
+                     f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
+                     f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | Screen gap |')
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     return f'''# Lokad.Image benchmarks
 
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
-current-cost screen. The release snapshot remains immutable. Thirteen read
-controls below use qualified 0.2.1 builds. These 44 displayed controls do not
+current-cost screen. The release snapshot remains immutable. Fourteen read
+controls below use qualified 0.2.1 builds. These 45 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -210,6 +222,10 @@ Complete PNG header inspection uses the explicitly labeled bounded adapter,
 checking structure/Strict EXIF and all nine source fields through EOF while
 skipping IDAT. CRC and pixels are opaque on both sides. Its 21 frozen RGBA8
 controls pass; the timing remains a screen gap, distinct from prefix probing.
+[Resident PNG Identify](../benchmarks/CURRENT-PNG-RESIDENT-IDENTIFY.md) checks the
+complete 218,775B container, including CRC and all nine metadata fields, without
+pixel decoding. Its 21 existing controls pass normal/scalar; the timing is a
+current screen gap. Other resident and stream Identify comparisons remain pending.
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

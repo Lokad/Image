@@ -103,7 +103,7 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 14 unchanged 0.2.0 controls,
-refreshes the VP8 Stream decode cost and thirteen read comparisons, and
+refreshes the VP8 Stream decode cost and fourteen read comparisons, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
@@ -176,6 +176,14 @@ its exact count replay does not translate into a material complete-operation
 screen gain (0.7%,below5% gate,+16B/op). Production/source/binaries and the actual
 package are restored; no confirmation/full/package repeat. Prior applicable
 PNG evidence remains valid. Keep this family closed without a distinct lead.
+
+[Resident PNG Identify](CURRENT-PNG-RESIDENT-IDENTIFY.md) now has current9field
+boundary evidence:16.133µs versus13.073µs,1.234×/upper1.312,96B/op. All21existing
+same-packet controls pass normal/scalar; source color/alpha/components are exact.
+The source/native projection supersedes the earlier six-field comparison; this
+is a short gap,so no confirmation or optimization follows. Production and actual
+package remain unchanged; full/package proofs are reused. Other named resident/
+stream Identify boundaries still need typed-fact reconciliation/current costs.
 
 ## Evidence invalidation
 
