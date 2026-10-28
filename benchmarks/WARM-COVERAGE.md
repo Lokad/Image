@@ -102,6 +102,22 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 
 ## Current evidence
 
+[Current VP8 photograph confirmation](current-vp8-photograph-encoding-evidence.json)
+resolves the wide screen at 1.467× / upper 1.501, 14.261 ms and 809,072 B/op;
+the complete 17,688-byte packet is exact. All 12 actual/filtered samples, native
+brackets and idle-v2 guards pass. The same VPS1 producer, IR3 harness, cached
+selectors and package proof are reused, with no builds or repeated qualification.
+This confirms a cost gap, without a speedup or regression claim. One six-second
+profile has 5,925 samples after warmup: Luma4 self 17.7%, reconstruction AddVector
+7.4%, coefficient writing 6.9%, quantization 11.1%. The cached profile host is
+reused. No inputs, settings or performance boundaries were added. Map the existing
+Luma4 samples before choosing a substantial primitive; closed variants stay closed.
+
+The [VP8L group-dispatch screen](VP8L-ENTROPY-GROUP-DISPATCH-REJECTED.md) missed
+its 5% gate at 4.71%; the qualified implementation was restored without variants
+or repeated full/package qualification. Its authored tile/row/copy regression
+remains. Production is unchanged; applicable independent confirmations remain valid.
+
 [The current summary](../docs/benchmark.md) retains 14 unchanged 0.2.0 controls,
 refreshes the VP8 Stream decode cost and eighteen read comparisons, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
