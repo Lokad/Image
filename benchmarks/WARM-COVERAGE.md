@@ -534,6 +534,23 @@ PNG encoder costs need evidence beforepassclaims. Resume remainingmaterialgaps;
 higherJPEGprobe ratios remainopenatsubmicrosecondcosts. Decoder,
 inspection, other-codec and editing algorithms retain applicable evidence.
 
+[Bicubic horizontal tap views](WARM-BICUBIC-HORIZONTAL-TAPS.md) are accepted:
+Down8 independently improves by 11.5% filtered / 13.1% all-actual elapsed, retaining
+exact pixels and unchanged storage. Its 1.339× / upper 1.347 gap stays open;
+Up16 has a current 1.453× / upper 1.654 screen. Both platforms pass 5,074 checks
+and the same actual package/three examples, including cached 8/16-bit pixels,
+admission refusal/recovery and retained-output ownership.
+
+This changes the general horizontal loop selected by nine existing controls:
+Down8/16, Up8/16, Cross8/16, Horizontal8/16 and HorizontalUp8. The other seven
+need current cost evidence before CPU-pass claims: **Down16, Up8, Cross8,
+Cross16, Horizontal8, Horizontal16, HorizontalUp8**. Resolve Down16 next using
+the existing selector. This is reconciliation of changed paths in the finite
+inventory, without a new shape/depth/filter grid. Mixed8/16 select earlier column
+kernels; vertical axes copy decoded rows; tight-workspace, wider-support and
+word-horizontal-enlargement paths leave before the changed loop. Other codecs,
+filters, text and read boundaries retain applicable unchanged confirmations.
+
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an

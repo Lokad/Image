@@ -147,12 +147,20 @@ internal static class CachedBicubicResize
                         else
                         {
                             var n=Math.Max(counts[x],counts[x+1]);
+                            var tapOffsets0=offsets.Slice(base0,n);
+                            var tapOffsets1=offsets.Slice(base1,n);
+                            var tapWeights0=weights.Slice(base0,n);
+                            var tapWeights1=weights.Slice(base1,n);
+                            // Geometry offsets address four-double pixels. Bound
+                            // each tap table once and index the borrowed vector
+                            // view without constructing a slice for every sample.
+                            var decodedPixels=MemoryMarshal.Cast<double,Vector256<double>>(decoded);
                             for(var tx=0;tx<n;tx++)
                             {
-                                var p0=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[base0+tx],4)));
-                                var p1=MemoryMarshal.Read<Vector256<double>>(MemoryMarshal.AsBytes(decoded.Slice(offsets[base1+tx],4)));
-                                var w0=Vector256.Create(weights[base0+tx]);
-                                var w1=Vector256.Create(weights[base1+tx]);
+                                var p0=decodedPixels[tapOffsets0[tx]>>2];
+                                var p1=decodedPixels[tapOffsets1[tx]>>2];
+                                var w0=Vector256.Create(tapWeights0[tx]);
+                                var w1=Vector256.Create(tapWeights1[tx]);
                                 // Independent accumulators avoid variable-half
                                 // wide-vector construction and its stack traffic.
                                 sum0=Avx.Add(sum0,Avx.Multiply(p0,w0));

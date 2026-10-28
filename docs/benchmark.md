@@ -3,7 +3,7 @@
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
-Twelve other controls retain
+Eleven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -38,15 +38,17 @@ an exact 98,590-byte packet. These follow-ups reuse the immutable build and pack
 proof. Opaque RGBA16 and diagram4 now confirm 1.412× / upper 1.417 and
 1.368× / upper 1.374, retaining exact 72,380/7,100-byte packets and
 1,201,552/741,137 B/op. These cost confirmations make no gain/regression claim.
-The current producer passes 5,057 checks on each platform and the same actual
-package/three examples; no owned storage is added by the accepted cursor change.
+The current producer passes 5,074 checks on each platform and the same actual
+package/three examples, including exact bicubic pixels and shared ownership.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
-parity confirmations. [Current bicubic Down8](../benchmarks/CURRENT-BICUBIC-DOWN8-COST.md)
-confirms a 1.471× / upper 1.663 gap, 332,187 B/op. TightCross16 uses the
+parity confirmations. [Bounded bicubic horizontal filtering](../benchmarks/WARM-BICUBIC-HORIZONTAL-TAPS.md)
+reduces Down8 elapsed by 11.5% filtered / 13.1% all actuals; its 1.339× / upper
+1.347 gap remains, 332,186 B/op with unchanged storage. Affected Up16 has a fresh
+1.453× / upper 1.654 screen, 5,016,594 B/op, without a gain claim. TightCross16 uses the
 [fresh unchanged-production screen](../benchmarks/BICUBIC-WORD-GUARD-VECTOR-REJECTED.md),
 1.522× / upper 1.652, 1,063,404 B/op; rejected candidate costs are excluded.
-These follow-ups reuse full/package qualification and make no gain/regression claim.
+The unchanged TightCross16 follow-up reuses qualification and makes no gain/regression claim.
 B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
@@ -147,8 +149,8 @@ control scope. These measurements make no arbitrary-content compression claim.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
 | Bilinear resize RGBA16 → 256×129 | 543.06 | 417.56 | 1.301 / 1.411 | 290,128 |
-| Bicubic resize RGBA8 † → 256×129 | 632.92 | 430.21 | 1.471 / 1.663 | 332,187 |
-| Bicubic upscale RGBA16 → 1027×519 | 4,140.75 | 2,874.80 | 1.440 / 1.709 | 5,016,594 |
+| Bicubic resize RGBA8 † → 256×129 | 560.31 | 418.31 | 1.339 / 1.347 | 332,186 |
+| Bicubic upscale RGBA16 † → 1027×519 | 4,182.05 | 2,877.38 | 1.453 / 1.654 | 5,016,594 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,263.40 | 829.93 | 1.522 / 1.652 | 1,063,404 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |

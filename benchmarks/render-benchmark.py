@@ -28,10 +28,16 @@ def render():
     png_prediction = json.loads((ROOT / 'benchmarks/png-predictable-compression-evidence.json').read_text(encoding='utf-8'))
     predictive_cost = json.loads((ROOT / 'benchmarks/warm-png-word-match-evidence.json').read_text(encoding='utf-8'))
     down8_cost = json.loads((ROOT / 'benchmarks/current-bicubic-down8-cost-evidence.json').read_text(encoding='utf-8'))
+    horizontal_cost = json.loads((ROOT / 'benchmarks/warm-bicubic-horizontal-taps-evidence.json').read_text(encoding='utf-8'))
     cross16_cost = json.loads((ROOT / 'benchmarks/bicubic-word-guard-vector-rejected-evidence.json').read_text(encoding='utf-8'))
     assert not down8_cost['productionChanged'] and down8_cost['independentQuietConfirmation']
     assert down8_cost['preparation']['productionSha256'] == predictive_cost['producers']['linuxSha256']
-    editing_costs = {'case22': down8_cost['observation'], 'case24': cross16_cost['freshBaselineShort']}
+    assert horizontal_cost['productionChanged'] and horizontal_cost['independentQuietConfirmationThisPair']
+    assert horizontal_cost['qualification']['sameActualPackageBothOs']
+    assert horizontal_cost['baselineReference']['librarySha256'] == down8_cost['preparation']['productionSha256']
+    editing_costs = {'case22': horizontal_cost['cases']['Down8'][-1],
+                     'case23': horizontal_cost['cases']['Up16'][-1],
+                     'case24': cross16_cost['freshBaselineShort']}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -94,7 +100,10 @@ def render():
         native = min(b['mean'] for b in observation['nativeBrackets'])
         ratio = observation['worstBracketRatio']
         upper = observation['conservativeRatioUpper']
-        expected_library = predictive_cost['producers']['linuxSha256'] if case['id'] in editing_costs else producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
+        if case['id'] in editing_costs:
+            expected_library = (horizontal_cost if case['id'] in {'case22', 'case23'} else predictive_cost)['producers']['linuxSha256']
+        else:
+            expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
         samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12', 'case22'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
@@ -219,7 +228,7 @@ def render():
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
-Twelve other controls retain
+Eleven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -254,15 +263,17 @@ an exact 98,590-byte packet. These follow-ups reuse the immutable build and pack
 proof. Opaque RGBA16 and diagram4 now confirm 1.412× / upper 1.417 and
 1.368× / upper 1.374, retaining exact 72,380/7,100-byte packets and
 1,201,552/741,137 B/op. These cost confirmations make no gain/regression claim.
-The current producer passes 5,057 checks on each platform and the same actual
-package/three examples; no owned storage is added by the accepted cursor change.
+The current producer passes 5,074 checks on each platform and the same actual
+package/three examples, including exact bicubic pixels and shared ownership.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
-parity confirmations. [Current bicubic Down8](../benchmarks/CURRENT-BICUBIC-DOWN8-COST.md)
-confirms a 1.471× / upper 1.663 gap, 332,187 B/op. TightCross16 uses the
+parity confirmations. [Bounded bicubic horizontal filtering](../benchmarks/WARM-BICUBIC-HORIZONTAL-TAPS.md)
+reduces Down8 elapsed by 11.5% filtered / 13.1% all actuals; its 1.339× / upper
+1.347 gap remains, 332,186 B/op with unchanged storage. Affected Up16 has a fresh
+1.453× / upper 1.654 screen, 5,016,594 B/op, without a gain claim. TightCross16 uses the
 [fresh unchanged-production screen](../benchmarks/BICUBIC-WORD-GUARD-VECTOR-REJECTED.md),
 1.522× / upper 1.652, 1,063,404 B/op; rejected candidate costs are excluded.
-These follow-ups reuse full/package qualification and make no gain/regression claim.
+The unchanged TightCross16 follow-up reuses qualification and makes no gain/regression claim.
 B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 

@@ -393,6 +393,55 @@ foreach (var filter in new[] { ResizeFilter.Bilinear, ResizeFilter.Bicubic })
         if (!resizedHalf.GetRow16(1).Slice(x * 4, 4).SequenceEqual(new ushort[] { 65535, 65535, 65535, 1 }))
             throw new Exception("Package consumer resize loses visible color at an exact half-alpha tie.");
 }
+foreach (var (cachedDepth, cachedHash) in new[]
+{
+    (8, "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8"),
+    (16, "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f")
+})
+{
+    using var cachedRoot = new Lokad.Image.Tooling.TestMemoryBudget(128_000_000);
+    var cachedLimits = new ImageLimits { MemoryBudget = cachedRoot };
+    using var cachedSource = ImageBuffer.Create(513, 259, cachedDepth, cachedLimits);
+    var cachedRecipe = Lokad.Image.Tooling.OriginalPixels.Generate(513, 259, cachedDepth);
+    for (var y = 0; y < 259; y++)
+    {
+        if (cachedDepth == 8) cachedRecipe.AsSpan(y * 513 * 4, 513 * 4).CopyTo(cachedSource.GetRow8(y));
+        else for (var i = 0; i < 513 * 4; i++)
+            cachedSource.GetRow16(y)[i] = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(
+                cachedRecipe.AsSpan((y * 513 * 4 + i) * 2));
+    }
+    if (cachedDepth == 8) cachedSource.GetRow8(0)[3] = cachedSource.GetRow8(0)[513 * 4 - 1] = 0;
+    else cachedSource.GetRow16(0)[3] = cachedSource.GetRow16(0)[513 * 4 - 1] = 0;
+    var cachedBefore = Lokad.Image.Tooling.OriginalPixels.Bytes(cachedSource);
+    using var cachedFirst = ImageTransforms.Resize(cachedSource, 256, 129, ResizeFilter.Bicubic, cachedLimits);
+    using var cachedSecond = ImageTransforms.Resize(cachedSource, 256, 129, ResizeFilter.Bicubic, cachedLimits);
+    if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(
+        Lokad.Image.Tooling.OriginalPixels.Bytes(cachedSecond))) != cachedHash
+        || !cachedBefore.AsSpan().SequenceEqual(Lokad.Image.Tooling.OriginalPixels.Bytes(cachedSource)))
+        throw new Exception("Package cached bicubic pixels or borrowed input differ.");
+    var cachedLive = cachedRoot.Bytes;
+    cachedRoot.RefuseAtGrowth = cachedRoot.GrowthAttempts + 1;
+    try
+    {
+        using var refused = ImageTransforms.Resize(cachedSource, 256, 129, ResizeFilter.Bicubic, cachedLimits);
+        throw new Exception("Package cached bicubic admission refusal was ignored.");
+    }
+    catch (ImageLimitException) { if (cachedRoot.Bytes != cachedLive) throw new Exception("Package cached bicubic refusal leaked storage."); }
+    finally { cachedRoot.RefuseAtGrowth = 0; }
+    using (var recovered = ImageTransforms.Resize(cachedSource, 256, 129, ResizeFilter.Bicubic, cachedLimits))
+        if (!Lokad.Image.Tooling.OriginalPixels.Bytes(recovered).AsSpan().SequenceEqual(Lokad.Image.Tooling.OriginalPixels.Bytes(cachedSecond)))
+            throw new Exception("Package cached bicubic did not recover after admission refusal.");
+    if (cachedDepth == 8) cachedFirst.GetRow8(0)[0] ^= 255;
+    else cachedFirst.GetRow16(0)[0] ^= 65535;
+    cachedSource.Dispose(); cachedFirst.Dispose();
+    if (cachedRoot.Bytes != 256L * 129 * 4 * (cachedDepth / 8)
+        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(
+            Lokad.Image.Tooling.OriginalPixels.Bytes(cachedSecond))) != cachedHash)
+        throw new Exception("Package cached bicubic survivor ownership differs.");
+    cachedSecond.Dispose();
+    if (cachedRoot.Bytes != 0 || cachedRoot.IsDisposed) throw new Exception("Package cached bicubic root cleanup differs.");
+}
+Console.WriteLine("Packaged cached bicubic passed (8/16-bit pixels, admission and ownership).");
 using (var packageWideRoot = new Lokad.Image.Tooling.TestMemoryBudget(513 * 259 * 4 + 2 * 128 * 64 * 4 + 4096))
 {
     var packageWideLimits = new ImageLimits { MemoryBudget = packageWideRoot, MaxWorkingBytes = 513 * 259 * 4 + 128 * 64 * 4 + 4096 };
