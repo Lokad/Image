@@ -15,7 +15,7 @@ def render():
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
     vp8 = json.loads((ROOT / 'benchmarks/warm-vp8-simd-input-evidence.json').read_text(encoding='utf-8'))
-    trellis = json.loads((ROOT / 'benchmarks/current-vp8-trellis-encoding-evidence.json').read_text(encoding='utf-8'))
+    trellis = json.loads((ROOT / 'benchmarks/warm-vp8-trellis-caller-invariants-evidence.json').read_text(encoding='utf-8'))
     photograph = json.loads((ROOT / 'benchmarks/current-vp8-photograph-encoding-evidence.json').read_text(encoding='utf-8'))
     alpha = json.loads((ROOT / 'benchmarks/current-vp8-alpha8-encoding-evidence.json').read_text(encoding='utf-8'))
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
@@ -72,7 +72,8 @@ def render():
     assert predictive_cost['productionChanged'] and predictive_cost['independentQuietConfirmationThisPair']
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
-    assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
+    assert trellis['productionChanged'] and trellis['independentQuietConfirmation']
+    assert trellis['qualification']['sameActualPackageBothOs']
     assert not photograph['productionChanged'] and photograph['independentQuietConfirmation']
     assert not alpha['productionChanged'] and alpha['independentQuietConfirmation']
     assert jpeg['productionChanged'] and jpeg['independentQuietConfirmationThisPair']
@@ -265,8 +266,11 @@ SIMD input preparation reduces VP8 effort2 elapsed by13.2% using all actuals in
 the final independent comparison (14.3% filtered);1.345× / upper1.423 remains open,
 with741,375B/op and exact packets. An earlier independent pair gives5.4% with
 overlapping intervals; both pairs and the material native drift remain recorded.
-VP8 effort6 independently confirms a1.539× / upper1.551 gap,754,344B/op and exact
-6,818B packet. VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
+[Trellis caller invariants](../benchmarks/WARM-VP8-TRELLIS-CALLER-INVARIANTS.md)
+reduce effort6 elapsed by4.98% filtered/5.14% all actuals in a fresh independent
+pair, retaining754,344B/op and the exact6,818B packet. Its1.439× / upper1.451 gap
+remains. Other changed effort5/6 callers need applicable current costs before CPU-pass claims.
+VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
 17,688-byte packet. VP8 alpha confirms 1.296× / upper 1.306, 21,353,208 B/op and
 an exact 98,590-byte packet. These follow-ups reuse the immutable build and package
 proof. Opaque RGBA16 and diagram4 now confirm 1.412× / upper 1.417 and

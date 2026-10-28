@@ -51,15 +51,10 @@ internal static class Vp8TrellisQuantization
         Vp8QuantizationMatrix matrix, Vp8RatePlan rate, ReadOnlySpan<ushort> weights,
         int type, int initialContext, int lambda, OperationContext operation)
     {
-        if (coefficients.Length < 16 || levels.Length < 16 || matrix.Values.Length < 80 || weights.Length < 16
-            || type is not (0 or 3) || (uint)initialContext > 2 || lambda < 1)
-            throw new ArgumentException("Invalid VP8 luma trellis layout or policy.");
-        if (coefficients.Overlaps(levels)) throw new ArgumentException("Coefficient and level buffers must not overlap.");
-        for (var p = 0; p < 16; p++)
-            if (coefficients[p] is < -2040 or > 2040) throw new ArgumentOutOfRangeException(nameof(coefficients), "Coefficient exceeds the VP8 DCT domain.");
-        var sum = 0; foreach (var weight in weights[..16]) sum += weight;
-        if (sum != 256) throw new ArgumentException("Trellis importance must sum to256.");
-        _ = rate.Values; operation.Cancellation.ThrowIfCancellationRequested();
+        // Private callers supply disjoint 16-sample DCT blocks, a live plan,
+        // generated importance weights and bounded luma policy/context. Their
+        // byte residuals establish the DCT domain before this per-block search.
+        operation.Cancellation.ThrowIfCancellationRequested();
         var fixedLevels = rate.FixedLevels; var variableLevels = rate.VariableLevels; var endOfBlock = rate.EndOfBlock;
         var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
         var first = type == 0 ? 1 : 0;

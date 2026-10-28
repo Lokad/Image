@@ -31,8 +31,11 @@ SIMD input preparation reduces VP8 effort2 elapsed by13.2% using all actuals in
 the final independent comparison (14.3% filtered);1.345× / upper1.423 remains open,
 with741,375B/op and exact packets. An earlier independent pair gives5.4% with
 overlapping intervals; both pairs and the material native drift remain recorded.
-VP8 effort6 independently confirms a1.539× / upper1.551 gap,754,344B/op and exact
-6,818B packet. VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
+[Trellis caller invariants](../benchmarks/WARM-VP8-TRELLIS-CALLER-INVARIANTS.md)
+reduce effort6 elapsed by4.98% filtered/5.14% all actuals in a fresh independent
+pair, retaining754,344B/op and the exact6,818B packet. Its1.439× / upper1.451 gap
+remains. Other changed effort5/6 callers need applicable current costs before CPU-pass claims.
+VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
 17,688-byte packet. VP8 alpha confirms 1.296× / upper 1.306, 21,353,208 B/op and
 an exact 98,590-byte packet. These follow-ups reuse the immutable build and package
 proof. Opaque RGBA16 and diagram4 now confirm 1.412× / upper 1.417 and
@@ -135,7 +138,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | VP8 RGBA8 † | 69,341.28 | 53,516.87 | 1.296 / 1.306 | 21,353,208 | 98,590 / 98,590 |
 | VP8 opaque photograph † | 14,261.18 | 9,720.44 | 1.467 / 1.501 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 7,938.19 | 5,800.70 | 1.368 / 1.374 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 15,159.83 | 9,852.07 | 1.539 / 1.551 | 754,344 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 14,112.31 | 9,806.71 | 1.439 / 1.451 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 22,026.04 | 15,596.77 | 1.412 / 1.417 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 161,904.66 | 120,988.24 | 1.338 / 1.923 | 29,696,928 | 183,812 / 183,812 |

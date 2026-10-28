@@ -576,6 +576,16 @@ package/threeexamples pass. Word publication, including passing VerticalUp16,
 mixed-word/tight/wide kernels and other algorithms retain applicable evidence.
 This supersedes earlier byte-publication costs without expanding the inventory.
 
+[Trellis caller invariants](WARM-VP8-TRELLIS-CALLER-INVARIANTS.md) independently
+reduce the existing diagram/effort6 control by4.98% filtered/5.14% all actuals:
+1.439× / upper1.451,unchanged754,344B/op and exact6,818B packet. Public validation,
+cancellation, admission and ownership stay intact; only repeated private checks
+of caller-established invariants go. Full5,074perOS,21focusednormal/scalar and
+SAMEactualpackage/threeexamples pass. Other method5/6 callers selecting Apply
+need applicable current costs before CPU-pass claims. Methods0–4, other codecs,
+decoders, editing/text and passing resize cases retain applicable unchanged proof.
+No path or parity pass is added; the full268 objective remains open.
+
 Resolve uncertainty before optimization; optimize demonstrated largest gaps and
 stop confirmed passing cases. Stored publication and distance mapping are accepted.
 The fixed-importance trial is [deferred](VP8-FIXED-IMPORTANCE-DEFERRED.md): an

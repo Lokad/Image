@@ -40,7 +40,7 @@ public sealed class Vp8TrellisQuantizationTests
     }
 
     [Fact]
-    public void ZeroCandidateSearchPreservesValidationAndCancellationBeforeMutation()
+    public void ZeroCandidateSearchPreservesCancellationBeforeMutation()
     {
         using var input = new Inputs(0);
         var coefficients = Enumerable.Repeat((short)1, 18).ToArray(); var levels = Enumerable.Repeat((short)77, 18).ToArray();
@@ -56,9 +56,6 @@ public sealed class Vp8TrellisQuantizationTests
         }
         var error = Assert.Throws<OperationCanceledException>(() => Apply(levels));
         Assert.Equal(cancellation.Token, error.CancellationToken);
-        weights[0]--; Assert.Throws<ArgumentException>(() => Apply(levels)); weights[0]++;
-        coefficients[15] = 2041; Assert.Throws<ArgumentOutOfRangeException>(() => Apply(levels)); coefficients[15] = 1;
-        Assert.Throws<ArgumentException>(() => Apply(coefficients));
         Assert.Equal(oldCoefficients, coefficients); Assert.Equal(oldLevels, levels); Assert.Equal(retained, input.Root.Bytes);
     }
 
