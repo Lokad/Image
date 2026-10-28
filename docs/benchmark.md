@@ -3,7 +3,7 @@
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
-Fourteen other controls retain
+Twelve other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -16,7 +16,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows, VP8L RGBA8 encode and bicubic Down8 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -42,7 +42,12 @@ The current producer passes 5,057 checks on each platform and the same actual
 package/three examples; no owned storage is added by the accepted cursor change.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
-parity confirmations. B/op measures managed allocation, not native
+parity confirmations. [Current bicubic Down8](../benchmarks/CURRENT-BICUBIC-DOWN8-COST.md)
+confirms a 1.471× / upper 1.663 gap, 332,187 B/op. TightCross16 uses the
+[fresh unchanged-production screen](../benchmarks/BICUBIC-WORD-GUARD-VECTOR-REJECTED.md),
+1.522× / upper 1.652, 1,063,404 B/op; rejected candidate costs are excluded.
+These follow-ups reuse full/package qualification and make no gain/regression claim.
+B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
 Operations include normalization, input delivery and independently owned output;
@@ -142,9 +147,9 @@ control scope. These measurements make no arbitrary-content compression claim.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
 | Bilinear resize RGBA16 → 256×129 | 543.06 | 417.56 | 1.301 / 1.411 | 290,128 |
-| Bicubic resize RGBA8 → 256×129 | 668.47 | 432.43 | 1.546 / 2.457 | 332,183 |
+| Bicubic resize RGBA8 † → 256×129 | 632.92 | 430.21 | 1.471 / 1.663 | 332,187 |
 | Bicubic upscale RGBA16 → 1027×519 | 4,140.75 | 2,874.80 | 1.440 / 1.709 | 5,016,594 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB → 256×519 | 1,275.98 | 819.97 | 1.556 / 1.640 | 1,063,410 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,263.40 | 829.93 | 1.522 / 1.652 | 1,063,404 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
 | Lanczos3 reduction RGBA8 → 256×129 | 726.29 | 491.22 | 1.479 / 2.222 | 138,455 |

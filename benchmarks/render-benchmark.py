@@ -27,6 +27,11 @@ def render():
     current_reconciliation = json.loads((ROOT / 'benchmarks/current-png-vp8-reconciliation-evidence.json').read_text(encoding='utf-8'))
     png_prediction = json.loads((ROOT / 'benchmarks/png-predictable-compression-evidence.json').read_text(encoding='utf-8'))
     predictive_cost = json.loads((ROOT / 'benchmarks/warm-png-word-match-evidence.json').read_text(encoding='utf-8'))
+    down8_cost = json.loads((ROOT / 'benchmarks/current-bicubic-down8-cost-evidence.json').read_text(encoding='utf-8'))
+    cross16_cost = json.loads((ROOT / 'benchmarks/bicubic-word-guard-vector-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert not down8_cost['productionChanged'] and down8_cost['independentQuietConfirmation']
+    assert down8_cost['preparation']['productionSha256'] == predictive_cost['producers']['linuxSha256']
+    editing_costs = {'case22': down8_cost['observation'], 'case24': cross16_cost['freshBaselineShort']}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -68,13 +73,15 @@ def render():
         observation = case['observation']
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
-        updated = vp8_case or vp8l_case or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
+        updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
         producer = current_reconciliation if case['id'] in {'case09', 'case11'} else trellis if case['id'] == 'case10' else photograph if case['id'] == 'case08' else alpha if case['id'] == 'case07' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] in {'case17', 'case18'}:
             producer = predictive_cost
         elif case['id'] in {'case19', 'case20'}:
             producer = png_prediction
-        if vp8_case:
+        if case['id'] in editing_costs:
+            observation = editing_costs[case['id']]
+        elif vp8_case:
             observation = producer['cases'][vp8_cases[case['id']]][-1]
         elif case['id'] == 'case00':
             observation = producer['cases']['Vp8Stream'][-1]
@@ -87,9 +94,10 @@ def render():
         native = min(b['mean'] for b in observation['nativeBrackets'])
         ratio = observation['worstBracketRatio']
         upper = observation['conservativeRatioUpper']
-        assert receipt['librarySha256'] == (producer['producers']['linuxSha256'] if updated else evidence['librarySha256'])
+        expected_library = predictive_cost['producers']['linuxSha256'] if case['id'] in editing_costs else producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
+        assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12', 'case22'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -211,7 +219,7 @@ def render():
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
-Fourteen other controls retain
+Twelve other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -224,7 +232,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows, VP8L RGBA8 encode and bicubic Down8 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -250,7 +258,12 @@ The current producer passes 5,057 checks on each platform and the same actual
 package/three examples; no owned storage is added by the accepted cursor change.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
-parity confirmations. B/op measures managed allocation, not native
+parity confirmations. [Current bicubic Down8](../benchmarks/CURRENT-BICUBIC-DOWN8-COST.md)
+confirms a 1.471× / upper 1.663 gap, 332,187 B/op. TightCross16 uses the
+[fresh unchanged-production screen](../benchmarks/BICUBIC-WORD-GUARD-VECTOR-REJECTED.md),
+1.522× / upper 1.652, 1,063,404 B/op; rejected candidate costs are excluded.
+These follow-ups reuse full/package qualification and make no gain/regression claim.
+B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
 Operations include normalization, input delivery and independently owned output;
