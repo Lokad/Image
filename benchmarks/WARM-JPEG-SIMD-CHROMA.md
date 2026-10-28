@@ -1,5 +1,8 @@
 # Exact SIMD JPEG chroma tiles
 
+Selected JPEG420 costs are superseded by [SIMD color conversion](WARM-JPEG-SIMD-COLOR.md).
+The chroma arithmetic and its qualification remain applicable.
+
 The existing JPEG420 decode independently falls from2.095ms to1.746ms,
 **16.7% less elapsed**, retaining exact pixels and757298B/op. Its
 **1.732×/upper1.862** gap remains to the warm single-CPU≤1× objective.

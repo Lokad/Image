@@ -1,3 +1,7 @@
+using System.Buffers.Binary;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 // Full-range BT.601 conversion at the pinned reference's integer precision.
@@ -30,7 +34,35 @@ internal static class JpegInverseColor
         var target = destination[..(int)required];
         if (luma.Overlaps(target) || cb.Overlaps(target) || cr.Overlaps(target))
             throw new ArgumentException("Color inputs and destination must not overlap.");
-        for (var x = 0; x < luma.Length; x++)
+        var x = 0;
+        if (luma.Length >= 8 && Avx2.IsSupported && (channels == 4 || Ssse3.IsSupported))
+        {
+            var red = Vector256.Create(Red); var blue = Vector256.Create(Blue);
+            var greenU = Vector256.Create(GreenU); var greenV = Vector256.Create(GreenV);
+            var center = Vector256.Create(128); var bias = Vector256.Create(1 << 12);
+            var rgb = Vector128.Create((byte)0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 128, 128, 128, 128);
+            for (; x + 8 <= luma.Length; x += 8)
+            {
+                var y = Avx2.Add(Avx2.ShiftLeftLogical(WidenEight(luma, x), 13), bias);
+                var u = Avx2.Subtract(WidenEight(cb, x), center);
+                var v = Avx2.Subtract(WidenEight(cr, x), center);
+                var r = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(y, Avx2.MultiplyLow(v, red)), 13));
+                var g = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(Avx2.Add(y, Avx2.MultiplyLow(u, greenU)),
+                    Avx2.MultiplyLow(v, greenV)), 13));
+                var b = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(y, Avx2.MultiplyLow(u, blue)), 13));
+                var packed = Avx2.Or(Avx2.Or(r.AsUInt32(), Avx2.ShiftLeftLogical(g.AsUInt32(), 8)),
+                    Avx2.Or(Avx2.ShiftLeftLogical(b.AsUInt32(), 16), Vector256.Create(0xFF000000u))).AsByte();
+                if (channels == 4) packed.CopyTo(target.Slice(x * 4, 32));
+                else
+                {
+                    // Each shuffled four-pixel group has twelve RGB bytes.
+                    // Store only those bytes, preserving caller row padding.
+                    StoreRgb12(target.Slice(x * 3, 12), Ssse3.Shuffle(packed.GetLower(), rgb));
+                    StoreRgb12(target.Slice(x * 3 + 12, 12), Ssse3.Shuffle(packed.GetUpper(), rgb));
+                }
+            }
+        }
+        for (; x < luma.Length; x++)
         {
             var y = (luma[x] << 13) + (1 << 12);
             var u = cb[x] - 128; var v = cr[x] - 128;
@@ -39,6 +71,18 @@ internal static class JpegInverseColor
             target[x * channels + 2] = (byte)Math.Clamp((y + u * Blue) >> 13, 0, 255);
             if (channels == 4) target[x * channels + 3] = 255;
         }
+    }
+
+    private static Vector256<int> WidenEight(ReadOnlySpan<byte> row, int x)
+        => Avx2.ConvertToVector256Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(x, 8))).AsByte());
+
+    private static Vector256<int> Clip(Vector256<int> value)
+        => Avx2.Min(Avx2.Max(value, Vector256<int>.Zero), Vector256.Create(255));
+
+    private static void StoreRgb12(Span<byte> target, Vector128<byte> packed)
+    {
+        BinaryPrimitives.WriteUInt64LittleEndian(target, packed.AsUInt64().ToScalar());
+        BinaryPrimitives.WriteUInt32LittleEndian(target[8..], packed.AsUInt32().GetElement(2));
     }
 
     internal static void WriteFilteredPixel(byte luma, int cbQ9, int crQ9, Span<byte> destination, int channels)

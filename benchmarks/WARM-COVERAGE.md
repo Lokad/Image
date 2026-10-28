@@ -247,6 +247,19 @@ applicable proof. Current selected cost refreshed; other affected controls need
 current proof before pass claims. Next:eight-pixel color conversion,using the
 retained JCP2 profile; no unchanged profile or chroma/inverse variants repeated.
 
+[SIMD JPEG color](WARM-JPEG-SIMD-COLOR.md) independently reduces the sameJPEG420
+case18.4% (1746.224→1424.367µs),1.396×/upper1.518,still open.757319B/op (+21),no
+new owned storage. SameQ13 coefficients/rounding/clipping,exact normal/scalar pixels,
+RGB/RGBA packing/padding and fallback. BothOS5054full,SAME package/three examples,
+8color normal/scalar,293public JPEG normal/scalar and15AVX2-disabled controls pass.
+Baseline/focused proof reused;zero baseline retiming or harness/native/selector
+builds. Bulk byte-plane color costs change; selectedJPEG420 refreshed,other affected
+controls need current proof before pass claims. Largest remaining ratios prioritize
+VP8trellis1.519/photo1.479/PNGFastest1.471. A bounded current6second VP8profile
+(5912samples,exact6818B packet) places40.7% in Apply;one hostbuild,no production/
+native rebuild or gain claim. Inspect its instruction offsets;do not reopen closed
+state-collapse/uniform/scan/batch families or repeat unchanged profiles.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
