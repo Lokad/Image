@@ -542,11 +542,14 @@ and the same actual package/three examples, including cached 8/16-bit pixels,
 admission refusal/recovery and retained-output ownership.
 
 This changes the general horizontal loop selected by nine existing controls:
-Down8/16, Up8/16, Cross8/16, Horizontal8/16 and HorizontalUp8. The other seven
-need current cost evidence before CPU-pass claims: **Down16, Up8, Cross8,
-Cross16, Horizontal8, Horizontal16, HorizontalUp8**. Resolve Down16 next using
-the existing selector. This is reconciliation of changed paths in the finite
-inventory, without a new shape/depth/filter grid. Mixed8/16 select earlier column
+Down8/16, Up8/16, Cross8/16, Horizontal8/16 and HorizontalUp8. The
+[bounded reconciliation](CURRENT-BICUBIC-CACHED-COSTS.md) now supplies current
+costs for all nine: Down16 and three horizontal cases are independently confirmed
+gaps; Up8/Cross8/Cross16 are clear-gap screens. No builds or repeated full/package
+proofs were needed. Horizontal8 preserves its existing six certified rational
+alpha halves and exact qualified pixels; no new exception is introduced.
+This reconciles changed paths in the finite inventory without a new
+shape/depth/filter grid. Mixed8/16 select earlier column
 kernels; vertical axes copy decoded rows; tight-workspace, wider-support and
 word-horizontal-enlargement paths leave before the changed loop. Other codecs,
 filters, text and read boundaries retain applicable unchanged confirmations.

@@ -274,6 +274,9 @@ reduces Down8 elapsed by 11.5% filtered / 13.1% all actuals; its 1.339× / upper
 [fresh unchanged-production screen](../benchmarks/BICUBIC-WORD-GUARD-VECTOR-REJECTED.md),
 1.522× / upper 1.652, 1,063,404 B/op; rejected candidate costs are excluded.
 The unchanged TightCross16 follow-up reuses qualification and makes no gain/regression claim.
+All nine affected Cached controls now have [current costs](../benchmarks/CURRENT-BICUBIC-CACHED-COSTS.md)
+on the same immutable producer; the seven companion results retain their
+allocation figures, confirmation status and existing exact-half qualifications.
 B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
