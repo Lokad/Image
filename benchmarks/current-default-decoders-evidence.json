@@ -2612,5 +2612,51 @@
     "mirrored": true,
     "allMembersVerified": true
   },
-  "next": "Investigate the newly demonstrated6.02x defaultJPEG420 gap first, using one bounded current profile to distinguish entropy/inverse transform/chroma/color cost. Select one substantial primitive preserving exact pixels, cancellation and admitted storage; no matrix expansion. WebP1.42/1.30x remain named screen gaps. Full267path objective remains open."
+  "next": "JIV1: SIMD evaluation of the existing exactJPEG inverse matrix; one substantial primitive preserving signed overflow, saturation, pre-columnDC bias, rounding, cancellation, admitted scratch and portable fallback. Existing frozen inverse/pixel gates before one shortJPEG420 screen (material gate5%); independent confirmation only if promising. Prioritize remaining measured gaps afterward; full267path goal remains open.",
+  "diagnostic": {
+    "profilingOnly": true,
+    "noTimingOrGainClaim": true,
+    "seconds": 6,
+    "samples": 5930,
+    "topFiveSelfSamples": [
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 2397,
+        "fraction": 0.4042158516020236
+      },
+      {
+        "method": "instance float64 [Lokad.Image] Lokad.Image.Internal.JpegDecoder::Interpolate(class Lokad.Image.Internal.JpegDecoder/Component,int32,int32)[Optimized]",
+        "samples": 1452,
+        "fraction": 0.2448566610455312
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::WriteYcbcrPixels(int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+        "samples": 1008,
+        "fraction": 0.1699831365935919
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "samples": 382,
+        "fraction": 0.06441821247892074
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseColor::WriteRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+        "samples": 341,
+        "fraction": 0.05750421585160202
+      }
+    ],
+    "exactPixels": true,
+    "oneProfileHostBuild": true,
+    "producerHarnessNativeSelectorBuilds": 0,
+    "rawArchive": {
+      "file": "current-jpeg420-decode-profile.tar.xz",
+      "sha256": "84685a3a30f07d01fcc1517937e0b2322d3a339c3b1e781e35cc255aedeaf463",
+      "bytes": 822736,
+      "members": 35,
+      "mirrored": true,
+      "allMembersVerified": true
+    },
+    "failures": "Captured trace reused after correcting file ownership, one missing receipt variable and sudo PATH for perf script; no repeated profile or benchmark.",
+    "decision": "Inverse transform40.4216%; chroma Interpolate24.4857% plus WriteYcbcrPixels16.9983%; entropyReadPlainBaselineAc6.4418%; colorWriteRow5.7504%. Start one SIMD exact inverse-matrix primitive with unchanged signed overflow/saturation/DC bias/rounding, portable fallback and storage. Then reassess remaining gap, rather than microtuning smaller costs."
+  }
 }

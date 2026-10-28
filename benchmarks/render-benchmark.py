@@ -227,8 +227,10 @@ screens JPEG420 at6.018×,757,166B/op and VP8L resident/Stream at1.425×/1.304×
 confidence bounds, exact managed/native pixels and all quiet guards passing.
 The frozen packets/settings and owned-output boundaries stay fixed. JPEG's old
 pre-parity managed hash is refreshed only after exact normal/scalar comparison.
-Its larger material gap takes priority for investigation; no production build or
-optimization, independent speedup/pass claim or full/package repetition occurs.
+A bounded current-core diagnostic places40.4% in the inverse transform and41.5%
+in chroma interpolation/pixel placement. SIMD evaluation of the exact inverse
+matrix is next; no production change, independent speedup/pass claim or full/
+package repetition occurs. Diagnostic sample shares are not timing comparisons.
 
 ''' + codecs + '''
 

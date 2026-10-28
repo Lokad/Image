@@ -45,8 +45,16 @@ bracket, filtered/all-actual bound, guard, source/input/output/worker/child iden
 and the mirrored176-member raw master. Preparation/retention failures caused no
 measurement repeat and are retained.
 
-JPEG420's6.02× gap takes priority over the smaller encoder ratios. Next, one
-bounded profile will identify whether inverse transformation, entropy or pixel
-conversion dominates before choosing a substantial primitive. Both WebP gaps
-remain recorded. The full267-path warm single-CPU conservative≤1× objective stays
-open; no additional content, sampling or settings grid is introduced.
+JPEG420's6.02× gap takes priority over the smaller encoder ratios. One six-second
+current-core CPU profile (5930samples) places40.4% in inverse transformation,
+24.5% in chroma interpolation and17.0% in its surrounding pixel loop; entropy
+accounts for6.4% and color conversion5.8%. Diagnostic shares are not timing/gain
+evidence. Exact pixels and guards pass. One profile-host build reuses the core,
+harness and worker; postprocessing corrections reuse the captured trace.
+
+The next primitive is SIMD evaluation of the existing exact inverse matrix,
+retaining signed overflow, saturation, biased columns, rounding, cancellation,
+scratch admission and the portable fallback. The mirrored35-member diagnostic
+archive is linked in the numeric evidence; no profile repeat or new raster is
+needed. Both WebP gaps remain recorded. The full267-path warm single-CPU
+conservative≤1× objective stays open; no content/sampling/settings grid is added.
