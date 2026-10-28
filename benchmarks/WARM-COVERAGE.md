@@ -324,6 +324,15 @@ complete-operation result fails the 5% gate. Restore and stop this family;
 unchanged qualification is reused. Next resolve the wide VP8L resident-decode
 control before selecting a distinct substantial opportunity.
 
+The [VP8L resident confirmation](current-vp8l-resident-decode-evidence.json)
+resolves its wide screen at 4.583 ms, 1.333× / upper 1.404, 1,216,162 B/op.
+All twelve actual/filtered samples, native brackets and quiet guards pass on
+the immutable VPS1 producer, with exact pixels, alpha, hidden RGB and independent
+outputs. No builds or qualification checks repeat. One bounded workload-only
+trace places 34.7% in ReadImage and 33.1% in Huffman.Read; those are attribution
+leads, without phase-time or speedup claims. Reuse its instruction samples before
+choosing a distinct substantial primitive; the full 267-path objective remains.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:

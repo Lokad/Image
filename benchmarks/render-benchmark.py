@@ -27,9 +27,11 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
+    resident_decode = json.loads((ROOT / 'benchmarks/current-vp8l-resident-decode-evidence.json').read_text(encoding='utf-8'))
     jpeg_chroma = json.loads((ROOT / 'benchmarks/warm-jpeg-simd-color-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_chroma['productionChanged'] and jpeg_chroma['independentQuietConfirmationThisPair']
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
+    assert not resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
     assert not resident_other['productionChanged'] and resident_other['independentQuietConfirmation']
@@ -86,10 +88,10 @@ def render():
     for case, label in [('Jpeg420', 'JPEG baseline420, resident decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
                         ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
-        producer = jpeg_chroma if case == 'Jpeg420' else decoders
+        producer = jpeg_chroma if case == 'Jpeg420' else resident_decode if case == 'WebpResident' else decoders
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
-        samples = 12 if case == 'Jpeg420' else 3
+        samples = 12 if case in {'Jpeg420', 'WebpResident'} else 3
         assert producer['status'][case] == ('confirmed-gap' if samples == 12 else 'screen-gap')
         assert len(observation['managed']['actual']) == samples
         assert receipt['librarySha256'] == producer['producers']['linuxSha256']
@@ -182,7 +184,7 @@ Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; both VP8L decoder controls retain current screens. These 52 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 52 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -191,7 +193,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420 decode, VP8 efforts2/6 and VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 efforts2/6 and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -232,7 +234,10 @@ evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
-supplies VP8L resident/Stream screens at1.425×/1.304×,1,216,162/1,216,190B/op.
+retains the VP8L Stream screen at1.304×,1,216,190B/op. A
+[resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
+resolves its wide screen at1.333× / upper1.404,1,216,162B/op,with the same
+immutable build and exact pixels;no gain/regression or general decode claim follows.
 [SIMD color conversion](../benchmarks/WARM-JPEG-SIMD-COLOR.md) independently
 reduces JPEG420 decode from1.746ms to1.424ms (18.4% less), retaining exact pixels.
 Its1.396×/upper1.518 gap remains;757,319B/op is21B higher,with no new owned storage.

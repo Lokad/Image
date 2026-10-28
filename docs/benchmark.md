@@ -5,7 +5,7 @@ Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; both VP8L decoder controls retain current screens. These 52 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 52 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -14,7 +14,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420 decode, VP8 efforts2/6 and VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 efforts2/6 and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -55,7 +55,10 @@ evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
-supplies VP8L resident/Stream screens at1.425×/1.304×,1,216,162/1,216,190B/op.
+retains the VP8L Stream screen at1.304×,1,216,190B/op. A
+[resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
+resolves its wide screen at1.333× / upper1.404,1,216,162B/op,with the same
+immutable build and exact pixels;no gain/regression or general decode claim follows.
 [SIMD color conversion](../benchmarks/WARM-JPEG-SIMD-COLOR.md) independently
 reduces JPEG420 decode from1.746ms to1.424ms (18.4% less), retaining exact pixels.
 Its1.396×/upper1.518 gap remains;757,319B/op is21B higher,with no new owned storage.
@@ -91,7 +94,7 @@ independent gap. Earlier profiles remain diagnostic history.
 | PNG RGBA8, Fastest1 / native1 † | 6,450.06 | 4,385.76 | 1.471 / 1.504 | 1,344,586 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
 | JPEG baseline420, resident decode † | 1,424.37 | 1,020.52 | 1.396 / 1.518 | 757,319 | — |
-| VP8L RGBA8, resident decode † | 4,314.08 | 3,028.30 | 1.425 / 3.692 | 1,216,162 | — |
+| VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
