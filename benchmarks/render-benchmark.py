@@ -24,6 +24,7 @@ def render():
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
+    current_reconciliation = json.loads((ROOT / 'benchmarks/current-png-vp8-reconciliation-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -44,6 +45,7 @@ def render():
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
     assert png_cursor['productionChanged'] and png_cursor['independentQuietConfirmationThisPair']
     assert set(png_cursor['cases']) == {'ValidatePng8', 'ValidatePng16', 'ValidatePng16Async'}
+    assert not current_reconciliation['productionChanged'] and current_reconciliation['allBuilds'] == 0
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
     assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
@@ -62,7 +64,7 @@ def render():
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
-        producer = trellis if case['id'] == 'case10' else photograph if case['id'] == 'case08' else alpha if case['id'] == 'case07' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        producer = current_reconciliation if case['id'] in {'case09', 'case11'} else trellis if case['id'] == 'case10' else photograph if case['id'] == 'case08' else alpha if case['id'] == 'case07' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if vp8_case:
             observation = producer['cases'][vp8_cases[case['id']]][-1]
         elif case['id'] == 'case00':
@@ -78,7 +80,7 @@ def render():
         upper = observation['conservativeRatioUpper']
         assert receipt['librarySha256'] == (producer['producers']['linuxSha256'] if updated else evidence['librarySha256'])
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case10', 'case12'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -200,7 +202,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 efforts2/6, VP8 photograph/alpha and VP8L RGBA8 encode have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -217,8 +219,11 @@ VP8 effort6 independently confirms a1.539× / upper1.551 gap,754,344B/op and exa
 6,818B packet. VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
 17,688-byte packet. VP8 alpha confirms 1.296× / upper 1.306, 21,353,208 B/op and
 an exact 98,590-byte packet. These follow-ups reuse the immutable build and package
-proof. Two other VP8 companions retain wide screens, without gain/regression claims.
-BothOS pass5055checks and the same actual package/three examples; no owned storage is added.
+proof. Opaque RGBA16 and diagram4 now confirm 1.412× / upper 1.417 and
+1.368× / upper 1.374, retaining exact 72,380/7,100-byte packets and
+1,201,552/741,137 B/op. These cost confirmations make no gain/regression claim.
+The current producer passes 5,057 checks on each platform and the same actual
+package/three examples; no owned storage is added by the accepted cursor change.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -242,9 +247,16 @@ four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes
 caller RGB420 and governed RGBA16; other subsampled encoder costs need current
 evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
-The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
-Stream decode. Its four tight PNG decoder costs are prior-production after the
-shared cursor change below; their correctness proof remains applicable.
+The [earlier read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md)
+retains VP8 Stream decode. The
+[current reconciliation](../benchmarks/current-png-vp8-reconciliation-evidence.json)
+refreshes four tight PNG decoder costs after the shared cursor change below:
+PNG8 ordinary/live-token screen at 1.090/1.405×, 68,224 B/op; PNG16 independently
+confirms gaps at 1.010× / upper 1.015 and 1.040× / upper 1.053, 70,272 B/op.
+Each preserves its frozen local ceiling, one-byte-below refusal and exact pixels.
+The unchanged qualified build, harness, native workers, selectors and package
+proof are reused, without builds or repeated qualification. Other PNG decoder
+costs remain prior-production until reconciled.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
 retains the VP8L Stream screen at1.304×,1,216,190B/op. A
 [resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
@@ -257,8 +269,8 @@ remain; the 1.285× / upper 1.304 gap stays open. Both platforms pass 5,056 full
 checks, affected scalar tests and the same actual package/three examples. Other
 JPEG inverse-render costs need current evidence before pass claims; validation,
 encoding and unrelated paths retain applicable proof. Packet/settings and owned
-output boundaries stay fixed. Remaining wide VP8 companions need resolution
-before tuning; PNG Fastest retains its applicable independent gap.
+output boundaries stay fixed. VP8 companions are now independently confirmed;
+PNG Fastest retains its applicable independent gap.
 
 
 ''' + codecs + '''

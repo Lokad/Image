@@ -97,7 +97,7 @@ source fields and21 frozen RGBA8 controls agree normal/scalar. VP8+alpha Stream
 decode screens1.291×,1966583B/op with exact pixels. Tight PNG8 ordinary/live-token
 decode screens1.370×/1.387×,68224B/op; PNG16 screens1.041×/1.029×,70272B/op.
 All remained gaps; no independent timing confirmation or speedup claim. The
-four PNG decode costs are prior-production after the shared cursor below.
+four earlier PNG decode costs are superseded by the reconciliation below.
 Current production qualification/package proof is reused. These six controls do not
 refresh every Identify/decoder boundary affected by read-policy changes.
 
@@ -116,12 +116,29 @@ Release package and three examples. No storage/admission boundary is added.
 The shared cursor changes noncancellable streaming PNG validation/fused RGBA
 decode and full materialization; the cancellable token decoder stays unchanged
 but gains a dispatch check. Other PNG decoder CPU evidence is prior-production
-until reconciled, including the four tight companions above. Existing functional
+until reconciled; the four tight companions are refreshed below. Existing functional
 proof remains exact. Counting-only indexed/interlaced validation, encoders,
 inspection, other codecs, editing/text and applicable confirmations are unchanged.
 The [preceding PNG8 confirmation/profile](current-png8-validation-evidence.json)
 retains the diagnostic lead and immutable pre-change producer. No new input or
 settings grid, repeated profile or harness/native/selector build was needed.
+
+The [current PNG/VP8 reconciliation](current-png-vp8-reconciliation-evidence.json)
+refreshes six existing controls on the same qualified PSC1 producer. Tight PNG8
+ordinary/live-token screens are 1.090/1.405×, 68,224 B/op. Tight PNG16 independently
+confirms 1.010× / upper 1.015 and live-token 1.040× / upper 1.053, 70,272 B/op.
+Their frozen memory ceilings and one-byte-below refusal remain unchanged. The
+near-parity outcomes are confirmed gaps; no optimization or gain claim follows.
+
+Opaque RGBA16 VP8 independently confirms 1.412× / upper 1.417, 22.026 ms and
+1,201,552 B/op; diagram method4 confirms 1.368× / upper 1.374, 7.938 ms and
+741,137 B/op. Complete 72,380/7,100-byte packets and alpha remain exact. All
+twelve actuals/filtered results, native brackets and idle-v2 guards pass. All six
+VP8 encoding rows now have independent confirmations. This resolves the two wide
+screens without new inputs, production/harness/native/selector builds or repeated
+full/package qualification. Existing unaffected proofs remain applicable.
+The raw archive retains one excluded selector-mismatch attempt and the valid
+replacement; it is mirrored and member-verified. The full 267-path goal remains.
 
 The [JPEG AC publication trial](JPEG-BASELINE-AC-PUBLICATION-REJECTED.md) missed
 its 5% screen gate at 1.49%. Qualified code/producers were restored, actual package

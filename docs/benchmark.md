@@ -14,7 +14,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 efforts2/6, VP8 photograph/alpha and VP8L RGBA8 encode have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, all six VP8 encoding rows and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -31,8 +31,11 @@ VP8 effort6 independently confirms a1.539× / upper1.551 gap,754,344B/op and exa
 6,818B packet. VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
 17,688-byte packet. VP8 alpha confirms 1.296× / upper 1.306, 21,353,208 B/op and
 an exact 98,590-byte packet. These follow-ups reuse the immutable build and package
-proof. Two other VP8 companions retain wide screens, without gain/regression claims.
-BothOS pass5055checks and the same actual package/three examples; no owned storage is added.
+proof. Opaque RGBA16 and diagram4 now confirm 1.412× / upper 1.417 and
+1.368× / upper 1.374, retaining exact 72,380/7,100-byte packets and
+1,201,552/741,137 B/op. These cost confirmations make no gain/regression claim.
+The current producer passes 5,057 checks on each platform and the same actual
+package/three examples; no owned storage is added by the accepted cursor change.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -56,9 +59,16 @@ four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes
 caller RGB420 and governed RGBA16; other subsampled encoder costs need current
 evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
-The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
-Stream decode. Its four tight PNG decoder costs are prior-production after the
-shared cursor change below; their correctness proof remains applicable.
+The [earlier read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md)
+retains VP8 Stream decode. The
+[current reconciliation](../benchmarks/current-png-vp8-reconciliation-evidence.json)
+refreshes four tight PNG decoder costs after the shared cursor change below:
+PNG8 ordinary/live-token screen at 1.090/1.405×, 68,224 B/op; PNG16 independently
+confirms gaps at 1.010× / upper 1.015 and 1.040× / upper 1.053, 70,272 B/op.
+Each preserves its frozen local ceiling, one-byte-below refusal and exact pixels.
+The unchanged qualified build, harness, native workers, selectors and package
+proof are reused, without builds or repeated qualification. Other PNG decoder
+costs remain prior-production until reconciled.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
 retains the VP8L Stream screen at1.304×,1,216,190B/op. A
 [resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
@@ -71,8 +81,8 @@ remain; the 1.285× / upper 1.304 gap stays open. Both platforms pass 5,056 full
 checks, affected scalar tests and the same actual package/three examples. Other
 JPEG inverse-render costs need current evidence before pass claims; validation,
 encoding and unrelated paths retain applicable proof. Packet/settings and owned
-output boundaries stay fixed. Remaining wide VP8 companions need resolution
-before tuning; PNG Fastest retains its applicable independent gap.
+output boundaries stay fixed. VP8 companions are now independently confirmed;
+PNG Fastest retains its applicable independent gap.
 
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
@@ -86,9 +96,9 @@ before tuning; PNG Fastest retains its applicable independent gap.
 | VP8 diagram, effort2 / distortion-only search † | 3,381.88 | 2,514.90 | 1.345 / 1.423 | 741,375 | 7,330 / 7,330 |
 | VP8 RGBA8 † | 69,341.28 | 53,516.87 | 1.296 / 1.306 | 21,353,208 | 98,590 / 98,590 |
 | VP8 opaque photograph † | 14,261.18 | 9,720.44 | 1.467 / 1.501 | 809,072 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 8,431.04 | 6,233.83 | 1.352 / 2.469 | 741,137 | 7,100 / 7,100 |
+| VP8 opaque text/diagram † | 7,938.19 | 5,800.70 | 1.368 / 1.374 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,159.83 | 9,852.07 | 1.539 / 1.551 | 754,344 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 21,213.46 | 15,682.46 | 1.353 / 2.085 | 1,201,552 | 72,380 / 72,380 |
+| VP8 opaque RGBA16, including normalization † | 22,026.04 | 15,596.77 | 1.412 / 1.417 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 161,904.66 | 120,988.24 | 1.338 / 1.923 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 162,750.37 | 120,441.78 | 1.351 / 1.431 | 29,697,312 | 183,812 / 183,812 |

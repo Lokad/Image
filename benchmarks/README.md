@@ -26,6 +26,10 @@ accepted production changes on Windows/Linux, scalar paths and the actual Releas
 package. Stop passing cases; add a workload only for a concrete missing required
 algorithm or public boundary. Compression correctness precedes CPU gains.
 
+Generated cached selectors can bind fixed parameter values. Verify their prepared
+case and ordinal before reuse; changing the case environment filter does not
+rebind them. Check the actual case in each receipt and exclude mismatched runs.
+
 Regenerate docs/benchmark.md with `python benchmarks/render-benchmark.py` and
 verify with `--check` after accepted rounds. Archived reports/raw JSON are immutable
 history. The former long narrative and retired experiment recipes remain in
