@@ -102,6 +102,15 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 
 ## Current evidence
 
+[Paired JPEG inverse columns](WARM-JPEG-PAIRED-COLUMNS.md) independently reduce
+the existing JPEG420 decode by 2.51% (2.44% all actuals), 1.331 ms to 1.298 ms,
+with exact pixels and unchanged 757,319 B/op. The 1.285× / upper 1.304 gap remains.
+Both interval forms separate; all actuals, native brackets and idle-v2 guards are
+retained. Both OS pass 5,056 full checks, affected scalar tests and the SAME actual
+package/three examples. Other AVX2 JPEG inverse-render costs become prior-production
+until reconciled. Validation skips inverse rendering; its passing evidence remains
+applicable. Other codecs, encoding, editing and text paths remain unchanged.
+
 [Current VP8 alpha confirmation](current-vp8-alpha8-encoding-evidence.json)
 resolves the existing wide screen at 1.296× / upper 1.306, 69.341 ms and
 21,353,208 B/op, with the complete 98,590-byte packet and alpha exact. All twelve

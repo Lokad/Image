@@ -1,5 +1,9 @@
 # Exact SIMD JPEG color conversion
 
+Selected JPEG420 costs are superseded by [paired inverse columns](WARM-JPEG-PAIRED-COLUMNS.md).
+The color arithmetic and its qualification remain applicable.
+
+
 The existing JPEG420 decode independently falls from1.746ms to1.424ms,
 **18.4% less elapsed**, retaining exact pixels. Its **1.396×/upper1.518** gap
 remains to the warm single-CPU≤1× objective. Allocation is757319B/op (+21B).

@@ -30,8 +30,8 @@ def render():
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
     resident_decode = json.loads((ROOT / 'benchmarks/current-vp8l-resident-decode-evidence.json').read_text(encoding='utf-8'))
-    jpeg_chroma = json.loads((ROOT / 'benchmarks/warm-jpeg-simd-color-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_chroma['productionChanged'] and jpeg_chroma['independentQuietConfirmationThisPair']
+    jpeg_decode = json.loads((ROOT / 'benchmarks/warm-jpeg-paired-columns-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_decode['productionChanged'] and jpeg_decode['independentQuietConfirmationThisPair']
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
@@ -92,7 +92,7 @@ def render():
     for case, label in [('Jpeg420', 'JPEG baseline420, resident decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
                         ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
-        producer = jpeg_chroma if case == 'Jpeg420' else resident_decode if case == 'WebpResident' else decoders
+        producer = jpeg_decode if case == 'Jpeg420' else resident_decode if case == 'WebpResident' else decoders
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         samples = 12 if case in {'Jpeg420', 'WebpResident'} else 3
@@ -246,16 +246,16 @@ retains the VP8L Stream screen at1.304×,1,216,190B/op. A
 [resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
 resolves its wide screen at1.333× / upper1.404,1,216,162B/op,with the same
 immutable build and exact pixels;no gain/regression or general decode claim follows.
-[SIMD color conversion](../benchmarks/WARM-JPEG-SIMD-COLOR.md) independently
-reduces JPEG420 decode from1.746ms to1.424ms (18.4% less), retaining exact pixels.
-Its1.396×/upper1.518 gap remains;757,319B/op is21B higher,with no new owned storage.
-BothOS pass5054full checks,SAME actual package/three examples,8existing color
-normal/scalar controls,293public JPEG normal/scalar and15AVX2-disabled pixel/caller
-controls. Other affected byte-plane color costs need current evidence before pass
-claims; validation,encoding and unrelated paths retain applicable proof. Frozen
-packet/settings and owned-output boundaries stay fixed. Material VP8 companion
-bounds need resolution before further tuning; PNGFastest retains its applicable
-independent gap. Earlier profiles remain diagnostic history.
+[Paired JPEG inverse columns](../benchmarks/WARM-JPEG-PAIRED-COLUMNS.md) reduce
+JPEG420 decode from 1.331 ms to 1.298 ms: 2.5% less filtered elapsed and 2.4% using
+all actuals, with separated intervals and unchanged 757,319 B/op. Exact pixels
+remain; the 1.285× / upper 1.304 gap stays open. Both platforms pass 5,056 full
+checks, affected scalar tests and the same actual package/three examples. Other
+JPEG inverse-render costs need current evidence before pass claims; validation,
+encoding and unrelated paths retain applicable proof. Packet/settings and owned
+output boundaries stay fixed. Remaining wide VP8 companions need resolution
+before tuning; PNG Fastest retains its applicable independent gap.
+
 
 ''' + codecs + '''
 

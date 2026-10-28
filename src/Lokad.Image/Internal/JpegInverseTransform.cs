@@ -102,23 +102,33 @@ internal static class JpegInverseTransform
         var r0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
         var r1 = WidenRow(rows, 1); var r2 = WidenRow(rows, 2); var r3 = WidenRow(rows, 3);
         var r4 = WidenRow(rows, 4); var r5 = WidenRow(rows, 5); var r6 = WidenRow(rows, 6); var r7 = WidenRow(rows, 7);
-        for (var y = 0; y < 8; y++)
+        // T.81 A.3.3: reflected outputs share even frequencies and negate odd
+        // frequencies. DC/quarter-turn weights also share the same magnitude.
+        // All operations remain modulo Int32, so regrouping preserves even
+        // overflowing sums. Keep the signed-word DC bias above this pairing.
+        var unit = Vector256.Create(Kernel[0]);
+        var plus = Avx2.MultiplyLow(Avx2.Add(r0, r4), unit);
+        var minus = Avx2.MultiplyLow(Avx2.Subtract(r0, r4), unit);
+        for (var y = 0; y < 4; y++)
         {
-            // Eight columns in parallel. Low products and wrapping additions
-            // retain every scalar Int32 precision boundary, even at extremes.
-            var sum = Avx2.MultiplyLow(r0, Vector256.Create(Kernel[y]));
-            sum = Avx2.Add(sum, Avx2.MultiplyLow(r1, Vector256.Create(Kernel[8 + y])));
-            sum = Avx2.Add(sum, Avx2.MultiplyLow(r2, Vector256.Create(Kernel[16 + y])));
-            sum = Avx2.Add(sum, Avx2.MultiplyLow(r3, Vector256.Create(Kernel[24 + y])));
-            sum = Avx2.Add(sum, Avx2.MultiplyLow(r4, Vector256.Create(Kernel[32 + y])));
-            sum = Avx2.Add(sum, Avx2.MultiplyLow(r5, Vector256.Create(Kernel[40 + y])));
-            sum = Avx2.Add(sum, Avx2.MultiplyLow(r6, Vector256.Create(Kernel[48 + y])));
-            sum = Avx2.Add(sum, Avx2.MultiplyLow(r7, Vector256.Create(Kernel[56 + y])));
-            sum = Avx2.ShiftRightArithmetic(sum, 20);
-            var words = Sse2.PackSignedSaturate(sum.GetLower(), sum.GetUpper());
-            var bytes = Sse2.PackUnsignedSaturate(words, words);
-            BinaryPrimitives.WriteUInt64LittleEndian(pixels.Slice(y * 8, 8), bytes.AsUInt64().ToScalar());
+            var even = y is 0 or 3 ? plus : minus;
+            even = Avx2.Add(even, Avx2.MultiplyLow(r2, Vector256.Create(Kernel[16 + y])));
+            even = Avx2.Add(even, Avx2.MultiplyLow(r6, Vector256.Create(Kernel[48 + y])));
+            var odd = Avx2.MultiplyLow(r1, Vector256.Create(Kernel[8 + y]));
+            odd = Avx2.Add(odd, Avx2.MultiplyLow(r3, Vector256.Create(Kernel[24 + y])));
+            odd = Avx2.Add(odd, Avx2.MultiplyLow(r5, Vector256.Create(Kernel[40 + y])));
+            odd = Avx2.Add(odd, Avx2.MultiplyLow(r7, Vector256.Create(Kernel[56 + y])));
+            StoreRow(Avx2.Add(even, odd), pixels.Slice(y * 8, 8));
+            StoreRow(Avx2.Subtract(even, odd), pixels.Slice((7 - y) * 8, 8));
         }
+    }
+
+    private static void StoreRow(Vector256<int> sum, Span<byte> pixels)
+    {
+        sum = Avx2.ShiftRightArithmetic(sum, 20);
+        var words = Sse2.PackSignedSaturate(sum.GetLower(), sum.GetUpper());
+        var bytes = Sse2.PackUnsignedSaturate(words, words);
+        BinaryPrimitives.WriteUInt64LittleEndian(pixels, bytes.AsUInt64().ToScalar());
     }
 
     private static Vector256<int> WidenRow(ReadOnlySpan<short> rows, int y)

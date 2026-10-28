@@ -63,16 +63,16 @@ retains the VP8L Stream screen at1.304×,1,216,190B/op. A
 [resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
 resolves its wide screen at1.333× / upper1.404,1,216,162B/op,with the same
 immutable build and exact pixels;no gain/regression or general decode claim follows.
-[SIMD color conversion](../benchmarks/WARM-JPEG-SIMD-COLOR.md) independently
-reduces JPEG420 decode from1.746ms to1.424ms (18.4% less), retaining exact pixels.
-Its1.396×/upper1.518 gap remains;757,319B/op is21B higher,with no new owned storage.
-BothOS pass5054full checks,SAME actual package/three examples,8existing color
-normal/scalar controls,293public JPEG normal/scalar and15AVX2-disabled pixel/caller
-controls. Other affected byte-plane color costs need current evidence before pass
-claims; validation,encoding and unrelated paths retain applicable proof. Frozen
-packet/settings and owned-output boundaries stay fixed. Material VP8 companion
-bounds need resolution before further tuning; PNGFastest retains its applicable
-independent gap. Earlier profiles remain diagnostic history.
+[Paired JPEG inverse columns](../benchmarks/WARM-JPEG-PAIRED-COLUMNS.md) reduce
+JPEG420 decode from 1.331 ms to 1.298 ms: 2.5% less filtered elapsed and 2.4% using
+all actuals, with separated intervals and unchanged 757,319 B/op. Exact pixels
+remain; the 1.285× / upper 1.304 gap stays open. Both platforms pass 5,056 full
+checks, affected scalar tests and the same actual package/three examples. Other
+JPEG inverse-render costs need current evidence before pass claims; validation,
+encoding and unrelated paths retain applicable proof. Packet/settings and owned
+output boundaries stay fixed. Remaining wide VP8 companions need resolution
+before tuning; PNG Fastest retains its applicable independent gap.
+
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -97,7 +97,7 @@ independent gap. Earlier profiles remain diagnostic history.
 | PNG RGBA16, SmallestSize9 / native9 † | 26,234.53 | 20,109.52 | 1.305 / 1.565 | 3,813,670 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,450.06 | 4,385.76 | 1.471 / 1.504 | 1,344,586 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
-| JPEG baseline420, resident decode † | 1,424.37 | 1,020.52 | 1.396 / 1.518 | 757,319 | — |
+| JPEG baseline420, resident decode † | 1,297.81 | 1,009.85 | 1.285 / 1.304 | 757,319 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 
