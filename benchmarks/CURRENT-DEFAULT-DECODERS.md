@@ -1,6 +1,6 @@
 # Current default JPEG420 and VP8L decode
 
-JPEG420 costs below are superseded by [integer chroma expansion](WARM-JPEG-QUARTER-CHROMA.md).
+JPEG420 costs below are superseded by [SIMD chroma tiles](WARM-JPEG-SIMD-CHROMA.md).
 The two VP8L screens remain applicable on their unchanged paths.
 
 Three existing controls have current costs on the qualified0.2.1 core. All are

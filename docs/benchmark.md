@@ -52,16 +52,16 @@ The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes V
 Stream decode and four existing tight PNG companions without a speedup claim.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
 supplies VP8L resident/Stream screens at1.425×/1.304×,1,216,162/1,216,190B/op.
-[Integer quarter-phase chroma](../benchmarks/WARM-JPEG-QUARTER-CHROMA.md)
-independently reduces JPEG420 decode from3.965ms to2.095ms (47.2% less), retaining
-exact pixels. Its2.079×/upper2.241 gap remains. Reported allocation rises30B/op to
-757,298;64B stack tiles and owned capacity stay unchanged. BothOS pass5054full
-checks and SAME actual package/three consumer examples; existing293public JPEG
-scalar checks perOS and unchanged inverse proof are reused. Other affected420/422
-decoder costs need current evidence before pass claims; validation,encoding and
-other codecs/editing/text retain applicable unchanged proof. Frozen packet/
-settings and owned-output boundaries stay fixed. One current diagnostic profile
-prioritizes SIMD chroma tiles; it introduces no extra performance control.
+[SIMD chroma tiles](../benchmarks/WARM-JPEG-SIMD-CHROMA.md) independently reduce
+JPEG420 decode from2.095ms to1.746ms (16.7% less), retaining exact pixels and
+757,298B/op. Its1.732×/upper1.862 gap remains.64B stack tiles and owned capacity
+stay unchanged. BothOS pass5054full checks,SAME actual package/three consumer
+examples and15existing SSE2-without-AVX2 pixel/caller controls;293public JPEG scalar
+checks perOS and unchanged inverse proof are reused. Other affected420/422 costs
+need current evidence before pass claims; validation,encoding and other codecs/
+editing/text retain applicable proof. Frozen packet/settings and owned-output
+boundaries stay fixed. The retained profile prioritizes color conversion next;
+no extra performance control or profile is introduced.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -86,7 +86,7 @@ prioritizes SIMD chroma tiles; it introduces no extra performance control.
 | PNG RGBA16, SmallestSize9 / native9 † | 26,234.53 | 20,109.52 | 1.305 / 1.565 | 3,813,670 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,450.06 | 4,385.76 | 1.471 / 1.504 | 1,344,586 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 426.14 | 405.06 | 1.052 / 1.067 | 1,741,709 | 1,066,552 / 1,066,552 |
-| JPEG baseline420, resident decode † | 2,095.45 | 1,007.97 | 2.079 / 2.241 | 757,298 | — |
+| JPEG baseline420, resident decode † | 1,746.22 | 1,008.44 | 1.732 / 1.862 | 757,298 | — |
 | VP8L RGBA8, resident decode † | 4,314.08 | 3,028.30 | 1.425 / 3.692 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 

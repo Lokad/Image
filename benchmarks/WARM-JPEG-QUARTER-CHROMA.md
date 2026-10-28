@@ -1,5 +1,8 @@
 # Exact integer JPEG chroma expansion
 
+Selected JPEG420 costs are superseded by [SIMD chroma tiles](WARM-JPEG-SIMD-CHROMA.md).
+The integer edge/tail fallback and its qualification remain applicable.
+
 The existing JPEG420 decode independently falls from3.965ms to2.095ms,
 **47.2% less elapsed**, with exact reference pixels. Its **2.079×/upper2.241**
 gap remains to the warm single-CPU≤1× objective.

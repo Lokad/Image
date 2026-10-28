@@ -235,6 +235,18 @@ SIMD chroma tile with integer edge/tail/single-pixel fallback. Only420/422YCbCr
 RGB/RGBA costs change; luma-only/444/411/410/directRGB/CMYK/YCCK and unrelated
 paths retain applicable unchanged proofs. No extra image/control or profile repeat.
 
+[SIMD JPEG chroma](WARM-JPEG-SIMD-CHROMA.md) independently reduces the sameJPEG420
+case16.7% (2095.452→1746.224µs),1.732×/upper1.862,still open.757298B/op and64B
+scratch unchanged; exact normal/scalar pixels. BothOS5054full checks,SAME actual
+package/three examples,293public scalar and15existing AVX2-disabled pixel/caller
+controls pass. Existing scalar/baseline proof reused; zero baseline retiming or
+harness/native/selector builds. Wide short upper30.849 retained,one independent
+confirmation; no scoring repeats or new image/grid. Vector-eligible420/422costs
+change; integer edges/tails/single-pixel arithmetic and unrelated paths retain
+applicable proof. Current selected cost refreshed; other affected controls need
+current proof before pass claims. Next:eight-pixel color conversion,using the
+retained JCP2 profile; no unchanged profile or chroma/inverse variants repeated.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
