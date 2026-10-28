@@ -10,6 +10,8 @@ public sealed class PngDeflaterMatchPacketTests
     // Frozen on the actual qualified producer on both OSes before comparison
     // changes. These exact packets also retain generic-write delivery behavior.
     [Theory]
+    [InlineData(false, 1, 194788, "69e71b5130919c68443efb049041b9046d46271e15f4861b0538637e38a25527")]
+    [InlineData(true, 1, 2572, "627ea60fdd0fcdac95042f82ae4db419f5c916b3be5b0dd87ce12c23906a771f")]
     [InlineData(false, 6, 194728, "4f018a3e97ec49f78ddb73365caace2d6f8012beb026ffcb6033f38f11148ab7")]
     [InlineData(false, 9, 194728, "d264b218480edf0d84609f1fc2c1297d7eff25730239cf1fdf916f1921086fc8")]
     [InlineData(true, 6, 1702, "0667b95cf3e7480d5979bd9301670229be2d5d70d8911f35bba5379bf932edf4")]
