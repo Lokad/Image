@@ -311,6 +311,12 @@ and focused normal/scalar controls pass on both systems. It is rejected; qualifi
 source, matched binaries and linked tests are restored. No confirmation or
 repeated full/package qualification follows. Keep this family closed.
 
+The [dictionary-width trial](PNG-DICTIONARY-WIDTH-REJECTED.md) saves 256 KiB of
+owned capacity and 19.5% measured allocation, but only 1.3% elapsed in its short
+screen, below the 5% CPU gate. Exact bytes, cleanup and high-index comparisons pass
+normally/scalar on both systems. It is rejected and restored without confirmation
+or repeated full/package checks; retain the allocation evidence for later work.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
