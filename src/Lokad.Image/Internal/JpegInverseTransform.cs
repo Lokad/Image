@@ -1,3 +1,8 @@
+using System.Buffers.Binary;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 // Independent matrix evaluation of T.81 A.3.3 at the pinned reference's
@@ -16,7 +21,8 @@ internal static class JpegInverseTransform
             var value = frequency == 0 ? 1 : Math.Sqrt(2) * Math.Cos((2 * x + 1) * frequency * Math.PI / 16);
             // The pinned 8-bit policy represents the unit rotation one Q14
             // step below unity, including the DC and quarter-turn columns.
-            result[x * 8 + frequency] = frequency is 0 or 4
+            // One frequency's eight output weights are contiguous for SIMD.
+            result[frequency * 8 + x] = frequency is 0 or 4
                 ? Math.Sign(value) * ((1 << 14) - 1)
                 : (int)Math.Round(value * (1 << 14), MidpointRounding.AwayFromZero);
         }
@@ -36,6 +42,11 @@ internal static class JpegInverseTransform
         // Level shift belongs to the dequantized DC input. Narrow AC modulo
         // 16 bits, but saturate DC after adding the eight-bit sample midpoint.
         input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
+        if (Avx2.IsSupported)
+        {
+            InverseAvx2(input, rows, pixels);
+            return;
+        }
         for (var y = 0; y < 8; y++)
         {
             var row = input.Slice(y * 8, 8);
@@ -48,7 +59,7 @@ internal static class JpegInverseTransform
             {
                 var sum = 1 << 10;
                 for (var u = 0; u < 8; u++)
-                    sum = unchecked(sum + row[u] * Kernel[x * 8 + u]);
+                    sum = unchecked(sum + row[u] * Kernel[u * 8 + x]);
                 rows[y * 8 + x] = (short)Math.Clamp(sum >> 11, short.MinValue, short.MaxValue);
             }
         }
@@ -58,10 +69,58 @@ internal static class JpegInverseTransform
             // The reference SIMD path adds the column bias in signed words
             // before multiplication. Widening that addition changes extremes.
             var biased = unchecked((short)(rows[x] + 32));
-            var sum = biased * Kernel[y * 8];
+            var sum = biased * Kernel[y];
             for (var v = 1; v < 8; v++)
-                sum = unchecked(sum + rows[v * 8 + x] * Kernel[y * 8 + v]);
+                sum = unchecked(sum + rows[v * 8 + x] * Kernel[v * 8 + y]);
             pixels[y * 8 + x] = (byte)Math.Clamp(sum >> 20, 0, 255);
         }
     }
+
+    private static void InverseAvx2(ReadOnlySpan<short> input, Span<short> rows, Span<byte> pixels)
+    {
+        for (var y = 0; y < 8; y++)
+        {
+            var row = input.Slice(y * 8, 8);
+            if (!row[1..].ContainsAnyExcept((short)0))
+            {
+                rows.Slice(y * 8, 8).Fill(unchecked((short)(row[0] * 8)));
+                continue;
+            }
+            var sum = Vector256.Create(1 << 10);
+            for (var u = 0; u < 8; u++)
+            {
+                var weights = MemoryMarshal.Read<Vector256<int>>(MemoryMarshal.AsBytes(Kernel.AsSpan(u * 8, 8)));
+                sum = Avx2.Add(sum, Avx2.MultiplyLow(Vector256.Create((int)row[u]), weights));
+            }
+            sum = Avx2.ShiftRightArithmetic(sum, 11);
+            var packed = Sse2.PackSignedSaturate(sum.GetLower(), sum.GetUpper());
+            MemoryMarshal.Write(MemoryMarshal.AsBytes(rows.Slice(y * 8, 8)), in packed);
+        }
+
+        // Bias in signed words before widening, preserving the scalar wrap.
+        var first = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows[..8]));
+        var r0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
+        var r1 = WidenRow(rows, 1); var r2 = WidenRow(rows, 2); var r3 = WidenRow(rows, 3);
+        var r4 = WidenRow(rows, 4); var r5 = WidenRow(rows, 5); var r6 = WidenRow(rows, 6); var r7 = WidenRow(rows, 7);
+        for (var y = 0; y < 8; y++)
+        {
+            // Eight columns in parallel. Low products and wrapping additions
+            // retain every scalar Int32 precision boundary, even at extremes.
+            var sum = Avx2.MultiplyLow(r0, Vector256.Create(Kernel[y]));
+            sum = Avx2.Add(sum, Avx2.MultiplyLow(r1, Vector256.Create(Kernel[8 + y])));
+            sum = Avx2.Add(sum, Avx2.MultiplyLow(r2, Vector256.Create(Kernel[16 + y])));
+            sum = Avx2.Add(sum, Avx2.MultiplyLow(r3, Vector256.Create(Kernel[24 + y])));
+            sum = Avx2.Add(sum, Avx2.MultiplyLow(r4, Vector256.Create(Kernel[32 + y])));
+            sum = Avx2.Add(sum, Avx2.MultiplyLow(r5, Vector256.Create(Kernel[40 + y])));
+            sum = Avx2.Add(sum, Avx2.MultiplyLow(r6, Vector256.Create(Kernel[48 + y])));
+            sum = Avx2.Add(sum, Avx2.MultiplyLow(r7, Vector256.Create(Kernel[56 + y])));
+            sum = Avx2.ShiftRightArithmetic(sum, 20);
+            var words = Sse2.PackSignedSaturate(sum.GetLower(), sum.GetUpper());
+            var bytes = Sse2.PackUnsignedSaturate(words, words);
+            BinaryPrimitives.WriteUInt64LittleEndian(pixels.Slice(y * 8, 8), bytes.AsUInt64().ToScalar());
+        }
+    }
+
+    private static Vector256<int> WidenRow(ReadOnlySpan<short> rows, int y)
+        => Avx2.ConvertToVector256Int32(MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows.Slice(y * 8, 8))));
 }

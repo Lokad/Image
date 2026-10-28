@@ -211,6 +211,18 @@ screen gaps need no extra confirmation. No production/harness/worker/selector
 build or full/package repeat. The new materialJPEG gap takes priority for one
 bounded current profile. Other sampling/depth/policies/boundaries stay required.
 
+[Exact JPEG inverse SIMD](WARM-JPEG-SIMD-INVERSE.md) independently reduces the
+existingJPEG420 decode34.8% (6085.790→3965.366µs),3.936×/upper3.992,still a gap.
+Reported allocation757166→757268B/op; explicit256B stack/256B table and owned
+capacity unchanged. Generated weights,word bias,Int32 wrap/saturation/rounding
+and scalar fallback remain exact. BothOS5054full checks,39internal/293public
+scalar and SAME actual package/three examples pass. One corebuild perOS reuses
+all harnesses/workers/selectors; no scoring repeats. AllJPEG render/caller-sample
+costs are affected; only this named cost is refreshed. Pixel validation skips
+inverse/render,keeping its baseline420 pass; Identify/encoding/other codecs and
+editing/text retain applicable unchanged proof. Next:one exact quarter-phase
+half-resolution chroma-expansion primitive,no inverse variants or workload grid.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:

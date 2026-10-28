@@ -27,6 +27,8 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
+    jpeg_inverse = json.loads((ROOT / 'benchmarks/warm-jpeg-simd-inverse-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_inverse['productionChanged'] and jpeg_inverse['independentQuietConfirmationThisPair']
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
@@ -83,13 +85,16 @@ def render():
     for case, label in [('Jpeg420', 'JPEG baseline420, resident decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
                         ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
-        observation = decoders['cases'][case][-1]
+        producer = jpeg_inverse if case == 'Jpeg420' else decoders
+        observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert decoders['status'][case] == 'screen-gap' and len(observation['managed']['actual']) == 3
-        assert receipt['librarySha256'] == decoders['producers']['linuxSha256']
+        samples = 12 if case == 'Jpeg420' else 3
+        assert producer['status'][case] == ('confirmed-gap' if samples == 12 else 'screen-gap')
+        assert len(observation['managed']['actual']) == samples
+        assert receipt['librarySha256'] == producer['producers']['linuxSha256']
         assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
         assert all(q['passed'] for q in observation['quietness'].values())
-        assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 3
+        assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         native = min(b['mean'] for b in observation['nativeBrackets'])
         assert math.isclose(stats['Mean'] / native, observation['worstBracketRatio'], rel_tol=1e-12)
         rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
@@ -175,8 +180,8 @@ Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
-controls below use qualified 0.2.1 builds. Three default decoder screens also use
-the current immutable core. These 52 displayed controls do not
+controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
+current evidence; both VP8L decoder controls retain current screens. These 52 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -185,7 +190,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, VP8 photograph and VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420 decode, VP8 photograph and VP8L RGBA8 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -218,19 +223,21 @@ current VP8 encoding rows; unchanged effort2 retains
 four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes
 caller RGB420 and governed RGBA16; other subsampled encoder costs need current
-evidence before a pass claim. Grayscale/4:4:4 and decoding paths are unchanged.
+evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
 The [read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md) refreshes VP8
 Stream decode and four existing tight PNG companions without a speedup claim.
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
-screens JPEG420 at6.018×,757,166B/op and VP8L resident/Stream at1.425×/1.304×,
-1,216,162/1,216,190B/op. These are clear short-screen gaps, with wide retained
-confidence bounds, exact managed/native pixels and all quiet guards passing.
-The frozen packets/settings and owned-output boundaries stay fixed. JPEG's old
-pre-parity managed hash is refreshed only after exact normal/scalar comparison.
-A bounded current-core diagnostic places40.4% in the inverse transform and41.5%
-in chroma interpolation/pixel placement. SIMD evaluation of the exact inverse
-matrix is next; no production change, independent speedup/pass claim or full/
-package repetition occurs. Diagnostic sample shares are not timing comparisons.
+supplies VP8L resident/Stream screens at1.425×/1.304×,1,216,162/1,216,190B/op.
+[Exact inverse-matrix SIMD](../benchmarks/WARM-JPEG-SIMD-INVERSE.md) independently
+reduces JPEG420 decode from6.086ms to3.965ms (34.8% less), retaining exact pixels.
+Its3.936×/upper3.992 gap remains. Reported allocation rises102B/op to757,268;
+explicit scratch/table capacities and owned heap storage stay unchanged. BothOS
+pass5054full checks, affected scalar checks and SAME actual package/three consumer
+examples. Other affected JPEG decoder costs need current evidence before pass
+claims; validation skips inverse rendering and retains its applicable proof.
+Frozen packets/settings and owned-output boundaries stay fixed. Next is exact
+quarter-phase chroma expansion; the prechange profile is diagnostic evidence,
+without postchange component-cost claims.
 
 ''' + codecs + '''
 

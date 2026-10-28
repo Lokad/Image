@@ -89,4 +89,46 @@ public sealed class JpegReferenceInverseTests
         using var context = new OperationContext(ImageLimits.Default, default);
         Assert.Throws<ArgumentException>(() => JpegInverseTransform.Inverse(new int[coefficients], new ushort[quantizers], output, context));
         Assert.All(output, value => Assert.Equal(165, value));     }
+
+    [Fact]
+    public void IntegerExtremesKeepFrozenScalarPixelsWithoutHeapAdmission()
+    {
+        // Original 32 spectra, frozen against the preceding scalar matrix.
+        // Exercise wrapping products/sums, saturated rows and word DC bias.
+        var coefficients = new int[64]; var quantizers = new ushort[64];
+        var pixels = new byte[32 * 64]; uint state = 0x91c72b35;
+        using var root = new TestMemoryBudget(0);
+        using var context = new OperationContext(ImageLimits.Default with { MemoryBudget = root, MaxWorkingBytes = 1 }, default);
+        for (var block = 0; block < 32; block++)
+        {
+            for (var k = 0; k < 64; k++)
+            {
+                state ^= state << 13; state ^= state >> 17; state ^= state << 5;
+                coefficients[k] = unchecked((int)state); quantizers[k] = (ushort)(1 + state % 65535);
+            }
+            if (block < 8)
+            {
+                coefficients[0] = new[] { int.MinValue, int.MaxValue, -32768, 32767, -1024, 0, 1024, 4095 }[block];
+                quantizers[0] = 65535;
+            }
+            JpegInverseTransform.Inverse(coefficients, quantizers, pixels.AsSpan(block * 64, 64), context);
+        }
+        Assert.Equal("93fe53a2ff35c1d82ee9e99b5a8e54aa6a0eb47fb21e77926a4fc078c412df0b", Hash(pixels));
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void CancellationPrecedesTransformAndOutputMutation()
+    {
+        using var canceled = new CancellationTokenSource();
+        using var root = new TestMemoryBudget(0);
+        using var context = new OperationContext(ImageLimits.Default with { MemoryBudget = root }, canceled.Token);
+        canceled.Cancel();
+        var output = Enumerable.Repeat((byte)165, 64).ToArray();
+        var exception = Assert.Throws<OperationCanceledException>(() =>
+            JpegInverseTransform.Inverse(new int[64], new ushort[64], output, context));
+        Assert.Equal(canceled.Token, exception.CancellationToken);
+        Assert.All(output, value => Assert.Equal(165, value));
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Attempts); Assert.False(root.IsDisposed);
+    }
 }

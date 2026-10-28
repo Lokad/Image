@@ -1,5 +1,8 @@
 # Current default JPEG420 and VP8L decode
 
+JPEG420 costs below are superseded by [exact inverse SIMD](WARM-JPEG-SIMD-INVERSE.md).
+The two VP8L screens remain applicable on their unchanged paths.
+
 Three existing controls have current costs on the qualified0.2.1 core. All are
 screen gaps, with exact pixels and passing quiet-VM guards; no production
 optimization, independent parity confirmation or before/after gain is claimed.
