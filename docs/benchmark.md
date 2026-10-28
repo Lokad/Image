@@ -136,7 +136,7 @@ and unlisted content/settings are excluded.
 | Probe JPEG dimensions, seekable | 0.381 | 0.192 | 1.988 / 2.031 | 744 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.159 | 0.123 | 1.289 / 1.550 | 744 | Screen gap |
 | Probe JPEG dimensions, async nonseekable | 0.425 | 0.201 | 2.119 / 2.154 | 744 | Confirmed gap |
-| Validate PNG8, span | 1,868.603 | 1,379.073 | 1.355 / 1.399 | 240 | Screen gap |
+| Validate PNG8, span | 1,860.613 | 1,379.064 | 1.349 / 1.354 | 240 | Confirmed gap |
 | Validate PNG16, span | 2,933.196 | 2,962.169 | 0.990 / 1.000 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span | 5.286 | 3.930 | 1.345 / 1.570 | 1,168 | Screen gap |
 | Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
@@ -157,11 +157,15 @@ compares complete coding and source metadata against FFmpeg natural-frame decode
 plus an original metadata adapter, without RGBA normalization or caller raster
 copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
-validation pass independently; progressive420 remains a confirmed gap. Other
+validation pass independently; PNG8 and progressive420 remain confirmed gaps. Other
 validation rows are short screens, without independent parity claims. The
 [streaming PNG validator](../benchmarks/WARM-PNG-VALIDATION.md) reduces PNG16 elapsed
 by42.4% and warm span allocation from17,008 to240B/op. Its repeat passes with a
 narrow upper0.99966; the preceding upper1.00108 is retained in the evidence.
+The [PNG8 follow-up](../benchmarks/current-png8-validation-evidence.json) confirms
+1.349× / upper 1.354 and 240 B/op on the same immutable build and frozen packet,
+without a gain claim. Its profile identifies streaming Deflate/history handling
+as the next substantial lead.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

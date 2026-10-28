@@ -102,6 +102,21 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 
 ## Current evidence
 
+[Current PNG8 validation](current-png8-validation-evidence.json) independently
+confirms the existing span case at 1.349× / upper 1.354, 1.861 ms and 240 B/op.
+The 210,972-byte packet, all source metadata and coding/ownership scope remain
+exact. Twelve actual/filtered samples and both native/idle-v2 brackets pass.
+Unchanged JCP1 build/worker/selector/package proof are reused. One cached-tool
+metadata preparation refreshes twelve short correctness controls without changing
+the seven inputs. A tiny profile host adds no production/harness/native build.
+Its 5,988 post-warmup samples identify streaming decoding/history handling as the
+next substantial lead; CRC/Adler total under 3%. Shared PNG16 validation passes
+must be reconciled if that path changes; no new workload grid is needed.
+
+The [JPEG AC publication trial](JPEG-BASELINE-AC-PUBLICATION-REJECTED.md) missed
+its 5% screen gate at 1.49%. Qualified code/producers were restored, actual package
+unchanged; no variants, independent confirmation or full/package repetition.
+
 [Paired JPEG inverse columns](WARM-JPEG-PAIRED-COLUMNS.md) independently reduce
 the existing JPEG420 decode by 2.51% (2.44% all actuals), 1.331 ms to 1.298 ms,
 with exact pixels and unchanged 757,319 B/op. The 1.285× / upper 1.304 gap remains.

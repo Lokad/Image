@@ -23,6 +23,7 @@ def render():
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
+    png8_validation = json.loads((ROOT / 'benchmarks/current-png8-validation-evidence.json').read_text(encoding='utf-8'))
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -41,6 +42,7 @@ def render():
     assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
+    assert not png8_validation['productionChanged'] and png8_validation['independentQuietConfirmation']
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
     assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
@@ -120,7 +122,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads
+        producer = png8_validation if case == 'ValidatePng8' else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads
         observations = producer['cases'][case]
         observation = observations[-1]
         receipt = observation['receipt']
@@ -285,11 +287,15 @@ compares complete coding and source metadata against FFmpeg natural-frame decode
 plus an original metadata adapter, without RGBA normalization or caller raster
 copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
-validation pass independently; progressive420 remains a confirmed gap. Other
+validation pass independently; PNG8 and progressive420 remain confirmed gaps. Other
 validation rows are short screens, without independent parity claims. The
 [streaming PNG validator](../benchmarks/WARM-PNG-VALIDATION.md) reduces PNG16 elapsed
 by42.4% and warm span allocation from17,008 to240B/op. Its repeat passes with a
 narrow upper0.99966; the preceding upper1.00108 is retained in the evidence.
+The [PNG8 follow-up](../benchmarks/current-png8-validation-evidence.json) confirms
+1.349× / upper 1.354 and 240 B/op on the same immutable build and frozen packet,
+without a gain claim. Its profile identifies streaming Deflate/history handling
+as the next substantial lead.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
