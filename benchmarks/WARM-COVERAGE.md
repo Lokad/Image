@@ -305,6 +305,12 @@ and package/suite repetitions are unnecessary. This is diagnostic evidence only.
 Screen one word-buffered bit-emission primitive, preserving byte/flush/failure
 boundaries; keep hash and bulk match-extension trials closed.
 
+The [word bit-buffer screen](PNG-WORD-BIT-BUFFER-REJECTED.md) gives only 3.7% less
+elapsed, below its 5% gate, and adds 125 B/op. Exact packets, flush/failure cleanup
+and focused normal/scalar controls pass on both systems. It is rejected; qualified
+source, matched binaries and linked tests are restored. No confirmation or
+repeated full/package qualification follows. Keep this family closed.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
