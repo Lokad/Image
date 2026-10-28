@@ -102,6 +102,19 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 
 ## Current evidence
 
+[Current VP8 alpha confirmation](current-vp8-alpha8-encoding-evidence.json)
+resolves the existing wide screen at 1.296× / upper 1.306, 69.341 ms and
+21,353,208 B/op, with the complete 98,590-byte packet and alpha exact. All twelve
+actual/filtered samples, native brackets and idle-v2 guards pass. The immutable
+VPS1 producer, cached selector/worker and package qualification are reused.
+This is a cost confirmation, without a speedup or regression claim.
+
+[Current JPEG420 attribution](current-jpeg420-decode-attribution-evidence.json)
+uses the same qualified build and cached host: 5,630 samples after warmup,
+inverse AVX2 32.7% and plain-baseline AC entropy 29.8%. No timing/build/package
+repeat. The older profile predates accepted inverse/chroma/color changes. One
+column-only cosine-symmetry candidate is next; exact arithmetic and pixels first.
+
 [Current VP8 photograph confirmation](current-vp8-photograph-encoding-evidence.json)
 resolves the wide screen at 1.467× / upper 1.501, 14.261 ms and 809,072 B/op;
 the complete 17,688-byte packet is exact. All 12 actual/filtered samples, native

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-10-28",
+  "round": "JDP2",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "noTimingClaim": true,
+  "scope": "One existing 513x259 baseline420 JPEG Decode/independent owned RGBA8/release. Frozen 52093-byte packet, exact normal/scalar reference pixels. No input/settings/control added.",
+  "productionSha256": "9b9f7ecea473a52fe4652e5d4408b88f47a4b647efea5440ebf3375369510c1a",
+  "benchmarkAssemblySha256": "2221147d5c6d29177f93e88ebad3b7cc1aa8d533c2c098677ccf8367c02d2c22",
+  "seconds": 6,
+  "samples": 5630,
+  "warmupExcluded": true,
+  "methods": [
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      "samples": 1839,
+      "fraction": 0.3266429840142096
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+      "samples": 1678,
+      "fraction": 0.2980461811722913
+    },
+    {
+      "method": "Native or unresolved",
+      "samples": 385,
+      "fraction": 0.06838365896980461
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 275,
+      "fraction": 0.04884547069271759
+    },
+    {
+      "method": "class Lokad.Image.ImageInfo [Lokad.Image] Lokad.Image.Internal.ContainerHeaders::Jpeg(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+      "samples": 221,
+      "fraction": 0.03925399644760213
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseColor::WriteRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+      "samples": 218,
+      "fraction": 0.03872113676731794
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadScan(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+      "samples": 180,
+      "fraction": 0.03197158081705151
+    },
+    {
+      "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint8> [Lokad.Image] Lokad.Image.Internal.JpegDecoder::HalfChroma16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32)[Optimized]",
+      "samples": 177,
+      "fraction": 0.031438721136767316
+    },
+    {
+      "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::WriteYcbcrPixels(int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+      "samples": 174,
+      "fraction": 0.030905861456483125
+    },
+    {
+      "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 122,
+      "fraction": 0.0216696269982238
+    },
+    {
+      "method": "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.JpegDecoder::Render()[Optimized]",
+      "samples": 99,
+      "fraction": 0.01758436944937833
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+      "samples": 71,
+      "fraction": 0.01261101243339254
+    },
+    {
+      "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+      "samples": 62,
+      "fraction": 0.011012433392539964
+    },
+    {
+      "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      "samples": 54,
+      "fraction": 0.009591474245115453
+    }
+  ],
+  "hostBuilds": 0,
+  "productionHarnessNativeBuilds": 0,
+  "quietGuardsPassed": true,
+  "exactPixelsAlphaOwnership": true,
+  "interpretation": "InverseAvx2 32.66%, ReadPlainBaselineAc 29.80%, inverse wrapper 4.88%, ContainerHeaders.Jpeg 3.93%, color WriteRow 3.87%. Method locations are sample attribution, not independently scored costs. The earlier JDP1 profile predates accepted inverse/chroma/color changes and is superseded for prioritization.",
+  "opportunity": "Exact cosine symmetry pairs column output y with 7-y: even-frequency sums are equal and odd-frequency sums negate. Reuse the DC/quarter-turn pair, preserving signed-word bias and modulo-Int32 arithmetic. One column-only candidate can reduce vector products from64 to26; row arithmetic, dequantization and portable fallback remain unchanged.",
+  "baselineEvidence": "warm-jpeg-simd-color-evidence.json#cases.Jpeg420",
+  "qualificationReuse": "The immutable producer is VPS1; unaffected JPEG420 confirmation and full/package correctness remain applicable. No new timing, build, test or package proof for this diagnostic.",
+  "rawArchive": {
+    "file": "current-jpeg420-decode-attribution.tar.xz",
+    "sha256": "5642d53c6efc68cad8eb3fc7b7ec03225b8bcec31e10149395ea9de2d89c4adf",
+    "bytes": 2396744,
+    "members": 47,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "One paired-column inverse candidate, existing exact native/frozen extrema/admission/cancellation controls plus a bounded old-source equivalence proof. >=5% complete-operation short gate before independent comparison. No matrix unroll/weight/rounding variants; full 267-path goal remains."
+}

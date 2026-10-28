@@ -14,7 +14,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 efforts2/6, VP8 photograph and VP8L RGBA8 encode have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 efforts2/6, VP8 photograph/alpha and VP8L RGBA8 encode have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -29,8 +29,9 @@ with741,375B/op and exact packets. An earlier independent pair gives5.4% with
 overlapping intervals; both pairs and the material native drift remain recorded.
 VP8 effort6 independently confirms a1.539× / upper1.551 gap,754,344B/op and exact
 6,818B packet. VP8 photograph confirms 1.467× / upper 1.501, 809,072 B/op and an exact
-17,688-byte packet, reusing the same immutable build and package proof. Three other
-VP8 companion rows retain wide screens, without independent gain/regression claims.
+17,688-byte packet. VP8 alpha confirms 1.296× / upper 1.306, 21,353,208 B/op and
+an exact 98,590-byte packet. These follow-ups reuse the immutable build and package
+proof. Two other VP8 companions retain wide screens, without gain/regression claims.
 BothOS pass5055checks and the same actual package/three examples; no owned storage is added.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
@@ -48,6 +49,7 @@ settings, boundaries, binaries, samples, package checks and retained raw archive
 VP8 encoding rows, retaining earlier observations and uncertainty; the
 [trellis follow-up](../benchmarks/current-vp8-trellis-encoding-evidence.json)
 and [photograph follow-up](../benchmarks/current-vp8-photograph-encoding-evidence.json)
+and [alpha follow-up](../benchmarks/current-vp8-alpha8-encoding-evidence.json)
 resolve their wide screens without rebuilding or repeating qualification.
 [shared-history predictor pricing](../benchmarks/WARM-VP8L-PREPARED-PREDICTION-COST.md) supplies the
 four affected VP8L rows. Other paths retain applicable prior proof.
@@ -81,7 +83,7 @@ independent gap. Earlier profiles remain diagnostic history.
 | JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,381.88 | 2,514.90 | 1.345 / 1.423 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA8 † | 76,492.29 | 53,601.78 | 1.427 / 4.906 | 21,353,208 | 98,590 / 98,590 |
+| VP8 RGBA8 † | 69,341.28 | 53,516.87 | 1.296 / 1.306 | 21,353,208 | 98,590 / 98,590 |
 | VP8 opaque photograph † | 14,261.18 | 9,720.44 | 1.467 / 1.501 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 8,431.04 | 6,233.83 | 1.352 / 2.469 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,159.83 | 9,852.07 | 1.539 / 1.551 | 754,344 | 6,818 / 6,818 |
