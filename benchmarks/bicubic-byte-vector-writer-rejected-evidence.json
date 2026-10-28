@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-10-28",
+  "version": "0.2.1",
+  "round": "DPV1",
+  "productionChanged": false,
+  "status": "rejected-restored",
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "case": "WarmBicubicResize/Down8",
+  "candidate": {
+    "librarySha256": "f39f65a44a6c1c726fd146f09f41d1a0d5e24321f3a329984ac2b41d82e0506f",
+    "sourceSha256": "dd30ffa0f342e5d497c384df44721281eae0229b94a793e8054dbfc8c5b395a0",
+    "microseconds": 632.9379052083334,
+    "ratio": 1.5084199960452473,
+    "conservativeRatioUpper": 2.000534108283218,
+    "allocatedBytes": 332187,
+    "actuals": [
+      634980.884375,
+      631532.95625,
+      632299.875
+    ],
+    "nativeBrackets": [
+      {
+        "mean": 419603.2317708333,
+        "standardError": 243.85086097394083,
+        "confidenceLower": 411897.7751375867,
+        "confidenceUpper": 427308.68840407993,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 53764848,
+            "CompletedOperations": 771,
+            "Observed": 38550,
+            "OutputStride": 1024,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 420037.875
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 53656874,
+            "CompletedOperations": 899,
+            "Observed": 44950,
+            "OutputStride": 1024,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 419194.328125
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 53705919,
+            "CompletedOperations": 1027,
+            "Observed": 51350,
+            "OutputStride": 1024,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 419577.4921875
+          }
+        ]
+      },
+      {
+        "mean": 430522.5885416667,
+        "standardError": 3089.58662214451,
+        "confidenceLower": 332894.57264494355,
+        "confidenceUpper": 528150.6044383898,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 54370469,
+            "CompletedOperations": 1539,
+            "Observed": 76950,
+            "OutputStride": 1024,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 424769.2890625
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 55225214,
+            "CompletedOperations": 1667,
+            "Observed": 83350,
+            "OutputStride": 1024,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 431446.984375
+          },
+          {
+            "State": "sample",
+            "Operations": 128,
+            "ElapsedNanoseconds": 55724991,
+            "CompletedOperations": 1795,
+            "Observed": 89750,
+            "OutputStride": 1024,
+            "Cpu": 0,
+            "OutputBytes": 0,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 435351.4921875
+          }
+        ]
+      }
+    ]
+  },
+  "baseline": {
+    "evidence": "current-bicubic-down8-cost-evidence.json",
+    "path": "observation",
+    "microseconds": 632.9214524305556
+  },
+  "profile": {
+    "diagnosticOnly": true,
+    "noTimingClaim": true,
+    "seconds": 6,
+    "samples": 5936,
+    "leadingMethods": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 3925,
+        "fraction": 0.6612196765498652
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::WriteByteRow(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,float64,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 1727,
+        "fraction": 0.2909366576819407
+      },
+      {
+        "method": "Native or unresolved",
+        "samples": 136,
+        "fraction": 0.022911051212938006
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.CachedBicubicResize::Original(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 79,
+        "fraction": 0.013308625336927223
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "samples": 37,
+        "fraction": 0.006233153638814016
+      }
+    ],
+    "hostBuilds": 1,
+    "productionHarnessNativeBuilds": 0,
+    "rawArchive": {
+      "file": "current-bicubic-down8-attribution.tar.xz",
+      "sha256": "642b3abe5ca692a259ccbed8ab00b027b0b7fc620c1a77b175c5a2c803113aaa",
+      "bytes": 1334828,
+      "members": 41,
+      "mirrored": true,
+      "allMembersVerified": true
+    }
+  },
+  "correctness": {
+    "exactManagedPixels": true,
+    "nativeRgbAlphaMaximum": 1,
+    "nativeRgbAlphaRmseMaximum": 0.25,
+    "sourceOwnershipQuietnessPassed": true,
+    "candidateAndRestoredWindowsLinuxNormalScalarPublicCasesEach": 89
+  },
+  "restoration": {
+    "sourceSha256": "6a23636457a8d027d5ba927b3f1f67a946c54e62f8c70dc0ea8899aee6b81ef4",
+    "linuxSha256": "7640836693491912a9f344441ef9cc2619181d3ca785b9d517aa1d57c953fba7",
+    "windowsSha256": "1a5020c773e22630d0b8575dddc1996fba439e446d1092823da5b914cba0ab0e",
+    "packageSha256": "3888290114133bee362833275ed42cb9b80b44500cbdb86a1c86c4e185574743",
+    "fullPackageQualificationReused": true
+  },
+  "rawArchive": {
+    "file": "bicubic-byte-vector-writer-rejected.tar.xz",
+    "sha256": "24ca2efc38b4fdb715bc179783920fd24a54dd433516bd9f92acde06e034f5cf",
+    "bytes": 1294780,
+    "members": 122,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "decision": "No meaningful whole-operation gain. Restored original; no variants or independent confirmation. Full observations, selectors, producers, guards and restoration retained in raw archive."
+}
