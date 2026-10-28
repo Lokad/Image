@@ -14,7 +14,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420 decode, VP8 effort2 and VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420 decode, VP8 efforts2/6 and VP8L RGBA8 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -27,9 +27,10 @@ SIMD input preparation reduces VP8 effort2 elapsed by13.2% using all actuals in
 the final independent comparison (14.3% filtered);1.345× / upper1.423 remains open,
 with741,375B/op and exact packets. An earlier independent pair gives5.4% with
 overlapping intervals; both pairs and the material native drift remain recorded.
-Five affected VP8 companion rows have wide current short bounds, without
-independent gain/regression claims. BothOS pass5055checks and the same actual
-package/three examples; no owned storage is added.
+VP8 effort6 independently confirms a1.539× / upper1.551 gap,754,344B/op and exact
+6,818B packet, reusing the same build and package proof. Four other VP8 companion
+rows have wide current short bounds, without independent gain/regression claims.
+BothOS pass5055checks and the same actual package/three examples; no owned storage is added.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -43,7 +44,9 @@ Source images are 513×259; resize rows state output dimensions. The
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
 [SIMD VP8 input preparation](../benchmarks/WARM-VP8-SIMD-INPUT.md) supplies all six
-current VP8 encoding rows, retaining earlier observations and uncertainty.
+VP8 encoding rows, retaining earlier observations and uncertainty; the
+[trellis follow-up](../benchmarks/current-vp8-trellis-encoding-evidence.json)
+resolves its wide screen without rebuilding or repeating qualification.
 [shared-history predictor pricing](../benchmarks/WARM-VP8L-PREPARED-PREDICTION-COST.md) supplies the
 four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes
@@ -76,7 +79,7 @@ independent gap. Earlier profiles remain diagnostic history.
 | VP8 RGBA8 † | 76,492.29 | 53,601.78 | 1.427 / 4.906 | 21,353,208 | 98,590 / 98,590 |
 | VP8 opaque photograph † | 14,820.95 | 10,186.52 | 1.455 / 5.376 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 8,431.04 | 6,233.83 | 1.352 / 2.469 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 15,559.99 | 9,960.93 | 1.562 / 2.816 | 754,344 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 15,159.83 | 9,852.07 | 1.539 / 1.551 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 21,213.46 | 15,682.46 | 1.353 / 2.085 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 161,904.66 | 120,988.24 | 1.338 / 1.923 | 29,696,928 | 183,812 / 183,812 |

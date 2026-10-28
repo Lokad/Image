@@ -15,6 +15,7 @@ def render():
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
     vp8 = json.loads((ROOT / 'benchmarks/warm-vp8-simd-input-evidence.json').read_text(encoding='utf-8'))
+    trellis = json.loads((ROOT / 'benchmarks/current-vp8-trellis-encoding-evidence.json').read_text(encoding='utf-8'))
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
     vp8l = json.loads((ROOT / 'benchmarks/warm-vp8l-prepared-prediction-cost-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
@@ -38,6 +39,7 @@ def render():
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
     assert streamed['productionChanged'] and len(streamed['cases']) == 4
     assert vp8['productionChanged'] and vp8['independentQuietConfirmationThisPair']
+    assert not trellis['productionChanged'] and trellis['independentQuietConfirmation']
     assert jpeg['productionChanged'] and jpeg['independentQuietConfirmationThisPair']
     assert vp8l['version'] == '0.2.1' and vp8l['independentQuietConfirmationThisPair']
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
@@ -51,7 +53,7 @@ def render():
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
-        producer = vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        producer = trellis if case['id'] == 'case10' else vp8 if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if vp8_case:
             observation = producer['cases'][vp8_cases[case['id']]][-1]
         elif case['id'] == 'case00':
@@ -67,7 +69,7 @@ def render():
         upper = observation['conservativeRatioUpper']
         assert receipt['librarySha256'] == (producer['producers']['linuxSha256'] if updated else evidence['librarySha256'])
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case06', 'case12'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case06', 'case10', 'case12'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -189,7 +191,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420 decode, VP8 effort2 and VP8L RGBA8 have 12 measured iterations each;
+Stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420 decode, VP8 efforts2/6 and VP8L RGBA8 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
@@ -202,9 +204,10 @@ SIMD input preparation reduces VP8 effort2 elapsed by13.2% using all actuals in
 the final independent comparison (14.3% filtered);1.345× / upper1.423 remains open,
 with741,375B/op and exact packets. An earlier independent pair gives5.4% with
 overlapping intervals; both pairs and the material native drift remain recorded.
-Five affected VP8 companion rows have wide current short bounds, without
-independent gain/regression claims. BothOS pass5055checks and the same actual
-package/three examples; no owned storage is added.
+VP8 effort6 independently confirms a1.539× / upper1.551 gap,754,344B/op and exact
+6,818B packet, reusing the same build and package proof. Four other VP8 companion
+rows have wide current short bounds, without independent gain/regression claims.
+BothOS pass5055checks and the same actual package/three examples; no owned storage is added.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. B/op measures managed allocation, not native
@@ -218,7 +221,9 @@ Source images are 513×259; resize rows state output dimensions. The
 [distance mapping](../benchmarks/WARM-PNG-DISTANCE-SYMBOL.md) record exact dimensions,
 settings, boundaries, binaries, samples, package checks and retained raw archives.
 [SIMD VP8 input preparation](../benchmarks/WARM-VP8-SIMD-INPUT.md) supplies all six
-current VP8 encoding rows, retaining earlier observations and uncertainty.
+VP8 encoding rows, retaining earlier observations and uncertainty; the
+[trellis follow-up](../benchmarks/current-vp8-trellis-encoding-evidence.json)
+resolves its wide screen without rebuilding or repeating qualification.
 [shared-history predictor pricing](../benchmarks/WARM-VP8L-PREPARED-PREDICTION-COST.md) supplies the
 four affected VP8L rows. Other paths retain applicable prior proof.
 [JPEG area filtering](../benchmarks/WARM-JPEG-HORIZONTAL-AREA-FILTER.md) refreshes

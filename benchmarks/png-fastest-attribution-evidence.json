@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-10-28",
+  "round": "PFP1",
+  "productionChanged": false,
+  "diagnosticOnly": true,
+  "noTimingClaim": true,
+  "scope": "One existing513x259 RGBA8 Fastest PNG control;one6-second workload-only trace after setup/warmup on immutable VPS1 core andIR3 harness.",
+  "summary": {
+    "profilingOnly": true,
+    "noTimingClaim": true,
+    "productionSha256": "9b9f7ecea473a52fe4652e5d4408b88f47a4b647efea5440ebf3375369510c1a",
+    "seconds": 6,
+    "samples": 5974,
+    "methods": [
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "samples": 2843,
+        "fraction": 0.4758955473719451
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+        "samples": 998,
+        "fraction": 0.16705724807499164
+      },
+      {
+        "method": "instance int64 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int64)[Optimized]",
+        "samples": 724,
+        "fraction": 0.12119183126883161
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "samples": 475,
+        "fraction": 0.07951121526615333
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "samples": 282,
+        "fraction": 0.04720455306327419
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|1_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+        "samples": 162,
+        "fraction": 0.02711750920656177
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+        "samples": 155,
+        "fraction": 0.025945764981586877
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|1_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+        "samples": 93,
+        "fraction": 0.015567458988952126
+      },
+      {
+        "method": "Native or unresolved",
+        "samples": 77,
+        "fraction": 0.012889186474723802
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::AdvanceOrigin()[Optimized]",
+        "samples": 51,
+        "fraction": 0.008536993639102779
+      },
+      {
+        "method": "int32[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(uint8[])[Optimized]",
+        "samples": 38,
+        "fraction": 0.0063608972212922665
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(int32[],int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 21,
+        "fraction": 0.0035152326749246735
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ComputeChunk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "samples": 21,
+        "fraction": 0.0035152326749246735
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "samples": 13,
+        "fraction": 0.002176096417810512
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Runs(uint8[],valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.DeflateHuffman/Run>)[Optimized]",
+        "samples": 11,
+        "fraction": 0.0018413123535319718
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.PngCodec::Encode(class Lokad.Image.ImageBuffer,class [System.Runtime]System.IO.Stream,class Lokad.Image.PngEncodeOptions,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 2,
+        "fraction": 0.00033478406427854036
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Start()[Optimized]",
+        "samples": 2,
+        "fraction": 0.00033478406427854036
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+        "samples": 2,
+        "fraction": 0.00033478406427854036
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Reduce(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint64>)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016739203213927018
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteByte(uint8)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016739203213927018
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00016739203213927018
+      },
+      {
+        "method": "stub ReportStubBlock<MethodCallThunk>",
+        "samples": 1,
+        "fraction": 0.00016739203213927018
+      }
+    ]
+  },
+  "packetBytes": 236828,
+  "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+  "allRgbaSamplesExact": true,
+  "alphaExact": true,
+  "hiddenRgbExact": true,
+  "sourceUnchanged": true,
+  "independentOwnedOutput": true,
+  "quietness": {
+    "before": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.000324517022818,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0005002501250625312,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0005002501250625312,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.0732421875,
+        0.02783203125,
+        0.08154296875
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    },
+    "after": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.000308308983222,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.1982421875,
+        0.05908203125,
+        0.09130859375
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    }
+  },
+  "workflow": {
+    "profileHostBuilds": 1,
+    "productionHarnessNativeBuilds": 0,
+    "testsPackageRepeated": false
+  },
+  "rawArchive": {
+    "file": "png-fastest-current-attribution.tar.xz",
+    "sha256": "7a988161a674c8769a41d7f7cd369e3a7b88aa6fb3996c13526c65986ffac3a6",
+    "bytes": 2789420,
+    "members": 48,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "One bounded32bit bit-buffer candidate inPngDeflater.Put/Align/output. Preserve complete bytes,flush/failure/cancellation andownership;require>=5percent narrow short gain before independent confirmation. Do not reopen hash orbulk-match-extension families."
+}

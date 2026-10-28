@@ -288,6 +288,23 @@ fallback, row cancellation and capacity; no owner or storage is added.
 Stop this primitive. Resolve material wide companion measurements before choosing
 the next opportunity; the full 267-path warm upper ≤1× objective remains.
 
+The [current trellis confirmation](current-vp8-trellis-encoding-evidence.json)
+resolves that wide effort 6 screen: 15.160 ms, 1.539× / upper 1.551, 754,344 B/op
+and the same exact 6,818 B packet. Twelve actual/ten filtered samples, native
+brackets and idle-v2 guards pass. The immutable VPS1 build, cached selector and
+worker are reused; no builds, tests or package checks are repeated. This is a
+confirmed gap, without a before/after gain or regression claim. The bounded
+native strategy review establishes no distinct substantial trellis candidate;
+keep closed variants closed and attribute PNGFastest before editing.
+
+The [PNGFastest trace](png-fastest-attribution-evidence.json) now supplies that
+attribution: 5,974 workload samples, 47.6% in match searching, 16.7% in bit writing
+and 12.1% in dictionary insertion. The same 236,828 B packet, pixels, ownership
+and quiet guards pass. One tiny host is built; production/harness/native builds
+and package/suite repetitions are unnecessary. This is diagnostic evidence only.
+Screen one word-buffered bit-emission primitive, preserving byte/flush/failure
+boundaries; keep hash and bulk match-extension trials closed.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
