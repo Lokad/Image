@@ -317,6 +317,13 @@ screen, below the 5% CPU gate. Exact bytes, cleanup and high-index comparisons p
 normally/scalar on both systems. It is rejected and restored without confirmation
 or repeated full/package checks; retain the allocation evidence for later work.
 
+The [insertion-inlining trial](PNG-INSERTION-INLINING-REJECTED.md) is also flat:
+7.039 ms baseline versus 7.038 ms candidate, with identical allocation and packets.
+Matched instruction attribution established the call boundary, but its measured
+complete-operation result fails the 5% gate. Restore and stop this family;
+unchanged qualification is reused. Next resolve the wide VP8L resident-decode
+control before selecting a distinct substantial opportunity.
+
 ## Evidence invalidation
 
 Regression/pixel/reference evidence and timings are separate:
