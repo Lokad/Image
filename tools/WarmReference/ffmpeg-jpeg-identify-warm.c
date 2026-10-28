@@ -20,7 +20,7 @@
 
 typedef struct {
     AVCodecParameters *parameters;
-    int alpha, orientation;
+    int alpha, orientation, color, alpha_rep, components;
 } Descriptor;
 typedef struct {
     AVCodecContext *context;
@@ -63,12 +63,7 @@ static uint8_t *input_file(const char *path, size_t *size)
     if (!b || fread(b,1,(size_t)n,f)!=(size_t)n || ferror(f) || fclose(f)) fail("Read input failed.");
     *size=(size_t)n; return b;
 }
-static void add_work(uint64_t *work, uint64_t amount)
-{
-    if (amount>UINT64_C(2000000000)-*work) fail("Work limit exceeded.");
-    *work+=amount;
-}
-static int orientation(const uint8_t *b, size_t n, uint64_t *work)
+static int orientation(const uint8_t *b, size_t n)
 {
     if (n>=6 && !memcmp(b,"Exif\0\0",6)) { b+=6; n-=6; }
     if (n<8) fail("Truncated EXIF.");
@@ -81,7 +76,6 @@ static int orientation(const uint8_t *b, size_t n, uint64_t *work)
     if ((uint64_t)count*12+6>n-offset) fail("Truncated IFD.");
     int found=0, result=1;
     for (unsigned i=0; i<count; i++) {
-        add_work(work,1);
         const uint8_t *entry=directory+2+12*i;
         if (read16(entry,little)!=0x0112) continue;
         if (found || read16(entry+2,little)!=3 || read32(entry+4,little)!=1) fail("Invalid orientation field.");
@@ -102,19 +96,19 @@ static Descriptor identify(Work *w)
     if (w->size>64U*1024*1024 || w->size<2 || w->input[0]!=255 || w->input[1]!=0xd8)
         fail("Invalid JPEG signature/input limit.");
     size_t position=2, metadata=0;
-    unsigned items=0, width=0, height=0;
+    unsigned items=0, width=0, height=0, components=0;
+    uint32_t identifiers=0; int jfif=0, adobe=-1;
     int frame=0, scan=0, exif=0, scan_seen=0, ended=0, orient=1;
-    uint64_t work=0;
+
     while (position<w->size) {
         if (scan && w->input[position]!=255) {
             const uint8_t *next=memchr(w->input+position,255,w->size-position);
             size_t count=next ? (size_t)(next-w->input)-position : w->size-position;
-            add_work(&work,count); position+=count;
+            position+=count;
             if (position==w->size) break;
         }
-        add_work(&work,1);
         if (w->input[position++]!=255) fail("Invalid JPEG marker.");
-        while (position<w->size && w->input[position]==255) { position++; add_work(&work,1); }
+        while (position<w->size && w->input[position]==255) { position++; }
         if (position==w->size) break;
         unsigned marker=w->input[position++];
         if (scan && !marker) continue;
@@ -132,15 +126,16 @@ static Descriptor identify(Work *w)
         unsigned length=read16(w->input+position,0);
         if (length<2 || length>w->size-position) fail("Truncated JPEG segment.");
         const uint8_t *payload=w->input+position+2; unsigned payload_size=length-2;
-        position+=length; add_work(&work,length);
+        position+=length;
         if (marker>=0xc0 && marker<=0xcf && marker!=0xc4 && marker!=0xc8 && marker!=0xcc) {
             if (marker!=0xc0 && marker!=0xc2) fail("Unsupported JPEG coding profile.");
             if (frame || payload_size<6) fail("Invalid/duplicate JPEG frame header.");
             if (payload[0]!=8) fail("Unsupported JPEG precision.");
-            height=read16(payload+1,0); width=read16(payload+3,0); unsigned components=payload[5];
-            if (components!=1 && components!=3) fail("Unsupported JPEG component layout.");
+            height=read16(payload+1,0); width=read16(payload+3,0); components=payload[5];
+            if (components!=1 && components!=3 && components!=4) fail("Unsupported JPEG component layout.");
             if (payload_size!=6+3*components || !width || !height) fail("Invalid JPEG frame dimensions/components.");
             if (width>32768 || height>32768 || (uint64_t)width*height>32000000) fail("JPEG dimension/pixel limit exceeded.");
+            for (unsigned i=0;i<components;i++) identifiers|=(uint32_t)payload[6+3*i]<<(8*i);
             frame=1;
         } else if (marker==0xda) {
             if (!frame || payload_size<4 || !payload[0] || payload_size!=4+2U*payload[0]) fail("Invalid JPEG scan header.");
@@ -148,9 +143,12 @@ static Descriptor identify(Work *w)
         } else if ((marker>=0xe0 && marker<=0xef) || marker==0xfe) {
             if (payload_size>4U*1024*1024-metadata) fail("JPEG metadata limit exceeded.");
             metadata+=payload_size;
+            if (marker==0xe0 && payload_size>=5 && !memcmp(payload,"JFIF\0",5)) jfif=1;
+            if (marker==0xee && payload_size>=12 && !memcmp(payload,"Adobe",5))
+                adobe=adobe==-1 || adobe==payload[11] ? payload[11] : -2;
             if (marker==0xe1 && payload_size>=6 && !memcmp(payload,"Exif\0\0",6)) {
                 if (exif) fail("Duplicate JPEG EXIF.");
-                orient=orientation(payload,payload_size,&work); exif=1;
+                orient=orientation(payload,payload_size); exif=1;
             }
         }
     }
@@ -175,21 +173,25 @@ static Descriptor identify(Work *w)
     if (result.parameters->codec_id!=AV_CODEC_ID_MJPEG || result.parameters->width!=(int)width
         || result.parameters->height!=(int)height || result.parameters->bits_per_raw_sample!=8)
         fail("Native extracted metadata differs from complete source validation.");
-    w->completed++; w->observed+=(uint64_t)width+height+8+orient;
+    result.alpha_rep=1; result.components=(int)components;
+    if (components==1) result.color=1;
+    else if (components==3) result.color=adobe==0?2:adobe==1?4:adobe==-1?(jfif?4:identifiers==0x00424752?2:0):0;
+    else result.color=adobe==0?5:adobe==2?6:adobe==-1&&identifiers==0x4b594d43?5:0;
+    w->completed++; w->observed+=(uint64_t)width+height+8+orient+result.color+result.alpha_rep+result.components;
     return result;
 }
 static void release(Descriptor *d)
 { avcodec_parameters_free(&d->parameters); }
-static void descriptor_bytes(const Descriptor *d, uint8_t output[24])
+static void descriptor_bytes(const Descriptor *d, uint8_t output[36])
 {
     uint32_t fields[]={1,(uint32_t)d->parameters->width,(uint32_t)d->parameters->height,
-        (uint32_t)d->parameters->bits_per_raw_sample,(uint32_t)d->alpha,(uint32_t)d->orientation};
-    for (unsigned i=0; i<6; i++)
+        (uint32_t)d->parameters->bits_per_raw_sample,(uint32_t)d->alpha,(uint32_t)d->orientation,(uint32_t)d->color,(uint32_t)d->alpha_rep,(uint32_t)d->components};
+    for (unsigned i=0; i<9; i++)
         for (unsigned b=0; b<4; b++) output[4*i+b]=(uint8_t)(fields[i]>>(8*b));
 }
 static void check_write(Work *w, const char *path)
 {
-    Descriptor d=identify(w); uint8_t bytes[24]; descriptor_bytes(&d,bytes); release(&d);
+    Descriptor d=identify(w); uint8_t bytes[36]; descriptor_bytes(&d,bytes); release(&d);
     if (memcmp(w->input,w->original,w->size)) fail("Source changed.");
     FILE *f=fopen(path,"wb");
     if (!f || fwrite(bytes,1,sizeof(bytes),f)!=sizeof(bytes) || fclose(f)) fail("Write descriptor failed.");
@@ -206,15 +208,16 @@ int main(int argc, char **argv)
     w.context->opaque=&w; w.context->get_buffer2=reject_pixels; w.context->max_pixels=32000000;
     if (avcodec_open2(w.context,codec,NULL)<0 || w.context->active_thread_type) fail("Open serial metadata decoder failed.");
     Descriptor first=identify(&w), second=identify(&w);
-    uint8_t a[24], b[24]; descriptor_bytes(&first,a); descriptor_bytes(&second,b);
+    uint8_t a[36], b[36]; descriptor_bytes(&first,a); descriptor_bytes(&second,b);
     if (first.parameters==second.parameters || memcmp(a,b,sizeof(a))) fail("Descriptors alias or differ.");
     first.parameters->width^=1; descriptor_bytes(&second,b);
     if (memcmp(a,b,sizeof(a))) fail("Live descriptor changed with its peer.");
     unsigned width=(unsigned)second.parameters->width, height=(unsigned)second.parameters->height;
     int depth=second.parameters->bits_per_raw_sample, orient=second.orientation;
+    int source_color=second.color, source_alpha=second.alpha_rep, components=second.components;
     release(&first); release(&second); check_write(&w,argv[3]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-identify\",\"backend\":\"FFmpeg MJPEG discard-all metadata extraction with original full structural/EXIF scan and timed canonical SOF2 projection\",\"width\":%u,\"height\":%u,\"depth\":%d,\"hasAlpha\":false,\"orientation\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"outputBytes\":24,\"inputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"fullStructureTimed\":true,\"structureMetadataTimed\":true,\"canonicalHeaderProjectionTimed\":true,\"canonicalHeaderBytes\":17,\"canonicalHeaderProfile\":\"SOF2 grayscale8 metadata only\",\"discardAllHeaderExtractionTimed\":true,\"decoderStateResetTimed\":true,\"descriptorAcquisitionAndReleaseTimed\":true,\"pixelDecode\":false,\"pixelBufferRequests\":%u,\"scalarMode\":false,\"cpuFlags\":%d,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
-        width,height,depth,orient,w.cpu,w.size,w.completed,w.pixel_requests,av_get_cpu_flags(),av_version_info(),avcodec_version(),avutil_version());
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-identify\",\"backend\":\"FFmpeg MJPEG discard-all metadata extraction with original full structural/EXIF scan and timed canonical SOF2 projection\",\"width\":%u,\"height\":%u,\"depth\":%d,\"hasAlpha\":false,\"orientation\":%d,\"sourceColor\":%d,\"sourceAlpha\":%d,\"sourceComponentCount\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"outputBytes\":36,\"inputBytes\":%zu,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"fullStructureTimed\":true,\"structureMetadataTimed\":true,\"canonicalHeaderProjectionTimed\":true,\"canonicalHeaderBytes\":17,\"canonicalHeaderProfile\":\"SOF2 grayscale8 metadata only\",\"discardAllHeaderExtractionTimed\":true,\"decoderStateResetTimed\":true,\"descriptorAcquisitionAndReleaseTimed\":true,\"pixelDecode\":false,\"pixelBufferRequests\":%u,\"scalarMode\":false,\"cpuFlags\":%d,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+        width,height,depth,orient,source_color,source_alpha,components,w.cpu,w.size,w.completed,w.pixel_requests,av_get_cpu_flags(),av_version_info(),avcodec_version(),avutil_version());
     fflush(stdout);
     char line[128];
     while (fgets(line,sizeof(line),stdin)) {
@@ -228,7 +231,7 @@ int main(int argc, char **argv)
         for (uint64_t i=0; i<count; i++) { Descriptor d=identify(&w); release(&d); }
         uint64_t elapsed=clock_ns(CLOCK_MONOTONIC)-start, cpu_elapsed=clock_ns(CLOCK_PROCESS_CPUTIME_ID)-cpu_start;
         if (cpu()!=w.cpu || sched_getcpu()!=w.cpu || w.completed-completed!=count) fail("Sample CPU/count differs.");
-        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"cpuElapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":0,\"outputBytes\":24,\"cpu\":%d}\n",count,elapsed,cpu_elapsed,w.completed,w.observed,w.cpu); fflush(stdout);
+        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"cpuElapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":0,\"outputBytes\":36,\"cpu\":%d}\n",count,elapsed,cpu_elapsed,w.completed,w.observed,w.cpu); fflush(stdout);
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     av_packet_free(&w.projection); av_frame_free(&w.frame); avcodec_free_context(&w.context); av_free(w.input); av_free(w.original);

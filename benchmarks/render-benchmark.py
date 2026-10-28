@@ -24,8 +24,10 @@ def render():
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
+    resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
+    assert not resident_other['productionChanged'] and resident_other['independentQuietConfirmation']
     assert not reads['productionChanged'] and len(reads['cases']) == 12
     assert probes['productionChanged'] and len(probes['cases']) == 4
     assert not png_validation['productionChanged'] and png_validation['sourceAndQualifiedProducersRestored']
@@ -125,14 +127,25 @@ def render():
                      f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
                      f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
                      f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | Screen gap |')
+    for case, label in [('Jpeg8', 'Identify JPEG420, resident, canonical adapter'),
+                        ('Webp8', 'Identify VP8L+alpha, resident, parser adapter')]:
+        identified = resident_other['cases'][case][-1]
+        assert resident_other['status'][case] == 'confirmed-pass' and identified['conservativeRatioUpper'] <= 1
+        assert identified['receipt']['typedSourceMetadataExact'] and identified['receipt']['descriptorFields'] == 9
+        assert identified['receipt']['librarySha256'] == resident_other['producers']['linuxSha256']
+        assert len(identified['managed']['actual']) == 12 and all(q['passed'] for q in identified['quietness'].values())
+        read_rows.append(f'| {label} | {identified["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
+                         f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
+                         f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
+                         f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | Confirmed pass |')
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     return f'''# Lokad.Image benchmarks
 
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
-current-cost screen. The release snapshot remains immutable. Fourteen read
-controls below use qualified 0.2.1 builds. These 45 displayed controls do not
+current-cost screen. The release snapshot remains immutable. Sixteen read
+controls below use qualified 0.2.1 builds. These 47 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -225,7 +238,12 @@ controls pass; the timing remains a screen gap, distinct from prefix probing.
 [Resident PNG Identify](../benchmarks/CURRENT-PNG-RESIDENT-IDENTIFY.md) checks the
 complete 218,775B container, including CRC and all nine metadata fields, without
 pixel decoding. Its 21 existing controls pass normal/scalar; the timing is a
-current screen gap. Other resident and stream Identify comparisons remain pending.
+current screen gap.
+[Resident JPEG/WebP Identify](../benchmarks/CURRENT-JPEG-WEBP-RESIDENT-IDENTIFY.md)
+passes independently with all nine metadata facts,96B/op each. JPEG retains the
+explicit canonical-header adapter; WebP includes public-parser packet buffering
+and EOF flush. These frozen packet results are not general codec speed claims.
+Other stream/async Identify boundaries remain pending.
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

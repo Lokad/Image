@@ -3,8 +3,8 @@
 Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** retains its unchanged 0.2.1 proof. Fourteen other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
-current-cost screen. The release snapshot remains immutable. Fourteen read
-controls below use qualified 0.2.1 builds. These 45 displayed controls do not
+current-cost screen. The release snapshot remains immutable. Sixteen read
+controls below use qualified 0.2.1 builds. These 47 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -119,6 +119,8 @@ and unlisted content/settings are excluded.
 | Validate PNG16, async nonseekable | 3,001.887 | 3,602.437 | 0.833 / 0.847 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 16.133 | 13.073 | 1.234 / 1.312 | 96 | Screen gap |
+| Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |
+| Identify VP8L+alpha, resident, parser adapter | 0.022 | 4.985 | 0.004 / 0.005 | 96 | Confirmed pass |
 
 Probes compare requested dimensions using FFmpeg AVIO/owned descriptors plus an
 original bounded header adapter; they stop before pixel payloads. Validation
@@ -145,7 +147,12 @@ controls pass; the timing remains a screen gap, distinct from prefix probing.
 [Resident PNG Identify](../benchmarks/CURRENT-PNG-RESIDENT-IDENTIFY.md) checks the
 complete 218,775B container, including CRC and all nine metadata fields, without
 pixel decoding. Its 21 existing controls pass normal/scalar; the timing is a
-current screen gap. Other resident and stream Identify comparisons remain pending.
+current screen gap.
+[Resident JPEG/WebP Identify](../benchmarks/CURRENT-JPEG-WEBP-RESIDENT-IDENTIFY.md)
+passes independently with all nine metadata facts,96B/op each. JPEG retains the
+explicit canonical-header adapter; WebP includes public-parser packet buffering
+and EOF flush. These frozen packet results are not general codec speed claims.
+Other stream/async Identify boundaries remain pending.
 
 Read allocations use the default null shared budget and warm permitted private
 pools. [Governed pixel-validation storage](../benchmarks/PIXEL-VALIDATION-STORAGE.md)

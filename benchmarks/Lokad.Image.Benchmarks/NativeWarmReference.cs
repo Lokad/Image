@@ -24,7 +24,7 @@ internal sealed partial class NativeWarmReference : IDisposable
         if (!jpeg && !webp && expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("PNG/JPEG/WebP Identify only.", nameof(expected));
         if (stream && expected.Format != Lokad.Image.ImageFormat.Png) throw new ArgumentException("Fresh Stream Identify uses the existing PNG only.", nameof(stream));
         if (nonSeekable && !stream) throw new ArgumentException("Nonseekable Identify requires Stream delivery.", nameof(nonSeekable));
-        if (sourceMetadata && (jpeg || webp || stream)) throw new ArgumentException("Typed source metadata currently qualifies resident PNG only.", nameof(sourceMetadata));
+        if (sourceMetadata && stream) throw new ArgumentException("Typed source metadata currently qualifies resident inspection only.", nameof(sourceMetadata));
         var kind = nonSeekable ? "png-nonseekable" : stream ? "png-stream" : webp ? "webp" : jpeg ? "jpeg" : "png";
         Executable = Path.Combine(state.Root, "external", "warm-reference", "ffmpeg-" + kind + "-identify-warm");
         using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external", "warm-reference", kind + "-identify-identity.json"))))

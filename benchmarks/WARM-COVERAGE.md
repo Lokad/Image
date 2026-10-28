@@ -103,7 +103,7 @@ refresh every Identify/decoder boundary affected by read-policy changes.
 ## Current evidence
 
 [The current summary](../docs/benchmark.md) retains 14 unchanged 0.2.0 controls,
-refreshes the VP8 Stream decode cost and fourteen read comparisons, and
+refreshes the VP8 Stream decode cost and sixteen read comparisons, and
 refreshes three compressed PNG controls on the latest qualified 0.2.1 producer,
 retaining the unchanged independent stored-PNG path.
 [Bulk stored publication](WARM-PNG-BULK-STORED.md) independently measures PNG16
@@ -184,6 +184,13 @@ The source/native projection supersedes the earlier six-field comparison; this
 is a short gap,so no confirmation or optimization follows. Production and actual
 package remain unchanged; full/package proofs are reused. Other named resident/
 stream Identify boundaries still need typed-fact reconciliation/current costs.
+
+[Resident JPEG/WebP Identify](CURRENT-JPEG-WEBP-RESIDENT-IDENTIFY.md) independently
+passes the existing two controls with9source facts:JPEG0.420×/upper0.426 and
+WebP0.00436×/upper0.00483,96B/op each. All21controls percodec pass normal/scalar;
+complete projection/parser buffering and fresh ownership remain timed. These
+replace earlier6field timing proof; stop both passing cases. Production/DLL/
+package/full proofs remain unchanged. Stream/async Identify is still pending.
 
 ## Evidence invalidation
 
