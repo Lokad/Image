@@ -22,6 +22,9 @@ def render():
     assert vp8_quantization['qualification']['sameActualPackageBothOs']
     assert vp8_quantization['sourceScope']['quantizedLevelArithmeticUnchanged']
     assert len(vp8_quantization['cases']) == 6
+    trellis_cost = json.loads((ROOT / 'benchmarks/current-vp8-effort6-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not trellis_cost['productionChanged'] and trellis_cost['allBuilds'] == 0
+    assert trellis_cost['independentQuietConfirmation']
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
     vp8l = json.loads((ROOT / 'benchmarks/warm-vp8l-prepared-prediction-cost-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
@@ -116,6 +119,8 @@ def render():
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
         producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        if case['id'] == 'case10':
+            producer = trellis_cost
         if case['id'] in {'case17', 'case18'}:
             producer = predictive_cost
         elif case['id'] in {'case19', 'case20'}:
@@ -141,7 +146,7 @@ def render():
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case08', 'case12', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case08', 'case10', 'case12', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -276,7 +281,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph, VP8L RGBA8 encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph/effort6 diagram, VP8L RGBA8 encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -295,6 +300,10 @@ the five companions are short screens and remain gaps, with unchanged allocation
 and packets. Unmatched screens establish no causal gain or regression.
 Other affected method0–6 boundaries need applicable current costs before CPU-pass claims.
 Earlier input preparation and trellis gains remain in the linked history.
+[Current effort-6 diagram](../benchmarks/CURRENT-VP8-EFFORT6-COST.md) independently
+confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
+It remains a gap; this unchanged-path confirmation makes no causal comparison
+against older short screens. Zero builds or repeated qualification.
 The current producer passes 5,065 checks on each platform, plus 41 focused
 normal/scalar and 27 public scalar cases, and the same actual package/three examples.
 Nine tests solely for unreachable private invalid inputs were removed; public/live

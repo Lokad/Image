@@ -16,7 +16,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph, VP8L RGBA8 encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph/effort6 diagram, VP8L RGBA8 encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -35,6 +35,10 @@ the five companions are short screens and remain gaps, with unchanged allocation
 and packets. Unmatched screens establish no causal gain or regression.
 Other affected method0–6 boundaries need applicable current costs before CPU-pass claims.
 Earlier input preparation and trellis gains remain in the linked history.
+[Current effort-6 diagram](../benchmarks/CURRENT-VP8-EFFORT6-COST.md) independently
+confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
+It remains a gap; this unchanged-path confirmation makes no causal comparison
+against older short screens. Zero builds or repeated qualification.
 The current producer passes 5,065 checks on each platform, plus 41 focused
 normal/scalar and 27 public scalar cases, and the same actual package/three examples.
 Nine tests solely for unreachable private invalid inputs were removed; public/live
@@ -148,7 +152,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | VP8 RGBA8 † | 70,231.82 | 53,675.16 | 1.308 / 1.382 | 21,353,208 | 98,590 / 98,590 |
 | VP8 opaque photograph † | 13,899.64 | 9,701.62 | 1.433 / 1.438 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 7,750.98 | 5,823.99 | 1.331 / 1.478 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 13,710.68 | 9,832.62 | 1.394 / 1.740 | 754,344 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,535.94 | 15,580.45 | 1.318 / 1.375 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 161,904.66 | 120,988.24 | 1.338 / 1.923 | 29,696,928 | 183,812 / 183,812 |

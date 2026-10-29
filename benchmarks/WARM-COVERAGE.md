@@ -41,6 +41,12 @@ restoration in linked reports: [packed premultiplication](LANCZOS3-PACKED-PREMUL
 Exact qualified production is restored; these trials change no accepted cost,
 required case or applicable full/package qualification.
 
+[Current effort-6 VP8 diagram](CURRENT-VP8-EFFORT6-COST.md) independently
+confirms1.401× / upper1.415,754,344B/op, unchanged exact6,818Bpacket. All12actuals,
+native brackets/CLI pixels/source/owners/quiet pass. Zero builds; unchanged
+full/package proof reused. It remains a gap, without a causal comparison against
+the older short screen. No required case added or removed.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
