@@ -102,6 +102,16 @@ need applicable current evidence;scalar short inputs and unrelated paths retain
 unchanged proof. No required case added or removed. Earlier VND1pair stays
 unqualified; this new bounded block supplies accepted evidence.
 
+[Current resident VP8 costs](CURRENT-VP8-DECODER-COSTS.md) reconcile four existing
+paths after VNB1: normal-filter opaque ordinary/live-token1.170/1.186×,
+simple-filter opaque1.253×, resident VP8+ALPH1.246×. Conservative uppers are
+1.210/1.193/1.280/1.273; all remain confirmed gaps. Exact pixels, source/owners,
+12actuals/native brackets and both quiet guards pass. Zero builds/new controls;
+unchanged full/scalar/SAME actual package qualification is reused. These are
+current costs, without a causal comparison against older producers. The four
+named uncertainties are resolved; other affected decoder boundaries still need
+applicable evidence before CPU-pass claims. Prior records remain historical.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

@@ -233,6 +233,12 @@ copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
 validation pass independently; PNG8 and progressive420 remain confirmed gaps. VP8L and indexed
 validation rows are short screens, without independent parity claims.
+[Resident VP8 confirmations](../benchmarks/CURRENT-VP8-DECODER-COSTS.md) refresh
+the four existing opaque ordinary/live-token, simple-filter and VP8+ALPH controls:
+1.170/1.186/1.253/1.246×, conservative uppers1.210/1.193/1.280/1.273.
+Allocations are760,564/760,564/760,513/1,966,487B/op, with exact frozen pixels.
+All remain gaps. Zero builds; current qualification is reused. No causal
+comparison against older costs or new workload follows.
 [Direct VP8 token decisions](../benchmarks/WARM-VP8-DIRECT-TOKEN-DECISIONS.md)
 reduce validation elapsed by 7.20–8.12% in both counterbalanced time directions,
 with separate raw and reference-normalized confidence envelopes. Current cost
