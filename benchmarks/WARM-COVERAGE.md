@@ -246,6 +246,12 @@ upper0.984/70272Bop. Full5132/OS,122internal+258publicnormal/scalar,SAMEpackage/
 3examples pass,onecorebuild/OS/zerootherbuilds. Otherrelevantpaths retainproof.
 PNGcostrefreshcomplete;full268pathobjective staysopen.
 
+[Sparse palette stores](WARM-PNG-SPARSE-PALETTE-EXPANSION.md) supersede both
+Adam7 palette gaps:54.9%/64.9% less elapsed,uppers0.587/0.440,4976/2608Bop pass.
+Gray1 sharedfallback currentcost1.129/upper1.155,1440Bop remainsgap;no historical
+causalityclaim. Full5153/OS,140internal+258publicnormal/scalar,SAMEpackage/3examples
+pass. Onecorebuild/OS,zerootherbuilds;no newbuffer/LUT. Full268objective active.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

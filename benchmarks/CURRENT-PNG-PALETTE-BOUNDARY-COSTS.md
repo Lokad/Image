@@ -1,14 +1,15 @@
 # Current PNG palette boundary costs
 
 Four existing controls resolve current costs without production changes or a
-historical speedup claim. Confirmed passing paths stop.
+historical speedup claim. Adam7 palette8/4 rows below are superseded by
+[packed sparse expansion](WARM-PNG-SPARSE-PALETTE-EXPANSION.md), which passes.
 
 | Complete 513×259 decode | Lokad µs | Ratio / upper | Allocated B/op | Status |
 | --- | ---: | ---: | ---: | --- |
 | Palette8, partial alpha | 330.007 | 0.902 / 0.911 | 2,224 | Pass; stop |
 | Palette8, 16 entries | 128.064 | 1.173 / 1.180 | 1,512 | Gap |
-| Adam7 palette8 | 1,703.925 | 1.274 / 1.283 | 4,976 | Gap |
-| Adam7 palette4 | 1,414.857 | 1.250 / 1.251 | 2,608 | Gap |
+| Adam7 palette8 | 1,703.925 | 1.274 / 1.283 | 4,976 | Prior; superseded |
+| Adam7 palette4 | 1,414.857 | 1.250 / 1.251 | 2,608 | Prior; superseded |
 
 Each control retains all 12 actuals, native brackets, filtered/unfiltered
 confidence envelopes and idle-v2 guards. Frozen packets/settings, exact RGBA,

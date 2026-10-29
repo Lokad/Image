@@ -44,7 +44,7 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,132 checks on each platform, plus 122 affected kernel
+The current producer passes 5,153 checks on each platform, plus 140 affected kernel
 and 258 public checks normal/scalar per OS, and the same actual package/three examples.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
@@ -259,8 +259,14 @@ removes generic pixelmapping:76.2%less elapsed,0.341× / upper0.342,unchanged
 2,456B/op;passandstop. FullbothOS/live/normal+scalar/SAMEpackage qualify.
 
 [Palette boundaries](../benchmarks/CURRENT-PNG-PALETTE-BOUNDARY-COSTS.md):
-Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8 1.274/upper 1.283 gap; Adam7 palette4 1.250/upper 1.251 gap.
+Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8/4 now pass at uppers 0.587/0.440.
 Exact pixels, owners, native and quiet gates pass; zero builds or repeated qualification.
+
+[Packed sparse palette stores](../benchmarks/WARM-PNG-SPARSE-PALETTE-EXPANSION.md)
+reduce Adam7 palette8/4 elapsed by 54.9%/64.9%, retaining 4,976/2,608 B/op.
+Both pass at uppers 0.587/0.440 and stop. Gray1 remains a current 1.129× /
+upper 1.155 gap, 1,440 B/op. Exact pixels/owners/native/quiet, full 5,153 checks/OS,
+affected normal/scalar and same actual package qualify; no new buffers or LUTs.
 
 [Policies and packed keys](../benchmarks/CURRENT-PNG-POLICY-PACKED-KEY-COSTS.md)
 resolve eight more costs. Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable now passes upper 0.984; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable now 1.094 / upper 1.107 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
@@ -297,7 +303,7 @@ their allocated costs are 4,472/8,568 B/op. Each named control has 12 actuals,
 frozen inputs/settings, exact pixels, independent outputs and quiet guards.
 [Indexed and packed controls](../benchmarks/CURRENT-PNG-INDEXED-PACKED-COSTS.md)
 add seven passes: palette8/4/2/1 and gray1/2/4, allocated 504–2,472 B/op. Adam7
-Gray1 remains a 1.083× / upper 1.094 gap, 1,440 B/op. All eight reuse the same
+Gray1 has a refreshed 1.129× / upper 1.155 gap, 1,440 B/op. All eight reuse the same
 build, selector and qualification; no new images, cases or retiming.
 
 [Two retained PNG outputs under one caller root](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)

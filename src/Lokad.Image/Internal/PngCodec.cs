@@ -485,6 +485,12 @@ internal static class PngCodec
                         CopyPackedPaletteRow(row, result.Pixels.Slice(offset, width * 4), width, header.Depth,
                             header.Palette, header.Transparency, context.Cancellation);
                     }
+                    else if (header.ColorType == 3 && stepX > 1)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopySparsePaletteRow(row, result.Pixels.Slice(offset, result.Stride - startX * 4),
+                            width, header.Depth, stepX, header.Palette, header.Transparency, context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -811,6 +817,26 @@ internal static class PngCodec
             var alpha = index < transparency.Length ? transparency[index] : (byte)255;
             var rgba = (uint)BinaryPrimitives.ReadUInt16LittleEndian(rgb) | (uint)rgb[2] << 16 | (uint)alpha << 24;
             BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * 4)..], rgba);
+        }
+    }
+
+    internal static void CopySparsePaletteRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        int width, int depth, int stepX, ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency,
+        CancellationToken cancellation)
+    {
+        // Adam7 pass samples select palette colors at sparse columns.
+        // Pack the same straight RGBA bytes as the dense scalar path, retaining
+        // hidden RGB and leaving columns belonging to other passes untouched.
+        var colors = palette.Length / 3;
+        for (var x = 0; x < width; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var index = Sample(row, x, depth);
+            if (index >= colors) throw new ImageDataException("PNG palette index out of range.");
+            var rgb = palette.Slice(index * 3, 3);
+            var alpha = index < transparency.Length ? transparency[index] : (byte)255;
+            var rgba = (uint)BinaryPrimitives.ReadUInt16LittleEndian(rgb) | (uint)rgb[2] << 16 | (uint)alpha << 24;
+            BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * stepX * 4)..], rgba);
         }
     }
 
@@ -1596,14 +1622,6 @@ internal static class PngCodec
         var maximum = (1 << header.Depth) - 1;
         var outputMaximum = target.BitDepth == 16 ? 65535 : 255;
         int r, g, b, a = outputMaximum;
-        if (header.ColorType == 3)
-        {
-            var paletteIndex = Sample(row, index, header.Depth);
-            if (paletteIndex >= header.Palette.Length / 3) throw new ImageDataException("PNG palette index out of range.");
-            r = header.Palette[paletteIndex * 3]; g = header.Palette[paletteIndex * 3 + 1]; b = header.Palette[paletteIndex * 3 + 2];
-            if (paletteIndex < header.Transparency.Length) a = header.Transparency[paletteIndex];
-        }
-        else
         {
             var first = Sample(row, index * channels, header.Depth);
             var second = channels >= 2 ? Sample(row, index * channels + 1, header.Depth) : first;
