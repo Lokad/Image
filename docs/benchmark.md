@@ -250,7 +250,11 @@ gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877.
 its gap:19.2%less elapsed,0.880× / upper0.882,unchanged3,448B/op;passandstop.
 All12actuals/pixels/owners/quiet pass; fullbothOS/live/scalar/SAMEpackage qualify.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 21 existing decode/stream/
+[Color-key transparency](../benchmarks/CURRENT-PNG-TRANSPARENCY-COSTS.md):
+Gray8tRNS 0.443/upper0.446 pass; Gray16tRNS 1.441/upper1.443 gap; Rgb8tRNS 0.845/upper0.852 pass; Rgb16tRNS 0.700/upper0.705 pass.
+Exactpixels/owners/native/quiet pass;zero builds or repeatedqualification.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 17 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 

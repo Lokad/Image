@@ -212,6 +212,11 @@ existingcases withzero builds:gray8/gray-alpha8/RGB16 passandstop;RGB8 remains
 231publicnormal/scalar,SAMEactualpackage/3examples pass,one corebuild/OS,zero
 otherbuilds. Other relevantpaths retain proof;21existingPNGcosts remain.
 
+[Color-key currentcosts](CURRENT-PNG-TRANSPARENCY-COSTS.md) resolve4existingcases:
+Gray8tRNS 0.443/upper0.446 pass; Gray16tRNS 1.441/upper1.443 gap; Rgb8tRNS 0.845/upper0.852 pass; Rgb16tRNS 0.700/upper0.705 pass.
+All12actuals/pixels/owners/native/quiet pass;zero builds,unchangedproof reused.
+17existingPNGcosts remain unrefreshed;full268pathobjective.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

@@ -139,6 +139,15 @@ def render():
     assert o['receipt']['librarySha256'] == png_rgb_paeth['producers']['linuxSha256']
     assert png_rgb_paeth['qualification']['fullChecksEachOs'] == 5107
     assert png_rgb_paeth['qualification']['package']['sha256'] == png_rgb_paeth['qualification']['linuxPackage']['sameActualPackageSha256']
+    png_keys = json.loads((ROOT / 'benchmarks/current-png-transparency-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_keys['productionChanged'] and png_keys['allBuilds'] == 0
+    assert png_keys['producers']['linuxSha256'] == png_rgb_paeth['producers']['linuxSha256']
+    assert len(png_keys['cases']) == 4
+    for case, observations in png_keys['cases'].items():
+        o = observations[-1]
+        assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
+        assert o['receipt']['librarySha256'] == png_keys['producers']['linuxSha256']
+        assert (o['conservativeRatioUpper'] <= 1) == (png_keys['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -576,7 +585,11 @@ gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877.
 its gap:19.2%less elapsed,0.880× / upper0.882,unchanged3,448B/op;passandstop.
 All12actuals/pixels/owners/quiet pass; fullbothOS/live/scalar/SAMEpackage qualify.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 21 existing decode/stream/
+[Color-key transparency](../benchmarks/CURRENT-PNG-TRANSPARENCY-COSTS.md):
+Gray8tRNS 0.443/upper0.446 pass; Gray16tRNS 1.441/upper1.443 gap; Rgb8tRNS 0.845/upper0.852 pass; Rgb16tRNS 0.700/upper0.705 pass.
+Exactpixels/owners/native/quiet pass;zero builds or repeatedqualification.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 17 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 
