@@ -457,6 +457,12 @@ internal static class PngCodec
                         var offset = (startY + y * stepY) * result.Stride + startX * 8;
                         CopyGray16Row(row, result.Pixels.Slice(offset, width * 8), context.Cancellation);
                     }
+                    else if (header.ColorType == 0 && header.Depth == 16 && stepX == 1 && header.Transparency.Length == 2)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 8;
+                        CopyGray16TransparentRow(row, result.Pixels.Slice(offset, width * 8),
+                            BinaryPrimitives.ReadUInt16BigEndian(header.Transparency), context.Cancellation);
+                    }
                     else if (header.ColorType == 4 && header.Depth == 8 && stepX == 1)
                     {
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
@@ -686,6 +692,38 @@ internal static class PngCodec
             var value = BinaryPrimitives.ReadUInt16BigEndian(row[(x * 2)..]);
             samples[x * 4] = value; samples[x * 4 + 1] = value;
             samples[x * 4 + 2] = value; samples[x * 4 + 3] = ushort.MaxValue;
+        }
+    }
+
+    internal static void CopyGray16TransparentRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        ushort transparentKey, CancellationToken cancellation)
+    {
+        // PNG 11.3.2.1: compare the full gray16 sample with the two-byte key.
+        // Transparency does not change its RGB, including either sample byte.
+        var pixels = row.Length / 2; var x = 0;
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            var shuffle = Vector256.Create(
+                (byte)1, 0, 1, 0, 1, 0, 128, 128, 3, 2, 3, 2, 3, 2, 128, 128,
+                5, 4, 5, 4, 5, 4, 128, 128, 7, 6, 7, 6, 7, 6, 128, 128);
+            var opaque = Vector256.Create(0xffff000000000000UL);
+            var key = Vector256.Create((ulong)transparentKey * 0x0000000100010001UL);
+            for (; x <= pixels - 4; x += 4)
+            {
+                if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+                var packed = Vector256.Create(MemoryMarshal.Read<ulong>(row[(x * 2)..])).AsByte();
+                var colors = Avx2.Shuffle(packed, shuffle).AsUInt64();
+                var alpha = Avx2.AndNot(Avx2.CompareEqual(colors, key), opaque);
+                (colors | alpha).AsByte().CopyTo(destination[(x * 8)..]);
+            }
+        }
+        var samples = MemoryMarshal.Cast<byte, ushort>(destination);
+        for (; x < pixels; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var value = BinaryPrimitives.ReadUInt16BigEndian(row[(x * 2)..]);
+            samples[x * 4] = value; samples[x * 4 + 1] = value; samples[x * 4 + 2] = value;
+            samples[x * 4 + 3] = value == transparentKey ? (ushort)0 : ushort.MaxValue;
         }
     }
 

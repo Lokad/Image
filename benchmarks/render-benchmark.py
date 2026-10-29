@@ -148,6 +148,14 @@ def render():
         assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
         assert o['receipt']['librarySha256'] == png_keys['producers']['linuxSha256']
         assert (o['conservativeRatioUpper'] <= 1) == (png_keys['status'][case] == 'confirmed-pass')
+    png_gray_key = json.loads((ROOT / 'benchmarks/warm-png-gray16-key-row-evidence.json').read_text(encoding='utf-8'))
+    assert png_gray_key['productionChanged'] and png_gray_key['decision']['passed']
+    o = png_gray_key['cases']['DecodeGray16Transparency'][-1]
+    assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
+    assert o['conservativeRatioUpper'] <= 1 and o['managedMemory']['BytesAllocatedPerOperation'] == 2456
+    assert o['receipt']['librarySha256'] == png_gray_key['producers']['linuxSha256']
+    assert png_gray_key['qualification']['fullChecksEachOs'] == 5129
+    assert png_gray_key['qualification']['package']['sha256'] == png_gray_key['qualification']['linuxPackage']['sameActualPackageSha256']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -435,7 +443,7 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,107 checks on each platform, plus24affected kernel
+The current producer passes 5,129 checks on each platform, plus36affected kernel
 and231public checks normal/scalar perOS, and the SAMEactualpackage/threeexamples.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
@@ -586,8 +594,12 @@ its gap:19.2%less elapsed,0.880× / upper0.882,unchanged3,448B/op;passandstop.
 All12actuals/pixels/owners/quiet pass; fullbothOS/live/scalar/SAMEpackage qualify.
 
 [Color-key transparency](../benchmarks/CURRENT-PNG-TRANSPARENCY-COSTS.md):
-Gray8tRNS 0.443/upper0.446 pass; Gray16tRNS 1.441/upper1.443 gap; Rgb8tRNS 0.845/upper0.852 pass; Rgb16tRNS 0.700/upper0.705 pass.
+Gray8tRNS 0.443/upper0.446 pass; Gray16tRNS priorgap supersededbydirectrow0.341/upper0.342 pass; Rgb8tRNS 0.845/upper0.852 pass; Rgb16tRNS 0.700/upper0.705 pass.
 Exactpixels/owners/native/quiet pass;zero builds or repeatedqualification.
+
+[Direct gray16 color-key expansion](../benchmarks/WARM-PNG-GRAY16-KEY-ROW.md)
+removes generic pixelmapping:76.2%less elapsed,0.341× / upper0.342,unchanged
+2,456B/op;passandstop. FullbothOS/live/normal+scalar/SAMEpackage qualify.
 
 [PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 17 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;

@@ -1,12 +1,13 @@
 # Current PNG color-key transparency costs
 
 Four existing controls resolve current costs without production changes or a
-historical speedup claim. Confirmed passing paths stop.
+historical speedup claim. The gray16baseline is superseded by
+[direct row expansion](WARM-PNG-GRAY16-KEY-ROW.md), which passes.
 
 | Complete 513×259 decode | Lokad µs | Ratio / upper | Allocated B/op | Status |
 | --- | ---: | ---: | ---: | --- |
 | Gray8 tRNS | 336.446 | 0.443 / 0.446 | 1,432 | Pass; stop |
-| Gray16 tRNS | 2,939.882 | 1.441 / 1.443 | 2,456 | Gap |
+| Gray16 tRNS | 2,939.882 | 1.441 / 1.443 | 2,456 | Prior; superseded |
 | Rgb8 tRNS | 1,085.873 | 0.845 / 0.852 | 3,480 | Pass; stop |
 | Rgb16 tRNS | 2,225.576 | 0.700 / 0.705 | 6,552 | Pass; stop |
 

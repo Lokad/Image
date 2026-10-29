@@ -217,6 +217,11 @@ Gray8tRNS 0.443/upper0.446 pass; Gray16tRNS 1.441/upper1.443 gap; Rgb8tRNS 0.845
 All12actuals/pixels/owners/native/quiet pass;zero builds,unchangedproof reused.
 17existingPNGcosts remain unrefreshed;full268pathobjective.
 
+[Directgray16keyrows](WARM-PNG-GRAY16-KEY-ROW.md) supersedeits tRNSgap:
+76.2%less elapsed,0.341/upper0.342,2456Bop PASS/STOP. Full5129/OS,36kernel+
+231publicnormal/scalar,SAMEactualpackage/3examples pass,onecorebuild/OS,zero
+otherbuilds.17existingPNGcosts remain;otherrelevantproof reused.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
