@@ -156,6 +156,15 @@ def render():
     assert o['receipt']['librarySha256'] == png_gray_key['producers']['linuxSha256']
     assert png_gray_key['qualification']['fullChecksEachOs'] == 5129
     assert png_gray_key['qualification']['package']['sha256'] == png_gray_key['qualification']['linuxPackage']['sameActualPackageSha256']
+    png_palette_boundaries = json.loads((ROOT / 'benchmarks/current-png-palette-boundary-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_palette_boundaries['productionChanged'] and png_palette_boundaries['allBuilds'] == 0
+    assert png_palette_boundaries['producers']['linuxSha256'] == png_gray_key['producers']['linuxSha256']
+    assert len(png_palette_boundaries['cases']) == 4
+    for case, observations in png_palette_boundaries['cases'].items():
+        o = observations[-1]
+        assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
+        assert o['receipt']['librarySha256'] == png_palette_boundaries['producers']['linuxSha256']
+        assert (o['conservativeRatioUpper'] <= 1) == (png_palette_boundaries['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -601,7 +610,11 @@ Exactpixels/owners/native/quiet pass;zero builds or repeatedqualification.
 removes generic pixelmapping:76.2%less elapsed,0.341× / upper0.342,unchanged
 2,456B/op;passandstop. FullbothOS/live/normal+scalar/SAMEpackage qualify.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 17 existing decode/stream/
+[Palette boundaries](../benchmarks/CURRENT-PNG-PALETTE-BOUNDARY-COSTS.md):
+Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8 1.274/upper 1.283 gap; Adam7 palette4 1.250/upper 1.251 gap.
+Exact pixels, owners, native and quiet gates pass; zero builds or repeated qualification.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 13 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 

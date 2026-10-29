@@ -222,6 +222,11 @@ All12actuals/pixels/owners/native/quiet pass;zero builds,unchangedproof reused.
 231publicnormal/scalar,SAMEactualpackage/3examples pass,onecorebuild/OS,zero
 otherbuilds.17existingPNGcosts remain;otherrelevantproof reused.
 
+[Palette boundary costs](CURRENT-PNG-PALETTE-BOUNDARY-COSTS.md) resolve four cases:
+Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8 1.274/upper 1.283 gap; Adam7 palette4 1.250/upper 1.251 gap.
+All 12 actuals, pixels, owners, native and quiet gates pass; zero builds.
+13 existing PNG costs remain unrefreshed; full 268-path objective.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

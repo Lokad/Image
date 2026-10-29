@@ -258,7 +258,11 @@ Exactpixels/owners/native/quiet pass;zero builds or repeatedqualification.
 removes generic pixelmapping:76.2%less elapsed,0.341× / upper0.342,unchanged
 2,456B/op;passandstop. FullbothOS/live/normal+scalar/SAMEpackage qualify.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 17 existing decode/stream/
+[Palette boundaries](../benchmarks/CURRENT-PNG-PALETTE-BOUNDARY-COSTS.md):
+Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8 1.274/upper 1.283 gap; Adam7 palette4 1.250/upper 1.251 gap.
+Exact pixels, owners, native and quiet gates pass; zero builds or repeated qualification.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 13 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 
