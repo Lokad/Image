@@ -44,10 +44,10 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,082 checks on each platform, plus 32 affected internal
-scalar and 350 public scalar cases, and the same actual package/three examples.
-Nine tests solely for unreachable private invalid inputs were removed; public/live
-coverage, exact bicubic pixels and shared ownership remain.
+The current producer passes 5,107 checks on each platform, plus24affected kernel
+and231public checks normal/scalar perOS, and the SAMEactualpackage/threeexamples.
+Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
+encoder packets and shared ownership remain.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. [Byte zero-tap trimming](../benchmarks/WARM-BICUBIC-ZERO-TAPS.md)
@@ -245,8 +245,10 @@ costs need current evidence before pass claims; metadata-only reads, other codec
 and editing retain applicable unchanged proof.
 
 [Paeth source layouts](../benchmarks/CURRENT-PNG-PAETH-SOURCE-COSTS.md) pass for
-gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877. RGB8 remains1.085× /
-upper1.104,3,448B/op. All12actuals/pixels/owners/quiet pass; zero builds.
+gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877.
+[RGB8 SIMD reconstruction](../benchmarks/WARM-PNG-RGB8-PAETH-SIMD.md) supersedes
+its gap:19.2%less elapsed,0.880× / upper0.882,unchanged3,448B/op;passandstop.
+All12actuals/pixels/owners/quiet pass; fullbothOS/live/scalar/SAMEpackage qualify.
 
 [PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 21 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;

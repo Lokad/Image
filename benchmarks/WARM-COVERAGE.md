@@ -207,6 +207,11 @@ proof reused.25costs remain unrefreshed; no workload expansion or retuning.
 existingcases withzero builds:gray8/gray-alpha8/RGB16 passandstop;RGB8 remains
 1.085/upper1.104,3448Bop.21existingcosts remain unrefreshed,full268pathobjective.
 
+[RGB8PaethSIMD](WARM-PNG-RGB8-PAETH-SIMD.md) supersedes its source-layoutgap:
+19.2%less elapsed,0.880/upper0.882,3448Bop PASS/STOP. Full5107/OS,24kernel+
+231publicnormal/scalar,SAMEactualpackage/3examples pass,one corebuild/OS,zero
+otherbuilds. Other relevantpaths retain proof;21existingPNGcosts remain.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

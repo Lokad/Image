@@ -1,11 +1,12 @@
 # Current PNG Paeth source-layout costs
 
-Three existing source layouts pass and stop. RGB8 remains a demonstrated gap.
+Three existing source layouts pass and stop. The RGB8baseline below is
+superseded by [SIMD reconstruction](WARM-PNG-RGB8-PAETH-SIMD.md), which passes.
 No production edit or historical speedup claim.
 
 | Complete 513×259 decode | Lokad µs | Ratio / upper | Allocated B/op | Status |
 | --- | ---: | ---: | ---: | --- |
-| RgbPaeth8 | 2,860.610 | 1.085 / 1.104 | 3,448 | Gap |
+| RgbPaeth8 | 2,860.610 | 1.085 / 1.104 | 3,448 | Prior; superseded |
 | GrayPaeth8 | 969.038 | 0.937 / 0.960 | 1,400 | Pass; stop |
 | GrayAlphaPaeth8 | 1,851.785 | 0.925 / 0.941 | 2,424 | Pass; stop |
 | RgbPaeth16 | 3,863.840 | 0.865 / 0.877 | 6,520 | Pass; stop |

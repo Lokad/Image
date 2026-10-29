@@ -5,7 +5,7 @@
 - Adaptive lossless PNG row prediction for predictable content, including
   full-precision 16-bit gradients after flips and rotations; existing declared
   reference packet controls remain unchanged.
-- Faster PNG row scoring and prediction with safe SIMD, exact filter ties and
+- Faster PNG row scoring, prediction and reconstruction with safe SIMD, exact filter ties and
   residual bytes, portable fallback and unchanged admitted workspace.
 - Faster bounded Deflate match scans for PNG Optimal/SmallestSize, preserving
   complete packets, dictionary order, ring boundaries and cancellation.

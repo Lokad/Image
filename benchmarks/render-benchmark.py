@@ -131,6 +131,14 @@ def render():
         assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
         assert o['receipt']['librarySha256'] == png_paeth_sources['producers']['linuxSha256']
         assert (o['conservativeRatioUpper'] <= 1) == (png_paeth_sources['status'][case] == 'confirmed-pass')
+    png_rgb_paeth = json.loads((ROOT / 'benchmarks/warm-png-rgb8-paeth-simd-evidence.json').read_text(encoding='utf-8'))
+    assert png_rgb_paeth['productionChanged'] and png_rgb_paeth['decision']['passed']
+    o = png_rgb_paeth['cases']['DecodeRgbPaeth8'][-1]
+    assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
+    assert o['conservativeRatioUpper'] <= 1 and o['managedMemory']['BytesAllocatedPerOperation'] == 3448
+    assert o['receipt']['librarySha256'] == png_rgb_paeth['producers']['linuxSha256']
+    assert png_rgb_paeth['qualification']['fullChecksEachOs'] == 5107
+    assert png_rgb_paeth['qualification']['package']['sha256'] == png_rgb_paeth['qualification']['linuxPackage']['sameActualPackageSha256']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -418,10 +426,10 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,082 checks on each platform, plus 32 affected internal
-scalar and 350 public scalar cases, and the same actual package/three examples.
-Nine tests solely for unreachable private invalid inputs were removed; public/live
-coverage, exact bicubic pixels and shared ownership remain.
+The current producer passes 5,107 checks on each platform, plus24affected kernel
+and231public checks normal/scalar perOS, and the SAMEactualpackage/threeexamples.
+Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
+encoder packets and shared ownership remain.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. [Byte zero-tap trimming](../benchmarks/WARM-BICUBIC-ZERO-TAPS.md)
@@ -563,8 +571,10 @@ costs need current evidence before pass claims; metadata-only reads, other codec
 and editing retain applicable unchanged proof.
 
 [Paeth source layouts](../benchmarks/CURRENT-PNG-PAETH-SOURCE-COSTS.md) pass for
-gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877. RGB8 remains1.085× /
-upper1.104,3,448B/op. All12actuals/pixels/owners/quiet pass; zero builds.
+gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877.
+[RGB8 SIMD reconstruction](../benchmarks/WARM-PNG-RGB8-PAETH-SIMD.md) supersedes
+its gap:19.2%less elapsed,0.880× / upper0.882,unchanged3,448B/op;passandstop.
+All12actuals/pixels/owners/quiet pass; fullbothOS/live/scalar/SAMEpackage qualify.
 
 [PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 21 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
