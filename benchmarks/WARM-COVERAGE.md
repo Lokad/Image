@@ -53,6 +53,12 @@ native/sample/alpha/hiddenRGB/source/owner/quiet gates pass. Zero builds and
 unchanged qualification reused; no causal comparison against older screens.
 It remains a gap; required controls/settings stay unchanged.
 
+[Current photograph VP8L](VP8L-SHARED-COLOR-MASK-REJECTED.md) independently
+confirms1.360× / upper1.397,20,418,440B/op and exact160,032Bpackets. A shared
+color-mask candidate fails confirmation; original source/exact binaries are
+restored. All native/pixel/source/owner/quiet gates pass; unchanged full/package
+proof is reused. The photograph remains a gap; no required case changes.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
