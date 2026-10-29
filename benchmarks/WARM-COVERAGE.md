@@ -81,6 +81,10 @@ pass, with12actuals and unchanged native/settings/input/boundary. Zero builds or
 repeated qualification; the original producer header is restored exactly. This
 replaces its uncertain screen without a causal gain/regression or new case.
 
+[VP8 token-local state](VP8-TOKEN-LOCAL-STATE-REJECTED.md) fails its 5% screen
+gate. Original source/exact binaries/package are restored; current validation
+costs and required paths stay. No variants or independent confirmation follow.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
