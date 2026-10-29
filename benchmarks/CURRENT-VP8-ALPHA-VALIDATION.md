@@ -1,4 +1,7 @@
-# Current VP8-plus-alpha validation cost
+# VP8-plus-alpha validation cost before direct token decisions
+
+Superseded by [direct token decisions](WARM-VP8-DIRECT-TOKEN-DECISIONS.md).
+Retained historical cost and raw evidence; this does not qualify the new reader.
 
 One existing 513×259 frozen VP8/ALPH packet, borrowed encoded span. Both subjects
 validate complete coding and return independently owned nine-field metadata.

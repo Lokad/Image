@@ -34,9 +34,9 @@ def render():
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
     vp8l = json.loads((ROOT / 'benchmarks/warm-vp8l-prepared-prediction-cost-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
-    vp8_validation = json.loads((ROOT / 'benchmarks/current-vp8-alpha-validation-evidence.json').read_text(encoding='utf-8'))
-    assert not vp8_validation['productionChanged'] and vp8_validation['allBuilds'] == 0
-    assert vp8_validation['independentQuietConfirmation']
+    vp8_validation = json.loads((ROOT / 'benchmarks/warm-vp8-direct-token-decisions-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_validation['productionChanged'] and vp8_validation['independentCounterbalancedBlock']
+    assert vp8_validation['decision']['allGatesPassed'] and vp8_validation['qualification']['sameActualPackageBothOs']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -128,7 +128,7 @@ def render():
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
-        producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else reconciled if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8_validation if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] == 'case10':
             producer = trellis_cost
         elif case['id'] == 'case13':
@@ -324,8 +324,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,065 checks on each platform, plus 41 focused
-normal/scalar and 27 public scalar cases, and the same actual package/three examples.
+The current producer passes 5,082 checks on each platform, plus 32 affected internal
+scalar and 350 public scalar cases, and the same actual package/three examples.
 Nine tests solely for unreachable private invalid inputs were removed; public/live
 coverage, exact bicubic pixels and shared ownership remain.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -457,11 +457,15 @@ copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
 validation pass independently; PNG8 and progressive420 remain confirmed gaps. VP8L and indexed
 validation rows are short screens, without independent parity claims.
-[VP8-plus-alpha validation](../benchmarks/CURRENT-VP8-ALPHA-VALIDATION.md) now
-independently confirms 1.523× / upper 1.697, 770,092 B/op on the unchanged
-qualified build. Its complete-coding/natural-frame/metadata boundary is fixed;
-zero builds or repeated full/package checks. This resolves an older screen
-without a causal speedup/regression claim. The
+[Direct VP8 token decisions](../benchmarks/WARM-VP8-DIRECT-TOKEN-DECISIONS.md)
+reduce validation elapsed by 7.20–8.12% in both counterbalanced time directions,
+with separate raw and reference-normalized confidence envelopes. Current cost
+is 1.351× / upper 1.382, unchanged 770,092 B/op. The stream companion is a current
+1.274× / upper 2.005 short gap, unchanged 1,966,583 B/op. Exact descriptor/pixels,
+source/owners/quiet gates, 5,082 full checks per OS, affected scalar checks and
+the SAME actual Release package/three examples pass. Other affected VP8 decoder
+costs need current evidence before pass claims; metadata-only reads, other codecs
+and editing retain applicable unchanged proof. The
 [shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) reduces PNG8
 validation elapsed by 22.85% filtered / 22.87% all actuals against a fresh baseline,
 with unchanged 240 B/op. Its 1.042× / upper 1.052 gap remains. PNG16 span and async

@@ -9,8 +9,8 @@ internal partial struct Vp8BooleanReader
     // RFC6386 sections7.2/13.2: at most7token,11category and1sign decisions
     // for each of16coefficients. Each decision consumes at most7input bits.
     // 272partition bytes cover266consumed bytes,3lookahead bytes and slack.
-    // Short inputs and live cancellation
-    // retain the original bit-at-a-time reader and its partial failure state.
+    // Short inputs retain the bit-at-a-time reader. Cancelable blocks use the
+    // separate polling wrapper and preserve its exact canceled prefix.
     internal bool CanReadCoefficientBlock(ReadOnlySpan<byte> data, OperationContext context)
         => !context.Cancellation.CanBeCanceled
         && range is >= 128 and <= 255 && (uint)value < (uint)range && (uint)shift <= 7
@@ -38,10 +38,7 @@ internal partial struct Vp8BooleanReader
             if (reader.Read(128) != 0) sample = -sample;
             values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
         }
-        // The buffered word contains the original8bit value followed by Bits
-        // future bits. Discarding lookahead restores the exact public cursor.
-        position = reader.Position - (reader.Bits + 7) / 8;
-        shift = (reader.Bits - 1) & 7; range = reader.Range; value = (int)(reader.Value >> reader.Bits);
+        reader.Publish(ref this);
         return nonzero != 0;
     }
 
@@ -53,40 +50,68 @@ internal partial struct Vp8BooleanReader
 
         internal BlockReader(ReadOnlySpan<byte> data, int position, int shift, int range, int value)
         {
-            this.data = data; Position = position + 1; Bits = shift + 1; Range = range;             Value = ((uint)value << Bits) | ((uint)data[position] & ((1u << Bits) - 1));
+            this.data = data; Position = position + 1; Bits = shift + 1; Range = range;
+            Value = ((uint)value << 24) | (((uint)data[position] & ((1u << Bits) - 1)) << (24 - Bits));
             Fill();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal int Read(int probability)
         {
+            Normalize();
             var boundary = 1 + ((Range - 1) * probability >> 8);
-            var bit = Value >> Bits >= (uint)boundary ? 1 : 0; var mask = -bit;
-            Value -= (uint)(boundary & mask) << Bits;
+            var bit = Value >= ((uint)boundary << 24) ? 1 : 0; var mask = -bit;
+            Value -= (uint)(boundary & mask) << 24;
             Range = boundary + ((Range - 2 * boundary) & mask);
+            return bit;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal int TokenRead(int probability)
+        {
+            Normalize();
+            var boundary = 1 + ((Range - 1) * probability >> 8);
+            var split = (uint)boundary << 24;
+            if (Value < split) { Range = boundary; return 0; }
+            Range -= boundary; Value -= split; return 1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Normalize()
+        {
             var count = BitOperations.LeadingZeroCount((uint)Range) - 24;
-            Range <<= count; Bits -= count; Fill(); return bit;
+            Range <<= count; Value <<= count; Bits -= count; Fill();
+        }
+
+        internal void Publish(ref Vp8BooleanReader target)
+        {
+            // The previous decision began with >=8 known future bits and needs
+            // at most7 to normalize. Publish without reading canceled input.
+            var count = BitOperations.LeadingZeroCount((uint)Range) - 24;
+            var bits = Bits - count;
+            target.position = Position - (bits + 7) / 8; target.shift = (bits - 1) & 7;
+            target.range = Range << count; target.value = (int)((Value << count) >> 24);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Fill()
         {
-            // Before a decision,8<=Bits<=24 and Value<Range*2^Bits<2^32.
-            // Normalization removes at most7bits. A16bit refill when Bits<8
-            // returns17..23future bits and cannot overflow the32bit word.
+            // After normalization, Value<Range*2^24<2^32 and the low24-Bits
+            // bits are zero. A16bit refill fits that zero region and returns
+            // 17..23known future bits, before the next decision.
             if (Bits >= 8) return;
-            Value = Value << 16 | BinaryPrimitives.ReadUInt16BigEndian(data.Slice(Position, 2));
+            Value |= (uint)BinaryPrimitives.ReadUInt16BigEndian(data.Slice(Position, 2)) << (8 - Bits);
             Position += 2; Bits += 16;
         }
 
         internal int Token(ReadOnlySpan<byte> p, bool previousZero)
         {
-            if (!previousZero && Read(p[0]) == 0) return 11;
-            if (Read(p[1]) == 0) return 0;
-            if (Read(p[2]) == 0) return 1;
-            if (Read(p[3]) == 0) return Read(p[4]) == 0 ? 2 : 3 + Read(p[5]);
-            if (Read(p[6]) == 0) return 5 + Read(p[7]);
-            var upper = Read(p[8]); return 7 + 2 * upper + Read(p[9 + upper]);
+            if (!previousZero && TokenRead(p[0]) == 0) return 11;
+            if (TokenRead(p[1]) == 0) return 0;
+            if (TokenRead(p[2]) == 0) return 1;
+            if (TokenRead(p[3]) == 0) return TokenRead(p[4]) == 0 ? 2 : 3 + TokenRead(p[5]);
+            if (TokenRead(p[6]) == 0) return 5 + TokenRead(p[7]);
+            var upper = TokenRead(p[8]); return 7 + 2 * upper + TokenRead(p[9 + upper]);
         }
 
         internal int Category(int category)

@@ -44,8 +44,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,065 checks on each platform, plus 41 focused
-normal/scalar and 27 public scalar cases, and the same actual package/three examples.
+The current producer passes 5,082 checks on each platform, plus 32 affected internal
+scalar and 350 public scalar cases, and the same actual package/three examples.
 Nine tests solely for unreachable private invalid inputs were removed; public/live
 coverage, exact bicubic pixels and shared ownership remain.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -149,7 +149,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 7,754.22 | 6,004.85 | 1.291 / 1.334 | 1,966,583 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 7,638.57 | 5,995.99 | 1.274 / 2.005 | 1,966,583 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 2,030.36 | 1,582.17 | 1.283 / 1.294 | 373,416 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,251.99 | 1,839.51 | 1.224 / 1.446 | 804,644 | 52,115 / 52,117 |
@@ -216,7 +216,7 @@ and unlisted content/settings are excluded.
 | Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
-| Validate VP8+alpha, span | 8,716.160 | 5,721.858 | 1.523 / 1.697 | 770,092 | Confirmed gap |
+| Validate VP8+alpha, span | 7,367.434 | 5,452.572 | 1.351 / 1.382 | 770,092 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,942.287 | 3,614.992 | 0.814 / 0.817 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 16.133 | 13.073 | 1.234 / 1.312 | 96 | Screen gap |
@@ -233,11 +233,15 @@ copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
 validation pass independently; PNG8 and progressive420 remain confirmed gaps. VP8L and indexed
 validation rows are short screens, without independent parity claims.
-[VP8-plus-alpha validation](../benchmarks/CURRENT-VP8-ALPHA-VALIDATION.md) now
-independently confirms 1.523× / upper 1.697, 770,092 B/op on the unchanged
-qualified build. Its complete-coding/natural-frame/metadata boundary is fixed;
-zero builds or repeated full/package checks. This resolves an older screen
-without a causal speedup/regression claim. The
+[Direct VP8 token decisions](../benchmarks/WARM-VP8-DIRECT-TOKEN-DECISIONS.md)
+reduce validation elapsed by 7.20–8.12% in both counterbalanced time directions,
+with separate raw and reference-normalized confidence envelopes. Current cost
+is 1.351× / upper 1.382, unchanged 770,092 B/op. The stream companion is a current
+1.274× / upper 2.005 short gap, unchanged 1,966,583 B/op. Exact descriptor/pixels,
+source/owners/quiet gates, 5,082 full checks per OS, affected scalar checks and
+the SAME actual Release package/three examples pass. Other affected VP8 decoder
+costs need current evidence before pass claims; metadata-only reads, other codecs
+and editing retain applicable unchanged proof. The
 [shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) reduces PNG8
 validation elapsed by 22.85% filtered / 22.87% all actuals against a fresh baseline,
 with unchanged 240 B/op. Its 1.042× / upper 1.052 gap remains. PNG16 span and async

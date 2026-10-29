@@ -74,7 +74,7 @@ fails its 5% screen gate. The original source and exact qualified binaries are
 restored; accepted PNG costs, package proof and required cases are unchanged.
 No variants or independent timing confirmation follow.
 
-[Current VP8-plus-alpha validation](CURRENT-VP8-ALPHA-VALIDATION.md) independently
+The superseded [VP8-plus-alpha validation cost](CURRENT-VP8-ALPHA-VALIDATION.md) independently
 confirms the existing borrowed-span control at1.523× / upper1.697,770,092B/op.
 Complete coding, nine-field descriptor, source/surviving ownership and quiet gates
 pass, with12actuals and unchanged native/settings/input/boundary. Zero builds or
@@ -89,6 +89,18 @@ costs and required paths stay. No variants or independent confirmation follow.
 fails its 5% screen gate. Its independent exact algebra and cursor checks pass,
 but no complete-operation gain follows. Both source files/exact binaries/package
 are restored; no width/inlining variants or repeated qualification.
+
+[Direct VP8 token decisions](WARM-VP8-DIRECT-TOKEN-DECISIONS.md) accept7.20–8.12%
+less elapsed in both predeclared counterbalanced time orders, with separate raw
+and reference-normalized confidence envelopes. Current ValidateVp8Alpha1.351× /
+upper1.382,770,092B/op remains a gap; StreamNative8 has a current1.274×/upper2.005
+short,1,966,583B/op and exact frozen pixels. BothOS5,082full checks,32internal/
+350publicscalar andSAMEactualpackage/3examples pass. Same immutable source/builds
+through all measurements/qualification; no counterbalanced rebuild or retuning.
+Other buffered VP8 normal/cancelable/delivery/opaque/simple-filter/alpha costs
+need applicable current evidence;scalar short inputs and unrelated paths retain
+unchanged proof. No required case added or removed. Earlier VND1pair stays
+unqualified; this new bounded block supplies accepted evidence.
 
 ## Finite checklist
 

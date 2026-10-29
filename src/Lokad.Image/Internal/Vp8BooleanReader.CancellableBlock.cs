@@ -37,7 +37,7 @@ internal partial struct Vp8BooleanReader
             }
             return nonzero != 0;
         }
-        finally { reader.Publish(ref this, context); }
+        finally { reader.Publish(ref this); }
     }
 
     internal ref struct CancellableBlockReader
@@ -58,23 +58,24 @@ internal partial struct Vp8BooleanReader
             return reader.Read(probability);
         }
 
-        internal void Publish(ref Vp8BooleanReader target, OperationContext context)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int TokenRead(int probability)
         {
-            target.position = reader.Position - (reader.Bits + 7) / 8;
-            target.shift = (reader.Bits - 1) & 7;
-            target.range = reader.Range; target.value = (int)(reader.Value >> reader.Bits);
+            cancellation.ThrowIfCancellationRequested();
+            return reader.TokenRead(probability);
         }
 
+        internal void Publish(ref Vp8BooleanReader target) => reader.Publish(ref target);
+
         // RFC6386 section13.2, preserving the original probability/read order.
-        // Keep the existing noncancelable hot methods untouched.
         internal int Token(ReadOnlySpan<byte> p, bool previousZero)
         {
-            if (!previousZero && Read(p[0]) == 0) return 11;
-            if (Read(p[1]) == 0) return 0;
-            if (Read(p[2]) == 0) return 1;
-            if (Read(p[3]) == 0) return Read(p[4]) == 0 ? 2 : 3 + Read(p[5]);
-            if (Read(p[6]) == 0) return 5 + Read(p[7]);
-            var upper = Read(p[8]); return 7 + 2 * upper + Read(p[9 + upper]);
+            if (!previousZero && TokenRead(p[0]) == 0) return 11;
+            if (TokenRead(p[1]) == 0) return 0;
+            if (TokenRead(p[2]) == 0) return 1;
+            if (TokenRead(p[3]) == 0) return TokenRead(p[4]) == 0 ? 2 : 3 + TokenRead(p[5]);
+            if (TokenRead(p[6]) == 0) return 5 + TokenRead(p[7]);
+            var upper = TokenRead(p[8]); return 7 + 2 * upper + TokenRead(p[9 + upper]);
         }
 
         internal int Category(int category)

@@ -51,7 +51,7 @@ public sealed partial class Vp8CoefficientBlockTests
             cancellation.Cancel();
             try {buffered.Read(128);throw new Exception("Canceled decision was accepted.");}
             catch(OperationCanceledException error) {Assert.Equal(cancellation.Token,error.CancellationToken);}
-            buffered.Publish(ref actual,context);
+            buffered.Publish(ref actual);
             Assert.Equal(State(expected),State(actual));Assert.Equal(0,root.GrowthAttempts);
             Assert.Equal(0,root.Bytes);Assert.False(root.IsDisposed);
             using var following=new OperationContext(new() {},default);
