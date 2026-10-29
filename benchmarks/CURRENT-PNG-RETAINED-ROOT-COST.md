@@ -1,4 +1,7 @@
-# Current PNG cost with retained outputs and one caller root
+# PNG retained-root cost before row selection
+
+Superseded for current CPU cost by [caller-root row selection](WARM-PNG-CALLER-ROOT-ROWS.md).
+This retained record supplies its unchanged original independent baseline.
 
 The existing two-decode operation independently confirms **3,525.226 µs,
 1.237× FFmpeg / upper 1.244**, with **2,574,629 allocated B/op**. It remains a

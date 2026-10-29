@@ -139,10 +139,12 @@ internal static class PngCodec
             var pixelBytes = (long)header.Info.Width * header.Info.Height * (header.Depth == 16 ? 8 : 4);
             // Select before parsing Deflate framing. Keep the original workspace allowance
             // and every subsequent row/result admission available. Tight RGBA
-            // can stream within the original workspace; other inputs retain
+            // and caller-budgeted RGBA can stream within the original workspace;
+            // the latter avoids uncached full-frame scratch. Other inputs retain
             // the original reader. Cancelable framing
             // keeps its original per-symbol cancellation checks.
             var materialize = header.Interlace == 0
+                && !(context.HasMemoryBudget && header.ColorType == 6 && header.Info.Height <= PngRowInflation.MaxRows)
                 && filteredLength <= PixelStoragePool.MaxRetainedBytes
                 && context.RemainingWorkingBytes >= filteredLength + 4096 + 256 * 1024L
                     + pixelBytes + rowBytes * 2 + PngInflatedReader.BufferBytes;
@@ -192,7 +194,7 @@ internal static class PngCodec
                             try
                             {
                                 // Framing validation precedes row reconstruction.
-                                // Preserve the original per-row atomic charges.
+                                // Keep cooperative cancellation at row boundaries.
                                 output.DecodeRows(context);
                                 speculative.Orientation = header.Info.Orientation;
                                 var result = speculative; speculative = null; return result;

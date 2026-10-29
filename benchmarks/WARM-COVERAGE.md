@@ -140,6 +140,15 @@ quiet gates pass. Zero builds or repeated qualification. One affected cost is
 resolved after scan CRC reuse; 51 remain. It is a gap without a causal comparison
 against older producers. No required case added or removed.
 
+[Caller-root PNG row selection](WARM-PNG-CALLER-ROOT-ROWS.md) supersedes
+the retained-root CPU cost: 3.13% less independent elapsed, 36.37% fewer allocated
+bytes (1,638,183 B/op) and 1,766,641-byte admitted peak, with exact ownership and
+cleanup. Current ratio 1.201 / upper 1.204 remains a gap. The changed shared Decode
+body affects 53 existing boundaries; current stored16 is independently refreshed
+at 0.753 / upper 0.758 and stops. Four Scan-only validation paths retain PCF1 costs.
+51 named decode/stream/composition costs remain. Full 5,082/OS, 225 focused public
+normal/scalar per OS and SAME actual package/three examples pass. No new cases.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

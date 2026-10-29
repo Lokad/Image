@@ -245,21 +245,23 @@ costs need current evidence before pass claims; metadata-only reads, other codec
 and editing retain applicable unchanged proof. The
 [shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) retains its
 earlier dataflow and resource proof. [Folded CRC reuse](../benchmarks/WARM-PNG-SCAN-CRC-REUSE.md)
-now independently reduces stored RGBA16 decode elapsed by 28.7% to 237.983 µs,
-0.750× / upper 0.760, unchanged 8,568 B/op. PNG16 span/async validation pass at
+accepted 28.7% less stored RGBA16 decode elapsed. On the current build, that case
+independently passes at 222.536 µs, 0.753× / upper 0.758, 8,568 B/op; stop.
+The unchanged PNG16 span/async validation paths pass at
 0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 remains 1.366× /
 upper 1.423, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
 0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
-Both platforms pass 5,082 checks, 117 focused normal/scalar checks, 452 public
-scalar checks and the same actual package/three examples. No storage or admission
-boundary changes. The other 51
-affected existing PNG decode/stream/composition costs need current evidence;
-PNG encoding, metadata-only scans and unrelated paths retain applicable proof.
-[Two retained PNG outputs under one caller root](../benchmarks/CURRENT-PNG-RETAINED-ROOT-COST.md)
-independently confirm 1.237× / upper 1.244, 2,574,629 B/op and a 2,306,560-byte
-admitted peak. Both full decodes, output overlap/release and managed admission
-are timed. Exact pixels, root/source ownership and cleanup pass. Zero builds or
-repeated qualification; this is a current cost, not a gain against older screens.
+[Caller-root PNG row selection](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
+avoids uncached full-frame scratch: two retained outputs independently improve
+3.13% elapsed and 36.37% allocation to 1.201× / upper 1.204, 1,638,183 B/op,
+with admitted peak 2,306,560 → 1,766,641 bytes. Both full decodes, output overlap,
+release and managed admission are timed; exact pixels/owners/cleanup pass.
+The predeclared allocation-saving exception and both confidence views pass.
+All 5,082 checks per OS, 225 focused public normal/scalar checks and the SAME
+actual package/three examples pass. One core build per OS is reused, with zero
+harness/native/selector builds. The other 51 affected existing PNG decode/stream/
+composition costs need current evidence; unchanged validation, encoding,
+metadata-only scans and unrelated paths retain applicable proof.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
