@@ -1,5 +1,8 @@
 # Current tight bicubic cross16 cost
 
+Superseded by [output-resident word rows](WARM-BICUBIC-OUTPUT-ROW-CACHE.md);
+the unchanged original measurements below remain historical evidence.
+
 The existing 513×259 RGBA16 →256×519 TightCross16 control independently confirms
 1,285.382 µs, 1.570× / conservative upper1.580, 1,063,410 allocated B/op.
 It remains a CPU gap. Twelve actuals and eleven filtered observations, both native

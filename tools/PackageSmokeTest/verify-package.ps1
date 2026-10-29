@@ -454,6 +454,55 @@ foreach (var (cachedDepth, cachedHash) in new[]
     if (cachedRoot.Bytes != 0 || cachedRoot.IsDisposed) throw new Exception("Package cached bicubic root cleanup differs.");
 }
 Console.WriteLine("Packaged cached bicubic passed (8/16-bit pixels, admission and ownership).");
+using (var crossRoot = new Lokad.Image.Tooling.TestMemoryBudget((513L * 259 + 2L * 256 * 519) * 8 + 4096))
+{
+    const long crossOutputBytes = 256L * 519 * 8;
+    var crossLimits = new ImageLimits { MemoryBudget = crossRoot,
+        MaxWorkingBytes = (513L * 259 + 256L * 519) * 8 + 4096 };
+    using var crossSource = ImageBuffer.Create(513, 259, 16, crossLimits);
+    var crossRecipe = Lokad.Image.Tooling.OriginalPixels.Generate(513, 259, 16);
+    for (var y = 0; y < 259; y++)
+    for (var i = 0; i < 513 * 4; i++)
+        crossSource.GetRow16(y)[i] = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(
+            crossRecipe.AsSpan((y * 513 * 4 + i) * 2));
+    crossSource.GetRow16(0)[3] = crossSource.GetRow16(0)[513 * 4 - 1] = 0;
+    var crossInput = Lokad.Image.Tooling.OriginalPixels.Bytes(crossSource);
+    const string crossHash = "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1";
+    using var crossFirst = ImageTransforms.Resize(crossSource, 256, 519, ResizeFilter.Bicubic, crossLimits);
+    using var crossSecond = ImageTransforms.Resize(crossSource, 256, 519, ResizeFilter.Bicubic, crossLimits);
+    var crossLive = crossRoot.Bytes;
+    if (crossLive != 513L * 259 * 8 + 2 * crossOutputBytes
+        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(
+            Lokad.Image.Tooling.OriginalPixels.Bytes(crossSecond))) != crossHash
+        || !crossInput.AsSpan().SequenceEqual(Lokad.Image.Tooling.OriginalPixels.Bytes(crossSource)))
+        throw new Exception("Packaged tight word bicubic pixels or retained admission differ.");
+    crossRoot.RefuseAtGrowth = crossRoot.GrowthAttempts + 1;
+    try
+    {
+        using var refused = ImageTransforms.Resize(crossSource, 256, 519, ResizeFilter.Bicubic, crossLimits);
+        throw new Exception("Packaged tight word bicubic ignored shared admission refusal.");
+    }
+    catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget && e.Limit == ImageLimitKind.WorkingBytes)
+    {
+        if (crossRoot.Bytes != crossLive || crossRoot.Refusals != 1)
+            throw new Exception("Packaged tight word bicubic refusal cleanup differs.");
+    }
+    finally { crossRoot.RefuseAtGrowth = 0; }
+    crossFirst.GetRow16(0)[0] ^= 65535; crossFirst.Dispose();
+    using (var recovered = ImageTransforms.Resize(crossSource, 256, 519, ResizeFilter.Bicubic, crossLimits))
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(
+            Lokad.Image.Tooling.OriginalPixels.Bytes(recovered))) != crossHash)
+            throw new Exception("Packaged tight word bicubic failed after released capacity.");
+    crossSource.Dispose();
+    if (crossRoot.Bytes != crossOutputBytes
+        || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(
+            Lokad.Image.Tooling.OriginalPixels.Bytes(crossSecond))) != crossHash)
+        throw new Exception("Packaged tight word bicubic survivor depends on disposed owners.");
+    crossSecond.Dispose();
+    if (crossRoot.Bytes != 0 || crossRoot.IsDisposed)
+        throw new Exception("Packaged tight word bicubic root cleanup differs.");
+}
+Console.WriteLine("Packaged tight word bicubic passed (exact pixels, shared admission and surviving owners).");
 using (var packageWideRoot = new Lokad.Image.Tooling.TestMemoryBudget(513 * 259 * 4 + 2 * 128 * 64 * 4 + 4096))
 {
     var packageWideLimits = new ImageLimits { MemoryBudget = packageWideRoot, MaxWorkingBytes = 513 * 259 * 4 + 128 * 64 * 4 + 4096 };

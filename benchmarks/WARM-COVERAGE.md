@@ -38,7 +38,7 @@ restoration in linked reports: [packed premultiplication](LANCZOS3-PACKED-PREMUL
 [paired normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md),
 [reciprocal normalization](LANCZOS3-RECIPROCAL-NORMALIZATION-REJECTED.md) and
 [coefficient symmetry](LANCZOS3-COEFFICIENT-SYMMETRY-REJECTED.md).
-Exact qualified production is restored; these trials change no accepted cost,
+The original Lanczos implementation is restored; these trials change no accepted cost,
 required case or applicable full/package qualification.
 
 [Current effort-6 VP8 diagram](CURRENT-VP8-EFFORT6-COST.md) independently
@@ -58,6 +58,15 @@ confirms1.360× / upper1.397,20,418,440B/op and exact160,032Bpackets. A shared
 color-mask candidate fails confirmation; original source/exact binaries are
 restored. All native/pixel/source/owner/quiet gates pass; unchanged full/package
 proof is reused. The photograph remains a gap; no required case changes.
+
+[Output-resident word rows](WARM-BICUBIC-OUTPUT-ROW-CACHE.md) accepts26.2–29.3%
+lower TightCross16 mean elapsed in both predeclared A/B/B/A time directions,
+with separate filtered/unfiltered and reference-normalized confidence envelopes.
+Current conservative cost1.232× / upper1.396,1,063,419B/op remains a gap. Only
+TightCross16/TightHorizontal16 costs invalidate; both are refreshed. Exact pixels,
+native/source/owners/quiet,5,080checks/OS and SAME actual package/three examples
+pass. Reuse the exact existing build/scalar proof; no core/harness/native rebuild,
+new image or profile. The prior COR1 result keeps its unqualified status.
 
 ## Finite checklist
 
@@ -638,7 +647,8 @@ need applicable current costs before CPU-pass claims. Methods0–4, other codecs
 decoders, editing/text and passing resize cases retain applicable unchanged proof.
 No path or parity pass is added; the full268 objective remains open.
 
-[TightCross16 confirmation](CURRENT-BICUBIC-CROSS16-COST.md) resolves the wide
+The prior [TightCross16 confirmation](CURRENT-BICUBIC-CROSS16-COST.md), now
+superseded by output-resident rows, resolved the wide
 short-screen confidence:1.570× / upper1.580,1,285.382µs,1,063,410B/op. All twelve
 actuals and exact pixels/native bounds/owners/guards pass. No gain/regression
 claim against earlier screens. Current immutable TGV1 producer and cached
@@ -681,7 +691,7 @@ independent TightCross16 confirmation current and close this pairing family.
 The distinct [output-resident row-cache trial](BICUBIC-OUTPUT-ROW-CACHE-UNQUALIFIED.md)
 has23.723%lower confirmation means but fails its predeclared native-stability
 limit (7.688%drift versus3%). It is unqualified, not an accepted gain or parity
-pass. Production/exact binaries are restored; six useful precision/ownership/
+pass. Production/exact binaries were restored for that trial; six useful precision/ownership/
 cleanup controls remain. No variants or repeated confirmations; unchanged
 full/package evidence and accepted costs carry forward.
 Closed source-energy, histogram,

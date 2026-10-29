@@ -60,10 +60,12 @@ reduces Up16 elapsed by 15.1% in a fresh independent pair, retaining exact pixel
 1.221× / upper 1.234, 5,016,602 B/op (measured +8 B/op; no new owned buffer).
 Its VerticalUp16 companion independently passes at 0.964× / upper 0.973,
 2,516,728 B/op; stop this unchanged case. All five affected word controls have
-current costs. TightCross16 has an
-[independent current confirmation](../benchmarks/CURRENT-BICUBIC-CROSS16-COST.md):
-1.570× / upper1.580,1,063,410B/op. This unchanged-path follow-up reuses qualification
-and makes no gain/regression claim against earlier short screens.
+current costs. [Output-resident rows](../benchmarks/WARM-BICUBIC-OUTPUT-ROW-CACHE.md)
+reduce TightCross16 elapsed26.2–29.3% in both counterbalanced time orders; all raw
+and reference-normalized confidence gates pass. Current conservative cost is
+1.232× / upper1.396,1,063,419B/op. Existing private output supplies workspace,
+with no added owned capacity; full5,080checks/OS and SAME actual package/three
+examples pass. The identity-height companion has a current short gap.
 The [cached-path reconciliation](../benchmarks/CURRENT-BICUBIC-CACHED-COSTS.md)
 retains mixed-axis costs and exact-half qualifications; byte zero-tap trimming
 and shared word publication supersede its other rows with current results.
@@ -183,7 +185,7 @@ control scope. These measurements make no arbitrary-content compression claim.
 | Bilinear resize RGBA16 → 256×129 | 543.06 | 417.56 | 1.301 / 1.411 | 290,128 |
 | Bicubic resize RGBA8 † → 256×129 | 572.97 | 417.08 | 1.374 / 1.441 | 332,188 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,285.38 | 818.88 | 1.570 / 1.580 | 1,063,410 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
 | Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |

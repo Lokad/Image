@@ -44,9 +44,10 @@ def render():
     horizontal_cost = json.loads((ROOT / 'benchmarks/warm-bicubic-horizontal-taps-evidence.json').read_text(encoding='utf-8'))
     word_publication = json.loads((ROOT / 'benchmarks/warm-bicubic-shared-word-publication-evidence.json').read_text(encoding='utf-8'))
     byte_zero_taps = json.loads((ROOT / 'benchmarks/warm-bicubic-zero-taps-evidence.json').read_text(encoding='utf-8'))
-    cross16_cost = json.loads((ROOT / 'benchmarks/current-bicubic-cross16-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not cross16_cost['productionChanged'] and cross16_cost['allBuilds'] == 0
-    assert cross16_cost['independentQuietConfirmation']
+    cross16_cost = json.loads((ROOT / 'benchmarks/warm-bicubic-output-row-cache-evidence.json').read_text(encoding='utf-8'))
+    assert cross16_cost['productionChanged'] and cross16_cost['workflow']['productionBuilds'] == 0
+    assert cross16_cost['independentCounterbalancedBlock'] and cross16_cost['decision']['allGatesPassed']
+    assert cross16_cost['qualification']['sameActualPackageBothOs']
     lanczos_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-reduce8-cost-evidence.json').read_text(encoding='utf-8'))
     assert not lanczos_cost['productionChanged'] and lanczos_cost['productionHarnessNativeBuilds'] == 0
     assert lanczos_cost['selectorBuilds'] == 1 and lanczos_cost['independentQuietConfirmation']
@@ -335,10 +336,12 @@ reduces Up16 elapsed by 15.1% in a fresh independent pair, retaining exact pixel
 1.221× / upper 1.234, 5,016,602 B/op (measured +8 B/op; no new owned buffer).
 Its VerticalUp16 companion independently passes at 0.964× / upper 0.973,
 2,516,728 B/op; stop this unchanged case. All five affected word controls have
-current costs. TightCross16 has an
-[independent current confirmation](../benchmarks/CURRENT-BICUBIC-CROSS16-COST.md):
-1.570× / upper1.580,1,063,410B/op. This unchanged-path follow-up reuses qualification
-and makes no gain/regression claim against earlier short screens.
+current costs. [Output-resident rows](../benchmarks/WARM-BICUBIC-OUTPUT-ROW-CACHE.md)
+reduce TightCross16 elapsed26.2–29.3% in both counterbalanced time orders; all raw
+and reference-normalized confidence gates pass. Current conservative cost is
+1.232× / upper1.396,1,063,419B/op. Existing private output supplies workspace,
+with no added owned capacity; full5,080checks/OS and SAME actual package/three
+examples pass. The identity-height companion has a current short gap.
 The [cached-path reconciliation](../benchmarks/CURRENT-BICUBIC-CACHED-COSTS.md)
 retains mixed-axis costs and exact-half qualifications; byte zero-tap trimming
 and shared word publication supersede its other rows with current results.
