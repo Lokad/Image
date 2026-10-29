@@ -30,6 +30,8 @@ public sealed class LanczosTests
         yield return [8, 1, 5, 3, 9, false];
         yield return [16, 5, 1, 9, 3, false];
         yield return [16, 9, 131, 5, 3, false]; // Greater than the bounded row cache.
+        yield return [16, 31, 23, 16, 12, false]; // Transparent reduction across multiple output rows.
+        yield return [16, 7, 3, 19, 9, false]; // Enlargement with tiny and zero alpha.
     }
     [Theory]
     [MemberData(nameof(Cases))]

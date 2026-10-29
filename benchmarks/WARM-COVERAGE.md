@@ -36,8 +36,9 @@ restoration in linked reports: [packed premultiplication](LANCZOS3-PACKED-PREMUL
 [vertical batching](LANCZOS3-FOUR-TAP-VERTICAL-REJECTED.md),
 [word spans](LANCZOS3-WORD-SPAN-HOISTING-REJECTED.md),
 [paired normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md),
-[reciprocal normalization](LANCZOS3-RECIPROCAL-NORMALIZATION-REJECTED.md) and
-[coefficient symmetry](LANCZOS3-COEFFICIENT-SYMMETRY-REJECTED.md).
+[reciprocal normalization](LANCZOS3-RECIPROCAL-NORMALIZATION-REJECTED.md),
+[coefficient symmetry](LANCZOS3-COEFFICIENT-SYMMETRY-REJECTED.md) and
+[output-resident source products](LANCZOS3-OUTPUT-ROW-PRODUCTS-REJECTED.md).
 The original Lanczos implementation is restored; these trials change no accepted cost,
 required case or applicable full/package qualification.
 
