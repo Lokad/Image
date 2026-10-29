@@ -69,6 +69,11 @@ native/source/owners/quiet,5,080checks/OS and SAME actual package/three examples
 pass. Reuse the exact existing build/scalar proof; no core/harness/native rebuild,
 new image or profile. The prior COR1 result keeps its unqualified status.
 
+[Bounded greedy cancellation polling](PNG-FAST-CANCELLATION-POLLS-REJECTED.md)
+fails its 5% screen gate. The original source and exact qualified binaries are
+restored; accepted PNG costs, package proof and required cases are unchanged.
+No variants or independent timing confirmation follow.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
