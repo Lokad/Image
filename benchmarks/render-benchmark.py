@@ -55,6 +55,16 @@ def render():
         assert root_observation['receipt']['librarySha256'] == png_root_rows['producers']['linuxSha256']
         assert len(root_observation['managed']['actual']) == 12 and all(q['passed'] for q in root_observation['quietness'].values())
         assert (root_observation['conservativeRatioUpper'] <= 1) == (png_root_rows['status'][case] == 'confirmed-pass')
+    png_rgba_costs = json.loads((ROOT / 'benchmarks/current-png-rgba-decode-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_rgba_costs['productionChanged'] and png_rgba_costs['productionHarnessNativeBuilds'] == 0
+    assert png_rgba_costs['producers']['linuxSha256'] == png_root_rows['producers']['linuxSha256']
+    assert png_rgba_costs['status'] == {'Decode8': 'confirmed-gap', 'Decode16': 'confirmed-confidence-open'}
+    for case, observations in png_rgba_costs['cases'].items():
+        rgba_observation = observations[-1]
+        assert len(rgba_observation['managed']['actual']) == 12 and all(q['passed'] for q in rgba_observation['quietness'].values())
+        assert rgba_observation['receipt']['librarySha256'] == png_rgba_costs['producers']['linuxSha256']
+        assert rgba_observation['conservativeRatioUpper'] > 1
+        assert (rgba_observation['worstBracketRatio'] < 1) == (case == 'Decode16')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -501,9 +511,15 @@ release and managed admission are timed; exact pixels/owners/cleanup pass.
 The predeclared allocation-saving exception and both confidence views pass.
 All 5,082 checks per OS, 225 focused public normal/scalar checks and the SAME
 actual package/three examples pass. One core build per OS is reused, with zero
-harness/native/selector builds. The other 51 affected existing PNG decode/stream/
+harness/native/selector builds. The other 49 affected existing PNG decode/stream/
 composition costs need current evidence; unchanged validation, encoding,
 metadata-only scans and unrelated paths retain applicable proof.
+[Current resident PNG costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md)
+resolve RGBA8 at 1.131× / upper 1.166, 4,472 B/op (gap), and RGBA16 at 0.999× /
+upper 1.006, 8,568 B/op (confidence open). All 12 actuals per case and exact
+pixels/owners/quiet gates pass. No retiming, pooling or pass claim from mean
+alone. One generic typed-int selector is reused; production/harness/native and
+full/package qualification are unchanged.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

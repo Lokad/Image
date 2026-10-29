@@ -149,6 +149,13 @@ at 0.753 / upper 0.758 and stops. Four Scan-only validation paths retain PCF1 co
 51 named decode/stream/composition costs remain. Full 5,082/OS, 225 focused public
 normal/scalar per OS and SAME actual package/three examples pass. No new cases.
 
+[Current resident RGBA PNG costs](CURRENT-PNG-RGBA-DECODE-COSTS.md) resolve two
+more existing cases without production rebuilds: RGBA8 1.131 / upper 1.166,
+4,472 B/op is a gap; RGBA16 0.999 / upper 1.006, 8,568 B/op remains confidence
+open. Both have 12 actuals, exact pixels/ownership and quiet guards. No retiming
+or pass claim from mean alone. One generic cached-harness selector is reusable.
+49 affected costs still need refresh, with current functional/package proof reused.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
