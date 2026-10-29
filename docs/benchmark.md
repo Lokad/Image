@@ -16,14 +16,17 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph/effort6 diagram, VP8L RGBA8 encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph/effort6 diagram, VP8L RGBA8/16 encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
 Shared-history predictor pricing reduces VP8L RGBA8
 elapsed by 7.4% against a fresh independent baseline, preserving exact packets.
 It remains a1.332× / upper1.360 gap. Allocation rises by8,224B/op for one reusable
-8KiB analysis buffer; RGBA16/async/photograph have current screens.
+8KiB analysis buffer. [RGBA16 confirmation](../benchmarks/CURRENT-VP8L-RGBA16-COST.md)
+resolves the wide screen at1.341× / upper1.431,29,696,928B/op and exact183,812B
+packets; this makes no causal comparison against older screens. Async/photograph
+retain current screens.
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
@@ -155,7 +158,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,535.94 | 15,580.45 | 1.318 / 1.375 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 161,904.66 | 120,988.24 | 1.338 / 1.923 | 29,696,928 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 185,381.86 | 138,254.62 | 1.341 / 1.431 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 162,750.37 | 120,441.78 | 1.351 / 1.431 | 29,697,312 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 † | 109,137.75 | 82,564.36 | 1.322 / 1.411 | 20,417,624 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |

@@ -47,6 +47,12 @@ native brackets/CLI pixels/source/owners/quiet pass. Zero builds; unchanged
 full/package proof reused. It remains a gap, without a causal comparison against
 the older short screen. No required case added or removed.
 
+[Current RGBA16 lossless WebP](CURRENT-VP8L-RGBA16-COST.md) independently
+confirms1.341× / upper1.431,29,696,928B/op and exact183,812Bpackets. All12actuals,
+native/sample/alpha/hiddenRGB/source/owner/quiet gates pass. Zero builds and
+unchanged qualification reused; no causal comparison against older screens.
+It remains a gap; required controls/settings stay unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
