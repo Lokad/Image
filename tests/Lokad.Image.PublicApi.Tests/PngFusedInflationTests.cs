@@ -5,10 +5,11 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class PngFusedInflationTests
 {
     [Theory]
-    [InlineData(8)] [InlineData(16)]
-    public void FixedCompleteTreesPreserveExactPixelsAndTightAdmission(int depth)
+    [InlineData(8, false)] [InlineData(16, false)]
+    [InlineData(8, true)] [InlineData(16, true)]
+    public void FixedCompleteTreesPreserveExactPixelsAndTightAdmission(int depth, bool interlace)
     {
-        var frame = new AuthoredPng.Frame("fused", 6, depth, 19, 17, false);
+        var frame = new AuthoredPng.Frame("fused", 6, depth, 19, 17, interlace);
         var raw = AuthoredPng.FilteredRows(frame);
         var compressed = AuthoredDeflate.Fixed(raw.Select(value => new AuthoredDeflate.Token(value)), raw);
         var encoded = AuthoredPng.Wrap(frame, compressed); var original = encoded.ToArray();
@@ -28,9 +29,41 @@ public sealed class PngFusedInflationTests
             new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = peak - 1 } }));
         Assert.Throws<ImageLimitException>(() => ImageCodec.Decode(encoded,
             new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = peak - 1 } }, cancellation.Token));
+        using var root = new TestMemoryBudget(4 * 1024 * 1024);
+        using (var charged = ImageCodec.Decode(encoded,
+            new DecodeOptions { Limits = new ImageLimits { MaxWorkingBytes = peak, MemoryBudget = root } }))
+        {
+            Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(charged));
+            Assert.Equal(19 * 17 * (depth / 8) * 4, root.Bytes);
+        }
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
         if (depth == 8) fused.GetRow8(0)[0] ^= 255; else fused.GetRow16(0)[0] ^= 65535;
         Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(originalPath));
         Assert.Equal(original, encoded);
+    }
+
+    [Theory]
+    [InlineData(false, false)] [InlineData(false, true)]
+    [InlineData(true, false)] [InlineData(true, true)]
+    public void Adam7FilterAndChecksumFailuresKeepReplayOrderAndReleaseSharedStorage(bool lastRow, bool badChecksum)
+    {
+        var frame = new AuthoredPng.Frame("adam7-replay", 6, 16, 19, 17, true);
+        var valid = AuthoredPng.FilteredRows(frame); var rows = valid.ToArray();
+        // The final Adam7 pass has full-width rows, including the last row.
+        rows[lastRow ? rows.Length - (19 * 8 + 1) : 0] = 5;
+        var compressed = AuthoredDeflate.Fixed(rows.Select(value => new AuthoredDeflate.Token(value)), rows);
+        if (badChecksum) compressed[^1] ^= 1;
+        var encoded = AuthoredPng.Wrap(frame, compressed);
+        using var root = new TestMemoryBudget(4 * 1024 * 1024);
+        var options = new DecodeOptions { Limits = ImageLimits.Default with { MemoryBudget = root } };
+        var first = Record.Exception(() => { using var image = ImageCodec.Decode(encoded); });
+        var replay = Record.Exception(() => { using var image = ImageCodec.Decode(encoded, options); });
+        Assert.IsType<ImageDataException>(first); Assert.Equal(first.GetType(), replay?.GetType());
+        Assert.Equal(first.Message, replay?.Message); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        var recovered = AuthoredPng.Wrap(frame, AuthoredDeflate.Fixed(valid.Select(value => new AuthoredDeflate.Token(value)), valid));
+        using (var image = ImageCodec.Decode(recovered, options))
+            Assert.Equal(AuthoredPng.Expected(frame), OriginalPixels.Bytes(image));
+        Assert.Equal(0, root.Bytes);
     }
 
     [Theory]

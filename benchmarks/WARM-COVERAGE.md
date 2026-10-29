@@ -184,6 +184,13 @@ pass and stop;Adam7RGBA16 remains1.346/upper1.362,23616Bop. Exactpixels/owners/
 native/quiet all12actuals pass. Current diagnostic identifies47.1%BCL inflation
 versus1.7%sparsecopy; no microcopy trial.37costs remain unrefreshed, no case added.
 
+[Adam7 framed-output reuse](WARM-PNG-ADAM7-FRAMED-OUTPUT.md) supersedes the
+seven-pass gap:43.8%less elapsed,0.758/upper0.761,23240Bop PASS/STOP. Additional
+admitted filtered capacity1063423B uses the existing bounded pool; shared-root
+and tight-ceiling behavior remains. Full5094/OS,11kernel+231publicnormal/scalar
+andSAMEactualpackage/3examples pass,one corebuild/OS,zero otherbuilds.37existing
+costs remain unrefreshed; unchanged relevant-path evidence is reused.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

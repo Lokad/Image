@@ -257,7 +257,7 @@ avoids uncached full-frame scratch: two retained outputs independently improve
 with admitted peak 2,306,560 → 1,766,641 bytes. Both full decodes, output overlap,
 release and managed admission are timed; exact pixels/owners/cleanup pass.
 The predeclared allocation-saving exception and both confidence views pass.
-Current production passes 5,088 checks per OS, 11 kernel and 225 public checks
+Current production passes 5,094 checks per OS, 11 kernel and 231 public checks
 normal/scalar, and the SAME actual package/three examples. Each accepted round
 reuses one core build per OS, with zero harness/native/selector builds in these
 PNG optimizations. The other 37 affected existing PNG decode/stream/
@@ -283,9 +283,15 @@ They reuse the frozen build/selector/native worker and full/package proof, with
 zero builds or repeated qualification.
 [Word expansion and Adam7](../benchmarks/CURRENT-PNG-WORD-DECODE-COSTS.md)
 refresh four existing controls: RGB16/gray-alpha16/gray16 pass with uppers
-0.996/0.851/0.739, allocated 6,520/4,472/2,424 B/op. Adam7 RGBA16 remains a
-1.346× / upper 1.362 gap, 23,616 B/op. All 12 actuals and exact pixels/owners/
-quiet gates pass; no rebuilds, new workloads or repeated qualification.
+0.996/0.851/0.739, allocated 6,520/4,472/2,424 B/op.
+[Adam7 framed-output reuse](../benchmarks/WARM-PNG-ADAM7-FRAMED-OUTPUT.md)
+then removes duplicate inflation: 43.8% less elapsed, 0.758× / upper 0.761,
+23,240 B/op; pass and stop. It admits 1,063,423 bytes of additional filtered
+capacity in the existing bounded pool; shared-root and tight-ceiling paths stay.
+All 12 actuals, exact pixels/owners/error/cancellation and confidence gates pass.
+Six authored interlace/replay/root cases are added; full qualification and the
+SAME actual package pass on both OSes. One core build per OS; no harness/native/
+selector builds, new benchmark images or cases. Unchanged-path evidence is reused.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

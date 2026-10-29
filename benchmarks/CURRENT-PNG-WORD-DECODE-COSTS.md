@@ -1,12 +1,12 @@
 # Current 16-bit PNG decode costs
 
-Three existing word-expansion controls independently pass and stop. Seven-pass
-RGBA16 remains a demonstrated gap. No production change or causal comparison
+Three word-expansion controls pass and stop. The Adam7baseline below is
+superseded by [framed-output reuse](WARM-PNG-ADAM7-FRAMED-OUTPUT.md), which passes. No production change or causal comparison
 against older producers is made.
 
 | Complete 513×259 decode | Lokad µs | Ratio / upper | Allocated B/op | Status |
 | --- | ---: | ---: | ---: | --- |
-| Adam7 RGBA16 | 5,293.592 | 1.346 / 1.362 | 23,616 | Gap |
+| Adam7 RGBA16 | 5,293.592 | 1.346 / 1.362 | 23,616 | Prior; superseded |
 | RGB16 → RGBA16 | 2,193.172 | 0.986 / 0.996 | 6,520 | Pass; stop |
 | Gray-alpha16 → RGBA16 | 1,519.872 | 0.846 / 0.851 | 4,472 | Pass; stop |
 | Gray16 → RGBA16 | 702.848 | 0.732 / 0.739 | 2,424 | Pass; stop |

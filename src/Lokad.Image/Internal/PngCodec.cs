@@ -143,7 +143,9 @@ internal static class PngCodec
             // the latter avoids uncached full-frame scratch. Other inputs retain
             // the original reader. Cancelable framing
             // keeps its original per-symbol cancellation checks.
-            var materialize = header.Interlace == 0
+            // Adam7's concatenated pass rows can reuse the same certified output.
+            // Keep the existing shared-root storage requirements for interlace.
+            var materialize = (header.Interlace == 0 || header.ColorType == 6 && !context.HasMemoryBudget)
                 && !(context.HasMemoryBudget && header.ColorType == 6 && header.Info.Height <= PngRowInflation.MaxRows)
                 && filteredLength <= PixelStoragePool.MaxRetainedBytes
                 && context.RemainingWorkingBytes >= filteredLength + 4096 + 256 * 1024L
