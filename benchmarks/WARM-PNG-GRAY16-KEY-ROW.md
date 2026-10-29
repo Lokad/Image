@@ -1,8 +1,8 @@
 # Direct PNG gray16 color-key expansion
 
 Complete gray16 color-key decoding improves **76.2%**, with unchanged
-**2,456B/op**, and independently passes warm one-CPU parity. Stop this case.
-Both filtered/unfiltered raw99.9%CIs and conservative normalized envelopes
+**2,456 B/op**, and independently passes warm one-CPU parity. Stop this case.
+Both filtered/unfiltered raw 99.9% CIs and conservative normalized envelopes
 separate from the valid prior independent confirmation.
 
 | Complete 513×259 decode | Lokad µs | Ratio / upper | Allocated B/op |
@@ -25,13 +25,14 @@ decode/normalization/owned output/disposal and exactsamples/alpha/hiddenRGB/
 source/owner gates remain. All raw/native brackets and idle-v2 guards are retained.
 Native allocations are unmeasured; no newimage/settings or timing sweep.
 
-All5,129checks/OS pass (2,046internal,2,135public,948live), plus36kernel and231public
-checks normal/scalar perOS.22new cases cover every65,536sample under8explicitkeys,
+All 5,129 checks/OS pass (2,046 internal, 2,135 public, 948 live), plus 36 kernel
+and 231 public checks normal/scalar per OS. The 22 new cases cover all 65,536
+sample values under eight explicit keys,
 fullword and low-byte distinctions, hiddenRGB, tails/unaligned guards and
-cancellation. The SAMEactualReleasepackage andthreeexamples pass bothOS.
-Onecorebuild/OS,zero harness/native/selector builds; immutable binaries reused
-throughout. Published releases remain immutable.17existingPNG costs still need
-refresh; this scoped pass does not complete the full268pathobjective.
+cancellation. The same actual Release package and three examples pass both OSes.
+One core build/OS, zero harness/native/selector builds; immutable binaries reused
+throughout. Published releases remain immutable. At this checkpoint, 17 existing
+PNG costs needed refresh; this scoped pass does not complete the 268-path objective.
 
 [Evidence](warm-png-gray16-key-row-evidence.json) and
 [prior color-key costs](CURRENT-PNG-TRANSPARENCY-COSTS.md).

@@ -44,8 +44,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,129 checks on each platform, plus36affected kernel
-and231public checks normal/scalar perOS, and the SAMEactualpackage/threeexamples.
+The current producer passes 5,129 checks on each platform, plus 36 affected kernel
+and 231 public checks normal/scalar per OS, and the same actual package/three examples.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -262,7 +262,11 @@ removes generic pixelmapping:76.2%less elapsed,0.341× / upper0.342,unchanged
 Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8 1.274/upper 1.283 gap; Adam7 palette4 1.250/upper 1.251 gap.
 Exact pixels, owners, native and quiet gates pass; zero builds or repeated qualification.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 13 existing decode/stream/
+[Policies and packed keys](../benchmarks/CURRENT-PNG-POLICY-PACKED-KEY-COSTS.md)
+resolve eight more costs. Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable 1.016 / upper 1.022 gap; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable 1.387 / upper 1.395 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
+All actuals, pixels, owners, policies, native and quiet gates pass; zero builds.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has five existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 

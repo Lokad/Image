@@ -227,6 +227,11 @@ Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper
 All 12 actuals, pixels, owners, native and quiet gates pass; zero builds.
 13 existing PNG costs remain unrefreshed; full 268-path objective.
 
+[Policy/packed-key costs](CURRENT-PNG-POLICY-PACKED-KEY-COSTS.md) resolve eight:
+Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable 1.016 / upper 1.022 gap; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable 1.387 / upper 1.395 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
+All 12 actuals, pixels, owners, policies, native and quiet gates pass; zero builds.
+Only five PNG stream/composition costs remain unrefreshed; full268pathobjective.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
