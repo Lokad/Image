@@ -172,6 +172,12 @@ descriptor/owners and restored proof. Full5088/OS,11kernel+225public normal/scal
 andSAMEactualpackage/3examples pass. One corebuild/OS,zero harness/native/selector
 builds.45costs remain unrefreshed; no case added or removed.
 
+[Current Sub/Up PNG costs](CURRENT-PNG-SUB-UP-COSTS.md) resolve four more existing
+cases with zero builds: Sub8/16 uppers0.728/0.413, Up8/16 uppers0.767/0.818 pass
+and stop,4472/8568Bop. All12actuals,exact pixels/owners/native andquiet gates pass.
+One immutablePAV1build/selector is reused; no qualification/package repeats.
+41affected costs remain unrefreshed. No case added or removed.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
