@@ -252,9 +252,14 @@ upper 1.423, 1,168 B/op. PNG8 remains confidence-open after one bounded resoluti
 0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
 Both platforms pass 5,082 checks, 117 focused normal/scalar checks, 452 public
 scalar checks and the same actual package/three examples. No storage or admission
-boundary changes. The other 52
+boundary changes. The other 51
 affected existing PNG decode/stream/composition costs need current evidence;
 PNG encoding, metadata-only scans and unrelated paths retain applicable proof.
+[Two retained PNG outputs under one caller root](../benchmarks/CURRENT-PNG-RETAINED-ROOT-COST.md)
+independently confirm 1.237× / upper 1.244, 2,574,629 B/op and a 2,306,560-byte
+admitted peak. Both full decodes, output overlap/release and managed admission
+are timed. Exact pixels, root/source ownership and cleanup pass. Zero builds or
+repeated qualification; this is a current cost, not a gain against older screens.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

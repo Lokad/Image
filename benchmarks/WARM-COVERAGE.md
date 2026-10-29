@@ -132,6 +132,14 @@ remain. No required case added/removed. PNG encoding and metadata-only Identify/
 inspection/probing, other codecs and editing/text over decoded buffers retain
 valid unchanged evidence. Do not confuse older2× successes with current1× proof.
 
+[Current two-retained-output PNG cost](CURRENT-PNG-RETAINED-ROOT-COST.md)
+independently confirms the existing caller-root boundary at 1.237× / upper 1.244,
+2,574,629 B/op and 2,306,560-byte admission peak. Both complete decodes, overlap
+and cleanup remain timed; exact samples/owners/charges/refusal/cancellation and
+quiet gates pass. Zero builds or repeated qualification. One affected cost is
+resolved after scan CRC reuse; 51 remain. It is a gap without a causal comparison
+against older producers. No required case added or removed.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

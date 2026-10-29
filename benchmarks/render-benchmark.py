@@ -43,6 +43,9 @@ def render():
     png_crc_scan = json.loads((ROOT / 'benchmarks/warm-png-scan-crc-reuse-evidence.json').read_text(encoding='utf-8'))
     assert png_crc_scan['productionChanged'] and png_crc_scan['decision']['passed']
     assert png_crc_scan['qualification']['sameActualPackageBothOs'] and len(png_crc_scan['cases']) == 5
+    png_retained = json.loads((ROOT / 'benchmarks/current-png-retained-root-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not png_retained['productionChanged'] and png_retained['allBuilds'] == 0
+    assert png_retained['producers']['linuxSha256'] == png_crc_scan['producers']['linuxSha256']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -482,9 +485,14 @@ upper 1.423, 1,168 B/op. PNG8 remains confidence-open after one bounded resoluti
 0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
 Both platforms pass 5,082 checks, 117 focused normal/scalar checks, 452 public
 scalar checks and the same actual package/three examples. No storage or admission
-boundary changes. The other 52
+boundary changes. The other 51
 affected existing PNG decode/stream/composition costs need current evidence;
 PNG encoding, metadata-only scans and unrelated paths retain applicable proof.
+[Two retained PNG outputs under one caller root](../benchmarks/CURRENT-PNG-RETAINED-ROOT-COST.md)
+independently confirm 1.237× / upper 1.244, 2,574,629 B/op and a 2,306,560-byte
+admitted peak. Both full decodes, output overlap/release and managed admission
+are timed. Exact pixels, root/source ownership and cleanup pass. Zero builds or
+repeated qualification; this is a current cost, not a gain against older screens.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
