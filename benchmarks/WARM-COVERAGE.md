@@ -20,6 +20,11 @@ is closed after a1.98% short-screen improvement missed the5% gate. Exact qualifi
 source/binaries are restored; no current cost or qualification changes. Its
 bounded current-code profile and rejected actuals are retained for future decisions.
 
+The [four-tap vertical Lanczos trial](LANCZOS3-FOUR-TAP-VERTICAL-REJECTED.md)
+also fails the5% screen gate. Native execution rates differ from the retained
+confirmation; no causal gain/regression is inferred. Exact qualified source and
+binaries are restored. These failed candidates change no current cost or scope.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
