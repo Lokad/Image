@@ -1,7 +1,9 @@
 # Current PNG policy and packed-key costs
 
 Eight existing controls resolve current costs without production changes or a
-historical speedup claim. Confirmed passing paths stop.
+historical speedup claim. Tight+cancelable rows below are superseded by the
+[bounded cursor](WARM-PNG-CANCELABLE-ROW-CURSOR.md): byte remains a smaller gap,
+word passes. Confirmed passing paths stop.
 
 | Complete 513×259 decode | Lokad µs | Ratio / upper | Allocated B/op | Status |
 | --- | ---: | ---: | ---: | --- |
@@ -9,9 +11,9 @@ historical speedup claim. Confirmed passing paths stop.
 | Gray1, key1 | 58.478 | 0.085 / 0.086 | 536 | Pass; stop |
 | RGBA16, tight | 2,870.128 | 0.991 / 1.002 | 70,272 | Confidence open |
 | RGBA16, cancelable | 2,820.060 | 0.971 / 0.974 | 8,568 | Pass; stop |
-| RGBA16, tight + cancelable | 2,944.704 | 1.016 / 1.022 | 70,272 | Gap |
+| RGBA16, tight + cancelable | 2,944.704 | 1.016 / 1.022 | 70,272 | Prior; superseded |
 | RGBA8, tight | 1,495.320 | 1.071 / 1.076 | 68,224 | Gap |
-| RGBA8, tight + cancelable | 1,934.514 | 1.387 / 1.395 | 68,224 | Gap |
+| RGBA8, tight + cancelable | 1,934.514 | 1.387 / 1.395 | 68,224 | Prior; superseded |
 | RGBA8, cancelable | 1,587.248 | 1.140 / 1.143 | 4,472 | Gap |
 
 Each control retains all 12 actuals, native brackets, filtered/unfiltered

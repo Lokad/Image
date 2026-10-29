@@ -141,8 +141,8 @@ internal static class PngCodec
             // and every subsequent row/result admission available. Tight RGBA
             // and caller-budgeted RGBA can stream within the original workspace;
             // the latter avoids uncached full-frame scratch. Other inputs retain
-            // the original reader. Cancelable framing
-            // keeps its original per-symbol cancellation checks.
+            // the original reader. Cancelable rolling framing checks each bounded
+            // history slab; materialized framing keeps per-symbol checks.
             // Adam7's concatenated pass rows can reuse the same certified output.
             // Keep the existing shared-root storage requirements for interlace.
             var materialize = (header.Interlace == 0 || header.ColorType == 6 && !context.HasMemoryBudget)

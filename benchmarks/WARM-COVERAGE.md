@@ -240,6 +240,12 @@ zero production/selector/nativebuilds;completedtimings reused;async21controls
 andbyteexacttemporaryproofrestoration pass. No unrefreshedPNGcosts;gaps and
 openconfidence remain,full268pathobjective unchanged.
 
+[Cancelable row cursors](WARM-PNG-CANCELABLE-ROW-CURSOR.md) improve tight/cancel8
+by21.0%,same68224Bop;1.094/upper1.107gap remains. Tight/cancel16 nowpasses
+upper0.984/70272Bop. Full5132/OS,122internal+258publicnormal/scalar,SAMEpackage/
+3examples pass,onecorebuild/OS/zerootherbuilds. Otherrelevantpaths retainproof.
+PNGcostrefreshcomplete;full268pathobjective staysopen.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

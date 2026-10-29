@@ -47,29 +47,6 @@ internal sealed class PngRowInflation
         EnsureSpace(); start = position; return history;
     }
 
-    public void Literal(byte value)
-    {
-        EnsureSpace(); history[position++] = value;
-    }
-
-    public void Match(int length, int distance)
-    {
-        EnsureSpace();
-        if (distance == 1) history.AsSpan(position, length).Fill(history[position - 1]);
-        else
-        {
-            var copied = Math.Min(length, distance);
-            history.AsSpan(position - distance, copied).CopyTo(history.AsSpan(position, copied));
-            while (copied < length)
-            {
-                var count = Math.Min(copied, length - copied);
-                history.AsSpan(position, count).CopyTo(history.AsSpan(position + copied, count));
-                copied += count;
-            }
-        }
-        position += length;
-    }
-
     public void Stored(ReadOnlySpan<byte> bytes)
     {
         while (!bytes.IsEmpty)

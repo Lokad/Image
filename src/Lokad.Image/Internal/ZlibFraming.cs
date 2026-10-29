@@ -248,8 +248,8 @@ internal static partial class ZlibFraming
                         ? reader.CanInflateCursor()
                             ? InflateStreamingCursor(ref reader, literals, distances, literalLookup, distanceLookup,
                                 output, expectedBytes, window, destination)
-                            : InflateStreamingBlock(ref reader, literals, distances, literalLookup, distanceLookup,
-                                output, expectedBytes, window, destination)
+                            : InflateCancelableStreamingCursor(ref reader, literals, distances, literalLookup, distanceLookup,
+                                output, expectedBytes, window, destination, context.Cancellation)
                         : CountBlock(ref reader, literals, distances, literalLookup, distanceLookup,
                             output, expectedBytes, window);
                 }
@@ -371,47 +371,23 @@ internal static partial class ZlibFraming
         }
     }
 
-    private static long InflateStreamingBlock(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
+    private static long InflateCancelableStreamingCursor(scoped ref Bits reader, scoped Huffman literals, scoped Huffman distances,
         scoped ReadOnlySpan<ushort> literalLookup, scoped ReadOnlySpan<ushort> distanceLookup,
-        long output, long expectedBytes, int window, PngRowInflation destination)
+        long output, long expectedBytes, int window, PngRowInflation destination, CancellationToken cancellation)
     {
-        // Decode the same framing symbols and retain their exact charges. The
-        // rolling output only reconstructs private rows; it cannot publish a
-        // raster/filter/checksum decision before the complete framing walk.
+        // Reuse the local cursor within the existing 64-KiB history. Its stop
+        // leaves 257 bytes for a maximal token, so each call produces at most
+        // 65536 bytes. Poll on both sides before committing its private output.
         while (true)
         {
-            var writable = destination.Writable;
-            var count = reader.CopyStreamingLiteralRun(literalLookup,
-                writable[..(int)Math.Min(writable.Length, expectedBytes - output)]);
-            destination.Advance(count); output += count;
-            var symbol = DecodeLiteral(ref reader, literals, literalLookup);
-            if (symbol == 256) return output;
-            int length, distance = 0;
-            if (symbol < 256) length = 1;
-            else
-            {
-                if (symbol > 285) throw new ImageDataException("Invalid PNG Deflate length code.");
-                if (symbol < 265) length = symbol - 254;
-                else if (symbol == 285) length = 258;
-                else
-                {
-                    var extra = (symbol - 265) / 4 + 1;
-                    length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra) + reader.Read(extra);
-                }
-                var distanceSymbol = DecodeDistance(ref reader, distances, distanceLookup);
-                if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
-                distance = distanceSymbol + 1;
-                if (distanceSymbol >= 4)
-                {
-                    var extra = distanceSymbol / 2 - 1;
-                    distance = 1 + ((2 + (distanceSymbol & 1)) << extra) + reader.Read(extra);
-                }
-                if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
-            }
-            if (length > expectedBytes - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
-            if (symbol < 256) destination.Literal((byte)symbol);
-            else destination.Match(length, distance);
-            output += length;
+            cancellation.ThrowIfCancellationRequested();
+            var history = destination.BorrowHistory(out var start);
+            var expected = start + (int)Math.Min(history.Length - start, expectedBytes - output);
+            var end = reader.InflateCursor(literals, distances, literalLookup, distanceLookup,
+                history, start, window, expected, history.Length - 257, out var ended);
+            cancellation.ThrowIfCancellationRequested();
+            destination.Advance(end - start); output += end - start;
+            if (ended) return output;
         }
     }
 

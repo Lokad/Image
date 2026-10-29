@@ -44,8 +44,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,129 checks on each platform, plus 36 affected kernel
-and 231 public checks normal/scalar per OS, and the same actual package/three examples.
+The current producer passes 5,132 checks on each platform, plus 122 affected kernel
+and 258 public checks normal/scalar per OS, and the same actual package/three examples.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -263,8 +263,14 @@ Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper
 Exact pixels, owners, native and quiet gates pass; zero builds or repeated qualification.
 
 [Policies and packed keys](../benchmarks/CURRENT-PNG-POLICY-PACKED-KEY-COSTS.md)
-resolve eight more costs. Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable 1.016 / upper 1.022 gap; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable 1.387 / upper 1.395 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
+resolve eight more costs. Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable now passes upper 0.984; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable now 1.094 / upper 1.107 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
 All actuals, pixels, owners, policies, native and quiet gates pass; zero builds.
+
+[Bounded cancelable row cursors](../benchmarks/WARM-PNG-CANCELABLE-ROW-CURSOR.md)
+reduce tight+cancelable PNG8 elapsed by 21.0%, with unchanged 68,224 B/op;
+1.094× / upper 1.107 remains a gap. The word companion passes upper 0.984,
+70,272 B/op. Exact pixels, cancellation, admission, owners and quiet gates pass;
+full 5,132 checks/OS, affected normal/scalar and same actual package qualify.
 
 [Stream and composition costs](../benchmarks/CURRENT-PNG-STREAM-COMPOSITION-COSTS.md)
 finish the planned PNG refresh: seekable PNG16 passes at upper 0.958, 8,664 B/op.
