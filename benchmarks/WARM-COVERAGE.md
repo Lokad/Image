@@ -660,6 +660,12 @@ The [CrossWord horizontal-pair trial](BICUBIC-HORIZONTAL-PAIR-REJECTED.md)
 also fails its5% screen gate and is fully restored. Its exact-pixel/ownership
 checks pass; no variants or repeated full/package qualification. Keep the
 independent TightCross16 confirmation current and close this pairing family.
+The distinct [output-resident row-cache trial](BICUBIC-OUTPUT-ROW-CACHE-UNQUALIFIED.md)
+has23.723%lower confirmation means but fails its predeclared native-stability
+limit (7.688%drift versus3%). It is unqualified, not an accepted gain or parity
+pass. Production/exact binaries are restored; six useful precision/ownership/
+cleanup controls remain. No variants or repeated confirmations; unchanged
+full/package evidence and accepted costs carry forward.
 Closed source-energy, histogram,
 word/fragment, prediction/quantizer/trellis and other rejected variants stay closed.
 Use immutable builds and narrow jobs; batch full Windows/Linux/scalar/package

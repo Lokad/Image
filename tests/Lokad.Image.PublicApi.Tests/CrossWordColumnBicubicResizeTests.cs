@@ -6,6 +6,91 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class CrossWordColumnBicubicResizeTests
 {
     [Theory]
+    [InlineData(31, 23, 16, 129, false)] [InlineData(13, 7, 7, 101, false)]
+    [InlineData(31, 23, 16, 129, true)] [InlineData(13, 7, 7, 101, true)]
+    public void LongOutputsKeepPrefixTailAndTinyAlphaExact(int sourceWidth, int sourceHeight,
+        int width, int height, bool tiny)
+    {
+        using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, 16);
+        if (tiny)
+            for (var y = 0; y < sourceHeight; y++)
+            for (var x = 0; x < sourceWidth; x++)
+                source.GetRow16(y)[x * 4 + 3] = (ushort)((x + y) % 7 == 0 ? 65535 : (x + y) % 3 == 0 ? 1 : 0);
+        var input = OriginalPixels.Bytes(source);
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + (long)width * height * 8 + 4096 };
+        using var actual = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+        Assert.Equal(ExactResizeReference.Resize(input, sourceWidth, sourceHeight, 16, width, height,
+            ResizeFilter.Bicubic), OriginalPixels.Bytes(actual));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Fact]
+    public void LongOutputStorageRemainsChargedAndIndependentUntilDisposal()
+    {
+        using var source = OriginalPixels.Buffer(13, 7, 16);
+        var input = OriginalPixels.Bytes(source);
+        const int bytes = 7 * 101 * 8;
+        using var root = new TestMemoryBudget(2 * bytes + 4096);
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + bytes + 4096, MemoryBudget = root };
+        using (var first = ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, limits))
+        using (var survivor = ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, limits))
+        {
+            Assert.Equal(2 * bytes, root.Bytes);
+            Assert.InRange(root.Peak, 2 * bytes, 2 * bytes + 4096);
+            var expected = OriginalPixels.Bytes(survivor);
+            first.GetRow16(0)[0] ^= 65535;
+            first.Dispose();
+            Assert.Equal(bytes, root.Bytes);
+            Assert.Equal(expected, OriginalPixels.Bytes(survivor));
+            using var subsequent = ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, limits);
+            Assert.Equal(expected, OriginalPixels.Bytes(subsequent));
+            Assert.Equal(input, OriginalPixels.Bytes(source));
+        }
+        Assert.Equal(0, root.Bytes);
+        Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void LongOutputRefusalAndCancellationReleasePrivateStorageWithoutRetry()
+    {
+        using var source = OriginalPixels.Buffer(13, 7, 16);
+        var input = OriginalPixels.Bytes(source);
+        const int bytes = 7 * 101 * 8;
+        var local = new ImageLimits { MaxWorkingBytes = input.Length + bytes + 4096 };
+        using var baseline = new TestMemoryBudget(bytes + 4096);
+        using (ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, local with { MemoryBudget = baseline })) { }
+        var growths = baseline.GrowthAttempts;
+        Assert.InRange(growths, 1, 2);
+        for (var failure = 1; failure <= growths; failure++)
+        {
+            using var root = new TestMemoryBudget(bytes + 4096) { RefuseAtGrowth = failure };
+            var limits = local with { MemoryBudget = root };
+            var error = Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, limits));
+            Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
+            Assert.Equal(ImageLimitKind.WorkingBytes, error.Limit);
+            Assert.Equal(1, root.Refusals);
+            Assert.Equal(failure, root.GrowthAttempts);
+            Assert.Equal(0, root.Bytes);
+            root.RefuseAtGrowth = 0;
+            using (ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, limits)) { }
+            Assert.Equal(0, root.Bytes);
+        }
+        using var canceled = new TestMemoryBudget(bytes + 4096);
+        using var token = new CancellationTokenSource();
+        canceled.Admitted = _ => { if (canceled.GrowthAttempts == growths) token.Cancel(); };
+        var canceledLimits = local with { MemoryBudget = canceled };
+        var cancellation = Assert.Throws<OperationCanceledException>(() =>
+            ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, canceledLimits, token.Token));
+        Assert.Equal(token.Token, cancellation.CancellationToken);
+        Assert.Equal(0, canceled.Bytes);
+        canceled.Admitted = null;
+        using (ImageTransforms.Resize(source, 7, 101, ResizeFilter.Bicubic, canceledLimits)) { }
+        Assert.Equal(0, canceled.Bytes);
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.False(canceled.IsDisposed);
+    }
+
+    [Theory]
     [InlineData(4095)] [InlineData(4096)]
     public void WiderStripsKeepFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {
