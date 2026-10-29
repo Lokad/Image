@@ -242,56 +242,38 @@ is 1.351× / upper 1.382, unchanged 770,092 B/op. The stream companion is a curr
 source/owners/quiet gates, 5,082 full checks per OS, affected scalar checks and
 the SAME actual Release package/three examples pass. Other affected VP8 decoder
 costs need current evidence before pass claims; metadata-only reads, other codecs
-and editing retain applicable unchanged proof. The
-[shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) retains its
-earlier dataflow and resource proof. [Folded CRC reuse](../benchmarks/WARM-PNG-SCAN-CRC-REUSE.md)
-accepted 28.7% less stored RGBA16 decode elapsed. On the current build, that case
-independently passes at 222.536 µs, 0.753× / upper 0.758, 8,568 B/op; stop.
-The unchanged PNG16 span/async validation paths pass at
-0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 is refreshed at 1.359× /
-upper 1.369, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
-0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
-[Caller-root PNG row selection](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
-avoids uncached full-frame scratch: two retained outputs independently improve
-3.13% elapsed and 36.37% allocation to 1.201× / upper 1.204, 1,638,183 B/op,
-with admitted peak 2,306,560 → 1,766,641 bytes. Both full decodes, output overlap,
-release and managed admission are timed; exact pixels/owners/cleanup pass.
-The predeclared allocation-saving exception and both confidence views pass.
-Current production passes 5,094 checks per OS, 11 kernel and 231 public checks
-normal/scalar, and the SAME actual package/three examples. Each accepted round
-reuses one core build per OS, with zero harness/native/selector builds in these
-PNG optimizations. The other 37 affected existing PNG decode/stream/
-composition costs need current evidence; unchanged validation, encoding,
-metadata-only scans and unrelated paths retain applicable proof.
-[Current resident PNG costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md)
-resolve RGBA8 at 1.131× / upper 1.166, 4,472 B/op (gap), and RGBA16 at 0.999× /
-upper 1.006, 8,568 B/op (confidence open). All 12 actuals per case and exact
-pixels/owners/quiet gates pass. No retiming, pooling or pass claim from mean
-alone. One generic typed-int selector is reused; production/harness/native and
-full/package qualification are unchanged.
-The same report confirms Paeth16 at 0.907× / upper 0.962 (pass; stop), while
-Paeth8's 0.989–1.031 interval stays confidence-open.
-[Average SIMD reconstruction](../benchmarks/WARM-PNG-AVERAGE-SIMD.md) supersedes
-the scalar Average8/16 gaps: 20.3%/22.5% less independent elapsed, unchanged
-4,472/8,568 B/op, at 0.911/0.915× with uppers 0.916/0.918. Both pass and stop.
-Exact pixels, scalar/overlap/tail/cancellation behavior and both confidence gates
-pass. Six independent tests are added; no new benchmark images or cases.
-[Sub/Up current costs](../benchmarks/CURRENT-PNG-SUB-UP-COSTS.md) also pass:
-Sub8/16 uppers 0.728/0.413, Up8/16 uppers 0.767/0.818, with 4,472/8,568 B/op.
-All four have 12 actuals, exact pixels/owners and quiet guards; stop unchanged.
-They reuse the frozen build/selector/native worker and full/package proof, with
-zero builds or repeated qualification.
-[Word expansion and Adam7](../benchmarks/CURRENT-PNG-WORD-DECODE-COSTS.md)
-refresh four existing controls: RGB16/gray-alpha16/gray16 pass with uppers
-0.996/0.851/0.739, allocated 6,520/4,472/2,424 B/op.
-[Adam7 framed-output reuse](../benchmarks/WARM-PNG-ADAM7-FRAMED-OUTPUT.md)
-then removes duplicate inflation: 43.8% less elapsed, 0.758× / upper 0.761,
-23,240 B/op; pass and stop. It admits 1,063,423 bytes of additional filtered
-capacity in the existing bounded pool; shared-root and tight-ceiling paths stay.
-All 12 actuals, exact pixels/owners/error/cancellation and confidence gates pass.
-Six authored interlace/replay/root cases are added; full qualification and the
-SAME actual package pass on both OSes. One core build per OS; no harness/native/
-selector builds, new benchmark images or cases. Unchanged-path evidence is reused.
+and editing retain applicable unchanged proof. [PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 33 existing decode/stream/
+composition costs to refresh. Keep scoped passes stopped and uncertain results open;
+the displayed rows do not narrow the full 268-path objective.
+
+[Adam7 framed-output reuse](../benchmarks/WARM-PNG-ADAM7-FRAMED-OUTPUT.md) removes
+duplicate inflation: 43.8% less elapsed, 0.758× / upper 0.761, 23,240 B/op; pass.
+It admits 1,063,423 extra bytes of filtered capacity in the existing bounded pool;
+shared-root and tight-ceiling paths retain their prior storage requirements.
+[Average SIMD](../benchmarks/WARM-PNG-AVERAGE-SIMD.md) improves RGBA8/16 by
+20.3%/22.5%, with uppers 0.916/0.918 and unchanged 4,472/8,568 B/op; both pass.
+
+[Word expansion](../benchmarks/CURRENT-PNG-WORD-DECODE-COSTS.md) RGB16/gray-alpha16/
+gray16 passes at uppers 0.996/0.851/0.739, allocated 6,520/4,472/2,424 B/op.
+[Byte expansion and stored RGBA8](../benchmarks/CURRENT-PNG-BYTE-DECODE-COSTS.md)
+pass at uppers 0.721/0.655/0.916/0.748, allocated 3,448/2,424/1,400/4,472 B/op.
+[Sub/Up](../benchmarks/CURRENT-PNG-SUB-UP-COSTS.md) also pass at both depths;
+their allocated costs are 4,472/8,568 B/op. Each named control has 12 actuals,
+frozen inputs/settings, exact pixels, independent outputs and quiet guards.
+
+[Two retained PNG outputs under one caller root](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
+remain a 1.201× / upper 1.204 gap, 1,638,183 B/op and 1,766,641-byte admitted peak.
+[Resident None/Paeth costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md) retain
+a None RGBA8 gap at 1.131× / upper 1.166, 4,472 B/op; None RGBA16 and Paeth8
+remain confidence-open at uppers 1.006/1.031, 8,568/4,472 B/op. Paeth16 passes.
+The validation table retains unchanged PNG16 span/async passes, PNG8 uncertainty
+and the refreshed indexed Adam7 gap. No retiming or pass claims from means alone.
+
+Current production passes 5,094 tests per OS, 11 kernel and 231 public checks
+normal/scalar, and the SAME actual package/three examples. Each accepted change
+reuses one frozen core build per OS; these PNG rounds add no harness/native/
+selector builds. Subsequent current-cost checks reuse qualification, with no new
+benchmark images, cases or settings. All raw observations and confidence views remain.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

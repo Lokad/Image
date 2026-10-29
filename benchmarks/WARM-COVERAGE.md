@@ -191,6 +191,12 @@ and tight-ceiling behavior remains. Full5094/OS,11kernel+231publicnormal/scalar
 andSAMEactualpackage/3examples pass,one corebuild/OS,zero otherbuilds.37existing
 costs remain unrefreshed; unchanged relevant-path evidence is reused.
 
+[Current byte PNG costs](CURRENT-PNG-BYTE-DECODE-COSTS.md) resolve four more:
+RGB8/gray-alpha8/gray8/storedRGBA8 uppers0.721/0.655/0.916/0.748 pass andstop,
+3448/2424/1400/4472Bop. Exactpixels/owners/native/quiet all12actuals pass. Stored8
+description-only postcheck mismatch is recovered without retiming;original
+packet/settings stay fixed. Zero builds or repeatedqualification.33costs remain.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
