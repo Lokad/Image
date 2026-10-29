@@ -12,8 +12,7 @@ confirms the existing513×259RGBA8→256×129 path at1.500× / upper1.511,
 138,451B/op. Exact managed/native pixels, source/independent ownership and quiet
 guards pass. This unchanged-path cost confirmation reuses current Windows/Linux
 and actual-package qualification. One small selector build, no production,
-harness/native build or new control. Other Lanczos rows retain release screens;
-no general Lanczos CPU-pass claim follows.
+harness/native build or new control. No general Lanczos CPU-pass claim follows.
 
 [Current Lanczos3 word reduction](CURRENT-LANCZOS3-REDUCE16-COST.md) independently
 confirms the existing513×259RGBA16→256×129 path at1.585× / upper1.666,
@@ -36,8 +35,9 @@ Closed Lanczos experiments retain their rejected sources, raw samples and
 restoration in linked reports: [packed premultiplication](LANCZOS3-PACKED-PREMULTIPLICATION-REJECTED.md),
 [vertical batching](LANCZOS3-FOUR-TAP-VERTICAL-REJECTED.md),
 [word spans](LANCZOS3-WORD-SPAN-HOISTING-REJECTED.md),
-[paired normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md) and
-[reciprocal normalization](LANCZOS3-RECIPROCAL-NORMALIZATION-REJECTED.md).
+[paired normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md),
+[reciprocal normalization](LANCZOS3-RECIPROCAL-NORMALIZATION-REJECTED.md) and
+[coefficient symmetry](LANCZOS3-COEFFICIENT-SYMMETRY-REJECTED.md).
 Exact qualified production is restored; these trials change no accepted cost,
 required case or applicable full/package qualification.
 
