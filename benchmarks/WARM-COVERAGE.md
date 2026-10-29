@@ -156,6 +156,14 @@ open. Both have 12 actuals, exact pixels/ownership and quiet guards. No retiming
 or pass claim from mean alone. One generic cached-harness selector is reusable.
 49 affected costs still need refresh, with current functional/package proof reused.
 
+The same [resident PNG cost report](CURRENT-PNG-RGBA-DECODE-COSTS.md) now adds
+four existing predictor/depth paths with zero builds: Paeth16 upper0.962 passes
+and stops; Paeth8 interval0.989–1.031 stays confidence-open without retiming.
+Average8/16 confirm1.143/1.180, uppers1.154/1.189,4472/8568Bop. All12actuals,
+exactpixels/owners and quiet guards pass. Average16's older worker record is
+reconciled explicitly to the same existing current reference settings/boundary.
+45 costs remain unrefreshed; no case added, no passing/uncertain control retuned.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

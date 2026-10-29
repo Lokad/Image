@@ -259,7 +259,7 @@ release and managed admission are timed; exact pixels/owners/cleanup pass.
 The predeclared allocation-saving exception and both confidence views pass.
 All 5,082 checks per OS, 225 focused public normal/scalar checks and the SAME
 actual package/three examples pass. One core build per OS is reused, with zero
-harness/native/selector builds. The other 49 affected existing PNG decode/stream/
+harness/native/selector builds. The other 45 affected existing PNG decode/stream/
 composition costs need current evidence; unchanged validation, encoding,
 metadata-only scans and unrelated paths retain applicable proof.
 [Current resident PNG costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md)
@@ -268,6 +268,10 @@ upper 1.006, 8,568 B/op (confidence open). All 12 actuals per case and exact
 pixels/owners/quiet gates pass. No retiming, pooling or pass claim from mean
 alone. One generic typed-int selector is reused; production/harness/native and
 full/package qualification are unchanged.
+The same report confirms Paeth16 at 0.907× / upper 0.962 (pass; stop), while
+Paeth8's 0.989–1.031 interval stays confidence-open. Average8/16 remain gaps at
+1.143/1.180×, uppers 1.154/1.189, 4,472/8,568 B/op. Four current-cost jobs reuse
+the same selector/build/native worker with no rebuilds or workload expansion.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
