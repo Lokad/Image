@@ -197,6 +197,12 @@ RGB8/gray-alpha8/gray8/storedRGBA8 uppers0.721/0.655/0.916/0.748 pass andstop,
 description-only postcheck mismatch is recovered without retiming;original
 packet/settings stay fixed. Zero builds or repeatedqualification.33costs remain.
 
+[Indexed/packed current costs](CURRENT-PNG-INDEXED-PACKED-COSTS.md) resolve eight
+existingcases withzero builds:palette8/4/2/1 andgray1/2/4 passandstop,uppers
+0.886/0.682/0.596/0.586/0.185/0.619/0.598. Adam7gray1 remains1.083/upper1.094,
+1440Bop. All12actuals/exactpixels/owners/native/quiet pass;unchanged full/package
+proof reused.25costs remain unrefreshed; no workload expansion or retuning.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

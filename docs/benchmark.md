@@ -242,7 +242,9 @@ is 1.351× / upper 1.382, unchanged 770,092 B/op. The stream companion is a curr
 source/owners/quiet gates, 5,082 full checks per OS, affected scalar checks and
 the SAME actual Release package/three examples pass. Other affected VP8 decoder
 costs need current evidence before pass claims; metadata-only reads, other codecs
-and editing retain applicable unchanged proof. [PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 33 existing decode/stream/
+and editing retain applicable unchanged proof.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 25 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 
@@ -260,6 +262,10 @@ pass at uppers 0.721/0.655/0.916/0.748, allocated 3,448/2,424/1,400/4,472 B/op.
 [Sub/Up](../benchmarks/CURRENT-PNG-SUB-UP-COSTS.md) also pass at both depths;
 their allocated costs are 4,472/8,568 B/op. Each named control has 12 actuals,
 frozen inputs/settings, exact pixels, independent outputs and quiet guards.
+[Indexed and packed controls](../benchmarks/CURRENT-PNG-INDEXED-PACKED-COSTS.md)
+add seven passes: palette8/4/2/1 and gray1/2/4, allocated 504–2,472 B/op. Adam7
+Gray1 remains a 1.083× / upper 1.094 gap, 1,440 B/op. All eight reuse the same
+build, selector and qualification; no new images, cases or retiming.
 
 [Two retained PNG outputs under one caller root](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
 remain a 1.201× / upper 1.204 gap, 1,638,183 B/op and 1,766,641-byte admitted peak.

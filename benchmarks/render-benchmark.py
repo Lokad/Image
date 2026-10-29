@@ -113,6 +113,15 @@ def render():
         assert byte_observation['conservativeRatioUpper'] <= 1 and png_byte_costs['status'][case] == 'confirmed-pass'
         assert len(byte_observation['managed']['actual']) == 12 and all(q['passed'] for q in byte_observation['quietness'].values())
         assert byte_observation['receipt']['librarySha256'] == png_byte_costs['producers']['linuxSha256']
+    png_packed = json.loads((ROOT / 'benchmarks/current-png-indexed-packed-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_packed['productionChanged'] and png_packed['allBuilds'] == 0
+    assert png_packed['producers']['linuxSha256'] == png_adam7['producers']['linuxSha256']
+    assert len(png_packed['cases']) == 8 and list(png_packed['status'].values()).count('confirmed-pass') == 7
+    for case, observations in png_packed['cases'].items():
+        packed_observation = observations[-1]
+        assert len(packed_observation['managed']['actual']) == 12 and all(q['passed'] for q in packed_observation['quietness'].values())
+        assert packed_observation['receipt']['librarySha256'] == png_packed['producers']['linuxSha256']
+        assert (packed_observation['conservativeRatioUpper'] <= 1) == (png_packed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -542,7 +551,9 @@ is 1.351× / upper 1.382, unchanged 770,092 B/op. The stream companion is a curr
 source/owners/quiet gates, 5,082 full checks per OS, affected scalar checks and
 the SAME actual Release package/three examples pass. Other affected VP8 decoder
 costs need current evidence before pass claims; metadata-only reads, other codecs
-and editing retain applicable unchanged proof. [PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 33 existing decode/stream/
+and editing retain applicable unchanged proof.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 25 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 
@@ -560,6 +571,10 @@ pass at uppers 0.721/0.655/0.916/0.748, allocated 3,448/2,424/1,400/4,472 B/op.
 [Sub/Up](../benchmarks/CURRENT-PNG-SUB-UP-COSTS.md) also pass at both depths;
 their allocated costs are 4,472/8,568 B/op. Each named control has 12 actuals,
 frozen inputs/settings, exact pixels, independent outputs and quiet guards.
+[Indexed and packed controls](../benchmarks/CURRENT-PNG-INDEXED-PACKED-COSTS.md)
+add seven passes: palette8/4/2/1 and gray1/2/4, allocated 504–2,472 B/op. Adam7
+Gray1 remains a 1.083× / upper 1.094 gap, 1,440 B/op. All eight reuse the same
+build, selector and qualification; no new images, cases or retiming.
 
 [Two retained PNG outputs under one caller root](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
 remain a 1.201× / upper 1.204 gap, 1,638,183 B/op and 1,766,641-byte admitted peak.
