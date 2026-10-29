@@ -203,6 +203,10 @@ existingcases withzero builds:palette8/4/2/1 andgray1/2/4 passandstop,uppers
 1440Bop. All12actuals/exactpixels/owners/native/quiet pass;unchanged full/package
 proof reused.25costs remain unrefreshed; no workload expansion or retuning.
 
+[Paeth source-layout costs](CURRENT-PNG-PAETH-SOURCE-COSTS.md) resolve four more
+existingcases withzero builds:gray8/gray-alpha8/RGB16 passandstop;RGB8 remains
+1.085/upper1.104,3448Bop.21existingcosts remain unrefreshed,full268pathobjective.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

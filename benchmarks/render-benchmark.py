@@ -122,6 +122,15 @@ def render():
         assert len(packed_observation['managed']['actual']) == 12 and all(q['passed'] for q in packed_observation['quietness'].values())
         assert packed_observation['receipt']['librarySha256'] == png_packed['producers']['linuxSha256']
         assert (packed_observation['conservativeRatioUpper'] <= 1) == (png_packed['status'][case] == 'confirmed-pass')
+    png_paeth_sources = json.loads((ROOT / 'benchmarks/current-png-paeth-source-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_paeth_sources['productionChanged'] and png_paeth_sources['allBuilds'] == 0
+    assert png_paeth_sources['producers']['linuxSha256'] == png_adam7['producers']['linuxSha256']
+    assert len(png_paeth_sources['cases']) == 4 and list(png_paeth_sources['status'].values()).count('confirmed-pass') == 3
+    for case, observations in png_paeth_sources['cases'].items():
+        o = observations[-1]
+        assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
+        assert o['receipt']['librarySha256'] == png_paeth_sources['producers']['linuxSha256']
+        assert (o['conservativeRatioUpper'] <= 1) == (png_paeth_sources['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -553,7 +562,11 @@ the SAME actual Release package/three examples pass. Other affected VP8 decoder
 costs need current evidence before pass claims; metadata-only reads, other codecs
 and editing retain applicable unchanged proof.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 25 existing decode/stream/
+[Paeth source layouts](../benchmarks/CURRENT-PNG-PAETH-SOURCE-COSTS.md) pass for
+gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877. RGB8 remains1.085× /
+upper1.104,3,448B/op. All12actuals/pixels/owners/quiet pass; zero builds.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 21 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 

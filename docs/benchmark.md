@@ -244,7 +244,11 @@ the SAME actual Release package/three examples pass. Other affected VP8 decoder
 costs need current evidence before pass claims; metadata-only reads, other codecs
 and editing retain applicable unchanged proof.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 25 existing decode/stream/
+[Paeth source layouts](../benchmarks/CURRENT-PNG-PAETH-SOURCE-COSTS.md) pass for
+gray8/gray-alpha8/RGB16 at uppers0.960/0.941/0.877. RGB8 remains1.085× /
+upper1.104,3,448B/op. All12actuals/pixels/owners/quiet pass; zero builds.
+
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has 21 existing decode/stream/
 composition costs to refresh. Keep scoped passes stopped and uncertain results open;
 the displayed rows do not narrow the full 268-path objective.
 
