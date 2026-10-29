@@ -47,6 +47,11 @@ confirms the existing513×259RGBA16→1027×519 path at1.267× / upper1.453,
 Zero builds/repeated qualification. All four existing Lanczos costs are now
 independently current, with unchanged source; all remain gaps.
 
+[Paired Lanczos normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md) is
+rejected after one independent pair resolves conflicting short-screen rates:
+1.59% lower raw means with overlapping intervals, missing the5% gate. Exact
+qualified source/tests/binaries/package are restored; all accepted costs remain.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
