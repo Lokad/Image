@@ -113,6 +113,25 @@ current costs, without a causal comparison against older producers. The four
 named uncertainties are resolved; other affected decoder boundaries still need
 applicable evidence before CPU-pass claims. Prior records remain historical.
 
+[Shared scan CRC reuse](WARM-PNG-SCAN-CRC-REUSE.md) accepts28.7% less independent
+storedRGBA16 decode elapsed, with unchanged8,568B/op and exact frozen packet/
+pixels. Current0.750× / upper0.760 passes and stops. BothOS5,082full/live,
+117focused normal/scalar,452publicscalar andSAMEactualpackage/3examples pass on
+the same immutable build; zero harness/native/selector builds or new controls.
+All four displayed validators are independently current: word span/async pass
+with uppers0.955/0.843; indexed Adam7 remains a1.366× gap; byte span remains
+confidence-open at0.986× / upper1.020 after one bounded final confirmation.
+No more timing or code retuning follows that confidence result in this round.
+
+This changes the scan checksum selected by57existing controls. The evidence names
+47resident decode cases,4seekable stream/decode-composition cases,1nonseekable
+async decode,1caller-root two-retained-output operation and4validators; all were in the original inventory. This round
+refreshes5costs, leaving52affected costs to reconcile on this qualified build.
+Their older CPU results are prior-production; functional/native/oracle proofs
+remain. No required case added/removed. PNG encoding and metadata-only Identify/
+inspection/probing, other codecs and editing/text over decoded buffers retain
+valid unchanged evidence. Do not confuse older2× successes with current1× proof.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

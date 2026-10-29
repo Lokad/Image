@@ -40,6 +40,9 @@ def render():
     vp8_decoder_costs = json.loads((ROOT / 'benchmarks/current-vp8-decoder-costs-evidence.json').read_text(encoding='utf-8'))
     assert not vp8_decoder_costs['productionChanged'] and vp8_decoder_costs['allBuilds'] == 0
     assert vp8_decoder_costs['independentQuietConfirmation'] and len(vp8_decoder_costs['cases']) == 4
+    png_crc_scan = json.loads((ROOT / 'benchmarks/warm-png-scan-crc-reuse-evidence.json').read_text(encoding='utf-8'))
+    assert png_crc_scan['productionChanged'] and png_crc_scan['decision']['passed']
+    assert png_crc_scan['qualification']['sameActualPackageBothOs'] and len(png_crc_scan['cases']) == 5
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -219,7 +222,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -236,7 +239,7 @@ def render():
         ratio, upper = observation['worstBracketRatio'], observation['conservativeRatioUpper']
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
         assert (upper <= 1) == (producer['status'][case] == 'confirmed-pass')
-        status = 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
+        status = 'Confidence open' if producer['status'][case] == 'confirmed-confidence-open' else 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
     headers = reconciled['cases']['PngHeaders'][-1]
@@ -388,15 +391,10 @@ four affected VP8L rows. Other paths retain applicable prior proof.
 caller RGB420 and governed RGBA16; other subsampled encoder costs need current
 evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
 The [earlier read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md)
-retains VP8 Stream decode. The
-[current reconciliation](../benchmarks/current-png-vp8-reconciliation-evidence.json)
-refreshes four tight PNG decoder costs after the shared cursor change below:
-PNG8 ordinary/live-token screen at 1.090/1.405×, 68,224 B/op; PNG16 independently
-confirms gaps at 1.010× / upper 1.015 and 1.040× / upper 1.053, 70,272 B/op.
-Each preserves its frozen local ceiling, one-byte-below refusal and exact pixels.
-The unchanged qualified build, harness, native workers, selectors and package
-proof are reused, without builds or repeated qualification. Other PNG decoder
-costs remain prior-production until reconciled.
+retains prior VP8 Stream decode. The four tight PNG decode controls (byte/word,
+ordinary/live token) need current CPU evidence after shared scan-CRC reuse;
+their frozen ceilings, one-byte-below refusals and exact pixels remain qualified.
+Earlier CPU costs remain in [retained evidence](../benchmarks/current-png-vp8-reconciliation-evidence.json).
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
 retains the VP8L Stream screen at1.304×,1,216,190B/op. A
 [resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
@@ -475,15 +473,18 @@ source/owners/quiet gates, 5,082 full checks per OS, affected scalar checks and
 the SAME actual Release package/three examples pass. Other affected VP8 decoder
 costs need current evidence before pass claims; metadata-only reads, other codecs
 and editing retain applicable unchanged proof. The
-[shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) reduces PNG8
-validation elapsed by 22.85% filtered / 22.87% all actuals against a fresh baseline,
-with unchanged 240 B/op. Its 1.042× / upper 1.052 gap remains. PNG16 span and async
-are refreshed on this producer and pass with upper 0.974/0.817, 240/8,544 B/op.
-Both platforms pass 5,057 full checks, affected scalar tests and the same actual
-package/three examples. No storage or admission boundary is added. Other affected
-PNG decoder costs need current evidence before pass claims. The
-[preceding streaming validator](../benchmarks/WARM-PNG-VALIDATION.md) retains
-the earlier workspace and allocation improvements; its timing is historical.
+[shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) retains its
+earlier dataflow and resource proof. [Folded CRC reuse](../benchmarks/WARM-PNG-SCAN-CRC-REUSE.md)
+now independently reduces stored RGBA16 decode elapsed by 28.7% to 237.983 µs,
+0.750× / upper 0.760, unchanged 8,568 B/op. PNG16 span/async validation pass at
+0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 remains 1.366× /
+upper 1.423, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
+0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
+Both platforms pass 5,082 checks, 117 focused normal/scalar checks, 452 public
+scalar checks and the same actual package/three examples. No storage or admission
+boundary changes. The other 52
+affected existing PNG decode/stream/composition costs need current evidence;
+PNG encoding, metadata-only scans and unrelated paths retain applicable proof.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

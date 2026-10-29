@@ -105,15 +105,10 @@ four affected VP8L rows. Other paths retain applicable prior proof.
 caller RGB420 and governed RGBA16; other subsampled encoder costs need current
 evidence before a pass claim. Grayscale/4:4:4 encoding paths are unchanged.
 The [earlier read reconciliation](../benchmarks/WARM-READ-RECONCILIATION.md)
-retains VP8 Stream decode. The
-[current reconciliation](../benchmarks/current-png-vp8-reconciliation-evidence.json)
-refreshes four tight PNG decoder costs after the shared cursor change below:
-PNG8 ordinary/live-token screen at 1.090/1.405×, 68,224 B/op; PNG16 independently
-confirms gaps at 1.010× / upper 1.015 and 1.040× / upper 1.053, 70,272 B/op.
-Each preserves its frozen local ceiling, one-byte-below refusal and exact pixels.
-The unchanged qualified build, harness, native workers, selectors and package
-proof are reused, without builds or repeated qualification. Other PNG decoder
-costs remain prior-production until reconciled.
+retains prior VP8 Stream decode. The four tight PNG decode controls (byte/word,
+ordinary/live token) need current CPU evidence after shared scan-CRC reuse;
+their frozen ceilings, one-byte-below refusals and exact pixels remain qualified.
+Earlier CPU costs remain in [retained evidence](../benchmarks/current-png-vp8-reconciliation-evidence.json).
 The [default decoder reconciliation](../benchmarks/CURRENT-DEFAULT-DECODERS.md)
 retains the VP8L Stream screen at1.304×,1,216,190B/op. A
 [resident confirmation](../benchmarks/current-vp8l-resident-decode-evidence.json)
@@ -210,14 +205,14 @@ and unlisted content/settings are excluded.
 | Probe JPEG dimensions, seekable | 0.381 | 0.192 | 1.988 / 2.031 | 744 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.159 | 0.123 | 1.289 / 1.550 | 744 | Screen gap |
 | Probe JPEG dimensions, async nonseekable | 0.425 | 0.201 | 2.119 / 2.154 | 744 | Confirmed gap |
-| Validate PNG8, span | 1,436.810 | 1,378.564 | 1.042 / 1.052 | 240 | Confirmed gap |
-| Validate PNG16, span | 2,878.686 | 2,960.749 | 0.972 / 0.974 | 240 | Confirmed pass |
-| Validate indexed Adam7 19×17, span | 5.286 | 3.930 | 1.345 / 1.570 | 1,168 | Screen gap |
+| Validate PNG8, span | 1,425.169 | 1,446.042 | 0.986 / 1.020 | 240 | Confidence open |
+| Validate PNG16, span | 2,943.210 | 3,119.778 | 0.943 / 0.955 | 240 | Confirmed pass |
+| Validate indexed Adam7 19×17, span | 5.562 | 4.071 | 1.366 / 1.423 | 1,168 | Confirmed gap |
 | Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
 | Validate VP8+alpha, span | 7,367.434 | 5,452.572 | 1.351 / 1.382 | 770,092 | Confirmed gap |
-| Validate PNG16, async nonseekable | 2,942.287 | 3,614.992 | 0.814 / 0.817 | 8,544 | Confirmed pass |
+| Validate PNG16, async nonseekable | 2,984.361 | 3,678.840 | 0.811 / 0.843 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 16.133 | 13.073 | 1.234 / 1.312 | 96 | Screen gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |
@@ -248,15 +243,18 @@ source/owners/quiet gates, 5,082 full checks per OS, affected scalar checks and
 the SAME actual Release package/three examples pass. Other affected VP8 decoder
 costs need current evidence before pass claims; metadata-only reads, other codecs
 and editing retain applicable unchanged proof. The
-[shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) reduces PNG8
-validation elapsed by 22.85% filtered / 22.87% all actuals against a fresh baseline,
-with unchanged 240 B/op. Its 1.042× / upper 1.052 gap remains. PNG16 span and async
-are refreshed on this producer and pass with upper 0.974/0.817, 240/8,544 B/op.
-Both platforms pass 5,057 full checks, affected scalar tests and the same actual
-package/three examples. No storage or admission boundary is added. Other affected
-PNG decoder costs need current evidence before pass claims. The
-[preceding streaming validator](../benchmarks/WARM-PNG-VALIDATION.md) retains
-the earlier workspace and allocation improvements; its timing is historical.
+[shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) retains its
+earlier dataflow and resource proof. [Folded CRC reuse](../benchmarks/WARM-PNG-SCAN-CRC-REUSE.md)
+now independently reduces stored RGBA16 decode elapsed by 28.7% to 237.983 µs,
+0.750× / upper 0.760, unchanged 8,568 B/op. PNG16 span/async validation pass at
+0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 remains 1.366× /
+upper 1.423, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
+0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
+Both platforms pass 5,082 checks, 117 focused normal/scalar checks, 452 public
+scalar checks and the same actual package/three examples. No storage or admission
+boundary changes. The other 52
+affected existing PNG decode/stream/composition costs need current evidence;
+PNG encoding, metadata-only scans and unrelated paths retain applicable proof.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

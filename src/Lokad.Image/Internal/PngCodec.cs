@@ -47,7 +47,7 @@ internal static class PngCodec
                     throw new ImageDataException("Invalid PNG chunk name.");
             var payload = data.Slice(position + 8, length);
             context.Cancellation.ThrowIfCancellationRequested();
-            if (Crc32.Compute(data.Slice(position + 4, length + 4), context.Cancellation)
+            if (PngIdentificationCrc32.Compute(data.Slice(position + 4, length + 4), context.Cancellation)
                 != BinaryPrimitives.ReadUInt32BigEndian(data[(position + 8 + length)..]))
                 throw new ImageDataException("Invalid PNG chunk CRC.");
             position += length + 12;
