@@ -88,6 +88,15 @@ def render():
         assert png_sub_up['status'][case] == 'confirmed-pass' and sub_up_observation['conservativeRatioUpper'] <= 1
         assert len(sub_up_observation['managed']['actual']) == 12 and all(q['passed'] for q in sub_up_observation['quietness'].values())
         assert sub_up_observation['receipt']['librarySha256'] == png_sub_up['producers']['linuxSha256']
+    png_word_costs = json.loads((ROOT / 'benchmarks/current-png-word-decode-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_word_costs['productionChanged'] and png_word_costs['allBuilds'] == 0
+    assert png_word_costs['producers']['linuxSha256'] == png_average['producers']['linuxSha256']
+    assert set(png_word_costs['cases']) == {'DecodeAdam7_16', 'DecodeRgb16', 'DecodeGrayAlpha16', 'DecodeGray16'}
+    for case, observations in png_word_costs['cases'].items():
+        word_observation = observations[-1]
+        assert len(word_observation['managed']['actual']) == 12 and all(q['passed'] for q in word_observation['quietness'].values())
+        assert word_observation['receipt']['librarySha256'] == png_word_costs['producers']['linuxSha256']
+        assert (word_observation['conservativeRatioUpper'] <= 1) == (case != 'DecodeAdam7_16')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -535,7 +544,7 @@ The predeclared allocation-saving exception and both confidence views pass.
 Current production passes 5,088 checks per OS, 11 kernel and 225 public checks
 normal/scalar, and the SAME actual package/three examples. Each accepted round
 reuses one core build per OS, with zero harness/native/selector builds in these
-PNG optimizations. The other 41 affected existing PNG decode/stream/
+PNG optimizations. The other 37 affected existing PNG decode/stream/
 composition costs need current evidence; unchanged validation, encoding,
 metadata-only scans and unrelated paths retain applicable proof.
 [Current resident PNG costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md)
@@ -556,6 +565,11 @@ Sub8/16 uppers 0.728/0.413, Up8/16 uppers 0.767/0.818, with 4,472/8,568 B/op.
 All four have 12 actuals, exact pixels/owners and quiet guards; stop unchanged.
 They reuse the frozen build/selector/native worker and full/package proof, with
 zero builds or repeated qualification.
+[Word expansion and Adam7](../benchmarks/CURRENT-PNG-WORD-DECODE-COSTS.md)
+refresh four existing controls: RGB16/gray-alpha16/gray16 pass with uppers
+0.996/0.851/0.739, allocated 6,520/4,472/2,424 B/op. Adam7 RGBA16 remains a
+1.346× / upper 1.362 gap, 23,616 B/op. All 12 actuals and exact pixels/owners/
+quiet gates pass; no rebuilds, new workloads or repeated qualification.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

@@ -178,6 +178,12 @@ and stop,4472/8568Bop. All12actuals,exact pixels/owners/native andquiet gates pa
 One immutablePAV1build/selector is reused; no qualification/package repeats.
 41affected costs remain unrefreshed. No case added or removed.
 
+[Current word PNG costs](CURRENT-PNG-WORD-DECODE-COSTS.md) resolve four more
+existing cases with zero builds:RGB16/gray-alpha16/gray16 uppers0.996/0.851/0.739
+pass and stop;Adam7RGBA16 remains1.346/upper1.362,23616Bop. Exactpixels/owners/
+native/quiet all12actuals pass. Current diagnostic identifies47.1%BCL inflation
+versus1.7%sparsecopy; no microcopy trial.37costs remain unrefreshed, no case added.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

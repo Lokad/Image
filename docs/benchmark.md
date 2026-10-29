@@ -260,7 +260,7 @@ The predeclared allocation-saving exception and both confidence views pass.
 Current production passes 5,088 checks per OS, 11 kernel and 225 public checks
 normal/scalar, and the SAME actual package/three examples. Each accepted round
 reuses one core build per OS, with zero harness/native/selector builds in these
-PNG optimizations. The other 41 affected existing PNG decode/stream/
+PNG optimizations. The other 37 affected existing PNG decode/stream/
 composition costs need current evidence; unchanged validation, encoding,
 metadata-only scans and unrelated paths retain applicable proof.
 [Current resident PNG costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md)
@@ -281,6 +281,11 @@ Sub8/16 uppers 0.728/0.413, Up8/16 uppers 0.767/0.818, with 4,472/8,568 B/op.
 All four have 12 actuals, exact pixels/owners and quiet guards; stop unchanged.
 They reuse the frozen build/selector/native worker and full/package proof, with
 zero builds or repeated qualification.
+[Word expansion and Adam7](../benchmarks/CURRENT-PNG-WORD-DECODE-COSTS.md)
+refresh four existing controls: RGB16/gray-alpha16/gray16 pass with uppers
+0.996/0.851/0.739, allocated 6,520/4,472/2,424 B/op. Adam7 RGBA16 remains a
+1.346× / upper 1.362 gap, 23,616 B/op. All 12 actuals and exact pixels/owners/
+quiet gates pass; no rebuilds, new workloads or repeated qualification.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes
