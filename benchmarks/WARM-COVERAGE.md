@@ -31,6 +31,11 @@ confirms the existing513×259RGBA16→256×129 path at1.585× / upper1.666,
 source/owners and quiet guards pass. One selector build reuses unchanged
 production/harness/native/oracle/full/package evidence; no new cases.
 
+The [word-window span trial](LANCZOS3-WORD-SPAN-HOISTING-REJECTED.md) is closed.
+Shifted native rates made its initial screen uncertain; one fresh frozen-baseline
+screen fails to support the5% gain gate. Exact qualified sources/binaries are
+restored, with no current-cost changes or repeated full/package qualification.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
