@@ -232,6 +232,14 @@ Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, 
 All 12 actuals, pixels, owners, policies, native and quiet gates pass; zero builds.
 Only five PNG stream/composition costs remain unrefreshed; full268pathobjective.
 
+[Stream/composition costs](CURRENT-PNG-STREAM-COMPOSITION-COSTS.md) finish the
+five remaining PNG measurements. Seekable16 passes upper0.958/8664Bop;byte
+seekable/composed,wordcomposed,async8 remain1.112/1.147/1.124/1.075 gaps. All12
+actuals/delivery/pixels/owners/native/quiet pass. One untimedwordinputharnessfix,
+zero production/selector/nativebuilds;completedtimings reused;async21controls
+andbyteexacttemporaryproofrestoration pass. No unrefreshedPNGcosts;gaps and
+openconfidence remain,full268pathobjective unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

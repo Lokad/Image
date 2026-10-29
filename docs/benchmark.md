@@ -266,9 +266,14 @@ Exact pixels, owners, native and quiet gates pass; zero builds or repeated quali
 resolve eight more costs. Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable 1.016 / upper 1.022 gap; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable 1.387 / upper 1.395 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
 All actuals, pixels, owners, policies, native and quiet gates pass; zero builds.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has five existing decode/stream/
-composition costs to refresh. Keep scoped passes stopped and uncertain results open;
-the displayed rows do not narrow the full 268-path objective.
+[Stream and composition costs](../benchmarks/CURRENT-PNG-STREAM-COMPOSITION-COSTS.md)
+finish the planned PNG refresh: seekable PNG16 passes at upper 0.958, 8,664 B/op.
+Byte seekable/composed, word composed and async nonseekable remain gaps at
+1.112/1.147/1.124/1.075×; allocations 4,568/701,264/1,401,346/12,776 B/op.
+Exact pixels, input delivery, owners, native and quiet gates pass. One untimed
+word-input harness fix; no production rebuild or repeated completed timings.
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) has no unrefreshed named costs;
+gaps and confidence-open cases remain. The full 268-path objective stays active.
 
 [Adam7 framed-output reuse](../benchmarks/WARM-PNG-ADAM7-FRAMED-OUTPUT.md) removes
 duplicate inflation: 43.8% less elapsed, 0.758× / upper 0.761, 23,240 B/op; pass.

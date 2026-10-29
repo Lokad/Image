@@ -74,13 +74,8 @@ public class WarmStreamDecode
                 });
             input = HorizontalFlipInput.Create(Depth);
             expected = Compose ? ExpectedComposition(input) : input;
-            if (Depth == 8)
-                encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-cancel8", "input.png"));
-            else using (var source = JpegBenchmarkCase.Buffer(input, HorizontalFlipInput.Width, HorizontalFlipInput.Height, Depth))
-            using (var output = new MemoryStream())
-            {
-                ImageCodec.EncodePng(source, output); encoded = output.ToArray();
-            }
+            // Decoder inputs stay fixed when encoder defaults change.
+            encoded = File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-cancel" + Depth, "input.png"));
             if (JpegBenchmarkCase.Hash(encoded) != EncodedHash)
                 throw new InvalidOperationException("Frozen existing PNG input changed.");
             File.WriteAllBytes(state.Input, encoded);

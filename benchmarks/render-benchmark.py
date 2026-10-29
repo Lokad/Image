@@ -174,6 +174,16 @@ def render():
         assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
         assert o['receipt']['librarySha256'] == png_policies['producers']['linuxSha256']
         assert (o['conservativeRatioUpper'] <= 1) == (png_policies['status'][case] == 'confirmed-pass')
+    png_stream_costs = json.loads((ROOT / 'benchmarks/current-png-stream-composition-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_stream_costs['productionChanged'] and png_stream_costs['coreBuilds'] == png_stream_costs['selectorNativeBuilds'] == 0
+    assert png_stream_costs['harnessBuilds'] == 1 and png_stream_costs['remainingAffectedCosts'] == 0
+    assert png_stream_costs['producers']['linuxSha256'] == png_gray_key['producers']['linuxSha256']
+    assert len(png_stream_costs['cases']) == 5 and png_stream_costs['defaultProofRestored']['restoredByteExact']
+    for case, observations in png_stream_costs['cases'].items():
+        o = observations[-1]
+        assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
+        assert o['receipt']['librarySha256'] == png_stream_costs['producers']['linuxSha256']
+        assert (o['conservativeRatioUpper'] <= 1) == (png_stream_costs['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -627,9 +637,14 @@ Exact pixels, owners, native and quiet gates pass; zero builds or repeated quali
 resolve eight more costs. Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable 1.016 / upper 1.022 gap; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable 1.387 / upper 1.395 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
 All actuals, pixels, owners, policies, native and quiet gates pass; zero builds.
 
-[PNG coverage](../benchmarks/WARM-COVERAGE.md) still has five existing decode/stream/
-composition costs to refresh. Keep scoped passes stopped and uncertain results open;
-the displayed rows do not narrow the full 268-path objective.
+[Stream and composition costs](../benchmarks/CURRENT-PNG-STREAM-COMPOSITION-COSTS.md)
+finish the planned PNG refresh: seekable PNG16 passes at upper 0.958, 8,664 B/op.
+Byte seekable/composed, word composed and async nonseekable remain gaps at
+1.112/1.147/1.124/1.075×; allocations 4,568/701,264/1,401,346/12,776 B/op.
+Exact pixels, input delivery, owners, native and quiet gates pass. One untimed
+word-input harness fix; no production rebuild or repeated completed timings.
+[PNG coverage](../benchmarks/WARM-COVERAGE.md) has no unrefreshed named costs;
+gaps and confidence-open cases remain. The full 268-path objective stays active.
 
 [Adam7 framed-output reuse](../benchmarks/WARM-PNG-ADAM7-FRAMED-OUTPUT.md) removes
 duplicate inflation: 43.8% less elapsed, 0.758× / upper 0.761, 23,240 B/op; pass.
