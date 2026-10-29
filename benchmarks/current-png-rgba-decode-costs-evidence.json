@@ -7155,5 +7155,9 @@
       "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
       "scope": "Current previously approved worker; original RGBA16 decode, owned decode/conversion output allocation, BE-to-LE conversion and release are unchanged. Added encoder-level/palette/gray-key support is not selected; added CPU/normalSIMD reporting and process-clock telemetry stays outside elapsed interval. Original settings/nativeReady fields, static FFmpeg archives/build flags preserved. Boundary description adds unrelated gray1/key1 text; this RGBA16 operation does not select it. No reference retuning or new pixel/quality exception."
     }
+  },
+  "supersededCases": {
+    "DecodeAverage8": "warm-png-average-simd-evidence.json#/cases/DecodeAverage8",
+    "DecodeAverage16": "warm-png-average-simd-evidence.json#/cases/DecodeAverage16"
   }
 }

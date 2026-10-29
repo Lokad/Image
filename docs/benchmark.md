@@ -207,7 +207,7 @@ and unlisted content/settings are excluded.
 | Probe JPEG dimensions, async nonseekable | 0.425 | 0.201 | 2.119 / 2.154 | 744 | Confirmed gap |
 | Validate PNG8, span | 1,425.169 | 1,446.042 | 0.986 / 1.020 | 240 | Confidence open |
 | Validate PNG16, span | 2,943.210 | 3,119.778 | 0.943 / 0.955 | 240 | Confirmed pass |
-| Validate indexed Adam7 19×17, span | 5.562 | 4.071 | 1.366 / 1.423 | 1,168 | Confirmed gap |
+| Validate indexed Adam7 19×17, span | 5.320 | 3.915 | 1.359 / 1.369 | 1,168 | Confirmed gap |
 | Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
@@ -248,8 +248,8 @@ earlier dataflow and resource proof. [Folded CRC reuse](../benchmarks/WARM-PNG-S
 accepted 28.7% less stored RGBA16 decode elapsed. On the current build, that case
 independently passes at 222.536 µs, 0.753× / upper 0.758, 8,568 B/op; stop.
 The unchanged PNG16 span/async validation paths pass at
-0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 remains 1.366× /
-upper 1.423, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
+0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 is refreshed at 1.359× /
+upper 1.369, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
 0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
 [Caller-root PNG row selection](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
 avoids uncached full-frame scratch: two retained outputs independently improve
@@ -257,9 +257,10 @@ avoids uncached full-frame scratch: two retained outputs independently improve
 with admitted peak 2,306,560 → 1,766,641 bytes. Both full decodes, output overlap,
 release and managed admission are timed; exact pixels/owners/cleanup pass.
 The predeclared allocation-saving exception and both confidence views pass.
-All 5,082 checks per OS, 225 focused public normal/scalar checks and the SAME
-actual package/three examples pass. One core build per OS is reused, with zero
-harness/native/selector builds. The other 45 affected existing PNG decode/stream/
+Current production passes 5,088 checks per OS, 11 kernel and 225 public checks
+normal/scalar, and the SAME actual package/three examples. Each accepted round
+reuses one core build per OS, with zero harness/native/selector builds in these
+PNG optimizations. The other 45 affected existing PNG decode/stream/
 composition costs need current evidence; unchanged validation, encoding,
 metadata-only scans and unrelated paths retain applicable proof.
 [Current resident PNG costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md)
@@ -269,9 +270,12 @@ pixels/owners/quiet gates pass. No retiming, pooling or pass claim from mean
 alone. One generic typed-int selector is reused; production/harness/native and
 full/package qualification are unchanged.
 The same report confirms Paeth16 at 0.907× / upper 0.962 (pass; stop), while
-Paeth8's 0.989–1.031 interval stays confidence-open. Average8/16 remain gaps at
-1.143/1.180×, uppers 1.154/1.189, 4,472/8,568 B/op. Four current-cost jobs reuse
-the same selector/build/native worker with no rebuilds or workload expansion.
+Paeth8's 0.989–1.031 interval stays confidence-open.
+[Average SIMD reconstruction](../benchmarks/WARM-PNG-AVERAGE-SIMD.md) supersedes
+the scalar Average8/16 gaps: 20.3%/22.5% less independent elapsed, unchanged
+4,472/8,568 B/op, at 0.911/0.915× with uppers 0.916/0.918. Both pass and stop.
+Exact pixels, scalar/overlap/tail/cancellation behavior and both confidence gates
+pass. Six independent tests are added; no new benchmark images or cases.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

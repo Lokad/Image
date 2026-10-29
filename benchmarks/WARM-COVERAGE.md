@@ -164,6 +164,14 @@ exactpixels/owners and quiet guards pass. Average16's older worker record is
 reconciled explicitly to the same existing current reference settings/boundary.
 45 costs remain unrefreshed; no case added, no passing/uncertain control retuned.
 
+[Average SIMD reconstruction](WARM-PNG-AVERAGE-SIMD.md) now supersedes both
+scalar gaps:20.3%/22.5%less independent elapsed, unchanged4472/8568Bop. Both
+Average8/16 pass uppers0.916/0.918 and stop. Earlier fast-return kernels stay
+unchanged; indexed validation is refreshed at1.359/upper1.369,1168Bop with exact
+descriptor/owners and restored proof. Full5088/OS,11kernel+225public normal/scalar
+andSAMEactualpackage/3examples pass. One corebuild/OS,zero harness/native/selector
+builds.45costs remain unrefreshed; no case added or removed.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

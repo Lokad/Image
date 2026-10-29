@@ -70,6 +70,15 @@ def render():
             assert png_rgba_costs['comparisonLowerBounds'][case] <= 1 < rgba_observation['conservativeRatioUpper']
         else:
             assert rgba_status == 'confirmed-gap' and png_rgba_costs['comparisonLowerBounds'][case] > 1
+    png_average = json.loads((ROOT / 'benchmarks/warm-png-average-simd-evidence.json').read_text(encoding='utf-8'))
+    assert png_average['productionChanged'] and png_average['decision']['passed'] and png_average['secondaryDecision']['passed']
+    assert png_average['qualification']['sameActualPackageBothOs'] and png_average['qualification']['fullChecksEachOs'] == 5088
+    assert set(png_average['cases']) == {'DecodeAverage8', 'DecodeAverage16', 'ValidateIndexedAdam7'}
+    for case, observations in png_average['cases'].items():
+        average_observation = observations[-1]
+        assert len(average_observation['managed']['actual']) == 12 and all(q['passed'] for q in average_observation['quietness'].values())
+        assert average_observation['receipt']['librarySha256'] == png_average['producers']['linuxSha256']
+        assert (average_observation['conservativeRatioUpper'] <= 1) == (case != 'ValidateIndexedAdam7')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -249,7 +258,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -505,8 +514,8 @@ earlier dataflow and resource proof. [Folded CRC reuse](../benchmarks/WARM-PNG-S
 accepted 28.7% less stored RGBA16 decode elapsed. On the current build, that case
 independently passes at 222.536 µs, 0.753× / upper 0.758, 8,568 B/op; stop.
 The unchanged PNG16 span/async validation paths pass at
-0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 remains 1.366× /
-upper 1.423, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
+0.943/0.811×, uppers 0.955/0.843, 240/8,544 B/op. Indexed Adam7 is refreshed at 1.359× /
+upper 1.369, 1,168 B/op. PNG8 remains confidence-open after one bounded resolution:
 0.986× / upper 1.020, 240 B/op; both independent jobs remain, with no further retiming.
 [Caller-root PNG row selection](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
 avoids uncached full-frame scratch: two retained outputs independently improve
@@ -514,9 +523,10 @@ avoids uncached full-frame scratch: two retained outputs independently improve
 with admitted peak 2,306,560 → 1,766,641 bytes. Both full decodes, output overlap,
 release and managed admission are timed; exact pixels/owners/cleanup pass.
 The predeclared allocation-saving exception and both confidence views pass.
-All 5,082 checks per OS, 225 focused public normal/scalar checks and the SAME
-actual package/three examples pass. One core build per OS is reused, with zero
-harness/native/selector builds. The other 45 affected existing PNG decode/stream/
+Current production passes 5,088 checks per OS, 11 kernel and 225 public checks
+normal/scalar, and the SAME actual package/three examples. Each accepted round
+reuses one core build per OS, with zero harness/native/selector builds in these
+PNG optimizations. The other 45 affected existing PNG decode/stream/
 composition costs need current evidence; unchanged validation, encoding,
 metadata-only scans and unrelated paths retain applicable proof.
 [Current resident PNG costs](../benchmarks/CURRENT-PNG-RGBA-DECODE-COSTS.md)
@@ -526,9 +536,12 @@ pixels/owners/quiet gates pass. No retiming, pooling or pass claim from mean
 alone. One generic typed-int selector is reused; production/harness/native and
 full/package qualification are unchanged.
 The same report confirms Paeth16 at 0.907× / upper 0.962 (pass; stop), while
-Paeth8's 0.989–1.031 interval stays confidence-open. Average8/16 remain gaps at
-1.143/1.180×, uppers 1.154/1.189, 4,472/8,568 B/op. Four current-cost jobs reuse
-the same selector/build/native worker with no rebuilds or workload expansion.
+Paeth8's 0.989–1.031 interval stays confidence-open.
+[Average SIMD reconstruction](../benchmarks/WARM-PNG-AVERAGE-SIMD.md) supersedes
+the scalar Average8/16 gaps: 20.3%/22.5% less independent elapsed, unchanged
+4,472/8,568 B/op, at 0.911/0.915× with uppers 0.916/0.918. Both pass and stop.
+Exact pixels, scalar/overlap/tail/cancellation behavior and both confidence gates
+pass. Six independent tests are added; no new benchmark images or cases.
 JPEG probing has twelve-actual gap
 confirmations; PNG/WebP probing remains screened. The
 [workspace reduction](../benchmarks/WARM-PROBE-WORKSPACE.md) lowers all four probes

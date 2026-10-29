@@ -1,5 +1,8 @@
 # Current resident RGBA PNG decode costs
 
+Average rows are superseded by [SIMD reconstruction](WARM-PNG-AVERAGE-SIMD.md).
+None/Paeth paths remain unchanged and retain the scoped evidence below.
+
 Six existing 513×259 controls have independent evidence on the qualified PGRR1
 build. No production change or causal comparison against older producers is made.
 
@@ -9,8 +12,8 @@ build. No production change or causal comparison against older producers is made
 | None RGBA16 | 2,891.613 | 0.999 / 1.006 | 8,568 | Confidence open |
 | Paeth RGBA8 | 3,040.484 | 1.014 / 1.031 | 4,472 | Confidence open |
 | Paeth RGBA16 | 5,173.711 | 0.907 / 0.962 | 8,568 | Pass; stop |
-| Average RGBA8 | 2,112.275 | 1.143 / 1.154 | 4,472 | Gap |
-| Average RGBA16 | 5,282.373 | 1.180 / 1.189 | 8,568 | Gap |
+| Average RGBA8 | 2,112.275 | 1.143 / 1.154 | 4,472 | Prior; superseded |
+| Average RGBA16 | 5,282.373 | 1.180 / 1.189 | 8,568 | Prior; superseded |
 
 All 12 actuals per case, native brackets, filtered/unfiltered bounds and both
 idle-v2 guards are retained. RGBA16 None and Paeth8 remain confidence-open; their

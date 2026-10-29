@@ -1262,6 +1262,11 @@ internal static class PngCodec
             else UnfilterPaeth6(row, previous, cancellation);
             return;
         }
+        if (filter == 3 && (stride == 4 || stride == 8) && Vector128.IsHardwareAccelerated
+            && previous.Length >= row.Length && !((ReadOnlySpan<byte>)row).Overlaps(previous))
+        {
+            UnfilterAverage(row, previous, stride, cancellation); return;
+        }
         for (var i = 0; i < row.Length; i++)
         {
             if ((i & 65535) == 0) cancellation.ThrowIfCancellationRequested();
@@ -1274,6 +1279,41 @@ internal static class PngCodec
                 _ => throw new ImageDataException("Invalid PNG filter.")
             };
             row[i] = unchecked((byte)(row[i] + prediction));
+        }
+    }
+
+    private static void UnfilterAverage(Span<byte> row, ReadOnlySpan<byte> previous, int stride, CancellationToken cancellation)
+    {
+        // Average predicts encoded bytes at either sample depth. Widen before
+        // adding so the shift rounds down, then retain each byte modulo 256.
+        var left = Vector128<ushort>.Zero;
+        var byteMask = Vector128.Create((ushort)255);
+        var offset = 0;
+        if (stride == 8)
+            for (; offset <= row.Length - 8; offset += 8)
+            {
+                if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+                var up = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<ulong>(previous[offset..]), 0UL).AsByte());
+                var delta = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<ulong>(row[offset..]), 0UL).AsByte());
+                left = (((left + up) >> 1) + delta) & byteMask;
+                var value = Vector128.Narrow(left, Vector128<ushort>.Zero).AsUInt64().GetElement(0);
+                MemoryMarshal.Write(row[offset..], in value);
+            }
+        else
+            for (; offset <= row.Length - 4; offset += 4)
+            {
+                if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+                var up = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<uint>(previous[offset..]), 0U, 0U, 0U).AsByte());
+                var delta = Vector128.WidenLower(Vector128.Create(MemoryMarshal.Read<uint>(row[offset..]), 0U, 0U, 0U).AsByte());
+                left = (((left + up) >> 1) + delta) & byteMask;
+                var value = Vector128.Narrow(left, Vector128<ushort>.Zero).AsUInt32().GetElement(0);
+                MemoryMarshal.Write(row[offset..], in value);
+            }
+        for (; offset < row.Length; offset++)
+        {
+            if ((offset & 65535) == 0) cancellation.ThrowIfCancellationRequested();
+            var prediction = ((offset >= stride ? row[offset - stride] : 0) + previous[offset]) / 2;
+            row[offset] = unchecked((byte)(row[offset] + prediction));
         }
     }
 
