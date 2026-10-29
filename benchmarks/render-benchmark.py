@@ -204,6 +204,10 @@ def render():
         assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
         assert o['receipt']['librarySha256'] == png_sparse_palette['producers']['linuxSha256']
         assert (o['conservativeRatioUpper'] <= 1) == (png_sparse_palette['status'][case] == 'confirmed-pass')
+    png_materialized_rejected = json.loads((ROOT / 'benchmarks/png-cancelable-materialized-cursor-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert png_materialized_rejected['candidateRejected'] and not png_materialized_rejected['productionChanged']
+    assert not png_materialized_rejected['decision']['passed']
+    assert png_materialized_rejected['qualification']['confirmationRuns'] == 0
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -668,6 +672,11 @@ reduce tight+cancelable PNG8 elapsed by 21.0%, with unchanged 68,224 B/op;
 1.094× / upper 1.107 remains a gap. The word companion passes upper 0.984,
 70,272 B/op. Exact pixels, cancellation, admission, owners and quiet gates pass;
 full 5,132 checks/OS, affected normal/scalar and same actual package qualify.
+
+[Materialized cancelable cursor trial](../benchmarks/PNG-CANCELABLE-MATERIALIZED-CURSOR-REJECTED.md)
+misses its 5% short-screen gate (4.34% elapsed, 4.20% normalized); it is removed
+without confirmation or a changed accepted cost. Qualified source and binaries
+are restored; existing full/package evidence remains valid.
 
 [Stream and composition costs](../benchmarks/CURRENT-PNG-STREAM-COMPOSITION-COSTS.md)
 finish the planned PNG refresh: seekable PNG16 passes at upper 0.958, 8,664 B/op.

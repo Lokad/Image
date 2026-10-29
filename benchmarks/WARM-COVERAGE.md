@@ -252,6 +252,11 @@ Gray1 sharedfallback currentcost1.129/upper1.155,1440Bop remainsgap;no historica
 causalityclaim. Full5153/OS,140internal+258publicnormal/scalar,SAMEpackage/3examples
 pass. Onecorebuild/OS,zerootherbuilds;no newbuffer/LUT. Full268objective active.
 
+[Materialized cancelable PNG cursor](PNG-CANCELABLE-MATERIALIZED-CURSOR-REJECTED.md)
+fails the predeclared5% screen:4.34%elapsed/4.20%normalized reduction. Removed,
+no variants/confirmation;exact qualified source/binaries/package restored,
+existing full qualification reused. Accepted costs and268required paths unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

@@ -278,6 +278,11 @@ reduce tight+cancelable PNG8 elapsed by 21.0%, with unchanged 68,224 B/op;
 70,272 B/op. Exact pixels, cancellation, admission, owners and quiet gates pass;
 full 5,132 checks/OS, affected normal/scalar and same actual package qualify.
 
+[Materialized cancelable cursor trial](../benchmarks/PNG-CANCELABLE-MATERIALIZED-CURSOR-REJECTED.md)
+misses its 5% short-screen gate (4.34% elapsed, 4.20% normalized); it is removed
+without confirmation or a changed accepted cost. Qualified source and binaries
+are restored; existing full/package evidence remains valid.
+
 [Stream and composition costs](../benchmarks/CURRENT-PNG-STREAM-COMPOSITION-COSTS.md)
 finish the planned PNG refresh: seekable PNG16 passes at upper 0.958, 8,664 B/op.
 Byte seekable/composed, word composed and async nonseekable remain gaps at
