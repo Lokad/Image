@@ -34,6 +34,9 @@ def render():
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
     vp8l = json.loads((ROOT / 'benchmarks/warm-vp8l-prepared-prediction-cost-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
+    vp8_validation = json.loads((ROOT / 'benchmarks/current-vp8-alpha-validation-evidence.json').read_text(encoding='utf-8'))
+    assert not vp8_validation['productionChanged'] and vp8_validation['allBuilds'] == 0
+    assert vp8_validation['independentQuietConfirmation']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -213,7 +216,8 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = png_cursor if case in png_cursor['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads
+        producer = (vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+                    else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
         receipt = observation['receipt']
@@ -451,8 +455,13 @@ compares complete coding and source metadata against FFmpeg natural-frame decode
 plus an original metadata adapter, without RGBA normalization or caller raster
 copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
-validation pass independently; PNG8 and progressive420 remain confirmed gaps. Other
-validation rows are short screens, without independent parity claims. The
+validation pass independently; PNG8 and progressive420 remain confirmed gaps. VP8L and indexed
+validation rows are short screens, without independent parity claims.
+[VP8-plus-alpha validation](../benchmarks/CURRENT-VP8-ALPHA-VALIDATION.md) now
+independently confirms 1.523× / upper 1.697, 770,092 B/op on the unchanged
+qualified build. Its complete-coding/natural-frame/metadata boundary is fixed;
+zero builds or repeated full/package checks. This resolves an older screen
+without a causal speedup/regression claim. The
 [shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) reduces PNG8
 validation elapsed by 22.85% filtered / 22.87% all actuals against a fresh baseline,
 with unchanged 240 B/op. Its 1.042× / upper 1.052 gap remains. PNG16 span and async

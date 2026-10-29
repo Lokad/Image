@@ -216,7 +216,7 @@ and unlisted content/settings are excluded.
 | Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
-| Validate VP8+alpha, span | 7,923.113 | 5,448.818 | 1.454 / 1.595 | 770,092 | Screen gap |
+| Validate VP8+alpha, span | 8,716.160 | 5,721.858 | 1.523 / 1.697 | 770,092 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,942.287 | 3,614.992 | 0.814 / 0.817 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 16.133 | 13.073 | 1.234 / 1.312 | 96 | Screen gap |
@@ -231,8 +231,13 @@ compares complete coding and source metadata against FFmpeg natural-frame decode
 plus an original metadata adapter, without RGBA normalization or caller raster
 copies. Async uses resident immediate callbacks and includes acquisition/EOF and
 cleanup. Inputs are 513×259 except indexed Adam7. Baseline420, PNG16 span and async
-validation pass independently; PNG8 and progressive420 remain confirmed gaps. Other
-validation rows are short screens, without independent parity claims. The
+validation pass independently; PNG8 and progressive420 remain confirmed gaps. VP8L and indexed
+validation rows are short screens, without independent parity claims.
+[VP8-plus-alpha validation](../benchmarks/CURRENT-VP8-ALPHA-VALIDATION.md) now
+independently confirms 1.523× / upper 1.697, 770,092 B/op on the unchanged
+qualified build. Its complete-coding/natural-frame/metadata boundary is fixed;
+zero builds or repeated full/package checks. This resolves an older screen
+without a causal speedup/regression claim. The
 [shared PNG cursor](../benchmarks/WARM-PNG-STREAMING-CURSOR.md) reduces PNG8
 validation elapsed by 22.85% filtered / 22.87% all actuals against a fresh baseline,
 with unchanged 240 B/op. Its 1.042× / upper 1.052 gap remains. PNG16 span and async

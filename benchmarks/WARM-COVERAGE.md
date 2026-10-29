@@ -74,6 +74,13 @@ fails its 5% screen gate. The original source and exact qualified binaries are
 restored; accepted PNG costs, package proof and required cases are unchanged.
 No variants or independent timing confirmation follow.
 
+[Current VP8-plus-alpha validation](CURRENT-VP8-ALPHA-VALIDATION.md) independently
+confirms the existing borrowed-span control at1.523× / upper1.697,770,092B/op.
+Complete coding, nine-field descriptor, source/surviving ownership and quiet gates
+pass, with12actuals and unchanged native/settings/input/boundary. Zero builds or
+repeated qualification; the original producer header is restored exactly. This
+replaces its uncertain screen without a causal gain/regression or new case.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
