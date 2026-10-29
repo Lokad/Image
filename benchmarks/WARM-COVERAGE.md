@@ -41,6 +41,12 @@ confirms the existing513×259RGBA8→1027×519 path at1.033× / upper1.038,
 319,038B/op. It remains a gap. Exact independent pixels/native bounds/source/
 owners/quiet pass. Zero builds and no repeated qualification; no controls added.
 
+[Current Lanczos3 word enlargement](CURRENT-LANCZOS3-ENLARGE16-COST.md) independently
+confirms the existing513×259RGBA16→1027×519 path at1.267× / upper1.453,
+4,583,983B/op. Exact independent pixels/native bounds/source/owners/quiet pass.
+Zero builds/repeated qualification. All four existing Lanczos costs are now
+independently current, with unchanged source; all remain gaps.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
