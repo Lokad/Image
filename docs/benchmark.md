@@ -1,9 +1,9 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
+Updated 2026-10-29. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
-Ten other controls retain
+Nine other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -16,7 +16,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph, VP8L RGBA8 encode and bicubic Up16/TightCross16 and Lanczos3 Reduce8 have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph, VP8L RGBA8 encode and bicubic Up16/TightCross16 and Lanczos3 Reduce8/16 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -61,8 +61,11 @@ and shared word publication supersede its other rows with current results.
 [Lanczos3 byte reduction](../benchmarks/CURRENT-LANCZOS3-REDUCE8-COST.md)
 now independently confirms1.500× / upper1.511,138,451B/op on unchanged production.
 Exact pixels and the same native quality/ownership gates pass; one small launcher
-build reuses qualified library/harness/worker and package proof. The other three
-Lanczos rows retain their identified release screens.
+build reuses qualified library/harness/worker and package proof.
+[Word reduction](../benchmarks/CURRENT-LANCZOS3-REDUCE16-COST.md) independently
+confirms1.585× / upper1.666,138,439B/op, with the same exact managed/native-bound
+gates and unchanged-path qualification. The two enlargement rows retain release
+screens; neither confirmation makes a causal comparison against older screens.
 B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 
@@ -169,7 +172,7 @@ control scope. These measurements make no arbitrary-content compression claim.
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
 | Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |
-| Lanczos3 reduction RGBA16 → 256×129 | 729.03 | 505.81 | 1.441 / 1.745 | 138,435 |
+| Lanczos3 reduction RGBA16 † → 256×129 | 802.46 | 506.27 | 1.585 / 1.666 | 138,439 |
 | Lanczos3 enlargement RGBA8 → 1027×519 | 4,217.30 | 4,129.35 | 1.021 / 1.137 | 319,038 |
 | Lanczos3 enlargement RGBA16 → 1027×519 | 5,395.65 | 4,106.76 | 1.314 / 1.571 | 4,583,983 |
 

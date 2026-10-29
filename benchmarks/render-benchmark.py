@@ -41,6 +41,9 @@ def render():
     lanczos_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-reduce8-cost-evidence.json').read_text(encoding='utf-8'))
     assert not lanczos_cost['productionChanged'] and lanczos_cost['productionHarnessNativeBuilds'] == 0
     assert lanczos_cost['selectorBuilds'] == 1 and lanczos_cost['independentQuietConfirmation']
+    lanczos_word_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-reduce16-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not lanczos_word_cost['productionChanged'] and lanczos_word_cost['productionHarnessNativeBuilds'] == 0
+    assert lanczos_word_cost['selectorBuilds'] == 1 and lanczos_word_cost['independentQuietConfirmation']
     assert not down8_cost['productionChanged'] and down8_cost['independentQuietConfirmation']
     assert down8_cost['preparation']['productionSha256'] == predictive_cost['producers']['linuxSha256']
     assert horizontal_cost['productionChanged'] and horizontal_cost['independentQuietConfirmationThisPair']
@@ -55,7 +58,8 @@ def render():
     editing_costs = {'case22': byte_zero_taps['cases']['Down8'][-1],
                      'case23': word_publication['cases']['Up16'][-1],
                      'case24': cross16_cost['cases']['TightCross16'][-1],
-                     'case27': lanczos_cost['cases']['Reduce8'][-1]}
+                     'case27': lanczos_cost['cases']['Reduce8'][-1],
+                     'case28': lanczos_word_cost['cases']['Reduce16'][-1]}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
@@ -120,13 +124,13 @@ def render():
         ratio = observation['worstBracketRatio']
         upper = observation['conservativeRatioUpper']
         if case['id'] in editing_costs:
-            editing_producer = byte_zero_taps if case['id'] == 'case22' else word_publication if case['id'] == 'case23' else cross16_cost if case['id'] == 'case24' else lanczos_cost
+            editing_producer = byte_zero_taps if case['id'] == 'case22' else word_publication if case['id'] == 'case23' else cross16_cost if case['id'] == 'case24' else lanczos_cost if case['id'] == 'case27' else lanczos_word_cost
             expected_library = editing_producer['producers']['linuxSha256']
         else:
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case08', 'case12', 'case23', 'case24', 'case27'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case02', 'case08', 'case12', 'case23', 'case24', 'case27', 'case28'} or updated and receipt['caseId'] in {'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -245,10 +249,10 @@ def render():
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     return f'''# Lokad.Image benchmarks
 
-Updated 2026-10-28. **† Rows** use qualified 0.2.1 development-path evidence;
+Updated 2026-10-29. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
-Ten other controls retain
+Nine other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
@@ -261,7 +265,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph, VP8L RGBA8 encode and bicubic Up16/TightCross16 and Lanczos3 Reduce8 have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph, VP8L RGBA8 encode and bicubic Up16/TightCross16 and Lanczos3 Reduce8/16 have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -306,8 +310,11 @@ and shared word publication supersede its other rows with current results.
 [Lanczos3 byte reduction](../benchmarks/CURRENT-LANCZOS3-REDUCE8-COST.md)
 now independently confirms1.500× / upper1.511,138,451B/op on unchanged production.
 Exact pixels and the same native quality/ownership gates pass; one small launcher
-build reuses qualified library/harness/worker and package proof. The other three
-Lanczos rows retain their identified release screens.
+build reuses qualified library/harness/worker and package proof.
+[Word reduction](../benchmarks/CURRENT-LANCZOS3-REDUCE16-COST.md) independently
+confirms1.585× / upper1.666,138,439B/op, with the same exact managed/native-bound
+gates and unchanged-path qualification. The two enlargement rows retain release
+screens; neither confirmation makes a causal comparison against older screens.
 B/op measures managed allocation, not native
 allocation, peak live memory or cooperative-admission charges.
 

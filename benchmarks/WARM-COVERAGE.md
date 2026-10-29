@@ -25,6 +25,12 @@ also fails the5% screen gate. Native execution rates differ from the retained
 confirmation; no causal gain/regression is inferred. Exact qualified source and
 binaries are restored. These failed candidates change no current cost or scope.
 
+[Current Lanczos3 word reduction](CURRENT-LANCZOS3-REDUCE16-COST.md) independently
+confirms the existing513×259RGBA16→256×129 path at1.585× / upper1.666,
+138,439B/op. Exact independent managed pixels, unchanged native max1/RMSE.25,
+source/owners and quiet guards pass. One selector build reuses unchanged
+production/harness/native/oracle/full/package evidence; no new cases.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
