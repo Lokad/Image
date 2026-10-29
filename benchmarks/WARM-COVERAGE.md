@@ -15,26 +15,11 @@ and actual-package qualification. One small selector build, no production,
 harness/native build or new control. Other Lanczos rows retain release screens;
 no general Lanczos CPU-pass claim follows.
 
-The [packed-byte Lanczos trial](LANCZOS3-PACKED-PREMULTIPLICATION-REJECTED.md)
-is closed after a1.98% short-screen improvement missed the5% gate. Exact qualified
-source/binaries are restored; no current cost or qualification changes. Its
-bounded current-code profile and rejected actuals are retained for future decisions.
-
-The [four-tap vertical Lanczos trial](LANCZOS3-FOUR-TAP-VERTICAL-REJECTED.md)
-also fails the5% screen gate. Native execution rates differ from the retained
-confirmation; no causal gain/regression is inferred. Exact qualified source and
-binaries are restored. These failed candidates change no current cost or scope.
-
 [Current Lanczos3 word reduction](CURRENT-LANCZOS3-REDUCE16-COST.md) independently
 confirms the existing513×259RGBA16→256×129 path at1.585× / upper1.666,
 138,439B/op. Exact independent managed pixels, unchanged native max1/RMSE.25,
 source/owners and quiet guards pass. One selector build reuses unchanged
 production/harness/native/oracle/full/package evidence; no new cases.
-
-The [word-window span trial](LANCZOS3-WORD-SPAN-HOISTING-REJECTED.md) is closed.
-Shifted native rates made its initial screen uncertain; one fresh frozen-baseline
-screen fails to support the5% gain gate. Exact qualified sources/binaries are
-restored, with no current-cost changes or repeated full/package qualification.
 
 [Current Lanczos3 byte enlargement](CURRENT-LANCZOS3-ENLARGE8-COST.md) independently
 confirms the existing513×259RGBA8→1027×519 path at1.033× / upper1.038,
@@ -47,10 +32,14 @@ confirms the existing513×259RGBA16→1027×519 path at1.267× / upper1.453,
 Zero builds/repeated qualification. All four existing Lanczos costs are now
 independently current, with unchanged source; all remain gaps.
 
-[Paired Lanczos normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md) is
-rejected after one independent pair resolves conflicting short-screen rates:
-1.59% lower raw means with overlapping intervals, missing the5% gate. Exact
-qualified source/tests/binaries/package are restored; all accepted costs remain.
+Closed Lanczos experiments retain their rejected sources, raw samples and
+restoration in linked reports: [packed premultiplication](LANCZOS3-PACKED-PREMULTIPLICATION-REJECTED.md),
+[vertical batching](LANCZOS3-FOUR-TAP-VERTICAL-REJECTED.md),
+[word spans](LANCZOS3-WORD-SPAN-HOISTING-REJECTED.md),
+[paired normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md) and
+[reciprocal normalization](LANCZOS3-RECIPROCAL-NORMALIZATION-REJECTED.md).
+Exact qualified production is restored; these trials change no accepted cost,
+required case or applicable full/package qualification.
 
 ## Finite checklist
 
