@@ -85,6 +85,11 @@ replaces its uncertain screen without a causal gain/regression or new case.
 gate. Original source/exact binaries/package are restored; current validation
 costs and required paths stay. No variants or independent confirmation follow.
 
+[VP8 fixed-alignment arithmetic](VP8-FIXED-ALIGNMENT-WINDOW-REJECTED.md) also
+fails its 5% screen gate. Its independent exact algebra and cursor checks pass,
+but no complete-operation gain follows. Both source files/exact binaries/package
+are restored; no width/inlining variants or repeated qualification.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
