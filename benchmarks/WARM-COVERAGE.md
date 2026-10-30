@@ -455,6 +455,14 @@ confirmation. Three useful public fill/truncation controls remain and pass withi
 101 focused checks each normal/scalar on both OSes. Current qualified production
 and benchmark costs are unchanged; no redundant full/package run.
 
+[Current RGBA8/None PNG decode](CURRENT-PNG-RGBA8-CRC-COST.md) confirms the
+existing resident control at1.092/upper1.098/lower1.085,1520.358µs,4472B/op.
+One12actual job on the immutable CRC build, exact original pixels/packet/native/
+source/ownership and both quiet guards; zero builds or new fixtures/settings.
+No causal gain claim or retiming. Earlier affected cost is historical. A bounded
+source review finds no new substantial lead beyond the accepted cursor and closed
+literal/refill/classifier/token-loop variants; no production candidate added.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

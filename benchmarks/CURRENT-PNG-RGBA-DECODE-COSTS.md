@@ -5,6 +5,8 @@ All costs below are historical after [GFNI CRC](WARM-PNG-GFNI-CRC.md).
 [Current None/Paeth evidence](CURRENT-PNG-NONE-PAETH-CRC-COSTS.md) refreshes two
 confidence-open cases; other affected paths need current costs before CPU-pass
 claims. The original behavioral contracts and raw evidence remain retained.
+[Current RGBA8/None](CURRENT-PNG-RGBA8-CRC-COST.md) independently confirms a
+1.092× gap on the CRC build.
 
 Six existing 513×259 controls have independent evidence on the qualified PGRR1
 build. No production change or causal comparison against older producers is made.

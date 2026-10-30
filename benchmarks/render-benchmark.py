@@ -587,6 +587,8 @@ before CPU-pass claims.
 Two resident PNG decode controls also remain confidence-open on this build;
 [None/Paeth evidence](../benchmarks/CURRENT-PNG-NONE-PAETH-CRC-COSTS.md) retains
 one confirmation each without retiming or assuming an optimization need.
+The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
+separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
 The current producer passes **5,193 checks per OS**, plus 642 internal and 386
 public focused checks in normal, GFNI-only-disabled and scalar modes. The same
