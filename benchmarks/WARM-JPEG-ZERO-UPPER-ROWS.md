@@ -1,5 +1,9 @@
 # Omit exact zero JPEG frequency rows
 
+Four-component costs are superseded by
+[caller coefficient reuse](WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md). The zero-row
+primitive and unchanged three-component420 confirmation remain applicable.
+
 The existing sparse-CMYK complete decode uses **25.5% less elapsed time**, with
 exact pixels. Its **1.658× / upper1.669** FFmpeg cost remains a gap. No owned
 storage, cache or table is added.

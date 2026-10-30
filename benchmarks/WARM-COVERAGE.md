@@ -342,6 +342,16 @@ settings/exactnormal-scalar-nativepixels/owners/quiet pass. Full5171/OS,
 Onecorebuild/OS,zerootherbuilds. Onepre-candidate896sampleprofile retained,
 not currentpost-changeattribution. Stoprowcountvariants;full268scopeopen.
 
+[Callerfour-bufferreuse](WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md) accepts7.5%less
+elapsedand549351B/op(33.6%)lessallocation:1.664/upper1.672,1085562B/op. Oneextra
+549120Bpayload canremaincachedwithinunchanged4MiBceiling;shared-rootbuffers
+neverpool. OwnedSparse2Dcurrent1.677/upper1.688,1085520B/op;ordinary3component420
+unchangedpathreuses1.115/upper1.120,757328B/op. BothCMYKcontrolsaround1.67 are
+largestconfirmedgaps;no orderingretime. No newcases/settings. Full5171/OS,
+38internal/98publicnormal-scalar,SAMEpackage/governedconsumer/3examples pass.
+Onecorebuild/OS,zerootherbuilds,nonewtestsmirroringexistingpolicy. Exactpixels/
+inputs/settings/source/owners/quiet pass. Stopcachepolicyvariants;full268open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

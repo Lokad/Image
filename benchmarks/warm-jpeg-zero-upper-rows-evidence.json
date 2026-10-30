@@ -5737,5 +5737,18 @@
     "mirrored": true,
     "allMembersVerified": true
   },
-  "next": "Stop zero-upper-row variants. Unchanged callerCMYK1.807/upper1.817 is now the largest confirmed material gap. Bound an audit of its existing coefficient reuse/allocation path before another candidate; preserve root-governed ownership and cache ceiling. Full268-path objective stays open."
+  "next": "Stop zero-upper-row variants. Unchanged callerCMYK1.807/upper1.817 is now the largest confirmed material gap. Bound an audit of its existing coefficient reuse/allocation path before another candidate; preserve root-governed ownership and cache ceiling. Full268-path objective stays open.",
+  "supersededCases": {
+    "CmykCaller": {
+      "by": "warm-jpeg-caller-coefficient-slots-evidence.json",
+      "reason": "Shared4component coefficient reuse policy changes these complete operation costs; original raw evidence remains retained."
+    },
+    "CmykAdobeSparse2D": {
+      "by": "warm-jpeg-caller-coefficient-slots-evidence.json",
+      "reason": "Shared4component coefficient reuse policy changes these complete operation costs; original raw evidence remains retained."
+    }
+  },
+  "unchangedCasesReused": [
+    "NativeDecode420"
+  ]
 }

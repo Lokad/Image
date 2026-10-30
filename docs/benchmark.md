@@ -48,18 +48,18 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,171 checks on each platform, plus 32 affected kernel
+The current producer passes 5,171 checks on each platform, plus 38 affected kernel
 and 98 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
-[Omitting zero JPEG frequency rows](../benchmarks/WARM-JPEG-ZERO-UPPER-ROWS.md)
-independently reduces sparse-CMYK elapsed by 25.5%, retaining exact pixels and
-frozen inputs/settings: 1.658× / upper1.669, 1,085,520 B/op (5 measured B/op above
-the prior result; no new owned storage). Baseline420 is current at 1.115× /
-upper1.120, 757,328 B/op; elapsed is about 1% higher than its prior independent
-result, without a fresh paired causal claim. Unchanged DC-only caller-CMYK is
-now the largest confirmed gap: its valid 1.807× / upper1.817 confirmation and
-1,634,913 B/op remain applicable because it bypasses the changed matrix.
+[Four-buffer caller-CMYK reuse](../benchmarks/WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md)
+independently reduces elapsed by 7.5% and allocation by 549,351 B/op (33.6%):
+1.664× / upper1.672, 1,085,562 B/op. This default unrooted control may retain
+549,120 more payload bytes within the unchanged 4 MiB cache ceiling; shared-budget
+operations still bypass the cache. Owned sparse-CMYK is current at 1.677× /
+upper1.688, 1,085,520 B/op, without a fresh paired causal gain claim. These two
+are the largest confirmed material gaps. The unchanged three-component420 path
+retains its valid 1.115× / upper1.120 confirmation and 757,328 B/op.
 Other affected JPEG rendering paths need applicable costs before CPU-pass claims;
 metadata-only inspection, coding validation and unchanged paths reuse valid evidence.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
@@ -185,10 +185,10 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | PNG RGBA16, NoCompression0 / native0 ‡ | 443.91 | 421.09 | 1.054 / 1.090 | 1,741,712 | 1,066,552 / 1,066,552 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 383,214.38 | 407,274.63 | 0.941 / 0.979 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,124.01 | 1,008.25 | 1.115 / 1.120 | 757,328 | — |
-| JPEG DC-only, caller CMYK decode † | 600.31 | 332.30 | 1.807 / 1.817 | 1,634,913 | — |
+| JPEG DC-only, caller CMYK decode † | 555.26 | 333.64 | 1.664 / 1.672 | 1,085,562 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
-| JPEG CMYK sparse-2D, resident decode † | 731.43 | 441.28 | 1.658 / 1.669 | 1,085,520 | — |
+| JPEG CMYK sparse-2D, resident decode † | 733.93 | 437.75 | 1.677 / 1.688 | 1,085,520 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

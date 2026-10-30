@@ -7,6 +7,7 @@ internal ref partial struct JpegDecoder
     // retain the original component order, including subsampled YCCK planes.
     private void MaterializeCmykPlanes()
     {
+        if (!context.HasMemoryBudget) JpegCoefficientPool.Shared.EnableFourthSlot();
         Span<byte> block = stackalloc byte[64];
         foreach (var component in components)
         {
