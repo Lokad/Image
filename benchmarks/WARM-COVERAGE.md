@@ -375,6 +375,17 @@ These three existing paths do not expand the268-case inventory. YCCK and4:1:0
 are now the largest demonstrated gaps; prioritize one substantial YCCKrow
 sampling/black/color primitive before smaller-gap or closed-trial work.
 
+[YCCK conversion over rows](WARM-YCCK-ROW-TILES.md) supersedes the YCCK420 gap:
+3,420.79→462.26 µs,86.5% less independent elapsed,0.653× / upper0.660 passes.
+Stop this unchanged control.895,545 B/op (measured +87),192 bytes bounded stack,
+no new heap buffer/cache/owner; exact half-grid/Q16/Q13 pixels and cancellation
+remain. All5,180 checks/OS,336internal/339public focused normal/scalar,SAMEpackage/
+governedconsumer/threeexamples pass. One corebuild/OS,zero other measurement
+builds/variants/profiles/retimes. Current4:1:0 4.703/upper4.718 and4:1:1
+2.807/upper2.823 remain the largest gaps on unchanged paths. Other affected
+owned YCCK boundaries need applicable current costs before CPU-pass claims;
+caller samples and unrelated paths reuse relevant evidence. Full268 stays open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

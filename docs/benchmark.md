@@ -48,7 +48,7 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,178 checks on each platform, plus 334 internal and
+The current producer passes 5,180 checks on each platform, plus 336 internal and
 339 public focused checks normal/scalar per OS, and the same actual package/three examples.
 The [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks pass through that package on both OSes.
@@ -64,15 +64,20 @@ ownership and native boundaries remain. Other affected baseline JPEG costs need
 current evidence before CPU-pass claims. Progressive coefficient algorithms remain;
 its shared dispatch gets no new CPU-pass claim. Metadata-only parsing, encoders,
 other codecs and editing/text retain applicable unchanged-path evidence.
+[YCCK conversion over rows](../benchmarks/WARM-YCCK-ROW-TILES.md) reduces the existing
+owned YCCK420 control from 3,420.79 to 462.26 µs:86.5% less independent elapsed,
+0.653× / upper0.660,895,545 B/op (measured +87). Every pixel remains exact.
+The kernel uses192 bytes of bounded stack scratch and existing admitted source/
+output owners, with no new heap buffer or cache. All5,180 checks/OS and the same
+actual package pass. Stop this passing control; other affected owned YCCK costs
+still need applicable current evidence. Caller sample paths are unchanged.
 [Extended-JPEG reconciliation](../benchmarks/WARM-EXTENDED-JPEG-CURRENT-COSTS.md)
-adds current confirmations of three existing controls: YCCK4204.835× / upper4.864,
-895,458B/op;4:1:1 2.807× / upper2.823,751,280B/op;4:1:0 4.703× / upper4.718,
-720,792B/op. All normal/scalar native and independent pixels are now exact.
-Historical expected pixels and padded-grid adapters are corrected to the declared
-native-output policy; original packets/source data and production pixels remain
-unchanged. These are current costs, not causal comparisons with earlier exports.
-YCCK and4:1:0 now lead optimization priorities. The same JDS1qualification/package
-is reused; no production build, full-suite repeat or new workload matrix.
+retains current4:1:1 2.807× / upper2.823,751,280 B/op and4:1:0 4.703× /
+upper4.718,720,792 B/op. Both have exact independent/native pixels on unchanged
+paths. Their old padded-grid exports were reconciled to the declared native
+policy with original packets/source data preserved; no causal comparison with
+older exports follows. These are now the largest demonstrated gaps. No new
+workload matrix or repeated confirmation of passing cases.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -198,7 +203,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 | JPEG CMYK sparse-2D, resident decode † | 658.64 | 443.71 | 1.484 / 1.491 | 1,085,759 | — |
-| JPEG YCCK420, resident decode † | 3,420.79 | 707.48 | 4.835 / 4.864 | 895,458 | — |
+| JPEG YCCK420, resident decode † | 462.26 | 708.38 | 0.653 / 0.660 | 895,545 | — |
 | JPEG 4:1:1, resident decode † | 1,256.78 | 447.72 | 2.807 / 2.823 | 751,280 | — |
 | JPEG 4:1:0, resident decode † | 2,388.42 | 507.81 | 4.703 / 4.718 | 720,792 | — |
 

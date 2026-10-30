@@ -1,8 +1,11 @@
 # Current extended-JPEG decode costs
 
+YCCK420 is superseded by [row conversion](WARM-YCCK-ROW-TILES.md), independently
+confirmed at 0.653× / upper 0.660. The 4:1:1/4:1:0 costs below remain current.
+
 Three existing required controls now have valid current costs on the unchanged
-qualified production build. **YCCK4204.835× and4:1:0 4.703× are the largest
-demonstrated gaps.** All three have exact independent managed/native pixels.
+qualified production build. At this checkpoint, YCCK420 4.835× and 4:1:0 4.703× were the largest
+demonstrated gaps. All three have exact independent managed/native pixels.
 
 | Complete owned RGBA8 decode,513×259 | Lokad µs | FFmpeg µs | Ratio / upper | Managed B/op | Encoded input B |
 | --- | ---: | ---: | ---: | ---: | ---: |

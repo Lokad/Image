@@ -44,6 +44,7 @@ internal ref partial struct JpegDecoder
                 }
                 return result;
             }
+            if (source == JpegColorSpace.Ycck && TryRenderHalfResolutionYcck(result, invert)) return result;
             for (var y = 0; y < info.Height; y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();

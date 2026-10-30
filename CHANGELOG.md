@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster YCCK 4:2:0 decoding through SIMD over rows, preserving exact pixels,
+  portable execution, cancellation and shared admission.
 - Baseline JPEG decoding reconstructs component planes directly, and pixel
   validation uses block scratch, reducing admitted workspace with exact pixels.
 - Adaptive lossless PNG row prediction for predictable content, including
