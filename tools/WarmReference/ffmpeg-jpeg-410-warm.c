@@ -1,8 +1,7 @@
 /* Original benchmark-only public-API adapter. JPEG framing follows ITU T.81.
- * Resident H4V2 JPEG -> fresh independently owned RGBA8. Full-range centered
- * original quarter-width samples are recovered from even decoder positions.
- * Centered half-height interpolation precedes 516-column grid conversion and
- * in-place output compaction to the original odd width. No packet changes. */
+ * Resident H4V2 JPEG -> fresh independently owned RGBA8. Preserve the native
+ * decoder's byte half-grid expansion and convert at actual coded dimensions
+ * using the public reference's chroma positions. No packet changes. */
 #define _GNU_SOURCE
 #include <inttypes.h>
 #include <sched.h>
@@ -39,7 +38,7 @@ typedef struct {
     AVFrame *decoded;
     struct SwsContext *conversion;
     AVPacket *input;
-    uint8_t *source,*output,*expected,*vertical;
+    uint8_t *source,*output,*expected;
     size_t encoded_bytes,raw_bytes;
     int width,height,cpu;
     uint64_t completed,observed;
@@ -47,15 +46,15 @@ typedef struct {
 static void initialize_conversion(Work *w)
 {
     w->conversion=sws_alloc_context(); if (!w->conversion) fail("Allocate conversion failed.");
-    require(av_opt_set_int(w->conversion,"srcw",(w->width+3)&~3,0),"Set source width");
+    require(av_opt_set_int(w->conversion,"srcw",w->width,0),"Set source width");
     require(av_opt_set_int(w->conversion,"srch",w->height,0),"Set source height");
-    require(av_opt_set_int(w->conversion,"dstw",(w->width+3)&~3,0),"Set output width");
+    require(av_opt_set_int(w->conversion,"dstw",w->width,0),"Set output width");
     require(av_opt_set_int(w->conversion,"dsth",w->height,0),"Set output height");
-    require(av_opt_set_int(w->conversion,"src_format",AV_PIX_FMT_YUVJ411P,0),"Set decoded format");
+    require(av_opt_set_int(w->conversion,"src_format",AV_PIX_FMT_YUVJ420P,0),"Set decoded format");
     require(av_opt_set_int(w->conversion,"dst_format",AV_PIX_FMT_RGBA,0),"Set owned output format");
-    require(av_opt_set_int(w->conversion,"sws_flags",SWS_BILINEAR|SWS_ACCURATE_RND|SWS_FULL_CHR_H_INT|SWS_BITEXACT,0),"Set packing flags");
+    require(av_opt_set_int(w->conversion,"sws_flags",SWS_BILINEAR|SWS_ACCURATE_RND|SWS_FULL_CHR_H_INT,0),"Set packing flags");
     require(av_opt_set_int(w->conversion,"threads",1,0),"Set conversion threads");
-    require(av_opt_set_int(w->conversion,"src_h_chr_pos",384,0),"Centered quarter-width chroma");
+    require(av_opt_set_int(w->conversion,"src_h_chr_pos",0,0),"Public-reference horizontal chroma position");
     require(av_opt_set_int(w->conversion,"src_v_chr_pos",0,0),"Full-height chroma");
     require(sws_init_context(w->conversion,NULL,NULL),"Initialize packing");
     const int *matrix=sws_getCoefficients(SWS_CS_ITU601);
@@ -66,49 +65,23 @@ static void initialize_conversion(Work *w)
 static void release(Work *w) { free(w->output); w->output=NULL; }
 static void apply(Work *w)
 {
-    /* Include fresh zeroed owned output capacity, all component decode,
-     * exact-grid conversion, in-place row compaction and plane release.
-     * Reuse only codec/conversion/packet/empty wrapper; no decoded cache. */
-    int grid=(w->width+3)&~3;
-    w->output=calloc((size_t)grid*w->height*4+AV_INPUT_BUFFER_PADDING_SIZE,1);
+    /* Time complete decode, actual-grid conversion and fresh independent output. */
+    w->output=calloc(w->raw_bytes+AV_INPUT_BUFFER_PADDING_SIZE,1);
     if (!w->output) fail("Allocate owned output failed.");
     avcodec_flush_buffers(w->codec);
     require(avcodec_send_packet(w->codec,w->input),"Submit complete JPEG");
     require(avcodec_receive_frame(w->codec,w->decoded),"Receive JPEG samples");
     AVFrame *d=w->decoded;
     if (d->width!=w->width || d->height!=w->height || d->format!=AV_PIX_FMT_YUVJ420P
-        || !d->buf[0] || !d->data[1] || !d->data[2] || d->linesize[0]<grid
+        || !d->buf[0] || !d->data[1] || !d->data[2] || d->linesize[0]<w->width
         || d->linesize[1]<(w->width+1)/2 || d->linesize[2]<(w->width+1)/2
         || (d->color_range!=AVCOL_RANGE_JPEG && d->color_range!=AVCOL_RANGE_UNSPECIFIED))
         fail("Expected owned full-range H4V2 decoder planes.");
-    // The final chroma sample is real (ceil(width/4)); keep it. Extend only
-    // owned decoder luma padding, never the packet or valid component samples.
-    for (int y=0;y<w->height;y++)
-        memset(d->data[0]+y*d->linesize[0]+w->width,d->data[0][y*d->linesize[0]+w->width-1],grid-w->width);
-    // Software MJPEG preserves every original quarter-width chroma sample
-    // at even positions in its expanded 420 planes. Recover and vertically
-    // interpolate in one pass, with no separate recovered-plane copy.
-    int cw=(w->width+3)/4,ch=(w->height+1)/2;
-    size_t plane_bytes=(size_t)cw*w->height;
-    w->vertical=malloc(plane_bytes*2); if (!w->vertical) fail("Allocate vertical chroma failed.");
-    for (int c=0;c<2;c++)
-    for (int y=0;y<w->height;y++) {
-        int top=(y+1)/2-1,bottom=top+1,tw=(y&1)?3:1;
-        if (top<0) top=0;
-        if (bottom>=ch) bottom=ch-1;
-        const uint8_t *a=d->data[c+1]+top*d->linesize[c+1];
-        const uint8_t *b=d->data[c+1]+bottom*d->linesize[c+1];
-        uint8_t *out=w->vertical+c*plane_bytes+(size_t)y*cw;
-        for (int x=0;x<cw;x++) out[x]=(a[x*2]*tw+b[x*2]*(4-tw)+2)>>2;
-    }
-    const uint8_t *planes[4]={d->data[0],w->vertical,w->vertical+plane_bytes,NULL};
-    int strides[4]={d->linesize[0],cw,cw,0};
-    uint8_t *output[4]={w->output,NULL,NULL,NULL}; int output_stride[4]={grid*4,0,0,0};
+    const uint8_t *planes[4]={d->data[0],d->data[1],d->data[2],d->data[3]};
+    int strides[4]={d->linesize[0],d->linesize[1],d->linesize[2],d->linesize[3]};
+    uint8_t *output[4]={w->output,NULL,NULL,NULL}; int output_stride[4]={w->width*4,0,0,0};
     if (sws_scale(w->conversion,planes,strides,0,w->height,output,output_stride)!=w->height)
-        fail("Quarter-width centered RGBA conversion incomplete.");
-    for (int y=0;y<w->height;y++)
-        memmove(w->output+(size_t)y*w->width*4,w->output+(size_t)y*grid*4,(size_t)w->width*4);
-    free(w->vertical); w->vertical=NULL;
+        fail("Actual-grid RGBA conversion incomplete.");
     av_frame_unref(d);
     w->observed+=w->output[w->raw_bytes/2]; w->completed++;
 }
@@ -156,7 +129,7 @@ int main(int argc,char **argv)
     check_pixels(&w,held); check_pixels(&w,w.output); held[0]^=255;
     check_pixels(&w,w.output); free(held); check_pixels(&w,w.output); release(&w);
     check_and_write(&w,argv[3]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-410-decode\",\"width\":513,\"height\":259,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"decoder\":\"mjpeg\",\"decodedPixelFormat\":\"yuvj420p\",\"outputBytes\":%zu,\"outputStride\":2052,\"initialCompletedOperations\":%" PRIu64 ",\"freshZeroedCallerOutputTimed\":true,\"packingTimed\":true,\"horizontalSampling\":4,\"verticalSampling\":2,\"centeredGridWidth\":516,\"inPlaceCompactionTimed\":true,\"quarterSampleRecoveryTimed\":true,\"verticalInterpolationTimed\":true,\"chromaStagingAcquisitionAndReleaseTimed\":true,\"nativeVerticalRounding\":\"ties-up to8bit\",\"explicitBt601FullRange\":true,\"opaqueAlpha\":true,\"conversionThreads\":1,\"stateResetTimed\":true,\"decoderPlanesReleaseTimed\":true,\"outputAcquisitionAndReleaseTimed\":true,\"independentLiveOutputs\":true,\"pixelsDeterministic\":true,\"rgbaIntermediate\":false,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"jpeg-410-decode\",\"width\":513,\"height\":259,\"depth\":8,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"decoder\":\"mjpeg\",\"decodedPixelFormat\":\"yuvj420p\",\"outputBytes\":%zu,\"outputStride\":2052,\"initialCompletedOperations\":%" PRIu64 ",\"freshZeroedCallerOutputTimed\":true,\"packingTimed\":true,\"horizontalSampling\":4,\"verticalSampling\":2,\"actualCodedDimensions\":true,\"paddedGridRemapping\":false,\"extraChromaRaster\":false,\"horizontalChromaPosition\":0,\"verticalChromaPosition\":0,\"inPlaceCompactionTimed\":false,\"explicitBt601FullRange\":true,\"opaqueAlpha\":true,\"conversionThreads\":1,\"stateResetTimed\":true,\"decoderPlanesReleaseTimed\":true,\"outputAcquisitionAndReleaseTimed\":true,\"independentLiveOutputs\":true,\"pixelsDeterministic\":true,\"rgbaIntermediate\":false,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u}\n",
         w.cpu,w.raw_bytes,w.completed,av_version_info(),avcodec_version()); fflush(stdout);
     char line[128];
     while (fgets(line,sizeof(line),stdin)) {

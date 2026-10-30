@@ -256,6 +256,11 @@ def render():
     assert cmyk_current['qualification']['package']['sha256'] == cmyk_current['qualification']['linuxPackage']['sameActualPackageSha256']
     assert cmyk_current['fixtureCorrection']['encodedPacketRasterProjectionBlocksReferenceSettingsUnchanged']
     assert cmyk_current['fixtureCorrection']['proofOverlayRestoredByteExact'] and cmyk_current['fixtureCorrection']['acceptedDerivedOraclesInstalled']
+    extended_jpeg = json.loads((ROOT / 'benchmarks/warm-extended-jpeg-current-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not extended_jpeg['productionChanged'] and extended_jpeg['independentQuietConfirmation']
+    assert extended_jpeg['producers'] == cmyk_current['producers']
+    assert extended_jpeg['qualification']['package']['sha256'] == cmyk_current['qualification']['package']['sha256']
+    assert all(status == 'confirmed-gap' for status in extended_jpeg['status'].values())
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -432,6 +437,19 @@ def render():
                  f'{min(b["mean"] for b in cmyk["nativeBrackets"]) / 1000:,.2f} | '
                  f'{cmyk["worstBracketRatio"]:.3f} / {cmyk["conservativeRatioUpper"]:.3f} | '
                  f'{cmyk["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    for case, label in [('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode')]:
+        observation = extended_jpeg['cases'][case][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == extended_jpeg['producers']['linuxSha256']
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert receipt['nativePixelsExact'] and not receipt['nativeExceptionUsed']
+        assert receipt['decoderMaximum'] == receipt['scalarDecoderMaximum'] == 0
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | '
+                     f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -516,7 +534,7 @@ Seven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 55 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 58 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -573,6 +591,15 @@ ownership and native boundaries remain. Other affected baseline JPEG costs need
 current evidence before CPU-pass claims. Progressive coefficient algorithms remain;
 its shared dispatch gets no new CPU-pass claim. Metadata-only parsing, encoders,
 other codecs and editing/text retain applicable unchanged-path evidence.
+[Extended-JPEG reconciliation](../benchmarks/WARM-EXTENDED-JPEG-CURRENT-COSTS.md)
+adds current confirmations of three existing controls: YCCK4204.835× / upper4.864,
+895,458B/op;4:1:1 2.807× / upper2.823,751,280B/op;4:1:0 4.703× / upper4.718,
+720,792B/op. All normal/scalar native and independent pixels are now exact.
+Historical expected pixels and padded-grid adapters are corrected to the declared
+native-output policy; original packets/source data and production pixels remain
+unchanged. These are current costs, not causal comparisons with earlier exports.
+YCCK and4:1:0 now lead optimization priorities. The same JDS1qualification/package
+is reused; no production build, full-suite repeat or new workload matrix.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound

@@ -29,9 +29,9 @@ internal sealed class WarmJpeg411Decode
                 || JpegBenchmarkCase.Hash(expected) != prepared.GetProperty("rgbaSha256").GetString()
                 || JpegBenchmarkCase.HashFile(Path.Combine(folder, "projection.ycbcr")) != prepared.GetProperty("projectionSha256").GetString()
                 || JpegBenchmarkCase.HashFile(Path.Combine(folder, "blocks.ycbcr")) != prepared.GetProperty("blocksSha256").GetString()
-                || !validation.GetProperty("passed").GetBoolean() || !validation.GetProperty("nativePlanesExact").GetBoolean() || !validation.GetProperty("exactCenteredGridNormalization").GetBoolean()
+                || !validation.GetProperty("passed").GetBoolean() || !validation.GetProperty("nativePlanesExact").GetBoolean() || !validation.GetProperty("actualCodedGridNormalization").GetBoolean()
                 || validation.GetProperty("inputSha256").GetString() != JpegBenchmarkCase.Hash(input) || validation.GetProperty("ffmpegSha256").GetString() != JpegBenchmarkCase.HashFile(state.Ffmpeg))
-                throw new InvalidOperationException("Original411 packet, analytical reference or centered native validation differs.");
+                throw new InvalidOperationException("Original411 packet, analytical reference or actual-grid native validation differs.");
             using (var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = document.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = document.RootElement.GetProperty("sourceRevision").GetString() });
             File.WriteAllBytes(state.Input, input); Validate();
@@ -42,7 +42,7 @@ internal sealed class WarmJpeg411Decode
                 var pixels = File.ReadAllBytes(Path.Combine(folder, output.GetProperty("file").GetString()!));
                 if (JpegBenchmarkCase.Hash(pixels) != output.GetProperty("sha256").GetString()) throw new InvalidOperationException("Frozen411 CLI samples differ.");
                 if (output.GetProperty("scalar").GetBoolean()) (scalarMaximum, scalarRmse) = Agreement(pixels);
-                else if (!pixels.AsSpan().SequenceEqual(nativePixels)) throw new InvalidOperationException("Native411 worker and explicit centered CLI differ.");
+                else if (!pixels.AsSpan().SequenceEqual(nativePixels)) throw new InvalidOperationException("Native411 worker and actual-grid CLI differ.");
             }
             before = native.Measure(smoke, sampleCount: count); ready = true;
         }
@@ -51,9 +51,8 @@ internal sealed class WarmJpeg411Decode
 
     private (int Maximum, double Rmse) Agreement(byte[] actual)
     {
-        var result = JpegQualityCorpus.Compare(expected, actual);
-        if (result.Maximum > 4 || result.Rmse > 1.5) throw new InvalidOperationException("JPEG411 maximum4/RMSE1.5 exceeded.");
-        return (result.Maximum, result.Rmse);
+        if (!actual.AsSpan().SequenceEqual(expected)) throw new InvalidOperationException("JPEG 411 native pixels differ from the independent fixed-point reference.");
+        return (0, 0);
     }
 
     private void Validate()
@@ -85,10 +84,10 @@ internal sealed class WarmJpeg411Decode
                 managedOutputBytes = expected.Length, nativeOutputBytes = nativePixels.Length, managedOutputSha256 = JpegBenchmarkCase.Hash(expected), nativeOutputSha256 = JpegBenchmarkCase.Hash(nativePixels),
                 decoderMaximum = maximum, decoderRmse = rmse, scalarDecoderMaximum = scalarMaximum, scalarDecoderRmse = scalarRmse,
                 decoderAgreementWithinBounds = true, exactAnalyticalManagedPixels = true, nativeCliPixelsExact = true, scalarCliAgreementWithinBounds = true,
-                alphaExact = true, sourceUnchanged = true, independentOwnedOutput = true, iccConversion = false, exifReorientation = false,
+                nativePixelsExact = true, nativeExceptionUsed = false, alphaExact = true, sourceUnchanged = true, independentOwnedOutput = true, iccConversion = false, exifReorientation = false,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpeg411Decode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same resident original authored DC/unit-quantization baseline H4V1 JPEG to fresh independently owned RGBA8, all three component decodes, exact centered quarter-width chroma, full-range BT601 matrix/opaque alpha, output acquisition/disposal and plane release timed. FFmpeg softwareMJPEG plus explicit centered516-column grid conversion and in-place compaction to513, extending only owned luma padding; original packet and valid decoded samples unchanged. No second RGBA raster or decoded cache. Codec/conversion/packet/empty wrapper reused. ICC/EXIF transforms disabled. One CPU/thread; startup, preparation, I/O, IPC and checks excluded. Exact analytical managed pixels; normal/scalar native maximum4/RMSE1.5 and exact alpha."
+                boundary = "Same original resident authored DC/unit-quantization baseline H4V1 JPEG to fresh independently owned RGBA8. Complete component decode, actual coded-dimension chroma normalization, full-range BT.601 conversion, opaque alpha, output acquisition/disposal and decoded-plane release are timed on both sides. Native software MJPEG feeds direct513x259 libswscale conversion with public bilinear/accurate/full-chroma/in_h_chr_pos0/in_v_chr_pos0 settings; no padded-grid remapping, recovered chroma raster or row compaction. Packet/input/source/settings unchanged. Codec/conversion/resident packet/empty wrapper reused, never decoded content. ICC/EXIF transforms disabled. Startup, preparation, I/O, IPC and checks excluded. One CPU/thread. Exact independent authored-block analytical pixels, exact normal/scalar native RGBA and independent output lifetimes."
             }, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine("Validated JPEG411 decode: " + path);
         }

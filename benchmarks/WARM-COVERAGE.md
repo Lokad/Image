@@ -356,8 +356,24 @@ pre-scoring correctness revision,one Linuxbuild;zero othermeasurement builds.
 Existing four controls only. Other affected baseline costs are historical pending
 applicable evidence; no new progressive CPU-pass claim. Unchanged metadata-only,
 encoding, othercodec and editing/text evidence remains applicable. Stop this
-architecture round; largest unchanged confirmed gaps are Lanczos word/byte
-reduction1.585/1.500. Full268-path objective stays open.
+architecture round; its then-largest unchanged displayed gaps were Lanczos
+word/byte reduction1.585/1.500. The extended costs below now take priority.
+Full268-path objective stays open.
+
+[Extended-JPEG current costs](WARM-EXTENDED-JPEG-CURRENT-COSTS.md) resolve three
+existing affected uncertainties without changing production: YCCK4204.835× /
+upper4.864,895,458B/op;4:1:1 2.807× / upper2.823,751,280B/op;4:1:0 4.703× /
+upper4.718,720,792B/op. All12actuals/native brackets/quiet guards pass. Independent
+authored-block oracles and SIMD/scalar native pixels are exact on both OSes.
+Historical binary64/centered expectations and padded-grid adapters are superseded;
+original packets/projections/block means and production pixels are unchanged.
+The quarter baseline now follows the declared actual-coded-dimension public
+conversion policy, so no causal gain is claimed against older export costs.
+JDS1full5178/OS/focused/SAMEpackage/governedconsumer/threeexamples remain valid.
+Zero production builds/new selectors/repeated full or package qualification.
+These three existing paths do not expand the268-case inventory. YCCK and4:1:0
+are now the largest demonstrated gaps; prioritize one substantial YCCKrow
+sampling/black/color primitive before smaller-gap or closed-trial work.
 
 ## Finite checklist
 

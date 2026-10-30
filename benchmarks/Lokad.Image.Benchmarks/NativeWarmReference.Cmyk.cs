@@ -26,8 +26,10 @@ internal sealed partial class NativeWarmReference
                 || Ready.GetProperty("width").GetInt32() != 513 || Ready.GetProperty("height").GetInt32() != 259 || Ready.GetProperty("depth").GetInt32() != 8
                 || Ready.GetProperty("decodedPixelFormat").GetString() != (quarterHeight ? "yuvj420p" : quarterWidth ? "yuvj411p" : ycck ? "yuva444p" : "gbrap") || Ready.GetProperty("decoder").GetString() != "mjpeg" || (!quarterWidth && Ready.GetProperty("adobeTransform").GetInt32() != (ycck ? 2 : 0))
                 || ((ycck || quarterWidth) && !Ready.GetProperty("explicitBt601FullRange").GetBoolean())
-                || (quarterHeight && new[] { "quarterSampleRecoveryTimed", "verticalInterpolationTimed", "chromaStagingAcquisitionAndReleaseTimed" }.Any(key => !Ready.GetProperty(key).GetBoolean()))
-                || (quarterWidth && (Ready.GetProperty("horizontalSampling").GetInt32() != 4 || Ready.GetProperty("verticalSampling").GetInt32() != (quarterHeight ? 2 : 1) || Ready.GetProperty("centeredGridWidth").GetInt32() != 516 || !Ready.GetProperty("inPlaceCompactionTimed").GetBoolean()))
+                || (quarterWidth && (Ready.GetProperty("horizontalSampling").GetInt32() != 4 || Ready.GetProperty("verticalSampling").GetInt32() != (quarterHeight ? 2 : 1)
+                    || !Ready.GetProperty("actualCodedDimensions").GetBoolean() || Ready.GetProperty("paddedGridRemapping").GetBoolean()
+                    || Ready.GetProperty("extraChromaRaster").GetBoolean() || Ready.GetProperty("inPlaceCompactionTimed").GetBoolean()
+                    || Ready.GetProperty("horizontalChromaPosition").GetInt32() != 0 || Ready.GetProperty("verticalChromaPosition").GetInt32() != 0))
                 || Ready.GetProperty("outputStride").GetInt32() != 513 * (rgb ? 3 : 4) || Ready.GetProperty("outputBytes").GetInt32() != expectedBytes
                 || (rgb ? Ready.GetProperty("outputHasAlpha").GetBoolean() : !Ready.GetProperty("opaqueAlpha").GetBoolean())
                 || Ready.GetProperty("cpu").GetInt32() != cpu || Ready.GetProperty("affinityCount").GetInt32() != 1 || Ready.GetProperty("codecThreads").GetInt32() != 1

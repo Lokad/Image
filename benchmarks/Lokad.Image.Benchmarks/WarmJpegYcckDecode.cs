@@ -55,21 +55,8 @@ internal sealed class WarmJpegYcckDecode
 
     private static (int Maximum, double Rmse) Agreement(byte[] actual, byte[] expected)
     {
-        if (actual.Length != 513 * 259 * 4 || actual.Length != expected.Length) throw new InvalidOperationException("YCCK reference dimensions differ.");
-        var maximum = 0; long squared = 0;
-        for (var i = 0; i < actual.Length; i++)
-        {
-            if (i % 4 == 3) { if (actual[i] != 255 || expected[i] != 255) throw new InvalidOperationException("K was mistaken for alpha."); continue; }
-            var error = Math.Abs(actual[i] - expected[i]); maximum = Math.Max(maximum, error); squared += error * error;
-            // Owner-approved exception is limited to this authored YCCK420
-            // fixture's chroma transitions. Every other pixel keeps maximum4.
-            var pixel = i / 4; var x = pixel % 513; var y = pixel / 513;
-            var transition = x % 16 is 0 or 15 || y % 16 is 0 or 15;
-            if (error > (transition ? 16 : 4)) throw new InvalidOperationException("YCCK native transition/interior maximum16/4 exceeded.");
-        }
-        var rmse = Math.Sqrt((double)squared / (513 * 259 * 3));
-        if (rmse > 1.5) throw new InvalidOperationException("YCCK native RGB RMSE1.5 exceeded.");
-        return (maximum, rmse);
+        if (!actual.AsSpan().SequenceEqual(expected)) throw new InvalidOperationException("JPEG Ycck native pixels differ from the independent fixed-point reference.");
+        return (0, 0);
     }
 
     private void Validate()
@@ -102,11 +89,11 @@ internal sealed class WarmJpegYcckDecode
                 decoderMaximum = maximum, decoderRmse = rmse, scalarDecoderMaximum = scalarMaximum, scalarDecoderRmse = scalarRmse,
                 decoderAgreementWithinBounds = true, exactAnalyticalManagedPixels = true, nativeCliPixelsExact = true, scalarCliAgreementWithinBounds = true,
                 approvedNativeOnlyGate = "RGB<=16 at authored chroma transitions (x/y mod16=0or15), <=4 elsewhere; RGB RMSE<=1.5; alpha exact255 and exact managed pixels unchanged.",
-                alphaExact = true, blackIsNotAlpha = true, sourceUnchanged = true, independentOwnedOutput = true, iccConversion = false, exifReorientation = false,
+                nativePixelsExact = true, nativeExceptionUsed = false, alphaExact = true, blackIsNotAlpha = true, sourceUnchanged = true, independentOwnedOutput = true, iccConversion = false, exifReorientation = false,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpegYcckDecode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
                 boundary = "Identical resident authored Adobe-transform2 H2V2 full-K four-component baseline JPEG to fresh independently owned RGBA8. Public managed Decode includes complete decode, component materialization, inversion/device-YCCK conversion, zeroed output allocation and disposal. Native software mjpeg includes state reset, all four component decodes and K/YCbCr multiplication, opaque alpha, fresh zeroed RGBA allocation, explicit full-range BT.601 YUVA444P-to-RGBA conversion and decoded-plane/output release. Codec, conversion, padded resident packet and empty frame wrapper reused; no decoded content cache. ICC conversion and EXIF reorientation disabled. Startup, projection/packet preparation, I/O, IPC, hashing and checks excluded. One CPU, "
-                    + "exact analytical managed pixels" + "; normal native CLI exact; approved native-only maximum16 at authored chroma transitions (x/y mod16=0or15), maximum4 elsewhere/RMSE1.5 with exact opaque alpha."
+                    + "exact analytical managed pixels" + "; normal/scalar native CLI and independent fixed-point authored-block reference exact, including opaque alpha. Historical native-only exception is unused."
             }, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine("Validated YCCK JPEG decode: " + path);
         }

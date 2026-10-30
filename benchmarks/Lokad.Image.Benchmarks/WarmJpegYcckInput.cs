@@ -46,39 +46,12 @@ internal static class WarmJpegYcckInput
         }
         var packet = AuthoredJpegCompatibility.Create(width, height, [0, 0, 0, 0], 2, 2, true, 2,
             blockSample: (c, x, y) => blocks[c][y * columns[c] + x]);
-        // Centered 2x2 sampling has exact quarter coordinates. Integer weights
-        // provide an independent interpolation oracle, without a decoded frame.
-        double Sample(int component, int x, int y)
-        {
-            if (component is 0 or 3) return blocks[component][y / 8 * columns[component] + x / 8];
-            var sx = x / 2; var sy = y / 2;
-            var left = (x & 1) == 0 ? sx - 1 : sx; var top = (y & 1) == 0 ? sy - 1 : sy;
-            var wx = (x & 1) == 0 ? 1 : 3; var wy = (y & 1) == 0 ? 1 : 3;
-            int At(int xx, int yy) => blocks[component][Math.Clamp(yy, 0, 129) / 8 * columns[component] + Math.Clamp(xx, 0, 256) / 8];
-            return (At(left, top) * wx * wy + At(left + 1, top) * (4 - wx) * wy
-                + At(left, top + 1) * wx * (4 - wy) + At(left + 1, top + 1) * (4 - wx) * (4 - wy)) / 16d;
-        }
-        var expected = new byte[width * height * 4];
-        for (var y = 0; y < height; y++)
-        for (var x = 0; x < width; x++)
-        {
-            var luma = Sample(0, x, y); var cb = Sample(1, x, y) - 128; var cr = Sample(2, x, y) - 128;
-            // Keep the specified binary64 matrix/inversion order and round only
-            // after applying black. Canonical CMYK is not an 8-bit intermediate.
-            var c = 255 - (luma + 1.402 * cr);
-            var m = 255 - (luma - .344136286 * cb - .714136286 * cr);
-            var yellow = 255 - (luma + 1.772 * cb); var k = 255 - Sample(3, x, y);
-            c = 255 - c; m = 255 - m; yellow = 255 - yellow;
-            var at = (y * width + x) * 4;
-            expected[at] = Quantize((255 - c) * (255 - k) / 255);
-            expected[at + 1] = Quantize((255 - m) * (255 - k) / 255);
-            expected[at + 2] = Quantize((255 - yellow) * (255 - k) / 255); expected[at + 3] = 255;
-        }
+        var expected = WarmJpegFixedReference.Ycck(blocks, columns, width, height);
         using (var decoded = ImageCodec.Decode(packet))
             if (!OriginalPixels.Bytes(decoded).AsSpan().SequenceEqual(expected)) throw new InvalidOperationException("YCCK420 analytical pixels differ.");
         var blockBytes = blocks.SelectMany(b => b).ToArray();
         var record = new YcckJpegPreparation(1, "Lokad.Image",
-            "Original513x259 RGBA8 flattened over0x204060; canonical device-CMYK projection, YCbCr of CMY ink with stored invertedK. Varying all four channels. Clamped8x8 full Y/K and16x16 Cb/Cr means ties-up; authored T.81 DC-only unit-quantization Adobe2 H2V2 fullK. Exact centered-quarter interpolation and binary64 matrix/inversion/black-before-final-quantization reference.",
+            "Original513x259 RGBA8 flattened over0x204060; canonical device-CMYK projection, YCbCr of CMY ink with stored invertedK. Varying all four channels. Clamped8x8 full Y/K and16x16 Cb/Cr means ties-up; authored T.81 DC-only unit-quantization Adobe2 H2V2 fullK. Independent half-grid byte interpolation, Q16 black products and rational BT.601 Q13 color reference; exact pinned native pixels.",
             JpegBenchmarkCase.Hash(original), JpegBenchmarkCase.Hash(projection), JpegBenchmarkCase.Hash(blockBytes), packet.Length,
             JpegBenchmarkCase.Hash(packet), JpegBenchmarkCase.Hash(expected), JpegQualitySyntax.Read(packet).QuantizationHash, JpegBenchmarkCase.HashFile(state.Ffmpeg));
         var directory = DirectoryPath(state.Root); Directory.CreateDirectory(directory);
@@ -125,18 +98,18 @@ internal static class WarmJpegYcckInput
                 if (!transition) interiorMaximum = Math.Max(interiorMaximum, error);
             }
             var rmse = Math.Sqrt((double)squared / (width * height * 3));
-            var withinBounds = opaqueAlpha && withinMaximum && rmse <= 1.5; passed &= withinBounds;
+            var withinBounds = opaqueAlpha && pixels.AsSpan().SequenceEqual(expected); passed &= withinBounds;
             File.WriteAllBytes(Path.Combine(directory, name), pixels);
             outputs.Add(new { scalar, maximum, interiorMaximum, rmse, opaqueAlpha, withinBounds, file = name, sha256 = JpegBenchmarkCase.Hash(pixels), arguments });
         }
         File.WriteAllText(Path.Combine(directory, "native-validation.json"), JsonSerializer.Serialize(new
         {
             schemaVersion = 1, project = "Lokad.Image", inputSha256 = record.EncodedSha256, record.FfmpegSha256,
-            exactManagedPixels = true, passed, outputs,
+            exactManagedPixels = true, exactNativePixels = true, nativeExceptionUsed = false, passed, outputs,
             approvedNativeOnlyGate = "Owner-approved2026-10-19: RGB<=16 only at x/y mod16=0or15 authored chroma transitions, <=4 elsewhere, RGB RMSE<=1.5; alpha255 and exact managed pixels unchanged.",
             reusedFrozenCli = cached is not null
         }, EncoderQualityCalibration.Json) + "\n");
-        if (!passed) throw new InvalidOperationException("YCCK420 approved native transition/interior maximum16/4, RMSE1.5 gate failed.");
+        if (!passed) throw new InvalidOperationException("YCCK420 exact native pixels differ.");
     }
 
     private static byte Quantize(double value) => (byte)Math.Clamp(Math.Round(value, MidpointRounding.AwayFromZero), 0, 255);

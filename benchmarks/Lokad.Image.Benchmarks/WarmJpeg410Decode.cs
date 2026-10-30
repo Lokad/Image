@@ -29,10 +29,10 @@ internal sealed class WarmJpeg410Decode
                 || JpegBenchmarkCase.Hash(expected) != prepared.GetProperty("rgbaSha256").GetString()
                 || JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "artifacts/warm-reference/jpeg-411/projection.ycbcr")) != prepared.GetProperty("projectionSha256").GetString()
                 || JpegBenchmarkCase.HashFile(Path.Combine(folder, "blocks.ycbcr")) != prepared.GetProperty("blocksSha256").GetString()
-                || !validation.GetProperty("nativeHorizontalPreExpansionVerified").GetBoolean() || !validation.GetProperty("recoveredQuarterSamplesExact").GetBoolean()
-                || !validation.GetProperty("passed").GetBoolean() || !validation.GetProperty("nativePlanesExact").GetBoolean() || !validation.GetProperty("exactCenteredGridNormalization").GetBoolean()
+                || !validation.GetProperty("nativeHorizontalPreExpansionVerified").GetBoolean()
+                || !validation.GetProperty("passed").GetBoolean() || !validation.GetProperty("nativePlanesExact").GetBoolean() || !validation.GetProperty("actualCodedGridNormalization").GetBoolean()
                 || validation.GetProperty("inputSha256").GetString() != JpegBenchmarkCase.Hash(input) || validation.GetProperty("ffmpegSha256").GetString() != JpegBenchmarkCase.HashFile(state.Ffmpeg))
-                throw new InvalidOperationException("Original410 packet, analytical reference or centered native validation differs.");
+                throw new InvalidOperationException("Original410 packet, analytical reference or actual-grid native validation differs.");
             using (var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = document.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = document.RootElement.GetProperty("sourceRevision").GetString() });
             File.WriteAllBytes(state.Input, input); Validate();
@@ -43,7 +43,7 @@ internal sealed class WarmJpeg410Decode
                 var pixels = File.ReadAllBytes(Path.Combine(folder, output.GetProperty("file").GetString()!));
                 if (JpegBenchmarkCase.Hash(pixels) != output.GetProperty("sha256").GetString()) throw new InvalidOperationException("Frozen410 CLI samples differ.");
                 if (output.GetProperty("scalar").GetBoolean()) (scalarMaximum, scalarRmse) = Agreement(pixels);
-                else if (!pixels.AsSpan().SequenceEqual(nativePixels)) throw new InvalidOperationException("Native410 worker and explicit centered CLI differ.");
+                else if (!pixels.AsSpan().SequenceEqual(nativePixels)) throw new InvalidOperationException("Native410 worker and actual-grid CLI differ.");
             }
             before = native.Measure(smoke, sampleCount: count); ready = true;
         }
@@ -52,9 +52,8 @@ internal sealed class WarmJpeg410Decode
 
     private (int Maximum, double Rmse) Agreement(byte[] actual)
     {
-        var result = JpegQualityCorpus.Compare(expected, actual);
-        if (result.Maximum > 4 || result.Rmse > 1.5) throw new InvalidOperationException("JPEG410 maximum4/RMSE1.5 exceeded.");
-        return (result.Maximum, result.Rmse);
+        if (!actual.AsSpan().SequenceEqual(expected)) throw new InvalidOperationException("JPEG 410 native pixels differ from the independent fixed-point reference.");
+        return (0, 0);
     }
 
     private void Validate()
@@ -86,10 +85,10 @@ internal sealed class WarmJpeg410Decode
                 managedOutputBytes = expected.Length, nativeOutputBytes = nativePixels.Length, managedOutputSha256 = JpegBenchmarkCase.Hash(expected), nativeOutputSha256 = JpegBenchmarkCase.Hash(nativePixels),
                 decoderMaximum = maximum, decoderRmse = rmse, scalarDecoderMaximum = scalarMaximum, scalarDecoderRmse = scalarRmse,
                 decoderAgreementWithinBounds = true, exactAnalyticalManagedPixels = true, nativeCliPixelsExact = true, scalarCliAgreementWithinBounds = true,
-                alphaExact = true, sourceUnchanged = true, independentOwnedOutput = true, iccConversion = false, exifReorientation = false,
+                nativePixelsExact = true, nativeExceptionUsed = false, alphaExact = true, sourceUnchanged = true, independentOwnedOutput = true, iccConversion = false, exifReorientation = false,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmJpeg410Decode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same resident original authored DC/unit-quantization baseline H4V2 JPEG to fresh independently owned RGBA8, all three component decodes, centered quarter-width/half-height chroma, full-range BT601 matrix/opaque alpha, output acquisition/disposal and plane release timed. Native chroma staging acquisition/recovery/interpolation/release also timed, without a separate recovered-plane copy. FFmpeg softwareMJPEG plus exact even-position original-quarter-sample recovery, centered vertical expansion with native ties-up8bit rounding and explicit centered516-column grid conversion and in-place compaction to513, extending only owned luma padding; original packet and valid decoded samples unchanged. No second RGBA raster or decoded cache. Codec/conversion/packet/empty wrapper reused. ICC/EXIF transforms disabled. One CPU/thread; startup, preparation, I/O, IPC and checks excluded. Exact analytical managed pixels; normal/scalar native maximum4/RMSE1.5 and exact alpha."
+                boundary = "Same original resident authored DC/unit-quantization baseline H4V2 JPEG to fresh independently owned RGBA8. Complete component decode, actual coded-dimension chroma normalization, full-range BT.601 conversion, opaque alpha, output acquisition/disposal and decoded-plane release are timed on both sides. Native software MJPEG including its byte half-grid horizontal expansion feeds direct513x259 libswscale conversion with public bilinear/accurate/full-chroma/in_h_chr_pos0/in_v_chr_pos0 settings; no padded-grid remapping, recovered chroma raster or row compaction. Packet/input/source/settings unchanged. Codec/conversion/resident packet/empty wrapper reused, never decoded content. ICC/EXIF transforms disabled. Startup, preparation, I/O, IPC and checks excluded. One CPU/thread. Exact independent authored-block analytical pixels, exact normal/scalar native RGBA and independent output lifetimes."
             }, EncoderQualityCalibration.Json) + "\n");
             Console.WriteLine("Validated JPEG410 decode: " + path);
         }

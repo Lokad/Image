@@ -47,23 +47,7 @@ internal static class WarmJpeg411Input
         }
         var packet = AuthoredJpegCompatibility.Create(width, height, [0, 0, 0], 4, 1,
             blockSample: (c, x, y) => blocks[c][y * columns[c] + x]);
-        double Sample(int c, int x, int y)
-        {
-            if (c == 0) return blocks[c][y / 8 * columns[c] + x / 8];
-            var eighth = 2 * x - 3; var left = eighth >> 3; var rightWeight = eighth - left * 8;
-            int At(int sx) => blocks[c][y / 8 * columns[c] + Math.Clamp(sx, 0, (width + 3) / 4 - 1) / 8];
-            return (At(left) * (8 - rightWeight) + At(left + 1) * rightWeight) / 8d;
-        }
-        var expected = new byte[width * height * 4];
-        for (var y = 0; y < height; y++)
-        for (var x = 0; x < width; x++)
-        {
-            var luma = Sample(0, x, y); var cb = Sample(1, x, y) - 128; var cr = Sample(2, x, y) - 128;
-            var at = (y * width + x) * 4;
-            expected[at] = Quantize(luma + 1.402 * cr);
-            expected[at + 1] = Quantize(luma - .344136286 * cb - .714136286 * cr);
-            expected[at + 2] = Quantize(luma + 1.772 * cb); expected[at + 3] = 255;
-        }
+        var expected = WarmJpegFixedReference.Quarter(blocks, columns, width, height, halfHeight: false);
         var packetHash = Hash(packet);
         using (var first = ImageCodec.Decode(packet))
         using (var survivor = ImageCodec.Decode(packet))
@@ -81,16 +65,14 @@ internal static class WarmJpeg411Input
         File.WriteAllText(Path.Combine(folder, "preparation.json"), JsonSerializer.Serialize(new
         {
             schemaVersion = 1, project = "Lokad.Image", width, height, bitDepth = 8, horizontalSampling = 4, verticalSampling = 1,
-            recipe = "Existing original513x259 RGBA8 flattened over0x204060; RGB->YCbCr projection, clamped8x8 fullY and32x8 quarterwidthCbCr rounded means; authoredT81DC-only/unitquantization H4V1. Independent integer-eighth centered chroma and frozen binary64 BT601 matrix, final-only awayfromzero quantization.",
+            recipe = "Existing original513x259 RGBA8 flattened over0x204060; RGB->YCbCr projection, clamped8x8 fullY and32x8 quarterwidthCbCr rounded means; authoredT81DC-only/unitquantization H4V1. Independent expanded authored component rasters, actual coded dimensions, native byte pre-expansion where required, normalized Q14 horizontal/Q12 vertical filters and rational BT.601 Q13 color; exact native pixels.",
             rasterSha256 = Hash(original), opaqueRgbaSha256 = Hash(opaque), projectionSha256 = Hash(projection), blocksSha256 = Hash(blockBytes),
             encodedBytes = packet.Length, encodedSha256 = packetHash, rgbaSha256 = Hash(expected),
             exactManagedPixels = true, sourceUnchanged = true, independentOwnedOutputs = true, noTimingClaim = true
         }, new JsonSerializerOptions { WriteIndented = true }));
 
 
-        // Validate FFmpeg's unexpanded component planes before normalization. The
-        // 513-wide raster has 129 real chroma samples: its centered grid is 516 wide.
-        // Extending only luma padding preserves all encoded samples and the packet.
+        // Validate original decoded component samples before actual-grid color conversion.
         var planeArgs = new[] { "-hide_banner", "-loglevel", "error", "-threads:v", "1", "-thread_type:v", "0", "-noautorotate", "-f", "image2pipe", "-c:v", "mjpeg", "-i", "pipe:0", "-frames:v", "1", "-threads:v", "1", "-c:v", "rawvideo", "-pix_fmt", "yuvj411p", "-f", "rawvideo", "pipe:1" };
         var planes = OracleProcess.Run(state.Ffmpeg, planeArgs, packet);
         if (planes.Length != (width + 258) * height) throw new Exception("Native411 plane lengths differ.");
@@ -103,34 +85,14 @@ internal static class WarmJpeg411Input
                 if (planes[planeOffset + y * cw + x] != blocks[c][y / 8 * columns[c] + x / 8]) throw new Exception("Native411 planes differ.");
             planeOffset += cw * height;
         }
-        const int grid = 516;
-        var padded = new byte[(grid + 258) * height];
-        for (var y = 0; y < height; y++)
-        {
-            planes.AsSpan(y * width, width).CopyTo(padded.AsSpan(y * grid));
-            padded.AsSpan(y * grid + width, grid - width).Fill(planes[y * width + width - 1]);
-        }
-        planes.AsSpan(width * height).CopyTo(padded.AsSpan(grid * height));
-        var outputs = new List<object>();
-        foreach (var scalar in new[] { false, true })
-        {
-            var arguments = new List<string> { "-hide_banner", "-loglevel", "error" };
-            if (scalar) arguments.AddRange(["-cpuflags", "0"]);
-            arguments.AddRange(["-threads:v", "1", "-f", "rawvideo", "-pixel_format", "yuvj411p", "-video_size", "516x259", "-i", "pipe:0", "-filter_threads", "1", "-vf", "scale=flags=bilinear+accurate_rnd+full_chroma_int+bitexact:in_h_chr_pos=384:in_v_chr_pos=0:in_color_matrix=bt601:in_range=pc:out_range=pc,format=rgba,crop=513:259:0:0", "-frames:v", "1", "-threads:v", "1", "-pix_fmt", "rgba", "-f", "rawvideo", "pipe:1"]);
-            var pixels = OracleProcess.Run(state.Ffmpeg, arguments.ToArray(), padded);
-            var agreement = JpegQualityCorpus.Compare(expected, pixels);
-            if (agreement.Maximum > 4 || agreement.Rmse > 1.5) throw new Exception("Native411 centered maximum4/RMSE1.5 exceeded.");
-            var name = scalar ? "centered-scalar.rgba" : "centered-native.rgba";
-            File.WriteAllBytes(Path.Combine(folder, name), pixels);
-            outputs.Add(new { scalar, arguments, file = name, sha256 = Hash(pixels), maximum = agreement.Maximum, rmse = agreement.Rmse, alphaExact = true, passed = true });
-        }
+        var outputs = WarmJpegFixedReference.ValidateQuarterNative(state, folder, packet, expected);
         File.WriteAllText(Path.Combine(folder, "native-validation.json"), JsonSerializer.Serialize(new
         {
             schemaVersion = 1, project = "Lokad.Image", inputSha256 = packetHash, ffmpegSha256 = JpegBenchmarkCase.HashFile(state.Ffmpeg),
-            nativePlanesExact = true, planeArguments = planeArgs, nativePlaneSha256 = Hash(planes), exactCenteredGridNormalization = true,
-            normalization = "Original public softwareMJPEG planes; only luma right padding extended to516, full-range BT601 centeredquarterwidth bilinear/accurate/full-chroma/bitexact conversion, crop to513. Native worker performs this complete operation including in-place output compaction inside timing, without packet edits or additional RGBA raster.",
+            nativePlanesExact = true, planeArguments = planeArgs, nativePlaneSha256 = Hash(planes), actualCodedGridNormalization = true,
+            normalization = "Original software MJPEG component planes converted directly at coded513x259 dimensions with the public full-range BT.601/bilinear/accurate/full-chroma/in_h_chr_pos0/in_v_chr_pos0 policy. Native state reset, component decode, normalization, fresh owned RGBA acquisition and release are timed. No padded-grid remapping, recovered chroma raster or in-place compaction.",
             passed = true, noTimingClaim = true, outputs
         }, new JsonSerializerOptions { WriteIndented = true }));
-        Console.WriteLine("Prepared original JPEG411 with exact analytical managed pixels and checked native centered normalization.");
+        Console.WriteLine("Prepared original JPEG411 with exact independent/native pixels at coded dimensions.");
     }
 }

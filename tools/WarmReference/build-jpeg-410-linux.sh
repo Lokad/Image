@@ -14,7 +14,7 @@ python3 - "$repo_root" "$output" "$prefix" <<'PY'
 import hashlib,json,pathlib,subprocess,sys
 root,output,prefix=map(pathlib.Path,sys.argv[1:])
 digest=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-record=dict(schemaVersion=1,project='Lokad.Image',purpose='Original independently owned H4V2 JPEG decode with centered exact-grid conversion FFmpeg reference',
+record=dict(schemaVersion=1,project='Lokad.Image',purpose='Original independently owned H4V2 JPEG decode with direct actual-coded-dimension public-reference color conversion',
     sourceSha256=digest(root/'tools/WarmReference/ffmpeg-jpeg-410-warm.c'),
     buildScriptSha256=digest(root/'tools/WarmReference/build-jpeg-410-linux.sh'),
     workerSha256=digest(output/'ffmpeg-jpeg-410-warm'),

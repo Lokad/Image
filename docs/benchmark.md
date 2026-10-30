@@ -7,7 +7,7 @@ Seven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 55 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 58 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -64,6 +64,15 @@ ownership and native boundaries remain. Other affected baseline JPEG costs need
 current evidence before CPU-pass claims. Progressive coefficient algorithms remain;
 its shared dispatch gets no new CPU-pass claim. Metadata-only parsing, encoders,
 other codecs and editing/text retain applicable unchanged-path evidence.
+[Extended-JPEG reconciliation](../benchmarks/WARM-EXTENDED-JPEG-CURRENT-COSTS.md)
+adds current confirmations of three existing controls: YCCK4204.835× / upper4.864,
+895,458B/op;4:1:1 2.807× / upper2.823,751,280B/op;4:1:0 4.703× / upper4.718,
+720,792B/op. All normal/scalar native and independent pixels are now exact.
+Historical expected pixels and padded-grid adapters are corrected to the declared
+native-output policy; original packets/source data and production pixels remain
+unchanged. These are current costs, not causal comparisons with earlier exports.
+YCCK and4:1:0 now lead optimization priorities. The same JDS1qualification/package
+is reused; no production build, full-suite repeat or new workload matrix.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -189,6 +198,9 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 | JPEG CMYK sparse-2D, resident decode † | 658.64 | 443.71 | 1.484 / 1.491 | 1,085,759 | — |
+| JPEG YCCK420, resident decode † | 3,420.79 | 707.48 | 4.835 / 4.864 | 895,458 | — |
+| JPEG 4:1:1, resident decode † | 1,256.78 | 447.72 | 2.807 / 2.823 | 751,280 | — |
+| JPEG 4:1:0, resident decode † | 2,388.42 | 507.81 | 4.703 / 4.718 | 720,792 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha
