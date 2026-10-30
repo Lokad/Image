@@ -577,6 +577,12 @@ BZT1harness/native and retained driver;ZERO builds/newcases/profiles/retiming.
 Original exactpixels/nativebounds/settings/source/owners/quiet pass. Applicable
 5220/OS/scalar/SAMEactualpackage proof reused. Demonstratedgap; full268open.
 
+[FP32 byte cubic reduction](BICUBIC-FLOAT-REDUCTION-REJECTED.md) is rejected:
+one current Down8screen fails5%gate despite55354 fewer allocatedBop. Exactpixels/
+nativebounds/owners/quiet pass. Original source/DLLs/package restored;661public
+normal/scalar eachOS including14useful newcases pass. No variants/profiles/
+candidate12 or repeatedfull/package proof. Accepted Down8 remainsBCC1; full268open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
