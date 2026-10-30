@@ -59,3 +59,20 @@ are Lanczos word/byte reduction1.585/1.500; stop retuning this architecture roun
 [prior caller reuse](WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md).
 Mirrored/member-verified jpeg-direct-baseline-planes-qualified.tar.xz, 254 members,
 SHA256 0c535221ceb98df2d72b47d5d02c00a650853a7b3f5f9af9e1a842ace2067e05; reference/checkpoint dependencies are pinned by hash.
+
+## Current staging profile
+
+After the staging change, one two-second diagnostic on the qualified 4:1:1-strip
+producer reuses the existing owned sparse-CMYK control and immutable core. Of
+1,933 samples, 29.4% are in baseline entropy routines, 22.6% in the inverse kernel,
+and 14.4% in its block coordinator. Instruction mapping locates 136 samples
+(7.0% overall) in the eight-row publication loop. Color conversion is 2.7%.
+These are profile proportions, without an elapsed-time or parity claim.
+
+Next examine one fused DC/AC traversal before smaller publication changes. Keep
+the original eight-bit tables, marker/error cursor and all pixel/resource gates;
+no candidate is accepted from this profile. No builds, repeated timing,
+passing-case retuning or new workload grid. Existing full/package proof applies.
+[Profile evidence](current-jpeg-baseline-profile-evidence.json) pins the current
+source and raw map/JIT/samples. Mirrored/member-verified jpeg-baseline-current-profile.tar.xz,
+69 members, SHA256 3e2c6e782a934bb3bbcd7e33b88a7c3886433dcc045cec23b449ea78ccd3e267.

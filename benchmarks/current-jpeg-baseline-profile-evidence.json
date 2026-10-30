@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "JBP1",
+  "profilingOnly": true,
+  "noTimingClaim": true,
+  "productionChanged": false,
+  "productionHarnessNativeSelectorBuilds": 0,
+  "productionSha256": "af86ce8ed20660ad4435980a4a10ee0c00ffd7362a95d26e1f1b97d530f47fb7",
+  "qualifiedProductionCommit": "e26b57248a0aa4c23e7407e13cab051c2aea5559",
+  "scope": "One2second singleCPU0 diagnostic of the existing513x259 owned CmykAdobeSparse2D complete operation;JDS1 baseline staging changed,so old whole-operation attribution is stale. No content/settings grid,scored comparison or passing-case retime.",
+  "reference": {
+    "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+    "inputBytes": 22708,
+    "managedOutputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+    "nativeOutputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+    "exactAnalyticalManagedPixels": true,
+    "nativeCliPixelsExact": true,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "quietGuardsPassed": true
+  },
+  "summary": {
+    "profilingOnly": true,
+    "noTimingClaim": true,
+    "productionSha256": "af86ce8ed20660ad4435980a4a10ee0c00ffd7362a95d26e1f1b97d530f47fb7",
+    "seconds": 2,
+    "samples": 1933,
+    "methods": [
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 437,
+        "fraction": 0.22607346094154165
+      },
+      {
+        "method": "Native or unresolved",
+        "samples": 317,
+        "fraction": 0.16399379203310915
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool)[Optimized]",
+        "samples": 278,
+        "fraction": 0.1438178996378686
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "samples": 240,
+        "fraction": 0.12415933781686497
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 132,
+        "fraction": 0.06828763579927574
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "samples": 121,
+        "fraction": 0.06259699948266943
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "samples": 103,
+        "fraction": 0.05328504914640455
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "samples": 93,
+        "fraction": 0.04811174340403518
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 65,
+        "fraction": 0.03362648732540093
+      },
+      {
+        "method": "class Lokad.Image.ImageInfo [Lokad.Image] Lokad.Image.Internal.ContainerHeaders::Jpeg(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+        "samples": 56,
+        "fraction": 0.028970512157268494
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderCmykRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 53,
+        "fraction": 0.027418520434557683
+      },
+      {
+        "method": "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        "samples": 30,
+        "fraction": 0.015519917227108122
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "samples": 3,
+        "fraction": 0.0015519917227108122
+      },
+      {
+        "method": "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderCmyk(int32)[Optimized]",
+        "samples": 3,
+        "fraction": 0.0015519917227108122
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 2,
+        "fraction": 0.0010346611484738748
+      }
+    ]
+  },
+  "audit": {
+    "profilingOnly": true,
+    "noTimingClaim": true,
+    "samples": 1933,
+    "publicationJitOffsetRange": [
+      "0x3f2",
+      "0x45c"
+    ],
+    "publicationSamples": 136,
+    "publicationSampleFraction": 0.07035695809622348,
+    "baselineCoordinatorSamples": 278,
+    "entropyFlatSampleFraction": 0.2938437661665804,
+    "entropyMethods": [
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "samples": 240,
+        "fraction": 0.12415933781686497
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 132,
+        "fraction": 0.06828763579927574
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "samples": 103,
+        "fraction": 0.05328504914640455
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "samples": 93,
+        "fraction": 0.04811174340403518
+      }
+    ],
+    "sourceIdentities": {
+      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "8e6e6d7cb1c33a3eacb84bc780ff879a4fdb6362b9af233bed4dca6382264dac",
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "19095281794746570a6409732e11602353e21e38ca1106577675e3e17af7e51f",
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bfd962082ae991abeb5e2c1403d3395dde145db67d04e38e2f518dbaa154a458",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "bac1f917228eb29f6c1e4786c3cdf2a765fdab1e0728bb70c2cb91563cbeec33",
+      "src/Lokad.Image/Internal/JpegInverseTransform.cs": "702c3e5aa276e9d4b0d2ec9dac43f6a656f72b3c457aaba7ad5b20633eb28906"
+    },
+    "coreUnchanged": true,
+    "profilesOrTimingRepeats": 0,
+    "decision": "Existing ordinary AC loop already fuses short Huffman prefix and amplitude with local word lookahead; DC prefix/amplitude still use separate reader calls before entering it. Bound one potential whole-baseline-block DC/AC fusion, preserving full logical cursor/marker/error semantics and scalar/cancellable fallback. No candidate yet. Do not reopen transform arithmetic or optimize color(2.7percent). Publication copies account for a smaller measured share; defer generic strided-transform refactoring that would touch passing kernels."
+  },
+  "workflow": "Reuse verified immutable QTS1production and existing JDC2harness/native/fixtures/selectors. No build,production change,new full/package checks or timing claim;QTS1full5188/OS and SAMEactualpackage proof remain. First guard failed on an updated admission-document/source-manifest mismatch before any diagnostic process started;retain failure,refresh only public source metadata/files,then run the single successful diagnostic. No completed job was repeated.",
+  "rawArtifacts": {
+    "file": "jpeg-baseline-current-profile.tar.xz",
+    "sha256": "3e2c6e782a934bb3bbcd7e33b88a7c3886433dcc045cec23b449ea78ccd3e267",
+    "bytes": 276372,
+    "members": 69,
+    "dependency": {
+      "file": "jpeg-quarter-single-strips-qualified.tar.xz",
+      "sha256": "e644094f2f51ea3b33fcff4837e1d9a82868ec7b895ea96220b7106e4dc6785e"
+    },
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "Bound one generic baseline DC/AC traversal fusion using existing8bit tables and marker-aware logical cursor. Preserve predictor/run/category failures and exact pixels,borrowed source,terminal admission,cancellation and output ownership. Establish speculative/replay correctness before a candidate;do not enlarge tables,reopen closed inverse variants or infer an elapsed gain from sample fractions."
+}
