@@ -4,13 +4,13 @@ namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class JpegQuarterStripAdmissionTests
 {
-    [Fact]
-    public void OwnedStripsMatchRealCallerPixelsAtOddEdgesAcrossBaselineAndProgressive()
+    [Theory] [InlineData(1)] [InlineData(2)]
+    public void OwnedStripsMatchRealCallerPixelsAtOddEdgesAcrossBaselineAndProgressive(int vertical)
     {
         foreach (var (width, height) in new[] { (1, 1), (67, 19), (513, 259) })
         foreach (var progressive in new[] { false, true })
         {
-            var data = AuthoredJpegCompatibility.Create(width, height, [60, 105, 145], 4, 2, progressive: progressive, restart: 1, vary: true);
+            var data = AuthoredJpegCompatibility.Create(width, height, [60, 105, 145], 4, vertical, progressive: progressive, restart: 1, vary: true);
             var original = data.ToArray(); var rgb = new byte[width * height * 3];
             ImageCodec.DecodeJpeg(data, rgb, JpegSampleFormat.Rgb);
             using var root = new TestMemoryBudget(4 * 1024 * 1024);
@@ -24,7 +24,7 @@ public sealed class JpegQuarterStripAdmissionTests
                     Assert.Equal(255, owned.GetRow8(y)[x * 4 + 3]);
                 }
                 Assert.Equal(rgb, actual); Assert.Equal(width * height * 4, root.Bytes);
-                if (width == 67) JpegQuarterExactTests.AssertNative(OriginalPixels.Bytes(owned), 2);
+                if (width == 67) JpegQuarterExactTests.AssertNative(OriginalPixels.Bytes(owned), vertical);
                 var retained = OriginalPixels.Bytes(owned);
                 Assert.Equal(original, data); Array.Clear(data); Assert.Equal(retained, OriginalPixels.Bytes(owned));
             }
@@ -32,10 +32,10 @@ public sealed class JpegQuarterStripAdmissionTests
         }
     }
 
-    [Theory] [InlineData(false)] [InlineData(true)]
-    public void StripAdmissionRefusalOrCancellationCleansOwnedResultAndAllowsRecovery(bool cancel)
+    [Theory] [InlineData(1, false)] [InlineData(1, true)] [InlineData(2, false)] [InlineData(2, true)]
+    public void StripAdmissionRefusalOrCancellationCleansOwnedResultAndAllowsRecovery(int vertical, bool cancel)
     {
-        var data = JpegQuarterExactTests.Input(2); var original = data.ToArray();
+        var data = JpegQuarterExactTests.Input(vertical); var original = data.ToArray();
         long finalGrowth;
         using (var reference = new TestMemoryBudget(4 * 1024 * 1024))
         {
@@ -43,7 +43,7 @@ public sealed class JpegQuarterStripAdmissionTests
             using (var image = ImageCodec.Decode(data, new DecodeOptions { Limits = new() { MemoryBudget = reference } }))
             {
                 finalGrowth = reference.GrowthAttempts; Assert.Equal(67 * 19 * 4, reference.Bytes);
-                Assert.Equal(1792, admissions[^1] - admissions[^2]);
+                Assert.Equal(vertical == 1 ? 1536 : 1792, admissions[^1] - admissions[^2]);
             }
             Assert.Equal(0, reference.Bytes);
         }
@@ -64,7 +64,7 @@ public sealed class JpegQuarterStripAdmissionTests
         }
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.Equal(original, data);
         root.Admitted = null; root.RefuseAtGrowth = 0;
-        using (var next = ImageCodec.Decode(data, options)) JpegQuarterExactTests.AssertNative(OriginalPixels.Bytes(next), 2);
+        using (var next = ImageCodec.Decode(data, options)) JpegQuarterExactTests.AssertNative(OriginalPixels.Bytes(next), vertical);
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

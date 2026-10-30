@@ -8,7 +8,7 @@ less elapsed time**, with every pixel unchanged. Its independently confirmed
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Original 4:1:0, independent | 2,388.42 | 507.81 | 4.703 / 4.718 | 720,792 | 3,399 |
 | 4:1:0 strips, independent | 382.11 | 508.00 | 0.752 / 0.765 | 720,835 | 3,399 |
-| Current 4:1:1 companion | 1,257.52 | 449.06 | 2.800 / 2.823 | 751,280 | 3,904 |
+| Historical 4:1:1 companion | 1,257.52 | 449.06 | 2.800 / 2.823 | 751,280 | 3,904 |
 
 64-column strips prepare horizontal positions once and reuse two filtered source
 rows per chroma plane. Safe AVX2 processes vertical filtering and color over rows;
@@ -49,8 +49,8 @@ lifetime annotation error was fixed before scoring. Zero harness/native/selector
 builds. Linux's initial document check was corrected by syncing the admission
 guide; the package was neither regenerated nor successfully reverified twice.
 
-Passing YCCK is unchanged and was not retimed. The next largest demonstrated gap
-is 4:1:1 at 2.800×. The full **268-path ≤1×** objective remains open.
+Passing YCCK is unchanged and was not retimed. The historical 4:1:1 companion is superseded by
+[its separable strips](WARM-JPEG-QUARTER-SINGLE-STRIPS.md). The full **268-path ≤1×** objective remains open.
 
 [Evidence](warm-jpeg-quarter-strips-evidence.json),
 [independent references](WARM-EXTENDED-JPEG-CURRENT-COSTS.md).

@@ -48,8 +48,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,180 checks on each platform, plus 336 internal and
-339 public focused checks normal/scalar per OS, and the same actual package/three examples.
+The current producer passes 5,188 checks on each platform, plus 338 internal and
+345 public focused checks normal/scalar per OS, and the same actual package/three examples.
 The [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks pass through that package on both OSes.
 [Direct baseline JPEG planes](../benchmarks/WARM-JPEG-DIRECT-BASELINE-PLANES.md)
@@ -72,15 +72,16 @@ output owners, with no new heap buffer or cache. All5,180 checks/OS and the same
 actual package pass. Stop this passing control; other affected owned YCCK costs
 still need applicable current evidence. Caller sample paths are unchanged.
 [Separable 4:1:0 strips](../benchmarks/WARM-JPEG-QUARTER-STRIPS.md) reduce that
-control from 2,388.42 to 382.11 µs:84.0% less independent elapsed,0.752× /
-upper0.765,720,835 B/op (measured +43). Exact pixels and every rounding boundary
-remain. The fixed1,792-byte stack workspace is admitted alongside live planes/
-output and released after actual users, with no new heap buffer or persistent
-cache. All5,185 checks/OS and the same actual package pass. Stop this control.
-Its current4:1:1 companion remains a2.800× / upper2.823 gap,751,280 B/op,
-without a paired gain claim. Caller pixel paths and passingYCCK are unchanged.
-Other affected owned4:1:0 costs need applicable current evidence;4:1:1 now leads
-optimization priorities. No new workload matrix or passing-case retiming.
+control from 2,388.42 to 382.11 µs: 84.0% less independent elapsed, 0.752× /
+upper 0.765, 720,835 B/op (measured +43). Stop this passing control.
+[4:1:1 strips](../benchmarks/WARM-JPEG-QUARTER-SINGLE-STRIPS.md) reduce its decode
+from 1,257.52 to 550.79 µs: 56.2% less elapsed, 1.233× / upper 1.237,
+751,295 B/op (measured +15). This remains a gap. Each admits its fixed stack
+workspace before allocation: 1,536 bytes for 4:1:1 and 1,792 for 4:1:0, released
+after users. Exact pixels, precision and ownership pass all current checks.
+Passing 4:1:0/YCCK evidence is reused; other affected owned quarter-grid
+boundaries need applicable costs before CPU-pass claims. The full 268-path
+objective remains open.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -207,7 +208,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 | JPEG CMYK sparse-2D, resident decode † | 658.64 | 443.71 | 1.484 / 1.491 | 1,085,759 | — |
 | JPEG YCCK420, resident decode † | 462.26 | 708.38 | 0.653 / 0.660 | 895,545 | — |
-| JPEG 4:1:1, resident decode † | 1,257.52 | 449.06 | 2.800 / 2.823 | 751,280 | — |
+| JPEG 4:1:1, resident decode † | 550.79 | 446.84 | 1.233 / 1.237 | 751,295 | — |
 | JPEG 4:1:0, resident decode † | 382.11 | 508.00 | 0.752 / 0.765 | 720,835 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved

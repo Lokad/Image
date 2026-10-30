@@ -271,6 +271,10 @@ def render():
     assert quarter_strips['decision']['passed'] and quarter_strips['status'] == {'Decode410': 'confirmed-pass', 'Decode411': 'confirmed-gap'}
     assert quarter_strips['qualification']['fullChecksEachOs'] == 5185
     assert quarter_strips['qualification']['package']['sha256'] == quarter_strips['qualification']['linuxPackage']['sameActualPackageSha256']
+    quarter_single = json.loads((ROOT / 'benchmarks/warm-jpeg-quarter-single-strips-evidence.json').read_text(encoding='utf-8'))
+    assert quarter_single['productionChanged'] and quarter_single['independentQuietConfirmation'] and quarter_single['decision']['passed']
+    assert quarter_single['qualification']['fullChecksEachOs'] == 5188
+    assert quarter_single['qualification']['package']['sha256'] == quarter_single['qualification']['linuxPackage']['sameActualPackageSha256']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -448,7 +452,7 @@ def render():
                  f'{cmyk["worstBracketRatio"]:.3f} / {cmyk["conservativeRatioUpper"]:.3f} | '
                  f'{cmyk["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     for case, label in [('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode')]:
-        producer = ycck_rows if case == 'Ycck420' else quarter_strips
+        producer = ycck_rows if case == 'Ycck420' else quarter_single if case == 'Decode411' else quarter_strips
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         assert receipt['librarySha256'] == producer['producers']['linuxSha256']
@@ -586,8 +590,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,180 checks on each platform, plus 336 internal and
-339 public focused checks normal/scalar per OS, and the same actual package/three examples.
+The current producer passes 5,188 checks on each platform, plus 338 internal and
+345 public focused checks normal/scalar per OS, and the same actual package/three examples.
 The [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks pass through that package on both OSes.
 [Direct baseline JPEG planes](../benchmarks/WARM-JPEG-DIRECT-BASELINE-PLANES.md)
@@ -610,15 +614,16 @@ output owners, with no new heap buffer or cache. All5,180 checks/OS and the same
 actual package pass. Stop this passing control; other affected owned YCCK costs
 still need applicable current evidence. Caller sample paths are unchanged.
 [Separable 4:1:0 strips](../benchmarks/WARM-JPEG-QUARTER-STRIPS.md) reduce that
-control from 2,388.42 to 382.11 µs:84.0% less independent elapsed,0.752× /
-upper0.765,720,835 B/op (measured +43). Exact pixels and every rounding boundary
-remain. The fixed1,792-byte stack workspace is admitted alongside live planes/
-output and released after actual users, with no new heap buffer or persistent
-cache. All5,185 checks/OS and the same actual package pass. Stop this control.
-Its current4:1:1 companion remains a2.800× / upper2.823 gap,751,280 B/op,
-without a paired gain claim. Caller pixel paths and passingYCCK are unchanged.
-Other affected owned4:1:0 costs need applicable current evidence;4:1:1 now leads
-optimization priorities. No new workload matrix or passing-case retiming.
+control from 2,388.42 to 382.11 µs: 84.0% less independent elapsed, 0.752× /
+upper 0.765, 720,835 B/op (measured +43). Stop this passing control.
+[4:1:1 strips](../benchmarks/WARM-JPEG-QUARTER-SINGLE-STRIPS.md) reduce its decode
+from 1,257.52 to 550.79 µs: 56.2% less elapsed, 1.233× / upper 1.237,
+751,295 B/op (measured +15). This remains a gap. Each admits its fixed stack
+workspace before allocation: 1,536 bytes for 4:1:1 and 1,792 for 4:1:0, released
+after users. Exact pixels, precision and ownership pass all current checks.
+Passing 4:1:0/YCCK evidence is reused; other affected owned quarter-grid
+boundaries need applicable costs before CPU-pass claims. The full 268-path
+objective remains open.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound

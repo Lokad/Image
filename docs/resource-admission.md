@@ -11,7 +11,7 @@ storage/copies, not caller-owned input storage again.
 storage (PNG compressed input/rows/inflater, progressive JPEG coefficients, WebP
 planes/history). Baseline JPEG validates with block scratch; baseline decoding
 reconstructs admitted component sample planes without full-frame coefficients.
-Owned JPEG 4:1:0 rendering also admits 1,792 bytes of fixed stack workspace
+Owned JPEG 4:1:1/4:1:0 rendering also admits 1,536/1,792 bytes of fixed stack workspace
 alongside its live component planes and output.
 Stream acquisition stays charged through validation; successful metadata results
 contain only scalar facts. Its memory bounds can therefore differ from Decode's.

@@ -394,10 +394,21 @@ no new heap/frame copy/across-operation cache or budget. Exact pixels, threshold
 and all native precision boundaries remain. Full5,185/OS,338internal/342public
 normal/scalar,SAMEpackage/governedconsumer/threeexamples pass. One successful
 core build/OS; no harness/native/selector builds or scored reruns. Shared-dispatch
-companionDecode411now2.800/upper2.823,751,280B/op is a current gap without a
-paired gain claim. PassingYCCK and caller paths retain applicable evidence.
+companionDecode411then2.800/upper2.823,751,280B/op is superseded by the
+4:1:1 round below. PassingYCCK and caller paths retain applicable evidence.
 Other affected owned410boundaries need applicable costs before CPU-pass claims;
-411 is now largest. Full268-case objective remains open.
+Full268-case objective remains open.
+
+[Separable JPEG4:1:1 strips](WARM-JPEG-QUARTER-SINGLE-STRIPS.md) now improve
+existing Decode411 from1,257.52 to550.79 us, 56.2% less independent elapsed,
+1.233x / upper1.237, 751,295 B/op (+15). Confirmed gap remains.
+Admit1,536-byte fixed stack workspace before allocation,release after users.
+No new heap/framecopy/cache/budget/owner; exact positions/precision/pixels remain.
+Full5,188/OS,338internal/345public normal/scalar,SAMEpackage/governedasync/3examples
+pass. One corebuild/OS,zero harness/native/selector builds,variants,profiles or
+successful retimes. Reuse originalQTC1independent12. Caller routines and passing
+410/YCCKkernels retain applicable evidence without retiming. Other affected owned
+411boundaries need applicable costs before CPU claims. Full268<=1x stays open.
 
 ## Finite checklist
 
