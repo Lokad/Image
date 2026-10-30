@@ -11,6 +11,21 @@ namespace Lokad.Image.Internal;
 internal static class JpegInverseTransform
 {
     private static readonly int[] Kernel = BuildKernel();
+    private static readonly Vector256<short> Row01 = BuildRowPair(0);
+    private static readonly Vector256<short> Row23 = BuildRowPair(2);
+    private static readonly Vector256<short> Row45 = BuildRowPair(4);
+    private static readonly Vector256<short> Row67 = BuildRowPair(6);
+
+    private static Vector256<short> BuildRowPair(int frequency)
+    {
+        Span<short> weights = stackalloc short[16];
+        for (var x = 0; x < 8; x++)
+        {
+            weights[x * 2] = checked((short)Kernel[frequency * 8 + x]);
+            weights[x * 2 + 1] = checked((short)Kernel[(frequency + 1) * 8 + x]);
+        }
+        return MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(weights));
+    }
 
     private static int[] BuildKernel()
     {
@@ -115,12 +130,11 @@ internal static class JpegInverseTransform
                 rows.Slice(y * 8, 8).Fill(unchecked((short)(row[0] * 8)));
                 continue;
             }
-            var sum = Vector256.Create(1 << 10);
-            for (var u = 0; u < 8; u++)
-            {
-                var weights = MemoryMarshal.Read<Vector256<int>>(MemoryMarshal.AsBytes(Kernel.AsSpan(u * 8, 8)));
-                sum = Avx2.Add(sum, Avx2.MultiplyLow(Vector256.Create((int)row[u]), weights));
-            }
+            // Signed-word dot pairs retain the original modulo-Int32 sums.
+            var sum = Avx2.Add(Vector256.Create(1 << 10), RowProduct(row, 0, Row01));
+            sum = Avx2.Add(sum, RowProduct(row, 2, Row23));
+            sum = Avx2.Add(sum, RowProduct(row, 4, Row45));
+            sum = Avx2.Add(sum, RowProduct(row, 6, Row67));
             sum = Avx2.ShiftRightArithmetic(sum, 11);
             var packed = Sse2.PackSignedSaturate(sum.GetLower(), sum.GetUpper());
             MemoryMarshal.Write(MemoryMarshal.AsBytes(rows.Slice(y * 8, 8)), in packed);
@@ -129,8 +143,10 @@ internal static class JpegInverseTransform
         // Bias in signed words before widening, preserving the scalar wrap.
         var first = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows[..8]));
         var r0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
-        var r1 = WidenRow(rows, 1); var r2 = WidenRow(rows, 2); var r3 = WidenRow(rows, 3);
-        var r4 = WidenRow(rows, 4); var r5 = WidenRow(rows, 5); var r6 = WidenRow(rows, 6); var r7 = WidenRow(rows, 7);
+        var r4 = WidenRow(rows, 4);
+        var p26 = PairRows(rows, 2, 6);
+        var p13 = PairRows(rows, 1, 3);
+        var p57 = PairRows(rows, 5, 7);
         // T.81 A.3.3: reflected outputs share even frequencies and negate odd
         // frequencies. DC/quarter-turn weights also share the same magnitude.
         // All operations remain modulo Int32, so regrouping preserves even
@@ -141,16 +157,30 @@ internal static class JpegInverseTransform
         for (var y = 0; y < 4; y++)
         {
             var even = y is 0 or 3 ? plus : minus;
-            even = Avx2.Add(even, Avx2.MultiplyLow(r2, Vector256.Create(Kernel[16 + y])));
-            even = Avx2.Add(even, Avx2.MultiplyLow(r6, Vector256.Create(Kernel[48 + y])));
-            var odd = Avx2.MultiplyLow(r1, Vector256.Create(Kernel[8 + y]));
-            odd = Avx2.Add(odd, Avx2.MultiplyLow(r3, Vector256.Create(Kernel[24 + y])));
-            odd = Avx2.Add(odd, Avx2.MultiplyLow(r5, Vector256.Create(Kernel[40 + y])));
-            odd = Avx2.Add(odd, Avx2.MultiplyLow(r7, Vector256.Create(Kernel[56 + y])));
+            even = Avx2.Add(even, Avx2.MultiplyAddAdjacent(p26, PairWeights(Kernel[16 + y], Kernel[48 + y])));
+            var odd = Avx2.Add(
+                Avx2.MultiplyAddAdjacent(p13, PairWeights(Kernel[8 + y], Kernel[24 + y])),
+                Avx2.MultiplyAddAdjacent(p57, PairWeights(Kernel[40 + y], Kernel[56 + y])));
             StoreRow(Avx2.Add(even, odd), pixels.Slice(y * 8, 8));
             StoreRow(Avx2.Subtract(even, odd), pixels.Slice((7 - y) * 8, 8));
         }
     }
+
+    private static Vector256<int> RowProduct(ReadOnlySpan<short> row, int first, Vector256<short> weights)
+    {
+        var pair = MemoryMarshal.Read<int>(MemoryMarshal.AsBytes(row.Slice(first, 2)));
+        return Avx2.MultiplyAddAdjacent(Vector256.Create(pair).AsInt16(), weights);
+    }
+
+    private static Vector256<short> PairRows(ReadOnlySpan<short> rows, int first, int second)
+    {
+        var a = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows.Slice(first * 8, 8)));
+        var b = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows.Slice(second * 8, 8)));
+        return Vector256.Create(Sse2.UnpackLow(a, b), Sse2.UnpackHigh(a, b));
+    }
+
+    private static Vector256<short> PairWeights(int first, int second)
+        => Vector256.Create(unchecked((int)((uint)(ushort)first | ((uint)(ushort)second << 16)))).AsInt16();
 
     private static void StoreRow(Vector256<int> sum, Span<byte> pixels)
     {

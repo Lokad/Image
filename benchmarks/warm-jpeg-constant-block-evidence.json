@@ -5701,5 +5701,18 @@
     "mirrored": true,
     "allMembersVerified": true
   },
-  "next": "Stop complete constant-block variants. Sparse-CMYK2D at2.433/upper2.446 is the largest confirmed material gap; inspect a distinct substantial primitive rather than retuning this fast path or confirmed passing cases. Other changed JPEG rendering paths need applicable current evidence before CPU-pass claims. Full268-path objective remains open."
+  "next": "Stop complete constant-block variants. Sparse-CMYK2D at2.433/upper2.446 is the largest confirmed material gap; inspect a distinct substantial primitive rather than retuning this fast path or confirmed passing cases. Other changed JPEG rendering paths need applicable current evidence before CPU-pass claims. Full268-path objective remains open.",
+  "supersededCases": {
+    "CmykAdobeSparse2D": {
+      "by": "warm-jpeg-packed-word-inverse-evidence.json",
+      "reason": "Nonconstant AVX2 matrix uses packed-word dot pairs; original raw evidence remains retained."
+    },
+    "NativeDecode420": {
+      "by": "warm-jpeg-packed-word-inverse-evidence.json",
+      "reason": "Nonconstant AVX2 matrix uses packed-word dot pairs; original raw evidence remains retained."
+    }
+  },
+  "unchangedCasesReused": [
+    "CmykCaller"
+  ]
 }

@@ -322,6 +322,16 @@ pass. Onecorebuild/OS,zerootherbuilds;onetest-onlyimportfix/coreunchangedretaine
 Currentcosts supersede priorDQP1threecontrols;olderaffectedJPEGrenderpaths need
 currentevidencebeforeCPU-passclaims. Stopbothacceptedprimitives;full268open.
 
+[Packed-word JPEG inverse](WARM-JPEG-PACKED-WORD-INVERSE.md) accepts8.6%less
+sparse-CMYKelapsed:2.181/upper2.197,1085515B/op(+2 measured,no dynamiccapacity).
+Affected baseline420current1.103/upper1.107,757328B/op. Existing DC-onlycallerCMYK
+bypasses matrix;unchangedbodyproof reusesvalid1.807/upper1.817,1634913B/op without
+repeatingtiming. Two affectedcontrolsrefresh;no new cases/settings. Full5170/OS,
+31internal/98publicnormal-scalar,SAMEpackage/governedconsumer/3examples pass.
+Onecorebuild/OS,zerootherbuilds. Exactpixels/frozeninputs/settings/owners/quiet
+pass. Stopthispackedwordprimitive;oldnonconstantAVX2JPEGcosts need currentevidence
+beforeCPU-passclaims. Full268 remainsopen;largestconfirmedgap sparse-CMYK2.181.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

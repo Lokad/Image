@@ -1,5 +1,9 @@
 # Exact constant JPEG blocks
 
+Nonconstant sparse-CMYK/baseline420 costs are superseded by
+[packed-word matrices](WARM-JPEG-PACKED-WORD-INVERSE.md). The DC-only caller
+confirmation and accepted constant-block primitive remain applicable.
+
 The existing DC-only caller-CMYK decode uses **40.1% less elapsed time** with
 exact pixels: **1.807× / upper1.817** FFmpeg. No owned storage is added.
 
