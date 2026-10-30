@@ -34,8 +34,12 @@ Development 0.2.1 provides selective `Probe`/`ProbeAsync` on seekable and nonsee
 streams. The default reads dimensions before pixel payloads. The stream stays open
 at the acquired prefix. Unexamined orientation/alpha/animation
 fields are null. Select additional `ImageProbeFacts` when needed; late metadata
-may require more input. Use Identify/InspectHeaders for their stronger complete
-container checks and Decode for pixel validation. See [source metadata](source-metadata.md).
+may require more input. Probing starts at the current position and does not rewind.
+Dimension-only probing stops before pixel payloads; seeking JPEG entropy for late
+metadata can read ahead by up to 8 KiB. Reopen or explicitly replay a consumed prefix
+before decoding a nonseekable input. Use Identify/InspectHeaders for their stronger
+container checks, ValidatePixels for pixel-coding validation, and Decode when pixels
+are needed. See [source metadata](source-metadata.md).
 
 ## Work with 16-bit pixels
 
@@ -70,50 +74,66 @@ an explicit `BackgroundRgb` for transparent input; flattening and depth reductio
 share that rounding. WebP encoding defaults to lossless; set
 `WebpEncodeOptions.Lossless = false` explicitly for lossy encoding.
 
-## Bound an operation and pass cancellation
+## Share memory admission and use asynchronous streams
 
-Limits apply separately to each operation. Pass the same chosen policy and
-cancellation token to every stage of a workflow.
+The caller supplies its `IMemoryBudget` root and owns both streams. Forward that
+root and the current token through every stage; local limits still apply to each
+operation. This function accepts an input positioned at the image beginning and
+writes directly to the supplied destination.
 
 ```csharp
 using Lokad.Image;
 
-var limits = new ImageLimits
+static async Task WriteThumbnailAsync(Stream input, Stream output,
+    IMemoryBudget memoryBudget, ImageFormat format, CancellationToken token)
 {
-    MaxDimension = 1024,
-    MaxPixels = 1_000_000,
-    MaxInputBytes = 1024 * 1024,
-    MaxOutputBytes = 4 * 1024 * 1024,
-    MaxWorkingBytes = 64L * 1024 * 1024,
-};
-using var cancellation = new CancellationTokenSource();
-var token = cancellation.Token;
-
-using var input = File.OpenRead("input.png");
-var header = await ImageCodec.ProbeAsync(input,
-    new ImageProbeOptions { Limits = limits, MaxAcquiredBytes = 64 * 1024 }, token);
-input.Position = 0; // This FileStream is seekable; decode starts at the image beginning.
-using var image = ImageCodec.Decode(input,
-    new DecodeOptions { ApplyOrientation = true, Limits = limits }, token);
-using var thumbnail = ImageTransforms.ResizeToFit(image, 128, 96,
-    allowUpscaling: false, limits: limits, cancellationToken: token);
-using var encoded = new MemoryStream();
-ImageCodec.EncodePng(thumbnail, encoded, new PngEncodeOptions { Limits = limits }, token);
-File.WriteAllBytes("bounded-thumbnail.png", encoded.ToArray());
+    var limits = new ImageLimits
+    {
+        MemoryBudget = memoryBudget,
+        MaxDimension = 1024, MaxPixels = 1_000_000,
+        MaxInputBytes = 1024 * 1024, MaxOutputBytes = 4 * 1024 * 1024,
+        MaxWorkingBytes = 64L * 1024 * 1024,
+    };
+    using var image = await ImageCodec.DecodeAsync(input,
+        new DecodeOptions { ApplyOrientation = true, Limits = limits }, token);
+    using var thumbnail = ImageTransforms.ResizeToFit(image, 128, 96,
+        allowUpscaling: false, limits: limits, cancellationToken: token);
+    switch (format)
+    {
+        case ImageFormat.Png:
+            await ImageCodec.EncodePngAsync(thumbnail, output, new() { Limits = limits }, token);
+            break;
+        case ImageFormat.Jpeg:
+            await ImageCodec.EncodeJpegAsync(thumbnail, output,
+                new() { Limits = limits, Quality = 85, Sampling = JpegSampling.YCbCr420, BackgroundRgb = 0xffffff }, token);
+            break;
+        case ImageFormat.WebP:
+            await ImageCodec.EncodeWebpAsync(thumbnail, output,
+                new() { Limits = limits, Lossless = true, Effort = 4 }, token);
+            break;
+        default: throw new ArgumentOutOfRangeException(nameof(format));
+    }
+}
 ```
 
-Connect the token to the caller's cancellation source. `MaxWorkingBytes` admits
-the operation's accounted source, result and scratch buffers; it is not a cap
-on process RSS. The [resource admission notes](resource-admission.md) define
-the charges and local memory limits. A failed encode may leave partial bytes in its
-output stream; discard them. The example writes the destination after encoding
-succeeds.
+Images stay charged until disposal, including their overlap during resizing.
+Input acquisition and encoder staging remain charged until actual async users
+finish; requesting cancellation does not end a borrow. Streams and the root stay
+open. `MaxWorkingBytes` counts accounted source/result/scratch capacity, not RSS;
+shared admission charges owned storage rather than charging borrowed inputs again.
+
+If the destination retains encoded bytes, the caller must admit its capacity and
+keep that storage owner alive through publication. Codec completion does not fund
+arbitrary surviving copies. A failed write can leave partial output; publication
+or atomic file replacement is the caller's policy. See [resource admission](resource-admission.md).
 
 ## Ownership, inspection and failures
 
 Dispose every `ImageBuffer` you own. Row spans refer to that buffer's mutable
 storage and should only be used while it is alive. Supplied streams stay open;
 callers own their positions and disposal.
+Failure or cancellation leaves the position reached by the underlying I/O;
+there is no rewind or rollback. Successful full read routes finish at EOF.
 
 `ImageCodec.Identify` reports coded dimensions, precision and recognized EXIF
 orientation without constructing a pixel buffer. `ImageInfo.OrientedWidth` and
@@ -125,7 +145,9 @@ Use `ImageCodec.ValidatePixels(encodedBytes)` or
 validity is needed without a retained raster. Results describe coded dimensions
 and pending orientation. These operations use codec-dependent memory, read streams
 through EOF and leave them open. Pass `metadataPolicy: ImageMetadataPolicy.IgnoreInvalid`
-explicitly when needed. Use Decode directly when the pixels are needed.
+explicitly when needed. PNG retains compressed input/rows/inflater, JPEG retains
+coefficients and WebP retains planes/history; validation is not fixed-memory or
+an incremental decoder. Use Decode directly when pixels are needed.
 
 `Decode(Stream)` reads through EOF into private storage and decodes its acquired
 prefix without a final encoded-input copy. Returned pixels own separate storage.
@@ -150,6 +172,17 @@ use the same memory-admission root. The JPEG sample overload accepts borrowed
 `ReadOnlyMemory<byte>` gray/RGB samples with the same stride/quality controls.
 Keep source storage stable until completion. No final `ToArray` copy is needed;
 discard partial output after a write failure or cancellation.
+
+For codec embedding, `DecodeJpeg(encoded.Span, destination.Span, format, stride,
+options, token)` writes caller-owned grayscale/RGB/CMYK8 samples. Choose
+`JpegDecodeOptions.SourceColorSpace`, `CmykInversion` and `ApplyOrientation`
+explicitly; ICC conversion is not applied. Destination padding stays untouched
+on success, while failure can leave partial pixels. Its geometry must fit the
+chosen orientation. `EncodeJpegAsync(samples, width, height, format, output,
+stride, options, token)` borrows grayscale/RGB8 samples without an RGBA frame.
+Keep the sample owner alive and stable through completion. Caller sample storage
+is separate from codec scratch; local working limits include the declared spans,
+while shared admission does not charge those borrowed buffers again.
 
 `ImageDrawing.FillRectangle`, `CopyRegion` and `Composite` mutate a canvas in coded
 coordinates with clipped destinations. Copy source rectangles must fit and depths
@@ -191,6 +224,10 @@ capacity estimates and asynchronous lifetimes.
 Malformed input raises `ImageDataException`, unsupported formats or profiles
 raise `UnsupportedImageException`, exhausted admission limits raise
 `ImageLimitException`, and cancellation raises `OperationCanceledException`.
+Use `ImageLimitException.Scope` and `Limit`, and `UnsupportedImageException.Feature`
+for structured classification. `SharedBudget` refusal is terminal, with no retry,
+wait or lower-quality fallback; it is not corrupt coding. `IgnoreInvalid` tolerates
+optional metadata only and preserves required coding/container and resource checks.
 Invalid API arguments use standard argument exceptions. Stream I/O failures
 propagate. Encoders strip optional metadata; ICC color management and metadata
 round-tripping are deferred.

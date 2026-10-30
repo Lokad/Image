@@ -46,6 +46,8 @@ It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
 The current producer passes 5,157 checks on each platform, plus 131 affected kernel
 and 258 public checks normal/scalar per OS, and the same actual package/three examples.
+The unchanged DLL also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
+and pending-I/O/shared-admission checks through the updated same package on both OSes.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in

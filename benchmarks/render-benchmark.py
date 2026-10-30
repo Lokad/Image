@@ -220,6 +220,10 @@ def render():
     assert png_sparse_gray['productionChanged'] and png_sparse_gray['decision']['passed']
     assert png_sparse_gray['qualification']['fullChecksEachOs'] == 5157
     assert png_sparse_gray['qualification']['package']['sha256'] == png_sparse_gray['qualification']['linuxPackage']['sameActualPackageSha256']
+    refresh = png_sparse_gray['packageDocumentationConsumerRefresh']
+    assert refresh['productionUnchanged'] and refresh['sameActualPackagePassedWindowsLinux']
+    assert refresh['librarySha256'] == png_sparse_gray['qualification']['package']['librarySha256']
+    assert refresh['governedStreamingConsumerPassed'] and refresh['usageExamplesEachOs'] == 3
     assert png_sparse_gray['status'] == {'DecodeGray1Adam7': 'confirmed-pass'}
     o = png_sparse_gray['cases']['DecodeGray1Adam7'][-1]
     assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
@@ -514,6 +518,8 @@ It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
 The current producer passes 5,157 checks on each platform, plus 131 affected kernel
 and 258 public checks normal/scalar per OS, and the same actual package/three examples.
+The unchanged DLL also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
+and pending-I/O/shared-admission checks through the updated same package on both OSes.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in

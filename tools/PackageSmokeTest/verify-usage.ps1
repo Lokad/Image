@@ -81,23 +81,44 @@ if (!source.GetRow16(0).SequenceEqual(new ushort[] {1000, 2000, 3000, 65535, 400
     throw new Exception("16-bit source was mutated.");
 '@,
 @'
-if (!input.CanRead || !encoded.CanWrite || thumbnail.Width > 128 || thumbnail.Height > 96)
-    throw new Exception("Bounded workflow geometry or ownership differs.");
-using var docDecoded = ImageCodec.Decode(File.ReadAllBytes("bounded-thumbnail.png"));
-if ((docDecoded.Width, docDecoded.Height, docDecoded.BitDepth) != (thumbnail.Width, thumbnail.Height, 16))
-    throw new Exception("Bounded output geometry or precision differs.");
-for (var docY = 0; docY < thumbnail.Height; docY++)
-    if (!docDecoded.GetRow16(docY).SequenceEqual(thumbnail.GetRow16(docY)))
-        throw new Exception("Bounded output changes pixels.");
-if ((header.Width, header.Height) != (docWidth, docHeight) || header.Orientation != null || header.BytesRead != 29)
-    throw new Exception("Bounded example selective acquisition/unknown facts differ.");
+using var docBudget = new Lokad.Image.Tooling.TestMemoryBudget(64L * 1024 * 1024);
+using var cancellation = new CancellationTokenSource();
+foreach (var docFormat in new[] { ImageFormat.Png, ImageFormat.Jpeg, ImageFormat.WebP })
+{
+    using var docInput = File.OpenRead("input.png");
+    using var docOutput = File.Create("bounded-thumbnail-" + docFormat);
+    await WriteThumbnailAsync(docInput, docOutput, docBudget, docFormat, cancellation.Token);
+    if (!docInput.CanRead || !docOutput.CanWrite || docInput.Position != docInput.Length
+        || docBudget.Bytes != 0 || docBudget.IsDisposed)
+        throw new Exception("Governed usage example did not borrow streams/root or release its image/staging owners.");
+    docOutput.Dispose();
+    var docPacket = File.ReadAllBytes("bounded-thumbnail-" + docFormat);
+    using var docDecoded = ImageCodec.Decode(docPacket);
+    if ((docDecoded.Width, docDecoded.Height, docDecoded.BitDepth) != (128, 85, docFormat == ImageFormat.Png ? 16 : 8)
+        || ImageCodec.Identify(docPacket).Format != docFormat)
+        throw new Exception("Governed usage geometry, source precision or selected output codec differs.");
+}
+using var docPrefix = File.OpenRead("input.png");
+var docLimits = new ImageLimits { MemoryBudget = docBudget };
+var header = await ImageCodec.ProbeAsync(docPrefix, new() { Limits = docLimits, MaxAcquiredBytes = 64 * 1024 });
+if ((header.Width, header.Height) != (docWidth, docHeight) || header.Orientation != null || header.BytesRead != 29
+    || docPrefix.Position != 29 || docBudget.Bytes != 0)
+    throw new Exception("Documented selective acquisition/unknown facts differ.");
+docPrefix.Position = 0;
+if ((await ImageCodec.ValidatePixelsAsync(docPrefix, docLimits)).Width != docWidth
+    || docPrefix.Position != docPrefix.Length || !docPrefix.CanRead || docBudget.Bytes != 0)
+    throw new Exception("Documented complete pixel validation differs from selective probing.");
 cancellation.Cancel();
+using var docCanceledInput = File.OpenRead("input.png");
+using var docCanceledOutput = new MemoryStream();
 try
 {
-    using var docUnexpected = ImageCodec.Decode(docInputBytes, new DecodeOptions { Limits = limits }, token);
+    await WriteThumbnailAsync(docCanceledInput, docCanceledOutput, docBudget, ImageFormat.Png, cancellation.Token);
     throw new Exception("Documented token did not propagate cancellation.");
 }
 catch (OperationCanceledException) { }
+if (docBudget.Bytes != 0 || docCanceledOutput.Length != 0 || !docCanceledInput.CanRead || !docCanceledOutput.CanWrite)
+    throw new Exception("Canceled usage example leaked ownership or wrote before admission.");
 '@
 )
 $inputCheck = @'
@@ -109,6 +130,7 @@ static ushort DocSample(int x, int y, int channel) => channel == 3
     ? (ushort)((x + y) % 3 == 0 ? 0 : 65535 - (x * 257 + y * 11) % 65536)
     : (ushort)((x * 1103 + y * 1789 + channel * 997 + 13) & 65535);
 '@
+$usageBudgetSource = [Security.SecurityElement]::Escape((Join-Path $PSScriptRoot '../Shared/TestMemoryBudget.cs'))
 $identityCheck = @'
 var docLibrary = typeof(ImageCodec).Assembly.Location;
 if (Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(docLibrary))) != args[0])
@@ -128,7 +150,7 @@ for ($index = 0; $index -lt $snippets.Count; $index++) {
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
   </PropertyGroup>
-  <ItemGroup><PackageReference Include="Lokad.Image" Version="$packageVersion" /></ItemGroup>
+  <ItemGroup><PackageReference Include="Lokad.Image" Version="$packageVersion" /><Compile Include="$usageBudgetSource" Link="TestMemoryBudget.cs" /></ItemGroup>
 </Project>
 "@ | Set-Content -LiteralPath $project -Encoding utf8
     $snippet = [regex]::Replace($snippets[$index].Groups[1].Value, '^using Lokad\.Image;\r?\n', '')

@@ -63,6 +63,7 @@ try {
     $fontFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredTrueType.cs'))
     $memoryFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/TestMemoryBudget.cs'))
     $memoryConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/CooperativeMemoryConsumer.cs'))
+    $streamingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/GovernedStreamingConsumer.cs'))
     $shapingFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredOpenType.cs'))
     $shapingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/TextShapingConsumer.cs'))
     $jpegFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredJpegCompatibility.cs'))
@@ -86,6 +87,7 @@ try {
     <Compile Include="$fontFixturePath" Link="AuthoredTrueType.cs" />
     <Compile Include="$memoryFixturePath" Link="TestMemoryBudget.cs" />
     <Compile Include="$memoryConsumerPath" Link="CooperativeMemoryConsumer.cs" />
+    <Compile Include="$streamingConsumerPath" Link="GovernedStreamingConsumer.cs" />
     <Compile Include="$shapingFixturePath" Link="AuthoredOpenType.cs" />
     <Compile Include="$shapingConsumerPath" Link="TextShapingConsumer.cs" />
     <Compile Include="$jpegFixturePath" Link="AuthoredJpegCompatibility.cs" />

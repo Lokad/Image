@@ -27,6 +27,10 @@ finalizers or weak-table tracking. Caller roots, inputs and streams stay borrowe
 Copies are charged separately. Temporary owners release on every exit; growing
 buffers cover retained capacity and replacement overlap. Asynchronous owners stay
 charged until actual reads/writes finish, including cancellation and failure.
+Encoded capacity retained by a caller-owned stream belongs to that caller's
+storage owner. Keep its admission through later consumers/publication; codec
+completion does not admit arbitrary retained copies. Stream failure can leave
+partial output; publication/atomic replacement is outside the codec operation.
 
 Shared refusal throws `ImageLimitException` with `WorkingBytes` and `SharedBudget`,
 terminates the affected operation and releases unused/relinquished reservations.

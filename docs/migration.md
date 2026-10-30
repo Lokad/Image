@@ -6,6 +6,13 @@ Actual acquisition has its own bound, distinct from encoded extents. Complete
 Identify/InspectHeaders behavior stays available. Optional `ImageMetadataPolicy.IgnoreInvalid`
 tolerates unusable EXIF across read routes; strict remains the default. Permissive
 orientation probing may traverse the entire container to resolve overrides.
+For embedding, use the existing async stream and caller-JPEG-memory APIs with
+one borrowed `ImageLimits.MemoryBudget` root at every stage. Probe consumes a
+prefix; ValidatePixels consumes through EOF without returning a raster. Retained
+images and caller-owned encoded storage need their owners through the last user;
+stream output can be partial and does not perform atomic publication. The
+[governed pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
+shows the supported flow without an additional host or budget interface.
 See [source metadata](source-metadata.md).
 
 `ValidatePixels`/`ValidatePixelsAsync` add complete coding validation without an

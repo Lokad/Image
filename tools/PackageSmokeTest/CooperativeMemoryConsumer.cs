@@ -114,5 +114,6 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged caller JPEG result lifetime or geometry differs.");
         }
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged caller JPEG storage leaked.");
+        await GovernedStreamingConsumer.Verify();
     }
 }
