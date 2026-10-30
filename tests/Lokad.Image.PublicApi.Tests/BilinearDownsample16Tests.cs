@@ -1,9 +1,53 @@
 using Lokad.Image.Tooling;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.PublicApi.Tests;
 
 public sealed class BilinearDownsample16Tests
 {
+    [Fact]
+    public void PreparationBorrowsTheRootAndReleasesWorkspaceBeforePublishingTheResult()
+    {
+        using var pattern = OriginalPixels.Buffer(513, 259, 16);
+        const int sourceBytes = 513 * 259 * 8;
+        const int outputBytes = 256 * 129 * 8;
+        using var expected = ImageTransforms.Resize(pattern, 256, 129, ResizeFilter.Bilinear,
+            new ImageLimits { MaxWorkingBytes = sourceBytes + outputBytes + 4096 });
+        var accelerated = Avx512F.IsSupported && Avx2.IsSupported && Avx.IsSupported && Sse41.IsSupported;
+        // The accelerated operation fits without the unused horizontal plan;
+        // portable original-order filtering retains its existing workspace.
+        using var root = new TestMemoryBudget(sourceBytes + outputBytes + (accelerated ? 24 : 40) * 1024);
+        var limits = new ImageLimits { MemoryBudget = root };
+        using var source = ImageBuffer.Create(513, 259, 16, limits);
+        for (var y = 0; y < source.Height; y++) pattern.GetRow16(y).CopyTo(source.GetRow16(y));
+        var input = OriginalPixels.Bytes(source);
+        var pixels = OriginalPixels.Bytes(expected);
+        using (var first = ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bilinear, limits))
+        {
+            Assert.Equal(pixels, OriginalPixels.Bytes(first));
+            Assert.Equal(sourceBytes + outputBytes, root.Bytes);
+            var refusals = root.Refusals;
+            var refused = Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bilinear, limits));
+            Assert.Equal(ImageLimitScope.SharedBudget, refused.Scope);
+            Assert.Equal(refusals + 1, root.Refusals);
+            Assert.Equal(sourceBytes + outputBytes, root.Bytes);
+            Assert.Equal(pixels, OriginalPixels.Bytes(first));
+        }
+        Assert.Equal(sourceBytes, root.Bytes);
+        using var cancellation = new CancellationTokenSource();
+        root.Admitted = _ => { if (root.Bytes > sourceBytes + outputBytes) cancellation.Cancel(); };
+        var canceled = Assert.ThrowsAny<OperationCanceledException>(() => ImageTransforms.Resize(source, 256, 129,
+            ResizeFilter.Bilinear, limits, cancellation.Token));
+        Assert.Equal(cancellation.Token, canceled.CancellationToken);
+        Assert.Equal(sourceBytes, root.Bytes);
+        root.Admitted = null;
+        using (var recovered = ImageTransforms.Resize(source, 256, 129, ResizeFilter.Bilinear, limits))
+            Assert.Equal(pixels, OriginalPixels.Bytes(recovered));
+        Assert.Equal(sourceBytes, root.Bytes);
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.False(root.IsDisposed);
+    }
+
     [Theory]
     [InlineData(67, 13, 40, 7)]
     [InlineData(17, 17, 8, 8)]

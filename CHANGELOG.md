@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- RGBA16 bilinear reduction reuses vertical geometry and avoids unused horizontal
+  preparation, reducing CPU and allocation while preserving exact pixels.
 - VP8 pixel-coding validation shares the complete parser while omitting discarded
   reconstruction planes, reducing CPU, allocation and shared-memory peaks.
 - Faster lossless WebP decoding through bounded word refills, preserving exact

@@ -160,6 +160,12 @@ public static class ImageTransforms
                 result.Orientation = source.Orientation;
                 return result;
             }
+            if (filter == ResizeFilter.Bilinear && source.BitDepth == 16
+                && BilinearDownsample16.TryApply(source, result, scaleY, context))
+            {
+                result.Orientation = source.Orientation;
+                return result;
+            }
             double[]? horizontalWeights = null;
             int[]? horizontalOffsets = null;
             int[]? horizontalCounts = null;

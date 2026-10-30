@@ -17,12 +17,35 @@ internal static class BilinearDownsample16
         var scaleX = (double)source.Width / result.Width;
         if (source.BitDepth != 16 || result.Width < 2 || result.Width >= source.Width || result.Height >= source.Height
             || scaleX > 2.5 || scaleY > 2.5
-            || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
-            || context.RemainingWorkingBytes < WorkspaceBytes) return false;
+            || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported) return false;
+        const int verticalTaps = 6; // At scale <=2.5, inclusive triangle support has at most six taps.
+        var planElements = (long)result.Height * verticalTaps;
+        var ownedBytes = WorkspaceBytes + planElements * sizeof(double)
+            + (long)result.Height * (2 * sizeof(int) + sizeof(double)) + 4 * 64;
+        if (planElements > Array.MaxLength || context.RemainingWorkingBytes < ownedBytes) return false;
         const int sampleBytes = 2;
-        context.Reserve(WorkspaceBytes);
+        context.Reserve(ownedBytes);
         try
         {
+            var verticalWeights = new double[(int)planElements];
+            var verticalFirst = new int[result.Height];
+            var verticalCounts = new int[result.Height];
+            var verticalNormalizers = new double[result.Height];
+            for (var y = 0; y < result.Height; y++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var center = (y + .5) * source.Height / result.Height - .5;
+                var first = (int)Math.Ceiling(center - scaleY);
+                var count = (int)Math.Floor(center + scaleY) - first + 1;
+                verticalFirst[y] = first; verticalCounts[y] = count;
+                double normalizer = 0;
+                for (var t = 0; t < count; t++)
+                {
+                    var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bilinear);
+                    verticalWeights[y * verticalTaps + t] = wy; normalizer += wy;
+                }
+                verticalNormalizers[y] = normalizer;
+            }
             // Fixed arrays occupy 3,640 bytes within the admitted charge. This
             // frame unwinds before direct replay can need tiny-alpha scratch.
             Span<Vector256<double>> cache = stackalloc Vector256<double>[10 * 6];
@@ -32,7 +55,6 @@ internal static class BilinearDownsample16
             Span<int> offsets = stackalloc int[6 * 10];
             Span<int> counts = stackalloc int[6];
             Span<double> normalizers = stackalloc double[6];
-            Span<double> vertical = stackalloc double[10];
             Span<int> rows = stackalloc int[10];
             var input = source.Pixels;
             for (var tile = 0; tile < result.Width; tile += 6)
@@ -64,14 +86,12 @@ internal static class BilinearDownsample16
                 for (var y = 0; y < result.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (y + .5) * source.Height / result.Height - .5;
-                    var first = (int)Math.Ceiling(center - scaleY);
-                    var count = (int)Math.Floor(center + scaleY) - first + 1;
-                    double normalizerY = 0;
+                    var first = verticalFirst[y];
+                    var count = verticalCounts[y];
+                    var vertical = verticalWeights.AsSpan(y * verticalTaps, count);
+                    var normalizerY = verticalNormalizers[y];
                     for (var t = 0; t < count; t++)
                     {
-                        var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bilinear);
-                        vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
                         var slot = sy % 10; rows[t] = slot * 6;
                         if (rowIds[slot] == sy) continue;
@@ -145,12 +165,10 @@ internal static class BilinearDownsample16
                             offsets.Slice(x * 10, counts[x]), sourceFirst, vertical[..count], first, context)) return false;
                 }
             }
-            // Admission bounds complete original tap cost. Failed speculative
-            // strips leave the counter untouched for original-order replay.
             context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
-        finally { context.Release(WorkspaceBytes); }
+        finally { context.Release(ownedBytes); }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)

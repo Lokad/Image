@@ -563,6 +563,14 @@ No new case,production change,historical causal gain or successful retiming.
 Applicable5219/OS/scalar/actualpackage proof reused. Gap remains; establish one
 substantial distinct dataflow lead before editing. Full268<=1x remainsopen.
 
+[Word bilinear geometry reuse](WARM-BILINEAR-WORD-GEOMETRY.md) confirms13.7%
+less elapsed time/17309 fewer Bop:Down161.125/upper1.133,272815Bop. ExistingUp16
+currentcost1.287/upper1.297,4498923Bop;no pairedcausalclaim. Frozen exactmanaged
+pixels/nativebounds/source/owners/quiet pass. Full5220/OS,184publicnormal/scalar,
+SAMEactualpackage/governedasync/newbilinearconsumer/3examples pass. Onecore/OS,
+zeroharness/native/selectorbuilds. Bothpaths remain gaps; no caseadded or full268
+parityclaim. Other requiredwordgeometries/boundaries need applicableproof.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

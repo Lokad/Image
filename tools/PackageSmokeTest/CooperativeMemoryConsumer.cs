@@ -119,6 +119,28 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged compressed alpha leaked storage or disposed the borrowed root.");
         }
         Console.WriteLine("Packaged compressed alpha fits two RGBA frames.");
+        using (var pattern = OriginalPixels.Buffer(513, 259, 16))
+        {
+            const int outputBytes = 256 * 129 * 8;
+            using var expected = ImageTransforms.Resize(pattern, 256, 129, ResizeFilter.Bilinear,
+                new ImageLimits { MaxWorkingBytes = 513 * 259 * 8 + outputBytes + 4096 });
+            var accelerated = System.Runtime.Intrinsics.X86.Avx512F.IsSupported
+                && System.Runtime.Intrinsics.X86.Avx2.IsSupported && System.Runtime.Intrinsics.X86.Avx.IsSupported
+                && System.Runtime.Intrinsics.X86.Sse41.IsSupported;
+            using var bilinearBudget = new TestMemoryBudget(outputBytes + (accelerated ? 24 : 40) * 1024);
+            using (var actual = ImageTransforms.Resize(pattern, 256, 129, ResizeFilter.Bilinear,
+                new ImageLimits { MemoryBudget = bilinearBudget }))
+            {
+                if (bilinearBudget.Bytes != outputBytes)
+                    throw new Exception("Packaged bilinear preparation retained temporary storage.");
+                for (var y = 0; y < actual.Height; y++)
+                    if (!actual.GetRow16(y).SequenceEqual(expected.GetRow16(y)))
+                        throw new Exception("Packaged bilinear word samples differ.");
+            }
+            if (bilinearBudget.Bytes != 0 || bilinearBudget.IsDisposed)
+                throw new Exception("Packaged bilinear preparation leaked storage or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged bilinear word preparation pixels and admission passed.");
         var rgb = new byte[17 * 11 * 3];
         for (var i = 0; i < rgb.Length; i++) rgb[i] = (byte)(i * 37 + i / 11);
         var jpegOptions = new JpegEncodeOptions { Quality = 69, Limits = limits };

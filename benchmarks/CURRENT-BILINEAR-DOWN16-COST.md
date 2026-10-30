@@ -1,5 +1,7 @@
 # Current RGBA16 bilinear reduction
 
+Superseded by [accepted geometry reuse](WARM-BILINEAR-WORD-GEOMETRY.md); retained as its original independent baseline.
+
 The existing 513×259→256×129 control independently confirms **1.308× /
 upper 1.318**, **544.837 µs** and
 **290,124 allocated B/op**. This is a demonstrated gap.
