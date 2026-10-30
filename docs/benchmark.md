@@ -87,7 +87,7 @@ Other affected boundaries need applicable costs; unchanged paths retain proof.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
 | Bilinear resize RGBA16 † → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
-| Bicubic resize RGBA8 † → 256×129 | 572.97 | 417.08 | 1.374 / 1.441 | 332,188 |
+| Bicubic resize RGBA8 † → 256×129 | 579.25 | 418.45 | 1.384 / 1.400 | 332,188 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
@@ -127,8 +127,8 @@ displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP ancho
 and Lanczos3 have twelve measured iterations. The existing
 [RGBA16 bilinear reduction](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) now also
 has an independent twelve: 1.125× / upper1.133, with exact managed pixels.
-Remaining short screens retain
-three. Short screens do not establish independent parity.
+[RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md) also
+has an independent twelve: 1.384× / upper1.400. Remaining short screens retain three. Short screens do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode
 uses **libwebp exact=1** to preserve hidden RGB; grayscale JPEG uses explicitly

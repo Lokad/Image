@@ -571,6 +571,12 @@ SAMEactualpackage/governedasync/newbilinearconsumer/3examples pass. Onecore/OS,
 zeroharness/native/selectorbuilds. Bothpaths remain gaps; no caseadded or full268
 parityclaim. Other requiredwordgeometries/boundaries need applicableproof.
 
+[Current byte cubic reduction](CURRENT-BICUBIC-BYTE-REDUCTION-COST.md) resolves
+Down8 after writer changes:579.250µs,1.384/upper1.400,332188Bop. One12 on BRC2core,
+BZT1harness/native and retained driver;ZERO builds/newcases/profiles/retiming.
+Original exactpixels/nativebounds/settings/source/owners/quiet pass. Applicable
+5220/OS/scalar/SAMEactualpackage proof reused. Demonstratedgap; full268open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
