@@ -463,6 +463,14 @@ No causal gain claim or retiming. Earlier affected cost is historical. A bounded
 source review finds no new substantial lead beyond the accepted cursor and closed
 literal/refill/classifier/token-loop variants; no production candidate added.
 
+[Current VP8 stream decode](CURRENT-VP8-STREAM-DECODE-COST.md) independently
+confirms the existing fresh seekable VP8+ALPH control at1.215/upper1.228,
+7279.108µs,1966583B/op. Exact frozen98590Bpacket/pixels/alpha/source/owners,
+complete acquisition/normalization/release and both idle-v2 guards pass. One12;
+no production/harness/native builds, new fixture/settings or retiming. Historical
+stream driver was absent; one small matching12actual selector built. Current
+qualified production and other applicable evidence remain unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

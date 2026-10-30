@@ -38,7 +38,7 @@ bounds remain qualified. Companion costs make no paired speedup/regression claim
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 7,638.57 | 5,995.99 | 1.274 / 2.005 | 1,966,583 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 7,279.11 | 5,988.93 | 1.215 / 1.228 | 1,966,583 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |
@@ -110,7 +110,7 @@ bounds remain qualified. Companion costs make no paired speedup/regression claim
 † identifies qualified development-path costs. PNG encodes use the cached
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
-displayed PNG CRC callers, the indicated JPEG/WebP anchors, bicubic word anchors
+displayed PNG CRC callers, VP8 stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
 and Lanczos3 have twelve measured iterations; remaining short screens retain
 three. Short screens do not establish independent parity.
 

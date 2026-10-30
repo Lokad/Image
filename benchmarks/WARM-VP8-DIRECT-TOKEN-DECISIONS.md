@@ -1,5 +1,7 @@
 # Direct VP8 token decisions
 
+The stream companion cost is superseded by [current independent confirmation](CURRENT-VP8-STREAM-DECODE-COST.md).
+
 The existing VP8/ALPH validation control uses **7.20% filtered / 7.23% all-actual
 less managed time** in the forward comparison and **8.12% in both views** in the
 reverse comparison. Native-normalized point ratios improve 7.26%/12.03%.

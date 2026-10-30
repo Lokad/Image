@@ -44,6 +44,10 @@ def render():
     vp8_decoder_costs = json.loads((ROOT / 'benchmarks/current-vp8-decoder-costs-evidence.json').read_text(encoding='utf-8'))
     assert not vp8_decoder_costs['productionChanged'] and vp8_decoder_costs['allBuilds'] == 0
     assert vp8_decoder_costs['independentQuietConfirmation'] and len(vp8_decoder_costs['cases']) == 4
+    vp8_stream = json.loads((ROOT / 'benchmarks/current-vp8-stream-decode-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not vp8_stream['productionChanged'] and vp8_stream['productionHarnessNativeBuilds'] == 0
+    assert vp8_stream['selectorBuilds'] == 1 and vp8_stream['independentQuietConfirmation']
+    assert vp8_stream['status']['Vp8Stream'] == 'confirmed-gap'
     png_crc_scan = json.loads((ROOT / 'benchmarks/warm-png-scan-crc-reuse-evidence.json').read_text(encoding='utf-8'))
     assert png_crc_scan['productionChanged'] and png_crc_scan['decision']['passed']
     assert png_crc_scan['qualification']['sameActualPackageBothOs'] and len(png_crc_scan['cases']) == 5
@@ -382,7 +386,7 @@ def render():
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
-        producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8_validation if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8_stream if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] == 'case10':
             producer = trellis_cost
         elif case['id'] == 'case13':
@@ -417,7 +421,7 @@ def render():
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case02', 'case08', 'case10', 'case12', 'case13', 'case15', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case15', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -611,7 +615,7 @@ bounds remain qualified. Companion costs make no paired speedup/regression claim
 † identifies qualified development-path costs. PNG encodes use the cached
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
-displayed PNG CRC callers, the indicated JPEG/WebP anchors, bicubic word anchors
+displayed PNG CRC callers, VP8 stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
 and Lanczos3 have twelve measured iterations; remaining short screens retain
 three. Short screens do not establish independent parity.
 
