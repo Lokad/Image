@@ -42,13 +42,26 @@ internal static class WarmJpegCmykInput
         for (var x = 0; x < 513; x++)
         {
             var at = (y * 513 + x) * 4; var block = ((y / 8) * columns + x / 8) * 4;
-            // The optional first AC coefficient is4 at (u=1,v=0). Its
-            // analytical contribution is C(0)*cos((2x+1)pi/16), safely away
-            // from sample halves. Keep the original DC packet unchanged.
-            var adjustment = nonzeroAc ? (int)Math.Round((Math.Cos((2 * (x & 7) + 1) * Math.PI / 16)
-                + (twoDimensional ? Math.Cos((2 * (y & 7) + 1) * Math.PI / 16) : 0)) / Math.Sqrt(2), MidpointRounding.AwayFromZero) : 0;
-            for (var c = 0; c < 4; c++) canonical[at + c] = (byte)(255 - Math.Clamp(blocks[block + c] + adjustment, 0, 255));
-            for (var c = 0; c < 3; c++) expected[at + c] = (byte)(((255 - canonical[at + c]) * (255 - canonical[at + 3]) + 127) / 255);
+            // Independently evaluate the bounded DC plus first one/two AC=4
+            // spectra at the documented Q14 row/column boundaries. Ideal cosine
+            // rounding differs at a tie. These small spectra fit signed words
+            // and Int32 sums; the dense control uses its qualified path below.
+            var horizontal = nonzeroAc ? 4 * (int)Math.Round(Math.Sqrt(2) * Math.Cos((2 * (x & 7) + 1) * Math.PI / 16) * 16384, MidpointRounding.AwayFromZero) : 0;
+            var vertical = twoDimensional ? 32 * (int)Math.Round(Math.Sqrt(2) * Math.Cos((2 * (y & 7) + 1) * Math.PI / 16) * 16384, MidpointRounding.AwayFromZero) : 0;
+            for (var c = 0; c < 4; c++)
+            {
+                var sample = (int)blocks[block + c];
+                if (nonzeroAc && !general)
+                {
+                    var row = (sample * 8 * 16383 + horizontal + 1024) >> 11;
+                    sample = ((row + 32) * 16383 + vertical) >> 20;
+                }
+                canonical[at + c] = (byte)(255 - Math.Clamp(sample, 0, 255));
+            }
+            // The declared device-color policy truncates its Q16 reciprocal.
+            // Derive expected RGB from independent canonical samples, retaining
+            // every authored component and packet byte.
+            for (var c = 0; c < 3; c++) expected[at + c] = (byte)(((255 - canonical[at + c]) * (255 - canonical[at + 3]) * ((1 << 16) / 255)) >> 16);
             expected[at + 3] = 255;
         }
         var actualCmyk = new byte[canonical.Length]; ImageCodec.DecodeJpeg(packet, actualCmyk, JpegSampleFormat.Cmyk);
@@ -59,7 +72,7 @@ internal static class WarmJpegCmykInput
             // both predecessor and candidate must reproduce it exactly.
             actualCmyk.CopyTo(canonical, 0);
             for (var i = 0; i < canonical.Length; i += 4)
-                for (var c = 0; c < 3; c++) expected[i + c] = (byte)(((255 - canonical[i + c]) * (255 - canonical[i + 3]) + 127) / 255);
+                for (var c = 0; c < 3; c++) expected[i + c] = (byte)(((255 - canonical[i + c]) * (255 - canonical[i + 3]) * ((1 << 16) / 255)) >> 16);
         }
         if (!actualCmyk.AsSpan().SequenceEqual(canonical)) throw new InvalidOperationException("Analytical CMYK fixture component/inversion check failed.");
         ImageCodec.DecodeJpeg(packet, actualCmyk, JpegSampleFormat.Cmyk, options: new() { CmykInversion = JpegCmykInversion.None });

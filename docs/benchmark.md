@@ -7,7 +7,7 @@ Seven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 53 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 54 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -52,6 +52,12 @@ The current producer passes 5,163 checks on each platform, plus 50 affected kern
 and 66 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
+[Current CMYK sparse-2D](../benchmarks/CURRENT-CMYK-FIXED-INVERSE-COST.md) independently
+confirms2.850× / upper2.858,1,085,508B/op, the largest current material gap.
+Managed normal/scalar and native pixels are exact after correcting the expected
+inverse/device oracle to the existing Q14/Q16 contract. Original packet/settings
+are frozen; earlier failed setups had no scored actuals. Production/package
+qualification is reused unchanged; there is no causal gain claim against old code.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in
@@ -177,6 +183,7 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | JPEG baseline420, resident decode † | 1,297.81 | 1,009.85 | 1.285 / 1.304 | 757,319 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
+| JPEG CMYK sparse-2D, resident decode † | 1,247.21 | 437.65 | 2.850 / 2.858 | 1,085,508 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

@@ -290,6 +290,16 @@ existing governed schema/hash checks recovered without measurement reruns.
 Affected420/422 costs need applicable evidence before CPU-pass claims;full268
 stays open. Stop this preparation primitive; no variants or passing-path retuning.
 
+[Current CMYK fixed-policy cost](CURRENT-CMYK-FIXED-INVERSE-COST.md) resolves
+sparse-2D at2.850/upper2.858 confirmedgap,1085508B/op. Original packet/source
+blocks/settings/native stayfrozen; independent Q14inverse/Q16device expected
+oracles match managednormal/scalar/native exactly. Earlier setup/generator
+failures had0actuals; one completed12 confirmation, allraw/guards retained.
+No productionchange/full/package repeats;reuse5163checks/OS/SAMEpackage.
+Only derived expectedpixels/hash corrected; originals archived, proof overlays
+restoredbyteexact before accepted currentoracles installed. Prioritize this
+largest material gap; full268 scope and rejected floating axis families unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

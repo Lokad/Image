@@ -561,5 +561,8 @@
     "inputAndNativeQualityAndOwnershipGatesUnchanged": true
   },
   "reasonForCurrentCodeCheck": "Earlier complete-operation timing predates cooperative admission/borrowed-input and retained-owner/default-storage/disposal paths; unchanged IDCT is insufficient timing evidence",
-  "nextItem": "Use the existing profile only for unchanged sparse inverse method, not current whole-operation fractions. Evaluate one substantial axis-cross specialization only if its exact arithmetic/order, transpose, cancellation/work and ownership proof holds. Do not revisit rejected leading-prefix sharing or repeat profiles by default."
+  "nextItem": "Use the existing profile only for unchanged sparse inverse method, not current whole-operation fractions. Evaluate one substantial axis-cross specialization only if its exact arithmetic/order, transpose, cancellation/work and ownership proof holds. Do not revisit rejected leading-prefix sharing or repeat profiles by default.",
+  "currentCostApplicable": false,
+  "supersededBy": "current-cmyk-fixed-inverse-cost-evidence.json",
+  "supersededReason": "Relevant inverse/device precision and ownership paths changed. The current benchmark expected RGBA still follows the superseded nearest device policy and fails setup before timing. Retain this original numeric evidence as historical, without a current CPU claim."
 }

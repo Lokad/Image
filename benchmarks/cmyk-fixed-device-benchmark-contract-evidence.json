@@ -1,0 +1,85 @@
+{
+  "profilingOnly": false,
+  "correctnessOnly": true,
+  "noTiming": true,
+  "toolBuilds": 0,
+  "productionChanged": false,
+  "productionSha256": "e7d557e9d4cef7a2a6cc067ebd9643cc3766894e689fad18c3b19655b8255b44",
+  "originalInputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+  "canonicalSha256": "ec509cb695ba77b034a570e387a5ae509b539f353a1ce2ab02854bb410e92bd3",
+  "previousAnalyticalRgbaSha256": "f5fb95f5d6768c47b171d94903a1570f83c1f45f813ade50ea02de1cf430922d",
+  "derivedFixedDeviceRgbaSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+  "policy": "The existing documented Q16 device-color reciprocal is floor(65536/255); each channel is ((255-ink)*(255-black)*reciprocal)>>16. Derived solely from the frozen independent canonical CMYK fixture, without using production decoded pixels as oracle.",
+  "results": {
+    "normal": {
+      "sha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+      "bytes": 531468,
+      "equalsDeclaredFixedDeviceOracle": true,
+      "equalsFrozenNative": true,
+      "versusPreviousAnalytical": {
+        "differingSamples": 200427,
+        "maximum": 1,
+        "squaredSum": 200427
+      }
+    },
+    "scalar": {
+      "sha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf",
+      "bytes": 531468,
+      "equalsDeclaredFixedDeviceOracle": true,
+      "equalsFrozenNative": true,
+      "versusPreviousAnalytical": {
+        "differingSamples": 200427,
+        "maximum": 1,
+        "squaredSum": 200427
+      }
+    }
+  },
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "CMC1",
+  "status": "resolved-by-fixed-oracle-cost",
+  "scoredActuals": 0,
+  "performanceClaim": false,
+  "scope": "One existing513x259 resident CmykAdobeSparse2D control on the qualified JCL1 Linux DLL. Original22708B packet,coded component samples,canonical CMYK and native output unchanged. Both managed normal/scalar outputs exactly match the existing frozen native output and an independently derived canonical-to-device Q16 oracle. This does not establish broader decoder equality or current CPU parity.",
+  "failure": "Benchmark setup rejects the superseded nearest-integer device-CMYK RGBA fixture before any workload actual. Current documented pinned fixed-point device conversion uses floor(65536/255), then shift16. No production defect is demonstrated by this case; production and fixture bytes remain unchanged.",
+  "invalidations": [
+    "6fba93c fixed-point inverse qualification",
+    "a811236 fixed-point/full-resolution decoding",
+    "26b2606 CMYK/YCCK device color precision",
+    "b62fe39 ownership/fuel cleanup",
+    "1d88af6 AVX2 inverse matrices",
+    "980001e mirrored inverse columns"
+  ],
+  "qualificationReuse": "Current JCL1 full5163/OS,normal-scalar,SAMEactualpackage/governedconsumer/3examples remains applicable to unchanged production. Diagnostic pixel probe is Linux normal/scalar only; not a new full cross-platform claim.",
+  "workflow": {
+    "productionBuilds": 0,
+    "harnessBuilds": 0,
+    "nativeBuilds": 0,
+    "selectorBuilds": 1,
+    "diagnosticToolBuilds": 0,
+    "originalFixtureAllBytesVerifiedUnchanged": true
+  },
+  "next": "Correct benchmark expected-pixel generation to the documented existing Q16 device policy, deriving solely from the original independent canonical CMYK fixture. Preserve original packet/raster/component/settings/native identities and all old raw evidence. Validate both managed modes against exact independent/current-native bytes, not a relaxed tolerance. Restore any proof overlay byte-exact, then make one independent12 confirmation on the same qualified DLL. The failed setup has zero scored actuals; no old timing can support a current CPU claim. No axis-cross or sparse-IDCT variant.",
+  "rawArtifacts": {
+    "file": "cmyk-fixed-device-contract-diagnosis.tar.xz",
+    "sha256": "83d3a9ac5e8cdd0c9f956defacfc0482522d8c8e133cd829eb882e056acfdcf0",
+    "bytes": 1187860,
+    "members": 66,
+    "dependency": {
+      "file": "jpeg-column-plans-qualified.tar.xz",
+      "sha256": "632a38b92fc8a5cdb38fdc97d9527928b5ae4eab62331ae946397213cf0a4025"
+    },
+    "scoredActuals": 0,
+    "productionChanged": false,
+    "fixtureBytesUnchanged": true,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "resolution": {
+    "evidence": "current-cmyk-fixed-inverse-cost-evidence.json",
+    "independentInverseAndDeviceOracles": true,
+    "currentConfirmationActuals": 12,
+    "productionChanged": false,
+    "originalPacketUnchanged": true
+  }
+}

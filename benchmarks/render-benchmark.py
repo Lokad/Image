@@ -244,6 +244,15 @@ def render():
     assert len(o['managed']['actual']) == 12 and all(g['passed'] for g in o['quietness'].values())
     assert o['receipt']['librarySha256'] == png_small_lookup['producers']['linuxSha256']
     assert o['conservativeRatioUpper'] <= 1 and o['managedMemory']['BytesAllocatedPerOperation'] == 1512
+    cmyk_contract = json.loads((ROOT / 'benchmarks/cmyk-fixed-device-benchmark-contract-evidence.json').read_text(encoding='utf-8'))
+    assert not cmyk_contract['productionChanged'] and cmyk_contract['scoredActuals'] == 0
+    assert not cmyk_contract['performanceClaim'] and cmyk_contract['status'] == 'resolved-by-fixed-oracle-cost'
+    assert all(v['equalsDeclaredFixedDeviceOracle'] and v['equalsFrozenNative'] for v in cmyk_contract['results'].values())
+    cmyk_current = json.loads((ROOT / 'benchmarks/current-cmyk-fixed-inverse-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not cmyk_current['productionChanged'] and cmyk_current['independentQuietConfirmation']
+    assert cmyk_current['status'] == {'CmykAdobeSparse2D': 'confirmed-gap'} and cmyk_current['normalizedLower'] > 1
+    assert cmyk_current['fixtureCorrection']['encodedPacketRasterProjectionBlocksReferenceSettingsUnchanged']
+    assert cmyk_current['fixtureCorrection']['proofOverlayRestoredByteExact'] and cmyk_current['fixtureCorrection']['acceptedDerivedOraclesInstalled']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -410,6 +419,16 @@ def render():
         rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    cmyk = cmyk_current['cases']['CmykAdobeSparse2D'][-1]
+    receipt, stats = cmyk['receipt'], cmyk['managed']['statistics']
+    assert len(cmyk['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert receipt['librarySha256'] == cmyk_current['producers']['linuxSha256']
+    assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] and receipt['decoderMaximum'] == receipt['scalarDecoderMaximum'] == 0
+    assert all(g['passed'] for g in cmyk['quietness'].values())
+    rows.append(('codec', f'| JPEG CMYK sparse-2D, resident decode † | {stats["Mean"] / 1000:,.2f} | '
+                 f'{min(b["mean"] for b in cmyk["nativeBrackets"]) / 1000:,.2f} | '
+                 f'{cmyk["worstBracketRatio"]:.3f} / {cmyk["conservativeRatioUpper"]:.3f} | '
+                 f'{cmyk["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -494,7 +513,7 @@ Seven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 53 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 54 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -539,6 +558,12 @@ The current producer passes 5,163 checks on each platform, plus 50 affected kern
 and 66 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
+[Current CMYK sparse-2D](../benchmarks/CURRENT-CMYK-FIXED-INVERSE-COST.md) independently
+confirms2.850× / upper2.858,1,085,508B/op, the largest current material gap.
+Managed normal/scalar and native pixels are exact after correcting the expected
+inverse/device oracle to the existing Q14/Q16 contract. Original packet/settings
+are frozen; earlier failed setups had no scored actuals. Production/package
+qualification is reused unchanged; there is no causal gain claim against old code.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in

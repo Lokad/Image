@@ -1,7 +1,12 @@
-# Current CMYK sparse-2D JPEG decoding
+# Earlier CMYK sparse-2D JPEG cost
 
-The existing case remains a demonstrated **1.829× gap** on the current
-qualified 0.2.0 producer. This refresh resolves old-code uncertainty; it is not an
+**Historical cost, superseded.** [Current fixed-policy confirmation](CURRENT-CMYK-FIXED-INVERSE-COST.md)
+gives2.850× / upper2.858 with exact managed/native pixels. The packet/settings
+are unchanged; corrected expected inverse/device precision replaces the old
+oracle. This earlier numeric row remains historical, without a current claim.
+
+The original round demonstrated a **1.829× gap** on its then-qualified
+0.2.0 producer. This refresh resolves old-code uncertainty; it is not an
 optimization or an independent parity confirmation.
 
 | Complete resident JPEG → owned RGBA8 | Lokad µs | FFmpeg µs | Ratio / conservative upper | Lokad allocated B/op | JPEG / RGBA B |
