@@ -69,6 +69,42 @@ public sealed class ImageProbeTests
     }
 
     [Theory]
+    [InlineData(0)] [InlineData(1)] [InlineData(2)]
+    public async Task JpegMarkerFillsAndTruncationAgreeAcrossReadCompletionModes(int mode)
+    {
+        var original = OriginalExif.Attach(OriginalExif.Create(MetadataProfile.JpegBaseline420, 17, 11),
+            ImageOrientation.Rotate90, false);
+        var expected = ImageCodec.Identify(original);
+        byte[] filled = [.. original.AsSpan(0, 2), 255, 255, .. original.AsSpan(2)];
+        byte[][] invalidTails = [[], [255], [255, 255], [17], [255, 0], [255, 216]];
+        var asynchronous = mode != 0;
+        using var root = new TestMemoryBudget(8448);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 8448 };
+        foreach (var seekable in new[] { false, true })
+        {
+            using var input = new ObservedInput(filled, asynchronous, seekable, chunk: 1, mixed: mode == 2);
+            var result = await Run(input, asynchronous, new() { Facts = ImageProbeFacts.All, Limits = limits });
+            Assert.Equal((expected.Width, expected.Height, expected.Orientation),
+                (result.Width, result.Height, result.Orientation));
+            Assert.Equal(ImageProbeFacts.All, result.EstablishedFacts);
+            Assert.Equal(input.BytesRead, result.BytesRead); Assert.Equal(input.Offset, result.BytesTraversed);
+            Assert.False(input.WasDisposed); Assert.Equal(0, root.Bytes);
+            using var headers = new ObservedInput(filled, asynchronous, seekable, chunk: 1, mixed: mode == 2);
+            Assert.Equal(expected, asynchronous ? await ImageCodec.InspectHeadersAsync(headers, limits)
+                : ImageCodec.InspectHeaders(headers, limits));
+            Assert.False(headers.WasDisposed); Assert.Equal(0, root.Bytes);
+            foreach (var tail in invalidTails)
+            {
+                byte[] truncated = [255, 216, .. tail];
+                using var broken = new ObservedInput(truncated, asynchronous, seekable, chunk: 1, mixed: mode == 2);
+                await Assert.ThrowsAsync<ImageDataException>(() => Run(broken, asynchronous, new() { Limits = limits }).AsTask());
+                Assert.Equal(truncated.Length, broken.BytesRead);
+                Assert.False(broken.WasDisposed); Assert.Equal(0, root.Bytes);
+            }
+        }
+    }
+
+    [Theory]
     [InlineData(ImageFormat.Png)] [InlineData(ImageFormat.Jpeg)] [InlineData(ImageFormat.WebP)]
     public async Task DimensionAcquisitionDoesNotGrowWithValidPixelPayload(ImageFormat format)
     {

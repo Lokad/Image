@@ -448,6 +448,13 @@ Each has one12-actual job with exact pixels, unchanged packets/settings/source/
 ownership and idle-v2 guards. No retiming, new fixtures, builds or production
 change. Reuse PCRG1 qualification; do not infer optimization needs or CPU passes.
 
+[Completed JPEG marker acquisition](JPEG-PROBE-COMPLETED-MARKERS-REJECTED.md)
+misses the predeclared 5% screen: 1.83% filtered / 1.79% all elapsed, no allocation
+saving. Candidate source and core restored exactly both OSes; no variants or
+confirmation. Three useful public fill/truncation controls remain and pass within
+101 focused checks each normal/scalar on both OSes. Current qualified production
+and benchmark costs are unchanged; no redundant full/package run.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
