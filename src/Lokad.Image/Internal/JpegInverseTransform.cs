@@ -37,11 +37,7 @@ internal static class JpegInverseTransform
         context.Cancellation.ThrowIfCancellationRequested();
         Span<short> input = stackalloc short[64];
         Span<short> rows = stackalloc short[64];
-        for (var i = 0; i < 64; i++)
-            input[i] = unchecked((short)((long)coefficients[i] * quantization[i]));
-        // Level shift belongs to the dequantized DC input. Narrow AC modulo
-        // 16 bits, but saturate DC after adding the eight-bit sample midpoint.
-        input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
+        Dequantize(coefficients, quantization, input);
         if (Avx2.IsSupported)
         {
             InverseAvx2(input, rows, pixels);
@@ -74,6 +70,30 @@ internal static class JpegInverseTransform
                 sum = unchecked(sum + rows[v * 8 + x] * Kernel[v * 8 + y]);
             pixels[y * 8 + x] = (byte)Math.Clamp(sum >> 20, 0, 255);
         }
+    }
+
+    // The caller validates complete 64-sample blocks. AC only retains the low
+    // word, so truncating operands before word multiplication is exact modulo
+    // 65536 for the entire Int32 coefficient/UInt16 quantizer domain.
+    internal static void Dequantize(ReadOnlySpan<int> coefficients, ReadOnlySpan<ushort> quantization, Span<short> input)
+    {
+        if (Avx2.IsSupported)
+        {
+            for (var i = 0; i < 64; i += 16)
+            {
+                var first = MemoryMarshal.Read<Vector256<int>>(MemoryMarshal.AsBytes(coefficients.Slice(i, 8)));
+                var second = MemoryMarshal.Read<Vector256<int>>(MemoryMarshal.AsBytes(coefficients.Slice(i + 8, 8)));
+                var words = Vector256.Narrow(first, second);
+                var scales = MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(quantization.Slice(i, 16)));
+                Avx2.MultiplyLow(words, scales).CopyTo(input.Slice(i, 16));
+            }
+        }
+        else
+            for (var i = 0; i < 64; i++)
+                input[i] = unchecked((short)((long)coefficients[i] * quantization[i]));
+        // DC saturates after the original full-width product and level shift;
+        // a previously narrowed product cannot replace this calculation.
+        input[0] = (short)Math.Clamp((long)coefficients[0] * quantization[0] + 1024, short.MinValue, short.MaxValue);
     }
 
     private static void InverseAvx2(ReadOnlySpan<short> input, Span<short> rows, Span<byte> pixels)

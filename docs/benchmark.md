@@ -7,7 +7,7 @@ Seven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 54 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 55 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -16,7 +16,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph/effort6 diagram, VP8L RGBA8/16/photograph encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/CMYK/VP8L decode, VP8 photograph/effort6 diagram, VP8L RGBA8/16/photograph encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -48,16 +48,19 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,163 checks on each platform, plus 50 affected kernel
-and 66 public checks normal/scalar per OS, and the same actual package/three examples.
+The current producer passes 5,166 checks on each platform, plus 27 affected kernel
+and 98 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
-[Current CMYK sparse-2D](../benchmarks/CURRENT-CMYK-FIXED-INVERSE-COST.md) independently
-confirms2.850× / upper2.858,1,085,508B/op, the largest current material gap.
-Managed normal/scalar and native pixels are exact after correcting the expected
-inverse/device oracle to the existing Q14/Q16 contract. Original packet/settings
-are frozen; earlier failed setups had no scored actuals. Production/package
-qualification is reused unchanged; there is no causal gain claim against old code.
+[SIMD JPEG dequantization](../benchmarks/WARM-JPEG-DEQUANTIZATION.md) independently
+reduces sparse-CMYK elapsed by 13.9%, retaining exact normal/scalar/native pixels
+and frozen inputs/settings. Its 2.453× / upper2.462 gap remains, at 1,085,513 B/op
+(5 measured B/op above the prior independent result; no new owned capacity).
+Affected baseline420 is independently current at 1.239× / upper1.245, 757,319 B/op.
+Caller CMYK is the largest confirmed gap: 3.032× / upper3.051, 1,634,905 B/op.
+These companion costs make no causal gain claims. Other affected JPEG rendering
+paths need applicable costs before CPU-pass claims; metadata-only inspection,
+coding validation, encoders and other unchanged paths reuse valid evidence.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in
@@ -180,10 +183,11 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | PNG RGBA8, Fastest1 / native1 † | 6,321.82 | 4,366.98 | 1.448 / 1.460 | 1,344,453 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 443.91 | 421.09 | 1.054 / 1.090 | 1,741,712 | 1,066,552 / 1,066,552 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 383,214.38 | 407,274.63 | 0.941 / 0.979 | 3,402,572 | 573,041 / 573,041 |
-| JPEG baseline420, resident decode † | 1,297.81 | 1,009.85 | 1.285 / 1.304 | 757,319 | — |
+| JPEG baseline420, resident decode † | 1,249.21 | 1,008.36 | 1.239 / 1.245 | 757,319 | — |
+| JPEG DC-only, caller CMYK decode † | 1,002.66 | 330.66 | 3.032 / 3.051 | 1,634,905 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
-| JPEG CMYK sparse-2D, resident decode † | 1,247.21 | 437.65 | 2.850 / 2.858 | 1,085,508 | — |
+| JPEG CMYK sparse-2D, resident decode † | 1,073.80 | 437.73 | 2.453 / 2.462 | 1,085,513 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

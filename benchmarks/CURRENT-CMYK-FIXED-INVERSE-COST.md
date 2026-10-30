@@ -1,5 +1,8 @@
 # Current CMYK sparse-2D decode
 
+Current costs are superseded by [SIMD dequantization](WARM-JPEG-DEQUANTIZATION.md).
+Original evidence and accepted behavior remain retained.
+
 The existing 513×259 CMYK sparse-2D control independently confirms a
 **2.850× / upper2.858 gap**, the largest current material gap.
 This is a current cost, without a speedup/regression claim against the superseded

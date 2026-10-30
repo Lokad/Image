@@ -300,6 +300,17 @@ Only derived expectedpixels/hash corrected; originals archived, proof overlays
 restoredbyteexact before accepted currentoracles installed. Prioritize this
 largest material gap; full268 scope and rejected floating axis families unchanged.
 
+[SIMD JPEG dequantization](WARM-JPEG-DEQUANTIZATION.md) accepts13.9%less
+sparse-CMYK elapsed with exact pixels:2.453/upper2.462,1085513B/op(+5 measured,
+no new owned storage). Affected baseline420 independently current1.239/upper1.245,
+757319B/op; callerCMYK3.032/upper3.051,1634905B/op is now the largest confirmed
+gap. These are existing named controls, not new coverage. Full5166/OS,
+27internal/98publicnormal-scalar,SAMEpackage/governedconsumer/3examples pass.
+Onecorebuild/OS,zerootherbuilds;fresh3pair then onecandidate12 and two companion12s.
+Old JPEG rendering costs need applicable current evidence before CPU-pass claims;
+metadata-only inspection/ValidatePixels skipinverse, other unchanged paths reuse
+valid proof. Stop the SIMD preparation primitive; full268-path objective open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

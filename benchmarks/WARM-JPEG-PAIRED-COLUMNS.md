@@ -1,5 +1,8 @@
 # Exact paired JPEG inverse columns
 
+Current costs are superseded by [SIMD dequantization](WARM-JPEG-DEQUANTIZATION.md).
+Original evidence and accepted behavior remain retained.
+
 The existing JPEG420 complete decode takes **2.51% less elapsed** in an independent
 comparison, or **2.44% using all actual samples**, with unchanged allocation and
 exact pixels. **1.285× / upper 1.304×** remains a gap to warm single-CPU parity.

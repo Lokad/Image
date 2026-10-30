@@ -1,5 +1,8 @@
 # Caller CMYK JPEG decoding
 
+Current costs are superseded by [SIMD dequantization](WARM-JPEG-DEQUANTIZATION.md).
+Original evidence and accepted behavior remain retained.
+
 The first short screen demonstrates an **8.522x** gap against FFmpeg.
 Both decode the same10,895-byte original513x259 untagged CMYK packet into
 531,468bytes of fresh caller-owned canonical ink samples. All four channels,

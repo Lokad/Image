@@ -629,5 +629,11 @@
       "sha256": "41830f00c49ef1e19738e0cb4ac1141864b23d247c9502b8cb4ca42d7f3653a0"
     }
   },
-  "workloadScope": "Untagged canonical full-resolution C/M/Y/K; source reconstruction, all four components, fresh zeroed independent caller storage, raw packing and release timed. FFmpeg YUVA444P containers expose raw ink planes; no swscale/black/alpha/color transformation. Same10895Bpacket and531468Boutput. All managed/native/normal/scalar samples exact; source/padding and independent output lifetimes checked. Adobe inversion correctness-tested, outside this timing scope. No new image/settings grid or baseline exception."
+  "workloadScope": "Untagged canonical full-resolution C/M/Y/K; source reconstruction, all four components, fresh zeroed independent caller storage, raw packing and release timed. FFmpeg YUVA444P containers expose raw ink planes; no swscale/black/alpha/color transformation. Same10895Bpacket and531468Boutput. All managed/native/normal/scalar samples exact; source/padding and independent output lifetimes checked. Adobe inversion correctness-tested, outside this timing scope. No new image/settings grid or baseline exception.",
+  "supersededCases": {
+    "CmykCaller": {
+      "by": "warm-jpeg-dequantization-evidence.json",
+      "reason": "Common inverse dequantization changes this complete decode cost. Original raw evidence and accepted primitives/oracles remain retained."
+    }
+  }
 }

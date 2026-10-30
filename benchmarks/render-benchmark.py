@@ -248,9 +248,11 @@ def render():
     assert not cmyk_contract['productionChanged'] and cmyk_contract['scoredActuals'] == 0
     assert not cmyk_contract['performanceClaim'] and cmyk_contract['status'] == 'resolved-by-fixed-oracle-cost'
     assert all(v['equalsDeclaredFixedDeviceOracle'] and v['equalsFrozenNative'] for v in cmyk_contract['results'].values())
-    cmyk_current = json.loads((ROOT / 'benchmarks/current-cmyk-fixed-inverse-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not cmyk_current['productionChanged'] and cmyk_current['independentQuietConfirmation']
-    assert cmyk_current['status'] == {'CmykAdobeSparse2D': 'confirmed-gap'} and cmyk_current['normalizedLower'] > 1
+    cmyk_current = json.loads((ROOT / 'benchmarks/warm-jpeg-dequantization-evidence.json').read_text(encoding='utf-8'))
+    assert cmyk_current['productionChanged'] and cmyk_current['independentQuietConfirmation']
+    assert all(status == 'confirmed-gap' for status in cmyk_current['status'].values())
+    assert cmyk_current['decision']['passed'] and cmyk_current['qualification']['fullChecksEachOs'] == 5166
+    assert cmyk_current['qualification']['package']['sha256'] == cmyk_current['qualification']['linuxPackage']['sameActualPackageSha256']
     assert cmyk_current['fixtureCorrection']['encodedPacketRasterProjectionBlocksReferenceSettingsUnchanged']
     assert cmyk_current['fixtureCorrection']['proofOverlayRestoredByteExact'] and cmyk_current['fixtureCorrection']['acceptedDerivedOraclesInstalled']
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
@@ -308,8 +310,7 @@ def render():
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
     resident_decode = json.loads((ROOT / 'benchmarks/current-vp8l-resident-decode-evidence.json').read_text(encoding='utf-8'))
-    jpeg_decode = json.loads((ROOT / 'benchmarks/warm-jpeg-paired-columns-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_decode['productionChanged'] and jpeg_decode['independentQuietConfirmationThisPair']
+    jpeg_decode = cmyk_current
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
@@ -401,13 +402,14 @@ def render():
                  f'{predicted["worstBracketRatio"]:.3f} / {predicted["conservativeRatioUpper"]:.3f} | '
                  f'{predicted["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                  f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
-    for case, label in [('Jpeg420', 'JPEG baseline420, resident decode'),
+    for case, label in [('NativeDecode420', 'JPEG baseline420, resident decode'),
+                        ('CmykCaller', 'JPEG DC-only, caller CMYK decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
                         ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
-        producer = jpeg_decode if case == 'Jpeg420' else resident_decode if case == 'WebpResident' else decoders
+        producer = jpeg_decode if case in {'NativeDecode420', 'CmykCaller'} else resident_decode if case == 'WebpResident' else decoders
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
-        samples = 12 if case in {'Jpeg420', 'WebpResident'} else 3
+        samples = 12 if case in {'NativeDecode420', 'CmykCaller', 'WebpResident'} else 3
         assert producer['status'][case] == ('confirmed-gap' if samples == 12 else 'screen-gap')
         assert len(observation['managed']['actual']) == samples
         assert receipt['librarySha256'] == producer['producers']['linuxSha256']
@@ -513,7 +515,7 @@ Seven other controls retain
 published 0.2.0 measurements on unchanged paths. VP8 Stream decode now has a
 current-cost screen. The release snapshot remains immutable. Eighteen read
 controls below use qualified 0.2.1 builds. Default JPEG420 decode has independent
-current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 54 displayed controls do not
+current evidence; VP8L resident decode is independently confirmed and Stream retains a current screen. These 55 displayed controls do not
 complete the full CPU-parity objective
 or establish general replacement readiness.
 
@@ -522,7 +524,7 @@ Measurements use the dedicated quiet Ubuntu 24.04 x64 VM
 sequential Release execution, no concurrency. This representative scope is not
 the full performance objective.
 
-Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/VP8L resident decode, VP8 photograph/effort6 diagram, VP8L RGBA8/16/photograph encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
+Predictive/stored PNG16, Fastest PNG8, caller-RGB420 JPEG, JPEG420/CMYK/VP8L decode, VP8 photograph/effort6 diagram, VP8L RGBA8/16/photograph encode and bicubic Up16/TightCross16 and all four Lanczos3 controls have 12 measured iterations each;
 other codec/editing rows are short BenchmarkDotNet screens with three. Native brackets and
 idle/process guards pass. Predictive PNG16 uses four complete sequential operations
 per iteration/native sample to resolve execution-rate shifts; costs are per operation.
@@ -554,16 +556,19 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,163 checks on each platform, plus 50 affected kernel
-and 66 public checks normal/scalar per OS, and the same actual package/three examples.
+The current producer passes 5,166 checks on each platform, plus 27 affected kernel
+and 98 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
-[Current CMYK sparse-2D](../benchmarks/CURRENT-CMYK-FIXED-INVERSE-COST.md) independently
-confirms2.850× / upper2.858,1,085,508B/op, the largest current material gap.
-Managed normal/scalar and native pixels are exact after correcting the expected
-inverse/device oracle to the existing Q14/Q16 contract. Original packet/settings
-are frozen; earlier failed setups had no scored actuals. Production/package
-qualification is reused unchanged; there is no causal gain claim against old code.
+[SIMD JPEG dequantization](../benchmarks/WARM-JPEG-DEQUANTIZATION.md) independently
+reduces sparse-CMYK elapsed by 13.9%, retaining exact normal/scalar/native pixels
+and frozen inputs/settings. Its 2.453× / upper2.462 gap remains, at 1,085,513 B/op
+(5 measured B/op above the prior independent result; no new owned capacity).
+Affected baseline420 is independently current at 1.239× / upper1.245, 757,319 B/op.
+Caller CMYK is the largest confirmed gap: 3.032× / upper3.051, 1,634,905 B/op.
+These companion costs make no causal gain claims. Other affected JPEG rendering
+paths need applicable costs before CPU-pass claims; metadata-only inspection,
+coding validation, encoders and other unchanged paths reuse valid evidence.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in
