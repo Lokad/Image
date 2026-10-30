@@ -86,7 +86,7 @@ Other affected boundaries need applicable costs; unchanged paths retain proof.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Bilinear resize RGBA16 → 256×129 | 543.06 | 417.56 | 1.301 / 1.411 | 290,128 |
+| Bilinear resize RGBA16 † → 256×129 | 544.84 | 416.50 | 1.308 / 1.318 | 290,124 |
 | Bicubic resize RGBA8 † → 256×129 | 572.97 | 417.08 | 1.374 / 1.441 | 332,188 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
@@ -124,7 +124,10 @@ Other affected boundaries need applicable costs; unchanged paths retain proof.
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
 displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
-and Lanczos3 have twelve measured iterations; remaining short screens retain
+and Lanczos3 have twelve measured iterations. The existing
+[RGBA16 bilinear reduction](../benchmarks/CURRENT-BILINEAR-DOWN16-COST.md) now also
+has an independent twelve: 1.308× / upper1.318, with exact managed pixels.
+Remaining short screens retain
 three. Short screens do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode

@@ -334,14 +334,25 @@ def render():
     assert horizontal_cost['baselineReference']['librarySha256'] == down8_cost['preparation']['productionSha256']
     assert byte_zero_taps['qualification']['sameActualPackageBothOs']
     assert byte_zero_taps['sourceScope']['otherCachedSourceUnchanged']
-    editing_costs = {'case22': byte_zero_taps['cases']['Down8'][-1],
+    bilinear_word_cost = json.loads((ROOT / 'benchmarks/current-bilinear-down16-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not bilinear_word_cost['productionChanged'] and bilinear_word_cost['allBuilds'] == 0
+    assert bilinear_word_cost['independentQuietConfirmation']
+    bilinear_word = bilinear_word_cost['cases']['Down16'][-1]
+    assert len(bilinear_word['managed']['actual']) == 12
+    assert bilinear_word['receipt']['managedRationalReferenceExact']
+    assert bilinear_word['receipt']['sourceUnchanged'] and bilinear_word['receipt']['independentOwnedOutput']
+    assert bilinear_word_cost['comparisonLowerBounds']['Down16'] > 1
+    assert bilinear_word_cost['status']['Down16'] == 'confirmed-gap'
+    editing_costs = {'case21': bilinear_word,
+                     'case22': byte_zero_taps['cases']['Down8'][-1],
                      'case23': word_publication['cases']['Up16'][-1],
                      'case24': cross16_cost['cases']['TightCross16'][-1],
                      'case27': lanczos_cost['cases']['Reduce8'][-1],
                      'case28': lanczos_word_cost['cases']['Reduce16'][-1],
                      'case29': lanczos_enlarge8_cost['cases']['Enlarge8'][-1],
                      'case30': lanczos_enlarge16_cost['cases']['Enlarge16'][-1]}
-    editing_producers = {'case22': byte_zero_taps, 'case23': word_publication,
+    editing_producers = {'case21': bilinear_word_cost,
+                         'case22': byte_zero_taps, 'case23': word_publication,
                          'case24': cross16_cost, 'case27': lanczos_cost,
                          'case28': lanczos_word_cost, 'case29': lanczos_enlarge8_cost,
                          'case30': lanczos_enlarge16_cost}
@@ -441,7 +452,7 @@ def render():
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case15', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case15', 'case21', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -649,7 +660,10 @@ Other affected boundaries need applicable costs; unchanged paths retain proof.
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
 displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
-and Lanczos3 have twelve measured iterations; remaining short screens retain
+and Lanczos3 have twelve measured iterations. The existing
+[RGBA16 bilinear reduction](../benchmarks/CURRENT-BILINEAR-DOWN16-COST.md) now also
+has an independent twelve: 1.308× / upper1.318, with exact managed pixels.
+Remaining short screens retain
 three. Short screens do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode

@@ -553,6 +553,16 @@ successfultiming repeats. OtheraffectedVP8 async/root/composition costs need
 currentproof;VP8L,encoders/metadata/othercodecs/edit/text unchanged. VWR1literal/run
 passingproof retained/STOP. Full268<=1x remainsopen;close reconstructionelision.
 
+[Current RGBA16 bilinear reduction](CURRENT-BILINEAR-DOWN16-COST.md) resolves
+Down16's missing independent current confirmation:544.837µs,1.308/upper1.318,
+290124B/op. The older twelve predates accepted row reuse; its replacement and
+release refresh had only three actuals. One twelve reuses VVR1 core/harness,
+original worker and retained typed Down16 driver:ZERO builds. Original513x259→
+256x129 pixels/nativebounds/settings/complete publicResize/owners/quiet pass.
+No new case,production change,historical causal gain or successful retiming.
+Applicable5219/OS/scalar/actualpackage proof reused. Gap remains; establish one
+substantial distinct dataflow lead before editing. Full268<=1x remainsopen.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

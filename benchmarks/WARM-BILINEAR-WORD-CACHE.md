@@ -1,5 +1,8 @@
 # RGBA16 bilinear row reuse
 
+Current cost: [independent Down16 confirmation](CURRENT-BILINEAR-DOWN16-COST.md).
+The row-reuse gain below is retained history; its three-actual screen is superseded.
+
 Updated 2026-10-17. The existing Down16 workload is **31.8% faster**, remaining
 an open warm single-CPU parity gap. This is a qualified three-actual screen,
 not an independent parity confirmation.
