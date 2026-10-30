@@ -8,7 +8,9 @@ inputs as well as results and temporary capacity. Shared admission charges owned
 storage/copies, not caller-owned input storage again.
 
 `ValidatePixels` retains no raster charge. It still admits substantial codec
-storage (PNG compressed input/rows/inflater, JPEG coefficients, WebP planes/history).
+storage (PNG compressed input/rows/inflater, progressive JPEG coefficients, WebP
+planes/history). Baseline JPEG validates with block scratch; baseline decoding
+reconstructs admitted component sample planes without full-frame coefficients.
 Stream acquisition stays charged through validation; successful metadata results
 contain only scalar facts. Its memory bounds can therefore differ from Decode's.
 

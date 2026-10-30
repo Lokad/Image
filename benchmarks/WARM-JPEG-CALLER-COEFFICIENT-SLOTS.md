@@ -1,5 +1,9 @@
 # Reuse all four caller-CMYK coefficient buffers
 
+Baseline costs and storage are superseded by
+[direct sample planes](WARM-JPEG-DIRECT-BASELINE-PLANES.md). The existing
+coefficient pool remains used by progressive decoding and observation.
+
 The existing caller-CMYK complete decode uses **7.5% less elapsed time** and
 **549,351 fewer allocated bytes per operation (33.6%)**, preserving exact pixels.
 Its **1.664× / upper1.672** FFmpeg cost remains a gap.

@@ -7,6 +7,7 @@ internal ref partial struct JpegDecoder
     internal ImageInfo DecodeSamples(Span<byte> destination, JpegSampleFormat format, int stride,
         JpegDecodeOptions options)
     {
+        directBaseline = true;
         var orientation = options.ApplyOrientation ? info.Orientation : ImageOrientation.Normal;
         var width = (int)orientation >= 5 ? info.Height : info.Width;
         var height = (int)orientation >= 5 ? info.Width : info.Height;
@@ -81,6 +82,7 @@ internal ref partial struct JpegDecoder
 
     private void MaterializeSamplePlanes()
     {
+        if (directBaseline && !progressive) return;
         // Four-component decoding shares the qualified inverse block walk.
         // Allocation, block charges and coefficient release retain their order.
         if (components.Length == 4) { MaterializeCmykPlanes(); return; }

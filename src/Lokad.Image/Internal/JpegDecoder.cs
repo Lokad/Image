@@ -18,7 +18,7 @@ internal ref partial struct JpegDecoder
     private readonly JpegHuffman?[] acTables;
     private Component[] components;
     private int position, maxH, maxV, mcuColumns, mcuRows, restartInterval;
-    private bool progressive, frameSeen, scanSeen, rgb;
+    private bool progressive, frameSeen, scanSeen, rgb, directBaseline, validateBaseline;
 
     private sealed class Component
     {
@@ -40,6 +40,7 @@ internal ref partial struct JpegDecoder
         dcTables = new JpegHuffman[4]; acTables = new JpegHuffman[4];
         components = []; position = 2; maxH = 0; maxV = 0; mcuColumns = 0; mcuRows = 0; restartInterval = 0;
         progressive = false; frameSeen = false; scanSeen = false; rgb = false;
+        directBaseline = false; validateBaseline = false;
     }
 
     public ImageBuffer Decode() => DecodeCore(validateOnly: false)!;
@@ -52,6 +53,8 @@ internal ref partial struct JpegDecoder
 
     private ImageBuffer? DecodeCore(bool validateOnly)
     {
+        directBaseline = !validateOnly;
+        validateBaseline = validateOnly;
         var adobeTransform = -1;
         try
         {
@@ -171,8 +174,16 @@ internal ref partial struct JpegDecoder
             component.SampleHeight = (info.Height * component.V + maxV - 1) / maxV;
             var countValues = (long)component.BlockColumns * component.BlockRows * 64;
             if (countValues > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG coefficient plane is too large.");
-            context.Reserve(countValues * 4 + 64 * 4);
-            component.Coefficients = context.RentCoefficients((int)countValues);
+            if (!progressive && (directBaseline || validateBaseline))
+            {
+                context.Reserve((directBaseline ? countValues : 0) + 64 * 4);
+                if (directBaseline) component.Plane = new byte[(int)countValues];
+            }
+            else
+            {
+                context.Reserve(countValues * 4 + 64 * 4);
+                component.Coefficients = context.RentCoefficients((int)countValues);
+            }
             component.Approximation = new int[64]; Array.Fill(component.Approximation, -1);
         }
     }
@@ -260,6 +271,12 @@ internal ref partial struct JpegDecoder
         var columns = interleaved ? mcuColumns : (first.SampleWidth + 7) / 8;
         var rows = interleaved ? mcuRows : (first.SampleHeight + 7) / 8;
         var reader = new JpegEntropyReader(data, position, context);
+        if (!progressive && (directBaseline || validateBaseline))
+        {
+            ReadBaselineBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, interleaved, directBaseline);
+            reader.Align(); position = reader.Position;
+            return;
+        }
         int eobRun = 0, expectedRestart = 0;
         for (var mcu = 0; mcu < columns * rows; mcu++)
         {
@@ -290,7 +307,7 @@ internal ref partial struct JpegDecoder
         reader.Align(); position = reader.Position;
     }
 
-    internal static void ReadBaselineBlock(ref JpegEntropyReader reader, Span<int> block, ref int predictor,
+    internal static void ReadBaselineBlock(ref JpegEntropyReader reader, scoped Span<int> block, ref int predictor,
         JpegHuffman dc, JpegHuffman ac, OperationContext context)
     {
         if (block.Length != 64) throw new ArgumentException("JPEG coefficient blocks have 64 entries.", nameof(block));
@@ -335,7 +352,7 @@ internal ref partial struct JpegDecoder
         }
     }
 
-    private static void ReadCancelableBaselineAc(ref JpegEntropyReader reader, Span<int> block, JpegHuffman ac)
+    private static void ReadCancelableBaselineAc(ref JpegEntropyReader reader, scoped Span<int> block, JpegHuffman ac)
     {
         var k = 1;
         while (k <= 63)
@@ -621,32 +638,7 @@ internal ref partial struct JpegDecoder
 
     private ImageBuffer Render()
     {
-        Span<byte> block = stackalloc byte[64];
-        foreach (var component in components)
-        {
-            var length = component.Coefficients.Length;
-            context.Reserve(length); component.Plane = new byte[length];
-            for (var y = 0; y < component.BlockRows; y++)
-            for (var x = 0; x < component.BlockColumns; x++)
-            {
-                ReadOnlySpan<int> coefficients = component.Coefficients.AsSpan((y * component.BlockColumns + x) * 64, 64);
-                if (progressive)
-                {
-                    // EOI has validated every component's DC progression. The
-                    // already admitted progression array is no longer needed;
-                    // reuse it for this block without new scratch admission.
-                    var natural = component.Approximation.AsSpan();
-                    for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
-                    coefficients = natural;
-                }
-                JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
-                for (var by = 0; by < 8; by++)
-                    block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
-            }
-            var storage=component.Coefficients;
-            component.Coefficients = []; context.Release(length * 4L);
-            context.ReturnCoefficients(storage);
-        }
+        MaterializeSamplePlanes();
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try
         {

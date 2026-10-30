@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Baseline JPEG decoding reconstructs component planes directly, and pixel
+  validation uses block scratch, reducing admitted workspace with exact pixels.
 - Adaptive lossless PNG row prediction for predictable content, including
   full-precision 16-bit gradients after flips and rotations; existing declared
   reference packet controls remain unchanged.

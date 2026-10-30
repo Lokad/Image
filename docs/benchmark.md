@@ -48,22 +48,22 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,171 checks on each platform, plus 38 affected kernel
-and 98 public checks normal/scalar per OS, and the same actual package/three examples.
-It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
-and pending-I/O/shared-admission checks through the same package on both OSes.
-[Four-buffer caller-CMYK reuse](../benchmarks/WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md)
-independently reduces elapsed by 7.5% and allocation by 549,351 B/op (33.6%):
-1.664× / upper1.672, 1,085,562 B/op. This default unrooted control may retain
-549,120 more payload bytes within the unchanged 4 MiB cache ceiling; shared-budget
-operations still bypass the cache. Owned sparse-CMYK is current at 1.677× /
-upper1.688, 1,085,520 B/op, without a fresh paired causal gain claim. These two
-are the largest confirmed material gaps. The unchanged three-component420 path
-retains its valid 1.115× / upper1.120 confirmation and 757,328 B/op.
-Other affected JPEG rendering paths need applicable costs before CPU-pass claims;
-metadata-only inspection, coding validation and unchanged paths reuse valid evidence.
-Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
-encoder packets and shared ownership remain.
+The current producer passes 5,178 checks on each platform, plus 334 internal and
+339 public focused checks normal/scalar per OS, and the same actual package/three examples.
+The [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
+and pending-I/O/shared-admission checks pass through that package on both OSes.
+[Direct baseline JPEG planes](../benchmarks/WARM-JPEG-DIRECT-BASELINE-PLANES.md)
+reduce owned sparse-CMYK elapsed by10.3% independently:1.484× / upper1.491,
+1,085,759B/op. Caller-CMYK is current at1.198× / upper1.216,1,085,964B/op;
+ordinary420 at1.103× / upper1.109,757,362B/op; coding validation passes at
+0.890× / upper0.899,9,984B/op. Companion costs are not paired causal gains.
+Baseline decoding reconstructs admitted byteplanes per block; validation uses
+block scratch. This removes full-frame coefficient staging and reduces admitted
+workspace; warm default allocation does not fall. Exact pixels, compression,
+ownership and native boundaries remain. Other affected baseline JPEG costs need
+current evidence before CPU-pass claims. Progressive coefficient algorithms remain;
+its shared dispatch gets no new CPU-pass claim. Metadata-only parsing, encoders,
+other codecs and editing/text retain applicable unchanged-path evidence.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -184,11 +184,11 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | PNG RGBA8, Fastest1 / native1 † | 6,321.82 | 4,366.98 | 1.448 / 1.460 | 1,344,453 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 443.91 | 421.09 | 1.054 / 1.090 | 1,741,712 | 1,066,552 / 1,066,552 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 383,214.38 | 407,274.63 | 0.941 / 0.979 | 3,402,572 | 573,041 / 573,041 |
-| JPEG baseline420, resident decode † | 1,124.01 | 1,008.25 | 1.115 / 1.120 | 757,328 | — |
-| JPEG DC-only, caller CMYK decode † | 555.26 | 333.64 | 1.664 / 1.672 | 1,085,562 | — |
+| JPEG baseline420, resident decode † | 1,111.15 | 1,007.07 | 1.103 / 1.109 | 757,362 | — |
+| JPEG DC-only, caller CMYK decode † | 397.07 | 331.53 | 1.198 / 1.216 | 1,085,964 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
-| JPEG CMYK sparse-2D, resident decode † | 733.93 | 437.75 | 1.677 / 1.688 | 1,085,520 | — |
+| JPEG CMYK sparse-2D, resident decode † | 658.64 | 443.71 | 1.484 / 1.491 | 1,085,759 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha
@@ -228,7 +228,7 @@ and unlisted content/settings are excluded.
 | Validate PNG8, span | 1,425.169 | 1,446.042 | 0.986 / 1.020 | 240 | Confidence open |
 | Validate PNG16, span | 2,943.210 | 3,119.778 | 0.943 / 0.955 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span | 5.320 | 3.915 | 1.359 / 1.369 | 1,168 | Confirmed gap |
-| Validate JPEG baseline420, span | 620.209 | 676.122 | 0.917 / 0.935 | 9,984 | Confirmed pass |
+| Validate JPEG baseline420, span | 603.917 | 678.376 | 0.890 / 0.899 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
 | Validate VP8+alpha, span | 7,367.434 | 5,452.572 | 1.351 / 1.382 | 770,092 | Confirmed gap |

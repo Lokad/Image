@@ -342,15 +342,22 @@ settings/exactnormal-scalar-nativepixels/owners/quiet pass. Full5171/OS,
 Onecorebuild/OS,zerootherbuilds. Onepre-candidate896sampleprofile retained,
 not currentpost-changeattribution. Stoprowcountvariants;full268scopeopen.
 
-[Callerfour-bufferreuse](WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md) accepts7.5%less
-elapsedand549351B/op(33.6%)lessallocation:1.664/upper1.672,1085562B/op. Oneextra
-549120Bpayload canremaincachedwithinunchanged4MiBceiling;shared-rootbuffers
-neverpool. OwnedSparse2Dcurrent1.677/upper1.688,1085520B/op;ordinary3component420
-unchangedpathreuses1.115/upper1.120,757328B/op. BothCMYKcontrolsaround1.67 are
-largestconfirmedgaps;no orderingretime. No newcases/settings. Full5171/OS,
-38internal/98publicnormal-scalar,SAMEpackage/governedconsumer/3examples pass.
-Onecorebuild/OS,zerootherbuilds,nonewtestsmirroringexistingpolicy. Exactpixels/
-inputs/settings/source/owners/quiet pass. Stopcachepolicyvariants;full268open.
+[Direct baseline JPEG planes](WARM-JPEG-DIRECT-BASELINE-PLANES.md) supersede the
+[caller four-buffer policy](WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md) for baseline
+costs/storage. Owned sparse-CMYK independently uses10.3% less elapsed,1.484× /
+upper1.491,1,085,759B/op. Current caller-CMYK1.198/upper1.216,1,085,964B/op;
+ordinary4201.103/upper1.109,757,362B/op; baseline validation0.890/upper0.899,
+9,984B/op. Baseline byteplanes and validation scratch remove full-frame coefficient
+staging with exact pixels and lower admitted workspace; no warm allocation gain
+is claimed. Initial4.1% screen was explicitly accepted by the project owner before
+one independent confirmation. All5,178 checks/OS,334internal/339public normal/scalar,
+SAMEpackage/governedconsumer/threeexamples pass. Two Windowscore builds for a
+pre-scoring correctness revision,one Linuxbuild;zero othermeasurement builds.
+Existing four controls only. Other affected baseline costs are historical pending
+applicable evidence; no new progressive CPU-pass claim. Unchanged metadata-only,
+encoding, othercodec and editing/text evidence remains applicable. Stop this
+architecture round; largest unchanged confirmed gaps are Lanczos word/byte
+reduction1.585/1.500. Full268-path objective stays open.
 
 ## Finite checklist
 

@@ -6,7 +6,7 @@ public sealed class JpegCmykOutputMemoryTests
 {
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void OwnedCmykFitsTheUnchangedCallerPlaneAdmissionPeak(bool progressive)
+    public void OwnedCmykFundsItsRetainedResultAlongsideCallerPlaneWorkspace(bool progressive)
     {
         const int width = 65, height = 31;
         var input = AuthoredJpegCompatibility.Create(width, height, [17, 191, 250, 63], adobe: 0,
@@ -16,11 +16,14 @@ public sealed class JpegCmykOutputMemoryTests
         ImageCodec.DecodeJpeg(input, cmyk, JpegSampleFormat.Cmyk, options: new() { Limits = new() { MemoryBudget = reference } });
         Assert.Equal(0, reference.Bytes);
         var expected = new byte[width * height * 3]; ImageCodec.DecodeJpeg(input, expected, JpegSampleFormat.Rgb);
-        using var root = new TestMemoryBudget(reference.Peak);
-        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = reference.Peak + input.Length + cmyk.Length };
+        // Progressive coefficient overlap already dominates the result. Direct
+        // baseline planes need the separately owned RGBA result alongside them.
+        var capacity = reference.Peak + (progressive ? 0 : cmyk.Length);
+        using var root = new TestMemoryBudget(capacity);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = capacity + input.Length + cmyk.Length };
         using (var result = ImageCodec.Decode(input, new() { Limits = limits }))
         {
-            Assert.Equal(cmyk.Length, root.Bytes); Assert.True(root.Peak <= reference.Peak);
+            Assert.Equal(cmyk.Length, root.Bytes); Assert.True(root.Peak <= capacity);
             for (var y = 0; y < height; y++)
             for (var x = 0; x < width; x++)
             {

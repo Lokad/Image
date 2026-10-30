@@ -248,11 +248,11 @@ def render():
     assert not cmyk_contract['productionChanged'] and cmyk_contract['scoredActuals'] == 0
     assert not cmyk_contract['performanceClaim'] and cmyk_contract['status'] == 'resolved-by-fixed-oracle-cost'
     assert all(v['equalsDeclaredFixedDeviceOracle'] and v['equalsFrozenNative'] for v in cmyk_contract['results'].values())
-    cmyk_current = json.loads((ROOT / 'benchmarks/warm-jpeg-caller-coefficient-slots-evidence.json').read_text(encoding='utf-8'))
+    cmyk_current = json.loads((ROOT / 'benchmarks/warm-jpeg-direct-baseline-planes-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_current['productionChanged'] and cmyk_current['independentQuietConfirmation']
-    assert all(status == 'confirmed-gap' for status in cmyk_current['status'].values())
-    assert cmyk_current['decision']['passed'] and cmyk_current['qualification']['fullChecksEachOs'] == 5171
-    assert cmyk_current['reusedCaseProducers']['NativeDecode420'] == cmyk_current['reused420Evidence']['referenceCore']
+    assert all(cmyk_current['status'][case] == 'confirmed-gap' for case in ['CmykCaller', 'CmykAdobeSparse2D', 'NativeDecode420'])
+    assert cmyk_current['status']['ValidateJpegBaseline420'] == 'confirmed-pass'
+    assert cmyk_current['decision']['passed'] and cmyk_current['qualification']['fullChecksEachOs'] == 5178
     assert cmyk_current['qualification']['package']['sha256'] == cmyk_current['qualification']['linuxPackage']['sameActualPackageSha256']
     assert cmyk_current['fixtureCorrection']['encodedPacketRasterProjectionBlocksReferenceSettingsUnchanged']
     assert cmyk_current['fixtureCorrection']['proofOverlayRestoredByteExact'] and cmyk_current['fixtureCorrection']['acceptedDerivedOraclesInstalled']
@@ -445,7 +445,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (cmyk_current if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -557,22 +557,22 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,171 checks on each platform, plus 38 affected kernel
-and 98 public checks normal/scalar per OS, and the same actual package/three examples.
-It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
-and pending-I/O/shared-admission checks through the same package on both OSes.
-[Four-buffer caller-CMYK reuse](../benchmarks/WARM-JPEG-CALLER-COEFFICIENT-SLOTS.md)
-independently reduces elapsed by 7.5% and allocation by 549,351 B/op (33.6%):
-1.664× / upper1.672, 1,085,562 B/op. This default unrooted control may retain
-549,120 more payload bytes within the unchanged 4 MiB cache ceiling; shared-budget
-operations still bypass the cache. Owned sparse-CMYK is current at 1.677× /
-upper1.688, 1,085,520 B/op, without a fresh paired causal gain claim. These two
-are the largest confirmed material gaps. The unchanged three-component420 path
-retains its valid 1.115× / upper1.120 confirmation and 757,328 B/op.
-Other affected JPEG rendering paths need applicable costs before CPU-pass claims;
-metadata-only inspection, coding validation and unchanged paths reuse valid evidence.
-Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
-encoder packets and shared ownership remain.
+The current producer passes 5,178 checks on each platform, plus 334 internal and
+339 public focused checks normal/scalar per OS, and the same actual package/three examples.
+The [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
+and pending-I/O/shared-admission checks pass through that package on both OSes.
+[Direct baseline JPEG planes](../benchmarks/WARM-JPEG-DIRECT-BASELINE-PLANES.md)
+reduce owned sparse-CMYK elapsed by10.3% independently:1.484× / upper1.491,
+1,085,759B/op. Caller-CMYK is current at1.198× / upper1.216,1,085,964B/op;
+ordinary420 at1.103× / upper1.109,757,362B/op; coding validation passes at
+0.890× / upper0.899,9,984B/op. Companion costs are not paired causal gains.
+Baseline decoding reconstructs admitted byteplanes per block; validation uses
+block scratch. This removes full-frame coefficient staging and reduces admitted
+workspace; warm default allocation does not fall. Exact pixels, compression,
+ownership and native boundaries remain. Other affected baseline JPEG costs need
+current evidence before CPU-pass claims. Progressive coefficient algorithms remain;
+its shared dispatch gets no new CPU-pass claim. Metadata-only parsing, encoders,
+other codecs and editing/text retain applicable unchanged-path evidence.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound

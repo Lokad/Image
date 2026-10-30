@@ -122,9 +122,10 @@ public sealed class JpegSampleDecodeTests
         var encoded = OriginalExif.Attach(new(AuthoredJpeg.GrayscaleDcGrid(width, height, false), null,
             width, height, MetadataProfile.JpegBaseline420), ImageOrientation.Rotate90, false);
         // Independent T.81 MCU geometry and the documented parser/table charges:
-        // two 8x8 blocks, coefficient+sample overlap; destination is live throughout.
+        // two reconstructed 8x8 blocks; destination is live throughout. Baseline
+        // coefficients use one stack block instead of full-frame storage.
         const int tables = 2 * (204 + 512) + 12 + 176;
-        var peak = encoded.Length + pixels + 1024 + 128 + tables + 256 + 128 + pixels * 5;
+        var peak = encoded.Length + pixels + 1024 + 128 + tables + 256 + 128 + pixels;
         var options = new JpegDecodeOptions { ApplyOrientation = true, Limits = new() { MaxWorkingBytes = peak } };
         var result = new byte[pixels];
         ImageCodec.DecodeJpeg(encoded, result, JpegSampleFormat.Grayscale, options: options);
