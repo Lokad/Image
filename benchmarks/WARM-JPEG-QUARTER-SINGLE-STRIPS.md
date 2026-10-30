@@ -1,5 +1,7 @@
 # Separable strips for JPEG 4:1:1
 
+Current affected CPU costs are in [baseline DC/AC fusion](WARM-JPEG-BASELINE-DC-AC-FUSION.md); the measurements below are historical.
+
 The existing complete owned RGBA8 control improves **56.2%** with exact
 pixels. Its independent **1.233x / upper 1.237** remains a gap.
 

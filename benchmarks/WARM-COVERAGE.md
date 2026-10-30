@@ -410,6 +410,21 @@ successful retimes. Reuse originalQTC1independent12. Caller routines and passing
 410/YCCKkernels retain applicable evidence without retiming. Other affected owned
 411boundaries need applicable costs before CPU claims. Full268<=1x stays open.
 
+[Baseline JPEG DC/AC fusion](WARM-JPEG-BASELINE-DC-AC-FUSION.md) independently
+improves owned sparse-CMYK 4.483% filtered/4.570% all elapsed:629.11µs,
+1.405905/upper1.412829,1,085,758B/op(-1). Six existing current companions:
+callerCMYK1.052/upper1.058,ordinary4201.077/upper1.082,4111.172/upper1.192
+remain gaps;YCCK420.596/upper.607,410.724/upper.735,baselinevalidation.875/
+upper.880 PASS/STOP. No paired companion gain claims. Exact original packets,
+independent/native/scalar pixels,source,ownership and quiet-v2 gates pass.
+Only scalar locals;no new buffer/table/cache/budget/owner or storage admission.
+Full5,193/OS,343internal/345publicnormal-scalar,SAMEactualpackage/governedasync/
+3examples pass. Onecorebuild/OS,zero harness/native/selector builds,variants,
+profiles or successful retimes. Other affected baseline decode/validation CPU
+proof needs applicable current costs;progressive/encoder/metadata-only/othercodec/
+editing/text relevant unchanged-path evidence remains. Prior JPEG/profiling
+reports are historical for the changed entropy path. Full268<=1x stays open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

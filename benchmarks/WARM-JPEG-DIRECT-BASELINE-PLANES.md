@@ -1,5 +1,7 @@
 # Reconstruct baseline JPEG directly into sample planes
 
+Current affected CPU costs are in [baseline DC/AC fusion](WARM-JPEG-BASELINE-DC-AC-FUSION.md); the measurements below are historical.
+
 The existing owned sparse-CMYK control uses **10.3% less elapsed time** in an
 independent comparison, with exact pixels. Its **1.484× / upper1.491** cost
 remains a gap. No encoder, quality setting or packet changes.
@@ -60,7 +62,7 @@ are Lanczos word/byte reduction1.585/1.500; stop retuning this architecture roun
 Mirrored/member-verified jpeg-direct-baseline-planes-qualified.tar.xz, 254 members,
 SHA256 0c535221ceb98df2d72b47d5d02c00a650853a7b3f5f9af9e1a842ace2067e05; reference/checkpoint dependencies are pinned by hash.
 
-## Current staging profile
+## Staging profile before DC/AC fusion
 
 After the staging change, one two-second diagnostic on the qualified 4:1:1-strip
 producer reuses the existing owned sparse-CMYK control and immutable core. Of

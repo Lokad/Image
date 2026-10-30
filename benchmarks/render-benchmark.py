@@ -275,6 +275,12 @@ def render():
     assert quarter_single['productionChanged'] and quarter_single['independentQuietConfirmation'] and quarter_single['decision']['passed']
     assert quarter_single['qualification']['fullChecksEachOs'] == 5188
     assert quarter_single['qualification']['package']['sha256'] == quarter_single['qualification']['linuxPackage']['sameActualPackageSha256']
+    baseline_blocks = json.loads((ROOT / 'benchmarks/warm-jpeg-baseline-dc-ac-fusion-evidence.json').read_text(encoding='utf-8'))
+    assert baseline_blocks['productionChanged'] and baseline_blocks['independentQuietConfirmation'] and baseline_blocks['decision']['passed']
+    assert baseline_blocks['qualification']['fullChecksEachOs'] == 5193
+    assert baseline_blocks['qualification']['package']['sha256'] == baseline_blocks['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert baseline_blocks['postcheckRecovery']['measurementReruns'] == 0
+    assert set(baseline_blocks['cases']) == {'CmykAdobeSparse2D', 'CmykCaller', 'NativeDecode420', 'Ycck420', 'Decode411', 'Decode410', 'ValidateJpegBaseline420'}
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -330,7 +336,7 @@ def render():
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
     resident_decode = json.loads((ROOT / 'benchmarks/current-vp8l-resident-decode-evidence.json').read_text(encoding='utf-8'))
-    jpeg_decode = cmyk_current
+    jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert not resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
@@ -441,10 +447,10 @@ def render():
         rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
-    cmyk = cmyk_current['cases']['CmykAdobeSparse2D'][-1]
+    cmyk = baseline_blocks['cases']['CmykAdobeSparse2D'][-1]
     receipt, stats = cmyk['receipt'], cmyk['managed']['statistics']
     assert len(cmyk['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    assert receipt['librarySha256'] == cmyk_current['producers']['linuxSha256']
+    assert receipt['librarySha256'] == baseline_blocks['producers']['linuxSha256']
     assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] and receipt['decoderMaximum'] == receipt['scalarDecoderMaximum'] == 0
     assert all(g['passed'] for g in cmyk['quietness'].values())
     rows.append(('codec', f'| JPEG CMYK sparse-2D, resident decode † | {stats["Mean"] / 1000:,.2f} | '
@@ -452,7 +458,7 @@ def render():
                  f'{cmyk["worstBracketRatio"]:.3f} / {cmyk["conservativeRatioUpper"]:.3f} | '
                  f'{cmyk["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     for case, label in [('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode')]:
-        producer = ycck_rows if case == 'Ycck420' else quarter_single if case == 'Decode411' else quarter_strips
+        producer = baseline_blocks
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         assert receipt['librarySha256'] == producer['producers']['linuxSha256']
@@ -478,7 +484,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (cmyk_current if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -590,40 +596,26 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,188 checks on each platform, plus 338 internal and
+The current producer passes 5,193 checks on each platform, plus 343 internal and
 345 public focused checks normal/scalar per OS, and the same actual package/three examples.
 The [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks pass through that package on both OSes.
-[Direct baseline JPEG planes](../benchmarks/WARM-JPEG-DIRECT-BASELINE-PLANES.md)
-reduce owned sparse-CMYK elapsed by10.3% independently:1.484× / upper1.491,
-1,085,759B/op. Caller-CMYK is current at1.198× / upper1.216,1,085,964B/op;
-ordinary420 at1.103× / upper1.109,757,362B/op; coding validation passes at
-0.890× / upper0.899,9,984B/op. Companion costs are not paired causal gains.
-Baseline decoding reconstructs admitted byteplanes per block; validation uses
-block scratch. This removes full-frame coefficient staging and reduces admitted
-workspace; warm default allocation does not fall. Exact pixels, compression,
-ownership and native boundaries remain. Other affected baseline JPEG costs need
-current evidence before CPU-pass claims. Progressive coefficient algorithms remain;
-its shared dispatch gets no new CPU-pass claim. Metadata-only parsing, encoders,
+[Fused baseline JPEG traversal](../benchmarks/WARM-JPEG-BASELINE-DC-AC-FUSION.md)
+reduces owned sparse-CMYK elapsed by 4.48% independently to 629.11 µs:
+1.406× / upper 1.413, 1,085,758 B/op (measured -1). Caller-CMYK is current at
+1.052× / upper 1.058, ordinary420 at 1.077× / upper 1.082 and 4:1:1 at
+1.172× / upper 1.192. YCCK420, 4:1:0 and baseline coding validation still pass
+at upper 0.607 / 0.735 / 0.880; stop these controls. The six companions are
+current costs, without paired causal-gain claims. Exact pixels and complete
+native/ownership boundaries remain. The traversal adds only scalar locals;
+existing admitted tables, block scratch, planes and output owners are reused.
+Other affected baseline decode/validation boundaries need current evidence
+before CPU-pass claims. Progressive decoding, encoders, metadata-only inspection,
 other codecs and editing/text retain applicable unchanged-path evidence.
-[YCCK conversion over rows](../benchmarks/WARM-YCCK-ROW-TILES.md) reduces the existing
-owned YCCK420 control from 3,420.79 to 462.26 µs:86.5% less independent elapsed,
-0.653× / upper0.660,895,545 B/op (measured +87). Every pixel remains exact.
-The kernel uses192 bytes of bounded stack scratch and existing admitted source/
-output owners, with no new heap buffer or cache. All5,180 checks/OS and the same
-actual package pass. Stop this passing control; other affected owned YCCK costs
-still need applicable current evidence. Caller sample paths are unchanged.
-[Separable 4:1:0 strips](../benchmarks/WARM-JPEG-QUARTER-STRIPS.md) reduce that
-control from 2,388.42 to 382.11 µs: 84.0% less independent elapsed, 0.752× /
-upper 0.765, 720,835 B/op (measured +43). Stop this passing control.
-[4:1:1 strips](../benchmarks/WARM-JPEG-QUARTER-SINGLE-STRIPS.md) reduce its decode
-from 1,257.52 to 550.79 µs: 56.2% less elapsed, 1.233× / upper 1.237,
-751,295 B/op (measured +15). This remains a gap. Each admits its fixed stack
-workspace before allocation: 1,536 bytes for 4:1:1 and 1,792 for 4:1:0, released
-after users. Exact pixels, precision and ownership pass all current checks.
-Passing 4:1:0/YCCK evidence is reused; other affected owned quarter-grid
-boundaries need applicable costs before CPU-pass claims. The full 268-path
-objective remains open.
+[Direct planes](../benchmarks/WARM-JPEG-DIRECT-BASELINE-PLANES.md),
+[YCCK rows](../benchmarks/WARM-YCCK-ROW-TILES.md) and
+[quarter-grid strips](../benchmarks/WARM-JPEG-QUARTER-SINGLE-STRIPS.md) retain
+their architecture and historical gains. The full 268-path objective remains open.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound

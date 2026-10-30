@@ -315,6 +315,8 @@ internal ref partial struct JpegDecoder
         // Ah=Al=0. Keep symbol/amplitude traversal and every failure boundary
         // while removing progressive/refinement state from this hot loop.
         context.Cancellation.ThrowIfCancellationRequested();
+        var k = 1;
+        if (!dc.TryReadPlainBaselineBlock(ref reader, ac, block, ref predictor, ref k))
         {
             var category = dc.Read(ref reader);
             if (category > 11) throw new ImageDataException("Invalid JPEG DC coefficient category.");
@@ -326,29 +328,28 @@ internal ref partial struct JpegDecoder
                 ReadCancelableBaselineAc(ref reader, block, ac);
                 return;
             }
-            var k = 1;
-            while (k <= 63)
+        }
+        while (k <= 63)
+        {
+            ac.ReadPlainBaselineAc(ref reader, block, ref k);
+            if (k > 63) return;
+            if (ac.TryReadBaselineAc(ref reader, 64 - k, out var fastSymbol, out var amplitude))
             {
-                ac.ReadPlainBaselineAc(ref reader, block, ref k);
-                if (k > 63) return;
-                if (ac.TryReadBaselineAc(ref reader, 64 - k, out var fastSymbol, out var amplitude))
-                {
-                    k += fastSymbol >> 4;
-                    block[JpegTransform.Zigzag[k++]] = amplitude;
-                    continue;
-                }
-                var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
-                if (size == 0)
-                {
-                    if (run == 15) { k += 16; if (k > 64) throw new ImageDataException("JPEG zero run exceeds band."); continue; }
-                    if (run != 0) throw new ImageDataException("Invalid baseline JPEG end-of-block symbol.");
-                    return;
-                }
-                if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
-                k += run;
-                if (k > 63) throw new ImageDataException("JPEG coefficient run exceeds band.");
-                block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
+                k += fastSymbol >> 4;
+                block[JpegTransform.Zigzag[k++]] = amplitude;
+                continue;
             }
+            var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
+            if (size == 0)
+            {
+                if (run == 15) { k += 16; if (k > 64) throw new ImageDataException("JPEG zero run exceeds band."); continue; }
+                if (run != 0) throw new ImageDataException("Invalid baseline JPEG end-of-block symbol.");
+                return;
+            }
+            if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
+            k += run;
+            if (k > 63) throw new ImageDataException("JPEG coefficient run exceeds band.");
+            block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
         }
     }
 

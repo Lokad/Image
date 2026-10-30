@@ -250,8 +250,130 @@ public sealed class JpegBaselineBlockTests
         }
     }
 
-    // Original unfused traversal with immediate parent charges, independently
-    // retaining symbol/amplitude and syntax failure order. No speculative state escapes.
+    [Fact]
+    public void FusedDcAndEndOfBlockKeepEveryCachedPhaseSignedEndpointAndPendingTail()
+    {
+        var tables = Tables(); var fused = 0;
+        for (var phase = 0; phase < 8; phase++)
+        for (var size = 0; size <= 11; size++)
+        foreach (var value in size == 0 ? new[] { 0 } : new[] { 1 << (size - 1), (1 << size) - 1, -(1 << (size - 1)), -((1 << size) - 1) })
+        {
+            var input = Stuff(new string('0', phase) + Dc(size) + Signed(value, size) + Ac(0) + "10101100" + new string('0', 64));
+            var original = input.ToArray(); using var context = Context();
+            var actual = Enumerable.Repeat(12345, 66).ToArray(); var expected = actual.ToArray();
+            var reader = new JpegEntropyReader(input, 0, context); var reference = new JpegEntropyReader(input, 0, context);
+            if (phase != 0) { reader.ReadBits(phase); reference.ReadBits(phase); }
+            var predictor = 777; var expectedPredictor = predictor; var coefficient = 1;
+            if (tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, actual.AsSpan(1, 64), ref predictor, ref coefficient))
+            { fused++; Assert.Equal(64, coefficient); }
+            else JpegDecoder.ReadBaselineBlock(ref reader, actual.AsSpan(1, 64), ref predictor, tables.Dc, tables.Ac, context);
+            ScalarBaseline(ref reference, expected.AsSpan(1, 64), ref expectedPredictor, tables.Dc, tables.Ac, context);
+            Assert.Equal(expected, actual); Assert.Equal(expectedPredictor, predictor); Assert.Equal(reference.Position, reader.Position);
+            Assert.Equal(172, reader.ReadBits(8)); Assert.Equal(172, reference.ReadBits(8));
+            Assert.Equal(reference.Position, reader.Position); Assert.Equal(original, input);
+        }
+        Assert.True(fused > 100);
+    }
+
+    [Fact]
+    public void FusedTraversalCommitsValidPrefixAndHandsLongAcItsOriginalPendingBits()
+    {
+        using var context = Context(); var dcCounts = new byte[16]; dcCounts[0] = 1;
+        var acCounts = new byte[16]; acCounts[0] = acCounts[8] = 1;
+        var dc = new JpegHuffman(dcCounts, [0], context); var ac = new JpegHuffman(acCounts, [1, 0x0b], context);
+        var input = Stuff("001100000000" + new string('0', 64)); var original = input.ToArray();
+        var reader = new JpegEntropyReader(input, 0, context); var storage = Enumerable.Repeat(12345, 66).ToArray();
+        var predictor = 17; var coefficient = 1;
+        Assert.True(dc.TryReadPlainBaselineBlock(ref reader, ac, storage.AsSpan(1, 64), ref predictor, ref coefficient));
+        Assert.Equal(2, coefficient); Assert.Equal(17, predictor); Assert.Equal(1, reader.Position);
+        Assert.Equal(17, storage[1]); Assert.Equal(1, storage[1 + JpegTransform.Zigzag[1]]);
+        for (var i = 0; i < storage.Length; i++)
+            if (i != 1 && i != 1 + JpegTransform.Zigzag[1]) Assert.Equal(12345, storage[i]);
+        Assert.Equal(0x0b, ac.Read(ref reader)); Assert.Equal(2, reader.Position);
+        Assert.Equal(0, reader.ReadBits(5)); Assert.Equal(original, input);
+    }
+
+    [Fact]
+    public void FusedInitialMissLeavesPredictorStorageReaderAndFutureMarkersUntouched()
+    {
+        var tables = Tables(); var longCounts = new byte[16]; longCounts[8] = 1;
+        var longDc = new JpegHuffman(longCounts, [0], Context());
+        Check(longDc, new byte[8], 17, false);
+        Check(tables.Dc, Stuff(Dc(12) + new string('0', 64)), 17, false);
+        Check(tables.Dc, Stuff(Dc(1) + "1" + new string('0', 64)), 32767, false);
+        Check(tables.Dc, [0, 255, 0xd0, 0, 0], 17, false);
+        Check(tables.Dc, new byte[8], 17, true);
+
+        void Check(JpegHuffman dc, byte[] input, int initialPredictor, bool cancelable)
+        {
+            using var cancellation = new CancellationTokenSource();
+            using var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
+            var reader = new JpegEntropyReader(input, 0, context); var reference = new JpegEntropyReader(input, 0, context);
+            var storage = Enumerable.Repeat(12345, 66).ToArray(); var predictor = initialPredictor; var coefficient = 1;
+            Assert.False(dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, storage.AsSpan(1, 64), ref predictor, ref coefficient));
+            Assert.Equal(initialPredictor, predictor); Assert.Equal(1, coefficient); Assert.Equal(0, reader.Position);
+            Assert.All(storage, value => Assert.Equal(12345, value));
+            Assert.Equal(reference.ReadBits(4), reader.ReadBits(4)); Assert.Equal(reference.Position, reader.Position);
+        }
+    }
+
+    [Fact]
+    public void FusedNonzeroDcAndPartialAcKeepEveryTruncationErrorAndGuard()
+    {
+        var tables = Tables();
+        var lead = Dc(5) + Signed(-20, 5) + Ac(1) + "1" + Ac(0x38) + Signed(255, 8) + Ac(0xf0) + Ac(10) + Signed(-777, 10);
+        foreach (var ending in new[] { Ac(0), Ac(0x0b), Ac(0x10) })
+        for (var phase = 0; phase < 8; phase++)
+        {
+            var original = Stuff(new string('0', phase) + lead + ending + "101" + new string('0', 64));
+            for (var length = 0; length <= original.Length; length++)
+            {
+                var input = original.AsSpan(0, length).ToArray(); var expected = Run(false); var actual = Run(true);
+                Assert.Equal(expected.Error, actual.Error); Assert.Equal(expected.Message, actual.Message);
+                Assert.Equal(expected.Position, actual.Position); Assert.Equal(expected.Predictor, actual.Predictor);
+                Assert.Equal(expected.Tail, actual.Tail); Assert.Equal(expected.Block, actual.Block);
+                Assert.Equal(original.AsSpan(0, length).ToArray(), input);
+
+                (Type? Error, string? Message, int Position, int Predictor, int Tail, int[] Block) Run(bool fast)
+                {
+                    using var context = Context(); var reader = new JpegEntropyReader(input, 0, context);
+                    var block = Enumerable.Repeat(12345, 66).ToArray(); var predictor = 17; var tail = -1; Exception? error = null;
+                    try
+                    {
+                        if (phase != 0) reader.ReadBits(phase);
+                        if (fast) JpegDecoder.ReadBaselineBlock(ref reader, block.AsSpan(1, 64), ref predictor, tables.Dc, tables.Ac, context);
+                        else ScalarBaseline(ref reader, block.AsSpan(1, 64), ref predictor, tables.Dc, tables.Ac, context);
+                        tail = reader.ReadBits(3);
+                    }
+                    catch (ImageDataException failure) { error = failure; }
+                    return (error?.GetType(), error?.Message, reader.Position, predictor, tail, block);
+                }
+            }
+        }
+    }
+
+    [Fact]
+    public void FusedBlockUsesNoHeapOrAdditionalStorageOwner()
+    {
+        var tables = Tables(); using var context = Context(); byte[] input = new byte[8];
+        Span<int> block = stackalloc int[64]; var predictor = 0; var coefficient = 1;
+        for (var i = 0; i < 16; i++)
+        {
+            var warm = new JpegEntropyReader(input, 0, context); coefficient = 1;
+            Assert.True(tables.Dc.TryReadPlainBaselineBlock(ref warm, tables.Ac, block, ref predictor, ref coefficient));
+        }
+        var allocated = GC.GetAllocatedBytesForCurrentThread(); var complete = 0;
+        for (var i = 0; i < 1000; i++)
+        {
+            var reader = new JpegEntropyReader(input, 0, context); coefficient = 1;
+            if (tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, block, ref predictor, ref coefficient) && coefficient == 64) complete++;
+        }
+        allocated = GC.GetAllocatedBytesForCurrentThread() - allocated;
+        Assert.Equal(1000, complete); Assert.Equal(0, allocated); Assert.Equal(0, predictor);
+    }
+
+    // Original unfused T.81 traversal, independently retaining symbol/amplitude
+    // and syntax failure order. No speculative state escapes.
     private static void ScalarBaseline(ref JpegEntropyReader reader, Span<int> block, ref int predictor,
         JpegHuffman dc, JpegHuffman ac, OperationContext context)
     {

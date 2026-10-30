@@ -1,5 +1,7 @@
 # Separable strips for JPEG 4:1:0
 
+Current affected CPU costs are in [baseline DC/AC fusion](WARM-JPEG-BASELINE-DC-AC-FUSION.md); the measurements below are historical.
+
 The existing owned 4:1:0 control falls from **2,388.42 to 382.11 µs**: **84.0%
 less elapsed time**, with every pixel unchanged. Its independently confirmed
 **0.752× / upper 0.765** cost passes the one-CPU warm target. Stop this control.

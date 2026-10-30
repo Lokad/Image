@@ -1,5 +1,7 @@
 # YCCK conversion over rows
 
+Current affected CPU costs are in [baseline DC/AC fusion](WARM-JPEG-BASELINE-DC-AC-FUSION.md); the measurements below are historical.
+
 The existing YCCK420 control falls from **3,420.79 to 462.26 µs**: **86.5% less
 elapsed time**, with every pixel unchanged. Its independently confirmed
 **0.653× / upper 0.660** cost passes the one-CPU warm target. Stop this control.

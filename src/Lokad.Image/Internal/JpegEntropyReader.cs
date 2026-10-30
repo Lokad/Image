@@ -6,7 +6,7 @@ using System.Numerics;
 namespace Lokad.Image.Internal;
 
 /// <summary>MSB-first JPEG entropy bits with marker-aware byte unstuffing.</summary>
-internal ref struct JpegEntropyReader
+internal ref partial struct JpegEntropyReader
 {
     private readonly ReadOnlySpan<byte> data;
     private readonly OperationContext context;
@@ -588,8 +588,6 @@ cache = candidateCache; pending = candidatePending - length;
             if (next == 255 && (candidatePosition >= data.Length || data[candidatePosition++] != 0)) return false;
             candidateBits = candidateBits << 8 | next; candidateAvailable += 8;
         }
-        // Prefix bits cost count, and ReadBits(size) costs one. If the combined
-        // charge cannot fit, the original sequence preserves partial admission.
         context.Cancellation.ThrowIfCancellationRequested();
         bits = candidateBits; available = candidateAvailable - size; position = candidatePosition;
         var amplitude = (int)((bits >> available) & ((1u << size) - 1));

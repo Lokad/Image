@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster sparse-CMYK JPEG decoding through a fused baseline DC/AC traversal,
+  preserving exact pixels, cancellation and admitted storage ownership.
 - Faster JPEG 4:1:1 and 4:1:0 decoding with separable chroma strips and safe SIMD,
   preserving exact pixels and explicitly admitted bounded workspace.
 - Faster YCCK 4:2:0 decoding through SIMD over rows, preserving exact pixels,
