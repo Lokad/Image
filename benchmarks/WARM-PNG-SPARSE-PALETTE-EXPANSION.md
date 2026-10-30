@@ -8,7 +8,10 @@ allocations and exact pixels. Both independently pass warm one-CPU parity and st
 | Prior Adam7 palette8 | 1,703.925 | 1.274 / 1.283 | 4,976 | Prior |
 | Current Adam7 palette8 | 768.983 | 0.570 / 0.587 | 4,976 | Pass; stop |
 | Current Adam7 palette4 | 495.940 | 0.437 / 0.440 | 2,608 | Pass; stop |
-| Current Adam7 gray1 | 1,282.717 | 1.129 / 1.155 | 1,440 | Gap |
+| Prior Adam7 gray1 | 1,282.717 | 1.129 / 1.155 | 1,440 | Superseded |
+
+The gray1 row is superseded by [packed grayscale expansion](WARM-PNG-SPARSE-GRAY-EXPANSION.md),
+which independently passes parity.
 
 Sparse palette passes pack exact RGB/tRNS bytes into one little-endian pixel
 store, replacing generic mapping and four per-channel stores. Only pass pixels

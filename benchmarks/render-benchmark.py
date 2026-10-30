@@ -216,6 +216,15 @@ def render():
     assert vp8_inverse_rejected['candidateRejected'] and not vp8_inverse_rejected['productionChanged']
     assert not vp8_inverse_rejected['decision']['passed']
     assert vp8_inverse_rejected['qualification']['confirmationRuns'] == 0
+    png_sparse_gray = json.loads((ROOT / 'benchmarks/warm-png-sparse-gray-expansion-evidence.json').read_text(encoding='utf-8'))
+    assert png_sparse_gray['productionChanged'] and png_sparse_gray['decision']['passed']
+    assert png_sparse_gray['qualification']['fullChecksEachOs'] == 5157
+    assert png_sparse_gray['qualification']['package']['sha256'] == png_sparse_gray['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert png_sparse_gray['status'] == {'DecodeGray1Adam7': 'confirmed-pass'}
+    o = png_sparse_gray['cases']['DecodeGray1Adam7'][-1]
+    assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
+    assert o['receipt']['librarySha256'] == png_sparse_gray['producers']['linuxSha256']
+    assert o['conservativeRatioUpper'] <= 1 and o['managedMemory']['BytesAllocatedPerOperation'] == 1440
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -503,7 +512,7 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,153 checks on each platform, plus 140 affected kernel
+The current producer passes 5,157 checks on each platform, plus 131 affected kernel
 and 258 public checks normal/scalar per OS, and the same actual package/three examples.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
@@ -669,9 +678,11 @@ Exact pixels, owners, native and quiet gates pass; zero builds or repeated quali
 
 [Packed sparse palette stores](../benchmarks/WARM-PNG-SPARSE-PALETTE-EXPANSION.md)
 reduce Adam7 palette8/4 elapsed by 54.9%/64.9%, retaining 4,976/2,608 B/op.
-Both pass at uppers 0.587/0.440 and stop. Gray1 remains a current 1.129× /
-upper 1.155 gap, 1,440 B/op. Exact pixels/owners/native/quiet, full 5,153 checks/OS,
-affected normal/scalar and same actual package qualify; no new buffers or LUTs.
+Both pass at uppers 0.587/0.440 and stop. Their gray1 baseline is superseded by
+[packed sparse grayscale](../benchmarks/WARM-PNG-SPARSE-GRAY-EXPANSION.md):
+80.0% less elapsed, 0.223× / upper 0.230, unchanged 1,440 B/op; pass and stop.
+Exact pixels/owners/native/quiet, full 5,157 checks/OS, affected normal/scalar and
+same actual package qualify; no new buffers or LUTs.
 
 [Policies and packed keys](../benchmarks/CURRENT-PNG-POLICY-PACKED-KEY-COSTS.md)
 resolve eight more costs. Pass and stop: Gray2, key0, Gray1, key1, RGBA16, cancelable. Remaining: RGBA16, tight 0.991 / upper 1.002 confidence open; RGBA16, tight + cancelable now passes upper 0.984; RGBA8, tight 1.071 / upper 1.076 gap; RGBA8, tight + cancelable now 1.094 / upper 1.107 gap; RGBA8, cancelable 1.140 / upper 1.143 gap.
@@ -708,8 +719,8 @@ their allocated costs are 4,472/8,568 B/op. Each named control has 12 actuals,
 frozen inputs/settings, exact pixels, independent outputs and quiet guards.
 [Indexed and packed controls](../benchmarks/CURRENT-PNG-INDEXED-PACKED-COSTS.md)
 add seven passes: palette8/4/2/1 and gray1/2/4, allocated 504–2,472 B/op. Adam7
-Gray1 has a refreshed 1.129× / upper 1.155 gap, 1,440 B/op. All eight reuse the same
-build, selector and qualification; no new images, cases or retiming.
+Gray1 now passes via the linked sparse expansion at upper 0.230, 1,440 B/op.
+Other unchanged paths reuse valid build/selector/qualification evidence; no new images or cases.
 
 [Two retained PNG outputs under one caller root](../benchmarks/WARM-PNG-CALLER-ROOT-ROWS.md)
 remain a 1.201× / upper 1.204 gap, 1,638,183 B/op and 1,766,641-byte admitted peak.

@@ -491,6 +491,12 @@ internal static class PngCodec
                         CopySparsePaletteRow(row, result.Pixels.Slice(offset, result.Stride - startX * 4),
                             width, header.Depth, stepX, header.Palette, header.Transparency, context.Cancellation);
                     }
+                    else if (header.ColorType == 0 && header.Depth < 8 && stepX > 1)
+                    {
+                        var offset = (startY + y * stepY) * result.Stride + startX * 4;
+                        CopySparsePackedGrayRow(row, result.Pixels.Slice(offset, result.Stride - startX * 4),
+                            width, header.Depth, stepX, header.Transparency, context.Cancellation);
+                    }
                     else
                     {
                         for (var x = 0; x < width; x++)
@@ -836,6 +842,22 @@ internal static class PngCodec
             var rgb = palette.Slice(index * 3, 3);
             var alpha = index < transparency.Length ? transparency[index] : (byte)255;
             var rgba = (uint)BinaryPrimitives.ReadUInt16LittleEndian(rgb) | (uint)rgb[2] << 16 | (uint)alpha << 24;
+            BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * stepX * 4)..], rgba);
+        }
+    }
+
+    internal static void CopySparsePackedGrayRow(ReadOnlySpan<byte> row, Span<byte> destination,
+        int width, int depth, int stepX, ReadOnlySpan<byte> transparency, CancellationToken cancellation)
+    {
+        // For packed depths1/2/4, 255 is exactly divisible by the source maximum.
+        // Keep the complete tRNS key and hidden RGB, touching only pass pixels.
+        var scale = 255 / ((1 << depth) - 1);
+        var key = transparency.IsEmpty ? -1 : BinaryPrimitives.ReadUInt16BigEndian(transparency);
+        for (var x = 0; x < width; x++)
+        {
+            if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
+            var sample = Sample(row, x, depth); var gray = sample * scale;
+            var rgba = (uint)gray * 0x00010101u | (sample == key ? 0u : 0xff000000u);
             BinaryPrimitives.WriteUInt32LittleEndian(destination[(x * stepX * 4)..], rgba);
         }
     }

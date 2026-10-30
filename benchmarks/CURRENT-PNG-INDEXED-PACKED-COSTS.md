@@ -1,8 +1,8 @@
 # Current indexed and packed PNG decode costs
 
 Seven existing controls independently pass warm one-CPU parity and stop. Adam7
-Gray1 remains a gap; its baseline below is superseded by the
-[current shared-fallback cost](WARM-PNG-SPARSE-PALETTE-EXPANSION.md). These are current costs, without a historical
+Gray1 now also passes through [packed sparse expansion](WARM-PNG-SPARSE-GRAY-EXPANSION.md);
+its baseline below is superseded. These are current costs, without a historical
 speedup claim.
 
 | Complete 513×259 decode | Lokad µs | Ratio / upper | Allocated B/op | Status |

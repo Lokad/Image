@@ -248,8 +248,8 @@ PNGcostrefreshcomplete;full268pathobjective staysopen.
 
 [Sparse palette stores](WARM-PNG-SPARSE-PALETTE-EXPANSION.md) supersede both
 Adam7 palette gaps:54.9%/64.9% less elapsed,uppers0.587/0.440,4976/2608Bop pass.
-Gray1 sharedfallback currentcost1.129/upper1.155,1440Bop remainsgap;no historical
-causalityclaim. Full5153/OS,140internal+258publicnormal/scalar,SAMEpackage/3examples
+Gray1 sharedfallback baseline below is superseded by packedgray expansion;
+its current upper0.230 passes with1440Bop. Full5153/OS,140internal+258publicnormal/scalar,SAMEpackage/3examples
 pass. Onecorebuild/OS,zerootherbuilds;no newbuffer/LUT. Full268objective active.
 
 [Materialized cancelable PNG cursor](PNG-CANCELABLE-MATERIALIZED-CURSOR-REJECTED.md)
@@ -266,6 +266,12 @@ accepted costs unchanged. Existing full/package proof reused;268paths remain.
 misses5%screen:3.47%elapsed/3.62%normalized reduction,exact17688Bpacket and
 809072Bop unchanged. Removed,no variants/confirmation;qualified source/binaries/
 package restored,existing full proof reused. All268required paths remain.
+
+[Sparse packed-gray expansion](WARM-PNG-SPARSE-GRAY-EXPANSION.md) closes the named
+Gray1Adam7 gap:80.0%less elapsed,0.223/upper0.230,1440Bop passandstop. Exact
+pixels/native/source/owners/quiet,5157checks/OS,131internal+258publicnormal/scalar,
+SAMEactualpackage/3examples qualify. Onecorebuild/OS,zerootherbuilds;no new
+buffer/LUT/capacity. Full268pathobjective remainsactive;unchanged paths reuseproof.
 
 ## Finite checklist
 
