@@ -212,6 +212,10 @@ def render():
     assert vp8l_histogram_rejected['candidateRejected'] and not vp8l_histogram_rejected['productionChanged']
     assert not vp8l_histogram_rejected['decision']['passed']
     assert vp8l_histogram_rejected['qualification']['confirmationRuns'] == 0
+    vp8_inverse_rejected = json.loads((ROOT / 'benchmarks/vp8-packed-inverse-reconstruction-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_inverse_rejected['candidateRejected'] and not vp8_inverse_rejected['productionChanged']
+    assert not vp8_inverse_rejected['decision']['passed']
+    assert vp8_inverse_rejected['qualification']['confirmationRuns'] == 0
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -484,10 +488,6 @@ packets; this makes no causal comparison against older screens.
 [Photograph confirmation](../benchmarks/VP8L-SHARED-COLOR-MASK-REJECTED.md) gives
 the current unchanged-path cost; its mask-sharing trial is rejected. Async
 retains a current screen.
-[Shared RGBA histogram trial](../benchmarks/VP8L-SHARED-PREDICTOR-HISTOGRAM-REJECTED.md)
-misses its 5% short-screen gate (1.65% elapsed, 0.57% normalized), retaining exact
-160,032-byte photograph packets. It is removed; accepted costs and qualification
-remain unchanged. No confirmation, companion timing or package repeat.
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
@@ -507,6 +507,8 @@ The current producer passes 5,153 checks on each platform, plus 140 affected ker
 and 258 public checks normal/scalar per OS, and the same actual package/three examples.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
+Closed PNG/WebP trials and their raw evidence are retained in
+[coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
 including unfiltered managed samples. Short screens are not new independent
 parity confirmations. [Byte zero-tap trimming](../benchmarks/WARM-BICUBIC-ZERO-TAPS.md)
@@ -680,11 +682,6 @@ reduce tight+cancelable PNG8 elapsed by 21.0%, with unchanged 68,224 B/op;
 1.094× / upper 1.107 remains a gap. The word companion passes upper 0.984,
 70,272 B/op. Exact pixels, cancellation, admission, owners and quiet gates pass;
 full 5,132 checks/OS, affected normal/scalar and same actual package qualify.
-
-[Materialized cancelable cursor trial](../benchmarks/PNG-CANCELABLE-MATERIALIZED-CURSOR-REJECTED.md)
-misses its 5% short-screen gate (4.34% elapsed, 4.20% normalized); it is removed
-without confirmation or a changed accepted cost. Qualified source and binaries
-are restored; existing full/package evidence remains valid.
 
 [Stream and composition costs](../benchmarks/CURRENT-PNG-STREAM-COMPOSITION-COSTS.md)
 finish the planned PNG refresh: seekable PNG16 passes at upper 0.958, 8,664 B/op.

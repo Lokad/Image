@@ -262,6 +262,11 @@ miss the5%screen:1.65%elapsed/0.57%normalized reduction,exact160032Bphotograph
 packet. Removed, no variants/confirmation;qualifiedsource/binaries/package and
 accepted costs unchanged. Existing full/package proof reused;268paths remain.
 
+[Packed VP8 inverse reconstruction](VP8-PACKED-INVERSE-RECONSTRUCTION-REJECTED.md)
+misses5%screen:3.47%elapsed/3.62%normalized reduction,exact17688Bpacket and
+809072Bop unchanged. Removed,no variants/confirmation;qualified source/binaries/
+package restored,existing full proof reused. All268required paths remain.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
