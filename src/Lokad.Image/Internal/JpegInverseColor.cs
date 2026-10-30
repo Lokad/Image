@@ -7,7 +7,7 @@ namespace Lokad.Image.Internal;
 // Full-range BT.601 conversion at the pinned reference's integer precision.
 // Derive coefficients from Kr=299/1000 and Kb=114/1000, rather than incorporating
 // a native conversion table. Callers check row cancellation and own all supplied spans.
-internal static class JpegInverseColor
+internal static partial class JpegInverseColor
 {
     private static readonly int Red = Coefficient(2 * (1000 - 299), 1000, false);
     private static readonly int Blue = Coefficient(2 * (1000 - 114), 1000, false);

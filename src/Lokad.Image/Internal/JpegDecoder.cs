@@ -731,6 +731,7 @@ internal ref partial struct JpegDecoder
                 }
                 if (quarterYcbcr)
                 {
+                    if (maxV == 2) { RenderQuarterHalfStrips(result); return result; }
                     WriteQuarterYcbcrPixels(y, 0, info.Width, row, 4);
                     continue;
                 }

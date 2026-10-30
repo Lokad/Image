@@ -71,13 +71,16 @@ The kernel uses192 bytes of bounded stack scratch and existing admitted source/
 output owners, with no new heap buffer or cache. All5,180 checks/OS and the same
 actual package pass. Stop this passing control; other affected owned YCCK costs
 still need applicable current evidence. Caller sample paths are unchanged.
-[Extended-JPEG reconciliation](../benchmarks/WARM-EXTENDED-JPEG-CURRENT-COSTS.md)
-retains current4:1:1 2.807× / upper2.823,751,280 B/op and4:1:0 4.703× /
-upper4.718,720,792 B/op. Both have exact independent/native pixels on unchanged
-paths. Their old padded-grid exports were reconciled to the declared native
-policy with original packets/source data preserved; no causal comparison with
-older exports follows. These are now the largest demonstrated gaps. No new
-workload matrix or repeated confirmation of passing cases.
+[Separable 4:1:0 strips](../benchmarks/WARM-JPEG-QUARTER-STRIPS.md) reduce that
+control from 2,388.42 to 382.11 µs:84.0% less independent elapsed,0.752× /
+upper0.765,720,835 B/op (measured +43). Exact pixels and every rounding boundary
+remain. The fixed1,792-byte stack workspace is admitted alongside live planes/
+output and released after actual users, with no new heap buffer or persistent
+cache. All5,185 checks/OS and the same actual package pass. Stop this control.
+Its current4:1:1 companion remains a2.800× / upper2.823 gap,751,280 B/op,
+without a paired gain claim. Caller pixel paths and passingYCCK are unchanged.
+Other affected owned4:1:0 costs need applicable current evidence;4:1:1 now leads
+optimization priorities. No new workload matrix or passing-case retiming.
 Closed PNG/WebP trials and their raw evidence are retained in
 [coverage](../benchmarks/WARM-COVERAGE.md); accepted results remain unchanged.
 Ratio uses the faster native bracket; upper is the conservative confidence bound
@@ -204,8 +207,8 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
 | JPEG CMYK sparse-2D, resident decode † | 658.64 | 443.71 | 1.484 / 1.491 | 1,085,759 | — |
 | JPEG YCCK420, resident decode † | 462.26 | 708.38 | 0.653 / 0.660 | 895,545 | — |
-| JPEG 4:1:1, resident decode † | 1,256.78 | 447.72 | 2.807 / 2.823 | 751,280 | — |
-| JPEG 4:1:0, resident decode † | 2,388.42 | 507.81 | 4.703 / 4.718 | 720,792 | — |
+| JPEG 4:1:1, resident decode † | 1,257.52 | 449.06 | 2.800 / 2.823 | 751,280 | — |
+| JPEG 4:1:0, resident decode † | 382.11 | 508.00 | 0.752 / 0.765 | 720,835 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

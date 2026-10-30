@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster JPEG 4:1:0 decoding with separable chroma strips and safe SIMD,
+  preserving exact pixels and explicitly admitted bounded workspace.
 - Faster YCCK 4:2:0 decoding through SIMD over rows, preserving exact pixels,
   portable execution, cancellation and shared admission.
 - Baseline JPEG decoding reconstructs component planes directly, and pixel

@@ -386,6 +386,19 @@ builds/variants/profiles/retimes. Current4:1:0 4.703/upper4.718 and4:1:1
 owned YCCK boundaries need applicable current costs before CPU-pass claims;
 caller samples and unrelated paths reuse relevant evidence. Full268 stays open.
 
+[Separable JPEG4:1:0 strips](WARM-JPEG-QUARTER-STRIPS.md) now pass the existing
+Decode410control:2,388.42→382.11 µs,84.0% less independent elapsed,0.752× /
+upper0.765. Stop this control unchanged.720,835 B/op (measured +43),1,792-byte
+fixed stack capacity reserved before allocation and released after actual users;
+no new heap/frame copy/across-operation cache or budget. Exact pixels, threshold
+and all native precision boundaries remain. Full5,185/OS,338internal/342public
+normal/scalar,SAMEpackage/governedconsumer/threeexamples pass. One successful
+core build/OS; no harness/native/selector builds or scored reruns. Shared-dispatch
+companionDecode411now2.800/upper2.823,751,280B/op is a current gap without a
+paired gain claim. PassingYCCK and caller paths retain applicable evidence.
+Other affected owned410boundaries need applicable costs before CPU-pass claims;
+411 is now largest. Full268-case objective remains open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

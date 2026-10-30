@@ -1,7 +1,7 @@
 # Current extended-JPEG decode costs
 
 YCCK420 is superseded by [row conversion](WARM-YCCK-ROW-TILES.md), independently
-confirmed at 0.653× / upper 0.660. The 4:1:1/4:1:0 costs below remain current.
+confirmed at 0.653× / upper 0.660. The quarter costs below are superseded by [strip reconstruction](WARM-JPEG-QUARTER-STRIPS.md).
 
 Three existing required controls now have valid current costs on the unchanged
 qualified production build. At this checkpoint, YCCK420 4.835× and 4:1:0 4.703× were the largest
