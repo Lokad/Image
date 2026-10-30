@@ -1,5 +1,9 @@
 # Exact packed-word JPEG inverse
 
+Affected sparse-CMYK/baseline420 costs are superseded by
+[zero upper rows](WARM-JPEG-ZERO-UPPER-ROWS.md). The accepted packed-word
+primitive and unchanged DC-only confirmation remain retained.
+
 The existing sparse-CMYK complete decode uses **8.6% less elapsed time**, with
 exact pixels. Its **2.181× / upper2.197** FFmpeg cost remains the largest
 confirmed material gap. No per-operation storage is added.

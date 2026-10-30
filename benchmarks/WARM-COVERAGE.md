@@ -332,6 +332,16 @@ Onecorebuild/OS,zerootherbuilds. Exactpixels/frozeninputs/settings/owners/quiet
 pass. Stopthispackedwordprimitive;oldnonconstantAVX2JPEGcosts need currentevidence
 beforeCPU-passclaims. Full268 remainsopen;largestconfirmedgap sparse-CMYK2.181.
 
+[Omit exactzero JPEG frequency rows](WARM-JPEG-ZERO-UPPER-ROWS.md) accepts25.5%less
+sparse-CMYKelapsed:1.658/upper1.669,1085520B/op(+5 measured,no new ownedstorage).
+Affectedbaseline420current1.115/upper1.120,757328B/op,elapsed0.958%higher thanprior
+independent. DC-onlycallerCMYK unchanged1.807/upper1.817,1634913B/op nowlargest
+confirmedgap;validconfirmationreusedwithunchangedbodyproof. Originalinputs/
+settings/exactnormal-scalar-nativepixels/owners/quiet pass. Full5171/OS,
+32internal/98publicnormal-scalar,SAMEpackage/governedconsumer/3examples pass.
+Onecorebuild/OS,zerootherbuilds. Onepre-candidate896sampleprofile retained,
+not currentpost-changeattribution. Stoprowcountvariants;full268scopeopen.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

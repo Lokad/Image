@@ -122,7 +122,9 @@ internal static class JpegInverseTransform
 
     private static void InverseAvx2(ReadOnlySpan<short> input, Span<short> rows, Span<byte> pixels)
     {
-        for (var y = 0; y < 8; y++)
+        var twoLowRows = !input[16..].ContainsAnyExcept((short)0);
+        var rowCount = twoLowRows ? 2 : 8;
+        for (var y = 0; y < rowCount; y++)
         {
             var row = input.Slice(y * 8, 8);
             if (!row[1..].ContainsAnyExcept((short)0))
@@ -143,6 +145,20 @@ internal static class JpegInverseTransform
         // Bias in signed words before widening, preserving the scalar wrap.
         var first = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows[..8]));
         var r0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
+        if (twoLowRows)
+        {
+            // Every omitted row transforms to zero. Keep all sixteen lower
+            // frequencies, the original word bias and the same column sums.
+            var even = Avx2.MultiplyLow(r0, Vector256.Create(Kernel[0]));
+            var r1 = WidenRow(rows, 1);
+            for (var y = 0; y < 4; y++)
+            {
+                var odd = Avx2.MultiplyLow(r1, Vector256.Create(Kernel[8 + y]));
+                StoreRow(Avx2.Add(even, odd), pixels.Slice(y * 8, 8));
+                StoreRow(Avx2.Subtract(even, odd), pixels.Slice((7 - y) * 8, 8));
+            }
+            return;
+        }
         var r4 = WidenRow(rows, 4);
         var p26 = PairRows(rows, 2, 6);
         var p13 = PairRows(rows, 1, 3);
