@@ -441,6 +441,13 @@ decode/Identify/validation CPUcosts are historical untilapplicable currentproof;
 earlier passing PNGcosts are not current parityproof. CRC-opaqueprobe/header,
 JPEG/WebP/editing/text retain relevant unchangedpath evidence. Full268<=1x open.
 
+[Current None/Paeth decode costs](CURRENT-PNG-NONE-PAETH-CRC-COSTS.md) resolve
+the two pre-CRC uncertain comparisons on the frozen PCRG1 DLL: None RGBA16
+1.004/upper1.014 and Paeth RGBA8 1.006/upper1.016, both confidence-open.
+Each has one12-actual job with exact pixels, unchanged packets/settings/source/
+ownership and idle-v2 guards. No retiming, new fixtures, builds or production
+change. Reuse PCRG1 qualification; do not infer optimization needs or CPU passes.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

@@ -584,6 +584,9 @@ confirmed gap; PNG8 validation is confidence-open and is retained without
 retiming. Four PNG controls pass at this tested scope. Header/probe paths skip
 CRC and retain applicable evidence. Other affected PNG paths need current costs
 before CPU-pass claims.
+Two resident PNG decode controls also remain confidence-open on this build;
+[None/Paeth evidence](../benchmarks/CURRENT-PNG-NONE-PAETH-CRC-COSTS.md) retains
+one confirmation each without retiming or assuming an optimization need.
 
 The current producer passes **5,193 checks per OS**, plus 642 internal and 386
 public focused checks in normal, GFNI-only-disabled and scalar modes. The same

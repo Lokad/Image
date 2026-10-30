@@ -1,7 +1,10 @@
 # Current resident RGBA PNG decode costs
 
 Average rows are superseded by [SIMD reconstruction](WARM-PNG-AVERAGE-SIMD.md).
-None/Paeth paths remain unchanged and retain the scoped evidence below.
+All costs below are historical after [GFNI CRC](WARM-PNG-GFNI-CRC.md).
+[Current None/Paeth evidence](CURRENT-PNG-NONE-PAETH-CRC-COSTS.md) refreshes two
+confidence-open cases; other affected paths need current costs before CPU-pass
+claims. The original behavioral contracts and raw evidence remain retained.
 
 Six existing 513×259 controls have independent evidence on the qualified PGRR1
 build. No production change or causal comparison against older producers is made.
@@ -18,7 +21,7 @@ build. No production change or causal comparison against older producers is made
 All 12 actuals per case, native brackets, filtered/unfiltered bounds and both
 idle-v2 guards are retained. RGBA16 None and Paeth8 remain confidence-open; their
 conservative intervals cross parity. Do not pool, retime or assume a need to
-optimize them while larger gaps remain. Paeth16 passes and stops.
+optimize them while larger gaps remain. The historical Paeth16 pass needs applicable current CPU evidence.
 
 Both subjects perform complete decoding, normalization, independent output
 ownership and release from the frozen original packets, including native word
