@@ -1,5 +1,8 @@
 # Exact SIMD JPEG horizontal area filtering
 
+The following costs are superseded by [column preparation](WARM-JPEG-COLUMN-PLANS.md).
+Its accepted filtering primitive and raw evidence remain retained.
+
 Caller-RGB420 independently uses **16.1% less elapsed**,2.030ms versus a fresh
 2.420ms baseline. The **1.283× / upper1.294** CPU gap remains open. Complete
 packets stay52,091/52,093B, differing only by the approved attribution COM;

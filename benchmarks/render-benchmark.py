@@ -31,7 +31,11 @@ def render():
     vp8l_photo_cost = json.loads((ROOT / 'benchmarks/vp8l-shared-color-mask-rejected-evidence.json').read_text(encoding='utf-8'))
     assert not vp8l_photo_cost['productionChanged'] and vp8l_photo_cost['candidateRejected']
     assert vp8l_photo_cost['independentQuietConfirmation']
-    jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-horizontal-area-filter-evidence.json').read_text(encoding='utf-8'))
+    jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-column-plans-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg['qualification']['fullChecksEachOs'] == 5163 and jpeg['decision']['passed']
+    assert jpeg['qualification']['package']['sha256'] == jpeg['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert jpeg['qualification']['governedStreamingConsumerPassed'] and jpeg['postcheckRecovery']['measurementReruns'] == 0
+    assert jpeg['status'] == {'Rgb420': 'confirmed-gap', 'Rgba16': 'screen-gap'}
     vp8l = json.loads((ROOT / 'benchmarks/warm-vp8l-prepared-prediction-cost-evidence.json').read_text(encoding='utf-8'))
     reads = json.loads((ROOT / 'benchmarks/warm-image-read-evidence.json').read_text(encoding='utf-8'))
     vp8_validation = json.loads((ROOT / 'benchmarks/warm-vp8-direct-token-decisions-evidence.json').read_text(encoding='utf-8'))
@@ -512,9 +516,13 @@ packets; this makes no causal comparison against older screens.
 [Photograph confirmation](../benchmarks/VP8L-SHARED-COLOR-MASK-REJECTED.md) gives
 the current unchanged-path cost; its mask-sharing trial is rejected. Async
 retains a current screen.
-Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
-16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
-upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
+[JPEG column preparation](../benchmarks/WARM-JPEG-COLUMN-PLANS.md) independently
+reduces caller-RGB420 elapsed by a further 7.55%, preserving exact packets within
+the approved COM boundary. Its 1.190× / upper1.197 gap remains. Allocation rises
+by 14,806 to 388,222 B/op for admitted temporary descriptors. Governed RGBA16 has
+a current 1.141× / upper1.292 screen, 819,452 B/op, with unchanged 1,704,856 B
+shared-root peak and prompt cleanup. The prior horizontal-filter gain is retained
+in the linked history. These are frozen controls, without broader CPU-pass claims.
 [Quantization caller invariants](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md)
 reduce VP8 photograph elapsed by 6.93% filtered / 6.90% all actuals against a fresh
 independent baseline: 1.433× / upper 1.438, unchanged 809,072 B/op and exact
@@ -527,8 +535,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,158 checks on each platform, plus 72 affected kernel
-and 258 public checks normal/scalar per OS, and the same actual package/three examples.
+The current producer passes 5,163 checks on each platform, plus 50 affected kernel
+and 66 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,

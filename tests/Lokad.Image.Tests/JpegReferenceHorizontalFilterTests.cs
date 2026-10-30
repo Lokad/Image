@@ -10,6 +10,7 @@ public sealed class JpegReferenceHorizontalFilterTests
     {
         if (!Avx512BW.IsSupported || !BitConverter.IsLittleEndian) return;
         Span<JpegReferenceArea> plans = stackalloc JpegReferenceArea[8];
+        Span<JpegReferenceArea> actual = stackalloc JpegReferenceArea[8];
         var source = new int[20]; var output = new short[20];
         var random = new Random(721934);
         for (var width = 16; width <= 1025; width++)
@@ -25,9 +26,20 @@ public sealed class JpegReferenceHorizontalFilterTests
                     first = Math.Min(first, plan.Source(0) * (pair ? 2 : 1));
                     last = Math.Max(last, plan.Source(plan.Count - 1) * (pair ? 2 : 1) + (pair ? 1 : 0));
                 }
+                var column = new JpegReferenceColumn(width, left, actual);
+                Assert.Equal(first, column.First); Assert.Equal(last, column.Last);
+                for (var x = 0; x < 8; x++)
+                {
+                    Assert.Equal(plans[x].Count, actual[x].Count);
+                    for (var tap = 0; tap < plans[x].Count; tap++)
+                    {
+                        Assert.Equal(plans[x].Source(tap), actual[x].Source(tap));
+                        Assert.Equal(plans[x].Weight(tap), actual[x].Weight(tap));
+                    }
+                }
                 var columns = last - first + 1;
                 if (columns < 16) continue;
-                var filter = new JpegReferenceHorizontalFilter(plans, first, pair);
+                var filter = column.Filter;
                 for (var control = 0; control < 5; control++)
                 {
                     Array.Fill(source, unchecked((int)0xa5a5a5a5)); Array.Fill(output, (short)165);

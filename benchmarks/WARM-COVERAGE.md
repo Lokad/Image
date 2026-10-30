@@ -280,6 +280,16 @@ SAMEactualpackage/governedconsumer/3examples pass. No new owned capacity, heap
 table or cache; one corebuild/OS, zero other measurement builds. Prior PBA1
 short-palette cost is superseded; all raw evidence retained. Full268 remains open.
 
+[JPEG column preparation](WARM-JPEG-COLUMN-PLANS.md) accepts7.55%less callerRGB420
+elapsed,exact52091/52093B approvedCOM packets. Current1.190/upper1.197 remainsgap;
+388222B/op is +14806 measured. GovernedRGBA16 refreshed1.141/upper1.292 short,
+819452B/op;sharedrootpeak1704856 unchanged,temporarycleanup/refusal/cancel pass.
+Full5163/OS,50internal/66public normal/scalar,SAMEpackage/governedconsumer/3examples
+pass. Onecorebuild/OS,zerootherbuilds. Original postcheck failures retained and
+existing governed schema/hash checks recovered without measurement reruns.
+Affected420/422 costs need applicable evidence before CPU-pass claims;full268
+stays open. Stop this preparation primitive; no variants or passing-path retuning.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

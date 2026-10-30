@@ -12,7 +12,8 @@ internal static partial class JpegEncoder
         JpegEntropyRecords? entropyCache)
     {
         // All per-MCU and nested tap storage fits the admitted8-KiB fixed owner.
-        // Row/filter plans stay here; optional entropy records have an outer owner.
+        // Stack plans stay here; retained column capacity is admitted separately.
+        // Optional entropy records have an outer owner.
         Span<byte> mcu = stackalloc byte[512];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[3]; previous.Clear();
@@ -30,111 +31,137 @@ internal static partial class JpegEncoder
         Span<short> horizontalChroma = stackalloc short[16];
         const int stride = 18;
         var pair = (width & 1) == 0;
-        var chromaWidth = (width + 1) / 2;
         var chromaRows = sampling == JpegSampling.YCbCr420 ? 8 : 16;
         var chromaHeight = sampling == JpegSampling.YCbCr420 ? (height + 1) / 2 : height;
+        JpegReferenceColumn[]? prepared = null;
+        var columnsBytes = 32L + ((width + 15) / 16) * (long)JpegReferenceColumn.ByteSize;
         var mcuIndex = 0;
-        for (var top = 0; top < height; top += 16)
-        for (var left = 0; left < width; left += 16)
+        try
         {
-            ReferenceRestart(mcuIndex++, restartInterval, previous, writer, context);
-            context.Cancellation.ThrowIfCancellationRequested();
-            for (var x = 0; x < 8; x++)
-                horizontalPlans[x] = JpegReferenceArea.Create(pair ? width / 2 : width, chromaWidth,
-                    Math.Min(left / 2 + x, chromaWidth - 1), 14);
-            if (left == 0)
-                for (var y = 0; y < chromaRows; y++)
-                    verticalPlans[y] = JpegReferenceArea.Create(height, chromaHeight,
-                        Math.Min((sampling == JpegSampling.YCbCr420 ? top / 2 : top) + y, chromaHeight - 1), 12);
-            var firstX = left; var lastX = Math.Min(left + 15, width - 1);
-            var firstY = top; var lastY = Math.Min(top + 15, height - 1);
-            foreach (var plan in horizontalPlans)
+            // Select using declared local capacity before shared admission. A shared
+            // refusal is terminal; the admitted array is never retried or replaced.
+            if (height > 16 && width >= 16 && Avx512BW.IsSupported && BitConverter.IsLittleEndian
+                && columnsBytes <= context.RemainingWorkingBytes)
             {
-                firstX = Math.Min(firstX, plan.Source(0) * (pair ? 2 : 1));
-                lastX = Math.Max(lastX, plan.Source(plan.Count - 1) * (pair ? 2 : 1) + (pair ? 1 : 0));
-            }
-            foreach (var plan in verticalPlans[..chromaRows])
-            {
-                firstY = Math.Min(firstY, plan.Source(0));
-                lastY = Math.Max(lastY, plan.Source(plan.Count - 1));
-            }
-            var columns = lastX - firstX + 1;
-            // Selectors/weights are reused across all initialized tile rows.
-            // The384-byte plan fits the existing admitted8-KiB MCU workspace.
-            var vectorFilter = Avx512BW.IsSupported && BitConverter.IsLittleEndian && columns >= 16;
-            var horizontalFilter = vectorFilter ? new JpegReferenceHorizontalFilter(horizontalPlans, firstX, pair) : default;
-            for (var sy = firstY; sy <= lastY; sy++)
-            {
-                var row = pixels.Slice((sy - firstY) * stride, columns);
-                if (image is null)
+                context.Reserve(columnsBytes);
+                try
                 {
-                    var bytes = callerRow[..(columns * 3)]; source.CopyRgbRow(firstX, sy, bytes);
-                    for (var x = 0; x < columns; x++) row[x] = bytes[x * 3] | bytes[x * 3 + 1] << 8 | bytes[x * 3 + 2] << 16;
-                }
-                else if (image.BitDepth == 8)
-                    JpegReferenceColor.NormalizeRgba8(image.GetRow8(sy).Slice(firstX * 4, columns * 4), row, background);
-                else
-                    JpegReferenceColor.NormalizeRgba16(image.GetRow16(sy).Slice(firstX * 4, columns * 4), row, background);
-            }
-            for (var y = 0; y < 16; y++)
-            {
-                var row = pixels.Slice((Math.Min(top + y, height - 1) - firstY) * stride, columns);
-                var offset = y / 8 * 128 + y % 8 * 8;
-                JpegReferenceColor.MatrixLumaRow(row, firstX, left, width,
-                    mcu.Slice(offset, 8), mcu.Slice(offset + 64, 8));
-            }
-            // Every luma sample is now independent of this tile. Convert each
-            // distinct chroma input once, pairing RGB before matrix rounding.
-            // The affine Q6 channels stay in1024..15360 and fit two16-bit fields.
-            for (var row = 0; row <= lastY - firstY; row++)
-            {
-                var rowPixels = pixels.Slice(row * stride, stride);
-                JpegReferenceColor.MatrixChromaRow(rowPixels, columns, pair);
-                if (vectorFilter) horizontalFilter.Apply(rowPixels[..columns], horizontalChroma);
-                else for (var x = 0; x < 8; x++)
-                {
-                    var plan = horizontalPlans[x]; var sumU = 0; var sumV = 0;
-                    for (var tap = 0; tap < plan.Count; tap++)
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    prepared = new JpegReferenceColumn[(width + 15) / 16];
+                    for (var column = 0; column < prepared.Length; column++)
                     {
-                        var packed = rowPixels[plan.Source(tap) * (pair ? 2 : 1) - firstX];
-                        sumU += (packed & 65535) * plan.Weight(tap);
-                        sumV += (packed >> 16) * plan.Weight(tap);
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        prepared[column] = new JpegReferenceColumn(width, column * 16, horizontalPlans);
                     }
-                    // Preserve the signed full-range guard sample (it can be
-                    // -1), before vertical filtering and final byte clamping.
-                    horizontalChroma[x * 2] = checked((short)JpegReferenceColor.FullChromaQ7(Math.Min(32767, sumU >> 13)));
-                    horizontalChroma[x * 2 + 1] = checked((short)JpegReferenceColor.FullChromaQ7(Math.Min(32767, sumV >> 13)));
                 }
-                // Read all horizontal taps before overwriting their Q6 inputs.
-                horizontalChroma.CopyTo(MemoryMarshal.Cast<int, short>(rowPixels));
-            }
-            var chroma = MemoryMarshal.Cast<int, short>(pixels);
-            for (var y = 0; y < chromaRows; y++)
-            for (var x = 0; x < 8; x++)
-            {
-                ReferenceChroma(chroma, stride * 2, firstY, x, verticalPlans[y],
-                    out var cb, out var cr);
-                var position = y / 8 * 64 + y % 8 * 8 + x;
-                mcu[256 + position] = cb; mcu[256 + chromaRows * 8 + position] = cr;
-            }
-            for (var component = 0; component < 3; component++)
-            for (var vertical = 0; vertical < (component == 0 ? 2 : chromaRows / 8); vertical++)
-            for (var horizontal = 0; horizontal < (component == 0 ? 2 : 1); horizontal++)
-            {
-                var offset = component == 0 ? (vertical * 2 + horizontal) * 64
-                    : 256 + (component - 1) * chromaRows * 8 + vertical * 64;
-                JpegReferenceTransform.Forward(mcu.Slice(offset, 64), transformed);
-                JpegReferenceTransform.Quantize(transformed, quantizationPlan, coefficients);
-                if (entropyCache is null)
-                    ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
-                else
+                catch
                 {
-                    var target = entropyCache.BeginBlock();
-                    var count = JpegEntropyRecords.RecordBlock(coefficients, component, previous, histograms, target);
-                    entropyCache.Commit(count);
+                    prepared = null; context.Release(columnsBytes); throw;
                 }
             }
-            entropyCache?.MarkMcuEnd();
+            for (var top = 0; top < height; top += 16)
+            for (var left = 0; left < width; left += 16)
+            {
+                ReferenceRestart(mcuIndex++, restartInterval, previous, writer, context);
+                context.Cancellation.ThrowIfCancellationRequested();
+                var localColumn = prepared is null ? new JpegReferenceColumn(width, left, horizontalPlans) : default;
+                ref readonly var column = ref (prepared is null ? ref localColumn : ref prepared[left / 16]);
+                // A tiny final tile retains the original scalar taps.
+                if (prepared is not null && column.Last - column.First + 1 < 16)
+                    _ = new JpegReferenceColumn(width, left, horizontalPlans);
+                if (left == 0)
+                    for (var y = 0; y < chromaRows; y++)
+                        verticalPlans[y] = JpegReferenceArea.Create(height, chromaHeight,
+                            Math.Min((sampling == JpegSampling.YCbCr420 ? top / 2 : top) + y, chromaHeight - 1), 12);
+                var firstX = column.First; var lastX = column.Last;
+                var firstY = top; var lastY = Math.Min(top + 15, height - 1);
+                foreach (var plan in verticalPlans[..chromaRows])
+                {
+                    firstY = Math.Min(firstY, plan.Source(0));
+                    lastY = Math.Max(lastY, plan.Source(plan.Count - 1));
+                }
+                var columns = lastX - firstX + 1;
+                // Selectors/weights are reused across all initialized tile rows.
+                // The384-byte plan fits the existing admitted8-KiB MCU workspace.
+                var vectorFilter = Avx512BW.IsSupported && BitConverter.IsLittleEndian && columns >= 16;
+                ref readonly var horizontalFilter = ref column.Filter;
+                for (var sy = firstY; sy <= lastY; sy++)
+                {
+                    var row = pixels.Slice((sy - firstY) * stride, columns);
+                    if (image is null)
+                    {
+                        var bytes = callerRow[..(columns * 3)]; source.CopyRgbRow(firstX, sy, bytes);
+                        for (var x = 0; x < columns; x++) row[x] = bytes[x * 3] | bytes[x * 3 + 1] << 8 | bytes[x * 3 + 2] << 16;
+                    }
+                    else if (image.BitDepth == 8)
+                        JpegReferenceColor.NormalizeRgba8(image.GetRow8(sy).Slice(firstX * 4, columns * 4), row, background);
+                    else
+                        JpegReferenceColor.NormalizeRgba16(image.GetRow16(sy).Slice(firstX * 4, columns * 4), row, background);
+                }
+                for (var y = 0; y < 16; y++)
+                {
+                    var row = pixels.Slice((Math.Min(top + y, height - 1) - firstY) * stride, columns);
+                    var offset = y / 8 * 128 + y % 8 * 8;
+                    JpegReferenceColor.MatrixLumaRow(row, firstX, left, width,
+                        mcu.Slice(offset, 8), mcu.Slice(offset + 64, 8));
+                }
+                // Every luma sample is now independent of this tile. Convert each
+                // distinct chroma input once, pairing RGB before matrix rounding.
+                // The affine Q6 channels stay in1024..15360 and fit two16-bit fields.
+                for (var row = 0; row <= lastY - firstY; row++)
+                {
+                    var rowPixels = pixels.Slice(row * stride, stride);
+                    JpegReferenceColor.MatrixChromaRow(rowPixels, columns, pair);
+                    if (vectorFilter) horizontalFilter.Apply(rowPixels[..columns], horizontalChroma);
+                    else for (var x = 0; x < 8; x++)
+                    {
+                        var plan = horizontalPlans[x]; var sumU = 0; var sumV = 0;
+                        for (var tap = 0; tap < plan.Count; tap++)
+                        {
+                            var packed = rowPixels[plan.Source(tap) * (pair ? 2 : 1) - firstX];
+                            sumU += (packed & 65535) * plan.Weight(tap);
+                            sumV += (packed >> 16) * plan.Weight(tap);
+                        }
+                        // Preserve the signed full-range guard sample (it can be
+                        // -1), before vertical filtering and final byte clamping.
+                        horizontalChroma[x * 2] = checked((short)JpegReferenceColor.FullChromaQ7(Math.Min(32767, sumU >> 13)));
+                        horizontalChroma[x * 2 + 1] = checked((short)JpegReferenceColor.FullChromaQ7(Math.Min(32767, sumV >> 13)));
+                    }
+                    // Read all horizontal taps before overwriting their Q6 inputs.
+                    horizontalChroma.CopyTo(MemoryMarshal.Cast<int, short>(rowPixels));
+                }
+                var chroma = MemoryMarshal.Cast<int, short>(pixels);
+                for (var y = 0; y < chromaRows; y++)
+                for (var x = 0; x < 8; x++)
+                {
+                    ReferenceChroma(chroma, stride * 2, firstY, x, verticalPlans[y],
+                        out var cb, out var cr);
+                    var position = y / 8 * 64 + y % 8 * 8 + x;
+                    mcu[256 + position] = cb; mcu[256 + chromaRows * 8 + position] = cr;
+                }
+                for (var component = 0; component < 3; component++)
+                for (var vertical = 0; vertical < (component == 0 ? 2 : chromaRows / 8); vertical++)
+                for (var horizontal = 0; horizontal < (component == 0 ? 2 : 1); horizontal++)
+                {
+                    var offset = component == 0 ? (vertical * 2 + horizontal) * 64
+                        : 256 + (component - 1) * chromaRows * 8 + vertical * 64;
+                    JpegReferenceTransform.Forward(mcu.Slice(offset, 64), transformed);
+                    JpegReferenceTransform.Quantize(transformed, quantizationPlan, coefficients);
+                    if (entropyCache is null)
+                        ReferenceBlock(coefficients, component, previous, histograms, tables, writer);
+                    else
+                    {
+                        var target = entropyCache.BeginBlock();
+                        var count = JpegEntropyRecords.RecordBlock(coefficients, component, previous, histograms, target);
+                        entropyCache.Commit(count);
+                    }
+                }
+                entropyCache?.MarkMcuEnd();
+            }
+        }
+        finally
+        {
+            if (prepared is not null) context.Release(columnsBytes);
         }
     }
 

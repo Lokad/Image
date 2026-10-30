@@ -29,9 +29,13 @@ packets; this makes no causal comparison against older screens.
 [Photograph confirmation](../benchmarks/VP8L-SHARED-COLOR-MASK-REJECTED.md) gives
 the current unchanged-path cost; its mask-sharing trial is rejected. Async
 retains a current screen.
-Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
-16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
-upper1.294 gap remains; governed RGBA16 has a current1.224× screen.
+[JPEG column preparation](../benchmarks/WARM-JPEG-COLUMN-PLANS.md) independently
+reduces caller-RGB420 elapsed by a further 7.55%, preserving exact packets within
+the approved COM boundary. Its 1.190× / upper1.197 gap remains. Allocation rises
+by 14,806 to 388,222 B/op for admitted temporary descriptors. Governed RGBA16 has
+a current 1.141× / upper1.292 screen, 819,452 B/op, with unchanged 1,704,856 B
+shared-root peak and prompt cleanup. The prior horizontal-filter gain is retained
+in the linked history. These are frozen controls, without broader CPU-pass claims.
 [Quantization caller invariants](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md)
 reduce VP8 photograph elapsed by 6.93% filtered / 6.90% all actuals against a fresh
 independent baseline: 1.433× / upper 1.438, unchanged 809,072 B/op and exact
@@ -44,8 +48,8 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,158 checks on each platform, plus 72 affected kernel
-and 258 public checks normal/scalar per OS, and the same actual package/three examples.
+The current producer passes 5,163 checks on each platform, plus 50 affected kernel
+and 66 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
@@ -150,8 +154,8 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | --- | ---: | ---: | ---: | ---: | ---: |
 | WebP VP8 + alpha, fresh seekable Stream † | 7,638.57 | 5,995.99 | 1.274 / 2.005 | 1,966,583 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
-| JPEG 4:2:0 from caller RGB samples † | 2,030.36 | 1,582.17 | 1.283 / 1.294 | 373,416 | 52,091 / 52,093 |
-| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,251.99 | 1,839.51 | 1.224 / 1.446 | 804,644 | 52,115 / 52,117 |
+| JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,331.69 | 2,509.72 | 1.328 / 1.463 | 741,375 | 7,330 / 7,330 |
