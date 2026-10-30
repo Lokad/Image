@@ -356,6 +356,8 @@ internal static class PngCodec
             context.Reserve(rowBytes * 2L);
             var previous = new byte[rowBytes];
             var row = new byte[rowBytes];
+            var paletteLookup = !validateOnly && header.ColorType == 3 && header.Depth == 8
+                && stepX == 1 && width >= 16 ? new Palette8Lookup(header.Palette, header.Transparency) : default;
             try
             {
                 // Only the single-pass, noncancelable case can preflight all
@@ -477,7 +479,7 @@ internal static class PngCodec
                     {
                         var offset = (startY + y * stepY) * result.Stride + startX * 4;
                         CopyPalette8Row(row, result.Pixels.Slice(offset, width * 4),
-                            header.Palette, header.Transparency, context.Cancellation);
+                            header.Palette, header.Transparency, paletteLookup, context.Cancellation);
                     }
                     else if (header.ColorType == 3 && header.Depth < 8 && stepX == 1)
                     {
@@ -795,7 +797,7 @@ internal static class PngCodec
     }
 
     internal static void CopyPalette8Row(ReadOnlySpan<byte> row, Span<byte> destination,
-        ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency, CancellationToken cancellation)
+        ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency, in Palette8Lookup lookup, CancellationToken cancellation)
     {
         // PNG sections 7.3/11.2.2/11.3.2.1: indices select RGB triples. Missing
         // tRNS entries are opaque; zero alpha preserves the palette's hidden RGB.
@@ -813,7 +815,7 @@ internal static class PngCodec
             return;
         }
         var x = colors is >= 1 and <= 16 && row.Length >= 16 && Ssse3.IsSupported
-            ? CopySmallPalette8Row(row, destination, palette, transparency, cancellation) : 0;
+            ? CopySmallPalette8Row(row, destination, colors, lookup, cancellation) : 0;
         for (; x < row.Length; x++)
         {
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
@@ -862,21 +864,31 @@ internal static class PngCodec
         }
     }
 
-    private static int CopySmallPalette8Row(ReadOnlySpan<byte> row, Span<byte> destination,
-        ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency, CancellationToken cancellation)
+    internal readonly struct Palette8Lookup
     {
-        // At most sixteen RGB triples fit per-channel byte shuffle vectors.
-        // Variable insertion handles partial palettes/alpha without padded storage.
-        var colors = palette.Length / 3;
-        var red = Vector128<byte>.Zero; var green = red; var blue = red;
-        var alpha = Vector128.Create((byte)255);
-        for (var i = 0; i < colors; i++)
+        internal readonly Vector128<byte> Red, Green, Blue, Alpha;
+
+        internal Palette8Lookup(ReadOnlySpan<byte> palette, ReadOnlySpan<byte> transparency)
         {
-            red = red.WithElement(i, palette[i * 3]);
-            green = green.WithElement(i, palette[i * 3 + 1]);
-            blue = blue.WithElement(i, palette[i * 3 + 2]);
-            if (i < transparency.Length) alpha = alpha.WithElement(i, transparency[i]);
+            // PNG RGB triples and omitted-alpha=255, prepared once per dense
+            // pass. Registers only: no expanded table, cache or heap storage.
+            Red = Green = Blue = Alpha = Vector128<byte>.Zero;
+            var colors = palette.Length / 3;
+            if (colors is < 1 or > 16 || !Ssse3.IsSupported) return;
+            Alpha = Vector128.Create((byte)255);
+            for (var i = 0; i < colors; i++)
+            {
+                Red = Red.WithElement(i, palette[i * 3]);
+                Green = Green.WithElement(i, palette[i * 3 + 1]);
+                Blue = Blue.WithElement(i, palette[i * 3 + 2]);
+                if (i < transparency.Length) Alpha = Alpha.WithElement(i, transparency[i]);
+            }
         }
+    }
+
+    private static int CopySmallPalette8Row(ReadOnlySpan<byte> row, Span<byte> destination,
+        int colors, in Palette8Lookup lookup, CancellationToken cancellation)
+    {
         var maximum = Vector128.Create((byte)(colors - 1)); var x = 0;
         for (; x <= row.Length - 16; x += 16)
         {
@@ -885,8 +897,8 @@ internal static class PngCodec
             // prefix and cancellation checkpoint once, before the first error.
             if (!Vector128.EqualsAll(Sse2.Min(indices, maximum), indices)) break;
             if ((x & 4095) == 0) cancellation.ThrowIfCancellationRequested();
-            var r = Ssse3.Shuffle(red, indices); var g = Ssse3.Shuffle(green, indices);
-            var b = Ssse3.Shuffle(blue, indices); var a = Ssse3.Shuffle(alpha, indices);
+            var r = Ssse3.Shuffle(lookup.Red, indices); var g = Ssse3.Shuffle(lookup.Green, indices);
+            var b = Ssse3.Shuffle(lookup.Blue, indices); var a = Ssse3.Shuffle(lookup.Alpha, indices);
             var rgLow = Sse2.UnpackLow(r, g).AsUInt16(); var baLow = Sse2.UnpackLow(b, a).AsUInt16();
             var rgHigh = Sse2.UnpackHigh(r, g).AsUInt16(); var baHigh = Sse2.UnpackHigh(b, a).AsUInt16();
             Sse2.UnpackLow(rgLow, baLow).AsByte().CopyTo(destination.Slice(x * 4, 16));

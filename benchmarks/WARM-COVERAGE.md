@@ -223,7 +223,7 @@ All12actuals/pixels/owners/native/quiet pass;zero builds,unchangedproof reused.
 otherbuilds.17existingPNGcosts remain;otherrelevantproof reused.
 
 [Palette boundary costs](CURRENT-PNG-PALETTE-BOUNDARY-COSTS.md) resolve four cases:
-Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8 1.274/upper 1.283 gap; Adam7 palette4 1.250/upper 1.251 gap.
+Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries prior1.173/upper1.180 is superseded by prepared lookup upper0.706 pass; Adam7 palette8 1.274/upper 1.283 gap; Adam7 palette4 1.250/upper 1.251 gap.
 All 12 actuals, pixels, owners, native and quiet gates pass; zero builds.
 13 existing PNG costs remain unrefreshed; full 268-path objective.
 
@@ -272,6 +272,13 @@ Gray1Adam7 gap:80.0%less elapsed,0.223/upper0.230,1440Bop passandstop. Exact
 pixels/native/source/owners/quiet,5157checks/OS,131internal+258publicnormal/scalar,
 SAMEactualpackage/3examples qualify. Onecorebuild/OS,zerootherbuilds;no new
 buffer/LUT/capacity. Full268pathobjective remainsactive;unchanged paths reuseproof.
+
+[Prepared small-palette lookup](WARM-PNG-SMALL-PALETTE-LOOKUP.md) closes the named
+16-entry Palette8Short gap: 40.5% less elapsed, 0.698/upper0.706, 1512 B/op,
+exact pixels and pass/stop. Full5158 checks/OS, 72internal/258public normal/scalar,
+SAMEactualpackage/governedconsumer/3examples pass. No new owned capacity, heap
+table or cache; one corebuild/OS, zero other measurement builds. Prior PBA1
+short-palette cost is superseded; all raw evidence retained. Full268 remains open.
 
 ## Finite checklist
 

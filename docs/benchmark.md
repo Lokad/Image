@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-29. **† Rows** use qualified 0.2.1 development-path evidence;
+Updated 2026-10-30. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
 Seven other controls retain
@@ -44,10 +44,10 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,157 checks on each platform, plus 131 affected kernel
+The current producer passes 5,158 checks on each platform, plus 72 affected kernel
 and 258 public checks normal/scalar per OS, and the same actual package/three examples.
-The unchanged DLL also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
-and pending-I/O/shared-admission checks through the updated same package on both OSes.
+It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
+and pending-I/O/shared-admission checks through the same package on both OSes.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in
@@ -263,7 +263,11 @@ removes generic pixelmapping:76.2%less elapsed,0.341× / upper0.342,unchanged
 2,456B/op;passandstop. FullbothOS/live/normal+scalar/SAMEpackage qualify.
 
 [Palette boundaries](../benchmarks/CURRENT-PNG-PALETTE-BOUNDARY-COSTS.md):
-Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8/4 now pass at uppers 0.587/0.440.
+Palette8 partial alpha passes upper 0.911; the 16-entry case now passes upper 0.706; Adam7 palette8/4 pass at uppers 0.587/0.440.
+[Prepared small-palette lookup](../benchmarks/WARM-PNG-SMALL-PALETTE-LOOKUP.md)
+reduces complete decode elapsed by 40.5%, with unchanged 1,512 B/op and exact
+pixels: 0.698× / upper 0.706. Stop this case. No heap table/cache/buffer is added;
+full both-OS/live/scalar/same-package/governed-consumer checks pass.
 Exact pixels, owners, native and quiet gates pass; zero builds or repeated qualification.
 
 [Packed sparse palette stores](../benchmarks/WARM-PNG-SPARSE-PALETTE-EXPANSION.md)

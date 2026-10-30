@@ -229,6 +229,17 @@ def render():
     assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
     assert o['receipt']['librarySha256'] == png_sparse_gray['producers']['linuxSha256']
     assert o['conservativeRatioUpper'] <= 1 and o['managedMemory']['BytesAllocatedPerOperation'] == 1440
+    png_small_lookup = json.loads((ROOT / 'benchmarks/warm-png-small-palette-lookup-evidence.json').read_text(encoding='utf-8'))
+    assert png_small_lookup['productionChanged'] and png_small_lookup['decision']['passed']
+    q = png_small_lookup['qualification']
+    assert q['fullChecksEachOs'] == 5158 and q['focusedInternalEachModeEachOs'] == 72
+    assert q['package']['sha256'] == q['linuxPackage']['sameActualPackageSha256']
+    assert q['governedStreamingConsumerPassed'] and q['usageExamplesEachOs'] == 3
+    assert png_small_lookup['status'] == {'DecodePalette8Short': 'confirmed-pass'}
+    o = png_small_lookup['cases']['DecodePalette8Short'][-1]
+    assert len(o['managed']['actual']) == 12 and all(g['passed'] for g in o['quietness'].values())
+    assert o['receipt']['librarySha256'] == png_small_lookup['producers']['linuxSha256']
+    assert o['conservativeRatioUpper'] <= 1 and o['managedMemory']['BytesAllocatedPerOperation'] == 1512
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -472,7 +483,7 @@ def render():
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     return f'''# Lokad.Image benchmarks
 
-Updated 2026-10-29. **† Rows** use qualified 0.2.1 development-path evidence;
+Updated 2026-10-30. **† Rows** use qualified 0.2.1 development-path evidence;
 **‡ stored PNG** and Fastest PNG retain their applicable earlier evidence;
 SmallestSize and predictive PNG are refreshed after bounded match scanning.
 Seven other controls retain
@@ -516,10 +527,10 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,157 checks on each platform, plus 131 affected kernel
+The current producer passes 5,158 checks on each platform, plus 72 affected kernel
 and 258 public checks normal/scalar per OS, and the same actual package/three examples.
-The unchanged DLL also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
-and pending-I/O/shared-admission checks through the updated same package on both OSes.
+It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
+and pending-I/O/shared-admission checks through the same package on both OSes.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in
@@ -679,7 +690,11 @@ removes generic pixelmapping:76.2%less elapsed,0.341× / upper0.342,unchanged
 2,456B/op;passandstop. FullbothOS/live/normal+scalar/SAMEpackage qualify.
 
 [Palette boundaries](../benchmarks/CURRENT-PNG-PALETTE-BOUNDARY-COSTS.md):
-Palette8, partial alpha 0.902/upper 0.911 pass; Palette8, 16 entries 1.173/upper 1.180 gap; Adam7 palette8/4 now pass at uppers 0.587/0.440.
+Palette8 partial alpha passes upper 0.911; the 16-entry case now passes upper 0.706; Adam7 palette8/4 pass at uppers 0.587/0.440.
+[Prepared small-palette lookup](../benchmarks/WARM-PNG-SMALL-PALETTE-LOOKUP.md)
+reduces complete decode elapsed by 40.5%, with unchanged 1,512 B/op and exact
+pixels: 0.698× / upper 0.706. Stop this case. No heap table/cache/buffer is added;
+full both-OS/live/scalar/same-package/governed-consumer checks pass.
 Exact pixels, owners, native and quiet gates pass; zero builds or repeated qualification.
 
 [Packed sparse palette stores](../benchmarks/WARM-PNG-SPARSE-PALETTE-EXPANSION.md)

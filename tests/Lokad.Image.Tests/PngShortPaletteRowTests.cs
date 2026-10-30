@@ -4,6 +4,32 @@ namespace Lokad.Image.Tests;
 
 public sealed class PngShortPaletteRowTests
 {
+    [Fact]
+    public void ReusesOneLookupAcrossDifferentRowsAndIndependentOutputs()
+    {
+        var palette = Palette(13); byte[] alpha = [0, 87, 255, 19];
+        var lookup = new PngCodec.Palette8Lookup(palette, alpha);
+        var first = new byte[513 * 4];
+        for (var row = 0; row < 3; row++)
+        {
+            var input = Enumerable.Range(0, 513).Select(x => (byte)((x * 7 + row * 3) % 13)).ToArray();
+            var output = row == 0 ? first : new byte[first.Length];
+            PngCodec.CopyPalette8Row(input, output, palette, alpha, lookup, default);
+            for (var x = 0; x < input.Length; x++)
+            {
+                Assert.Equal(palette.AsSpan(input[x] * 3, 3).ToArray(), output.AsSpan(x * 4, 3).ToArray());
+                Assert.Equal(input[x] < alpha.Length ? alpha[input[x]] : (byte)255, output[x * 4 + 3]);
+            }
+        }
+        // Later row writes must not affect a surviving earlier row.
+        for (var x = 0; x < 513; x++)
+        {
+            var index = x * 7 % 13;
+            Assert.Equal(palette.AsSpan(index * 3, 3).ToArray(), first.AsSpan(x * 4, 3).ToArray());
+            Assert.Equal(index < alpha.Length ? alpha[index] : (byte)255, first[x * 4 + 3]);
+        }
+    }
+
     private static byte[] Palette(int colors)
     {
         var palette = new byte[colors * 3];
@@ -29,7 +55,7 @@ public sealed class PngShortPaletteRowTests
         var alpha = Enumerable.Range(0, alphaEntries).Select(i => unchecked((byte)(i * 101))).ToArray();
         var originalInput = input.ToArray(); var originalPalette = palette.ToArray(); var originalAlpha = alpha.ToArray();
         var output = Enumerable.Repeat((byte)0xa5, width * 4 + 10).ToArray();
-        PngCodec.CopyPalette8Row(input.AsSpan(1, width), output.AsSpan(5, width * 4), palette, alpha, default);
+        PngCodec.CopyPalette8Row(input.AsSpan(1, width), output.AsSpan(5, width * 4), palette, alpha, new PngCodec.Palette8Lookup(palette, alpha), default);
         for (var x = 0; x < width; x++)
         {
             var index = input[x + 1];
@@ -49,7 +75,7 @@ public sealed class PngShortPaletteRowTests
         var input = Enumerable.Range(0, width).Select(x => (byte)(x % 16)).ToArray(); input[badPosition] = badIndex;
         var palette = Palette(16); var alpha = Enumerable.Range(0, 16).Select(x => (byte)(x * 17)).ToArray();
         var output = Enumerable.Repeat((byte)0xa5, width * 4).ToArray();
-        var error = Assert.Throws<ImageDataException>(() => PngCodec.CopyPalette8Row(input, output, palette, alpha, default));
+        var error = Assert.Throws<ImageDataException>(() => PngCodec.CopyPalette8Row(input, output, palette, alpha, new PngCodec.Palette8Lookup(palette, alpha), default));
         Assert.Equal("PNG palette index out of range.", error.Message);
         for (var x = 0; x < badPosition; x++)
         {
@@ -65,7 +91,7 @@ public sealed class PngShortPaletteRowTests
     {
         var input = new byte[width]; input[0] = 7; var palette = Palette(7);
         var output = Enumerable.Repeat((byte)0xa5, width * 4).ToArray(); var token = new CancellationToken(true);
-        var error = Assert.Throws<OperationCanceledException>(() => PngCodec.CopyPalette8Row(input, output, palette, [], token));
+        var error = Assert.Throws<OperationCanceledException>(() => PngCodec.CopyPalette8Row(input, output, palette, [], new PngCodec.Palette8Lookup(palette, []), token));
         Assert.Equal(token, error.CancellationToken);
         Assert.All(output, value => Assert.Equal((byte)0xa5, value));
     }
