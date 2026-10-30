@@ -48,19 +48,20 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,166 checks on each platform, plus 27 affected kernel
+The current producer passes 5,168 checks on each platform, plus 29 affected kernel
 and 98 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
-[SIMD JPEG dequantization](../benchmarks/WARM-JPEG-DEQUANTIZATION.md) independently
-reduces sparse-CMYK elapsed by 13.9%, retaining exact normal/scalar/native pixels
-and frozen inputs/settings. Its 2.453× / upper2.462 gap remains, at 1,085,513 B/op
-(5 measured B/op above the prior independent result; no new owned capacity).
-Affected baseline420 is independently current at 1.239× / upper1.245, 757,319 B/op.
-Caller CMYK is the largest confirmed gap: 3.032× / upper3.051, 1,634,905 B/op.
-These companion costs make no causal gain claims. Other affected JPEG rendering
-paths need applicable costs before CPU-pass claims; metadata-only inspection,
-coding validation, encoders and other unchanged paths reuse valid evidence.
+[Constant JPEG blocks](../benchmarks/WARM-JPEG-CONSTANT-BLOCK.md) independently
+reduce DC-only caller-CMYK elapsed by 40.1%, retaining exact normal/scalar/native
+pixels and frozen inputs/settings: 1.807× / upper1.817, 1,634,913 B/op
+(8 measured B/op above the prior result; no new owned capacity).
+Sparse-CMYK is now the largest confirmed gap: 2.433× / upper2.446, 1,085,513 B/op.
+Baseline420 is current at 1.267× / upper1.285, 757,319 B/op; its elapsed time is
+2.4% higher than the prior independent result. This bounded cost accompanies
+the primary gain; companions have no fresh paired causal gain claims. Other
+affected JPEG rendering paths need applicable costs before CPU-pass claims;
+metadata-only inspection, coding validation and unchanged paths reuse valid evidence.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in
@@ -183,11 +184,11 @@ rejected VP8 experiments; their costs do not replace accepted-production evidenc
 | PNG RGBA8, Fastest1 / native1 † | 6,321.82 | 4,366.98 | 1.448 / 1.460 | 1,344,453 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 ‡ | 443.91 | 421.09 | 1.054 / 1.090 | 1,741,712 | 1,066,552 / 1,066,552 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 383,214.38 | 407,274.63 | 0.941 / 0.979 | 3,402,572 | 573,041 / 573,041 |
-| JPEG baseline420, resident decode † | 1,249.21 | 1,008.36 | 1.239 / 1.245 | 757,319 | — |
-| JPEG DC-only, caller CMYK decode † | 1,002.66 | 330.66 | 3.032 / 3.051 | 1,634,905 | — |
+| JPEG baseline420, resident decode † | 1,279.56 | 1,010.28 | 1.267 / 1.285 | 757,319 | — |
+| JPEG DC-only, caller CMYK decode † | 600.31 | 332.30 | 1.807 / 1.817 | 1,634,913 | — |
 | VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
-| JPEG CMYK sparse-2D, resident decode † | 1,073.80 | 437.73 | 2.453 / 2.462 | 1,085,513 | — |
+| JPEG CMYK sparse-2D, resident decode † | 1,074.77 | 441.68 | 2.433 / 2.446 | 1,085,513 | — |
 
 Packets pass existing complete-byte gates; color JPEG differs only by the approved
 two-byte-smaller attribution COM. Lossless pixels, lossy reconstruction and alpha

@@ -38,6 +38,15 @@ internal static class JpegInverseTransform
         Span<short> input = stackalloc short[64];
         Span<short> rows = stackalloc short[64];
         Dequantize(coefficients, quantization, input);
+        if (!input[1..].ContainsAnyExcept((short)0))
+        {
+            // Both matrix passes are constant. Preserve the row word wrap
+            // and the column's word bias before its widened multiplication.
+            var row = unchecked((short)(input[0] * 8));
+            var biased = unchecked((short)(row + 32));
+            pixels.Fill((byte)Math.Clamp((biased * Kernel[0]) >> 20, 0, 255));
+            return;
+        }
         if (Avx2.IsSupported)
         {
             InverseAvx2(input, rows, pixels);

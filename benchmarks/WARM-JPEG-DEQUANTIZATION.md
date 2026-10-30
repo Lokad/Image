@@ -1,5 +1,8 @@
 # Exact SIMD JPEG dequantization
 
+Current costs are superseded by [constant blocks](WARM-JPEG-CONSTANT-BLOCK.md).
+The accepted SIMD primitive and all original evidence remain retained.
+
 The fixed inverse's 64 scalar widened products become safe AVX2 low-word
 products. The existing sparse-CMYK complete decode uses **13.9% less elapsed
 time**, with exact pixels. It remains **2.453× / upper2.462** FFmpeg.

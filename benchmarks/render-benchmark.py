@@ -248,10 +248,10 @@ def render():
     assert not cmyk_contract['productionChanged'] and cmyk_contract['scoredActuals'] == 0
     assert not cmyk_contract['performanceClaim'] and cmyk_contract['status'] == 'resolved-by-fixed-oracle-cost'
     assert all(v['equalsDeclaredFixedDeviceOracle'] and v['equalsFrozenNative'] for v in cmyk_contract['results'].values())
-    cmyk_current = json.loads((ROOT / 'benchmarks/warm-jpeg-dequantization-evidence.json').read_text(encoding='utf-8'))
+    cmyk_current = json.loads((ROOT / 'benchmarks/warm-jpeg-constant-block-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_current['productionChanged'] and cmyk_current['independentQuietConfirmation']
     assert all(status == 'confirmed-gap' for status in cmyk_current['status'].values())
-    assert cmyk_current['decision']['passed'] and cmyk_current['qualification']['fullChecksEachOs'] == 5166
+    assert cmyk_current['decision']['passed'] and cmyk_current['qualification']['fullChecksEachOs'] == 5168
     assert cmyk_current['qualification']['package']['sha256'] == cmyk_current['qualification']['linuxPackage']['sameActualPackageSha256']
     assert cmyk_current['fixtureCorrection']['encodedPacketRasterProjectionBlocksReferenceSettingsUnchanged']
     assert cmyk_current['fixtureCorrection']['proofOverlayRestoredByteExact'] and cmyk_current['fixtureCorrection']['acceptedDerivedOraclesInstalled']
@@ -556,19 +556,20 @@ Earlier input preparation and trellis gains remain in the linked history.
 confirms1.401× / upper1.415,754,344B/op and an unchanged exact6,818Bpacket.
 It remains a gap; this unchanged-path confirmation makes no causal comparison
 against older short screens. Zero builds or repeated qualification.
-The current producer passes 5,166 checks on each platform, plus 27 affected kernel
+The current producer passes 5,168 checks on each platform, plus 29 affected kernel
 and 98 public checks normal/scalar per OS, and the same actual package/three examples.
 It also passes the [governed async pipeline](usage.md#share-memory-admission-and-use-asynchronous-streams)
 and pending-I/O/shared-admission checks through the same package on both OSes.
-[SIMD JPEG dequantization](../benchmarks/WARM-JPEG-DEQUANTIZATION.md) independently
-reduces sparse-CMYK elapsed by 13.9%, retaining exact normal/scalar/native pixels
-and frozen inputs/settings. Its 2.453× / upper2.462 gap remains, at 1,085,513 B/op
-(5 measured B/op above the prior independent result; no new owned capacity).
-Affected baseline420 is independently current at 1.239× / upper1.245, 757,319 B/op.
-Caller CMYK is the largest confirmed gap: 3.032× / upper3.051, 1,634,905 B/op.
-These companion costs make no causal gain claims. Other affected JPEG rendering
-paths need applicable costs before CPU-pass claims; metadata-only inspection,
-coding validation, encoders and other unchanged paths reuse valid evidence.
+[Constant JPEG blocks](../benchmarks/WARM-JPEG-CONSTANT-BLOCK.md) independently
+reduce DC-only caller-CMYK elapsed by 40.1%, retaining exact normal/scalar/native
+pixels and frozen inputs/settings: 1.807× / upper1.817, 1,634,913 B/op
+(8 measured B/op above the prior result; no new owned capacity).
+Sparse-CMYK is now the largest confirmed gap: 2.433× / upper2.446, 1,085,513 B/op.
+Baseline420 is current at 1.267× / upper1.285, 757,319 B/op; its elapsed time is
+2.4% higher than the prior independent result. This bounded cost accompanies
+the primary gain; companions have no fresh paired causal gain claims. Other
+affected JPEG rendering paths need applicable costs before CPU-pass claims;
+metadata-only inspection, coding validation and unchanged paths reuse valid evidence.
 Prior scalar qualification remains applicable to unchanged kernels; exact pixels,
 encoder packets and shared ownership remain.
 Closed PNG/WebP trials and their raw evidence are retained in

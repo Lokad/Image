@@ -311,6 +311,17 @@ Old JPEG rendering costs need applicable current evidence before CPU-pass claims
 metadata-only inspection/ValidatePixels skipinverse, other unchanged paths reuse
 valid proof. Stop the SIMD preparation primitive; full268-path objective open.
 
+[Exact constant JPEG blocks](WARM-JPEG-CONSTANT-BLOCK.md) accepts40.1%less
+DC-onlycallerCMYKelapsed:1.807/upper1.817,1634913B/op(+8 measured,no new storage).
+SparseCMYKcurrent2.433/upper2.446,1085513B/op is largest confirmedgap; baseline420
+current1.267/upper1.285,757319B/op,elapsed2.430%higher thanpriorindependent.
+Explicit bounded companioncost accompanies40.1%primarygain;no freshpairedclaim.
+Originalinputs/settings/exactnormal-scalar-nativepixels/owners/quiet pass.
+Full5168/OS,29internal/98publicnormal-scalar,SAMEpackage/governedconsumer/3examples
+pass. Onecorebuild/OS,zerootherbuilds;onetest-onlyimportfix/coreunchangedretained.
+Currentcosts supersede priorDQP1threecontrols;olderaffectedJPEGrenderpaths need
+currentevidencebeforeCPU-passclaims. Stopbothacceptedprimitives;full268open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
