@@ -19,9 +19,8 @@ internal static class WebpCodec
             if (data.Slice(position, 4).SequenceEqual("ALPH"u8)) alphaPayload = data.Slice(position + 8, length);
             if (data.Slice(position, 4).SequenceEqual("VP8 "u8))
             {
-                var planes = new Vp8Decoder(data.Slice(position + 8, length), context).DecodePlanes();
+                new Vp8Decoder(data.Slice(position + 8, length), context).ValidatePixels();
                 if (!alphaPayload.IsEmpty) WebpAlpha.ValidatePixels(alphaPayload, info.Width, info.Height, context);
-                context.Release(planes.MemoryBytes);
                 return info;
             }
             position += 8 + length + (length & 1);

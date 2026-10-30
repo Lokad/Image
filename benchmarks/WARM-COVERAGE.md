@@ -536,6 +536,23 @@ Other affected VP8L/ALPH Decode/ValidatePixels async/root/composition costs need
 currentproof; metadata,opaqueVP8,encoders,othercodecs/edit/text unchanged. Full268
 <=1x remainsopen;closewordrefill withoutwidth/inlining/prefetchvariants.
 
+[VP8 validation without planes](WARM-VP8-VALIDATION-WITHOUT-PLANES.md) shares the
+complete parser and omits only discarded reconstruction/filtering. Independent
+validation gain7.93%filtered/7.89%all,1.227/upper1.232,554478B/op (215614 fewer).
+Same115542Binput/nine-field descriptor/native/source/owners/quiet pass. Governed
+allocation770256→554704B,sharedpeak751800→536248B (-28.67%),bothOS/normal-scalar;
+fullDecode1434800Ballocated/884699Bpeak unchanged. Root640KiB passes with terminal
+refusal,cancellation,live-token/async-user cleanup and following success.
+Five fullDecode companion12 costs staywithin5%guard; actual normalized changes
+-3.83%..+2.57% retained,without pairedgain/regression claims. All sixremain gaps.
+Full5219/OS,63internal/303publicnormal-scalar,SAMEactualpackage/governedasync/
+twoframe-alpha/3examples pass. All164 frozenreconstruction fixtures stayexact;
+new shared-parser validation corpus/malformedpayload checks preserve everycoding
+failure. Onecorebuild/OS,zero harness/native/selectorbuilds/profile/variants or
+successfultiming repeats. OtheraffectedVP8 async/root/composition costs need
+currentproof;VP8L,encoders/metadata/othercodecs/edit/text unchanged. VWR1literal/run
+passingproof retained/STOP. Full268<=1x remainsopen;close reconstructionelision.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

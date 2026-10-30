@@ -93,7 +93,15 @@ internal ref struct Vp8Decoder
         }
     }
 
-    public Vp8Planes DecodePlanes()
+    public Vp8Planes DecodePlanes() => ReadPlanes(true)!;
+
+    internal void ValidatePixels()
+    {
+        ReadPlanes(false);
+        context.Cancellation.ThrowIfCancellationRequested();
+    }
+
+    private Vp8Planes? ReadPlanes(bool reconstruct)
     {
         var count = columns * rows; var metadataBytes = count * 20L + columns * 13L + 256;
         context.Reserve(metadataBytes);
@@ -132,8 +140,12 @@ internal ref struct Vp8Decoder
         var stride = columns * 16; var planeHeight = rows * 16;
         var lumaSize = (long)stride * planeHeight; var chromaSize = lumaSize / 4;
         if (lumaSize > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8 reconstruction plane is too large.");
-        context.Reserve(lumaSize + chromaSize * 2 + 128);
-        var result = new Vp8Planes(width, height, stride, new byte[(int)lumaSize], new byte[(int)chromaSize], new byte[(int)chromaSize]);
+        Vp8Planes? result = null;
+        if (reconstruct)
+        {
+            context.Reserve(lumaSize + chromaSize * 2 + 128);
+            result = new Vp8Planes(width, height, stride, new byte[(int)lumaSize], new byte[(int)chromaSize], new byte[(int)chromaSize]);
+        }
         var aboveCoefficients = new byte[columns * 9]; Span<byte> leftCoefficients = stackalloc byte[9];
         Span<short> coefficients = stackalloc short[25 * 16];
         Span<int> predictionSamples = stackalloc int[13];
@@ -176,6 +188,9 @@ internal ref struct Vp8Decoder
                     if (hasY2) above[8] = leftCoefficients[8] = 0;
                 }
                 if (!any && hasY2) block.Flags |= 2;
+                // Entropy contexts depend on parsed nonzeros, never on pixels.
+                // Validation consumes the identical tokens without discarded planes.
+                if (result is null) continue;
                 var x = mx * 16; var y = my * 16;
                 if (hasY2) Vp8Prediction.Large(result.Y, stride, x, y, 16, block.Mode);
                 Vp8Prediction.Large(result.U, stride / 2, x / 2, y / 2, 8, block.Chroma);
@@ -200,7 +215,7 @@ internal ref struct Vp8Decoder
         }
         // RFC 6386 section 15: a zero frame-level filter disables the entire pass,
         // including positive segment overrides and reference/mode deltas.
-        if (filterLevel != 0)
+        if (result is not null && filterLevel != 0)
             for (var my = 0; my < rows; my++)
             for (var mx = 0; mx < columns; mx++)
             {

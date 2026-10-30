@@ -34,19 +34,24 @@ The literal/run control passes at **0.729× / upper 0.732**, 542,502 B/op.
 Indexed and live-token controls remain **1.009× / upper 1.012**, 820,194 B/op
 and **1.173× / upper 1.181**, 684,377 B/op. [Word-refill evidence](../benchmarks/WARM-VP8L-WORD-REFILL.md).
 
-The current producer passes **5,210 checks per OS**, plus 60 internal/272 public
-focused checks in normal/scalar modes, plus eight strengthened mixed-prefix
-checks per mode after test-only builds. The same actual Release package, governed
-async and two-frame-alpha consumers and three examples pass both OSes. Exact
-packets, pixels, metadata, cancellation and ownership stay qualified; shared
-capacity stays unchanged. Companion costs make no paired gain claim. Other
-affected boundaries need applicable costs; unchanged paths retain their proof.
+VP8 coding validation now omits discarded reconstruction while sharing the full
+parser: **7.93%** less elapsed time and **215,614 fewer allocated B/op**. Its
+governed peak falls **28.67%**; full-decoding allocations/peaks stay unchanged.
+Five decoder companions have current independent costs, all within the declared
+5% comparison guard. [Validation evidence](../benchmarks/WARM-VP8-VALIDATION-WITHOUT-PLANES.md).
+
+The current producer passes **5,219 checks per OS**, plus 63 internal/303 public
+focused checks in normal/scalar modes. A live-token assertion is added before
+full qualification through test-only builds. The same actual Release package,
+governed async/two-frame-alpha consumers and three examples pass both OSes.
+Packets, pixels, complete coding, source ownership and cancellation stay qualified.
+Other affected boundaries need applicable costs; unchanged paths retain proof.
 
 **Codecs**
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 7,047.57 | 5,988.49 | 1.177 / 1.187 | 1,434,827 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 6,950.27 | 5,998.83 | 1.159 / 1.162 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |
@@ -106,7 +111,7 @@ affected boundaries need applicable costs; unchanged paths retain their proof.
 | Validate JPEG baseline420, span | 589.348 | 673.562 | 0.875 / 0.880 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 3,558.644 | 3,043.039 | 1.169 / 1.176 | 685,421 | Confirmed gap |
-| Validate VP8+alpha, span | 7,261.076 | 5,449.599 | 1.332 / 1.339 | 770,092 | Confirmed gap |
+| Validate VP8+alpha, span | 6,685.351 | 5,449.916 | 1.227 / 1.232 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,850.602 | 3,605.292 | 0.791 / 0.802 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

@@ -44,7 +44,7 @@ def render():
     vp8_decoder_costs = json.loads((ROOT / 'benchmarks/current-vp8-decoder-costs-evidence.json').read_text(encoding='utf-8'))
     assert not vp8_decoder_costs['productionChanged'] and vp8_decoder_costs['allBuilds'] == 0
     assert vp8_decoder_costs['independentQuietConfirmation'] and len(vp8_decoder_costs['cases']) == 4
-    vp8_stream = json.loads((ROOT / 'benchmarks/warm-vp8l-word-refill-evidence.json').read_text(encoding='utf-8'))
+    vp8_stream = json.loads((ROOT / 'benchmarks/warm-vp8-validation-without-planes-evidence.json').read_text(encoding='utf-8'))
     assert vp8_stream['productionChanged'] and vp8_stream['independentQuietConfirmation']
     assert vp8_stream['decision']['passed'] and vp8_stream['qualification']['sameActualPackageBothOs']
     assert vp8_stream['qualification']['compressedAlphaTwoFramesActualPackagePassed']
@@ -522,7 +522,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (resident_decode if case in {'ValidateVp8lAlpha', 'ValidateVp8Alpha'} else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -620,13 +620,18 @@ The literal/run control passes at **0.729× / upper 0.732**, 542,502 B/op.
 Indexed and live-token controls remain **1.009× / upper 1.012**, 820,194 B/op
 and **1.173× / upper 1.181**, 684,377 B/op. [Word-refill evidence](../benchmarks/WARM-VP8L-WORD-REFILL.md).
 
-The current producer passes **5,210 checks per OS**, plus 60 internal/272 public
-focused checks in normal/scalar modes, plus eight strengthened mixed-prefix
-checks per mode after test-only builds. The same actual Release package, governed
-async and two-frame-alpha consumers and three examples pass both OSes. Exact
-packets, pixels, metadata, cancellation and ownership stay qualified; shared
-capacity stays unchanged. Companion costs make no paired gain claim. Other
-affected boundaries need applicable costs; unchanged paths retain their proof.
+VP8 coding validation now omits discarded reconstruction while sharing the full
+parser: **7.93%** less elapsed time and **215,614 fewer allocated B/op**. Its
+governed peak falls **28.67%**; full-decoding allocations/peaks stay unchanged.
+Five decoder companions have current independent costs, all within the declared
+5% comparison guard. [Validation evidence](../benchmarks/WARM-VP8-VALIDATION-WITHOUT-PLANES.md).
+
+The current producer passes **5,219 checks per OS**, plus 63 internal/303 public
+focused checks in normal/scalar modes. A live-token assertion is added before
+full qualification through test-only builds. The same actual Release package,
+governed async/two-frame-alpha consumers and three examples pass both OSes.
+Packets, pixels, complete coding, source ownership and cancellation stay qualified.
+Other affected boundaries need applicable costs; unchanged paths retain proof.
 
 **Codecs**
 

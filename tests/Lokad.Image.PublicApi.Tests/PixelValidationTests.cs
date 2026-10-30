@@ -148,6 +148,7 @@ public sealed class PixelValidationTests
 
     [Theory]
     [InlineData(MetadataProfile.Png8)] [InlineData(MetadataProfile.JpegBaseline420)] [InlineData(MetadataProfile.WebpLosslessAlpha)]
+    [InlineData(MetadataProfile.WebpLossyAlpha)]
     public void BoundedTruncationAndPayloadMutationsAgreeWithDecode(MetadataProfile profile)
     {
         var data = OriginalExif.Create(profile, 17, 11).Encoded;
@@ -163,6 +164,7 @@ public sealed class PixelValidationTests
 
     [Theory]
     [InlineData(MetadataProfile.Png8)] [InlineData(MetadataProfile.JpegBaseline420)] [InlineData(MetadataProfile.WebpLosslessAlpha)]
+    [InlineData(MetadataProfile.WebpLossyAlpha)]
     public async Task MetadataPolicyIsSharedAndNeverWeakensResourceOrOuterContainerChecks(MetadataProfile profile)
     {
         var fixture = OriginalExif.Create(profile, 17, 11);
@@ -183,6 +185,7 @@ public sealed class PixelValidationTests
 
     [Theory]
     [InlineData(MetadataProfile.Png8)] [InlineData(MetadataProfile.JpegBaseline420)] [InlineData(MetadataProfile.WebpLosslessAlpha)]
+    [InlineData(MetadataProfile.WebpLossyAlpha)]
     public void RefusalAndCpuCancellationAreTerminalAndReleaseAllOwnedStorage(MetadataProfile profile)
     {
         var data = OriginalExif.Create(profile, 17, 11).Encoded;
@@ -200,10 +203,11 @@ public sealed class PixelValidationTests
         Assert.Equal(ImageCodec.Identify(data), ImageCodec.ValidatePixels(data, limits)); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
-    [Fact]
-    public async Task AsyncUsersKeepStorageAdmittedThroughCancellationAndBorrowTheInput()
+    [Theory]
+    [InlineData(MetadataProfile.Png16)] [InlineData(MetadataProfile.WebpLossyAlpha)]
+    public async Task AsyncUsersKeepStorageAdmittedThroughCancellationAndBorrowTheInput(MetadataProfile profile)
     {
-        var data = OriginalExif.Create(MetadataProfile.Png16, 17, 11).Encoded;
+        var data = OriginalExif.Create(profile, 17, 11).Encoded;
         using var root = new TestMemoryBudget(1024 * 1024); using var cancellation = new CancellationTokenSource();
         using var input = new Input(data, false, true, 5)
         { DuringRead = () => { Assert.True(root.Bytes > 0); cancellation.Cancel(); } };
@@ -214,11 +218,12 @@ public sealed class PixelValidationTests
         await ImageCodec.ValidatePixelsAsync(success, limits); Assert.Equal(0, root.Bytes);
     }
 
-    [Fact]
-    public async Task ConcurrentReadsShareOneRootAndCancellationAwaitsTheActualUser()
+    [Theory]
+    [InlineData(MetadataProfile.Png8)] [InlineData(MetadataProfile.WebpLossyAlpha)]
+    public async Task ConcurrentReadsShareOneRootAndCancellationAwaitsTheActualUser(MetadataProfile profile)
     {
         const int capacity = 1024 * 1024;
-        var data = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
+        var data = OriginalExif.Create(profile, 17, 11).Encoded;
         using var root = new TestMemoryBudget(capacity); Assert.True(root.TryReserve(capacity - 8192, out var caller));
         var limits = new ImageLimits { MemoryBudget = root };
         var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);

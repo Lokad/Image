@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- VP8 pixel-coding validation shares the complete parser while omitting discarded
+  reconstruction planes, reducing CPU, allocation and shared-memory peaks.
 - Faster lossless WebP decoding through bounded word refills, preserving exact
   pixels, cancellation and admitted storage ownership.
 - Lossless WebP decoding reuses complete-overwrite result storage for warm,
