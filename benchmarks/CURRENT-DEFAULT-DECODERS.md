@@ -1,7 +1,7 @@
 # Current default JPEG420 and VP8L decode
 
 JPEG420 costs below are superseded by [SIMD color conversion](WARM-JPEG-SIMD-COLOR.md).
-The two VP8L screens remain applicable on their unchanged paths.
+The VP8L screens are historical; [complete-overwrite results](WARM-WEBP-LOSSLESS-OVERWRITE.md) supplies current independent costs.
 
 Three existing controls have current costs on the qualified0.2.1 core. All are
 screen gaps, with exact pixels and passing quiet-VM guards; no production

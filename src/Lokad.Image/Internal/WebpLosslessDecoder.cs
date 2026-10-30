@@ -29,7 +29,7 @@ internal ref struct WebpLosslessDecoder
         var pixels = DecodePixels();
         try
         {
-            var result = ImageBuffer.Allocate(width, height, 8, context);
+            var result = ImageBuffer.AllocateForOverwrite(width, height, 8, context);
             try
             {
                 for (var y = 0; y < height; y++)

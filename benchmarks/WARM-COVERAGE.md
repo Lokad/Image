@@ -486,6 +486,20 @@ boundaries need applicable current costs; rawALPH,ordinaryVP8L/opaqueVP8 decode,
 pixel validation,encoding/metadata/othercodecs/edit/text retain relevant proof.
 Full268<=1x remainsopen; close this ownership primitive without microvariants.
 
+[Lossless WebP result allocation](WARM-WEBP-LOSSLESS-OVERWRITE.md) adopts the
+existing complete-overwrite owner policy without changing entropy/transforms,
+pixel stores or cancellation/cleanup. Independent resident gain5.55%filtered/
+5.49%all,1.272/upper1.285,684377B/op (531802 fewer); freshstream current1.274/
+upper1.287,684422B/op. ExactRGBA/alpha/hiddenRGB/source/owners/native/quiet pass.
+Governed allocation1217192B/peak1063480B unchanged bothOS/normal-scalar; no
+shared-peak savings claim. Full5199/OS,49internal/272publicnormal-scalar,SAME
+actualpackage/governedasync/twoframe-alpha/3examples pass. Onecorebuild/OS,
+zero benchmarkharness/native/selector builds. Onecurrentoriginal12 resolves
+raw-rate drift; no successfultiming repeat,variant,profile or capacity tuning.
+Other affected ordinaryVP8L boundaries need applicable currentcosts; compressed
+ALPH DecodeGreen,validation,encoders/metadata/othercodecs/edit/text unchanged.
+Full268<=1x staysopen; close this allocationprimitive without microvariants.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

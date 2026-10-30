@@ -351,10 +351,12 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
-    resident_decode = json.loads((ROOT / 'benchmarks/current-vp8l-resident-decode-evidence.json').read_text(encoding='utf-8'))
+    resident_decode = json.loads((ROOT / 'benchmarks/warm-webp-lossless-overwrite-evidence.json').read_text(encoding='utf-8'))
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
-    assert not resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
+    assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
+    assert resident_decode['decision']['passed'] and resident_decode['qualification']['sameActualPackageBothOs']
+    assert resident_decode['memory']['governedAllocationAndPeakUnchanged']
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
     assert not resident_other['productionChanged'] and resident_other['independentQuietConfirmation']
@@ -451,10 +453,10 @@ def render():
                         ('CmykCaller', 'JPEG DC-only, caller CMYK decode'),
                         ('WebpResident', 'VP8L RGBA8, resident decode'),
                         ('WebpStream', 'VP8L RGBA8, fresh seekable Stream decode')]:
-        producer = jpeg_decode if case in {'NativeDecode420', 'CmykCaller'} else resident_decode if case == 'WebpResident' else decoders
+        producer = jpeg_decode if case in {'NativeDecode420', 'CmykCaller'} else resident_decode
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
-        samples = 12 if case in {'NativeDecode420', 'CmykCaller', 'WebpResident'} else 3
+        samples = 12
         assert producer['status'][case] == ('confirmed-gap' if samples == 12 else 'screen-gap')
         assert len(observation['managed']['actual']) == samples
         assert receipt['librarySha256'] == producer.get('reusedCaseProducers', {}).get(case, producer['producers']['linuxSha256'])
@@ -600,12 +602,17 @@ decode improves **2.89%**, with **531,756 fewer allocated B/op**; the existing
 governed control's peak falls **37.34%**. Both stream and resident costs have
 independent confirmations. [Direct-green evidence](../benchmarks/WARM-WEBP-ALPHA-DIRECT-GREEN.md).
 
-The current producer passes **5,197 checks per OS**, 35 internal/270 public
-focused checks in normal/scalar modes, and 54 additional scalar admission checks.
-The same actual Release package, governed async consumer, two-frame compressed-
-alpha consumer and three examples pass on both OSes. Packets, pixels, source
-ownership and native-only bounds remain qualified. Unchanged CRC code retains
-its earlier GFNI-only-disabled proof. Companion costs make no paired gain claim.
+Ordinary lossless WebP decoding now uses existing complete-overwrite result
+storage. Resident decode improves **5.55%**, with **531,802 fewer allocated
+B/op**; resident and fresh-stream costs are independently confirmed. Governed
+allocation and shared peaks stay unchanged. [Overwrite evidence](../benchmarks/WARM-WEBP-LOSSLESS-OVERWRITE.md).
+
+The current producer passes **5,199 checks per OS**, plus 49 internal/272 public
+focused checks in normal/scalar modes. The same actual Release package, governed
+async consumer, two-frame compressed-alpha consumer and three examples pass both
+OSes. Exact packets, pixels, source ownership and native-only bounds remain
+qualified. Unchanged paths retain their applicable earlier proof. Companion
+costs make no paired gain claim.
 
 **Codecs**
 
@@ -622,7 +629,7 @@ its earlier GFNI-only-disabled proof. Companion costs make no paired gain claim.
 † identifies qualified development-path costs. PNG encodes use the cached
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
-displayed PNG CRC callers, VP8 stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
+displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
 and Lanczos3 have twelve measured iterations; remaining short screens retain
 three. Short screens do not establish independent parity.
 

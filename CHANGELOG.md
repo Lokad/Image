@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Lossless WebP decoding reuses complete-overwrite result storage for warm,
+  ungoverned calls, preserving exact pixels and caller-budget ownership.
 - Compressed WebP alpha decoding avoids an intermediate RGBA image, reducing
   allocations and shared-memory peaks while preserving exact pixels.
 - Faster PNG CRC processing through safe GFNI, with portable fallbacks and

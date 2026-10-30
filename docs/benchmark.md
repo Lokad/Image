@@ -33,12 +33,17 @@ decode improves **2.89%**, with **531,756 fewer allocated B/op**; the existing
 governed control's peak falls **37.34%**. Both stream and resident costs have
 independent confirmations. [Direct-green evidence](../benchmarks/WARM-WEBP-ALPHA-DIRECT-GREEN.md).
 
-The current producer passes **5,197 checks per OS**, 35 internal/270 public
-focused checks in normal/scalar modes, and 54 additional scalar admission checks.
-The same actual Release package, governed async consumer, two-frame compressed-
-alpha consumer and three examples pass on both OSes. Packets, pixels, source
-ownership and native-only bounds remain qualified. Unchanged CRC code retains
-its earlier GFNI-only-disabled proof. Companion costs make no paired gain claim.
+Ordinary lossless WebP decoding now uses existing complete-overwrite result
+storage. Resident decode improves **5.55%**, with **531,802 fewer allocated
+B/op**; resident and fresh-stream costs are independently confirmed. Governed
+allocation and shared peaks stay unchanged. [Overwrite evidence](../benchmarks/WARM-WEBP-LOSSLESS-OVERWRITE.md).
+
+The current producer passes **5,199 checks per OS**, plus 49 internal/272 public
+focused checks in normal/scalar modes. The same actual Release package, governed
+async consumer, two-frame compressed-alpha consumer and three examples pass both
+OSes. Exact packets, pixels, source ownership and native-only bounds remain
+qualified. Unchanged paths retain their applicable earlier proof. Companion
+costs make no paired gain claim.
 
 **Codecs**
 
@@ -68,8 +73,8 @@ its earlier GFNI-only-disabled proof. Companion costs make no paired gain claim.
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,085.36 | 1,007.70 | 1.077 / 1.082 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |
-| VP8L RGBA8, resident decode † | 4,583.44 | 3,438.40 | 1.333 / 1.404 | 1,216,162 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 4,462.61 | 3,422.65 | 1.304 / 1.578 | 1,216,190 | — |
+| VP8L RGBA8, resident decode † | 3,843.47 | 3,020.97 | 1.272 / 1.285 | 684,377 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 3,859.76 | 3,030.16 | 1.274 / 1.287 | 684,422 | — |
 | JPEG CMYK sparse-2D, resident decode † | 629.11 | 447.48 | 1.406 / 1.413 | 1,085,758 | — |
 | JPEG YCCK420, resident decode † | 421.45 | 707.63 | 0.596 / 0.607 | 895,547 | — |
 | JPEG 4:1:1, resident decode † | 527.41 | 450.16 | 1.172 / 1.192 | 751,295 | — |
@@ -116,7 +121,7 @@ its earlier GFNI-only-disabled proof. Companion costs make no paired gain claim.
 † identifies qualified development-path costs. PNG encodes use the cached
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
-displayed PNG CRC callers, VP8 stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
+displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
 and Lanczos3 have twelve measured iterations; remaining short screens retain
 three. Short screens do not establish independent parity.
 
