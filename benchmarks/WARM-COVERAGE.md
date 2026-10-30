@@ -508,6 +508,15 @@ one tiny12selector,zero production/harness/nativebuilds or repeatedqualification
 This resolves oldshortcosts,not a causalgain. No variant or newrequiredcase.
 Full268<=1x remainsopen; larger materialgaps keeppriority.
 
+[Current live-token VP8L decode](CURRENT-VP8L-CANCELABLE-DECODE-COST.md) resolves
+the existing NativeLosslessCancelable8 cost:3877.435µs,1.282/upper1.291,684377B/op.
+Same183812Bpacket,live caller token,complete decoding/normalization/ownedresult/
+release,exactRGBA/alpha/hiddenRGB,normal-scalar CLI,source/owners/alreadycanceled
+rejection andquiet pass. ONE12 reuses WOD1core/harness/worker/fixture andVIC1driver:
+ZERO builds/sync/profile/repeatedqualification or successfultiming. It remains
+a gap,not a cancellation-specific optimization lead or historicalgain. No case
+added; full268<=1x remainsopen andlargermaterialgaps retainpriority.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

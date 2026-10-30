@@ -38,9 +38,10 @@ storage. Resident decode improves **5.55%**, with **531,802 fewer allocated
 B/op**; resident and fresh-stream costs are independently confirmed. Governed
 allocation and shared peaks stay unchanged. [Overwrite evidence](../benchmarks/WARM-WEBP-LOSSLESS-OVERWRITE.md).
 
-The existing [indexed VP8L decoder](../benchmarks/CURRENT-VP8L-INDEXED-DECODE-COST.md)
-also has a current independent confirmation: **1.070× / upper 1.081**, with
-**820,192 B/op** and exact pixels. It remains a gap; no historical gain is claimed.
+Existing [indexed](../benchmarks/CURRENT-VP8L-INDEXED-DECODE-COST.md) and
+[live-token](../benchmarks/CURRENT-VP8L-CANCELABLE-DECODE-COST.md) VP8L confirmations
+remain gaps: **1.070× / upper 1.081**, 820,192 B/op and **1.282× / upper 1.291**,
+684,377 B/op respectively. Pixels stay exact; no historical gain is claimed.
 
 The current producer passes **5,199 checks per OS**, plus 49 internal/272 public
 focused checks in normal/scalar modes. The same actual Release package, governed

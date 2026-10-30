@@ -360,6 +360,14 @@ def render():
     assert indexed_observation['receipt']['allRgbaSamplesExact']
     assert indexed_observation['receipt']['managedOutputSha256'] == indexed_observation['receipt']['nativeOutputSha256']
     assert all(q['passed'] for q in indexed_observation['quietness'].values())
+    live_decode = json.loads((ROOT / 'benchmarks/current-vp8l-cancelable-decode-cost-evidence.json').read_text(encoding='utf-8'))
+    live_observation = live_decode['cases']['NativeLosslessCancelable8'][-1]
+    assert not live_decode['productionChanged'] and live_decode['allBuilds'] == 0
+    assert live_decode['producers'] == resident_decode['producers']
+    assert len(live_observation['managed']['actual']) == 12
+    assert live_observation['receipt']['allRgbaSamplesExact'] and live_observation['receipt']['alreadyCanceledRejected']
+    assert live_observation['receipt']['cancellationCanBeCanceled'] and not live_observation['receipt']['cancellationRequested']
+    assert all(q['passed'] for q in live_observation['quietness'].values())
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
@@ -615,9 +623,10 @@ storage. Resident decode improves **5.55%**, with **531,802 fewer allocated
 B/op**; resident and fresh-stream costs are independently confirmed. Governed
 allocation and shared peaks stay unchanged. [Overwrite evidence](../benchmarks/WARM-WEBP-LOSSLESS-OVERWRITE.md).
 
-The existing [indexed VP8L decoder](../benchmarks/CURRENT-VP8L-INDEXED-DECODE-COST.md)
-also has a current independent confirmation: **{indexed_observation['worstBracketRatio']:.3f}× / upper {indexed_observation['conservativeRatioUpper']:.3f}**, with
-**{indexed_observation['managedMemory']['BytesAllocatedPerOperation']:,} B/op** and exact pixels. It remains a gap; no historical gain is claimed.
+Existing [indexed](../benchmarks/CURRENT-VP8L-INDEXED-DECODE-COST.md) and
+[live-token](../benchmarks/CURRENT-VP8L-CANCELABLE-DECODE-COST.md) VP8L confirmations
+remain gaps: **{indexed_observation['worstBracketRatio']:.3f}× / upper {indexed_observation['conservativeRatioUpper']:.3f}**, {indexed_observation['managedMemory']['BytesAllocatedPerOperation']:,} B/op and **{live_observation['worstBracketRatio']:.3f}× / upper {live_observation['conservativeRatioUpper']:.3f}**,
+{live_observation['managedMemory']['BytesAllocatedPerOperation']:,} B/op respectively. Pixels stay exact; no historical gain is claimed.
 
 The current producer passes **5,199 checks per OS**, plus 49 internal/272 public
 focused checks in normal/scalar modes. The same actual Release package, governed
