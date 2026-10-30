@@ -425,6 +425,22 @@ proof needs applicable current costs;progressive/encoder/metadata-only/othercode
 editing/text relevant unchanged-path evidence remains. Prior JPEG/profiling
 reports are historical for the changed entropy path. Full268<=1x stays open.
 
+[GFNI PNG CRC](WARM-PNG-GFNI-CRC.md) independently improves complete seekable
+Identify14.16%filtered/14.27%all elapsed:19.537µs,1.226/upper1.232,192B/op
+unchanged. Hardware affine proof69,632outputs;original fallbacks and every
+polynomial/cancellation/ownership boundary remain. Onecandidate,no newstorage.
+All12affecteddisplayedcomparisons nowhavecurrent12actual costs:4pass,1confidence-
+open,7gaps. Stored16/predictable16/validate16/asyncvalidate16 PASS/STOP atuppers
+.539/.870/.956/.802. Validate8confidence-open lower.995/upper1.010;residentIdentify
+smallgaplower1.00034/upper1.00466. No retiming or tiny-gap tuning. Companion
+costs have no paired causal claim. No packets/settings/images/casegrid change.
+Full5,193/OS,642internal/386publicnormal/GFNI-off/scalar,SAMEpackage/governedasync/
+3examples pass. Onecorebuild/OS,zero harness/native/selector builds;existing
+generic12/four-invocation encoderselector reused. Other affected PNGencode/
+decode/Identify/validation CPUcosts are historical untilapplicable currentproof;
+earlier passing PNGcosts are not current parityproof. CRC-opaqueprobe/header,
+JPEG/WebP/editing/text retain relevant unchangedpath evidence. Full268<=1x open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

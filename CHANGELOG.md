@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster PNG CRC processing through safe GFNI, with portable fallbacks and
+  unchanged packets, pixels and resource ownership.
 - Faster sparse-CMYK JPEG decoding through a fused baseline DC/AC traversal,
   preserving exact pixels, cancellation and admitted storage ownership.
 - Faster JPEG 4:1:1 and 4:1:0 decoding with separable chroma strips and safe SIMD,

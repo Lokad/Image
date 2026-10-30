@@ -70,6 +70,11 @@ internal static class PngIdentificationCrc32
     private static Vector128<ulong> Read(ReadOnlySpan<byte> bytes)
     {
         var input = MemoryMarshal.Read<Vector128<byte>>(bytes);
+        // GF2P8AFFINEQB uses matrix byte 7-i for output bit i. Giving byte r
+        // basis bit r reverses all eight bits, independently in every lane.
+        if (Gfni.IsSupported)
+            return Ssse3.Shuffle(Gfni.GaloisFieldAffineTransform(input,
+                Vector128.Create(0x8040201008040201UL).AsByte(), 0), ByteOrder).AsUInt64();
         var mask = Vector128.Create((byte)15);
         var low = Ssse3.Shuffle(Nibbles, Sse2.And(input, mask));
         var high = Ssse3.Shuffle(Nibbles, Sse2.And(Sse2.ShiftRightLogical(input.AsUInt16(), 4).AsByte(), mask));
