@@ -28,33 +28,25 @@ one confirmation each without retiming or assuming an optimization need.
 The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
 separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
-Compressed-alpha decoding now avoids a full RGBA intermediate. Complete stream
-decode improves **2.89%**, with **531,756 fewer allocated B/op**; the existing
-governed control's peak falls **37.34%**. Both stream and resident costs have
-independent confirmations. [Direct-green evidence](../benchmarks/WARM-WEBP-ALPHA-DIRECT-GREEN.md).
+Safe word refills improve complete resident VP8L decoding **8.32%** with unchanged
+**684,377 B/op**. Eight existing companions have fresh independent costs.
+The literal/run control passes at **0.729× / upper 0.732**, 542,502 B/op.
+Indexed and live-token controls remain **1.009× / upper 1.012**, 820,194 B/op
+and **1.173× / upper 1.181**, 684,377 B/op. [Word-refill evidence](../benchmarks/WARM-VP8L-WORD-REFILL.md).
 
-Ordinary lossless WebP decoding now uses existing complete-overwrite result
-storage. Resident decode improves **5.55%**, with **531,802 fewer allocated
-B/op**; resident and fresh-stream costs are independently confirmed. Governed
-allocation and shared peaks stay unchanged. [Overwrite evidence](../benchmarks/WARM-WEBP-LOSSLESS-OVERWRITE.md).
-
-Existing [indexed](../benchmarks/CURRENT-VP8L-INDEXED-DECODE-COST.md) and
-[live-token](../benchmarks/CURRENT-VP8L-CANCELABLE-DECODE-COST.md) VP8L confirmations
-remain gaps: **1.070× / upper 1.081**, 820,192 B/op and **1.282× / upper 1.291**,
-684,377 B/op respectively. Pixels stay exact; no historical gain is claimed.
-
-The current producer passes **5,199 checks per OS**, plus 49 internal/272 public
-focused checks in normal/scalar modes. The same actual Release package, governed
-async consumer, two-frame compressed-alpha consumer and three examples pass both
-OSes. Exact packets, pixels, source ownership and native-only bounds remain
-qualified. Unchanged paths retain their applicable earlier proof. Companion
-costs make no paired gain claim.
+The current producer passes **5,210 checks per OS**, plus 60 internal/272 public
+focused checks in normal/scalar modes, plus eight strengthened mixed-prefix
+checks per mode after test-only builds. The same actual Release package, governed
+async and two-frame-alpha consumers and three examples pass both OSes. Exact
+packets, pixels, metadata, cancellation and ownership stay qualified; shared
+capacity stays unchanged. Companion costs make no paired gain claim. Other
+affected boundaries need applicable costs; unchanged paths retain their proof.
 
 **Codecs**
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 7,068.76 | 5,985.38 | 1.181 / 1.184 | 1,434,827 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 7,047.57 | 5,988.49 | 1.177 / 1.187 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |
@@ -78,8 +70,8 @@ costs make no paired gain claim.
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,085.36 | 1,007.70 | 1.077 / 1.082 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |
-| VP8L RGBA8, resident decode † | 3,843.47 | 3,020.97 | 1.272 / 1.285 | 684,377 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 3,859.76 | 3,030.16 | 1.274 / 1.287 | 684,422 | — |
+| VP8L RGBA8, resident decode † | 3,523.53 | 3,027.02 | 1.164 / 1.177 | 684,377 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 3,510.17 | 3,028.17 | 1.159 / 1.171 | 684,422 | — |
 | JPEG CMYK sparse-2D, resident decode † | 629.11 | 447.48 | 1.406 / 1.413 | 1,085,758 | — |
 | JPEG YCCK420, resident decode † | 421.45 | 707.63 | 0.596 / 0.607 | 895,547 | — |
 | JPEG 4:1:1, resident decode † | 527.41 | 450.16 | 1.172 / 1.192 | 751,295 | — |
@@ -113,8 +105,8 @@ costs make no paired gain claim.
 | Validate indexed Adam7 19×17, span | 5.352 | 3.926 | 1.363 / 1.386 | 1,168 | Confirmed gap |
 | Validate JPEG baseline420, span | 589.348 | 673.562 | 0.875 / 0.880 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
-| Validate VP8L+alpha, span | 4,423.742 | 3,218.514 | 1.374 / 1.648 | 685,390 | Screen gap |
-| Validate VP8+alpha, span | 7,367.434 | 5,452.572 | 1.351 / 1.382 | 770,092 | Confirmed gap |
+| Validate VP8L+alpha, span | 3,558.644 | 3,043.039 | 1.169 / 1.176 | 685,421 | Confirmed gap |
+| Validate VP8+alpha, span | 7,261.076 | 5,449.599 | 1.332 / 1.339 | 770,092 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,850.602 | 3,605.292 | 0.791 / 0.802 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

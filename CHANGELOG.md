@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster lossless WebP decoding through bounded word refills, preserving exact
+  pixels, cancellation and admitted storage ownership.
 - Lossless WebP decoding reuses complete-overwrite result storage for warm,
   ungoverned calls, preserving exact pixels and caller-budget ownership.
 - Compressed WebP alpha decoding avoids an intermediate RGBA image, reducing

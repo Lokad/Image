@@ -10,6 +10,7 @@ internal ref struct WebpBitReader
     private readonly OperationContext context;
     private int position, available;
     private ulong bits;
+    // Physical cache cursor, including bounded lookahead within this payload.
     internal int Position => position;
 
     public WebpBitReader(ReadOnlySpan<byte> data, OperationContext context)
@@ -23,11 +24,25 @@ internal ref struct WebpBitReader
         context.Cancellation.ThrowIfCancellationRequested();
         while (available < count)
         {
-            if (position == data.Length) throw new ImageDataException("Truncated VP8L bitstream.");
-            bits |= (ulong)data[position++] << available; available += 8;
+            if (!Refill(ref bits, ref available, ref position)) throw new ImageDataException("Truncated VP8L bitstream.");
         }
         var value = (int)(bits & ((1ul << count) - 1));
         bits >>= count; available -= count; return value;
+    }
+
+    // All callers need at most 24 bits and refill only while fewer are cached.
+    // Appending 40 therefore fits in 63 bits. Look ahead only inside the declared
+    // payload; the three unused loaded bytes stay available for a later refill.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool Refill(ref ulong cache, ref int count, ref int at)
+    {
+        if (data.Length - at >= 8)
+        {
+            cache |= (BinaryPrimitives.ReadUInt64LittleEndian(data.Slice(at, 8)) & 0xFFFFFFFFFFul) << count;
+            at += 5; count += 40; return true;
+        }
+        if (at == data.Length) return false;
+        cache |= (ulong)data[at++] << count; count += 8; return true;
     }
 
     // Trusted complete eight-bit channel trees. On refusal the caller retains
@@ -73,13 +88,12 @@ internal ref struct WebpBitReader
             if (count != 0 && count <= candidateAvailable)
             {
                 // Publish only a complete symbol, after observing cancellation.
-                // Read no unnecessary byte.
                 context.Cancellation.ThrowIfCancellationRequested();
                 bits = candidateBits >> count; available = candidateAvailable - count; position = candidatePosition;
                 symbol = packed >> 4; return true;
             }
             if (candidateAvailable >= 8 || (1 << candidateAvailable) >= codes.Length || candidatePosition == data.Length) return false;
-            candidateBits |= (ulong)data[candidatePosition++] << candidateAvailable; candidateAvailable += 8;
+            if (!Refill(ref candidateBits, ref candidateAvailable, ref candidatePosition)) return false;
         }
     }
 
@@ -91,19 +105,19 @@ internal ref struct WebpBitReader
         var candidateBits = bits; var candidateAvailable = available; var candidatePosition = position;
         var code = 0;
         // RFC 9649 section 3.7: walk the canonical prefix using local bits.
-        // No extra table, allocation or byte beyond the actual code is needed.
+        // No extra table or allocation is needed.
         for (var length = 1; length <= 15; length++)
         {
             if (candidateAvailable < length)
             {
                 if (candidatePosition == data.Length) return false;
-                candidateBits |= (ulong)data[candidatePosition++] << candidateAvailable; candidateAvailable += 8;
+                if (!Refill(ref candidateBits, ref candidateAvailable, ref candidatePosition)) return false;
             }
             code = code * 2 + (int)(candidateBits >> (length - 1) & 1);
             var index = code - firstCode[length];
             if ((uint)index >= (uint)counts[length]) continue;
-            // A partial budget or missing byte keeps the original per-bit path,
-            // including consumed prefixes and limit-before-truncation order.
+            // Missing bytes keep the per-bit failure path. Successful symbols
+            // observe cancellation before committing the speculative cache.
             context.Cancellation.ThrowIfCancellationRequested();
             bits = candidateBits >> length; available = candidateAvailable - length; position = candidatePosition;
             symbol = symbols[firstSymbol[length] + index]; return true;
@@ -126,7 +140,7 @@ internal ref struct WebpBitReader
                 symbol = (int)(packed >> 4); return true;
             }
             if (candidateAvailable >= 12 || candidatePosition == data.Length) return false;
-            candidateBits |= (ulong)data[candidatePosition++] << candidateAvailable; candidateAvailable += 8;
+            if (!Refill(ref candidateBits, ref candidateAvailable, ref candidatePosition)) return false;
         }
     }
 }

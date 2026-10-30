@@ -517,6 +517,25 @@ ZERO builds/sync/profile/repeatedqualification or successfultiming. It remains
 a gap,not a cancellation-specific optimization lead or historicalgain. No case
 added; full268<=1x remainsopen andlargermaterialgaps retainpriority.
 
+[Bounded VP8L word refill](WARM-VP8L-WORD-REFILL.md) independently saves8.32%
+filtered/8.26%all residentdecode elapsed,unchanged684377B/op:1.164/upper1.177.
+Eight existingcompanions nowcurrent. Literal/run independentlypasses0.729/
+upper0.732,542502B/op:STOP. Indexed1.009/upper1.012,live-token1.173/upper1.181,
+seekableVP8L1.159/upper1.171,VP8+ALPHresident1.187/upper1.196 andstream1.177/
+upper1.187 remain gaps. VP8L/VP8+ALPH codingvalidators confirm1.169/upper1.176
+and1.332/upper1.339,685421/770092B/op. All originalinputs/settings/exactpixels or
+descriptors/source/owners/native/quiet pass; no pairedcompaniongain claim.
+One40bit refill primitive,no newstorage/owner/model; governedalloc/peak unchanged.
+Full5210/OS,60internal/272publicnormal-scalar,SAMEactualpackage/governedasync/
+twoframe-alpha/3examples pass. Elevennew independentfield/tail/cancel controls,
+52507transition proof;private in-payload lookahead replaces only oldsuccessful-
+symbol minimumphysicalcursor assertions,notpublicI/O. Onecorebuild/OS,zero
+harness/native/selectorbuilds or successfulretiming. Fresh3pair8.42%passesfixed5%
+gate; stableoriginalscreen reuses WOD1independentoriginal12 beforeonecandidate12.
+Other affected VP8L/ALPH Decode/ValidatePixels async/root/composition costs need
+currentproof; metadata,opaqueVP8,encoders,othercodecs/edit/text unchanged. Full268
+<=1x remainsopen;closewordrefill withoutwidth/inlining/prefetchvariants.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

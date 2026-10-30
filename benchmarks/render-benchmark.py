@@ -44,7 +44,7 @@ def render():
     vp8_decoder_costs = json.loads((ROOT / 'benchmarks/current-vp8-decoder-costs-evidence.json').read_text(encoding='utf-8'))
     assert not vp8_decoder_costs['productionChanged'] and vp8_decoder_costs['allBuilds'] == 0
     assert vp8_decoder_costs['independentQuietConfirmation'] and len(vp8_decoder_costs['cases']) == 4
-    vp8_stream = json.loads((ROOT / 'benchmarks/warm-webp-alpha-direct-green-evidence.json').read_text(encoding='utf-8'))
+    vp8_stream = json.loads((ROOT / 'benchmarks/warm-vp8l-word-refill-evidence.json').read_text(encoding='utf-8'))
     assert vp8_stream['productionChanged'] and vp8_stream['independentQuietConfirmation']
     assert vp8_stream['decision']['passed'] and vp8_stream['qualification']['sameActualPackageBothOs']
     assert vp8_stream['qualification']['compressedAlphaTwoFramesActualPackagePassed']
@@ -351,18 +351,18 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
-    resident_decode = json.loads((ROOT / 'benchmarks/warm-webp-lossless-overwrite-evidence.json').read_text(encoding='utf-8'))
-    indexed_decode = json.loads((ROOT / 'benchmarks/current-vp8l-indexed-decode-cost-evidence.json').read_text(encoding='utf-8'))
+    resident_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-word-refill-evidence.json').read_text(encoding='utf-8'))
+    indexed_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-word-refill-evidence.json').read_text(encoding='utf-8'))
     indexed_observation = indexed_decode['cases']['IndexedNative16Colors8'][-1]
-    assert not indexed_decode['productionChanged'] and indexed_decode['independentQuietConfirmation']
+    assert indexed_decode['productionChanged'] and indexed_decode['independentQuietConfirmation']
     assert indexed_decode['producers'] == resident_decode['producers']
     assert len(indexed_observation['managed']['actual']) == 12
     assert indexed_observation['receipt']['allRgbaSamplesExact']
     assert indexed_observation['receipt']['managedOutputSha256'] == indexed_observation['receipt']['nativeOutputSha256']
     assert all(q['passed'] for q in indexed_observation['quietness'].values())
-    live_decode = json.loads((ROOT / 'benchmarks/current-vp8l-cancelable-decode-cost-evidence.json').read_text(encoding='utf-8'))
+    live_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-word-refill-evidence.json').read_text(encoding='utf-8'))
     live_observation = live_decode['cases']['NativeLosslessCancelable8'][-1]
-    assert not live_decode['productionChanged'] and live_decode['allBuilds'] == 0
+    assert live_decode['productionChanged'] and live_decode['decision']['passed']
     assert live_decode['producers'] == resident_decode['producers']
     assert len(live_observation['managed']['actual']) == 12
     assert live_observation['receipt']['allRgbaSamplesExact'] and live_observation['receipt']['alreadyCanceledRejected']
@@ -373,6 +373,7 @@ def render():
     assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
     assert resident_decode['decision']['passed'] and resident_decode['qualification']['sameActualPackageBothOs']
     assert resident_decode['memory']['governedAllocationAndPeakUnchanged']
+    assert resident_decode['qualification']['strengthenedMixedChecksEachModeEachOs'] == 8
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
     assert not resident['productionChanged'] and resident['status']['PngResident'] == 'screen-gap'
     assert not resident_other['productionChanged'] and resident_other['independentQuietConfirmation']
@@ -521,7 +522,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (resident_decode if case in {'ValidateVp8lAlpha', 'ValidateVp8Alpha'} else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -613,27 +614,19 @@ one confirmation each without retiming or assuming an optimization need.
 The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
 separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
-Compressed-alpha decoding now avoids a full RGBA intermediate. Complete stream
-decode improves **2.89%**, with **531,756 fewer allocated B/op**; the existing
-governed control's peak falls **37.34%**. Both stream and resident costs have
-independent confirmations. [Direct-green evidence](../benchmarks/WARM-WEBP-ALPHA-DIRECT-GREEN.md).
+Safe word refills improve complete resident VP8L decoding **8.32%** with unchanged
+**684,377 B/op**. Eight existing companions have fresh independent costs.
+The literal/run control passes at **0.729× / upper 0.732**, 542,502 B/op.
+Indexed and live-token controls remain **1.009× / upper 1.012**, 820,194 B/op
+and **1.173× / upper 1.181**, 684,377 B/op. [Word-refill evidence](../benchmarks/WARM-VP8L-WORD-REFILL.md).
 
-Ordinary lossless WebP decoding now uses existing complete-overwrite result
-storage. Resident decode improves **5.55%**, with **531,802 fewer allocated
-B/op**; resident and fresh-stream costs are independently confirmed. Governed
-allocation and shared peaks stay unchanged. [Overwrite evidence](../benchmarks/WARM-WEBP-LOSSLESS-OVERWRITE.md).
-
-Existing [indexed](../benchmarks/CURRENT-VP8L-INDEXED-DECODE-COST.md) and
-[live-token](../benchmarks/CURRENT-VP8L-CANCELABLE-DECODE-COST.md) VP8L confirmations
-remain gaps: **{indexed_observation['worstBracketRatio']:.3f}× / upper {indexed_observation['conservativeRatioUpper']:.3f}**, {indexed_observation['managedMemory']['BytesAllocatedPerOperation']:,} B/op and **{live_observation['worstBracketRatio']:.3f}× / upper {live_observation['conservativeRatioUpper']:.3f}**,
-{live_observation['managedMemory']['BytesAllocatedPerOperation']:,} B/op respectively. Pixels stay exact; no historical gain is claimed.
-
-The current producer passes **5,199 checks per OS**, plus 49 internal/272 public
-focused checks in normal/scalar modes. The same actual Release package, governed
-async consumer, two-frame compressed-alpha consumer and three examples pass both
-OSes. Exact packets, pixels, source ownership and native-only bounds remain
-qualified. Unchanged paths retain their applicable earlier proof. Companion
-costs make no paired gain claim.
+The current producer passes **5,210 checks per OS**, plus 60 internal/272 public
+focused checks in normal/scalar modes, plus eight strengthened mixed-prefix
+checks per mode after test-only builds. The same actual Release package, governed
+async and two-frame-alpha consumers and three examples pass both OSes. Exact
+packets, pixels, metadata, cancellation and ownership stay qualified; shared
+capacity stays unchanged. Companion costs make no paired gain claim. Other
+affected boundaries need applicable costs; unchanged paths retain their proof.
 
 **Codecs**
 

@@ -6,7 +6,7 @@ public sealed class WebpHuffmanTests
 {
     [Theory]
     [InlineData(1)] [InlineData(2)] [InlineData(5)] [InlineData(8)] [InlineData(9)] [InlineData(10)] [InlineData(12)] [InlineData(15)]
-    public void CompleteUniformCodesPreserveSymbolsFieldsAndExactRequiredBytes(int length)
+    public void CompleteUniformCodesPreserveSymbolsAndFollowingFields(int length)
     {
         var alphabet = 1 << length;
         var lengths = Enumerable.Repeat((byte)length, alphabet).ToArray();
@@ -22,7 +22,6 @@ public sealed class WebpHuffmanTests
             for (var index = 0; index < symbols.Length; index++)
             {
                 Assert.Equal(symbols[index], tree.Read(ref reader));
-                Assert.Equal((phase + (index + 1) * length + 7) / 8, reader.Position);
             }
             Assert.Equal(0xA53C, reader.Read(16));
             Assert.Equal(unchanged, input);
@@ -32,19 +31,19 @@ public sealed class WebpHuffmanTests
     [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(2)] [InlineData(3)]
     [InlineData(4)] [InlineData(5)] [InlineData(6)] [InlineData(7)]
-    public void MixedShortCodesAndCachedOneBitLeavesDoNotPrefetchUnneededBytes(int phase)
+    public void MixedShortCodesAndCachedOneBitLeavesPreserveBitConsumption(int phase)
     {
         byte[] lengths = [1, 2, 3, 4, 5, 6, 7, 8, 8];
         string[] codes = ["0", "10", "110", "1110", "11110", "111110", "1111110", "11111110", "11111111"];
         var tree = new WebpHuffman(lengths, Context());
-        var input = Pack(new string('0', phase) + string.Concat(codes));
-        var reader = new WebpBitReader(input, Context()); var consumed = phase;
+        var input = Pack(new string('0', phase) + string.Concat(codes) + "0011110010100101");
+        var reader = new WebpBitReader(input, Context());
         Assert.Equal(0, reader.Read(phase));
         for (var symbol = 0; symbol < codes.Length; symbol++)
         {
-            Assert.Equal(symbol, tree.Read(ref reader)); consumed += codes[symbol].Length;
-            Assert.Equal((consumed + 7) / 8, reader.Position);
+            Assert.Equal(symbol, tree.Read(ref reader));
         }
+        Assert.Equal(0xA53C, reader.Read(16));
         var cached = new WebpBitReader(new byte[] { 0 }, Context());
         Assert.Equal(0, cached.Read(7)); Assert.Equal(0, tree.Read(ref cached)); Assert.Equal(1, cached.Position);
     }
