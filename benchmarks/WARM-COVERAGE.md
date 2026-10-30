@@ -500,6 +500,14 @@ Other affected ordinaryVP8L boundaries need applicable currentcosts; compressed
 ALPH DecodeGreen,validation,encoders/metadata/othercodecs/edit/text unchanged.
 Full268<=1x staysopen; close this allocationprimitive without microvariants.
 
+[Current indexed VP8L decode](CURRENT-VP8L-INDEXED-DECODE-COST.md) independently
+confirms the existing packed-width/type3 palette path at1.070/upper1.081,
+581.342µs,820192B/op. Original11810Bpacket andprojection,exactRGBA/alpha/hiddenRGB,
+normal-scalar nativepixels,source/owners/quiet pass. ImmutableWOD1core reused;
+one tiny12selector,zero production/harness/nativebuilds or repeatedqualification.
+This resolves oldshortcosts,not a causalgain. No variant or newrequiredcase.
+Full268<=1x remainsopen; larger materialgaps keeppriority.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

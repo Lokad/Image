@@ -352,6 +352,14 @@ def render():
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
     resident_decode = json.loads((ROOT / 'benchmarks/warm-webp-lossless-overwrite-evidence.json').read_text(encoding='utf-8'))
+    indexed_decode = json.loads((ROOT / 'benchmarks/current-vp8l-indexed-decode-cost-evidence.json').read_text(encoding='utf-8'))
+    indexed_observation = indexed_decode['cases']['IndexedNative16Colors8'][-1]
+    assert not indexed_decode['productionChanged'] and indexed_decode['independentQuietConfirmation']
+    assert indexed_decode['producers'] == resident_decode['producers']
+    assert len(indexed_observation['managed']['actual']) == 12
+    assert indexed_observation['receipt']['allRgbaSamplesExact']
+    assert indexed_observation['receipt']['managedOutputSha256'] == indexed_observation['receipt']['nativeOutputSha256']
+    assert all(q['passed'] for q in indexed_observation['quietness'].values())
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
@@ -606,6 +614,10 @@ Ordinary lossless WebP decoding now uses existing complete-overwrite result
 storage. Resident decode improves **5.55%**, with **531,802 fewer allocated
 B/op**; resident and fresh-stream costs are independently confirmed. Governed
 allocation and shared peaks stay unchanged. [Overwrite evidence](../benchmarks/WARM-WEBP-LOSSLESS-OVERWRITE.md).
+
+The existing [indexed VP8L decoder](../benchmarks/CURRENT-VP8L-INDEXED-DECODE-COST.md)
+also has a current independent confirmation: **{indexed_observation['worstBracketRatio']:.3f}× / upper {indexed_observation['conservativeRatioUpper']:.3f}**, with
+**{indexed_observation['managedMemory']['BytesAllocatedPerOperation']:,} B/op** and exact pixels. It remains a gap; no historical gain is claimed.
 
 The current producer passes **5,199 checks per OS**, plus 49 internal/272 public
 focused checks in normal/scalar modes. The same actual Release package, governed
