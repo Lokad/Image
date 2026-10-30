@@ -208,6 +208,10 @@ def render():
     assert png_materialized_rejected['candidateRejected'] and not png_materialized_rejected['productionChanged']
     assert not png_materialized_rejected['decision']['passed']
     assert png_materialized_rejected['qualification']['confirmationRuns'] == 0
+    vp8l_histogram_rejected = json.loads((ROOT / 'benchmarks/vp8l-shared-predictor-histogram-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert vp8l_histogram_rejected['candidateRejected'] and not vp8l_histogram_rejected['productionChanged']
+    assert not vp8l_histogram_rejected['decision']['passed']
+    assert vp8l_histogram_rejected['qualification']['confirmationRuns'] == 0
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
@@ -480,6 +484,10 @@ packets; this makes no causal comparison against older screens.
 [Photograph confirmation](../benchmarks/VP8L-SHARED-COLOR-MASK-REJECTED.md) gives
 the current unchanged-path cost; its mask-sharing trial is rejected. Async
 retains a current screen.
+[Shared RGBA histogram trial](../benchmarks/VP8L-SHARED-PREDICTOR-HISTOGRAM-REJECTED.md)
+misses its 5% short-screen gate (1.65% elapsed, 0.57% normalized), retaining exact
+160,032-byte photograph packets. It is removed; accepted costs and qualification
+remain unchanged. No confirmation, companion timing or package repeat.
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.

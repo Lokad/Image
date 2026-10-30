@@ -29,6 +29,10 @@ packets; this makes no causal comparison against older screens.
 [Photograph confirmation](../benchmarks/VP8L-SHARED-COLOR-MASK-REJECTED.md) gives
 the current unchanged-path cost; its mask-sharing trial is rejected. Async
 retains a current screen.
+[Shared RGBA histogram trial](../benchmarks/VP8L-SHARED-PREDICTOR-HISTOGRAM-REJECTED.md)
+misses its 5% short-screen gate (1.65% elapsed, 0.57% normalized), retaining exact
+160,032-byte photograph packets. It is removed; accepted costs and qualification
+remain unchanged. No confirmation, companion timing or package repeat.
 Horizontal JPEG chroma filtering independently reduces caller-RGB420 elapsed by
 16.1%, retaining373,416B/op and the approved exact packet boundary. Its1.283× /
 upper1.294 gap remains; governed RGBA16 has a current1.224× screen.

@@ -257,6 +257,11 @@ fails the predeclared5% screen:4.34%elapsed/4.20%normalized reduction. Removed,
 no variants/confirmation;exact qualified source/binaries/package restored,
 existing full qualification reused. Accepted costs and268required paths unchanged.
 
+[Shared RGBA predictor histograms](VP8L-SHARED-PREDICTOR-HISTOGRAM-REJECTED.md)
+miss the5%screen:1.65%elapsed/0.57%normalized reduction,exact160032Bphotograph
+packet. Removed, no variants/confirmation;qualifiedsource/binaries/package and
+accepted costs unchanged. Existing full/package proof reused;268paths remain.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
