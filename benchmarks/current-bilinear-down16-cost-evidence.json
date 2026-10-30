@@ -1175,5 +1175,75 @@
       }
     ]
   },
-  "next": "Current Down16 is a demonstrated gap. Establish a distinct substantial source/dataflow opportunity before editing; reuse closed-family reviews and avoid shape/width/inlining variants. Larger justified material gaps and full268<=1x remain priorities."
+  "next": "Current Down16 is a demonstrated gap. Establish a distinct substantial source/dataflow opportunity before editing; reuse closed-family reviews and avoid shape/width/inlining variants. Larger justified material gaps and full268<=1x remain priorities.",
+  "followupReview": {
+    "productionChanged": false,
+    "allBuilds": 0,
+    "profilingOnly": true,
+    "noTimingClaim": true,
+    "seconds": 6,
+    "samples": 5264,
+    "quietGuardsPassed": true,
+    "exactInputOutputAndSourcePass": true,
+    "productionSha256": "7ab00ba8284a4f5011c70cce2d5e5b8a029921a17f07242858245602f196569c",
+    "methods": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearDownsample16::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 4802,
+        "fraction": 0.9122340425531915
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "samples": 230,
+        "fraction": 0.043693009118541036
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "samples": 139,
+        "fraction": 0.02640577507598784
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BilinearDownsample16::OriginalWord(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 5,
+        "fraction": 0.0009498480243161094
+      },
+      {
+        "method": "uint16 [Lokad.Image] Lokad.Image.Internal.BilinearDownsample16::RoundWord(float64)[Optimized]",
+        "samples": 1,
+        "fraction": 0.00018996960486322188
+      }
+    ],
+    "sourceReview": {
+      "productionChanged": false,
+      "profilingOnly": true,
+      "noTimingClaim": true,
+      "selectedSourceSha256": {
+        "src/Lokad.Image/Internal/BilinearDownsample16.cs": "4a3502ac3b7b2b8d1597ee20309180ce0a5e816d66e313f9a402d9a4cb58a330",
+        "src/Lokad.Image/Internal/PreparedResize.cs": "26dcbde50f82b551b6c527a16775f3832be6b0db6b4f2c45a36369652ad6f640",
+        "src/Lokad.Image/ImageTransforms.cs": "52af77194057e32e56e3693affc90c751055d7801ef597eabd0ea5e2a7518755"
+      },
+      "existingControl": {
+        "strips": 43,
+        "verticalTapCount": 519,
+        "verticalKernelEvaluations": 22317,
+        "unusedHorizontalPlanAdmittedBytes": 25792
+      },
+      "proposed": {
+        "verticalKernelEvaluations": 519,
+        "verticalPlanAdmittedBytes": 8512,
+        "estimatedAdmittedCapacityReductionBytes": 17280
+      },
+      "scope": "Only existing word bilinear both-axis reduction, scales<=2.5. Current owned-source review; all costs remain BRC1, no gain claim. Candidate would prepare vertical geometry once and enter before unused horizontal preparation; retain row-cache/filter/rounding/error-certificate/replay arithmetic, cancellation and portable fallback. Reserve actual owned capacity before allocation; terminal shared refusal, exception cleanup, no root fallback."
+    },
+    "next": "One bounded vertical-geometry preparation candidate; no width/inlining/replay variant. Source-derived capacity estimates are not measured results. Original pixel arithmetic/guards, terminal shared refusal, cancellation/cleanup and independent owners remain acceptance gates.",
+    "rawArtifacts": {
+      "file": "bilinear-word-geometry-review.tar.xz",
+      "sha256": "1bb9bf3e65bc451fee40dd025c48dce456ded035a350ab85a6d21442c1824a74",
+      "bytes": 480908,
+      "members": 29,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependency": "49bf3dda3544456bab060147d1df9359207433b3defefbff90baad8caff59573"
+    }
+  }
 }
