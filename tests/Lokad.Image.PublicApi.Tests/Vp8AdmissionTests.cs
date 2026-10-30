@@ -43,9 +43,9 @@ public sealed class Vp8AdmissionTests
         peak = Math.Max(peak, planes + alphaBytes + pixels * 4);
         if (alphaProfile >= 4)
         {
-            // The owned alpha encoder's fixed full-alphabet trees, main-raster
-            // allocation and RGBA conversion have independently declared peaks.
-            var lossless = Math.Max(8944, Math.Max(8904 + pixels * 4, 544 + pixels * 8));
+            // Fixed full-alphabet trees and the transformed uint raster overlap;
+            // green extraction adds no independently owned RGBA raster.
+            var lossless = Math.Max(8944, 8904 + pixels * 4);
             peak = Math.Max(peak, planes + alphaBytes + lossless);
         }
         if (orient) peak = Math.Max(peak, pixels * 8);

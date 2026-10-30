@@ -44,9 +44,10 @@ def render():
     vp8_decoder_costs = json.loads((ROOT / 'benchmarks/current-vp8-decoder-costs-evidence.json').read_text(encoding='utf-8'))
     assert not vp8_decoder_costs['productionChanged'] and vp8_decoder_costs['allBuilds'] == 0
     assert vp8_decoder_costs['independentQuietConfirmation'] and len(vp8_decoder_costs['cases']) == 4
-    vp8_stream = json.loads((ROOT / 'benchmarks/current-vp8-stream-decode-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not vp8_stream['productionChanged'] and vp8_stream['productionHarnessNativeBuilds'] == 0
-    assert vp8_stream['selectorBuilds'] == 1 and vp8_stream['independentQuietConfirmation']
+    vp8_stream = json.loads((ROOT / 'benchmarks/warm-webp-alpha-direct-green-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_stream['productionChanged'] and vp8_stream['independentQuietConfirmation']
+    assert vp8_stream['decision']['passed'] and vp8_stream['qualification']['sameActualPackageBothOs']
+    assert vp8_stream['qualification']['compressedAlphaTwoFramesActualPackagePassed']
     assert vp8_stream['status']['Vp8Stream'] == 'confirmed-gap'
     png_crc_scan = json.loads((ROOT / 'benchmarks/warm-png-scan-crc-reuse-evidence.json').read_text(encoding='utf-8'))
     assert png_crc_scan['productionChanged'] and png_crc_scan['decision']['passed']
@@ -594,11 +595,17 @@ one confirmation each without retiming or assuming an optimization need.
 The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
 separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
-The current producer passes **5,193 checks per OS**, plus 642 internal and 386
-public focused checks in normal, GFNI-only-disabled and scalar modes. The same
-actual Release package, governed async consumer and three examples pass on both
-OSes. Packets, pixels, frozen settings, source ownership and existing native-only
-bounds remain qualified. Companion costs make no paired speedup/regression claim.
+Compressed-alpha decoding now avoids a full RGBA intermediate. Complete stream
+decode improves **2.89%**, with **531,756 fewer allocated B/op**; the existing
+governed control's peak falls **37.34%**. Both stream and resident costs have
+independent confirmations. [Direct-green evidence](../benchmarks/WARM-WEBP-ALPHA-DIRECT-GREEN.md).
+
+The current producer passes **5,197 checks per OS**, 35 internal/270 public
+focused checks in normal/scalar modes, and 54 additional scalar admission checks.
+The same actual Release package, governed async consumer, two-frame compressed-
+alpha consumer and three examples pass on both OSes. Packets, pixels, source
+ownership and native-only bounds remain qualified. Unchanged CRC code retains
+its earlier GFNI-only-disabled proof. Companion costs make no paired gain claim.
 
 **Codecs**
 

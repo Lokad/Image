@@ -32,16 +32,7 @@ internal static class WebpAlpha
             CopyRaw(payload[1..], alpha, context);
         }
         else
-        {
-            using var decoded = new WebpLosslessDecoder(payload[1..], width, height, context, header: false).Decode();
-            for (var y = 0; y < height; y++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var row = decoded.GetRow8(y);
-                for (var x = 0; x < width; x++) alpha[y * width + x] = row[x * 4 + 1];
-            }
-            context.ReleaseBorrowed(decoded.ByteLength);
-        }
+            new WebpLosslessDecoder(payload[1..], width, height, context, header: false).DecodeGreen(alpha);
         Unfilter(alpha, width, height, filter, context);
         return alpha;
     }

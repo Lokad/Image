@@ -471,6 +471,21 @@ no production/harness/native builds, new fixture/settings or retiming. Historica
 stream driver was absent; one small matching12actual selector built. Current
 qualified production and other applicable evidence remain unchanged.
 
+[Direct compressed-alpha output](WARM-WEBP-ALPHA-DIRECT-GREEN.md) removes the
+RGBA intermediate while keeping fullVP8L syntax/transform validation. Complete
+stream independent gain2.89%filtered/3.16%all,1.181/upper1.184,1434827B/op;
+resident current1.208/upper1.212,1434731B/op. Both exact frozen pixels/alpha/
+source/owners/native/quiet pass. Separate governed control peak1411931→884699B,
+allocations1966392→1434800B. One predeclared2% substantial-storage candidate,
+no variants/retiming. Before timing, an overstrict whole-frame peak prediction
+is corrected; actual frame allocation removal and37.34%peak reduction retained.
+Full5197/OS,35internal/270publicnormal-scalar,54corrected scalar admission,
+SAME actual package/two-frame-alpha/governed async/3examples pass. Onecorebuild/OS,
+zero benchmarkharness/native/selector builds. Other affected compressedALPH
+boundaries need applicable current costs; rawALPH,ordinaryVP8L/opaqueVP8 decode,
+pixel validation,encoding/metadata/othercodecs/edit/text retain relevant proof.
+Full268<=1x remainsopen; close this ownership primitive without microvariants.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

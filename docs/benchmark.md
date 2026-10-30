@@ -28,17 +28,23 @@ one confirmation each without retiming or assuming an optimization need.
 The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
 separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
-The current producer passes **5,193 checks per OS**, plus 642 internal and 386
-public focused checks in normal, GFNI-only-disabled and scalar modes. The same
-actual Release package, governed async consumer and three examples pass on both
-OSes. Packets, pixels, frozen settings, source ownership and existing native-only
-bounds remain qualified. Companion costs make no paired speedup/regression claim.
+Compressed-alpha decoding now avoids a full RGBA intermediate. Complete stream
+decode improves **2.89%**, with **531,756 fewer allocated B/op**; the existing
+governed control's peak falls **37.34%**. Both stream and resident costs have
+independent confirmations. [Direct-green evidence](../benchmarks/WARM-WEBP-ALPHA-DIRECT-GREEN.md).
+
+The current producer passes **5,197 checks per OS**, 35 internal/270 public
+focused checks in normal/scalar modes, and 54 additional scalar admission checks.
+The same actual Release package, governed async consumer, two-frame compressed-
+alpha consumer and three examples pass on both OSes. Packets, pixels, source
+ownership and native-only bounds remain qualified. Unchanged CRC code retains
+its earlier GFNI-only-disabled proof. Companion costs make no paired gain claim.
 
 **Codecs**
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 7,279.11 | 5,988.93 | 1.215 / 1.228 | 1,966,583 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 7,068.76 | 5,985.38 | 1.181 / 1.184 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |

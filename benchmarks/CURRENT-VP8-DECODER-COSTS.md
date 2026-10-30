@@ -1,5 +1,7 @@
 # Current resident VP8 decoder costs
 
+Compressed-alpha costs are superseded by [direct green output](WARM-WEBP-ALPHA-DIRECT-GREEN.md); opaque cases retain applicable evidence.
+
 All four existing513×259 controls remain independently confirmed CPU gaps on
 the qualified direct-token-decision build. Exact frozen FFmpeg pixels, alpha,
 borrowed source and independently owned surviving outputs pass. These are

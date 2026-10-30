@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Compressed WebP alpha decoding avoids an intermediate RGBA image, reducing
+  allocations and shared-memory peaks while preserving exact pixels.
 - Faster PNG CRC processing through safe GFNI, with portable fallbacks and
   unchanged packets, pixels and resource ownership.
 - Faster sparse-CMYK JPEG decoding through a fused baseline DC/AC traversal,

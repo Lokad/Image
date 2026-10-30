@@ -50,6 +50,26 @@ internal ref struct WebpLosslessDecoder
         finally { context.Release(pixels.Length * 4L + 32 + 512); }
     }
 
+    // RFC 9649 section 2.7.1.2: ALPH uses the green samples of a complete
+    // headerless VP8L image. Keep full syntax/transform validation, but avoid
+    // materializing an RGBA result whose other channels would be discarded.
+    internal void DecodeGreen(Span<byte> destination)
+    {
+        if (destination.Length != (long)width * height) throw new ArgumentException("Alpha destination size differs from the raster.", nameof(destination));
+        var pixels = DecodePixels();
+        try
+        {
+            for (var y = 0; y < height; y++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var row = pixels.AsSpan(y * width, width);
+                var alpha = destination.Slice(y * width, width);
+                for (var x = 0; x < width; x++) alpha[x] = (byte)(row[x] >> 8);
+            }
+        }
+        finally { context.Release(pixels.Length * 4L + 32 + 512); }
+    }
+
     internal void ValidatePixels()
     {
         var pixels = DecodePixels();

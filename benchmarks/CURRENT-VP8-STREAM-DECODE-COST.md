@@ -1,5 +1,7 @@
 # Current VP8 stream decode cost
 
+Compressed-alpha costs are superseded by [direct green output](WARM-WEBP-ALPHA-DIRECT-GREEN.md); opaque cases retain applicable evidence.
+
 The existing fresh seekable VP8+ALPH decode confirms a **1.215× gap**, upper
 **1.228**, lower 1.210, at **7,279.108 µs** and
 **1,966,583 B/op**. The earlier three-actual screen is superseded, without

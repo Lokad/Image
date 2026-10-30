@@ -97,6 +97,28 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged cached WebP result depends on source lifetime.");
         }
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged cached WebP owners leaked or closed the borrowed root.");
+        using (var alphaSource = OriginalPixels.Buffer(513, 259, 8))
+        using (var alphaPacket = new MemoryStream())
+        using (var alphaBudget = new TestMemoryBudget(2L * 513 * 259 * 4))
+        {
+            alphaSource.GetRow8(0)[3] = 0;
+            ImageCodec.EncodeWebp(alphaSource, alphaPacket, new() { Lossless = false, Quality = 85, Effort = 4 });
+            var alphaBytes = alphaPacket.ToArray();
+            var alphaLimits = new ImageLimits { MemoryBudget = alphaBudget,
+                MaxWorkingBytes = alphaBytes.Length + 2L * 513 * 259 * 4 };
+            using (var decoded = ImageCodec.Decode(alphaBytes, new() { Limits = alphaLimits }))
+            {
+                if (alphaBudget.Bytes != 513L * 259 * 4)
+                    throw new Exception("Packaged compressed alpha retained storage differs.");
+                for (var y = 0; y < 259; y++)
+                for (var x = 0; x < 513; x++)
+                    if (decoded.GetRow8(y)[x * 4 + 3] != alphaSource.GetRow8(y)[x * 4 + 3])
+                        throw new Exception("Packaged compressed alpha samples differ.");
+            }
+            if (alphaBudget.Bytes != 0 || alphaBudget.IsDisposed)
+                throw new Exception("Packaged compressed alpha leaked storage or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged compressed alpha fits two RGBA frames.");
         var rgb = new byte[17 * 11 * 3];
         for (var i = 0; i < rgb.Length; i++) rgb[i] = (byte)(i * 37 + i / 11);
         var jpegOptions = new JpegEncodeOptions { Quality = 69, Limits = limits };
