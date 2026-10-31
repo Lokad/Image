@@ -15,9 +15,14 @@ Packets stay 52,115 / 52,117 B, exact except approved COM. Borrowed-root peak
 remains 1,704,856 B. One core/internal build per OS, no harness/native/selector
 builds, profile, new input or settings grid. Full 5,331 checks/OS, affected
 normal/scalar/Linux-AVX512-off checks and SAME actual package/three examples pass.
-Only accelerated NormalizeRgba16 callers lose prior CPU proof: existing
-Encode422_16 (horizontal chroma preparation), Encode420Stream16 (forward output)
-and Encode420Cancelable16 (live cancellation checkpoints) need current costs.
+Only accelerated NormalizeRgba16 callers lose prior CPU proof. The three
+[existing companions](CURRENT-JPEG-WORD-COMPANION-COSTS.md) now have current
+independent costs: Encode422_16 (horizontal chroma preparation), 1.008 / upper
+1.016, 529,871 B/op; Encode420Stream16 (forward output), 1.039 / upper 1.058,
+388,247 B/op; Encode420Cancelable16 (live checkpoints), 1.047 / upper 1.065,
+388,215 B/op. All remain confirmed gaps, exact packets/pixels and ownership.
+Three recovered hash-verified selectors, zero builds/profiles/new inputs or
+repeated qualification; all five measured affected boundaries are now current.
 RGBA8/caller-byte samples, RGBA16 444, decoders and other operations retain
 applicable unchanged evidence. No new required cases or broader grayscale claim.
 Close normalization width/reciprocal/inlining variants; all 268 paths remain.

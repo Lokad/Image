@@ -149,9 +149,12 @@ Exact factored RGBA16 JPEG normalization independently saves **4.56%** elapsed
 packets** and **1,704,856 admitted peak bytes**. The nongoverned current cost is
 **1.036× / upper 1.049**, **388,215 B/op**, without a paired gain claim.
 [Normalization evidence](../benchmarks/JPEG-FACTORED-WORD-NORMALIZATION.md).
-Existing RGBA16 422, forward-only 420 and live-token 420 costs need refresh;
+Three affected [RGBA16 companions](../benchmarks/CURRENT-JPEG-WORD-COMPANION-COSTS.md)
+now independently confirm: 422 **1.008 / upper 1.016**, **529,871 B/op**;
+forward-only 420 **1.039 / upper 1.058**, **388,247 B/op**; live-token 420
+**1.047 / upper 1.065**, **388,215 B/op**. All remain gaps; packets stay exact.
 RGBA8/caller-byte samples, RGBA16 444 and all decoding/editing retain applicable
-unchanged-path evidence. The normalization family is closed to variants.
+unchanged-path evidence. No new cases or normalization variants.
 
 The current producer passes **5,331 checks per OS** (2,169 internal, 2,214
 public, 948 live), plus 13 internal/354 public affected checks normal/scalar and
