@@ -116,6 +116,11 @@ the immutable build; Wide8 retains its proven unchanged-path confirmation.
 Four larger-output controls remain gaps. No build, profile, new input or grid.
 [Current wider-support costs](../benchmarks/CURRENT-WIDE-BICUBIC-COSTS.md).
 
+Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
+1.023**, **1,085,758 B/op**. Confidence remains open (lower 0.994); no repeat or
+parity claim. The other three owned-CMYK costs retain valid evidence.
+[Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
+
 Current evidence covers **5,295 checks per OS**, including **2,162 freshly run internal**
 checks; unchanged public/live and actual-package proofs are reused. Four new
 CMYK row controls also pass scalar/ISA modes. Applicable coverage includes 353 internal and

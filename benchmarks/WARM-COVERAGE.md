@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Owned full-resolution CMYK costs](CURRENT-OWNED-CMYK-JPEG-COSTS.md) now include
+a current DC-only twelve:383.588µs,1.011×/upper1.023,lower.994,1,085,758B/op.
+Confidence remains open; no pass, confirmed-gap or repeat. Independent DC/Q16
+samples exactly match the original native frame; only stale derived RGB/metadata
+are temporarily reconciled then restored. Ac/sparse JRO1 and dense passing
+unchanged-path evidence are reused. Zero builds/profiles/newinputs/repeated
+qualification. Frozen canonical rows expose226repeats forDC/Ac and65forSparse2D,
+a feasibility lead for confirmed Acgap, not a new performance claim.
+All268paths remain;76displayed comparisons stay unchanged in count.
+
 [CMYK byte-plane packing](CMYK-VBMI-PACKING-REJECTED.md) misses its one short:
 0.45%raw/0.23%normalized gain, unchanged1,085,758B/op, exact pixels. Actual VBMI
 execution is verified. Candidate archived and production/core/public-core copies

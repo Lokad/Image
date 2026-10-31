@@ -910,6 +910,15 @@ def render():
     assert cmyk_pack['qualification']['totalApplicableEachOs'] == 5295
     assert cmyk_pack['qualification']['sameActualReleasePackageProofReused']
     assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in cmyk_pack['restoration'].values())
+    owned_cmyk_current = json.loads((ROOT / 'benchmarks/current-owned-cmyk-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not owned_cmyk_current['productionChanged'] and owned_cmyk_current['allBuilds'] == 0
+    assert owned_cmyk_current['status']['CmykAdobe'] == 'confirmed-confidence-open'
+    dc_cmyk = owned_cmyk_current['cases']['CmykAdobe'][-1]
+    assert owned_cmyk_current['comparisonLowerBound'] <= 1 < dc_cmyk['conservativeRatioUpper']
+    assert len(dc_cmyk['managed']['actual']) == 12 and all(q['passed'] for q in dc_cmyk['quietness'].values())
+    assert dc_cmyk['receipt']['managedOutputSha256'] == dc_cmyk['receipt']['nativeOutputSha256']
+    assert owned_cmyk_current['restoration']['originalDerivedFixtureRestoredByteExact']
+    assert owned_cmyk_current['qualificationReused']['sameActualReleasePackageProofReused']
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1102,6 +1111,11 @@ Both depths at **32×16 and 16×8 pass**, with conservative uppers **0.670–0.9
 the immutable build; Wide8 retains its proven unchanged-path confirmation.
 Four larger-output controls remain gaps. No build, profile, new input or grid.
 [Current wider-support costs](../benchmarks/CURRENT-WIDE-BICUBIC-COSTS.md).
+
+Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
+1.023**, **1,085,758 B/op**. Confidence remains open (lower 0.994); no repeat or
+parity claim. The other three owned-CMYK costs retain valid evidence.
+[Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
 Current evidence covers **5,295 checks per OS**, including **2,162 freshly run internal**\nchecks; unchanged public/live and actual-package proofs are reused. Four new\nCMYK row controls also pass scalar/ISA modes. Applicable coverage includes 353 internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.
