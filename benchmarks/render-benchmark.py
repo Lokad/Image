@@ -1025,6 +1025,11 @@ def render():
     assert all(v == 'confirmed-gap' for v in jpeg16_companions['status'].values())
     assert all(len(v[-1]['managed']['actual']) == 12 and v[-1]['receipt']['completePacketExact']
                for v in jpeg16_companions['cases'].values())
+    opaque_alpha = json.loads((ROOT / 'benchmarks/vp8l-opaque-alpha-analysis-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert opaque_alpha['candidateRejected'] and not opaque_alpha['productionChanged']
+    assert not opaque_alpha['decision']['independentCandidateConfirmation']
+    assert opaque_alpha['qualification']['applicableChecksEachOs'] == 5332
+    assert all(r['productionSourceRestoredByteExact'] for r in opaque_alpha['qualification']['restoration'].values())
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1296,6 +1301,10 @@ Linux with AVX512 disabled. Earlier bicubic
 [tap-sum](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md) and
 [vertical-geometry](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
 trials remain rejected, with useful behavior/ownership tests retained.
+[Opaque VP8L alpha reuse](../benchmarks/VP8L-OPAQUE-ALPHA-ANALYSIS-REJECTED.md)
+also misses its short screen and is removed. One predictor invariant passes
+separately on restored production: **5,332 applicable checks per OS**, without
+repeating unchanged full/package qualification. Accepted costs remain unchanged.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

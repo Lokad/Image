@@ -162,6 +162,10 @@ Linux with AVX512 disabled. Earlier bicubic
 [tap-sum](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md) and
 [vertical-geometry](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
 trials remain rejected, with useful behavior/ownership tests retained.
+[Opaque VP8L alpha reuse](../benchmarks/VP8L-OPAQUE-ALPHA-ANALYSIS-REJECTED.md)
+also misses its short screen and is removed. One predictor invariant passes
+separately on restored production: **5,332 applicable checks per OS**, without
+repeating unchanged full/package qualification. Accepted costs remain unchanged.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

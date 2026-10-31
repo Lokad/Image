@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Opaque predictor alpha reuse](VP8L-OPAQUE-ALPHA-ANALYSIS-REJECTED.md) is rejected:
+one short pair saves only 1.58% raw and is 0.35% worse normalized. Exact packets,
+pixels, source/ownership/native/quiet gates pass; no confirmation or variants.
+One current opaque profile guides this bounded trial; instrumented times are
+discarded. Source/core restored byte-exactly on both OSes, with one useful
+predictor-alpha invariant retained. Full/package proof is reused: 5,332 applicable
+checks per OS, no repeated full run or changed accepted cost. All 268 paths remain.
+
 [Exact factored word normalization](JPEG-FACTORED-WORD-NORMALIZATION.md) retains
 4.56% filtered / 4.72% all-sample / 4.38% native-normalized improvement, with
 separated confidence. Governed RGBA16 JPEG420 is 1.127× / upper 1.135,
