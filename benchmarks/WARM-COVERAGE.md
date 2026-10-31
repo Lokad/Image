@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Greedy PNG long-match reuse](PNG-GREEDY-MATCH-REUSE-REJECTED.md) fails one
+screen: 3.02% higher filtered/all elapsed and 2.96% higher normalized point ratio,
+with unchanged 3,813,732 B/op and exact 968,216-byte packets. One current profile
+motivates the bounded transfer; its method fractions are diagnostic, all times
+discarded. No confirmation or variants. Original source/core/public binaries
+are restored byte-exactly on both OSes; 201 focused PNG checks pass normal/scalar
+for candidate and restored production. No new tests or repeated full/package
+proof. Accepted costs and all 268 paths remain; close this caller transfer.
+
 [Current RGBA16 Fastest PNG costs](CURRENT-FASTEST-WORD-PNG-COSTS.md) resolve
 three existing named uncertainties: stock 1.332 / upper 1.341, cancelable
 1.372 / upper 1.383, forward-only 1.331 / upper 1.345. Managed allocation is
