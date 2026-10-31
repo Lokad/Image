@@ -682,7 +682,7 @@ from caller RGB420. A stale public-decoder record is refreshed only in a tempora
 header; native pixels/source quality/settings remain unchanged. An incorrect
 cached selector stops before actuals; one small correct selector supplies the
 single successful twelve. No production/harness/native build; both headers are
-restored and unchanged full/package proof is reused. The 64th displayed comparison
+restored and unchanged full/package proof is reused. The 63rd displayed comparison
 is already required by the unchanged 268-case inventory.
 
 [Current asynchronous caller-RGB420 JPEG](CURRENT-ASYNC-JPEG-RGB420-COST.md)
@@ -693,7 +693,7 @@ predates reference-compatible encoding and shared column preparation, so it is
 historical. One independent twelve and current ownership/failure/cancellation
 probe pass with zero measurement builds; unchanged full/package proof is reused.
 Future async JPEG receipts omit their stale calibration record; archived actuals
-remain authoritative. This already-required boundary is the 63rd displayed
+remain authoritative. This already-required boundary is the 62nd displayed
 comparison; the finite 268-case inventory is unchanged.
 
 [Current asynchronous VP8L encoding](CURRENT-ASYNC-VP8L-ENCODE-COST.md) resolves
@@ -704,7 +704,8 @@ included equivalently. One independent twelve, zero builds/profiles; current
 source/ownership/cancellation/failure checks pass and unchanged full/package proof
 is reused. The original completed job is recovered after a metadata key-casing
 postcheck failure, without retiming. No required case or workload grid is added;
-the summary displays this already-required public boundary as its 62nd comparison.
+the summary refreshes this already-displayed public boundary once with current
+evidence, replacing its older observation.
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
 names 257 controls. Remove four retired boundaries and add two distinct required

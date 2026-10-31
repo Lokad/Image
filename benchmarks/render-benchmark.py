@@ -450,6 +450,7 @@ def render():
     assert vp8l['version'] == '0.2.1' and vp8l['independentQuietConfirmationThisPair']
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
+    async_vp8l = json.loads((ROOT / 'benchmarks/current-async-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
     vp8_cases = {'case06': 'DiagramLossyDistortion8', 'case07': 'Alpha8',
                  'case08': 'PhotographLossy8', 'case09': 'DiagramLossy8',
                  'case10': 'DiagramLossyTrellis8', 'case11': 'Opaque16'}
@@ -466,6 +467,8 @@ def render():
             producer = vp8l_word_cost
         elif case['id'] == 'case15':
             producer = vp8l_photo_cost
+        elif case['id'] == 'case14':
+            producer = async_vp8l
         if case['id'] in {'case17', 'case18'}:
             producer = predictive_cost
         elif case['id'] in {'case19', 'case20'}:
@@ -497,7 +500,7 @@ def render():
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case15', 'case21', 'case22', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case14', 'case15', 'case21', 'case22', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -575,7 +578,6 @@ def render():
     opaque_row = f'| VP8L opaque RGBA8 / libwebp exact=1 † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 121,896 / 121,896 |'
     position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     rows.insert(position + 1, ('codec', opaque_row))
-    async_vp8l = json.loads((ROOT / 'benchmarks/current-async-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
     assert not async_vp8l['productionChanged'] and async_vp8l['allBuilds'] == 0
     assert async_vp8l['independentQuietConfirmation'] and async_vp8l['qualificationReuse']['sameActualPackageBothOs']
     assert async_vp8l['comparisonLowerBounds']['WebpLossless8AsyncNonSeekable'] > 1
@@ -586,10 +588,6 @@ def render():
     assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
     assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
     assert all(q['passed'] for q in observation['quietness'].values())
-    rows.insert(position + 2, ('codec', f'| VP8L RGBA8 async nonseekable / libwebp exact=1 † | {stats["Mean"] / 1000:,.2f} | '
-                f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 183,812 / 183,812 |'))
     for filename, case, label, managed_bytes, native_bytes, build_key in [
             ('current-async-jpeg-rgb420-cost-evidence.json', 'JpegRgb420AsyncSamples',
              'JPEG caller RGB24 async nonseekable, 420', 52091, 52093, 'allMeasurementBuilds'),
@@ -704,7 +702,7 @@ def render():
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **64 comparisons** rank the remaining work; completion requires every
+These **63 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
