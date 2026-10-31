@@ -1,5 +1,9 @@
 # Current opaque VP8L encoding cost
 
+Historical verdict/cost. The exact candidate is subsequently retained by explicit
+acceptance; [current qualification and costs](WARM-VP8L-COLOR-BIN-REUSE.md)
+preserve the normalized-confidence caveat. Original records below remain intact.
+
 The existing513×259opaqueRGBA8 control independently confirms **1.455× /
 upper1.483** (lower1.427): **103,346.218µs,19,992,640B/op**. Managed and libwebp
 packets are exactly **121,896bytes**, SHA465b7001…. This is a current gap, replacing

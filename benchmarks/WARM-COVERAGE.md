@@ -618,11 +618,19 @@ Full5240/OS/SAMEpackage reused. One6s profile anduntimedcopy diagnose2.48%active
 colorbins;nextreviewmayreuse discoveredindices inexistingunusedscratch. No
 productionedit,newcases orretiming;all268required paths stay in scope.
 
-[Color-bin reuse](VP8L-COLOR-BIN-REUSE-REJECTED.md) misses normalized confidence
-after4.02%filtered/3.65%all reduction;rawintervals separate,normalizedones overlap.
-All packet/pixel/resource/ownership/quiet gates pass. Exact sources/tests/cores/
-package restored;25internal/153publicnormal-scalar eachOS pass. No variants/
-retiming/full/package repeat;OLC1acceptedcost remainscurrent. Full268open.
+[Color-bin reuse](WARM-VP8L-COLOR-BIN-REUSE.md) is retained by explicit acceptance:
+4.02% filtered/3.65% all-actuals reduction, 4.26% normalized point improvement.
+Raw intervals separate; normalized intervals overlap. The original rejection
+and restoration remain history. Exact saved sources and immutable DLLs are
+reinstated with no additional core build or opaque retiming. Three existing
+companions each receive one current twelve. Opaque/RGBA8/RGBA16/photograph ratios
+are 1.393/1.308/1.356/1.309; all remain gaps. Full 5240/OS, 25 internal/153 public
+normal/scalar and the same actual package/three examples pass both OSes.
+Raw 6e8e51e4... is mirrored/member-verified. Other named color-search callers,
+including applicable normalization/effort/stream/async boundaries, need current
+costs before CPU-pass claims. Diagram4 and green-only VP8 alpha skip this search;
+decoders, other codecs, editing/text and inspection retain applicable evidence.
+The full 268-path objective remains open; no further bin-list variants.
 
 ## Finite checklist
 

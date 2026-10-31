@@ -301,6 +301,13 @@ def render():
     opaque_vp8l = json.loads((ROOT / 'benchmarks/current-opaque-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
     assert not opaque_vp8l['productionChanged'] and opaque_vp8l['measurementBuilds'] == 0
     assert opaque_vp8l['independentQuietConfirmation'] and opaque_vp8l['status']['EncodeOpaque8'] == 'confirmed-gap'
+    vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
+    assert vp8l_bins['acceptance']['retained'] and vp8l_bins['independentQuietConfirmation']
+    assert not vp8l_bins['acceptance']['normalizedConfidenceSeparated']
+    assert vp8l_bins['qualification']['fullChecksEachOs'] == 5240
+    assert vp8l_bins['qualification']['sameActualPackageBothOs']
+    assert vp8l_bins['qualification']['package']['sha256'] == vp8l_bins['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert set(vp8l_bins['cases']) == {'Encode8', 'Encode16', 'EncodeOpaque8', 'PhotographLossless8'}
     webp_probe = json.loads((ROOT / 'benchmarks/current-webp-dimension-probe-cost-evidence.json').read_text(encoding='utf-8'))
     assert not webp_probe['productionChanged'] and webp_probe['allBuilds'] == 0
     assert webp_probe['independentQuietConfirmation'] and webp_probe['status']['ProbeDimensionsWebp'] == 'confirmed-gap'
@@ -459,6 +466,9 @@ def render():
         if case['id'] in {'case17', 'case18', 'case19', 'case20'}:
             producer = png_gfni
             observation = png_gfni['cases'][observation['receipt']['caseId']][-1]
+        if case['id'] in {'case12', 'case13', 'case15'}:
+            producer = vp8l_bins
+            observation = vp8l_bins['cases'][{'case12': 'Encode8', 'case13': 'Encode16', 'case15': 'PhotographLossless8'}[case['id']]][-1]
         receipt = observation['receipt']
         stats = observation['managed']['statistics']
         native = min(b['mean'] for b in observation['nativeBrackets'])
@@ -538,9 +548,9 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
-    observation = opaque_vp8l['cases']['EncodeOpaque8'][-1]
+    observation = vp8l_bins['cases']['EncodeOpaque8'][-1]
     receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == opaque_vp8l['producers']['linuxSha256'] and receipt['completePacketExact']
+    assert receipt['librarySha256'] == vp8l_bins['producers']['linuxSha256'] and receipt['completePacketExact']
     assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 121896
     assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
     assert all(q['passed'] for q in observation['quietness'].values())
@@ -663,8 +673,16 @@ JPEG dimension probing now combines marker reads: **6.73%** less filtered elapse
 unchanged **744 B/op / 512 admitted bytes**. Both named probes remain CPU gaps.
 [Marker-pair evidence](../benchmarks/WARM-JPEG-PROBE-MARKER-PAIRS.md).
 
-The current producer passes **5,240 checks per OS**, plus 104 public header/probe
-focused checks in normal/scalar modes. The same actual Release package, governed
+Lossless WebP color-bin reuse retains **4.02% less elapsed time** on the opaque
+control, with unchanged **19,992,640 B/op**. Raw confidence intervals separate;
+normalized intervals overlap. This specific gain is explicitly accepted with
+that caveat. All four displayed color-search controls have current independent
+costs; their complete packets remain exact and all remain CPU gaps.
+[Color-bin evidence](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md).
+
+The current producer passes **5,240 checks per OS**, plus 25 internal/153 public
+focused checks in normal/scalar modes. Header/probe proofs remain applicable.
+The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
 Every affected named WebP decode/validation control has current costs; the three

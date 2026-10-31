@@ -22,7 +22,7 @@ public sealed class Vp8lColorCostTests
     [Fact]
     public void InvariantHistoryTermsPreserveFrozenScalarCostsAtPopulationExtrema()
     {
-        var histogram = new int[256]; var history = new int[256]; var products = new long[256];
+        var histogram = new int[256]; var history = new int[256]; var products = new long[256]; var activeBins = new int[256];
         int[] populations = [0, 1, 4, 16, 1024, 262144];
         int[] histories = [0, 1, 255, 256, 4095, 4096, 65535, 65536, 16777216, 268435456];
         int[] active = [1, 4, 16, 64, 256];
@@ -36,7 +36,15 @@ public sealed class Vp8lColorCostTests
             Partition(history, priorCount, active[(test / 7) % active.Length], (test >> 3) & 255);
             var original = Original(histogram, history);
             var baseline = Vp8lColorCost.Prepare(history, count, products);
-            var actual = Vp8lColorCost.Evaluate(histogram, history, products, baseline);
+            var activeCount = 0;
+            // A full permutation exercises the construction order independently
+            // of the ascending-bin scalar oracle, including dense populations.
+            for (var i = 0; i < 256; i++)
+            {
+                var bin = (i * 73 + test) & 255;
+                if (histogram[bin] != 0) activeBins[activeCount++] = bin;
+            }
+            var actual = Vp8lColorCost.Evaluate(histogram, history, products, baseline, activeBins.AsSpan(0, activeCount));
             Assert.Equal(original, actual);
             hash.AppendData(MemoryMarshal.AsBytes(histogram.AsSpan()));
             hash.AppendData(MemoryMarshal.AsBytes(history.AsSpan()));

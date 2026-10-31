@@ -18,6 +18,7 @@ public sealed class Vp8lReferenceColorTransformTests
             pixels[i] = unchecked(0x9e3779b9u * (uint)(i + 1)) ^ (uint)(i * 37) << 8;
         pixels[0] = 0; pixels[41] = 0x7fffffffu; pixels[42] = 0x80000000u; pixels[43] = uint.MaxValue;
         var original = pixels.ToArray(); var guarded = new int[264]; var expected = new int[256];
+        var active = new int[264]; var seen = new bool[256];
         using var root = new TestMemoryBudget(1);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         static int Signed(int value) { value &= 255; return value < 128 ? value : value - 256; }
@@ -37,8 +38,17 @@ public sealed class Vp8lReferenceColorTransformTests
                         - (int)Math.Floor(Signed(rb) * Signed((int)(pixel >> 16)) / 32d);
                 expected[(value % 256 + 256) % 256]++;
             }
-            Vp8lReferenceColorTransform.Histogram(pixels, width, offset, 1, offset + length, height - 1,
-                red, gr, gb, rb, guarded.AsSpan(4, 256), context);
+            Array.Fill(active, -719); Array.Clear(seen);
+            var activeCount = Vp8lReferenceColorTransform.Histogram(pixels, width, offset, 1, offset + length, height - 1,
+                red, gr, gb, rb, guarded.AsSpan(4, 256), active.AsSpan(4, 256), context);
+            for (var i = 0; i < activeCount; i++)
+            {
+                var bin = active[i + 4]; Assert.InRange(bin, 0, 255);
+                Assert.False(seen[bin]); seen[bin] = true;
+            }
+            for (var bin = 0; bin < 256; bin++) Assert.Equal(bin % 3 == 0 && expected[bin] != 0, seen[bin]);
+            Assert.All(active.AsSpan(0, 4).ToArray(), value => Assert.Equal(-719, value));
+            Assert.All(active.AsSpan(activeCount + 4).ToArray(), value => Assert.Equal(-719, value));
             Assert.True(expected.AsSpan().SequenceEqual(guarded.AsSpan(4, 256)));
             Assert.All(guarded.AsSpan(0, 4).ToArray(), value => Assert.Equal(-719, value));
             Assert.All(guarded.AsSpan(260, 4).ToArray(), value => Assert.Equal(-719, value));
@@ -50,18 +60,18 @@ public sealed class Vp8lReferenceColorTransformTests
     public void ScoredPlaneHistogramBorrowsStorageWithoutAllocationAndCancelsBeforeAccess()
     {
         var pixels = Enumerable.Range(0, 256).Select(i => unchecked((uint)i * 0x9e3779b9u)).ToArray();
-        var histogram = new int[256];
+        var histogram = new int[256]; var active = new int[256];
         using var root = new TestMemoryBudget(1);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        for (var i = 0; i < 32; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, context);
+        for (var i = 0; i < 32; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, active, context);
         var allocated = GC.GetAllocatedBytesForCurrentThread();
-        for (var i = 0; i < 64; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, context);
+        for (var i = 0; i < 64; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, active, context);
         Assert.Equal(allocated, GC.GetAllocatedBytesForCurrentThread());
         using var cancellation = new CancellationTokenSource();
         using var canceledContext = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
         cancellation.Cancel(); var original = histogram.ToArray();
         var error = Assert.Throws<OperationCanceledException>(() => Vp8lReferenceColorTransform.Histogram([], 32, 1, 1, 32, 7,
-            false, 0, 0, 0, histogram, canceledContext));
+            false, 0, 0, 0, histogram, active, canceledContext));
         Assert.Equal(cancellation.Token, error.CancellationToken); Assert.Equal(original, histogram);
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
     }

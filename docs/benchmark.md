@@ -38,8 +38,16 @@ JPEG dimension probing now combines marker reads: **6.73%** less filtered elapse
 unchanged **744 B/op / 512 admitted bytes**. Both named probes remain CPU gaps.
 [Marker-pair evidence](../benchmarks/WARM-JPEG-PROBE-MARKER-PAIRS.md).
 
-The current producer passes **5,240 checks per OS**, plus 104 public header/probe
-focused checks in normal/scalar modes. The same actual Release package, governed
+Lossless WebP color-bin reuse retains **4.02% less elapsed time** on the opaque
+control, with unchanged **19,992,640 B/op**. Raw confidence intervals separate;
+normalized intervals overlap. This specific gain is explicitly accepted with
+that caveat. All four displayed color-search controls have current independent
+costs; their complete packets remain exact and all remain CPU gaps.
+[Color-bin evidence](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md).
+
+The current producer passes **5,240 checks per OS**, plus 25 internal/153 public
+focused checks in normal/scalar modes. Header/probe proofs remain applicable.
+The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
 Every affected named WebP decode/validation control has current costs; the three
@@ -61,11 +69,11 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | VP8 opaque text/diagram † | 7,750.98 | 5,823.99 | 1.331 / 1.478 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,535.94 | 15,580.45 | 1.318 / 1.375 | 1,201,552 | 72,380 / 72,380 |
-| VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 103,346.22 | 71,024.81 | 1.455 / 1.483 | 19,992,640 | 121,896 / 121,896 |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 185,381.86 | 138,254.62 | 1.341 / 1.431 | 29,696,928 | 183,812 / 183,812 |
+| VP8L RGBA8 / libwebp exact=1 † | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 162,750.37 | 120,441.78 | 1.351 / 1.431 | 29,697,312 | 183,812 / 183,812 |
-| VP8L photograph / libwebp exact=1 † | 121,047.71 | 89,021.62 | 1.360 / 1.397 | 20,418,440 | 160,032 / 160,032 |
+| VP8L photograph / libwebp exact=1 † | 110,839.47 | 84,688.04 | 1.309 / 1.326 | 20,418,338 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
 | PNG RGBA8, SmallestSize9 / native9 † | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |

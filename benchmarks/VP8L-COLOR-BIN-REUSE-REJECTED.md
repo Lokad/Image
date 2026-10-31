@@ -1,5 +1,9 @@
 # Color-bin reuse: confirmation gate missed
 
+Historical verdict/cost. The exact candidate is subsequently retained by explicit
+acceptance; [current qualification and costs](WARM-VP8L-COLOR-BIN-REUSE.md)
+preserve the normalized-confidence caveat. Original records below remain intact.
+
 One candidate records newly nonzero bins while building each color histogram,
 using existing inactive-plane scratch. Scoring then visits the list, with no
 extra allocation,capacity,owner or changed arithmetic. The short pair passes

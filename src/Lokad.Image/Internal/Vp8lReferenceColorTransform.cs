@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 
 namespace Lokad.Image.Internal;
@@ -94,9 +96,10 @@ internal static class Vp8lReferenceColorTransform
     // RFC 9649 color arithmetic, retaining only the plane being scored.
     // Vector lanes widen signed channel bytes before multiplication/shift.
     // Histogram increments remain scalar so repeated bins retain every count.
-    internal static void Histogram(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
-        bool red, int gr, int gb, int rb, Span<int> histogram, OperationContext context)
+    internal static int Histogram(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
+        bool red, int gr, int gb, int rb, Span<int> histogram, Span<int> active, OperationContext context)
     {
+        var activeCount = 0;
         Span<int> values = stackalloc int[8];
         var redCoefficient = Vector256.Create((int)unchecked((sbyte)gr));
         var greenCoefficient = Vector256.Create((int)unchecked((sbyte)gb));
@@ -116,7 +119,7 @@ internal static class Vp8lReferenceColorTransform
                         : pixels.AsInt32() - (greenCoefficient * green >> 5)
                             - (blueCoefficient * ((pixels << 8).AsInt32() >> 24) >> 5);
                     (transformed & Vector256.Create(255)).CopyTo(values);
-                    foreach (var value in values) histogram[value]++;
+                    foreach (var value in values) Increment(histogram, active, ref activeCount, value);
                 }
             }
             for (; x < row.Length; x++)
@@ -125,9 +128,18 @@ internal static class Vp8lReferenceColorTransform
                 var transformed = red ? (int)(pixel >> 16) - (unchecked((sbyte)gr) * green >> 5)
                     : (int)pixel - (unchecked((sbyte)gb) * green >> 5)
                         - (unchecked((sbyte)rb) * unchecked((sbyte)(pixel >> 16)) >> 5);
-                histogram[transformed & 255]++;
+                Increment(histogram, active, ref activeCount, transformed & 255);
             }
         }
+        return activeCount;
+    }
+
+    // Record newly nonzero bins. Search starts from zero, so its list is complete;
+    // callers accumulating into prior counts still retain every increment.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void Increment(Span<int> histogram, Span<int> active, ref int count, int value)
+    {
+        if (histogram[value]++ == 0) active[count++] = value;
     }
 
     private sealed class Search : IDisposable
@@ -153,11 +165,11 @@ internal static class Vp8lReferenceColorTransform
             catch { context.Release(ScratchBytes); throw; }
         }
 
-        private long Cost(bool red)
+        private long Cost(bool red, ReadOnlySpan<int> active)
         {
             context.Cancellation.ThrowIfCancellationRequested();
             return Vp8lColorCost.Evaluate(Histogram, red ? RedHistory : BlueHistory,
-                red ? RedProducts : BlueProducts, red ? redBaseCost : blueBaseCost);
+                red ? RedProducts : BlueProducts, red ? redBaseCost : blueBaseCost, active);
         }
 
         private long Score(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
@@ -172,10 +184,13 @@ internal static class Vp8lReferenceColorTransform
             for (var i = 0; i < cachedTrials; i++)
                 if (trials[i] == key) return trials[TrialCapacity + i];
             var histogram = Histogram; histogram.Clear();
+            // Trial keys/costs occupy the first 128 longs. The unused half can
+            // hold all 256 bin indices until this score is consumed.
+            var active = MemoryMarshal.Cast<long, int>(trials[(TrialCapacity * 2)..]);
             // This tile remains unchanged during the complete coefficient search.
             // Strided borrowing needs neither a tile copy nor a second image.
-            Vp8lReferenceColorTransform.Histogram(working, width, x0, y0, x1, y1, red, gr, gb, rb, histogram, context);
-            var cost = Cost(red);
+            var activeCount = Vp8lReferenceColorTransform.Histogram(working, width, x0, y0, x1, y1, red, gr, gb, rb, histogram, active, context);
+            var cost = Cost(red, active[..activeCount]);
             const long preference = 3 * Vp8lReferenceCost.Scale;
             if (red)
             {

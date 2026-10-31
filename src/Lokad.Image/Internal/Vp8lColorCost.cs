@@ -18,14 +18,13 @@ internal static class Vp8lColorCost
     }
 
     internal static long Evaluate(ReadOnlySpan<int> histogram, ReadOnlySpan<int> history,
-        ReadOnlySpan<long> products, long baseline)
+        ReadOnlySpan<long> products, long baseline, ReadOnlySpan<int> active)
     {
         var cost = baseline;
-        for (var i = 0; i < 256; i++)
+        foreach (var i in active)
         {
             var count = histogram[i];
-            if (count != 0)
-                cost -= Vp8lReferenceCost.SLog(count) + Vp8lReferenceCost.SLog(count + history[i]) - products[i];
+            cost -= Vp8lReferenceCost.SLog(count) + Vp8lReferenceCost.SLog(count + history[i]) - products[i];
         }
         var weighted = histogram[0] * 3 * Vp8lReferenceCost.Scale;
         var weight = 240 * Vp8lReferenceCost.Scale;

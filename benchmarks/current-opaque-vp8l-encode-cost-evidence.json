@@ -1291,5 +1291,8 @@
       }
     ]
   },
-  "next": "One potential primitive:record newly nonzero bins during histogram construction and evaluate that list instead of rescanning256bins. Existing opposite-plane scratch after the64keys/64costs can hold256Int32indices without capacity or owner changes. Preserve exact integer sums/bias/ties and every packet; prove alias/lifetimes before coding. Unit-count memoization and expanding product lookup range are not justified by this distribution. No mask-width/population-window/rejected predictor variants."
+  "next": "One potential primitive:record newly nonzero bins during histogram construction and evaluate that list instead of rescanning256bins. Existing opposite-plane scratch after the64keys/64costs can hold256Int32indices without capacity or owner changes. Preserve exact integer sums/bias/ties and every packet; prove alias/lifetimes before coding. Unit-count memoization and expanding product lookup range are not justified by this distribution. No mask-width/population-window/rejected predictor variants.",
+  "supersededCases": {
+    "EncodeOpaque8": "warm-vp8l-color-bin-reuse-evidence.json#/cases/EncodeOpaque8"
+  }
 }

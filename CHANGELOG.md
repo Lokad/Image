@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Lossless WebP color search scores only bins recorded during histogram
+  construction, preserving exact packets and existing scratch capacity.
 - Bounded JPEG probes combine marker reads while preserving input limits,
   cancellation, prefix boundaries and caller-owned admission.
 - Non-indexed lossless WebP decoding owns decoded storage directly, avoiding a
