@@ -779,6 +779,9 @@ def render():
     assert integer_dot['candidateRejected'] and not integer_dot['productionChanged']
     assert not integer_dot['decision']['passed']
     assert all(v['productionSourceRestored'] and v['sourceManifestRestored'] for v in integer_dot['restoration'].values())
+    first_ac = json.loads((ROOT / 'benchmarks/jpeg-first-ac-confidence-open-evidence.json').read_text(encoding='utf-8'))
+    assert first_ac['confidenceOpen'] and not first_ac['accepted'] and not first_ac['productionChanged']
+    assert all(v['productionSourceAndConsumerRestored'] for v in first_ac['restoration'].values())
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -929,6 +932,10 @@ Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 **2,132,668 B/op**, exact pixels and the same **4 KiB** admission.
 Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
+
+A [first-scan JPEG candidate](../benchmarks/JPEG-FIRST-AC-CONFIDENCE-OPEN.md)
+shows 8.22%/9.66% independent raw gains but remains unaccepted because conservative
+native-normalized confidence is open. Qualified production and current costs stay.
 
 One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
 regresses 61.40% in a short screen despite exact pixels and unchanged workspace.

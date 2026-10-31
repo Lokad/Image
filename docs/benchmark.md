@@ -74,6 +74,10 @@ Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
 
+A [first-scan JPEG candidate](../benchmarks/JPEG-FIRST-AC-CONFIDENCE-OPEN.md)
+shows 8.22%/9.66% independent raw gains but remains unaccepted because conservative
+native-normalized confidence is open. Qualified production and current costs stay.
+
 One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
 regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
 It is rejected; the qualified builds/package and displayed costs remain unchanged.

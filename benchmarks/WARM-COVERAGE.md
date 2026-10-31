@@ -7,6 +7,12 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Progressive first-scan traversal](JPEG-FIRST-AC-CONFIDENCE-OPEN.md) remains
+unaccepted: two independent blocks show 8.22%/9.66% raw gains with exact pixels,
+but conservative native-normalized confidence stays open. One bounded reversed
+pair resolves no further; no third pair or variant. The promising candidate and
+raw evidence are preserved, qualified production restored, current costs retained.
+
 [Integer bicubic horizontal convolution](BICUBIC-INTEGER-DOT-REJECTED.md) is
 rejected after one exact-pixel short screen: 531.867 → 858.410 µs (61.40% slower).
 The qualified source/builds/package are restored exactly; current Wide8 evidence
