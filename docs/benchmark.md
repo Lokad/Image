@@ -143,20 +143,22 @@ four distinct bounded column paths; all remain gaps. Prepared VP8L body counting
 screens below the retained 4.1% threshold and is
 [rejected](../benchmarks/VP8L-PREPARED-BODY-COUNT-REJECTED.md); production is restored.
 
-The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
-public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
-Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
-Twelve public and four internal checks pass separately on restored production:
-5,330 applicable per OS, without a repeated full/package run. The
-[alternating-tap trial](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md)
-also misses its short screen; accepted costs and production remain unchanged.
-[Vertical geometry reuse](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
-is rejected after a corrected confirmation misses retention; source and packages
-are restored exactly, with five useful public tests retained.
-The existing [governed RGBA16 JPEG420 boundary](../benchmarks/CURRENT-GOVERNED-JPEG-RGBA16-COST.md)
-now has an independent current confirmation: **1.179× / upper1.197**,
-**819,489 B/op**, unchanged **52,115 / 52,117-byte packets**. This replaces its
-short screen without a causal gain claim or production change.
+Exact factored RGBA16 JPEG normalization independently saves **4.56%** elapsed
+(all actuals **4.72%**, native-normalized **4.38%**) with separated confidence:
+**1.127× / upper 1.135**, **819,489 B/op**, unchanged **52,115 / 52,117-byte
+packets** and **1,704,856 admitted peak bytes**. The nongoverned current cost is
+**1.036× / upper 1.049**, **388,215 B/op**, without a paired gain claim.
+[Normalization evidence](../benchmarks/JPEG-FACTORED-WORD-NORMALIZATION.md).
+Existing RGBA16 422, forward-only 420 and live-token 420 costs need refresh;
+RGBA8/caller-byte samples, RGBA16 444 and all decoding/editing retain applicable
+unchanged-path evidence. The normalization family is closed to variants.
+
+The current producer passes **5,331 checks per OS** (2,169 internal, 2,214
+public, 948 live), plus 13 internal/354 public affected checks normal/scalar and
+Linux with AVX512 disabled. Earlier bicubic
+[tap-sum](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md) and
+[vertical-geometry](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
+trials remain rejected, with useful behavior/ownership tests retained.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
@@ -174,7 +176,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | WebP VP8 + alpha, fresh seekable Stream † | 7,037.26 | 6,042.62 | 1.165 / 1.211 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
-| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,170.19 | 1,840.78 | 1.179 / 1.197 | 819,489 | 52,115 / 52,117 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,071.31 | 1,837.31 | 1.127 / 1.135 | 819,489 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,331.69 | 2,509.72 | 1.328 / 1.463 | 741,375 | 7,330 / 7,330 |

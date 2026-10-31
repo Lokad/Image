@@ -998,6 +998,26 @@ def render():
                           f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
             updated_governed16 += 1
     assert updated_governed16 == 1
+    factored_jpeg16 = json.loads((ROOT / 'benchmarks/jpeg-factored-word-normalization-evidence.json').read_text(encoding='utf-8'))
+    assert factored_jpeg16['accepted'] and factored_jpeg16['productionChanged']
+    assert factored_jpeg16['decision']['passed'] and factored_jpeg16['decision']['normalizedSeparated']
+    qualification = factored_jpeg16['qualification']
+    assert qualification['fullChecksEachOs'] == 5331 and qualification['harnessNativeSelectorBuilds'] == 0
+    assert qualification['package']['sha256'] == qualification['linuxPackage']['sameActualPackageSha256']
+    observation = factored_jpeg16['cases']['GovernedRgba16'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == factored_jpeg16['producers']['linuxSha256']
+    assert receipt['completePacketExact'] and receipt['callerMemoryBudgetPeakBytes'] == 1704856
+    assert len(observation['managed']['actual']) == 12
+    updated_factored16 = 0
+    for index, (kind, row) in enumerate(rows):
+        if row.startswith('| JPEG RGBA16 4:2:0 / caller IMemoryBudget'):
+            label = row.split('|')[1].strip()
+            rows[index] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+            updated_factored16 += 1
+    assert updated_factored16 == 1
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1250,20 +1270,22 @@ four distinct bounded column paths; all remain gaps. Prepared VP8L body counting
 screens below the retained 4.1% threshold and is
 [rejected](../benchmarks/VP8L-PREPARED-BODY-COUNT-REJECTED.md); production is restored.
 
-The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
-public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
-Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
-Twelve public and four internal checks pass separately on restored production:
-5,330 applicable per OS, without a repeated full/package run. The
-[alternating-tap trial](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md)
-also misses its short screen; accepted costs and production remain unchanged.
-[Vertical geometry reuse](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
-is rejected after a corrected confirmation misses retention; source and packages
-are restored exactly, with five useful public tests retained.
-The existing [governed RGBA16 JPEG420 boundary](../benchmarks/CURRENT-GOVERNED-JPEG-RGBA16-COST.md)
-now has an independent current confirmation: **1.179× / upper1.197**,
-**819,489 B/op**, unchanged **52,115 / 52,117-byte packets**. This replaces its
-short screen without a causal gain claim or production change.
+Exact factored RGBA16 JPEG normalization independently saves **4.56%** elapsed
+(all actuals **4.72%**, native-normalized **4.38%**) with separated confidence:
+**1.127× / upper 1.135**, **819,489 B/op**, unchanged **52,115 / 52,117-byte
+packets** and **1,704,856 admitted peak bytes**. The nongoverned current cost is
+**1.036× / upper 1.049**, **388,215 B/op**, without a paired gain claim.
+[Normalization evidence](../benchmarks/JPEG-FACTORED-WORD-NORMALIZATION.md).
+Existing RGBA16 422, forward-only 420 and live-token 420 costs need refresh;
+RGBA8/caller-byte samples, RGBA16 444 and all decoding/editing retain applicable
+unchanged-path evidence. The normalization family is closed to variants.
+
+The current producer passes **5,331 checks per OS** (2,169 internal, 2,214
+public, 948 live), plus 13 internal/354 public affected checks normal/scalar and
+Linux with AVX512 disabled. Earlier bicubic
+[tap-sum](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md) and
+[vertical-geometry](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
+trials remain rejected, with useful behavior/ownership tests retained.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

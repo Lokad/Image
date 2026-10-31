@@ -55,6 +55,38 @@ internal static partial class JpegReferenceColor
         var color = background ?? 0;
         var red = (int)(color >> 16 & 255); var green = (int)(color >> 8 & 255); var blue = (int)(color & 255);
         var x = 0;
+        if (Avx512F.IsSupported && Avx2.IsSupported && BitConverter.IsLittleEndian
+            && !MemoryMarshal.AsBytes(rgba).Overlaps(MemoryMarshal.AsBytes(rgb)))
+        {
+            // Cancelling 255 leaves N = sample*alpha + (background*257)*(65535-alpha).
+            // N <= 65535^2 fits uint; add half only after exact widening to double.
+            // The upward-rounded 1/(65535*257) never undershoots an integer; its
+            // total quotient error is < 2^-44, far below 1/(65535*257).
+            var backgroundPixel = Vector128.Create((uint)(red * 257), (uint)(green * 257), (uint)(blue * 257), 0);
+            var backgroundPair = Vector256.Create(backgroundPixel, backgroundPixel);
+            var backdrop = Vector512.Create(backgroundPair, backgroundPair);
+            var maximum = Vector512.Create(65535u);
+            var half = Vector512.Create(8421247.0);
+            var reciprocal = Vector512.Create(5.9373626057184524e-08);
+            for (; x + 4 <= rgb.Length; x += 4)
+            {
+                if (background is null && (rgba[x * 4 + 3] != 65535 || rgba[x * 4 + 7] != 65535
+                    || rgba[x * 4 + 11] != 65535 || rgba[x * 4 + 15] != 65535)) break;
+                var words = MemoryMarshal.Read<Vector256<ushort>>(MemoryMarshal.AsBytes(rgba[(x * 4)..]));
+                var samples = Avx512F.ConvertToVector512Int32(words).AsUInt32();
+                var alpha = Avx512F.Shuffle(samples.AsInt32(), 255).AsUInt32();
+                var numerator = Avx512F.MultiplyLow(samples, alpha)
+                    + Avx512F.MultiplyLow(backdrop, maximum - alpha);
+                var low = Avx512F.ConvertToVector256Int32WithTruncation(
+                    (Avx512F.ConvertToVector512Double(numerator.GetLower()) + half) * reciprocal);
+                var high = Avx512F.ConvertToVector256Int32WithTruncation(
+                    (Avx512F.ConvertToVector512Double(numerator.GetUpper()) + half) * reciprocal);
+                var lowWords = Sse2.PackSignedSaturate(low.GetLower(), low.GetUpper());
+                var highWords = Sse2.PackSignedSaturate(high.GetLower(), high.GetUpper());
+                var packed = Sse2.PackUnsignedSaturate(lowWords, highWords).AsInt32() & Vector128.Create(0xFFFFFF);
+                packed.CopyTo(rgb[x..]);
+            }
+        }
         if (Avx2.IsSupported && BitConverter.IsLittleEndian
             && !MemoryMarshal.AsBytes(rgba).Overlaps(MemoryMarshal.AsBytes(rgb)))
         {

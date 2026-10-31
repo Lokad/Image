@@ -7,15 +7,22 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
-[Governed RGBA16 JPEG420](CURRENT-GOVERNED-JPEG-RGBA16-COST.md) now independently
-confirms1.179×/upper1.197,819489B/op and52115/52117B packets,unchanged exact coded
-content except approved COM. Full normalization,alpha flattening on0x204060,
-BT.601/420,borrowed32MiB root,resident-source charge and fresh owned output remain.
-One current twelve,zero builds/profiles/new inputs/qualification repeats; existing
-driver/worker/fixture/quality checks reused. Completed job recovered after schema
-postcheck,never rescored. JCL1 only supplied a screen and invalidates earlier
-column-preparation timings. This is a confirmed gap,not parity or a new case;
-all268required paths remain. Unchanged MGP1 qualification carries forward.
+[Exact factored word normalization](JPEG-FACTORED-WORD-NORMALIZATION.md) retains
+4.56% filtered / 4.72% all-sample / 4.38% native-normalized improvement, with
+separated confidence. Governed RGBA16 JPEG420 is 1.127× / upper 1.135,
+819,489 B/op; nongoverned is 1.036× / upper 1.049, 388,215 B/op. Both remain gaps.
+Packets stay 52,115 / 52,117 B, exact except approved COM. Borrowed-root peak
+remains 1,704,856 B. One core/internal build per OS, no harness/native/selector
+builds, profile, new input or settings grid. Full 5,331 checks/OS, affected
+normal/scalar/Linux-AVX512-off checks and SAME actual package/three examples pass.
+Only accelerated NormalizeRgba16 callers lose prior CPU proof: existing
+Encode422_16 (horizontal chroma preparation), Encode420Stream16 (forward output)
+and Encode420Cancelable16 (live cancellation checkpoints) need current costs.
+RGBA8/caller-byte samples, RGBA16 444, decoders and other operations retain
+applicable unchanged evidence. No new required cases or broader grayscale claim.
+Close normalization width/reciprocal/inlining variants; all 268 paths remain.
+The [preceding governed confirmation](CURRENT-GOVERNED-JPEG-RGBA16-COST.md) is
+the reused original baseline, replacing JCL1's previously uncertain screen.
 
 [Enlargement vertical geometry](ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md) is
 rejected. The initial primary7.19%filtered gain accompanies a material horizontal
