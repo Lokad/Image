@@ -11582,7 +11582,7 @@
     }
   },
   "primitive": "Non-indexed little-endian VP8L decodes into the final ImageBuffer owner at the former main uint[] allocation point, after entropy/group/Huffman parsing. ARGB transforms/cache hashing remain unchanged; R/B exchange normalizes RGBA in place. Indexed expansion, metadata,green-only andvalidation retain temporary arrays. One shared entropy parser uses Span<uint>. Dirty result lookup regions are explicitly cleared; longer codes require zero holes. Same owner/admission model, no new cache/allowance/fallback.",
-  "scope": "Nine existing513x259 resident/live-token/seekable-stream/literal/indexed/VP8ALPH-green/validation controls only. Original packets,settings,complete input/acquisition/normalization/independent-output/disposal or coding-descriptor boundaries,exact pixels/alpha/hiddenRGB and native adapters stay fixed. All guards pass. Source span typing affects shared entropy work; other required decode boundaries need applicable proof before CPU-pass claims. Encoders,VP8opaque,metadata,other codecs/edit/text unchanged.",
+  "scope": "Nine existing513x259 resident/live-token/seekable-stream/literal/indexed/VP8ALPH-green/validation controls only. Original packets,settings,complete input/acquisition/normalization/independent-output/disposal or coding-descriptor boundaries,exact pixels/alpha/hiddenRGB and native adapters stay fixed. All guards pass. All nine affected named decode/coding-validation cases now have current costs; three opaque VP8 cases do not call the changed core and retain valid evidence. Encoders,VP8opaque,metadata,other codecs/edit/text unchanged.",
   "memory": {
     "measuredWarmAllocatedBefore": 684377,
     "measuredWarmAllocatedAfter": 152728,
@@ -11759,7 +11759,7 @@
       }
     ]
   },
-  "next": "Close direct-frame/scratch/span variants. Lossless8 upper0.696 passes and stops; other named cases remain gaps. Full268 warm upper<=1x objective unchanged. Reuse unaffected qualification.",
+  "next": "Close direct-frame/scratch/span variants. Lossless8 upper0.696 passes and stops; the other eight named affected cases remain gaps. All affected named WebP cases are current; the full268 warm upper<=1x objective stays open. Reuse unchanged qualification, without inventing new combinations.",
   "ciTestFollowup": {
     "productionUnchanged": true,
     "productionBuilds": 0,
@@ -11782,5 +11782,33 @@
       "members": 13,
       "mirroredAndMemberVerified": true
     }
+  },
+  "inventoryReconciliation": {
+    "immutableInventoryCommit": "27fc0425be9e21d913e7bd049fe3ce629bf28955",
+    "immutableInventoryPath": "docs/benchmark-pre-cleanup.md",
+    "affectedNamedCases": {
+      "WarmWebpDecode.Lossless8": "Lossless8",
+      "WarmWebpDecode.NativeLossless8": "WebpResident",
+      "WarmWebpDecode.StreamNativeLossless8": "WebpStream",
+      "WarmWebpDecode.NativeLosslessCancelable8": "NativeLosslessCancelable8",
+      "WarmWebpDecode.IndexedNative16Colors8": "IndexedNative16Colors8",
+      "WarmVp8Decode.Native8": "Native8",
+      "WarmVp8Decode.StreamNative8": "Vp8Stream",
+      "WarmImageRead.ValidateVp8lAlpha": "ValidateVp8lAlpha",
+      "WarmImageRead.ValidateVp8Alpha": "ValidateVp8Alpha"
+    },
+    "allAffectedNamedCasesHaveCurrentCosts": true,
+    "unchangedNamedCases": [
+      "WarmVp8Decode.Opaque8",
+      "WarmVp8Decode.OpaqueCancelable8",
+      "WarmVp8Decode.SimpleOpaque8"
+    ],
+    "unchangedEvidence": "warm-vp8-validation-without-planes-evidence.json",
+    "benchmarkSourceSha256": {
+      "benchmarks/Lokad.Image.Benchmarks/WarmWebpDecode.cs": "334453beb328679b9b6ba0721e79e11ff0a44edd60e7c7198ae8898c17f9a184",
+      "benchmarks/Lokad.Image.Benchmarks/WarmVp8Decode.cs": "a0effe64d72ef517c49124cf13f506d8e3114466d92d3101eaff07434903aa30",
+      "benchmarks/Lokad.Image.Benchmarks/WarmImageRead.cs": "83f9e0a9cf816ef02157816c74b6a28453da21030b788b661391898417f4cc1d"
+    },
+    "scope": "Every affected named WebP decode/coding-validation control in the finite inventory is current. No additional WebP async/root/composition combination is named. Functional async/root ownership remains qualified; no claim about unlisted combinations and no new matrix."
   }
 }

@@ -591,7 +591,7 @@ costs current; eight companions retain all data,without pairedgain claims.
 Literal/runupper.696 PASS/STOP; otherpaths gaps. Full5237/OS,58internal/306public
 normal-scalar,SAMEactualpackage/governedasync/oneframe+alpha/3examples pass.
 Shared parser/ARGB transforms/hash/pixels remainexact; dirty lookup holes cleared.
-No new matrix/variants/profiles/retiming. Other affectedboundaries need proof;
+No new matrix/variants/profiles/retiming. All nine affectednamed cases now current;
 full268 objective remainsopen. Raw34ed9ec1... mirrored/memberverified.
 
 ## Finite checklist

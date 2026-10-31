@@ -38,7 +38,8 @@ The current producer passes **5,237 checks per OS**, plus 58 internal/306 public
 focused checks in normal/scalar modes. The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
-Other affected boundaries need applicable costs; unchanged paths retain proof.
+Every affected named WebP decode/validation control has current costs; the three
+opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays open.
 
 **Codecs**
 
