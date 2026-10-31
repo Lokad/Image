@@ -1,5 +1,9 @@
 # Lossless WebP color refinement by coding cost
 
+Historical compression experiment: byte-exact encoding has superseded these size
+search results. The [current async output cost](CURRENT-ASYNC-VP8L-ENCODE-COST.md)
+uses exact 183,812-byte packets; retained measurements below describe their producer.
+
 The fixed photograph falls **160,612 → 159,104 bytes**, saving **1,508 B** and
 finishing **928 B below** its frozen **160,032-byte** reference. Actual managed
 output exactly matches the fixed prototype with exact normalized RGBA. All

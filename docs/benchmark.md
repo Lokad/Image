@@ -2,7 +2,7 @@
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **61 comparisons** rank the remaining work; completion requires every
+These **62 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -45,6 +45,11 @@ that caveat. All four displayed color-search controls have current independent
 costs; their complete packets remain exact and all remain CPU gaps.
 [Color-bin evidence](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md).
 
+The existing async lossless WebP output boundary now has current independent
+evidence: **1.293× / upper 1.316**, **29,697,312 B/op**, exact **183,812-byte** packets.
+Staging, actual WriteAsync delivery, growth and output release are timed on both
+subjects. [Async evidence](../benchmarks/CURRENT-ASYNC-VP8L-ENCODE-COST.md).
+
 Byte-bilinear enlargement reuses exact horizontal rows in existing geometry:
 **21.66% less elapsed**, **1.356× / upper 1.363**, **2,235,512 B/op**, with unchanged
 admitted capacity. Reduction retains its current independent cost; both remain
@@ -81,6 +86,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | VP8 opaque RGBA16, including normalization † | 20,535.94 | 15,580.45 | 1.318 / 1.375 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
+| VP8L RGBA8 async nonseekable / libwebp exact=1 † | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 162,750.37 | 120,441.78 | 1.351 / 1.431 | 29,697,312 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 † | 110,839.47 | 84,688.04 | 1.309 / 1.326 | 20,418,338 | 160,032 / 160,032 |

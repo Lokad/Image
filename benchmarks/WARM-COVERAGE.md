@@ -674,6 +674,16 @@ return to largest remaining gaps. Full268-path objective unchanged.
 
 ## Finite checklist
 
+[Current asynchronous VP8L encoding](CURRENT-ASYNC-VP8L-ENCODE-COST.md) resolves
+stale evidence for the existing `WebpLossless8AsyncNonSeekable` boundary:
+1.293× / upper 1.316, 29,697,312 B/op, exact 183,812-byte packets. Complete encoding,
+staging, immediate actual async delivery, fresh output growth and release are
+included equivalently. One independent twelve, zero builds/profiles; current
+source/ownership/cancellation/failure checks pass and unchanged full/package proof
+is reused. The original completed job is recovered after a metadata key-casing
+postcheck failure, without retiming. No required case or workload grid is added;
+the summary displays this already-required public boundary as its 62nd comparison.
+
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
 names 257 controls. Remove four retired boundaries and add two distinct required
 algorithms: **255 existing required cases**. Twelve named controls below cover

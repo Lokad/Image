@@ -575,6 +575,21 @@ def render():
     opaque_row = f'| VP8L opaque RGBA8 / libwebp exact=1 † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 121,896 / 121,896 |'
     position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     rows.insert(position + 1, ('codec', opaque_row))
+    async_vp8l = json.loads((ROOT / 'benchmarks/current-async-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not async_vp8l['productionChanged'] and async_vp8l['allBuilds'] == 0
+    assert async_vp8l['independentQuietConfirmation'] and async_vp8l['qualificationReuse']['sameActualPackageBothOs']
+    assert async_vp8l['comparisonLowerBounds']['WebpLossless8AsyncNonSeekable'] > 1
+    observation = async_vp8l['cases']['WebpLossless8AsyncNonSeekable'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == async_vp8l['producers']['linuxSha256'] and receipt['completePacketExact']
+    assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 183812
+    assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    rows.insert(position + 2, ('codec', f'| VP8L RGBA8 async nonseekable / libwebp exact=1 † | {stats["Mean"] / 1000:,.2f} | '
+                f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 183,812 / 183,812 |'))
     position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| Bilinear resize RGBA16'))
     for ordinal, case in enumerate(['Down8', 'Up8']):
         producer = bilinear_byte_reuse if case == 'Up8' else bilinear_byte_cost
@@ -668,7 +683,7 @@ def render():
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **61 comparisons** rank the remaining work; completion requires every
+These **62 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -710,6 +725,11 @@ normalized intervals overlap. This specific gain is explicitly accepted with
 that caveat. All four displayed color-search controls have current independent
 costs; their complete packets remain exact and all remain CPU gaps.
 [Color-bin evidence](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md).
+
+The existing async lossless WebP output boundary now has current independent
+evidence: **1.293× / upper 1.316**, **29,697,312 B/op**, exact **183,812-byte** packets.
+Staging, actual WriteAsync delivery, growth and output release are timed on both
+subjects. [Async evidence](../benchmarks/CURRENT-ASYNC-VP8L-ENCODE-COST.md).
 
 Byte-bilinear enlargement reuses exact horizontal rows in existing geometry:
 **21.66% less elapsed**, **1.356× / upper 1.363**, **2,235,512 B/op**, with unchanged
