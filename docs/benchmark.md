@@ -4,7 +4,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **74 tabulated comparisons** rank the remaining work; completion requires every
+These **75 tabulated comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -109,6 +109,11 @@ other progressive cases remain gaps. The table adds four already-required decode
 paths, without extending the workload checklist.
 [Refinement-window evidence](../benchmarks/WARM-JPEG-REFINEMENT-WINDOW.md).
 
+Dense/general CMYK JPEG decoding independently passes at **0.894× / upper 0.916**,
+**1,085,661 B/op**, with exact independent-matrix/native normal/scalar pixels.
+The stale derived reference is reconciled without changing production or inputs;
+this already-required case stops. [Current cost](../benchmarks/CURRENT-DENSE-CMYK-JPEG-COST.md).
+
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
 upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
 operation includes both complete decodes, retained overlap and releases on both
@@ -167,6 +172,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | JPEG progressive422, resident decode † | 2,724.57 | 2,258.63 | 1.206 / 1.223 | 847,116 | — |
 | JPEG ordinary progressive444, resident decode † | 4,487.30 | 3,361.70 | 1.335 / 1.349 | 984,212 | — |
 | JPEG progressive444, live-token resident decode † | 4,821.63 | 3,353.29 | 1.438 / 1.448 | 984,212 | — |
+| JPEG dense CMYK, resident decode (confirmed pass) † | 2,786.90 | 3,115.72 | 0.894 / 0.916 | 1,085,661 | — |
 
 **Editing**
 

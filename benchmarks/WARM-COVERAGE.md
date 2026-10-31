@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current dense/general CMYK decoding](CURRENT-DENSE-CMYK-JPEG-COST.md) passes
+at 0.894× / upper 0.916, 1,085,661 B/op. Independent Q14/Q16 matrix samples,
+managed normal/scalar on both OSes and native normal/scalar agree exactly.
+Preflight identifies old floating-inverse derived pixels before any actual;
+original inputs/settings stay, temporary derived data is restored byte-exact.
+One independent twelve, zero builds/profiles/repeated qualification. Stop this
+already-required general-inverse case; the table now has 75 comparisons and
+the full 268-path objective remains. Raw evidence and failed preflight retained.
+
 [Ordinary progressive refinement window](WARM-JPEG-REFINEMENT-WINDOW.md) improves
 matched 4:4:4 decoding 9.41% filtered/all elapsed and 9.32% normalized, with
 separate confidence envelopes and unchanged 984,212 B/op. Current 1.335× / upper
