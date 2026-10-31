@@ -655,6 +655,20 @@ def render():
                      f'{stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    tight_byte_down = json.loads((ROOT / 'benchmarks/current-tight-byte-bicubic-reduction-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not tight_byte_down['productionChanged'] and tight_byte_down['allBuilds'] == 0
+    assert tight_byte_down['producers'] == tight_byte_up['producers']
+    assert tight_byte_down['qualificationReuse']['sameActualPackageBothOs']
+    observation = tight_byte_down['cases']['TightDown8'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == tight_byte_down['producers']['linuxSha256']
+    assert receipt['managedRationalReferenceExact'] and receipt['managedMaxWorkingBytes'] == 667660
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    rows.append(('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | {stats["Mean"] / 1000:,.2f} | '
+                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -734,7 +748,7 @@ def render():
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **66 comparisons** rank the remaining work; completion requires every
+These **67 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -805,6 +819,9 @@ horizontal/vertical strip callers now confirm **1.188× / upper 1.235** and
 **1.371× / upper 1.379**, with **1,178,374 / 1,280,363 B/op**.
 [Fixed-certificate evidence](../benchmarks/WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md).
 [Current one-axis costs](../benchmarks/CURRENT-BYTE-BICUBIC-AXIAL-COSTS.md).
+The distinct 4 KiB reduction path confirms **1.552× / upper 1.558**,
+**132,309 B/op**, with exact pixels and zero builds.
+[Tight reduction evidence](../benchmarks/CURRENT-TIGHT-BYTE-BICUBIC-REDUCTION-COST.md).
 
 The current producer passes **5,245 checks per OS**, plus 179 public
 focused checks in normal/scalar modes and Linux with AVX512 disabled.

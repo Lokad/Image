@@ -674,6 +674,13 @@ return to largest remaining gaps. Full268-path objective unchanged.
 
 ## Finite checklist
 
+[Current tight-memory byte reduction](CURRENT-TIGHT-BYTE-BICUBIC-REDUCTION-COST.md)
+resolves existing`TightDown8`:646.826µs,1.552× / upper1.558,132,309B/op,exact
+rational/frozen pixels and original source+output+4KiB bound. One current twelve,
+zero builds/profiles,unchanged full/package proof reused. Its older six-column/
+fuel producer is superseded;no causal speedup claim or successful retiming.
+This distinct required boundary brings the summary to67 comparisons;all268 stay.
+
 [Fixed byte-bicubic certificate](WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md) improves
 `TightUp8` by9.87% independently:1.565× / upper1.591, unchanged2,492,956 B/op.
 The original513×259 RGBA8→1027×519 and input+output+4 KiB boundary stay fixed.

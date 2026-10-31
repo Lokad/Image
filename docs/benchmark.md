@@ -2,7 +2,7 @@
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **66 comparisons** rank the remaining work; completion requires every
+These **67 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -73,6 +73,9 @@ horizontal/vertical strip callers now confirm **1.188× / upper 1.235** and
 **1.371× / upper 1.379**, with **1,178,374 / 1,280,363 B/op**.
 [Fixed-certificate evidence](../benchmarks/WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md).
 [Current one-axis costs](../benchmarks/CURRENT-BYTE-BICUBIC-AXIAL-COSTS.md).
+The distinct 4 KiB reduction path confirms **1.552× / upper 1.558**,
+**132,309 B/op**, with exact pixels and zero builds.
+[Tight reduction evidence](../benchmarks/CURRENT-TIGHT-BYTE-BICUBIC-REDUCTION-COST.md).
 
 The current producer passes **5,245 checks per OS**, plus 179 public
 focused checks in normal/scalar modes and Linux with AVX512 disabled.
@@ -140,6 +143,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,823.16 | 3,081.49 | 1.565 / 1.591 | 2,492,956 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,800.86 | 1,515.49 | 1.188 / 1.235 | 1,178,374 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,374.70 | 1,732.26 | 1.371 / 1.379 | 1,280,363 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 646.83 | 416.72 | 1.552 / 1.558 | 132,309 |
 
 **Inspection and pixel-coding validation**
 
