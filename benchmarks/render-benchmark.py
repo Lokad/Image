@@ -823,6 +823,21 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    horizontal_cmyk = json.loads((ROOT / 'benchmarks/current-horizontal-cmyk-jpeg-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not horizontal_cmyk['productionChanged'] and horizontal_cmyk['status']['CmykAdobeAc'] == 'confirmed-gap'
+    assert horizontal_cmyk['comparisonLowerBound'] > 1
+    assert horizontal_cmyk['oracle']['independentIntegerQ14Q16'] and horizontal_cmyk['oracle']['managedAndNativeNormalScalarExact']
+    assert horizontal_cmyk['windowsProof']['managedNormalScalarIndependentOracleAndNativeExact'] and horizontal_cmyk['restoration']['originalDerivedFixtureByteExact']
+    observation = horizontal_cmyk['cases']['CmykAdobeAc'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == horizontal_cmyk['producers']['linuxSha256']
+    assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] == horizontal_cmyk['oracle']['rgbaSha256']
+    assert all(q['passed'] for q in observation['quietness'].values())
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    rows.append(('codec', f'| JPEG horizontal-only CMYK, resident decode † | {stats["Mean"] / 1000:,.2f} | '
+                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -904,7 +919,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **75 tabulated comparisons** rank the remaining work; completion requires every
+These **76 tabulated comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -1013,6 +1028,10 @@ Dense/general CMYK JPEG decoding independently passes at **0.894× / upper 0.916
 **1,085,661 B/op**, with exact independent-matrix/native normal/scalar pixels.
 The stale derived reference is reconciled without changing production or inputs;
 this already-required case stops. [Current cost](../benchmarks/CURRENT-DENSE-CMYK-JPEG-COST.md).
+
+The existing horizontal-only CMYK control separately confirms a **1.457× / upper
+1.521** gap, **1,085,757 B/op**, with exact independent/native pixels. One current
+confirmation resolves its old-code uncertainty. [Current cost](../benchmarks/CURRENT-HORIZONTAL-CMYK-JPEG-COST.md).
 
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
 upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each

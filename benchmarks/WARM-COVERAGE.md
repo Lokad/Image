@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current horizontal-only CMYK decoding](CURRENT-HORIZONTAL-CMYK-JPEG-COST.md)
+confirms 1.457× / upper 1.521, 1,085,757 B/op. Independent Q14/Q16 samples,
+managed normal/scalar both OSes and native normal/scalar agree exactly. Only
+old derived expected samples are temporarily corrected then restored byte-exact;
+inputs/settings remain fixed. One independent twelve, zero builds/profiles or
+repeated full/package qualification. This resolves an existing distinct required
+inverse path; 76 displayed comparisons, unchanged 268 required paths. Review one
+substantive storage/dataflow opportunity; do not retune the passing dense case.
+
 [Current dense/general CMYK decoding](CURRENT-DENSE-CMYK-JPEG-COST.md) passes
 at 0.894× / upper 0.916, 1,085,661 B/op. Independent Q14/Q16 matrix samples,
 managed normal/scalar on both OSes and native normal/scalar agree exactly.
