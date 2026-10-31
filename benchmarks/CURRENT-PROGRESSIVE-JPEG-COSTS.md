@@ -1,43 +1,35 @@
 # Current progressive JPEG costs
 
-Three existing controls have independent quiet-VM costs on qualified production.
-All remain CPU gaps. Managed frames equal the frozen native pixels exactly;
-normal/scalar correctness and independent output ownership pass.
+The ordinary-refinement window improves the matched 4:4:4 control **9.41%** with
+exact pixels and unchanged allocation. All six existing affected paths have current
+independent quiet-VM evidence on the same qualified producer.
 
-| Complete warm one-CPU decode | Lokad µs | Ratio / upper | Allocated B/op |
-| --- | ---: | ---: | ---: |
-| ProgressiveGray | 2,475.155 | 1.442 / 1.476 | 683,126 |
-| ProgressiveCancelable444 | 4,833.602 | 1.438 / 1.447 | 984,212 |
-| Progressive444 | 4,953.638 | 1.472 / 1.501 | 984,212 |
+| Existing complete warm one-CPU operation | Lokad µs | Ratio / upper | Allocated B/op | Status |
+| --- | ---: | ---: | ---: | --- |
+| Progressive444 | 4,487.297 | 1.335 / 1.349 | 984,212 | Gap |
+| ProgressiveGray | 2,270.109 | 1.326 / 1.332 | 683,126 | Gap |
+| Progressive420 | 2,208.307 | 1.060 / 1.160 | 775,318 | Confidence open |
+| Progressive422 | 2,724.566 | 1.206 / 1.223 | 847,116 | Gap |
+| ProgressiveCancelable444 | 4,821.634 | 1.438 / 1.448 | 984,212 | Gap |
+| ValidateJpegProgressive420 | 291.290 | 1.087 / 1.094 | 4,072 | Gap |
 
-All use original 513×259 progressive packets and coefficient proofs. Complete
-resident-input decoding, conversion, fresh independently owned RGBA8 output and
-release are timed on both subjects. FFmpeg's software MJPEG decoder resets state
-per operation; codec/conversion contexts and packet/frame wrappers are reused.
-Grayscale includes GRAY8 expansion. The live token is never signaled; setup is
-excluded and native has no equivalent option. Startup, I/O, IPC and validation
-are excluded. Native allocation is unmeasured.
+The original 513×259 packets/settings and one-CPU complete-operation boundaries
+remain. Decoding includes conversion, fresh independently owned RGBA8 and release;
+complete-coding validation excludes RGBA normalization on both sides. The FFmpeg
+software decoder resets per operation and reuses private contexts. The live token
+is never signaled; native has no token option. Startup, I/O, IPC and validation
+checks are excluded. Native allocation is unmeasured.
 
-Each has one retained independent twelve and both native brackets; conservative
-lower bounds exceed 1×. Temporary managed-hash metadata is refreshed to the
-already frozen native frame, then original headers restored byte-exactly. Packets,
-quantization, coefficients, reference settings and pixel tolerances stay fixed.
-No causal gain or regression claim follows from comparing separate token cases.
+All managed frames equal their frozen native frames. Source/output lifetimes,
+CLI/scalar correctness and quiet guards pass. Only 4:2:0 decode is confidence-open;
+no case yet has a ≤1× conservative upper. No timing repeat or new control is added.
+Full Windows/Linux/live qualification and the same actual Release package/three
+examples pass. Original temporary metadata/proof files are restored exactly.
 
-The grayscale/live measurements reuse the unchanged A128 producer and 5,267-check
-per-OS/package proof, with zero builds. Ordinary 4:4:4 uses the qualified LRP1
-producer (JPEG paths unchanged), 5,285 checks per OS, live comparisons, the same
-actual Release package on both OSes and three examples. It needs one small cached-
-source selector build changing only the case; no library/harness/native rebuild.
-An archive containing only the grayscale selector is refused before any actuals.
-No new fixture, profile, quality sweep or successful timing repeat.
-
-[Grayscale/live numeric evidence](current-progressive-jpeg-costs-evidence.json)
-pins raw current-progressive-jpeg-costs.tar.xz, SHA256
-3e47edc85c95f8fb34f8b7af94b7eb5a9e411f220076086cc79cc83aba062b4b
-(76 members). [Ordinary 4:4:4 evidence](current-progressive-jpeg-444-cost-evidence.json)
-pins raw current-progressive-jpeg-444-cost.tar.xz, SHA256
-9547e5a7553ae6f186161501a5f702da0352f5f8f3fadbc17b885b63651648f3
-(40 members). Both are mirrored and member-verified, retaining actual libraries,
-selectors, workers, packets, frames, receipts and guards. The full 268-path
-objective remains open. Reproduce with the [reference tooling](../tools/WarmReference/README.md).
+[Current optimization and qualification](WARM-JPEG-REFINEMENT-WINDOW.md) and
+[numeric evidence](warm-jpeg-refinement-window-evidence.json) pin all actuals,
+producers, hashes and mirrored/member-verified raw evidence. Earlier
+[grayscale/live costs](current-progressive-jpeg-costs-evidence.json) and
+[ordinary 4:4:4 cost](current-progressive-jpeg-444-cost-evidence.json) are retained
+as historical sources; only the latter supplies the matched gain baseline.
+The full 268-path objective remains open.

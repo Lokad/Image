@@ -168,7 +168,7 @@ var eob = 1; OverflowException? failure = null;
 
     // Independent T.81 G.1.2 traversal using the established one-bit reader;
     // it neither reads correction fields nor constructs nonzero/run masks.
-    private static void Reference(ref JpegEntropyReader reader, Span<int> block, JpegHuffman table,
+    internal static void Reference(ref JpegEntropyReader reader, Span<int> block, JpegHuffman table,
         int start, int end, int low, ref int eob)
     {
         var index = start; var increment = 1 << low;

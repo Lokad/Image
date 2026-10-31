@@ -67,6 +67,7 @@ try {
     $shapingFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredOpenType.cs'))
     $shapingConsumerPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/PackageSmokeTest/TextShapingConsumer.cs'))
     $jpegFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredJpegCompatibility.cs'))
+    $progressiveJpegFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredJpeg.cs'))
     $directRgbFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalDirectRgbControls.cs'))
     $pixelFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPixels.cs'))
     $vp8lFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8lControls.cs'))
@@ -92,6 +93,7 @@ try {
     <Compile Include="$shapingFixturePath" Link="AuthoredOpenType.cs" />
     <Compile Include="$shapingConsumerPath" Link="TextShapingConsumer.cs" />
     <Compile Include="$jpegFixturePath" Link="AuthoredJpegCompatibility.cs" />
+    <Compile Include="$progressiveJpegFixturePath" Link="AuthoredJpeg.cs" />
     <Compile Include="$directRgbFixturePath" Link="OriginalDirectRgbControls.cs" />
     <Compile Include="$pixelFixturePath" Link="OriginalPixels.cs" />
     <Compile Include="$vp8lFixturePath" Link="OriginalVp8lControls.cs" />

@@ -7,8 +7,22 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Ordinary progressive refinement window](WARM-JPEG-REFINEMENT-WINDOW.md) improves
+matched 4:4:4 decoding 9.41% filtered/all elapsed and 9.32% normalized, with
+separate confidence envelopes and unchanged 984,212 B/op. Current 1.335× / upper
+1.349 remains a gap. All six affected named paths have one current independent
+twelve; 4:2:0 decode is confidence-open (lower 0.969 / upper 1.160), other cases
+remain gaps. Exact frozen/native frames and validation descriptors, ownership,
+quiet guards, all 5,289 checks per OS and the same actual Windows package/three
+examples pass. One core/internal build per OS; zero harness/native/public-test
+builds or new input/profile. Two small selectors are built as needed. Temporary
+headers/read proof restored exactly. Four already-required decode paths join
+the current table: 74 displayed rows, unchanged 268 required paths. This primitive
+is closed after acceptance; no refill-width/threshold/EH variants.
+
 [Current ordinary progressive 4:4:4](CURRENT-PROGRESSIVE-JPEG-COSTS.md) resolves
-one existing required noncancelable path at 1.472× / upper 1.501, 984,212 B/op.
+the historical original for one existing required noncancelable path at
+1.472× / upper 1.501, 984,212 B/op; the accepted window above supersedes this cost.
 Exact frozen/native pixels, source/output ownership and quiet guards pass. One
 independent twelve, one cached-source selector build, no library/harness/native
 build or new control. Original header restored; unchanged full/package proof

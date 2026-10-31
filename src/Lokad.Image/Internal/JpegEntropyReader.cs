@@ -119,20 +119,20 @@ var index = start; var increment = 1 << low;
                 {
                     if (cancellation.IsCancellationRequested)
                     {
-                        PublishCancelableRefinementLookahead(cache, pending, cursor);
+                        PublishRefinementLookahead(cache, pending, cursor);
                         cancellation.ThrowIfCancellationRequested();
                     }
 pending -= length; symbol = packed >> 4;
                 }
                 else
                 {
-                    PublishCancelableRefinementLookahead(cache, pending, cursor);                     symbol = ac.Read(ref this);
+                    PublishRefinementLookahead(cache, pending, cursor);                     symbol = ac.Read(ref this);
                     cache = bits; pending = available; cursor = position;
                 }
                 run = symbol >> 4; var size = symbol & 15;
                 if (size != 0 && size != 1)
                 {
-                    PublishCancelableRefinementLookahead(cache, pending, cursor);
+                    PublishRefinementLookahead(cache, pending, cursor);
                     throw new ImageDataException("Invalid JPEG refinement symbol.");
                 }
                 if (size != 0 || run != 15)
@@ -148,14 +148,14 @@ pending -= length; symbol = packed >> 4;
                     {
                         if (cancellation.IsCancellationRequested)
                         {
-                            PublishCancelableRefinementLookahead(cache, pending, cursor);
+                            PublishRefinementLookahead(cache, pending, cursor);
                             cancellation.ThrowIfCancellationRequested();
                         }
 pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1));
                     }
                     else
                     {
-                        PublishCancelableRefinementLookahead(cache, pending, cursor);                         field = ReadBits(count);
+                        PublishRefinementLookahead(cache, pending, cursor);                         field = ReadBits(count);
                         cache = bits; pending = available; cursor = position;
                     }
                     if (size != 0) inserted = field == 0 ? -increment : increment;
@@ -187,42 +187,42 @@ pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1));
                 {
                     if (cancellation.IsCancellationRequested)
                     {
-                        PublishCancelableRefinementLookahead(cache, pending, cursor);
+                        PublishRefinementLookahead(cache, pending, cursor);
                         cancellation.ThrowIfCancellationRequested();
                     }
 bit = (int)((cache >> --pending) & 1);
                 }
                 else
                 {
-                    PublishCancelableRefinementLookahead(cache, pending, cursor);                     bit = ReadBits(1);
+                    PublishRefinementLookahead(cache, pending, cursor);                     bit = ReadBits(1);
                     cache = bits; pending = available; cursor = position;
                 }
                 if (bit != 0)
                 {
                     // ApplyCorrection can throw only for Int32.MinValue. Its
                     // already-consumed correction bit must survive that error.
-                    if (value == int.MinValue) PublishCancelableRefinementLookahead(cache, pending, cursor);
+                    if (value == int.MinValue) PublishRefinementLookahead(cache, pending, cursor);
                     JpegDecoder.ApplyCorrection(ref value, increment);
                 }
                 correctionPositions &= correctionPositions - 1;
             }
             if (finish)
             {
-                eobRun--; PublishCancelableRefinementLookahead(cache, pending, cursor); return true;
+                eobRun--; PublishRefinementLookahead(cache, pending, cursor); return true;
             }
             run -= BitOperations.PopCount(zeroPrefix); index = stop;
             if (run != 0 || (inserted != 0 && index > end))
             {
-                PublishCancelableRefinementLookahead(cache, pending, cursor);
+                PublishRefinementLookahead(cache, pending, cursor);
                 throw new ImageDataException("JPEG refinement run exceeds band.");
             }
             if (inserted != 0) { block[index] = inserted; nonzero |= 1UL << index; index++; }
         }
-        PublishCancelableRefinementLookahead(cache, pending, cursor); return true;
+        PublishRefinementLookahead(cache, pending, cursor); return true;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private void PublishCancelableRefinementLookahead(ulong cache, int pending, int cursor)
+    private void PublishRefinementLookahead(ulong cache, int pending, int cursor)
     {
         var wholeBytes = pending >> 3;
         bits = unchecked((uint)(cache >> (wholeBytes * 8))); available = pending & 7;
@@ -357,144 +357,169 @@ cache = candidateCache; pending = candidatePending - length;
     internal bool TryReadRefinementBlock(ReadOnlySpan<ushort> shortCodes, JpegHuffman ac,
         Span<int> block, int start, int end, int low, ref int eobRun)
     {
-                // Live cancellation retains the preceding traversal.
+        // Live cancellation retains its original logical-read checkpoints.
         if (context.Cancellation.CanBeCanceled
-            || !Avx2.IsSupported || !Bmi2.X64.IsSupported
+            || !Avx2.IsSupported || !Bmi2.X64.IsSupported || shortCodes.Length != 256
             || block.Length != 64 || start < 1 || start > end || end > 63 || low is < 0 or > 13)
             return false;
         var input = data;
-        var cursor = position; var cache = bits; var pending = available;
-var index = start; var increment = 1 << low;
+        var cursor = position; ulong cache = bits; var pending = available;
+        var index = start; var increment = 1 << low;
         ulong nonzero = 0;
         for (var offset = 0; offset < 64; offset += 8)
         {
             var values = Vector256.Create(block.Slice(offset, 8));
-            var zeros = (uint)Avx.MoveMask(
-                Avx2.CompareEqual(values, Vector256<int>.Zero).AsSingle());
+            var zeros = (uint)Avx.MoveMask(Avx2.CompareEqual(values, Vector256<int>.Zero).AsSingle());
             nonzero |= (ulong)(~zeros & 255) << offset;
         }
         var bandEnd = end == 63 ? ulong.MaxValue : (1UL << (end + 1)) - 1;
-        try
+        while (index <= end)
         {
-            while (index <= end)
+            var finish = eobRun > 0;
+            var run = 0; var inserted = 0; var stop = end + 1;
+            ulong correctionPositions, zeroPrefix = 0;
+            if (!finish)
             {
-                var finish = eobRun > 0;
-                var run = 0; var inserted = 0; var stop = end + 1;
-                ulong correctionPositions, zeroPrefix = 0;
-                if (!finish)
+                // Ordinary read-only lookahead can be retained across codes and
+                // fields. No escaped byte or marker enters this wider window.
+                if (pending < 16 && input.Length - cursor >= 4)
                 {
-                    // Complete short prefixes commit only their required byte.
-                    // Canonical/marker tails retain the existing Huffman reader.
-                    var candidateCache = cache; var candidatePending = pending; var candidateCursor = cursor;
-                    var prefix = (int)((cache & ((1u << pending) - 1)) << (8 - pending));
-                    var packed = shortCodes[prefix]; var length = packed & 15;
-                    if (length == 0 || length > candidatePending)
-                    {
-                        if (candidateCursor < input.Length)
-                        {
-                            var next = input[candidateCursor++];
-                            if (next != 255 || (candidateCursor < input.Length && input[candidateCursor++] == 0))
-                            {
-                                candidateCache = candidateCache << 8 | next; candidatePending += 8;
-                                prefix = (int)((candidateCache >> (candidatePending - 8)) & 255);
-                                packed = shortCodes[prefix]; length = packed & 15;
-                            }
-                            else length = 0;
-                        }
-                        else length = 0;
-                    }
-                    int symbol;
-                    if (length != 0 && length <= candidatePending)
-                    {
-cache = candidateCache; pending = candidatePending - length;
-                        cursor = candidateCursor; symbol = packed >> 4;
-                    }
-                    else
-                    {
-                        bits = cache; available = pending; position = cursor;
-                        try { symbol = ac.Read(ref this); }
-                        finally { cache = bits; pending = available; cursor = position; }
-                    }
-                    run = symbol >> 4; var size = symbol & 15;
-                    if (size != 0)
-                    {
-                        if (size != 1) throw new ImageDataException("Invalid JPEG refinement symbol.");
-                        inserted = ReadRefinementBits(input, ref cursor, ref cache, ref pending, 1) == 0 ? -increment : increment;
-                    }
-                    else if (run != 15)
-                    {
-                        eobRun = (1 << run) + ReadRefinementBits(input, ref cursor, ref cache, ref pending, run);
-                        finish = true;
-                    }
-                    else run = 16;
+                    var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
+                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
+                    { cache = cache << 32 | word; pending += 32; cursor += 4; }
                 }
-                var remaining = bandEnd & (ulong.MaxValue << index);
-                if (finish) correctionPositions = nonzero & remaining;
+                var prefix = pending >= 8 ? (int)((cache >> (pending - 8)) & 255)
+                    : (int)((cache & ((1UL << pending) - 1)) << (8 - pending));
+                var packed = shortCodes[prefix]; var length = packed & 15; int symbol;
+                if (length is > 0 and <= 8 && length <= pending)
+                { pending -= length; symbol = packed >> 4; }
                 else
                 {
-                    var zeros = ~nonzero & remaining;
-                    var target = Bmi2.X64.ParallelBitDeposit(1UL << (inserted != 0 ? run : run - 1), zeros);
-                    stop = target == 0 ? end + 1 : BitOperations.TrailingZeroCount(target) + (inserted != 0 ? 0 : 1);
-                    var prefix = (stop == 64 ? ulong.MaxValue : (1UL << stop) - 1) & remaining;
-                    zeroPrefix = zeros & prefix;
-                    correctionPositions = nonzero & prefix;
+                    PublishRefinementLookahead(cache, pending, cursor);
+                    symbol = ac.Read(ref this);
+                    cache = bits; pending = available; cursor = position;
                 }
-                while (correctionPositions != 0)
+                run = symbol >> 4; var size = symbol & 15;
+                if (size != 0 && size != 1)
                 {
-                    var remainingCount = BitOperations.PopCount(correctionPositions);
-                    var count = Math.Min(16, remainingCount);
-                    var selected = remainingCount <= 16 ? correctionPositions
-                        : Bmi2.X64.ParallelBitDeposit((1UL << count) - 1, correctionPositions);
-                    if (!TryReadRefinementField(input, ref cursor, ref cache, ref pending, count, out var rawField))
+                    PublishRefinementLookahead(cache, pending, cursor);
+                    throw new ImageDataException("Invalid JPEG refinement symbol.");
+                }
+                if (size != 0 || run != 15)
+                {
+                    var count = size != 0 ? 1 : run; int field;
+                    if (pending >= count)
+                    { pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1)); }
+                    else
                     {
-                        // A marker/truncation inside the field retains every
-                        // preceding correction and cancellation checkpoint.
-                        for (var scalar = selected; scalar != 0; scalar &= scalar - 1)
-                            if (ReadRefinementBits(input, ref cursor, ref cache, ref pending, 1) != 0)
-                                JpegDecoder.ApplyCorrection(ref block[BitOperations.TrailingZeroCount(scalar)], increment);
-                        correctionPositions &= ~selected;
-                        continue;
+                        // The slow reader owns any partially consumed required
+                        // bytes on failure, including an EOB field's whole byte.
+                        PublishRefinementLookahead(cache, pending, cursor);
+                        field = ReadRefinementBits(input, ref position, ref bits, ref available, count);
+                        cache = bits; pending = available; cursor = position;
                     }
-                    var field = (uint)rawField;
-                    if (field != 0)
+                    if (size != 0) inserted = field == 0 ? -increment : increment;
+                    else { eobRun = (1 << run) + field; finish = true; }
+                }
+                else run = 16;
+            }
+            var remaining = bandEnd & (ulong.MaxValue << index);
+            if (finish) correctionPositions = nonzero & remaining;
+            else
+            {
+                var zeros = ~nonzero & remaining;
+                var target = Bmi2.X64.ParallelBitDeposit(1UL << (inserted != 0 ? run : run - 1), zeros);
+                stop = target == 0 ? end + 1 : BitOperations.TrailingZeroCount(target) + (inserted != 0 ? 0 : 1);
+                var prefix = (stop == 64 ? ulong.MaxValue : (1UL << stop) - 1) & remaining;
+                zeroPrefix = zeros & prefix; correctionPositions = nonzero & prefix;
+            }
+            while (correctionPositions != 0)
+            {
+                var remainingCount = BitOperations.PopCount(correctionPositions);
+                var count = Math.Min(16, remainingCount);
+                var selected = remainingCount <= 16 ? correctionPositions
+                    : Bmi2.X64.ParallelBitDeposit((1UL << count) - 1, correctionPositions);
+                if (pending < count && input.Length - cursor >= 4)
+                {
+                    var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
+                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
+                    { cache = cache << 32 | word; pending += 32; cursor += 4; }
+                }
+                int rawField; var complete = pending >= count;
+                if (complete)
+                { pending -= count; rawField = (int)((cache >> pending) & ((1u << count) - 1)); }
+                else
+                {
+                    PublishRefinementLookahead(cache, pending, cursor);
+                    complete = TryReadRefinementField(input, ref position, ref bits, ref available, count, out rawField);
+                    cache = bits; pending = available; cursor = position;
+                }
+                if (!complete)
+                {
+                    // A failed group retains the original immediate per-bit
+                    // updates and precise marker/truncation cursor.
+                    for (var scalar = selected; scalar != 0; scalar &= scalar - 1)
                     {
-                        uint reversed;
-                        if (count <= 4)
-                        {
-                            // Nibble v contains the reversal of v's four bits.
-                            // This immediate is generated by that bit geometry.
-                            reversed = (uint)((0xF7B3D591E6A2C480UL >> ((int)field * 4)) & 15) >> (4 - count);
-                        }
+                        int bit;
+                        if (pending != 0) bit = (int)((cache >> --pending) & 1);
                         else
                         {
-                            reversed = field << (16 - count);
-                            reversed = ((reversed & 0x5555u) << 1) | ((reversed >> 1) & 0x5555u);
-                            reversed = ((reversed & 0x3333u) << 2) | ((reversed >> 2) & 0x3333u);
-                            reversed = ((reversed & 0x0F0Fu) << 4) | ((reversed >> 4) & 0x0F0Fu);
-                            reversed = ((reversed & 255u) << 8) | (reversed >> 8);
+                            PublishRefinementLookahead(cache, pending, cursor);
+                            bit = ReadRefinementBits(input, ref position, ref bits, ref available, 1);
+                            cache = bits; pending = available; cursor = position;
                         }
-                        var corrections = Bmi2.X64.ParallelBitDeposit(reversed, selected);
-                        while (corrections != 0)
+                        if (bit != 0)
                         {
-                            ref var value = ref block[BitOperations.TrailingZeroCount(corrections)];
+                            ref var value = ref block[BitOperations.TrailingZeroCount(scalar)];
+                            if (value == int.MinValue) PublishRefinementLookahead(cache, pending, cursor);
                             JpegDecoder.ApplyCorrection(ref value, increment);
-                            corrections &= corrections - 1;
                         }
                     }
                     correctionPositions &= ~selected;
+                    continue;
                 }
-                if (finish) { eobRun--; return true; }
-                run -= BitOperations.PopCount(zeroPrefix); index = stop;
-                if (run != 0 || (inserted != 0 && index > end))
-                    throw new ImageDataException("JPEG refinement run exceeds band.");
-                if (inserted != 0) { block[index] = inserted; nonzero |= 1UL << index; index++; }
+                var field = (uint)rawField;
+                if (field != 0)
+                {
+                    uint reversed;
+                    if (count <= 4)
+                    {
+                        // Nibble v contains the reversal of v's four bits.
+                        // This immediate is generated by that bit geometry.
+                        reversed = (uint)((0xF7B3D591E6A2C480UL >> ((int)field * 4)) & 15) >> (4 - count);
+                    }
+                    else
+                    {
+                        reversed = field << (16 - count);
+                        reversed = ((reversed & 0x5555u) << 1) | ((reversed >> 1) & 0x5555u);
+                        reversed = ((reversed & 0x3333u) << 2) | ((reversed >> 2) & 0x3333u);
+                        reversed = ((reversed & 0x0F0Fu) << 4) | ((reversed >> 4) & 0x0F0Fu);
+                        reversed = ((reversed & 255u) << 8) | (reversed >> 8);
+                    }
+                    var corrections = Bmi2.X64.ParallelBitDeposit(reversed, selected);
+                    while (corrections != 0)
+                    {
+                        ref var value = ref block[BitOperations.TrailingZeroCount(corrections)];
+                        if (value == int.MinValue) PublishRefinementLookahead(cache, pending, cursor);
+                        JpegDecoder.ApplyCorrection(ref value, increment);
+                        corrections &= corrections - 1;
+                    }
+                }
+                correctionPositions &= ~selected;
             }
-            return true;
+            if (finish)
+            {
+                eobRun--; PublishRefinementLookahead(cache, pending, cursor); return true;
+            }
+            run -= BitOperations.PopCount(zeroPrefix); index = stop;
+            if (run != 0 || (inserted != 0 && index > end))
+            {
+                PublishRefinementLookahead(cache, pending, cursor);
+                throw new ImageDataException("JPEG refinement run exceeds band.");
+            }
+            if (inserted != 0) { block[index] = inserted; nonzero |= 1UL << index; index++; }
         }
-        finally
-        {
-            bits = cache; available = pending; position = cursor;
-        }
+        PublishRefinementLookahead(cache, pending, cursor); return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

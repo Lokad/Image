@@ -782,21 +782,29 @@ def render():
     first_ac = json.loads((ROOT / 'benchmarks/jpeg-first-ac-confidence-open-evidence.json').read_text(encoding='utf-8'))
     assert first_ac['confidenceOpen'] and not first_ac['accepted'] and not first_ac['productionChanged']
     assert all(v['productionSourceAndConsumerRestored'] for v in first_ac['restoration'].values())
-    ordinary_progressive = json.loads((ROOT / 'benchmarks/current-progressive-jpeg-444-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not ordinary_progressive['productionChanged'] and ordinary_progressive['productionHarnessNativeBuilds'] == 0
-    assert ordinary_progressive['producers'] == local_repair['producers']
-    assert ordinary_progressive['preparation']['originalHeaderRestored']['originalHeaderByteExact']
-    observation = ordinary_progressive['cases']['Progressive444'][-1]
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == ordinary_progressive['producers']['linuxSha256']
-    assert not receipt['cancellationCanBeCanceled'] and receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    assert all(q['passed'] for q in observation['quietness'].values())
-    assert ordinary_progressive['comparisonLowerBounds']['Progressive444'] > 1
-    rows.append(('codec', f'| JPEG ordinary progressive444, resident decode † | {stats["Mean"] / 1000:,.2f} | '
-                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    refinement_window = json.loads((ROOT / 'benchmarks/warm-jpeg-refinement-window-evidence.json').read_text(encoding='utf-8'))
+    assert refinement_window['qualification']['fullChecksEachOs'] == 5289
+    assert refinement_window['decisions']['confirm']['passed'] and refinement_window['decisions']['confirm']['normalizedSeparated']
+    assert refinement_window['qualification']['sameActualPackageBothOs']
+    assert refinement_window['memory']['primaryAllocatedDifference'] == refinement_window['memory']['newOwnedCapacityBytes'] == 0
+    assert refinement_window['correctness']['headersAndReadProofRestored']['originalHeadersAndReadProofByteExact']
+    assert set(refinement_window['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422', 'Progressive444', 'ProgressiveCancelable444', 'ValidateJpegProgressive420'}
+    for key, label in [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
+                       ('Progressive420', 'JPEG progressive420, resident decode (confidence open)'),
+                       ('Progressive422', 'JPEG progressive422, resident decode'),
+                       ('Progressive444', 'JPEG ordinary progressive444, resident decode'),
+                       ('ProgressiveCancelable444', 'JPEG progressive444, live-token resident decode')]:
+        observation = refinement_window['cases'][key][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == refinement_window['producers']['linuxSha256']
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert (refinement_window['comparisonLowerBounds'][key] <= 1) == (key == 'Progressive420')
+        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | '
+                     f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -810,7 +818,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (refinement_window if case in refinement_window['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -878,7 +886,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **70 comparisons** rank the remaining work; completion requires every
+These **74 tabulated comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -950,7 +958,7 @@ Five shared-caller costs are refreshed on the immutable build; all six remain ga
 
 A [first-scan JPEG candidate](../benchmarks/JPEG-FIRST-AC-CONFIDENCE-OPEN.md)
 shows 8.22%/9.66% independent raw gains but remains unaccepted because conservative
-native-normalized confidence is open. Qualified production and current costs stay.
+native-normalized confidence is open. Its source and evidence remain archived.
 
 One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
 regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
@@ -972,13 +980,13 @@ A bounded byte-normalization screen regresses and is rejected; the verified
 implementation and all displayed costs remain unchanged.
 [Rejected screen](../benchmarks/BYTE-BICUBIC-ONE-NEWTON-REJECTED.md).
 
-Three existing progressive JPEG controls have current independent costs:
-grayscale **1.442× / upper 1.476**, **683,126 B/op**; ordinary 4:4:4
-**1.472× / upper 1.501** and live-token 4:4:4 **1.438× / upper 1.447**, both
-**984,212 B/op**. All remain gaps with exact native pixels. Original headers are
-restored; inputs/settings stay frozen. One cached-source selector build for
-ordinary 4:4:4, zero library/harness/native builds or new controls.
-[Progressive costs](../benchmarks/CURRENT-PROGRESSIVE-JPEG-COSTS.md).
+Ordinary progressive 4:4:4 decoding improves **9.41%** independently, with unchanged
+**984,212 B/op** and exact pixels: **1.335× / upper 1.349**. A local bit window
+retains grouped corrections and precise partial-error state. All six affected
+progressive paths have current costs; 4:2:0 decode remains confidence-open and
+other progressive cases remain gaps. The table adds four already-required decode
+paths, without extending the workload checklist.
+[Refinement-window evidence](../benchmarks/WARM-JPEG-REFINEMENT-WINDOW.md).
 
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
 upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
@@ -986,8 +994,8 @@ operation includes both complete decodes, retained overlap and releases on both
 subjects; native has no shared admission API. Exact pixels and root cleanup pass.
 [Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
 
-The current producer passes **5,285 checks per OS**, plus 18 focused internal and
-369 public focused checks normal/scalar and Linux with AVX512 disabled.
+The current producer passes **5,289 checks per OS**, plus 41 focused internal and
+346 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.

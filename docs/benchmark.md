@@ -4,7 +4,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **70 comparisons** rank the remaining work; completion requires every
+These **74 tabulated comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -76,7 +76,7 @@ Five shared-caller costs are refreshed on the immutable build; all six remain ga
 
 A [first-scan JPEG candidate](../benchmarks/JPEG-FIRST-AC-CONFIDENCE-OPEN.md)
 shows 8.22%/9.66% independent raw gains but remains unaccepted because conservative
-native-normalized confidence is open. Qualified production and current costs stay.
+native-normalized confidence is open. Its source and evidence remain archived.
 
 One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
 regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
@@ -98,13 +98,13 @@ A bounded byte-normalization screen regresses and is rejected; the verified
 implementation and all displayed costs remain unchanged.
 [Rejected screen](../benchmarks/BYTE-BICUBIC-ONE-NEWTON-REJECTED.md).
 
-Three existing progressive JPEG controls have current independent costs:
-grayscale **1.442× / upper 1.476**, **683,126 B/op**; ordinary 4:4:4
-**1.472× / upper 1.501** and live-token 4:4:4 **1.438× / upper 1.447**, both
-**984,212 B/op**. All remain gaps with exact native pixels. Original headers are
-restored; inputs/settings stay frozen. One cached-source selector build for
-ordinary 4:4:4, zero library/harness/native builds or new controls.
-[Progressive costs](../benchmarks/CURRENT-PROGRESSIVE-JPEG-COSTS.md).
+Ordinary progressive 4:4:4 decoding improves **9.41%** independently, with unchanged
+**984,212 B/op** and exact pixels: **1.335× / upper 1.349**. A local bit window
+retains grouped corrections and precise partial-error state. All six affected
+progressive paths have current costs; 4:2:0 decode remains confidence-open and
+other progressive cases remain gaps. The table adds four already-required decode
+paths, without extending the workload checklist.
+[Refinement-window evidence](../benchmarks/WARM-JPEG-REFINEMENT-WINDOW.md).
 
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
 upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
@@ -112,8 +112,8 @@ operation includes both complete decodes, retained overlap and releases on both
 subjects; native has no shared admission API. Exact pixels and root cleanup pass.
 [Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
 
-The current producer passes **5,285 checks per OS**, plus 18 focused internal and
-369 public focused checks normal/scalar and Linux with AVX512 disabled.
+The current producer passes **5,289 checks per OS**, plus 41 focused internal and
+346 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
@@ -159,7 +159,11 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | JPEG caller RGB24 async nonseekable, 420 † | 1,862.24 | 1,628.86 | 1.143 / 1.154 | 309,526 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 † | 4,626.46 | 3,857.58 | 1.199 / 1.210 | 820,475 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
-| JPEG ordinary progressive444, resident decode † | 4,953.64 | 3,365.28 | 1.472 / 1.501 | 984,212 | — |
+| JPEG progressive grayscale, resident decode † | 2,270.11 | 1,712.36 | 1.326 / 1.332 | 683,126 | — |
+| JPEG progressive420, resident decode (confidence open) † | 2,208.31 | 2,082.74 | 1.060 / 1.160 | 775,318 | — |
+| JPEG progressive422, resident decode † | 2,724.57 | 2,258.63 | 1.206 / 1.223 | 847,116 | — |
+| JPEG ordinary progressive444, resident decode † | 4,487.30 | 3,361.70 | 1.335 / 1.349 | 984,212 | — |
+| JPEG progressive444, live-token resident decode † | 4,821.63 | 3,353.29 | 1.438 / 1.448 | 984,212 | — |
 
 **Editing**
 
@@ -195,7 +199,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Validate PNG16, span | 2,799.737 | 2,958.844 | 0.946 / 0.956 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span | 5.352 | 3.926 | 1.363 / 1.386 | 1,168 | Confirmed gap |
 | Validate JPEG baseline420, span | 589.348 | 673.562 | 0.875 / 0.880 | 9,984 | Confirmed pass |
-| Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
+| Validate JPEG progressive420, span | 291.290 | 267.973 | 1.087 / 1.094 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 3,537.096 | 3,050.177 | 1.160 / 1.165 | 685,421 | Confirmed gap |
 | Validate VP8+alpha, span | 6,795.415 | 5,445.227 | 1.248 / 1.268 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,850.602 | 3,605.292 | 0.791 / 0.802 | 8,544 | Confirmed pass |
