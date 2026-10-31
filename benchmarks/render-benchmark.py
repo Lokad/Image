@@ -623,6 +623,20 @@ def render():
         label = f'Bilinear {"resize" if case == "Down8" else "upscale"} RGBA8 † → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
         row = f'| {label} | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'
         rows.insert(position + ordinal, ('editing', row))
+    tight_byte_up = json.loads((ROOT / 'benchmarks/current-tight-byte-bicubic-enlargement-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not tight_byte_up['productionChanged'] and tight_byte_up['allBuilds'] == 0
+    assert tight_byte_up['independentQuietConfirmation'] and tight_byte_up['qualificationReuse']['sameActualPackageBothOs']
+    assert tight_byte_up['comparisonLowerBounds']['TightUp8'] > 1
+    observation = tight_byte_up['cases']['TightUp8'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == tight_byte_up['producers']['linuxSha256']
+    assert receipt['managedRationalReferenceExact'] and receipt['managedMaxWorkingBytes'] == 2667616
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    rows.append(('editing', f'| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | {stats["Mean"] / 1000:,.2f} | '
+                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -702,7 +716,7 @@ def render():
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **63 comparisons** rank the remaining work; completion requires every
+These **64 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -765,6 +779,11 @@ Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
 **138,437 B/op**. A centered-product candidate fails independent confirmation;
 the qualified implementation is restored and new exact boundary tests retained.
 [Current cost and rejected trial](../benchmarks/LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md).
+
+The existing tight-memory RGBA8 bicubic enlargement now independently confirms
+**1.758× / upper 1.891**, **2,492,956 B/op**, with exact pixels and the original
+**4 KiB** workspace. It is the largest current gap involving substantial per-image
+work. [Tight enlargement evidence](../benchmarks/CURRENT-TIGHT-BYTE-BICUBIC-ENLARGEMENT-COST.md).
 
 The current producer passes **5,241 checks per OS**, plus 185 public
 focused checks in normal/scalar modes. Header/probe proofs remain applicable.

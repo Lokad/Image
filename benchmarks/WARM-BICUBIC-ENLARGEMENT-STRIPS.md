@@ -1,5 +1,9 @@
 # Wider bicubic enlargement strips
 
+The [current TightUp8 confirmation](CURRENT-TIGHT-BYTE-BICUBIC-ENLARGEMENT-COST.md)
+supersedes that case's cost below. Other measurements retain their identified
+producer and scope; no new causal comparison is established.
+
 Updated 2026-10-18. Fourteen-column strips reduce the seven existing enlargement
 times **8.3–17.8%**, with exact pixels and unchanged4-KiB admission. All results
 remain **qualified three-actual parity gaps**; every actual and both quiet guards

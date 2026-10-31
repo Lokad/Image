@@ -674,6 +674,14 @@ return to largest remaining gaps. Full268-path objective unchanged.
 
 ## Finite checklist
 
+[Current tight-memory byte bicubic enlargement](CURRENT-TIGHT-BYTE-BICUBIC-ENLARGEMENT-COST.md)
+resolves `TightUp8` at 1.758× / upper 1.891, 2,492,956 B/op. Original 513×259 RGBA8
+becomes 1027×519 under the unchanged input+output+4 KiB limit. Exact rational pixels,
+frozen native hashes/bounds, source/owners and quiet gates pass. One current twelve
+reuses a verified original selector, with zero builds/profiles or repeated full/
+package checks. This existing strip path is the 64th displayed comparison and
+now the priority for substantial optimization; the 268-case inventory is unchanged.
+
 [Current asynchronous RGBA8/444 JPEG](CURRENT-ASYNC-JPEG-RGBA8-COST.md) resolves
 the existing `Jpeg8AsyncNonSeekable` boundary at 1.199× / upper 1.210, 820,475 B/op.
 Complete 133,039/133,041-byte packets differ only by approved COM and reconstruct
