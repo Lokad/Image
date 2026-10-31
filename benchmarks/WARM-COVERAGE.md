@@ -7,6 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current tight wider-support byte costs](CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md)
+resolve two required input+output+4 KiB boundaries:128×64 is1.454×/upper1.475,
+32,905B/op;64×32 is1.474×/upper1.506,8,329B/op. Both are confirmed gaps, with exact
+managed frames, original native bounds, owners and quiet guards. One independent
+twelve per case, zero builds/profiles/inputs; unchanged MGP1 qualification applies.
+Default larger-workspace costs do not qualify these distinct column kernels.
+The [strided Double-product trial](PACKED-COLUMN-DOUBLE-PRODUCTS-REJECTED.md) failed
+its one CPU screen and is closed. Production/core/internal assemblies are exactly
+restored; three useful public controls pass on production. No full/package repeat.
+The same268-path goal remains;80 displayed rows do not narrow its scope.
+
 [Mixed bicubic geometry reuse](WARM-MIXED-BICUBIC-GEOMETRY.md) independently reduces
 tight RGBA16 elapsed 8.90% filtered / 8.28% all, 8.62% normalized, with separated
 confidence: 1.308× / upper1.369, 1,060,371 B/op (4 B noise), no new owned capacity.

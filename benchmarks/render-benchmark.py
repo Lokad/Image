@@ -942,6 +942,26 @@ def render():
                      f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    tight_wide = json.loads((ROOT / 'benchmarks/current-tight-wide-byte-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not tight_wide['productionChanged'] and tight_wide['independentQuietConfirmation']
+    assert tight_wide['workflow']['allBuilds'] == tight_wide['workflow']['newInputs'] == tight_wide['workflow']['newProfiles'] == 0
+    assert tight_wide['qualificationReused']['fullChecksEachOs'] == 5314
+    assert set(tight_wide['cases']) == {'TightWide8', 'Tight64x32_8'}
+    for case, observations in tight_wide['cases'].items():
+        observation = observations[-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == tight_wide['producers']['linuxSha256']
+        assert receipt['managedRationalReferenceExact'] and receipt['managedQualifiedOriginalPixelsExact']
+        assert receipt['independentOwnedOutput'] and receipt['sourceUnchanged']
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert receipt['managedMaxWorkingBytes'] == 513 * 259 * 4 + receipt['outputWidth'] * receipt['outputHeight'] * 4 + 4096
+        assert tight_wide['comparisonLowerBounds'][case] > 1 and tight_wide['status'][case] == 'confirmed-gap'
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        rows.append(('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
+                     f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1183,6 +1203,12 @@ Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
 bytes avoid a second inflation. All four named PNG validation costs are current;
 PNG16 sync/async also pass and stop, while PNG8 remains confidence-open.
 [Current evidence](../benchmarks/WARM-PNG-INDEXED-VALIDATION.md).
+
+Two existing tight-workspace RGBA8 reductions are independently measured:
+**128×64 at 1.454× / upper 1.475**, 32,905 B/op, and **64×32 at 1.474× / upper
+1.506**, 8,329 B/op. Both remain gaps; the default-workspace controls exercise
+different kernels. No production change or causal comparison to older costs.
+[Current tight reduction costs](../benchmarks/CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md).
 
 The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
 public, 948 live), plus 31 internal/544 public focused checks normal/scalar and

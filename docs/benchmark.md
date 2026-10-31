@@ -133,6 +133,12 @@ bytes avoid a second inflation. All four named PNG validation costs are current;
 PNG16 sync/async also pass and stop, while PNG8 remains confidence-open.
 [Current evidence](../benchmarks/WARM-PNG-INDEXED-VALIDATION.md).
 
+Two existing tight-workspace RGBA8 reductions are independently measured:
+**128×64 at 1.454× / upper 1.475**, 32,905 B/op, and **64×32 at 1.474× / upper
+1.506**, 8,329 B/op. Both remain gaps; the default-workspace controls exercise
+different kernels. No production change or causal comparison to older costs.
+[Current tight reduction costs](../benchmarks/CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md).
+
 The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
 public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
@@ -215,6 +221,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 529.18 | 348.67 | 1.518 / 1.534 | 231,239 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
 
 **Inspection and pixel-coding validation**
 
