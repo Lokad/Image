@@ -58,3 +58,12 @@ changes no production bytes; unchanged internal normal evidence is reused.
 qualification and mirrored/member-verified `vp8l-direct-output-qualified.tar.xz`,
 SHA256 34ed9ec1d8005a8a104f60f59c4c6d9326f9f14310a1c46aa0d0c91e4565eb46. Other affected boundaries need
 applicable costs; the full 268-path warm single-CPU objective remains open.
+
+A test-only CI follow-up permits 4 KiB of allocated overhead for the now-near-tied
+VP8L operations, after a 192-byte reversal on the Windows runner. It still rejects
+an extra frame or encoded-input copy; the peak-admission comparison retains its
+exact 32-byte array-header allowance. Other profiles retain strict allocation
+savings. Ninety focused cases pass normal/scalar on both OSes; production, costs
+and the actual package are unchanged, so full/package proof is reused. The
+evidence pins the failed CI log and mirrored/member-verified supplement
+`vp8l-direct-output-ci-test.tar.xz`, SHA256 4ca2b15e3e275e31418f39b95dab4d63f4b1f58e94669ea626edc27b22aaa630.

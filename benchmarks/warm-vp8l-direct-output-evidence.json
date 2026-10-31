@@ -11759,5 +11759,28 @@
       }
     ]
   },
-  "next": "Close direct-frame/scratch/span variants. Lossless8 upper0.696 passes and stops; other named cases remain gaps. Full268 warm upper<=1x objective unchanged. Reuse unaffected qualification."
+  "next": "Close direct-frame/scratch/span variants. Lossless8 upper0.696 passes and stops; other named cases remain gaps. Full268 warm upper<=1x objective unchanged. Reuse unaffected qualification.",
+  "ciTestFollowup": {
+    "productionUnchanged": true,
+    "productionBuilds": 0,
+    "successfulTimingsRepeated": 0,
+    "focusedChecksEachModeEachOs": 90,
+    "fullAndSamePackageQualificationReused": true,
+    "originalCi": {
+      "runId": 41147867249,
+      "linuxCorrectness": "passed",
+      "liveDifferential": "passed",
+      "windows": "one allocation near-tie assertion failed:685888 versus685696 bytes; admitted peaks623292/623260 unchanged"
+    },
+    "assertion": "Only VP8L uses a 4096-byte relative allocated-overhead bound: both now keep one history frame. This still rejects a531468-byte frame or183310-byte input copy. Other profiles require strict allocated savings. VP8L governed peak allowance stays exactly32B for its temporary-array header.",
+    "publicTestSha256": "8d745bca8a51507381929360fce0a2dee33757201a6ac3fccc5679387bd6860a",
+    "windowsAssemblySha256": "e4b819d788a3b88476ad72a630959e4538ac05c4c6c0dece715c3eebd20efeaf",
+    "rawArchive": {
+      "file": "vp8l-direct-output-ci-test.tar.xz",
+      "sha256": "4ca2b15e3e275e31418f39b95dab4d63f4b1f58e94669ea626edc27b22aaa630",
+      "bytes": 162444,
+      "members": 13,
+      "mirroredAndMemberVerified": true
+    }
+  }
 }

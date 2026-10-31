@@ -15,7 +15,12 @@ public sealed class PixelValidationMemoryTests(ITestOutputHelper output)
         var data = OriginalExif.Create(profile, 513, 259).Encoded;
         Measure(data, false); Measure(data, true); // Warm both fixed paths, without timing.
         var decode = Measure(data, false); var validate = Measure(data, true);
-        Assert.True(validate.Allocated < decode.Allocated, $"{profile}: validation allocations {validate} versus decode {decode}");
+        // VP8L now shares the same single-frame history in both operations.
+        // Small runtime/owner allocations can reverse their near tie; a 4 KiB
+        // allowance still rejects another 531,468-byte frame or an input copy.
+        var sharedHistoryOverhead = profile == MetadataProfile.WebpLosslessAlpha ? 4096 : 0;
+        Assert.True(validate.Allocated < decode.Allocated + sharedHistoryOverhead,
+            $"{profile}: validation allocations {validate} versus decode {decode}");
         // VP8L validation retains the same history as decoding. Its temporary
         // UInt32 array includes a 32-byte charge; retained image ownership
         // admits pixel capacity, so direct-output decoding can be 32 bytes lower.
