@@ -82,7 +82,7 @@ public sealed class WebpFfmpegTests
     [Fact]
     public void AuthoredLosslessBranchesInteroperateExactly()
     {
-        var fixtures = new List<byte[]> { AuthoredWebp.ColorTransform(), AuthoredWebp.SubtractGreen(), AuthoredWebp.CachedColor(),
+        var fixtures = new List<byte[]> { AuthoredWebp.LongGreenCacheRaster(), AuthoredWebp.ColorTransform(), AuthoredWebp.SubtractGreen(), AuthoredWebp.CachedColor(),
             AuthoredWebp.BackwardReference(), AuthoredWebp.EntropyGroups(), AuthoredWebp.DuplicateSimpleSymbols(),
             AuthoredWebp.CodeLengthRepeats(false), AuthoredWebp.CodeLengthRepeats(true), AuthoredWebp.EntropyGroupsWithCrossingCopy() };
         fixtures.Add(AuthoredWebp.OrientedPalette(false)); fixtures.Add(AuthoredWebp.OrientedPalette(true));

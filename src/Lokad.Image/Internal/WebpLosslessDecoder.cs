@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -26,12 +27,16 @@ internal ref struct WebpLosslessDecoder
 
     public ImageBuffer Decode()
     {
-        var pixels = DecodePixels();
+        ImageBuffer? result = null;
+        Span<uint> pixels = default;
+        var temporary = false;
         try
         {
-            var result = ImageBuffer.AllocateForOverwrite(width, height, 8, context);
-            try
+            pixels = DecodePixels(true, ref result);
+            temporary = result is null;
+            if (temporary)
             {
+                result = ImageBuffer.AllocateForOverwrite(width, height, 8, context);
                 for (var y = 0; y < height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -43,11 +48,29 @@ internal ref struct WebpLosslessDecoder
                         row[x * 4 + 2] = (byte)pixel; row[x * 4 + 3] = (byte)(pixel >> 24);
                     }
                 }
-                return result;
             }
-            catch { result.Dispose(); throw; }
+            else
+            {
+                // The stored words still have RFC 9649's ARGB channel positions.
+                // On little-endian hosts, exchanging R/B publishes RGBA in place.
+                for (var y = 0; y < height; y++)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var row = pixels.Slice(y * width, width);
+                    for (var x = 0; x < row.Length; x++)
+                    {
+                        var pixel = row[x];
+                        row[x] = pixel & 0xFF00FF00 | (pixel >> 16 & 255) | (pixel & 255) << 16;
+                    }
+                }
+            }
+            return result!;
         }
-        finally { context.Release(pixels.Length * 4L + 32 + 512); }
+        catch { result?.Dispose(); throw; }
+        finally
+        {
+            if (!pixels.IsEmpty) context.Release(512 + (temporary ? pixels.Length * 4L + 32 : 0));
+        }
     }
 
     // RFC 9649 section 2.7.1.2: ALPH uses the green samples of a complete
@@ -56,13 +79,14 @@ internal ref struct WebpLosslessDecoder
     internal void DecodeGreen(Span<byte> destination)
     {
         if (destination.Length != (long)width * height) throw new ArgumentException("Alpha destination size differs from the raster.", nameof(destination));
-        var pixels = DecodePixels();
+        ImageBuffer? unused = null;
+        var pixels = DecodePixels(false, ref unused);
         try
         {
             for (var y = 0; y < height; y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                var row = pixels.AsSpan(y * width, width);
+                var row = pixels.Slice(y * width, width);
                 var alpha = destination.Slice(y * width, width);
                 for (var x = 0; x < width; x++) alpha[x] = (byte)(row[x] >> 8);
             }
@@ -72,12 +96,13 @@ internal ref struct WebpLosslessDecoder
 
     internal void ValidatePixels()
     {
-        var pixels = DecodePixels();
+        ImageBuffer? unused = null;
+        var pixels = DecodePixels(false, ref unused);
         context.Release(pixels.Length * 4L + 32 + 512);
         context.Cancellation.ThrowIfCancellationRequested();
     }
 
-    private uint[] DecodePixels()
+    private Span<uint> DecodePixels(bool retainResult, scoped ref ImageBuffer? result)
     {
         context.Reserve(512); // Four transform descriptors and fixed parser scratch.
         var transforms = new Transform[4]; var count = 0; var seen = 0; var codedWidth = width;
@@ -103,7 +128,10 @@ internal ref struct WebpLosslessDecoder
             }
             transforms[count++] = transform;
         }
-        var pixels = ReadImage(codedWidth, height, true);
+        // A palette can expand/change the raster width; keep its existing array
+        // ownership. Other transforms operate in place on a full-width frame.
+        var pixels = ReadImageCore(codedWidth, height, true,
+            retainResult && (seen & 8) == 0 && BitConverter.IsLittleEndian, ref result, out _);
         for (var index = count - 1; index >= 0; index--)
         {
             var transform = transforms[index];
@@ -134,6 +162,15 @@ internal ref struct WebpLosslessDecoder
 
     private uint[] ReadImage(int imageWidth, int imageHeight, bool spatial)
     {
+        ImageBuffer? unused = null;
+        ReadImageCore(imageWidth, imageHeight, spatial, false, ref unused, out var allocated);
+        return allocated!;
+    }
+
+    private Span<uint> ReadImageCore(int imageWidth, int imageHeight, bool spatial,
+        bool retainResult, scoped ref ImageBuffer? result, out uint[]? allocated)
+    {
+        allocated = null;
         var cacheEnabled = reader.Read(1) != 0;
         var cacheBits = cacheEnabled ? reader.Read(4) : 0;
         if (cacheEnabled && cacheBits is < 1 or > 11)
@@ -156,7 +193,16 @@ internal ref struct WebpLosslessDecoder
             for (var channel = 1; channel < 4; channel++) tables[group * 5 + channel] = ReadHuffman(256);
             tables[group * 5 + 4] = ReadHuffman(40);
         }
-        var pixels = Allocate(imageWidth, imageHeight); var position = 0;
+        Span<uint> pixels;
+        if (retainResult)
+        {
+            var count = (long)imageWidth * imageHeight;
+            if (count <= 0 || count > Array.MaxLength / 4) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8L auxiliary raster is too large.");
+            result = ImageBuffer.AllocateForOverwrite(imageWidth, imageHeight, 8, context);
+            pixels = MemoryMarshal.Cast<byte, uint>(result.Pixels);
+        }
+        else pixels = allocated = Allocate(imageWidth, imageHeight);
+        var position = 0;
         var scratchStart = 0; var lookupEntries = (long)groups * 4096;
         if (lookupEntries <= pixels.Length / 2)
         {
@@ -166,7 +212,11 @@ internal ref struct WebpLosslessDecoder
                 if (!green.CanBuildWideGreen) continue;
                 context.Cancellation.ThrowIfCancellationRequested();
                 scratchStart = pixels.Length - (int)lookupEntries;
-                green.BuildWideGreen(pixels.AsSpan(scratchStart + group * 4096, 4096));
+                var lookup = pixels.Slice(scratchStart + group * 4096, 4096);
+                // Pooled/uninitialized result storage is not necessarily zero.
+                // Longer canonical codes leave lookup holes for slow traversal.
+                if (retainResult) lookup.Clear();
+                green.BuildWideGreen(lookup);
             }
         }
         while (position < pixels.Length)
@@ -176,7 +226,7 @@ internal ref struct WebpLosslessDecoder
                 + (position % imageWidth >> entropyBits)] >> 8) & 65535);
             var start = group * 5;
             var symbol = position < scratchStart && tables[start].CanBuildWideGreen
-                && reader.TryReadWideGreen(pixels.AsSpan(scratchStart + group * 4096, 4096), out var wideSymbol)
+                && reader.TryReadWideGreen(pixels.Slice(scratchStart + group * 4096, 4096), out var wideSymbol)
                 ? wideSymbol : tables[start].Read(ref reader);
             if (symbol < 256)
             {
@@ -279,7 +329,7 @@ internal ref struct WebpLosslessDecoder
         context.Reserve(count * 4 + 32); return new uint[(int)count];
     }
 
-    private void Apply(Transform transform, uint[] pixels, int imageWidth)
+    private void Apply(Transform transform, Span<uint> pixels, int imageWidth)
     {
         var tileWidth = Ceil(imageWidth, transform.Bits);
         for (var y = 0; y < height; y++)
@@ -319,7 +369,7 @@ internal ref struct WebpLosslessDecoder
         }
     }
 
-    private void ApplyPredictor(Transform transform, uint[] pixels, int imageWidth)
+    private void ApplyPredictor(Transform transform, Span<uint> pixels, int imageWidth)
     {
         var tileWidth = Ceil(imageWidth, transform.Bits); var tileSize = 1 << transform.Bits;
         for (var y = 0; y < height; y++)

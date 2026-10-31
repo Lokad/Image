@@ -6,6 +6,28 @@ namespace Lokad.Image.Tooling;
 /// <summary>Original VP8L constructions with deliberately chosen symbols and pixels.</summary>
 internal static class AuthoredWebp
 {
+    // Original RFC 9649 construction. One 12-bit lookup prefix has only longer
+    // canonical leaves; its zero entry must still select canonical traversal.
+    public static byte[] LongGreenCacheRaster()
+    {
+        const int width = 257, height = 33, alphabet = 280 + 1024;
+        var bits = new Bits(); bits.Write(0, 1); // No transforms.
+        bits.Write(1, 1); bits.Write(10, 4); bits.Write(0, 1); // Cache, one group.
+        bits.Write(0, 1); bits.Write(15, 4); // Full code-length alphabet.
+        int[] order = [17, 18, 0, 1, 2, 3, 4, 5, 16, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        foreach (var symbol in order) bits.Write(symbol < 16 ? 4 : 0, 3);
+        bits.Write(0, 1); // Encode every green-alphabet length.
+        for (var symbol = 0; symbol < alphabet; symbol++)
+        {
+            var length = symbol < 1023 ? 10 : symbol <= 1028 ? Math.Min(15, symbol - 1012) : 0;
+            bits.Write(Reverse(length, 4), 4);
+        }
+        Simple(bits, 0); Simple(bits, 0); Simple(bits, 0); Simple(bits, 0);
+        // Last leaf: code32767/15bits, cache index748, initially ARGBzero.
+        for (var pixel = 0; pixel < width * height; pixel++) bits.Write(32767, 15);
+        return Container(width, height, bits.Finish(), true);
+    }
+
     public static byte[] Predictor(int mode)
     {
         var bits = new Bits(); bits.Write(1, 1); bits.Write(0, 2); bits.Write(0, 3);

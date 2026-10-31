@@ -583,6 +583,17 @@ nativebounds/owners/quiet pass. Original source/DLLs/package restored;661public
 normal/scalar eachOS including14useful newcases pass. No variants/profiles/
 candidate12 or repeatedfull/package proof. Accepted Down8 remainsBCC1; full268open.
 
+[VP8L direct output](WARM-VP8L-DIRECT-OUTPUT.md) confirms2.73%filtered/2.79%all/
+2.62%normalized with separated intervals under the predeclared storage exception:
+resident3427.408µs,1.134/upper1.142,152728Bop (531649 fewer). Governedallocated
+1217192→685696B,peak1063480→623260B (-41.4%),bothOS/normal-scalar. Nine existing
+costs current; eight companions retain all data,without pairedgain claims.
+Literal/runupper.696 PASS/STOP; otherpaths gaps. Full5237/OS,58internal/306public
+normal-scalar,SAMEactualpackage/governedasync/oneframe+alpha/3examples pass.
+Shared parser/ARGB transforms/hash/pixels remainexact; dirty lookup holes cleared.
+No new matrix/variants/profiles/retiming. Other affectedboundaries need proof;
+full268 objective remainsopen. Raw34ed9ec1... mirrored/memberverified.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

@@ -70,6 +70,7 @@ try {
     $directRgbFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalDirectRgbControls.cs'))
     $pixelFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPixels.cs'))
     $vp8lFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8lControls.cs'))
+    $authoredWebpPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredWebp.cs'))
     $vp8FixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8Controls.cs'))
     $pngGradientPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPngGradient.cs'))
     $pngOraclePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/IndependentRgbaPng.cs'))
@@ -94,6 +95,7 @@ try {
     <Compile Include="$directRgbFixturePath" Link="OriginalDirectRgbControls.cs" />
     <Compile Include="$pixelFixturePath" Link="OriginalPixels.cs" />
     <Compile Include="$vp8lFixturePath" Link="OriginalVp8lControls.cs" />
+    <Compile Include="$authoredWebpPath" Link="AuthoredWebp.cs" />
     <Compile Include="$vp8FixturePath" Link="OriginalVp8Controls.cs" />
     <Compile Include="$pngGradientPath" Link="OriginalPngGradient.cs" />
     <Compile Include="$pngOraclePath" Link="IndependentRgbaPng.cs" />

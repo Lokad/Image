@@ -27,7 +27,8 @@ public sealed class WebpLosslessAdmissionTests
             foreach (var size in new[] { (1, 1), (64, 1), (99, 1), (17, 11), (16384, 1) })
             {
                 var count = (long)size.Item1 * size.Item2;
-                yield return ["constant", 0, size.Item1, size.Item2, Math.Max(1128L, Math.Max(936 + count * 4, 544 + count * 8)), orient];
+                yield return ["constant", 0, size.Item1, size.Item2,
+                    Math.Max(1128L, Math.Max(904 + count * 4, orient ? count * 8 : 0)), orient];
             }
         }
     }

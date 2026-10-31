@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Non-indexed lossless WebP decoding owns decoded storage directly, avoiding a
+  temporary full frame while preserving exact pixels and caller-budget lifetimes.
 - RGBA16 bilinear reduction reuses vertical geometry and avoids unused horizontal
   preparation, reducing CPU and allocation while preserving exact pixels.
 - VP8 pixel-coding validation shares the complete parser while omitting discarded

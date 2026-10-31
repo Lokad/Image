@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-30. Rows combine qualified **0.2.1 development** evidence with
+Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
 These **58 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
@@ -28,30 +28,23 @@ one confirmation each without retiming or assuming an optimization need.
 The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
 separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
-Safe word refills improve complete resident VP8L decoding **8.32%** with unchanged
-**684,377 B/op**. Eight existing companions have fresh independent costs.
-The literal/run control passes at **0.729× / upper 0.732**, 542,502 B/op.
-Indexed and live-token controls remain **1.009× / upper 1.012**, 820,194 B/op
-and **1.173× / upper 1.181**, 684,377 B/op. [Word-refill evidence](../benchmarks/WARM-VP8L-WORD-REFILL.md).
+Non-indexed VP8L decoding now owns its decoded storage directly: **2.73%** less
+elapsed time, **531,649 fewer allocated B/op** and **41.4% lower governed peak**.
+Eight affected companions have current costs. Literal/run passes at **0.692× /
+upper 0.696**, 10,840 B/op; indexed and live-token controls remain gaps.
+[Direct-output evidence](../benchmarks/WARM-VP8L-DIRECT-OUTPUT.md).
 
-VP8 coding validation now omits discarded reconstruction while sharing the full
-parser: **7.93%** less elapsed time and **215,614 fewer allocated B/op**. Its
-governed peak falls **28.67%**; full-decoding allocations/peaks stay unchanged.
-Five decoder companions have current independent costs, all within the declared
-5% comparison guard. [Validation evidence](../benchmarks/WARM-VP8-VALIDATION-WITHOUT-PLANES.md).
-
-The current producer passes **5,220 checks per OS**, plus 184 public resize/memory
-checks in normal/scalar modes. Word bilinear geometry reuse confirms **13.7%**
-less elapsed time and **17,309 fewer allocated B/op**. The same actual Release package,
-governed async/two-frame-alpha consumers and three examples pass both OSes.
-Packets, pixels, complete coding, source ownership and cancellation stay qualified.
+The current producer passes **5,237 checks per OS**, plus 58 internal/306 public
+focused checks in normal/scalar modes. The same actual Release package, governed
+async/one-frame lossless/alpha consumers and three examples pass both OSes.
+Packets, pixels, source ownership, admission and cancellation remain qualified.
 Other affected boundaries need applicable costs; unchanged paths retain proof.
 
 **Codecs**
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 6,950.27 | 5,998.83 | 1.159 / 1.162 | 1,434,827 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 6,986.26 | 6,014.54 | 1.162 / 1.176 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |
@@ -75,8 +68,8 @@ Other affected boundaries need applicable costs; unchanged paths retain proof.
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,085.36 | 1,007.70 | 1.077 / 1.082 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |
-| VP8L RGBA8, resident decode † | 3,523.53 | 3,027.02 | 1.164 / 1.177 | 684,377 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 3,510.17 | 3,028.17 | 1.159 / 1.171 | 684,422 | — |
+| VP8L RGBA8, resident decode † | 3,427.41 | 3,023.55 | 1.134 / 1.142 | 152,728 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 3,400.72 | 3,032.93 | 1.121 / 1.134 | 152,824 | — |
 | JPEG CMYK sparse-2D, resident decode † | 629.11 | 447.48 | 1.406 / 1.413 | 1,085,758 | — |
 | JPEG YCCK420, resident decode † | 421.45 | 707.63 | 0.596 / 0.607 | 895,547 | — |
 | JPEG 4:1:1, resident decode † | 527.41 | 450.16 | 1.172 / 1.192 | 751,295 | — |
@@ -110,8 +103,8 @@ Other affected boundaries need applicable costs; unchanged paths retain proof.
 | Validate indexed Adam7 19×17, span | 5.352 | 3.926 | 1.363 / 1.386 | 1,168 | Confirmed gap |
 | Validate JPEG baseline420, span | 589.348 | 673.562 | 0.875 / 0.880 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 277.509 | 263.457 | 1.053 / 1.063 | 4,072 | Confirmed gap |
-| Validate VP8L+alpha, span | 3,558.644 | 3,043.039 | 1.169 / 1.176 | 685,421 | Confirmed gap |
-| Validate VP8+alpha, span | 6,685.351 | 5,449.916 | 1.227 / 1.232 | 554,478 | Confirmed gap |
+| Validate VP8L+alpha, span | 3,537.096 | 3,050.177 | 1.160 / 1.165 | 685,421 | Confirmed gap |
+| Validate VP8+alpha, span | 6,795.415 | 5,445.227 | 1.248 / 1.268 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,850.602 | 3,605.292 | 0.791 / 0.802 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

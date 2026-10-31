@@ -119,6 +119,23 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged compressed alpha leaked storage or disposed the borrowed root.");
         }
         Console.WriteLine("Packaged compressed alpha fits two RGBA frames.");
+        {
+            const int losslessFrameBytes = 257 * 33 * 4;
+            var longGreen = AuthoredWebp.LongGreenCacheRaster();
+            using var losslessBudget = new TestMemoryBudget(losslessFrameBytes + 16 * 1024);
+            using (var image = ImageCodec.Decode(longGreen, new DecodeOptions
+                { Limits = new ImageLimits { MemoryBudget = losslessBudget } }))
+            {
+                if (losslessBudget.Bytes != losslessFrameBytes)
+                    throw new Exception("Packaged lossless result storage lifetime differs.");
+                for (var y = 0; y < image.Height; y++)
+                    if (image.GetRow8(y).IndexOfAnyExcept((byte)0) >= 0)
+                        throw new Exception("Packaged lossless long-prefix/cache pixels differ.");
+            }
+            if (losslessBudget.Bytes != 0 || losslessBudget.IsDisposed)
+                throw new Exception("Packaged lossless result leaked storage or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged lossless output fits one frame plus bounded parser storage.");
         using (var pattern = OriginalPixels.Buffer(513, 259, 16))
         {
             const int outputBytes = 256 * 129 * 8;
