@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Tight-memory RGBA8 bicubic enlargement avoids a redundant error-bound division,
+  preserving exact pixels, admitted storage and portable fallbacks.
 - RGBA8 bilinear enlargement reuses exact horizontal rows in existing geometry
   storage, reducing CPU while preserving pixels, admission and output ownership.
 - Lossless WebP color search scores only bins recorded during histogram

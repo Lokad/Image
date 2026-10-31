@@ -188,6 +188,29 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged byte bilinear leaked storage or disposed the caller root.");
         }
         Console.WriteLine("Packaged byte bilinear row reuse pixels and existing admission passed.");
+        {
+            const int sourceWidth = 513, sourceHeight = 259, width = 1027, height = 519;
+            const long sourceBytes = sourceWidth * sourceHeight * 4, outputBytes = width * height * 4;
+            using var seed = OriginalPixels.Buffer(sourceWidth, sourceHeight, 8);
+            seed.GetRow8(0)[3] = seed.GetRow8(0)[sourceWidth * 4 - 1] = 0;
+            using var bicubicBudget = new TestMemoryBudget(sourceBytes + outputBytes + 4096);
+            var bicubicLimits = new ImageLimits { MemoryBudget = bicubicBudget,
+                MaxWorkingBytes = sourceBytes + outputBytes + 4096 };
+            using var pattern = ImageBuffer.Create(sourceWidth, sourceHeight, 8, bicubicLimits);
+            for (var y = 0; y < sourceHeight; y++) seed.GetRow8(y).CopyTo(pattern.GetRow8(y));
+            using var actual = ImageTransforms.Resize(pattern, width, height, ResizeFilter.Bicubic, bicubicLimits);
+            if (bicubicBudget.Bytes != sourceBytes + outputBytes || bicubicBudget.Peak != sourceBytes + outputBytes + 4096)
+                throw new Exception("Packaged byte bicubic exceeded admitted scratch or retained temporary storage.");
+            pattern.Dispose();
+            var digest = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(actual)));
+            if (digest != "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94"
+                || bicubicBudget.Bytes != outputBytes)
+                throw new Exception("Packaged byte bicubic pixels or independent retained ownership differ.");
+            actual.Dispose();
+            if (bicubicBudget.Bytes != 0 || bicubicBudget.IsDisposed)
+                throw new Exception("Packaged byte bicubic leaked storage or disposed the caller root.");
+        }
+        Console.WriteLine("Packaged tight byte bicubic exact pixels and admission passed.");
         var rgb = new byte[17 * 11 * 3];
         for (var i = 0; i < rgb.Length; i++) rgb[i] = (byte)(i * 37 + i / 11);
         var jpegOptions = new JpegEncodeOptions { Quality = 69, Limits = limits };

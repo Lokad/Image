@@ -6,6 +6,30 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class EnlargingColumnBicubicResizeTests
 {
     [Theory]
+    [InlineData(35, 11)] [InlineData(35, 5)] [InlineData(17, 11)]
+    public void ClippedColorsAndLowAlphaKeepIndependentRationalPixels(int width, int height)
+    {
+        using var source = ImageBuffer.Create(17, 5, 8);
+        byte[] levels = [0, 1, 2, 127, 128, 254, 255];
+        byte[] alphas = [0, 1, 2, 255, 255];
+        for (var y = 0; y < source.Height; y++)
+        for (var x = 0; x < source.Width; x++)
+        {
+            var pixel = source.GetRow8(y).Slice(x * 4, 4);
+            pixel[0] = levels[(x + y) % levels.Length];
+            pixel[1] = levels[(3 * x + y + 1) % levels.Length];
+            pixel[2] = (byte)(x % 4 < 2 ? 0 : 255);
+            pixel[3] = alphas[(x + 2 * y) % alphas.Length];
+        }
+        var input = OriginalPixels.Bytes(source);
+        var expected = ExactResizeReference.Resize(input, 17, 5, 8, width, height, ResizeFilter.Bicubic);
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + (long)expected.Length + 4096 };
+        using var actual = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+        Assert.Equal(expected, OriginalPixels.Bytes(actual));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
+    [Theory]
     [InlineData(4095)] [InlineData(4096)]
     public void WiderStripsKeepFrozenPixelsAdmissionAndIndependentOwners(int scratch)
     {

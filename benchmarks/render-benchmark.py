@@ -623,10 +623,11 @@ def render():
         label = f'Bilinear {"resize" if case == "Down8" else "upscale"} RGBA8 † → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
         row = f'| {label} | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'
         rows.insert(position + ordinal, ('editing', row))
-    tight_byte_up = json.loads((ROOT / 'benchmarks/current-tight-byte-bicubic-enlargement-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not tight_byte_up['productionChanged'] and tight_byte_up['allBuilds'] == 0
-    assert tight_byte_up['independentQuietConfirmation'] and tight_byte_up['qualificationReuse']['sameActualPackageBothOs']
-    assert tight_byte_up['comparisonLowerBounds']['TightUp8'] > 1
+    tight_byte_up = json.loads((ROOT / 'benchmarks/warm-bicubic-byte-fixed-certificate-evidence.json').read_text(encoding='utf-8'))
+    assert tight_byte_up['productionChanged'] and tight_byte_up['independentQuietConfirmation']
+    assert tight_byte_up['qualification']['fullChecksEachOs'] == 5245
+    assert tight_byte_up['qualification']['sameActualPackageBothOs']
+    assert tight_byte_up['decisions']['confirm']['passed'] and tight_byte_up['decisions']['confirm']['normalizedSeparated']
     observation = tight_byte_up['cases']['TightUp8'][-1]
     receipt, stats = observation['receipt'], observation['managed']['statistics']
     assert receipt['librarySha256'] == tight_byte_up['producers']['linuxSha256']
@@ -780,13 +781,15 @@ Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
 the qualified implementation is restored and new exact boundary tests retained.
 [Current cost and rejected trial](../benchmarks/LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md).
 
-The existing tight-memory RGBA8 bicubic enlargement now independently confirms
-**1.758× / upper 1.891**, **2,492,956 B/op**, with exact pixels and the original
-**4 KiB** workspace. It is the largest current gap involving substantial per-image
-work. [Tight enlargement evidence](../benchmarks/CURRENT-TIGHT-BYTE-BICUBIC-ENLARGEMENT-COST.md).
+Tight-memory RGBA8 bicubic enlargement improves **9.87%** by removing a redundant
+error-bound division: **1.565× / upper 1.591**, unchanged **2,492,956 B/op**,
+exact pixels and **4 KiB** workspace. It remains a confirmed gap. The changed
+horizontal/vertical strip callers need current cost confirmation.
+[Fixed-certificate evidence](../benchmarks/WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md).
 
-The current producer passes **5,241 checks per OS**, plus 185 public
-focused checks in normal/scalar modes. Header/probe proofs remain applicable.
+The current producer passes **5,245 checks per OS**, plus 179 public
+focused checks in normal/scalar modes and Linux with AVX512 disabled.
+Header/probe proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.

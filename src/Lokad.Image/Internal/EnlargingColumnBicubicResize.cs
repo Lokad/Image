@@ -173,23 +173,21 @@ internal static class EnlargingColumnBicubicResize
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
     {
-        const double unitError = 2.3283064365386963e-10;
         const double maximum = 255d;
-        const double alphaError = unitError * maximum;
         var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
-        if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
+        if (!(n0 >= .5 && n1 >= .5 && a0 >= 1 && a1 >= 1)) return false;
         var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
         var values = Avx512F.Divide(sum, divisors);
-        var magnitudes = Avx512F.AndNot(Vector512.Create(long.MinValue), values.AsInt64()).AsDouble();
-        // Per-channel quotient bounds avoid scalar maximum/division chains.
-        // Doubling covers rounding of the positive error-bound calculation.
-        var errors = Vector512.Create(alphaError, alphaError, alphaError, unitError,
-            alphaError, alphaError, alphaError, unitError);
-        var numerators = Avx512F.Add(Vector512.Create(alphaError * maximum, alphaError * maximum, alphaError * maximum, alphaError,
-            alphaError * maximum, alphaError * maximum, alphaError * maximum, alphaError), Avx512F.Multiply(magnitudes, errors));
-        var margins = Avx512F.Divide(Avx512F.Multiply(numerators, Vector512.Create(2d)), Avx512F.Subtract(divisors, errors));
-        if (Vector512.ExtractMostSignificantBits(Avx512F.CompareGreaterThanOrEqual(margins, Vector512.Create(.25))) != 0
-            || !(values.GetElement(3) >= 1 + margins.GetElement(3) && values.GetElement(7) >= 1 + margins.GetElement(7))) return false;
+        // For clamp(N/D,0,255), the perturbation is bounded by
+        // (Nerr + 255*Derr)/(D-Derr), including across saturation boundaries.
+        // Existing byte arithmetic errors are (65025u,255u) for RGB and
+        // (255u,u) for alpha, u=2^-32. At D>=1 and D>=1/2 respectively,
+        // these fixed margins exceed twice that bound plus 2^-28 for rounding.
+        const double rgbMargin = 0.00006103515625; // 2^-14
+        const double alphaMargin = 0.00000095367431640625; // 2^-20
+        var margins = Vector512.Create(rgbMargin, rgbMargin, rgbMargin, alphaMargin,
+            rgbMargin, rgbMargin, rgbMargin, alphaMargin);
+        if (!(values.GetElement(3) >= 1 + alphaMargin && values.GetElement(7) >= 1 + alphaMargin)) return false;
         var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
         var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
             Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();

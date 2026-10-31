@@ -1,5 +1,7 @@
 # Current tight-memory byte bicubic enlargement
 
+Timing is superseded by the [fixed-certificate result](WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md). The original remains the verified causal baseline.
+
 The existing 513×259 RGBA8 →1027×519 control independently confirms **1.758× /
 conservative upper 1.891**, making it the largest current gap involving substantial
 per-image work. Its **4 KiB extra workspace** stays unchanged. This refreshes an
