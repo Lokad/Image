@@ -74,6 +74,12 @@ Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
 
+Local original-order repair improves tight RGBA8 bicubic reduction **5.61%**
+(all actuals **5.12%**), preserving exact pixels and the same **4 KiB** admission:
+**1.474× / upper 1.540**, **132,309 B/op** (+3 B/op noise). Uncertain pairs
+repair locally; tiny alpha still unwinds before exact scratch.
+[Local-repair evidence](../benchmarks/WARM-BICUBIC-LOCAL-REPAIR.md).
+
 The remaining shared-alpha caller audit reuses six proven unchanged paths and
 confirms four current costs. Word vertical enlargement passes at **0.973× /
 upper 0.985**, **2,514,272 B/op** and stops. Word bicubic enlargement remains
@@ -97,8 +103,8 @@ operation includes both complete decodes, retained overlap and releases on both
 subjects; native has no shared admission API. Exact pixels and root cleanup pass.
 [Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
 
-The current producer passes **5,267 checks per OS**, plus 22 new internal and
-179 public focused checks normal/scalar and Linux with AVX512 disabled.
+The current producer passes **5,285 checks per OS**, plus 18 focused internal and
+369 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
@@ -164,7 +170,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 659.88 | 416.61 | 1.584 / 1.591 | 132,306 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 529.18 | 348.67 | 1.518 / 1.534 | 231,239 |
 
 **Inspection and pixel-coding validation**

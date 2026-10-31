@@ -138,7 +138,15 @@ internal static class ColumnBicubicResize
                             sum = Avx512F.Add(sum, Avx512F.Multiply(pair, Vector512.Create(vertical[t])));
                         }
                         if (!TryWritePair(sum, normalizers[outputX] * normalizerY, normalizers[outputX + 1] * normalizerY,
-                            destination.Slice((tile + outputX) * 4, 8))) return false;
+                            destination.Slice((tile + outputX) * 4, 8)))
+                        {
+                            // Repair only uncertain pixels, preserving original tap order.
+                            // Tiny-alpha replay still unwinds this workspace first.
+                            for (var repair = outputX; repair < outputX + 2; repair++)
+                                if (!OriginalByte(source, result, tile + repair, y,
+                                    weights.Slice(repair * 10, counts[repair]), offsets.Slice(repair * 10, counts[repair]),
+                                    sourceFirst, vertical.Slice(0, count), first, context)) return false;
+                        }
                     }
                     for (var x = outputX; x < length; x++)
                     {
@@ -180,25 +188,59 @@ internal static class ColumnBicubicResize
         }
         finally { context.Release(WorkspaceBytes); }
     }
+    private static bool OriginalByte(ImageBuffer source, ImageBuffer result, int x, int y,
+        ReadOnlySpan<double> weights, ReadOnlySpan<byte> offsets, int sourceFirst,
+        ReadOnlySpan<double> vertical, int firstY, OperationContext context)
+    {
+        double red = 0, green = 0, blue = 0, alpha = 0, normalizer = 0;
+        for (var ty = 0; ty < vertical.Length; ty++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var wy = vertical[ty]; if (wy == 0) continue;
+            var row = source.GetRow8(Math.Clamp(firstY + ty, 0, source.Height - 1));
+            for (var tx = 0; tx < weights.Length; tx++)
+            {
+                var weight = wy * weights[tx]; if (weight == 0) continue;
+                var offset = (sourceFirst + offsets[tx]) * 4;
+                var a = row[offset + 3];
+                red += weight * a * row[offset];
+                green += weight * a * row[offset + 1];
+                blue += weight * a * row[offset + 2];
+                alpha += weight * a; normalizer += weight;
+            }
+        }
+        var normalized = alpha / normalizer;
+        // Exact tiny-alpha arithmetic needs this same 4-KiB allowance after unwind.
+        if (normalized > 0 && normalized < 1) return false;
+        var aOut = BicubicMath.RoundByte(normalized);
+        var color = aOut > 0 && alpha > 0;
+        var output = result.GetRow8(y).Slice(x * 4, 4);
+        output[0] = BicubicMath.RoundByte(color ? red / alpha : 0);
+        output[1] = BicubicMath.RoundByte(color ? green / alpha : 0);
+        output[2] = BicubicMath.RoundByte(color ? blue / alpha : 0);
+        output[3] = aOut;
+        return true;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool TryWritePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
     {
-        const double unitError = 2.3283064365386963e-10;
-        const double alphaError = unitError * 255;
         var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
-        if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
+        if (!(n0 >= .5 && n1 >= .5 && a0 >= 16 && a1 >= 16)) return false;
         var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
-        var values = Avx512F.Divide(sum, divisors);
-        var magnitudes = Avx512F.AndNot(Vector512.Create(long.MinValue), values.AsInt64()).AsDouble();
-        // Per-channel quotient bounds avoid scalar maximum/division chains.
-        // Doubling covers rounding of the positive error-bound calculation.
-        var errors = Vector512.Create(alphaError, alphaError, alphaError, unitError,
-            alphaError, alphaError, alphaError, unitError);
-        var numerators = Avx512F.Add(Vector512.Create(alphaError * 255, alphaError * 255, alphaError * 255, alphaError,
-            alphaError * 255, alphaError * 255, alphaError * 255, alphaError), Avx512F.Multiply(magnitudes, errors));
-        var margins = Avx512F.Divide(Avx512F.Multiply(numerators, Vector512.Create(2d)), Avx512F.Subtract(divisors, errors));
-        if (Vector512.ExtractMostSignificantBits(Avx512F.CompareGreaterThanOrEqual(margins, Vector512.Create(.25))) != 0
-            || !(values.GetElement(3) >= 1 + margins.GetElement(3) && values.GetElement(7) >= 1 + margins.GetElement(7))) return false;
+        // VRCP14PD has relative error <2^-14 (Intel ISA reference). One fused
+        // Newton correction and the quotient multiply give error <2^-27.
+        // With alpha sums >=16 and normalizers >=.5, the existing 2^-32
+        // accumulation bound contributes <3.79e-6 after clipping to [0,255];
+        // reciprocal error adds <1.90e-6. The larger 2^-16 margin certifies
+        // the original rounding decision. Uncertain pixels replay unchanged.
+        var reciprocal = Avx512F.Reciprocal14(divisors);
+        reciprocal = Avx512F.Multiply(reciprocal,
+            Avx512F.FusedMultiplyAddNegated(divisors, reciprocal, Vector512.Create(2d)));
+        var values = Avx512F.Multiply(sum, reciprocal);
+        const double margin = 1.52587890625e-5;
+        var margins = Vector512.Create(margin);
+        if (!(values.GetElement(3) >= 1 + margin && values.GetElement(7) >= 1 + margin)) return false;
         var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
         var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
             Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();

@@ -188,9 +188,15 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged byte bilinear leaked storage or disposed the caller root.");
         }
         Console.WriteLine("Packaged byte bilinear row reuse pixels and existing admission passed.");
+        foreach (var (width, height, expectedHash) in new[]
         {
-            const int sourceWidth = 513, sourceHeight = 259, width = 1027, height = 519;
-            const long sourceBytes = sourceWidth * sourceHeight * 4, outputBytes = width * height * 4;
+            (1027, 519, "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94"),
+            (256, 129, "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8")
+        })
+        {
+            const int sourceWidth = 513, sourceHeight = 259;
+            const long sourceBytes = sourceWidth * sourceHeight * 4;
+            var outputBytes = (long)width * height * 4;
             using var seed = OriginalPixels.Buffer(sourceWidth, sourceHeight, 8);
             seed.GetRow8(0)[3] = seed.GetRow8(0)[sourceWidth * 4 - 1] = 0;
             using var bicubicBudget = new TestMemoryBudget(sourceBytes + outputBytes + 4096);
@@ -199,11 +205,13 @@ internal static class CooperativeMemoryConsumer
             using var pattern = ImageBuffer.Create(sourceWidth, sourceHeight, 8, bicubicLimits);
             for (var y = 0; y < sourceHeight; y++) seed.GetRow8(y).CopyTo(pattern.GetRow8(y));
             using var actual = ImageTransforms.Resize(pattern, width, height, ResizeFilter.Bicubic, bicubicLimits);
-            if (bicubicBudget.Bytes != sourceBytes + outputBytes || bicubicBudget.Peak != sourceBytes + outputBytes + 4096)
+            if (bicubicBudget.Bytes != sourceBytes + outputBytes || bicubicBudget.Peak > sourceBytes + outputBytes + 4096
+                || ((width == 1027 || System.Runtime.Intrinsics.X86.Avx512F.IsSupported)
+                    && bicubicBudget.Peak != sourceBytes + outputBytes + 4096))
                 throw new Exception("Packaged byte bicubic exceeded admitted scratch or retained temporary storage.");
             pattern.Dispose();
             var digest = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(actual)));
-            if (digest != "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94"
+            if (digest != expectedHash
                 || bicubicBudget.Bytes != outputBytes)
                 throw new Exception("Packaged byte bicubic pixels or independent retained ownership differ.");
             actual.Dispose();

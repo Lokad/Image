@@ -7,6 +7,18 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Local bicubic repair](WARM-BICUBIC-LOCAL-REPAIR.md) improves existing TightDown8
+5.61% filtered/5.12% all-actual elapsed, 6.93% normalized, with separately separated
+confidence. Current 622.835 µs, 1.474× / upper 1.540, 132,309 B/op (+3 B/op noise).
+The fixed certificate's uncertain pairs now replay only their original-order
+pixels; tiny alpha still unwinds 4 KiB scratch. Exact frozen/native pixels,
+admission/refusal/cancellation/owners pass. Full 5,285 checks per OS, 18 internal/
+369 public focused normal/scalar/LinuxAVX512off and the same actual Windows
+Release package/three examples pass both OSes, including tight byte up/down
+ownership. One core/internal build per OS, zero other library/harness/native/
+selector builds or new profiles/inputs. Other unchanged paths reuse evidence;
+this primitive is closed and all 268 paths remain required.
+
 [Current retained PNG decoding](CURRENT-RETAINED-PNG-DECODE-COST.md) confirms
 the existing two-output borrowed-root boundary at 1.157× / upper 1.168,
 1,637,520 B/op and actual governed peak 1,766,641 bytes. Both complete decodes,

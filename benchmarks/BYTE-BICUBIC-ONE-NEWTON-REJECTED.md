@@ -1,5 +1,9 @@
 # Byte bicubic reciprocal screen: rejected
 
+This whole-frame-refusal experiment remains rejected. A later distinct
+[local repair](WARM-BICUBIC-LOCAL-REPAIR.md) reuses its arithmetic unchanged and
+repairs uncertain pixels in original order; see that accepted current result.
+
 One bounded normalization candidate preserves exact pixels but regresses the
 complete tight-memory byte reduction from **653.668 µs to 8,586.159 µs** on the
 quiet VM short screen. It is rejected immediately, with no independent candidate

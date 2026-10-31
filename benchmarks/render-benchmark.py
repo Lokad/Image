@@ -755,6 +755,26 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    local_repair = json.loads((ROOT / 'benchmarks/warm-bicubic-local-repair-evidence.json').read_text(encoding='utf-8'))
+    assert local_repair['qualification']['fullChecksEachOs'] == 5285
+    assert local_repair['qualification']['sameActualPackageBothOs']
+    assert local_repair['decisions']['confirm']['defaultFivePercentPassed']
+    assert local_repair['decisions']['confirm']['normalizedSeparated']
+    observation = local_repair['cases']['TightDown8'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == local_repair['producers']['linuxSha256']
+    assert all(q['passed'] for q in observation['quietness'].values())
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    updated = 0
+    for index, (kind, row) in enumerate(rows):
+        label = row.split('|')[1].strip()
+        if kind == 'editing' and label.startswith('Bicubic RGBA8 reduction,'):
+            rows[index] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | '
+                           f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                           f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                           f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
+            updated += 1
+    assert updated == 1
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -906,6 +926,12 @@ Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
 
+Local original-order repair improves tight RGBA8 bicubic reduction **5.61%**
+(all actuals **5.12%**), preserving exact pixels and the same **4 KiB** admission:
+**1.474× / upper 1.540**, **132,309 B/op** (+3 B/op noise). Uncertain pairs
+repair locally; tiny alpha still unwinds before exact scratch.
+[Local-repair evidence](../benchmarks/WARM-BICUBIC-LOCAL-REPAIR.md).
+
 The remaining shared-alpha caller audit reuses six proven unchanged paths and
 confirms four current costs. Word vertical enlargement passes at **0.973× /
 upper 0.985**, **2,514,272 B/op** and stops. Word bicubic enlargement remains
@@ -929,8 +955,8 @@ operation includes both complete decodes, retained overlap and releases on both
 subjects; native has no shared admission API. Exact pixels and root cleanup pass.
 [Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
 
-The current producer passes **5,267 checks per OS**, plus 22 new internal and
-179 public focused checks normal/scalar and Linux with AVX512 disabled.
+The current producer passes **5,285 checks per OS**, plus 18 focused internal and
+369 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
