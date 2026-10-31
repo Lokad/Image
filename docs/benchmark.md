@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-31. These **82 selected comparisons** combine qualified
+Updated 2026-10-31. These **85 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -32,6 +32,11 @@ its explicit normalized-confidence-overlap exception, without a parity claim.
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
 small 1.7% point cost increase is disclosed; all three refreshed read controls
 remain confirmed gaps.
+
+The three existing [RGBA16 Fastest PNG boundaries](../benchmarks/CURRENT-FASTEST-WORD-PNG-COSTS.md)
+now confirm 1.331–1.372× gaps with exact complete 968,216-byte packets. Their
+older BCL-encoder timing passes are historical; this adds current costs for
+existing required paths, with unchanged production and reused qualification.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
@@ -66,6 +71,9 @@ acceptance histories are retained in the coverage links and raw evidence.
 | PNG RGBA16, SmallestSize9 / native9 † | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,083.65 | 4,351.80 | 1.398 / 1.420 | 1,344,428 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
+| PNG RGBA16, Fastest1 / native1 † | 23,284.98 | 17,477.77 | 1.332 / 1.341 | 3,813,732 | 968,216 / 968,216 |
+| PNG RGBA16 Fastest1, live cancelable token † | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
+| PNG RGBA16 Fastest1, forward-only output † | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,111.27 | 1,013.36 | 1.097 / 1.136 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |

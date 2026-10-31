@@ -426,6 +426,10 @@ def render():
     assert header_skips['qualification']['sameActualPackageBothOs']
     assert header_skips['qualification']['package']['sha256'] == header_skips['qualification']['linuxPackage']['sameActualPackageSha256']
     assert set(header_skips['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
+    fastest_word = json.loads((ROOT / 'benchmarks/current-fastest-word-png-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not fastest_word['productionChanged'] and fastest_word['independentQuietConfirmations'] == 3
+    assert fastest_word['producers'] == header_skips['producers']
+    assert fastest_word['qualificationReused']['packageSha256'] == header_skips['qualification']['package']['sha256']
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -542,6 +546,21 @@ def render():
             packet = f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,}' if case['operation'] == 'encode' else '—'
             cells.append(packet)
         rows.append((case['kind'], '| ' + ' | '.join(cells) + ' |'))
+    for case, label in [('EncodeFast16', 'PNG RGBA16, Fastest1 / native1'),
+                        ('EncodeFastCancelable16', 'PNG RGBA16 Fastest1, live cancelable token'),
+                        ('EncodeFastForward16', 'PNG RGBA16 Fastest1, forward-only output')]:
+        observation = fastest_word['cases'][case][-1]
+        receipt = observation['receipt']
+        assert fastest_word['status'][case] == 'confirmed-gap'
+        assert receipt['librarySha256'] == fastest_word['producers']['linuxSha256']
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 968216
+        assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
+        stats = observation['managed']['statistics']
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 968,216 / 968,216 |'))
     predicted = png_gfni['cases']['EncodePredictable16'][-1]
     receipt, stats = predicted['receipt'], predicted['managed']['statistics']
     assert receipt['librarySha256'] == png_gfni['producers']['linuxSha256']
@@ -1202,6 +1221,11 @@ its explicit normalized-confidence-overlap exception, without a parity claim.
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
 small 1.7% point cost increase is disclosed; all three refreshed read controls
 remain confirmed gaps.
+
+The three existing [RGBA16 Fastest PNG boundaries](../benchmarks/CURRENT-FASTEST-WORD-PNG-COSTS.md)
+now confirm 1.331–1.372× gaps with exact complete 968,216-byte packets. Their
+older BCL-encoder timing passes are historical; this adds current costs for
+existing required paths, with unchanged production and reused qualification.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named

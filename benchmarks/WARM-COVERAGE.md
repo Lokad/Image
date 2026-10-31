@@ -7,6 +7,20 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current RGBA16 Fastest PNG costs](CURRENT-FASTEST-WORD-PNG-COSTS.md) resolve
+three existing named uncertainties: stock 1.332 / upper 1.341, cancelable
+1.372 / upper 1.383, forward-only 1.331 / upper 1.345. Managed allocation is
+3,813,732 / 3,813,732 / 3,813,764 B/op; all complete 968,216-byte packets match
+the frozen reference exactly. Earlier BCL2/native1 IDAT-tolerance CPU passes
+predate the exact encoder and shared GFNI CRC; they are not current proof.
+Three successful twelves on the qualified SKP1 core, cached four-invocation
+selector and unchanged native worker; no production build or repeated full/
+package checks. One forward comparator path fix and harness build after a
+zero-actual stale-stock setup failure; a prelaunch stale-source guard also stops
+and is reconciled without waiver. All failures/raw are retained. No new image,
+setting or required path; all 268 remain. Stop uncertainty retiming and resume
+one substantial primitive among the largest demonstrated per-image gaps.
+
 [Completed header skips](WARM-HEADER-SKIP-FAST-PATH.md) retain **8.25% filtered /
 8.27% all-sample / 8.73% normalized** improvement with separated confidence.
 Seekable JPEG probing confirms 1.681 / upper 1.736, 744 B/op. The async companion

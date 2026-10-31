@@ -224,7 +224,7 @@ public partial class WarmPng
                 }
                 catch (ImageLimitException) { }
             }
-            if (ForwardOutput && !File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-fast16-fast2", "input.png")).AsSpan().SequenceEqual(encoded))
+            if (ForwardOutput && !File.ReadAllBytes(Path.Combine(state.Root, "artifacts", "warm-reference", "png-fast16-fast2-reference-v1", "input.png")).AsSpan().SequenceEqual(encoded))
                 throw new InvalidOperationException("Forward-only output differs from the frozen stock packet.");
             ValidatePng(encoded); ValidateManaged();
             if (Cancelable || Tight || Smallest || Fastest || NoCompression || Rgb || Gray || GrayAlpha || Palette || Up || Sub || Average)
