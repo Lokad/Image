@@ -4,7 +4,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **69 comparisons** rank the remaining work; completion requires every
+These **70 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -98,11 +98,12 @@ A bounded byte-normalization screen regresses and is rejected; the verified
 implementation and all displayed costs remain unchanged.
 [Rejected screen](../benchmarks/BYTE-BICUBIC-ONE-NEWTON-REJECTED.md).
 
-Two existing progressive JPEG uncertainties now have current independent costs:
-grayscale **1.442× / upper 1.476**, **683,126 B/op**; live-token 4:4:4
-**1.438× / upper 1.447**, **984,212 B/op**. Both remain CPU gaps with exact native
-pixels. Prepared packets/settings stay frozen; stale managed-hash metadata is
-reconciled and original headers restored. Zero builds or new controls.
+Three existing progressive JPEG controls have current independent costs:
+grayscale **1.442× / upper 1.476**, **683,126 B/op**; ordinary 4:4:4
+**1.472× / upper 1.501** and live-token 4:4:4 **1.438× / upper 1.447**, both
+**984,212 B/op**. All remain gaps with exact native pixels. Original headers are
+restored; inputs/settings stay frozen. One cached-source selector build for
+ordinary 4:4:4, zero library/harness/native builds or new controls.
 [Progressive costs](../benchmarks/CURRENT-PROGRESSIVE-JPEG-COSTS.md).
 
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
@@ -158,6 +159,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | JPEG caller RGB24 async nonseekable, 420 † | 1,862.24 | 1,628.86 | 1.143 / 1.154 | 309,526 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 † | 4,626.46 | 3,857.58 | 1.199 / 1.210 | 820,475 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
+| JPEG ordinary progressive444, resident decode † | 4,953.64 | 3,365.28 | 1.472 / 1.501 | 984,212 | — |
 
 **Editing**
 

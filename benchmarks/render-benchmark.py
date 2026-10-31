@@ -782,6 +782,21 @@ def render():
     first_ac = json.loads((ROOT / 'benchmarks/jpeg-first-ac-confidence-open-evidence.json').read_text(encoding='utf-8'))
     assert first_ac['confidenceOpen'] and not first_ac['accepted'] and not first_ac['productionChanged']
     assert all(v['productionSourceAndConsumerRestored'] for v in first_ac['restoration'].values())
+    ordinary_progressive = json.loads((ROOT / 'benchmarks/current-progressive-jpeg-444-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not ordinary_progressive['productionChanged'] and ordinary_progressive['productionHarnessNativeBuilds'] == 0
+    assert ordinary_progressive['producers'] == local_repair['producers']
+    assert ordinary_progressive['preparation']['originalHeaderRestored']['originalHeaderByteExact']
+    observation = ordinary_progressive['cases']['Progressive444'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == ordinary_progressive['producers']['linuxSha256']
+    assert not receipt['cancellationCanBeCanceled'] and receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    assert ordinary_progressive['comparisonLowerBounds']['Progressive444'] > 1
+    rows.append(('codec', f'| JPEG ordinary progressive444, resident decode † | {stats["Mean"] / 1000:,.2f} | '
+                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -863,7 +878,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **69 comparisons** rank the remaining work; completion requires every
+These **70 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -957,11 +972,12 @@ A bounded byte-normalization screen regresses and is rejected; the verified
 implementation and all displayed costs remain unchanged.
 [Rejected screen](../benchmarks/BYTE-BICUBIC-ONE-NEWTON-REJECTED.md).
 
-Two existing progressive JPEG uncertainties now have current independent costs:
-grayscale **1.442× / upper 1.476**, **683,126 B/op**; live-token 4:4:4
-**1.438× / upper 1.447**, **984,212 B/op**. Both remain CPU gaps with exact native
-pixels. Prepared packets/settings stay frozen; stale managed-hash metadata is
-reconciled and original headers restored. Zero builds or new controls.
+Three existing progressive JPEG controls have current independent costs:
+grayscale **1.442× / upper 1.476**, **683,126 B/op**; ordinary 4:4:4
+**1.472× / upper 1.501** and live-token 4:4:4 **1.438× / upper 1.447**, both
+**984,212 B/op**. All remain gaps with exact native pixels. Original headers are
+restored; inputs/settings stay frozen. One cached-source selector build for
+ordinary 4:4:4, zero library/harness/native builds or new controls.
 [Progressive costs](../benchmarks/CURRENT-PROGRESSIVE-JPEG-COSTS.md).
 
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /

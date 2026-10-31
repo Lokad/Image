@@ -7,6 +7,13 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current ordinary progressive 4:4:4](CURRENT-PROGRESSIVE-JPEG-COSTS.md) resolves
+one existing required noncancelable path at 1.472× / upper 1.501, 984,212 B/op.
+Exact frozen/native pixels, source/output ownership and quiet guards pass. One
+independent twelve, one cached-source selector build, no library/harness/native
+build or new control. Original header restored; unchanged full/package proof
+reused. The summary now displays 70 comparisons; all 268 paths remain required.
+
 [Progressive first-scan traversal](JPEG-FIRST-AC-CONFIDENCE-OPEN.md) remains
 unaccepted: two independent blocks show 8.22%/9.66% raw gains with exact pixels,
 but conservative native-normalized confidence stays open. One bounded reversed
