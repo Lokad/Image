@@ -44,7 +44,7 @@ def render():
     vp8_decoder_costs = json.loads((ROOT / 'benchmarks/current-vp8-decoder-costs-evidence.json').read_text(encoding='utf-8'))
     assert not vp8_decoder_costs['productionChanged'] and vp8_decoder_costs['allBuilds'] == 0
     assert vp8_decoder_costs['independentQuietConfirmation'] and len(vp8_decoder_costs['cases']) == 4
-    vp8_stream = json.loads((ROOT / 'benchmarks/warm-vp8l-direct-output-evidence.json').read_text(encoding='utf-8'))
+    vp8_stream = json.loads((ROOT / 'benchmarks/warm-vp8l-group-dispatch-evidence.json').read_text(encoding='utf-8'))
     assert vp8_stream['productionChanged'] and vp8_stream['independentQuietConfirmation']
     assert vp8_stream['decision']['passed'] and vp8_stream['qualification']['sameActualPackageBothOs']
     assert vp8_stream['qualification']['compressedAlphaTwoFramesActualPackagePassed']
@@ -410,8 +410,8 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
-    resident_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-direct-output-evidence.json').read_text(encoding='utf-8'))
-    indexed_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-direct-output-evidence.json').read_text(encoding='utf-8'))
+    resident_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-group-dispatch-evidence.json').read_text(encoding='utf-8'))
+    indexed_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-group-dispatch-evidence.json').read_text(encoding='utf-8'))
     indexed_observation = indexed_decode['cases']['IndexedNative16Colors8'][-1]
     assert indexed_decode['productionChanged'] and indexed_decode['independentQuietConfirmation']
     assert indexed_decode['producers'] == resident_decode['producers']
@@ -419,7 +419,7 @@ def render():
     assert indexed_observation['receipt']['allRgbaSamplesExact']
     assert indexed_observation['receipt']['managedOutputSha256'] == indexed_observation['receipt']['nativeOutputSha256']
     assert all(q['passed'] for q in indexed_observation['quietness'].values())
-    live_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-direct-output-evidence.json').read_text(encoding='utf-8'))
+    live_decode = json.loads((ROOT / 'benchmarks/warm-vp8l-group-dispatch-evidence.json').read_text(encoding='utf-8'))
     live_observation = live_decode['cases']['NativeLosslessCancelable8'][-1]
     assert live_decode['productionChanged'] and live_decode['decision']['passed']
     assert live_decode['producers'] == resident_decode['producers']
@@ -431,8 +431,8 @@ def render():
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
     assert resident_decode['decision']['passed'] and resident_decode['qualification']['sameActualPackageBothOs']
-    assert resident_decode['memory']['measuredWarmReductionBytes'] == 531649
-    assert resident_decode['memory']['governedBefore']['decode']['peakAdmittedBytes'] == 1063480
+    assert resident_decode['memory']['newOwnedCapacityBytes'] == 0
+    assert resident_decode['memory']['measuredWarmAllocatedBefore'] == resident_decode['memory']['measuredWarmAllocatedAfter'] == 152728
     assert resident_decode['qualification']['focusedInternalEachModeEachOs'] == 58
     assert resident_decode['qualification']['longGreenFixtureInteroperatesExactly']
     assert not reconciled['productionChanged'] and len(reconciled['cases']) == 6
@@ -1042,11 +1042,11 @@ one confirmation each without retiming or assuming an optimization need.
 The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
 separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
-Non-indexed VP8L decoding now owns its decoded storage directly: **2.73%** less
-elapsed time, **531,649 fewer allocated B/op** and **41.4% lower governed peak**.
-Eight affected companions have current costs. Literal/run passes at **0.692× /
-upper 0.696**, 10,840 B/op; indexed and live-token controls remain gaps.
-[Direct-output evidence](../benchmarks/WARM-VP8L-DIRECT-OUTPUT.md).
+VP8L group dispatch independently reduces resident decode elapsed by **5.93%**:
+**1.068× / upper 1.079**, unchanged **152,728 B/op**. All nine affected named
+decode/validation controls have current costs. Literal/run passes at **0.714× /
+upper 0.726**, 10,840 B/op; indexed is confidence-open at **1.008× / upper 1.039**.
+Live-token decoding remains a gap. [Current evidence](../benchmarks/WARM-VP8L-GROUP-DISPATCH.md).
 
 JPEG dimension probing now combines marker reads: **6.73%** less filtered elapsed,
 unchanged **744 B/op / 512 admitted bytes**. Both named probes remain CPU gaps.
@@ -1133,12 +1133,9 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-Current evidence covers **5,305 checks per OS**: 2,164 freshly run internal
-checks, with unchanged 2,193 public/948 live and actual-package proofs reused.
-Two new JPEG cursor/fallback controls also pass scalar/ISA modes. Applicable
-focused coverage includes 355 internal and 354 public checks normal/scalar and
-Linux with AVX512 disabled. Header/probe proofs remain applicable.
-[Retained JPEG boundary coverage](../benchmarks/JPEG-CROSS-BLOCK-LOOKAHEAD-REJECTED.md).
+The current producer passes **5,305 checks per OS** (2,164 internal, 2,193
+public, 948 live), plus 58 internal/306 public focused checks normal/scalar and
+Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.

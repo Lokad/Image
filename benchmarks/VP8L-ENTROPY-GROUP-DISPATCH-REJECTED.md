@@ -1,5 +1,8 @@
 # VP8L entropy-group dispatch screen
 
+Historical screen. The identical strategy is now independently qualified on the
+current owned-frame decoder: [current group-dispatch evidence](WARM-VP8L-GROUP-DISPATCH.md).
+
 One existing 513×259 resident RGBA8 decode, frozen 183,812-byte libwebp exact=1
 packet. Complete public decode, independently owned output and disposal; one warm
 CPU. All 531,468 output bytes, alpha and hidden RGB remain exact.

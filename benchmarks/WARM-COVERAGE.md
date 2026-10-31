@@ -7,6 +7,21 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[VP8L group dispatch](WARM-VP8L-GROUP-DISPATCH.md) independently improves resident
+decode5.93%filtered/5.94%all raw/5.79%normalized with separated confidence and
+unchanged152728B/op:1.068×/upper1.079 remainsgap. All nine affected named costs
+current; literal/runupper.726 PASS/STOP, indexed1.008/upper1.039confidenceopen,
+othersgaps. No pairedcompaniongainclaims or new matrix. Original packets/settings,
+exactRGBA/alpha/hiddenRGB,descriptors,owners,quietguards pass. Full5305/OS,
+58internal/306publicnormal/scalar+Linux512off,SAMEactualWindowspackage/DLL and
+3examples bothOS pass. Onecore/internalbuildperOS;zerootherbuilds/profiles/inputs.
+Thirteen original-path sourcepins and freshstable3 reuse validoriginal12.
+Exact archived VGD1strategy reassessed under4.1%triage; new proof clearsdefault5%.
+No tile/width/inliningvariants. Currentproducer changed only ReadImageCore;
+opaqueVP8/encoders/metadata/othercodecs/editing/text retain unchangedproof.
+Raw9e8562f3efa8b5d74e28f85471fc7ef6e471b71d384129930f94f16b0c0fcc23,
+7070940B/315members mirrored/memberverified. Full268objective remainsopen.
+
 [Owned full-resolution CMYK costs](CURRENT-OWNED-CMYK-JPEG-COSTS.md) now include
 a current DC-only twelve:383.588µs,1.011×/upper1.023,lower.994,1,085,758B/op.
 Confidence remains open; no pass, confirmed-gap or repeat. Independent DC/Q16

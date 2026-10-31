@@ -1,5 +1,9 @@
 # VP8L owns decoded output directly
 
+The CPU costs below are superseded for all nine controls by
+[current group-dispatch evidence](WARM-VP8L-GROUP-DISPATCH.md). The ownership
+and admission change remains in production.
+
 The existing resident control independently confirms **2.73% less elapsed time**,
 **531,649 fewer allocated B/op** and **41.4% lower governed peak storage**.
 The predeclared substantial-storage exception requires ≥2% filtered/all/native-

@@ -29,11 +29,11 @@ one confirmation each without retiming or assuming an optimization need.
 The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
 separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
 
-Non-indexed VP8L decoding now owns its decoded storage directly: **2.73%** less
-elapsed time, **531,649 fewer allocated B/op** and **41.4% lower governed peak**.
-Eight affected companions have current costs. Literal/run passes at **0.692× /
-upper 0.696**, 10,840 B/op; indexed and live-token controls remain gaps.
-[Direct-output evidence](../benchmarks/WARM-VP8L-DIRECT-OUTPUT.md).
+VP8L group dispatch independently reduces resident decode elapsed by **5.93%**:
+**1.068× / upper 1.079**, unchanged **152,728 B/op**. All nine affected named
+decode/validation controls have current costs. Literal/run passes at **0.714× /
+upper 0.726**, 10,840 B/op; indexed is confidence-open at **1.008× / upper 1.039**.
+Live-token decoding remains a gap. [Current evidence](../benchmarks/WARM-VP8L-GROUP-DISPATCH.md).
 
 JPEG dimension probing now combines marker reads: **6.73%** less filtered elapsed,
 unchanged **744 B/op / 512 admitted bytes**. Both named probes remain CPU gaps.
@@ -120,12 +120,9 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-Current evidence covers **5,305 checks per OS**: 2,164 freshly run internal
-checks, with unchanged 2,193 public/948 live and actual-package proofs reused.
-Two new JPEG cursor/fallback controls also pass scalar/ISA modes. Applicable
-focused coverage includes 355 internal and 354 public checks normal/scalar and
-Linux with AVX512 disabled. Header/probe proofs remain applicable.
-[Retained JPEG boundary coverage](../benchmarks/JPEG-CROSS-BLOCK-LOOKAHEAD-REJECTED.md).
+The current producer passes **5,305 checks per OS** (2,164 internal, 2,193
+public, 948 live), plus 58 internal/306 public focused checks normal/scalar and
+Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
@@ -136,7 +133,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 6,986.26 | 6,014.54 | 1.162 / 1.176 | 1,434,827 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 7,037.26 | 6,042.62 | 1.165 / 1.211 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |
@@ -161,8 +158,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,111.27 | 1,013.36 | 1.097 / 1.136 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |
-| VP8L RGBA8, resident decode † | 3,427.41 | 3,023.55 | 1.134 / 1.142 | 152,728 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 3,400.72 | 3,032.93 | 1.121 / 1.134 | 152,824 | — |
+| VP8L RGBA8, resident decode † | 3,224.25 | 3,019.22 | 1.068 / 1.079 | 152,728 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 3,271.53 | 3,048.58 | 1.073 / 1.102 | 152,824 | — |
 | JPEG CMYK sparse-2D, resident decode † | 638.03 | 442.45 | 1.442 / 1.481 | 1,085,758 | — |
 | JPEG YCCK420, resident decode † | 421.45 | 707.63 | 0.596 / 0.607 | 895,547 | — |
 | JPEG 4:1:1, resident decode † | 527.41 | 450.16 | 1.172 / 1.192 | 751,295 | — |
@@ -213,8 +210,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Validate indexed Adam7 19×17, span | 5.352 | 3.926 | 1.363 / 1.386 | 1,168 | Confirmed gap |
 | Validate JPEG baseline420, span | 589.348 | 673.562 | 0.875 / 0.880 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 291.290 | 267.973 | 1.087 / 1.094 | 4,072 | Confirmed gap |
-| Validate VP8L+alpha, span | 3,537.096 | 3,050.177 | 1.160 / 1.165 | 685,421 | Confirmed gap |
-| Validate VP8+alpha, span | 6,795.415 | 5,445.227 | 1.248 / 1.268 | 554,478 | Confirmed gap |
+| Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
+| Validate VP8+alpha, span | 6,696.676 | 5,469.412 | 1.224 / 1.250 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,850.602 | 3,605.292 | 0.791 / 0.802 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

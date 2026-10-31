@@ -219,18 +219,35 @@ internal ref struct WebpLosslessDecoder
                 green.BuildWideGreen(lookup);
             }
         }
+        var greenTree = tables[0]; var redTree = tables[1]; var blueTree = tables[2];
+        var alphaTree = tables[3]; var distanceTree = tables[4];
+        ReadOnlySpan<uint> greenLookup = scratchStart != 0 && greenTree.CanBuildWideGreen
+            ? pixels.Slice(scratchStart, 4096) : default;
+        var nextGroupBoundary = entropy.Length == 0 ? pixels.Length : 0;
+        var tileSize = 1 << entropyBits;
         while (position < pixels.Length)
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            var group = entropy.Length == 0 ? 0 : (int)((entropy[(position / imageWidth >> entropyBits) * entropyWidth
-                + (position % imageWidth >> entropyBits)] >> 8) & 65535);
-            var start = group * 5;
-            var symbol = position < scratchStart && tables[start].CanBuildWideGreen
-                && reader.TryReadWideGreen(pixels.Slice(scratchStart + group * 4096, 4096), out var wideSymbol)
-                ? wideSymbol : tables[start].Read(ref reader);
+            if (position >= nextGroupBoundary)
+            {
+                // A copy may cross several tiles or rows. Select from its actual
+                // endpoint, then borrow the immutable trees until the next edge.
+                var row = position / imageWidth; var column = position - row * imageWidth;
+                var group = (int)((entropy[(row >> entropyBits) * entropyWidth + (column >> entropyBits)] >> 8) & 65535);
+                var start = group * 5;
+                greenTree = tables[start]; redTree = tables[start + 1]; blueTree = tables[start + 2];
+                alphaTree = tables[start + 3]; distanceTree = tables[start + 4];
+                greenLookup = scratchStart != 0 && greenTree.CanBuildWideGreen
+                    ? pixels.Slice(scratchStart + group * 4096, 4096) : default;
+                nextGroupBoundary = position + Math.Min(imageWidth - column, tileSize - (column & (tileSize - 1)));
+            }
+            // The borrowed lookup occupies unwritten output storage; stop using
+            // it before any literal or copy has overwritten that storage.
+            var symbol = position < scratchStart && !greenLookup.IsEmpty
+                && reader.TryReadWideGreen(greenLookup, out var wideSymbol)
+                ? wideSymbol : greenTree.Read(ref reader);
             if (symbol < 256)
             {
-                var redTree=tables[start+1];var blueTree=tables[start+2];var alphaTree=tables[start+3];
                 uint pixel;
                 if(redTree.TryReadByteChannels(blueTree,alphaTree,ref reader,out var channels))
                     pixel=channels|((uint)symbol<<8);
@@ -245,7 +262,7 @@ internal ref struct WebpLosslessDecoder
             else if (symbol < 280)
             {
                 var length = Prefix(symbol - 256);
-                var distance = WebpDistances.Resolve(Prefix(tables[start + 4].Read(ref reader)), imageWidth);
+                var distance = WebpDistances.Resolve(Prefix(distanceTree.Read(ref reader)), imageWidth);
                 if (distance > position || length > pixels.Length - position)
                     throw new ImageDataException("VP8L backward reference exceeds the raster.");
                 context.Cancellation.ThrowIfCancellationRequested();
