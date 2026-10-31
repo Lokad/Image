@@ -884,6 +884,26 @@ def render():
     wide_view = json.loads((ROOT / 'benchmarks/bicubic-wide-tap-view-rejected-evidence.json').read_text(encoding='utf-8'))
     assert wide_view['candidateRejected'] and not wide_view['productionChanged'] and not wide_view['decision']['passed']
     assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in wide_view['restoration'].values())
+    wide_current = json.loads((ROOT / 'benchmarks/current-wide-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not wide_current['productionChanged'] and wide_current['allBuilds'] == 0
+    assert wide_current['independentQuietConfirmations'] == 7 and wide_current['reusedIndependentConfirmations'] == 1
+    assert len(wide_current['cases']) == 8 and list(wide_current['status'].values()).count('confirmed-pass') == 4
+    assert wide_current['evidenceReuse']['relevantSourcesByteExactSinceA128']
+    for case, observations in wide_current['cases'].items():
+        observation = observations[-1]
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert (observation['conservativeRatioUpper'] <= 1) == (wide_current['status'][case] == 'confirmed-pass')
+        assert observation['receipt']['managedRationalReferenceExact'] and observation['receipt']['independentOwnedOutput']
+        if case != 'Wide8':
+            assert observation['receipt']['librarySha256'] == wide_current['producers']['currentLinuxSha256']
+    observation = wide_current['cases']['Down32x16_8'][-1]
+    matches = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| Bicubic RGBA8, 32×16 / default')]
+    assert len(matches) == 1
+    rows[matches[0]] = ('editing', f'| Bicubic RGBA8, 32×16 / default workspace (confirmed pass) † → 32×16 | '
+                       f'{observation["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
+                       f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                       f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                       f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1069,6 +1089,13 @@ The already-required tight-workspace RGBA16 horizontal resize now has an indepen
 current cost: **1.267× / upper 1.326**, **530,838 B/op** (lower 1.201 confirms a gap).
 Exact managed pixels and frozen native bounds pass; no build or optimization.
 [Current horizontal cost](../benchmarks/CURRENT-TIGHT-HORIZONTAL-WORD-BICUBIC.md).
+
+A bounded wider-support audit resolves eight existing default bicubic paths.
+Both depths at **32×16 and 16×8 pass**, with conservative uppers **0.670–0.948×**,
+**199,372–202,248 B/op**, and stop unchanged. Seven current confirmations reuse
+the immutable build; Wide8 retains its proven unchanged-path confirmation.
+Four larger-output controls remain gaps. No build, profile, new input or grid.
+[Current wider-support costs](../benchmarks/CURRENT-WIDE-BICUBIC-COSTS.md).
 
 The current producer passes **5,291 checks per OS**, plus 349 focused internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.

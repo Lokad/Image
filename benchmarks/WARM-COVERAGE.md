@@ -7,6 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Wider-support bicubic audit](CURRENT-WIDE-BICUBIC-COSTS.md) reconciles exactly
+eight existing default paths using two original source rasters, no new grid.
+Seven current independent twelves plus proven unchanged Wide8 reuse give four
+passes: Down32x16_8 upper.948/199372Bop,Down32x16_16 upper.848/201413Bop,
+Down16x8_8 upper.742/201739Bop,Down16x8_16 upper.670/202248Bop. Stop all four.
+Wide8/16 andDown64x32_8/16 remain gaps. Exact pixels/native bounds/owners/quiet
+pass;zero builds/profiles/repeated full/package proof. Earlier16x8passing
+manifests pin changed operation contexts; current proof now covers cleanup.
+Current32×16byte pass replaces its wide short bound. All268paths remain;
+76displayed comparisons stay unchanged in count.
+
 [Wider horizontal tap-view transfer](BICUBIC-WIDE-TAP-VIEW-REJECTED.md) misses
 its one short screen: 539.453 versus523.424 µs, unchanged231,239 B/op and exact
 pixels/native bounds. 217public controls normal/scalarbothOS/LinuxAVX512offpass.

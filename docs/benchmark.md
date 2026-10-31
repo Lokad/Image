@@ -109,6 +109,13 @@ current cost: **1.267× / upper 1.326**, **530,838 B/op** (lower 1.201 confirms 
 Exact managed pixels and frozen native bounds pass; no build or optimization.
 [Current horizontal cost](../benchmarks/CURRENT-TIGHT-HORIZONTAL-WORD-BICUBIC.md).
 
+A bounded wider-support audit resolves eight existing default bicubic paths.
+Both depths at **32×16 and 16×8 pass**, with conservative uppers **0.670–0.948×**,
+**199,372–202,248 B/op**, and stop unchanged. Seven current confirmations reuse
+the immutable build; Wide8 retains its proven unchanged-path confirmation.
+Four larger-output controls remain gaps. No build, profile, new input or grid.
+[Current wider-support costs](../benchmarks/CURRENT-WIDE-BICUBIC-COSTS.md).
+
 The current producer passes **5,291 checks per OS**, plus 349 focused internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
@@ -175,7 +182,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic upscale RGBA16 † → 1027×519 | 3,541.70 | 2,879.12 | 1.230 / 1.244 | 5,016,602 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
+| Bicubic RGBA8, 32×16 / default workspace (confirmed pass) † → 32×16 | 349.19 | 377.36 | 0.925 / 0.948 | 199,372 |
 | Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |
 | Lanczos3 reduction RGBA16 † → 256×129 | 726.96 | 507.57 | 1.432 / 1.446 | 138,437 |
 | Lanczos3 enlargement RGBA8 † → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
