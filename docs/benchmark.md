@@ -153,6 +153,10 @@ also misses its short screen; accepted costs and production remain unchanged.
 [Vertical geometry reuse](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
 is rejected after a corrected confirmation misses retention; source and packages
 are restored exactly, with five useful public tests retained.
+The existing [governed RGBA16 JPEG420 boundary](../benchmarks/CURRENT-GOVERNED-JPEG-RGBA16-COST.md)
+now has an independent current confirmation: **1.179× / upper1.197**,
+**819,489 B/op**, unchanged **52,115 / 52,117-byte packets**. This replaces its
+short screen without a causal gain claim or production change.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
@@ -170,7 +174,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | WebP VP8 + alpha, fresh seekable Stream † | 7,037.26 | 6,042.62 | 1.165 / 1.211 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
-| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,092.66 | 1,833.49 | 1.141 / 1.292 | 819,452 | 52,115 / 52,117 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,170.19 | 1,840.78 | 1.179 / 1.197 | 819,489 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,331.69 | 2,509.72 | 1.328 / 1.463 | 741,375 | 7,330 / 7,330 |

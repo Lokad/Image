@@ -981,6 +981,23 @@ def render():
     assert enlargement_geometry['qualification']['applicableChecksEachOs'] == 5330
     assert enlargement_geometry['qualification']['prototypeOnlyInternalTestsRemoved'] == 3
     assert all(r['productionSourceRestoredByteExact'] for r in enlargement_geometry['restoration'].values())
+    governed_jpeg16 = json.loads((ROOT / 'benchmarks/current-governed-jpeg-rgba16-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not governed_jpeg16['productionChanged'] and governed_jpeg16['independentQuietConfirmation']
+    assert governed_jpeg16['allBuilds'] == governed_jpeg16['newProfiles'] == governed_jpeg16['newInputs'] == 0
+    observation = governed_jpeg16['cases']['Rgba16'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == governed_jpeg16['producers']['linuxSha256']
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert governed_jpeg16['comparisonLowerBounds']['Rgba16'] > 1
+    updated_governed16 = 0
+    for index, (kind, row) in enumerate(rows):
+        if row.startswith('| JPEG RGBA16 4:2:0 / caller IMemoryBudget'):
+            label = row.split('|')[1].strip()
+            rows[index] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+            updated_governed16 += 1
+    assert updated_governed16 == 1
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1243,6 +1260,10 @@ also misses its short screen; accepted costs and production remain unchanged.
 [Vertical geometry reuse](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
 is rejected after a corrected confirmation misses retention; source and packages
 are restored exactly, with five useful public tests retained.
+The existing [governed RGBA16 JPEG420 boundary](../benchmarks/CURRENT-GOVERNED-JPEG-RGBA16-COST.md)
+now has an independent current confirmation: **1.179× / upper1.197**,
+**819,489 B/op**, unchanged **52,115 / 52,117-byte packets**. This replaces its
+short screen without a causal gain claim or production change.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

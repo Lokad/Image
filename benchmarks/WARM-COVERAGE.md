@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Governed RGBA16 JPEG420](CURRENT-GOVERNED-JPEG-RGBA16-COST.md) now independently
+confirms1.179×/upper1.197,819489B/op and52115/52117B packets,unchanged exact coded
+content except approved COM. Full normalization,alpha flattening on0x204060,
+BT.601/420,borrowed32MiB root,resident-source charge and fresh owned output remain.
+One current twelve,zero builds/profiles/new inputs/qualification repeats; existing
+driver/worker/fixture/quality checks reused. Completed job recovered after schema
+postcheck,never rescored. JCL1 only supplied a screen and invalidates earlier
+column-preparation timings. This is a confirmed gap,not parity or a new case;
+all268required paths remain. Unchanged MGP1 qualification carries forward.
+
 [Enlargement vertical geometry](ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md) is
 rejected. The initial primary7.19%filtered gain accompanies a material horizontal
 no-plan regression. One inline-shortcut correction restores horizontal cost but
