@@ -969,6 +969,12 @@ def render():
     assert body_count['qualification']['applicableTotalChecksEachOs'] == 5321
     assert body_count['qualification']['full5314BothOsAndSameActualPackageProofReused']
     assert all(r['productionSourceRestoredByteExact'] for r in body_count['restoration'].values())
+    alternating_taps = json.loads((ROOT / 'benchmarks/bicubic-alternating-tap-sums-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert alternating_taps['candidateRejected'] and not alternating_taps['productionChanged']
+    assert not alternating_taps['decision']['passed'] and not alternating_taps['independentCandidateConfirmationRun']
+    assert alternating_taps['qualification']['applicableTotalChecksEachOs'] == 5325
+    assert alternating_taps['qualification']['focusedPublicEachMode'] == 221
+    assert all(r['productionSourceRestoredByteExact'] for r in alternating_taps['restoration'].values())
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1224,8 +1230,10 @@ screens below the retained 4.1% threshold and is
 The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
 public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
-Three public and four internal checks pass separately on restored production:
-5,321 applicable per OS, without a repeated full/package run.
+Seven public and four internal checks pass separately on restored production:
+5,325 applicable per OS, without a repeated full/package run. The
+[alternating-tap trial](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md)
+also misses its short screen; accepted costs and production remain unchanged.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

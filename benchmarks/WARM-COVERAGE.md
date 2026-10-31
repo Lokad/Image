@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Alternating wider bicubic tap sums](BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md)
+fails one Wide8 continuation screen:587.187versus532.115µs, exact pixels/native
+bounds/owners/quiet passed, no confirmation or unroll-count variant. The original
+source/core are restored exactly;221focused public checks pass in all required
+modes on candidate and restored production. Four useful exact-reference checks
+remain. Full5,314/OS and the same actual package proof carry forward with7public+
+4internal checks separately qualified:5,325applicable, no full/package repeat.
+Existing Wide8 costs and all268required paths remain unchanged.
+
 [Current tight wider-support word costs](CURRENT-TIGHT-WIDE-WORD-BICUBIC-COSTS.md)
 resolve two existing input+output+4 KiB paths:128×64 is1.464×/upper1.524,
 65,674B/op;64×32 is1.329×/upper1.355,16,521B/op. Both are confirmed gaps.
