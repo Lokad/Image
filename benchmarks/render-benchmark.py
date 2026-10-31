@@ -916,6 +916,12 @@ def render():
     assert color_rows['qualification']['sameActualReleasePackageProofReused']
     assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] and v['originalAcDerivedFixtureRestoredByteExact'] for v in color_rows['restoration'].values())
     assert color_rows['diagnostic']['profilingOnly'] and color_rows['diagnostic']['noTimingClaim']
+    overwrite_cmyk = json.loads((ROOT / 'benchmarks/cmyk-overwrite-allocation-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert overwrite_cmyk['candidateRejected'] and not overwrite_cmyk['productionChanged'] and not overwrite_cmyk['decision']['passed']
+    assert overwrite_cmyk['restoration']['productionSourceAndCoreCopiesRestoredByteExact']
+    assert overwrite_cmyk['restoration']['internalAssembliesRestoredByteExact']
+    assert overwrite_cmyk['qualification']['totalApplicableEachOs'] == 5303
+    assert overwrite_cmyk['qualification']['sameActualReleasePackageProofReused']
     owned_cmyk_current = json.loads((ROOT / 'benchmarks/current-owned-cmyk-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
     assert not owned_cmyk_current['productionChanged'] and owned_cmyk_current['allBuilds'] == 0
     assert owned_cmyk_current['status']['CmykAdobe'] == 'confirmed-confidence-open'

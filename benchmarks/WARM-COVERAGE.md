@@ -17,6 +17,14 @@ qualification. Frozen canonical rows expose226repeats forDC/Ac and65forSparse2D,
 a feasibility lead for confirmed Acgap, not a new performance claim.
 All268paths remain;76displayed comparisons stay unchanged in count.
 
+[CMYK output acquisition](CMYK-OVERWRITE-ALLOCATION-REJECTED.md) saves 49.0%
+allocation in the unaccepted default warm trial, but misses its declared CPU
+screen: 3.41% raw/1.09% normalized. No independent confirmation or variant.
+Exact pixels/owners/admission/quiet controls pass; original production, internal
+assemblies and descriptor-only benchmark changes are restored exactly. Current
+5,303 checks/OS, same package and all 76 costs are reused. No new input/profile.
+Do not repeat this allocation family or infer governed allocation savings.
+
 [Completed CMYK color rows](CMYK-COMPLETED-COLOR-ROWS-REJECTED.md) misses its
 one short: 1.78% raw, 4.69% normalized, unchanged allocation within noise.
 Production and overlays restored exactly; eight useful public controls retained.
