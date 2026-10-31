@@ -120,11 +120,12 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-Two existing tight mixed bicubic paths now have current independent costs:
-width up / height down is **1.408× / upper 1.449** for RGBA8 and **1.431× / upper
-1.452** for RGBA16, **530,400 / 1,060,367 B/op**. Both are gaps. Frozen build,
-fixtures and qualification are reused; no new matrix or causal speedup claim.
-[Current mixed costs](../benchmarks/CURRENT-TIGHT-MIXED-BICUBIC-COSTS.md).
+Mixed bicubic geometry reuse independently reduces tight RGBA16 elapsed by
+**8.90% filtered / 8.28% all actuals**, **8.62% normalized**: **1.308× / upper
+1.369**, **1,060,371 B/op**, unchanged owned capacity. Tight RGBA8 is **1.350× /
+upper 1.367**, 530,400 B/op. All six affected existing mixed/tight-vertical costs
+are current and remain gaps. No new workload or paired companion gain claim.
+[Current mixed evidence](../benchmarks/WARM-MIXED-BICUBIC-GEOMETRY.md).
 
 Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
 **0.448× / upper 0.460**, with allocation **1,168 → 792 B/op**. Certified filtered
@@ -132,13 +133,15 @@ bytes avoid a second inflation. All four named PNG validation costs are current;
 PNG16 sync/async also pass and stop, while PNG8 remains confidence-open.
 [Current evidence](../benchmarks/WARM-PNG-INDEXED-VALIDATION.md).
 
-The current producer passes **5,310 checks per OS** (2,164 internal, 2,198
-public, 948 live), plus 776 internal/332 public focused checks normal/scalar and
+The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
+public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
 shared root and releases its charge on success/failure.
+Both packaged mixed depths preserve frozen frames, aggregate admission and
+independent retained output lifetimes within the existing 4 KiB workspace.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
 Every affected named WebP decode/validation control has current costs; the three
 opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays open.
@@ -210,8 +213,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 529.18 | 348.67 | 1.518 / 1.534 | 231,239 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 1,217.91 | 864.94 | 1.408 / 1.449 | 530,400 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,221.63 | 853.40 | 1.431 / 1.452 | 1,060,367 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
 
 **Inspection and pixel-coding validation**
 

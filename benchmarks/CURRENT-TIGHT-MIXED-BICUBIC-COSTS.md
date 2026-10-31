@@ -1,5 +1,8 @@
 # Current tight mixed bicubic costs
 
+Pre-change baseline, superseded by [geometry reuse](WARM-MIXED-BICUBIC-GEOMETRY.md).
+Raw observations remain the original paired reference.
+
 Both existing width-enlargement/height-reduction controls are confirmed CPU gaps.
 These replace uncertain old-producer costs; no causal gain/regression is claimed.
 

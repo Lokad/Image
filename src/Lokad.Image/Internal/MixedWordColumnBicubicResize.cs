@@ -28,7 +28,7 @@ internal static class MixedWordColumnBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // These fixed arrays occupy 3,972 bytes; row offsets are bounded below 24.
+            // These fixed arrays occupy 3,992 bytes; row offsets are bounded below 24.
             // Intermediate values remain
             // unrounded; the frame returns before exact tiny-alpha scratch.
             Span<Vector256<double>> cache = stackalloc Vector256<double>[6 * 8];
@@ -40,6 +40,7 @@ internal static class MixedWordColumnBicubicResize
             Span<double> normalizers = stackalloc double[8];
             Span<double> horizontal = stackalloc double[5];
             Span<int> columns = stackalloc int[5];
+            Span<int> samplesX = stackalloc int[5];
             var input = source.Pixels;
             var inputStride = source.Stride;
             var output = result.Pixels;
@@ -47,9 +48,11 @@ internal static class MixedWordColumnBicubicResize
             // At eight rows, support spans at most 24 source rows in this range.
             // Larger vertical scales retain four-row bands and the same dispatch.
             var bandRows = scaleY <= 2.125 ? 8 : 4;
+            var geometry = MixedBicubicGeometry.Prepare(source, result, bandRows, context.Cancellation);
             for (var tileY = 0; tileY < result.Height; tileY += bandRows)
             {
                 var length = Math.Min(bandRows, result.Height - tileY);
+                var planned = tileY + length <= geometry.SafeRows;
                 var firstCenter = (tileY + .5) * source.Height / result.Height - .5;
                 var sourceFirst = Math.Clamp((int)Math.Ceiling(firstCenter - 2 * scaleY), 0, source.Height - 1);
                 for (var y = 0; y < length; y++)
@@ -75,17 +78,26 @@ internal static class MixedWordColumnBicubicResize
                 for (var x = 0; x < result.Width; x++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (x + .5) * source.Width / result.Width - .5;
-                    // A preserved or enlarged width fixes scaleX at one, keeping the
-                    // original binary64 coefficient values without a division.
-                    var first = (int)Math.Ceiling(center - 2);
-                    var count = (int)Math.Floor(center + 2) - first + 1;
-                    double normalizerX = 0;
+                    double center, normalizerX;
+                    int first, count;
+                    if (planned)
+                        geometry.Read(x, horizontal, samplesX, out center, out first, out count, out normalizerX);
+                    else
+                    {
+                        center = (x + .5) * source.Width / result.Width - .5;
+                        first = (int)Math.Ceiling(center - 2);
+                        count = (int)Math.Floor(center + 2) - first + 1;
+                        normalizerX = 0;
+                        for (var t = 0; t < count; t++)
+                        {
+                            var w = ImageTransforms.Kernel(first + t - center, ResizeFilter.Bicubic);
+                            horizontal[t] = w; normalizerX += w;
+                            samplesX[t] = Math.Clamp(first + t, 0, source.Width - 1);
+                        }
+                    }
                     for (var t = 0; t < count; t++)
                     {
-                        var w = ImageTransforms.Kernel(first + t - center, ResizeFilter.Bicubic);
-                        horizontal[t] = w; normalizerX += w;
-                        var sx = Math.Clamp(first + t, 0, source.Width - 1);
+                        var sx = samplesX[t];
                         var slot = sx % 6; columns[t] = slot * 8;
                         if (columnIds[slot] == sx) continue;
                         columnIds[slot] = sx;

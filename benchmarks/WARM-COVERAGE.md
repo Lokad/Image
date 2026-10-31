@@ -7,7 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
-[Current tight mixed bicubic costs](CURRENT-TIGHT-MIXED-BICUBIC-COSTS.md) resolve
+[Mixed bicubic geometry reuse](WARM-MIXED-BICUBIC-GEOMETRY.md) independently reduces
+tight RGBA16 elapsed 8.90% filtered / 8.28% all, 8.62% normalized, with separated
+confidence: 1.308× / upper1.369, 1,060,371 B/op (4 B noise), no new owned capacity.
+One shared exact plan uses private output only before whole-band overlap. All six
+affected named mixed/tight-vertical costs are current; all remain gaps. Full5,314
+checks per OS, scalar/AVX512-off and SAME actual package/three examples pass.
+One core/internal build per OS, no harness/native/selector build or new input/
+profile. Original twelve reused; no variant or successful score repeated.
+Raw evidence, exact invalidation and unchanged-path reuse are linked; all268stay.
+
+[Pre-change tight mixed costs](CURRENT-TIGHT-MIXED-BICUBIC-COSTS.md) resolved
 two existing named uncertainties without production changes: width up / height
 down, input+output+4 KiB. RGBA8 is 1.408× / upper1.449, 530,400 B/op; RGBA16 is
 1.431× / upper1.452, 1,060,367 B/op. Exact pixels, frozen native bounds, ownership

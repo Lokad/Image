@@ -462,6 +462,40 @@ foreach (var (cachedDepth, cachedHash) in new[]
     if (cachedRoot.Bytes != 0 || cachedRoot.IsDisposed) throw new Exception("Package cached bicubic root cleanup differs.");
 }
 Console.WriteLine("Packaged cached bicubic passed (8/16-bit pixels, admission and ownership).");
+foreach (var depth in new[] { 8, 16 })
+{
+    using var mixedSource = Lokad.Image.Tooling.OriginalPixels.Buffer(513, 259, depth);
+    if (depth == 8) mixedSource.GetRow8(0)[3] = mixedSource.GetRow8(0)[513 * 4 - 1] = 0;
+    else mixedSource.GetRow16(0)[3] = mixedSource.GetRow16(0)[513 * 4 - 1] = 0;
+    var mixedInput = Lokad.Image.Tooling.OriginalPixels.Bytes(mixedSource);
+    var mixedBytes = 1027L * 129 * 4 * (depth / 8);
+    using var mixedRoot = new Lokad.Image.Tooling.TestMemoryBudget(2 * mixedBytes + 4096);
+    var mixedLimits = new ImageLimits { MemoryBudget = mixedRoot, MaxWorkingBytes = mixedInput.Length + mixedBytes + 4096 };
+    var mixedFirst = ImageTransforms.Resize(mixedSource, 1027, 129, ResizeFilter.Bicubic, mixedLimits);
+    var mixedSecond = ImageTransforms.Resize(mixedSource, 1027, 129, ResizeFilter.Bicubic, mixedLimits);
+    var mixedExpected = depth == 8 ? "1ca9938539ba1421fe4f1540055be5d0675ac8ddc1ea87df5932a93ca35a0356"
+        : "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a";
+    string MixedHash(ImageBuffer image) => Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(
+        Lokad.Image.Tooling.OriginalPixels.Bytes(image))).ToLowerInvariant();
+    if (MixedHash(mixedFirst) != mixedExpected || MixedHash(mixedSecond) != mixedExpected
+        || mixedRoot.Bytes != 2 * mixedBytes || mixedRoot.Peak > 2 * mixedBytes + 4096)
+        throw new Exception("Packaged mixed bicubic pixels or admitted capacity differ.");
+    var mixedRefused = false;
+    try { using var third = ImageTransforms.Resize(mixedSource, 1027, 129, ResizeFilter.Bicubic, mixedLimits); }
+    catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget) { mixedRefused = true; }
+    if (!mixedRefused || mixedRoot.Bytes != 2 * mixedBytes) throw new Exception("Packaged mixed refusal cleanup differs.");
+    mixedFirst.Dispose();
+    using (var next = ImageTransforms.Resize(mixedSource, 1027, 129, ResizeFilter.Bicubic, mixedLimits))
+        if (MixedHash(next) != mixedExpected) throw new Exception("Packaged mixed admission did not recover.");
+    if (!Lokad.Image.Tooling.OriginalPixels.Bytes(mixedSource).AsSpan().SequenceEqual(mixedInput))
+        throw new Exception("Packaged mixed borrowed input changed.");
+    mixedSource.Dispose();
+    if (MixedHash(mixedSecond) != mixedExpected || mixedRoot.Bytes != mixedBytes)
+        throw new Exception("Packaged mixed survivor depends on another owner.");
+    mixedSecond.Dispose();
+    if (mixedRoot.Bytes != 0 || mixedRoot.IsDisposed) throw new Exception("Packaged mixed root cleanup differs.");
+}
+Console.WriteLine("Packaged mixed bicubic geometry preserves exact pixels and admitted owners.");
 using (var crossRoot = new Lokad.Image.Tooling.TestMemoryBudget((513L * 259 + 2L * 256 * 519) * 8 + 4096))
 {
     const long crossOutputBytes = 256L * 519 * 8;

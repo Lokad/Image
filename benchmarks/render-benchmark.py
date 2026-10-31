@@ -918,19 +918,25 @@ def render():
                        f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                        f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
-    tight_mixed = json.loads((ROOT / 'benchmarks/current-tight-mixed-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not tight_mixed['productionChanged'] and tight_mixed['independentQuietConfirmation']
-    assert tight_mixed['workflow']['allBuilds'] == 0
-    assert tight_mixed['qualificationReused']['fullChecksEachOs'] == 5310
-    assert set(tight_mixed['cases']) == {'TightMixed8', 'TightMixed16'}
+    tight_mixed = json.loads((ROOT / 'benchmarks/warm-mixed-bicubic-geometry-evidence.json').read_text(encoding='utf-8'))
+    assert tight_mixed['productionChanged'] and tight_mixed['independentQuietConfirmation']
+    assert tight_mixed['decision']['defaultFivePercentPassed'] and tight_mixed['decision']['normalizedSeparated']
+    assert tight_mixed['memory']['newOwnedCapacityBytes'] == 0
+    assert tight_mixed['workflow']['allMeasurementBuilds'] == 0
+    assert tight_mixed['qualification']['fullChecksEachOs'] == 5314
+    assert tight_mixed['qualification']['package']['sha256'] == tight_mixed['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert set(tight_mixed['cases']) == {'Mixed8', 'Mixed16', 'TightMixed8', 'TightMixed16', 'TightVertical8', 'TightVertical16'}
     for case, observations in tight_mixed['cases'].items():
         observation = observations[-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         assert receipt['librarySha256'] == tight_mixed['producers']['linuxSha256']
-        assert receipt['managedRationalReferenceExact'] and receipt['managedQualifiedOriginalPixelsExact']
+        assert receipt['managedQualifiedOriginalPixelsExact']
         assert all(q['passed'] for q in observation['quietness'].values())
         assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
         assert tight_mixed['comparisonLowerBounds'][case] > 1 and tight_mixed['status'][case] == 'confirmed-gap'
+        if case not in {'TightMixed8', 'TightMixed16'}:
+            continue
+        assert receipt['managedRationalReferenceExact']
         native = min(b['mean'] for b in observation['nativeBrackets'])
         rows.append(('editing', f'| Bicubic RGBA{receipt["depth"]}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
@@ -1165,11 +1171,12 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-Two existing tight mixed bicubic paths now have current independent costs:
-width up / height down is **1.408× / upper 1.449** for RGBA8 and **1.431× / upper
-1.452** for RGBA16, **530,400 / 1,060,367 B/op**. Both are gaps. Frozen build,
-fixtures and qualification are reused; no new matrix or causal speedup claim.
-[Current mixed costs](../benchmarks/CURRENT-TIGHT-MIXED-BICUBIC-COSTS.md).
+Mixed bicubic geometry reuse independently reduces tight RGBA16 elapsed by
+**8.90% filtered / 8.28% all actuals**, **8.62% normalized**: **1.308× / upper
+1.369**, **1,060,371 B/op**, unchanged owned capacity. Tight RGBA8 is **1.350× /
+upper 1.367**, 530,400 B/op. All six affected existing mixed/tight-vertical costs
+are current and remain gaps. No new workload or paired companion gain claim.
+[Current mixed evidence](../benchmarks/WARM-MIXED-BICUBIC-GEOMETRY.md).
 
 Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
 **0.448× / upper 0.460**, with allocation **1,168 → 792 B/op**. Certified filtered
@@ -1177,13 +1184,15 @@ bytes avoid a second inflation. All four named PNG validation costs are current;
 PNG16 sync/async also pass and stop, while PNG8 remains confidence-open.
 [Current evidence](../benchmarks/WARM-PNG-INDEXED-VALIDATION.md).
 
-The current producer passes **5,310 checks per OS** (2,164 internal, 2,198
-public, 948 live), plus 776 internal/332 public focused checks normal/scalar and
+The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
+public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
 shared root and releases its charge on success/failure.
+Both packaged mixed depths preserve frozen frames, aggregate admission and
+independent retained output lifetimes within the existing 4 KiB workspace.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
 Every affected named WebP decode/validation control has current costs; the three
 opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays open.

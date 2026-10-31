@@ -6,6 +6,8 @@
   temporary allocations while retaining arbitrary-precision fallback and admission.
 - Tight-memory RGBA8 bicubic enlargement avoids a redundant error-bound division,
   preserving exact pixels, admitted storage and portable fallbacks.
+- Mixed bicubic resizing reuses exact horizontal geometry in private result
+  storage, preserving pixels, working limits and output ownership.
 - RGBA8 bilinear enlargement reuses exact horizontal rows in existing geometry
   storage, reducing CPU while preserving pixels, admission and output ownership.
 - Lossless WebP color search scores only bins recorded during histogram
