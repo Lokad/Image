@@ -116,9 +116,12 @@ the immutable build; Wide8 retains its proven unchanged-path confirmation.
 Four larger-output controls remain gaps. No build, profile, new input or grid.
 [Current wider-support costs](../benchmarks/CURRENT-WIDE-BICUBIC-COSTS.md).
 
-The current producer passes **5,291 checks per OS**, plus 349 focused internal and
+Current evidence covers **5,295 checks per OS**, including **2,162 freshly run internal**
+checks; unchanged public/live and actual-package proofs are reused. Four new
+CMYK row controls also pass scalar/ISA modes. Applicable coverage includes 353 internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
+[Retained CMYK regression coverage](../benchmarks/CMYK-VBMI-PACKING-REJECTED.md).
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.

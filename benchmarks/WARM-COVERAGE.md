@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[CMYK byte-plane packing](CMYK-VBMI-PACKING-REJECTED.md) misses its one short:
+0.45%raw/0.23%normalized gain, unchanged1,085,758B/op, exact pixels. Actual VBMI
+execution is verified. Candidate archived and production/core/public-core copies
+restored exact. Four useful actual-row controls remain; restored2,162internal
+checks perOS plus new scalar/ISA checks pass. Unchanged2,185public/948live and
+sameactualpackage proof reused:5,295applicable checks/OS. No confirmation,
+variant, new profile/input or package repeat. Current76costs remain unchanged.
+
 [Wider-support bicubic audit](CURRENT-WIDE-BICUBIC-COSTS.md) reconciles exactly
 eight existing default paths using two original source rasters, no new grid.
 Seven current independent twelves plus proven unchanged Wide8 reuse give four

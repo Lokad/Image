@@ -904,6 +904,12 @@ def render():
                        f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                        f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
+    cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
+    assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
+    assert cmyk_pack['qualification']['totalApplicableEachOs'] == 5295
+    assert cmyk_pack['qualification']['sameActualReleasePackageProofReused']
+    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in cmyk_pack['restoration'].values())
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1097,9 +1103,9 @@ the immutable build; Wide8 retains its proven unchanged-path confirmation.
 Four larger-output controls remain gaps. No build, profile, new input or grid.
 [Current wider-support costs](../benchmarks/CURRENT-WIDE-BICUBIC-COSTS.md).
 
-The current producer passes **5,291 checks per OS**, plus 349 focused internal and
+Current evidence covers **5,295 checks per OS**, including **2,162 freshly run internal**\nchecks; unchanged public/live and actual-package proofs are reused. Four new\nCMYK row controls also pass scalar/ISA modes. Applicable coverage includes 353 internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.
-Header/probe proofs remain applicable.
+Header/probe proofs remain applicable.\n[Retained CMYK regression coverage](../benchmarks/CMYK-VBMI-PACKING-REJECTED.md).
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
