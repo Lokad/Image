@@ -38,6 +38,7 @@ internal sealed class WarmAsyncPngEncode
             // unchanged packet/native-boundary proof across unrelated changes.
             if (proof.GetProperty("timing").GetBoolean()
                 || proof.GetProperty("inputSha256").GetString() != RasterHash || !proof.GetProperty("equivalentNonSeekableOutput").GetBoolean()
+                || proof.GetProperty("managedPacketSha256").GetString() != PacketHash || proof.GetProperty("managedLevel").GetInt32() != 6
                 || !proof.GetProperty("normalScalarNativeAndCliExact").GetBoolean() || !proof.GetProperty("completePacketSizeGate").GetBoolean())
                 throw new InvalidOperationException("Nonseekable async PNG encode preparation differs.");
             using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
@@ -148,7 +149,7 @@ internal sealed class WarmAsyncPngEncode
             {
                 schemaVersion = 1, name = "WarmPng", caseId = "Png8AsyncNonSeekable", publicBoundary = "AsyncStreamEncode/PngRgba8FreshNonSeekable",
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = pixels.Length, inputSha256 = RasterHash,
-                width = 513, height = 259, depth = 8, managedLevel = 9, nativeLevel = 6, filterNone = true,
+                width = 513, height = 259, depth = 8, managedCompression = "Optimal", managedLevel = 6, nativeLevel = 6, filterNone = true,
                 managedOutputBytes = expected.Length, managedOutputSha256 = PacketHash, managedIdatBytes = IdatBytes(expected), nativeOutputBytes = nativeBytes, nativeIdatBytes = nativeIdat,
                 managedSnapshotExact = true, allRgbaSamplesExact = true, completePacketSizeGate = true, freshNonSeekableOutput = true, writeAsyncCallsVerified = true,
                 syncWrites = 0, seekOrLengthQueries = 0, callerOutputLeftOpen = true, noCallerFlushRequired = true,
@@ -157,7 +158,7 @@ internal sealed class WarmAsyncPngEncode
                 resourceAndCancellationGates = true, sinkFailureCleanupAndRecovery = true, preparedEquivalentBoundaryControls = true, preparation = proof,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmAsyncPngEncode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same resident borrowed RGBA8 to a fresh independently owned nonseekable caller output. Managed EncodePngAsync includes complete PNG encoding into admitted segmented staging, actual WriteAsync copies into caller-owned growing output, awaited completion and all staging/output release. Native single-thread FFmpeg PNG encoding into fresh owned packet staging, fresh nonseekable AVIO/scratch, output growth/callback copies, internal AVIO flush to finish writes, staging/AVIO/output release are timed. Both callbacks complete immediately; caller output remains alive after staging release and is disposed by its owner inside each complete operation. No final snapshot copy, input normalization for already-RGBA8 source, forced scheduling, real I/O, seek/length/output view or cached encoded content. Prepared source/context/wrappers and released private storage may be reused. Managed Optimal level9/native frozen level6/filterNone, exact alpha/hidden RGB and complete-packet size gate. Native internal flush does not require managed caller FlushAsync. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, preparation/hashing and validation excluded."
+                boundary = "Same resident borrowed RGBA8 to a fresh independently owned nonseekable caller output. Managed EncodePngAsync includes complete PNG encoding into admitted segmented staging, actual WriteAsync copies into caller-owned growing output, awaited completion and all staging/output release. Native single-thread FFmpeg PNG encoding into fresh owned packet staging, fresh nonseekable AVIO/scratch, output growth/callback copies, internal AVIO flush to finish writes, staging/AVIO/output release are timed. Both callbacks complete immediately; caller output remains alive after staging release and is disposed by its owner inside each complete operation. No final snapshot copy, input normalization for already-RGBA8 source, forced scheduling, real I/O, seek/length/output view or cached encoded content. Prepared source/context/wrappers and released private storage may be reused. Managed default Optimal maps to level6/native frozen level6/filterNone, exact alpha/hidden RGB and complete-packet byte equality. Native internal flush does not require managed caller FlushAsync. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, preparation/hashing and validation excluded."
             }, EncoderQualityCalibration.Json) + "\n");
         }
         finally { Dispose(); }
@@ -173,7 +174,7 @@ internal sealed class WarmAsyncPngEncode
             value.Prepare(); value.Validate(); using var output = new NonSeekableAsyncOutput(); value.Encode(output); value.RequireManaged(output);
             var packet = output.Snapshot(); File.WriteAllBytes(path, packet);
             Console.WriteLine(JsonSerializer.Serialize(new { librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), inputSha256 = RasterHash,
-                outputSha256 = JpegBenchmarkCase.Hash(packet), outputBytes = packet.Length, idatBytes = IdatBytes(packet), managedLevel = 9,
+                outputSha256 = JpegBenchmarkCase.Hash(packet), outputBytes = packet.Length, idatBytes = IdatBytes(packet), managedCompression = "Optimal", managedLevel = 6,
                 output.AsyncWrites, output.SyncWrites, output.MetadataQueries, output.AsyncFlushes, callerOpen = output.CanWrite, sourceUnchanged = true,
                 independentRetainedOutputs = true, sourceDisposalDoesNotInvalidateOutput = true, resourceLimits = true, cancellationBeforeAndDuringDelivery = true,
                 sinkFailureAndRecovery = true, immediateCallbacks = true, finalSnapshotUntimed = true }));

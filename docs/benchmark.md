@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **94 selected comparisons** combine qualified
+Updated 2026-11-01. These **95 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -45,6 +45,9 @@ have independent confirmations. Qualified [word-color packing](../benchmarks/WAR
 then improves Gray16 by **21.14%**, with unchanged allocation and exact packets.
 Gray16 is now **1.254 / upper 1.285**; RGB16/gray-alpha16 confirm **1.320/1.314×**.
 All three remain gaps; byte/RGBA/stored paths retain applicable unchanged costs.
+The [existing async PNG output boundary](../benchmarks/CURRENT-ASYNC-PNG-ENCODE-COST.md)
+now confirms **1.303 / upper 1.323**, 1,387,492 B/op and exact 210,973-byte packets.
+Its earlier BCL-encoder CPU pass is superseded; production and qualification remain.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
@@ -91,6 +94,7 @@ acceptance histories are retained in the coverage links and raw evidence.
 | PNG grayscale16, Optimal6 / native6, red-plane reference † | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
 | PNG gray-alpha16, Optimal6 / native6 † | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
+| PNG RGBA8 async, fresh nonseekable output, Optimal6 / native6 † | 24,513.62 | 18,812.43 | 1.303 / 1.323 | 1,387,492 | 210,973 / 210,973 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,111.27 | 1,013.36 | 1.097 / 1.136 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |

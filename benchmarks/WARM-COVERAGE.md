@@ -7,6 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current asynchronous PNG encoding](CURRENT-ASYNC-PNG-ENCODE-COST.md) resolves
+one existing boundary at **1.303 / upper 1.323**, 1,387,492 B/op,
+with complete exact 210,973-byte packets. The H13 BCL-encoder CPU pass is historical
+after exact encoding and shared checksum changes; original inputs/default Optimal
+(actual level6)/native6/None and equivalent complete owned output remain frozen.
+One twelve-actual job; unchanged qualified core/cached selector/native worker,
+harness metadata fix only, normal/scalar async probes both OSes. No profiles,
+production changes or repeated full/package checks. Reuse 5,342 checks per OS
+and the SAME actual package/three-example proof. Stop retiming this resolved gap;
+no new material case and the full 268-path objective remains.
+
 [Full-word PNG color packing](WARM-PNG-WORD-COLOR-PACKING.md) retains
 **21.14% filtered / 21.09% all-sample / 21.01% normalized** Gray16 improvement,
 with separated confidence and unchanged 1,506,972 B/op. Gray16 is now 1.254 /

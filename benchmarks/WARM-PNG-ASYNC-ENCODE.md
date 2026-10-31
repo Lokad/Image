@@ -1,5 +1,8 @@
 # Asynchronous nonseekable PNG encoding
 
+Historical BCL-encoder experiment. Its CPU pass and IDAT-only size gate are
+superseded by [current exact-packet evidence](CURRENT-ASYNC-PNG-ENCODE-COST.md).
+
 Updated 2026-10-20. The current qualified producer **independently passes warm
 single-CPU parity** for this named complete operation. Production is unchanged.
 

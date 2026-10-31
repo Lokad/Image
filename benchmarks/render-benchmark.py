@@ -446,6 +446,11 @@ def render():
     assert word_color_png['qualification']['sameActualPackageBothOs']
     assert word_color_png['qualification']['package']['sha256'] == word_color_png['qualification']['linuxPackage']['sameActualPackageSha256']
     assert set(word_color_png['cases']) == {'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16'}
+    async_png_cost = json.loads((ROOT / 'benchmarks/current-async-png-encode-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not async_png_cost['productionChanged'] and async_png_cost['independentQuietConfirmation']
+    assert async_png_cost['producers'] == word_color_png['producers']
+    assert async_png_cost['qualificationReused']['packageSha256'] == word_color_png['qualification']['package']['sha256']
+    assert async_png_cost['builds'] == dict(core=0, publicTests=0, internalTests=0, differential=0, selector=0, native=0, harnessEachOs=1)
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -613,6 +618,20 @@ def render():
         rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {packet_bytes:,} / {packet_bytes:,} |'))
+    observation = async_png_cost['cases']['Png8AsyncNonSeekable'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert async_png_cost['status']['Png8AsyncNonSeekable'] == 'confirmed-gap'
+    assert receipt['librarySha256'] == async_png_cost['producers']['linuxSha256']
+    assert receipt['managedLevel'] == receipt['nativeLevel'] == 6 and receipt['filterNone']
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 210973
+    assert receipt['managedOutputSha256'] == 'ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920'
+    assert receipt['completePacketSizeGate'] and receipt['allRgbaSamplesExact'] and receipt['resourceAndCancellationGates']
+    native = min(b['mean'] for b in observation['nativeBrackets'])
+    rows.append(('codec', f'| PNG RGBA8 async, fresh nonseekable output, Optimal6 / native6 † | {stats["Mean"] / 1000:,.2f} | '
+                 f'{native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 210,973 / 210,973 |'))
     predicted = png_gfni['cases']['EncodePredictable16'][-1]
     receipt, stats = predicted['receipt'], predicted['managed']['statistics']
     assert receipt['librarySha256'] == png_gfni['producers']['linuxSha256']
@@ -1286,6 +1305,9 @@ have independent confirmations. Qualified [word-color packing](../benchmarks/WAR
 then improves Gray16 by **21.14%**, with unchanged allocation and exact packets.
 Gray16 is now **1.254 / upper 1.285**; RGB16/gray-alpha16 confirm **1.320/1.314×**.
 All three remain gaps; byte/RGBA/stored paths retain applicable unchanged costs.
+The [existing async PNG output boundary](../benchmarks/CURRENT-ASYNC-PNG-ENCODE-COST.md)
+now confirms **1.303 / upper 1.323**, 1,387,492 B/op and exact 210,973-byte packets.
+Its earlier BCL-encoder CPU pass is superseded; production and qualification remain.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
