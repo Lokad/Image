@@ -1,5 +1,10 @@
 # PNG byte channel packing
 
+Historical BCL-encoder checkpoint. All three costs below are superseded by
+[current exact-encoder costs](CURRENT-BYTE-COLOR-PNG-COSTS.md). The older
+IDAT-tolerance passes do not establish current CPU parity or complete native
+packet equality. Original raw evidence remains retained.
+
 Updated 2026-10-17. The three existing gray8/RGB8/gray-alpha8 encodes independently
 meet warm single-CPU parity. Managed time falls **47.3%/16.6%/29.3%**, with exact
 PNG packets and frozen compression settings. Stop these cases; uniform parity

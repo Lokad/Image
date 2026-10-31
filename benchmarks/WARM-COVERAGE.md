@@ -7,6 +7,18 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current byte-color PNG costs](CURRENT-BYTE-COLOR-PNG-COSTS.md) resolve three
+existing default-color uncertainties: Gray8 1.325 / upper 1.354, 1,001,812 B/op;
+RGB8 1.309 / upper 1.324, 1,325,068 B/op; gray-alpha8 1.305 / upper 1.350,
+1,021,036 B/op. Complete 72,586 / 168,729 / 120,366-byte packets are exact.
+Earlier independent byte-packing costs use the replaced BCL9 encoder and IDAT
+tolerance; exact managed6 and shared GFNI CRC invalidate those older CPU passes.
+Native inputs/level6/None/settings/packets remain frozen. Three successful
+twelves, one unchanged qualified runtime/cached driver/worker, zero builds,
+profiles, new inputs/settings or repeated full/package proof. All three are now
+confirmed gaps; stop uncertainty retiming. These are existing required color
+boundaries, with no added shape/depth/filter/quality grid; all 268 paths remain.
+
 [Greedy PNG long-match reuse](PNG-GREEDY-MATCH-REUSE-REJECTED.md) fails one
 screen: 3.02% higher filtered/all elapsed and 2.96% higher normalized point ratio,
 with unchanged 3,813,732 B/op and exact 968,216-byte packets. One current profile
