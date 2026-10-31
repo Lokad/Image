@@ -838,6 +838,11 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    owned_cmyk = json.loads((ROOT / 'benchmarks/owned-cmyk-frame-unqualified-evidence.json').read_text(encoding='utf-8'))
+    assert not owned_cmyk['accepted'] and not owned_cmyk['productionChanged']
+    assert not owned_cmyk['decisions']['confirm']['passed'] and owned_cmyk['decisions']['short']['independentConfirmationAllowed']
+    assert owned_cmyk['memory']['allocatedFractionRemoved'] > .5
+    assert all(v['productionSourceAndTestSourceRestored'] and v['bothTestAssembliesRestored'] for v in owned_cmyk['restoration'].values())
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1032,6 +1037,10 @@ this already-required case stops. [Current cost](../benchmarks/CURRENT-DENSE-CMY
 The existing horizontal-only CMYK control separately confirms a **1.457× / upper
 1.521** gap, **1,085,757 B/op**, with exact independent/native pixels. One current
 confirmation resolves its old-code uncertainty. [Current cost](../benchmarks/CURRENT-HORIZONTAL-CMYK-JPEG-COST.md).
+
+An [owned-CMYK-frame candidate](../benchmarks/OWNED-CMYK-FRAME-UNQUALIFIED.md)
+removes 50.61% allocation but fails normalized CPU confirmation. It is archived;
+qualified production and displayed costs are restored unchanged.
 
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
 upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each

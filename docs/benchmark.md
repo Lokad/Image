@@ -118,6 +118,10 @@ The existing horizontal-only CMYK control separately confirms a **1.457× / uppe
 1.521** gap, **1,085,757 B/op**, with exact independent/native pixels. One current
 confirmation resolves its old-code uncertainty. [Current cost](../benchmarks/CURRENT-HORIZONTAL-CMYK-JPEG-COST.md).
 
+An [owned-CMYK-frame candidate](../benchmarks/OWNED-CMYK-FRAME-UNQUALIFIED.md)
+removes 50.61% allocation but fails normalized CPU confirmation. It is archived;
+qualified production and displayed costs are restored unchanged.
+
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
 upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
 operation includes both complete decodes, retained overlap and releases on both

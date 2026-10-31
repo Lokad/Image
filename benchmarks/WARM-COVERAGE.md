@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Owned CMYK frame](OWNED-CMYK-FRAME-UNQUALIFIED.md) removes 549,486 B/op
+(50.61%) in the candidate but remains unaccepted: raw 2.93%/2.74% independent
+gains have separate confidence, while normalized point changes 1.457×→1.463×
+and confidence overlaps. The false short/confirm decisions and one explicit
+triage exception are retained; no second confirmation or variant. Exact pixels,
+actual one-frame admission/retained ownership/refusal/cancel cleanup and focused
+347 internal/366 public controls pass normal/scalar both OSes/LinuxAVX512off.
+Qualified source/core/test assemblies/package/derived files are restored exactly;
+current costs and 268-path scope stay. Candidate full/package proof is not run.
+
 [Current horizontal-only CMYK decoding](CURRENT-HORIZONTAL-CMYK-JPEG-COST.md)
 confirms 1.457× / upper 1.521, 1,085,757 B/op. Independent Q14/Q16 samples,
 managed normal/scalar both OSes and native normal/scalar agree exactly. Only
