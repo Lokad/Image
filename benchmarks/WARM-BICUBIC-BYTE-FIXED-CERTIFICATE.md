@@ -52,11 +52,10 @@ The first package consumer compile used an internal accessor; public row access
 fixes the check against the identical already-created package. No successful
 timing, full suite or production build is repeated for these tooling corrections.
 
-Only TightUp8 has a new cost. **TightHorizontalUp8/TightVerticalUp8** also call the
-changed guard: functional qualification passes, but their older timings are
-historical pending current confirmation. Other kernels and codec production
-paths are unchanged. Stop variants of this primitive and resolve those named
-uncertainties before choosing further optimization; all268 required paths remain.
+This round measures TightUp8. **TightHorizontalUp8/TightVerticalUp8** also call the
+changed guard; their subsequently [refreshed current costs](CURRENT-BYTE-BICUBIC-AXIAL-COSTS.md)
+resolve the timing uncertainty. Other kernels and codec production paths are
+unchanged. Stop variants of this primitive; all268 required paths remain.
 
 [Numeric evidence](warm-bicubic-byte-fixed-certificate-evidence.json) includes
 both independent producers, samples, bounds, proof and qualification. Raw

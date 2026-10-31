@@ -681,9 +681,12 @@ Exact rational/frozen pixels, native bounds, source/owners and quiet gates pass.
 Full5,245/live checks per OS and the same actual Release package/three examples
 pass, including the affected packaged byte boundary. The prior1.758× original
 twelve is reused after stability checks. `TightHorizontalUp8/TightVerticalUp8`
-also call the changed guard: their functional proof passes but older CPU costs
-need current confirmation. Still64 displayed comparisons and268 required paths;
-no cases added or broad parity claim.
+also call the changed guard: [current axial confirmations](CURRENT-BYTE-BICUBIC-AXIAL-COSTS.md)
+resolve their costs at1.188× / upper1.235 and1.371× / upper1.379,
+1,178,374/1,280,363 B/op. Both preserve frozen pixels; the vertical case retains
+its one certified rational RGB half. One current twelve per case,zero builds,
+unchanged full/package qualification reused. Now66 displayed comparisons and
+the same268 required paths; no cases added or broad parity claim.
 
 [Current asynchronous RGBA8/444 JPEG](CURRENT-ASYNC-JPEG-RGBA8-COST.md) resolves
 the existing `Jpeg8AsyncNonSeekable` boundary at 1.199× / upper 1.210, 820,475 B/op.

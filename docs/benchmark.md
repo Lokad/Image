@@ -2,7 +2,7 @@
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **64 comparisons** rank the remaining work; completion requires every
+These **66 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -68,9 +68,11 @@ the qualified implementation is restored and new exact boundary tests retained.
 
 Tight-memory RGBA8 bicubic enlargement improves **9.87%** by removing a redundant
 error-bound division: **1.565× / upper 1.591**, unchanged **2,492,956 B/op**,
-exact pixels and **4 KiB** workspace. It remains a confirmed gap. The changed
-horizontal/vertical strip callers need current cost confirmation.
+exact pixels and **4 KiB** workspace. It remains a confirmed gap. Changed
+horizontal/vertical strip callers now confirm **1.188× / upper 1.235** and
+**1.371× / upper 1.379**, with **1,178,374 / 1,280,363 B/op**.
 [Fixed-certificate evidence](../benchmarks/WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md).
+[Current one-axis costs](../benchmarks/CURRENT-BYTE-BICUBIC-AXIAL-COSTS.md).
 
 The current producer passes **5,245 checks per OS**, plus 179 public
 focused checks in normal/scalar modes and Linux with AVX512 disabled.
@@ -136,6 +138,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Lanczos3 enlargement RGBA8 † → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
 | Lanczos3 enlargement RGBA16 † → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,823.16 | 3,081.49 | 1.565 / 1.591 | 2,492,956 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,800.86 | 1,515.49 | 1.188 / 1.235 | 1,178,374 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,374.70 | 1,732.26 | 1.371 / 1.379 | 1,280,363 |
 
 **Inspection and pixel-coding validation**
 
