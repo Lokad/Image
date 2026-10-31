@@ -632,6 +632,12 @@ costs before CPU-pass claims. Diagram4 and green-only VP8 alpha skip this search
 decoders, other codecs, editing/text and inspection retain applicable evidence.
 The full 268-path objective remains open; no further bin-list variants.
 
+[Default probe configuration](PROBE-DEFAULT-OPTIONS-REJECTED.md) stops after one
+short pair: 40 B/op saved, but only 0.86% filtered/0.91% all-actual elapsed and
+0.045% normalized improvement. No independent confirmation or variant. Exact
+CBA2 source/binaries/package restored; 104 public normal/scalar checks pass on
+both OSes. Full/package proof is reused. Current accepted costs stay unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
