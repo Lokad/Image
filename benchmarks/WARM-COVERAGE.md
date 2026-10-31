@@ -7,6 +7,12 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Wider horizontal tap-view transfer](BICUBIC-WIDE-TAP-VIEW-REJECTED.md) misses
+its one short screen: 539.453 versus523.424 µs, unchanged231,239 B/op and exact
+pixels/native bounds. 217public controls normal/scalarbothOS/LinuxAVX512offpass.
+Qualified source/core/publiccorecopies/package restored byte-exactly; unchanged
+full/package proof reused. No confirmation, variant, profile or current-row change.
+
 [Tight horizontal RGBA16 bicubic](CURRENT-TIGHT-HORIZONTAL-WORD-BICUBIC.md) now
 has one current independent twelve: 739.572 µs, 1.267× / upper 1.326,
 530,838 B/op; lower 1.201 confirms a gap. Exact pixels, approved native bounds,

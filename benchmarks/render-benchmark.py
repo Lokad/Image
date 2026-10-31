@@ -881,6 +881,9 @@ def render():
         matches = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + label) ]
         assert len(matches) == 1, (key, matches)
         rows[matches[0]] = ('codec', new_row)
+    wide_view = json.loads((ROOT / 'benchmarks/bicubic-wide-tap-view-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert wide_view['candidateRejected'] and not wide_view['productionChanged'] and not wide_view['decision']['passed']
+    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in wide_view['restoration'].values())
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
