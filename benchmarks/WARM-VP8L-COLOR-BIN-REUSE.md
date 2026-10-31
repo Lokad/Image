@@ -38,3 +38,12 @@ native or selector builds. No variant or additional profile is introduced.
 producers/package and mirrored/member-verified `vp8l-color-bin-reuse-retained.tar.xz`, SHA256 6e8e51e4e107d33bd0fe9391ced520e28c6c336de66b53bda9ffee30a77ca87f.
 The [original decision](VP8L-COLOR-BIN-REUSE-REJECTED.md) remains historical.
 All 268 required material paths remain in the performance objective.
+
+The bounded caller review of the [fixed inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
+identifies six named lossless encoder controls: the four above, the indexed
+effort-4 diagram, and nonseekable asynchronous output. The diagram skips color
+search; [current async evidence](CURRENT-ASYNC-VP8L-ENCODE-COST.md) covers the
+remaining affected named boundary. Both changed color-source files remain
+byte-identical on the current qualified build. These six costs retain their
+existing confidence status and all remain gaps. No additional unnamed effort or
+stream grid is inferred, and no measurement or build is repeated for this review.

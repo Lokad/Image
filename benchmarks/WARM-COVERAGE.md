@@ -640,9 +640,10 @@ reinstated with no additional core build or opaque retiming. Three existing
 companions each receive one current twelve. Opaque/RGBA8/RGBA16/photograph ratios
 are 1.393/1.308/1.356/1.309; all remain gaps. Full 5240/OS, 25 internal/153 public
 normal/scalar and the same actual package/three examples pass both OSes.
-Raw 6e8e51e4... is mirrored/member-verified. Other named color-search callers,
-including applicable normalization/effort/stream/async boundaries, need current
-costs before CPU-pass claims. Diagram4 and green-only VP8 alpha skip this search;
+Raw 6e8e51e4... is mirrored/member-verified. The bounded fixed-inventory review
+names six lossless encoder controls: those four anchors, indexed Diagram4 and
+nonseekable asynchronous output. WAC1 supplies the current async cost; Diagram4
+and green-only VP8 alpha skip this search. No unnamed effort/stream grid is added;
 decoders, other codecs, editing/text and inspection retain applicable evidence.
 The full 268-path objective remains open; no further bin-list variants.
 
@@ -687,9 +688,10 @@ return to largest remaining gaps. Full268-path objective unchanged.
 7.26%,removing360,288B/op,with unchanged exact pixels/admission. New current
 TightUp8/TightDown8/Wide8/bilinearUp8/two byte axial costs are in its numeric
 record. Full5,267/live checks per OS and SAMEactualReleasepackage/three examples
-pass. Because ResizeAlpha.Round is shared,the seven named displayed prior costs
-and previously passing VerticalUp16 require zero-call proof or current timing;
-do not assume every caller is active. Other algorithm/codec paths are unchanged.
+pass. The [caller audit](CURRENT-SHARED-ALPHA-CALLER-COSTS.md) reconciles all ten
+named uncertainties: six rigorous no-call proofs reuse unchanged paths and four
+independent confirmations use the same immutable build. VerticalUp16 passes and
+stops; the other confirmed cases remain gaps. Other algorithms are unchanged.
 The finite names and existing enum scope are recorded;no workload grid is added.
 
 [Current wider-support byte reduction](CURRENT-WIDE-BYTE-BICUBIC-COST.md) resolves
@@ -1209,11 +1211,12 @@ Regression/pixel/reference evidence and timings are separate:
   normalization, stream/async and applicable method5/6 prediction families with
   nonzero red/blue. Four displayed callers are refreshed. Diagram4 skips prediction/
   color search and normalized VP8 alpha has RedBlueZero, so their costs remain
-  valid. Other affected inventory cases need applicable current timings before a
-  CPU-pass claim. All decoders, unrelated codecs/editing and native workers remain.
+  valid. The sixth named lossless encoder boundary, nonseekable async output,
+  has current WAC1 evidence. All six remain gaps; no unnamed effort/stream
+  cases are inferred. All decoders, unrelated codecs/editing and native workers remain.
 - SIMD scored-plane histograms affect the same lossless color-search callers;
-  four displayed costs are refreshed above. Other affected named method5/6/opaque
-  callers need applicable current costs before a pass claim. No owned capacity,
+  four displayed costs are refreshed above; the named async boundary uses WAC1
+  and indexed Diagram4 bypasses this search. No owned capacity,
   admission or cancellation boundary changes. Unrelated proofs remain valid.
 - Whole-block zero-candidate preflight changes method5/6 luma-trellis encoding;
   the displayed diagram6 cost is independently refreshed. Other affected named
