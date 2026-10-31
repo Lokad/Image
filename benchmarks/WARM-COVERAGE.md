@@ -638,6 +638,19 @@ short pair: 40 B/op saved, but only 0.86% filtered/0.91% all-actual elapsed and
 CBA2 source/binaries/package restored; 104 public normal/scalar checks pass on
 both OSes. Full/package proof is reused. Current accepted costs stay unchanged.
 
+[Current byte bilinear](CURRENT-BYTE-BILINEAR-COSTS.md) resolves the two remaining
+named bilinear costs after BRC2 shared dispatch. Down8:504.783µs,1.303/upper1.315,
+157971B/op;Up8:3768.780µs,1.740/upper1.751,2235501B/op. Both independent twelve,
+exact rational managed pixels and unchanged native/ownership/idle-v2 gates pass.
+No builds, new workloads, profile or repeated full/package qualification. Cached
+selectors are bound to archived successful executions. Completed Down8 scores
+are recovered after a description-only postcheck error, never retimed. All four
+named byte/word bilinear controls now have current costs. Enlargement is the next
+largest substantial editing gap; bounded source review identifies repeated
+unrounded horizontal rows as one distinct reuse primitive. Rawc37903f2... is
+mirrored/member-verified. Full268-path objective unchanged;61 displayed rows now
+include these two already-required cases, without extending the workload matrix.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

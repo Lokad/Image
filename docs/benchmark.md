@@ -2,7 +2,7 @@
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **59 comparisons** rank the remaining work; completion requires every
+These **61 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -44,6 +44,11 @@ normalized intervals overlap. This specific gain is explicitly accepted with
 that caveat. All four displayed color-search controls have current independent
 costs; their complete packets remain exact and all remain CPU gaps.
 [Color-bin evidence](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md).
+
+The two existing [byte-bilinear controls](../benchmarks/CURRENT-BYTE-BILINEAR-COSTS.md)
+now have current independent costs. Enlargement is **1.740× / upper 1.751**,
+2,235,501 B/op, making it the next substantial editing gap; reduction also remains
+a gap. These existing checklist paths add no new image or settings grid.
 
 The current producer passes **5,240 checks per OS**, plus 25 internal/153 public
 focused checks in normal/scalar modes. Header/probe proofs remain applicable.
@@ -93,6 +98,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
+| Bilinear resize RGBA8 † → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
+| Bilinear upscale RGBA8 † → 1027×519 | 3,768.78 | 2,165.60 | 1.740 / 1.751 | 2,235,501 |
 | Bilinear resize RGBA16 † → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 579.25 | 418.45 | 1.384 / 1.400 | 332,188 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |

@@ -362,6 +362,12 @@ def render():
     assert bilinear_word['receipt']['sourceUnchanged'] and bilinear_word['receipt']['independentOwnedOutput']
     assert bilinear_word_cost['comparisonLowerBounds']['Down16'] > 1
     assert bilinear_word_cost['status']['Down16'] == 'confirmed-gap'
+    bilinear_byte_cost = json.loads((ROOT / 'benchmarks/current-byte-bilinear-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not bilinear_byte_cost['productionChanged'] and bilinear_byte_cost['allBuilds'] == 0
+    assert bilinear_byte_cost['independentQuietConfirmation']
+    assert set(bilinear_byte_cost['cases']) == {'Down8', 'Up8'}
+    assert bilinear_byte_cost['qualification']['sameActualPackageBothOs']
+    assert all(v > 1 for v in bilinear_byte_cost['comparisonLowerBounds'].values())
     bicubic_byte_cost = json.loads((ROOT / 'benchmarks/current-bicubic-byte-reduction-cost-evidence.json').read_text(encoding='utf-8'))
     assert not bicubic_byte_cost['productionChanged'] and bicubic_byte_cost['allBuilds'] == 0
     assert bicubic_byte_cost['independentQuietConfirmation'] and bicubic_byte_cost['status']['Down8'] == 'confirmed-gap'
@@ -558,6 +564,19 @@ def render():
     opaque_row = f'| VP8L opaque RGBA8 / libwebp exact=1 † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 121,896 / 121,896 |'
     position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     rows.insert(position + 1, ('codec', opaque_row))
+    position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| Bilinear resize RGBA16'))
+    for ordinal, case in enumerate(['Down8', 'Up8']):
+        observation = bilinear_byte_cost['cases'][case][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == bilinear_byte_cost['producers']['linuxSha256']
+        assert receipt['managedRationalReferenceExact'] and receipt['sourceUnchanged'] and receipt['independentOwnedOutput']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        assert math.isclose(stats['Mean'] / native, observation['worstBracketRatio'], rel_tol=1e-12)
+        label = f'Bilinear {"resize" if case == "Down8" else "upscale"} RGBA8 † → {receipt["outputWidth"]}×{receipt["outputHeight"]}'
+        row = f'| {label} | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'
+        rows.insert(position + ordinal, ('editing', row))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -637,7 +656,7 @@ def render():
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **59 comparisons** rank the remaining work; completion requires every
+These **61 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -679,6 +698,11 @@ normalized intervals overlap. This specific gain is explicitly accepted with
 that caveat. All four displayed color-search controls have current independent
 costs; their complete packets remain exact and all remain CPU gaps.
 [Color-bin evidence](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md).
+
+The two existing [byte-bilinear controls](../benchmarks/CURRENT-BYTE-BILINEAR-COSTS.md)
+now have current independent costs. Enlargement is **1.740× / upper 1.751**,
+2,235,501 B/op, making it the next substantial editing gap; reduction also remains
+a gap. These existing checklist paths add no new image or settings grid.
 
 The current producer passes **5,240 checks per OS**, plus 25 internal/153 public
 focused checks in normal/scalar modes. Header/probe proofs remain applicable.
