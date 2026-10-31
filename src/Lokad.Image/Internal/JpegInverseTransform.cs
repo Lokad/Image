@@ -151,6 +151,17 @@ internal static class JpegInverseTransform
             // frequencies, the original word bias and the same column sums.
             var even = Avx2.MultiplyLow(r0, Vector256.Create(Kernel[0]));
             var r1 = WidenRow(rows, 1);
+            if (Vector256.EqualsAll(r1, Vector256<int>.Zero))
+            {
+                // Every odd term is exactly zero. Preserve the existing word
+                // bias, modulo-Int32 product and clipping once, then reuse the
+                // completed bytes for all eight identical output rows.
+                StoreRow(even, pixels[..8]);
+                var packed = BinaryPrimitives.ReadUInt64LittleEndian(pixels[..8]);
+                for (var y = 1; y < 8; y++)
+                    BinaryPrimitives.WriteUInt64LittleEndian(pixels.Slice(y * 8, 8), packed);
+                return;
+            }
             for (var y = 0; y < 4; y++)
             {
                 var odd = Avx2.MultiplyLow(r1, Vector256.Create(Kernel[8 + y]));

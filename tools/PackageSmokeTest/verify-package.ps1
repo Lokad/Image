@@ -654,16 +654,22 @@ if (sparseRoot.Bytes != 17 * 9 * 4 || sparseRoot.IsDisposed) throw new Exception
 for (var sy = 0; sy < 9; sy++)
 for (var sx = 0; sx < 17; sx++)
 {
-    var delta = (int)Math.Round((Math.Cos((2 * (sx & 7) + 1) * Math.PI / 16)
-        + (sparseTerms == 2 ? Math.Cos((2 * (sy & 7) + 1) * Math.PI / 16) : 0)) / Math.Sqrt(2), MidpointRounding.AwayFromZero);
+    var horizontal = 4 * (int)Math.Round(Math.Sqrt(2) * Math.Cos((2 * (sx & 7) + 1) * Math.PI / 16) * 16384, MidpointRounding.AwayFromZero);
+    var vertical = sparseTerms == 2 ? 32 * (int)Math.Round(Math.Sqrt(2) * Math.Cos((2 * (sy & 7) + 1) * Math.PI / 16) * 16384, MidpointRounding.AwayFromZero) : 0;
+    int SparseSample(int sample)
+    {
+        var row = (sample * 8 * 16383 + horizontal + 1024) >> 11;
+        return Math.Clamp(((row + 32) * 16383 + vertical) >> 20, 0, 255);
+    }
     for (var sc = 0; sc < 3; sc++)
-        if (sparseSurvivor.GetRow8(sy)[sx * 4 + sc] != (((sparseValues[sc] + delta) * (sparseValues[3] + delta) * 257) >> 16))
+        if (sparseSurvivor.GetRow8(sy)[sx * 4 + sc] != ((SparseSample(sparseValues[sc]) * SparseSample(sparseValues[3]) * 257) >> 16))
             throw new Exception("Packaged sparse JPEG analytical sample differs.");
     if (sparseSurvivor.GetRow8(sy)[sx * 4 + 3] != 255) throw new Exception("Packaged sparse JPEG alpha differs.");
 }
 sparseSurvivor.Dispose();
 if (sparseRoot.Bytes != 0) throw new Exception("Packaged sparse JPEG retained charge leaked.");
 }
+Console.WriteLine("Packaged exact completed-row JPEG pixels and retained ownership passed.");
 for (var y = 0; y < 8; y++)
 for (var x = 0; x < 8; x++) new byte[] { 123, 123, 123, 255 }.CopyTo(opaque.GetRow8(y)[(x*4)..]);
 using var jpeg = new MemoryStream();

@@ -7,6 +7,20 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Exact completed-row JPEG reuse](WARM-JPEG-COMPLETED-ROW-REUSE.md) is accepted:
+10.48% filtered / 10.26% all-actual / 8.00% native-normalized gain with separated
+confidence. Horizontal CMYK is now 1.366× / upper 1.396, 1,085,755 B/op (−2 noise).
+All seven affected displayed decode costs are reconciled once; progressive420
+now confirms a gap at 1.096× / upper 1.108. Eight named no-call proofs preserve
+applicable grayscale, dense CMYK, caller-CMYK/YCCK/411/410 and coding-validation
+costs. 5,291 checks per OS, 349 internal/346 public focused normal/scalar controls,
+Linux AVX512-off and the same actual Windows package/three examples pass.
+No new workload, profile, admission capacity or tolerance. Temporary metadata and
+oracles are restored; accepted production remains. This primitive is closed.
+All 268 named paths remain required; 76 displayed comparisons rank the work.
+The following earlier costs/experiments retain provenance and raw evidence;
+affected JPEG rows are superseded by this checkpoint.
+
 [Owned CMYK frame](OWNED-CMYK-FRAME-UNQUALIFIED.md) removes 549,486 B/op
 (50.61%) in the candidate but remains unaccepted: raw 2.93%/2.74% independent
 gains have separate confidence, while normalized point changes 1.457×→1.463×

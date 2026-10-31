@@ -843,6 +843,36 @@ def render():
     assert not owned_cmyk['decisions']['confirm']['passed'] and owned_cmyk['decisions']['short']['independentConfirmationAllowed']
     assert owned_cmyk['memory']['allocatedFractionRemoved'] > .5
     assert all(v['productionSourceAndTestSourceRestored'] and v['bothTestAssembliesRestored'] for v in owned_cmyk['restoration'].values())
+    completed_rows = json.loads((ROOT / 'benchmarks/warm-jpeg-completed-row-reuse-evidence.json').read_text(encoding='utf-8'))
+    assert completed_rows['accepted'] and completed_rows['decisions']['confirm']['defaultFivePercentPassed']
+    assert completed_rows['decisions']['confirm']['normalizedSeparated']
+    assert completed_rows['qualification']['fullChecksEachOs'] == 5291
+    assert completed_rows['qualification']['sameActualPackageBothOs']
+    assert completed_rows['qualification']['package']['sha256'] == completed_rows['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert completed_rows['correctness']['headersAndOraclesRestored']['originalHeadersAndOraclesRestoredByteExact']
+    assert completed_rows['memory']['newOwnedCapacityBytes'] == 0
+    assert len(completed_rows['sourceScope']['noCalls']) == 8
+    for key, label in [('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'),
+                       ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'),
+                       ('NativeDecode420', 'JPEG baseline420, resident decode'),
+                       ('Progressive420', 'JPEG progressive420, resident decode'),
+                       ('Progressive422', 'JPEG progressive422, resident decode'),
+                       ('Progressive444', 'JPEG ordinary progressive444, resident decode'),
+                       ('ProgressiveCancelable444', 'JPEG progressive444, live-token resident decode')]:
+        observation = completed_rows['cases'][key][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == completed_rows['producers']['linuxSha256']
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert completed_rows['comparisonLowerBounds'][key] > 1
+        new_row = (f'| {label} † | {stats["Mean"] / 1000:,.2f} | '
+                   f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                   f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |')
+        matches = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + label) ]
+        assert len(matches) == 1, (key, matches)
+        rows[matches[0]] = ('codec', new_row)
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -921,9 +951,8 @@ def render():
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
-retained unchanged-path measurements. The shared-alpha caller audit proves six
-existing controls cannot reach the changed code and confirms four others on the
-immutable current build; their existing confidence requirements remain.
+retained unchanged-path measurements. Seven affected JPEG decode costs are current;
+eight named paths retain proven unchanged-path evidence.
 These **76 tabulated comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
@@ -994,17 +1023,6 @@ Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
 
-A [first-scan JPEG candidate](../benchmarks/JPEG-FIRST-AC-CONFIDENCE-OPEN.md)
-shows 8.22%/9.66% independent raw gains but remains unaccepted because conservative
-native-normalized confidence is open. Its source and evidence remain archived.
-
-An [exact separable-alpha trial](../benchmarks/EXACT-ALPHA-SEPARABLE-REJECTED.md)
-misses the short-screen gain gate; qualified production and current costs remain.
-
-One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
-regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
-It is rejected; the qualified builds/package and displayed costs remain unchanged.
-
 Local original-order repair improves tight RGBA8 bicubic reduction **5.61%**
 (all actuals **5.12%**), preserving exact pixels and the same **4 KiB** admission:
 **1.474× / upper 1.540**, **132,309 B/op** (+3 B/op noise). Uncertain pairs
@@ -1017,30 +1035,18 @@ upper 0.985**, **2,514,272 B/op** and stops. Word bicubic enlargement remains
 **1.230× / upper 1.244**, **5,016,602 B/op**. Existing word-bilinear/default-byte
 enlargements remain gaps; no new workload or production change.
 [Caller audit](../benchmarks/CURRENT-SHARED-ALPHA-CALLER-COSTS.md).
-A bounded byte-normalization screen regresses and is rejected; the verified
-implementation and all displayed costs remain unchanged.
-[Rejected screen](../benchmarks/BYTE-BICUBIC-ONE-NEWTON-REJECTED.md).
-
-Ordinary progressive 4:4:4 decoding improves **9.41%** independently, with unchanged
-**984,212 B/op** and exact pixels: **1.335× / upper 1.349**. A local bit window
-retains grouped corrections and precise partial-error state. All six affected
-progressive paths have current costs; 4:2:0 decode remains confidence-open and
-other progressive cases remain gaps. The table adds four already-required decode
-paths, without extending the workload checklist.
-[Refinement-window evidence](../benchmarks/WARM-JPEG-REFINEMENT-WINDOW.md).
+Exact completed-row reuse improves horizontal CMYK decoding **10.48%** independently
+(all actuals **10.26%**, normalized **8.00%**) with separated confidence:
+**1.366× / upper 1.396**, **1,085,755 B/op** (−2 B/op noise), unchanged owned capacity.
+All seven affected displayed JPEG costs are reconciled on the immutable build;
+progressive420 is now a confirmed gap. Eight named no-call proofs retain valid
+costs, including grayscale, dense CMYK and both coding validations.
+[Completed-row evidence](../benchmarks/WARM-JPEG-COMPLETED-ROW-REUSE.md).
 
 Dense/general CMYK JPEG decoding independently passes at **0.894× / upper 0.916**,
 **1,085,661 B/op**, with exact independent-matrix/native normal/scalar pixels.
 The stale derived reference is reconciled without changing production or inputs;
 this already-required case stops. [Current cost](../benchmarks/CURRENT-DENSE-CMYK-JPEG-COST.md).
-
-The existing horizontal-only CMYK control separately confirms a **1.457× / upper
-1.521** gap, **1,085,757 B/op**, with exact independent/native pixels. One current
-confirmation resolves its old-code uncertainty. [Current cost](../benchmarks/CURRENT-HORIZONTAL-CMYK-JPEG-COST.md).
-
-An [owned-CMYK-frame candidate](../benchmarks/OWNED-CMYK-FRAME-UNQUALIFIED.md)
-removes 50.61% allocation but fails normalized CPU confirmation. It is archived;
-qualified production and displayed costs are restored unchanged.
 
 Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
 upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
@@ -1048,7 +1054,7 @@ operation includes both complete decodes, retained overlap and releases on both
 subjects; native has no shared admission API. Exact pixels and root cleanup pass.
 [Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
 
-The current producer passes **5,289 checks per OS**, plus 41 focused internal and
+The current producer passes **5,291 checks per OS**, plus 349 focused internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
 The same actual Release package, governed

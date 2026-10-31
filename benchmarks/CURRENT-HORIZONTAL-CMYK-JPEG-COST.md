@@ -1,5 +1,9 @@
 # Current horizontal-only CMYK JPEG decode cost
 
+The cost below is superseded by [exact completed-row reuse](WARM-JPEG-COMPLETED-ROW-REUSE.md):
+535.551 µs, 1.366× / upper 1.396, 1,085,755 B/op. This original confirmation and
+its oracle/reference identities remain retained evidence.
+
 The existing single-horizontal-AC control independently confirms a gap:
 **591.095 µs, 1.457× / conservative upper 1.521**, **1,085,757 B/op**.
 This resolves the old fixed-inverse/entropy uncertainty; no causal gain or
