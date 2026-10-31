@@ -741,6 +741,20 @@ def render():
         assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
         assert receipt['decoderMaximum'] == receipt['scalarDecoderMaximum'] == 0
         assert progressive['comparisonLowerBounds'][key] > 1
+    retained_png = json.loads((ROOT / 'benchmarks/current-retained-png-decode-cost-evidence.json').read_text(encoding='utf-8'))
+    assert retained_png['producers'] == exact_alpha['producers'] and retained_png['allBuilds'] == 0
+    observation = retained_png['cases']['Png8Retained2'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == exact_alpha['producers']['linuxSha256']
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(a['Operations'] == 4 for a in observation['managed']['actual'])
+    assert all(q['passed'] for q in observation['quietness'].values())
+    assert all(retained_png['correctness'].values())
+    assert retained_png['comparisonLowerBounds']['Png8Retained2'] > 1
+    rows.append(('codec', f'| PNG8 decode, two retained images / shared caller root † | {stats["Mean"] / 1000:,.2f} | '
+                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -822,7 +836,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **68 comparisons** rank the remaining work; completion requires every
+These **69 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -908,6 +922,12 @@ grayscale **1.442× / upper 1.476**, **683,126 B/op**; live-token 4:4:4
 pixels. Prepared packets/settings stay frozen; stale managed-hash metadata is
 reconciled and original headers restored. Zero builds or new controls.
 [Progressive costs](../benchmarks/CURRENT-PROGRESSIVE-JPEG-COSTS.md).
+
+Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
+upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
+operation includes both complete decodes, retained overlap and releases on both
+subjects; native has no shared admission API. Exact pixels and root cleanup pass.
+[Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
 
 The current producer passes **5,267 checks per OS**, plus 22 new internal and
 179 public focused checks normal/scalar and Linux with AVX512 disabled.

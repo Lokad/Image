@@ -4,7 +4,7 @@ Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained unchanged-path measurements. The shared-alpha caller audit proves six
 existing controls cannot reach the changed code and confirms four others on the
 immutable current build; their existing confidence requirements remain.
-These **68 comparisons** rank the remaining work; completion requires every
+These **69 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -91,6 +91,12 @@ pixels. Prepared packets/settings stay frozen; stale managed-hash metadata is
 reconciled and original headers restored. Zero builds or new controls.
 [Progressive costs](../benchmarks/CURRENT-PROGRESSIVE-JPEG-COSTS.md).
 
+Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
+upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
+operation includes both complete decodes, retained overlap and releases on both
+subjects; native has no shared admission API. Exact pixels and root cleanup pass.
+[Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
+
 The current producer passes **5,267 checks per OS**, plus 22 new internal and
 179 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
@@ -137,6 +143,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | JPEG 4:1:0, resident decode † | 367.40 | 507.52 | 0.724 / 0.735 | 720,838 | — |
 | JPEG caller RGB24 async nonseekable, 420 † | 1,862.24 | 1,628.86 | 1.143 / 1.154 | 309,526 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 † | 4,626.46 | 3,857.58 | 1.199 / 1.210 | 820,475 | 133,039 / 133,041 |
+| PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
 
 **Editing**
 

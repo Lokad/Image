@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current retained PNG decoding](CURRENT-RETAINED-PNG-DECODE-COST.md) confirms
+the existing two-output borrowed-root boundary at 1.157× / upper 1.168,
+1,637,520 B/op and actual governed peak 1,766,641 bytes. Both complete decodes,
+independent retained overlap and releases are timed equivalently; all pixels,
+source, survivor charges, terminal refusal/cancellation/recovery and quiet
+guards pass. One independent twelve on the same immutable qualified build,
+zero builds/profiles/new inputs. This is displayed comparison 69, not a new
+required case; the full 268-path objective remains.
+
 [Current progressive JPEG costs](CURRENT-PROGRESSIVE-JPEG-COSTS.md) reconcile the
 existing grayscale and live-token 4:4:4 paths on the unchanged qualified build:
 1.442× / upper 1.476, 683,126 B/op and 1.438× / upper 1.447, 984,212 B/op.

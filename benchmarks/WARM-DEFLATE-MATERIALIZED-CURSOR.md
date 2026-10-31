@@ -1,5 +1,9 @@
 # Work-bounded materialized Deflate cursor
 
+This earlier production experiment is retained history.
+[Current two-retained-output decoding](CURRENT-RETAINED-PNG-DECODE-COST.md)
+supersedes that row's old cost, allocation and governed peak.
+
 One local bit cursor improves complete PNG decoding without new storage or a
 precision change. Both existing operations remain parity gaps, so neither gets
 a longer confirmation.
