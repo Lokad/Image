@@ -7,6 +7,11 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Integer bicubic horizontal convolution](BICUBIC-INTEGER-DOT-REJECTED.md) is
+rejected after one exact-pixel short screen: 531.867 → 858.410 µs (61.40% slower).
+The qualified source/builds/package are restored exactly; current Wide8 evidence
+and all 268 required paths remain unchanged. No confirmation or tuning variant.
+
 [Local bicubic repair](WARM-BICUBIC-LOCAL-REPAIR.md) improves existing TightDown8
 5.61% filtered/5.12% all-actual elapsed, 6.93% normalized, with separately separated
 confidence. Current 622.835 µs, 1.474× / upper 1.540, 132,309 B/op (+3 B/op noise).

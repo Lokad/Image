@@ -74,6 +74,10 @@ Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
 
+One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
+regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
+It is rejected; the qualified builds/package and displayed costs remain unchanged.
+
 Local original-order repair improves tight RGBA8 bicubic reduction **5.61%**
 (all actuals **5.12%**), preserving exact pixels and the same **4 KiB** admission:
 **1.474× / upper 1.540**, **132,309 B/op** (+3 B/op noise). Uncertain pairs

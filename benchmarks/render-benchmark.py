@@ -775,6 +775,10 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
+    integer_dot = json.loads((ROOT / 'benchmarks/bicubic-integer-dot-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert integer_dot['candidateRejected'] and not integer_dot['productionChanged']
+    assert not integer_dot['decision']['passed']
+    assert all(v['productionSourceRestored'] and v['sourceManifestRestored'] for v in integer_dot['restoration'].values())
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -925,6 +929,10 @@ Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 **2,132,668 B/op**, exact pixels and the same **4 KiB** admission.
 Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
+
+One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
+regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
+It is rejected; the qualified builds/package and displayed costs remain unchanged.
 
 Local original-order repair improves tight RGBA8 bicubic reduction **5.61%**
 (all actuals **5.12%**), preserving exact pixels and the same **4 KiB** admission:
