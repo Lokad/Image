@@ -14,6 +14,8 @@
   construction, preserving exact packets and existing scratch capacity.
 - Bounded JPEG probes combine marker reads while preserving input limits,
   cancellation, prefix boundaries and caller-owned admission.
+- Buffered and seekable header skips complete without an async state machine,
+  preserving bounded reads, cancellation and pending-I/O storage lifetimes.
 - Non-indexed lossless WebP decoding owns decoded storage directly, avoiding a
   temporary full frame while preserving exact pixels and caller-budget lifetimes.
 - RGBA16 bilinear reduction reuses vertical geometry and avoids unused horizontal

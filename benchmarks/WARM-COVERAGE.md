@@ -7,6 +7,20 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Completed header skips](WARM-HEADER-SKIP-FAST-PATH.md) retain **8.25% filtered /
+8.27% all-sample / 8.73% normalized** improvement with separated confidence.
+Seekable JPEG probing confirms 1.681 / upper 1.736, 744 B/op. The async companion
+is 2.007 / upper 2.052, same allocation, with a disclosed small 1.7% point cost
+increase; filtered intervals narrowly separate, all-sample intervals overlap.
+Complete seekable PNG8 headers now independently confirm 1.215 / upper 1.235,
+8,528 B/op. All three remain gaps. Full 5,332 checks per OS and the same actual
+Release package/three examples pass. No new tests, profiles, inputs/settings or
+harness/native/selector builds. Only skip-executing Probe/InspectHeaders timings
+are affected; frozen PNG/WebP dimension probes return before skips, and Identify,
+pixel validation, codecs/editing/fonts retain applicable unchanged proof. Other
+affected named header/orientation paths need current evidence before pass claims.
+Close skip-state variants; preserve the complete 268-path ≤1× objective.
+
 [Baseline grayscale JPEG decode](CURRENT-BASELINE-GRAYSCALE-JPEG-DECODE-COST.md)
 now independently confirms 1.218 / upper 1.226, 672,196 B/op. The existing
 147,825-byte packet produces exact Windows/Linux normal/scalar and FFmpeg

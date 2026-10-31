@@ -100,12 +100,12 @@ internal sealed class InspectionReader : IDisposable
         buffer.AsSpan(first, n).CopyTo(Header.AsSpan(offset)); first += n; return n;
     }
 
-    internal async ValueTask SkipAsync(long count)
+    internal ValueTask SkipAsync(long count)
     {
         if (count < 0) throw new ImageDataException("Invalid image payload length.");
         Context.Cancellation.ThrowIfCancellationRequested();
         var buffered = (int)Math.Min(count, last - first); first += buffered; count -= buffered;
-        if (count == 0) return;
+        if (count == 0) return ValueTask.CompletedTask;
         if (count > Context.Limits.MaxInputBytes - acquired)
             throw new ImageLimitException(ImageLimitKind.InputBytes, "Encoded input limit exceeded.");
         if (input.CanSeek)
@@ -115,14 +115,17 @@ internal sealed class InspectionReader : IDisposable
             Context.Cancellation.ThrowIfCancellationRequested();
             if (input.Seek(count, SeekOrigin.Current) != position + count) throw new ImageDataException("Invalid stream seek result.");
             acquired += count; Context.Cancellation.ThrowIfCancellationRequested();
+            return ValueTask.CompletedTask;
         }
-        else
+        return SkipForwardAsync(count);
+    }
+
+    private async ValueTask SkipForwardAsync(long count)
+    {
+        while (count != 0)
         {
-            while (count != 0)
-            {
-                if (!await FillAsync((int)Math.Min(count, buffer.Length)).ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
-                var n = (int)Math.Min(count, last); first = n; count -= n;
-            }
+            if (!await FillAsync((int)Math.Min(count, buffer.Length)).ConfigureAwait(false)) throw new ImageDataException("Truncated image payload.");
+            var n = (int)Math.Min(count, last); first = n; count -= n;
         }
     }
 

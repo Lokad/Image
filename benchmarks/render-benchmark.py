@@ -420,6 +420,12 @@ def render():
                          'case30': lanczos_enlarge16_cost}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
+    header_skips = json.loads((ROOT / 'benchmarks/warm-header-skip-fast-path-evidence.json').read_text(encoding='utf-8'))
+    assert header_skips['productionChanged'] and header_skips['decision']['passed']
+    assert header_skips['qualification']['fullChecksEachOs'] == 5332
+    assert header_skips['qualification']['sameActualPackageBothOs']
+    assert header_skips['qualification']['package']['sha256'] == header_skips['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert set(header_skips['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -1099,7 +1105,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (png_indexed if case in png_indexed['cases'] else refinement_window if case in refinement_window['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (header_skips if case in header_skips['cases'] else png_indexed if case in png_indexed['cases'] else refinement_window if case in refinement_window['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -1119,15 +1125,15 @@ def render():
         status = 'Confidence open' if producer['status'][case] == 'confirmed-confidence-open' else 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
-    headers = reconciled['cases']['PngHeaders'][-1]
+    headers = header_skips['cases']['PngHeaders'][-1]
     assert headers['receipt']['descriptorExact'] and headers['receipt']['typedSourceMetadataExact']
-    assert headers['receipt']['librarySha256'] == reconciled['producers']['linuxSha256']
-    assert len(headers['managed']['actual']) == 3 and all(q['passed'] for q in headers['quietness'].values())
+    assert headers['receipt']['librarySha256'] == header_skips['producers']['linuxSha256']
+    assert len(headers['managed']['actual']) == 12 and all(q['passed'] for q in headers['quietness'].values())
     read_rows.append(f'| Inspect PNG8 complete headers, seekable, adapter reference | '
                      f'{headers["managed"]["statistics"]["Mean"] / 1000:,.3f} | '
                      f'{min(b["mean"] for b in headers["nativeBrackets"]) / 1000:,.3f} | '
                      f'{headers["worstBracketRatio"]:.3f} / {headers["conservativeRatioUpper"]:.3f} | '
-                     f'{headers["managedMemory"]["BytesAllocatedPerOperation"]:,} | Screen gap |')
+                     f'{headers["managedMemory"]["BytesAllocatedPerOperation"]:,} | Confirmed gap |')
     identified = png_gfni['cases']['PngResident'][-1]
     assert identified['receipt']['descriptorExact'] and identified['receipt']['typedSourceMetadataExact']
     assert identified['receipt']['descriptorFields'] == 9 and identified['receipt']['nativeReady']['outputBytes'] == 36
@@ -1186,12 +1192,16 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production passes **5,331 checks per OS**, including 948 live comparisons;
-one separately qualified predictor invariant gives **5,332 applicable**. The same
-actual Release package, governed/retained/async consumers and three examples pass
-both OSes. Unchanged evidence is reused; no fresh full 5,332 run is claimed here.
+Current production passes **5,332 checks per OS**, including 948 live comparisons.
+The same actual Release package, governed/retained/async consumers and three
+examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
 its explicit normalized-confidence-overlap exception, without a parity claim.
+
+[Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
+8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
+small 1.7% point cost increase is disclosed; all three refreshed read controls
+remain confirmed gaps.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
