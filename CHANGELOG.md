@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- RGBA8 bilinear enlargement reuses exact horizontal rows in existing geometry
+  storage, reducing CPU while preserving pixels, admission and output ownership.
 - Lossless WebP color search scores only bins recorded during histogram
   construction, preserving exact packets and existing scratch capacity.
 - Bounded JPEG probes combine marker reads while preserving input limits,

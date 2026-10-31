@@ -5,6 +5,47 @@ namespace Lokad.Image.PublicApi.Tests;
 public sealed class BilinearByteFactorizationTests
 {
     [Fact]
+    public void ReusedByteRowsFitExistingGeometryAdmissionAndReleaseEveryOwner()
+    {
+        const int sourceWidth = 5, sourceHeight = 9, width = 11, height = 29;
+        const long sourceBytes = sourceWidth * sourceHeight * 4;
+        const long outputBytes = width * height * 4;
+        const long planBytes = width * 100 + 192;
+        using var root = new TestMemoryBudget(sourceBytes + outputBytes + planBytes);
+        var limits = new ImageLimits { MemoryBudget = root,
+            MaxWorkingBytes = sourceBytes + outputBytes + planBytes + 4096 };
+        using var source = ImageBuffer.Create(sourceWidth, sourceHeight, 8, limits);
+        for (var y = 0; y < sourceHeight; y++)
+        for (var x = 0; x < sourceWidth; x++)
+        {
+            var row = source.GetRow8(y); var at = x * 4;
+            row[at] = (byte)(x * 47 + y * 17); row[at + 1] = (byte)(x * 19 + y * 29);
+            row[at + 2] = (byte)(x * 31 + y * 11); row[at + 3] = (byte)(64 + (x * 37 + y * 13) % 192);
+        }
+        var original = OriginalPixels.Bytes(source);
+        using var direct = ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear,
+            new ImageLimits { MaxWorkingBytes = sourceBytes + outputBytes + 4096 });
+        var expected = OriginalPixels.Bytes(direct);
+        root.RefuseAtGrowth = root.GrowthAttempts + 2; // Result succeeds, geometry refuses.
+        var error = Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, width, height,
+            ResizeFilter.Bilinear, limits));
+        Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
+        Assert.Equal(sourceBytes, root.Bytes); Assert.Equal(1, root.Refusals);
+        root.RefuseAtGrowth = 0;
+        using var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear, limits);
+        Assert.Equal(expected, OriginalPixels.Bytes(first));
+        Assert.Equal(sourceBytes + outputBytes + planBytes, root.Peak);
+        Assert.Equal(sourceBytes + outputBytes, root.Bytes);
+        first.GetRow8(0)[0] ^= 255; first.Dispose();
+        Assert.Equal(sourceBytes, root.Bytes);
+        using var second = ImageTransforms.Resize(source, width, height, ResizeFilter.Bilinear, limits);
+        Assert.Equal(expected, OriginalPixels.Bytes(second)); Assert.Equal(original, OriginalPixels.Bytes(source));
+        source.Dispose(); Assert.Equal(outputBytes, root.Bytes);
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        second.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
     public void HorizontalProductBoundaryKeepsOriginalOrderPixelsAndOwners()
     {
         using var source = OriginalPixels.Buffer(9, 1, 8);

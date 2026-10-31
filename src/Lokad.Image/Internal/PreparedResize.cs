@@ -10,19 +10,20 @@ namespace Lokad.Image.Internal;
 internal static class PreparedResize
 {
     internal static void Apply<T>(ImageBuffer source, ImageBuffer result,
-        ReadOnlySpan<double> horizontalWeights, ReadOnlySpan<int> horizontalOffsets,
+        Span<double> horizontalWorkspace, ReadOnlySpan<int> horizontalOffsets,
         ReadOnlySpan<int> horizontalCounts, double scaleY, int radius, ResizeFilter filter,
 OperationContext context) where T : unmanaged, INumberBase<T>
     {
         // Byte and UInt16 specializations keep sample conversion and storage
         // outside runtime depth dispatch. Views remain local to this operation.
         ReadOnlySpan<T> input = MemoryMarshal.Cast<byte, T>(source.Pixels);
+        ReadOnlySpan<double> horizontalWeights = horizontalWorkspace;
         var packed8 = typeof(T) == typeof(byte) && Avx.IsSupported && Sse41.IsSupported;
         var paired = (typeof(T) == typeof(byte) || typeof(T) == typeof(ushort))
             && Avx512F.IsSupported && Avx2.IsSupported && Avx.IsSupported && Sse41.IsSupported;
         if (paired && Avx512DQ.IsSupported && typeof(T) == typeof(byte) && filter == ResizeFilter.Bilinear
             && result.Width > source.Width && result.Height > source.Height
-            && BilinearUpsample.TryApply(source, result, horizontalWeights, horizontalOffsets,
+            && BilinearUpsample.TryApply(source, result, horizontalWorkspace, horizontalOffsets,
                 horizontalCounts, context)) return;
         if (paired && Avx512DQ.IsSupported && typeof(T) == typeof(ushort) && filter == ResizeFilter.Bilinear
             && result.Width > source.Width && result.Height > source.Height

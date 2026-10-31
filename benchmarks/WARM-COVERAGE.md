@@ -651,6 +651,22 @@ unrounded horizontal rows as one distinct reuse primitive. Rawc37903f2... is
 mirrored/member-verified. Full268-path objective unchanged;61 displayed rows now
 include these two already-required cases, without extending the workload matrix.
 
+[Byte-bilinear row reuse](WARM-BILINEAR-BYTE-ROW-REUSE.md) independently confirms
+21.66% filtered/21.62% all elapsed and21.74% normalized reduction, with separate
+confidence envelopes. CurrentUp8:2930.451µs,1.356/upper1.363,2235512B/op (+11);
+admitted capacity unchanged. Existing geometry padding holds two exact horizontal
+rows,259 builds versus1038 on this control. Original weight cells and exact replay,
+alpha/tails/width guards/portable fallbacks/cancellation/owners remain. Only the
+named Up8 enlargement changes; byteDown8 and word paths retain applicable evidence.
+Existing JPEG resize/transcode controls downsize and do not enter the new path.
+Native-screen drift required one fresh original twelve. A bounds-only cache-view
+guard correction required one additional core/OS and final-producer confirmation;
+all initial scores/proofs retained. Final5241/OS and185publicnormal-scalar pass;
+SAMEactualWindowspackage/byteadmission/3examples pass bothOS. Total2corebuilds/OS,
+zero harness/native/selector builds, no profile or retuned variant. Raw7c17dfe3...
+mirrored/member-verified. Up8 still gap; close row-reuse/padding variants and
+return to largest remaining gaps. Full268-path objective unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

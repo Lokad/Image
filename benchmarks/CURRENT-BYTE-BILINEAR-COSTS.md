@@ -1,5 +1,8 @@
 # Current byte-bilinear costs
 
+Up8 costs are superseded by [exact horizontal-row reuse](WARM-BILINEAR-BYTE-ROW-REUSE.md).
+Down8 remains applicable to its unchanged path; the original costs below are retained.
+
 Two existing 513×259 RGBA8 controls resolve complete-operation uncertainty after
 the word-bilinear dispatch change. Each receives one independent 12-iteration
 quiet-VM confirmation on the current immutable producer, with zero builds.

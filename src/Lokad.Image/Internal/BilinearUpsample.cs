@@ -10,7 +10,7 @@ namespace Lokad.Image.Internal;
 internal static class BilinearUpsample
 {
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts,
+        Span<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts,
 OperationContext context)
     {
         var width = result.Width;
@@ -24,6 +24,12 @@ OperationContext context)
         // before widening preserves every integer lane, with four rather than
         // eight wide multiplies per group. Larger outputs retain the old path.
         var factorHorizontal = dx <= int.MaxValue / 65025;
+        // Triangle enlargement uses at most three of each eight weights. Its
+        // last four doubles hold two exact RGBA Int32 rows in the same admitted
+        // storage. Original-order replay reads only the original weight cells.
+        var rowCache = factorHorizontal ? MemoryMarshal.Cast<double, int>(weights) : default;
+        var cachedEven = -1;
+        var cachedOdd = -1;
         // Output array admission bounds 4*width*height below Int32.MaxValue.
         // Integer premultiplied sums are consequently below 2^47, exactly
         // representable in binary64. No intermediate pixel rounding occurs.
@@ -42,33 +48,27 @@ OperationContext context)
             var firstY = cy < 0 ? -1 : (int)(cy / dy);
             var fy = (int)(cy - firstY * dy);
             var wy0 = (int)dy - fy;
-            var row0 = Math.Clamp(firstY, 0, source.Height - 1) * stride;
-            var row1 = Math.Clamp(firstY + 1, 0, source.Height - 1) * stride;
+            var y0 = Math.Clamp(firstY, 0, source.Height - 1);
+            var y1 = Math.Clamp(firstY + 1, 0, source.Height - 1);
+            var row0 = y0 * stride;
+            var row1 = y1 * stride;
+            if (factorHorizontal)
+            {
+                PrepareRow(input, rowCache, offsets, width, (int)dx, row0, y0 & 1,
+                    ref cachedEven, ref cachedOdd, context);
+                PrepareRow(input, rowCache, offsets, width, (int)dx, row1, y1 & 1,
+                    ref cachedEven, ref cachedOdd, context);
+            }
             var x = 0;
             for (; x + 3 < width; x += 4)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                var at = x * 8;
-                var f0 = offsets[at + 3]; var f1 = offsets[at + 11];
-                var f2 = offsets[at + 19]; var f3 = offsets[at + 27];
-                var w0 = (int)dx - f0; var w1 = (int)dx - f1;
-                var w2 = (int)dx - f2; var w3 = (int)dx - f3;
-                var l0 = offsets[at + 4]; var l1 = offsets[at + 12];
-                var l2 = offsets[at + 20]; var l3 = offsets[at + 28];
-                var r0 = offsets[at + 5]; var r1 = offsets[at + 13];
-                var r2 = offsets[at + 21]; var r3 = offsets[at + 29];
                 var first = Vector512<long>.Zero;
                 var second = Vector512<long>.Zero;
                 if (factorHorizontal)
                 {
-                    var leftWeights = Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1,
-                        w2, w2, w2, w2, w3, w3, w3, w3);
-                    var rightWeights = Vector512.Create(f0, f0, f0, f0, f1, f1, f1, f1,
-                        f2, f2, f2, f2, f3, f3, f3, f3);
-                    var top = Horizontal(Gather(input, row0, l0, l1, l2, l3),
-                        Gather(input, row0, r0, r1, r2, r3), leftWeights, rightWeights);
-                    var bottom = Horizontal(Gather(input, row1, l0, l1, l2, l3),
-                        Gather(input, row1, r0, r1, r2, r3), leftWeights, rightWeights);
+                    var top = CachedRow(rowCache, x, y0 & 1);
+                    var bottom = CachedRow(rowCache, x, y1 & 1);
                     var topWeight = Vector512.Create((long)wy0); var bottomWeight = Vector512.Create((long)fy);
                     first = Avx512F.Add(Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(top.GetLower()), topWeight),
                         Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(bottom.GetLower()), bottomWeight));
@@ -77,6 +77,15 @@ OperationContext context)
                 }
                 else
                 {
+                    var at = x * 8;
+                    var f0 = offsets[at + 3]; var f1 = offsets[at + 11];
+                    var f2 = offsets[at + 19]; var f3 = offsets[at + 27];
+                    var w0 = (int)dx - f0; var w1 = (int)dx - f1;
+                    var w2 = (int)dx - f2; var w3 = (int)dx - f3;
+                    var l0 = offsets[at + 4]; var l1 = offsets[at + 12];
+                    var l2 = offsets[at + 20]; var l3 = offsets[at + 28];
+                    var r0 = offsets[at + 5]; var r1 = offsets[at + 13];
+                    var r2 = offsets[at + 21]; var r3 = offsets[at + 29];
                     Tap(ref first, ref second, Gather(input, row0, l0, l1, l2, l3),
                         w0 * wy0, w1 * wy0, w2 * wy0, w3 * wy0);
                     Tap(ref first, ref second, Gather(input, row0, r0, r1, r2, r3),
@@ -118,6 +127,43 @@ OperationContext context)
                 Scalar(source, output, weights, offsets, counts, x, y, width, height, context);
         }
         return true;
+    }
+
+    private static void PrepareRow(ReadOnlySpan<byte> input, Span<int> cache,
+        ReadOnlySpan<int> offsets, int width, int dx, int row, int slot,
+        ref int cachedEven, ref int cachedOdd, OperationContext context)
+    {
+        ref var cached = ref (slot == 0 ? ref cachedEven : ref cachedOdd);
+        if (cached == row) return;
+        for (var x = 0; x + 3 < width; x += 4)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var at = x * 8;
+            var f0 = offsets[at + 3]; var f1 = offsets[at + 11];
+            var f2 = offsets[at + 19]; var f3 = offsets[at + 27];
+            var w0 = dx - f0; var w1 = dx - f1;
+            var w2 = dx - f2; var w3 = dx - f3;
+            var left = Gather(input, row, offsets[at + 4], offsets[at + 12], offsets[at + 20], offsets[at + 28]);
+            var right = Gather(input, row, offsets[at + 5], offsets[at + 13], offsets[at + 21], offsets[at + 29]);
+            var values = Horizontal(left, right,
+                Vector512.Create(w0, w0, w0, w0, w1, w1, w1, w1, w2, w2, w2, w2, w3, w3, w3, w3),
+                Vector512.Create(f0, f0, f0, f0, f1, f1, f1, f1, f2, f2, f2, f2, f3, f3, f3, f3));
+            var target = x * 16 + 8 + slot * 4;
+            values.GetLower().GetLower().CopyTo(cache.Slice(target, 4));
+            values.GetLower().GetUpper().CopyTo(cache.Slice(target + 16, 4));
+            values.GetUpper().GetLower().CopyTo(cache.Slice(target + 32, 4));
+            values.GetUpper().GetUpper().CopyTo(cache.Slice(target + 48, 4));
+        }
+        cached = row;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<int> CachedRow(ReadOnlySpan<int> cache, int x, int slot)
+    {
+        var at = x * 16 + 8 + slot * 4;
+        return Vector512.Create(
+            Vector256.Create(Vector128.Create(cache.Slice(at, 4)), Vector128.Create(cache.Slice(at + 16, 4))),
+            Vector256.Create(Vector128.Create(cache.Slice(at + 32, 4)), Vector128.Create(cache.Slice(at + 48, 4))));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

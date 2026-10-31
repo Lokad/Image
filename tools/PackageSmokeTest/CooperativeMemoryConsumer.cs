@@ -158,6 +158,36 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged bilinear preparation leaked storage or disposed the borrowed root.");
         }
         Console.WriteLine("Packaged bilinear word preparation pixels and admission passed.");
+        {
+            const int sourceWidth = 5, sourceHeight = 9, width = 11, height = 29;
+            const long sourceBytes = sourceWidth * sourceHeight * 4, outputBytes = width * height * 4;
+            const long planBytes = width * 100 + 192;
+            using var byteBudget = new TestMemoryBudget(sourceBytes + outputBytes + planBytes);
+            var byteLimits = new ImageLimits { MemoryBudget = byteBudget,
+                MaxWorkingBytes = sourceBytes + outputBytes + planBytes + 4096 };
+            using var pattern = ImageBuffer.Create(sourceWidth, sourceHeight, 8, byteLimits);
+            for (var y = 0; y < sourceHeight; y++)
+            for (var x = 0; x < sourceWidth; x++)
+            {
+                var row = pattern.GetRow8(y); var at = x * 4;
+                row[at] = (byte)(x * 47 + y * 17); row[at + 1] = (byte)(x * 19 + y * 29);
+                row[at + 2] = (byte)(x * 31 + y * 11); row[at + 3] = (byte)(64 + (x * 37 + y * 13) % 192);
+            }
+            using var expected = ImageTransforms.Resize(pattern, width, height, ResizeFilter.Bilinear,
+                new ImageLimits { MaxWorkingBytes = sourceBytes + outputBytes + 4096 });
+            using var actual = ImageTransforms.Resize(pattern, width, height, ResizeFilter.Bilinear, byteLimits);
+            if (byteBudget.Bytes != sourceBytes + outputBytes || byteBudget.Peak != sourceBytes + outputBytes + planBytes)
+                throw new Exception("Packaged byte bilinear exceeded existing admitted geometry or retained scratch.");
+            pattern.Dispose();
+            for (var y = 0; y < height; y++)
+                if (!actual.GetRow8(y).SequenceEqual(expected.GetRow8(y)))
+                    throw new Exception("Packaged byte bilinear row reuse changed exact pixels or source independence.");
+            if (byteBudget.Bytes != outputBytes) throw new Exception("Packaged byte bilinear source ownership differs.");
+            actual.Dispose();
+            if (byteBudget.Bytes != 0 || byteBudget.IsDisposed)
+                throw new Exception("Packaged byte bilinear leaked storage or disposed the caller root.");
+        }
+        Console.WriteLine("Packaged byte bilinear row reuse pixels and existing admission passed.");
         var rgb = new byte[17 * 11 * 3];
         for (var i = 0; i < rgb.Length; i++) rgb[i] = (byte)(i * 37 + i / 11);
         var jpegOptions = new JpegEncodeOptions { Quality = 69, Limits = limits };
