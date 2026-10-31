@@ -121,12 +121,12 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-Current evidence covers **5,295 checks per OS**, including **2,162 freshly run internal**
-checks; unchanged public/live and actual-package proofs are reused. Four new
-CMYK row controls also pass scalar/ISA modes. Applicable coverage includes 353 internal and
-346 public focused checks normal/scalar and Linux with AVX512 disabled.
-Header/probe proofs remain applicable.
-[Retained CMYK regression coverage](../benchmarks/CMYK-VBMI-PACKING-REJECTED.md).
+Current evidence covers **5,303 checks per OS**: 2,193 freshly run public checks,
+with unchanged 2,162 internal/948 live and actual-package proofs reused. Eight
+new CMYK ownership/pixel controls also pass scalar/ISA modes. Applicable focused
+coverage includes 353 internal and 354 public checks normal/scalar and Linux
+with AVX512 disabled. Header/probe proofs remain applicable.
+[Retained CMYK regression coverage](../benchmarks/CMYK-COMPLETED-COLOR-ROWS-REJECTED.md).
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.

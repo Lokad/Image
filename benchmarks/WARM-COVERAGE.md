@@ -17,6 +17,16 @@ qualification. Frozen canonical rows expose226repeats forDC/Ac and65forSparse2D,
 a feasibility lead for confirmed Acgap, not a new performance claim.
 All268paths remain;76displayed comparisons stay unchanged in count.
 
+[Completed CMYK color rows](CMYK-COMPLETED-COLOR-ROWS-REJECTED.md) misses its
+one short: 1.78% raw, 4.69% normalized, unchanged allocation within noise.
+Production and overlays restored exactly; eight useful public controls retained.
+Fresh 2,193 public checks/OS plus reused 2,162 internal/948 live and same actual
+package give 5,303 applicable checks/OS. Scalar/ISA modes pass. No confirmation
+or variant. A two-second current diagnostic attributes only 3.1% of samples to
+color conversion; sample shares are not elapsed costs. Next assess complete-
+overwrite CMYK output allocation using the existing allocator, preserving
+governed ownership. Current 76 costs/all 268 paths unchanged.
+
 [CMYK byte-plane packing](CMYK-VBMI-PACKING-REJECTED.md) misses its one short:
 0.45%raw/0.23%normalized gain, unchanged1,085,758B/op, exact pixels. Actual VBMI
 execution is verified. Candidate archived and production/core/public-core copies

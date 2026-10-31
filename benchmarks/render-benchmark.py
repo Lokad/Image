@@ -910,6 +910,12 @@ def render():
     assert cmyk_pack['qualification']['totalApplicableEachOs'] == 5295
     assert cmyk_pack['qualification']['sameActualReleasePackageProofReused']
     assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in cmyk_pack['restoration'].values())
+    color_rows = json.loads((ROOT / 'benchmarks/cmyk-completed-color-rows-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert color_rows['candidateRejected'] and not color_rows['productionChanged'] and not color_rows['decision']['passed']
+    assert color_rows['qualification']['totalApplicableEachOs'] == 5303
+    assert color_rows['qualification']['sameActualReleasePackageProofReused']
+    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] and v['originalAcDerivedFixtureRestoredByteExact'] for v in color_rows['restoration'].values())
+    assert color_rows['diagnostic']['profilingOnly'] and color_rows['diagnostic']['noTimingClaim']
     owned_cmyk_current = json.loads((ROOT / 'benchmarks/current-owned-cmyk-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
     assert not owned_cmyk_current['productionChanged'] and owned_cmyk_current['allBuilds'] == 0
     assert owned_cmyk_current['status']['CmykAdobe'] == 'confirmed-confidence-open'
@@ -1117,9 +1123,12 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-Current evidence covers **5,295 checks per OS**, including **2,162 freshly run internal**\nchecks; unchanged public/live and actual-package proofs are reused. Four new\nCMYK row controls also pass scalar/ISA modes. Applicable coverage includes 353 internal and
-346 public focused checks normal/scalar and Linux with AVX512 disabled.
-Header/probe proofs remain applicable.\n[Retained CMYK regression coverage](../benchmarks/CMYK-VBMI-PACKING-REJECTED.md).
+Current evidence covers **5,303 checks per OS**: 2,193 freshly run public checks,
+with unchanged 2,162 internal/948 live and actual-package proofs reused. Eight
+new CMYK ownership/pixel controls also pass scalar/ISA modes. Applicable focused
+coverage includes 353 internal and 354 public checks normal/scalar and Linux
+with AVX512 disabled. Header/probe proofs remain applicable.
+[Retained CMYK regression coverage](../benchmarks/CMYK-COMPLETED-COLOR-ROWS-REJECTED.md).
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
