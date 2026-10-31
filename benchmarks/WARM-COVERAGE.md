@@ -28,6 +28,12 @@ independent twelve, one cached-source selector build, no library/harness/native
 build or new control. Original header restored; unchanged full/package proof
 reused. The summary now displays 70 comparisons; all 268 paths remain required.
 
+[Exact separable-alpha convolution](EXACT-ALPHA-SEPARABLE-REJECTED.md) misses
+the bounded short-screen gain gate, with exact pixels and unchanged allocations.
+Candidate code/tests and raw evidence are archived; the qualified source and
+binaries are restored exactly. No confirmation, profile or plan-width variant.
+Current costs and the explicitly retained approximately 4.1% histogram gain stay.
+
 [Progressive first-scan traversal](JPEG-FIRST-AC-CONFIDENCE-OPEN.md) remains
 unaccepted: two independent blocks show 8.22%/9.66% raw gains with exact pixels,
 but conservative native-normalized confidence stays open. One bounded reversed

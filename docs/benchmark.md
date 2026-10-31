@@ -78,6 +78,9 @@ A [first-scan JPEG candidate](../benchmarks/JPEG-FIRST-AC-CONFIDENCE-OPEN.md)
 shows 8.22%/9.66% independent raw gains but remains unaccepted because conservative
 native-normalized confidence is open. Its source and evidence remain archived.
 
+An [exact separable-alpha trial](../benchmarks/EXACT-ALPHA-SEPARABLE-REJECTED.md)
+misses the short-screen gain gate; qualified production and current costs remain.
+
 One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
 regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
 It is rejected; the qualified builds/package and displayed costs remain unchanged.

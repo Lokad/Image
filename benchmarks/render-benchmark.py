@@ -779,6 +779,10 @@ def render():
     assert integer_dot['candidateRejected'] and not integer_dot['productionChanged']
     assert not integer_dot['decision']['passed']
     assert all(v['productionSourceRestored'] and v['sourceManifestRestored'] for v in integer_dot['restoration'].values())
+    separable_alpha = json.loads((ROOT / 'benchmarks/exact-alpha-separable-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert separable_alpha['candidateRejected'] and not separable_alpha['productionChanged']
+    assert not separable_alpha['decision']['passed'] and separable_alpha['decision']['allocatedDifference'] == 0
+    assert all(v['productionSourceRestored'] and v['sourceManifestRestored'] for v in separable_alpha['restoration'].values())
     first_ac = json.loads((ROOT / 'benchmarks/jpeg-first-ac-confidence-open-evidence.json').read_text(encoding='utf-8'))
     assert first_ac['confidenceOpen'] and not first_ac['accepted'] and not first_ac['productionChanged']
     assert all(v['productionSourceAndConsumerRestored'] for v in first_ac['restoration'].values())
@@ -959,6 +963,9 @@ Five shared-caller costs are refreshed on the immutable build; all six remain ga
 A [first-scan JPEG candidate](../benchmarks/JPEG-FIRST-AC-CONFIDENCE-OPEN.md)
 shows 8.22%/9.66% independent raw gains but remains unaccepted because conservative
 native-normalized confidence is open. Its source and evidence remain archived.
+
+An [exact separable-alpha trial](../benchmarks/EXACT-ALPHA-SEPARABLE-REJECTED.md)
+misses the short-screen gain gate; qualified production and current costs remain.
 
 One [integer horizontal-convolution experiment](../benchmarks/BICUBIC-INTEGER-DOT-REJECTED.md)
 regresses 61.40% in a short screen despite exact pixels and unchanged workspace.
