@@ -674,6 +674,22 @@ return to largest remaining gaps. Full268-path objective unchanged.
 
 ## Finite checklist
 
+[Exact integer alpha](WARM-EXACT-ALPHA-INT128.md) improves TightUp8 independently
+7.26%,removing360,288B/op,with unchanged exact pixels/admission. New current
+TightUp8/TightDown8/Wide8/bilinearUp8/two byte axial costs are in its numeric
+record. Full5,267/live checks per OS and SAMEactualReleasepackage/three examples
+pass. Because ResizeAlpha.Round is shared,the seven named displayed prior costs
+and previously passing VerticalUp16 require zero-call proof or current timing;
+do not assume every caller is active. Other algorithm/codec paths are unchanged.
+The finite names and existing enum scope are recorded;no workload grid is added.
+
+[Current wider-support byte reduction](CURRENT-WIDE-BYTE-BICUBIC-COST.md) resolves
+existing`Wide8`:528.948µs,1.521× / upper1.532,231,239B/op. Exact rational/frozen
+pixels,source/output/native hashes,owners and quiet pass. One current twelve,
+zero builds/profiles,unchanged full/package proof reused. Older generalized-kernel/
+fuel-producer timings are superseded without a causal claim. This is the68th
+displayed comparison;the same268required paths remain.
+
 [Current tight-memory byte reduction](CURRENT-TIGHT-BYTE-BICUBIC-REDUCTION-COST.md)
 resolves existing`TightDown8`:646.826µs,1.552× / upper1.558,132,309B/op,exact
 rational/frozen pixels and original source+output+4KiB bound. One current twelve,

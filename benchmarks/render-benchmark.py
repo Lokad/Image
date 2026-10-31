@@ -669,6 +669,50 @@ def render():
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    wide_byte = json.loads((ROOT / 'benchmarks/current-wide-byte-bicubic-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not wide_byte['productionChanged'] and wide_byte['allBuilds'] == 0
+    assert wide_byte['qualificationReuse']['sameActualPackageBothOs']
+    observation = wide_byte['cases']['Wide8'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == wide_byte['producers']['linuxSha256']
+    assert receipt['managedRationalReferenceExact'] and receipt['managedMaxWorkingBytes'] is None
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    rows.append(('editing', f'| Bicubic RGBA8 wider-support reduction † → 128×64 | {stats["Mean"] / 1000:,.2f} | '
+                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    exact_alpha = json.loads((ROOT / 'benchmarks/warm-exact-alpha-int128-evidence.json').read_text(encoding='utf-8'))
+    assert exact_alpha['qualification']['fullChecksEachOs'] == 5267
+    assert exact_alpha['qualification']['sameActualPackageBothOs']
+    assert exact_alpha['decisions']['confirm']['passed'] and exact_alpha['decisions']['confirm']['normalizedSeparated']
+    refreshed_prefixes = {
+        'Bilinear upscale RGBA8': 'bilinear-Up8',
+        'Bicubic RGBA8 enlargement,': 'bicubic-TightUp8',
+        'Bicubic RGBA8 width enlargement,': 'bicubic-TightHorizontalUp8',
+        'Bicubic RGBA8 height enlargement,': 'bicubic-TightVerticalUp8',
+        'Bicubic RGBA8 reduction,': 'bicubic-TightDown8',
+        'Bicubic RGBA8 wider-support reduction': 'bicubic-Wide8',
+    }
+    refreshed, pending = set(), []
+    for index, (kind, row) in enumerate(rows):
+        label = row.split('|')[1].strip()
+        if kind != 'editing' or not any(name in label.lower() for name in ('bilinear', 'bicubic')):
+            continue
+        key = next((key for prefix, key in refreshed_prefixes.items() if label.startswith(prefix)), None)
+        if key is None:
+            pending.append(label)
+            rows[index] = (kind, row.replace(label, label + ' ‡', 1))
+            continue
+        observation = exact_alpha['cases'][key][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == exact_alpha['producers']['linuxSha256']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        rows[index] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                       f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
+        refreshed.add(key)
+    assert refreshed == set(exact_alpha['cases']) and len(pending) == len(exact_alpha['evidenceInvalidation']['pendingDisplayedCases']) == 7
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -747,8 +791,10 @@ def render():
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
-retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **67 comparisons** rank the remaining work; completion requires every
+retained unchanged-path measurements. **‡** marks seven prior-producer resize
+costs needing reachability reconciliation after the shared exact-alpha change;
+they are retained context, not current performance proof.
+These **68 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -812,19 +858,16 @@ Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
 the qualified implementation is restored and new exact boundary tests retained.
 [Current cost and rejected trial](../benchmarks/LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md).
 
-Tight-memory RGBA8 bicubic enlargement improves **9.87%** by removing a redundant
-error-bound division: **1.565× / upper 1.591**, unchanged **2,492,956 B/op**,
-exact pixels and **4 KiB** workspace. It remains a confirmed gap. Changed
-horizontal/vertical strip callers now confirm **1.188× / upper 1.235** and
-**1.371× / upper 1.379**, with **1,178,374 / 1,280,363 B/op**.
-[Fixed-certificate evidence](../benchmarks/WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md).
-[Current one-axis costs](../benchmarks/CURRENT-BYTE-BICUBIC-AXIAL-COSTS.md).
-The distinct 4 KiB reduction path confirms **1.552× / upper 1.558**,
-**132,309 B/op**, with exact pixels and zero builds.
-[Tight reduction evidence](../benchmarks/CURRENT-TIGHT-BYTE-BICUBIC-REDUCTION-COST.md).
+Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
+**7.26%**, removing **360,288 allocated B/op (14.45%)**: **1.473× / upper 1.481**,
+**2,132,668 B/op**, exact pixels and the same **4 KiB** admission.
+Five shared-caller costs are refreshed on the immutable build; seven other
+displayed callers and the earlier passing VerticalUp16 need reachability/current
+cost reconciliation. All six refreshed cases remain gaps.
+[Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
 
-The current producer passes **5,245 checks per OS**, plus 179 public
-focused checks in normal/scalar modes and Linux with AVX512 disabled.
+The current producer passes **5,267 checks per OS**, plus 22 new internal and
+179 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
@@ -848,11 +891,11 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
 displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
-and Lanczos3 have twelve measured iterations. The existing
-[RGBA16 bilinear reduction](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) now also
-has an independent twelve: 1.125× / upper1.133, with exact managed pixels.
-[RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md) also
-has an independent twelve: 1.384× / upper1.400. Remaining short screens retain three. Short screens do not establish independent parity.
+and Lanczos3 have twelve measured iterations. Retained
+[RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
+[RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md)
+also have independent twelves; **‡** distinguishes their pending current costs.
+Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode
 uses **libwebp exact=1** to preserve hidden RGB; grayscale JPEG uses explicitly

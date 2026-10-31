@@ -1,5 +1,7 @@
 # Byte bicubic enlargement: fixed error certificate
 
+These timings precede the [exact-alpha producer](WARM-EXACT-ALPHA-INT128.md), which supplies the latest costs for these paths. Original evidence is retained.
+
 The existing tight-memory RGBA8 enlargement is **9.87% faster** in independent
 confirmation, with **unchanged pixels and allocations**. A fixed conservative
 clipped-quotient error bound removes the second vector division used for rounding

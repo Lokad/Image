@@ -25,6 +25,14 @@ internal static class ResizeAlpha
             var lastX = Floor(cx + radius * dx, 2L * width) + 1;
             var firstY = Floor(cy - radius * dy, 2L * height);
             var lastY = Floor(cy + radius * dy, 2L * height) + 1;
+            // An overflow proof, not a work limit: larger arithmetic continues
+            // through BigInteger below. Cubic |weight| <= 2*d^3, so these bounds
+            // give |total| <= 2^102, |alpha| < 2^118 and a rounding numerator
+            // below 2^120, including UInt16 samples and negative kernel lobes.
+            if (dx <= 16384 && dy <= 16384
+                && (lastX - firstX + 1) * (lastY - firstY + 1) <= 65536)
+                return Round128(source, firstX, lastX, firstY, lastY, cx, cy, dx, dy,
+                    width, height, filter, context);
             BigInteger alpha = 0, total = 0;
             for (var sy = firstY; sy <= lastY; sy++)
             {
@@ -51,6 +59,34 @@ internal static class ResizeAlpha
             return rounded >= maximum ? maximum : (int)rounded;
         }
         finally { context.Release(ScratchBytes); }
+    }
+
+    private static int Round128(ImageBuffer source, long firstX, long lastX, long firstY, long lastY,
+        Int128 cx, Int128 cy, long dx, long dy, int width, int height,
+        ResizeFilter filter, OperationContext context)
+    {
+        Int128 alpha = 0, total = 0;
+        for (var sy = firstY; sy <= lastY; sy++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var wy = Weight(Int128.Abs((Int128)2 * height * sy - cy), dy, filter);
+            var iy = (int)Math.Clamp(sy, 0, source.Height - 1);
+            for (var sx = firstX; sx <= lastX; sx++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                if (wy == 0) continue;
+                var wx = Weight(Int128.Abs((Int128)2 * width * sx - cx), dx, filter);
+                if (wx == 0) continue;
+                var weight = wx * wy;
+                total += weight;
+                alpha += weight * source.Sample((int)Math.Clamp(sx, 0, source.Width - 1), iy, 3);
+            }
+        }
+        if (total <= 0) throw new ImageDataException("Resize kernel has no positive total weight.");
+        if (alpha <= 0) return 0;
+        var rounded = (alpha * 2 + total) / (total * 2);
+        var maximum = source.BitDepth == 8 ? 255 : 65535;
+        return rounded >= maximum ? maximum : (int)rounded;
     }
 
     private static long Floor(Int128 numerator, long denominator)

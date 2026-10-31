@@ -211,6 +211,28 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged byte bicubic leaked storage or disposed the caller root.");
         }
         Console.WriteLine("Packaged tight byte bicubic exact pixels and admission passed.");
+        foreach (var depth in new[] { 8, 16 })
+        foreach (var filter in new[] { ResizeFilter.Bilinear, ResizeFilter.Bicubic })
+        {
+            using var alphaRoot = new TestMemoryBudget((2 + 5) * 4 * (depth / 8) + 4096);
+            var alphaLimits = new ImageLimits { MemoryBudget = alphaRoot,
+                MaxWorkingBytes = (2 + 5) * 4 * (depth / 8) + 4096 };
+            using var step = ImageBuffer.Create(1, 2, depth, alphaLimits);
+            if (depth == 8) step.GetRow8(0)[3] = 1;
+            else step.GetRow16(0)[3] = 1;
+            using var result = ImageTransforms.Resize(step, 1, 5, filter, alphaLimits);
+            int[] expectedAlpha = [1, 1, 1, 0, 0];
+            for (var y = 0; y < 5; y++)
+                if ((depth == 8 ? result.GetRow8(y)[3] : result.GetRow16(y)[3]) != expectedAlpha[y])
+                    throw new Exception("Packaged exact alpha half or negative-lobe clamp differs.");
+            step.Dispose();
+            if (alphaRoot.Bytes != 5 * 4 * (depth / 8))
+                throw new Exception("Packaged exact alpha retained-owner charge differs.");
+            result.Dispose();
+            if (alphaRoot.Bytes != 0 || alphaRoot.IsDisposed)
+                throw new Exception("Packaged exact alpha leaked storage or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged exact alpha halves, depths, filters and ownership passed.");
         var rgb = new byte[17 * 11 * 3];
         for (var i = 0; i < rgb.Length; i++) rgb[i] = (byte)(i * 37 + i / 11);
         var jpegOptions = new JpegEncodeOptions { Quality = 69, Limits = limits };

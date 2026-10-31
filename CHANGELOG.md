@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Exact low-alpha resizing uses Int128 where overflow bounds permit, reducing
+  temporary allocations while retaining arbitrary-precision fallback and admission.
 - Tight-memory RGBA8 bicubic enlargement avoids a redundant error-bound division,
   preserving exact pixels, admitted storage and portable fallbacks.
 - RGBA8 bilinear enlargement reuses exact horizontal rows in existing geometry

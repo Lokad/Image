@@ -1,5 +1,7 @@
 # Current byte bicubic one-axis costs
 
+These timings precede the [exact-alpha producer](WARM-EXACT-ALPHA-INT128.md), which supplies the latest costs for these paths. Original evidence is retained.
+
 Both existing one-axis strip controls now have independent current costs on the
 accepted fixed-certificate build. Both remain **confirmed gaps** against the ≤1×
 target. This resolves the timing uncertainty created by the changed guard; it

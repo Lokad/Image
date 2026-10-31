@@ -1,8 +1,10 @@
 # Lokad.Image benchmarks
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
-retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **67 comparisons** rank the remaining work; completion requires every
+retained unchanged-path measurements. **‡** marks seven prior-producer resize
+costs needing reachability reconciliation after the shared exact-alpha change;
+they are retained context, not current performance proof.
+These **68 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -66,19 +68,16 @@ Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
 the qualified implementation is restored and new exact boundary tests retained.
 [Current cost and rejected trial](../benchmarks/LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md).
 
-Tight-memory RGBA8 bicubic enlargement improves **9.87%** by removing a redundant
-error-bound division: **1.565× / upper 1.591**, unchanged **2,492,956 B/op**,
-exact pixels and **4 KiB** workspace. It remains a confirmed gap. Changed
-horizontal/vertical strip callers now confirm **1.188× / upper 1.235** and
-**1.371× / upper 1.379**, with **1,178,374 / 1,280,363 B/op**.
-[Fixed-certificate evidence](../benchmarks/WARM-BICUBIC-BYTE-FIXED-CERTIFICATE.md).
-[Current one-axis costs](../benchmarks/CURRENT-BYTE-BICUBIC-AXIAL-COSTS.md).
-The distinct 4 KiB reduction path confirms **1.552× / upper 1.558**,
-**132,309 B/op**, with exact pixels and zero builds.
-[Tight reduction evidence](../benchmarks/CURRENT-TIGHT-BYTE-BICUBIC-REDUCTION-COST.md).
+Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
+**7.26%**, removing **360,288 allocated B/op (14.45%)**: **1.473× / upper 1.481**,
+**2,132,668 B/op**, exact pixels and the same **4 KiB** admission.
+Five shared-caller costs are refreshed on the immutable build; seven other
+displayed callers and the earlier passing VerticalUp16 need reachability/current
+cost reconciliation. All six refreshed cases remain gaps.
+[Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
 
-The current producer passes **5,245 checks per OS**, plus 179 public
-focused checks in normal/scalar modes and Linux with AVX512 disabled.
+The current producer passes **5,267 checks per OS**, plus 22 new internal and
+179 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
@@ -128,22 +127,23 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Bilinear resize RGBA8 † → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
-| Bilinear upscale RGBA8 † → 1027×519 | 2,930.45 | 2,160.61 | 1.356 / 1.363 | 2,235,512 |
-| Bilinear resize RGBA16 † → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
-| Bicubic resize RGBA8 † → 256×129 | 579.25 | 418.45 | 1.384 / 1.400 | 332,188 |
-| Bicubic upscale RGBA16 † → 1027×519 | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
-| Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
+| Bilinear resize RGBA8 † → 256×129 ‡ | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
+| Bilinear upscale RGBA8 † → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
+| Bilinear resize RGBA16 † → 256×129 ‡ | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
+| Bicubic resize RGBA8 † → 256×129 ‡ | 579.25 | 418.45 | 1.384 / 1.400 | 332,188 |
+| Bicubic upscale RGBA16 † → 1027×519 ‡ | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 ‡ | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
+| Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 ‡ | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
+| Bicubic RGBA8, 32×16 / default workspace → 32×16 ‡ | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
 | Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |
 | Lanczos3 reduction RGBA16 † → 256×129 | 726.96 | 507.57 | 1.432 / 1.446 | 138,437 |
 | Lanczos3 enlargement RGBA8 † → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
 | Lanczos3 enlargement RGBA16 † → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,823.16 | 3,081.49 | 1.565 / 1.591 | 2,492,956 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,800.86 | 1,515.49 | 1.188 / 1.235 | 1,178,374 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,374.70 | 1,732.26 | 1.371 / 1.379 | 1,280,363 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 646.83 | 416.72 | 1.552 / 1.558 | 132,309 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 659.88 | 416.61 | 1.584 / 1.591 | 132,306 |
+| Bicubic RGBA8 wider-support reduction † → 128×64 | 529.18 | 348.67 | 1.518 / 1.534 | 231,239 |
 
 **Inspection and pixel-coding validation**
 
@@ -172,11 +172,11 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 four-invocation selector; predictable PNG16 native samples also batch four.
 Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
 displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
-and Lanczos3 have twelve measured iterations. The existing
-[RGBA16 bilinear reduction](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) now also
-has an independent twelve: 1.125× / upper1.133, with exact managed pixels.
-[RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md) also
-has an independent twelve: 1.384× / upper1.400. Remaining short screens retain three. Short screens do not establish independent parity.
+and Lanczos3 have twelve measured iterations. Retained
+[RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
+[RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md)
+also have independent twelves; **‡** distinguishes their pending current costs.
+Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode
 uses **libwebp exact=1** to preserve hidden RGB; grayscale JPEG uses explicitly

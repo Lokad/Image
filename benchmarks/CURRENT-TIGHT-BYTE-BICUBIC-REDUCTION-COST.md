@@ -1,5 +1,7 @@
 # Current tight-memory byte bicubic reduction
 
+These timings precede the [exact-alpha producer](WARM-EXACT-ALPHA-INT128.md), which supplies the latest costs for these paths. Original evidence is retained.
+
 The existing513×259 RGBA8→256×129 strip path confirms **1.552× / upper1.558**,
 **646.826 µs** against416.724 µs for FFmpeg zscale's zimg backend, with
 **132,309 allocated B/op**. It remains a gap against the ≤1× objective.
