@@ -7,6 +7,19 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Six default/stored PNG costs](CURRENT-PNG-ENCODE-COVERAGE.md) resolve the finite
+remaining audit: RGBA8 1.342 / upper 1.373, 1,325,732 B/op; RGBA16 1.337 /
+upper 1.359, 3,813,732 B/op; RGB16 1.457 / upper 1.479, 3,571,252 B/op;
+Gray16 1.587 / upper 1.621, 1,506,972 B/op; gray-alpha16 1.459 / upper 1.480,
+2,264,564 B/op; stored RGBA8 1.338 / upper 1.471, 1,203,724 B/op. Every complete
+packet, source sample, alpha/hidden RGB and output owner passes the frozen gates.
+One twelve each, same qualified core/cached driver/worker, zero builds/profiles/
+new inputs/settings or repeated full/package proof. Earlier BCL/IDAT-tolerance
+passes are historical after exact encoding and GFNI CRC. Stop retiming these
+resolved cases. Gray16 is the largest new PNG ratio; repeated per-sample word-row
+acquisition is a concrete unclosed packing lead. All 268 paths remain; this is
+the six-case audit, without a whole-PNG-family parity claim or added grid.
+
 [Current byte-color PNG costs](CURRENT-BYTE-COLOR-PNG-COSTS.md) resolve three
 existing default-color uncertainties: Gray8 1.325 / upper 1.354, 1,001,812 B/op;
 RGB8 1.309 / upper 1.324, 1,325,068 B/op; gray-alpha8 1.305 / upper 1.350,

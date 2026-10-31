@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-31. These **88 selected comparisons** combine qualified
+Updated 2026-10-31. These **94 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -40,6 +40,9 @@ existing required paths, with unchanged production and reused qualification.
 The [existing byte-color PNG controls](../benchmarks/CURRENT-BYTE-COLOR-PNG-COSTS.md)
 likewise confirm 1.305–1.325× with exact packets; their old BCL-era costs are
 superseded. Reference inputs/settings and the finite required scope are unchanged.
+The [six remaining named default/stored PNG controls](../benchmarks/CURRENT-PNG-ENCODE-COVERAGE.md)
+now have current confirmations too. Gray16 is the largest new gap at 1.587×;
+all six retain exact complete packets, with unchanged production and no builds.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
@@ -80,6 +83,12 @@ acceptance histories are retained in the coverage links and raw evidence.
 | PNG grayscale8, Optimal6 / native6 † | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
+| PNG RGBA8, Optimal6 / native6 † | 24,157.64 | 17,999.79 | 1.342 / 1.373 | 1,325,732 | 210,973 / 210,973 |
+| PNG RGBA16, Optimal6 / native6 † | 26,842.58 | 20,081.34 | 1.337 / 1.359 | 3,813,732 | 963,202 / 963,202 |
+| PNG RGB16, Optimal6 / native6 † | 24,119.32 | 16,552.00 | 1.457 / 1.479 | 3,571,252 | 739,472 / 739,472 |
+| PNG grayscale16, Optimal6 / native6, red-plane reference † | 8,637.95 | 5,442.94 | 1.587 / 1.621 | 1,506,972 | 265,433 / 265,433 |
+| PNG gray-alpha16, Optimal6 / native6 † | 16,121.94 | 11,052.73 | 1.459 / 1.480 | 2,264,564 | 506,887 / 506,887 |
+| PNG RGBA8, stored0 / native0 † | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,111.27 | 1,013.36 | 1.097 / 1.136 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |

@@ -435,6 +435,11 @@ def render():
     assert byte_color_png['independentQuietConfirmations'] == 3
     assert byte_color_png['producers'] == header_skips['producers']
     assert byte_color_png['qualificationReused']['packageSha256'] == header_skips['qualification']['package']['sha256']
+    png_encode_coverage = json.loads((ROOT / 'benchmarks/current-png-encode-coverage-evidence.json').read_text(encoding='utf-8'))
+    assert not png_encode_coverage['productionChanged'] and png_encode_coverage['allBuilds'] == 0
+    assert png_encode_coverage['independentQuietConfirmations'] == 6
+    assert png_encode_coverage['producers'] == header_skips['producers']
+    assert png_encode_coverage['qualificationReused']['packageSha256'] == header_skips['qualification']['package']['sha256']
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -573,6 +578,25 @@ def render():
         receipt = observation['receipt']
         assert byte_color_png['status'][case] == 'confirmed-gap'
         assert receipt['librarySha256'] == byte_color_png['producers']['linuxSha256']
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
+        assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes']
+        stats = observation['managed']['statistics']
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        packet_bytes = receipt['managedOutputBytes']
+        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {packet_bytes:,} / {packet_bytes:,} |'))
+    for case, label in [('Encode8', 'PNG RGBA8, Optimal6 / native6'),
+                        ('Encode16', 'PNG RGBA16, Optimal6 / native6'),
+                        ('EncodeRgb16', 'PNG RGB16, Optimal6 / native6'),
+                        ('EncodeGray16', 'PNG grayscale16, Optimal6 / native6, red-plane reference'),
+                        ('EncodeGrayAlpha16', 'PNG gray-alpha16, Optimal6 / native6'),
+                        ('EncodeNoCompression8', 'PNG RGBA8, stored0 / native0')]:
+        observation = png_encode_coverage['cases'][case][-1]
+        receipt = observation['receipt']
+        assert png_encode_coverage['status'][case] == 'confirmed-gap'
+        assert receipt['librarySha256'] == png_encode_coverage['producers']['linuxSha256']
         assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
         assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
         assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes']
@@ -1250,6 +1274,9 @@ existing required paths, with unchanged production and reused qualification.
 The [existing byte-color PNG controls](../benchmarks/CURRENT-BYTE-COLOR-PNG-COSTS.md)
 likewise confirm 1.305–1.325× with exact packets; their old BCL-era costs are
 superseded. Reference inputs/settings and the finite required scope are unchanged.
+The [six remaining named default/stored PNG controls](../benchmarks/CURRENT-PNG-ENCODE-COVERAGE.md)
+now have current confirmations too. Gray16 is the largest new gap at 1.587×;
+all six retain exact complete packets, with unchanged production and no builds.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named

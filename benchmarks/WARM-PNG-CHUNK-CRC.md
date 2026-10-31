@@ -7,6 +7,8 @@ The three RGBA16 Fastest boundaries now have
 [current exact-encoder costs](CURRENT-FASTEST-WORD-PNG-COSTS.md); the BCL-era
 passes below are historical. Other dated results require the current-path
 validity recorded in [coverage](WARM-COVERAGE.md).
+The six remaining default/stored controls are superseded by
+[current complete-packet costs](CURRENT-PNG-ENCODE-COVERAGE.md).
 
 Updated 2026-10-17. Stored RGBA8 encoding is **13.1% faster** than its retained
 357.17 µs predecessor; stored RGBA16 is **14.5% faster** than the current accepted
