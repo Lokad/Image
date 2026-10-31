@@ -329,6 +329,14 @@ def render():
     assert cross16_cost['productionChanged'] and cross16_cost['workflow']['productionBuilds'] == 0
     assert cross16_cost['independentCounterbalancedBlock'] and cross16_cost['decision']['allGatesPassed']
     assert cross16_cost['qualification']['sameActualPackageBothOs']
+    horizontal_word_current = json.loads((ROOT / 'benchmarks/current-tight-horizontal-word-bicubic-evidence.json').read_text(encoding='utf-8'))
+    assert not horizontal_word_current['productionChanged'] and horizontal_word_current['allBuilds'] == 0
+    assert horizontal_word_current['comparisonLowerBound'] > 1
+    horizontal_word_observation = horizontal_word_current['cases']['TightHorizontal16'][-1]
+    assert len(horizontal_word_observation['managed']['actual']) == 12
+    assert all(q['passed'] for q in horizontal_word_observation['quietness'].values())
+    assert horizontal_word_current['qualificationReused']['sameActualPackageBothOs']
+    assert horizontal_word_current['recovery']['measurementReruns'] == 0
     lanczos_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-reduce8-cost-evidence.json').read_text(encoding='utf-8'))
     assert not lanczos_cost['productionChanged'] and lanczos_cost['productionHarnessNativeBuilds'] == 0
     assert lanczos_cost['selectorBuilds'] == 1 and lanczos_cost['independentQuietConfirmation']
@@ -1053,6 +1061,11 @@ upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
 operation includes both complete decodes, retained overlap and releases on both
 subjects; native has no shared admission API. Exact pixels and root cleanup pass.
 [Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
+
+The already-required tight-workspace RGBA16 horizontal resize now has an independent
+current cost: **1.267× / upper 1.326**, **530,838 B/op** (lower 1.201 confirms a gap).
+Exact managed pixels and frozen native bounds pass; no build or optimization.
+[Current horizontal cost](../benchmarks/CURRENT-TIGHT-HORIZONTAL-WORD-BICUBIC.md).
 
 The current producer passes **5,291 checks per OS**, plus 349 focused internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.

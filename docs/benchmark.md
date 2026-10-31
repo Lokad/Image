@@ -104,6 +104,11 @@ operation includes both complete decodes, retained overlap and releases on both
 subjects; native has no shared admission API. Exact pixels and root cleanup pass.
 [Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
 
+The already-required tight-workspace RGBA16 horizontal resize now has an independent
+current cost: **1.267× / upper 1.326**, **530,838 B/op** (lower 1.201 confirms a gap).
+Exact managed pixels and frozen native bounds pass; no build or optimization.
+[Current horizontal cost](../benchmarks/CURRENT-TIGHT-HORIZONTAL-WORD-BICUBIC.md).
+
 The current producer passes **5,291 checks per OS**, plus 349 focused internal and
 346 public focused checks normal/scalar and Linux with AVX512 disabled.
 Header/probe proofs remain applicable.

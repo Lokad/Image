@@ -7,6 +7,13 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Tight horizontal RGBA16 bicubic](CURRENT-TIGHT-HORIZONTAL-WORD-BICUBIC.md) now
+has one current independent twelve: 739.572 µs, 1.267× / upper 1.326,
+530,838 B/op; lower 1.201 confirms a gap. Exact pixels, approved native bounds,
+input/output ownership and quiet guards pass. Zero builds/profiles/new inputs;
+current full/package qualification is reused. This resolves the earlier short
+uncertainty without optimization or a causal comparison.
+
 [Exact completed-row JPEG reuse](WARM-JPEG-COMPLETED-ROW-REUSE.md) is accepted:
 10.48% filtered / 10.26% all-actual / 8.00% native-normalized gain with separated
 confidence. Horizontal CMYK is now 1.366× / upper 1.396, 1,085,755 B/op (−2 noise).
