@@ -7,6 +7,18 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Cancelable PNG cursor reassessment](PNG-CANCELABLE-CURSOR-REASSESSMENT.md)
+resolves the existing live-token RGBA8 decode at **1.150 / upper 1.182**,
+4,472 B/op, one independent twelve on unchanged qualified production. Shared
+GFNI CRC invalidates the old cost. The exact archived cursor, previously rejected
+by a 5% cutoff, now saves only 3.38% raw/3.49% normalized in one fresh short.
+It misses 4.1% triage and is removed without confirmation or variants. All pixels/
+owners/native/quiet gates and candidate/restored normal/scalar checks both OSes
+pass. Original source/core/PDB/XML/linked tests are byte-exact; unchanged 5,342
+checks per OS and SAME actual package/three examples are reused. No new case,
+profile, settings/grid, full/package repeat or reopened confidence gate.
+Close this reassessed family; preserve the full 268-path objective.
+
 [Current asynchronous PNG encoding](CURRENT-ASYNC-PNG-ENCODE-COST.md) resolves
 one existing boundary at **1.303 / upper 1.323**, 1,387,492 B/op,
 with complete exact 210,973-byte packets. The H13 BCL-encoder CPU pass is historical

@@ -451,6 +451,12 @@ def render():
     assert async_png_cost['producers'] == word_color_png['producers']
     assert async_png_cost['qualificationReused']['packageSha256'] == word_color_png['qualification']['package']['sha256']
     assert async_png_cost['builds'] == dict(core=0, publicTests=0, internalTests=0, differential=0, selector=0, native=0, harnessEachOs=1)
+    cursor_reassessment = json.loads((ROOT / 'benchmarks/png-cancelable-cursor-reassessment-evidence.json').read_text(encoding='utf-8'))
+    assert cursor_reassessment['candidateRejected'] and not cursor_reassessment['productionChanged']
+    assert cursor_reassessment['independentQuietConfirmation'] and not cursor_reassessment['independentCandidateConfirmation']
+    assert not cursor_reassessment['decision']['passed'] and cursor_reassessment['sourceScope']['sourceRestoredByteExact']
+    assert cursor_reassessment['producers'] == word_color_png['producers']
+    assert cursor_reassessment['qualification']['packageSha256'] == word_color_png['qualification']['package']['sha256']
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -632,6 +638,19 @@ def render():
     rows.append(('codec', f'| PNG RGBA8 async, fresh nonseekable output, Optimal6 / native6 † | {stats["Mean"] / 1000:,.2f} | '
                  f'{native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 210,973 / 210,973 |'))
+    observation = cursor_reassessment['cases']['DecodeCancelable8'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert cursor_reassessment['status']['DecodeCancelable8'] == 'confirmed-gap'
+    assert receipt['librarySha256'] == cursor_reassessment['producers']['linuxSha256']
+    assert receipt['inputSha256'] == '4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f'
+    assert receipt['cancellationCanBeCanceled'] and not receipt['cancellationRequested']
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    assert all(receipt[k] for k in ('allRgbaSamplesExact', 'alphaExact', 'hiddenRgbExact', 'sourceUnchanged', 'independentOwnedOutput'))
+    native = min(b['mean'] for b in observation['nativeBrackets'])
+    rows.append(('codec', f'| PNG RGBA8 decode, live token † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     predicted = png_gfni['cases']['EncodePredictable16'][-1]
     receipt, stats = predicted['receipt'], predicted['managed']['statistics']
     assert receipt['librarySha256'] == png_gfni['producers']['linuxSha256']
@@ -1308,6 +1327,9 @@ All three remain gaps; byte/RGBA/stored paths retain applicable unchanged costs.
 The [existing async PNG output boundary](../benchmarks/CURRENT-ASYNC-PNG-ENCODE-COST.md)
 now confirms **1.303 / upper 1.323**, 1,387,492 B/op and exact 210,973-byte packets.
 Its earlier BCL-encoder CPU pass is superseded; production and qualification remain.
+The [existing live-token PNG decode](../benchmarks/PNG-CANCELABLE-CURSOR-REASSESSMENT.md)
+confirms **1.150 / upper 1.182**, 4,472 B/op. The archived cursor reassessment
+misses 4.1% triage and is removed; accepted production and exact pixels remain.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
