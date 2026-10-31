@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current progressive JPEG costs](CURRENT-PROGRESSIVE-JPEG-COSTS.md) reconcile the
+existing grayscale and live-token 4:4:4 paths on the unchanged qualified build:
+1.442× / upper 1.476, 683,126 B/op and 1.438× / upper 1.447, 984,212 B/op.
+Both remain CPU gaps. Current normal/scalar managed output equals the frozen
+native frames exactly; original packets, coefficient proofs and settings stay
+fixed. Stale prepared managed hashes are corrected temporarily, then original
+headers restored byte-exactly. One independent twelve each, zero builds/profiles
+or new controls; full Windows/Linux/live and actual-package evidence is reused.
+
 [Current Lanczos3 byte reduction](CURRENT-LANCZOS3-REDUCE8-COST.md) independently
 confirms the existing513×259RGBA8→256×129 path at1.500× / upper1.511,
 138,451B/op. Exact managed/native pixels, source/independent ownership and quiet

@@ -728,6 +728,19 @@ def render():
         refreshed.add(key)
     assert refreshed == set(exact_alpha['cases']) | {'bicubic-Up16'}
     assert reused == set(alpha_callers['noCallProof']['cases'])
+    progressive = json.loads((ROOT / 'benchmarks/current-progressive-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not progressive['productionChanged'] and progressive['allBuilds'] == 0
+    assert progressive['producers'] == exact_alpha['producers']
+    assert progressive['preparation']['originalHeadersRestored']['originalHeadersByteExact']
+    for key, observations in progressive['cases'].items():
+        observation = observations[-1]
+        receipt = observation['receipt']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['librarySha256'] == exact_alpha['producers']['linuxSha256']
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert receipt['decoderMaximum'] == receipt['scalarDecoderMaximum'] == 0
+        assert progressive['comparisonLowerBounds'][key] > 1
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -888,6 +901,13 @@ enlargements remain gaps; no new workload or production change.
 A bounded byte-normalization screen regresses and is rejected; the verified
 implementation and all displayed costs remain unchanged.
 [Rejected screen](../benchmarks/BYTE-BICUBIC-ONE-NEWTON-REJECTED.md).
+
+Two existing progressive JPEG uncertainties now have current independent costs:
+grayscale **1.442× / upper 1.476**, **683,126 B/op**; live-token 4:4:4
+**1.438× / upper 1.447**, **984,212 B/op**. Both remain CPU gaps with exact native
+pixels. Prepared packets/settings stay frozen; stale managed-hash metadata is
+reconciled and original headers restored. Zero builds or new controls.
+[Progressive costs](../benchmarks/CURRENT-PROGRESSIVE-JPEG-COSTS.md).
 
 The current producer passes **5,267 checks per OS**, plus 22 new internal and
 179 public focused checks normal/scalar and Linux with AVX512 disabled.

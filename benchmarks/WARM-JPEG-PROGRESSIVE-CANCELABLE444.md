@@ -1,5 +1,9 @@
 # Progressive JPEG444 with a live cancellation token
 
+This earlier production round is retained history. See
+[current progressive costs](CURRENT-PROGRESSIVE-JPEG-COSTS.md) for the qualified
+native-exact decoder's current cost and allocation.
+
 Complete warm progressive JPEG444 decoding independently confirms **1.935× FFmpeg /
 upper 1.940×**, at **6,453.37 µs** and unchanged **2,682,364 managed B/op**. Managed
 time falls **3.6%**, closing the original **2.008×** gap. All twelve actuals and both
