@@ -6,6 +6,43 @@ namespace Lokad.Image.Tests;
 
 public sealed class LanczosHorizontalTests
 {
+    [Fact]
+    public void WordSignBoundariesAndTailsMatchIndependentBigIntegerRows()
+    {
+        ushort[] values = [0, 1, 32767, 32768, 32769, 65534, 65535];
+        foreach (var (width, target) in new[] { (1, 5), (3, 1), (4, 2), (5, 3), (7, 13), (31, 9), (1031, 2) })
+        {
+            using var source = ImageBuffer.Create(width, 1, 16);
+            for (var x = 0; x < width; x++)
+            {
+                source.SetSample(x, 0, 0, values[x % values.Length]);
+                source.SetSample(x, 0, 1, values[(x + 3) % values.Length]);
+                source.SetSample(x, 0, 2, values[(x + 5) % values.Length]);
+                source.SetSample(x, 0, 3, x % 5 == 0 ? 0 : x % 5 == 1 ? 1 : 65535);
+            }
+            var unchanged = source.Pixels.ToArray(); var expected = LanczosReference.Axis(width, target);
+            using var context = new OperationContext(ImageLimits.Default, default);
+            using var plan = LanczosPlan.Create(width, target, context);
+            var storage = context.RemainingWorkingBytes;
+            var output = new long[target * 4 + 2]; Array.Fill(output, long.MinValue + 73);
+            LanczosResize.Horizontal(source, 0, plan, output.AsSpan(1, target * 4), context);
+            Assert.Equal(storage, context.RemainingWorkingBytes);
+            Assert.Equal(long.MinValue + 73, output[0]); Assert.Equal(long.MinValue + 73, output[^1]);
+            for (var x = 0; x < target; x++)
+            {
+                Assert.Equal(LanczosPlan.One, expected[x].Sum(w => (long)w));
+                for (var c = 0; c < 4; c++)
+                {
+                    BigInteger sum = 0;
+                    for (var i = 0; i < width; i++)
+                        sum += (BigInteger)source.Sample(i, 0, 3) * (c == 3 ? 1 : source.Sample(i, 0, c)) * expected[x][i];
+                    Assert.Equal(sum, (BigInteger)output[1 + x * 4 + c]);
+                }
+            }
+            Assert.Equal(unchanged, source.Pixels.ToArray());
+        }
+    }
+
     [Theory]
     [InlineData(8)] [InlineData(16)]
     public void FullPrecisionAndNegativeWeightsMatchIndependentBigIntegerRows(int depth)

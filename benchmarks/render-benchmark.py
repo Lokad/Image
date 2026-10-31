@@ -332,9 +332,12 @@ def render():
     lanczos_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-reduce8-cost-evidence.json').read_text(encoding='utf-8'))
     assert not lanczos_cost['productionChanged'] and lanczos_cost['productionHarnessNativeBuilds'] == 0
     assert lanczos_cost['selectorBuilds'] == 1 and lanczos_cost['independentQuietConfirmation']
-    lanczos_word_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-reduce16-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not lanczos_word_cost['productionChanged'] and lanczos_word_cost['productionHarnessNativeBuilds'] == 0
-    assert lanczos_word_cost['selectorBuilds'] == 1 and lanczos_word_cost['independentQuietConfirmation']
+    lanczos_word_cost = json.loads((ROOT / 'benchmarks/lanczos3-centered-word-products-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert not lanczos_word_cost['productionChanged'] and lanczos_word_cost['candidateRejected']
+    assert lanczos_word_cost['originalRestored'] and lanczos_word_cost['independentQuietConfirmation']
+    assert lanczos_word_cost['qualificationReuse']['sameActualPackageBothOs']
+    assert lanczos_word_cost['comparisonLowerBounds']['Reduce16'] > 1
+    assert len(lanczos_word_cost['cases']['Reduce16'][-1]['managed']['actual']) == 12
     lanczos_enlarge8_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-enlarge8-cost-evidence.json').read_text(encoding='utf-8'))
     assert not lanczos_enlarge8_cost['productionChanged'] and lanczos_enlarge8_cost['allBuilds'] == 0
     assert lanczos_enlarge8_cost['independentQuietConfirmation']
@@ -712,6 +715,11 @@ Byte-bilinear enlargement reuses exact horizontal rows in existing geometry:
 **21.66% less elapsed**, **1.356× / upper 1.363**, **2,235,512 B/op**, with unchanged
 admitted capacity. Reduction retains its current independent cost; both remain
 gaps. [Row-reuse evidence](../benchmarks/WARM-BILINEAR-BYTE-ROW-REUSE.md).
+
+Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
+**138,437 B/op**. A centered-product candidate fails independent confirmation;
+the qualified implementation is restored and new exact boundary tests retained.
+[Current cost and rejected trial](../benchmarks/LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md).
 
 The current producer passes **5,241 checks per OS**, plus 185 public
 focused checks in normal/scalar modes. Header/probe proofs remain applicable.

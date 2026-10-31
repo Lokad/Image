@@ -14,11 +14,14 @@ guards pass. This unchanged-path cost confirmation reuses current Windows/Linux
 and actual-package qualification. One small selector build, no production,
 harness/native build or new control. No general Lanczos CPU-pass claim follows.
 
-[Current Lanczos3 word reduction](CURRENT-LANCZOS3-REDUCE16-COST.md) independently
-confirms the existing513×259RGBA16→256×129 path at1.585× / upper1.666,
-138,439B/op. Exact independent managed pixels, unchanged native max1/RMSE.25,
-source/owners and quiet guards pass. One selector build reuses unchanged
-production/harness/native/oracle/full/package evidence; no new cases.
+[Current Lanczos3 word reduction](LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md)
+independently confirms the existing513×259RGBA16→256×129 path at1.432× /
+upper1.446,138,437B/op. Exact independent managed pixels, unchanged native
+max1/RMSE.25, source/owners and quiet guards pass. The centered signed-product
+candidate is4.8%slower independently and rejected. Qualified production/binaries/
+package are restored;66internal/159public focused normal/scalar checks pass on
+both OSes and Linux AVX512-off, including the retained new BigInteger boundary
+fact. Reuse unchanged full/live/actual-package qualification; no new cases.
 
 [Current Lanczos3 byte enlargement](CURRENT-LANCZOS3-ENLARGE8-COST.md) independently
 confirms the existing513×259RGBA8→1027×519 path at1.033× / upper1.038,
@@ -32,7 +35,8 @@ Zero builds/repeated qualification. All four existing Lanczos costs are now
 independently current, with unchanged source; all remain gaps.
 
 Closed Lanczos experiments retain their rejected sources, raw samples and
-restoration in linked reports: [packed premultiplication](LANCZOS3-PACKED-PREMULTIPLICATION-REJECTED.md),
+restoration in linked reports: [centered word products](LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md),
+[packed premultiplication](LANCZOS3-PACKED-PREMULTIPLICATION-REJECTED.md),
 [vertical batching](LANCZOS3-FOUR-TAP-VERTICAL-REJECTED.md),
 [word spans](LANCZOS3-WORD-SPAN-HOISTING-REJECTED.md),
 [paired normalization](LANCZOS3-PAIRED-NORMALIZATION-REJECTED.md),
@@ -40,8 +44,9 @@ restoration in linked reports: [packed premultiplication](LANCZOS3-PACKED-PREMUL
 [coefficient symmetry](LANCZOS3-COEFFICIENT-SYMMETRY-REJECTED.md) and
 [output-resident source products](LANCZOS3-OUTPUT-ROW-PRODUCTS-REJECTED.md) and
 [adjacent-window source products](LANCZOS3-ADJACENT-SOURCE-PRODUCTS-REJECTED.md).
-The original Lanczos implementation is restored; these trials change no accepted cost,
-required case or applicable full/package qualification.
+The original Lanczos implementation is restored. The centered-product trial
+provides a fresh original Reduce16 cost; no trial changes the required cases or
+applicable full/package qualification.
 
 [Current effort-6 VP8 diagram](CURRENT-VP8-EFFORT6-COST.md) independently
 confirms1.401× / upper1.415,754,344B/op, unchanged exact6,818Bpacket. All12actuals,

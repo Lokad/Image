@@ -1,5 +1,9 @@
 # Current Lanczos3 word-reduction cost
 
+Superseded cost: the [centered-product trial](LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md)
+retains a fresh original confirmation after exact restoration. The measurements
+below remain historical evidence.
+
 The existing513×259 RGBA16→256×129 control independently confirms **802.461 µs,
 1.585× / conservative upper1.666**, with **138,439 allocated B/op**. It remains
 a CPU gap. All12 actuals are retained/filtered, with both passing idle-v2 guards.

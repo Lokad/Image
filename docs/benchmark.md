@@ -50,6 +50,11 @@ Byte-bilinear enlargement reuses exact horizontal rows in existing geometry:
 admitted capacity. Reduction retains its current independent cost; both remain
 gaps. [Row-reuse evidence](../benchmarks/WARM-BILINEAR-BYTE-ROW-REUSE.md).
 
+Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
+**138,437 B/op**. A centered-product candidate fails independent confirmation;
+the qualified implementation is restored and new exact boundary tests retained.
+[Current cost and rejected trial](../benchmarks/LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md).
+
 The current producer passes **5,241 checks per OS**, plus 185 public
 focused checks in normal/scalar modes. Header/probe proofs remain applicable.
 The same actual Release package, governed
@@ -107,7 +112,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
 | Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |
-| Lanczos3 reduction RGBA16 † → 256×129 | 802.46 | 506.27 | 1.585 / 1.666 | 138,439 |
+| Lanczos3 reduction RGBA16 † → 256×129 | 726.96 | 507.57 | 1.432 / 1.446 | 138,437 |
 | Lanczos3 enlargement RGBA8 † → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
 | Lanczos3 enlargement RGBA16 † → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
 
