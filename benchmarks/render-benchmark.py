@@ -298,6 +298,9 @@ def render():
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_gfni['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
+    opaque_vp8l = json.loads((ROOT / 'benchmarks/current-opaque-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not opaque_vp8l['productionChanged'] and opaque_vp8l['measurementBuilds'] == 0
+    assert opaque_vp8l['independentQuietConfirmation'] and opaque_vp8l['status']['EncodeOpaque8'] == 'confirmed-gap'
     webp_probe = json.loads((ROOT / 'benchmarks/current-webp-dimension-probe-cost-evidence.json').read_text(encoding='utf-8'))
     assert not webp_probe['productionChanged'] and webp_probe['allBuilds'] == 0
     assert webp_probe['independentQuietConfirmation'] and webp_probe['status']['ProbeDimensionsWebp'] == 'confirmed-gap'
@@ -535,6 +538,16 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    observation = opaque_vp8l['cases']['EncodeOpaque8'][-1]
+    receipt, stats = observation['receipt'], observation['managed']['statistics']
+    assert receipt['librarySha256'] == opaque_vp8l['producers']['linuxSha256'] and receipt['completePacketExact']
+    assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 121896
+    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+    assert all(q['passed'] for q in observation['quietness'].values())
+    native = min(b['mean'] for b in observation['nativeBrackets'])
+    opaque_row = f'| VP8L opaque RGBA8 / libwebp exact=1 † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 121,896 / 121,896 |'
+    position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
+    rows.insert(position + 1, ('codec', opaque_row))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -614,7 +627,7 @@ def render():
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **58 comparisons** rank the remaining work; completion requires every
+These **59 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM

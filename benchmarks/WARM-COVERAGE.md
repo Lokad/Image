@@ -611,6 +611,13 @@ prefix/source/owners/native/quiet gates pass. Zerobuilds/newcases/retiming;
 full5240/OS andSAMEpackage/3examples reused. Non-timed defaultoptions diagnostic
 identifies40B/call;no productionedit orspeedclaim. Rawmirror/memberproof retained.
 
+[Current opaque VP8L encoding](CURRENT-OPAQUE-VP8L-ENCODE-COST.md) resolves
+the originalEncodeOpaque8 case on unchanged JMR1core:103346.218µs,1.455/upper1.483,
+19992640Bop,exact121896Bpacket. One12/alloriginalgates/zero measuredbuilds.
+Full5240/OS/SAMEpackage reused. One6s profile anduntimedcopy diagnose2.48%active
+colorbins;nextreviewmayreuse discoveredindices inexistingunusedscratch. No
+productionedit,newcases orretiming;all268required paths stay in scope.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

@@ -2,7 +2,7 @@
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **58 comparisons** rank the remaining work; completion requires every
+These **59 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -62,6 +62,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,535.94 | 15,580.45 | 1.318 / 1.375 | 1,201,552 | 72,380 / 72,380 |
 | VP8L RGBA8 / libwebp exact=1 † | 161,623.34 | 121,357.51 | 1.332 / 1.360 | 29,696,928 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 103,346.22 | 71,024.81 | 1.455 / 1.483 | 19,992,640 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 185,381.86 | 138,254.62 | 1.341 / 1.431 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 162,750.37 | 120,441.78 | 1.351 / 1.431 | 29,697,312 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 † | 121,047.71 | 89,021.62 | 1.360 / 1.397 | 20,418,440 | 160,032 / 160,032 |
