@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Baseline grayscale JPEG decode](CURRENT-BASELINE-GRAYSCALE-JPEG-DECODE-COST.md)
+now independently confirms 1.218 / upper 1.226, 672,196 B/op. The existing
+147,825-byte packet produces exact Windows/Linux normal/scalar and FFmpeg
+normal/scalar pixels. A stale derived managed hash stops initial setup before
+actuals; only that hash is refreshed after the six-way proof. Source, native
+pixels, quantization and original bounds remain. One successful twelve, zero
+builds/profiles/new inputs/full or package repeats. This required baseline path
+differs from progressive-gray and caller-gray output; all 268 paths remain.
+
 [Current single-component JPEG costs](CURRENT-GRAYSCALE-JPEG-COSTS.md) resolve
 two missing independent confirmations: RGBA8 is 1.126 / upper 1.137, 155,436 B/op;
 caller GRAY8 is 1.072 / upper 1.090, 155,439 B/op. Both are confirmed gaps, with

@@ -1048,6 +1048,12 @@ def render():
                               f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
                 updated_gray += 1
     assert updated_gray == 2
+    baseline_gray_cost = json.loads((ROOT / 'benchmarks/current-baseline-grayscale-jpeg-decode-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not baseline_gray_cost['productionChanged'] and baseline_gray_cost['allBuilds'] == 0
+    assert baseline_gray_cost['producers'] == factored_jpeg16['producers']
+    assert baseline_gray_cost['correctness']['allSixPixelOutputsExact']
+    assert baseline_gray_cost['pixelReconciliation']['catalog']['firstSetupActuals'] == 0
+    assert len(baseline_gray_cost['cases']['OwnedDecodeGray'][-1]['managed']['actual']) == 12
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1155,190 +1161,44 @@ def render():
                          f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
                          f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
+    displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
-retained unchanged-path measurements. Seven affected JPEG decode costs are current;
-eight named paths retain proven unchanged-path evidence.
-These **76 tabulated comparisons** rank the remaining work; completion requires every
-material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
+Updated 2026-10-31. These **{displayed_count} selected comparisons** combine qualified
+**0.2.1 development** costs with the retained **0.2.0 baseline**. The
+[268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
+validity, missing confirmations and remaining gaps. Full warm parity is open.
 
-Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
-({evidence['machine']['cpuModel']}), with one pinned CPU, warm .NET 10, tiering
-and concurrent GC disabled. Each operation includes admission, normalization,
-input delivery as labeled, fresh output ownership and release. Startup,
-preparation, transport and validation are excluded. Native brackets and the
-versioned idle/process guards pass. Ratios use the faster native bracket;
-**upper** includes conservative filtered/unfiltered confidence bounds.
-Managed **B/op** is measured allocation; native allocation is unmeasured.
+Sequential measurements use the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
+one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC.
+Complete operations include admission, labeled input delivery/normalization,
+fresh output ownership and release. Startup, benchmark IPC, preparation and
+checks are excluded. Native brackets and versioned idle/process guards pass.
+Times are µs; ratios use the faster native bracket. **Upper** includes conservative
+filtered/unfiltered confidence bounds. **B/op** is measured managed allocation,
+including harness costs; native allocation is unmeasured. Short screens do not
+establish independent parity, even when their upper bound is below one.
 
-All twelve displayed PNG comparisons affected by
-[GFNI CRC reversal](../benchmarks/WARM-PNG-GFNI-CRC.md) have fresh independent
-confirmations. Complete seekable Identify improves **14.16%**, with unchanged
-192 B/op, but remains 1.226× / upper 1.232. Resident Identify remains a small
-confirmed gap; PNG8 validation is confidence-open and is retained without
-retiming. Four PNG controls pass at this tested scope. Header/probe paths skip
-CRC and retain applicable evidence. Other affected PNG paths need current costs
-before CPU-pass claims.
-Two resident PNG decode controls also remain confidence-open on this build;
-[None/Paeth evidence](../benchmarks/CURRENT-PNG-NONE-PAETH-CRC-COSTS.md) retains
-one confirmation each without retiming or assuming an optimization need.
-The existing [RGBA8/None decode](../benchmarks/CURRENT-PNG-RGBA8-CRC-COST.md)
-separately confirms a 1.092× gap (upper 1.098), with 4,472 B/op.
+FFmpeg is the reference. Approved exceptions are **libwebp exact=1** for lossless
+encoding, **SIMD libjpeg-turbo** for single-component JPEG encoding, and **zimg**
+(FFmpeg zscale backend) for bicubic/Lanczos3. Required packing, halos, alpha work
+and output ownership stay inside the declared boundaries. Exact packets/pixels,
+case-scoped native bounds and frozen settings remain; equal numerical quality
+settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-VP8L group dispatch independently reduces resident decode elapsed by **5.93%**:
-**1.068× / upper 1.079**, unchanged **152,728 B/op**. All nine affected named
-decode/validation controls have current costs. Literal/run passes at **0.714× /
-upper 0.726**, 10,840 B/op; indexed is confidence-open at **1.008× / upper 1.039**.
-Live-token decoding remains a gap. [Current evidence](../benchmarks/WARM-VP8L-GROUP-DISPATCH.md).
+Current production passes **5,331 checks per OS**, including 948 live comparisons;
+one separately qualified predictor invariant gives **5,332 applicable**. The same
+actual Release package, governed/retained/async consumers and three examples pass
+both OSes. Unchanged evidence is reused; no fresh full 5,332 run is claimed here.
+The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
+its explicit normalized-confidence-overlap exception, without a parity claim.
 
-JPEG dimension probing now combines marker reads: **6.73%** less filtered elapsed,
-unchanged **744 B/op / 512 admitted bytes**. Both named probes remain CPU gaps.
-[Marker-pair evidence](../benchmarks/WARM-JPEG-PROBE-MARKER-PAIRS.md).
-
-Lossless WebP color-bin reuse retains **4.02% less elapsed time** on the opaque
-control, with unchanged **19,992,640 B/op**. Raw confidence intervals separate;
-normalized intervals overlap. This specific gain is explicitly accepted with
-that caveat. All four displayed color-search controls have current independent
-costs; their complete packets remain exact and all remain CPU gaps.
-[Color-bin evidence](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md).
-
-The existing async lossless WebP output boundary now has current independent
-evidence: **1.293× / upper 1.316**, **29,697,312 B/op**, exact **183,812-byte** packets.
-Staging, actual WriteAsync delivery, growth and output release are timed on both
-subjects. [Async evidence](../benchmarks/CURRENT-ASYNC-VP8L-ENCODE-COST.md).
-
-Async JPEG confirms **1.143× / upper 1.154**, **309,526 B/op** for caller RGB420,
-and **1.199× / upper 1.210**, **820,475 B/op** for RGBA8/444 including flattening.
-Reconstruction is exact; complete packets differ only by approved attribution.
-[Caller RGB420](../benchmarks/CURRENT-ASYNC-JPEG-RGB420-COST.md) and
-[RGBA8/444](../benchmarks/CURRENT-ASYNC-JPEG-RGBA8-COST.md) retain current evidence.
-
-Byte-bilinear enlargement reuses exact horizontal rows: its paired round reduced
-elapsed by **21.66%**, without added admitted capacity. The table includes later
-shared alpha-rounding costs; enlargement and reduction remain gaps. [Row-reuse evidence](../benchmarks/WARM-BILINEAR-BYTE-ROW-REUSE.md).
-
-Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
-**138,437 B/op**. A centered-product candidate fails independent confirmation;
-the qualified implementation is restored and new exact boundary tests retained.
-[Current cost and rejected trial](../benchmarks/LANCZOS3-CENTERED-WORD-PRODUCTS-REJECTED.md).
-
-Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
-**7.26%**, removing **360,288 allocated B/op (14.45%)**: **1.473× / upper 1.481**,
-**2,132,668 B/op**, exact pixels and the same **4 KiB** admission.
-Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
-[Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
-
-Local original-order repair improves tight RGBA8 bicubic reduction **5.61%**
-(all actuals **5.12%**), preserving exact pixels and the same **4 KiB** admission:
-**1.474× / upper 1.540**, **132,309 B/op** (+3 B/op noise). Uncertain pairs
-repair locally; tiny alpha still unwinds before exact scratch.
-[Local-repair evidence](../benchmarks/WARM-BICUBIC-LOCAL-REPAIR.md).
-
-The remaining shared-alpha caller audit reuses six proven unchanged paths and
-confirms four current costs. Word vertical enlargement passes at **0.973× /
-upper 0.985**, **2,514,272 B/op** and stops. Word bicubic enlargement remains
-**1.230× / upper 1.244**, **5,016,602 B/op**. Existing word-bilinear/default-byte
-enlargements remain gaps; no new workload or production change.
-[Caller audit](../benchmarks/CURRENT-SHARED-ALPHA-CALLER-COSTS.md).
-Exact completed-row reuse improves horizontal CMYK decoding **10.48%** independently
-(all actuals **10.26%**, normalized **8.00%**) with separated confidence:
-**1.366× / upper 1.396**, **1,085,755 B/op** (−2 B/op noise), unchanged owned capacity.
-All seven affected displayed JPEG costs are reconciled on the immutable build;
-progressive420 is now a confirmed gap. Eight named no-call proofs retain valid
-costs, including grayscale, dense CMYK and both coding validations.
-[Completed-row evidence](../benchmarks/WARM-JPEG-COMPLETED-ROW-REUSE.md).
-
-Dense/general CMYK JPEG decoding independently passes at **0.894× / upper 0.916**,
-**1,085,661 B/op**, with exact independent-matrix/native normal/scalar pixels.
-The stale derived reference is reconciled without changing production or inputs;
-this already-required case stops. [Current cost](../benchmarks/CURRENT-DENSE-CMYK-JPEG-COST.md).
-
-Two retained PNG8 decodes under one borrowed caller root confirm **1.157× /
-upper 1.168**, **1,637,520 B/op**, with **1,766,641 governed peak bytes**. Each
-operation includes both complete decodes, retained overlap and releases on both
-subjects; native has no shared admission API. Exact pixels and root cleanup pass.
-[Retained-output cost](../benchmarks/CURRENT-RETAINED-PNG-DECODE-COST.md).
-
-The already-required tight-workspace RGBA16 horizontal resize now has an independent
-current cost: **1.267× / upper 1.326**, **530,838 B/op** (lower 1.201 confirms a gap).
-Exact managed pixels and frozen native bounds pass; no build or optimization.
-[Current horizontal cost](../benchmarks/CURRENT-TIGHT-HORIZONTAL-WORD-BICUBIC.md).
-
-A bounded wider-support audit resolves eight existing default bicubic paths.
-Both depths at **32×16 and 16×8 pass**, with conservative uppers **0.670–0.948×**,
-**199,372–202,248 B/op**, and stop unchanged. Seven current confirmations reuse
-the immutable build; Wide8 retains its proven unchanged-path confirmation.
-Four larger-output controls remain gaps. No build, profile, new input or grid.
-[Current wider-support costs](../benchmarks/CURRENT-WIDE-BICUBIC-COSTS.md).
-
-Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
-1.023**, **1,085,758 B/op**. Confidence remains open (lower 0.994); no repeat or
-parity claim. The other three owned-CMYK costs retain valid evidence.
-[Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
-
-Mixed bicubic geometry reuse independently reduces tight RGBA16 elapsed by
-**8.90% filtered / 8.28% all actuals**, **8.62% normalized**: **1.308× / upper
-1.369**, **1,060,371 B/op**, unchanged owned capacity. Tight RGBA8 is **1.350× /
-upper 1.367**, 530,400 B/op. All six affected existing mixed/tight-vertical costs
-are current and remain gaps. No new workload or paired companion gain claim.
-[Current mixed evidence](../benchmarks/WARM-MIXED-BICUBIC-GEOMETRY.md).
-
-Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
-**0.448× / upper 0.460**, with allocation **1,168 → 792 B/op**. Certified filtered
-bytes avoid a second inflation. All four named PNG validation costs are current;
-PNG16 sync/async also pass and stop, while PNG8 remains confidence-open.
-[Current evidence](../benchmarks/WARM-PNG-INDEXED-VALIDATION.md).
-
-Two existing tight-workspace RGBA8 reductions are independently measured:
-**128×64 at 1.454× / upper 1.475**, 32,905 B/op, and **64×32 at 1.474× / upper
-1.506**, 8,329 B/op. Both remain gaps; the default-workspace controls exercise
-different kernels. No production change or causal comparison to older costs.
-[Current tight byte](../benchmarks/CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md) and
-[word reduction costs](../benchmarks/CURRENT-TIGHT-WIDE-WORD-BICUBIC-COSTS.md) resolve
-four distinct bounded column paths; all remain gaps. Prepared VP8L body counting
-screens below the retained 4.1% threshold and is
-[rejected](../benchmarks/VP8L-PREPARED-BODY-COUNT-REJECTED.md); production is restored.
-
-Exact factored RGBA16 JPEG normalization independently saves **4.56%** elapsed
-(all actuals **4.72%**, native-normalized **4.38%**) with separated confidence:
-**1.127× / upper 1.135**, **819,489 B/op**, unchanged **52,115 / 52,117-byte
-packets** and **1,704,856 admitted peak bytes**. The nongoverned current cost is
-**1.036× / upper 1.049**, **388,215 B/op**, without a paired gain claim.
-[Normalization evidence](../benchmarks/JPEG-FACTORED-WORD-NORMALIZATION.md).
-Three affected [RGBA16 companions](../benchmarks/CURRENT-JPEG-WORD-COMPANION-COSTS.md)
-now independently confirm: 422 **1.008 / upper 1.016**, **529,871 B/op**;
-forward-only 420 **1.039 / upper 1.058**, **388,247 B/op**; live-token 420
-**1.047 / upper 1.065**, **388,215 B/op**. All remain gaps; packets stay exact.
-RGBA8/caller-byte samples, RGBA16 444 and all decoding/editing retain applicable
-unchanged-path evidence. No new cases or normalization variants.
-
-The two existing single-component grayscale JPEG boundaries now have current
-independent costs against the approved SIMD libjpeg-turbo reference: RGBA8
-**1.126 / upper 1.137**, **155,436 B/op**; caller GRAY8 **1.072 / upper 1.090**,
-**155,439 B/op**. Both remain gaps with raw-exact **58,910-byte packets**.
-[Grayscale evidence](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md) replaces short
-screens without a causal gain claim, new input or production change.
-
-The current producer passes **5,331 checks per OS** (2,169 internal, 2,214
-public, 948 live), plus 13 internal/354 public affected checks normal/scalar and
-Linux with AVX512 disabled. Earlier bicubic
-[tap-sum](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md) and
-[vertical-geometry](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
-trials remain rejected, with useful behavior/ownership tests retained.
-[Opaque VP8L alpha reuse](../benchmarks/VP8L-OPAQUE-ALPHA-ANALYSIS-REJECTED.md)
-also misses its short screen and is removed. One predictor invariant passes
-separately on restored production: **5,332 applicable checks per OS**, without
-repeating unchanged full/package qualification. Accepted costs remain unchanged.
-The same actual Release package, governed
-async/one-frame lossless/alpha consumers and three examples pass both OSes.
-Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
-shared root and releases its charge on success/failure.
-Both packaged mixed depths preserve frozen frames, aggregate admission and
-independent retained output lifetimes within the existing 4 KiB workspace.
-Packets, pixels, source ownership, admission and cancellation remain qualified.
-Every affected named WebP decode/validation control has current costs; the three
-opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays open.
+Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
+now have independent current costs. The additional named
+[baseline grayscale decode](../benchmarks/CURRENT-BASELINE-GRAYSCALE-JPEG-DECODE-COST.md)
+confirms **829.713 µs, 1.218 / upper 1.226, 672,196 B/op** with exact six-way
+managed/native pixels. It remains a gap. Earlier experiments and individual
+acceptance histories are retained in the coverage links and raw evidence.
 
 **Codecs**
 
