@@ -942,26 +942,33 @@ def render():
                      f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    tight_wide = json.loads((ROOT / 'benchmarks/current-tight-wide-byte-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not tight_wide['productionChanged'] and tight_wide['independentQuietConfirmation']
-    assert tight_wide['workflow']['allBuilds'] == tight_wide['workflow']['newInputs'] == tight_wide['workflow']['newProfiles'] == 0
-    assert tight_wide['qualificationReused']['fullChecksEachOs'] == 5314
-    assert set(tight_wide['cases']) == {'TightWide8', 'Tight64x32_8'}
-    for case, observations in tight_wide['cases'].items():
-        observation = observations[-1]
-        receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert receipt['librarySha256'] == tight_wide['producers']['linuxSha256']
-        assert receipt['managedRationalReferenceExact'] and receipt['managedQualifiedOriginalPixelsExact']
-        assert receipt['independentOwnedOutput'] and receipt['sourceUnchanged']
-        assert all(q['passed'] for q in observation['quietness'].values())
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert receipt['managedMaxWorkingBytes'] == 513 * 259 * 4 + receipt['outputWidth'] * receipt['outputHeight'] * 4 + 4096
-        assert tight_wide['comparisonLowerBounds'][case] > 1 and tight_wide['status'][case] == 'confirmed-gap'
-        native = min(b['mean'] for b in observation['nativeBrackets'])
-        rows.append(('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
-                     f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    for depth, name in [(8, 'byte'), (16, 'word')]:
+        tight_wide = json.loads((ROOT / f'benchmarks/current-tight-wide-{name}-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
+        assert not tight_wide['productionChanged'] and tight_wide['independentQuietConfirmation']
+        assert tight_wide['workflow']['allBuilds'] == tight_wide['workflow']['newInputs'] == tight_wide['workflow']['newProfiles'] == 0
+        assert tight_wide['qualificationReused']['fullChecksEachOs'] == 5314
+        assert set(tight_wide['cases']) == {f'TightWide{depth}', f'Tight64x32_{depth}'}
+        for case, observations in tight_wide['cases'].items():
+            observation = observations[-1]
+            receipt, stats = observation['receipt'], observation['managed']['statistics']
+            assert receipt['librarySha256'] == tight_wide['producers']['linuxSha256']
+            assert receipt['managedRationalReferenceExact'] and receipt['managedQualifiedOriginalPixelsExact']
+            assert receipt['independentOwnedOutput'] and receipt['sourceUnchanged']
+            assert all(q['passed'] for q in observation['quietness'].values())
+            assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+            assert receipt['managedMaxWorkingBytes'] == (513 * 259 + receipt['outputWidth'] * receipt['outputHeight']) * (depth // 2) + 4096
+            assert tight_wide['comparisonLowerBounds'][case] > 1 and tight_wide['status'][case] == 'confirmed-gap'
+            native = min(b['mean'] for b in observation['nativeBrackets'])
+            rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
+                         f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                         f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                         f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    body_count = json.loads((ROOT / 'benchmarks/vp8l-prepared-body-count-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert body_count['candidateRejected'] and not body_count['productionChanged'] and not body_count['decision']['passed']
+    assert not body_count['independentCandidateConfirmationRun']
+    assert body_count['qualification']['applicableTotalChecksEachOs'] == 5321
+    assert body_count['qualification']['full5314BothOsAndSameActualPackageProofReused']
+    assert all(r['productionSourceRestoredByteExact'] for r in body_count['restoration'].values())
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1208,11 +1215,17 @@ Two existing tight-workspace RGBA8 reductions are independently measured:
 **128×64 at 1.454× / upper 1.475**, 32,905 B/op, and **64×32 at 1.474× / upper
 1.506**, 8,329 B/op. Both remain gaps; the default-workspace controls exercise
 different kernels. No production change or causal comparison to older costs.
-[Current tight reduction costs](../benchmarks/CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md).
+[Current tight byte](../benchmarks/CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md) and
+[word reduction costs](../benchmarks/CURRENT-TIGHT-WIDE-WORD-BICUBIC-COSTS.md) resolve
+four distinct bounded column paths; all remain gaps. Prepared VP8L body counting
+screens below the retained 4.1% threshold and is
+[rejected](../benchmarks/VP8L-PREPARED-BODY-COUNT-REJECTED.md); production is restored.
 
 The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
 public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
+Three public and four internal checks pass separately on restored production:
+5,321 applicable per OS, without a repeated full/package run.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

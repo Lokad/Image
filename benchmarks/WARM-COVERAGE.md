@@ -7,6 +7,22 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current tight wider-support word costs](CURRENT-TIGHT-WIDE-WORD-BICUBIC-COSTS.md)
+resolve two existing input+output+4 KiB paths:128×64 is1.464×/upper1.524,
+65,674B/op;64×32 is1.329×/upper1.355,16,521B/op. Both are confirmed gaps.
+The three-column Double and two-column UInt32 kernels/word guards are distinct
+from byte/default workspace. One independent twelve per case, frozen pixels,
+native bounds, owners and quiet-v2 pass; zero builds/profiles/inputs/repeats.
+
+[Prepared VP8L body counting](VP8L-PREPARED-BODY-COUNT-REJECTED.md) misses its
+one continuation screen:3.61%raw/3.44%normalized,32B/op additional metadata,
+exact183,812-byte packet. No candidate confirmation or variants follow.
+Production/core are restored exactly; four useful counting/ownership/failure
+tests pass on production, including scalar bothOS+LinuxAVX512-off. Full5,314/OS
+and the same actual package proof carry forward, with3public+4internal tests
+separately qualified:5,321applicable, no fresh full/package run. CBA2's explicit
+retention and the full268-path objective are unchanged.
+
 [Current tight wider-support byte costs](CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md)
 resolve two required input+output+4 KiB boundaries:128×64 is1.454×/upper1.475,
 32,905B/op;64×32 is1.474×/upper1.506,8,329B/op. Both are confirmed gaps, with exact
@@ -16,7 +32,7 @@ Default larger-workspace costs do not qualify these distinct column kernels.
 The [strided Double-product trial](PACKED-COLUMN-DOUBLE-PRODUCTS-REJECTED.md) failed
 its one CPU screen and is closed. Production/core/internal assemblies are exactly
 restored; three useful public controls pass on production. No full/package repeat.
-The same268-path goal remains;80 displayed rows do not narrow its scope.
+The same268-path goal remains;82 displayed rows do not narrow its scope.
 
 [Mixed bicubic geometry reuse](WARM-MIXED-BICUBIC-GEOMETRY.md) independently reduces
 tight RGBA16 elapsed 8.90% filtered / 8.28% all, 8.62% normalized, with separated

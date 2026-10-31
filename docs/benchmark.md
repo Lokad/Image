@@ -137,11 +137,17 @@ Two existing tight-workspace RGBA8 reductions are independently measured:
 **128×64 at 1.454× / upper 1.475**, 32,905 B/op, and **64×32 at 1.474× / upper
 1.506**, 8,329 B/op. Both remain gaps; the default-workspace controls exercise
 different kernels. No production change or causal comparison to older costs.
-[Current tight reduction costs](../benchmarks/CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md).
+[Current tight byte](../benchmarks/CURRENT-TIGHT-WIDE-BYTE-BICUBIC-COSTS.md) and
+[word reduction costs](../benchmarks/CURRENT-TIGHT-WIDE-WORD-BICUBIC-COSTS.md) resolve
+four distinct bounded column paths; all remain gaps. Prepared VP8L body counting
+screens below the retained 4.1% threshold and is
+[rejected](../benchmarks/VP8L-PREPARED-BODY-COUNT-REJECTED.md); production is restored.
 
 The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
 public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
+Three public and four internal checks pass separately on restored production:
+5,321 applicable per OS, without a repeated full/package run.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
@@ -223,6 +229,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 611.34 | 417.61 | 1.464 / 1.524 | 65,674 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 
 **Inspection and pixel-coding validation**
 
