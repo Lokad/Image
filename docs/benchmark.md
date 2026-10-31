@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **96 selected comparisons** combine qualified
+Updated 2026-11-01. These **98 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -51,6 +51,9 @@ Its earlier BCL-encoder CPU pass is superseded; production and qualification rem
 The [existing live-token PNG decode](../benchmarks/PNG-CANCELABLE-CURSOR-REASSESSMENT.md)
 confirms **1.150 / upper 1.182**, 4,472 B/op. The archived cursor reassessment
 misses 4.1% triage and is removed; accepted production and exact pixels remain.
+Two [tight PNG decoding costs](../benchmarks/CURRENT-TIGHT-PNG-DECODE-COSTS.md)
+are current: byte confirms **1.096 / upper 1.119**, 68,224 B/op; word is
+**confidence-open at 0.997 / upper 1.016**, 70,272 B/op, with no pass or gap claim.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
@@ -99,6 +102,8 @@ acceptance histories are retained in the coverage links and raw evidence.
 | PNG RGBA8, stored0 / native0 † | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG RGBA8 async, fresh nonseekable output, Optimal6 / native6 † | 24,513.62 | 18,812.43 | 1.303 / 1.323 | 1,387,492 | 210,973 / 210,973 |
 | PNG RGBA8 decode, live token † | 1,607.11 | 1,397.16 | 1.150 / 1.182 | 4,472 | — |
+| PNG RGBA8 decode, tight working limit † | 1,642.61 | 1,498.48 | 1.096 / 1.119 | 68,224 | — |
+| PNG RGBA16 decode, tight working limit (confidence open) † | 3,120.34 | 3,128.99 | 0.997 / 1.016 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,111.27 | 1,013.36 | 1.097 / 1.136 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode † | 348.53 | 331.27 | 1.052 / 1.058 | 1,085,961 | — |

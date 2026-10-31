@@ -457,6 +457,10 @@ def render():
     assert not cursor_reassessment['decision']['passed'] and cursor_reassessment['sourceScope']['sourceRestoredByteExact']
     assert cursor_reassessment['producers'] == word_color_png['producers']
     assert cursor_reassessment['qualification']['packageSha256'] == word_color_png['qualification']['package']['sha256']
+    tight_png_costs = json.loads((ROOT / 'benchmarks/current-tight-png-decode-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not tight_png_costs['productionChanged'] and tight_png_costs['allBuilds'] == 0
+    assert tight_png_costs['independentQuietConfirmations'] == 2 and tight_png_costs['producers'] == word_color_png['producers']
+    assert tight_png_costs['qualificationReused']['packageSha256'] == word_color_png['qualification']['package']['sha256']
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -651,6 +655,25 @@ def render():
     rows.append(('codec', f'| PNG RGBA8 decode, live token † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    for case, label, limit in [('DecodeTight8', 'PNG RGBA8 decode, tight working limit', 1235173),
+                               ('DecodeTight16', 'PNG RGBA16 decode, tight working limit (confidence open)', 3254193)]:
+        observation = tight_png_costs['cases'][case][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == tight_png_costs['producers']['linuxSha256']
+        assert receipt['tightWorkingBytes'] == limit and not receipt['cancellationCanBeCanceled']
+        assert receipt['nativeDecodeEndianConversionTimed'] == (case == 'DecodeTight16')
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert all(receipt[k] for k in ('allRgbaSamplesExact', 'alphaExact', 'hiddenRgbExact', 'sourceUnchanged', 'independentOwnedOutput'))
+        if case == 'DecodeTight8':
+            assert tight_png_costs['status'][case] == 'confirmed-gap' and tight_png_costs['comparisonLowerBounds'][case] > 1
+        else:
+            assert tight_png_costs['status'][case] == 'confirmed-confidence-open'
+            assert tight_png_costs['comparisonLowerBounds'][case] <= 1 < observation['conservativeRatioUpper']
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
     predicted = png_gfni['cases']['EncodePredictable16'][-1]
     receipt, stats = predicted['receipt'], predicted['managed']['statistics']
     assert receipt['librarySha256'] == png_gfni['producers']['linuxSha256']
@@ -1330,6 +1353,9 @@ Its earlier BCL-encoder CPU pass is superseded; production and qualification rem
 The [existing live-token PNG decode](../benchmarks/PNG-CANCELABLE-CURSOR-REASSESSMENT.md)
 confirms **1.150 / upper 1.182**, 4,472 B/op. The archived cursor reassessment
 misses 4.1% triage and is removed; accepted production and exact pixels remain.
+Two [tight PNG decoding costs](../benchmarks/CURRENT-TIGHT-PNG-DECODE-COSTS.md)
+are current: byte confirms **1.096 / upper 1.119**, 68,224 B/op; word is
+**confidence-open at 0.997 / upper 1.016**, 70,272 B/op, with no pass or gap claim.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named

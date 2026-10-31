@@ -7,6 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current tight PNG decoding](CURRENT-TIGHT-PNG-DECODE-COSTS.md) resolves two
+existing post-GFNI measurement uncertainties on unchanged qualified production:
+byte is a **1.096 / upper 1.119** gap, 68,224 B/op; word remains confidence-open
+at **0.997 / upper 1.016**, 70,272 B/op, without a pass or gap claim. One independent
+twelve each retains all actuals, original packets/samples/tight local limits,
+native endian conversion, output owners and both quiet guards. Zero builds/
+profiles/new inputs/settings or repeated full/package checks; same immutable core,
+cached selector/harness/worker and 5,342-check/actual-package proof are reused.
+Do not assume optimization is needed for the word case or repeat valid scores
+without a new reason. The full 268-path objective remains open.
+
 [Cancelable PNG cursor reassessment](PNG-CANCELABLE-CURSOR-REASSESSMENT.md)
 resolves the existing live-token RGBA8 decode at **1.150 / upper 1.182**,
 4,472 B/op, one independent twelve on unchanged qualified production. Shared
