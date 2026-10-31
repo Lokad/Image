@@ -1,9 +1,9 @@
 # Lokad.Image benchmarks
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
-retained unchanged-path measurements. **‡** marks seven prior-producer resize
-costs needing reachability reconciliation after the shared exact-alpha change;
-they are retained context, not current performance proof.
+retained unchanged-path measurements. The shared-alpha caller audit proves six
+existing controls cannot reach the changed code and confirms four others on the
+immutable current build; their existing confidence requirements remain.
 These **68 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
@@ -71,10 +71,15 @@ the qualified implementation is restored and new exact boundary tests retained.
 Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 **7.26%**, removing **360,288 allocated B/op (14.45%)**: **1.473× / upper 1.481**,
 **2,132,668 B/op**, exact pixels and the same **4 KiB** admission.
-Five shared-caller costs are refreshed on the immutable build; seven other
-displayed callers and the earlier passing VerticalUp16 need reachability/current
-cost reconciliation. All six refreshed cases remain gaps.
+Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
+
+The remaining shared-alpha caller audit reuses six proven unchanged paths and
+confirms four current costs. Word vertical enlargement passes at **0.973× /
+upper 0.985**, **2,514,272 B/op** and stops. Word bicubic enlargement remains
+**1.230× / upper 1.244**, **5,016,602 B/op**. Existing word-bilinear/default-byte
+enlargements remain gaps; no new workload or production change.
+[Caller audit](../benchmarks/CURRENT-SHARED-ALPHA-CALLER-COSTS.md).
 
 The current producer passes **5,267 checks per OS**, plus 22 new internal and
 179 public focused checks normal/scalar and Linux with AVX512 disabled.
@@ -127,14 +132,14 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Bilinear resize RGBA8 † → 256×129 ‡ | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
+| Bilinear resize RGBA8 † → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 † → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
-| Bilinear resize RGBA16 † → 256×129 ‡ | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
-| Bicubic resize RGBA8 † → 256×129 ‡ | 579.25 | 418.45 | 1.384 / 1.400 | 332,188 |
-| Bicubic upscale RGBA16 † → 1027×519 ‡ | 3,513.80 | 2,878.92 | 1.221 / 1.234 | 5,016,602 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 ‡ | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
-| Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 ‡ | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace → 32×16 ‡ | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
+| Bilinear resize RGBA16 † → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
+| Bicubic resize RGBA8 † → 256×129 | 579.25 | 418.45 | 1.384 / 1.400 | 332,188 |
+| Bicubic upscale RGBA16 † → 1027×519 | 3,541.70 | 2,879.12 | 1.230 / 1.244 | 5,016,602 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
+| Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
+| Bicubic RGBA8, 32×16 / default workspace → 32×16 | 363.67 | 375.44 | 0.969 / 1.174 | 199,372 |
 | Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |
 | Lanczos3 reduction RGBA16 † → 256×129 | 726.96 | 507.57 | 1.432 / 1.446 | 138,437 |
 | Lanczos3 enlargement RGBA8 † → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
@@ -175,7 +180,7 @@ displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP ancho
 and Lanczos3 have twelve measured iterations. Retained
 [RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
 [RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md)
-also have independent twelves; **‡** distinguishes their pending current costs.
+also have independent twelves and proven unchanged executed paths.
 Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode

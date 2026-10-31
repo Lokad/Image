@@ -686,6 +686,9 @@ def render():
     assert exact_alpha['qualification']['fullChecksEachOs'] == 5267
     assert exact_alpha['qualification']['sameActualPackageBothOs']
     assert exact_alpha['decisions']['confirm']['passed'] and exact_alpha['decisions']['confirm']['normalizedSeparated']
+    alpha_callers = json.loads((ROOT / 'benchmarks/current-shared-alpha-caller-costs-evidence.json').read_text(encoding='utf-8'))
+    assert alpha_callers['producers'] == exact_alpha['producers']
+    assert not alpha_callers['productionChanged'] and alpha_callers['allBuilds'] == 0
     refreshed_prefixes = {
         'Bilinear upscale RGBA8': 'bilinear-Up8',
         'Bicubic RGBA8 enlargement,': 'bicubic-TightUp8',
@@ -693,18 +696,29 @@ def render():
         'Bicubic RGBA8 height enlargement,': 'bicubic-TightVerticalUp8',
         'Bicubic RGBA8 reduction,': 'bicubic-TightDown8',
         'Bicubic RGBA8 wider-support reduction': 'bicubic-Wide8',
+        'Bicubic upscale RGBA16': 'bicubic-Up16',
     }
-    refreshed, pending = set(), []
+    reused_prefixes = {
+        'Bilinear resize RGBA8': 'bilinear-Down8',
+        'Bilinear resize RGBA16': 'bilinear-Down16',
+        'Bicubic resize RGBA8': 'bicubic-Down8',
+        'Bicubic RGBA16, width down / height up': 'bicubic-TightCross16',
+        'Bicubic RGBA8, 32×16 / input+output': 'bicubic-Tight32x16_8',
+        'Bicubic RGBA8, 32×16 / default': 'bicubic-Down32x16_8',
+    }
+    refreshed, reused = set(), set()
     for index, (kind, row) in enumerate(rows):
         label = row.split('|')[1].strip()
         if kind != 'editing' or not any(name in label.lower() for name in ('bilinear', 'bicubic')):
             continue
         key = next((key for prefix, key in refreshed_prefixes.items() if label.startswith(prefix)), None)
         if key is None:
-            pending.append(label)
-            rows[index] = (kind, row.replace(label, label + ' ‡', 1))
+            key = next(key for prefix, key in reused_prefixes.items() if label.startswith(prefix))
+            assert alpha_callers['noCallProof']['cases'][key]['changedCalleeUnreachable']
+            assert alpha_callers['noCallProof']['cases'][key]['reusePriorPerformance']
+            reused.add(key)
             continue
-        observation = exact_alpha['cases'][key][-1]
+        observation = (alpha_callers if key == 'bicubic-Up16' else exact_alpha)['cases'][key][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         assert receipt['librarySha256'] == exact_alpha['producers']['linuxSha256']
         assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
@@ -712,7 +726,8 @@ def render():
         rows[index] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
         refreshed.add(key)
-    assert refreshed == set(exact_alpha['cases']) and len(pending) == len(exact_alpha['evidenceInvalidation']['pendingDisplayedCases']) == 7
+    assert refreshed == set(exact_alpha['cases']) | {'bicubic-Up16'}
+    assert reused == set(alpha_callers['noCallProof']['cases'])
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -791,9 +806,9 @@ def render():
     return f"""# Lokad.Image benchmarks
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
-retained unchanged-path measurements. **‡** marks seven prior-producer resize
-costs needing reachability reconciliation after the shared exact-alpha change;
-they are retained context, not current performance proof.
+retained unchanged-path measurements. The shared-alpha caller audit proves six
+existing controls cannot reach the changed code and confirms four others on the
+immutable current build; their existing confidence requirements remain.
 These **68 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
@@ -861,10 +876,15 @@ the qualified implementation is restored and new exact boundary tests retained.
 Exact Int128 alpha accumulation improves tight RGBA8 bicubic enlargement
 **7.26%**, removing **360,288 allocated B/op (14.45%)**: **1.473× / upper 1.481**,
 **2,132,668 B/op**, exact pixels and the same **4 KiB** admission.
-Five shared-caller costs are refreshed on the immutable build; seven other
-displayed callers and the earlier passing VerticalUp16 need reachability/current
-cost reconciliation. All six refreshed cases remain gaps.
+Five shared-caller costs are refreshed on the immutable build; all six remain gaps.
 [Exact-alpha evidence](../benchmarks/WARM-EXACT-ALPHA-INT128.md).
+
+The remaining shared-alpha caller audit reuses six proven unchanged paths and
+confirms four current costs. Word vertical enlargement passes at **0.973× /
+upper 0.985**, **2,514,272 B/op** and stops. Word bicubic enlargement remains
+**1.230× / upper 1.244**, **5,016,602 B/op**. Existing word-bilinear/default-byte
+enlargements remain gaps; no new workload or production change.
+[Caller audit](../benchmarks/CURRENT-SHARED-ALPHA-CALLER-COSTS.md).
 
 The current producer passes **5,267 checks per OS**, plus 22 new internal and
 179 public focused checks normal/scalar and Linux with AVX512 disabled.
@@ -894,7 +914,7 @@ displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP ancho
 and Lanczos3 have twelve measured iterations. Retained
 [RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
 [RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md)
-also have independent twelves; **‡** distinguishes their pending current costs.
+also have independent twelves and proven unchanged executed paths.
 Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode

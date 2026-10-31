@@ -1,5 +1,9 @@
 # Exact alpha accumulation with Int128
 
+The [subsequent caller audit](CURRENT-SHARED-ALPHA-CALLER-COSTS.md) reconciles
+the ten pending callers below: six no-call proofs and four current confirmations.
+Production and the qualification recorded here remain unchanged.
+
 The existing tight-memory RGBA8 enlargement is **7.26% faster** independently,
 with **360,288 fewer allocated bytes/op (14.45%)** and identical pixels.
 Its comparison improves1.565×→**1.473× / upper1.481**. This is an accepted
