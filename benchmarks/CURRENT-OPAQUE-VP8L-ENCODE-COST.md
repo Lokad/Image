@@ -28,3 +28,7 @@ retained; no production rebuild or scored job was repeated.
 [Evidence](current-opaque-vp8l-encode-cost-evidence.json) pins producers,original
 selector,packet,boundaries and mirrored/member-verified `current-opaque-vp8l-encode-cost.tar.xz`, SHA256 80d3cd73390e68c7549ba756837687319a5c71b64fa1db34e794d34e0322cc7b.
 The full268-path warm single-CPU upper≤1x objective remains open.
+
+The subsequent [color-bin reuse trial](VP8L-COLOR-BIN-REUSE-REJECTED.md) misses
+its normalized confidence gate. Exact qualified production is restored; this
+current cost remains applicable. The tracking family is closed without variants.

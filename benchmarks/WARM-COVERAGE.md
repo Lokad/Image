@@ -618,6 +618,12 @@ Full5240/OS/SAMEpackage reused. One6s profile anduntimedcopy diagnose2.48%active
 colorbins;nextreviewmayreuse discoveredindices inexistingunusedscratch. No
 productionedit,newcases orretiming;all268required paths stay in scope.
 
+[Color-bin reuse](VP8L-COLOR-BIN-REUSE-REJECTED.md) misses normalized confidence
+after4.02%filtered/3.65%all reduction;rawintervals separate,normalizedones overlap.
+All packet/pixel/resource/ownership/quiet gates pass. Exact sources/tests/cores/
+package restored;25internal/153publicnormal-scalar eachOS pass. No variants/
+retiming/full/package repeat;OLC1acceptedcost remainscurrent. Full268open.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
