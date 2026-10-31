@@ -34,7 +34,11 @@ Eight affected companions have current costs. Literal/run passes at **0.692× /
 upper 0.696**, 10,840 B/op; indexed and live-token controls remain gaps.
 [Direct-output evidence](../benchmarks/WARM-VP8L-DIRECT-OUTPUT.md).
 
-The current producer passes **5,237 checks per OS**, plus 58 internal/306 public
+JPEG dimension probing now combines marker reads: **6.73%** less filtered elapsed,
+unchanged **744 B/op / 512 admitted bytes**. Both named probes remain CPU gaps.
+[Marker-pair evidence](../benchmarks/WARM-JPEG-PROBE-MARKER-PAIRS.md).
+
+The current producer passes **5,240 checks per OS**, plus 104 public header/probe
 focused checks in normal/scalar modes. The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
@@ -96,9 +100,9 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Probe PNG dimensions, seekable | 0.156 | 0.123 | 1.263 / 1.956 | 744 | Screen gap |
-| Probe JPEG dimensions, seekable | 0.381 | 0.192 | 1.988 / 2.031 | 744 | Confirmed gap |
+| Probe JPEG dimensions, seekable | 0.355 | 0.193 | 1.842 / 1.895 | 744 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.159 | 0.123 | 1.289 / 1.550 | 744 | Screen gap |
-| Probe JPEG dimensions, async nonseekable | 0.425 | 0.201 | 2.119 / 2.154 | 744 | Confirmed gap |
+| Probe JPEG dimensions, async nonseekable | 0.397 | 0.201 | 1.976 / 2.017 | 744 | Confirmed gap |
 | Validate PNG8, span | 1,382.593 | 1,378.823 | 1.003 / 1.010 | 240 | Confidence open |
 | Validate PNG16, span | 2,799.737 | 2,958.844 | 0.946 / 0.956 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span | 5.352 | 3.926 | 1.363 / 1.386 | 1,168 | Confirmed gap |

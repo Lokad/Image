@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Bounded JPEG probes combine marker reads while preserving input limits,
+  cancellation, prefix boundaries and caller-owned admission.
 - Non-indexed lossless WebP decoding owns decoded storage directly, avoiding a
   temporary full frame while preserving exact pixels and caller-budget lifetimes.
 - RGBA16 bilinear reduction reuses vertical geometry and avoids unused horizontal

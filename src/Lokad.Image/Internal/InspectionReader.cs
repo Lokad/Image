@@ -138,7 +138,14 @@ internal sealed class InspectionReader : IDisposable
                 first += n + 1; break;
             }
         }
-        else if (await ByteAsync().ConfigureAwait(false) != 255) throw new ImageDataException("Invalid JPEG marker.");
+        else
+        {
+            // Probe reads can acquire the natural prefix/code pair together.
+            // Keep a lone allowed byte ahead of the input-limit sentinel.
+            if (first == last && !await FillAsync(Context.Limits.MaxInputBytes - acquired >= 2 ? 2 : 1).ConfigureAwait(false))
+                throw new ImageDataException("Invalid JPEG marker.");
+            if (buffer[first++] != 255) throw new ImageDataException("Invalid JPEG marker.");
+        }
         int marker;
         do { marker = await ByteAsync().ConfigureAwait(false); } while (marker == 255);
         if (marker < 0) throw new ImageDataException("Truncated JPEG marker.");

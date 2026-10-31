@@ -175,6 +175,34 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged caller JPEG result lifetime or geometry differs.");
         }
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged caller JPEG storage leaked.");
+        using (var probeBudget = new TestMemoryBudget(512))
+        {
+            var probeOptions = new ImageProbeOptions
+                { Limits = new ImageLimits { MemoryBudget = probeBudget, MaxWorkingBytes = 512 } };
+            foreach (var asynchronous in new[] { false, true })
+            {
+                using var jpegInput = new MemoryStream(syncJpeg.ToArray(), writable: false);
+                var dimensions = asynchronous ? await ImageCodec.ProbeAsync(jpegInput, probeOptions)
+                    : ImageCodec.Probe(jpegInput, probeOptions);
+                if ((dimensions.Width, dimensions.Height) != (17, 11)
+                    || dimensions.BytesRead <= 0 || dimensions.BytesRead > dimensions.BytesTraversed
+                    || dimensions.BytesTraversed != jpegInput.Position
+                    || jpegInput.Position >= jpegInput.Length || !jpegInput.CanRead || probeBudget.Bytes != 0)
+                    throw new Exception("Packaged JPEG probe prefix, dimensions or borrowed ownership differs.");
+            }
+            using var invalidPrefix = new MemoryStream([255, 216, 17, 99], writable: false);
+            try
+            {
+                _ = await ImageCodec.ProbeAsync(invalidPrefix, probeOptions with
+                    { Limits = probeOptions.Limits with { MaxInputBytes = 3 } });
+                throw new Exception("Packaged invalid JPEG marker was accepted.");
+            }
+            catch (ImageDataException) { }
+            if (invalidPrefix.Position != 3 || !invalidPrefix.CanRead
+                || probeBudget.Bytes != 0 || probeBudget.Peak != 512 || probeBudget.IsDisposed)
+                throw new Exception("Packaged JPEG probe input limit or admission cleanup differs.");
+        }
+        Console.WriteLine("Packaged JPEG probes preserve bounded prefixes and invalid-marker limits.");
         await GovernedStreamingConsumer.Verify();
     }
 }

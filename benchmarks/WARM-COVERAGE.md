@@ -594,6 +594,16 @@ Shared parser/ARGB transforms/hash/pixels remainexact; dirty lookup holes cleare
 No new matrix/variants/profiles/retiming. All nine affectednamed cases now current;
 full268 objective remainsopen. Raw34ed9ec1... mirrored/memberverified.
 
+[JPEG marker pairs](WARM-JPEG-PROBE-MARKER-PAIRS.md) independently confirm
+6.73%filtered/6.48%all/6.73%normalized with separately separated envelopes.
+Async.396830µs,1.976/upper2.017;synccompanion.354809µs,1.842/upper1.895,
+both744Bop/512admittedB. Four calls removed at the same valid prefix; one-byte
+input-edge clamp preserves data/limit classification. Both remain gaps. Full
+5240/OS,104publicnormal-scalar andSAMEactualpackage/governedJPEG/3examples pass.
+Onecore/OS,zero native/worker/selectorbuilds;no variants/profiles/retiming.
+Othercodecs/JPEGspanIdentify/codec/edit/text kernels unchanged. Raw48efc8a3...
+mirrored/memberverified;full268 objective unchanged.
+
 ## Finite checklist
 
 The [immutable inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)

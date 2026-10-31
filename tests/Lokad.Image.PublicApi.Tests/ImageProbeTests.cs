@@ -105,6 +105,43 @@ public sealed class ImageProbeTests
     }
 
     [Theory]
+    [InlineData(0)] [InlineData(1)] [InlineData(2)]
+    public async Task JpegMarkerAcquisitionPreservesEarlyLimitsAndInvalidPrefixFailures(int mode)
+    {
+        var data = OriginalExif.Create(MetadataProfile.JpegBaseline420, 17, 11).Encoded;
+        var asynchronous = mode != 0;
+        using var root = new TestMemoryBudget(Workspace);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = Workspace };
+        foreach (var cap in new[] { 2, 3, 4 })
+        foreach (var acquiredLimit in new[] { false, true })
+        {
+            using var input = new ObservedInput(data, asynchronous, false,
+                chunk: mode == 2 ? 1 : int.MaxValue, mixed: mode == 2);
+            var options = new ImageProbeOptions { Limits = acquiredLimit ? limits : limits with { MaxInputBytes = cap },
+                MaxAcquiredBytes = acquiredLimit ? cap : 1024 * 1024 };
+            var failure = await Assert.ThrowsAsync<ImageLimitException>(() => Run(input, asynchronous, options).AsTask());
+            Assert.Equal(acquiredLimit ? ImageLimitKind.AcquiredBytes : ImageLimitKind.InputBytes, failure.Limit);
+            Assert.Equal(ImageLimitScope.Operation, failure.Scope);
+            Assert.Equal(acquiredLimit ? cap : cap + 1, input.BytesRead);
+            Assert.False(input.WasDisposed); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+        foreach (var acquiredLimit in new[] { false, true })
+        {
+            using var invalid = new ObservedInput([255, 216, 17, 99], asynchronous, false,
+                chunk: mode == 2 ? 1 : int.MaxValue, mixed: mode == 2);
+            var options = new ImageProbeOptions { Limits = acquiredLimit ? limits : limits with { MaxInputBytes = 3 },
+                MaxAcquiredBytes = acquiredLimit ? 3 : 1024 * 1024 };
+            await Assert.ThrowsAsync<ImageDataException>(() => Run(invalid, asynchronous, options).AsTask());
+            Assert.Equal(3, invalid.BytesRead); Assert.False(invalid.WasDisposed); Assert.Equal(0, root.Bytes);
+        }
+        using var recovered = new ObservedInput(data, asynchronous, false,
+            chunk: mode == 2 ? 1 : int.MaxValue, mixed: mode == 2);
+        var result = await Run(recovered, asynchronous, new() { Limits = limits });
+        Assert.Equal((17, 11), (result.Width, result.Height));
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.False(recovered.WasDisposed);
+    }
+
+    [Theory]
     [InlineData(ImageFormat.Png)] [InlineData(ImageFormat.Jpeg)] [InlineData(ImageFormat.WebP)]
     public async Task DimensionAcquisitionDoesNotGrowWithValidPixelPayload(ImageFormat format)
     {

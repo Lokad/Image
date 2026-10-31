@@ -298,6 +298,11 @@ def render():
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_gfni['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
+    jpeg_probe = json.loads((ROOT / 'benchmarks/warm-jpeg-probe-marker-pairs-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_probe['decision']['passed'] and jpeg_probe['qualification']['fullChecksEachOs'] == 5240
+    assert jpeg_probe['qualification']['sameActualPackageBothOs'] and jpeg_probe['qualification']['jpegProbePrefixesAndInvalidLimitPassed']
+    assert jpeg_probe['memory']['allocatedBytesPerOperation'] == 744 and jpeg_probe['memory']['dimensionAdmittedBytes'] == 512
+    assert set(jpeg_probe['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync'}
     png_validation = json.loads((ROOT / 'benchmarks/png-validation-current-evidence.json').read_text(encoding='utf-8'))
     png_cursor = json.loads((ROOT / 'benchmarks/warm-png-streaming-cursor-evidence.json').read_text(encoding='utf-8'))
     current_reconciliation = json.loads((ROOT / 'benchmarks/current-png-vp8-reconciliation-evidence.json').read_text(encoding='utf-8'))
@@ -541,7 +546,7 @@ def render():
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
         producer = (vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
-                    else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
+                    else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
         receipt = observation['receipt']
@@ -638,7 +643,11 @@ Eight affected companions have current costs. Literal/run passes at **0.692× /
 upper 0.696**, 10,840 B/op; indexed and live-token controls remain gaps.
 [Direct-output evidence](../benchmarks/WARM-VP8L-DIRECT-OUTPUT.md).
 
-The current producer passes **5,237 checks per OS**, plus 58 internal/306 public
+JPEG dimension probing now combines marker reads: **6.73%** less filtered elapsed,
+unchanged **744 B/op / 512 admitted bytes**. Both named probes remain CPU gaps.
+[Marker-pair evidence](../benchmarks/WARM-JPEG-PROBE-MARKER-PAIRS.md).
+
+The current producer passes **5,240 checks per OS**, plus 104 public header/probe
 focused checks in normal/scalar modes. The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.

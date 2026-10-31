@@ -1,5 +1,8 @@
 # Completed header acquisition
 
+JPEG costs are superseded by [marker-pair acquisition](WARM-JPEG-PROBE-MARKER-PAIRS.md).
+PNG/WebP companion evidence remains applicable to their unchanged paths.
+
 The shared header reader now returns completed `ValueTask`s directly for
 synchronous and successfully completed reads. Small await helpers handle pending
 or faulted reads. Counter/limit/cancellation completion stays shared; each pending
