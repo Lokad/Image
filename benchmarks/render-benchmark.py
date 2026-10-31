@@ -918,6 +918,24 @@ def render():
                        f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                        f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
+    tight_mixed = json.loads((ROOT / 'benchmarks/current-tight-mixed-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not tight_mixed['productionChanged'] and tight_mixed['independentQuietConfirmation']
+    assert tight_mixed['workflow']['allBuilds'] == 0
+    assert tight_mixed['qualificationReused']['fullChecksEachOs'] == 5310
+    assert set(tight_mixed['cases']) == {'TightMixed8', 'TightMixed16'}
+    for case, observations in tight_mixed['cases'].items():
+        observation = observations[-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == tight_mixed['producers']['linuxSha256']
+        assert receipt['managedRationalReferenceExact'] and receipt['managedQualifiedOriginalPixelsExact']
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert tight_mixed['comparisonLowerBounds'][case] > 1 and tight_mixed['status'][case] == 'confirmed-gap'
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        rows.append(('editing', f'| Bicubic RGBA{receipt["depth"]}, width up / height down, input+output+4 KiB † → 1027×129 | '
+                     f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1146,6 +1164,12 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 1.023**, **1,085,758 B/op**. Confidence remains open (lower 0.994); no repeat or
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
+
+Two existing tight mixed bicubic paths now have current independent costs:
+width up / height down is **1.408× / upper 1.449** for RGBA8 and **1.431× / upper
+1.452** for RGBA16, **530,400 / 1,060,367 B/op**. Both are gaps. Frozen build,
+fixtures and qualification are reused; no new matrix or causal speedup claim.
+[Current mixed costs](../benchmarks/CURRENT-TIGHT-MIXED-BICUBIC-COSTS.md).
 
 Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
 **0.448× / upper 0.460**, with allocation **1,168 → 792 B/op**. Certified filtered

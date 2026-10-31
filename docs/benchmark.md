@@ -120,6 +120,12 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
+Two existing tight mixed bicubic paths now have current independent costs:
+width up / height down is **1.408× / upper 1.449** for RGBA8 and **1.431× / upper
+1.452** for RGBA16, **530,400 / 1,060,367 B/op**. Both are gaps. Frozen build,
+fixtures and qualification are reused; no new matrix or causal speedup claim.
+[Current mixed costs](../benchmarks/CURRENT-TIGHT-MIXED-BICUBIC-COSTS.md).
+
 Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
 **0.448× / upper 0.460**, with allocation **1,168 → 792 B/op**. Certified filtered
 bytes avoid a second inflation. All four named PNG validation costs are current;
@@ -204,6 +210,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
 | Bicubic RGBA8 wider-support reduction † → 128×64 | 529.18 | 348.67 | 1.518 / 1.534 | 231,239 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 1,217.91 | 864.94 | 1.408 / 1.449 | 530,400 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,221.63 | 853.40 | 1.431 / 1.452 | 1,060,367 |
 
 **Inspection and pixel-coding validation**
 

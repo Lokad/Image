@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current tight mixed bicubic costs](CURRENT-TIGHT-MIXED-BICUBIC-COSTS.md) resolve
+two existing named uncertainties without production changes: width up / height
+down, input+output+4 KiB. RGBA8 is 1.408× / upper1.449, 530,400 B/op; RGBA16 is
+1.431× / upper1.452, 1,060,367 B/op. Exact pixels, frozen native bounds, ownership
+and quiet guards pass. One current twelve per case, zero builds/profiles/inputs;
+5,310 checks per OS and same actual package proof are reused. Both remain gaps.
+The summary displays these already-required boundaries; all 268 remain in scope.
+
 [Indexed PNG validation](WARM-PNG-INDEXED-VALIDATION.md) removes a second
 inflation on the bounded indexed path: 66.81% independent elapsed improvement,
 0.448× / upper 0.460, 792 B/op (−376). All four named PNG validation costs are
