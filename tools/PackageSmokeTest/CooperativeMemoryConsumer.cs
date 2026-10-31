@@ -30,6 +30,7 @@ internal static class CooperativeMemoryConsumer
             ImageDrawing.DrawText(decoded, layout, 0, 0, RgbaColor.From8(12, 34, 56), limits);
         }
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged owners leaked or disposed the borrowed budget.");
+        await VerifyWordPngPacking(budget, limits);
         using var empty = new TestMemoryBudget(0);
         try
         {
@@ -309,5 +310,55 @@ internal static class CooperativeMemoryConsumer
         }
         Console.WriteLine("Packaged JPEG probes preserve bounded prefixes and invalid-marker limits.");
         await GovernedStreamingConsumer.Verify();
+    }
+
+    private static async Task VerifyWordPngPacking(TestMemoryBudget budget, ImageLimits limits)
+    {
+        foreach (var color in new[] { PngColorType.Grayscale, PngColorType.Rgb, PngColorType.GrayscaleAlpha })
+        {
+            using var source = ImageBuffer.Create(17, 2, 16, limits);
+            for (var y = 0; y < source.Height; y++)
+            for (var x = 0; x < source.Width; x++)
+            {
+                var pixel = source.GetRow16(y).Slice(x * 4, 4);
+                pixel[0] = (ushort)(1 + x * 257 + y * 43);
+                pixel[1] = color == PngColorType.Rgb ? (ushort)(pixel[0] ^ 0x1234) : pixel[0];
+                pixel[2] = color == PngColorType.Rgb ? (ushort)(pixel[0] ^ 0x8000) : pixel[0];
+                pixel[3] = color == PngColorType.GrayscaleAlpha ? (ushort)(x == 0 ? 0 : x * 977 + y) : ushort.MaxValue;
+            }
+            var pixels = OriginalPixels.Bytes(source); var sourceBytes = pixels.Length;
+            var options = new PngEncodeOptions { ColorType = color, Limits = limits };
+            using (var caller = budget.CreateScope())
+            {
+                if (!caller.TryReserve(4 * 1024 * 1024 - sourceBytes - 65536, out var held))
+                    throw new Exception("Packaged word PNG refusal setup differs.");
+                using var rejected = new MemoryStream();
+                try
+                {
+                    ImageCodec.EncodePng(source, rejected, options);
+                    throw new Exception("Packaged word PNG ignored shared admission refusal.");
+                }
+                catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget && e.Limit == ImageLimitKind.WorkingBytes) { }
+                if (rejected.Length != 0 || budget.Bytes != sourceBytes + held.Bytes || !rejected.CanWrite)
+                    throw new Exception("Packaged word PNG refusal leaked storage or wrote output.");
+            }
+            using var synchronous = new MemoryStream(); using var asynchronous = new MemoryStream();
+            ImageCodec.EncodePng(source, synchronous, options);
+            await ImageCodec.EncodePngAsync(source, asynchronous, options);
+            if (!synchronous.ToArray().AsSpan().SequenceEqual(asynchronous.ToArray())
+                || !pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(source))
+                || budget.Bytes != sourceBytes || budget.IsDisposed || !synchronous.CanWrite || !asynchronous.CanWrite)
+                throw new Exception("Packaged word PNG pixels, async cleanup or borrowed owners differ.");
+            source.Dispose();
+            if (budget.Bytes != 0) throw new Exception("Packaged word PNG source storage leaked.");
+            using (var decoded = ImageCodec.Decode(asynchronous.ToArray(), new() { Limits = limits }))
+            {
+                if (decoded.BitDepth != 16 || !pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(decoded))
+                    || budget.Bytes != sourceBytes)
+                    throw new Exception("Packaged word PNG precision or independent retained output differs.");
+            }
+            if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged word PNG retained storage leaked.");
+        }
+        Console.WriteLine("Packaged full-word PNG color packing, async and shared admission passed.");
     }
 }

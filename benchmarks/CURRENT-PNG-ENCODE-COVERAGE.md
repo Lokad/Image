@@ -1,5 +1,9 @@
 # Current default and stored PNG encoding costs
 
+Gray16/RGB16/gray-alpha16 costs below describe the preceding word packer and are
+superseded by [qualified word-color packing](WARM-PNG-WORD-COLOR-PACKING.md).
+RGBA8, RGBA16 and stored8 costs retain applicable unchanged-path evidence.
+
 Six existing named uncertainties now independently confirm warm single-CPU gaps
 on the unchanged qualified core. One twelve-actual job per case; these are current
 costs, without paired gain/regression claims against older encoders.

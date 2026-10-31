@@ -7,8 +7,22 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Full-word PNG color packing](WARM-PNG-WORD-COLOR-PACKING.md) retains
+**21.14% filtered / 21.09% all-sample / 21.01% normalized** Gray16 improvement,
+with separated confidence and unchanged 1,506,972 B/op. Gray16 is now 1.254 /
+upper 1.285; existing RGB16 and gray-alpha16 companions independently confirm
+1.320 / upper 1.338, 3,571,252 B/op and 1.314 / upper 1.333, 2,264,564 B/op.
+All complete packets and full-word samples are exact. One bounded row-span/SIMD
+packing primitive, no owned-capacity/owner/charge change. Ten new public cases;
+5,342 checks per OS and the SAME actual Release package/three examples pass,
+including word-color async/shared-refusal/cleanup/retained lifetime checks.
+Only 16-bit gray/RGB/gray-alpha callers lose prior CPU proof; three existing
+default costs are current. Byte/RGBA16, Deflate/CRC/prediction and unrelated paths
+reuse applicable unchanged evidence. Close packing width/inlining/mask variants;
+all three remain gaps and the full 268-path objective remains.
+
 [Six default/stored PNG costs](CURRENT-PNG-ENCODE-COVERAGE.md) resolve the finite
-remaining audit: RGBA8 1.342 / upper 1.373, 1,325,732 B/op; RGBA16 1.337 /
+audit on the preceding packer: RGBA8 1.342 / upper 1.373, 1,325,732 B/op; RGBA16 1.337 /
 upper 1.359, 3,813,732 B/op; RGB16 1.457 / upper 1.479, 3,571,252 B/op;
 Gray16 1.587 / upper 1.621, 1,506,972 B/op; gray-alpha16 1.459 / upper 1.480,
 2,264,564 B/op; stored RGBA8 1.338 / upper 1.471, 1,203,724 B/op. Every complete
@@ -16,8 +30,8 @@ packet, source sample, alpha/hidden RGB and output owner passes the frozen gates
 One twelve each, same qualified core/cached driver/worker, zero builds/profiles/
 new inputs/settings or repeated full/package proof. Earlier BCL/IDAT-tolerance
 passes are historical after exact encoding and GFNI CRC. Stop retiming these
-resolved cases. Gray16 is the largest new PNG ratio; repeated per-sample word-row
-acquisition is a concrete unclosed packing lead. All 268 paths remain; this is
+resolved cases. The three word-color costs are superseded by the packing round
+above; RGBA8/16 and stored8 retain unchanged-path evidence. All 268 paths remain; this is
 the six-case audit, without a whole-PNG-family parity claim or added grid.
 
 [Current byte-color PNG costs](CURRENT-BYTE-COLOR-PNG-COSTS.md) resolve three

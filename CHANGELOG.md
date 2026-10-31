@@ -41,9 +41,9 @@
 - Adaptive lossless PNG row prediction for predictable content, including
   full-precision 16-bit gradients after flips and rotations; existing declared
   reference packet controls remain unchanged.
-- Faster PNG row scoring, prediction, reconstruction and bounded cancelable
-  inflation, including reuse of certified indexed validation bytes, preserving
-  exact bytes, portable fallback and admitted workspace.
+- Faster PNG full-word color packing, row scoring, prediction, reconstruction
+  and bounded cancelable inflation, including reuse of certified indexed
+  validation bytes, preserving exact bytes, portable fallback and admitted workspace.
 - Faster bounded Deflate match scans for PNG Optimal/SmallestSize, preserving
   complete packets, dictionary order, ring boundaries and cancellation.
 - Faster bicubic filtering and shared guarded word publication, preserving

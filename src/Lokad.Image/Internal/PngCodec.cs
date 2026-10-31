@@ -1787,25 +1787,7 @@ internal static class PngCodec
             }
             else
             {
-                var position = 0;
-                for (var x = 0; x < source.Width; x++)
-                {
-                    if ((x & 4095) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                    var r = source.Sample(x, y, 0); var g = source.Sample(x, y, 1); var b = source.Sample(x, y, 2);
-                    var a = source.Sample(x, y, 3);
-                    var maximum = source.BitDepth == 8 ? 255 : 65535;
-                    if ((color is 0 or 4) && (r != g || r != b))
-                        throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
-                    if ((color is 0 or 2) && a != maximum)
-                        throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
-                    WriteSample(row, ref position, r, source.BitDepth);
-                    if (color is 2 or 6)
-                    {
-                        WriteSample(row, ref position, g, source.BitDepth);
-                        WriteSample(row, ref position, b, source.BitDepth);
-                    }
-                    if (color is 4 or 6) WriteSample(row, ref position, a, source.BitDepth);
-                }
+                PackWordRow(source, y, row, color, context.Cancellation);
             }
             if (predict)
             {
@@ -1894,10 +1876,84 @@ internal static class PngCodec
         return i;
     }
 
-    private static void WriteSample(Span<byte> row, ref int position, int sample, int depth)
+    private static void PackWordRow(ImageBuffer source, int y, Span<byte> row, int color, CancellationToken cancellation)
     {
-        if (depth == 16) { BinaryPrimitives.WriteUInt16BigEndian(row[position..], (ushort)sample); position += 2; }
-        else row[position++] = (byte)sample;
+        // PNG sections 7.3/11.2.1: selected full-word channels are big endian.
+        // Format validation leaves only 16-bit gray/RGB/gray-alpha here. Keep
+        // the original pixel checkpoints and first invalid pixel's error order.
+        var position = 0;
+        var components = color == 2 ? 3 : color == 4 ? 2 : 1;
+        for (var x = 0; x < source.Width; x += 4096)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var count = Math.Min(4096, source.Width - x);
+            var input = source.GetRow16(y).Slice(x * 4, count * 4);
+            var i = PackWordVectors(input, row[position..], color);
+            position += i / 4 * components * 2;
+            for (; i < input.Length; i += 4)
+            {
+                var r = input[i]; var g = input[i + 1]; var b = input[i + 2]; var a = input[i + 3];
+                if ((color is 0 or 4) && (r != g || r != b))
+                    throw new ArgumentException("Grayscale encoding requires equal RGB channels.", nameof(source));
+                if ((color is 0 or 2) && a != ushort.MaxValue)
+                    throw new ArgumentException("Encoding without alpha requires opaque pixels.", nameof(source));
+                BinaryPrimitives.WriteUInt16BigEndian(row[position..], r); position += 2;
+                if (color == 2)
+                {
+                    BinaryPrimitives.WriteUInt16BigEndian(row[position..], g);
+                    BinaryPrimitives.WriteUInt16BigEndian(row[(position + 2)..], b); position += 4;
+                }
+                if (color == 4) { BinaryPrimitives.WriteUInt16BigEndian(row[position..], a); position += 2; }
+            }
+        }
+    }
+
+    private static int PackWordVectors(ReadOnlySpan<ushort> input, Span<byte> output, int color)
+    {
+        if (!BitConverter.IsLittleEndian || !Avx512F.IsSupported || !Avx512BW.IsSupported
+            || !Avx512Vbmi.IsSupported || input.Length < 32) return 0;
+        // Eight RGBA16 pixels fit in each group. Select the PNG channels and
+        // reverse each word's bytes together; unused lanes are never stored.
+        // Leave an invalid group to the scalar loop so earlier opaque failures
+        // still precede a later grayscale failure in that same group.
+        var indices = color == 0 ? Vector512.Create<byte>([
+            1, 0, 9, 8, 17, 16, 25, 24, 33, 32, 41, 40, 49, 48, 57, 56,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            : color == 2 ? Vector512.Create<byte>([
+                1, 0, 3, 2, 5, 4, 9, 8, 11, 10, 13, 12, 17, 16, 19, 18,
+                21, 20, 25, 24, 27, 26, 29, 28, 33, 32, 35, 34, 37, 36, 41, 40,
+                43, 42, 45, 44, 49, 48, 51, 50, 53, 52, 57, 56, 59, 58, 61, 60,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            : Vector512.Create<byte>([
+                1, 0, 7, 6, 9, 8, 15, 14, 17, 16, 23, 22, 25, 24, 31, 30,
+                33, 32, 39, 38, 41, 40, 47, 46, 49, 48, 55, 54, 57, 56, 63, 62,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        var mask = Vector512.Create(65535UL); var i = 0; var position = 0;
+        for (; i <= input.Length - 32; i += 32)
+        {
+            var value = Vector512.LoadUnsafe(ref MemoryMarshal.GetReference(input), (nuint)i);
+            var pixels = value.AsUInt64(); var red = pixels & mask;
+            if ((color is 0 or 4) && (!Vector512.EqualsAll(red, Avx512F.ShiftRightLogical(pixels, 16) & mask)
+                || !Vector512.EqualsAll(red, Avx512F.ShiftRightLogical(pixels, 32) & mask))) break;
+            if ((color is 0 or 2) && !Vector512.EqualsAll(Avx512F.ShiftRightLogical(pixels, 48), mask)) break;
+            var packed = Avx512Vbmi.PermuteVar64x8(value.AsByte(), indices);
+            if (color == 0)
+            {
+                packed.GetLower().GetLower().StoreUnsafe(ref MemoryMarshal.GetReference(output), (nuint)position); position += 16;
+            }
+            else
+            {
+                packed.GetLower().StoreUnsafe(ref MemoryMarshal.GetReference(output), (nuint)position); position += 32;
+                if (color == 2)
+                {
+                    packed.GetUpper().GetLower().StoreUnsafe(ref MemoryMarshal.GetReference(output), (nuint)position); position += 16;
+                }
+            }
+        }
+        return i;
     }
 
     internal static void WriteChunk(Stream output, ReadOnlySpan<byte> type, ReadOnlySpan<byte> payload)

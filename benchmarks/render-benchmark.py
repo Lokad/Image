@@ -440,6 +440,12 @@ def render():
     assert png_encode_coverage['independentQuietConfirmations'] == 6
     assert png_encode_coverage['producers'] == header_skips['producers']
     assert png_encode_coverage['qualificationReused']['packageSha256'] == header_skips['qualification']['package']['sha256']
+    word_color_png = json.loads((ROOT / 'benchmarks/warm-png-word-color-packing-evidence.json').read_text(encoding='utf-8'))
+    assert word_color_png['productionChanged'] and word_color_png['decision']['passed']
+    assert word_color_png['qualification']['fullChecksEachOs'] == 5342
+    assert word_color_png['qualification']['sameActualPackageBothOs']
+    assert word_color_png['qualification']['package']['sha256'] == word_color_png['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert set(word_color_png['cases']) == {'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16'}
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -593,10 +599,11 @@ def render():
                         ('EncodeGray16', 'PNG grayscale16, Optimal6 / native6, red-plane reference'),
                         ('EncodeGrayAlpha16', 'PNG gray-alpha16, Optimal6 / native6'),
                         ('EncodeNoCompression8', 'PNG RGBA8, stored0 / native0')]:
-        observation = png_encode_coverage['cases'][case][-1]
+        producer = word_color_png if case in word_color_png['cases'] else png_encode_coverage
+        observation = producer['cases'][case][-1]
         receipt = observation['receipt']
-        assert png_encode_coverage['status'][case] == 'confirmed-gap'
-        assert receipt['librarySha256'] == png_encode_coverage['producers']['linuxSha256']
+        assert producer['status'][case] == 'confirmed-gap'
+        assert receipt['librarySha256'] == producer['producers']['linuxSha256']
         assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
         assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
         assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes']
@@ -1234,7 +1241,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-10-31. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-01. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -1256,7 +1263,7 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production passes **5,332 checks per OS**, including 948 live comparisons.
+Current production passes **5,342 checks per OS**, including 948 live comparisons.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -1274,9 +1281,11 @@ existing required paths, with unchanged production and reused qualification.
 The [existing byte-color PNG controls](../benchmarks/CURRENT-BYTE-COLOR-PNG-COSTS.md)
 likewise confirm 1.305–1.325× with exact packets; their old BCL-era costs are
 superseded. Reference inputs/settings and the finite required scope are unchanged.
-The [six remaining named default/stored PNG controls](../benchmarks/CURRENT-PNG-ENCODE-COVERAGE.md)
-now have current confirmations too. Gray16 is the largest new gap at 1.587×;
-all six retain exact complete packets, with unchanged production and no builds.
+The [six named default/stored PNG controls](../benchmarks/CURRENT-PNG-ENCODE-COVERAGE.md)
+have independent confirmations. Qualified [word-color packing](../benchmarks/WARM-PNG-WORD-COLOR-PACKING.md)
+then improves Gray16 by **21.14%**, with unchanged allocation and exact packets.
+Gray16 is now **1.254 / upper 1.285**; RGB16/gray-alpha16 confirm **1.320/1.314×**.
+All three remain gaps; byte/RGBA/stored paths retain applicable unchanged costs.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named

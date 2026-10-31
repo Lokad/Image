@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-10-31. These **94 selected comparisons** combine qualified
+Updated 2026-11-01. These **94 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -22,7 +22,7 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production passes **5,332 checks per OS**, including 948 live comparisons.
+Current production passes **5,342 checks per OS**, including 948 live comparisons.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -40,9 +40,11 @@ existing required paths, with unchanged production and reused qualification.
 The [existing byte-color PNG controls](../benchmarks/CURRENT-BYTE-COLOR-PNG-COSTS.md)
 likewise confirm 1.305–1.325× with exact packets; their old BCL-era costs are
 superseded. Reference inputs/settings and the finite required scope are unchanged.
-The [six remaining named default/stored PNG controls](../benchmarks/CURRENT-PNG-ENCODE-COVERAGE.md)
-now have current confirmations too. Gray16 is the largest new gap at 1.587×;
-all six retain exact complete packets, with unchanged production and no builds.
+The [six named default/stored PNG controls](../benchmarks/CURRENT-PNG-ENCODE-COVERAGE.md)
+have independent confirmations. Qualified [word-color packing](../benchmarks/WARM-PNG-WORD-COLOR-PACKING.md)
+then improves Gray16 by **21.14%**, with unchanged allocation and exact packets.
+Gray16 is now **1.254 / upper 1.285**; RGB16/gray-alpha16 confirm **1.320/1.314×**.
+All three remain gaps; byte/RGBA/stored paths retain applicable unchanged costs.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
@@ -85,9 +87,9 @@ acceptance histories are retained in the coverage links and raw evidence.
 | PNG gray-alpha8, Optimal6 / native6 † | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
 | PNG RGBA8, Optimal6 / native6 † | 24,157.64 | 17,999.79 | 1.342 / 1.373 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, Optimal6 / native6 † | 26,842.58 | 20,081.34 | 1.337 / 1.359 | 3,813,732 | 963,202 / 963,202 |
-| PNG RGB16, Optimal6 / native6 † | 24,119.32 | 16,552.00 | 1.457 / 1.479 | 3,571,252 | 739,472 / 739,472 |
-| PNG grayscale16, Optimal6 / native6, red-plane reference † | 8,637.95 | 5,442.94 | 1.587 / 1.621 | 1,506,972 | 265,433 / 265,433 |
-| PNG gray-alpha16, Optimal6 / native6 † | 16,121.94 | 11,052.73 | 1.459 / 1.480 | 2,264,564 | 506,887 / 506,887 |
+| PNG RGB16, Optimal6 / native6 † | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
+| PNG grayscale16, Optimal6 / native6, red-plane reference † | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
+| PNG gray-alpha16, Optimal6 / native6 † | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,111.27 | 1,013.36 | 1.097 / 1.136 | 757,362 | — |
