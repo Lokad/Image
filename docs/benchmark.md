@@ -101,7 +101,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | --- | ---: | ---: | ---: | ---: | --- |
 | Probe PNG dimensions, seekable | 0.156 | 0.123 | 1.263 / 1.956 | 744 | Screen gap |
 | Probe JPEG dimensions, seekable | 0.355 | 0.193 | 1.842 / 1.895 | 744 | Confirmed gap |
-| Probe WebP dimensions, seekable | 0.159 | 0.123 | 1.289 / 1.550 | 744 | Screen gap |
+| Probe WebP dimensions, seekable | 0.165 | 0.125 | 1.323 / 1.425 | 744 | Confirmed gap |
 | Probe JPEG dimensions, async nonseekable | 0.397 | 0.201 | 1.976 / 2.017 | 744 | Confirmed gap |
 | Validate PNG8, span | 1,382.593 | 1,378.823 | 1.003 / 1.010 | 240 | Confidence open |
 | Validate PNG16, span | 2,799.737 | 2,958.844 | 0.946 / 0.956 | 240 | Confirmed pass |
