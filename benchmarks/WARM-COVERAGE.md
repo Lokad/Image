@@ -674,6 +674,17 @@ return to largest remaining gaps. Full268-path objective unchanged.
 
 ## Finite checklist
 
+[Current asynchronous RGBA8/444 JPEG](CURRENT-ASYNC-JPEG-RGBA8-COST.md) resolves
+the existing `Jpeg8AsyncNonSeekable` boundary at 1.199× / upper 1.210, 820,475 B/op.
+Complete 133,039/133,041-byte packets differ only by approved COM and reconstruct
+exactly. This includes ImageBuffer borrowing and full alpha flattening, distinct
+from caller RGB420. A stale public-decoder record is refreshed only in a temporary
+header; native pixels/source quality/settings remain unchanged. An incorrect
+cached selector stops before actuals; one small correct selector supplies the
+single successful twelve. No production/harness/native build; both headers are
+restored and unchanged full/package proof is reused. The 64th displayed comparison
+is already required by the unchanged 268-case inventory.
+
 [Current asynchronous caller-RGB420 JPEG](CURRENT-ASYNC-JPEG-RGB420-COST.md)
 resolves the existing `JpegRgb420AsyncSamples` boundary at 1.143× / upper 1.154,
 309,526 B/op. The original RGB24 projection remains; complete 52,091/52,093-byte

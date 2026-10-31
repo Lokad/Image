@@ -1,5 +1,8 @@
 # Asynchronous nonseekable JPEG RGBA8 encoding
 
+Historical producer and short screen. [Current packet and cost evidence](CURRENT-ASYNC-JPEG-RGBA8-COST.md)
+supersede these measurements; the original raw evidence remains retained.
+
 Updated 2026-10-20. The current qualified producer has a **1.034× gap**
 for this already-named complete operation. Production is unchanged; no independent
 parity confirmation is claimed and no long run above parity is added.
