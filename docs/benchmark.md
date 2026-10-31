@@ -146,10 +146,13 @@ screens below the retained 4.1% threshold and is
 The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
 public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
-Seven public and four internal checks pass separately on restored production:
-5,325 applicable per OS, without a repeated full/package run. The
+Twelve public and four internal checks pass separately on restored production:
+5,330 applicable per OS, without a repeated full/package run. The
 [alternating-tap trial](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md)
 also misses its short screen; accepted costs and production remain unchanged.
+[Vertical geometry reuse](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
+is rejected after a corrected confirmation misses retention; source and packages
+are restored exactly, with five useful public tests retained.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

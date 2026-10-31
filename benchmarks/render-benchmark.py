@@ -975,6 +975,12 @@ def render():
     assert alternating_taps['qualification']['applicableTotalChecksEachOs'] == 5325
     assert alternating_taps['qualification']['focusedPublicEachMode'] == 221
     assert all(r['productionSourceRestoredByteExact'] for r in alternating_taps['restoration'].values())
+    enlargement_geometry = json.loads((ROOT / 'benchmarks/enlargement-vertical-geometry-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert enlargement_geometry['candidateRejected'] and not enlargement_geometry['productionChanged']
+    assert not enlargement_geometry['decision']['passed']
+    assert enlargement_geometry['qualification']['applicableChecksEachOs'] == 5330
+    assert enlargement_geometry['qualification']['prototypeOnlyInternalTestsRemoved'] == 3
+    assert all(r['productionSourceRestoredByteExact'] for r in enlargement_geometry['restoration'].values())
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1230,10 +1236,13 @@ screens below the retained 4.1% threshold and is
 The current producer passes **5,314 checks per OS** (2,164 internal, 2,202
 public, 948 live), plus 31 internal/544 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
-Seven public and four internal checks pass separately on restored production:
-5,325 applicable per OS, without a repeated full/package run. The
+Twelve public and four internal checks pass separately on restored production:
+5,330 applicable per OS, without a repeated full/package run. The
 [alternating-tap trial](../benchmarks/BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md)
 also misses its short screen; accepted costs and production remain unchanged.
+[Vertical geometry reuse](../benchmarks/ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md)
+is rejected after a corrected confirmation misses retention; source and packages
+are restored exactly, with five useful public tests retained.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB

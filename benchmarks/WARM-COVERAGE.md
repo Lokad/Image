@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Enlargement vertical geometry](ENLARGEMENT-VERTICAL-GEOMETRY-REJECTED.md) is
+rejected. The initial primary7.19%filtered gain accompanies a material horizontal
+no-plan regression. One inline-shortcut correction restores horizontal cost but
+leaves only1.17%primary gain, below4.1%. Source/core/internal assemblies/package
+are restored byte-exactly; no variants follow. Five public exact-frame/ownership
+tests remain and549focused checks pass in each required mode on restored
+production. Prototype-only helper tests are removed. Prior5,314/OS/full/SAME
+package proof carries forward with12public+4internal tests separately qualified:
+5,330applicable,no fresh full5,330claim. Accepted costs/all268paths stay unchanged.
+
 [Alternating wider bicubic tap sums](BICUBIC-ALTERNATING-TAP-SUMS-REJECTED.md)
 fails one Wide8 continuation screen:587.187versus532.115µs, exact pixels/native
 bounds/owners/quiet passed, no confirmation or unroll-count variant. The original
