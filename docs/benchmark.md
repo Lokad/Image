@@ -80,6 +80,9 @@ upper 0.985**, **2,514,272 B/op** and stops. Word bicubic enlargement remains
 **1.230× / upper 1.244**, **5,016,602 B/op**. Existing word-bilinear/default-byte
 enlargements remain gaps; no new workload or production change.
 [Caller audit](../benchmarks/CURRENT-SHARED-ALPHA-CALLER-COSTS.md).
+A bounded byte-normalization screen regresses and is rejected; the verified
+implementation and all displayed costs remain unchanged.
+[Rejected screen](../benchmarks/BYTE-BICUBIC-ONE-NEWTON-REJECTED.md).
 
 The current producer passes **5,267 checks per OS**, plus 22 new internal and
 179 public focused checks normal/scalar and Linux with AVX512 disabled.
