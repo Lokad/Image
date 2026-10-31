@@ -17,6 +17,15 @@ qualification. Frozen canonical rows expose226repeats forDC/Ac and65forSparse2D,
 a feasibility lead for confirmed Acgap, not a new performance claim.
 All268paths remain;76displayed comparisons stay unchanged in count.
 
+[Cross-block JPEG lookahead](JPEG-CROSS-BLOCK-LOOKAHEAD-REJECTED.md) misses its
+one short: candidate640.481µs versus reusedoriginal626.368µs, unchanged allocation
+within noise; no causal gain/regression claim or confirmation/variant. An initial
+progressive error-position mismatch is corrected before scoring. All355internal/
+354public focused normal/scalar/ISA checks then pass. Original production restored
+exactly; two useful boundary tests retained. Fresh2164internal/OS plus reused
+2193public/948live and sameactualpackage proof give5305applicable checks/OS.
+No new benchmark input/profile/harness/native/selector build. Current76costs stay.
+
 [CMYK output acquisition](CMYK-OVERWRITE-ALLOCATION-REJECTED.md) saves 49.0%
 allocation in the unaccepted default warm trial, but misses its declared CPU
 screen: 3.41% raw/1.09% normalized. No independent confirmation or variant.

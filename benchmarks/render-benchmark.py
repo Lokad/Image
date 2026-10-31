@@ -922,6 +922,11 @@ def render():
     assert overwrite_cmyk['restoration']['internalAssembliesRestoredByteExact']
     assert overwrite_cmyk['qualification']['totalApplicableEachOs'] == 5303
     assert overwrite_cmyk['qualification']['sameActualReleasePackageProofReused']
+    block_window = json.loads((ROOT / 'benchmarks/jpeg-cross-block-lookahead-rejected-evidence.json').read_text(encoding='utf-8'))
+    assert block_window['candidateRejected'] and not block_window['productionChanged'] and not block_window['decision']['passed']
+    assert block_window['qualification']['totalApplicableEachOs'] == 5305
+    assert block_window['qualification']['sameActualReleasePackageProofReused']
+    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in block_window['restoration'].values())
     owned_cmyk_current = json.loads((ROOT / 'benchmarks/current-owned-cmyk-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
     assert not owned_cmyk_current['productionChanged'] and owned_cmyk_current['allBuilds'] == 0
     assert owned_cmyk_current['status']['CmykAdobe'] == 'confirmed-confidence-open'
@@ -1065,10 +1070,9 @@ Reconstruction is exact; complete packets differ only by approved attribution.
 [Caller RGB420](../benchmarks/CURRENT-ASYNC-JPEG-RGB420-COST.md) and
 [RGBA8/444](../benchmarks/CURRENT-ASYNC-JPEG-RGBA8-COST.md) retain current evidence.
 
-Byte-bilinear enlargement reuses exact horizontal rows in existing geometry:
-**21.66% less elapsed**, **1.356× / upper 1.363**, **2,235,512 B/op**, with unchanged
-admitted capacity. Reduction retains its current independent cost; both remain
-gaps. [Row-reuse evidence](../benchmarks/WARM-BILINEAR-BYTE-ROW-REUSE.md).
+Byte-bilinear enlargement reuses exact horizontal rows: its paired round reduced
+elapsed by **21.66%**, without added admitted capacity. The table includes later
+shared alpha-rounding costs; enlargement and reduction remain gaps. [Row-reuse evidence](../benchmarks/WARM-BILINEAR-BYTE-ROW-REUSE.md).
 
 Lanczos3 word reduction has a fresh current cost: **1.432× / upper 1.446**,
 **138,437 B/op**. A centered-product candidate fails independent confirmation;
@@ -1129,12 +1133,12 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-Current evidence covers **5,303 checks per OS**: 2,193 freshly run public checks,
-with unchanged 2,162 internal/948 live and actual-package proofs reused. Eight
-new CMYK ownership/pixel controls also pass scalar/ISA modes. Applicable focused
-coverage includes 353 internal and 354 public checks normal/scalar and Linux
-with AVX512 disabled. Header/probe proofs remain applicable.
-[Retained CMYK regression coverage](../benchmarks/CMYK-COMPLETED-COLOR-ROWS-REJECTED.md).
+Current evidence covers **5,305 checks per OS**: 2,164 freshly run internal
+checks, with unchanged 2,193 public/948 live and actual-package proofs reused.
+Two new JPEG cursor/fallback controls also pass scalar/ISA modes. Applicable
+focused coverage includes 355 internal and 354 public checks normal/scalar and
+Linux with AVX512 disabled. Header/probe proofs remain applicable.
+[Retained JPEG boundary coverage](../benchmarks/JPEG-CROSS-BLOCK-LOOKAHEAD-REJECTED.md).
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
