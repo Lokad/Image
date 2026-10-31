@@ -160,7 +160,7 @@ internal sealed class WarmAsyncJpegEncode
                 runId = Environment.GetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID"), smoke, cpu, sourceIdentity, inputBytes = pixels.Length, inputSha256 = InputHash,
                 width = 513, height = 259, depth = 8, managedQuality = 85, nativeQuality = 5, sampling = sampleInput ? "420" : "444", backgroundRgb = sampleInput ? (int?)null : 0x204060,
                 rawInputChannels = sampleInput ? 3 : 4, directCallerSamples = sampleInput, rgbaIntermediate = false,
-                managedOutputBytes = expected.Length, managedOutputSha256 = PacketHash, nativeOutputBytes = nativeBytes, qualityMatch = anchor.Match,
+                managedOutputBytes = expected.Length, managedOutputSha256 = PacketHash, nativeOutputBytes = nativeBytes,
                 managedSnapshotExact = true, encodedPacketsExact = true, qualityMatched = true, freshNonSeekableOutput = true, writeAsyncCallsVerified = true,
                 syncWrites = 0, seekOrLengthQueries = 0, callerOutputLeftOpen = true, noCallerFlushRequired = true,
                 completeEncodeStagingDeliveryAndReleaseTimed = true, outputAcquisitionGrowthAndReleaseTimed = true, noFinalSnapshotCopyTimed = true,

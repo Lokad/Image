@@ -1,5 +1,8 @@
 # Asynchronous caller-RGB420 JPEG encoding
 
+Historical producer and short screen. [Current cost and packet evidence](CURRENT-ASYNC-JPEG-RGB420-COST.md)
+supersede the measurements and compression claims below; their raw evidence is retained.
+
 Updated 2026-10-20. The current qualified producer has a **1.276× gap**
 for the already-named complete caller-sample async operation. Production is
 unchanged. This is a short screen; no independent parity confirmation is claimed.

@@ -2,7 +2,7 @@
 
 Updated 2026-10-31. Rows combine qualified **0.2.1 development** evidence with
 retained 0.2.0 measurements whose relevant production paths remain unchanged.
-These **62 comparisons** rank the remaining work; completion requires every
+These **63 comparisons** rank the remaining work; completion requires every
 material path in the [268-case coverage checklist](../benchmarks/WARM-COVERAGE.md).
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM
@@ -49,6 +49,10 @@ The existing async lossless WebP output boundary now has current independent
 evidence: **1.293× / upper 1.316**, **29,697,312 B/op**, exact **183,812-byte** packets.
 Staging, actual WriteAsync delivery, growth and output release are timed on both
 subjects. [Async evidence](../benchmarks/CURRENT-ASYNC-VP8L-ENCODE-COST.md).
+
+Async caller-RGB420 JPEG now confirms **1.143× / upper 1.154**, **309,526 B/op**.
+Reconstruction is exact; complete **52,091 / 52,093-byte** packets differ only by
+approved attribution. [Caller async evidence](../benchmarks/CURRENT-ASYNC-JPEG-RGB420-COST.md).
 
 Byte-bilinear enlargement reuses exact horizontal rows in existing geometry:
 **21.66% less elapsed**, **1.356× / upper 1.363**, **2,235,512 B/op**, with unchanged
@@ -104,6 +108,7 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | JPEG YCCK420, resident decode † | 421.45 | 707.63 | 0.596 / 0.607 | 895,547 | — |
 | JPEG 4:1:1, resident decode † | 527.41 | 450.16 | 1.172 / 1.192 | 751,295 | — |
 | JPEG 4:1:0, resident decode † | 367.40 | 507.52 | 0.724 / 0.735 | 720,838 | — |
+| JPEG caller RGB24 async nonseekable, 420 † | 1,862.24 | 1,628.86 | 1.143 / 1.154 | 309,526 | 52,091 / 52,093 |
 
 **Editing**
 

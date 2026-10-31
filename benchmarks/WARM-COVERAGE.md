@@ -674,6 +674,17 @@ return to largest remaining gaps. Full268-path objective unchanged.
 
 ## Finite checklist
 
+[Current asynchronous caller-RGB420 JPEG](CURRENT-ASYNC-JPEG-RGB420-COST.md)
+resolves the existing `JpegRgb420AsyncSamples` boundary at 1.143× / upper 1.154,
+309,526 B/op. The original RGB24 projection remains; complete 52,091/52,093-byte
+packets differ only by approved COM and reconstruct exactly. Its older Q69 screen
+predates reference-compatible encoding and shared column preparation, so it is
+historical. One independent twelve and current ownership/failure/cancellation
+probe pass with zero measurement builds; unchanged full/package proof is reused.
+Future async JPEG receipts omit their stale calibration record; archived actuals
+remain authoritative. This already-required boundary is the 63rd displayed
+comparison; the finite 268-case inventory is unchanged.
+
 [Current asynchronous VP8L encoding](CURRENT-ASYNC-VP8L-ENCODE-COST.md) resolves
 stale evidence for the existing `WebpLossless8AsyncNonSeekable` boundary:
 1.293× / upper 1.316, 29,697,312 B/op, exact 183,812-byte packets. Complete encoding,
