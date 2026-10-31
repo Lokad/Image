@@ -120,11 +120,19 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-The current producer passes **5,305 checks per OS** (2,164 internal, 2,193
-public, 948 live), plus 58 internal/306 public focused checks normal/scalar and
+Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
+**0.448× / upper 0.460**, with allocation **1,168 → 792 B/op**. Certified filtered
+bytes avoid a second inflation. All four named PNG validation costs are current;
+PNG16 sync/async also pass and stop, while PNG8 remains confidence-open.
+[Current evidence](../benchmarks/WARM-PNG-INDEXED-VALIDATION.md).
+
+The current producer passes **5,310 checks per OS** (2,164 internal, 2,198
+public, 948 live), plus 776 internal/332 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
+Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
+shared root and releases its charge on success/failure.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
 Every affected named WebP decode/validation control has current costs; the three
 opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays open.
@@ -205,14 +213,14 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | Probe JPEG dimensions, seekable | 0.355 | 0.193 | 1.842 / 1.895 | 744 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.165 | 0.125 | 1.323 / 1.425 | 744 | Confirmed gap |
 | Probe JPEG dimensions, async nonseekable | 0.397 | 0.201 | 1.976 / 2.017 | 744 | Confirmed gap |
-| Validate PNG8, span | 1,382.593 | 1,378.823 | 1.003 / 1.010 | 240 | Confidence open |
-| Validate PNG16, span | 2,799.737 | 2,958.844 | 0.946 / 0.956 | 240 | Confirmed pass |
-| Validate indexed Adam7 19×17, span | 5.352 | 3.926 | 1.363 / 1.386 | 1,168 | Confirmed gap |
+| Validate PNG8, span | 1,417.189 | 1,384.730 | 1.023 / 1.056 | 240 | Confidence open |
+| Validate PNG16, span | 2,805.515 | 2,974.590 | 0.943 / 0.972 | 240 | Confirmed pass |
+| Validate indexed Adam7 19×17, span | 1.776 | 3.965 | 0.448 / 0.460 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span | 589.348 | 673.562 | 0.875 / 0.880 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 291.290 | 267.973 | 1.087 / 1.094 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
 | Validate VP8+alpha, span | 6,696.676 | 5,469.412 | 1.224 / 1.250 | 554,478 | Confirmed gap |
-| Validate PNG16, async nonseekable | 2,850.602 | 3,605.292 | 0.791 / 0.802 | 8,544 | Confirmed pass |
+| Validate PNG16, async nonseekable | 2,836.823 | 3,623.647 | 0.783 / 0.790 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.805 | 0.590 | 1.365 / 1.603 | 8,528 | Screen gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |

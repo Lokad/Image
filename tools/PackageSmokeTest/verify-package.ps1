@@ -72,6 +72,7 @@ try {
     $pixelFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPixels.cs'))
     $vp8lFixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8lControls.cs'))
     $authoredWebpPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/AuthoredWebp.cs'))
+    $authoredPngPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/FormatCases/AuthoredPng.cs'))
     $vp8FixturePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalVp8Controls.cs'))
     $pngGradientPath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/OriginalPngGradient.cs'))
     $pngOraclePath = [Security.SecurityElement]::Escape((Join-Path $repoRoot 'tools/Shared/IndependentRgbaPng.cs'))
@@ -98,6 +99,7 @@ try {
     <Compile Include="$pixelFixturePath" Link="OriginalPixels.cs" />
     <Compile Include="$vp8lFixturePath" Link="OriginalVp8lControls.cs" />
     <Compile Include="$authoredWebpPath" Link="AuthoredWebp.cs" />
+    <Compile Include="$authoredPngPath" Link="AuthoredPng.cs" />
     <Compile Include="$vp8FixturePath" Link="OriginalVp8Controls.cs" />
     <Compile Include="$pngGradientPath" Link="OriginalPngGradient.cs" />
     <Compile Include="$pngOraclePath" Link="IndependentRgbaPng.cs" />
@@ -670,6 +672,29 @@ sparseSurvivor.Dispose();
 if (sparseRoot.Bytes != 0) throw new Exception("Packaged sparse JPEG retained charge leaked.");
 }
 Console.WriteLine("Packaged exact completed-row JPEG pixels and retained ownership passed.");
+{
+    var indexedFrame = new Lokad.Image.Tooling.AuthoredPng.Frame("package-indexed", 3, 4, 19, 17, true);
+    var indexedPacket = Lokad.Image.Tooling.AuthoredPng.Build(indexedFrame);
+    var originalPacket = indexedPacket.ToArray();
+    var expectedInfo = ImageCodec.Identify(indexedPacket);
+    using var indexedRoot = new Lokad.Image.Tooling.TestMemoryBudget(8192);
+    var indexedLimits = new ImageLimits { MemoryBudget = indexedRoot };
+    if (ImageCodec.ValidatePixels(indexedPacket, indexedLimits) != expectedInfo || indexedRoot.Bytes != 0
+        || indexedRoot.IsDisposed || indexedRoot.Peak > 8192)
+        throw new Exception("Packaged indexed PNG validation storage or descriptor differs.");
+    var invalidRows = Lokad.Image.Tooling.AuthoredPng.FilteredRows(indexedFrame);
+    invalidRows[0] = 5;
+    var invalidPacket = Lokad.Image.Tooling.AuthoredPng.Wrap(indexedFrame,
+        Lokad.Image.Tooling.AuthoredPng.StoredZlib(invalidRows));
+    var rejected = false;
+    try { ImageCodec.ValidatePixels(invalidPacket, indexedLimits); }
+    catch (ImageDataException) { rejected = true; }
+    if (!rejected || indexedRoot.Bytes != 0 || indexedRoot.IsDisposed
+        || ImageCodec.ValidatePixels(indexedPacket, indexedLimits) != expectedInfo || indexedRoot.Bytes != 0
+        || !indexedPacket.AsSpan().SequenceEqual(originalPacket))
+        throw new Exception("Packaged indexed PNG validation cleanup or input ownership differs.");
+    Console.WriteLine($"Packaged indexed PNG validation fits bounded shared storage: {indexedRoot.Peak} bytes.");
+}
 for (var y = 0; y < 8; y++)
 for (var x = 0; x < 8; x++) new byte[] { 123, 123, 123, 255 }.CopyTo(opaque.GetRow8(y)[(x*4)..]);
 using var jpeg = new MemoryStream();

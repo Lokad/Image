@@ -236,10 +236,13 @@ internal static class PngCodec
         var header = Scan(data, context, metadataPolicy);
         context.Reserve(header.CompressedLength);
         var compressed = context.RentPixels(compressedStorage, header.CompressedLength);
+        byte[]? filtered = null;
+        var filteredBytes = 0;
         try
         {
             CopyCompressed(data, compressed, context);
             int streamLength;
+            var filteredLength = FilteredLength(header);
             var rowBytes = ((long)header.Info.Width * Channels(header.ColorType) * header.Depth + 7) / 8;
             if (header.Interlace == 0 && header.ColorType != 3 && rowBytes <= int.MaxValue)
             {
@@ -252,7 +255,7 @@ internal static class PngCodec
                 {
                     history = context.RentPixels(compressedStorage, PngRowInflation.HistoryBytes);
                     var rows = new PngRowInflation((int)rowBytes, header.Info.Height, history);
-                    streamLength = ZlibFraming.ValidateAndInflateRows(compressed, FilteredLength(header), context, rows, out var completeTrees);
+                    streamLength = ZlibFraming.ValidateAndInflateRows(compressed, filteredLength, context, rows, out var completeTrees);
                     if (completeTrees && rows.Finish(BinaryPrimitives.ReadUInt32BigEndian(compressed.AsSpan(streamLength - 4))))
                     {
                         context.Cancellation.ThrowIfCancellationRequested();
@@ -268,14 +271,42 @@ internal static class PngCodec
                 // acceptance/error precedence. History is released first;
                 // admission refusal is terminal and never reaches this path.
             }
-            else streamLength = ZlibFraming.Validate(compressed, FilteredLength(header), context);
-            context.Reserve(256 * 1024);
-            try { ReadRaster(header, compressed, streamLength, context, validateOnly: true); }
-            finally { context.Release(256 * 1024); }
+            else if (header.ColorType == 3 && filteredLength <= 256 * 1024 - 4096
+                && context.RemainingWorkingBytes >= 256 * 1024L + rowBytes * 2)
+            {
+                // Filtered output plus framing scratch fits the old inflater
+                // allowance. Admit owned capacity before rent, including for a
+                // borrowed shared root; refusal never enters the replay path.
+                context.Reserve(filteredLength);
+                filteredBytes = (int)filteredLength;
+                filtered = context.RentPixels(inflatedStorage, filteredBytes);
+                streamLength = ZlibFraming.ValidateAndInflate(compressed, filtered, context, out var completeTrees);
+                var certified = false;
+                if (completeTrees)
+                {
+                    uint a = 1, b = 0;
+                    Adler32.Append(filtered, ref a, ref b, context.Cancellation);
+                    certified = (b << 16 | a) == BinaryPrimitives.ReadUInt32BigEndian(compressed.AsSpan(streamLength - 4));
+                }
+                if (!certified)
+                {
+                    // Preserve original BCL acceptance and row/checksum error
+                    // order for uncertain output. Release scratch before replay.
+                    context.ReturnPixels(inflatedStorage, filtered); filtered = null;
+                    context.Release(filteredBytes); filteredBytes = 0;
+                }
+            }
+            else streamLength = ZlibFraming.Validate(compressed, filteredLength, context);
+            var inflaterBytes = filtered is null ? 256 * 1024 : 0;
+            if (inflaterBytes != 0) context.Reserve(inflaterBytes);
+            try { ReadRaster(header, compressed, streamLength, context, filtered, validateOnly: true); }
+            finally { if (inflaterBytes != 0) context.Release(inflaterBytes); }
             return header.Info;
         }
         finally
         {
+            if (filtered is not null) context.ReturnPixels(inflatedStorage, filtered);
+            if (filteredBytes != 0) context.Release(filteredBytes);
             context.ReturnPixels(compressedStorage, compressed);
             context.Release(header.CompressedLength + (long)header.Palette.Length + header.Transparency.Length);
         }
@@ -362,7 +393,8 @@ internal static class PngCodec
             {
                 // Only the single-pass, noncancelable case can preflight all
                 // remaining row storage without moving a failure ahead.
-                if (header.Interlace == 0 && !context.Cancellation.CanBeCanceled
+                // Materialized validation has no BCL read-ahead buffer to admit.
+                if ((!validateOnly || filtered is null) && header.Interlace == 0 && !context.Cancellation.CanBeCanceled
                     && context.RemainingWorkingBytes >= PngInflatedReader.BufferBytes)
                 {
                     context.Reserve(PngInflatedReader.BufferBytes);

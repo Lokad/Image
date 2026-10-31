@@ -297,6 +297,20 @@ def render():
         assert len(observation['managed']['actual']) == len(observation['receipt']['nativeBefore']) == len(observation['receipt']['nativeAfter']) == 12
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_gfni['status'][case] == 'confirmed-pass')
+    png_indexed = json.loads((ROOT / 'benchmarks/warm-png-indexed-validation-evidence.json').read_text(encoding='utf-8'))
+    assert png_indexed['productionChanged'] and png_indexed['independentQuietConfirmation'] and png_indexed['decision']['passed']
+    assert png_indexed['decision']['defaultFivePercentPassed'] and png_indexed['decision']['normalizedSeparated']
+    assert set(png_indexed['cases']) == {'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
+    assert png_indexed['qualification']['fullChecksEachOs'] == 5310
+    assert png_indexed['qualification']['package']['sha256'] == png_indexed['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert png_indexed['memory']['measuredWarmReductionBytes'] == 376
+    assert png_indexed['memory']['governedActualPackagePeakEachOs'] == 4581
+    for case, observations in png_indexed['cases'].items():
+        observation = observations[-1]
+        assert observation['receipt']['librarySha256'] == png_indexed['producers']['linuxSha256']
+        assert len(observation['managed']['actual']) == len(observation['receipt']['nativeBefore']) == len(observation['receipt']['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert (observation['conservativeRatioUpper'] <= 1) == (png_indexed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     opaque_vp8l = json.loads((ROOT / 'benchmarks/current-opaque-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
     assert not opaque_vp8l['productionChanged'] and opaque_vp8l['measurementBuilds'] == 0
@@ -949,7 +963,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (refinement_window if case in refinement_window['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (png_indexed if case in png_indexed['cases'] else refinement_window if case in refinement_window['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -1133,11 +1147,19 @@ Owned DC-only CMYK JPEG now has a current independent cost: **1.011× / upper
 parity claim. The other three owned-CMYK costs retain valid evidence.
 [Current CMYK scope and costs](../benchmarks/CURRENT-OWNED-CMYK-JPEG-COSTS.md).
 
-The current producer passes **5,305 checks per OS** (2,164 internal, 2,193
-public, 948 live), plus 58 internal/306 public focused checks normal/scalar and
+Indexed Adam7 PNG validation independently improves **66.81%** to **1.776 µs**,
+**0.448× / upper 0.460**, with allocation **1,168 → 792 B/op**. Certified filtered
+bytes avoid a second inflation. All four named PNG validation costs are current;
+PNG16 sync/async also pass and stop, while PNG8 remains confidence-open.
+[Current evidence](../benchmarks/WARM-PNG-INDEXED-VALIDATION.md).
+
+The current producer passes **5,310 checks per OS** (2,164 internal, 2,198
+public, 948 live), plus 776 internal/332 public focused checks normal/scalar and
 Linux with AVX512 disabled. Header/probe and JPEG boundary proofs remain applicable.
 The same actual Release package, governed
 async/one-frame lossless/alpha consumers and three examples pass both OSes.
+Packaged indexed PNG validation peaks at **4,581 admitted bytes** under an 8 KiB
+shared root and releases its charge on success/failure.
 Packets, pixels, source ownership, admission and cancellation remain qualified.
 Every affected named WebP decode/validation control has current costs; the three
 opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays open.

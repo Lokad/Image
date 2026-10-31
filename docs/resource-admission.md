@@ -9,7 +9,9 @@ storage/copies, not caller-owned input storage again.
 
 `ValidatePixels` retains no raster charge. It still admits substantial codec
 storage (PNG compressed input/rows/inflater, progressive JPEG coefficients, WebP
-planes/history). Baseline JPEG validates with block scratch; baseline decoding
+planes/history). Bounded indexed PNG validation reuses certified filtered bytes;
+larger or uncertain streams retain the inflater path. Baseline JPEG validates with
+block scratch; baseline decoding
 reconstructs admitted component sample planes without full-frame coefficients.
 Owned JPEG 4:1:1/4:1:0 rendering also admits 1,536/1,792 bytes of fixed stack workspace
 alongside its live component planes and output.

@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Indexed PNG validation](WARM-PNG-INDEXED-VALIDATION.md) removes a second
+inflation on the bounded indexed path: 66.81% independent elapsed improvement,
+0.448× / upper 0.460, 792 B/op (−376). All four named PNG validation costs are
+current; indexed/PNG16 sync/async pass and stop, PNG8 remains confidence-open.
+Full 5,310 checks per OS and the same actual package/DLL, shared admission and
+three examples pass both OSes. No new workload/profile or reference build.
+Decode/encode/metadata and other codec/edit/text paths retain applicable proofs.
+Raw archive and exact invalidations are linked in the report; the 268-path
+objective remains open.
+
 [VP8L group dispatch](WARM-VP8L-GROUP-DISPATCH.md) independently improves resident
 decode5.93%filtered/5.94%all raw/5.79%normalized with separated confidence and
 unchanged152728B/op:1.068×/upper1.079 remainsgap. All nine affected named costs

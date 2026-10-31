@@ -38,7 +38,8 @@
   full-precision 16-bit gradients after flips and rotations; existing declared
   reference packet controls remain unchanged.
 - Faster PNG row scoring, prediction, reconstruction and bounded cancelable
-  inflation, preserving exact bytes, portable fallback and admitted workspace.
+  inflation, including reuse of certified indexed validation bytes, preserving
+  exact bytes, portable fallback and admitted workspace.
 - Faster bounded Deflate match scans for PNG Optimal/SmallestSize, preserving
   complete packets, dictionary order, ring boundaries and cancellation.
 - Faster bicubic filtering and shared guarded word publication, preserving
