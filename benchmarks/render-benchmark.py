@@ -1030,6 +1030,24 @@ def render():
     assert not opaque_alpha['decision']['independentCandidateConfirmation']
     assert opaque_alpha['qualification']['applicableChecksEachOs'] == 5332
     assert all(r['productionSourceRestoredByteExact'] for r in opaque_alpha['qualification']['restoration'].values())
+    grayscale_costs = json.loads((ROOT / 'benchmarks/current-grayscale-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not grayscale_costs['productionChanged'] and grayscale_costs['allBuilds'] == 0
+    assert grayscale_costs['producers'] == factored_jpeg16['producers']
+    assert grayscale_costs['independentQuietConfirmations'] == 2
+    assert grayscale_costs['correctness']['rawCompletePacketExact']
+    updated_gray = 0
+    for case, label in [('RgbaGray', 'JPEG grayscale, standalone SIMD libjpeg-turbo'),
+                        ('CallerGray', 'JPEG from caller GRAY8, standalone SIMD libjpeg-turbo')]:
+        observation = grayscale_costs['cases'][case][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert len(observation['managed']['actual']) == 12 and grayscale_costs['comparisonLowerBounds'][case] > 1
+        for index, (kind, row) in enumerate(rows):
+            if row.startswith(f'| {label} |'):
+                rows[index] = (kind, f'| {label} † | {stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                              f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                              f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+                updated_gray += 1
+    assert updated_gray == 2
     cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
     assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
     assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
@@ -1294,6 +1312,13 @@ forward-only 420 **1.039 / upper 1.058**, **388,247 B/op**; live-token 420
 **1.047 / upper 1.065**, **388,215 B/op**. All remain gaps; packets stay exact.
 RGBA8/caller-byte samples, RGBA16 444 and all decoding/editing retain applicable
 unchanged-path evidence. No new cases or normalization variants.
+
+The two existing single-component grayscale JPEG boundaries now have current
+independent costs against the approved SIMD libjpeg-turbo reference: RGBA8
+**1.126 / upper 1.137**, **155,436 B/op**; caller GRAY8 **1.072 / upper 1.090**,
+**155,439 B/op**. Both remain gaps with raw-exact **58,910-byte packets**.
+[Grayscale evidence](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md) replaces short
+screens without a causal gain claim, new input or production change.
 
 The current producer passes **5,331 checks per OS** (2,169 internal, 2,214
 public, 948 live), plus 13 internal/354 public affected checks normal/scalar and

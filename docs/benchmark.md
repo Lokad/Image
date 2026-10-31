@@ -156,6 +156,13 @@ forward-only 420 **1.039 / upper 1.058**, **388,247 B/op**; live-token 420
 RGBA8/caller-byte samples, RGBA16 444 and all decoding/editing retain applicable
 unchanged-path evidence. No new cases or normalization variants.
 
+The two existing single-component grayscale JPEG boundaries now have current
+independent costs against the approved SIMD libjpeg-turbo reference: RGBA8
+**1.126 / upper 1.137**, **155,436 B/op**; caller GRAY8 **1.072 / upper 1.090**,
+**155,439 B/op**. Both remain gaps with raw-exact **58,910-byte packets**.
+[Grayscale evidence](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md) replaces short
+screens without a causal gain claim, new input or production change.
+
 The current producer passes **5,331 checks per OS** (2,169 internal, 2,214
 public, 948 live), plus 13 internal/354 public affected checks normal/scalar and
 Linux with AVX512 disabled. Earlier bicubic
@@ -184,8 +191,8 @@ opaque VP8 controls retain unchanged-path evidence. The 268-case objective stays
 | JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,071.31 | 1,837.31 | 1.127 / 1.135 | 819,489 | 52,115 / 52,117 |
-| JPEG grayscale, standalone SIMD libjpeg-turbo | 1,594.51 | 1,401.06 | 1.138 / 1.298 | 155,436 | 58,910 / 58,910 |
-| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo | 1,155.59 | 1,075.36 | 1.075 / 1.561 | 155,438 | 58,910 / 58,910 |
+| JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
+| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,331.69 | 2,509.72 | 1.328 / 1.463 | 741,375 | 7,330 / 7,330 |
 | VP8 RGBA8 † | 70,231.82 | 53,675.16 | 1.308 / 1.382 | 21,353,208 | 98,590 / 98,590 |
 | VP8 opaque photograph † | 13,899.64 | 9,701.62 | 1.433 / 1.438 | 809,072 | 17,688 / 17,688 |

@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current single-component JPEG costs](CURRENT-GRAYSCALE-JPEG-COSTS.md) resolve
+two missing independent confirmations: RGBA8 is 1.126 / upper 1.137, 155,436 B/op;
+caller GRAY8 is 1.072 / upper 1.090, 155,439 B/op. Both are confirmed gaps, with
+raw-exact 58,910-byte packets and the approved SIMD libjpeg-turbo reference.
+RGBA normalization and caller-sample boundaries remain distinct and frozen.
+Earlier independent costs predate the paired entropy writer; later rows only
+supplied shorts. One twelve each, zero builds/profiles/new inputs/qualification
+repeats. Immutable JFN1 and its full/package proof remain; all 268 paths required.
+
 [Opaque predictor alpha reuse](VP8L-OPAQUE-ALPHA-ANALYSIS-REJECTED.md) is rejected:
 one short pair saves only 1.58% raw and is 0.35% worse normalized. Exact packets,
 pixels, source/ownership/native/quiet gates pass; no confirmation or variants.
