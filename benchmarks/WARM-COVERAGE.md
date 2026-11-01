@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Allocation-only text/drawing controls](TEXT-DRAWING-ALLOCATION-CONTROLS.md)
+measure all nine existing boundaries: composites56B/op, font757272, logical3152,
+Latin6408, Arabic28656, fitting224168 and drawing83456 at eitherdepth. Three
+identical16-operation samples and both quiet guards pass; exact frozen pixels
+and borrowed sources pass. No elapsed times or native comparisons. A font worker,
+managed control and immutable3/12 selector pass zero-timing preflight. Production,
+package and valid proofs/costs are unchanged; allnine still lack warm timings.
+
 [Public text reference readiness](PUBLIC-TEXT-LAYOUT-REFERENCE.md) supplies
 retained paths, glyph/cluster data, real bounds and complete fitting on four
 existing controls. Both platforms match glyphs/clusters/lines and select16.75px

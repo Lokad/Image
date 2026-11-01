@@ -1493,6 +1493,15 @@ def render():
     assert overlap['rejectedTrial']['restoration']['productionRestoredByteExactly']
     rows.append(('editing', f'| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | {c["managedMicroseconds"]:,.2f} | '
                  f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
+    allocation_only = json.loads((ROOT / 'benchmarks/text-drawing-allocation-controls-evidence.json').read_text(encoding='utf-8'))
+    assert allocation_only['allocationOnly'] and not allocation_only['timingClaim'] and not allocation_only['comparativeBaselineUsed']
+    assert allocation_only['quietGuardsPassed'] and allocation_only['remainingAuditedWithoutElapsedTime'] == 9
+    allocation_values = {c['caseId']: c['allocatedBytesPerOperation'] for c in allocation_only['observations']['cases']}
+    assert len(allocation_values) == 9
+    assert all(c['sampleValues'] == [c['allocatedBytesPerOperation']] * 3 and c['operationsPerSample'] == 16
+               for c in allocation_only['observations']['cases'])
+    assert allocation_values['DrawingComposite8'] == allocation_values['DrawingComposite16']
+    assert allocation_values['DrawText8'] == allocation_values['DrawText16']
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1583,6 +1592,12 @@ Updated 2026-11-01. These **{displayed_count} selected comparisons** combine qua
 [282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
 268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);\nnine still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
+
+[Allocation-only text/drawing controls](../benchmarks/TEXT-DRAWING-ALLOCATION-CONTROLS.md)
+now cover all nine pending boundaries. Compositing allocates **{allocation_values["DrawingComposite8"]:,} B/op** at either
+depth; prepared text drawing allocates **{allocation_values["DrawText8"]:,} B/op** at either depth. These are
+stable allocated-byte diagnostics with both quiet guards, without elapsed-time
+or native comparisons; all nine timing results remain missing.
 
 [Paired overlapping copy](../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md)
 confirms a **1.106 / upper 1.152× gap**, 112 B/op. Both subjects count forward

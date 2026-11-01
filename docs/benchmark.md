@@ -7,6 +7,12 @@ Updated 2026-11-01. These **110 selected comparisons** combine qualified
 nine still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
 
+[Allocation-only text/drawing controls](../benchmarks/TEXT-DRAWING-ALLOCATION-CONTROLS.md)
+now cover all nine pending boundaries. Compositing allocates **56 B/op** at either
+depth; prepared text drawing allocates **83,456 B/op** at either depth. These are
+stable allocated-byte diagnostics with both quiet guards, without elapsed-time
+or native comparisons; all nine timing results remain missing.
+
 [Paired overlapping copy](../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md)
 confirms a **1.106 / upper 1.152× gap**, 112 B/op. Both subjects count forward
 movement and reverse restoration on one borrowed canvas; these are per-pair

@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "FRW67/ALC68",
+  "productionChanged": false,
+  "allocationOnly": true,
+  "timingClaim": false,
+  "comparativeBaselineUsed": false,
+  "requiredMaterialPaths": 282,
+  "selectedSummaryComparisons": 110,
+  "remainingAuditedWithoutElapsedTime": 9,
+  "newRequiredCases": 0,
+  "observations": {
+    "project": "Lokad.Image",
+    "allocationOnly": true,
+    "timingClaim": false,
+    "comparativeBaselineUsed": false,
+    "productionChanged": false,
+    "librarySha256": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676",
+    "harnessSha256": "83de1dea037fcbfa74b034cef28eac99566f2cab4bdb1b6f63f560955616e574",
+    "platform": "linux-x64",
+    "runtime": ".NET 10.0.8",
+    "cpu": 0,
+    "processorCount": 1,
+    "gcConfiguration": {
+      "ServerGC": false,
+      "ConcurrentGC": false,
+      "RetainVM": false,
+      "NoAffinitize": false,
+      "GCCpuGroup": false,
+      "GCLargePages": false,
+      "LOHThreshold": 85000,
+      "HeapCount": 1,
+      "MaxHeapCount": 0,
+      "GCHeapAffinitizeMask": 0,
+      "GCHeapAffinitizeRanges": "",
+      "GCHighMemPercent": 90,
+      "GCGen0MaxBudget": 134217728,
+      "GCHeapHardLimit": 0,
+      "GCHeapHardLimitPercent": 0,
+      "GCRegionRange": 33532829696,
+      "GCRegionSize": 0,
+      "UOHWaitBGCSizeIncPercent": 200,
+      "GCHeapHardLimitSOH": 0,
+      "GCHeapHardLimitLOH": 0,
+      "GCHeapHardLimitPOH": 0,
+      "GCHeapHardLimitSOHPercent": 0,
+      "GCHeapHardLimitLOHPercent": 0,
+      "GCHeapHardLimitPOHPercent": 0,
+      "GCConserveMem": 0,
+      "GCName": "",
+      "GCPath": "",
+      "GCDynamicAdaptationMode": 1,
+      "GCDTargetTCP": 0,
+      "GCDGen0GrowthPercent": 0,
+      "GCDGen0GrowthMinFactor": 0,
+      "GCDGen0GrowthMaxFactor": 0
+    },
+    "exactCompositeAndFrozenDrawPixels": true,
+    "sourceUnchanged": true,
+    "observed": 3648476,
+    "cases": [
+      {
+        "caseId": "DrawingComposite8",
+        "allocatedBytesPerOperation": 56,
+        "sampleValues": [
+          56,
+          56,
+          56
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": true,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "DrawingComposite16",
+        "allocatedBytesPerOperation": 56,
+        "sampleValues": [
+          56,
+          56,
+          56
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": true,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "FontLoadRegular",
+        "allocatedBytesPerOperation": 757272,
+        "sampleValues": [
+          757272,
+          757272,
+          757272
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": false,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "TextLayoutLogicalWrapped",
+        "allocatedBytesPerOperation": 3152,
+        "sampleValues": [
+          3152,
+          3152,
+          3152
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": false,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "TextLayoutOpenTypeLatin",
+        "allocatedBytesPerOperation": 6408,
+        "sampleValues": [
+          6408,
+          6408,
+          6408
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": false,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "TextLayoutOpenTypeArabic",
+        "allocatedBytesPerOperation": 28656,
+        "sampleValues": [
+          28656,
+          28656,
+          28656
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": false,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "TextFitOpenType",
+        "allocatedBytesPerOperation": 224168,
+        "sampleValues": [
+          224168,
+          224168,
+          224168
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": false,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "DrawText8",
+        "allocatedBytesPerOperation": 83456,
+        "sampleValues": [
+          83456,
+          83456,
+          83456
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": true,
+        "completeOperationAndDisposalIncluded": true
+      },
+      {
+        "caseId": "DrawText16",
+        "allocatedBytesPerOperation": 83456,
+        "sampleValues": [
+          83456,
+          83456,
+          83456
+        ],
+        "operationsPerSample": 16,
+        "warmups": 4,
+        "resetExcluded": true,
+        "completeOperationAndDisposalIncluded": true
+      }
+    ],
+    "scope": "Nine existing controls, one borrowed resident source/font/layout as appropriate. GC.GetAllocatedBytesForCurrentThread counts complete public operations and disposal. Canvas reset outside counter equally before every operation; no output convergence. Four warmups, three16-operation allocation samples, no elapsed-time API or reference sample. Direct allocation diagnostic, not BenchmarkDotNet timing/CI evidence."
+  },
+  "identities": {
+    "runtime": "tmp/alc68-runtime",
+    "hashes": {
+      "AllocationControls.dll": "83de1dea037fcbfa74b034cef28eac99566f2cab4bdb1b6f63f560955616e574",
+      "AllocationControls.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+      "AllocationControls.deps.json": "f00322d2e378802fd8455cdaaf69e4d8b29ab1e31e57f01f75f9588e52c4f939",
+      "Lokad.Image.dll": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676"
+    },
+    "guardsPassed": true,
+    "productionBuilds": 0,
+    "elapsedTimeSamples": 0
+  },
+  "quietGuardsPassed": true,
+  "guardSourceSha256": "a9594426c6137539cd775fad8204096fca79bed18baf2889bded07a48d8b2c26",
+  "fontWorkerPreflight": {
+    "project": "Lokad.Image",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "performanceBaselineApproved": false,
+    "productionChanged": false,
+    "mode": "check",
+    "timedSamples": 0,
+    "sourceAndMetricsExact": true,
+    "protocolAndOwnershipExact": true,
+    "negativeControls": [
+      {
+        "request": "sample 0",
+        "exitCode": 1,
+        "sampleRows": 0
+      },
+      {
+        "request": "sample 10000001",
+        "exitCode": 1,
+        "sampleRows": 0
+      },
+      {
+        "request": "bogus",
+        "exitCode": 1,
+        "sampleRows": 0
+      }
+    ],
+    "productionSha256": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676",
+    "harnessSha256": "cd00823982d37cb4edee5b318d88cd79395c67f914e6e4051cc71f7f6049c4d0",
+    "selectorSha256": "295e47f90c9057291241c90fba81bd915d0da42235cf16e4be952c7eeaa80103",
+    "runtime": "tmp/frw67-runtime",
+    "runtimeHashes": {
+      "Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "FontLoadHarness.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+      "Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "FontLoadDriver.deps.json": "98b8b61e0dc30afa04a06611cc1f62cd272b18e62d2159e06dc8d8e88d011ed8",
+      "CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "FontLoadDriver.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+      "Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "Lokad.Image.dll": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676",
+      "Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "FontLoadHarness.dll": "cd00823982d37cb4edee5b318d88cd79395c67f914e6e4051cc71f7f6049c4d0",
+      "Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "FontLoadHarness.deps.json": "4921fbd10b0edfcee68f58628949bae2336567a96622c8367127bbf9656cee0a",
+      "FontLoadDriver.dll": "295e47f90c9057291241c90fba81bd915d0da42235cf16e4be952c7eeaa80103",
+      "Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+    },
+    "nativeIdentity": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "sourceSha256": "85bf3edae2c4cac58ed9aea60140411499d28d05cd00bdb9f762173d61ced78d",
+      "workerSha256": "a2b2884626b376d71a927a646be0f3cb2bb515f79f33d744d265dfcc59707ab2",
+      "librarySha256": "992dac80abe3a3854f3eb2668da4207c029664ceca5f122ddb46e2a8169e9499",
+      "libraryVersion": "2.13.2",
+      "headerHashes": {
+        "external/freetype-reference/include/ft2build.h": "4a03081962780f1bebda042fb9b4aeef59661efd6f31eebcf0a6762dab2d7418",
+        "external/freetype-reference/include/freetype/freetype.h": "f8405ec80687d9e6c5fddb301288c370fe702f159a98b6152e9d32b3f68c2d46"
+      },
+      "flags": [
+        "-O2",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "performanceBaselineApproved": false
+    },
+    "selectorModes": "Same immutable selector chooses3 or12 actuals via existing LOKAD_IMAGE_WARM_MODE. It has not executed a scored job.",
+    "productionBuilds": 0,
+    "harnessBuilds": 1,
+    "selectorBuilds": 1,
+    "nativeBuilds": 1
+  },
+  "windowsManagedControl": {
+    "project": "Lokad.Image",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "glyphCount": 6253,
+    "unitsPerEm": 2048,
+    "inputSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "librarySha256": "d5a8a3e15c003720047c1682bc51ac3ff8efcabe1fd02f1e35af67919f726617"
+  },
+  "methodology": "Three16-operation GC.GetAllocatedBytesForCurrentThread samples after4warmups perexistingcontrol. Include complete public operation/disposal; resident inputs/options and identical per-operation canvasreset excluded. No elapsed clock or native-reference sample used. Directallocation diagnostic, notBDN timing/confidence evidence.",
+  "pendingBaselines": "Four explicit questions still coverallnine elapsed-time controls. No elapsed sample may run before its reference/bounds are approved; existing reference exceptions elsewhere are unchanged.",
+  "sources": {
+    "tmp/alc68/Program.cs": "809361ac41a7e42e80df38b6f01684accb82345415f97620ca2294d759dfa72e",
+    "tmp/alc68/AllocationControls.csproj": "58ad32c4495467ea638996ecba4dae039c8402e5fd3f5c7b73c9dea4019f79ea",
+    "tmp/frw67/WarmFontLoad.cs": "fe0e542dea7cd97516acb05e643a2b98960faf26ae54dba10877c345d90c77c3",
+    "tmp/frw67-font-load-warm.c": "85bf3edae2c4cac58ed9aea60140411499d28d05cd00bdb9f762173d61ced78d"
+  },
+  "qualificationReused": {
+    "fullChecksEachOS": 5378,
+    "liveEachOS": 948,
+    "sameActualPackageBothOS": true,
+    "usageExamplesEachOS": 3,
+    "packageSha256": "749ab90c50ff636be8b7eadfa5ee7e1460de2b3441081f70e487129b70190f40",
+    "report": "WARM-RECTANGLE-FILL-PACKED.md",
+    "rawDependencySha256": "93a1e91bdf349d7af12cde4a8300873dfeabfe5cb6d2a327e24b3262e2351e27"
+  },
+  "workflow": {
+    "productionBuilds": 0,
+    "fullSuiteRepeats": 0,
+    "packageRebuilds": 0,
+    "newFontInputs": 0,
+    "newImageInputs": 0,
+    "elapsedTimeJobs": 0,
+    "nativeTimedSamples": 0,
+    "nativeCompilePreflightFailures": 1
+  },
+  "invalidation": "No production path, existing measured worker or package changes. Valid CPU costs and full/package proof remain. These allocation figures do not establish elapsed-time gaps or passes.",
+  "raw": {
+    "file": "text-drawing-allocation-controls.tar.xz",
+    "bytes": 322192,
+    "sha256": "a2ffb809e6a075102594d38830cebec1a6af16d976d76a51e782a97c5455b48a",
+    "members": 47,
+    "vmMembersVerified": true,
+    "localMembersVerified": true
+  }
+}
