@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[JPEG single-coefficient partial evaluation](JPEG-SINGLE-AMPLITUDE-REJECTED.md)
+misses4.1%triage:0.92%filtered/0.98%allactual/1.10%normalizedpointgain,unchanged
+966367B/op. One active short,no confirmation/variants. Original source/core/PDB/
+XML/linkedtests restore exactly;47internal/all388public pass normal/scalar Linux.
+Candidate admission/cancellation tests also passed unchanged;no capacity/owner/
+allocation was added. Windows/package/full proof reused;current costs/all268paths
+remain. Close single-coefficient lookup partial evaluation.
+
 [PNG dimension-probe confirmation](CURRENT-PNG-DIMENSION-PROBE-COST.md) resolves
 the existing short-only boundary:0.157949us,1.284/upper1.328,744B/op,512admittedB,
 current confirmed gap. One independent12, original210972Binput/29Bprefix/36Btyped
