@@ -1367,6 +1367,44 @@ def render():
                                f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
                 updated_vertical += 1
     assert updated_vertical == 3
+    jpeg_rgb_result = json.loads((ROOT / 'benchmarks/jpeg-direct-rgb-result-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_rgb_result['accepted'] and jpeg_rgb_result['decision']['passed']
+    assert jpeg_rgb_result['qualification']['fullChecksEachOs'] == 5367
+    assert jpeg_rgb_result['qualification']['sameActualPackageBothOs']
+    assert jpeg_rgb_result['raw']['mirrored'] and jpeg_rgb_result['raw']['allMembersVerified']
+    assert len(jpeg_rgb_result['cases']) == 29
+    for cost in jpeg_rgb_result['cases'].values():
+        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['quietGuardsPassed']
+        assert (cost['status'] == 'confirmed-pass-stop') == (cost['upper'] <= 1)
+        assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
+    replacements = [
+        ('NativeDecode420', 'JPEG baseline420, resident decode'),
+        ('CmykCaller', 'JPEG DC-only, caller CMYK decode'),
+        ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'),
+        ('Ycck420', 'JPEG YCCK420, resident decode'),
+        ('Decode411', 'JPEG 4:1:1, resident decode'),
+        ('Decode410', 'JPEG 4:1:0, resident decode'),
+        ('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
+        ('Progressive420', 'JPEG progressive420, resident decode'),
+        ('Progressive422', 'JPEG progressive422, resident decode'),
+        ('Progressive444', 'JPEG ordinary progressive444, resident decode'),
+        ('ProgressiveCancelable444', 'JPEG progressive444, live-token resident decode'),
+        ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'),
+        ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'),
+    ]
+    for case, label in replacements:
+        c = jpeg_rgb_result['cases'][case]
+        qualifier = ' (confirmed pass)' if c['status'] == 'confirmed-pass-stop' else ' (confidence open)' if c['status'] == 'confirmed-confidence-open' else ''
+        position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| ' + label))
+        rows[position] = ('codec', f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
+                         f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
+                         f'{c["allocatedBytes"]:,} | — |')
+    c = jpeg_rgb_result['cases']['Ycck420CallerRgb']
+    assert c['status'] == 'confirmed-gap' and c['lower'] > 5
+    rows.append(('codec', f'| JPEG YCCK420, caller RGB24 decode † | {c["managedMicroseconds"]:,.2f} | '
+                 f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
+                 f'{c["allocatedBytes"]:,} | — |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1400,6 +1438,13 @@ def render():
         status = 'Confidence open' if producer['status'][case] == 'confirmed-confidence-open' else 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
+    for case, label in [('ValidateJpegBaseline420', 'Validate JPEG baseline420, span'),
+                        ('ValidateJpegProgressive420', 'Validate JPEG progressive420, span')]:
+        c = jpeg_rgb_result['cases'][case]
+        status = 'Confirmed pass' if c['status'] == 'confirmed-pass-stop' else 'Confidence open' if c['status'] == 'confirmed-confidence-open' else 'Confirmed gap'
+        position = next(i for i, row in enumerate(read_rows) if row.startswith('| ' + label))
+        read_rows[position] = (f'| {label} | {c["managedMicroseconds"]:,.3f} | {c["nativeMicroseconds"]:,.3f} | '
+                               f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |')
     headers = header_skips['cases']['PngHeaders'][-1]
     assert headers['receipt']['descriptorExact'] and headers['receipt']['typedSourceMetadataExact']
     assert headers['receipt']['librarySha256'] == header_skips['producers']['linuxSha256']
@@ -1467,9 +1512,9 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production qualification covers **5,354 checks per OS**, including 948 live
+Current production qualification covers **5,367 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused JPEG row/packet/admission checks pass normal/scalar on both OSes;
+Focused JPEG pixel/row/packet/admission checks pass normal/scalar on both OSes;
 applicable word-transpose and unrelated qualification remains valid.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
@@ -1493,20 +1538,16 @@ and shared-budget/async cases are confidence-open. No broader parity claim follo
 **32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
 112 B/op. Its **upper 0.748×** passes and stops; the byte companion remains a
 confirmed gap at **1.022 / upper 1.024×**, also 112 B/op.
-Three existing [baseline JPEG 4:4:4 decode boundaries](../benchmarks/CURRENT-BASELINE-JPEG444-DECODE-COSTS.md)
-now independently confirm **1.147/1.232/1.330×** gaps on owned/native/live-token
-inputs, with exact native pixels and current allocations. This resolves older
-evidence without changing production or adding controls to the finite checklist.
-Three existing [direct-RGB JPEG decode controls](../benchmarks/CURRENT-DIRECT-RGB-JPEG-DECODE-COSTS.md)
-also confirm **1.449/1.310/1.372×** gaps for 4:4:4/4:2:2/4:2:0, with exact current
-pixels. Three obsolete benchmark pixel hashes are refreshed after independent
-normal/scalar checks on both OSes; production and reference settings are unchanged.
-
-The existing [caller-owned JPEG sample controls](../benchmarks/CURRENT-CALLER-JPEG-DECODE-COSTS.md)
-confirm grayscale at **1.166 / upper 1.171×**, 273,427 B/op, and RGB420 at
-**0.928 / upper 0.938×**, 624,516 B/op. RGB420 passes and stops; grayscale remains
-a gap. Exact samples, independent caller outputs and no RGBA intermediate hold.
-No production, metadata, reference settings or finite-checklist changes.
+[Direct retained RGB JPEG results](../benchmarks/WARM-JPEG-DIRECT-RGB-RESULT.md)
+save **4.27% elapsed / 4.56% native-normalized** with separated confidence and
+exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the
+default ungoverned control; retained output capacity remains owned and charged.
+Its **1.383 / upper 1.397×** remains a CPU gap. All 29 existing affected JPEG
+decode/caller-sample/validation boundaries have current independent costs in the
+linked report; passing cases stop. Caller-YCCK420 RGB24 exposes the largest current
+JPEG gap at **5.622 / upper 5.719×**, 762,625 B/op, with exact normal/scalar native
+samples. Prior costs predate the current byte-exact conversion path; this existing
+required boundary is now prioritized. No new workload grid or broader parity claim.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
@@ -1542,11 +1583,8 @@ now independently confirms **1.116 / upper 1.142**, 27,418,912 B/op and exact
 7,234-byte packets. This replaces its retained release short without a speedup claim.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
-now have independent current costs. The additional named
-[baseline grayscale decode](../benchmarks/CURRENT-BASELINE-GRAYSCALE-JPEG-DECODE-COST.md)
-confirms **829.713 µs, 1.218 / upper 1.226, 672,196 B/op** with exact six-way
-managed/native pixels. It remains a gap. Earlier experiments and individual
-acceptance histories are retained in the coverage links and raw evidence.
+have independent current costs. Earlier experiments and individual acceptance
+histories remain in the coverage links and raw evidence.
 
 **Codecs**
 

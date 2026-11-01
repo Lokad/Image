@@ -1,5 +1,9 @@
 # Current direct-RGB JPEG decoding costs
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 The three existing 513×259 direct-RGB controls now have current independent
 single-CPU warm evidence. All remain demonstrated gaps; these are current costs,
 without paired speedup claims or broader JPEG parity claims.

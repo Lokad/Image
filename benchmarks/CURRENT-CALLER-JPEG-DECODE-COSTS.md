@@ -1,5 +1,9 @@
 # Current caller-owned JPEG decoding costs
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 The two existing 513×259 caller-buffer controls now have independent warm
 single-CPU evidence. RGB420 passes the conservative ≤1× gate; grayscale remains
 a demonstrated gap. These current costs do not establish a paired speedup or

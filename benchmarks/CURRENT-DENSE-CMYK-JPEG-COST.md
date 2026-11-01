@@ -1,5 +1,9 @@
 # Current dense-CMYK JPEG decode cost
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 The existing dense/general four-component control independently passes:
 **2,786.896 µs, 0.894× / conservative upper 0.916**, **1,085,661 B/op**.
 Stop this case at its tested scope. This resolves a stale baseline-entropy cost;

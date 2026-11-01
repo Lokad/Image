@@ -7,6 +7,22 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Direct retained RGB results](WARM-JPEG-DIRECT-RGB-RESULT.md) save 4.27% elapsed /
+4.56% native-normalized with separated confidence and exact pixels. DirectRgb444
+allocation drops 966,367 to 10,088 B/op on the default ungoverned control; actual
+output capacity remains owned/charged. All 29 affected existing JPEG boundaries
+now have independent current costs: six pass/stop, 23 confirmed gaps. Their common
+constructor/frame/block changes invalidate older decode costs; encoders, other
+codecs, edits, text and inspection retain applicable unchanged evidence. Fresh
+5,367 checks/OS, normal/scalar focus and the same actual Release package/three
+examples pass both OSes. No new cases/profiles or repeated valid scores.
+Caller-YCCK420 RGB24 exposes a **5.622 / upper 5.719×** gap on the current byte-exact
+conversion path, 762,625 B/op, with exact frozen normal/scalar native samples.
+It takes priority over smaller gaps. Earlier SIMD timing predates the current
+conversion and is not current proof. All 268 required paths remain; the main
+summary adds this already-required comparison (103 total), without expanding scope.
+Earlier milestones below retain their producer-specific history and raw evidence.
+
 [JPEG long-prefix fusion](JPEG-LONG-PREFIX-FUSION-REJECTED.md) is rejected:
 one DirectRgb444 short observes 3.26% raw / 3.49% normalized improvement, below
 4.1% triage. No confirmation or variants. Existing 9/10-bit storage is borrowed;

@@ -9,7 +9,7 @@ internal ref partial struct JpegDecoder
         scoped ReadOnlySpan<int> indexes, scoped ReadOnlySpan<int> dc,
         scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels)
     {
-        if (writePixels && !interleaved) FillUncodedBaselinePadding(components[indexes[0]], columns, rows);
+        if (writePixels && !interleaved && rgbResult is null) FillUncodedBaselinePadding(components[indexes[0]], columns, rows);
         Span<int> coefficients = stackalloc int[64];
         Span<byte> pixels = stackalloc byte[64];
         var expectedRestart = 0;
@@ -38,8 +38,17 @@ internal ref partial struct JpegDecoder
                     ReadBaselineBlock(ref reader, coefficients, ref component.Predictor, dcTables[dc[i]]!, acTables[ac[i]]!, context);
                     if (!writePixels) continue;
                     JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, pixels, context);
-                    for (var line = 0; line < 8; line++)
-                        pixels.Slice(line * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + line) * stride + x * 8, 8));
+                    if (rgbResult is { } target)
+                    {
+                        var left = x * 8; var top = y * 8;
+                        var width = Math.Min(8, info.Width - left); var height = Math.Min(8, info.Height - top);
+                        if (width > 0 && height > 0)
+                            StoreRgbBlock(pixels, target.Pixels.Slice(top * target.Stride + left * 4,
+                                (height - 1) * target.Stride + width * 4), target.Stride, width, height, indexes[i]);
+                    }
+                    else
+                        for (var line = 0; line < 8; line++)
+                            pixels.Slice(line * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + line) * stride + x * 8, 8));
                 }
             }
         }

@@ -1,5 +1,9 @@
 # Current horizontal-only CMYK JPEG decode cost
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 The cost below is superseded by [exact completed-row reuse](WARM-JPEG-COMPLETED-ROW-REUSE.md):
 535.551 µs, 1.366× / upper 1.396, 1,085,755 B/op. This original confirmation and
 its oracle/reference identities remain retained evidence.

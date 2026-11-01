@@ -1,5 +1,9 @@
 # Current progressive JPEG costs
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 Four decode costs are refreshed after exact completed-row reuse. Grayscale and
 complete-coding validation retain proven unchanged-path evidence. All six named
 paths have valid independent quiet-VM costs; none yet meets the ≤1× upper target.

@@ -1,5 +1,9 @@
 # Current baseline JPEG 4:4:4 decoding costs
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 Three existing 513×259 resident-input controls now have current independent
 single-CPU warm costs. All remain demonstrated gaps; these are fresh costs,
 with no paired speedup or broad JPEG performance claim.

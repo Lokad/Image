@@ -19,6 +19,8 @@ internal ref partial struct JpegDecoder
     private Component[] components;
     private int position, maxH, maxV, mcuColumns, mcuRows, restartInterval;
     private bool progressive, frameSeen, scanSeen, rgb, directBaseline, validateBaseline;
+    private bool allowRgbResult;
+    private ImageBuffer? rgbResult;
 
     private sealed class Component
     {
@@ -41,6 +43,7 @@ internal ref partial struct JpegDecoder
         components = []; position = 2; maxH = 0; maxV = 0; mcuColumns = 0; mcuRows = 0; restartInterval = 0;
         progressive = false; frameSeen = false; scanSeen = false; rgb = false;
         directBaseline = false; validateBaseline = false;
+        allowRgbResult = false; rgbResult = null;
     }
 
     public ImageBuffer Decode() => DecodeCore(validateOnly: false)!;
@@ -55,6 +58,7 @@ internal ref partial struct JpegDecoder
     {
         directBaseline = !validateOnly;
         validateBaseline = validateOnly;
+        allowRgbResult = !validateOnly;
         var adobeTransform = -1;
         try
         {
@@ -78,6 +82,11 @@ internal ref partial struct JpegDecoder
                     }
                     if (components.Length == 4) return RenderCmyk(adobeTransform);
                     if (adobeTransform == 2) throw UnsupportedColorTransform();
+                    if (rgbResult is { } completed)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        rgbResult = null; return completed;
+                    }
                     return Render();
                 }
                 var payload = ReadSegment();
@@ -103,6 +112,7 @@ internal ref partial struct JpegDecoder
         }
         finally
         {
+            rgbResult?.Dispose(); rgbResult = null;
             foreach(var component in components)
             {
                 if(component is null || component.Coefficients.Length==0)continue;
@@ -167,6 +177,20 @@ internal ref partial struct JpegDecoder
         if (count == 3 && components[0].Id == 'R' && components[1].Id == 'G' && components[2].Id == 'B') rgb = true;
         mcuColumns = (info.Width + 8 * maxH - 1) / (8 * maxH);
         mcuRows = (info.Height + 8 * maxV - 1) / (8 * maxV);
+        // The bounded header pass already examined the entire container. Only
+        // an unambiguous final RGB declaration selects this retained result;
+        // caller sample buffers and validation keep their original storage.
+        if (allowRgbResult && !progressive && count == 3 && info.SourceColor == SourceColorModel.Rgb)
+        {
+            var fullResolution = true;
+            foreach (var component in components)
+                fullResolution &= component.H == maxH && component.V == maxV;
+            if (fullResolution)
+            {
+                rgbResult = ImageBuffer.AllocateForOverwrite(info.Width, info.Height, 8, context);
+                rgbResult.Orientation = info.Orientation;
+            }
+        }
         foreach (var component in components)
         {
             component.BlockColumns = mcuColumns * component.H; component.BlockRows = mcuRows * component.V;
@@ -176,8 +200,8 @@ internal ref partial struct JpegDecoder
             if (countValues > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG coefficient plane is too large.");
             if (!progressive && (directBaseline || validateBaseline))
             {
-                context.Reserve((directBaseline ? countValues : 0) + 64 * 4);
-                if (directBaseline) component.Plane = new byte[(int)countValues];
+                context.Reserve((directBaseline && rgbResult is null ? countValues : 0) + 64 * 4);
+                if (directBaseline && rgbResult is null) component.Plane = new byte[(int)countValues];
             }
             else
             {

@@ -2,6 +2,45 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyDirectRgbResult()
+    {
+        const int width = 513, height = 259, bytes = width * height * 4;
+        var data = AuthoredJpeg.SequentialRgbFrame(width, height, 2, false);
+        using var root = new TestMemoryBudget(data.Length + 2L * bytes + 128 * 1024);
+        if (!root.TryReserve(data.Length, out var input)) throw new Exception("Cannot admit packaged RGB input.");
+        using var inputOwner = input;
+        var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
+        using var first = ImageCodec.Decode(data, options);
+        using var stream = new MemoryStream(data, writable: false);
+        using var second = await ImageCodec.DecodeAsync(stream, options);
+        if (root.Bytes != data.Length + 2L * bytes || !stream.CanRead || root.IsDisposed)
+            throw new Exception("Packaged RGB result or stream ownership differs.");
+        try
+        {
+            using var unexpected = ImageCodec.Decode(data, options);
+            throw new Exception("Packaged RGB ignored aggregate refusal.");
+        }
+        catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+        if (root.Refusals != 1 || root.Bytes != data.Length + 2L * bytes)
+            throw new Exception("Packaged RGB admission was retried or leaked storage.");
+        first.Dispose();
+        using var recovered = ImageCodec.Decode(data, options);
+        data.AsSpan().Clear();
+        foreach (var image in new[] { second, recovered })
+            for (var y = 0; y < height; y++)
+            {
+                var row = image.GetRow8(y);
+                for (var x = 0; x < width; x++)
+                    if (row[x * 4] != 45 || row[x * 4 + 1] != 105 || row[x * 4 + 2] != 205 || row[x * 4 + 3] != 255)
+                        throw new Exception("Packaged RGB exact pixels or independent lifetime differ.");
+            }
+        recovered.Dispose(); second.Dispose();
+        if (root.Bytes != data.Length) throw new Exception("Packaged RGB result storage leaked.");
+        inputOwner?.Dispose();
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged RGB borrowed root differs.");
+        Console.WriteLine("Packaged direct RGB JPEG preserves exact pixels, bounded ownership, async and admission recovery.");
+    }
+
     private static void VerifyWordTranspose()
     {
         const int width = 35, height = 37, bytes = width * height * 8;
@@ -76,6 +115,7 @@ internal static class CooperativeMemoryConsumer
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged owners leaked or disposed the borrowed budget.");
         await VerifyWordPngPacking(budget, limits);
         VerifyWordTranspose();
+        await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try
         {

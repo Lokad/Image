@@ -41,6 +41,53 @@ internal static class AuthoredJpeg
         output.Write(new byte[] { 255, 217 }); return output.ToArray();
     }
 
+    // Original constant RGB components, with T.81 DC differences and optional
+    // separate scans. Equal vertical factors exercise padded MCU rows without
+    // changing any visible sample. No production encoder supplies this fixture.
+    public static byte[] SequentialRgbFrame(int width, int height, int vertical, bool separateScans, int restartInterval = 0)
+    {
+        if (vertical is not (1 or 2)) throw new ArgumentOutOfRangeException(nameof(vertical));
+        using var output = Header(width, height, restartInterval, JpegSampling.YCbCr444,
+            progressive: false, rgbIds: true, equalVertical: vertical);
+        byte[] ids = [82, 71, 66]; int[] values = [45, 105, 205];
+        var columns = (width + 7) / 8;
+        if (separateScans)
+        {
+            // Deliberately publish alpha's component first; later channels must
+            // preserve it while the result is still private.
+            foreach (var component in new[] { 2, 0, 1 })
+            {
+                var sample = values[component];
+                Scan(output, 0, 63, 0, 0, bits =>
+                {
+                    var previous = 0;
+                    for (var mcu = 0; mcu < columns * ((height + 7) / 8); mcu++)
+                    {
+                        if (restartInterval != 0 && mcu != 0 && mcu % restartInterval == 0)
+                        { bits.Restart(mcu / restartInterval - 1); previous = 0; }
+                        var dc = (sample - 128) * 8; bits.Dc(dc - previous); previous = dc; bits.Ac(0);
+                    }
+                }, ids[component]);
+            }
+        }
+        else Scan(output, 0, 63, 0, 0, bits =>
+        {
+            var previous = new int[3];
+            for (var mcu = 0; mcu < columns * ((height + vertical * 8 - 1) / (vertical * 8)); mcu++)
+            {
+                if (restartInterval != 0 && mcu != 0 && mcu % restartInterval == 0)
+                { bits.Restart(mcu / restartInterval - 1); Array.Clear(previous); }
+                for (var component = 0; component < 3; component++)
+                for (var row = 0; row < vertical; row++)
+                {
+                    var dc = (values[component] - 128) * 8; bits.Dc(dc - previous[component]);
+                    previous[component] = dc; bits.Ac(0);
+                }
+            }
+        }, ids);
+        output.Write(new byte[] { 255, 217 }); return output.ToArray();
+    }
+
     public static byte[] RefinedBlock(bool negativeDc = false)
     {
         using var output = Header(8, 8, 0);
@@ -245,7 +292,7 @@ internal static class AuthoredJpeg
     }
 
     private static MemoryStream Header(int width, int height, int restartInterval, JpegSampling sampling = JpegSampling.Grayscale,
-        bool progressive = true, bool rgbIds = false, bool adobeRgb = false)
+        bool progressive = true, bool rgbIds = false, bool adobeRgb = false, int equalVertical = 0)
     {
         var output = new MemoryStream(); output.Write(new byte[] { 255, 216 });
         if (adobeRgb) Segment(output, 0xEE, new byte[] { 65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, 0 });
@@ -258,7 +305,8 @@ internal static class AuthoredJpeg
         for (var component = 0; component < count; component++)
         {
             frame[6 + 3 * component] = rgbIds ? "RGB"u8[component] : (byte)(component + 1);
-            frame[7 + 3 * component] = component == 0 ? (byte)(h << 4 | v) : (byte)0x11;
+            frame[7 + 3 * component] = equalVertical != 0 ? (byte)(0x10 | equalVertical)
+                : component == 0 ? (byte)(h << 4 | v) : (byte)0x11;
         }
         BinaryPrimitives.WriteUInt16BigEndian(frame.AsSpan(1), (ushort)height);
         BinaryPrimitives.WriteUInt16BigEndian(frame.AsSpan(3), (ushort)width);

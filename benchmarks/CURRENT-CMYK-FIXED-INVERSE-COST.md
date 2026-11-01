@@ -1,5 +1,9 @@
 # Current CMYK sparse-2D decode
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 Current costs are superseded by [SIMD dequantization](WARM-JPEG-DEQUANTIZATION.md).
 Original evidence and accepted behavior remain retained.
 

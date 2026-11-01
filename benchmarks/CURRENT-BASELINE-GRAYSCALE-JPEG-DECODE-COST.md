@@ -1,5 +1,9 @@
 # Current baseline grayscale JPEG decode cost
 
+Historical costs: affected JPEG boundaries are superseded by the
+[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+Original observations and raw evidence remain below.
+
 The existing resident baseline grayscale control independently confirms
 **829.713 µs**, **1.218× / upper 1.226** (lower 1.208), **672,196 B/op**.
 This is a confirmed gap on the current qualified core, without a causal comparison
