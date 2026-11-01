@@ -22,6 +22,13 @@ def render():
     assert vp8_quantization['qualification']['sameActualPackageBothOs']
     assert vp8_quantization['sourceScope']['quantizedLevelArithmeticUnchanged']
     assert len(vp8_quantization['cases']) == 6
+    vp8_companion_costs = json.loads((ROOT / 'benchmarks/current-vp8-companion-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not vp8_companion_costs['productionChanged'] and vp8_companion_costs['allBuilds'] == 0
+    assert vp8_companion_costs['independentQuietConfirmations'] == 4
+    assert all(s == 'confirmed-gap' for s in vp8_companion_costs['status'].values())
+    assert all(v > 1 for v in vp8_companion_costs['comparisonLowerBounds'].values())
+    assert all(len(v[-1]['managed']['actual']) == 12 and v[-1]['receipt']['completePacketExact']
+               for v in vp8_companion_costs['cases'].values())
     trellis_cost = json.loads((ROOT / 'benchmarks/current-vp8-effort6-cost-evidence.json').read_text(encoding='utf-8'))
     assert not trellis_cost['productionChanged'] and trellis_cost['allBuilds'] == 0
     assert trellis_cost['independentQuietConfirmation']
@@ -531,6 +538,8 @@ def render():
         producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8_stream if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] == 'case10':
             producer = trellis_cost
+        elif case['id'] in {'case06', 'case07', 'case09', 'case11'}:
+            producer = vp8_companion_costs
         elif case['id'] == 'case13':
             producer = vp8l_word_cost
         elif case['id'] == 'case15':
@@ -570,7 +579,7 @@ def render():
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case14', 'case15', 'case16', 'case21', 'case22', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case00', 'case02', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12', 'case13', 'case14', 'case15', 'case16', 'case21', 'case22', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -1336,6 +1345,9 @@ The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
 its explicit normalized-confidence-overlap exception, without a parity claim.
+All six displayed VP8 encoder controls now have independent costs; the four
+[refreshed companions](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
+confirm 1.298–1.333× gaps with exact packets and unchanged allocations.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's

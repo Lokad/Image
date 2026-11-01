@@ -7,6 +7,18 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Four current VP8 companions](WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
+now independently confirm: diagram/method2 1.332/upper1.346, diagram/method4
+1.333/upper1.351, RGBA8+alpha1.298/upper1.307, opaqueRGBA16 1.315/upper1.319.
+All exact7,330/7,100/98,590/72,380B packets, reconstruction/alpha/owners and
+allocations remain. One current12each resolves post-quantizer short-only proof;
+older independent caller costs predate QIV1. Photograph/method4 and diagram/
+method6 independent proof is reused without retiming. All six named displayed
+VP8 encoder controls now have independent costs and remain gaps; stop them.
+Zero builds/profiles/newinputs/settings/fullorpackageproof repeats. Same immutable
+qualified core/currentharness/worker/fixtures;5,342-check/SAMEactual-package proof
+and full268objective remain. No grid or production change.
+
 [Repeated metric preflight](WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#distortion-metric-preflight-rejected)
 misses one short screen:1.03% lower elapsed/1.14% lower normalized point cost,
 unchanged809,072B/op and exact17,688B packets. No confirmation or variants.

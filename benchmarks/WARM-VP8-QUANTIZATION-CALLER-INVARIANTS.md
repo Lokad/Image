@@ -6,6 +6,10 @@ all actuals. Both confidence-interval forms separate; faster-native-bracket drif
 is 0.082%. Allocation stays 809,072B/op and the exact 17,688-byte packet is unchanged.
 The resulting 1.433× / upper 1.438 remains a CPU gap.
 
+The acceptance-round observations below are retained; the current companion
+section supersedes four former short screens. Photograph and method6 retain
+their applicable independent evidence.
+
 | Existing 513×259 control | Lokad µs | Ratio / upper | Allocated B/op | Both packet bytes | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Photograph effort4 | 13,899.636 | 1.433 / 1.438 | 809,072 | 17,688 | Confirmed gap |
@@ -95,3 +99,39 @@ member-verified raw vp8-metric-preflight-rejected.tar.xz, SHA256
 6e4d6a83167ae8d1ba8c05a704bf1b1266c73802c5a3965e5c8b2e6170a0f4c9
 (3,354,484 B / 131 members), retains the rejected code and reproduction material.
 WPC31/QIV1 dependencies remain retained; all268 paths stay in the objective.
+
+## Current companion costs
+
+Four existing controls each receive one current independent twelve on unchanged
+qualified production. All remain confirmed gaps; no paired speedup or regression
+claim follows. All six displayed VP8 encoder controls now have independent costs.
+
+| Existing 513×259 input | Managed µs | Ratio / upper | Managed B/op | Packet B, exact both |
+| --- | ---: | ---: | ---: | ---: |
+| Diagram, effort2 | 3,353.137 | 1.332 / 1.346 | 741,375 | 7,330 |
+| Diagram, effort4 | 7,791.306 | 1.333 / 1.351 | 741,137 | 7,100 |
+| RGBA8 + compressed alpha | 69,770.340 | 1.298 / 1.307 | 21,353,208 | 98,590 |
+| Opaque RGBA16 normalization | 20,568.517 | 1.315 / 1.319 | 1,201,552 | 72,380 |
+
+Original reference inputs/settings, full normalization, complete public encoding,
+fresh output growth/ownership/disposal and reconstruction/alpha gates remain.
+All exact packets, source and independent output owners pass. Native allocation
+is unmeasured; B/op includes harness costs and matches the previous screens.
+Equal numerical quality settings are not the matching criterion.
+
+The quantizer change above invalidates older complete-operation costs for these
+callers. Its post-change three-actual screens were current; this supplies missing
+independent confirmation. Photograph/method4 and diagram/method6 have valid
+independent twelves and are not retimed. Every new job retains all twelve actuals,
+including BDN's rejected selections, native brackets and both idle-v2 guards.
+
+Zero builds, profiles, new inputs/settings or repeated full/package proofs. Reuse
+the same immutable qualified core, current harness, cached selectors and workers,
+plus unchanged5,342 checks per OS and SAME actual Release-package/three-example
+qualification. Stop retiming these valid gaps; the full268-path objective remains.
+
+[Numeric evidence](current-vp8-companion-costs-evidence.json) retains every sample,
+pin and boundary. Mirrored/member-verified raw current-vp8-companion-costs.tar.xz, SHA256
+135bba7a33b58c6a33063ccab805d928bcbc3ef57567f7a9d65e74f7a6c238db (2,166,312 B / 97 members),
+retains actual assemblies, workers, fixtures, packets, failures and reproduction;
+WPC31/QIV1 dependencies remain retained.
