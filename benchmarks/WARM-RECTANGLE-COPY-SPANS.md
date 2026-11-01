@@ -43,12 +43,18 @@ checks frozen full byte/word canvases with the shared budget limited to exactly
 the two resident image buffers, unchanged source, surviving canvas after source
 disposal and final release to zero.
 
-Only CopyRegion changes. Its two baseline costs are superseded; overlapping-copy
-CPU evidence is still missing. Existing codec, geometry, fill, composite and text
-production paths remain unchanged and reuse valid evidence. The summary has
-107 selected comparisons in three tables; twelve audited paths remain unmeasured.
+Only CopyRegion changed in this round. Its two costs remain valid through the
+later FillRectangle change. The subsequent
+[paired overlapping-copy control](CURRENT-OVERLAPPING-COPY-COST.md) has its own
+current cost. Existing codec, geometry, composite and text paths reuse valid
+unchanged-path evidence. The current summary has 110 selected comparisons;
+nine audited paths remain unmeasured.
 Stop this span-hoisting round without width/chunk/inlining variants or repeated
 word timing to chase significance. Full warm parity remains open.
+
+A later [cancellation dataflow trial](COPY-CANCELLATION-CONTEXT-REJECTED.md)
+removed a dependent field load but supplied no useful gain. Original production
+and these costs are retained; that substitution is closed.
 
 [Evidence](rectangle-copy-spans-evidence.json) includes samples, costs, confidence,
 ownership, qualification, source/producer hashes and the exact package identity.
