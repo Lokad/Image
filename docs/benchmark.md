@@ -24,8 +24,8 @@ settings do not establish equivalence. See [codec parity](codec-parity.md).
 
 Current production qualification covers **5,376 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused exact transpose pixel/admission checks pass normal/scalar on both OSes;
-applicable JPEG and unrelated qualification remains valid.
+Focused wider-bicubic checks pass normal/scalar on both OSes and Linux without
+AVX512; applicable transpose, JPEG and unrelated qualification remains valid.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -55,6 +55,11 @@ and shared-budget/async cases are confidence-open. No broader parity claim follo
 now independently saves **31.02% elapsed / 32.38% native-normalized**, with exact
 pixels and unchanged 112 B/op; **0.691 / upper 0.711×** also passes and stops.
 The word kernel and common dispatch are unchanged; their evidence is reused.
+[Independent wider bicubic repair](../benchmarks/WARM-WIDE-BICUBIC-INDEPENDENT-REPAIR.md)
+saves **6.68% elapsed / 6.26% native-normalized** on RGBA8 →128×64, with exact
+pixels and unchanged owned capacity. It remains a gap at **1.423 / upper1.445×**.
+All eight affected controls have current costs: four pass and stop, three remain
+confirmed gaps, and byte64×32 is confidence-open. Other paths reuse valid evidence.
 [Direct retained RGB JPEG results](../benchmarks/WARM-JPEG-DIRECT-RGB-RESULT.md)
 save **4.27% elapsed / 4.56% native-normalized** with separated confidence and
 exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the
@@ -185,7 +190,7 @@ histories remain in the coverage links and raw evidence.
 | Bicubic upscale RGBA16 † → 1027×519 | 3,541.70 | 2,879.12 | 1.230 / 1.244 | 5,016,602 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace (confirmed pass) † → 32×16 | 349.19 | 377.36 | 0.925 / 0.948 | 199,372 |
+| Bicubic RGBA8, 32×16 / default workspace → 32×16 | 342.09 | 379.01 | 0.903 / 0.927 | 199,369 |
 | Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |
 | Lanczos3 reduction RGBA16 † → 256×129 | 726.96 | 507.57 | 1.432 / 1.446 | 138,437 |
 | Lanczos3 enlargement RGBA8 † → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
@@ -194,7 +199,7 @@ histories remain in the coverage links and raw evidence.
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
-| Bicubic RGBA8 wider-support reduction † → 128×64 | 529.18 | 348.67 | 1.518 / 1.534 | 231,239 |
+| Bicubic RGBA8 wider-support reduction † → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |

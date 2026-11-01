@@ -94,6 +94,42 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine($"Packaged RGBA{depth} transpose preserves exact pixels, tails and shared ownership.");
     }
 
+    private static void VerifyWideBicubicRepair()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            const int width = 513, height = 259, outputWidth = 128, outputHeight = 64;
+            var sampleBytes = depth / 8;
+            var input = OriginalPixels.Generate(width, height, depth);
+            input.AsSpan(3 * sampleBytes, sampleBytes).Clear();
+            input.AsSpan((width * 4 - 1) * sampleBytes, sampleBytes).Clear();
+            using var root = new TestMemoryBudget(4 * 1024 * 1024);
+            var limits = new ImageLimits { MemoryBudget = root };
+            using var source = ImageBuffer.Create(width, height, depth, limits);
+            for (var y = 0; y < height; y++)
+                if (depth == 8) input.AsSpan(y * width * 4, width * 4).CopyTo(source.GetRow8(y));
+                else
+                    for (var sample = 0; sample < width * 4; sample++)
+                        source.GetRow16(y)[sample] = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(
+                            input.AsSpan((y * width * 4 + sample) * 2));
+            using var first = ImageTransforms.Resize(source, outputWidth, outputHeight, ResizeFilter.Bicubic, limits);
+            using var second = ImageTransforms.Resize(source, outputWidth, outputHeight, ResizeFilter.Bicubic, limits);
+            var expectedHash = depth == 8 ? "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71"
+                : "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9";
+            var outputBytes = outputWidth * outputHeight * 4 * sampleBytes;
+            if (root.Bytes != input.Length + 2L * outputBytes)
+                throw new Exception("Packaged wider bicubic retained temporary storage.");
+            source.Dispose(); first.Dispose(); input.AsSpan().Clear();
+            var hash = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(second)));
+            if (hash != expectedHash || root.Bytes != outputBytes)
+                throw new Exception("Packaged wider bicubic changed exact pixels or surviving ownership.");
+            second.Dispose();
+            if (root.Bytes != 0 || root.IsDisposed)
+                throw new Exception("Packaged wider bicubic leaked or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged wider bicubic preserves exact byte/word frames and shared ownership.");
+    }
+
     internal static async Task Verify()
     {
         using var budget = new TestMemoryBudget(4 * 1024 * 1024);
@@ -125,6 +161,7 @@ internal static class CooperativeMemoryConsumer
         await VerifyWordPngPacking(budget, limits);
         VerifyTranspose(8);
         VerifyTranspose(16);
+        VerifyWideBicubicRepair();
         await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try

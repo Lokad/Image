@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Independent wider bicubic repair](WARM-WIDE-BICUBIC-INDEPENDENT-REPAIR.md)
+improves existingWide8 by6.68%elapsed/6.26%normalized, exact pixels and unchanged
+owned capacity;1.423/upper1.445 remains a gap. One3/12 reuses validbaseline12.
+Seven shared-body companions refreshed once:fourpassesstop,threegaps total,
+byte64x32confidence-open. No repeated score or new grid.5376checks/OS,
+221publicnormal/scalar/OS+LinuxAVX512off,SAMEactualpackage/threeexamples bothOS
+pass,including frozen fullbyte/word frames andsharedrootlifetimes. Only this
+body invalidates eight costs;unrelated proofs reused. Summary105/all268remain.
+
 [Exact byte transpose](WARM-BYTE-TRANSPOSE-MATRIX.md) passes and stops at
 0.691/upper0.711,112B/op:31.02%elapsed/32.38%normalized, exact pixels and
 separated confidence. One3/12 reuses the unchanged primitive's original12;

@@ -1076,22 +1076,26 @@ def render():
     wide_view = json.loads((ROOT / 'benchmarks/bicubic-wide-tap-view-rejected-evidence.json').read_text(encoding='utf-8'))
     assert wide_view['candidateRejected'] and not wide_view['productionChanged'] and not wide_view['decision']['passed']
     assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in wide_view['restoration'].values())
-    wide_current = json.loads((ROOT / 'benchmarks/current-wide-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not wide_current['productionChanged'] and wide_current['allBuilds'] == 0
-    assert wide_current['independentQuietConfirmations'] == 7 and wide_current['reusedIndependentConfirmations'] == 1
-    assert len(wide_current['cases']) == 8 and list(wide_current['status'].values()).count('confirmed-pass') == 4
-    assert wide_current['evidenceReuse']['relevantSourcesByteExactSinceA128']
+    wide_current = json.loads((ROOT / 'benchmarks/wide-bicubic-independent-repair-evidence.json').read_text(encoding='utf-8'))
+    assert wide_current['accepted'] and wide_current['decision']['normalizedSeparated']
+    assert wide_current['independentQuietConfirmations'] == len(wide_current['cases']) == 8
+    assert wide_current['qualification']['fullChecksEachOs'] == 5376
+    assert wide_current['qualification']['package']['sha256'] == wide_current['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert list(wide_current['status'].values()).count('confirmed-pass-stop') == 4
     for case, observations in wide_current['cases'].items():
         observation = observations[-1]
         assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
-        assert (observation['conservativeRatioUpper'] <= 1) == (wide_current['status'][case] == 'confirmed-pass')
+        assert (observation['conservativeRatioUpper'] <= 1) == (wide_current['status'][case] == 'confirmed-pass-stop')
         assert observation['receipt']['managedRationalReferenceExact'] and observation['receipt']['independentOwnedOutput']
-        if case != 'Wide8':
-            assert observation['receipt']['librarySha256'] == wide_current['producers']['currentLinuxSha256']
-    observation = wide_current['cases']['Down32x16_8'][-1]
-    matches = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| Bicubic RGBA8, 32×16 / default')]
-    assert len(matches) == 1
-    rows[matches[0]] = ('editing', f'| Bicubic RGBA8, 32×16 / default workspace (confirmed pass) † → 32×16 | '
+        assert observation['receipt']['librarySha256'] == wide_current['producers']['linuxSha256']
+    for prefix, case in [('| Bicubic RGBA8 wider-support reduction', 'Wide8'),
+                         ('| Bicubic RGBA8, 32×16 / default', 'Down32x16_8')]:
+        matches = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith(prefix)]
+        assert len(matches) == 1
+        index = matches[0]
+        label = rows[index][1].split('|')[1].strip()
+        observation = wide_current['cases'][case][-1]
+        rows[index] = ('editing', f'| {label} | '
                        f'{observation["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                        f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
@@ -1571,8 +1575,8 @@ settings do not establish equivalence. See [codec parity](codec-parity.md).
 
 Current production qualification covers **5,376 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused exact transpose pixel/admission checks pass normal/scalar on both OSes;
-applicable JPEG and unrelated qualification remains valid.
+Focused wider-bicubic checks pass normal/scalar on both OSes and Linux without
+AVX512; applicable transpose, JPEG and unrelated qualification remains valid.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -1602,6 +1606,11 @@ and shared-budget/async cases are confidence-open. No broader parity claim follo
 now independently saves **31.02% elapsed / 32.38% native-normalized**, with exact
 pixels and unchanged 112 B/op; **0.691 / upper 0.711×** also passes and stops.
 The word kernel and common dispatch are unchanged; their evidence is reused.
+[Independent wider bicubic repair](../benchmarks/WARM-WIDE-BICUBIC-INDEPENDENT-REPAIR.md)
+saves **6.68% elapsed / 6.26% native-normalized** on RGBA8 →128×64, with exact
+pixels and unchanged owned capacity. It remains a gap at **1.423 / upper1.445×**.
+All eight affected controls have current costs: four pass and stop, three remain
+confirmed gaps, and byte64×32 is confidence-open. Other paths reuse valid evidence.
 [Direct retained RGB JPEG results](../benchmarks/WARM-JPEG-DIRECT-RGB-RESULT.md)
 save **4.27% elapsed / 4.56% native-normalized** with separated confidence and
 exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the

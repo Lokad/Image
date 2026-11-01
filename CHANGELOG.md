@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Wider bicubic resizing repairs uncertain pixels independently, preserving exact
+  pixels, cancellation and existing memory ownership.
 - Speed JPEG decoder preflight with bounded marker searches, preserving exact
   pixels, container limits and cooperative cancellation.
 - Decode half-grid YCCK directly into caller RGB rows through the existing exact

@@ -180,28 +180,18 @@ internal static class WideCachedBicubicResize
                         Avx512F.CompareLessThanOrEqual(values,Vector512.Create(maximum)).AsInt64());
                     var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
                     var ambiguousMask=Vector512.ExtractMostSignificantBits(ambiguous);
-                    if(capacity>=64)
+                    // A failed certificate needs original-order repair only
+                    // for that pixel; its certified neighbor keeps the SIMD result.
+                    var original0=colorMargin0>=.25 || n0<.5 || !(values.GetElement(3)>=1+alphaMargin) || (ambiguousMask&15)!=0;
+                    var original1=colorMargin1>=.25 || n1<.5 || !(values.GetElement(7)>=1+alphaMargin) || (ambiguousMask&240)!=0;
+                    if(original0 || original1)
                     {
-                        // Preserve all original guards independently: uncertainty
-                        // in one pixel does not require reevaluating its neighbor.
-                        var original0=colorMargin0>=.25 || n0<.5 || !(values.GetElement(3)>=1+alphaMargin) || (ambiguousMask&15)!=0;
-                        var original1=colorMargin1>=.25 || n1<.5 || !(values.GetElement(7)>=1+alphaMargin) || (ambiguousMask&240)!=0;
-                        if(original0 || original1)
-                        {
-                            if(original0)Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,capacity,context);
-                            else if(wide16)WriteWord(destination,x,values.GetLower());
-                            else WriteByte(destination,x,values.GetLower());
-                            if(original1)Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,capacity,context);
-                            else if(wide16)WriteWord(destination,x+1,values.GetUpper());
-                            else WriteByte(destination,x+1,values.GetUpper());
-                            continue;
-                        }
-                    }
-                    if(colorMargin0>=.25 || colorMargin1>=.25 || n0<.5 || n1<.5 || !(values.GetElement(3)>=1+alphaMargin && values.GetElement(7)>=1+alphaMargin)
-                        || ambiguousMask!=0)
-                    {
-                        Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,capacity,context);
-                        Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                        if(original0)Original(source,result,x,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                        else if(wide16)WriteWord(destination,x,values.GetLower());
+                        else WriteByte(destination,x,values.GetLower());
+                        if(original1)Original(source,result,x+1,y,weights,offsets,counts,vertical[..count],first,capacity,context);
+                        else if(wide16)WriteWord(destination,x+1,values.GetUpper());
+                        else WriteByte(destination,x+1,values.GetUpper());
                         continue;
                     }
                     var clipped=Avx512F.Min(Vector512.Create(maximum),Avx512F.Max(Vector512<double>.Zero,values));

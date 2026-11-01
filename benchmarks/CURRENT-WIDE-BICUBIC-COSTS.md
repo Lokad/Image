@@ -1,5 +1,9 @@
 # Current wider-support bicubic costs
 
+These costs are superseded by [independent rounding repair](WARM-WIDE-BICUBIC-INDEPENDENT-REPAIR.md).
+The original observations and raw evidence below are retained.
+
+
 Four existing paths pass the ≤1× conservative-upper objective and stop unchanged:
 both depths at 32×16 and 16×8. Four larger-output controls remain confirmed gaps.
 Seven current independent confirmations resolve production/short uncertainty;
