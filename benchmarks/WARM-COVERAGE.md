@@ -10,8 +10,10 @@ reconciled in the summary below.
 [Current VP8 photograph attribution](CURRENT-VP8-PHOTO-ATTRIBUTION.md) resolves
 post-quantizer profile uncertainty with one six-second trace, 5,910 samples,
 exact packets/pixels/owners and both quiet guards. No code/build/timing claim,
-new case or repeated qualification. Bound one paired prepared-mode quantization
-lead before a short; keep closed families closed. Current CPU costs are unchanged.
+new case or repeated qualification. The [prepared quantization pair trial](VP8-PREPARED-QUANTIZATION-PAIR-REJECTED.md)
+is rejected at2.39%elapsed/2.92%normalized, unchanged809072B/op and exact17688Bpacket.
+Exactsource/binary restoration passed withoutrebuild; no confirmation,variants or
+full/package repeat. Current CPU costs are unchanged; all268paths remainrequired.
 
 [Bounded JPEG container scanning](WARM-JPEG-CONTAINER-SCAN.md) independently saves
 13.81% elapsed / 13.97% native-normalized on owned baseline444 decode, with separated

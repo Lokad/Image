@@ -14,13 +14,11 @@ phase timings or predicted gains; the existing independent CPU cost is unchanged
 
 The earlier QIV1b trace predates the accepted quantizer guard cleanup. This trace
 resolves that attribution uncertainty without retuning a confirmed case.
-The next bounded lead is paired ordinary quantization of existing prepared Luma4
-mode buffers. Ten nonuniform, noncancelable mode candidates already have their
-transforms ready and all ten are quantized before the block can stop. Pairing
-must preserve arithmetic, mode order/ties, rates, reconstruction and independent
-scratch; its small extra scratch must fit the admitted envelope. Establish those
-facts before one complete-operation screen. Closed reconstruction, trellis and
-width-only variants remain closed. No performance improvement is claimed here.
+[Paired prepared quantization](VP8-PREPARED-QUANTIZATION-PAIR-REJECTED.md) has now
+been screened and rejected: 2.39% elapsed / 2.92% native-normalized, unchanged
+allocation and exact packet. Source and binaries are restored without rebuilding;
+no confirmation or variants. This trace remains current attribution, not a gain
+claim. Closed reconstruction, trellis and width-only variants remain closed.
 
 [Evidence](current-vp8-photo-attribution-evidence.json). Mirrored/member-verified
 current-vp8-photo-attribution.tar.xz, 47 members, SHA256 d04385dc49b612e4a1b03fd830b7a89fbc7fc96f993faaff0bb0f49558a41121.

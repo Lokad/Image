@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "VPQ39",
+  "accepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "scope": "Existing513x259 opaque PhotographLossy8,effort4; complete normalization,encode,fresh independently owned packet and release; frozen inputs/reference/settings and singleCPU.",
+  "selectedProducers": {
+    "linuxSha256": "4c8d203bc2d98569f9d3d63590c3e6680850926f105543634eb0a7f2dcc6ef65",
+    "windowsSha256": "12175cf8c24645f5d0fbf732efcbd8aa8a7d8c88bddbbce023cde4255a44f09e"
+  },
+  "candidateLinuxSha256": "08559e0cde0c3086acb7e2f625e7454a0c2d096372b5ab159544e1094bc8210f",
+  "originalEvidence": {
+    "file": "warm-vp8-quantization-caller-invariants-evidence.json",
+    "case": "PhotographLossy8",
+    "independentActuals": 12,
+    "reusedBecause": "Relevant VP8 production paths unchanged; later JPEG/PNG/editing/lossless changes do not call them."
+  },
+  "candidate": {
+    "actuals": 3,
+    "meanMicroseconds": 13566.825733333335,
+    "ratio": 1.3908341940300475,
+    "upper": 2.728460632016542,
+    "allocatedBytes": 809072,
+    "packetBytes": 17688,
+    "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+    "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+    "allFrozenPacketReconstructionSourceOwnerAndQuietGatesPassed": true
+  },
+  "decision": {
+    "mode": "short",
+    "baselineCurrentIndependent12Reused": true,
+    "raw": {
+      "statistics": {
+        "reduction": 0.023943784766957354,
+        "separated": false
+      },
+      "unfilteredActualStatistics": {
+        "reduction": 0.02423160820437642,
+        "separated": false
+      }
+    },
+    "nativeNormalizedReduction": 0.029230463906250725,
+    "nativePointDrift": 0.005445864278524892,
+    "baselineNormalizedLower": 1.42875597254672,
+    "candidateNormalizedUpper": 2.728460632016542,
+    "normalizedSeparated": false,
+    "screenPassed": false,
+    "passed": false,
+    "candidateRatio": 1.3908341940300475,
+    "candidateUpper": 2.728460632016542,
+    "candidateAllocation": {
+      "BytesAllocatedPerOperation": 809072
+    },
+    "allocationDelta": 0,
+    "candidateMeanMicroseconds": 13566.825733333335
+  },
+  "primitive": "Pair two prepared ordinary Luma4 quantizations with AVX512F+BW; same immutable matrix, independent levels/nonzero flags and ordered decisions. Extra64B stack scratch insideexisting16KiB envelope. No speculative quantization,cache,heap,owner,admission or cancellation change. Restored aftersub4.1percent screen; no variants.",
+  "affectedNamed": [
+    "WarmCompression/PhotographLossy8",
+    "WarmCompression/DiagramLossy8",
+    "WarmCompression/DiagramLossyTrellis8",
+    "WarmWebp/Encode8",
+    "WarmWebp/Encode16",
+    "WarmWebp/EncodeOpaque8",
+    "WarmWebp/EncodeOpaque16"
+  ],
+  "candidateChecks": {
+    "internal-normal": 36,
+    "public-normal": 392,
+    "internal-scalar": 36,
+    "public-scalar": 392,
+    "internal-avx512off": 36
+  },
+  "restoration": {
+    "productionRestoredByteExactly": true,
+    "allSavedBinaryAndSourceHashesVerified": true,
+    "restorationBuilds": 0,
+    "focused": {
+      "internal-normal": 33,
+      "public-normal": 392,
+      "internal-scalar": 33,
+      "public-scalar": 392,
+      "internal-avx512off": 33
+    },
+    "removedCandidateOnlyTests": 3,
+    "selectedCoreSha256": "4c8d203bc2d98569f9d3d63590c3e6680850926f105543634eb0a7f2dcc6ef65",
+    "windowsNeverBuilt": true,
+    "full5369AndSameActualPackageProofReused": true
+  },
+  "windowsAndActualPackageUnchanged": true,
+  "packageSha256": "f525a1a97778b36d3ab3bffdb359bbda41d146fcfe0f89507d031997200f709e",
+  "full5369PerOsAndSamePackageQualificationReused": true,
+  "builds": {
+    "linuxCore": 1,
+    "linuxInternalTests": 1,
+    "windows": 0,
+    "publicTests": 0,
+    "harness": 0,
+    "native": 0,
+    "selectors": 0,
+    "restoration": 0
+  },
+  "confirmationRuns": 0,
+  "raw": {
+    "file": "vp8-prepared-quantization-pair-rejected.tar.xz",
+    "sha256": "a18d8c6fef1a8f44bbdc9fb067796295410964ce719e90528c975bfa921c1c01",
+    "bytes": 2642204,
+    "members": 85,
+    "mirrored": true,
+    "allMembersVerified": true
+  }
+}
