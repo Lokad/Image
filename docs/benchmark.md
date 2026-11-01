@@ -40,6 +40,10 @@ Three existing [baseline JPEG 4:4:4 decode boundaries](../benchmarks/CURRENT-BAS
 now independently confirm **1.147/1.232/1.330×** gaps on owned/native/live-token
 inputs, with exact native pixels and current allocations. This resolves older
 evidence without changing production or adding controls to the finite checklist.
+Three existing [direct-RGB JPEG decode controls](../benchmarks/CURRENT-DIRECT-RGB-JPEG-DECODE-COSTS.md)
+also confirm **1.449/1.310/1.372×** gaps for 4:4:4/4:2:2/4:2:0, with exact current
+pixels. Three obsolete benchmark pixel hashes are refreshed after independent
+normal/scalar checks on both OSes; production and reference settings are unchanged.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's

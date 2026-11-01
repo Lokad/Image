@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current direct-RGB JPEG444/422/420 decode](CURRENT-DIRECT-RGB-JPEG-DECODE-COSTS.md)
+independently confirms 1.449/upper1.458, 1.310/upper1.324 and 1.372/upper1.387
+gaps, with 966,367/829,164/757,363 B/op. All current samples equal native component
+planes with the existing rational interpolation, normal/scalar on both OSes.
+Refresh only three obsolete benchmark expected-pixel hashes; production, original
+packets/settings and native phase/interpretation corrections remain. One harness
+build/OS, zero other builds/new controls/profiles or full/package repetitions.
+The unchanged J4N31 core/full/actual-package proof carries forward. Stop retiming
+these gaps without a distinct change; all 268 required paths remain in scope.
+
 [Three current baseline JPEG444 decode boundaries](CURRENT-BASELINE-JPEG444-DECODE-COSTS.md)
 independently confirm owned/native/live-token gaps at 1.147/upper1.158,
 1.232/upper1.247 and 1.330/upper1.348, with 948,069/966,367/966,367 B/op.

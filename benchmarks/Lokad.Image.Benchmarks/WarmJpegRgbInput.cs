@@ -6,17 +6,19 @@ internal static class WarmJpegRgbInput
 {
     internal const string SourceSha256 = "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274";
     internal const string InputSha256 = "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729";
-    internal const string ManagedSha256 = "c66733fae2979ac6388499d415a7bc448fcc2765a5bdb578421de4c04e39c4c9";
+    // Pinned integer inverse samples, independently checked against native
+    // component planes and rational centered interpolation, normal and scalar.
+    internal const string ManagedSha256 = "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369";
     internal const string NativeSha256 = "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369";
 
     internal const string Source422Sha256 = "f0b28dd0edce8c7286099c9b4572d7fd8baf6290bcd7b4ff9134f1e699354828";
     internal const string Input422Sha256 = "0894aa4975ec61d5a3723bb04ee4703a23313532097e5bc080823b623134b9c9";
-    internal const string Managed422Sha256 = "81d19ce7a8331b310ad4e6c1214d1a2b93c7ad8a09afa730ceda2e998355c0de";
+    internal const string Managed422Sha256 = "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517";
     internal const string Native422Sha256 = "5cd92d09be1dc007dc2a696153cf50a3340e93bf015affe7146c3e28af195517";
 
     internal const string Source420Sha256 = "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08";
     internal const string Input420Sha256 = "26e897ecf53f5eb6ea45e6bb881c2168e989dddd5a62c7449268e0c1feeb34e5";
-    internal const string Managed420Sha256 = "08cabc07ee3df6ec835cf11a99d50c535449663f6a7f0e53bf4215ebac74b361";
+    internal const string Managed420Sha256 = "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca";
     internal const string Native420Sha256 = "e3a693f838f7e27c2764ac61a18db1dc82c4e881e4c4d24479e2f7dcbae325ca";
     internal const string Oracle420Filter = "extractplanes=y+u+v[r][g][b];"
         + "[g]scale=iw*2:ih*2:flags=bilinear+accurate_rnd,crop=513:259,setsar=1[ge];"

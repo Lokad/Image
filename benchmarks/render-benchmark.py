@@ -1272,6 +1272,16 @@ def render():
         assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
         assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
         assert jpeg444_decode['comparisonLowerBounds'][case] > 1
+    direct_rgb = json.loads((ROOT / 'benchmarks/current-direct-rgb-jpeg-decode-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not direct_rgb['productionChanged'] and direct_rgb['workflow']['allMeasurementBuilds'] == 0
+    assert direct_rgb['producers'] == jpeg444_rows['producers']
+    for case in ['DirectRgb444', 'DirectRgb422', 'DirectRgb420']:
+        observation = direct_rgb['cases'][case][-1]
+        receipt = observation['receipt']
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
+        assert direct_rgb['comparisonLowerBounds'][case] > 1
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1390,6 +1400,10 @@ Three existing [baseline JPEG 4:4:4 decode boundaries](../benchmarks/CURRENT-BAS
 now independently confirm **1.147/1.232/1.330×** gaps on owned/native/live-token
 inputs, with exact native pixels and current allocations. This resolves older
 evidence without changing production or adding controls to the finite checklist.
+Three existing [direct-RGB JPEG decode controls](../benchmarks/CURRENT-DIRECT-RGB-JPEG-DECODE-COSTS.md)
+also confirm **1.449/1.310/1.372×** gaps for 4:4:4/4:2:2/4:2:0, with exact current
+pixels. Three obsolete benchmark pixel hashes are refreshed after independent
+normal/scalar checks on both OSes; production and reference settings are unchanged.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
