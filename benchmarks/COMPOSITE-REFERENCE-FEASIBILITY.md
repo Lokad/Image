@@ -1,0 +1,46 @@
+# Compositing reference feasibility
+
+The fixed 513×259 RGBA8/RGBA16 controls pass an independent BigInteger
+source-over oracle on the current Windows and Linux DLLs. Both borrow separate
+source and destination images, composite at (17,19), and clip right/bottom.
+A shared budget admits exactly two frames; source disposal leaves the destination
+charged, and destination disposal releases the final charge. Source pixels stay
+unchanged. These checks establish correctness and ownership, **not performance**.
+
+A separate, same-revision FFmpeg n8.1 overlay-only build preserves every existing
+reference prefix and worker. The first graph prototype copied the destination
+and failed the borrowed-canvas boundary. The corrected public-API sequence submits
+the immutable source at timestamp −1 and closes its timeline. Each subsequent
+canvas reference passes through the graph and returns with the same pixel pointer.
+Three independently reset operations preserve the pointer and source pixels;
+graph threading is disabled. Reset, preparation and verification are outside
+the operation. A scored managed/native harness is still outstanding.
+
+Native RGBA8 differs from the exact rational result by at most **one RGB sample**,
+RMSE **0.386072**. Alpha, untouched pixels and zero-source-alpha pixels are exact.
+This reflects intermediate effective-alpha quantization. A proposed native-only
+bound of RGB ≤1 and RMSE ≤0.5 **awaits approval**. Managed pixels remain exact;
+no timings have been collected under an unapproved bound.
+
+This FFmpeg overlay has no full-precision RGBA16/GBRAP16 path. Its existing GEQ
+filter reproduces the exact 16-bit result using explicit integer rounding in
+binary64. That check uses a pre-stacked input and format conversion; it is
+**not an approved performance reference**. Neither downconversion nor a generic
+expression-filter timing establishes equivalent compositing performance.
+
+All nine outstanding audited paths remain unmeasured. Production, the actual
+package and existing qualification are unchanged: reuse 5,378 checks per OS and
+the same package consumer proof. This round adds no production build, full-suite
+repeat, package rebuild, timing or new fixture.
+
+[Evidence](composite-reference-feasibility-evidence.json). Retained
+composite-reference-feasibility.tar.xz: **2,561,772 bytes / 51 members**,
+SHA256 **716a85d706f813721ce12c3137c00d316aa9e082a0646c919541d547293b1aa9**,
+mirrored and member-verified. It contains the original probes, failed and passing
+ownership records, managed diagnostic consumer, input/output rasters, actual
+Linux producers, build flags and per-member hashes. With the pinned external
+FFmpeg checkout, replay cmf61-build-overlay-vm.py in a fresh separate prefix,
+then the archived cmf61-run-repeat-overlay-vm.py and cmf61-geq16-check-vm.py
+from the repository root. Run the retained Cmf61Managed consumer against each
+frozen platform DLL. The [packed-fill round](WARM-RECTANGLE-FILL-PACKED.md)
+retains the unchanged full/package qualification dependency.

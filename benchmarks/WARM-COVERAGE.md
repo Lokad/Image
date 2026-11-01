@@ -7,6 +7,13 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Compositing feasibility](COMPOSITE-REFERENCE-FEASIBILITY.md) confirms exact
+managed RGBA8/RGBA16 pixels and two-frame shared admission on Windows/Linux.
+An isolated FFmpeg RGBA8 overlay preserves the destination; its proposed native
+RGB bound awaits approval. Full-precision GEQ supplies correctness only.
+No timing or production change: nine audited controls remain unmeasured, and
+existing performance, full-suite and actual-package evidence remains valid.
+
 [Paired overlapping copy](CURRENT-OVERLAPPING-COPY-COST.md) fills missing current
 evidence at1.106/upper1.152,112B/op, exact full snapshots. TWO publicmoves and
 reverse restoration count onbothsubjects;nativeusesSIX disjoint-bandcalls.

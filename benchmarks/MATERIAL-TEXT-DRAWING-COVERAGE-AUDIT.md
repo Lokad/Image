@@ -11,6 +11,13 @@ subjects. The remaining nine have no warm measurements.
 Existing text/drawing correctness and memory qualification remain valid;
 they are not warm CPU evidence.
 
+[Compositing reference feasibility](COMPOSITE-REFERENCE-FEASIBILITY.md) now
+checks both depths against an independent integer oracle on both platforms.
+A separate same-revision RGBA8 overlay build preserves the borrowed canvas;
+its native-only one-sample RGB bound awaits approval. Full-precision RGBA16
+matches a GEQ correctness check, which is not an approved CPU reference.
+Neither control has a timing result; the remaining count stays nine.
+
 The immutable original inventory contains no text-layout, font, fitting, drawing
 or compositing comparison rows. At the inspected revision, no benchmark C# entry
 point referenced these public APIs. The earlier coverage statement that they reused
@@ -48,7 +55,7 @@ includes bounds and retained output ownership; fitting includes every trial.
 Rendering borrows the same prepared layout and includes raster workspace and
 compositing. Keep admission and actual output release within the operation.
 
-The pinned FFmpeg CLI and libavfilter archive currently contain no drawbox,
+The originally installed FFmpeg CLI and libavfilter archive contain no drawbox,
 drawtext or overlay filter. Its public `av_image_copy_plane` API passes the
 separate-buffer feasibility check at both depths: copy the existing 256×129
 rectangle at (127,65) to (17,19) in a borrowed 513×259 canvas. All samples, alpha,

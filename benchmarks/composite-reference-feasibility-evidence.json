@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "CMF61",
+  "kind": "compositing correctness and reference-boundary feasibility",
+  "inspectedRevision": "284a06b7810dc9dd32a0fd0b7abf28e45803c8ed",
+  "productionChanged": false,
+  "timingClaim": false,
+  "requiredMaterialPaths": 282,
+  "remainingAuditedUnmeasured": 9,
+  "newRequiredCases": 0,
+  "scope": {
+    "width": 513,
+    "height": 259,
+    "depths": [
+      8,
+      16
+    ],
+    "x": 17,
+    "y": 19,
+    "separateSourceAndCanvas": true,
+    "clipRightAndBottom": true
+  },
+  "managed": [
+    {
+      "project": "Lokad.Image",
+      "correctnessOnly": true,
+      "timingClaim": false,
+      "librarySha256": "d5a8a3e15c003720047c1682bc51ac3ff8efcabe1fd02f1e35af67919f726617",
+      "platform": "win-x64",
+      "cases": [
+        {
+          "depth": 8,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "8aafe9cc6bdbd7b747c23772b398796fc7b681b3705d42714f5afbd1eac366cd",
+          "independentBigIntegerExact": true,
+          "sourceUnchanged": true,
+          "twoFrameSharedBudget": true,
+          "finalReleaseToZero": true
+        },
+        {
+          "depth": 16,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputSha256": "f00cbff802ec887c4c07787377ed2c400c268ac2884ceec1ff631444ee0a106e",
+          "independentBigIntegerExact": true,
+          "sourceUnchanged": true,
+          "twoFrameSharedBudget": true,
+          "finalReleaseToZero": true
+        }
+      ]
+    },
+    {
+      "project": "Lokad.Image",
+      "correctnessOnly": true,
+      "timingClaim": false,
+      "librarySha256": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676",
+      "platform": "linux-x64",
+      "cases": [
+        {
+          "depth": 8,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "8aafe9cc6bdbd7b747c23772b398796fc7b681b3705d42714f5afbd1eac366cd",
+          "independentBigIntegerExact": true,
+          "sourceUnchanged": true,
+          "twoFrameSharedBudget": true,
+          "finalReleaseToZero": true
+        },
+        {
+          "depth": 16,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputSha256": "f00cbff802ec887c4c07787377ed2c400c268ac2884ceec1ff631444ee0a106e",
+          "independentBigIntegerExact": true,
+          "sourceUnchanged": true,
+          "twoFrameSharedBudget": true,
+          "finalReleaseToZero": true
+        }
+      ]
+    }
+  ],
+  "nativeBuild": {
+    "schemaVersion": 1,
+    "project": "Lokad.Image",
+    "purpose": "Isolated correctness-reference feasibility build; no CPU claim",
+    "ffmpegRevision": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+    "existingReferencePrefixUnchanged": true,
+    "flags": [
+      "--prefix={repository}/external/cmf61-native",
+      "--disable-everything",
+      "--disable-autodetect",
+      "--disable-debug",
+      "--disable-doc",
+      "--disable-network",
+      "--disable-programs",
+      "--disable-avcodec",
+      "--disable-avformat",
+      "--disable-avdevice",
+      "--disable-swscale",
+      "--disable-swresample",
+      "--enable-avutil",
+      "--enable-avfilter",
+      "--enable-static",
+      "--disable-shared",
+      "--enable-pic",
+      "--enable-filter=overlay,format"
+    ],
+    "staticArchives": {
+      "libavfilter.a": "4fb1027dbe3057ad8a98f7231bef6a61fc54ff8fb9ea892aedbd1e33321c6c31",
+      "libavutil.a": "8935f27fb14c3fe7155d8901b8ed623115173cec31ae54e854e5b05ef874c7ea"
+    },
+    "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "productionBuilds": 0
+  },
+  "failedInitialPrototype": {
+    "workerSha256": "042048f7f500d8cd55fecf25bf8f9af76f6e9c9bd57294bc942a6d6ac4896021",
+    "sourceSha256": "e4ac8757190f38cddbc9ba0686ea53df460b1fe52486c887d6a8a1b36cdd68a5",
+    "borrowedCanvasPixelPointerPreserved": false,
+    "outputStride": 2304,
+    "reason": "Framesync retained the main reference and produced a cloned destination; rejected ownership boundary, no timing."
+  },
+  "rgba8ReusableReference": {
+    "schemaVersion": 1,
+    "project": "Lokad.Image",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "productionChanged": false,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "referenceSha256": "8aafe9cc6bdbd7b747c23772b398796fc7b681b3705d42714f5afbd1eac366cd",
+    "nativeSha256": "13d387dd37bdfae878f34e2523bdedf80224354484fa078c004997dbd7291658",
+    "workerSha256": "65a712f09928773e9be4aff7fb4be89535ee688fad79de62d961e946796cb54b",
+    "sourceSha256": "74c1e06afa112e6315f52b4d5f82b855880d26aceb5a316b1aa9821a3b6aac8d",
+    "native": {
+      "project": "Lokad.Image",
+      "correctnessOnly": true,
+      "timingClaim": false,
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "x": 17,
+      "y": 19,
+      "graphThreads": 1,
+      "threadType": 0,
+      "borrowedCanvasPixelPointerPreserved": true,
+      "sourceUnchanged": true,
+      "frameReferenceTransfer": true,
+      "completedCompositeOperations": 3,
+      "resetOutsideOperation": true,
+      "canvasStride": 2080,
+      "sourceStride": 2080,
+      "ffmpegVersion": "n8.1"
+    },
+    "rgbMaximum": 1,
+    "rgbRmse": 0.38607163447480025,
+    "rgbChangedSamples": 59412,
+    "alphaMaximum": 0,
+    "alphaRmse": 0.0,
+    "untouchedCanvasExact": true,
+    "zeroSourceAlphaLeavesAllSamplesExact": true,
+    "fullRgba16Supported": false,
+    "performanceGateApproved": false
+  },
+  "proposedNativeGate": {
+    "status": "awaiting explicit approval",
+    "rgbMaximum": 1,
+    "rgbRmseMaximum": 0.5,
+    "alphaExact": true,
+    "untouchedCanvasExact": true,
+    "zeroSourceAlphaLeavesAllSamplesExact": true,
+    "managedPixelsExact": true
+  },
+  "rgba16CorrectnessOnly": {
+    "project": "Lokad.Image",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "performanceBaselineApproved": false,
+    "productionChanged": false,
+    "depth": 16,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "f00cbff802ec887c4c07787377ed2c400c268ac2884ceec1ff631444ee0a106e",
+    "outputBytes": 1062936,
+    "filter": "format=gbrap16le,geq=r='if(lt(X,17)+lt(Y,19)+gte(X,513),r(X,Y),st(0,alpha(X+496,Y-19));if(eq(ld(0),0),r(X,Y),st(1,alpha(X,Y));st(2,ld(0)*65535+ld(1)*(65535-ld(0)));floor((r(X+496,Y-19)*ld(0)*65535+r(X,Y)*ld(1)*(65535-ld(0))+floor(ld(2)/2))/ld(2))))':g='if(lt(X,17)+lt(Y,19)+gte(X,513),g(X,Y),st(0,alpha(X+496,Y-19));if(eq(ld(0),0),g(X,Y),st(1,alpha(X,Y));st(2,ld(0)*65535+ld(1)*(65535-ld(0)));floor((g(X+496,Y-19)*ld(0)*65535+g(X,Y)*ld(1)*(65535-ld(0))+floor(ld(2)/2))/ld(2))))':b='if(lt(X,17)+lt(Y,19)+gte(X,513),b(X,Y),st(0,alpha(X+496,Y-19));if(eq(ld(0),0),b(X,Y),st(1,alpha(X,Y));st(2,ld(0)*65535+ld(1)*(65535-ld(0)));floor((b(X+496,Y-19)*ld(0)*65535+b(X,Y)*ld(1)*(65535-ld(0))+floor(ld(2)/2))/ld(2))))':a='if(lt(X,17)+lt(Y,19)+gte(X,513),alpha(X,Y),floor((alpha(X+496,Y-19)*65535+alpha(X,Y)*(65535-alpha(X+496,Y-19))+32767)/65535))':interpolation=nearest,crop=513:259:0:0:exact=1,format=rgba64le",
+    "prestackedInput": true,
+    "scope": "Functional exact-rational native check only. Stacking/format conversion/output ownership are not a qualified CPU boundary; no speed or parity claim.",
+    "rationalDoubleBound": "Common-depth cancellation keeps numerator below65535^3<2^48. Coverage<=65535^2<2^32. Integer products/sums fit binary64 exactly; nearest-integer ratio spacing exceeds quotient ulp. Explicitfloor andintegerhalf terms preserve half-up sample rounding.",
+    "managedAndBigIntegerExact": true
+  },
+  "baselineBlockers": [
+    "RGBA8 requires approval of the scoped native-only rounding bound, then a scored harness resetting identical canvas state outside each operation on both subjects. The reusable ownership probe is not a completed timing harness.",
+    "The pinned overlay lacks full-precision RGBA16/GBRAP16. GEQ verifies pixels only; no equivalent CPU baseline or alternative reference exception is approved."
+  ],
+  "qualificationReused": {
+    "fullChecksEachOS": 5378,
+    "liveEachOS": 948,
+    "sameActualPackageBothOS": true,
+    "usageExamplesEachOS": 3,
+    "packageSha256": "749ab90c50ff636be8b7eadfa5ee7e1460de2b3441081f70e487129b70190f40",
+    "report": "WARM-RECTANGLE-FILL-PACKED.md",
+    "rawDependencySha256": "93a1e91bdf349d7af12cde4a8300873dfeabfe5cb6d2a327e24b3262e2351e27"
+  },
+  "workflow": {
+    "productionBuilds": 0,
+    "diagnosticConsumerBuilds": 1,
+    "isolatedNativeBuilds": 1,
+    "scoredMeasurements": 0,
+    "fullSuiteRepeats": 0,
+    "packageRebuilds": 0,
+    "newFixtures": 0
+  },
+  "evidenceInvalidation": "No production paths or existing reference prefixes/workers change. Existing costs, correctness and actual-package proof remain valid. These checks do not supply missing warm performance evidence.",
+  "raw": {
+    "file": "composite-reference-feasibility.tar.xz",
+    "sha256": "716a85d706f813721ce12c3137c00d316aa9e082a0646c919541d547293b1aa9",
+    "bytes": 2561772,
+    "members": 51,
+    "vmMembersVerified": true,
+    "localMembersVerified": true
+  }
+}
