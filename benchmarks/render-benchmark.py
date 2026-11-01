@@ -1331,6 +1331,42 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    jpeg_vertical = json.loads((ROOT / 'benchmarks/jpeg-vertical-chroma-row-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_vertical['accepted'] and jpeg_vertical['decision']['normalizedSeparated']
+    assert jpeg_vertical['qualification']['fullChecksEachOs'] == 5354
+    assert jpeg_vertical['qualification']['package']['sha256'] == jpeg_vertical['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert len(jpeg_vertical['cases']) == 11
+    assert sum(s == 'confirmed-pass-stop' for s in jpeg_vertical['status'].values()) == 7
+    updated_vertical = 0
+    for case, prefix in [('CallerRGB420', '| JPEG 4:2:0 from caller RGB samples'),
+                         ('GovernedRGBA16', '| JPEG RGBA16 4:2:0 / caller IMemoryBudget'),
+                         ('JpegRgb420AsyncSamples', '| JPEG caller RGB24 async nonseekable, 420')]:
+        observation = jpeg_vertical['cases'][case][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == jpeg_vertical['producers']['linuxSha256']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['managedOutputBytes'] + 2 == receipt['nativeOutputBytes']
+        if case == 'CallerRGB420':
+            original = jpeg['cases']['Rgb420'][-1]['receipt']
+            assert receipt['nativeReady']['frozenPacketExact'] and receipt['psnrGapDb'] == 0
+            assert all(receipt[subject][field] == original[subject][field]
+                       for subject in ('managedQuality', 'nativeQuality')
+                       for field in ('encodedSha256', 'nativeDecodedSha256'))
+        else:
+            assert receipt.get('completePacketExact', receipt.get('encodedPacketsExact'))
+        for index, (kind, row) in enumerate(rows):
+            if row.startswith(prefix):
+                label = row.split('|')[1].strip()
+                if jpeg_vertical['status'][case] == 'confirmed-confidence-open':
+                    label = label.replace(' †', ' (confidence open) †')
+                rows[index] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | '
+                               f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                               f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                               f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
+                               f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+                updated_vertical += 1
+    assert updated_vertical == 3
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1431,9 +1467,10 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production qualification covers **5,352 checks per OS**, including 948 live
+Current production qualification covers **5,354 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused word-transpose/ownership checks pass normal/scalar on both OSes.
+Focused JPEG row/packet/admission checks pass normal/scalar on both OSes;
+applicable word-transpose and unrelated qualification remains valid.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -1447,6 +1484,11 @@ saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
 Resident byte/word and async controls independently pass; forward-only and
 live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
 25.90% elapsed gain includes an 8.61% faster native bracket between runs.
+[Exact JPEG vertical chroma rows](../benchmarks/WARM-JPEG-VERTICAL-CHROMA-ROWS.md)
+save **11.80% elapsed / 11.95% native-normalized** on caller-RGB420, preserving
+exact packets and allocation. All eleven existing affected boundaries now have
+independent costs: seven pass and stop, caller/restart remain confirmed gaps,
+and shared-budget/async cases are confidence-open. No broader parity claim follows.
 [RGBA16 transpose](../benchmarks/WARM-WORD-TRANSPOSE-MATRIX.md) independently saves
 **32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
 112 B/op. Its **upper 0.748×** passes and stops; the byte companion remains a

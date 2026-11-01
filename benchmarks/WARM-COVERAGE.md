@@ -7,6 +7,18 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Exact vertical chroma rows](WARM-JPEG-VERTICAL-CHROMA-ROWS.md) independently
+reduce caller-RGB420 elapsed by 11.80% / 11.95% native-normalized, with separated
+confidence and exact frozen packets. All eleven affected existing boundaries
+now have current independent costs: seven pass and stop; caller RGB420 and
+restart33 remain confirmed gaps; governed RGBA16 and async caller RGB420 remain
+confidence-open. No new capacity, owner or cancellation boundary. Fresh 5,354
+checks per OS, affected normal/scalar checks and the same actual Release package
+with three examples pass Windows/Linux. One core/internal build per OS, cached
+harness/native/selectors, one primary short/confirmation and ten companion costs;
+no repeated scores or new workload grid. Earlier affected CPU evidence is
+historical; all other applicable evidence remains. All 268 paths remain required.
+
 [Safe word transpose](WARM-WORD-TRANSPOSE-MATRIX.md) independently improves
 32.57%filtered/32.56%allactual/31.77%normalized with separated confidence:
 32.929us,0.740/upper0.748,unchanged112B/op. Exact original/native pixels and

@@ -101,4 +101,45 @@ internal static partial class JpegReferenceColor
             LimitedChroma(r, g, b, pair, out var u, out var v); rgb[x] = u | v << 16;
         }
     }
+
+    internal static void VerticalChromaRow(ReadOnlySpan<short> chroma, int stride, int firstY,
+        JpegReferenceArea vertical, Span<byte> cb, Span<byte> cr)
+    {
+        if (Avx2.IsSupported && BitConverter.IsLittleEndian)
+        {
+            var low = Vector256.Create(1 << 18); var high = low;
+            for (var row = 0; row < vertical.Count; row++)
+            {
+                var at = (vertical.Source(row) - firstY) * stride;
+                // Eight interleaved signed Q7 pairs, borrowed from an already
+                // initialized MCU row. Q12 weights sum to4096, so Int32 suffices.
+                var pairs = MemoryMarshal.Read<Vector256<short>>(MemoryMarshal.AsBytes(chroma[at..]));
+                var weight = Vector256.Create(vertical.Weight(row));
+                low += Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(pairs.GetLower()), weight);
+                high += Avx2.MultiplyLow(Avx2.ConvertToVector256Int32(pairs.GetUpper()), weight);
+            }
+            low = Avx2.ShiftRightArithmetic(low, 19); high = Avx2.ShiftRightArithmetic(high, 19);
+            var first = Sse2.PackSignedSaturate(low.GetLower(), low.GetUpper());
+            var second = Sse2.PackSignedSaturate(high.GetLower(), high.GetUpper());
+            var interleaved = Sse2.PackUnsignedSaturate(first, second).AsUInt16();
+            var u = (interleaved & Vector128.Create((ushort)255)).AsInt16();
+            var v = Sse2.ShiftRightLogical(interleaved, 8).AsInt16();
+            var result = Sse2.PackUnsignedSaturate(u, v).AsUInt64();
+            var uBytes = result.GetElement(0); var vBytes = result.GetElement(1);
+            MemoryMarshal.Write(cb, in uBytes); MemoryMarshal.Write(cr, in vBytes);
+            return;
+        }
+        for (var x = 0; x < 8; x++)
+        {
+            var sumU = 1 << 18; var sumV = 1 << 18;
+            for (var row = 0; row < vertical.Count; row++)
+            {
+                var at = (vertical.Source(row) - firstY) * stride + x * 2;
+                sumU += chroma[at] * vertical.Weight(row);
+                sumV += chroma[at + 1] * vertical.Weight(row);
+            }
+            cb[x] = (byte)Math.Clamp(sumU >> 19, 0, 255);
+            cr[x] = (byte)Math.Clamp(sumV >> 19, 0, 255);
+        }
+    }
 }

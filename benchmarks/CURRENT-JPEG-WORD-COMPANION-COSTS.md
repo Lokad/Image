@@ -1,5 +1,7 @@
 # Current RGBA16 JPEG companion costs
 
+CPU costs below describe preceding production. [Current vertical-row results](WARM-JPEG-VERTICAL-CHROMA-ROWS.md) supersede affected timings; packet, admission and implementation evidence remains.
+
 Three existing controls now have independent current costs on the accepted
 [factored-normalization build](JPEG-FACTORED-WORD-NORMALIZATION.md). All remain
 confirmed gaps, including 422's conservative lower bound just above 1.001.

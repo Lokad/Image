@@ -1,5 +1,7 @@
 # Exact factored JPEG word normalization
 
+CPU costs below describe preceding production. [Current vertical-row results](WARM-JPEG-VERTICAL-CHROMA-ROWS.md) supersede affected timings; packet, admission and implementation evidence remains.
+
 The existing governed RGBA16 JPEG420 control independently improves **4.56%**
 in filtered elapsed, **4.72%** across all samples and **4.38%** native-normalized.
 Raw, all-sample and normalized confidence intervals separate. This retains a

@@ -132,12 +132,10 @@ internal static partial class JpegEncoder
                 }
                 var chroma = MemoryMarshal.Cast<int, short>(pixels);
                 for (var y = 0; y < chromaRows; y++)
-                for (var x = 0; x < 8; x++)
                 {
-                    ReferenceChroma(chroma, stride * 2, firstY, x, verticalPlans[y],
-                        out var cb, out var cr);
-                    var position = y / 8 * 64 + y % 8 * 8 + x;
-                    mcu[256 + position] = cb; mcu[256 + chromaRows * 8 + position] = cr;
+                    var position = y / 8 * 64 + y % 8 * 8;
+                    JpegReferenceColor.VerticalChromaRow(chroma, stride * 2, firstY, verticalPlans[y],
+                        mcu.Slice(256 + position, 8), mcu.Slice(256 + chromaRows * 8 + position, 8));
                 }
                 for (var component = 0; component < 3; component++)
                 for (var vertical = 0; vertical < (component == 0 ? 2 : chromaRows / 8); vertical++)
@@ -163,19 +161,6 @@ internal static partial class JpegEncoder
         {
             if (prepared is not null) context.Release(columnsBytes);
         }
-    }
-
-    private static void ReferenceChroma(ReadOnlySpan<short> chroma, int stride, int firstY, int x,
-        JpegReferenceArea vertical, out byte cb, out byte cr)
-    {
-        var sumU = 1 << 18; var sumV = 1 << 18;
-        for (var row = 0; row < vertical.Count; row++)
-        {
-            var at = (vertical.Source(row) - firstY) * stride + x * 2;
-            sumU += chroma[at] * vertical.Weight(row);
-            sumV += chroma[at + 1] * vertical.Weight(row);
-        }
-        cb = (byte)Math.Clamp(sumU >> 19, 0, 255); cr = (byte)Math.Clamp(sumV >> 19, 0, 255);
     }
 
     private static void ReferenceRgb(ImageBuffer? image, JpegSampleInput source, int x, int y, uint? background,

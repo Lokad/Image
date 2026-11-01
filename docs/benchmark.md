@@ -22,9 +22,10 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production qualification covers **5,352 checks per OS**, including 948 live
+Current production qualification covers **5,354 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused word-transpose/ownership checks pass normal/scalar on both OSes.
+Focused JPEG row/packet/admission checks pass normal/scalar on both OSes;
+applicable word-transpose and unrelated qualification remains valid.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -38,6 +39,11 @@ saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
 Resident byte/word and async controls independently pass; forward-only and
 live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
 25.90% elapsed gain includes an 8.61% faster native bracket between runs.
+[Exact JPEG vertical chroma rows](../benchmarks/WARM-JPEG-VERTICAL-CHROMA-ROWS.md)
+save **11.80% elapsed / 11.95% native-normalized** on caller-RGB420, preserving
+exact packets and allocation. All eleven existing affected boundaries now have
+independent costs: seven pass and stop, caller/restart remain confirmed gaps,
+and shared-budget/async cases are confidence-open. No broader parity claim follows.
 [RGBA16 transpose](../benchmarks/WARM-WORD-TRANSPOSE-MATRIX.md) independently saves
 **32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
 112 B/op. Its **upper 0.748×** passes and stops; the byte companion remains a
@@ -103,8 +109,8 @@ acceptance histories are retained in the coverage links and raw evidence.
 | --- | ---: | ---: | ---: | ---: | ---: |
 | WebP VP8 + alpha, fresh seekable Stream † | 7,037.26 | 6,042.62 | 1.165 / 1.211 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
-| JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
-| JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,071.31 | 1,837.31 | 1.127 / 1.135 | 819,489 | 52,115 / 52,117 |
+| JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,353.14 | 2,517.95 | 1.332 / 1.346 | 741,375 | 7,330 / 7,330 |
@@ -148,7 +154,7 @@ acceptance histories are retained in the coverage links and raw evidence.
 | JPEG YCCK420, resident decode † | 421.45 | 707.63 | 0.596 / 0.607 | 895,547 | — |
 | JPEG 4:1:1, resident decode † | 527.41 | 450.16 | 1.172 / 1.192 | 751,295 | — |
 | JPEG 4:1:0, resident decode † | 367.40 | 507.52 | 0.724 / 0.735 | 720,838 | — |
-| JPEG caller RGB24 async nonseekable, 420 † | 1,862.24 | 1,628.86 | 1.143 / 1.154 | 309,526 | 52,091 / 52,093 |
+| JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
 | JPEG progressive grayscale, resident decode † | 2,270.11 | 1,712.36 | 1.326 / 1.332 | 683,126 | — |

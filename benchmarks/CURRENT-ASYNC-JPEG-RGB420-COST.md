@@ -1,5 +1,7 @@
 # Current asynchronous caller-RGB420 JPEG encoding
 
+CPU costs below describe preceding production. [Current vertical-row results](WARM-JPEG-VERTICAL-CHROMA-ROWS.md) supersede affected timings; packet, admission and implementation evidence remains.
+
 The existing 513×259 RGB24 nonseekable-output control independently confirms a
 **1.143× / conservative upper 1.154** CPU gap. Reconstruction matches exactly;
 the complete 52,091/52,093-byte packets differ only by approved COM attribution.

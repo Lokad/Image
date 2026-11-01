@@ -1,5 +1,7 @@
 # JPEG column preparation
 
+CPU costs below describe preceding production. [Current vertical-row results](WARM-JPEG-VERTICAL-CHROMA-ROWS.md) supersede affected timings; packet, admission and implementation evidence remains.
+
 The existing caller-RGB420 control uses **7.55% less elapsed time** with exact
 packets. Its **1.190× / upper1.197** warm one-CPU cost remains a gap. Measured
 allocation rises by **14,806 B/op** for one temporary column-descriptor array.

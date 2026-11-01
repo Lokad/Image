@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster 4:2:0 and 4:2:2 JPEG encoding through exact SIMD vertical chroma rows,
+  preserving packets, scalar fallbacks and existing memory ownership.
 - Faster RGBA16 transpose through safe AVX2, preserving exact pixels, scalar
   fallbacks, cancellation and shared-memory ownership.
 - Exact low-alpha resizing uses Int128 where overflow bounds permit, reducing
