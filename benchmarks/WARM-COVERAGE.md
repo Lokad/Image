@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Signed-coefficient fusion](VP8-PACKED-PROBABILITY-BINDING-REJECTED.md#signed-coefficient-fusion-rejected)
+also misses one short screen: elapsed4.14% higher, normalized point only1.73%
+lower. Exact pixels/native/owner/quiet gates pass; no confirmation or variants.
+Original source/core/PDB/XML/linked tests restored byte-exactly; 32 internal/264
+public checks pass candidate AND restored normal/scalar on each OS. Reuse
+unchanged full/package qualification and accepted costs. No grid or objective
+change; close this fusion family.
+
 [Packed VP8 probability binding](VP8-PACKED-PROBABILITY-BINDING-REJECTED.md)
 misses one fresh short screen: point elapsed0.65% higher/normalized0.52% higher,
 unchanged760,564B/op. Original input/filter8/native/pixel/owner/quiet gates pass.
