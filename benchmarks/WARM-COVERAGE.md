@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Independent paired-quantization confirmation](VP8-QUANTIZATION-PAIR-CONFIRMATION.md)
+rejects the unchanged archivedcandidate:0.97%filtered/0.62%all/0.67%normalized,
+all-actual/normalized confidenceoverlap. One scoped2%point continuation after
+boundedlarge-lead review changesno confidence/finalparityrule. Zero builds,
+newshorts/profiles/cases/variants; exactpacket/owners/quietgates pass. Source
+restoredbyteexactly, actualselected/test/packagebinariesneverchanged, unchanged
+5369bothOS/SAMEpackage proof reusedwithoutchecks. No secondconfirmation.
+All268requiredpaths andcurrentselectedcosts remainunchanged.
+
 [Current RGBA16 VP8-with-alpha](CURRENT-VP8-ALPHA16-COST.md) independently confirms
 1.311/upper1.365,21350352B/op,exact98590Bpacket. Full per-operation UInt16→8-bit
 normalization remains included on bothsubjects. One valid12,zerobuilds/newcases/

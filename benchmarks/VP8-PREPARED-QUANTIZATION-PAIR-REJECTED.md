@@ -1,9 +1,11 @@
 # Prepared VP8 quantization pairs: rejected
 
-The existing photograph/effort4 short observes **2.39% less elapsed time**
-(2.42% all actuals, **2.92% native-normalized**), below the 4.1% continuation gate.
-Reject without confirmation or variants. Short point means do not establish a
-causal gain or change current production costs; confidence intervals overlap.
+The original photograph/effort4 short observes **2.39% less elapsed time**
+(2.42% all actuals, **2.92% native-normalized**), below its 4.1% continuation gate.
+Its short confidence overlaps. A later [independent confirmation](VP8-QUANTIZATION-PAIR-CONFIRMATION.md)
+of the exact archived candidate finds only0.97%filtered/0.62%all/0.67%normalized,
+with all-actual/normalized confidence overlap. The candidate remains rejected;
+the original short below is retained history. No further confirmation or variant.
 
 | Complete original 513×259 encode | Lokad µs | Ratio / upper | Managed B/op | Packet B |
 |---|---:|---:|---:|---:|
