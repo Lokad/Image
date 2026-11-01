@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[JPEG long-prefix fusion](JPEG-LONG-PREFIX-FUSION-REJECTED.md) is rejected:
+one DirectRgb444 short observes 3.26% raw / 3.49% normalized improvement, below
+4.1% triage. No confirmation or variants. Existing 9/10-bit storage is borrowed;
+exact pixels, cursor/error/partial-coefficient behavior, ownership and quiet gates
+pass. Source/core/linked tests restore byte-exactly, with 63 internal/388 public
+checks normal/scalar Linux. Windows/package/current costs and applicable 5,354
+checks per OS remain unchanged. No repeated full proof; all 268 paths remain.
+
 [Exact vertical chroma rows](WARM-JPEG-VERTICAL-CHROMA-ROWS.md) independently
 reduce caller-RGB420 elapsed by 11.80% / 11.95% native-normalized, with separated
 confidence and exact frozen packets. All eleven affected existing boundaries

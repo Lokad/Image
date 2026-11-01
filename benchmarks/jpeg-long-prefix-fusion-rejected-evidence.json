@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "JHF35",
+  "date": "2026-11-01",
+  "accepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "scope": "One existing513x259 DirectRgb444 resident133057B marker-only JPEG tocomplete fresh independently ownedRGBA8 output and release. Frozen input/reference/settings and nativeSIMD/oneCPU. No newworkloads/grid.",
+  "selectedProducers": {
+    "windowsSha256": "7b3707f3bcc4c5cda62ddd3099778198c3ceb018bd6eed2c4e20a7779523e5de",
+    "linuxSha256": "e6edc70cdc9e23a9a5ee4d3cd8af2815581d711b83f6c71e963044adc8f9ee46"
+  },
+  "candidateLinuxSha256": "0fb504ac7dcce0f92ff8ffaa5b779654bbb2d6d1333928cc9dac18d944183d9e",
+  "originalEvidence": {
+    "file": "current-direct-rgb-jpeg-decode-costs-evidence.json",
+    "case": "DirectRgb444",
+    "meanMicroseconds": 2098.4073177083333,
+    "ratio": 1.4494858030753077,
+    "upper": 1.457541042029664,
+    "allocatedBytes": 966367,
+    "actuals": 12
+  },
+  "candidate": {
+    "meanMicroseconds": 2030.0973035714285,
+    "ratio": 1.3989427057116142,
+    "upper": 1.514082146676905,
+    "allocatedBytes": 966370,
+    "actuals": 3,
+    "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+    "managedOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+    "nativeOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+    "allFrozenGatesPassed": true
+  },
+  "decision": {
+    "mode": "short",
+    "baselineCurrentIndependent12Reused": true,
+    "raw": {
+      "statistics": {
+        "reduction": 0.03255326721387264,
+        "separated": false
+      },
+      "unfilteredActualStatistics": {
+        "reduction": 0.033185503037357345,
+        "separated": false
+      }
+    },
+    "nativeNormalizedReduction": 0.034869673960557956,
+    "nativePointDrift": 0.002400097359069653,
+    "baselineNormalizedLower": 1.439624796059951,
+    "candidateNormalizedUpper": 1.514082146676905,
+    "normalizedSeparated": false,
+    "screenPassed": false,
+    "passed": false,
+    "candidateRatio": 1.3989427057116142,
+    "candidateUpper": 1.514082146676905,
+    "candidateAllocation": {
+      "BytesAllocatedPerOperation": 966370
+    },
+    "allocationDelta": 3,
+    "candidateMeanMicroseconds": 2030.0973035714285
+  },
+  "primitive": "Forward existing9/10-bit canonical table asborrowedspan into ordinaryfusedbaseline ACloop. On8-bitmiss,peek10alreadybufferedbits and requirefullcode+amplitude beforeconsume. No extraread/lookupstorage/table/owner/charge/polling. Longer/invalid/stuffed/zero-run cases retainfallback. Removed aftersub4.1percent screen;no variant or confirmation.",
+  "frozenSymbolCounts": {
+    "project": "Lokad.Image",
+    "round": "JHF35",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newCases": 0,
+    "newProfiles": 0,
+    "noTimingClaim": true,
+    "case": "DirectRgb444",
+    "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+    "inputBytes": 133057,
+    "width": 513,
+    "height": 259,
+    "components": {
+      "82": [
+        1,
+        2
+      ],
+      "71": [
+        1,
+        2
+      ],
+      "66": [
+        1,
+        2
+      ]
+    },
+    "mcus": 1105,
+    "blocks": 6630,
+    "dcCodeLengths": {
+      "2": 5431,
+      "3": 862,
+      "4": 258,
+      "5": 74,
+      "6": 5
+    },
+    "acCodeLengths": {
+      "2": 123762,
+      "3": 30304,
+      "4": 38245,
+      "5": 16925,
+      "6": 6262,
+      "7": 5209,
+      "8": 2316,
+      "9": 1544,
+      "10": 883,
+      "11": 550,
+      "12": 480,
+      "13": 182,
+      "14": 46,
+      "15": 24,
+      "16": 8
+    },
+    "acSymbols": 226740,
+    "ac9or10": 2427,
+    "ac9or10Fraction": 0.010703889917967717,
+    "firstBaselineShortLoopExitCodeLength": {
+      "10": 566,
+      "11": 310,
+      "9": 1181,
+      "12": 155,
+      "ZRL": 24,
+      "13": 55,
+      "14": 17,
+      "15": 8,
+      "16": 1
+    },
+    "potentialFurtherSymbolsBeforeAbove10OrZrl": 22573,
+    "stuffedBytes": 368,
+    "entropyBytes": 132708,
+    "paddingBits": 1,
+    "endMarkerExact": true,
+    "interpretation": "Independent canonical symbol-count diagnostic of one frozen original packet,not component elapsed time or speed prediction. Existing9/10bit table is already allocated;potential candidate only forwards it into the ordinary fused baselineblockloop on short-prefix miss,keeping >=11/zero-run/stuffing/errors/cancelled paths original. Availablebit guard must cover code+amplitude<=20;do not consume insufficient lookahead."
+  },
+  "baselineValidity": "EntropyHuffman/fusedblock/ReadBaselineBlock/scan/OperationContext files unchanged since46f9fa4 confirmation. Later acceptedTPX33 changes wordtranspose;JVC34 changes encoder verticalrows only. Both are no-call from decoding. Reuse valid independent12;do not remeasure original.",
+  "correctness": "Candidate65internal/388public checks normal/scalarLinux pass,including two trial-only9/10bit fullbaseline oracle cases. Allphases,partialcoefficients/predictor/cursor/failuremessages,truncation/markers/category/run endpoints andoriginal packet/native exactframes/owners/quietgates pass. No quality/resource/ownership tolerance changes.",
+  "restoration": {
+    "sourceByteExact": true,
+    "allBinaryCopiesByteExact": true,
+    "selectedLinuxCoreSha256": "e6edc70cdc9e23a9a5ee4d3cd8af2815581d711b83f6c71e963044adc8f9ee46",
+    "restorationBuilds": 0,
+    "focused": {
+      "internal-normal": 63,
+      "public-normal": 388,
+      "internal-scalar": 63,
+      "public-scalar": 388
+    },
+    "newTrialOnlyTestsRemoved": true,
+    "full5354AndSamePackageProofReused": true
+  },
+  "qualificationReuse": {
+    "fullChecksEachOs": 5354,
+    "liveComparisonsEachOs": 948,
+    "sameActualReleasePackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "packageSha256": "16f2c5ffd517c6e982235c01625bcc17189b1d3411051eff0be61b2246a4989c",
+    "reference": "jpeg-vertical-chroma-row-evidence.json",
+    "ciCommit": "09d206153c6c8e893cf823c6d679b7b6336462a8",
+    "ciRun": 41286475497,
+    "ciAllThreeJobsGreen": true,
+    "noRepeatedFullPackageQualification": true
+  },
+  "workflow": {
+    "linuxCoreBuilds": 1,
+    "linuxInternalBuilds": 1,
+    "windowsBuilds": 0,
+    "publicDifferentialHarnessNativeSelectorBuilds": 0,
+    "activeCandidateScreens": 1,
+    "candidateIndependentConfirmations": 0,
+    "newProfiles": 0,
+    "restorationBuilds": 0,
+    "closedFamily": "Existing9/10bit lookup inside fusedbaseline ACloop;no widerprefix/guard/layout/inlining variants."
+  },
+  "rawArtifacts": {
+    "file": "jpeg-long-prefix-fusion-rejected.tar.xz",
+    "sha256": "d3cc1fb7e0b61c46b694f8442ec8079e816cfc81aa0877706377aac08a77de9f",
+    "bytes": 3296500,
+    "members": 91,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-vertical-chroma-row-qualified.tar.xz",
+        "sha256": "5f18050615ddf30758e6af225b77ade98b54a5a9f4efa3af0dd98adb5e482b10"
+      },
+      {
+        "file": "current-direct-rgb-jpeg-decode-costs.tar.xz",
+        "sha256": "f01da8c6740bdf02b616e0be28bfa87415e23a2be222aabad2a66bfb17fe2142"
+      },
+      {
+        "file": "jpeg-single-amplitude-rejected.tar.xz",
+        "sha256": "f4f8687e4213e9dbb9e423693c5456ba656c4035354f0ce6164dd06a9ca44375"
+      }
+    ]
+  },
+  "next": "Keep unchanged currentcosts. Review eliminating separate componentplanes for equal-grid baseline JPEG through explicit ownedresult storage;bounded source/admission/late-marker proof before prototype. All268requiredpaths remain."
+}
