@@ -31,6 +31,12 @@ All six displayed VP8 encoder controls now have independent costs; the four
 [refreshed companions](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
 confirm 1.298–1.333× gaps with exact packets and unchanged allocations.
 
+[JPEG 4:4:4 row normalization](../benchmarks/WARM-JPEG444-ROW-NORMALIZATION.md)
+saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
+Resident byte/word and async controls independently pass; forward-only and
+live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
+25.90% elapsed gain includes an 8.61% faster native bracket between runs.
+
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
 small 1.7% point cost increase is disclosed; all three refreshed read controls
@@ -73,7 +79,7 @@ acceptance histories are retained in the coverage links and raw evidence.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | WebP VP8 + alpha, fresh seekable Stream † | 7,037.26 | 6,042.62 | 1.165 / 1.211 | 1,434,827 | — |
-| JPEG 4:4:4, forward-only / exact reference | 4,597.26 | 3,766.58 | 1.221 / 1.407 | 820,123 | 133,039 / 133,041 |
+| JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,877.03 | 1,577.94 | 1.190 / 1.197 | 388,222 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget † | 2,071.31 | 1,837.31 | 1.127 / 1.135 | 819,489 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
@@ -120,7 +126,7 @@ acceptance histories are retained in the coverage links and raw evidence.
 | JPEG 4:1:1, resident decode † | 527.41 | 450.16 | 1.172 / 1.192 | 751,295 | — |
 | JPEG 4:1:0, resident decode † | 367.40 | 507.52 | 0.724 / 0.735 | 720,838 | — |
 | JPEG caller RGB24 async nonseekable, 420 † | 1,862.24 | 1,628.86 | 1.143 / 1.154 | 309,526 | 52,091 / 52,093 |
-| JPEG RGBA8 async nonseekable, 444 † | 4,626.46 | 3,857.58 | 1.199 / 1.210 | 820,475 | 133,039 / 133,041 |
+| JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
 | JPEG progressive grayscale, resident decode † | 2,270.11 | 1,712.36 | 1.326 / 1.332 | 683,126 | — |
 | JPEG progressive420, resident decode † | 2,138.63 | 1,951.98 | 1.096 / 1.108 | 775,318 | — |

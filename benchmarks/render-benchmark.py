@@ -1240,6 +1240,28 @@ def render():
     assert dc_cmyk['receipt']['managedOutputSha256'] == dc_cmyk['receipt']['nativeOutputSha256']
     assert owned_cmyk_current['restoration']['originalDerivedFixtureRestoredByteExact']
     assert owned_cmyk_current['qualificationReused']['sameActualReleasePackageProofReused']
+    jpeg444_rows = json.loads((ROOT / 'benchmarks/jpeg444-row-normalization-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg444_rows['accepted'] and jpeg444_rows['decision']['normalizedSeparated']
+    assert all(q['total'] == 5342 for q in jpeg444_rows['qualification'].values())
+    assert jpeg444_rows['package']['sameActualWindowsReleasePackageBothOs']
+    for case, label in [('Encode444Stream8', 'JPEG 4:4:4, forward-only / exact reference'),
+                        ('Jpeg8AsyncNonSeekable', 'JPEG RGBA8 async nonseekable, 444')]:
+        observation = jpeg444_rows['cases'][case][-1]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
+        assert receipt.get('completePacketExact', receipt.get('encodedPacketsExact'))
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert (receipt['managedOutputBytes'], receipt['nativeOutputBytes']) == (133039, 133041)
+        status = jpeg444_rows['status'][case]
+        assert (status == 'confirmed-pass') == (observation['conservativeRatioUpper'] <= 1)
+        qualifier = 'confirmed pass' if status == 'confirmed-pass' else 'confidence open'
+        replacement = (f'| {label} ({qualifier}) † | {stats["Mean"] / 1000:,.2f} | '
+                       f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                       f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                       f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 133,039 / 133,041 |')
+        position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| ' + label))
+        rows[position] = ('codec', replacement)
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1348,6 +1370,12 @@ its explicit normalized-confidence-overlap exception, without a parity claim.
 All six displayed VP8 encoder controls now have independent costs; the four
 [refreshed companions](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
 confirm 1.298–1.333× gaps with exact packets and unchanged allocations.
+
+[JPEG 4:4:4 row normalization](../benchmarks/WARM-JPEG444-ROW-NORMALIZATION.md)
+saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
+Resident byte/word and async controls independently pass; forward-only and
+live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
+25.90% elapsed gain includes an 8.61% faster native bracket between runs.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's

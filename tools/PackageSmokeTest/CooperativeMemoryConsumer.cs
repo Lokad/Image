@@ -309,7 +309,52 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged JPEG probe input limit or admission cleanup differs.");
         }
         Console.WriteLine("Packaged JPEG probes preserve bounded prefixes and invalid-marker limits.");
+        await VerifyJpeg444(budget, limits);
         await GovernedStreamingConsumer.Verify();
+    }
+
+    private static async Task VerifyJpeg444(TestMemoryBudget budget, ImageLimits limits)
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            using var source = ImageBuffer.Create(17, 11, depth, limits);
+            var rgb = new byte[17 * 11 * 3];
+            var maximum = depth == 8 ? 255 : 65535;
+            for (var y = 0; y < 11; y++)
+            for (var x = 0; x < 17; x++)
+            {
+                var alpha = (x * 977 + y * 43) & maximum;
+                for (var c = 0; c < 4; c++)
+                {
+                    var sample = c == 3 ? alpha : (1 + x * 257 + y * 191 + c * 811) & maximum;
+                    if (depth == 8) source.GetRow8(y)[x * 4 + c] = (byte)sample;
+                    else source.GetRow16(y)[x * 4 + c] = (ushort)sample;
+                    if (c == 3) continue;
+                    var background = c == 0 ? 0x20 : c == 1 ? 0x40 : 0x60;
+                    var denominator = (long)maximum * maximum;
+                    var numerator = sample * (long)alpha * 255 + background * (long)(maximum - alpha) * maximum;
+                    rgb[(y * 17 + x) * 3 + c] = (byte)((numerator + denominator / 2) / denominator);
+                }
+            }
+            var pixels = OriginalPixels.Bytes(source);
+            var options = new JpegEncodeOptions
+                { Quality = 85, Sampling = JpegSampling.YCbCr444, BackgroundRgb = 0x204060, Limits = limits };
+            using var caller = new MemoryStream();
+            using var owned = new MemoryStream();
+            using var asynchronous = new MemoryStream();
+            ImageCodec.EncodeJpeg(rgb, 17, 11, JpegSampleFormat.Rgb, caller, options: options);
+            ImageCodec.EncodeJpeg(source, owned, options);
+            await ImageCodec.EncodeJpegAsync(source, asynchronous, options);
+            if (!caller.ToArray().AsSpan().SequenceEqual(owned.ToArray())
+                || !caller.ToArray().AsSpan().SequenceEqual(asynchronous.ToArray())
+                || !pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(source))
+                || budget.Bytes != pixels.Length || budget.IsDisposed
+                || !caller.CanWrite || !owned.CanWrite || !asynchronous.CanWrite)
+                throw new Exception("Packaged JPEG444 normalization, packet or borrowed ownership differs.");
+        }
+        if (budget.Bytes != 0 || budget.IsDisposed)
+            throw new Exception("Packaged JPEG444 retained storage leaked.");
+        Console.WriteLine("Packaged JPEG444 byte/word normalization, exact packets, async and shared ownership passed.");
     }
 
     private static async Task VerifyWordPngPacking(TestMemoryBudget budget, ImageLimits limits)

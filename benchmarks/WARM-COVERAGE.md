@@ -7,6 +7,20 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[JPEG 4:4:4 row normalization](WARM-JPEG444-ROW-NORMALIZATION.md) independently
+saves 18.92% relative to FFmpeg, with separated raw/all-actual/normalized
+confidence and exact packets. All five existing affected image-input controls
+have current twelve-actual evidence: resident RGBA8 (0.986/upper0.995), resident
+RGBA16 (0.981/upper0.992) and async nonseekable RGBA8 (0.961/upper0.971) pass;
+forward-only (0.989/upper1.009) and live-token (0.994/upper1.001) remain
+confidence-open. Stop passing cases and do not retime near-parity cases to chase
+significance. Measured allocations and complete boundaries are recorded in the
+report. Windows/Linux each pass 5,342 checks, affected scalar/ISA checks and the
+same actual Release package with all three examples. One core/internal build
+per OS; no other production/test/harness/selector/native rebuilds, new controls
+or settings. Grayscale/420/422 and unrelated paths retain applicable evidence.
+The full 268-path objective remains open; close row-normalization variants.
+
 [Four current VP8 companions](WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
 now independently confirm: diagram/method2 1.332/upper1.346, diagram/method4
 1.333/upper1.351, RGBA8+alpha1.298/upper1.307, opaqueRGBA16 1.315/upper1.319.

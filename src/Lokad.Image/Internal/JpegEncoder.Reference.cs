@@ -111,6 +111,9 @@ internal static partial class JpegEncoder
             return;
         }
         Span<byte> mcu = stackalloc byte[384]; Span<byte> row = stackalloc byte[24];
+        // Reuse the exact row normalization already used by subsampled scans.
+        // These32 bytes fit the admitted8-KiB fixed owner.
+        Span<int> rgbRow = stackalloc int[8];
         Span<short> transformed = stackalloc short[64], coefficients = stackalloc short[64];
         Span<int> previous = stackalloc int[3]; previous.Clear();
         var mcuIndex = 0;
@@ -119,15 +122,24 @@ internal static partial class JpegEncoder
         {
             ReferenceRestart(mcuIndex++, restartInterval, previous, writer, context);
             context.Cancellation.ThrowIfCancellationRequested();
+            var columns = Math.Min(8, width - left);
             for (var y = 0; y < 16; y++)
             {
                 var sy = Math.Min(top + y, height - 1);
                 if (image is null) source.CopyRgbRow(left, sy, row);
+                else if (image.BitDepth == 8)
+                    JpegReferenceColor.NormalizeRgba8(image.GetRow8(sy).Slice(left * 4, columns * 4), rgbRow[..columns], background);
+                else
+                    JpegReferenceColor.NormalizeRgba16(image.GetRow16(sy).Slice(left * 4, columns * 4), rgbRow[..columns], background);
                 for (var x = 0; x < 8; x++)
                 {
                     int r, g, b;
                     if (image is null) { r = row[x * 3]; g = row[x * 3 + 1]; b = row[x * 3 + 2]; }
-                    else ReadRgb(image, Math.Min(left + x, width - 1), sy, background, out r, out g, out b);
+                    else
+                    {
+                        var rgb = rgbRow[Math.Min(x, columns - 1)];
+                        r = rgb & 255; g = rgb >> 8 & 255; b = rgb >> 16 & 255;
+                    }
                     JpegReferenceColor.Convert(r, g, b, out var luma, out var cb, out var cr);
                     var position = y / 8 * 64 + y % 8 * 8 + x;
                     mcu[position] = luma; mcu[128 + position] = cb; mcu[256 + position] = cr;
