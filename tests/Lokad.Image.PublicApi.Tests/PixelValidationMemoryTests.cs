@@ -39,7 +39,7 @@ public sealed class PixelValidationMemoryTests(ITestOutputHelper output)
             encodedBytes = data.Length, encodedSha256 = Convert.ToHexStringLower(SHA256.HashData(data)),
             decode = new { allocatedBytes = decode.Allocated, peakAdmittedBytes = decode.Peak },
             validate = new { allocatedBytes = validate.Allocated, peakAdmittedBytes = validate.Peak },
-            host = "TestMemoryBudget adapter included; synchronous borrowed span; no timing" }));
+            host = "TestMemoryBudget adapter included; synchronous borrowed span; allocation minimum and admission peak across three warm operations; no timing" }));
     }
 
     private static (long Allocated, long Peak) Measure(byte[] data, bool validate)
@@ -47,11 +47,18 @@ public sealed class PixelValidationMemoryTests(ITestOutputHelper output)
         using var root = new TestMemoryBudget(64 * 1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = root };
         var options = new DecodeOptions { Limits = limits };
-        var before = GC.GetAllocatedBytesForCurrentThread();
-        if (validate) _ = ImageCodec.ValidatePixels(data, limits);
-        else { using var image = ImageCodec.Decode(data, options); }
-        var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        // Runtime bookkeeping can appear after the first warm call. A fixed
+        // sample count measures the steady allocation floor; the borrowed root
+        // still records the maximum admitted storage across every operation.
+        var allocated = long.MaxValue;
+        for (var sample = 0; sample < 3; sample++)
+        {
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            if (validate) _ = ImageCodec.ValidatePixels(data, limits);
+            else { using var image = ImageCodec.Decode(data, options); }
+            allocated = Math.Min(allocated, GC.GetAllocatedBytesForCurrentThread() - before);
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
         return (allocated, root.Peak);
     }
 }
