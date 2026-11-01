@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Cached-bit live JPEG correction traversal](JPEG-CACHED-CORRECTION-REJECTED.md)
+is rejected:5.51%higher filtered/5.34%allactual/5.86%normalizedpointcost,
+unchanged984212B/op. One short,no confirmation/variants. Originalsource/core/
+PDB/XML/linkedtests restore exactly;47internal/all388public pass normal/scalar
+Linux,candidate AND restored. Unchanged full/package/Windows proof is reused.
+One2second capture also closes scalar progressive permutation without code:
+3.59%sampleattribution gives insufficient demonstrated headroom,not an elapsed
+bound. No changed current cost or required path;all268remain in scope.
+
 [Fused baseline entropy publication](JPEG-ENTROPY-PUBLICATION-REJECTED.md) misses
 4.1%triage:2.47%filtered/2.54%allactual/2.81%normalizedpointgain. One active
 short,no confirmation/variants. No storage/owner/charge added;observed966370B/op
