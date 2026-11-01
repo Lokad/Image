@@ -1385,6 +1385,20 @@ def render():
         assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12 and cost['quietGuardsPassed']
         assert (cost['status'] == 'confirmed-pass-stop') == (cost['upper'] <= 1)
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
+    jpeg_confidence = json.loads((ROOT / 'benchmarks/current-jpeg-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not jpeg_confidence['productionChanged'] and jpeg_confidence['allBuilds'] == 0
+    assert jpeg_confidence['independentConfirmations'] == 6 and jpeg_confidence['newCases'] == 0
+    assert set(jpeg_confidence['cases']) == {'NativeDecode420', 'NativeDecode422', 'OwnedDecodeGray',
+                                            'CmykCaller', 'CallerGray', 'ValidateJpegProgressive420'}
+    assert jpeg_confidence['producers'] == jpeg_scan['producers']
+    assert jpeg_confidence['raw']['mirrored'] and jpeg_confidence['raw']['allMembersVerified']
+    for case, cost in jpeg_confidence['cases'].items():
+        assert jpeg_scan['cases'][case]['status'] == 'confirmed-confidence-open'
+        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12 and cost['quietGuardsPassed']
+        assert (cost['status'] == 'confirmed-pass-stop') == (cost['upper'] <= 1)
+        assert (cost['status'] == 'confirmed-gap') == (cost['lower'] > 1)
+        assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
+        jpeg_scan['cases'][case] = cost
     replacements = [
         ('NativeDecode420', 'JPEG baseline420, resident decode'),
         ('CmykCaller', 'JPEG DC-only, caller CMYK decode'),
@@ -1555,6 +1569,9 @@ It independently saves **13.81% elapsed / 13.97% native-normalized** on the owne
 baseline444 control, which passes at **0.970 / upper 0.989×**, 948,077 B/op.
 Only the decoder preflight changes; exact pixels, marker/metadata limits, memory
 ownership and bounded cancellation remain. Passing cases stop.
+The [six-case confidence audit](../benchmarks/CURRENT-JPEG-CONFIDENCE.md) reuses the
+same DLL and confirms baseline420 decode and progressive420 validation gaps;
+four decoder cases remain confidence-open. No code change or gain claim follows.
 [Exact caller-YCCK RGB rows](../benchmarks/WARM-JPEG-CALLER-YCCK-ROWS.md) retain their
 **87.40% elapsed / 87.39% native-normalized** gain; their newer costs are in the
 scan report and table below. Unrelated paths reuse applicable unchanged evidence.

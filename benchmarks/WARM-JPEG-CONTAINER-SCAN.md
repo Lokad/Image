@@ -4,6 +4,8 @@ The existing owned baseline444 decode control independently saves **13.81%
 elapsed** (14.08% all-actual, **13.97% native-normalized**), with separated raw
 and normalized confidence. It now passes and stops at **0.970× / upper 0.989**.
 Measured allocation is **948,077 B/op**, versus 948,069 (+8 bytes).
+The six confidence-open rows below are superseded by the
+[bounded confidence audit](CURRENT-JPEG-CONFIDENCE.md); other23costs remain current.
 
 The decoder preflight now searches ordinary entropy in spans of at most 4 KiB
 using safe managed Span.IndexOf. It stops before every FF; original marker,

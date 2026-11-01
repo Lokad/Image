@@ -58,6 +58,9 @@ It independently saves **13.81% elapsed / 13.97% native-normalized** on the owne
 baseline444 control, which passes at **0.970 / upper 0.989×**, 948,077 B/op.
 Only the decoder preflight changes; exact pixels, marker/metadata limits, memory
 ownership and bounded cancellation remain. Passing cases stop.
+The [six-case confidence audit](../benchmarks/CURRENT-JPEG-CONFIDENCE.md) reuses the
+same DLL and confirms baseline420 decode and progressive420 validation gaps;
+four decoder cases remain confidence-open. No code change or gain claim follows.
 [Exact caller-YCCK RGB rows](../benchmarks/WARM-JPEG-CALLER-YCCK-ROWS.md) retain their
 **87.40% elapsed / 87.39% native-normalized** gain; their newer costs are in the
 scan report and table below. Unrelated paths reuse applicable unchanged evidence.
@@ -142,8 +145,8 @@ histories remain in the coverage links and raw evidence.
 | PNG RGBA8 decode, tight working limit † | 1,642.61 | 1,498.48 | 1.096 / 1.119 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit (confidence open) † | 3,120.34 | 3,128.99 | 0.997 / 1.016 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
-| JPEG baseline420, resident decode (confidence open) † | 1,055.77 | 1,034.46 | 1.021 / 1.067 | 757,362 | — |
-| JPEG DC-only, caller CMYK decode (confidence open) † | 342.19 | 333.47 | 1.026 / 1.056 | 1,085,967 | — |
+| JPEG baseline420, resident decode † | 1,062.27 | 1,017.29 | 1.044 / 1.078 | 757,362 | — |
+| JPEG DC-only, caller CMYK decode (confidence open) † | 335.68 | 336.82 | 0.997 / 1.032 | 1,085,963 | — |
 | VP8L RGBA8, resident decode † | 3,224.25 | 3,019.22 | 1.068 / 1.079 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 3,271.53 | 3,048.58 | 1.073 / 1.102 | 152,824 | — |
 | JPEG CMYK sparse-2D, resident decode † | 607.81 | 446.62 | 1.361 / 1.429 | 1,085,757 | — |
@@ -206,7 +209,7 @@ histories remain in the coverage links and raw evidence.
 | Validate PNG16, span | 2,805.515 | 2,974.590 | 0.943 / 0.972 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span | 1.776 | 3.965 | 0.448 / 0.460 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span | 543.780 | 689.481 | 0.789 / 0.815 | 9,984 | Confirmed pass |
-| Validate JPEG progressive420, span | 283.038 | 276.190 | 1.025 / 1.068 | 4,072 | Confidence open |
+| Validate JPEG progressive420, span | 283.293 | 268.802 | 1.054 / 1.080 | 4,072 | Confirmed gap |
 | Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
 | Validate VP8+alpha, span | 6,696.676 | 5,469.412 | 1.224 / 1.250 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,836.823 | 3,623.647 | 0.783 / 0.790 | 8,544 | Confirmed pass |

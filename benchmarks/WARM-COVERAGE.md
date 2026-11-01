@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[The bounded JPEG confidence audit](CURRENT-JPEG-CONFIDENCE.md) gives the six
+uncertain scan-round controls one independent12 each on the same DLL. Baseline420
+decode and progressive420validation become confirmed gaps; baseline422,ownedgray,
+callerCMYK andcallergray remain confidence-open. No passes,codechanges,gainclaims,
+newcases/builds/profiles or repeatedfull/package checks. Latest6 costs supersede
+their earlier observations; remaining23scan-round costs remain applicable. Stop
+this audit without repeated confirmation to chase significance. All268paths remain.
+
 [Current VP8 photograph attribution](CURRENT-VP8-PHOTO-ATTRIBUTION.md) resolves
 post-quantizer profile uncertainty with one six-second trace, 5,910 samples,
 exact packets/pixels/owners and both quiet guards. No code/build/timing claim,
@@ -19,8 +27,8 @@ full/package repeat. Current CPU costs are unchanged; all268paths remainrequired
 13.81% elapsed / 13.97% native-normalized on owned baseline444 decode, with separated
 confidence and exact pixels. It passes/stops at0.970/upper0.989,948077B/op (+8).
 All29 existing affected decode/caller/validation costs now use the same immutable
-DLL:8PASS/STOP,15confirmedgaps,6confidence-open. The six open cases are baseline420,
-baseline422,ownedgray,callerCMYK,callergray and progressive420validation: resolve
+DLL. Its six uncertain observations are superseded by the bounded audit above:
+current totals are8PASS/STOP,17confirmedgaps,4confidence-open. Resolve remaining
 uncertainty before assuming further optimization is needed. Source preflight alone
 changes; marker/metadata/EOI rules, 4KiB cancellation, memory and owners remain.
 Fresh5369checks/OS,28internal/399public normal/scalar and SAMEactualReleasepackage/

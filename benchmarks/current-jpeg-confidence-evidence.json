@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "independentConfirmations": 6,
+  "newCases": 0,
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "producers": {
+    "linuxSha256": "4c8d203bc2d98569f9d3d63590c3e6680850926f105543634eb0a7f2dcc6ef65",
+    "windowsSha256": "12175cf8c24645f5d0fbf732efcbd8aa8a7d8c88bddbbce023cde4255a44f09e"
+  },
+  "scope": "Six existing JCS37 confidence-open complete513x259 JPEG decode/caller-buffer/coding-validation controls. Same immutableproductionDLL, cachedharness/drivers/worker, frozeninputs/reference/settings and singleCPU. One12 each, no retries or optimization/gain claim.",
+  "cases": {
+    "NativeDecode420": {
+      "managedMicroseconds": 1062.2721364583333,
+      "nativeMicroseconds": 1017.2879973958334,
+      "ratio": 1.0442196695308068,
+      "upper": 1.078441315127599,
+      "lower": 1.017374139837753,
+      "allocatedBytes": 757362,
+      "status": "confirmed-gap",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "ccca91bcdaddc90c7aecf62d07cdc629c09c27e607c955cfcc97a7bf91caaf08",
+      "managedOutputSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+      "nativeOutputSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+      "outputBytes": 531468,
+      "receiptSha256": "d29690800138b72ed4b6dfc128395cc5c288db0d255c6e34763f340a46cc1115"
+    },
+    "NativeDecode422": {
+      "managedMicroseconds": 1372.7116437500001,
+      "nativeMicroseconds": 1352.218875,
+      "ratio": 1.0151549199089533,
+      "upper": 1.0400148524179624,
+      "lower": 0.9664668887840155,
+      "allocatedBytes": 829176,
+      "status": "confirmed-confidence-open",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "f0b28dd0edce8c7286099c9b4572d7fd8baf6290bcd7b4ff9134f1e699354828",
+      "managedOutputSha256": "a33b3465047aeabdd2c188b4c14be85918396a0af37c11dd257f01af73341f39",
+      "nativeOutputSha256": "a33b3465047aeabdd2c188b4c14be85918396a0af37c11dd257f01af73341f39",
+      "outputBytes": 531468,
+      "receiptSha256": "51f8d3745a7bafeef37b334e726f5ef62ff10d67ae74f5dbbf2d178c7a2be0f1"
+    },
+    "OwnedDecodeGray": {
+      "managedMicroseconds": 722.458736111111,
+      "nativeMicroseconds": 690.3048209635416,
+      "ratio": 1.0465792997109427,
+      "upper": 1.0956507070132875,
+      "lower": 0.9932934831746425,
+      "allocatedBytes": 672202,
+      "status": "confirmed-confidence-open",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "a53c7643717578453750459a7ecc7edb84c4d95366bde811a4f82db242960859",
+      "managedOutputSha256": "b1069feb5a3ed55bce9a2d647686dbe6a1527865d4d22e86b9e14ebe241950ff",
+      "nativeOutputSha256": "b1069feb5a3ed55bce9a2d647686dbe6a1527865d4d22e86b9e14ebe241950ff",
+      "outputBytes": 531468,
+      "receiptSha256": "cd5a8960c8c95216fa3f81755525dafbd98c0dddf6992c6aa2367d1b4746c474"
+    },
+    "CmykCaller": {
+      "managedMicroseconds": 335.678971765351,
+      "nativeMicroseconds": 336.8161555989583,
+      "ratio": 0.9966237253923135,
+      "upper": 1.0320302280866895,
+      "lower": 0.9541108478431762,
+      "allocatedBytes": 1085963,
+      "status": "confirmed-confidence-open",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "80c4e830cbf95a71d3f677bd8bd1ae48fe936a8464f9b30817b85d72887ae32e",
+      "managedOutputSha256": "2bbab8263563dfa49dd2d79e49d4719f024a98a352f184e79e57d3419b240310",
+      "nativeOutputSha256": "2bbab8263563dfa49dd2d79e49d4719f024a98a352f184e79e57d3419b240310",
+      "outputBytes": 531468,
+      "receiptSha256": "0beafda09bb9977dc8ced06c016d65d2e5d8399343b8c1b4c24a4ad8ca0f23a2"
+    },
+    "CallerGray": {
+      "managedMicroseconds": 634.7171885416667,
+      "nativeMicroseconds": 652.9113990885417,
+      "ratio": 0.9721337220145431,
+      "upper": 1.0083075786653422,
+      "lower": 0.9116809511952323,
+      "allocatedBytes": 273430,
+      "status": "confirmed-confidence-open",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "a53c7643717578453750459a7ecc7edb84c4d95366bde811a4f82db242960859",
+      "managedOutputSha256": "4fb35969e730edd267951dbf20b42638144d1423474f901838b0ebb83db71166",
+      "nativeOutputSha256": "4fb35969e730edd267951dbf20b42638144d1423474f901838b0ebb83db71166",
+      "outputBytes": 132867,
+      "receiptSha256": "6c06f4ebfd8103ae9d0cd82b9eb53dd0b716b6df5dae1067c4ac3230054ddf7b"
+    },
+    "ValidateJpegProgressive420": {
+      "managedMicroseconds": 283.29300680555554,
+      "nativeMicroseconds": 268.8020979817708,
+      "ratio": 1.0539092102799266,
+      "upper": 1.0801478109940477,
+      "lower": 1.0350173853135445,
+      "allocatedBytes": 4072,
+      "status": "confirmed-gap",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "1783bc6c4ab705fbd5b3e4db2d94707df0f438f6118563fbc688ab4f1d475af5",
+      "managedOutputSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+      "nativeOutputSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+      "outputBytes": 36,
+      "receiptSha256": "95380d11323bb0ee4c0552abc2a3a1e9850fc28fdd1448ee01e0d3cb69784a45"
+    }
+  },
+  "previousEvidence": "jpeg-container-scan-evidence.json",
+  "qualificationReused": {
+    "fullChecksEachOs": 5369,
+    "liveEachOs": 948,
+    "sameActualPackageBothOs": true,
+    "threeExamplesBothOs": true,
+    "packageSha256": "f525a1a97778b36d3ab3bffdb359bbda41d146fcfe0f89507d031997200f709e",
+    "repeatedSuitesOrPackageProofs": 0
+  },
+  "metadataRestoredByteExactly": true,
+  "sourceReview": {
+    "noNewProfile": true,
+    "entropyReaderSha256": "5ed9d6a8016f5d8c6c2b2806053c02406f63558ab44ad7d50d8b43a8cfcfc7e8",
+    "matchesRetainedOriginalJcg32Source": true,
+    "conclusion": "Retain expensiveentropy-path attribution withoutnewprofile. Priorwork found maskconstructionminor; closedcached-bit/headroom/token experiments provide no newsubstantial lead."
+  },
+  "decision": "Baseline420decode andprogressive420validation now confirmedgaps; fourcases stillconfidence-open. No passes or causal gains. Latestpredeclared sixcosts supersede priorobservations; no best-ofselection, repeatedmeasurement or newvariant.",
+  "raw": {
+    "file": "current-jpeg-confidence-resolution.tar.xz",
+    "sha256": "1c70d2b00d7cf60d904bcfb9b655872a738d73ff3dd11a0f136048b4089eac43",
+    "bytes": 2955836,
+    "members": 89,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "dependencies": [
+    {
+      "file": "jpeg-container-scan-qualified.tar.xz",
+      "sha256": "1fac10336e4dad0a9a22bc4bc4c4494cea37cf35ad311107417ce0b02c220006",
+      "bytes": 10807524,
+      "members": 485,
+      "mirrored": true,
+      "allMembersVerified": true
+    },
+    {
+      "file": "jpeg-cached-correction-rejected.tar.xz",
+      "sha256": "573fb99f7e5b05a371564dc21e2304ad92b475b4b858dca406b2a4f4501d3129",
+      "bytes": 2219048,
+      "members": 123,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "jpeg444-row-normalization-qualified.tar.xz",
+          "sha256": "baece509ccf51f64d4a915aac4040fa6201ae8f498d1c9f3d7751ff6fa827ae7"
+        },
+        {
+          "file": "jpeg-completed-row-reuse-qualified.tar.xz",
+          "sha256": "703866a741933611ed31767bbd094b37ad9761e72b30ea588604397ececce490"
+        },
+        {
+          "file": "jpeg-refinement-window-qualified.tar.xz",
+          "sha256": "34228786823fe3ea18cb4ff3495eb7f543773bfe7f31e300747efa499ef07fd8"
+        }
+      ]
+    }
+  ]
+}
