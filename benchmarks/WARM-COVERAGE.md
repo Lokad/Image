@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Default mixed-axis bicubic confirmations](CURRENT-DEFAULT-MIXED-BICUBIC-COSTS.md)
+resolve two existing short-only controls:Cross8 912.313us,1.084/upper1.107,
+731768B/op;Cross16 974.304us,1.178/upper1.196,1263193B/op. Both confirmedgaps.
+Original input/exact pixels/native frame/settings/owners/quiet gates hold. One
+current12each,zero builds/profiles/newcases or repeated full/package proof.
+Common-entry/noncalled-writer/low-alpha changes are scoped explicitly;no causal
+gain/regression claim or expectation refresh. Stop retiming these unchanged;
+all268required paths remain. The summary now includes these two existing cases.
+
 [VP8L histogram addition](VP8L-HISTOGRAM-ADDITION-UNQUALIFIED.md) is not retained:
 independent4.66%filtered/4.78%allactual/4.00%normalizedpointgain,unchanged
 19992640B/op and exact121896Bpacket. Raw confidence separates;normalized does

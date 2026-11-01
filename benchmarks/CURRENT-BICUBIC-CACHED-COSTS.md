@@ -3,8 +3,10 @@
 This is the DHP1 snapshot. [Shared word publication](WARM-BICUBIC-SHARED-WORD-PUBLICATION.md)
 supersedes Down16/Up16/Horizontal16 costs and qualifies the word vertical axes.
 [Byte zero-tap trimming](WARM-BICUBIC-ZERO-TAPS.md) supersedes the byte-publication
-rows and supplies current vertical/horizontal enlargement costs. Only the
-mixed-axis Cross8/Cross16 costs below remain current from this snapshot.
+rows and supplies current vertical/horizontal enlargement costs. The
+[default mixed-axis confirmations](CURRENT-DEFAULT-MIXED-BICUBIC-COSTS.md) now
+supersede Cross8/Cross16. All rows below are historical snapshots; retain their
+raw evidence without treating them as current qualification.
 
 All nine existing controls affected by DHP1 now have current costs on the same
 qualified producer. Inputs remain the original 513×259 RGBA8/16 raster, default

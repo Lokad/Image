@@ -1297,6 +1297,22 @@ def render():
         assert receipt['callerPaddingUnchanged'] and receipt['independentOwnedOutput'] and receipt['noRgbaIntermediate']
     assert caller_samples['comparisonLowerBounds']['Gray'] > 1
     assert caller_samples['cases']['Rgb'][-1]['conservativeRatioUpper'] < 1
+    mixed_costs = json.loads((ROOT / 'benchmarks/current-default-mixed-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not mixed_costs['productionChanged'] and mixed_costs['allBuilds'] == mixed_costs['newCases'] == 0
+    assert mixed_costs['producers'] == jpeg444_rows['producers']
+    assert mixed_costs['qualificationReuse']['sameActualPackageBothOs']
+    for case, depth in [('Cross8', 8), ('Cross16', 16)]:
+        observation = mixed_costs['cases'][case][-1]
+        receipt = observation['receipt']
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['librarySha256'] == mixed_costs['producers']['linuxSha256']
+        assert receipt['managedQualifiedOriginalPixelsExact'] and receipt['managedMaxWorkingBytes'] is None
+        assert mixed_costs['comparisonLowerBounds'][case] > 1
+        rows.append(('editing', f'| Bicubic RGBA{depth}, width down / height up, default workspace † → 256×519 | '
+                     f'{observation["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
+                     f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',

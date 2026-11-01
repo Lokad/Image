@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **98 selected comparisons** combine qualified
+Updated 2026-11-01. These **100 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -182,6 +182,8 @@ acceptance histories are retained in the coverage links and raw evidence.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 611.34 | 417.61 | 1.464 / 1.524 | 65,674 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
+| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
+| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
 
 **Inspection and pixel-coding validation**
 
