@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[PNG dimension-probe confirmation](CURRENT-PNG-DIMENSION-PROBE-COST.md) resolves
+the existing short-only boundary:0.157949us,1.284/upper1.328,744B/op,512admittedB,
+current confirmed gap. One independent12, original210972Binput/29Bprefix/36Btyped
+descriptor/native/ownership gates, allactuals/brackets and bothidle-v2 pass.
+WebP existing independent1.323/upper1.425 remains current and is reused without
+retiming. Both return before the changed skip wrapper;10relevantsourcebytes
+remain exact. Zero builds/newcases/profiles or repeated full/package proof.
+Stop retiming both gaps without a distinct change;all268paths remain in scope.
+
 [Eight-bit JPEG AC-pair lookup](JPEG-AC-PAIR-LOOKUP-REJECTED.md) is rejected:
 8.84% higher filtered elapsed /8.77% all-actual /8.66% normalized cost, +2,128B/op.
 Only the corrected active candidate judges the algorithm; prior original-DLL and

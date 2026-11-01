@@ -332,6 +332,9 @@ def render():
     webp_probe = json.loads((ROOT / 'benchmarks/current-webp-dimension-probe-cost-evidence.json').read_text(encoding='utf-8'))
     assert not webp_probe['productionChanged'] and webp_probe['allBuilds'] == 0
     assert webp_probe['independentQuietConfirmation'] and webp_probe['status']['ProbeDimensionsWebp'] == 'confirmed-gap'
+    png_probe = json.loads((ROOT / 'benchmarks/current-png-dimension-probe-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not png_probe['productionChanged'] and png_probe['allBuilds'] == 0
+    assert png_probe['independentQuietConfirmation'] and png_probe['comparisonLowerBounds']['ProbeDimensionsPng'] > 1
     jpeg_probe = json.loads((ROOT / 'benchmarks/warm-jpeg-probe-marker-pairs-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_probe['decision']['passed'] and jpeg_probe['qualification']['fullChecksEachOs'] == 5240
     assert jpeg_probe['qualification']['sameActualPackageBothOs'] and jpeg_probe['qualification']['jpegProbePrefixesAndInvalidLimitPassed']
@@ -1307,7 +1310,7 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
-        producer = (header_skips if case in header_skips['cases'] else png_indexed if case in png_indexed['cases'] else refinement_window if case in refinement_window['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else png_indexed if case in png_indexed['cases'] else refinement_window if case in refinement_window['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -1429,6 +1432,9 @@ No production, metadata, reference settings or finite-checklist changes.
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
 small 1.7% point cost increase is disclosed; all three refreshed read controls
 remain confirmed gaps.
+The [PNG dimension probe](../benchmarks/CURRENT-PNG-DIMENSION-PROBE-COST.md) also
+now confirms **1.284 / upper 1.328×**, 744 B/op. Its existing short lacked an
+independent twelve; WebP's unchanged confirmation is reused without retiming.
 
 The three existing [RGBA16 Fastest PNG boundaries](../benchmarks/CURRENT-FASTEST-WORD-PNG-COSTS.md)
 now confirm 1.331–1.372× gaps with exact complete 968,216-byte packets. Their

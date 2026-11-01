@@ -57,6 +57,9 @@ No production, metadata, reference settings or finite-checklist changes.
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
 small 1.7% point cost increase is disclosed; all three refreshed read controls
 remain confirmed gaps.
+The [PNG dimension probe](../benchmarks/CURRENT-PNG-DIMENSION-PROBE-COST.md) also
+now confirms **1.284 / upper 1.328×**, 744 B/op. Its existing short lacked an
+independent twelve; WebP's unchanged confirmation is reused without retiming.
 
 The three existing [RGBA16 Fastest PNG boundaries](../benchmarks/CURRENT-FASTEST-WORD-PNG-COSTS.md)
 now confirm 1.331–1.372× gaps with exact complete 968,216-byte packets. Their
@@ -184,7 +187,7 @@ acceptance histories are retained in the coverage links and raw evidence.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Probe PNG dimensions, seekable | 0.156 | 0.123 | 1.263 / 1.956 | 744 | Screen gap |
+| Probe PNG dimensions, seekable | 0.158 | 0.123 | 1.284 / 1.328 | 744 | Confirmed gap |
 | Probe JPEG dimensions, seekable | 0.326 | 0.194 | 1.681 / 1.736 | 744 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.165 | 0.125 | 1.323 / 1.425 | 744 | Confirmed gap |
 | Probe JPEG dimensions, async nonseekable | 0.404 | 0.201 | 2.007 / 2.052 | 744 | Confirmed gap |
