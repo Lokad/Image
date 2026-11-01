@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Three current baseline JPEG444 decode boundaries](CURRENT-BASELINE-JPEG444-DECODE-COSTS.md)
+independently confirm owned/native/live-token gaps at 1.147/upper1.158,
+1.232/upper1.247 and 1.330/upper1.348, with 948,069/966,367/966,367 B/op.
+Exact normal/scalar/native pixels hold on the two existing frozen packets;
+only stale expected decoded metadata hashes are projected during timing and
+original anchor bytes restored. Zero builds/new controls/settings/profiles or
+repeated qualification. Same immutable J4N31 core/harness and valid full/actual-
+package proof; all three CI jobs green. No paired speedup claim. Stop retiming
+these confirmed gaps without a distinct change; the 268-path objective remains.
+
 [JPEG 4:4:4 row normalization](WARM-JPEG444-ROW-NORMALIZATION.md) independently
 saves 18.92% relative to FFmpeg, with separated raw/all-actual/normalized
 confidence and exact packets. All five existing affected image-input controls

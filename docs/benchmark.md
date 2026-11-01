@@ -36,6 +36,10 @@ saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
 Resident byte/word and async controls independently pass; forward-only and
 live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
 25.90% elapsed gain includes an 8.61% faster native bracket between runs.
+Three existing [baseline JPEG 4:4:4 decode boundaries](../benchmarks/CURRENT-BASELINE-JPEG444-DECODE-COSTS.md)
+now independently confirm **1.147/1.232/1.330×** gaps on owned/native/live-token
+inputs, with exact native pixels and current allocations. This resolves older
+evidence without changing production or adding controls to the finite checklist.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's

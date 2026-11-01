@@ -1262,6 +1262,16 @@ def render():
                        f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 133,039 / 133,041 |')
         position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| ' + label))
         rows[position] = ('codec', replacement)
+    jpeg444_decode = json.loads((ROOT / 'benchmarks/current-baseline-jpeg444-decode-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not jpeg444_decode['productionChanged'] and jpeg444_decode['allBuilds'] == 0
+    assert jpeg444_decode['producers'] == jpeg444_rows['producers']
+    for case in ['Decode8', 'NativeDecode8', 'NativeDecodeCancelable8']:
+        observation = jpeg444_decode['cases'][case][-1]
+        receipt = observation['receipt']
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
+        assert jpeg444_decode['comparisonLowerBounds'][case] > 1
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1376,6 +1386,10 @@ saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
 Resident byte/word and async controls independently pass; forward-only and
 live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
 25.90% elapsed gain includes an 8.61% faster native bracket between runs.
+Three existing [baseline JPEG 4:4:4 decode boundaries](../benchmarks/CURRENT-BASELINE-JPEG444-DECODE-COSTS.md)
+now independently confirm **1.147/1.232/1.330×** gaps on owned/native/live-token
+inputs, with exact native pixels and current allocations. This resolves older
+evidence without changing production or adding controls to the finite checklist.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
