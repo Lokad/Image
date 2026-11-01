@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "WMS50",
+  "productionChanged": false,
+  "candidateRejected": true,
+  "case": "WarmWebp/Encode8",
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "candidatePrimitive": "Capture immutable CancellationToken once in matcher Build; use the same local at every original checkpoint, passing it by readonly reference to the private Length helper. Preserve every checkpoint and iteration/poll cadence. No quota, owner, allocation, capacity, hash, chain order, comparisons, limits or byte/pixel changes.",
+  "baseline": {
+    "managedMicroseconds": 69770.33995833332,
+    "nativeMicroseconds": 53756.4355,
+    "ratio": 1.2978974388719158,
+    "upper": 1.3074902115344802,
+    "allocated": 21353208,
+    "actuals": 12,
+    "rawActualNanosecondsPerOperation": [
+      69766614.5,
+      69685008.25,
+      69407610.75,
+      69538078.5,
+      69830258.0,
+      69989191.25,
+      69871510.5,
+      69624646.75,
+      69833813.5,
+      70007076.0,
+      69750597.5,
+      69939674.0
+    ],
+    "filteredManagedConfidence": {
+      "N": 12,
+      "Mean": 69770339.95833333,
+      "StandardError": 52577.35415073933,
+      "Level": 12,
+      "Margin": 233284.63396868182,
+      "Lower": 69537055.32436465,
+      "Upper": 70003624.59230201
+    },
+    "allActualManagedConfidence": {
+      "N": 12,
+      "Mean": 69770339.95833333,
+      "StandardError": 52577.35415073933,
+      "Level": 12,
+      "Margin": 233284.63396868182,
+      "Lower": 69537055.32436465,
+      "Upper": 70003624.59230201
+    },
+    "nativeBrackets": [
+      {
+        "mean": 53769699.583333336,
+        "standardError": 51666.16546308096,
+        "confidenceLower": 53540457.874744035,
+        "confidenceUpper": 53998941.29192264,
+        "samples": 12
+      },
+      {
+        "mean": 53756435.5,
+        "standardError": 33540.57123718478,
+        "confidenceLower": 53607616.67846451,
+        "confidenceUpper": 53905254.32153549,
+        "samples": 12
+      }
+    ]
+  },
+  "candidateShort": {
+    "managedMicroseconds": 69417.13541666667,
+    "nativeMicroseconds": 55335.60666666667,
+    "ratio": 1.2544750044004218,
+    "upper": 2.5186783636466856,
+    "allocated": 21353208,
+    "actuals": 3,
+    "rawActualNanosecondsPerOperation": [
+      69328659.0,
+      69657965.0,
+      69264782.25
+    ],
+    "filteredManagedConfidence": {
+      "N": 3,
+      "Mean": 69417135.41666667,
+      "StandardError": 121818.47965179017,
+      "Level": 12,
+      "Margin": 3849348.7713591424,
+      "Lower": 65567786.645307526,
+      "Upper": 73266484.18802582
+    },
+    "allActualManagedConfidence": {
+      "N": 3,
+      "Mean": 69417135.41666667,
+      "StandardError": 121818.47965179017,
+      "Level": 12,
+      "Margin": 3849348.7713591424,
+      "Lower": 65567786.645307526,
+      "Upper": 73266484.18802582
+    },
+    "nativeBrackets": [
+      {
+        "mean": 55335606.666666664,
+        "standardError": 830605.5147375584,
+        "confidenceLower": 29089257.781190623,
+        "confidenceUpper": 81581955.55214271,
+        "samples": 3
+      },
+      {
+        "mean": 56044022.333333336,
+        "standardError": 367368.9526776105,
+        "confidenceLower": 44435510.794958755,
+        "confidenceUpper": 67652533.87170792,
+        "samples": 3
+      }
+    ]
+  },
+  "decision": {
+    "mode": "short",
+    "baselineCurrentIndependent12Reused": true,
+    "raw": {
+      "statistics": {
+        "reduction": 0.005062388141975349,
+        "separated": false
+      },
+      "unfilteredActualStatistics": {
+        "reduction": 0.005062388141975349,
+        "separated": false
+      }
+    },
+    "nativeNormalizedReduction": 0.03345598286197027,
+    "nativePointDrift": 0.029376411437597394,
+    "baselineNormalizedLower": 1.2877484939647559,
+    "candidateNormalizedUpper": 2.5186783636466856,
+    "normalizedSeparated": false,
+    "screenPassed": false,
+    "passed": false,
+    "candidateRatio": 1.2544750044004218,
+    "candidateUpper": 2.5186783636466856,
+    "candidateAllocation": {
+      "BytesAllocatedPerOperation": 21353208
+    },
+    "allocationDelta": 0,
+    "candidateMeanMicroseconds": 69417.13541666667
+  },
+  "gates": {
+    "exactCompletePacket98590Bytes": true,
+    "originalSourcePixelsAlphaAndNativeChecksPassed": true,
+    "quietGuardsPassed": true,
+    "sourceAndIndependentOwnersPassed": true,
+    "everyCancellationCheckpointAndCadencePreserved": true
+  },
+  "lowering": {
+    "originalCodeBytes": 2792,
+    "candidateCodeBytes": 2743,
+    "fromFocusedOptimizedChecks": true,
+    "newProfiles": 0,
+    "noElapsedPredictionFromCodeSize": true
+  },
+  "qualification": {
+    "candidate": {
+      "platform": "linux",
+      "coreSha256": "ec18d8d85872887e2552f5da3a6c51090b90380bec8aa2eccdf6eafd952586b4",
+      "focused": {
+        "internal-normal": 112,
+        "public-normal": 392,
+        "internal-scalar": 112,
+        "public-scalar": 392
+      },
+      "coreBuilds": 1,
+      "internalBuilds": 1,
+      "publicBuilds": 0,
+      "otherBuilds": 0
+    },
+    "restoration": {
+      "productionRestoredByteExactly": true,
+      "allSavedBinaryAndSourceHashesVerified": true,
+      "restorationBuilds": 0,
+      "focused": {
+        "internal-normal": 112,
+        "public-normal": 392,
+        "internal-scalar": 112,
+        "public-scalar": 392
+      },
+      "removedCandidateOnlyCases": 0,
+      "selectedCoreSha256": "d7226d9a435c268f088c84c31f29a6243d0ccf80730a07ac299c5f3bcfa16b38",
+      "windowsNeverBuilt": true,
+      "full5376AndSameActualPackageProofReused": true
+    },
+    "sourceFilesRestored": {
+      "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "1cbaf525dd5a987ecbc097929f00c718598cfe52ce12da0cdd4b8d175db81afc",
+      "tests/Lokad.Image.Tests/Vp8lMatchLengthTests.cs": "a0d51b294c7d504d1c30bf76f0b76d587bd165fbfd75db6280d3f6e0d3e280a4"
+    },
+    "windowsCoreUnchanged": "bed9d5e06bfff8a326e4d0af9fd74f37a8ea1cd10443b8d99012e2af946da439",
+    "packageUnchanged": "d10ef558bd6263e876fa7946f836c6b64b386c415516869d69a946ebf039af8a",
+    "fullChecksEachOsReused": 5376,
+    "sameActualPackageBothOsReused": true,
+    "additionalFullPackageRuns": 0
+  },
+  "workflow": {
+    "candidateShorts": 1,
+    "candidateConfirmations": 0,
+    "originalIndependent12Reused": true,
+    "baselineRetimes": 0,
+    "newImages": 0,
+    "newCases": 0,
+    "newProfiles": 0,
+    "coreBuilds": 1,
+    "internalTestBuilds": 1,
+    "allOtherBuilds": 0,
+    "restorationBuilds": 0,
+    "variants": 0,
+    "collectorConsoleLiteral12NotAuthoritative": true,
+    "rawActualsAndNativeSampleArraysVerifiedAs3": true
+  },
+  "raw": {
+    "file": "webp-matcher-token-copies-rejected.tar.xz",
+    "sha256": "9c1f2ace345b4b4179918aaa16a30f15a47fb723dc3175776c45517ded740233",
+    "bytes": 2484380,
+    "members": 70,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "wide-bicubic-independent-repair-qualified.tar.xz",
+        "sha256": "9d22a44b401bdcf6fb24e02b1bfedcf873c8df513a09f2b1e8ba86baab2a915c"
+      },
+      {
+        "file": "current-vp8-companion-costs.tar.xz",
+        "sha256": "135bba7a33b58c6a33063ccab805d928bcbc3ef57567f7a9d65e74f7a6c238db"
+      },
+      {
+        "file": "current-vp8-alpha-attribution.tar.xz",
+        "sha256": "bc83587d79839a5b2784ea24540cc4a231d162e97d99abce3e781533c8d25b9c"
+      }
+    ]
+  },
+  "conclusion": "Point gains0.51%raw/3.35%native-normalized fall below4.1%continuation; native point drift+2.94%. No independent gain or regression claim. Original source/test delegate and all saved Linux binaries restored exactly; Windows/package unchanged. No longer confirmation or token-copy/passing/inlining variants."
+}

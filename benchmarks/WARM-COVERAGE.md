@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[WebP matcher token capture](WEBP-MATCHER-TOKEN-COPIES-REJECTED.md) is rejected:
+ONE3 gives0.51%raw/3.35%normalized points,native+2.94%,unchanged21353208B/op,
+exact98590Bpacket. Same checkpoints;different lowering doesnotproveCPUgain.
+Source/delegate/ALLsavedLinuxbinaries restoredbyteexactly withoutrebuild;
+112internal/392publicnormal/scalar candidate+restored pass. Windows/package
+unchanged;5376bothOS/SAMEpackage proof reused. No12/variants/profile/grid.
+Collectorconsole12literal isnotactualcount:rawlog/parser/nativearrays prove3;
+no retiming. Summary105/all268/currentcosts unchanged.
+
 [Bounded JPEG polling](JPEG-BOUNDED-CANCELLATION-POLLS-REJECTED.md) is rejected:
 one live-progressive444 short has no useful point gain (0.74%higher raw/
 1.07%highernormalized),unchanged984212B/op,exactpixels. No12/variants. Source,
