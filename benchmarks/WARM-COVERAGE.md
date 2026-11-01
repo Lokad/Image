@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Eight-bit JPEG AC-pair lookup](JPEG-AC-PAIR-LOOKUP-REJECTED.md) is rejected:
+8.84% higher filtered elapsed /8.77% all-actual /8.66% normalized cost, +2,128B/op.
+Only the corrected active candidate judges the algorithm; prior original-DLL and
+inactive-dispatch setup executions are retained separately. Exact pixels/owners
+hold; no independent confirmation or variants. Original source/core/PDB/XML/test
+assemblies restore byte-exactly;47internal/all388public pass normal/scalar Linux,
+including unchanged memory/cancellation tests. Windows and actual package remain
+unchanged;reuse valid full/package proof. Current costs/all268paths remain;close
+the paired-prefix family. Current profile remains diagnostic, not phase timing.
+
 [Current caller-owned JPEG sample decode](CURRENT-CALLER-JPEG-DECODE-COSTS.md)
 resolves two existing required boundaries: grayscale1.166/upper1.171 remains a
 demonstrated gap,273,427B/op; RGB4200.928/upper0.938 passes,624,516B/op. Exact
