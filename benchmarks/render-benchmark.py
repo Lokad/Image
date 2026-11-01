@@ -1282,6 +1282,18 @@ def render():
         assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
         assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
         assert direct_rgb['comparisonLowerBounds'][case] > 1
+    caller_samples = json.loads((ROOT / 'benchmarks/current-caller-jpeg-decode-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not caller_samples['productionChanged'] and caller_samples['workflow']['allBuilds'] == 0
+    assert caller_samples['producers'] == jpeg444_rows['producers']
+    for case in ['Gray', 'Rgb']:
+        observation = caller_samples['cases'][case][-1]
+        receipt = observation['receipt']
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
+        assert receipt['callerPaddingUnchanged'] and receipt['independentOwnedOutput'] and receipt['noRgbaIntermediate']
+    assert caller_samples['comparisonLowerBounds']['Gray'] > 1
+    assert caller_samples['cases']['Rgb'][-1]['conservativeRatioUpper'] < 1
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1406,6 +1418,12 @@ Three existing [direct-RGB JPEG decode controls](../benchmarks/CURRENT-DIRECT-RG
 also confirm **1.449/1.310/1.372×** gaps for 4:4:4/4:2:2/4:2:0, with exact current
 pixels. Three obsolete benchmark pixel hashes are refreshed after independent
 normal/scalar checks on both OSes; production and reference settings are unchanged.
+
+The existing [caller-owned JPEG sample controls](../benchmarks/CURRENT-CALLER-JPEG-DECODE-COSTS.md)
+confirm grayscale at **1.166 / upper 1.171×**, 273,427 B/op, and RGB420 at
+**0.928 / upper 0.938×**, 624,516 B/op. RGB420 passes and stops; grayscale remains
+a gap. Exact samples, independent caller outputs and no RGBA intermediate hold.
+No production, metadata, reference settings or finite-checklist changes.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's

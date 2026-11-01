@@ -7,6 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current caller-owned JPEG sample decode](CURRENT-CALLER-JPEG-DECODE-COSTS.md)
+resolves two existing required boundaries: grayscale1.166/upper1.171 remains a
+demonstrated gap,273,427B/op; RGB4200.928/upper0.938 passes,624,516B/op. Exact
+native samples, caller padding/ownership and no mandatory RGBA intermediate hold.
+Both existing metadata hashes already match independent exact proof; no metadata
+or expectation change. One independent12 each, zero builds/new cases/profiles or
+repeated full/package proof. CMYK caller evidence remains current and is reused.
+Stop RGB420; do not retime grayscale without a distinct production change.
+All268material paths remain in scope. Source-only review confirms the grayscale
+writer already copies rows directly; close that lead without an experiment.
+
 [Immediate probe completion](PROBE-COMPLETED-PATH-REJECTED.md) misses its short
 screen: 2.668% filtered / 2.636% all-actual / 1.740% normalized point gain,
 unchanged 744 B/op. No confirmation or variants. Original source/core/PDB/XML

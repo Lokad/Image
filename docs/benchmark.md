@@ -47,6 +47,12 @@ also confirm **1.449/1.310/1.372×** gaps for 4:4:4/4:2:2/4:2:0, with exact curr
 pixels. Three obsolete benchmark pixel hashes are refreshed after independent
 normal/scalar checks on both OSes; production and reference settings are unchanged.
 
+The existing [caller-owned JPEG sample controls](../benchmarks/CURRENT-CALLER-JPEG-DECODE-COSTS.md)
+confirm grayscale at **1.166 / upper 1.171×**, 273,427 B/op, and RGB420 at
+**0.928 / upper 0.938×**, 624,516 B/op. RGB420 passes and stops; grayscale remains
+a gap. Exact samples, independent caller outputs and no RGBA intermediate hold.
+No production, metadata, reference settings or finite-checklist changes.
+
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
 small 1.7% point cost increase is disclosed; all three refreshed read controls
