@@ -1,7 +1,7 @@
 # Current dense-CMYK JPEG decode cost
 
 Historical costs: affected JPEG boundaries are superseded by the
-[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+[current container-scan round](WARM-JPEG-CONTAINER-SCAN.md).
 Original observations and raw evidence remain below.
 
 The existing dense/general four-component control independently passes:

@@ -14,7 +14,15 @@ internal static class ContainerHeaders
         while (position < data.Length)
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            if (scan && data[position] != 255) { position++; continue; }
+            if (scan && data[position] != 255)
+            {
+                // Entropy is opaque here. Leave every FF to the original marker
+                // parser, and bound each search for cooperative cancellation.
+                var count = Math.Min(4096, data.Length - position);
+                var markerOffset = data.Slice(position, count).IndexOf((byte)255);
+                position += markerOffset < 0 ? count : markerOffset;
+                continue;
+            }
             if (data[position++] != 255) throw new ImageDataException("Invalid JPEG marker.");
             while (position < data.Length && data[position] == 255) { position++; context.Cancellation.ThrowIfCancellationRequested(); }
             if (position == data.Length) break;

@@ -1,8 +1,8 @@
 # Direct retained RGB JPEG result
 
-Caller-YCCK RGB, owned YCCK and caller-CMYK costs are superseded by
-[exact caller YCCK rows](WARM-JPEG-CALLER-YCCK-ROWS.md). The other 26 measured
-paths, including the direct-RGB gain, remain applicable.
+Current costs for all 29 affected JPEG boundaries are superseded by the
+[bounded container scan](WARM-JPEG-CONTAINER-SCAN.md). The retained storage gain,
+original observations and raw evidence remain recorded below.
 
 The existing direct-RGB444 control independently saves **4.27% elapsed**
 (4.33% all-actual, **4.56% native-normalized**), with separated raw and normalized

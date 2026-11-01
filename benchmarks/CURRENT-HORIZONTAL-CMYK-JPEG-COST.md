@@ -1,7 +1,7 @@
 # Current horizontal-only CMYK JPEG decode cost
 
 Historical costs: affected JPEG boundaries are superseded by the
-[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+[current container-scan round](WARM-JPEG-CONTAINER-SCAN.md).
 Original observations and raw evidence remain below.
 
 The cost below is superseded by [exact completed-row reuse](WARM-JPEG-COMPLETED-ROW-REUSE.md):

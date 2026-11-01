@@ -1,7 +1,7 @@
 # Current progressive JPEG costs
 
 Historical costs: affected JPEG boundaries are superseded by the
-[current retained-result round](WARM-JPEG-DIRECT-RGB-RESULT.md).
+[current container-scan round](WARM-JPEG-CONTAINER-SCAN.md).
 Original observations and raw evidence remain below.
 
 Four decode costs are refreshed after exact completed-row reuse. Grayscale and

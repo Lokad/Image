@@ -1,5 +1,9 @@
 # Exact caller YCCK420 RGB rows
 
+Current costs are superseded by the
+[bounded container scan](WARM-JPEG-CONTAINER-SCAN.md). The exact row implementation,
+paired gain and raw evidence remain retained.
+
 The existing caller-YCCK420 RGB24 control independently saves **87.40% elapsed**
 (87.41% all-actual, **87.39% native-normalized**), with separated confidence.
 It now passes and stops at **0.709× / upper 0.711**, down from **5.622×**.

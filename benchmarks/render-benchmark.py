@@ -1367,15 +1367,22 @@ def render():
                                f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
                 updated_vertical += 1
     assert updated_vertical == 3
+    # Retained gains remain claims about their original paired experiments.
     jpeg_rgb_result = json.loads((ROOT / 'benchmarks/jpeg-direct-rgb-result-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_rgb_result['accepted'] and jpeg_rgb_result['decision']['passed']
-    assert jpeg_rgb_result['qualification']['fullChecksEachOs'] == 5367
-    assert jpeg_rgb_result['qualification']['sameActualPackageBothOs']
-    assert jpeg_rgb_result['raw']['mirrored'] and jpeg_rgb_result['raw']['allMembersVerified']
-    assert len(jpeg_rgb_result['cases']) == 29
-    for cost in jpeg_rgb_result['cases'].values():
-        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12
-        assert cost['quietGuardsPassed']
+    caller_ycck = json.loads((ROOT / 'benchmarks/jpeg-caller-ycck-row-evidence.json').read_text(encoding='utf-8'))
+    for retained in [jpeg_rgb_result, caller_ycck]:
+        assert retained['accepted'] and retained['decision']['passed'] and retained['decision']['normalizedSeparated']
+        assert retained['qualification']['sameActualPackageBothOs']
+        assert retained['raw']['mirrored'] and retained['raw']['allMembersVerified']
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-container-scan-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_scan['accepted'] and jpeg_scan['decision']['passed'] and jpeg_scan['decision']['normalizedSeparated']
+    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5369
+    assert jpeg_scan['qualification']['sameActualPackageBothOs']
+    assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
+    assert len(jpeg_scan['cases']) == 29
+    assert jpeg_scan['cases']['Decode8']['status'] == 'confirmed-pass-stop'
+    for cost in jpeg_scan['cases'].values():
+        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12 and cost['quietGuardsPassed']
         assert (cost['status'] == 'confirmed-pass-stop') == (cost['upper'] <= 1)
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     replacements = [
@@ -1392,38 +1399,19 @@ def render():
         ('ProgressiveCancelable444', 'JPEG progressive444, live-token resident decode'),
         ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'),
         ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'),
+        ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode'),
     ]
     for case, label in replacements:
-        c = jpeg_rgb_result['cases'][case]
+        c = jpeg_scan['cases'][case]
         qualifier = ' (confirmed pass)' if c['status'] == 'confirmed-pass-stop' else ' (confidence open)' if c['status'] == 'confirmed-confidence-open' else ''
-        position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| ' + label))
-        rows[position] = ('codec', f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
-                         f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
-                         f'{c["allocatedBytes"]:,} | — |')
-    c = jpeg_rgb_result['cases']['Ycck420CallerRgb']
-    assert c['status'] == 'confirmed-gap' and c['lower'] > 5
-    rows.append(('codec', f'| JPEG YCCK420, caller RGB24 decode † | {c["managedMicroseconds"]:,.2f} | '
-                 f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
-                 f'{c["allocatedBytes"]:,} | — |'))
-    caller_ycck = json.loads((ROOT / 'benchmarks/jpeg-caller-ycck-row-evidence.json').read_text(encoding='utf-8'))
-    assert caller_ycck['accepted'] and caller_ycck['decision']['passed']
-    assert caller_ycck['qualification']['fullChecksEachOs'] == 5369
-    assert caller_ycck['qualification']['sameActualPackageBothOs']
-    assert caller_ycck['raw']['mirrored'] and caller_ycck['raw']['allMembersVerified']
-    assert len(caller_ycck['cases']) == 3
-    for case, label in [('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode'),
-                        ('Ycck420', 'JPEG YCCK420, resident decode'),
-                        ('CmykCaller', 'JPEG DC-only, caller CMYK decode')]:
-        c = caller_ycck['cases'][case]
-        assert c['managedActuals'] == c['nativeSamplesEachBracket'] == 12 and c['quietGuardsPassed']
-        assert c['managedOutputSha256'] == c['nativeOutputSha256']
-        assert (c['status'] == 'confirmed-pass-stop') == (c['upper'] <= 1)
-        assert math.isclose(c['managedMicroseconds'] / c['nativeMicroseconds'], c['ratio'], rel_tol=1e-12)
-        qualifier = ' (confirmed pass)' if c['status'] == 'confirmed-pass-stop' else ' (confidence open)' if c['status'] == 'confirmed-confidence-open' else ''
-        position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| ' + label))
-        rows[position] = ('codec', f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
-                         f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
-                         f'{c["allocatedBytes"]:,} | — |')
+        row = (f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
+               f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
+               f'{c["allocatedBytes"]:,} | — |')
+        if case == 'Ycck420CallerRgb':
+            rows.append(('codec', row))
+        else:
+            position = next(i for i, (kind, previous) in enumerate(rows) if previous.startswith('| ' + label))
+            rows[position] = ('codec', row)
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1459,7 +1447,7 @@ def render():
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
     for case, label in [('ValidateJpegBaseline420', 'Validate JPEG baseline420, span'),
                         ('ValidateJpegProgressive420', 'Validate JPEG progressive420, span')]:
-        c = jpeg_rgb_result['cases'][case]
+        c = jpeg_scan['cases'][case]
         status = 'Confirmed pass' if c['status'] == 'confirmed-pass-stop' else 'Confidence open' if c['status'] == 'confirmed-confidence-open' else 'Confirmed gap'
         position = next(i for i, row in enumerate(read_rows) if row.startswith('| ' + label))
         read_rows[position] = (f'| {label} | {c["managedMicroseconds"]:,.3f} | {c["nativeMicroseconds"]:,.3f} | '
@@ -1561,14 +1549,15 @@ confirmed gap at **1.022 / upper 1.024×**, also 112 B/op.
 save **4.27% elapsed / 4.56% native-normalized** with separated confidence and
 exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the
 default ungoverned control; retained output capacity remains owned and charged.
-Its **1.383 / upper 1.397×** remains a CPU gap. All 29 existing affected JPEG
-decode/caller-sample/validation boundaries have current independent costs in the
-linked report, with the following three superseded by the next round.
-[Exact caller-YCCK RGB rows](../benchmarks/WARM-JPEG-CALLER-YCCK-ROWS.md) save
-**87.40% elapsed / 87.39% native-normalized**, resolving that existing 5.622× gap
-at **0.709 / upper 0.711×** with exact pixels. Allocation is 762,704 B/op versus
-762,625 (+79 bytes). Caller RGB and the affected owned-YCCK companion pass and
-stop; caller CMYK remains a gap. Other decode costs retain their valid paths.
+That storage gain remains in production; current costs for all 29 affected JPEG
+boundaries come from the [bounded container scan](../benchmarks/WARM-JPEG-CONTAINER-SCAN.md).
+It independently saves **13.81% elapsed / 13.97% native-normalized** on the owned
+baseline444 control, which passes at **0.970 / upper 0.989×**, 948,077 B/op.
+Only the decoder preflight changes; exact pixels, marker/metadata limits, memory
+ownership and bounded cancellation remain. Passing cases stop.
+[Exact caller-YCCK RGB rows](../benchmarks/WARM-JPEG-CALLER-YCCK-ROWS.md) retain their
+**87.40% elapsed / 87.39% native-normalized** gain; their newer costs are in the
+scan report and table below. Unrelated paths reuse applicable unchanged evidence.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's

@@ -1,7 +1,8 @@
 # Caller YCCK420 RGB decoding
 
-Historical conversion/timing: current byte-exact behavior and costs are recorded
-in [exact caller YCCK rows](WARM-JPEG-CALLER-YCCK-ROWS.md). Raw evidence is retained.
+Historical conversion/timing: latest costs are in the
+[container-scan round](WARM-JPEG-CONTAINER-SCAN.md); the exact caller-row gain
+and its raw evidence remain in [caller YCCK rows](WARM-JPEG-CALLER-YCCK-ROWS.md).
 
 The first short screen demonstrates a **7.504x** gap against FFmpeg.
 Both decode the same 6,704-byte original YCCK420/full-black packet to 398,601 bytes

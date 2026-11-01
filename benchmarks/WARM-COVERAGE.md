@@ -7,6 +7,20 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Bounded JPEG container scanning](WARM-JPEG-CONTAINER-SCAN.md) independently saves
+13.81% elapsed / 13.97% native-normalized on owned baseline444 decode, with separated
+confidence and exact pixels. It passes/stops at0.970/upper0.989,948077B/op (+8).
+All29 existing affected decode/caller/validation costs now use the same immutable
+DLL:8PASS/STOP,15confirmedgaps,6confidence-open. The six open cases are baseline420,
+baseline422,ownedgray,callerCMYK,callergray and progressive420validation: resolve
+uncertainty before assuming further optimization is needed. Source preflight alone
+changes; marker/metadata/EOI rules, 4KiB cancellation, memory and owners remain.
+Fresh5369checks/OS,28internal/399public normal/scalar and SAMEactualReleasepackage/
+threeexamples bothOS pass. Onecorebuild perOS;zero test/harness/native/selector builds,
+profiles,newcases or repeated validscores. Earlier affected costs below retain their
+producer-specific history/raw; current costs are the scan table. Unrelated paths
+reuse applicable unchanged evidence. All268required paths remain; no fullparity claim.
+
 [Exact caller-YCCK RGB rows](WARM-JPEG-CALLER-YCCK-ROWS.md) resolve the existing
 5.622× gap: independent 87.40% elapsed / 87.39% native-normalized reduction with
 separated confidence, exact frozen pixels, 0.709 / upper0.711×. Allocation is

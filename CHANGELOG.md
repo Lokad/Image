@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Speed JPEG decoder preflight with bounded marker searches, preserving exact
+  pixels, container limits and cooperative cancellation.
 - Decode half-grid YCCK directly into caller RGB rows through the existing exact
   color kernel, preserving padding, ownership and cancellation.
 - Equal-grid baseline RGB JPEG decoding writes into the retained result,

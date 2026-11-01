@@ -1,7 +1,8 @@
 # Exact SIMD caller YCCK420 RGB rows
 
-Historical conversion/timing: current byte-exact behavior and costs are recorded
-in [exact caller YCCK rows](WARM-JPEG-CALLER-YCCK-ROWS.md). Raw evidence is retained.
+Historical conversion/timing: latest costs are in the
+[container-scan round](WARM-JPEG-CONTAINER-SCAN.md); the exact caller-row gain
+and its raw evidence remain in [caller YCCK rows](WARM-JPEG-CALLER-YCCK-ROWS.md).
 
 Caller RGB24 takes **80.2% less elapsed time**, 4,532.59→898.47µs, reducing the
 short gap from 7.504x to **1.488x / upper 1.550x**. Owned YCCK RGBA improves
