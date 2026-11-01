@@ -185,7 +185,7 @@
   },
   "baselineBlockers": [
     "RGBA8 requires approval of the scoped native-only rounding bound, then a scored harness resetting identical canvas state outside each operation on both subjects. The reusable ownership probe is not a completed timing harness.",
-    "The pinned overlay lacks full-precision RGBA16/GBRAP16. GEQ verifies pixels only; no equivalent CPU baseline or alternative reference exception is approved."
+    "The pinned overlay lacks full-precision RGBA16/GBRAP16. GEQ verifies pixels only. A same-control ImageSharp3.1.12 alternative preserves source/canvas and fits proposed one-sample/.25RMSE RGB/alpha gates onbothOS, but the tooling-only reference exception and bounds await explicit approval."
   ],
   "qualificationReused": {
     "fullChecksEachOS": 5378,
@@ -213,5 +213,89 @@
     "members": 51,
     "vmMembersVerified": true,
     "localMembersVerified": true
+  },
+  "rgba16AlternativeReference": {
+    "status": "awaiting explicit approval; not FFmpeg performance",
+    "reference": "ImageSharp3.1.12 Rgba64 DrawImage / normalSrcOver / opacity1",
+    "platforms": [
+      {
+        "project": "Lokad.Image",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "performanceBaselineApproved": false,
+        "productionChanged": false,
+        "platform": "win-x64",
+        "reference": "ImageSharp 3.1.12 Rgba64 DrawImage / normal SrcOver / opacity1",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "x": 17,
+        "y": 19,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "expectedSha256": "f00cbff802ec887c4c07787377ed2c400c268ac2884ceec1ff631444ee0a106e",
+        "outputSha256": "6b6eac019e69710d868931ab3a25d85667d17d45201025d80ecfeac4662b485f",
+        "referenceAssemblySha256": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "rgbMaximum": 1,
+        "rgbRmse": 0.04010142659734139,
+        "rgbChangedSamples": 641,
+        "alphaMaximum": 1,
+        "alphaRmse": 0.03899124657908482,
+        "untouchedCanvasExact": true,
+        "zeroSourceAlphaLeavesAllSamplesExact": true,
+        "borrowedCanvasStoragePreserved": true,
+        "sourceUnchanged": true,
+        "completedOperations": 3,
+        "resetOutsideOperation": true,
+        "maximumDegreeOfParallelism": 1
+      },
+      {
+        "project": "Lokad.Image",
+        "correctnessOnly": true,
+        "timingClaim": false,
+        "performanceBaselineApproved": false,
+        "productionChanged": false,
+        "platform": "linux-x64",
+        "reference": "ImageSharp 3.1.12 Rgba64 DrawImage / normal SrcOver / opacity1",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "x": 17,
+        "y": 19,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "expectedSha256": "f00cbff802ec887c4c07787377ed2c400c268ac2884ceec1ff631444ee0a106e",
+        "outputSha256": "6b6eac019e69710d868931ab3a25d85667d17d45201025d80ecfeac4662b485f",
+        "referenceAssemblySha256": "609a57965d0a7b5ccfb79d919ea7384e7ec86c03266b0390a19bd5f2104bc353",
+        "rgbMaximum": 1,
+        "rgbRmse": 0.04010142659734139,
+        "rgbChangedSamples": 641,
+        "alphaMaximum": 1,
+        "alphaRmse": 0.03899124657908482,
+        "untouchedCanvasExact": true,
+        "zeroSourceAlphaLeavesAllSamplesExact": true,
+        "borrowedCanvasStoragePreserved": true,
+        "sourceUnchanged": true,
+        "completedOperations": 3,
+        "resetOutsideOperation": true,
+        "maximumDegreeOfParallelism": 1
+      }
+    ],
+    "proposedReferenceBounds": {
+      "rgbMaximum": 1,
+      "alphaMaximum": 1,
+      "rgbRmseMaximum": 0.25,
+      "alphaRmseMaximum": 0.25
+    },
+    "managedPixelsExact": true,
+    "diagnosticConsumerBuilds": 1,
+    "productionBuilds": 0,
+    "timingClaim": false,
+    "raw": {
+      "file": "composite-rgba16-alternative-reference.tar.xz",
+      "bytes": 1457252,
+      "sha256": "a3f0690a0b20af521a54634474f616f3b5542e868cd106f0fbb2a52f4d17cbda",
+      "members": 11,
+      "localMembersVerified": true,
+      "vmMembersVerified": true
+    }
   }
 }

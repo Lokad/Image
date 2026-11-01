@@ -7,6 +7,12 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Packed ordinary VP8 quantization](VP8-PACKED-QUANTIZATION-REJECTED.md) fails
+one short: no useful raw/all/normalized gain, +1,920 B/op, exact 17,688-byte packet.
+Four sources/three trial cases/all 53 saved Linux binaries are restored exactly;
+33 internal/392 public checks pass normal/scalar. No confirmation or variants.
+Unchanged Windows production, full/package proof and current costs are reused.
+
 [Compositing feasibility](COMPOSITE-REFERENCE-FEASIBILITY.md) confirms exact
 managed RGBA8/RGBA16 pixels and two-frame shared admission on Windows/Linux.
 An isolated FFmpeg RGBA8 overlay preserves the destination; its proposed native

@@ -28,6 +28,14 @@ binary64. That check uses a pre-stacked input and format conversion; it is
 **not an approved performance reference**. Neither downconversion nor a generic
 expression-filter timing establishes equivalent compositing performance.
 
+A bounded alternative check uses the existing ImageSharp 3.1.12 `Rgba64`
+`DrawImage`, normal source-over and opacity1. Three reset operations preserve
+destination storage and source pixels on Windows/Linux. RGB/alpha maxima are
+one sample, with RMSE **0.040101/0.038991**; untouched and zero-source-alpha
+pixels are exact. This is a separate reference, **not FFmpeg performance**.
+A tooling-only exception for this fixed control, with RGB/alpha ≤1 and RMSE
+≤0.25 each, awaits approval. No timing or production change follows implicitly.
+
 All nine outstanding audited paths remain unmeasured. Production, the actual
 package and existing qualification are unchanged: reuse 5,378 checks per OS and
 the same package consumer proof. This round adds no production build, full-suite
@@ -44,3 +52,11 @@ then the archived cmf61-run-repeat-overlay-vm.py and cmf61-geq16-check-vm.py
 from the repository root. Run the retained Cmf61Managed consumer against each
 frozen platform DLL. The [packed-fill round](WARM-RECTANGLE-FILL-PACKED.md)
 retains the unchanged full/package qualification dependency.
+
+The alternative probe is retained separately in
+composite-rgba16-alternative-reference.tar.xz, **1,457,252 bytes / 11 members**,
+SHA256 **a3f0690a0b20af521a54634474f616f3b5542e868cd106f0fbb2a52f4d17cbda**,
+mirrored and member-verified. It includes the portable diagnostic consumer,
+actual reference DLL, both-platform records, output and member hashes. Its
+original input/oracle dependency is the compositing archive above. Run the
+retained Crf62 consumer against the repository root; it makes no timing claim.
