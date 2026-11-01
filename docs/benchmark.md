@@ -1,11 +1,17 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **109 selected comparisons** combine qualified
+Updated 2026-11-01. These **110 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
 268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);
-ten still lack warm measurements.
+nine still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
+
+[Paired overlapping copy](../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md)
+confirms a **1.106 / upper 1.152× gap**, 112 B/op. Both subjects count forward
+movement and reverse restoration on one borrowed canvas; these are per-pair
+costs. A bounded row-band trial has no useful gain and is restored exactly.
+Unchanged production qualification and package proof are reused.
 
 [Exact clipped rectangle fills](../benchmarks/WARM-RECTANGLE-FILL-PACKED.md)
 pass at **0.759 / upper 0.775×** for RGBA8 and **0.546 / upper 0.567×** for RGBA16,
@@ -229,6 +235,7 @@ histories remain in the coverage links and raw evidence.
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.89 | 3.83 | 1.016 / 1.052 | 56 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.29 | 4.20 | 0.546 / 0.567 | 56 |
+| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 4.18 | 3.78 | 1.106 / 1.152 | 112 |
 
 **Inspection and pixel-coding validation**
 

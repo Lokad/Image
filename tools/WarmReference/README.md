@@ -174,3 +174,9 @@ verify-fill-rectangle-linux.py, family FillRectangle and DrawingFill8/16.
 Public FFmpeg av_image_fill_color includes clipping and required color
 normalization inside each borrowed-canvas operation.
 [Both controls pass and stop](../../benchmarks/WARM-RECTANGLE-FILL-PACKED.md).
+
+Paired in-place copies use build-copy-region-overlap-linux.sh and
+verify-copy-region-overlap-linux.py, family CopyOverlap / DrawingCopyOverlap8.
+Both subjects count forward movement and reverse restoration on one canvas.
+[Current cost](../../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md) is per pair;
+native plane calls use disjoint bands without temporary pixels.

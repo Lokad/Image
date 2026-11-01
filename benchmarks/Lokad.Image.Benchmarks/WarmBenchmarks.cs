@@ -32,7 +32,7 @@ internal static class WarmBenchmarks
             if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
             family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
         }
-        if (family != "Lanczos3" && family is not ("FillRectangle" or "CopyRegion" or "Read" or "Flip" or "RetainedFlip" or "StreamDecode" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpLossless" or "Compression" or "WebpDecode" or "Vp8Decode" or "Nearest" or "Bilinear" or "Bicubic" or "Crop" or "VerticalFlip" or "HalfTurn" or "Clockwise" or "NormalOrientation" or "Counterclockwise" or "Transpose" or "Transverse" or "Clone" or "Identify" or "StreamIdentify")) throw new ArgumentException("Choose FillRectangle, CopyRegion, Read, Lanczos3, Flip, RetainedFlip, StreamDecode, Png, Jpeg, JpegDecode, Webp, WebpLossless, Compression, WebpDecode, Vp8Decode, Nearest, Bilinear, Bicubic, Crop, VerticalFlip, HalfTurn, Clockwise, NormalOrientation, Counterclockwise, Transpose, Transverse, Clone, Identify or StreamIdentify.");
+        if (family != "Lanczos3" && family is not ("CopyOverlap" or "FillRectangle" or "CopyRegion" or "Read" or "Flip" or "RetainedFlip" or "StreamDecode" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpLossless" or "Compression" or "WebpDecode" or "Vp8Decode" or "Nearest" or "Bilinear" or "Bicubic" or "Crop" or "VerticalFlip" or "HalfTurn" or "Clockwise" or "NormalOrientation" or "Counterclockwise" or "Transpose" or "Transverse" or "Clone" or "Identify" or "StreamIdentify")) throw new ArgumentException("Choose CopyOverlap, FillRectangle, CopyRegion, Read, Lanczos3, Flip, RetainedFlip, StreamDecode, Png, Jpeg, JpegDecode, Webp, WebpLossless, Compression, WebpDecode, Vp8Decode, Nearest, Bilinear, Bicubic, Crop, VerticalFlip, HalfTurn, Clockwise, NormalOrientation, Counterclockwise, Transpose, Transverse, Clone, Identify or StreamIdentify.");
         string? selection = null;
         var selectionOption = arguments.IndexOf("--warm-cases");
         if (selectionOption >= 0)
@@ -63,6 +63,7 @@ internal static class WarmBenchmarks
             if (family == "Lanczos3") { expectedPairs = WarmLanczosResize.SelectedCases().Length; type = typeof(WarmLanczosResize); }
             if (family == "CopyRegion") { expectedPairs = WarmCopyRegion.SelectedCases().Length; type = typeof(WarmCopyRegion); }
             if (family == "FillRectangle") { expectedPairs = WarmFillRectangle.SelectedCases().Length; type = typeof(WarmFillRectangle); }
+            if (family == "CopyOverlap") { expectedPairs = WarmCopyOverlap.SelectedCases().Length; type = typeof(WarmCopyOverlap); }
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
@@ -165,14 +166,18 @@ internal static class WarmBenchmarks
                             && value.GetProperty("nativeCliNormalScalarPixelsExact").GetBoolean()
                             && value.GetProperty("nativeCliPixelsExact").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
                         : value.GetProperty("allRgbaSamplesExact").GetBoolean();
-                    var ownershipVerified = family is "CopyRegion" or "FillRectangle"
+                    var ownershipVerified = family is "CopyRegion" or "FillRectangle" or "CopyOverlap"
                         ? (family != "CopyRegion" || value.GetProperty("borrowedSource").GetBoolean()) && value.GetProperty("borrowedCanvas").GetBoolean()
                             && value.GetProperty("callerBuffersAlive").GetBoolean()
                             && !value.GetProperty("sourcePreparationTimed").GetBoolean()
                             && !value.GetProperty("canvasPreparationTimed").GetBoolean()
                             && !value.GetProperty("outputAllocationTimed").GetBoolean()
                         : value.GetProperty("independentOwnedOutput").GetBoolean();
-                    if (!outputVerified || !value.GetProperty("sourceUnchanged").GetBoolean()
+                    var sourceVerified = family == "CopyOverlap"
+                        ? value.GetProperty("sourceAliasesCanvas").GetBoolean() && value.GetProperty("snapshotSemanticsExact").GetBoolean()
+                            && value.GetProperty("restorationTimed").GetBoolean() && value.GetProperty("publicMovesPerPair").GetInt32() == 2
+                        : value.GetProperty("sourceUnchanged").GetBoolean();
+                    if (!outputVerified || !sourceVerified
                         || !ownershipVerified || value.GetProperty("cpu").GetInt32() != cpu
                         || value.GetProperty("nativeExitCode").GetInt32() != 0 || value.GetProperty("smoke").GetBoolean() != validationOnly)
                         throw new InvalidOperationException("Warm receipt contract differs.");
@@ -197,7 +202,7 @@ internal static class WarmBenchmarks
             Directory.CreateDirectory(Path.GetDirectoryName(output)!);
             File.WriteAllText(output, JsonSerializer.Serialize(new { schemaVersion = 1, project = "Lokad.Image", runId, complete,
                 smoke = validationOnly, prepare, confirm, family, cpu, expectedPairs, actualPairs = pairs.Count,
-                method = family is "CopyRegion" or "FillRectangle"
+                method = family is "CopyRegion" or "FillRectangle" or "CopyOverlap"
                     ? "Managed BenchmarkDotNet elapsed samples and native internal monotonic samples, one pinned CPU, complete mutation of borrowed canvas with operation-scope cleanup. Native pre/post brackets; IPC/startup/filesystem/preparation excluded."
                     : "Managed BenchmarkDotNet elapsed samples and native worker internal monotonic samples, one pinned CPU, complete owned memory outputs. Native pre/post samples bracket managed measurements. IPC/startup/filesystem excluded. Screened rows require independent repeats before certification.", pairs },
                 new JsonSerializerOptions { WriteIndented = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals }) + "\n");

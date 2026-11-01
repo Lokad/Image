@@ -5,7 +5,9 @@ The coverage audit finds **14 omitted required paths**. Preserve all existing
 **282 paths**. The [two separate-buffer copy controls](WARM-RECTANGLE-COPY-SPANS.md)
 now have current independent costs: RGBA8 is a confirmed gap and RGBA16 is
 confidence-open. Both [clipped fill controls](WARM-RECTANGLE-FILL-PACKED.md) pass
-and stop at conservative uppers 0.775/0.567. The remaining ten have no warm measurements.
+and stop at conservative uppers 0.775/0.567. The [paired overlapping-copy control](CURRENT-OVERLAPPING-COPY-COST.md)
+now confirms a 1.106 / upper1.152 gap, with reverse restoration counted on both
+subjects. The remaining nine have no warm measurements.
 Existing text/drawing correctness and memory qualification remain valid;
 they are not warm CPU evidence.
 
@@ -21,7 +23,7 @@ pins the inspected revision, source query, original inventory and capability che
 | DrawingFill16 | FillRectangle, RGBA16 | Distinct ushort destination loop and full-precision color. |
 | DrawingCopy8 | CopyRegion, separate RGBA8 buffers | Exact rectangle placement into a borrowed existing canvas; no new output frame. |
 | DrawingCopy16 | CopyRegion, separate RGBA16 buffers | Distinct ushort span-copy boundary. |
-| DrawingCopyOverlap8 | CopyRegion, overlapping RGBA8 rectangle | Required snapshot semantics through reverse traversal; exclude reset equally on both subjects. |
+| DrawingCopyOverlap8 | CopyRegion, overlapping RGBA8 rectangle | Required snapshot/reverse traversal; two moves per pair, including reverse restoration in both totals. |
 | DrawingComposite8 | Composite, RGBA8 source/canvas | Straight-alpha rational source-over, including zero and partial alpha. |
 | DrawingComposite16 | Composite, RGBA16 source/canvas | Full-precision samples and 64-bit coverage arithmetic. |
 | FontLoadRegular | TrueTypeFont.Load, existing DejaVu Sans regular | Copy/validate supplied bytes and release an independently retained face. |

@@ -395,8 +395,10 @@ internal sealed partial class NativeWarmReference : IDisposable
                         && value.GetProperty("alphaMeanSquared").GetDouble() is >= 0 and <= 0.0625
                     : value.GetProperty("alphaExact").GetBoolean())
             : value.GetProperty("exact").GetBoolean();
-        if (value.GetProperty("state").GetString() != "checked" || !verified
-            || !value.GetProperty("sourceUnchanged").GetBoolean())
+        var sourceVerified = Ready.GetProperty("operation").GetString() == "copy-region-overlap"
+            ? value.GetProperty("sourceAliasesCanvas").GetBoolean() && value.GetProperty("snapshotSemanticsExact").GetBoolean()
+            : value.GetProperty("sourceUnchanged").GetBoolean();
+        if (value.GetProperty("state").GetString() != "checked" || !verified || !sourceVerified)
             throw new InvalidOperationException("Native final exact/source check failed.");
         completed++;
     }

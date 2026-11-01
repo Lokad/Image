@@ -1486,6 +1486,13 @@ def render():
         assert c['upper'] <= 1 and fill['cases'][case]['confirmation']['receipt']['allRgbaSamplesExact']
         rows.append(('editing', f'| {label} | {c["managedMicroseconds"]:,.2f} | {c["nativeMicroseconds"]:,.2f} | '
                      f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
+    overlap = json.loads((ROOT / 'benchmarks/current-overlapping-copy-cost-evidence.json').read_text(encoding='utf-8'))
+    c = overlap['cost']
+    assert not overlap['productionChanged'] and c['actuals'] == c['nativeSamplesEachBracket'] == 12
+    assert c['publicMovesPerPair'] == 2 and c['nativeCallsPerPair'] == 6 and c['lower'] > 1
+    assert overlap['rejectedTrial']['restoration']['productionRestoredByteExactly']
+    rows.append(('editing', f'| Overlapping RGBA8 copy + reverse restoration, per pair (gap) | {c["managedMicroseconds"]:,.2f} | '
+                 f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1574,8 +1581,14 @@ def render():
 Updated 2026-11-01. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
-268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);\nten still lack warm measurements.
+268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);\nnine still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
+
+[Paired overlapping copy](../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md)
+confirms a **1.106 / upper 1.152× gap**, 112 B/op. Both subjects count forward
+movement and reverse restoration on one borrowed canvas; these are per-pair
+costs. A bounded row-band trial has no useful gain and is restored exactly.
+Unchanged production qualification and package proof are reused.
 
 [Exact clipped rectangle fills](../benchmarks/WARM-RECTANGLE-FILL-PACKED.md)
 pass at **0.759 / upper 0.775×** for RGBA8 and **0.546 / upper 0.567×** for RGBA16,
