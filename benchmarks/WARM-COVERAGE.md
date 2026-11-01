@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current RGBA16 VP8-with-alpha](CURRENT-VP8-ALPHA16-COST.md) independently confirms
+1.311/upper1.365,21350352B/op,exact98590Bpacket. Full per-operation UInt16→8-bit
+normalization remains included on bothsubjects. One valid12,zerobuilds/newcases/
+fixtures/profiles or full/package repeats;one failedpre-warmuporaclepath launch
+isretained. This existingrequiredcase hadno post-packet-exact/QIV1confirmation;
+older471436B timingpasses arehistorical. Summary104comparisons/3tables,all268
+requiredpaths remain. Othercurrentcosts andqualification areunchanged.
+
 [Fused WebP cache histograms](WEBP-CACHE-HISTORY-FUSION-REJECTED.md) are rejected:
 one original RGBA8 VP8 short is2.34%slower/2.24%native-normalized, unchanged
 21353208B/op and exact98590Bpacket. Candidate114internal/392public normal/scalar,

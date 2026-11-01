@@ -29,6 +29,17 @@ def render():
     assert all(v > 1 for v in vp8_companion_costs['comparisonLowerBounds'].values())
     assert all(len(v[-1]['managed']['actual']) == 12 and v[-1]['receipt']['completePacketExact']
                for v in vp8_companion_costs['cases'].values())
+    vp8_alpha16 = json.loads((ROOT / 'benchmarks/current-vp8-alpha16-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not vp8_alpha16['productionChanged'] and vp8_alpha16['allBuilds'] == vp8_alpha16['newCases'] == 0
+    assert vp8_alpha16['case'] == 'WarmWebp/Encode16' and vp8_alpha16['independentConfirmations'] == 1
+    assert vp8_alpha16['raw']['mirrored'] and vp8_alpha16['raw']['allMembersVerified']
+    alpha16_cost = vp8_alpha16['cost']
+    assert alpha16_cost['actuals'] == alpha16_cost['nativeSamplesEachBracket'] == 12
+    assert all(alpha16_cost[k] for k in ['quietGuardsPassed', 'completePacketExact',
+                                        'fullSourceNormalizationTimed', 'normalizedReferenceExact'])
+    assert alpha16_cost['packetBytes'] == 98590 and alpha16_cost['status'] == 'confirmed-gap'
+    assert alpha16_cost['lower'] > 1 and math.isclose(alpha16_cost['managedMicroseconds'] /
+                                                   alpha16_cost['nativeMicroseconds'], alpha16_cost['ratio'], rel_tol=1e-12)
     trellis_cost = json.loads((ROOT / 'benchmarks/current-vp8-effort6-cost-evidence.json').read_text(encoding='utf-8'))
     assert not trellis_cost['productionChanged'] and trellis_cost['allBuilds'] == 0
     assert trellis_cost['independentQuietConfirmation']
@@ -1426,6 +1437,11 @@ def render():
         else:
             position = next(i for i, (kind, previous) in enumerate(rows) if previous.startswith('| ' + label))
             rows[position] = ('codec', row)
+    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8 RGBA8'))
+    rows.insert(position + 1, ('codec',
+        f'| VP8 RGBA16 + alpha, including normalization † | {alpha16_cost["managedMicroseconds"]:,.2f} | '
+        f'{alpha16_cost["nativeMicroseconds"]:,.2f} | {alpha16_cost["ratio"]:.3f} / {alpha16_cost["upper"]:.3f} | '
+        f'{alpha16_cost["allocatedBytes"]:,} | {alpha16_cost["packetBytes"]:,} / {alpha16_cost["packetBytes"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1541,7 +1557,10 @@ The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
 its explicit normalized-confidence-overlap exception, without a parity claim.
-All six displayed VP8 encoder controls now have independent costs; the four
+All seven displayed VP8 encoder controls now have independent costs. The
+[RGBA16 alpha control](../benchmarks/CURRENT-VP8-ALPHA16-COST.md) includes full word
+normalization and confirms **1.311 / upper 1.365×**, with exact 98,590-byte packets.
+The four
 [refreshed companions](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
 confirm 1.298–1.333× gaps with exact packets and unchanged allocations.
 
