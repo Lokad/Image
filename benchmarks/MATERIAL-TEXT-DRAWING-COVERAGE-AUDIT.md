@@ -4,7 +4,8 @@ The coverage audit finds **14 omitted required paths**. Preserve all existing
 268 codec, geometry and read controls: the finite completion checklist now has
 **282 paths**. The [two separate-buffer copy controls](WARM-RECTANGLE-COPY-SPANS.md)
 now have current independent costs: RGBA8 is a confirmed gap and RGBA16 is
-confidence-open. The remaining twelve have no warm measurements.
+confidence-open. Both [clipped fill controls](WARM-RECTANGLE-FILL-PACKED.md) pass
+and stop at conservative uppers 0.775/0.567. The remaining ten have no warm measurements.
 Existing text/drawing correctness and memory qualification remain valid;
 they are not warm CPU evidence.
 
@@ -56,8 +57,11 @@ The existing ImageSharp/Fonts comparison and
 FreeType checks are correctness tools, **not approved performance baselines**.
 Do not time a substitute or relax pixel/layout gates implicitly. Resolve the
 missing native boundary or an explicitly approved tooling-only exception before
-scoring text, fitting, fill or compositing; do not compare to FFmpeg process
+scoring text, fitting or compositing; do not compare to FFmpeg process
 startup or to a differently shaped operation.
+
+Public FFmpeg av_image_fill_color supplies the fill boundary, including timed
+clipping and color normalization; its two independently confirmed controls now pass.
 
 The copy controls and current costs are recorded in their linked report.
 Other additions remain named unmeasured work; existing confirmed passing cases

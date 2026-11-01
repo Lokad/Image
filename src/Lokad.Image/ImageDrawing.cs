@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Lokad.Image.Internal;
 
 namespace Lokad.Image;
@@ -30,6 +31,16 @@ public static partial class ImageDrawing
         var g = canvas.BitDepth == 8 ? (color.G + 128) / 257 : color.G;
         var b = canvas.BitDepth == 8 ? (color.B + 128) / 257 : color.B;
         var a = canvas.BitDepth == 8 ? (color.A + 128) / 257 : color.A;
+        // Read the native channel order once, then let Span.Fill replicate
+        // complete pixels with the runtime's vectorized or portable kernel.
+        uint pixel8 = 0; ulong pixel16 = 0;
+        if (canvas.BitDepth == 8)
+            pixel8 = MemoryMarshal.Read<uint>(stackalloc byte[] { (byte)r, (byte)g, (byte)b, (byte)a });
+        else
+        {
+            Span<ushort> channels = stackalloc ushort[] { (ushort)r, (ushort)g, (ushort)b, (ushort)a };
+            pixel16 = MemoryMarshal.Read<ulong>(MemoryMarshal.AsBytes(channels));
+        }
         for (var row = 0; row < region.Height; row++)
         for (var first = 0; first < region.Width;)
         {
@@ -38,14 +49,12 @@ public static partial class ImageDrawing
             if (canvas.BitDepth == 8)
             {
                 var samples = canvas.GetRow8(yRow).Slice((region.DestinationX + first) * 4, count * 4);
-                for (var i = 0; i < samples.Length; i += 4)
-                { samples[i] = (byte)r; samples[i + 1] = (byte)g; samples[i + 2] = (byte)b; samples[i + 3] = (byte)a; }
+                MemoryMarshal.Cast<byte, uint>(samples).Fill(pixel8);
             }
             else
             {
                 var samples = canvas.GetRow16(yRow).Slice((region.DestinationX + first) * 4, count * 4);
-                for (var i = 0; i < samples.Length; i += 4)
-                { samples[i] = (ushort)r; samples[i + 1] = (ushort)g; samples[i + 2] = (ushort)b; samples[i + 3] = (ushort)a; }
+                MemoryMarshal.Cast<ushort, ulong>(samples).Fill(pixel16);
             }
             first += count;
         }

@@ -1476,6 +1476,16 @@ def render():
         assert rectangle['cases'][case]['confirmation']['receipt']['allRgbaSamplesExact']
         rows.append(('editing', f'| {label} | {c["managedMicroseconds"]:,.2f} | {c["nativeMicroseconds"]:,.2f} | '
                      f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
+    fill = json.loads((ROOT / 'benchmarks/rectangle-fill-packed-evidence.json').read_text(encoding='utf-8'))
+    assert fill['requiredMaterialPaths'] == 282 and fill['newRequiredCases'] == 0
+    assert fill['qualification']['sameActualPackageBothOS'] and fill['raw']['allMembersVerified']
+    for case, label in [('DrawingFill8', 'Exact clipped fill into borrowed RGBA8 canvas (parity confirmed)'),
+                        ('DrawingFill16', 'Exact clipped fill into borrowed RGBA16 canvas (parity confirmed)')]:
+        c = fill['cases'][case]['cost']
+        assert c['actuals'] == c['nativeSamplesEachBracket'] == 12 and c['status'] == 'confirmed-pass-stop'
+        assert c['upper'] <= 1 and fill['cases'][case]['confirmation']['receipt']['allRgbaSamplesExact']
+        rows.append(('editing', f'| {label} | {c["managedMicroseconds"]:,.2f} | {c["nativeMicroseconds"]:,.2f} | '
+                     f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1564,8 +1574,15 @@ def render():
 Updated 2026-11-01. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
-268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);\ntwelve still lack warm measurements.
+268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);\nten still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
+
+[Exact clipped rectangle fills](../benchmarks/WARM-RECTANGLE-FILL-PACKED.md)
+pass at **0.759 / upper 0.775×** for RGBA8 and **0.546 / upper 0.567×** for RGBA16,
+with unchanged 56 B/op. Native-order packed pixel filling reduces elapsed time
+94.1% / 88.3% from the first current baselines, preserving exact full canvases.
+Both platforms pass 5,378 checks and the same actual package verifies one-canvas
+shared admission, partial/zero alpha and untouched pixels. Both controls stop.
 
 [Exact rectangle copying](../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) improves
 24.5% at RGBA8 and 17.4% at RGBA16, with unchanged 56 B/op and exact full canvases.

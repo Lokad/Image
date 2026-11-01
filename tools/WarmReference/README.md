@@ -168,3 +168,9 @@ DrawingCopy16 on the existing original rasters. Both subjects mutate a borrowed
 existing canvas; resident preparation and reset are excluded equally. See
 [current evidence](../../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) for frozen
 geometry, ownership, exact-pixel checks and immutable-driver reproduction.
+
+Clipped fills similarly use build-fill-rectangle-linux.sh and
+verify-fill-rectangle-linux.py, family FillRectangle and DrawingFill8/16.
+Public FFmpeg av_image_fill_color includes clipping and required color
+normalization inside each borrowed-canvas operation.
+[Both controls pass and stop](../../benchmarks/WARM-RECTANGLE-FILL-PACKED.md).

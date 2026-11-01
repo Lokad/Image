@@ -2,6 +2,45 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyRectangleFill()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            const int width = 513, height = 259;
+            var sampleBytes = depth / 8;
+            var input = OriginalPixels.Generate(width, height, depth);
+            input.AsSpan(3 * sampleBytes, sampleBytes).Clear();
+            input.AsSpan((width * 4 - 1) * sampleBytes, sampleBytes).Clear();
+            using var root = new TestMemoryBudget(input.Length);
+            var limits = new ImageLimits { MemoryBudget = root };
+            using var canvas = ImageBuffer.Create(width, height, depth, limits);
+            for (var y = 0; y < height; y++)
+                if (depth == 8) input.AsSpan(y * width * 4, width * 4).CopyTo(canvas.GetRow8(y));
+                else
+                    for (var sample = 0; sample < width * 4; sample++)
+                        canvas.GetRow16(y)[sample] = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(
+                            input.AsSpan((y * width * 4 + sample) * 2));
+            input.AsSpan().Clear();
+            var color = depth == 8 ? RgbaColor.From8(23, 57, 91, 128) : new RgbaColor(12345, 23456, 34567, 45678);
+            for (var phase = 0; phase < 2; phase++)
+            {
+                var fill = phase == 0 ? color : color with { A = 0 };
+                for (var repeat = 0; repeat < 2; repeat++)
+                    ImageDrawing.FillRectangle(canvas, -17, 19, 273, 129, fill, limits);
+                var expected = depth == 8
+                    ? (phase == 0 ? "b2cae827d4f9e5e328882d4a7aa2080829418d365f6ed7d882977304d510b478" : "8dff1a6f3c931f2f1cc34e172dcecf727eef62692319ce5f667b68debfc4c32d")
+                    : (phase == 0 ? "e112187d480232292794a75fcde041e5ba3a156d1b81a0f10989153a9203849a" : "4724530fb82c12776f8e3334cdee92012c653f8de385de51a5d63a4a53e543eb");
+                var hash = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(canvas)));
+                if (hash != expected || root.Bytes != input.Length || root.Refusals != 0 || root.IsDisposed)
+                    throw new Exception("Packaged fill changed exact pixels or required additional canvas storage.");
+            }
+            canvas.Dispose();
+            if (root.Bytes != 0 || root.IsDisposed)
+                throw new Exception("Packaged fill leaked storage or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged rectangle fill preserves exact byte/word canvases, zero-alpha RGB and shared ownership.");
+    }
+
     private static void VerifyRectangleCopy()
     {
         foreach (var depth in new[] { 8, 16 })
@@ -208,6 +247,7 @@ internal static class CooperativeMemoryConsumer
         VerifyTranspose(16);
         VerifyWideBicubicRepair();
         VerifyRectangleCopy();
+        VerifyRectangleFill();
         await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try

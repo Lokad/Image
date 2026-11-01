@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Vectorized complete-pixel rectangle filling preserves full sample precision,
+  hidden RGB, clipping, cancellation and existing memory ownership.
+
 - Faster exact rectangle copies at both pixel depths, preserving overlap,
   clipping, cancellation and caller-owned storage.
 - Wider bicubic resizing repairs uncertain pixels independently, preserving exact

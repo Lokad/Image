@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Exact packed rectangle fills](WARM-RECTANGLE-FILL-PACKED.md) pass and stop at
+RGBA8 0.759/upper0.775 and RGBA16 0.546/upper0.567, unchanged56B/op and exact
+fullcanvases. Elapsed improves94.1%/88.3%;raw/all/normalized confidence separate.
+Onebyte3/12 andoneword12 reuse the immutableharness/workers/originalrasters.
+5378checks/OS,72publicnormal/scalar/OS,SAMEactualpackage/threeexamples bothOS
+pass;packagechecks partial/zeroalpha andexactonecanvas sharedadmission.
+OnlyFillRectangle changes;copy/composite/privatehelper bodies unchanged.
+Summary109comparisons/3tables;all282requiredpaths remain,tenauditedpaths
+unmeasured. No further fillwidth/chunk/color/ISA variants or passing-case timing.
+
 [Exact rectangle copying](WARM-RECTANGLE-COPY-SPANS.md) improves RGBA8 by24.5%
 and RGBA16 by17.4%, unchanged56B/op and exactfullcanvas/source. Both independent
 gain comparisons separate raw/all/normalized confidence. Currentbyte1.100/
@@ -18,8 +28,8 @@ Summary107comparisons/3tables;required282 unchanged. No span/width/chunk variant
 
 [The bounded text/drawing audit](MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md)
 corrects an inventory omission: retain all 268 existing controls and add 14 named
-required paths, for **282 total**. The two separate-buffer copy controls now have
-current costs; the remaining twelve have functional qualification but no warm
+required paths, for **282 total**. The two separate-buffer copy and two fill
+controls now have current costs; the remaining ten have functional qualification but no warm
 performance evidence. Resolve equivalent native boundaries before timing;
 no new reference exception is implied. Earlier round
 counts below describe their own checkpoints, not full text/drawing coverage.

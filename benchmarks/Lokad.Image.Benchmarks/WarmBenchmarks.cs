@@ -32,7 +32,7 @@ internal static class WarmBenchmarks
             if (familyOption + 1 == arguments.Count) throw new ArgumentException("Supply a warm family.");
             family = arguments[familyOption + 1]; arguments.RemoveRange(familyOption, 2);
         }
-        if (family != "Lanczos3" && family is not ("CopyRegion" or "Read" or "Flip" or "RetainedFlip" or "StreamDecode" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpLossless" or "Compression" or "WebpDecode" or "Vp8Decode" or "Nearest" or "Bilinear" or "Bicubic" or "Crop" or "VerticalFlip" or "HalfTurn" or "Clockwise" or "NormalOrientation" or "Counterclockwise" or "Transpose" or "Transverse" or "Clone" or "Identify" or "StreamIdentify")) throw new ArgumentException("Choose CopyRegion, Read, Lanczos3, Flip, RetainedFlip, StreamDecode, Png, Jpeg, JpegDecode, Webp, WebpLossless, Compression, WebpDecode, Vp8Decode, Nearest, Bilinear, Bicubic, Crop, VerticalFlip, HalfTurn, Clockwise, NormalOrientation, Counterclockwise, Transpose, Transverse, Clone, Identify or StreamIdentify.");
+        if (family != "Lanczos3" && family is not ("FillRectangle" or "CopyRegion" or "Read" or "Flip" or "RetainedFlip" or "StreamDecode" or "Png" or "Jpeg" or "JpegDecode" or "Webp" or "WebpLossless" or "Compression" or "WebpDecode" or "Vp8Decode" or "Nearest" or "Bilinear" or "Bicubic" or "Crop" or "VerticalFlip" or "HalfTurn" or "Clockwise" or "NormalOrientation" or "Counterclockwise" or "Transpose" or "Transverse" or "Clone" or "Identify" or "StreamIdentify")) throw new ArgumentException("Choose FillRectangle, CopyRegion, Read, Lanczos3, Flip, RetainedFlip, StreamDecode, Png, Jpeg, JpegDecode, Webp, WebpLossless, Compression, WebpDecode, Vp8Decode, Nearest, Bilinear, Bicubic, Crop, VerticalFlip, HalfTurn, Clockwise, NormalOrientation, Counterclockwise, Transpose, Transverse, Clone, Identify or StreamIdentify.");
         string? selection = null;
         var selectionOption = arguments.IndexOf("--warm-cases");
         if (selectionOption >= 0)
@@ -62,6 +62,7 @@ internal static class WarmBenchmarks
             var type = family == "Read" ? typeof(WarmImageRead) : family == "Compression" ? typeof(WarmCompression) : family == "StreamIdentify" ? typeof(WarmStreamIdentify) : family == "Identify" ? typeof(WarmIdentify) : family == "StreamDecode" ? typeof(WarmStreamDecode) : family == "RetainedFlip" ? typeof(WarmRetainedFlip) : family == "Png" ? typeof(WarmPng) : family == "Jpeg" ? typeof(WarmJpeg) : family == "JpegDecode" ? typeof(WarmJpegDecode) : family == "Webp" ? typeof(WarmWebp) : family == "WebpLossless" ? typeof(WarmWebpLossless) : family == "WebpDecode" ? typeof(WarmWebpDecode) : family == "Vp8Decode" ? typeof(WarmVp8Decode) : family == "Nearest" ? typeof(WarmNearestResize) : family == "Bicubic" ? typeof(WarmBicubicResize) : family == "Bilinear" ? typeof(WarmBilinearResize) : family == "Crop" ? typeof(WarmCrop) : family == "VerticalFlip" ? typeof(WarmVerticalFlip) : family == "HalfTurn" ? typeof(WarmHalfTurn) : family == "Clockwise" ? typeof(WarmClockwise) : family == "NormalOrientation" ? typeof(WarmNormalOrientation) : family == "Counterclockwise" ? typeof(WarmCounterclockwise) : family == "Transpose" ? typeof(WarmTranspose) : family == "Transverse" ? typeof(WarmTransverse) : family == "Clone" ? typeof(WarmClone) : typeof(WarmHorizontalFlip);
             if (family == "Lanczos3") { expectedPairs = WarmLanczosResize.SelectedCases().Length; type = typeof(WarmLanczosResize); }
             if (family == "CopyRegion") { expectedPairs = WarmCopyRegion.SelectedCases().Length; type = typeof(WarmCopyRegion); }
+            if (family == "FillRectangle") { expectedPairs = WarmFillRectangle.SelectedCases().Length; type = typeof(WarmFillRectangle); }
             using var identity = new JpegBenchmarkCase();
             var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "WarmDry" : confirm ? "WarmConfirm" : "WarmShort")
                 .WithAffinity(affinity).WithGcServer(false).WithGcConcurrent(false)
@@ -164,8 +165,8 @@ internal static class WarmBenchmarks
                             && value.GetProperty("nativeCliNormalScalarPixelsExact").GetBoolean()
                             && value.GetProperty("nativeCliPixelsExact").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
                         : value.GetProperty("allRgbaSamplesExact").GetBoolean();
-                    var ownershipVerified = family == "CopyRegion"
-                        ? value.GetProperty("borrowedSource").GetBoolean() && value.GetProperty("borrowedCanvas").GetBoolean()
+                    var ownershipVerified = family is "CopyRegion" or "FillRectangle"
+                        ? (family != "CopyRegion" || value.GetProperty("borrowedSource").GetBoolean()) && value.GetProperty("borrowedCanvas").GetBoolean()
                             && value.GetProperty("callerBuffersAlive").GetBoolean()
                             && !value.GetProperty("sourcePreparationTimed").GetBoolean()
                             && !value.GetProperty("canvasPreparationTimed").GetBoolean()
@@ -196,8 +197,8 @@ internal static class WarmBenchmarks
             Directory.CreateDirectory(Path.GetDirectoryName(output)!);
             File.WriteAllText(output, JsonSerializer.Serialize(new { schemaVersion = 1, project = "Lokad.Image", runId, complete,
                 smoke = validationOnly, prepare, confirm, family, cpu, expectedPairs, actualPairs = pairs.Count,
-                method = family == "CopyRegion"
-                    ? "Managed BenchmarkDotNet elapsed samples and native internal monotonic samples, one pinned CPU, complete mutation of borrowed source/canvas with operation-scope cleanup. Native pre/post brackets; IPC/startup/filesystem/preparation excluded."
+                method = family is "CopyRegion" or "FillRectangle"
+                    ? "Managed BenchmarkDotNet elapsed samples and native internal monotonic samples, one pinned CPU, complete mutation of borrowed canvas with operation-scope cleanup. Native pre/post brackets; IPC/startup/filesystem/preparation excluded."
                     : "Managed BenchmarkDotNet elapsed samples and native worker internal monotonic samples, one pinned CPU, complete owned memory outputs. Native pre/post samples bracket managed measurements. IPC/startup/filesystem excluded. Screened rows require independent repeats before certification.", pairs },
                 new JsonSerializerOptions { WriteIndented = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals }) + "\n");
             if (!complete) Environment.ExitCode = 1;

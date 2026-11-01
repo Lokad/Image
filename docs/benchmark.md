@@ -1,11 +1,18 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **107 selected comparisons** combine qualified
+Updated 2026-11-01. These **109 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
 268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);
-twelve still lack warm measurements.
+ten still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
+
+[Exact clipped rectangle fills](../benchmarks/WARM-RECTANGLE-FILL-PACKED.md)
+pass at **0.759 / upper 0.775×** for RGBA8 and **0.546 / upper 0.567×** for RGBA16,
+with unchanged 56 B/op. Native-order packed pixel filling reduces elapsed time
+94.1% / 88.3% from the first current baselines, preserving exact full canvases.
+Both platforms pass 5,378 checks and the same actual package verifies one-canvas
+shared admission, partial/zero alpha and untouched pixels. Both controls stop.
 
 [Exact rectangle copying](../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) improves
 24.5% at RGBA8 and 17.4% at RGBA16, with unchanged 56 B/op and exact full canvases.
@@ -220,6 +227,8 @@ histories remain in the coverage links and raw evidence.
 | Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.89 | 3.83 | 1.016 / 1.052 | 56 |
+| Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
+| Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.29 | 4.20 | 0.546 / 0.567 | 56 |
 
 **Inspection and pixel-coding validation**
 

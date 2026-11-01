@@ -7,6 +7,23 @@ public sealed class DrawingTests
 {
     [Theory]
     [InlineData(8)] [InlineData(16)]
+    public void WideClippedFillKeepsHiddenRgbAndUntouchedPixelsAcrossChunks(int depth)
+    {
+        using var canvas = OriginalPixels.Buffer(8203, 4, depth);
+        using var before = canvas.Clone();
+        ImageDrawing.FillRectangle(canvas, -1, 1, 8203, 2, new RgbaColor(0x1234, 0xffff, 0x8001, 0));
+        int[] color = depth == 8 ? [18, 255, 128, 0] : [0x1234, 0xffff, 0x8001, 0];
+        for (var y = 0; y < 4; y++)
+        for (var x = 0; x < 8203; x++)
+        for (var channel = 0; channel < 4; channel++)
+            Assert.Equal(y is 1 or 2 && x < 8202 ? color[channel] : Sample(before, x, y, channel),
+                Sample(canvas, x, y, channel));
+        canvas.Dispose();
+        Assert.Equal(8203 * 4, depth == 8 ? before.GetRow8(0).Length : before.GetRow16(0).Length);
+    }
+
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
     public void FillClipsReplacesAlphaAndPreservesOtherPixelsAndOwners(int depth)
     {
         using var canvas = OriginalPixels.Buffer(9, 7, depth); using var survivor = canvas.Clone();
