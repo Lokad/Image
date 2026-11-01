@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **104 selected comparisons** combine qualified
+Updated 2026-11-01. These **105 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -30,9 +30,11 @@ The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
 its explicit normalized-confidence-overlap exception, without a parity claim.
-All seven displayed VP8 encoder controls now have independent costs. The
+All eight displayed VP8 encoder controls now have independent costs. The
 [RGBA16 alpha control](../benchmarks/CURRENT-VP8-ALPHA16-COST.md) includes full word
 normalization and confirms **1.311 / upper 1.365×**, with exact 98,590-byte packets.
+The [opaque byte control](../benchmarks/CURRENT-VP8-OPAQUE8-COST.md) confirms
+**1.268 / upper 1.308×**, with exact 72,380-byte packets.
 The four
 [refreshed companions](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
 confirm 1.298–1.333× gaps with exact packets and unchanged allocations.
@@ -118,6 +120,7 @@ histories remain in the coverage links and raw evidence.
 | VP8 diagram, effort2 / distortion-only search † | 3,353.14 | 2,517.95 | 1.332 / 1.346 | 741,375 | 7,330 / 7,330 |
 | VP8 RGBA8 † | 69,770.34 | 53,756.44 | 1.298 / 1.307 | 21,353,208 | 98,590 / 98,590 |
 | VP8 RGBA16 + alpha, including normalization † | 71,441.15 | 54,514.34 | 1.311 / 1.365 | 21,350,352 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 19,848.95 | 15,654.15 | 1.268 / 1.308 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 13,899.64 | 9,701.62 | 1.433 / 1.438 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 7,791.31 | 5,845.88 | 1.333 / 1.351 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |

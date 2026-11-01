@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current opaque RGBA8 VP8](CURRENT-VP8-OPAQUE8-COST.md) independently confirms
+1.268/upper1.308,1201552B/op,exact72380Bpacket. Original source/native/settings,
+freshoutput/owners/pixel/quietgates pass. One12,zerobuilds/newcases/fixtures/
+profiles/full/package repeats. Completeddata recoveredafterabyte-input-specific
+collectorflagcheck,withoutretiming. Earlier333580B timings arehistorical.
+Summary105comparisons/3tables;alleightdisplayedVP8encodercosts nowindependent.
+All268requiredpaths remain,withothercurrentproofs andcosts reusedunchanged.
+
 [Independent paired-quantization confirmation](VP8-QUANTIZATION-PAIR-CONFIRMATION.md)
 rejects the unchanged archivedcandidate:0.97%filtered/0.62%all/0.67%normalized,
 all-actual/normalized confidenceoverlap. One scoped2%point continuation after
