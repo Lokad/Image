@@ -65,6 +65,11 @@ public static partial class ImageDrawing
         context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
         var backwardsY = ReferenceEquals(source, canvas) && region.DestinationY > region.SourceY;
         var backwardsX = ReferenceEquals(source, canvas) && region.DestinationX > region.SourceX;
+        // Admission and geometry are already validated. Borrow each packed
+        // span once; copying bytes preserves both sample depths exactly.
+        var sourcePixels = source.Pixels; var canvasPixels = canvas.Pixels;
+        var pixelBytes = canvas.BitDepth / 8 * 4;
+        var sourceStride = source.Stride; var canvasStride = canvas.Stride;
         for (var row = 0; row < region.Height; row++)
         {
             var offsetY = backwardsY ? region.Height - row - 1 : row;
@@ -72,10 +77,10 @@ public static partial class ImageDrawing
             {
                 var count = Math.Min(4096, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
                 var offsetX = backwardsX ? region.Width - first - count : first;
-                var sx = (region.SourceX + offsetX) * 4; var dx = (region.DestinationX + offsetX) * 4;
+                var sx = (region.SourceX + offsetX) * pixelBytes; var dx = (region.DestinationX + offsetX) * pixelBytes;
                 var sy = region.SourceY + offsetY; var dy = region.DestinationY + offsetY;
-                if (canvas.BitDepth == 8) source.GetRow8(sy).Slice(sx, count * 4).CopyTo(canvas.GetRow8(dy).Slice(dx, count * 4));
-                else source.GetRow16(sy).Slice(sx, count * 4).CopyTo(canvas.GetRow16(dy).Slice(dx, count * 4));
+                sourcePixels.Slice(sy * sourceStride + sx, count * pixelBytes)
+                    .CopyTo(canvasPixels.Slice(dy * canvasStride + dx, count * pixelBytes));
                 first += count;
             }
         }

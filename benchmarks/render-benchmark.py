@@ -1466,6 +1466,16 @@ def render():
         f'| VP8 opaque RGBA8 † | {opaque8_cost["managedMicroseconds"]:,.2f} | '
         f'{opaque8_cost["nativeMicroseconds"]:,.2f} | {opaque8_cost["ratio"]:.3f} / {opaque8_cost["upper"]:.3f} | '
         f'{opaque8_cost["allocatedBytes"]:,} | {opaque8_cost["packetBytes"]:,} / {opaque8_cost["packetBytes"]:,} |'))
+    rectangle = json.loads((ROOT / 'benchmarks/rectangle-copy-spans-evidence.json').read_text(encoding='utf-8'))
+    assert rectangle['requiredMaterialPaths'] == 282 and rectangle['newRequiredCases'] == 0
+    assert rectangle['qualification']['sameActualPackageBothOS'] and rectangle['raw']['allMembersVerified']
+    for case, label in [('DrawingCopy8', 'Exact rectangle copy into borrowed RGBA8 canvas'),
+                        ('DrawingCopy16', 'Exact rectangle copy into borrowed RGBA16 canvas (confidence open)')]:
+        c = rectangle['cases'][case]['cost']
+        assert c['actuals'] == c['nativeSamplesEachBracket'] == 12
+        assert rectangle['cases'][case]['confirmation']['receipt']['allRgbaSamplesExact']
+        rows.append(('editing', f'| {label} | {c["managedMicroseconds"]:,.2f} | {c["nativeMicroseconds"]:,.2f} | '
+                     f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1554,8 +1564,14 @@ def render():
 Updated 2026-11-01. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
-268 controls and adds [14 unmeasured text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md).
+268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);\ntwelve still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
+
+[Exact rectangle copying](../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) improves
+24.5% at RGBA8 and 17.4% at RGBA16, with unchanged 56 B/op and exact full canvases.
+Both subjects mutate an existing borrowed canvas; input/canvas preparation is
+excluded. Current ratios are 1.100 / upper 1.114 (gap) and 1.016 / upper 1.052
+(confidence open). Both platforms and the same actual package pass qualification.
 
 Sequential measurements use the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC.

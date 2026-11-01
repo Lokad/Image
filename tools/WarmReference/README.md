@@ -161,3 +161,10 @@ renderer with `--check`. Keep at most three summary tables, allocations and
 verification status. Link superseded experiments instead of extending a timeline
 here. Reuse unchanged qualification; preserve reproducibility without new
 bookkeeping or quota machinery.
+
+Exact rectangle-copy controls use build-copy-region-linux.sh and
+verify-copy-region-linux.py. The warm family CopyRegion selects DrawingCopy8 or
+DrawingCopy16 on the existing original rasters. Both subjects mutate a borrowed
+existing canvas; resident preparation and reset are excluded equally. See
+[current evidence](../../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) for frozen
+geometry, ownership, exact-pixel checks and immutable-driver reproduction.

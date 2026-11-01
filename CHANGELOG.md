@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster exact rectangle copies at both pixel depths, preserving overlap,
+  clipping, cancellation and caller-owned storage.
 - Wider bicubic resizing repairs uncertain pixels independently, preserving exact
   pixels, cancellation and existing memory ownership.
 - Speed JPEG decoder preflight with bounded marker searches, preserving exact

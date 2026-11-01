@@ -7,11 +7,21 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Exact rectangle copying](WARM-RECTANGLE-COPY-SPANS.md) improves RGBA8 by24.5%
+and RGBA16 by17.4%, unchanged56B/op and exactfullcanvas/source. Both independent
+gain comparisons separate raw/all/normalized confidence. Currentbyte1.100/
+upper1.114 remainsgap;word1.016/upper1.052 isconfidence-open, no repeatedtiming.
+5376checks/OS,70publicnormal/scalar/OS,SAMEactualpackage/threeexamples bothOS pass;
+packageconsumer admits exactlytwoimagebuffers and verifies survivingcanvas.
+Only CopyRegion changes; unrelated original268 costs/proofs remain applicable.
+Summary107comparisons/3tables;required282 unchanged. No span/width/chunk variants.
+
 [The bounded text/drawing audit](MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md)
 corrects an inventory omission: retain all 268 existing controls and add 14 named
-required paths, for **282 total**. Those additions have functional qualification
-but no warm performance evidence. Their equivalent native boundaries must be
-resolved before timing; no new reference exception is implied. Earlier round
+required paths, for **282 total**. The two separate-buffer copy controls now have
+current costs; the remaining twelve have functional qualification but no warm
+performance evidence. Resolve equivalent native boundaries before timing;
+no new reference exception is implied. Earlier round
 counts below describe their own checkpoints, not full text/drawing coverage.
 
 [Current JPEG long-prefix confirmation](JPEG-LONG-PREFIX-CURRENT-CONFIRMATION.md)

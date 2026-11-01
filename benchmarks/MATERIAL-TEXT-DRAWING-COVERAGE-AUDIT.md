@@ -2,13 +2,15 @@
 
 The coverage audit finds **14 omitted required paths**. Preserve all existing
 268 codec, geometry and read controls: the finite completion checklist now has
-**282 paths**. None of these additions is a measured performance gap or a passing
-case. Existing text/drawing correctness and memory qualification remain valid;
+**282 paths**. The [two separate-buffer copy controls](WARM-RECTANGLE-COPY-SPANS.md)
+now have current independent costs: RGBA8 is a confirmed gap and RGBA16 is
+confidence-open. The remaining twelve have no warm measurements.
+Existing text/drawing correctness and memory qualification remain valid;
 they are not warm CPU evidence.
 
 The immutable original inventory contains no text-layout, font, fitting, drawing
-or compositing comparison rows. None of the current benchmark C# entry points
-references these public APIs. The earlier coverage statement that they reused
+or compositing comparison rows. At the inspected revision, no benchmark C# entry
+point referenced these public APIs. The earlier coverage statement that they reused
 unchanged performance evidence was incorrect. The [audit record](material-text-drawing-coverage-audit-evidence.json)
 pins the inspected revision, source query, original inventory and capability check.
 
@@ -57,13 +59,12 @@ missing native boundary or an explicitly approved tooling-only exception before
 scoring text, fitting, fill or compositing; do not compare to FFmpeg process
 startup or to a differently shaped operation.
 
-Next: implement only the two reusable rectangle-copy benchmark controls with
-this boundary, verify the actual managed outputs and collect current costs.
-Other additions remain named unmeasured work. Existing confirmed passing cases
-stay stopped. One standalone native correctness adapter was built; no production
-or benchmark build, timing run, repeated qualification or new font/image was
-needed. Existing 105 displayed comparison
-numbers and the unchanged Windows/Linux/package evidence remain applicable.
+The copy controls and current costs are recorded in their linked report.
+Other additions remain named unmeasured work; existing confirmed passing cases
+stay stopped. The initial audit required one standalone native correctness build
+and no production/benchmark build, timing or repeated qualification.
+The subsequent copy round updates only the affected costs and qualifies its
+accepted production change on both platforms and through the actual package.
 
 Reproducibility: retained `material-text-drawing-coverage-audit.tar.xz` contains
 the original adapter, exact native verification script, binary and records.

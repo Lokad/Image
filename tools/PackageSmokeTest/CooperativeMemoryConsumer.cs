@@ -2,6 +2,51 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyRectangleCopy()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            const int width = 513, height = 259;
+            var sampleBytes = depth / 8;
+            var input = OriginalPixels.Generate(width, height, depth);
+            input.AsSpan(3 * sampleBytes, sampleBytes).Clear();
+            input.AsSpan((width * 4 - 1) * sampleBytes, sampleBytes).Clear();
+            using var root = new TestMemoryBudget(2L * input.Length);
+            var limits = new ImageLimits { MemoryBudget = root };
+            using var source = ImageBuffer.Create(width, height, depth, limits);
+            using var canvas = ImageBuffer.Create(width, height, depth, limits);
+            for (var y = 0; y < height; y++)
+                if (depth == 8)
+                {
+                    input.AsSpan(y * width * 4, width * 4).CopyTo(source.GetRow8(y));
+                    input.AsSpan(y * width * 4, width * 4).CopyTo(canvas.GetRow8(y));
+                }
+                else
+                    for (var sample = 0; sample < width * 4; sample++)
+                    {
+                        var value = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(
+                            input.AsSpan((y * width * 4 + sample) * 2));
+                        source.GetRow16(y)[sample] = value;
+                        canvas.GetRow16(y)[sample] = value;
+                    }
+            for (var repeat = 0; repeat < 2; repeat++)
+                ImageDrawing.CopyRegion(source, 127, 65, 256, 129, canvas, 17, 19, limits);
+            if (root.Bytes != 2L * input.Length || root.Refusals != 0 ||
+                !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(input))
+                throw new Exception("Packaged copy changed its borrowed source or required extra storage.");
+            source.Dispose(); input.AsSpan().Clear();
+            var expected = depth == 8 ? "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4"
+                : "046a1b2e10c7c8e744e8af15497a0b3d498e750e84b2f15fa69cd082a3e1078d";
+            var hash = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(canvas)));
+            if (hash != expected || root.Bytes != canvas.Stride * (long)height || root.IsDisposed)
+                throw new Exception("Packaged copy changed exact pixels or surviving canvas ownership.");
+            canvas.Dispose();
+            if (root.Bytes != 0 || root.IsDisposed)
+                throw new Exception("Packaged copy leaked storage or disposed the borrowed root.");
+        }
+        Console.WriteLine("Packaged rectangle copy preserves exact byte/word canvases and shared ownership.");
+    }
+
     private static async Task VerifyDirectRgbResult()
     {
         const int width = 513, height = 259, bytes = width * height * 4;
@@ -162,6 +207,7 @@ internal static class CooperativeMemoryConsumer
         VerifyTranspose(8);
         VerifyTranspose(16);
         VerifyWideBicubicRepair();
+        VerifyRectangleCopy();
         await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try

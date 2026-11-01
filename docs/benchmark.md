@@ -1,10 +1,17 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **105 selected comparisons** combine qualified
+Updated 2026-11-01. These **107 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
-268 controls and adds [14 unmeasured text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md).
+268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);
+twelve still lack warm measurements.
 It records validity, missing confirmations and gaps. Full warm parity is open.
+
+[Exact rectangle copying](../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) improves
+24.5% at RGBA8 and 17.4% at RGBA16, with unchanged 56 B/op and exact full canvases.
+Both subjects mutate an existing borrowed canvas; input/canvas preparation is
+excluded. Current ratios are 1.100 / upper 1.114 (gap) and 1.016 / upper 1.052
+(confidence open). Both platforms and the same actual package pass qualification.
 
 Sequential measurements use the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC.
@@ -211,6 +218,8 @@ histories remain in the coverage links and raw evidence.
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
 | Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
+| Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
+| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.89 | 3.83 | 1.016 / 1.052 | 56 |
 
 **Inspection and pixel-coding validation**
 
