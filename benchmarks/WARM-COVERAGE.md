@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Fused baseline entropy publication](JPEG-ENTROPY-PUBLICATION-REJECTED.md) misses
+4.1%triage:2.47%filtered/2.54%allactual/2.81%normalizedpointgain. One active
+short,no confirmation/variants. No storage/owner/charge added;observed966370B/op
+versus966367 includesharnesscosts. OneLinuxcorebuild,zero test/toolingbuilds;
+47internal/all388public pass normal/scalar candidate AND exactrestored baseline.
+Windows/package/full proof reused;allcurrent costs/268paths remain. Close fused
+single-exit/EH publication,including guard/layout/refill/inlining variants.
+
 [JPEG single-coefficient partial evaluation](JPEG-SINGLE-AMPLITUDE-REJECTED.md)
 misses4.1%triage:0.92%filtered/0.98%allactual/1.10%normalizedpointgain,unchanged
 966367B/op. One active short,no confirmation/variants. Original source/core/PDB/
