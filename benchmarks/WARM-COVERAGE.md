@@ -7,6 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Exact caller-YCCK RGB rows](WARM-JPEG-CALLER-YCCK-ROWS.md) resolve the existing
+5.622× gap: independent 87.40% elapsed / 87.39% native-normalized reduction with
+separated confidence, exact frozen pixels, 0.709 / upper0.711×. Allocation is
+762,704 B/op versus762,625 (+79 B/op). Shared exact row traversal writes RGB/RGBA;
+no new storage/owner/admission or RGBA intermediate. Caller RGB and affected owned
+YCCK pass/stop; callerCMYK confirms1.044/upper1.059gap. These three costs supersede
+JDO36; other26decode costs and unrelated paths reuse applicable unchanged proof.
+Fresh5,369checks/OS,4internal/399public normal/scalar and sameactualReleasepackage/
+threeexamples bothOS pass. Onecore/internalbuild perOS, zero otherbuilds/profiles/
+newcases, oneprimaryshort/12 and twoaffected12s. Full268objective remains open.
+
 [Direct retained RGB results](WARM-JPEG-DIRECT-RGB-RESULT.md) save 4.27% elapsed /
 4.56% native-normalized with separated confidence and exact pixels. DirectRgb444
 allocation drops 966,367 to 10,088 B/op on the default ungoverned control; actual

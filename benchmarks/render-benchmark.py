@@ -1405,6 +1405,25 @@ def render():
     rows.append(('codec', f'| JPEG YCCK420, caller RGB24 decode † | {c["managedMicroseconds"]:,.2f} | '
                  f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
                  f'{c["allocatedBytes"]:,} | — |'))
+    caller_ycck = json.loads((ROOT / 'benchmarks/jpeg-caller-ycck-row-evidence.json').read_text(encoding='utf-8'))
+    assert caller_ycck['accepted'] and caller_ycck['decision']['passed']
+    assert caller_ycck['qualification']['fullChecksEachOs'] == 5369
+    assert caller_ycck['qualification']['sameActualPackageBothOs']
+    assert caller_ycck['raw']['mirrored'] and caller_ycck['raw']['allMembersVerified']
+    assert len(caller_ycck['cases']) == 3
+    for case, label in [('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode'),
+                        ('Ycck420', 'JPEG YCCK420, resident decode'),
+                        ('CmykCaller', 'JPEG DC-only, caller CMYK decode')]:
+        c = caller_ycck['cases'][case]
+        assert c['managedActuals'] == c['nativeSamplesEachBracket'] == 12 and c['quietGuardsPassed']
+        assert c['managedOutputSha256'] == c['nativeOutputSha256']
+        assert (c['status'] == 'confirmed-pass-stop') == (c['upper'] <= 1)
+        assert math.isclose(c['managedMicroseconds'] / c['nativeMicroseconds'], c['ratio'], rel_tol=1e-12)
+        qualifier = ' (confirmed pass)' if c['status'] == 'confirmed-pass-stop' else ' (confidence open)' if c['status'] == 'confirmed-confidence-open' else ''
+        position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| ' + label))
+        rows[position] = ('codec', f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
+                         f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
+                         f'{c["allocatedBytes"]:,} | — |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1512,7 +1531,7 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production qualification covers **5,367 checks per OS**, including 948 live
+Current production qualification covers **5,369 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
 Focused JPEG pixel/row/packet/admission checks pass normal/scalar on both OSes;
 applicable word-transpose and unrelated qualification remains valid.
@@ -1544,10 +1563,12 @@ exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the
 default ungoverned control; retained output capacity remains owned and charged.
 Its **1.383 / upper 1.397×** remains a CPU gap. All 29 existing affected JPEG
 decode/caller-sample/validation boundaries have current independent costs in the
-linked report; passing cases stop. Caller-YCCK420 RGB24 exposes the largest current
-JPEG gap at **5.622 / upper 5.719×**, 762,625 B/op, with exact normal/scalar native
-samples. Prior costs predate the current byte-exact conversion path; this existing
-required boundary is now prioritized. No new workload grid or broader parity claim.
+linked report, with the following three superseded by the next round.
+[Exact caller-YCCK RGB rows](../benchmarks/WARM-JPEG-CALLER-YCCK-ROWS.md) save
+**87.40% elapsed / 87.39% native-normalized**, resolving that existing 5.622× gap
+at **0.709 / upper 0.711×** with exact pixels. Allocation is 762,704 B/op versus
+762,625 (+79 bytes). Caller RGB and the affected owned-YCCK companion pass and
+stop; caller CMYK remains a gap. Other decode costs retain their valid paths.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's

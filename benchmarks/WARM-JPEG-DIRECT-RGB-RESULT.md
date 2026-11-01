@@ -1,5 +1,9 @@
 # Direct retained RGB JPEG result
 
+Caller-YCCK RGB, owned YCCK and caller-CMYK costs are superseded by
+[exact caller YCCK rows](WARM-JPEG-CALLER-YCCK-ROWS.md). The other 26 measured
+paths, including the direct-RGB gain, remain applicable.
+
 The existing direct-RGB444 control independently saves **4.27% elapsed**
 (4.33% all-actual, **4.56% native-normalized**), with separated raw and normalized
 confidence. It remains a CPU gap at **1.383× / upper 1.397**. Managed allocation

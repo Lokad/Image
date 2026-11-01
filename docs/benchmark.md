@@ -22,7 +22,7 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production qualification covers **5,367 checks per OS**, including 948 live
+Current production qualification covers **5,369 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
 Focused JPEG pixel/row/packet/admission checks pass normal/scalar on both OSes;
 applicable word-transpose and unrelated qualification remains valid.
@@ -54,10 +54,12 @@ exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the
 default ungoverned control; retained output capacity remains owned and charged.
 Its **1.383 / upper 1.397×** remains a CPU gap. All 29 existing affected JPEG
 decode/caller-sample/validation boundaries have current independent costs in the
-linked report; passing cases stop. Caller-YCCK420 RGB24 exposes the largest current
-JPEG gap at **5.622 / upper 5.719×**, 762,625 B/op, with exact normal/scalar native
-samples. Prior costs predate the current byte-exact conversion path; this existing
-required boundary is now prioritized. No new workload grid or broader parity claim.
+linked report, with the following three superseded by the next round.
+[Exact caller-YCCK RGB rows](../benchmarks/WARM-JPEG-CALLER-YCCK-ROWS.md) save
+**87.40% elapsed / 87.39% native-normalized**, resolving that existing 5.622× gap
+at **0.709 / upper 0.711×** with exact pixels. Allocation is 762,704 B/op versus
+762,625 (+79 bytes). Caller RGB and the affected owned-YCCK companion pass and
+stop; caller CMYK remains a gap. Other decode costs retain their valid paths.
 
 [Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
 8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
@@ -140,11 +142,11 @@ histories remain in the coverage links and raw evidence.
 | PNG RGBA16 decode, tight working limit (confidence open) † | 3,120.34 | 3,128.99 | 0.997 / 1.016 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,106.36 | 1,010.22 | 1.095 / 1.130 | 757,362 | — |
-| JPEG DC-only, caller CMYK decode † | 344.80 | 331.50 | 1.040 / 1.050 | 1,085,958 | — |
+| JPEG DC-only, caller CMYK decode † | 346.34 | 331.63 | 1.044 / 1.059 | 1,085,961 | — |
 | VP8L RGBA8, resident decode † | 3,224.25 | 3,019.22 | 1.068 / 1.079 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 3,271.53 | 3,048.58 | 1.073 / 1.102 | 152,824 | — |
 | JPEG CMYK sparse-2D, resident decode † | 609.12 | 436.83 | 1.394 / 1.401 | 1,085,757 | — |
-| JPEG YCCK420, resident decode (confirmed pass) † | 417.49 | 709.08 | 0.589 / 0.597 | 895,547 | — |
+| JPEG YCCK420, resident decode (confirmed pass) † | 426.18 | 710.51 | 0.600 / 0.617 | 895,547 | — |
 | JPEG 4:1:1, resident decode † | 518.70 | 447.24 | 1.160 / 1.167 | 751,295 | — |
 | JPEG 4:1:0, resident decode (confirmed pass) † | 365.01 | 508.34 | 0.718 / 0.726 | 720,838 | — |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
@@ -157,7 +159,7 @@ histories remain in the coverage links and raw evidence.
 | JPEG progressive444, live-token resident decode † | 4,859.37 | 3,352.56 | 1.449 / 1.463 | 984,212 | — |
 | JPEG dense CMYK, resident decode (confirmed pass) † | 2,782.23 | 3,124.32 | 0.891 / 0.898 | 1,085,661 | — |
 | JPEG horizontal-only CMYK, resident decode † | 527.30 | 392.30 | 1.344 / 1.351 | 1,085,755 | — |
-| JPEG YCCK420, caller RGB24 decode † | 3,404.56 | 605.55 | 5.622 / 5.719 | 762,625 | — |
+| JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 428.98 | 605.32 | 0.709 / 0.711 | 762,704 | — |
 
 **Editing**
 

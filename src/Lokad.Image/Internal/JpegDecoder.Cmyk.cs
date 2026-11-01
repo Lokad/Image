@@ -83,6 +83,8 @@ internal ref partial struct JpegDecoder
     {
         if (format == JpegSampleFormat.Cmyk && source == JpegColorSpace.Cmyk && orientation == ImageOrientation.Normal
             && TryWriteFullResolutionCmyk(destination, stride, invert)) return;
+        if (format == JpegSampleFormat.Rgb && source == JpegColorSpace.Ycck && orientation == ImageOrientation.Normal
+            && TryWriteHalfResolutionYcck(destination, stride, invert, 3)) return;
         for (var y = 0; y < info.Height; y++)
         {
             context.Cancellation.ThrowIfCancellationRequested();

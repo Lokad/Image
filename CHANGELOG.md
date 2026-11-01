@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Decode half-grid YCCK directly into caller RGB rows through the existing exact
+  color kernel, preserving padding, ownership and cancellation.
 - Equal-grid baseline RGB JPEG decoding writes into the retained result,
   avoiding temporary component planes while preserving exact pixels and admission.
 - Faster 4:2:0 and 4:2:2 JPEG encoding through exact SIMD vertical chroma rows,

@@ -8,6 +8,9 @@ namespace Lokad.Image.Internal;
 internal ref partial struct JpegDecoder
 {
     private bool TryRenderHalfResolutionYcck(ImageBuffer output, bool inverted)
+        => TryWriteHalfResolutionYcck(output.Pixels, output.Stride, inverted, 4);
+
+    private bool TryWriteHalfResolutionYcck(Span<byte> destination, int stride, bool inverted, int channels)
     {
         if (components.Length != 4) return false;
         var luma = components[0]; var cb = components[1]; var cr = components[2]; var black = components[3];
@@ -19,19 +22,20 @@ internal ref partial struct JpegDecoder
             RenderHalfYcckRow(luma.Plane.AsSpan(y * luma.BlockColumns * 8, info.Width),
                 cb.Plane.AsSpan(top * cb.BlockColumns * 8, cb.SampleWidth), cb.Plane.AsSpan(bottom * cb.BlockColumns * 8, cb.SampleWidth),
                 cr.Plane.AsSpan(top * cr.BlockColumns * 8, cr.SampleWidth), cr.Plane.AsSpan(bottom * cr.BlockColumns * 8, cr.SampleWidth),
-                black.Plane.AsSpan(y * black.BlockColumns * 8, info.Width), top != bottom, inverted, output.GetRow8(y), context);
+                black.Plane.AsSpan(y * black.BlockColumns * 8, info.Width), top != bottom, inverted,
+                destination.Slice(y * stride, info.Width * channels), context, channels);
         }
         return true;
     }
 
     internal static void RenderHalfYcckRow(ReadOnlySpan<byte> luma, ReadOnlySpan<byte> cbTop, ReadOnlySpan<byte> cbBottom,
         ReadOnlySpan<byte> crTop, ReadOnlySpan<byte> crBottom, ReadOnlySpan<byte> black,
-        bool interpolateRows, bool inverted, Span<byte> output, OperationContext context)
+        bool interpolateRows, bool inverted, Span<byte> output, OperationContext context, int channels = 4)
     {
         var half = (luma.Length + 1L) / 2;
-        if (black.Length != luma.Length || cbTop.Length != half || cbBottom.Length != half
-            || crTop.Length != half || crBottom.Length != half || output.Length != luma.Length * 4L)
-            throw new ArgumentException("YCCK rows require full luma/black, two half-width chroma rows and four output bytes per pixel.");
+        if (channels is not (3 or 4) || black.Length != luma.Length || cbTop.Length != half || cbBottom.Length != half
+            || crTop.Length != half || crBottom.Length != half || output.Length != luma.Length * (long)channels)
+            throw new ArgumentException("YCCK rows require full luma/black, two half-width chroma rows and RGB or RGBA output.");
         // Small bounded stack storage; source planes and output keep their existing
         // owners. Each tile reaches the existing color kernel as a complete row.
         Span<byte> scratch = stackalloc byte[64 * 3];
@@ -76,7 +80,7 @@ internal ref partial struct JpegDecoder
                 uValues[i] = (byte)(JpegBlackColor.Product(inverted ? 128 - u : u - 128, k) + 128);
                 vValues[i] = (byte)(JpegBlackColor.Product(inverted ? 128 - v : v - 128, k) + 128);
             }
-            JpegInverseColor.WriteRow(yValues[..count], uValues[..count], vValues[..count], output.Slice(start * 4, count * 4), 4);
+            JpegInverseColor.WriteRow(yValues[..count], uValues[..count], vValues[..count], output.Slice(start * channels, count * channels), channels);
         }
     }
 

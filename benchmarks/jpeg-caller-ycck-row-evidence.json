@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "accepted": true,
+  "productionChanged": true,
+  "producers": {
+    "linuxSha256": "9469af0d7ec619fbf0aea62cf88865cdf599091981cc9e86f3fb7a8fd0f98ca3",
+    "windowsSha256": "82d9b368abd176095766a077550ea6387e17f6631e660270bae2fe1a73ca4e31"
+  },
+  "decision": {
+    "mode": "confirm",
+    "baselineCurrentIndependent12Reused": true,
+    "raw": {
+      "statistics": {
+        "reduction": 0.8739980242369279,
+        "separated": true
+      },
+      "unfilteredActualStatistics": {
+        "reduction": 0.8741109179576809,
+        "separated": true
+      }
+    },
+    "nativeNormalizedReduction": 0.8739484716688162,
+    "nativePointDrift": -0.00039311358432292387,
+    "baselineNormalizedLower": 5.48912928841103,
+    "candidateNormalizedUpper": 0.711277953372039,
+    "normalizedSeparated": true,
+    "screenPassed": true,
+    "passed": true,
+    "candidateRatio": 0.7086904992138304,
+    "candidateUpper": 0.711277953372039,
+    "candidateAllocation": {
+      "BytesAllocatedPerOperation": 762704
+    },
+    "allocationDelta": 79,
+    "candidateMeanMicroseconds": 428.98153350694434
+  },
+  "original": {
+    "managedMicroseconds": 3404.5619595170456,
+    "nativeMicroseconds": 605.5538190104166,
+    "ratio": 5.622228533015792,
+    "upper": 5.718904053832434,
+    "lower": 5.48912928841103,
+    "allocatedBytes": 762625,
+    "status": "confirmed-gap",
+    "managedActuals": 12,
+    "nativeSamplesEachBracket": 12,
+    "quietGuardsPassed": true,
+    "validationSha256": "19184b60530d45f6c660fefad8da339def86decb110250f2fe0c8d7e06117507",
+    "inputSha256": "211fcc243d40db6e6e3e8944a2e479825289201bff140e5cf2901e85ee97053d",
+    "managedOutputSha256": "4faf220748d6a975919c876f0d2f0f554196e21a81d909c1f6c9bdae8ad94634",
+    "nativeOutputSha256": "4faf220748d6a975919c876f0d2f0f554196e21a81d909c1f6c9bdae8ad94634",
+    "outputBytes": 398601,
+    "boundary": "Same original resident Adobe2 YCCK420/full-K packet to fresh zeroed packed caller RGB24. Includes admission, complete decode of all4components, centered interpolation, binary64 matrix/inversion/black, packing and independent output lifetime. Native software mjpeg resets state, decodes all4components/K, applies chroma/black normalization, converts YUVA444P full-range BT601 directly to freshRGB24 and releases planes/output. Context, padded resident packet and empty wrappers reused, never decoded content. No RGBA intermediate/header patch/ICC/EXIF transformation. Preparation, hashing, validation, I/O, IPC and startup excluded. One CPU/thread. Exact analytical managed samples; native normal/scalar CLI bound transition16/interior4/RMSE1.5 fixed to this packet. Source/padding and two independent live output owners checked outside timing."
+  },
+  "cases": {
+    "Ycck420CallerRgb": {
+      "managedMicroseconds": 428.98153350694434,
+      "nativeMicroseconds": 605.315767578125,
+      "ratio": 0.7086904992138304,
+      "upper": 0.711277953372039,
+      "lower": 0.7054705147361031,
+      "allocatedBytes": 762704,
+      "status": "confirmed-pass-stop",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "211fcc243d40db6e6e3e8944a2e479825289201bff140e5cf2901e85ee97053d",
+      "managedOutputSha256": "4faf220748d6a975919c876f0d2f0f554196e21a81d909c1f6c9bdae8ad94634",
+      "nativeOutputSha256": "4faf220748d6a975919c876f0d2f0f554196e21a81d909c1f6c9bdae8ad94634",
+      "outputBytes": 398601,
+      "receiptSha256": "c3cbfce379a688fe70984f3fed7d94c777c27bd59760fc263066b9eb9b1af2a8"
+    },
+    "Ycck420": {
+      "managedMicroseconds": 426.1811009469697,
+      "nativeMicroseconds": 710.5131686197916,
+      "ratio": 0.5998215371220331,
+      "upper": 0.61657728730019,
+      "lower": 0.5849122877429809,
+      "allocatedBytes": 895547,
+      "status": "confirmed-pass-stop",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "211fcc243d40db6e6e3e8944a2e479825289201bff140e5cf2901e85ee97053d",
+      "managedOutputSha256": "51af083c5f02e9b5151017b1896aba53e051fe319174ede5704867fd84d25583",
+      "nativeOutputSha256": "51af083c5f02e9b5151017b1896aba53e051fe319174ede5704867fd84d25583",
+      "outputBytes": 531468,
+      "receiptSha256": "6ac79e08a1d6c12d199e2d21143d1805c4d123510c7402c8907bd1ebc43a18c7"
+    },
+    "CmykCaller": {
+      "managedMicroseconds": 346.34363967803034,
+      "nativeMicroseconds": 331.6302027994792,
+      "ratio": 1.0443669990077702,
+      "upper": 1.058979468972823,
+      "lower": 1.030419798323889,
+      "allocatedBytes": 1085961,
+      "status": "confirmed-gap",
+      "managedActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "quietGuardsPassed": true,
+      "inputSha256": "80c4e830cbf95a71d3f677bd8bd1ae48fe936a8464f9b30817b85d72887ae32e",
+      "managedOutputSha256": "2bbab8263563dfa49dd2d79e49d4719f024a98a352f184e79e57d3419b240310",
+      "nativeOutputSha256": "2bbab8263563dfa49dd2d79e49d4719f024a98a352f184e79e57d3419b240310",
+      "outputBytes": 531468,
+      "receiptSha256": "cd8651d2ebbd818f05f0175cad214b7b5d514a9a910aabf7b789006352815e03"
+    }
+  },
+  "qualification": {
+    "fullChecksEachOs": 5369,
+    "internalChecksEachOs": 2176,
+    "publicChecksEachOs": 2245,
+    "liveChecksEachOs": 948,
+    "focusedInternalEachMode": 4,
+    "focusedPublicEachMode": 399,
+    "normalAndScalarBothOs": true,
+    "sameActualPackageBothOs": true,
+    "threeExamplesBothOs": true,
+    "package": {
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "d4154263c3debde15d303a1d3dfdb56f6c7f745c3bfa472f75a3358555c4b65b",
+      "bytes": 390718,
+      "librarySha256": "82d9b368abd176095766a077550ea6387e17f6631e660270bae2fe1a73ca4e31",
+      "symbolsSha256": "76cafb72b559f37fd2dda9b56a1a9b35365a631a3333941dbd07fe5f4f62ffb1",
+      "actualConsumerPassed": true,
+      "usageExamples": 3
+    }
+  },
+  "workflow": {
+    "coreInternalBuildsEachOs": 1,
+    "publicHarnessNativeSelectorDifferentialBuilds": 0,
+    "newProfiles": 0,
+    "newPerformanceCases": 0,
+    "primaryShorts": 1,
+    "primaryIndependentConfirmations": 1,
+    "affectedCompanionConfirmations": 2,
+    "repeatedValidScores": 0
+  },
+  "validity": {
+    "affected": "Only current half-grid YCCK row traversal/packing and caller-four-component dispatch. Current callerRGB, ownedYCCK and callerCMYK costs supersede JDO36 for these three cases.",
+    "reused": "All other 26 JDO36 decode/caller/validation costs retain unchanged executed primitives. All encoders, other codecs, inspection, editing and text reuse applicable qualification and performance evidence.",
+    "scope": "Existing fixed 6704-byte 513x259 YCCK420 packet to fresh caller-owned packedRGB24 398601bytes, current exact normal/scalar native samples, complete decode/normalization/output acquisition/release. ICC/EXIF reorientation disabled in this timing; existing public and package tests retain opt-in orientation, inversion, padding and ownership."
+  },
+  "raw": {
+    "file": "jpeg-caller-ycck-rows-qualified.tar.xz",
+    "sha256": "2062ec67e919e6b50feae4c01c29ec18e6a53767404a8f0d21136eb6e507442b",
+    "bytes": 7083936,
+    "members": 171,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "dependencies": [
+    {
+      "file": "jpeg-direct-rgb-result-qualified.tar.xz",
+      "sha256": "c1c78391e1b59f5fda90ab160a8f73183b4fee8df8738e3fa549a23b9dee27a6",
+      "bytes": 27478528,
+      "members": 956,
+      "mirrored": true,
+      "allMembersVerified": true
+    }
+  ]
+}
