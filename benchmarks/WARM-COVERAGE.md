@@ -7,6 +7,13 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Exact byte transpose](WARM-BYTE-TRANSPOSE-MATRIX.md) passes and stops at
+0.691/upper0.711,112B/op:31.02%elapsed/32.38%normalized, exact pixels and
+separated confidence. One3/12 reuses the unchanged primitive's original12;
+word kernel/common dispatch unchanged, word cost reused.5376checks/OS,
+100focused public normal/scalar/OS, SAMEactualpackage/threeexamples bothOS pass.
+No new workload/profile/grid. Summary105comparisons;all268paths remain.
+
 [Current opaque RGBA8 VP8](CURRENT-VP8-OPAQUE8-COST.md) independently confirms
 1.268/upper1.308,1201552B/op,exact72380Bpacket. Original source/native/settings,
 freshoutput/owners/pixel/quietgates pass. One12,zerobuilds/newcases/fixtures/

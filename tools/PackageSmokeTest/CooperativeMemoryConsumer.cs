@@ -41,12 +41,13 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine("Packaged direct RGB JPEG preserves exact pixels, bounded ownership, async and admission recovery.");
     }
 
-    private static void VerifyWordTranspose()
+    private static void VerifyTranspose(int depth)
     {
-        const int width = 35, height = 37, bytes = width * height * 8;
+        const int width = 35, height = 37;
+        var bytes = width * height * (depth / 8) * 4;
         using var root = new TestMemoryBudget(3L * bytes);
         var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
-        using var source = ImageBuffer.Create(width, height, 16, limits);
+        using var source = ImageBuffer.Create(width, height, depth, limits);
         var original = new ushort[width * height * 4];
         for (var y = 0; y < height; y++)
         for (var x = 0; x < width; x++)
@@ -54,7 +55,12 @@ internal static class CooperativeMemoryConsumer
         {
             var value = channel == 3 && (x + y) % 7 == 0 ? (ushort)0
                 : (ushort)(x * 999 + y * 357 + channel * 8191);
-            source.GetRow16(y)[x * 4 + channel] = value;
+            if (depth == 8)
+            {
+                value = (byte)value;
+                source.GetRow8(y)[x * 4 + channel] = (byte)value;
+            }
+            else source.GetRow16(y)[x * 4 + channel] = value;
             original[(y * width + x) * 4 + channel] = value;
         }
         using var first = ImageTransforms.Transpose(source, false, limits);
@@ -71,18 +77,21 @@ internal static class CooperativeMemoryConsumer
         for (var y = 0; y < height; y++)
         for (var x = 0; x < width; x++)
         for (var channel = 0; channel < 4; channel++)
-            if (second.GetRow16(x)[y * 4 + channel] != original[(y * width + x) * 4 + channel])
+            if ((depth == 8 ? second.GetRow8(x)[y * 4 + channel] : second.GetRow16(x)[y * 4 + channel])
+                != original[(y * width + x) * 4 + channel])
                 throw new Exception("Packaged transpose changed complete pixels or scalar tails.");
         using (var restored = ImageTransforms.Transpose(second, false, limits))
         {
             second.Dispose();
             if (root.Bytes != bytes) throw new Exception("Packaged transpose recovery charge differs.");
             for (var y = 0; y < height; y++)
-                if (!restored.GetRow16(y).SequenceEqual(original.AsSpan(y * width * 4, width * 4)))
+            for (var sample = 0; sample < width * 4; sample++)
+                if ((depth == 8 ? restored.GetRow8(y)[sample] : restored.GetRow16(y)[sample])
+                    != original[y * width * 4 + sample])
                     throw new Exception("Packaged transpose recovery pixels differ.");
         }
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged transpose leaked or disposed the borrowed root.");
-        Console.WriteLine("Packaged RGBA16 transpose preserves exact pixels, tails and shared ownership.");
+        Console.WriteLine($"Packaged RGBA{depth} transpose preserves exact pixels, tails and shared ownership.");
     }
 
     internal static async Task Verify()
@@ -114,7 +123,8 @@ internal static class CooperativeMemoryConsumer
         }
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged owners leaked or disposed the borrowed budget.");
         await VerifyWordPngPacking(budget, limits);
-        VerifyWordTranspose();
+        VerifyTranspose(8);
+        VerifyTranspose(16);
         await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try

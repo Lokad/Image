@@ -22,10 +22,10 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production qualification covers **5,369 checks per OS**, including 948 live
+Current production qualification covers **5,376 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused JPEG pixel/row/packet/admission checks pass normal/scalar on both OSes;
-applicable word-transpose and unrelated qualification remains valid.
+Focused exact transpose pixel/admission checks pass normal/scalar on both OSes;
+applicable JPEG and unrelated qualification remains valid.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -51,8 +51,10 @@ independent costs: seven pass and stop, caller/restart remain confirmed gaps,
 and shared-budget/async cases are confidence-open. No broader parity claim follows.
 [RGBA16 transpose](../benchmarks/WARM-WORD-TRANSPOSE-MATRIX.md) independently saves
 **32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
-112 B/op. Its **upper 0.748×** passes and stops; the byte companion remains a
-confirmed gap at **1.022 / upper 1.024×**, also 112 B/op.
+112 B/op. Its **upper 0.748×** passes and stops. [RGBA8 transpose](../benchmarks/WARM-BYTE-TRANSPOSE-MATRIX.md)
+now independently saves **31.02% elapsed / 32.38% native-normalized**, with exact
+pixels and unchanged 112 B/op; **0.691 / upper 0.711×** also passes and stops.
+The word kernel and common dispatch are unchanged; their evidence is reused.
 [Direct retained RGB JPEG results](../benchmarks/WARM-JPEG-DIRECT-RGB-RESULT.md)
 save **4.27% elapsed / 4.56% native-normalized** with separated confidence and
 exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the
@@ -202,7 +204,7 @@ histories remain in the coverage links and raw evidence.
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
-| Plain transpose RGBA8 † → 259×513 | 38.86 | 38.02 | 1.022 / 1.024 | 112 |
+| Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
 
 **Inspection and pixel-coding validation**
 

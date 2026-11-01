@@ -1339,14 +1339,20 @@ def render():
     assert transpose_cost['decision']['normalizedSeparated']
     assert transpose_cost['qualification']['fullChecksEachOs'] == 5352
     assert transpose_cost['qualification']['package']['sha256'] == transpose_cost['qualification']['linuxPackage']['sameActualPackageSha256']
+    byte_transpose_cost = json.loads((ROOT / 'benchmarks/byte-transpose-matrix-evidence.json').read_text(encoding='utf-8'))
+    assert byte_transpose_cost['accepted'] and byte_transpose_cost['decision']['normalizedSeparated']
+    assert byte_transpose_cost['qualification']['fullChecksEachOs'] == 5376
+    assert byte_transpose_cost['qualification']['package']['sha256'] == byte_transpose_cost['qualification']['linuxPackage']['sameActualPackageSha256']
+    assert byte_transpose_cost['reuse']['wordKernelAndEntryUnchanged']
     for case, depth in [('Whole16', 16), ('Whole8', 8)]:
-        observation = transpose_cost['cases'][case][-1]
+        selected = byte_transpose_cost if depth == 8 else transpose_cost
+        observation = selected['cases'][case][-1]
         receipt = observation['receipt']
         assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
-        assert receipt['librarySha256'] == transpose_cost['producers']['linuxSha256']
+        assert receipt['librarySha256'] == selected['producers']['linuxSha256']
         assert receipt['allRgbaSamplesExact'] and receipt['alphaExact'] and receipt['hiddenRgbExact']
         assert receipt['sourceUnchanged'] and receipt['independentOwnedOutput']
-        assert (observation['conservativeRatioUpper'] < 1) == (case == 'Whole16')
+        assert observation['conservativeRatioUpper'] < 1
         rows.append(('editing', f'| Plain transpose RGBA{depth} † → 259×513 | '
                      f'{observation["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
@@ -1563,10 +1569,10 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production qualification covers **5,369 checks per OS**, including 948 live
+Current production qualification covers **5,376 checks per OS**, including 948 live
 comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused JPEG pixel/row/packet/admission checks pass normal/scalar on both OSes;
-applicable word-transpose and unrelated qualification remains valid.
+Focused exact transpose pixel/admission checks pass normal/scalar on both OSes;
+applicable JPEG and unrelated qualification remains valid.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -1592,8 +1598,10 @@ independent costs: seven pass and stop, caller/restart remain confirmed gaps,
 and shared-budget/async cases are confidence-open. No broader parity claim follows.
 [RGBA16 transpose](../benchmarks/WARM-WORD-TRANSPOSE-MATRIX.md) independently saves
 **32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
-112 B/op. Its **upper 0.748×** passes and stops; the byte companion remains a
-confirmed gap at **1.022 / upper 1.024×**, also 112 B/op.
+112 B/op. Its **upper 0.748×** passes and stops. [RGBA8 transpose](../benchmarks/WARM-BYTE-TRANSPOSE-MATRIX.md)
+now independently saves **31.02% elapsed / 32.38% native-normalized**, with exact
+pixels and unchanged 112 B/op; **0.691 / upper 0.711×** also passes and stops.
+The word kernel and common dispatch are unchanged; their evidence is reused.
 [Direct retained RGB JPEG results](../benchmarks/WARM-JPEG-DIRECT-RGB-RESULT.md)
 save **4.27% elapsed / 4.56% native-normalized** with separated confidence and
 exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the

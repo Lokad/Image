@@ -4,7 +4,8 @@ The existing RGBA16 transpose independently improves **32.57% elapsed**
 (32.56% all-actual / **31.77% native-normalized**), with exact pixels and unchanged
 **112 B/op**. Raw confidence separates in both views; normalized candidate upper
 **0.748** is below original lower **1.081**. This fixed path passes the warm
-single-CPU ≤1× objective and stops. The byte companion remains a confirmed gap.
+single-CPU ≤1× objective and stops. The byte companion below is historical; its current passing result is in
+[the byte transpose round](WARM-BYTE-TRANSPOSE-MATRIX.md).
 
 | Existing complete 513×259 → 259×513 transpose | Lokad µs | Ratio / upper | Managed B/op | Status |
 |---|---:|---:|---:|---|

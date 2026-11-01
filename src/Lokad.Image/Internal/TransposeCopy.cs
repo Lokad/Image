@@ -74,19 +74,45 @@ internal static class TransposeCopy
     private static void Copy<T>(ReadOnlySpan<T> source, Span<T> destination, int width, int height,
         OperationContext context) where T : unmanaged
     {
-        // A tile contains at most 1024 pixels; both working regions stay small.
-        // Full-pixel assignments retain channel byte order at either sample depth.
+        // Reified generic types keep the UInt64 portable fallback scalar.
+        var vectorized = typeof(T) == typeof(uint) && Sse2.IsSupported;
         for (var y = 0; y < height; y += 32)
         for (var x = 0; x < width; x += 32)
         {
             var rows = Math.Min(32, height - y);
             var columns = Math.Min(32, width - x);
             context.Cancellation.ThrowIfCancellationRequested();
-            for (var column = x; column < x + columns; column++)
+            var vectorRows = vectorized ? rows & ~3 : 0;
+            var vectorColumns = vectorized ? columns & ~3 : 0;
+            if (vectorized)
             {
-                var input = y * width + column;
-                var output = destination.Slice(column * height + y, rows);
-                for (var row = 0; row < rows; row++)
+                var inputPixels = MemoryMarshal.Cast<T, uint>(source);
+                var outputPixels = MemoryMarshal.Cast<T, uint>(destination);
+                for (var row = 0; row < vectorRows; row += 4)
+                for (var column = 0; column < vectorColumns; column += 4)
+                {
+                    var input = (y + row) * width + x + column;
+                    var r0 = Vector128.Create(inputPixels.Slice(input, 4));
+                    var r1 = Vector128.Create(inputPixels.Slice(input + width, 4));
+                    var r2 = Vector128.Create(inputPixels.Slice(input + 2 * width, 4));
+                    var r3 = Vector128.Create(inputPixels.Slice(input + 3 * width, 4));
+                    var low01 = Sse2.UnpackLow(r0, r1).AsUInt64();
+                    var high01 = Sse2.UnpackHigh(r0, r1).AsUInt64();
+                    var low23 = Sse2.UnpackLow(r2, r3).AsUInt64();
+                    var high23 = Sse2.UnpackHigh(r2, r3).AsUInt64();
+                    var output = (x + column) * height + y + row;
+                    Sse2.UnpackLow(low01, low23).AsUInt32().CopyTo(outputPixels.Slice(output, 4));
+                    Sse2.UnpackHigh(low01, low23).AsUInt32().CopyTo(outputPixels.Slice(output + height, 4));
+                    Sse2.UnpackLow(high01, high23).AsUInt32().CopyTo(outputPixels.Slice(output + 2 * height, 4));
+                    Sse2.UnpackHigh(high01, high23).AsUInt32().CopyTo(outputPixels.Slice(output + 3 * height, 4));
+                }
+            }
+            for (var column = 0; column < columns; column++)
+            {
+                var firstRow = column < vectorColumns ? vectorRows : 0;
+                var input = (y + firstRow) * width + x + column;
+                var output = destination.Slice((x + column) * height + y + firstRow, rows - firstRow);
+                for (var row = 0; row < output.Length; row++)
                 {
                     output[row] = source[input];
                     input += width;

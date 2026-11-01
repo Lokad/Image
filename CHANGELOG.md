@@ -10,7 +10,7 @@
   avoiding temporary component planes while preserving exact pixels and admission.
 - Faster 4:2:0 and 4:2:2 JPEG encoding through exact SIMD vertical chroma rows,
   preserving packets, scalar fallbacks and existing memory ownership.
-- Faster RGBA16 transpose through safe AVX2, preserving exact pixels, scalar
+- Faster RGBA8/16 transpose through safe SSE2/AVX2, preserving exact pixels, scalar
   fallbacks, cancellation and shared-memory ownership.
 - Exact low-alpha resizing uses Int128 where overflow bounds permit, reducing
   temporary allocations while retaining arbitrary-precision fallback and admission.
