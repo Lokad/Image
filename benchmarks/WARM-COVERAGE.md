@@ -7,6 +7,17 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Packed VP8 probability binding](VP8-PACKED-PROBABILITY-BINDING-REJECTED.md)
+misses one fresh short screen: point elapsed0.65% higher/normalized0.52% higher,
+unchanged760,564B/op. Original input/filter8/native/pixel/owner/quiet gates pass.
+No confirmation/variant follows. Source/core/PDB/XML/linked tests restored exactly;
+32 internal/264 public checks pass candidate AND restored normal/scalar each OS.
+No new tests/public/harness/native/selector builds or full/package repeats.
+Unchanged5,342-check/actual-package proof and accepted costs remain. One prior
+profile rejects a filter trial at2.19% sample headroom; JIT guides this separate
+model-binding test, without phase/predicted-speed claims. Close packed-model
+variants and retain the full268-path objective.
+
 [Current tight PNG decoding](CURRENT-TIGHT-PNG-DECODE-COSTS.md) resolves two
 existing post-GFNI measurement uncertainties on unchanged qualified production:
 byte is a **1.096 / upper 1.119** gap, 68,224 B/op; word remains confidence-open
