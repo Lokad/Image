@@ -1,5 +1,9 @@
 # Font and text reference feasibility
 
+The [complete public text adapter](PUBLIC-TEXT-LAYOUT-REFERENCE.md) now supplies
+the layout/fitting boundary identified below, with four existing controls and
+explicitly proposed timing/word-raster gates. The copied-font evidence remains valid.
+
 The existing DejaVu Sans 2.37 regular face has an equivalent **copy/open/retain/
 release** reference candidate using FreeType 2.13.2, FFmpeg's text backend.
 Each native result owns its byte copy and memory face, survives caller-input

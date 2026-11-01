@@ -7,12 +7,19 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Public text reference readiness](PUBLIC-TEXT-LAYOUT-REFERENCE.md) supplies
+retained paths, glyph/cluster data, real bounds and complete fitting on four
+existing controls. Both platforms match glyphs/clusters/lines and select16.75px
+after30trials; maximum bounds error<0.000008px. Existing byte raster gates pass.
+The proposed six-control timing reference and word gates await approval; no
+timing, current cost or production/package change. Nine controls stay unmeasured.
+
 [Font/text reference feasibility](FONT-TEXT-REFERENCE-FEASIBILITY.md) establishes
 copied font ownership and exact metrics on both platforms, with shared admission,
 terminal refusal and cleanup. A FreeType font-loading exception awaits approval.
 Prepared-path rendering is exact at byte depth on one existing Latin control;
-word RGB is exact, six alpha samples differ by one. Layout/fitting metadata still
-needs an equivalent public boundary. Nine controls remain unmeasured; no current
+word RGB is exact, six alpha samples differ by one. Its layout/fitting boundary
+is supplied by the complete public adapter above. Nine controls remain unmeasured; no current
 costs, production code, package or qualification proofs change.
 
 [Packed ordinary VP8 quantization](VP8-PACKED-QUANTIZATION-REJECTED.md) fails

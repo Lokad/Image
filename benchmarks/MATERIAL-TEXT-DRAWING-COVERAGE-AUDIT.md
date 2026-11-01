@@ -26,6 +26,12 @@ reproduce one existing byte rendering control; word rendering differs only at
 six alpha samples by one. Their bounds do not replace layout/fitting metadata.
 No new timing, font inventory or performance exception is implied.
 
+[The complete public text reference](PUBLIC-TEXT-LAYOUT-REFERENCE.md) now
+retains outlines and glyph/cluster data, checks actual bounds and includes all
+fitting trials plus retained-winner construction. Four existing controls match
+on both platforms; byte raster gates pass. The six-control reference exception
+and proposed word raster gates await approval. Nine controls remain unmeasured.
+
 The immutable original inventory contains no text-layout, font, fitting, drawing
 or compositing comparison rows. At the inspected revision, no benchmark C# entry
 point referenced these public APIs. The earlier coverage statement that they reused
