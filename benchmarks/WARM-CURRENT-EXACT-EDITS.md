@@ -1,5 +1,10 @@
 # Current single-owner exact-edit evidence
 
+Historical single-owner snapshot. The plain RGBA8/16 transpose rows are
+superseded by [current word-transpose evidence](WARM-WORD-TRANSPOSE-MATRIX.md).
+Later ownership/cancellation changes require path-specific validity review;
+retained kernel witnesses alone do not establish current CPU performance.
+
 The shared overwrite-storage pool change affects complete crop/clone/permutation
 operations even though their pixel kernels retain valid witnesses. Resolve each
 named operation on the existing immutable qualified production build, then stop

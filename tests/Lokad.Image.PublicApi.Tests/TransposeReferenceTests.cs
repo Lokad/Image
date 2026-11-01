@@ -15,6 +15,12 @@ public sealed class TransposeReferenceTests
     [InlineData(16, 1, 5)]
     [InlineData(8, 7, 1)]
     [InlineData(16, 7, 1)]
+    [InlineData(16, 3, 7)]
+    [InlineData(16, 4, 4)]
+    [InlineData(16, 5, 7)]
+    [InlineData(16, 31, 33)]
+    [InlineData(16, 32, 32)]
+    [InlineData(16, 33, 35)]
     public void TransposeMatchesIndependentPlacementAndExactAdmission(int depth, int width, int height)
     {
         using var source = OriginalPixels.Buffer(width, height, depth);
@@ -59,6 +65,42 @@ public sealed class TransposeReferenceTests
         Assert.Equal(expected, OriginalPixels.Bytes(oriented));
         Assert.Equal(original, OriginalPixels.Bytes(source));
         Assert.Equal(ImageOrientation.Transpose, source.Orientation);
+    }
+
+    [Fact]
+    public void WordPayloadsKeepHiddenRgbSharedAdmissionAndIndependentSurvivors()
+    {
+        const int width = 35, height = 37, bytes = width * height * 8;
+        using var root = new TestMemoryBudget(3L * bytes);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
+        using var source = ImageBuffer.Create(width, height, 16, limits);
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+        {
+            var index = y * width + x;
+            var payload = unchecked((ulong)(index + 1) * 0x9e3779b97f4a7c15UL)
+                ^ System.Numerics.BitOperations.RotateLeft(1UL, index & 63);
+            if (index % 11 == 0) payload &= 0x0000ffffffffffffUL;
+            var row = source.GetRow16(y);
+            for (var channel = 0; channel < 4; channel++) row[x * 4 + channel] = (ushort)(payload >> (channel * 16));
+        }
+        var original = OriginalPixels.Bytes(source);
+        var expected = TransposeReference(original, width, height, 16);
+        using var first = ImageTransforms.Transpose(source, false, limits);
+        using var second = ImageTransforms.Transpose(source, false, limits);
+        Assert.Equal(3L * bytes, root.Bytes);
+        Assert.Equal(expected, OriginalPixels.Bytes(first)); Assert.Equal(expected, OriginalPixels.Bytes(second));
+        var error = Assert.Throws<ImageLimitException>(() => ImageTransforms.Transpose(source, false, limits));
+        Assert.Equal(ImageLimitScope.SharedBudget, error.Scope); Assert.Equal(3L * bytes, root.Bytes);
+        Assert.Equal(original, OriginalPixels.Bytes(source));
+        source.Dispose(); first.Dispose(); Assert.Equal(bytes, root.Bytes);
+        Assert.Equal(expected, OriginalPixels.Bytes(second));
+        using (var restored = ImageTransforms.Transpose(second, false, limits))
+        {
+            Assert.Equal(original, OriginalPixels.Bytes(restored)); Assert.Equal(2L * bytes, root.Bytes);
+            second.Dispose(); Assert.Equal(bytes, root.Bytes); Assert.Equal(original, OriginalPixels.Bytes(restored));
+        }
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     private static byte[] TransposeReference(byte[] input, int width, int height, int depth)

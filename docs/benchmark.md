@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **100 selected comparisons** combine qualified
+Updated 2026-11-01. These **102 selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
 [268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
 validity, missing confirmations and remaining gaps. Full warm parity is open.
@@ -22,9 +22,9 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Retained production qualification covers **5,342 checks per OS**, including 948 live comparisons.
-Three additional [probe-contract checks](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md)
-pass normal/scalar on both OSes; the unqualified completion-wrapper trial is removed.
+Current production qualification covers **5,352 checks per OS**, including 948 live
+comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
+Focused word-transpose/ownership checks pass normal/scalar on both OSes.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -38,6 +38,10 @@ saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
 Resident byte/word and async controls independently pass; forward-only and
 live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
 25.90% elapsed gain includes an 8.61% faster native bracket between runs.
+[RGBA16 transpose](../benchmarks/WARM-WORD-TRANSPOSE-MATRIX.md) independently saves
+**32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
+112 B/op. Its **upper 0.748×** passes and stops; the byte companion remains a
+confirmed gap at **1.022 / upper 1.024×**, also 112 B/op.
 Three existing [baseline JPEG 4:4:4 decode boundaries](../benchmarks/CURRENT-BASELINE-JPEG444-DECODE-COSTS.md)
 now independently confirm **1.147/1.232/1.330×** gaps on owned/native/live-token
 inputs, with exact native pixels and current allocations. This resolves older
@@ -184,6 +188,8 @@ acceptance histories are retained in the coverage links and raw evidence.
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
+| Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
+| Plain transpose RGBA8 † → 259×513 | 38.86 | 38.02 | 1.022 / 1.024 | 112 |
 
 **Inspection and pixel-coding validation**
 

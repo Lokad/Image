@@ -7,6 +7,15 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Safe word transpose](WARM-WORD-TRANSPOSE-MATRIX.md) independently improves
+32.57%filtered/32.56%allactual/31.77%normalized with separated confidence:
+32.929us,0.740/upper0.748,unchanged112B/op. Exact original/native pixels and
+owners pass;Whole16passes/STOP. ExistingWhole8 confirms38.855us,1.022/upper1.024,
+112B/op gap;no byte speedup claim. Onecurrentoriginal12,onecandidate short/12,
+onebytecompanion12,zero new profiles/cases or repeated scores. BothOS5352full/
+livechecks,201focusedpublicnormal/scalar andSAMEactualReleasepackage/threeexamples
+pass. No extra buffer/owner/charge. Close word matrix variants;all268remain.
+
 [Default mixed-axis bicubic confirmations](CURRENT-DEFAULT-MIXED-BICUBIC-COSTS.md)
 resolve two existing short-only controls:Cross8 912.313us,1.084/upper1.107,
 731768B/op;Cross16 974.304us,1.178/upper1.196,1263193B/op. Both confirmedgaps.

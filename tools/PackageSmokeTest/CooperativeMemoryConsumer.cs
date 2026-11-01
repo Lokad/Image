@@ -2,6 +2,50 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyWordTranspose()
+    {
+        const int width = 35, height = 37, bytes = width * height * 8;
+        using var root = new TestMemoryBudget(3L * bytes);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * bytes };
+        using var source = ImageBuffer.Create(width, height, 16, limits);
+        var original = new ushort[width * height * 4];
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+        for (var channel = 0; channel < 4; channel++)
+        {
+            var value = channel == 3 && (x + y) % 7 == 0 ? (ushort)0
+                : (ushort)(x * 999 + y * 357 + channel * 8191);
+            source.GetRow16(y)[x * 4 + channel] = value;
+            original[(y * width + x) * 4 + channel] = value;
+        }
+        using var first = ImageTransforms.Transpose(source, false, limits);
+        using var second = ImageTransforms.Transpose(source, false, limits);
+        if (root.Bytes != 3L * bytes) throw new Exception("Packaged transpose retained charges differ.");
+        try
+        {
+            using var unexpected = ImageTransforms.Transpose(source, false, limits);
+            throw new Exception("Packaged transpose ignored aggregate refusal.");
+        }
+        catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+        source.Dispose(); first.Dispose();
+        if (root.Bytes != bytes) throw new Exception("Packaged transpose ownership depends on disposed inputs.");
+        for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+        for (var channel = 0; channel < 4; channel++)
+            if (second.GetRow16(x)[y * 4 + channel] != original[(y * width + x) * 4 + channel])
+                throw new Exception("Packaged transpose changed complete pixels or scalar tails.");
+        using (var restored = ImageTransforms.Transpose(second, false, limits))
+        {
+            second.Dispose();
+            if (root.Bytes != bytes) throw new Exception("Packaged transpose recovery charge differs.");
+            for (var y = 0; y < height; y++)
+                if (!restored.GetRow16(y).SequenceEqual(original.AsSpan(y * width * 4, width * 4)))
+                    throw new Exception("Packaged transpose recovery pixels differ.");
+        }
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged transpose leaked or disposed the borrowed root.");
+        Console.WriteLine("Packaged RGBA16 transpose preserves exact pixels, tails and shared ownership.");
+    }
+
     internal static async Task Verify()
     {
         using var budget = new TestMemoryBudget(4 * 1024 * 1024);
@@ -31,6 +75,7 @@ internal static class CooperativeMemoryConsumer
         }
         if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged owners leaked or disposed the borrowed budget.");
         await VerifyWordPngPacking(budget, limits);
+        VerifyWordTranspose();
         using var empty = new TestMemoryBudget(0);
         try
         {

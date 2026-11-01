@@ -2,6 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
+- Faster RGBA16 transpose through safe AVX2, preserving exact pixels, scalar
+  fallbacks, cancellation and shared-memory ownership.
 - Exact low-alpha resizing uses Int128 where overflow bounds permit, reducing
   temporary allocations while retaining arbitrary-precision fallback and admission.
 - Tight-memory RGBA8 bicubic enlargement avoids a redundant error-bound division,

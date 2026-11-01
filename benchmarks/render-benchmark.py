@@ -1313,6 +1313,24 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    transpose_cost = json.loads((ROOT / 'benchmarks/word-transpose-matrix-evidence.json').read_text(encoding='utf-8'))
+    assert transpose_cost['productionChanged'] and transpose_cost['decision']['passed']
+    assert transpose_cost['decision']['normalizedSeparated']
+    assert transpose_cost['qualification']['fullChecksEachOs'] == 5352
+    assert transpose_cost['qualification']['package']['sha256'] == transpose_cost['qualification']['linuxPackage']['sameActualPackageSha256']
+    for case, depth in [('Whole16', 16), ('Whole8', 8)]:
+        observation = transpose_cost['cases'][case][-1]
+        receipt = observation['receipt']
+        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert receipt['librarySha256'] == transpose_cost['producers']['linuxSha256']
+        assert receipt['allRgbaSamplesExact'] and receipt['alphaExact'] and receipt['hiddenRgbExact']
+        assert receipt['sourceUnchanged'] and receipt['independentOwnedOutput']
+        assert (observation['conservativeRatioUpper'] < 1) == (case == 'Whole16')
+        rows.append(('editing', f'| Plain transpose RGBA{depth} † → 259×513 | '
+                     f'{observation["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
+                     f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1413,9 +1431,9 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Retained production qualification covers **5,342 checks per OS**, including 948 live comparisons.
-Three additional [probe-contract checks](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md)
-pass normal/scalar on both OSes; the unqualified completion-wrapper trial is removed.
+Current production qualification covers **5,352 checks per OS**, including 948 live
+comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
+Focused word-transpose/ownership checks pass normal/scalar on both OSes.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
@@ -1429,6 +1447,10 @@ saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
 Resident byte/word and async controls independently pass; forward-only and
 live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
 25.90% elapsed gain includes an 8.61% faster native bracket between runs.
+[RGBA16 transpose](../benchmarks/WARM-WORD-TRANSPOSE-MATRIX.md) independently saves
+**32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
+112 B/op. Its **upper 0.748×** passes and stops; the byte companion remains a
+confirmed gap at **1.022 / upper 1.024×**, also 112 B/op.
 Three existing [baseline JPEG 4:4:4 decode boundaries](../benchmarks/CURRENT-BASELINE-JPEG444-DECODE-COSTS.md)
 now independently confirm **1.147/1.232/1.330×** gaps on owned/native/live-token
 inputs, with exact native pixels and current allocations. This resolves older
