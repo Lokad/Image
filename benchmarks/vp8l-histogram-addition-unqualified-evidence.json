@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "VHA32",
+  "date": "2026-11-01",
+  "accepted": false,
+  "productionRestored": true,
+  "warmParityComplete": false,
+  "requiredMaterialPaths": 268,
+  "scope": "Existing513x259 EncodeOpaque8 complete owned VP8L,m4/Q75/exact1,normalization/repacking,admission/fresh output growth/disposal on both sides. Frozen original input/settings and121896Bcomplete native packet. No new workload.",
+  "original": {
+    "evidence": "warm-vp8l-color-bin-reuse-evidence.json#/cases/EncodeOpaque8",
+    "point": {
+      "meanMicroseconds": 99191.76545454546,
+      "allActualMeanMicroseconds": 99573.50616666667,
+      "ratio": 1.393063050378785,
+      "upper": 1.4465855621927097,
+      "allocatedBytes": 19992640,
+      "actuals": 12,
+      "packetBytes": 121896,
+      "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f"
+    }
+  },
+  "short": {
+    "meanMicroseconds": 93381.40783333333,
+    "allActualMeanMicroseconds": 93381.40783333333,
+    "ratio": 1.3366362463804573,
+    "upper": 1.535535608916586,
+    "allocatedBytes": 19992640,
+    "actuals": 3,
+    "packetBytes": 121896,
+    "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f"
+  },
+  "confirmation": {
+    "meanMicroseconds": 94573.22818181818,
+    "allActualMeanMicroseconds": 94816.87591666667,
+    "ratio": 1.3373609689558403,
+    "upper": 1.3686925982760918,
+    "allocatedBytes": 19992640,
+    "actuals": 12,
+    "packetBytes": 121896,
+    "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f"
+  },
+  "decision": {
+    "accepted": false,
+    "baselineIndependent12Reused": true,
+    "raw": {
+      "statistics": {
+        "reduction": 0.04656170047546648,
+        "separated": true
+      },
+      "unfilteredActualStatistics": {
+        "reduction": 0.04777003876953301,
+        "separated": true
+      }
+    },
+    "nativeNormalizedReduction": 0.03998532687217493,
+    "baselineNormalizedLower": 1.3490051108924892,
+    "candidateNormalizedUpper": 1.3686925982760918,
+    "normalizedSeparated": false,
+    "allocationIncreaseBytes": 0,
+    "candidateMeanMicroseconds": 94573.22818181818,
+    "candidateRatio": 1.3373609689558403,
+    "candidateUpper": 1.3686925982760918,
+    "independentConfirmations": 1,
+    "screenDecision": "vha32-screen-decision.json",
+    "reason": "Required point/confidence gates remain;no CBA2 normalized-overlap waiver applies to this primitive."
+  },
+  "screenDecision": {
+    "accepted": false,
+    "confirmationAuthorized": true,
+    "productionQualificationPending": true,
+    "rawElapsedGainPercent": 5.857701589024256,
+    "allActualElapsedGainPercent": 6.218620365711514,
+    "normalizedCostGainPercent": 4.050556360890112,
+    "allocationIncreaseBytes": 0,
+    "reason": "Filtered/all elapsed gains5.86/6.22percent. Normalized4.05056percent narrowly misses predeclared4.1percent short triage by0.04944percentage point and rounds to4.1at one decimal. Explicit bounded screen decision: earn ONE independent confirmation,not acceptance or a confidence waiver. Preserve every final raw/all/normalized confidence/correctness gate. No second pair/width variant."
+  },
+  "attribution": {
+    "noNewProfile": true,
+    "noTimingClaim": true,
+    "sourceHashes": {
+      "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": "794593305ff192490c30521dbddb394ba2ec8783e6810c689d0e48867252a05d",
+      "tests/Lokad.Image.Tests/Vp8lReferenceClusteringTests.cs": "3b22d7059f2a2c055b2ddee8bde381f6693f7efb363bd5b03b5794e6333af175"
+    },
+    "profile": "VPR1 opaque762exclusive samples,retained nettrace and source manifest",
+    "combineSamples": 26,
+    "finishSamples": 25,
+    "totalSamples": 762,
+    "caveat": "Clustering source is byte-identical. Later caller/callee changes mean historical percentages are not current component elapsed costs. Source matched attribution only supports one bounded complete-operation trial.",
+    "distinctPrimitive": "Pure count-array addition in Combine and final output aggregation,not population entropy estimation,bin reuse,histogram construction,group dispatch or search changes.",
+    "acceptance": "One opaque complete-operation short against unchanged CBA2 original. Meaningful>=4.1percent filtered/all/native-normalized may earn one independent12. No SIMD-width/inlining/layout/threshold variants. Exact packets/pixels,shared memory/cancellation/ownership and bounded storage remain."
+  },
+  "primitive": "One safe Vector512/256 Int32-add helper with scalar fallback/tails replaces scalar bank additions in clustering Combine and final output aggregation. Exact modular sums,bank/merge order,ties,cancellation checkpoints,admitted capacity and ownership remain. No population entropy/arithmetic or search changes.",
+  "selectedProducers": {
+    "windowsSha256": "acb0bcb01e1ba500533a82126364fa2cc7244648e778ee46f361706c33efb607",
+    "linuxSha256": "54e981bc2965e7e609427ececcbcfb7efdae87a0e9450d946c6508924b00d6e1"
+  },
+  "candidateLinuxSha256": "0c527abd04050465b3b77e880665e66ea85d593b084dd4ad3330fdbd4b08ae89",
+  "candidateCorrectness": {
+    "focused": {
+      "internal-normal": 29,
+      "public-normal": 153,
+      "internal-scalar": 29,
+      "public-scalar": 153
+    },
+    "exactOriginalNativePacketsAndPixels": true,
+    "sourceAndIndependentOutputOwnership": true,
+    "versionedQuietGuardsPassed": true,
+    "limitsOrExpectationsChanged": false,
+    "arithmeticTest": "Original scalar oracle over full integer patterns,guards,offsets,tails,identical-bank aliasing,mismatched lengths and zero per-call allocation."
+  },
+  "restoration": {
+    "productionRestoredByteExactly": true,
+    "sourceAndAllSavedBinaryHashesVerified": true,
+    "restorationBuilds": 0,
+    "focused": {
+      "internal-normal": 28,
+      "public-normal": 153,
+      "internal-scalar": 28,
+      "public-scalar": 153
+    },
+    "removedImplementationOnlyTests": 1,
+    "selectedCoreSha256": "54e981bc2965e7e609427ececcbcfb7efdae87a0e9450d946c6508924b00d6e1",
+    "windowsNeverBuilt": true,
+    "fullPackageProofReused": true
+  },
+  "qualificationReuse": {
+    "productionPackageWindowsUnchanged": true,
+    "fullChecksEachOs": 5342,
+    "additionalPublicProbeChecksNormalScalarEachOs": 3,
+    "sameActualReleasePackageBothOs": true,
+    "usageExamplesEachOs": 3,
+    "reference": "jpeg444-row-normalization-evidence.json",
+    "ciCommit": "7e75645366582606c473937119815b17f399ed10",
+    "ciRun": 41279949618,
+    "ciAllThreeJobsPassed": true,
+    "noNewCombinedLocalFullRun": true
+  },
+  "workflow": {
+    "linuxCoreBuilds": 1,
+    "linuxInternalBuilds": 1,
+    "publicHarnessNativeSelectorWindowsBuilds": 0,
+    "shorts": 1,
+    "independentCandidateConfirmations": 1,
+    "newProfiles": 0,
+    "repeatedFullOrPackageChecks": 0,
+    "restorationBuilds": 0,
+    "noSecondPairOrVariants": true
+  },
+  "rawArtifacts": {
+    "file": "vp8l-histogram-addition-unqualified.tar.xz",
+    "sha256": "da33e7c434a8515b71d4677b574a893ec6b387aa370b9176499b37abcaf0b70f",
+    "bytes": 1666880,
+    "members": 77,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg444-row-normalization-qualified.tar.xz",
+        "sha256": "baece509ccf51f64d4a915aac4040fa6201ae8f498d1c9f3d7751ff6fa827ae7"
+      },
+      {
+        "file": "vp8l-color-bin-reuse-retained.tar.xz",
+        "sha256": "6e8e51e4e107d33bd0fe9391ced520e28c6c336de66b53bda9ffee30a77ca87f"
+      }
+    ]
+  },
+  "rawObservations": {
+    "short": "tmp/vha32-candidate-EncodeOpaque8-short-observation.json",
+    "confirmation": "tmp/vha32-candidate-EncodeOpaque8-confirm-observation.json",
+    "note": "All actuals/statistics/native brackets/receipts/source/binary identities and guards are retained as member-verified raw files;original full observation is in the pinned CBA2 dependency."
+  },
+  "next": "Close histogram integer-add width/packing/loop/inlining variants. Retain previously approved CBA2 gain and all current qualified costs. Resolve two existing default mixed-axis bicubic short-only confirmations after scoped source/selector validation;no new workload grid."
+}

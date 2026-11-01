@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[VP8L histogram addition](VP8L-HISTOGRAM-ADDITION-UNQUALIFIED.md) is not retained:
+independent4.66%filtered/4.78%allactual/4.00%normalizedpointgain,unchanged
+19992640B/op and exact121896Bpacket. Raw confidence separates;normalized does
+not (candidateupper1.369,originallower1.349). One short/oneconfirmation,no second
+pair/variants. Source/core/PDB/XML/linkedtests restore exactly;28internal/all153
+public pass normal/scalar Linux. Windows/full/package proof reused;all current
+costs and268paths remain. Approved CBA2gain/caveat unchanged;close histogram-add.
+
 [Cached-bit live JPEG correction traversal](JPEG-CACHED-CORRECTION-REJECTED.md)
 is rejected:5.51%higher filtered/5.34%allactual/5.86%normalizedpointcost,
 unchanged984212B/op. One short,no confirmation/variants. Originalsource/core/
