@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current JPEG long-prefix confirmation](JPEG-LONG-PREFIX-CURRENT-CONFIRMATION.md)
+rejects the identical archivedcandidate:ONE3thenONE12 gives2.08%raw/2.84%normalized
+points,unchanged10088B/op,exactpixels;raw/all/normalized confidenceoverlap.
+One scoped2%point continuation for a previouslyunconfirmed3.3%short changesno
+confidence/finalparityrule;currentshortalsoclears4.1%. Source,twotrialcontrols
+and ALLsavedLinuxbinaries restoredbyteexactly withoutrebuild;63internal/
+399publicnormal/scalar restorechecks pass. Windows/package unchanged;5376bothOS/
+SAMEpackage reused. No secondconfirmation/variants/profile/grid. Summary105/all268
+unchanged;original source-era short is historical,currentdecodercosts remain.
+
 [WebP matcher token capture](WEBP-MATCHER-TOKEN-COPIES-REJECTED.md) is rejected:
 ONE3 gives0.51%raw/3.35%normalized points,native+2.94%,unchanged21353208B/op,
 exact98590Bpacket. Same checkpoints;different lowering doesnotproveCPUgain.

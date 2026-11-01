@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "JHF51",
+  "productionChanged": false,
+  "candidateRejected": true,
+  "case": "WarmJpegDecode/DirectRgb444",
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "primitive": "Pass existingnullablelongCodes asborrowedReadOnlySpan into fusedbaseline ACloop. Only8-bitmiss peeks alreadybuffered10bits;check count+size<=pending before anyconsume. No extra reads/table/cache/owner/capacity/charges orpollchanges. >=11bit,invalidcode/ZRL/category/run/error fallback remainsoriginal.",
+  "scope": "All ordinary baseline componentblocks pass through ReadBaselineBlock,including directplanes/noninterleaved/restart/CMYK/YCCK/411/410 andcaller buffers;container validation passes same coefficient traversal withwritePixelsfalse. NativeDecodeCancelable8 stillloads the extraargument beforehelperreturnsfalse,so no unchangedCPUclaim for that entry withoutcost. Progressive scans nevercall it. JPEGinspection doesnotReadScan. Nested stream/async baseline callers forward samecontext;existing StreamDecode420Restart covers distinctstreamboundary. No new workloads/grid.",
+  "archivedCandidateReappliedByteExactly": true,
+  "baseline": {
+    "managedMicroseconds": 1921.8966138392857,
+    "nativeMicroseconds": 1453.5470950520833,
+    "ratio": 1.322211451133216,
+    "upper": 1.3616735920472895,
+    "allocated": 10088,
+    "actuals": 12,
+    "rawActualNanosecondsPerOperation": [
+      1902331.3839285714,
+      1938778.2589285714,
+      1908030.8214285714,
+      1918612.1875,
+      1895061.625,
+      1974643.892857143,
+      1917671.392857143,
+      1949752.1964285714,
+      1968510.142857143,
+      1892045.6339285714,
+      1913235.482142857,
+      1884116.9375
+    ],
+    "filteredManagedConfidence": {
+      "N": 12,
+      "Mean": 1921896.6138392857,
+      "StandardError": 8587.003489762195,
+      "Level": 12,
+      "Margin": 38100.35705208263,
+      "Lower": 1883796.256787203,
+      "Upper": 1959996.9708913683
+    },
+    "allActualManagedConfidence": {
+      "N": 12,
+      "Mean": 1921899.1629464289,
+      "StandardError": 8587.003489762203,
+      "Level": 12,
+      "Margin": 38100.35705208266,
+      "Lower": 1883798.8058943462,
+      "Upper": 1959999.5199985115
+    },
+    "nativeBrackets": [
+      {
+        "mean": 1466573.70703125,
+        "standardError": 6123.286481766456,
+        "confidenceLower": 1439404.8114362217,
+        "confidenceUpper": 1493742.6026262783,
+        "samples": 12
+      },
+      {
+        "mean": 1453547.0950520833,
+        "standardError": 2465.619440546823,
+        "confidenceLower": 1442607.1925411094,
+        "confidenceUpper": 1464486.997563057,
+        "samples": 12
+      }
+    ]
+  },
+  "candidateShort": {
+    "managedMicroseconds": 1837.4030907738097,
+    "nativeMicroseconds": 1452.682296875,
+    "ratio": 1.2648347782074707,
+    "upper": 1.4397033566099782,
+    "allocated": 10088,
+    "actuals": 3,
+    "rawActualNanosecondsPerOperation": [
+      1846605.9375,
+      1833332.982142857,
+      1832277.5982142857
+    ],
+    "filteredManagedConfidence": {
+      "N": 3,
+      "Mean": 1837403.0907738097,
+      "StandardError": 4610.293349523801,
+      "Level": 12,
+      "Margin": 145680.91057549065,
+      "Lower": 1691722.180198319,
+      "Upper": 1983084.0013493004
+    },
+    "allActualManagedConfidence": {
+      "N": 3,
+      "Mean": 1837405.5059523808,
+      "StandardError": 4610.293349523801,
+      "Level": 12,
+      "Margin": 145680.91057549065,
+      "Lower": 1691724.5953768902,
+      "Upper": 1983086.4165278715
+    },
+    "nativeBrackets": [
+      {
+        "mean": 1456916.8177083333,
+        "standardError": 2515.572730246522,
+        "confidenceLower": 1377427.0980359311,
+        "confidenceUpper": 1536406.5373807354,
+        "samples": 3
+      },
+      {
+        "mean": 1452682.296875,
+        "standardError": 1988.9520469627187,
+        "confidenceLower": 1389833.2928474268,
+        "confidenceUpper": 1515531.3009025732,
+        "samples": 3
+      }
+    ]
+  },
+  "candidateConfirmation": {
+    "managedMicroseconds": 1881.8958020833338,
+    "nativeMicroseconds": 1464.8337578125,
+    "ratio": 1.284716297700328,
+    "upper": 1.3309804129562546,
+    "allocated": 10088,
+    "actuals": 12,
+    "rawActualNanosecondsPerOperation": [
+      1905733.392857143,
+      1895176.875,
+      1840158.294642857,
+      1838624.2767857143,
+      1882318.2857142857,
+      1898053.1875,
+      1853109.8660714286,
+      1876389.2232142857,
+      1872602.5089285714,
+      1915802.3839285714,
+      1891465.5267857143,
+      1913348.482142857
+    ],
+    "filteredManagedConfidence": {
+      "N": 12,
+      "Mean": 1881895.8020833337,
+      "StandardError": 7685.152151640883,
+      "Level": 12,
+      "Margin": 34098.861299660144,
+      "Lower": 1847796.9407836737,
+      "Upper": 1915994.6633829938
+    },
+    "allActualManagedConfidence": {
+      "N": 12,
+      "Mean": 1881898.5252976192,
+      "StandardError": 7685.152151640888,
+      "Level": 12,
+      "Margin": 34098.861299660166,
+      "Lower": 1847799.663997959,
+      "Upper": 1915997.3865972792
+    },
+    "nativeBrackets": [
+      {
+        "mean": 1464833.7578125,
+        "standardError": 5701.035896880864,
+        "confidenceLower": 1439538.3793377073,
+        "confidenceUpper": 1490129.1362872927,
+        "samples": 12
+      },
+      {
+        "mean": 1478826.0338541667,
+        "standardError": 6542.1791825692135,
+        "confidenceLower": 1449798.520001195,
+        "confidenceUpper": 1507853.5477071386,
+        "samples": 12
+      }
+    ]
+  },
+  "decision": {
+    "mode": "confirm",
+    "baselineCurrentIndependent12Reused": true,
+    "raw": {
+      "statistics": {
+        "reduction": 0.020813196437265202,
+        "separated": false
+      },
+      "unfilteredActualStatistics": {
+        "reduction": 0.02081307824052825,
+        "separated": false
+      }
+    },
+    "nativeNormalizedReduction": 0.028357910076147297,
+    "nativePointDrift": 0.007764910265953384,
+    "baselineNormalizedLower": 1.261125078360313,
+    "candidateNormalizedUpper": 1.3309804129562546,
+    "normalizedSeparated": false,
+    "screenPassed": true,
+    "passed": false,
+    "candidateRatio": 1.284716297700328,
+    "candidateUpper": 1.3309804129562546,
+    "candidateAllocation": {
+      "BytesAllocatedPerOperation": 10088
+    },
+    "allocationDelta": 0,
+    "candidateMeanMicroseconds": 1881.8958020833338
+  },
+  "scopedGate": {
+    "pointThreshold": 0.02,
+    "reason": "User accepts smaller gains after prioritizing substantial opportunities. Recent larger accepted rounds and bounded rejected leads are recorded. This exact archived3.26%raw/3.49%normalized candidate never received independent confirmation; one scoped2%continuation is allowed, with every confidence/finalparity gate unchanged. No already-confirmed candidate is retuned or remeasured.",
+    "confidenceWaived": false,
+    "currentShortAlsoClearsDefaultPoint041": true,
+    "finalParityTargetUnchanged": true
+  },
+  "gates": {
+    "originalInput133057Bytes": true,
+    "exactOutput531468Bytes": true,
+    "allOriginalNativePixelAlphaSourceOwnerAndQuietGatesPassed": true,
+    "noNewQualityException": true
+  },
+  "qualification": {
+    "candidate": {
+      "platform": "linux",
+      "coreSha256": "4538f1cf0bd80937e082f5b4a170c0f8b1c12eb34f5e16660c4a0e88111aa539",
+      "focused": {
+        "internal-normal": 65,
+        "public-normal": 399,
+        "internal-scalar": 65,
+        "public-scalar": 399
+      },
+      "coreBuilds": 1,
+      "internalBuilds": 1,
+      "otherBuilds": 0
+    },
+    "restoration": {
+      "productionRestoredByteExactly": true,
+      "allSavedBinaryAndSourceHashesVerified": true,
+      "restorationBuilds": 0,
+      "focused": {
+        "internal-normal": 63,
+        "public-normal": 399,
+        "internal-scalar": 63,
+        "public-scalar": 399
+      },
+      "removedCandidateOnlyCases": 2,
+      "selectedCoreSha256": "d7226d9a435c268f088c84c31f29a6243d0ccf80730a07ac299c5f3bcfa16b38",
+      "windowsNeverBuilt": true,
+      "full5376AndSameActualPackageProofReused": true
+    },
+    "sourceFilesRestored": {
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "3206b10ee0cfdf1193095a2969066e97dc4ea02fcee530bd9d0492f5dd07d1ce",
+      "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "1e298637096538b2ef382f1ab28888477a51a2cfaa2c9a02c39fef0bacdfe8cf",
+      "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "8e5ee875af72352ba60bd2d0a706dc1416dbb7cc9ceffec9c763fbe5aad04e16"
+    },
+    "windowsCoreUnchanged": "bed9d5e06bfff8a326e4d0af9fd74f37a8ea1cd10443b8d99012e2af946da439",
+    "packageUnchanged": "d10ef558bd6263e876fa7946f836c6b64b386c415516869d69a946ebf039af8a",
+    "fullChecksEachOsReused": 5376,
+    "sameActualPackageBothOsReused": true,
+    "additionalFullPackageRuns": 0
+  },
+  "workflow": {
+    "candidateShorts": 1,
+    "candidateConfirmations": 1,
+    "originalIndependent12Reused": true,
+    "baselineRetimes": 0,
+    "newImages": 0,
+    "newCases": 0,
+    "newProfiles": 0,
+    "coreBuilds": 1,
+    "internalTestBuilds": 1,
+    "allOtherBuilds": 0,
+    "restorationBuilds": 0,
+    "variants": 0
+  },
+  "raw": {
+    "file": "jpeg-long-prefix-current-confirmation-rejected.tar.xz",
+    "sha256": "c67e38ac92b94c0b5d0e826cc78671e6540bf50b2ab7fe8b4d8bee43ad597c72",
+    "bytes": 3143892,
+    "members": 85,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "wide-bicubic-independent-repair-qualified.tar.xz",
+        "sha256": "9d22a44b401bdcf6fb24e02b1bfedcf873c8df513a09f2b1e8ba86baab2a915c"
+      },
+      {
+        "file": "jpeg-container-scan-qualified.tar.xz",
+        "sha256": "1fac10336e4dad0a9a22bc4bc4c4494cea37cf35ad311107417ce0b02c220006"
+      },
+      {
+        "file": "jpeg-long-prefix-fusion-rejected.tar.xz",
+        "sha256": "d3cc1fb7e0b61c46b694f8442ec8079e816cfc81aa0877706377aac08a77de9f"
+      }
+    ]
+  },
+  "conclusion": "Independent point gains2.08%raw/all and2.84%native-normalized do not separate required raw/all/normalized confidence. Exact source/test/binary restoration; unchangedWindows/package and currentcosts. No secondconfirmation or prefix-fusion variant. Full268path objective remains."
+}

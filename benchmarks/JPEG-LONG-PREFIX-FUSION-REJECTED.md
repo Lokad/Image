@@ -1,5 +1,10 @@
 # JPEG long-prefix fusion: rejected
 
+The [current independent confirmation](JPEG-LONG-PREFIX-CURRENT-CONFIRMATION.md)
+also rejects this exact candidate: required raw/normalized confidence overlaps.
+The earlier short and original threshold decision below remain historical.
+
+
 The existing DirectRgb444 screen observes **3.26% less elapsed time** (3.32% all
 actuals, **3.49% native-normalized**), below the 4.1% continuation threshold.
 Reject without an independent confirmation or variants. These short point means
