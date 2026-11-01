@@ -18,6 +18,14 @@ its native-only one-sample RGB bound awaits approval. Full-precision RGBA16
 matches a GEQ correctness check, which is not an approved CPU reference.
 Neither control has a timing result; the remaining count stays nine.
 
+[Font/text reference feasibility](FONT-TEXT-REFERENCE-FEASIBILITY.md) now
+checks copied-face ownership and exact metrics against FreeType, with managed
+aggregate admission/refusal/cancellation cleanup on both platforms. Its proposed
+font-loading reference exception awaits approval. Public prepared glyph paths
+reproduce one existing byte rendering control; word rendering differs only at
+six alpha samples by one. Their bounds do not replace layout/fitting metadata.
+No new timing, font inventory or performance exception is implied.
+
 The immutable original inventory contains no text-layout, font, fitting, drawing
 or compositing comparison rows. At the inspected revision, no benchmark C# entry
 point referenced these public APIs. The earlier coverage statement that they reused

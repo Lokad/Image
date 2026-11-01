@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Font/text reference feasibility](FONT-TEXT-REFERENCE-FEASIBILITY.md) establishes
+copied font ownership and exact metrics on both platforms, with shared admission,
+terminal refusal and cleanup. A FreeType font-loading exception awaits approval.
+Prepared-path rendering is exact at byte depth on one existing Latin control;
+word RGB is exact, six alpha samples differ by one. Layout/fitting metadata still
+needs an equivalent public boundary. Nine controls remain unmeasured; no current
+costs, production code, package or qualification proofs change.
+
 [Packed ordinary VP8 quantization](VP8-PACKED-QUANTIZATION-REJECTED.md) fails
 one short: no useful raw/all/normalized gain, +1,920 B/op, exact 17,688-byte packet.
 Four sources/three trial cases/all 53 saved Linux binaries are restored exactly;
