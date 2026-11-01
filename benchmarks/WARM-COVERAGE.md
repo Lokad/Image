@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Fused WebP cache histograms](WEBP-CACHE-HISTORY-FUSION-REJECTED.md) are rejected:
+one original RGBA8 VP8 short is2.34%slower/2.24%native-normalized, unchanged
+21353208B/op and exact98590Bpacket. Candidate114internal/392public normal/scalar,
+restored111/392 pass; source/binaries arebyteexactrestored withoutrebuild.
+No12/variants/full/package repeats; current5369bothOS/SAMEpackage proof reused.
+Onecurrent6secondtrace anduntimedJITmapping identifythe repeatedcachehistory
+dataflow,withoutcomponenttimingclaims. All268paths andcurrentcosts remain.
+
 [The bounded JPEG confidence audit](CURRENT-JPEG-CONFIDENCE.md) gives the six
 uncertain scan-round controls one independent12 each on the same DLL. Baseline420
 decode and progressive420validation become confirmed gaps; baseline422,ownedgray,
