@@ -61,3 +61,37 @@ source, range proof, qualification and unchanged native history. Mirrored,
 member-verified vp8-quantization-caller-invariants-qualified.tar.xz: 267 members,
 SHA256 a531df0a3acf92762c95793cfc513a33d9598cdefcfbe73424b7da8b88ef1ad8.
 The full 268-path objective remains open.
+
+## Distortion metric preflight: rejected
+
+A separate bounded trial removes repeated private metric rectangle/importance
+checks already enforced by their two validated decision callers. Eight call
+sites, snapshots and sixteen weights/sum256 are verified; entry validation,
+arithmetic, tie order, cancellation, admission and output ownership remain.
+No new cache, storage, wrapper or unsafe code. The quantizer above is unchanged.
+
+| Same complete photograph/effort4 encode | Managed µs | Ratio / upper | Managed B/op |
+| --- | ---: | ---: | ---: |
+| Current original, three actuals | 13,872.856 | 1.428 / 1.481 | 809,072 |
+| Rejected metric preflight, three actuals | 13,730.234 | 1.412 / 1.511 | 809,072 |
+
+Only **1.03% lower elapsed / 1.14% lower normalized point cost**, below4.1%
+triage: remove without independent confirmation or variants. Short observations
+establish no independent gain or parity. Exact 17,688-byte packets, reconstructed
+pixels/alpha, source/output owners, native settings and both idle-v2 guards pass.
+The original is within0.23% raw/all and0.34% normalized of the unchanged valid
+independent photograph control; that twelve-actual evidence remains applicable.
+
+Candidate AND restored **35 internal / 264 public** checks pass normal/scalar
+on both OSes. Original source/tests/core/PDB/XML/linked assemblies are restored
+byte-exactly. One core/internal build per OS, zero other builds, new tests,
+profiles, repeated full suites or package proofs. Reuse unchanged5,342 checks per
+OS and SAME actual Release-package/three-example qualification. Close repeated
+metric-preflight variants; current accepted costs remain.
+
+[Numeric evidence](vp8-metric-preflight-rejected-evidence.json) retains every
+actual, baseline stability, caller proof, restoration and source pins. Mirrored,
+member-verified raw vp8-metric-preflight-rejected.tar.xz, SHA256
+6e4d6a83167ae8d1ba8c05a704bf1b1266c73802c5a3965e5c8b2e6170a0f4c9
+(3,354,484 B / 131 members), retains the rejected code and reproduction material.
+WPC31/QIV1 dependencies remain retained; all268 paths stay in the objective.

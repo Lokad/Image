@@ -7,6 +7,14 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Repeated metric preflight](WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#distortion-metric-preflight-rejected)
+misses one short screen:1.03% lower elapsed/1.14% lower normalized point cost,
+unchanged809,072B/op and exact17,688B packets. No confirmation or variants.
+Source/tests/core/PDB/XML/linked assemblies restored byte-exactly;35internal/
+264public candidate ANDrestored checks pass normal/scalar on both OSes. Reuse
+unchanged5,342-check/SAMEactual-package proof and accepted costs. No new profile,
+input/settings grid or objective change. Close metric-preflight variants.
+
 [The existing indexed VP8L diagram](WARM-VP8L-COLOR-BIN-REUSE.md#indexed-diagram-current-cost)
 now independently confirms 1.116 / upper1.142, 27,418,912 B/op and exact7,234B
 packets. One current12 resolves its missing independent confirmation; the old
