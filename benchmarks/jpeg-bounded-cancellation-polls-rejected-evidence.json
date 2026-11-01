@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "JCP49",
+  "productionChanged": false,
+  "candidateRejected": true,
+  "case": "WarmJpegDecode/ProgressiveCancelable444",
+  "requiredMaterialPaths": 268,
+  "warmParityComplete": false,
+  "scope": "Only existing ProgressiveCancelable444 is a named timed caller of this live-token successive-approximation helper. Noncancelable progressive paths reject this helper; live baseline JPEG returns earlier before AC refinement. Public/caller-buffer/async cancellation, cleanup and decoder correctness remain qualified.",
+  "candidatePrimitive": "Live buffered JPEG AC refinement polls at each nonempty correction-group entry and cache refill, instead of every correction bit. JPEG bounds each group to at most63coefficient updates. Huffman/sign/EOB polls, scalar marker/truncation reader, logical cursor publication, immediate correction/error state and empty-EOB no-read behavior remain. No new counter, quota, reservation, owner, capacity or allocation.",
+  "candidateCadence": "Cancellation frequency changes within a bounded synchronous correction group. Public contract is cooperative direct checkpoints, not per-bit latency; no new time/work budget. At most63correction updates between checks, also polling before32bit ordinary refill and retaining scalar ReadBits checks. Already-canceled nonempty groups publish their original state before throwing; empty no-read tails retain original behavior.",
+  "baseline": {
+    "managedMicroseconds": 4925.834593750001,
+    "nativeMicroseconds": 3408.602875,
+    "ratio": 1.4451183591605699,
+    "upper": 1.5150253422737032,
+    "allocated": 984212,
+    "actuals": 12,
+    "rawActualNanosecondsPerOperation": [
+      5041197.208333333,
+      4955833.604166667,
+      4927503.0,
+      5116625.5625,
+      5040858.375,
+      4957251.354166667,
+      4854370.208333333,
+      4834989.0,
+      4844145.125,
+      4848055.020833333,
+      4832184.333333333,
+      4857052.583333333
+    ],
+    "filteredManagedConfidence": {
+      "N": 12,
+      "Mean": 4925834.593750001,
+      "StandardError": 28125.016022993554,
+      "Level": 12,
+      "Margin": 124790.11495094607,
+      "Lower": 4801044.478799054,
+      "Upper": 5050624.708700947
+    },
+    "allActualManagedConfidence": {
+      "N": 12,
+      "Mean": 4925838.781250001,
+      "StandardError": 28125.016022993554,
+      "Level": 12,
+      "Margin": 124790.11495094607,
+      "Lower": 4801048.666299054,
+      "Upper": 5050628.896200947
+    },
+    "nativeBrackets": [
+      {
+        "mean": 3408602.875,
+        "standardError": 16883.151252163232,
+        "confidenceLower": 3333692.681748227,
+        "confidenceUpper": 3483513.068251773,
+        "samples": 12
+      },
+      {
+        "mean": 3450871.2135416665,
+        "standardError": 23577.634927187537,
+        "confidenceLower": 3346257.734550944,
+        "confidenceUpper": 3555484.692532389,
+        "samples": 12
+      }
+    ]
+  },
+  "candidateShort": {
+    "managedMicroseconds": 4962.387027777777,
+    "nativeMicroseconds": 3397.6343958333337,
+    "ratio": 1.460541791625187,
+    "upper": 2.890799686256067,
+    "allocated": 984212,
+    "actuals": 3,
+    "rawActualNanosecondsPerOperation": [
+      4837683.270833333,
+      5001325.604166667,
+      5048162.520833333
+    ],
+    "filteredManagedConfidence": {
+      "N": 3,
+      "Mean": 4962387.027777777,
+      "StandardError": 63802.65786094769,
+      "Level": 12,
+      "Margin": 2016103.659711678,
+      "Lower": 2946283.368066099,
+      "Upper": 6978490.687489456
+    },
+    "allActualManagedConfidence": {
+      "N": 3,
+      "Mean": 4962390.465277777,
+      "StandardError": 63802.65786094769,
+      "Level": 12,
+      "Margin": 2016103.659711678,
+      "Lower": 2946286.805566099,
+      "Upper": 6978494.124989456
+    },
+    "nativeBrackets": [
+      {
+        "mean": 3406205.2708333335,
+        "standardError": 31398.70549357583,
+        "confidenceLower": 2414035.866327163,
+        "confidenceUpper": 4398374.675339504,
+        "samples": 3
+      },
+      {
+        "mean": 3397634.3958333335,
+        "standardError": 29032.730917227764,
+        "confidenceLower": 2480227.550789122,
+        "confidenceUpper": 4315041.2408775445,
+        "samples": 3
+      }
+    ]
+  },
+  "decision": {
+    "mode": "short",
+    "baselineCurrentIndependent12Reused": true,
+    "raw": {
+      "statistics": {
+        "reduction": -0.007420556523386912,
+        "separated": false
+      },
+      "unfilteredActualStatistics": {
+        "reduction": -0.0074203979567719625,
+        "separated": false
+      }
+    },
+    "nativeNormalizedReduction": -0.010672781483155536,
+    "nativePointDrift": -0.003217881216704188,
+    "baselineNormalizedLower": 1.350320671857405,
+    "candidateNormalizedUpper": 2.890799686256067,
+    "normalizedSeparated": false,
+    "screenPassed": false,
+    "passed": false,
+    "candidateRatio": 1.460541791625187,
+    "candidateUpper": 2.890799686256067,
+    "candidateAllocation": {
+      "BytesAllocatedPerOperation": 984212
+    },
+    "allocationDelta": 0,
+    "candidateMeanMicroseconds": 4962.387027777777
+  },
+  "gates": {
+    "originalPacketPixelsAlphaAndNativeBoundsPassed": true,
+    "logicalReaderAndFailureStatePassed": true,
+    "quietGuardsPassed": true,
+    "sourceAndIndependentOwnersPassed": true,
+    "fixtureMetadataRestoredByteExactly": true
+  },
+  "qualification": {
+    "candidate": {
+      "platform": "linux",
+      "coreSha256": "91c6ee6444c1e051ae6516f46e7c1175971019926adefe85ce56d37099bfe621",
+      "focused": {
+        "internal-normal": 85,
+        "public-normal": 365,
+        "internal-scalar": 85,
+        "public-scalar": 365
+      },
+      "coreBuilds": 1,
+      "internalBuilds": 1,
+      "publicBuilds": 0,
+      "otherBuilds": 0
+    },
+    "restoration": {
+      "productionRestoredByteExactly": true,
+      "allSavedBinaryAndSourceHashesVerified": true,
+      "restorationBuilds": 0,
+      "focused": {
+        "internal-normal": 83,
+        "public-normal": 365,
+        "internal-scalar": 83,
+        "public-scalar": 365
+      },
+      "removedCandidateOnlyCases": 2,
+      "selectedCoreSha256": "d7226d9a435c268f088c84c31f29a6243d0ccf80730a07ac299c5f3bcfa16b38",
+      "windowsNeverBuilt": true,
+      "full5376AndSameActualPackageProofReused": true
+    },
+    "sourceFilesRestored": {
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "5ed9d6a8016f5d8c6c2b2806053c02406f63558ab44ad7d50d8b43a8cfcfc7e8",
+      "tests/Lokad.Image.Tests/JpegRefinementBlockTests.cs": "ed9c0619f7590ad7a225a82ed1c8c5042a4c04979039e0360dadd86c0f541fa9"
+    },
+    "windowsCoreUnchanged": "bed9d5e06bfff8a326e4d0af9fd74f37a8ea1cd10443b8d99012e2af946da439",
+    "packageUnchanged": "d10ef558bd6263e876fa7946f836c6b64b386c415516869d69a946ebf039af8a",
+    "fullChecksEachOsReused": 5376,
+    "sameActualPackageBothOsReused": true,
+    "additionalFullPackageRuns": 0
+  },
+  "workflow": {
+    "candidateShorts": 1,
+    "candidateConfirmations": 0,
+    "originalIndependent12Reused": true,
+    "baselineRetimes": 0,
+    "newImages": 0,
+    "newCases": 0,
+    "newProfiles": 0,
+    "coreBuilds": 1,
+    "internalTestBuilds": 1,
+    "allOtherBuilds": 0,
+    "restorationBuilds": 0,
+    "variants": 0
+  },
+  "raw": {
+    "file": "jpeg-bounded-cancellation-polls-rejected.tar.xz",
+    "sha256": "5c6a99ecdb23dfd40027f67548f4c2eb33bbb7516fce30186c20d25d9672cd83",
+    "bytes": 3165876,
+    "members": 65,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "wide-bicubic-independent-repair-qualified.tar.xz",
+        "sha256": "9d22a44b401bdcf6fb24e02b1bfedcf873c8df513a09f2b1e8ba86baab2a915c"
+      },
+      {
+        "file": "jpeg-container-scan-qualified.tar.xz",
+        "sha256": "1fac10336e4dad0a9a22bc4bc4c4494cea37cf35ad311107417ce0b02c220006"
+      }
+    ]
+  },
+  "conclusion": "The three-actual screen supplies no useful point gain; it does not establish a confirmed regression. Original per-bit cancellation, source, test cases and all saved Linux binaries are restored exactly; Windows and actual package never changed. Current selected costs and valid qualification remain. No longer confirmation or cancellation cadence/group/refill variant."
+}

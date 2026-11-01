@@ -7,6 +7,13 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Bounded JPEG polling](JPEG-BOUNDED-CANCELLATION-POLLS-REJECTED.md) is rejected:
+one live-progressive444 short has no useful point gain (0.74%higher raw/
+1.07%highernormalized),unchanged984212B/op,exactpixels. No12/variants. Source,
+two candidate-only cases and every savedLinuxbinary restoredbyteexactly without
+rebuild;83internal/365publicnormal/scalar restorechecks pass. Windows/package
+unchanged;current5376bothOS/SAMEpackage proof reused. Summary105/all268unchanged.
+
 [Independent wider bicubic repair](WARM-WIDE-BICUBIC-INDEPENDENT-REPAIR.md)
 improves existingWide8 by6.68%elapsed/6.26%normalized, exact pixels and unchanged
 owned capacity;1.423/upper1.445 remains a gap. One3/12 reuses validbaseline12.
