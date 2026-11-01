@@ -1382,7 +1382,9 @@ and output ownership stay inside the declared boundaries. Exact packets/pixels,
 case-scoped native bounds and frozen settings remain; equal numerical quality
 settings do not establish equivalence. See [codec parity](codec-parity.md).
 
-Current production passes **5,342 checks per OS**, including 948 live comparisons.
+Retained production qualification covers **5,342 checks per OS**, including 948 live comparisons.
+Three additional [probe-contract checks](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md)
+pass normal/scalar on both OSes; the unqualified completion-wrapper trial is removed.
 The same actual Release package, governed/retained/async consumers and three
 examples pass both OSes. Applicable unchanged performance evidence is reused.
 The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains

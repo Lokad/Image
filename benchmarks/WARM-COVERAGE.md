@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Immediate probe completion](PROBE-COMPLETED-PATH-REJECTED.md) misses its short
+screen: 2.668% filtered / 2.636% all-actual / 1.740% normalized point gain,
+unchanged 744 B/op. No confirmation or variants. Original source/core/PDB/XML
+restored exactly on both OSes; all current costs remain. Candidate and restored
+original pass 2 internal/96 public checks normal/scalar each OS. Keep three actual
+public-contract checks for immediate status, cancellation and pending read/failure
+ownership; no obsolete implementation remains. Ten source identities and a stable
+current original short support reused SKP1 baseline evidence. Full/package proof
+is reused; no new profile/control/settings grid. Close completion-wrapper variants.
+
 [Current direct-RGB JPEG444/422/420 decode](CURRENT-DIRECT-RGB-JPEG-DECODE-COSTS.md)
 independently confirms 1.449/upper1.458, 1.310/upper1.324 and 1.372/upper1.387
 gaps, with 966,367/829,164/757,363 B/op. All current samples equal native component

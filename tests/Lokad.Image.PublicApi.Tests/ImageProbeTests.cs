@@ -346,6 +346,85 @@ public sealed class ImageProbeTests
     private static ValueTask<ImageProbeResult> Run(Stream input, bool asynchronous, ImageProbeOptions? options = null)
         => asynchronous ? ImageCodec.ProbeAsync(input, options) : ValueTask.FromResult(ImageCodec.Probe(input, options));
 
+    [Fact]
+    public async Task ImmediateProbeCompletionPreservesFailureAndCancellationStatus()
+    {
+        using var root = new TestMemoryBudget(Workspace);
+        var options = new ImageProbeOptions { Limits = new() { MemoryBudget = root } };
+        using var empty = new MemoryStream();
+        var failed = ImageCodec.ProbeAsync(empty, options);
+        Assert.True(failed.IsFaulted);
+        await Assert.ThrowsAsync<ImageDataException>(() => failed.AsTask());
+        using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
+        var canceled = ImageCodec.ProbeAsync(empty, options, cancellation.Token);
+        Assert.True(canceled.IsCanceled);
+        var error = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => canceled.AsTask());
+        Assert.Equal(cancellation.Token, error.CancellationToken);
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.True(empty.CanRead);
+        using var input = new MemoryStream(OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded);
+        var completed = ImageCodec.ProbeAsync(input, options);
+        Assert.True(completed.IsCompletedSuccessfully); Assert.Equal(17, (await completed).Width);
+        Assert.Equal(0, root.Bytes); Assert.True(input.CanRead);
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public async Task PendingProbeKeepsAdmissionUntilAnUncooperativeReadActuallyFinishes(bool fail)
+    {
+        var data = OriginalExif.Create(MetadataProfile.Png8, 17, 11).Encoded;
+        using var root = new TestMemoryBudget(Workspace);
+        using var cancellation = new CancellationTokenSource();
+        using var input = new GatedProbeInput(data, fail);
+        var pending = ImageCodec.ProbeAsync(input, new() { Limits = new() { MemoryBudget = root } }, cancellation.Token).AsTask();
+        await input.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        try
+        {
+            Assert.False(pending.IsCompleted); Assert.Equal(Workspace, root.Bytes);
+            cancellation.Cancel();
+            Assert.False(pending.IsCompleted); Assert.Equal(Workspace, root.Bytes);
+        }
+        finally { input.Release.TrySetResult(); }
+        if (fail) await Assert.ThrowsAsync<IOException>(() => pending);
+        else
+        {
+            var error = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
+            Assert.Equal(cancellation.Token, error.CancellationToken); Assert.True(pending.IsCanceled);
+        }
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.True(input.CanRead);
+        using var next = new MemoryStream(data);
+        Assert.Equal(17, (await ImageCodec.ProbeAsync(next, new() { Limits = new() { MemoryBudget = root } })).Width);
+        Assert.Equal(0, root.Bytes); Assert.True(next.CanRead);
+    }
+
+    private sealed class GatedProbeInput(byte[] data, bool fail) : Stream
+    {
+        private int position;
+        private bool disposed;
+        internal readonly TaskCompletionSource Entered = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        internal readonly TaskCompletionSource Release = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+        {
+            if (position == 0)
+            {
+                Entered.TrySetResult(); await Release.Task.ConfigureAwait(false);
+                if (fail) throw new IOException("Authored pending probe failure.");
+            }
+            var count = Math.Min(buffer.Length, data.Length - position);
+            data.AsMemory(position, count).CopyTo(buffer); position += count; return count;
+        }
+        public override bool CanRead => !disposed;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+        public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        public override void Flush() => throw new NotSupportedException();
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        protected override void Dispose(bool disposing) { disposed = true; base.Dispose(disposing); }
+    }
+
     private static byte[] Encode(ImageBuffer image, ImageFormat format)
     {
         using var output = new MemoryStream();
