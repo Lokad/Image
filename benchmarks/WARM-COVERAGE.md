@@ -7,6 +7,12 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[Current VP8 photograph attribution](CURRENT-VP8-PHOTO-ATTRIBUTION.md) resolves
+post-quantizer profile uncertainty with one six-second trace, 5,910 samples,
+exact packets/pixels/owners and both quiet guards. No code/build/timing claim,
+new case or repeated qualification. Bound one paired prepared-mode quantization
+lead before a short; keep closed families closed. Current CPU costs are unchanged.
+
 [Bounded JPEG container scanning](WARM-JPEG-CONTAINER-SCAN.md) independently saves
 13.81% elapsed / 13.97% native-normalized on owned baseline444 decode, with separated
 confidence and exact pixels. It passes/stops at0.970/upper0.989,948077B/op (+8).

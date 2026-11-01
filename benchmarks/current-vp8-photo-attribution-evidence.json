@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "productionChanged": false,
+  "diagnosticOnly": true,
+  "noTimingClaim": true,
+  "case": "PhotographLossy8",
+  "scope": "One frozen513x259 opaque photograph, method4, complete encode; current immutable selectedDLL,6seconds CPU-clock IP samples. No new source/settings/profile grid.",
+  "productionSha256": "4c8d203bc2d98569f9d3d63590c3e6680850926f105543634eb0a7f2dcc6ef65",
+  "harnessSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+  "samples": 5910,
+  "seconds": 6,
+  "methods": [
+    {
+      "method": "Vp8MacroblockDecision.Luma4",
+      "samples": 1016,
+      "fraction": 0.17191201353637903
+    },
+    {
+      "method": "Vp8BlockReconstruction.AddVector",
+      "samples": 434,
+      "fraction": 0.07343485617597292
+    },
+    {
+      "method": "Vp8FrameEncoding.Coefficients",
+      "samples": 421,
+      "fraction": 0.07123519458544839
+    },
+    {
+      "method": "Vp8BlockQuantization.QuantizedLevels",
+      "samples": 374,
+      "fraction": 0.06328257191201353
+    },
+    {
+      "method": "Vp8BlockQuantization.ApplyVectors",
+      "samples": 347,
+      "fraction": 0.05871404399323181
+    },
+    {
+      "method": "Vp8MacroblockDecision.Luma16",
+      "samples": 319,
+      "fraction": 0.05397631133671743
+    },
+    {
+      "method": "Vp8SourceHistogram.AddBlock",
+      "samples": 271,
+      "fraction": 0.045854483925549916
+    },
+    {
+      "method": "Vp8TokenStatistics.Record",
+      "samples": 265,
+      "fraction": 0.04483925549915398
+    },
+    {
+      "method": "Vp8Distortion.Energy",
+      "samples": 212,
+      "fraction": 0.03587140439932318
+    },
+    {
+      "method": "Vp8ForwardTransform.Transform",
+      "samples": 210,
+      "fraction": 0.03553299492385787
+    },
+    {
+      "method": "Vp8Prediction.SmallBlock",
+      "samples": 209,
+      "fraction": 0.03536379018612521
+    },
+    {
+      "method": "Vp8MacroblockDecision.Chroma",
+      "samples": 190,
+      "fraction": 0.032148900169204735
+    }
+  ],
+  "packetBytes": 17688,
+  "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+  "exactPacketsReconstructionSourceOwnersPassed": true,
+  "quietGuardsPassed": true,
+  "allBuilds": 0,
+  "repeatedSuitesOrPackageProofs": 0,
+  "raw": {
+    "file": "current-vp8-photo-attribution.tar.xz",
+    "sha256": "d04385dc49b612e4a1b03fd830b7a89fbc7fc96f993faaff0bb0f49558a41121",
+    "bytes": 2004900,
+    "members": 47,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "dependencies": [
+    {
+      "file": "jpeg-container-scan-qualified.tar.xz",
+      "sha256": "1fac10336e4dad0a9a22bc4bc4c4494cea37cf35ad311107417ce0b02c220006",
+      "bytes": 10807524,
+      "members": 485,
+      "mirrored": true,
+      "allMembersVerified": true
+    },
+    {
+      "file": "vp8-quantization-caller-invariants-qualified.tar.xz",
+      "sha256": "a531df0a3acf92762c95793cfc513a33d9598cdefcfbe73424b7da8b88ef1ad8",
+      "bytes": 4111992,
+      "members": 267,
+      "mirrored": true,
+      "allMembersVerified": true
+    }
+  ],
+  "next": "Bounded paired ordinary quantization over existing preparedLuma4 transforms. Prove independent coefficients/levels, unchangedmode order/ties/rate/distortion and existingScratchBytes beforeone short. No reconstruction/trellis/width-only variants."
+}

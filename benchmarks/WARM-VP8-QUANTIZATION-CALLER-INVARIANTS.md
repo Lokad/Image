@@ -37,6 +37,9 @@ removes 56 net production and 78 test lines. Nine rows solely testing unreachabl
 private invalid-range/alias/overflow-prefix behavior go; native hashes, signed
 packing endpoints, 73,504 arithmetic blocks, tails and no-allocation coverage stay.
 
+Current attribution is in the [qualified-DLL trace](CURRENT-VP8-PHOTO-ATTRIBUTION.md).
+The following diagnostic predates this round's accepted guard cleanup.
+
 The six-second diagnostic captures 5,915 samples. All quantization instruction
 addresses map to same-process 516/1,098/397-byte bodies, respectively 178/366/309
 samples. Shares are diagnostic, not method times or predicted gains. No host,
