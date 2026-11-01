@@ -7,6 +7,16 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[The existing indexed VP8L diagram](WARM-VP8L-COLOR-BIN-REUSE.md#indexed-diagram-current-cost)
+now independently confirms 1.116 / upper1.142, 27,418,912 B/op and exact7,234B
+packets. One current12 resolves its missing independent confirmation; the old
+release short is retained, without a paired speedup claim. Same inputs/settings/
+complete output ownership, exact samples/native normal/scalar and quiet gates.
+Zero builds/profiles/new inputs/settings or repeated qualification. All six named
+lossless encoder controls now have independent applicable costs and remain gaps;
+stop retiming them. Unchanged5,342-check/actual-package proof and full268objective
+remain. No optimization candidate, new case or workload grid is introduced.
+
 [Signed-coefficient fusion](VP8-PACKED-PROBABILITY-BINDING-REJECTED.md#signed-coefficient-fusion-rejected)
 also misses one short screen: elapsed4.14% higher, normalized point only1.73%
 lower. Exact pixels/native/owner/quiet gates pass; no confirmation or variants.

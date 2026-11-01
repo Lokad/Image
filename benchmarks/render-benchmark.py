@@ -514,6 +514,11 @@ def render():
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
     async_vp8l = json.loads((ROOT / 'benchmarks/current-async-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
+    diagram_vp8l = json.loads((ROOT / 'benchmarks/current-vp8l-diagram-cost-evidence.json').read_text(encoding='utf-8'))
+    assert not diagram_vp8l['productionChanged'] and diagram_vp8l['allBuilds'] == 0
+    assert diagram_vp8l['independentQuietConfirmation'] and diagram_vp8l['status']['DiagramLossless8'] == 'confirmed-gap'
+    assert diagram_vp8l['comparisonLowerBounds']['DiagramLossless8'] > 1
+    assert len(diagram_vp8l['cases']['DiagramLossless8'][-1]['managed']['actual']) == 12
     vp8_cases = {'case06': 'DiagramLossyDistortion8', 'case07': 'Alpha8',
                  'case08': 'PhotographLossy8', 'case09': 'DiagramLossy8',
                  'case10': 'DiagramLossyTrellis8', 'case11': 'Opaque16'}
@@ -522,7 +527,7 @@ def render():
         observation = case['observation']
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
-        updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case17', 'case18', 'case19', 'case20'}
+        updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case16', 'case17', 'case18', 'case19', 'case20'}
         producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8_stream if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] == 'case10':
             producer = trellis_cost
@@ -532,6 +537,8 @@ def render():
             producer = vp8l_photo_cost
         elif case['id'] == 'case14':
             producer = async_vp8l
+        elif case['id'] == 'case16':
+            producer = diagram_vp8l
         if case['id'] in {'case17', 'case18'}:
             producer = predictive_cost
         elif case['id'] in {'case19', 'case20'}:
@@ -563,7 +570,7 @@ def render():
             expected_library = producer['producers']['linuxSha256'] if updated else evidence['librarySha256']
         assert receipt['librarySha256'] == expected_library
         assert all(g['passed'] for g in observation['quietness'].values())
-        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case14', 'case15', 'case21', 'case22', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
+        samples = 12 if case['id'] in {'case00', 'case02', 'case08', 'case10', 'case12', 'case13', 'case14', 'case15', 'case16', 'case21', 'case22', 'case23', 'case24', 'case27', 'case28', 'case29', 'case30'} or updated and receipt['caseId'] in {'EncodeSmallest8', 'EncodeSmallest16', 'EncodeNoCompression16', 'EncodeFast8'} else 3
         assert (8 if samples == 12 else 2) <= stats['N'] <= samples
         assert len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == samples
         assert math.isclose(stats['Mean'] / native, ratio, rel_tol=1e-12)
@@ -1356,6 +1363,9 @@ misses 4.1% triage and is removed; accepted production and exact pixels remain.
 Two [tight PNG decoding costs](../benchmarks/CURRENT-TIGHT-PNG-DECODE-COSTS.md)
 are current: byte confirms **1.096 / upper 1.119**, 68,224 B/op; word is
 **confidence-open at 0.997 / upper 1.016**, 70,272 B/op, with no pass or gap claim.
+The existing [indexed lossless WebP diagram](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md#indexed-diagram-current-cost)
+now independently confirms **1.116 / upper 1.142**, 27,418,912 B/op and exact
+7,234-byte packets. This replaces its retained release short without a speedup claim.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named

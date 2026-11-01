@@ -54,6 +54,9 @@ misses 4.1% triage and is removed; accepted production and exact pixels remain.
 Two [tight PNG decoding costs](../benchmarks/CURRENT-TIGHT-PNG-DECODE-COSTS.md)
 are current: byte confirms **1.096 / upper 1.119**, 68,224 B/op; word is
 **confidence-open at 0.997 / upper 1.016**, 70,272 B/op, with no pass or gap claim.
+The existing [indexed lossless WebP diagram](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md#indexed-diagram-current-cost)
+now independently confirms **1.116 / upper 1.142**, 27,418,912 B/op and exact
+7,234-byte packets. This replaces its retained release short without a speedup claim.
 
 Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
 now have independent current costs. The additional named
@@ -83,7 +86,7 @@ acceptance histories are retained in the coverage links and raw evidence.
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | VP8L photograph / libwebp exact=1 † | 110,839.47 | 84,688.04 | 1.309 / 1.326 | 20,418,338 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 | 11,087.40 | 9,649.39 | 1.149 / 1.709 | 27,419,167 | 7,234 / 7,234 |
+| VP8L text/diagram / libwebp exact=1 † | 11,588.79 | 10,384.50 | 1.116 / 1.142 | 27,418,912 | 7,234 / 7,234 |
 | PNG RGBA8, SmallestSize9 / native9 † | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,083.65 | 4,351.80 | 1.398 / 1.420 | 1,344,428 | 236,828 / 236,828 |

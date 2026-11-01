@@ -47,3 +47,29 @@ remaining affected named boundary. Both changed color-source files remain
 byte-identical on the current qualified build. These six costs retain their
 existing confidence status and all remain gaps. No additional unnamed effort or
 stream grid is inferred, and no measurement or build is repeated for this review.
+
+## Indexed diagram current cost
+
+The existing 513×259 indexed effort-4 text/diagram control now has one independent
+twelve: **11,588.788 µs, 1.116× / upper 1.142, 27,418,912 B/op**. It is a confirmed
+gap. Managed/reference packets remain exactly 7,234 bytes; original pixels,
+alpha, native normal/scalar decoders, input and independent output owners pass.
+The complete encode/growth/disposal boundary and frozen reference settings stay.
+
+This resolves a missing independent confirmation. Its retained 0.2.0 short had
+upper1.709; it remains valid historical evidence for its producer, without a
+paired speedup claim. Indexed selection bypasses the color search changed above.
+All six named lossless encoder controls now have independent applicable costs.
+
+Zero builds, profiles, new inputs/settings or repeated full/package checks.
+The same qualified immutable core, current harness, cached selector and worker
+serve one successful twelve with all actuals, native brackets and both quiet-v2
+guards. Unchanged 5,342 checks per OS and SAME actual Release-package/three-example
+proof are reused. Native allocations are unmeasured; B/op includes harness costs.
+
+[Numeric evidence](current-vp8l-diagram-cost-evidence.json) retains pins, failure
+cleanup and unchanged-proof reuse. Mirrored/member-verified raw
+current-vp8l-diagram-cost.tar.xz, SHA256
+b4b812134e8e8c387b1beb982e80a39de47252ceeee4e31da33ee4f0969ab701
+(1,333,020 B / 46 members), retains original fixtures, worker, actual assemblies,
+scores and guards. Stop retiming this confirmed gap; all 268 paths remain required.
