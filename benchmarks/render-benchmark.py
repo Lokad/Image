@@ -1553,8 +1553,9 @@ def render():
 
 Updated 2026-11-01. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with the retained **0.2.0 baseline**. The
-[268-path coverage checklist](../benchmarks/WARM-COVERAGE.md) records current-path
-validity, missing confirmations and remaining gaps. Full warm parity is open.
+[282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
+268 controls and adds [14 unmeasured text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md).
+It records validity, missing confirmations and gaps. Full warm parity is open.
 
 Sequential measurements use the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC.

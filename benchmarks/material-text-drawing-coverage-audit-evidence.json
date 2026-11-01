@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "kind": "bounded required-path coverage audit",
+  "inspectedRevision": "3c68a44f8ab2f8d88e3f45823cf8b38eea7a1f73",
+  "productionChanged": false,
+  "allBuilds": 1,
+  "measurements": 0,
+  "existingRequiredControls": 268,
+  "addedRequiredPaths": 14,
+  "totalRequiredPaths": 282,
+  "originalInventory": {
+    "revision": "27fc0425be9e21d913e7bd049fe3ce629bf28955",
+    "path": "docs/benchmark-pre-cleanup.md",
+    "sha256": "df68c1c44cd99e9ce11e65bbd7aa08333641aac7e029ae3737c6e2927095cfd5",
+    "matchingTextOrDrawingRows": 0
+  },
+  "benchmarkSourceAudit": {
+    "directory": "benchmarks/Lokad.Image.Benchmarks",
+    "files": 108,
+    "pattern": "ImageDrawing|TextLayout|DrawText|TrueTypeFont|TryFit",
+    "matchingFiles": []
+  },
+  "nativeCapabilities": {
+    "filters": [],
+    "matchingFilterSymbols": [],
+    "filterVersion": "11.14.100",
+    "retainedRegularFont": true,
+    "timing": false
+  },
+  "textCorrectnessReference": {
+    "path": "tools/TextReference/README.md",
+    "performanceReference": false
+  },
+  "freetypeChecks": {
+    "paths": [
+      "tools/WarmReference/freetype-outline-check.c",
+      "tools/WarmReference/freetype-render-check.c"
+    ],
+    "approvedPerformanceReference": false
+  },
+  "cases": [
+    {
+      "id": "DrawingFill8",
+      "boundary": "FillRectangle, RGBA8",
+      "reason": "Packed byte replacement including hidden RGB; supplied color, clipped rectangle.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "DrawingFill16",
+      "boundary": "FillRectangle, RGBA16",
+      "reason": "Distinct ushort destination loop and full-precision color.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "DrawingCopy8",
+      "boundary": "CopyRegion, separate RGBA8 buffers",
+      "reason": "Exact rectangle placement into a borrowed existing canvas; no new output frame.",
+      "status": "native pixels/boundary feasible; warm benchmark not yet implemented"
+    },
+    {
+      "id": "DrawingCopy16",
+      "boundary": "CopyRegion, separate RGBA16 buffers",
+      "reason": "Distinct ushort span-copy boundary.",
+      "status": "native pixels/boundary feasible; warm benchmark not yet implemented"
+    },
+    {
+      "id": "DrawingCopyOverlap8",
+      "boundary": "CopyRegion, overlapping RGBA8 rectangle",
+      "reason": "Required snapshot semantics through reverse traversal; exclude reset equally on both subjects.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "DrawingComposite8",
+      "boundary": "Composite, RGBA8 source/canvas",
+      "reason": "Straight-alpha rational source-over, including zero and partial alpha.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "DrawingComposite16",
+      "boundary": "Composite, RGBA16 source/canvas",
+      "reason": "Full-precision samples and 64-bit coverage arithmetic.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "FontLoadRegular",
+      "boundary": "TrueTypeFont.Load, existing DejaVu Sans regular",
+      "reason": "Copy/validate supplied bytes and release an independently retained face.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "TextLayoutLogicalWrapped",
+      "boundary": "TextLayout.Create, Logical",
+      "reason": "Default logical mapping, kerning, wrapping, bounds and retained layout ownership.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "TextLayoutOpenTypeLatin",
+      "boundary": "TextLayout.Create, OpenType Latin",
+      "reason": "Required substitution/positioning path on the existing Latin kerning control.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "TextLayoutOpenTypeArabic",
+      "boundary": "TextLayout.Create, OpenType Arabic",
+      "reason": "Existing ArabicMarksDigits control exercises joining, bidi and mark positioning.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "TextFitOpenType",
+      "boundary": "TextLayout.TryFit, existing ConstrainedFit",
+      "reason": "Complete bounded size search, releasing rejected candidates and retaining the winner.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "DrawText8",
+      "boundary": "ImageDrawing.DrawText, RGBA8",
+      "reason": "Prepared-layout rasterization and alpha compositing into a borrowed canvas.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    },
+    {
+      "id": "DrawText16",
+      "boundary": "ImageDrawing.DrawText, RGBA16",
+      "reason": "Distinct full-precision destination/color behavior with the same prepared layout.",
+      "status": "unmeasured; equivalent reference boundary unresolved"
+    }
+  ],
+  "unchangedEvidence": {
+    "checksPerOS": 5376,
+    "actualPackageReused": true,
+    "selectedProductionCommit": "794538e629420090dc818193f5f6ce3900f74285",
+    "newProductionQualificationRequired": false
+  },
+  "productionBuilds": 0,
+  "benchmarkBuilds": 0,
+  "nativeCorrectnessAdapterBuilds": 1,
+  "raw": {
+    "file": "material-text-drawing-coverage-audit.tar.xz",
+    "sha256": "87de35a5b34fad1dfe09a0940ca4c358b1501e7749728ecacc9245baa7ea0826",
+    "bytes": 96572,
+    "members": 7,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "nativeCopyFeasibility": {
+    "schemaVersion": 1,
+    "project": "Lokad.Image",
+    "correctnessOnly": true,
+    "timingClaim": false,
+    "productionChanged": false,
+    "sourceSha256": "f99288287d512bf0683fc1bae80e53ecddb9ecd8cf90b3f636fa78f7fbedc828",
+    "workerSha256": "9db3d9d6cbbe81917bde3dbf9005b085c48b55d95f4208c16da75522f6c5cf9e",
+    "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "avutilVersion": "60.26.100",
+    "cases": [
+      {
+        "depth": 8,
+        "inputBytes": 531468,
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "outputSha256": "d5b9f521f37c7933ec119815d69806c52b7b060d733bb1f14564e0b075856ac4",
+        "allSamplesExact": true,
+        "alphaExact": true,
+        "hiddenRgbExact": true,
+        "untouchedCanvasExact": true,
+        "sourceUnchanged": true,
+        "publicApi": "av_image_copy_plane",
+        "sourceRectangle": [
+          127,
+          65,
+          256,
+          129
+        ],
+        "destination": [
+          17,
+          19
+        ],
+        "native": {
+          "depth": 8,
+          "sourceUnchanged": true,
+          "borrowedCanvas": true,
+          "operations": 2,
+          "timing": false
+        },
+        "negativeControls": {
+          "missing-output": 2,
+          "invalid-depth": 2
+        }
+      },
+      {
+        "depth": 16,
+        "inputBytes": 1062936,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "046a1b2e10c7c8e744e8af15497a0b3d498e750e84b2f15fa69cd082a3e1078d",
+        "allSamplesExact": true,
+        "alphaExact": true,
+        "hiddenRgbExact": true,
+        "untouchedCanvasExact": true,
+        "sourceUnchanged": true,
+        "publicApi": "av_image_copy_plane",
+        "sourceRectangle": [
+          127,
+          65,
+          256,
+          129
+        ],
+        "destination": [
+          17,
+          19
+        ],
+        "native": {
+          "depth": 16,
+          "sourceUnchanged": true,
+          "borrowedCanvas": true,
+          "operations": 2,
+          "timing": false
+        },
+        "negativeControls": {
+          "missing-output": 2,
+          "invalid-depth": 2
+        }
+      }
+    ]
+  },
+  "nativeLibrary": {
+    "avutilArchiveSha256": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+    "imgutilsHeaderSha256": "8e0055fd86fb10b7c9e435e9375736b6db201cb9930a38fb4ff1e1a1da8e0cff"
+  }
+}

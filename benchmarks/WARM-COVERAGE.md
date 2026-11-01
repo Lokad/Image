@@ -7,6 +7,13 @@ concurrency are excluded. Compression correctness precedes CPU optimization.
 The published 0.2.0 snapshot is retained as the baseline; current evidence is
 reconciled in the summary below.
 
+[The bounded text/drawing audit](MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md)
+corrects an inventory omission: retain all 268 existing controls and add 14 named
+required paths, for **282 total**. Those additions have functional qualification
+but no warm performance evidence. Their equivalent native boundaries must be
+resolved before timing; no new reference exception is implied. Earlier round
+counts below describe their own checkpoints, not full text/drawing coverage.
+
 [Current JPEG long-prefix confirmation](JPEG-LONG-PREFIX-CURRENT-CONFIRMATION.md)
 rejects the identical archivedcandidate:ONE3thenONE12 gives2.08%raw/2.84%normalized
 points,unchanged10088B/op,exactpixels;raw/all/normalized confidenceoverlap.
@@ -1527,10 +1534,13 @@ Added, using the existing 513×259 diagram and frozen settings:
   level6/pred=mixed is frozen explicitly;
   these packets have a size/pixel gate, not a byte-identity target. No extra grid.
 
-Remaining inventory includes named inspection/Identify stream and resident
+The original 268 controls include named inspection/Identify stream and resident
 boundaries; codec policies, normalization, caller gray/RGB/CMYK and CMYK/YCCK/411/410;
 sync/async and retained-root ownership; exact geometry and each required resize
-algorithm; logical/OpenType/bidi/Arabic text, fitting and drawing/compositing.
+algorithm. The [14 audited additions](MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md)
+separately cover supplied-font loading, logical/OpenType/Arabic layout, fitting,
+text rendering and drawing/compositing; they were absent from the original
+performance inventory, despite the earlier statement here.
 Each existing named case remains required until valid passing evidence applies.
 Add a case only when evidence identifies a distinct required algorithm or public
 boundary omitted from this inventory.
