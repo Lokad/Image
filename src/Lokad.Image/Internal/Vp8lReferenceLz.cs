@@ -187,13 +187,18 @@ internal static class Vp8lReferenceLz
     }
 
     internal static Vp8lTokenBuffer Trace(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, int width,
-        ReadOnlySpan<Vp8lToken> seed, OperationContext context, int cacheBits = 0)
+        ReadOnlySpan<Vp8lToken> seed, OperationContext context, int cacheBits = 0, Vp8lTokenBuffer? scratch = null)
     {
-        Validate(pixels.Length, width);
-        if (pixels.Length != matches.Length) throw new ArgumentException("Expected matching source/index lengths.");
-        var result = new Vp8lTokenBuffer(context, pixels.Length);
+        // Scratch ownership transfers on entry, including failure. The seed is
+        // independently owned and must remain unchanged throughout tracing.
+        var result = scratch;
         try
         {
+            Validate(pixels.Length, width);
+            if (pixels.Length != matches.Length) throw new ArgumentException("Expected matching source/index lengths.");
+            result ??= new Vp8lTokenBuffer(context, pixels.Length);
+            if (seed.Overlaps(result.Tokens)) throw new ArgumentException("Trace seed must not alias its scratch.", nameof(seed));
+            result.ResetForTrace(context, pixels.Length);
             using var state = new TraceState(pixels.Length, seed, width, cacheBits, context);
             state.Literal(pixels, 0, 0);
             var previousDistance = -1; var previousLength = -1; var firstConstant = false; var reach = 0; long distancePrice = -1;
@@ -238,7 +243,7 @@ internal static class Vp8lReferenceLz
             if (cacheBits != 0) Vp8lReferenceCache.Apply(pixels, result, cacheBits, context);
             return result;
         }
-        catch { result.Dispose(); throw; }
+        catch { result?.Dispose(); throw; }
     }
 
     internal static Vp8lTokenBuffer Encode(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, int width,
@@ -251,10 +256,10 @@ internal static class Vp8lReferenceLz
             standard = Greedy(pixels, matches, context); repeated = Repeats(pixels, width, context);
             var standardCost = Estimate(standard.Tokens, width, context); var repeatCost = Estimate(repeated.Tokens, width, context);
             if (repeatCost < standardCost) { var result = repeated; repeated = null; return result; }
-            repeated.Dispose(); repeated = null;
             if (traceSearch)
             {
-                trace = Trace(pixels, matches, width, standard.Tokens, context);
+                var scratch = repeated; repeated = null;
+                trace = Trace(pixels, matches, width, standard.Tokens, context, scratch: scratch);
                 if (Estimate(trace.Tokens, width, context) < standardCost) { var result = trace; trace = null; return result; }
             }
             var chosen = standard; standard = null; return chosen;

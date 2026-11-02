@@ -1512,6 +1512,16 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}) | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    workspace = json.loads((ROOT / 'benchmarks/webp-candidate-workspace-evidence.json').read_text(encoding='utf-8'))
+    assert workspace['productionAccepted'] and not workspace['qualifiedCpuGainClaim']
+    assert workspace['qualification']['fullChecksEachOs'] == 5383
+    assert workspace['qualification']['actualPackage']['sha256'] == workspace['qualification']['samePackageLinux']['sameActualPackageSha256']
+    historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
+                                      or row.startswith('| VP8 RGBA8 †')
+                                      or row.startswith('| VP8 RGBA16 + alpha,'))
+    assert sum(historical_workspace(row) for _, row in rows) == 8
+    rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
+            for kind, row in rows]
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1613,6 +1623,13 @@ they are not equivalent one-shot or prepared-session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
+[Accepted WebP workspace redesign](../benchmarks/WEBP-CANDIDATE-WORKSPACE.md)
+reduces diagram allocation from **27.4 to 10.5 MB/op** and peak admitted storage
+from **20.9 to 6.2 MB**, preserving exact packets. Photograph/alpha allocations
+also fall. Rows marked **‡** retain pre-workspace CPU/allocation measurements;
+they are historical costs pending refresh, not current implementation proof.
+The redesign's short CPU screen is diagnostic; no CPU gain is claimed from it.
+
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
 operations include declared normalization, output ownership and release; fixture
@@ -1633,8 +1650,9 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Unchanged production retains 5,378 checks per OS, affected scalar coverage and the
-same actual Release-package consumer/three examples on Windows/Linux. Current
+Current production passes 5,383 full/live checks per OS, 67 affected checks in
+normal/scalar modes and the same actual Release-package consumer/three examples
+on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
 [coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 

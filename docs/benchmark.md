@@ -16,6 +16,13 @@ they are not equivalent one-shot or prepared-session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
+[Accepted WebP workspace redesign](../benchmarks/WEBP-CANDIDATE-WORKSPACE.md)
+reduces diagram allocation from **27.4 to 10.5 MB/op** and peak admitted storage
+from **20.9 to 6.2 MB**, preserving exact packets. Photograph/alpha allocations
+also fall. Rows marked **‡** retain pre-workspace CPU/allocation measurements;
+they are historical costs pending refresh, not current implementation proof.
+The redesign's short CPU screen is diagnostic; no CPU gain is claimed from it.
+
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
 operations include declared normalization, output ownership and release; fixture
@@ -36,8 +43,9 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Unchanged production retains 5,378 checks per OS, affected scalar coverage and the
-same actual Release-package consumer/three examples on Windows/Linux. Current
+Current production passes 5,383 full/live checks per OS, 67 affected checks in
+normal/scalar modes and the same actual Release-package consumer/three examples
+on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
 [coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 
@@ -52,19 +60,19 @@ family evidence is linked below; individual experiments remain in
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,353.14 | 2,517.95 | 1.332 / 1.346 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA8 † | 69,770.34 | 53,756.44 | 1.298 / 1.307 | 21,353,208 | 98,590 / 98,590 |
-| VP8 RGBA16 + alpha, including normalization † | 71,441.15 | 54,514.34 | 1.311 / 1.365 | 21,350,352 | 98,590 / 98,590 |
+| VP8 RGBA8 † ‡ | 69,770.34 | 53,756.44 | 1.298 / 1.307 | 21,353,208 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † ‡ | 71,441.15 | 54,514.34 | 1.311 / 1.365 | 21,350,352 | 98,590 / 98,590 |
 | VP8 opaque RGBA8 † | 19,848.95 | 15,654.15 | 1.268 / 1.308 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 13,899.64 | 9,701.62 | 1.433 / 1.438 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 7,791.31 | 5,845.88 | 1.333 / 1.351 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,568.52 | 15,639.99 | 1.315 / 1.319 | 1,201,552 | 72,380 / 72,380 |
-| VP8L RGBA8 / libwebp exact=1 † | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
-| VP8L photograph / libwebp exact=1 † | 110,839.47 | 84,688.04 | 1.309 / 1.326 | 20,418,338 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 11,588.79 | 10,384.50 | 1.116 / 1.142 | 27,418,912 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † ‡ | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † ‡ | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † ‡ | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † ‡ | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
+| VP8L photograph / libwebp exact=1 † ‡ | 110,839.47 | 84,688.04 | 1.309 / 1.326 | 20,418,338 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † ‡ | 11,588.79 | 10,384.50 | 1.116 / 1.142 | 27,418,912 | 7,234 / 7,234 |
 | PNG RGBA8, SmallestSize9 / native9 † | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, Fastest1 / native1 † | 6,083.65 | 4,351.80 | 1.398 / 1.420 | 1,344,428 | 236,828 / 236,828 |

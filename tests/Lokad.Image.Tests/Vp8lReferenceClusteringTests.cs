@@ -10,6 +10,50 @@ public sealed class Vp8lReferenceClusteringTests
 {
     private static readonly Vp8lToken[] Sparse = [Vp8lToken.Literal(0xff010203u), Vp8lToken.Copy(63, 1)];
 
+    [Fact]
+    public void LongCopyAcrossEmptyTilesFitsSmallSharedRootAndKeepsIndependentPopulations()
+    {
+        // One literal and one copy cover64x64, crossing256 spatial tiles.
+        // Empty tiles contribute no symbols; their logical assignments remain.
+        Vp8lToken[] tokens = [Vp8lToken.Literal(0xff010203u), Vp8lToken.Copy(4095, 1)];
+        using var root = new TestMemoryBudget(256 * 1024);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var first = Vp8lReferenceClustering.Build(tokens, 64, 64, 2, 10, false, context);
+        var populations = first.Populations.ToArray(); var map = first.Map.ToArray();
+        Assert.Equal(1, first.GroupCount); Assert.Equal(256, map.Length);
+        Assert.All(map, value => Assert.Equal(0, value)); Assert.Equal(6, populations.Sum());
+        using (var second = Vp8lReferenceClustering.Build(tokens, 64, 64, 2, 10, false, context))
+        {
+            Assert.True(second.Populations.SequenceEqual(populations));
+            Assert.True(second.Map.SequenceEqual(map));
+        }
+        Assert.True(first.Populations.SequenceEqual(populations)); Assert.True(first.Map.SequenceEqual(map));
+        Assert.InRange(root.Peak, 1, 256 * 1024); Assert.True(root.Bytes > 0);
+        first.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void CompactHistogramAdmissionAndCancellationCleanUpBeforeLaterOperation()
+    {
+        Vp8lToken[] tokens = [Vp8lToken.Literal(0xff010203u), Vp8lToken.Copy(4095, 1)];
+        using var root = new TestMemoryBudget(256 * 1024);
+        Assert.True(root.TryReserve(256 * 1024 - 512, out var held));
+        using (var refused = new OperationContext(new() { MemoryBudget = root }, default))
+        {
+            var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(tokens, 64, 64, 2, 10, false, refused));
+            Assert.Equal(ImageLimitScope.SharedBudget, error.Scope);
+        }
+        Assert.Equal(held.Bytes, root.Bytes); held.Dispose(); Assert.Equal(0, root.Bytes);
+        using var cancellation = new CancellationTokenSource(); root.Admitted = _ => cancellation.Cancel();
+        using (var canceled = new OperationContext(new() { MemoryBudget = root }, cancellation.Token))
+            Assert.Throws<OperationCanceledException>(() => Vp8lReferenceClustering.Build(tokens, 64, 64, 2, 10, false, canceled));
+        Assert.Equal(0, root.Bytes); root.Admitted = null;
+        using (var later = new OperationContext(new() { MemoryBudget = root }, default))
+        using (var plan = Vp8lReferenceClustering.Build(tokens, 64, 64, 2, 10, false, later))
+            Assert.Equal(1, plan.GroupCount);
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     private static string Hash(ReadOnlySpan<int> values)
     {
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); Span<byte> bytes = stackalloc byte[4];

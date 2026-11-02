@@ -2,6 +2,53 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyWebpCandidateWorkspace()
+    {
+        // Authored flat regions and a small many-color patch exercise empty
+        // spatial tiles independently of the photograph/diagram fixtures.
+        const int width = 383, height = 193, capacity = 6 * 1024 * 1024;
+        var pixels = new byte[width * height * 4];
+        for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
+        {
+            var i = (y * width + x) * 4;
+            pixels[i] = 32; pixels[i + 1] = 64; pixels[i + 2] = 96; pixels[i + 3] = 255;
+            if (x is >= 64 and < 96 && y is >= 32 and < 64)
+            {
+                pixels[i] = (byte)(x * 7 + y * 3); pixels[i + 1] = (byte)(x * 3 + y * 11);
+                pixels[i + 2] = (byte)(x * 13 + y * 5); pixels[i + 3] = (byte)((x + y) % 7 == 0 ? 0 : 255);
+            }
+        }
+        using var root = new TestMemoryBudget(capacity); var limits = new ImageLimits { MemoryBudget = root };
+        using var source = ImageBuffer.Create(width, height, 8, limits);
+        for (var y = 0; y < height; y++) pixels.AsSpan(y * source.Stride, source.Stride).CopyTo(source.GetRow8(y));
+        var options = new WebpEncodeOptions { Lossless = true, Effort = 4, Quality = 85, Limits = limits };
+        using (var caller = root.CreateScope())
+        {
+            if (!caller.TryReserve(capacity - pixels.Length - 1024, out var held)) throw new Exception("WebP refusal setup differs.");
+            using (held)
+            using (var refused = new MemoryStream())
+            {
+                try { ImageCodec.EncodeWebp(source, refused, options); throw new Exception("WebP ignored shared refusal."); }
+                catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget) { }
+                if (refused.Length != 0 || !refused.CanWrite || root.Bytes != pixels.Length + held.Bytes)
+                    throw new Exception("WebP refusal leaked capacity or took output ownership.");
+            }
+        }
+        using var synchronous = new MemoryStream(); using var asynchronous = new MemoryStream();
+        ImageCodec.EncodeWebp(source, synchronous, options);
+        await ImageCodec.EncodeWebpAsync(source, asynchronous, options);
+        if (!synchronous.ToArray().AsSpan().SequenceEqual(asynchronous.ToArray()) || root.Bytes != pixels.Length
+            || !synchronous.CanWrite || !asynchronous.CanWrite || !OriginalPixels.Bytes(source).AsSpan().SequenceEqual(pixels))
+            throw new Exception("WebP workspace changed packets, source or asynchronous ownership.");
+        using var first = ImageCodec.Decode(synchronous.ToArray(), new DecodeOptions { Limits = limits });
+        using var survivor = ImageCodec.Decode(asynchronous.ToArray(), new DecodeOptions { Limits = limits });
+        source.Dispose(); first.Dispose();
+        if (!OriginalPixels.Bytes(survivor).AsSpan().SequenceEqual(pixels) || root.Bytes != pixels.Length)
+            throw new Exception("WebP surviving result lost pixels or admission.");
+        survivor.Dispose();
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("WebP workspace leaked capacity or disposed the caller root.");
+        Console.WriteLine("Packaged WebP candidate workspace preserves sync/async packets, hidden RGB and shared lifetimes.");
+    }
     private static void VerifyRectangleFill()
     {
         foreach (var depth in new[] { 8, 16 })
@@ -248,6 +295,7 @@ internal static class CooperativeMemoryConsumer
         VerifyWideBicubicRepair();
         VerifyRectangleCopy();
         VerifyRectangleFill();
+        await VerifyWebpCandidateWorkspace();
         await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try

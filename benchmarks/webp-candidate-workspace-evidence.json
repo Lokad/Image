@@ -1,0 +1,147 @@
+{
+  "project": "Lokad.Image",
+  "stage": "HWR76",
+  "date": "2026-11-02",
+  "productionAccepted": true,
+  "acceptance": "Operation-owned allocation/peak-storage reduction with exact packets and full lifecycle qualification; no qualified CPU-gain claim.",
+  "operationBoundary": "Complete public EncodeWebp, resident original source, normalization/preparation/candidate selection, fresh MemoryStream growth and disposal; no ToArray during measurement. Coarse budget peak is separate and excludes borrowed input/caller stream; no cross-operation pool added. Three direct screen batches, not BenchmarkDotNet qualification.",
+  "quietGuardsPassed": true,
+  "qualifiedCpuGainClaim": false,
+  "cases": [
+    {
+      "caseId": "photograph",
+      "dimensions": [
+        513,
+        259
+      ],
+      "packetBytes": 160032,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "beforeAllocatedBytes": 20416808,
+      "allocatedBytes": 19327976,
+      "beforeAdmittedPeakBytes": 12217052,
+      "admittedPeakBytes": 12217052,
+      "retainedRootBytes": 0,
+      "diagnosticBeforeNanoseconds": 122531259.66666667,
+      "diagnosticNanoseconds": 122724068.66666667,
+      "exactPacket": true,
+      "sourceUnchanged": true
+    },
+    {
+      "caseId": "diagram",
+      "dimensions": [
+        513,
+        259
+      ],
+      "packetBytes": 7234,
+      "packetSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "beforeAllocatedBytes": 27417688,
+      "allocatedBytes": 10481064,
+      "beforeAdmittedPeakBytes": 20929228,
+      "admittedPeakBytes": 6174402,
+      "retainedRootBytes": 0,
+      "diagnosticBeforeNanoseconds": 12102506.148148147,
+      "diagnosticNanoseconds": 10638875.2,
+      "exactPacket": true,
+      "sourceUnchanged": true
+    },
+    {
+      "caseId": "alpha",
+      "dimensions": [
+        513,
+        259
+      ],
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "beforeAllocatedBytes": 21348720,
+      "allocatedBytes": 19224016,
+      "beforeAdmittedPeakBytes": 6579383,
+      "admittedPeakBytes": 6579383,
+      "retainedRootBytes": 0,
+      "diagnosticBeforeNanoseconds": 76538947.83333333,
+      "diagnosticNanoseconds": 74549183.0,
+      "exactPacket": true,
+      "sourceUnchanged": true
+    },
+    {
+      "caseId": "authored-bars",
+      "dimensions": [
+        127,
+        65
+      ],
+      "packetBytes": 660,
+      "packetSha256": "4cd4197fb6d8636d3d8cd0ff29d9b7f161067413190237d1889ec55526b62b7a",
+      "inputSha256": "0762955e7161d65e38f39f1a7f6b6c69dcd1e806ee3b37038215727743e90084",
+      "beforeAllocatedBytes": 966592,
+      "allocatedBytes": 933264,
+      "beforeAdmittedPeakBytes": 312716,
+      "admittedPeakBytes": 312716,
+      "retainedRootBytes": 0,
+      "diagnosticBeforeNanoseconds": 1038228.490990991,
+      "diagnosticNanoseconds": 995968.5777777778,
+      "exactPacket": true,
+      "sourceUnchanged": true
+    }
+  ],
+  "producers": {
+    "beforeLinuxSha256": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676",
+    "linuxSha256": "53a82250bce6b78e92b510ef9e0b5931978295771a363e244a7eba490d8c8b41",
+    "windowsSha256": "f785bd7c6b5a0b0e296439802a435a5cdcd9bee678dde95c47379732ad6465a6"
+  },
+  "sourceSha256": {
+    "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": "b806c219eb8d4194741dd6d67128f94decb739fdd6355e51490bf45891e10e4b",
+    "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "f51f161ad0b4324e9fdf2d986618fe4fb38dccc613b3e98a098bd78e73370ec5",
+    "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "ad47ce6084bed4f5d22cefb6f56314a2114d3d8b3e28af4d46df3b6e5a64e40c",
+    "src/Lokad.Image/Internal/Vp8lTokenBuffer.cs": "2b37df5b42e5c74330fd24e671ced664a95d89abb5d77d3ef66ec0e5b4012c27",
+    "tests/Lokad.Image.Tests/Vp8lReferenceClusteringTests.cs": "75c618c32d1cede27ee038858ba2e3252af3a5673a9cebc080929e9681c2f952",
+    "tests/Lokad.Image.Tests/Vp8lTraceOwnershipTests.cs": "5e052afa08835bfc0c0253ede2188bf42c506cafd517d8bf352966fc76e2ce51"
+  },
+  "qualification": {
+    "fullChecksEachOs": 5383,
+    "fullCounts": [
+      2181,
+      2254,
+      948
+    ],
+    "affectedNormalScalarEachOs": 67,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "a776b6e67d3e1a0dc849b27e22a67a6475671f21c6b90ec2e8b9fcbd9c5c68da",
+      "symbolsSha256": "f456aa46eab622cc6f201afeea21dda2a45100939271cb553937ee184c6a2fbc",
+      "bytes": 391395,
+      "librarySha256": "f785bd7c6b5a0b0e296439802a435a5cdcd9bee678dde95c47379732ad6465a6",
+      "actualConsumerPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "a776b6e67d3e1a0dc849b27e22a67a6475671f21c6b90ec2e8b9fcbd9c5c68da",
+      "librarySha256": "f785bd7c6b5a0b0e296439802a435a5cdcd9bee678dde95c47379732ad6465a6",
+      "actualConsumerPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    }
+  },
+  "evidenceInvalidation": {
+    "affected": "VP8L encoding and lossless alpha in transparent VP8 encoding, including async/16-bit wrappers. Prior timings/allocations remain historical until measured on this implementation.",
+    "reused": "JPEG, PNG, decoders, resizing, inspection, text/drawing and opaque VP8 without lossless alpha: relevant executed production paths unchanged."
+  },
+  "raw": {
+    "file": "webp-candidate-workspace.tar.xz",
+    "bytes": 1587996,
+    "members": 75,
+    "sha256": "5a1492e1abc26a1f32e6abad99df161aebfa4962349041e1647f383d99adf806",
+    "vmMembersVerified": true,
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}

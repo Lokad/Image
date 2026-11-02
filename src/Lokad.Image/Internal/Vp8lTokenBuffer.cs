@@ -22,6 +22,17 @@ internal sealed class Vp8lTokenBuffer : IDisposable
     internal Span<Vp8lToken> Writable => (tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer))).AsSpan(0, Count);
     internal long CapacityBytes => (tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer))).Length * 8L;
 
+    // Transfer a rejected parsing candidate's existing capacity to the next
+    // candidate. Only Count entries are live; the previous values need no clear.
+    // Admission remains charged throughout, without a pool or another allowance.
+    internal void ResetForTrace(OperationContext owner, int capacity)
+    {
+        var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
+        if (!ReferenceEquals(context, owner) || storage.Length != capacity)
+            throw new ArgumentException("Trace scratch must belong to the same operation and input capacity.");
+        Count = 0; CacheBits = 0;
+    }
+
     internal Vp8lTokenBuffer(OperationContext context, int capacity)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(capacity);

@@ -23,9 +23,9 @@ internal static class Vp8lReferenceMainParsing
             var standardCost = Vp8lReferenceLz.Estimate(standard.Tokens, width, context, standardBits);
             var repeatedCost = Vp8lReferenceLz.Estimate(repeated.Tokens, width, context, repeatedBits);
             if (repeatedCost < standardCost) { var result = repeated; repeated = null; return result; }
-            repeated.Dispose(); repeated = null;
             if (!traceBackwards) { var direct = standard; standard = null; return direct; }
-            trace = Vp8lReferenceLz.Trace(pixels, matches, width, standard.Tokens, context, standardBits);
+            var scratch = repeated; repeated = null;
+            trace = Vp8lReferenceLz.Trace(pixels, matches, width, standard.Tokens, context, standardBits, scratch);
             if (Vp8lReferenceLz.Estimate(trace.Tokens, width, context, standardBits) < standardCost)
             { var result = trace; trace = null; return result; }
             var chosen = standard; standard = null; return chosen;

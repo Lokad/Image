@@ -14,6 +14,10 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   resize graphs and PNG contexts were reused while managed preparation was timed.
   Retain the measurements, label them accurately, and develop equivalent one-shot
   and reusable-state comparisons. Diagnostic screens are not qualified gains.
+- [Accepted WebP workspace](WEBP-CANDIDATE-WORKSPACE.md): diagram allocation
+  27.4→10.5 MB, peak admitted storage20.9→6.2 MB; exact packets and full
+  Windows/Linux/scalar/actual-package checks pass. Prior VP8L/transparent-VP8
+  encoder costs are historical pending refresh; CPU screens remain diagnostic.
 - Next architectural work targets WebP candidate storage, shared resize
   preparation/execution, then codec work ranked by useful absolute savings.
   Pending items block their own dependencies, not independent work. Failed
