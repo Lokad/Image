@@ -1535,9 +1535,10 @@ def render():
     assert workspace['qualification']['fullChecksEachOs'] == 5383
     assert workspace['qualification']['actualPackage']['sha256'] == workspace['qualification']['samePackageLinux']['sameActualPackageSha256']
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
+                                      and not row.startswith('| VP8L RGBA8 /')
                                       or row.startswith('| VP8 RGBA8 †')
                                       or row.startswith('| VP8 RGBA16 + alpha,'))
-    assert sum(historical_workspace(row) for _, row in rows) == 5
+    assert sum(historical_workspace(row) for _, row in rows) == 4
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
     webp_current = json.loads((ROOT / 'benchmarks/webp-constant-bank-workspace-evidence.json').read_text(encoding='utf-8'))
@@ -1744,9 +1745,12 @@ Raw times improve 6–9% alongside native clocks improving 8–9%; normalized
 before/after confidence overlaps, without an incremental CPU-gain claim.
 Photo/alpha retain confirmed CPU gaps; diagram confidence is open.
 Native prepared wrappers/scratch retain their labels; full per-call import,
-encoding and output ownership stay timed. The
-[earlier ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
-remains a lead; its cost and other affected rows marked **H** are historical.
+encoding and output ownership stay timed. [Current ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
+refreshes the varying-color/alpha case: **138.86 ms, 25.08 MB/op**, a confirmed
+**1.147× / upper1.162** gap with the exact **183,812-byte** packet. A one-second
+profile attributes 360/766 exclusive samples to paired histogram costs; these
+are a lead, not method times or promised savings. Other affected rows marked
+**H** remain historical.
 The [preceding constant-bank audit](../benchmarks/WEBP-CONSTANT-BANK-AUDIT.md)
 records the original opportunity; current savings above are measured.
 

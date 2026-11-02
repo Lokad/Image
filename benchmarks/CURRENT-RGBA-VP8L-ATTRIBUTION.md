@@ -1,49 +1,59 @@
 # Current RGBA8 lossless WebP cost
 
-Elapsed/allocation costs below are historical after the
-[matching/token handoff](WEBP-HEAD-TOKEN-HANDOFF.md). Retained attribution,
-algorithms and raw proof remain useful; the linked report has current anchors.
-
 One independent twelve-actual confirmation refreshes the existing 513×259 RGBA8
-control on the current qualified encoder. No production, harness, selector or
-native build; no new input, settings or workload. Both quiet guards pass.
+control after matching/token and compact-working-bank changes. The current
+qualified immutable DLL is reused with the existing harness, typed selector and
+native worker: zero builds, no new input/settings/workload. Both quiet guards pass.
 
 | Complete warm encode | Lokad µs | libwebp µs | Ratio / upper | Allocated B/op | Complete bytes |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Original RGBA8, lossless | 137,365.44 | 122,207.95 | 1.124 / 1.139 | 26,131,848 | 183,812 / 183,812 |
+| Original RGBA8, lossless | 138,864.70 | 121,100.00 | 1.147 / 1.162 | 25,083,168 | 183,812 / 183,812 |
 
-The reference is explicitly labeled libwebp exact=1, FFmpeg's encoder backend,
-method4/Q75. Complete packets, RGBA pixels, alpha and hidden RGB are exact.
-The managed operation includes public EncodeWebp, admission, fresh owned stream
-growth and disposal. Native normalization/repacking, fresh pixel import, encoding
-and independent owned packet acquisition/release are timed; native wrappers and
-BGRA scratch are prepared. Every pixel is reprocessed. Startup, I/O, IPC, checks
-and fixture preparation are excluded. One CPU; retained native preparation means
-this is not an equivalent fresh one-shot context comparison.
+The ratio lower bound is1.128: a confirmed CPU gap. The reference is explicitly
+libwebp exact=1, FFmpeg’s encoder backend, method4/Q75. Frozen complete packets,
+RGBA pixels, alpha and hidden RGB are exact. Source/settings, normal/scalar native
+pixels, independent output and all original harness gates pass unchanged.
 
-This replaces historical 158,892.27 µs / 29,696,928 B/op. It reconciles current
-cost, without attributing a causal speedup between different historical producers
-and clocks. The CPU gap remains confirmed. Allocation is total B/op, not measured
-peak live capacity; encoder scratch is not retained between calls. Sibling
-RGBA16, opaque and asynchronous costs remain historical.
+The managed operation includes public EncodeWebp, admission, preparation,
+normalization/candidates, fresh owned stream growth and disposal. Native
+normalization/repacking, fresh pixel import, encoding and independently owned
+packet acquisition/release are timed; wrappers and BGRA scratch are prepared.
+Every pixel is reprocessed. Startup, I/O, IPC, checks and fixture preparation are
+excluded. One CPU; this is not an equivalent fresh one-shot native context case.
 
-One one-second profile yields 783 workload samples. Paired histogram population
-costs receive 359 exclusive samples (45.8%), color histogram construction 67
-(8.6%). These are attribution, not method timings or guaranteed savings.
-Instrumented timing is discarded. Exact packets and both quiet guards pass.
-The [run-boundary follow-up](VP8L-RUN-BOUNDARIES-INCONCLUSIVE.md) had an
-unpromising screen and was restored; current costs remain unchanged. Further
-work needs a different bank-scan or preparation design. The earlier
-[window experiment](VP8L-WINDOW-POPULATIONS-DEFERRED.md) was inconclusive;
-its implementation and sparse/pair-cache diagnostics are evidence to consider,
-not gains to replay or permanent bans on a materially different design.
+Historical cost137,365.44µs /26,131,848B/op is replaced, without a causal gain or
+regression claim across different producers/clocks. This varying-color/alpha
+path cannot inherit the photograph/diagram/alpha anchors’ costs or peak capacity.
+Total B/op includes output growth, is not a live-capacity measurement, and encoder
+scratch is not retained. This round does not measure an admitted/physical peak.
+RGBA16, opaque and asynchronous sibling costs remain historical until needed.
 
-Unchanged production reuses 5,418 full/live checks per OS and the same actual
-0.2.1 Release-package consumer and three examples on Windows/Linux. No package
-regeneration or broad qualification is needed for this evidence-only round.
-[Evidence](current-rgba-vp8l-attribution-evidence.json) pins all actuals, brackets,
-identities and gates. Raw current-rgba-vp8l-attribution.tar.xz: 6,284,596 B /
-344 members, SHA256
-0c9790d32fcacc6dc91770b2dc1ad222fe4ade87208d5c709a701efb1b6d4607,
-mirrored/member-verified. Immutable runtime and indexed production source are
-included; broader qualification depends on the retained compact-Deflate archive.
+One one-second profile yields766workload samples. Paired histogram population
+costs receive360exclusive samples (47.0%); color histogram construction60 (7.8%).
+These are attribution, not method times or guaranteed savings. Instrumented
+timings are discarded; exact packets and both quiet guards pass.
+
+The next bounded audit measures individual combined support/zero runs and count
+ranges before considering prepared sparse-bank execution. That would remove
+per-pair zero-bin/logarithm work using owned support metadata, while retaining
+full logical costs and a portable dense path. Added metadata/preparation and
+correct RLE gap accounting must justify the design on complete workloads.
+Earlier [window statistics](VP8L-WINDOW-POPULATIONS-DEFERRED.md) and
+[run-boundary SIMD](VP8L-RUN-BOUNDARIES-INCONCLUSIVE.md) were inconclusive and are
+not replayed. Whole-empty64-bin/pair-cache diagnostics do not establish the cost
+or benefit of individual support. The family is not permanently closed.
+
+Unchanged production reuses5,440full/live checks perOS,285affected normal/scalar
+checks perOS, and the same actual0.2.1Release package/consumer with three usage
+examples on Windows/Linux. No broad repeat or package regeneration. Qualification
+is retained by [compact working banks](WEBP-CONSTANT-BANK-WORKSPACE.md).
+Publication remains postponed.
+
+[Evidence](current-rgba-vp8l-attribution-evidence.json) pins all twelve actuals,
+native brackets, source/producers, profile and gates. Raw current-rgba-vp8l-workspace-attribution.tar.xz:
+11,601,904B /439members, SHA256
+3a249ddcf33e8e81fc727f824080b63d43bda1095b3ed2629088b40eb2fde580, mirrored/member-verified.
+It includes immutable runtime, current indexed production source, sampler and
+profile. Full/package qualification depends on webp-constant-bank-workspace.tar.xz
+(SHA256 cb7feb8c8ded7a5693021ca0d20e7e3299e1df3f8db6235853cf761de0a255d6).
+Historical raw current-rgba-vp8l-attribution.tar.xz and prior reports remain retained.

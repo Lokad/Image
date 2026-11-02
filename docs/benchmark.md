@@ -41,9 +41,12 @@ Raw times improve 6–9% alongside native clocks improving 8–9%; normalized
 before/after confidence overlaps, without an incremental CPU-gain claim.
 Photo/alpha retain confirmed CPU gaps; diagram confidence is open.
 Native prepared wrappers/scratch retain their labels; full per-call import,
-encoding and output ownership stay timed. The
-[earlier ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
-remains a lead; its cost and other affected rows marked **H** are historical.
+encoding and output ownership stay timed. [Current ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
+refreshes the varying-color/alpha case: **138.86 ms, 25.08 MB/op**, a confirmed
+**1.147× / upper1.162** gap with the exact **183,812-byte** packet. A one-second
+profile attributes 360/766 exclusive samples to paired histogram costs; these
+are a lead, not method times or promised savings. Other affected rows marked
+**H** remain historical.
 The [preceding constant-bank audit](../benchmarks/WEBP-CONSTANT-BANK-AUDIT.md)
 records the original opportunity; current savings above are measured.
 
@@ -107,7 +110,7 @@ family evidence is linked below; individual experiments remain in
 | VP8 RGBA8 + lossless alpha † | 68,708.60 | 53,405.95 | 1.287 / 1.338 | 11,516,768 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 96,955.87 | 83,026.81 | 1.168 / 1.183 | 13,599,152 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 9,781.65 | 9,454.99 | 1.035 / 1.076 | 6,669,453 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † H | 137,365.44 | 122,207.95 | 1.124 / 1.139 | 26,131,848 | 183,812 / 183,812 |
+| VP8L RGBA8 / libwebp exact=1 † | 138,864.70 | 121,100.00 | 1.147 / 1.162 | 25,083,168 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † H | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
