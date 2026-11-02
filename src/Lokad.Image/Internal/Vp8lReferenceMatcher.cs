@@ -35,38 +35,38 @@ internal sealed class Vp8lMatchIndex : IDisposable
 internal static class Vp8lReferenceMatcher
 {
     private const int MaximumLength = 4095;
-    private const int HeadCount = 1 << 18;
+    internal const int HeadCount = 1 << 18;
 
     private static int Key(uint first, uint next)
         => (int)(unchecked(next * 0xc6a4a793u + first * 0x5bd1e996u) >> 14);
 
-    private sealed class Heads
+    private ref struct Heads
     {
-        private readonly int[]? dense;
+        private readonly Span<int> dense;
         private readonly Dictionary<int, int>? sparse;
-        internal Heads(int count, OperationContext context)
+        internal Heads(int count, OperationContext context, Vp8lTokenBuffer? storage)
         {
             // Sparse storage preserves the same eighteen-bit keys and chain order.
             // Its capacity is fixed from input length, never from available budget.
             if (count < 16384) sparse = new Dictionary<int, int>(count);
             else
             {
-                dense = new int[HeadCount];
+                dense = storage is null ? new int[HeadCount] : storage.BorrowScratchWords(context, HeadCount);
                 for (var at = 0; at < dense.Length; at += 4096)
                 {
                     var length = Math.Min(4096, dense.Length - at);
-                    context.Cancellation.ThrowIfCancellationRequested(); Array.Fill(dense, -1, at, length);
+                    context.Cancellation.ThrowIfCancellationRequested(); dense.Slice(at, length).Fill(-1);
                 }
             }
         }
-        internal int Get(int key) => dense is not null ? dense[key]
+        internal int Get(int key) => !dense.IsEmpty ? dense[key]
             : sparse!.TryGetValue(key, out var at) ? at : -1;
         internal void Set(int key, int at)
-        { if (dense is not null) dense[key] = at; else sparse![key] = at; }
+        { if (!dense.IsEmpty) dense[key] = at; else sparse![key] = at; }
     }
 
     internal static Vp8lMatchIndex Build(ReadOnlySpan<uint> pixels, int width,
-        int quality, bool lowEffort, OperationContext context)
+        int quality, bool lowEffort, OperationContext context, Vp8lTokenBuffer? headStorage = null)
     {
         Validate(pixels.Length, width);
         if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
@@ -78,10 +78,10 @@ internal static class Vp8lReferenceMatcher
             // Dictionary backing capacity has a coarse allowance for its buckets,
             // entries and prime rounding. No dictionary grows after construction:
             // there can be at most pixels.Length inserted keys.
-            var headBytes = pixels.Length < 16384 ? pixels.Length * 32L + 512 : HeadCount * 4L;
-            context.Reserve(headBytes); scratch = headBytes;
+            var headBytes = pixels.Length < 16384 ? pixels.Length * 32L + 512 : headStorage is null ? HeadCount * 4L : 0;
+            if (headBytes != 0) { context.Reserve(headBytes); scratch = headBytes; }
             context.Cancellation.ThrowIfCancellationRequested();
-            var heads = new Heads(pixels.Length, context);
+            var heads = new Heads(pixels.Length, context, headStorage);
             var values = result.Writable;
             // Each chain link points strictly backward. Output is written from
             // right to left, after its chain entry and all later entries have

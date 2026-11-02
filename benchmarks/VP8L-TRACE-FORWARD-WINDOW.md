@@ -1,5 +1,9 @@
 # Bounded VP8L trace working state
 
+Elapsed/allocation costs below are historical after the
+[matching/token handoff](WEBP-HEAD-TOKEN-HANDOFF.md). Retained attribution,
+algorithms and raw proof remain useful; the linked report has current anchors.
+
 Forward cost and pending-match storage now use at most 8,192 entries. Only the
 backtracking path remains proportional to the image. Complete-encode allocations
 fall by **2.49 MB** for the photograph/diagram and **4.99 MB** for transparent

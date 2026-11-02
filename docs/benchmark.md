@@ -30,20 +30,17 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Current WebP workspace](../benchmarks/VP8L-TRACE-FORWARD-WINDOW.md) uses bounded
-trace state and independent selected candidates. Photograph/diagram/alpha allocate
-**16.8 / 8.0 / 14.2 MB/op**, with admitted peaks **12.2 / 5.1 / 4.1 MB**, excluding
-borrowed inputs/caller streams. No trace workspace is retained between encodes.
-The latest storage stage has mixed CPU results, including a slower raw diagram;
-normalized before/after confidence overlaps. Three current costs are refreshed,
-without an incremental CPU-gain claim. Diagram parity confidence is open;
-photograph/alpha retain gaps. [Current ordinary RGBA8 VP8L](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
-confirms a 1.124× gap, 137.37 ms and 26.13 MB/op; its exact 183,812-byte packet
-is unchanged. Native wrappers/scratch are prepared; full per-call import, encoding
-and output ownership remain timed. A one-second profile identifies paired
-histogram costs as a lead. A [two-encode lifetime audit](../benchmarks/WEBP-STORAGE-LIFETIMES.md)
-identifies a matching-to-token storage handoff to qualify. Rows marked **H**
-retain historical affected costs.
+[Current WebP workspace](../benchmarks/WEBP-HEAD-TOKEN-HANDOFF.md) hands matching
+storage to the next token owner, preserving exact packets and independent selected
+candidates. Photograph/diagram/alpha allocate **15.8 / 6.9 / 12.1 MB/op**, with
+unchanged admitted peaks **12.2 / 5.1 / 4.1 MB**, excluding borrowed input/caller
+streams. No encoder scratch is retained. Matched direct diagnostics save about
+**1 / 1 / 2 MiB/op**. Raw times were slower alongside shifted native clocks;
+normalized before/after confidence overlaps, without an incremental CPU-gain or
+causal-regression claim. Three current anchors all retain confirmed CPU gaps.
+Native prepared wrappers/scratch retain their labels; full per-call import,
+encoding and output ownership stay timed. [Earlier ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
+remains a lead; its cost and other affected rows marked **H** are historical.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
@@ -79,7 +76,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,423 full/live checks per OS, 76 affected drawing checks in
+Current production passes 5,431 full/live checks per OS, 276 affected VP8L/alpha checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -102,10 +99,10 @@ family evidence is linked below; individual experiments remain in
 | VP8 opaque text/diagram † | 7,791.31 | 5,845.88 | 1.333 / 1.351 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,568.52 | 15,639.99 | 1.315 / 1.319 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 68,339.72 | 54,643.25 | 1.251 / 1.301 | 14,238,680 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 103,705.27 | 86,982.67 | 1.192 / 1.231 | 16,835,524 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 (confidence open) † | 10,392.20 | 10,057.04 | 1.033 / 1.075 | 7,988,537 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 137,365.44 | 122,207.95 | 1.124 / 1.139 | 26,131,848 | 183,812 / 183,812 |
+| VP8 RGBA8 + lossless alpha † | 73,075.33 | 58,807.56 | 1.243 / 1.250 | 12,141,728 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 104,631.18 | 91,365.41 | 1.145 / 1.156 | 15,787,102 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 10,791.71 | 10,311.55 | 1.047 / 1.069 | 6,939,701 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † H | 137,365.44 | 122,207.95 | 1.124 / 1.139 | 26,131,848 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † H | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |

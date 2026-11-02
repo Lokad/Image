@@ -1535,22 +1535,21 @@ def render():
     assert workspace['qualification']['fullChecksEachOs'] == 5383
     assert workspace['qualification']['actualPackage']['sha256'] == workspace['qualification']['samePackageLinux']['sameActualPackageSha256']
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
-                                      and not row.startswith('| VP8L RGBA8 /')
                                       or row.startswith('| VP8 RGBA8 †')
                                       or row.startswith('| VP8 RGBA16 + alpha,'))
-    assert sum(historical_workspace(row) for _, row in rows) == 4
+    assert sum(historical_workspace(row) for _, row in rows) == 5
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
-    webp_current = json.loads((ROOT / 'benchmarks/vp8l-trace-forward-window-evidence.json').read_text(encoding='utf-8'))
+    webp_current = json.loads((ROOT / 'benchmarks/webp-head-token-handoff-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
     assert webp_current['decision']['storageGainsVerified']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5411
+    assert webp_current['qualification']['fullChecksEachOs'] == 5431
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
     for case, label in [('alpha', 'VP8 RGBA8 + lossless alpha'),
                         ('photograph', 'VP8L photograph / libwebp exact=1'),
-                        ('diagram', 'VP8L text/diagram / libwebp exact=1 (confidence open)')]:
+                        ('diagram', 'VP8L text/diagram / libwebp exact=1')]:
         observation = webp_current['cases'][case]
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
         assert observation['librarySha256'] == webp_current['producers']['linuxSha256']
@@ -1734,20 +1733,17 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Current WebP workspace](../benchmarks/VP8L-TRACE-FORWARD-WINDOW.md) uses bounded
-trace state and independent selected candidates. Photograph/diagram/alpha allocate
-**16.8 / 8.0 / 14.2 MB/op**, with admitted peaks **12.2 / 5.1 / 4.1 MB**, excluding
-borrowed inputs/caller streams. No trace workspace is retained between encodes.
-The latest storage stage has mixed CPU results, including a slower raw diagram;
-normalized before/after confidence overlaps. Three current costs are refreshed,
-without an incremental CPU-gain claim. Diagram parity confidence is open;
-photograph/alpha retain gaps. [Current ordinary RGBA8 VP8L](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
-confirms a 1.124× gap, 137.37 ms and 26.13 MB/op; its exact 183,812-byte packet
-is unchanged. Native wrappers/scratch are prepared; full per-call import, encoding
-and output ownership remain timed. A one-second profile identifies paired
-histogram costs as a lead. A [two-encode lifetime audit](../benchmarks/WEBP-STORAGE-LIFETIMES.md)
-identifies a matching-to-token storage handoff to qualify. Rows marked **H**
-retain historical affected costs.
+[Current WebP workspace](../benchmarks/WEBP-HEAD-TOKEN-HANDOFF.md) hands matching
+storage to the next token owner, preserving exact packets and independent selected
+candidates. Photograph/diagram/alpha allocate **15.8 / 6.9 / 12.1 MB/op**, with
+unchanged admitted peaks **12.2 / 5.1 / 4.1 MB**, excluding borrowed input/caller
+streams. No encoder scratch is retained. Matched direct diagnostics save about
+**1 / 1 / 2 MiB/op**. Raw times were slower alongside shifted native clocks;
+normalized before/after confidence overlaps, without an incremental CPU-gain or
+causal-regression claim. Three current anchors all retain confirmed CPU gaps.
+Native prepared wrappers/scratch retain their labels; full per-call import,
+encoding and output ownership stay timed. [Earlier ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
+remains a lead; its cost and other affected rows marked **H** are historical.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
@@ -1783,7 +1779,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,423 full/live checks per OS, 76 affected drawing checks in
+Current production passes 5,431 full/live checks per OS, 276 affected VP8L/alpha checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in

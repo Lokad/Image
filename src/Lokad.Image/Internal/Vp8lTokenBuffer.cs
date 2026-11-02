@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Eight bytes per token. Positions are derived cumulatively, not retained.
@@ -25,12 +27,24 @@ internal sealed class Vp8lTokenBuffer : IDisposable
     // Transfer a rejected parsing candidate's existing capacity to the next
     // candidate. Only Count entries are live; the previous values need no clear.
     // Admission remains charged throughout, without a pool or another allowance.
-    internal void ResetForTrace(OperationContext owner, int capacity)
+    internal void ResetForReuse(OperationContext owner, int capacity)
     {
         var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
         if (!ReferenceEquals(context, owner) || storage.Length != capacity)
-            throw new ArgumentException("Trace scratch must belong to the same operation and input capacity.");
+            throw new ArgumentException("Token scratch must belong to the same operation and input capacity.");
         Count = 0; CacheBits = 0;
+    }
+
+    // Matching finishes before this owner's first tokens are written. Borrow
+    // only unused, already admitted capacity; no selected candidate may alias it.
+    internal Span<int> BorrowScratchWords(OperationContext owner, int words)
+    {
+        var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
+        if (!ReferenceEquals(context, owner) || Count != 0 || CacheBits != 0)
+            throw new ArgumentException("Matching scratch must be an empty token owner in the same operation.");
+        ArgumentOutOfRangeException.ThrowIfNegative(words);
+        if (words > storage.Length * 2) throw new ArgumentException("Token capacity does not cover the matching table.", nameof(words));
+        return MemoryMarshal.Cast<Vp8lToken, int>(storage.AsSpan())[..words];
     }
 
     internal Vp8lTokenBuffer(OperationContext context, int capacity)

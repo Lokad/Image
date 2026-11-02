@@ -93,8 +93,9 @@ internal static class CooperativeMemoryConsumer
     private static async Task VerifyWebpCandidateWorkspace()
     {
         // Authored flat regions and a small many-color patch exercise empty
-        // spatial tiles independently of the photograph/diagram fixtures.
-        const int width = 383, height = 193, capacity = 6 * 1024 * 1024;
+        // spatial tiles independently of the photograph/diagram fixtures. The
+        // frame is large enough to hand matching heads to ordinary token storage.
+        const int width = 513, height = 259, capacity = 6 * 1024 * 1024;
         var pixels = new byte[width * height * 4];
         for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
         {
@@ -136,6 +137,7 @@ internal static class CooperativeMemoryConsumer
         survivor.Dispose();
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("WebP workspace leaked capacity or disposed the caller root.");
         Console.WriteLine("Packaged WebP candidate workspace preserves sync/async packets, hidden RGB and shared lifetimes.");
+        Console.WriteLine("Packaged WebP head/token handoff preserves large-frame sync/async packets and shared ownership.");
     }
     private static void VerifyRectangleFill()
     {

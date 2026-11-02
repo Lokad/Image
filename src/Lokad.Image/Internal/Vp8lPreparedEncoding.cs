@@ -31,34 +31,45 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     {
         var tryNoCache = effort == 5 && quality >= 75 || effort == 6 && quality == 100;
         var low = effort == 0; var maximumCacheBits = quality <= 25 ? 0 : paletteColors == 0 ? 10 : BitOperations.Log2((uint)paletteColors) + 1;
-        using var matches = Vp8lReferenceMatcher.Build(pixels, width, quality, low, context);
-        if (low)
+        Vp8lTokenBuffer? seed = null;
+        try
         {
-            var tokens = Vp8lReferenceLz.Greedy(pixels, matches.Values, context);
-            Consider(candidatePrefix, Vp8lImageCode.TakeMain(tokens, width, height, analysis.HistogramBits, true, context, quality));
-            return;
-        }
-        var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context, quality >= 25);
-        var compareOrdinary = tryNoCache && ordinary.CacheBits != 0;
-        Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context, quality));
-        // Native already considers this profile complete when caching chose0.
-        if (compareOrdinary)
-        {
-            var uncached = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, true, maximumCacheBits, context, quality >= 25);
-            Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
-        }
-        if (paletteColors is >= 1 and <= 16 || effort == 6 && quality == 100 && analysis.DistinctColorsCapped is >= 1 and <= 16)
-        {
-            using var box = Vp8lReferenceMatcher.BuildBox(pixels, width, matches.Values, context);
-            var boxed = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, false, maximumCacheBits, context, quality >= 25);
-            var compareBox = tryNoCache && boxed.CacheBits != 0;
-            Consider(candidatePrefix, Vp8lImageCode.TakeMain(boxed, width, height, analysis.HistogramBits, false, context, quality));
-            if (compareBox)
+            // The table and first parsing candidate have disjoint uses. Select
+            // by physical capacity before admission, never by available budget.
+            if (pixels.Length * 8L >= Vp8lReferenceMatcher.HeadCount * 4L)
+                seed = new Vp8lTokenBuffer(context, pixels.Length);
+            using var matches = Vp8lReferenceMatcher.Build(pixels, width, quality, low, context, seed);
+            if (low)
             {
-                var uncached = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, true, maximumCacheBits, context, quality >= 25);
+                var owned = seed; seed = null;
+                var tokens = Vp8lReferenceLz.Greedy(pixels, matches.Values, context, owned);
+                Consider(candidatePrefix, Vp8lImageCode.TakeMain(tokens, width, height, analysis.HistogramBits, true, context, quality));
+                return;
+            }
+            var ordinarySeed = seed; seed = null;
+            var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context, quality >= 25, ordinarySeed);
+            var compareOrdinary = tryNoCache && ordinary.CacheBits != 0;
+            Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context, quality));
+            // Native already considers this profile complete when caching chose0.
+            if (compareOrdinary)
+            {
+                var uncached = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, true, maximumCacheBits, context, quality >= 25);
                 Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
             }
+            if (paletteColors is >= 1 and <= 16 || effort == 6 && quality == 100 && analysis.DistinctColorsCapped is >= 1 and <= 16)
+            {
+                using var box = Vp8lReferenceMatcher.BuildBox(pixels, width, matches.Values, context);
+                var boxed = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, false, maximumCacheBits, context, quality >= 25);
+                var compareBox = tryNoCache && boxed.CacheBits != 0;
+                Consider(candidatePrefix, Vp8lImageCode.TakeMain(boxed, width, height, analysis.HistogramBits, false, context, quality));
+                if (compareBox)
+                {
+                    var uncached = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, true, maximumCacheBits, context, quality >= 25);
+                    Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
+                }
+            }
         }
+        finally { seed?.Dispose(); }
     }
 
     private static int ClampPredictionBits(int width, int height, int bits)

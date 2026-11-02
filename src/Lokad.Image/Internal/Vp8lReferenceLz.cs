@@ -6,12 +6,16 @@ internal static class Vp8lReferenceLz
 {
     private const long Scale = Vp8lReferenceCost.Scale;
 
-    internal static Vp8lTokenBuffer Greedy(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, OperationContext context)
+    // Takes ownership of an optional matching-stage token buffer on entry.
+    internal static Vp8lTokenBuffer Greedy(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, OperationContext context,
+        Vp8lTokenBuffer? scratch = null)
     {
-        if (pixels.IsEmpty || pixels.Length != matches.Length) throw new ArgumentException("Expected matching source/index lengths.");
-        var result = new Vp8lTokenBuffer(context, pixels.Length);
+        var result = scratch;
         try
         {
+            if (pixels.IsEmpty || pixels.Length != matches.Length) throw new ArgumentException("Expected matching source/index lengths.");
+            if (result is null) result = new Vp8lTokenBuffer(context, pixels.Length);
+            else result.ResetForReuse(context, pixels.Length);
             var at = 0;
             while (at < pixels.Length)
             {
@@ -32,7 +36,7 @@ internal static class Vp8lReferenceLz
             }
             return result;
         }
-        catch { result.Dispose(); throw; }
+        catch { result?.Dispose(); throw; }
     }
 
     private static int Match(ReadOnlySpan<uint> pixels, int at, int distance, OperationContext context)
@@ -211,7 +215,7 @@ internal static class Vp8lReferenceLz
             if (pixels.Length != matches.Length) throw new ArgumentException("Expected matching source/index lengths.");
             result ??= new Vp8lTokenBuffer(context, pixels.Length);
             if (seed.Overlaps(result.Tokens)) throw new ArgumentException("Trace seed must not alias its scratch.", nameof(seed));
-            result.ResetForTrace(context, pixels.Length);
+            result.ResetForReuse(context, pixels.Length);
             using var state = new TraceState(pixels.Length, seed, width, cacheBits, context);
             state.Literal(pixels, 0, 0);
             var previousDistance = -1; var previousLength = -1; var firstConstant = false; var reach = 0; long distancePrice = -1;

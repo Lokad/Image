@@ -1,5 +1,9 @@
 # Current RGBA8 lossless WebP cost
 
+Elapsed/allocation costs below are historical after the
+[matching/token handoff](WEBP-HEAD-TOKEN-HANDOFF.md). Retained attribution,
+algorithms and raw proof remain useful; the linked report has current anchors.
+
 One independent twelve-actual confirmation refreshes the existing 513×259 RGBA8
 control on the current qualified encoder. No production, harness, selector or
 native build; no new input, settings or workload. Both quiet guards pass.

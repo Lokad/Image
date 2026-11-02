@@ -46,3 +46,7 @@ mirrored/member-verified. It includes full traces, private audit source/runtime,
 both launches and guards; broader source/qualification depends on the retained
 shared-compositing archive. Borrowed input and caller-owned stream capacity are
 excluded from admitted encoder peaks; native capacity is not measured here.
+
+The [matching/token handoff](WEBP-HEAD-TOKEN-HANDOFF.md) subsequently qualifies
+this proposal with measured allocation reductions, unchanged admitted peaks and
+exact packets. It makes no incremental CPU-gain claim.

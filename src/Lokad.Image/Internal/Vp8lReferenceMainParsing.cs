@@ -3,13 +3,14 @@ namespace Lokad.Image.Internal;
 internal static class Vp8lReferenceMainParsing
 {
     internal static Vp8lTokenBuffer Encode(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, int width,
-        bool disableCache, int maximumCacheBits, OperationContext context, bool traceBackwards = true)
+        bool disableCache, int maximumCacheBits, OperationContext context, bool traceBackwards = true,
+        Vp8lTokenBuffer? scratch = null)
     {
-        Validate(pixels.Length, matches.Length, width, maximumCacheBits);
-        Vp8lTokenBuffer? standard = null, repeated = null, trace = null;
+        Vp8lTokenBuffer? standard = scratch, repeated = null, trace = null;
         try
         {
-            standard = Vp8lReferenceLz.Greedy(pixels, matches, context);
+            Validate(pixels.Length, matches.Length, width, maximumCacheBits);
+            standard = Vp8lReferenceLz.Greedy(pixels, matches, context, standard);
             repeated = Vp8lReferenceLz.Repeats(pixels, width, context);
             var standardBits = 0; var repeatedBits = 0;
             if (!disableCache && !Vp8lReferenceCache.TryBestBitsWithHistory(pixels, standard.Tokens,
@@ -24,8 +25,8 @@ internal static class Vp8lReferenceMainParsing
             var repeatedCost = Vp8lReferenceLz.Estimate(repeated.Tokens, width, context, repeatedBits);
             if (repeatedCost < standardCost) { var result = repeated; repeated = null; return result; }
             if (!traceBackwards) { var direct = standard; standard = null; return direct; }
-            var scratch = repeated; repeated = null;
-            trace = Vp8lReferenceLz.Trace(pixels, matches, width, standard.Tokens, context, standardBits, scratch);
+            var rejected = repeated; repeated = null;
+            trace = Vp8lReferenceLz.Trace(pixels, matches, width, standard.Tokens, context, standardBits, rejected);
             if (Vp8lReferenceLz.Estimate(trace.Tokens, width, context, standardBits) < standardCost)
             { var result = trace; trace = null; return result; }
             var chosen = standard; standard = null; return chosen;
