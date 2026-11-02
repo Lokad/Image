@@ -30,11 +30,14 @@ var statistics = new Statistics(results.Select(m => m.Nanoseconds / m.Operations
 // Retain a second, conservative view containing every actual measurement,
 // without overhead subtraction or the engine's outlier selection.
 var unfilteredActualStatistics = new Statistics(actual.Select(m => m.Nanoseconds / m.Operations));
+// Mutable-canvas jobs may reuse separately verified allocation evidence instead
+// of running an extra diagnostics pass. Missing counters are unknown, not zero.
+var rawGc = lines.SingleOrDefault(line => line.StartsWith("// GC:", StringComparison.Ordinal));
+var rawThreading = lines.SingleOrDefault(line => line.StartsWith("// Threading:", StringComparison.Ordinal));
 var evidence = new
 {
     statistics, unfilteredActualStatistics, actual, results,
-    rawGc = lines.Single(line => line.StartsWith("// GC:", StringComparison.Ordinal)),
-    rawThreading = lines.Single(line => line.StartsWith("// Threading:", StringComparison.Ordinal))
+    rawGc, rawThreading, extraStatsRecorded = rawGc is not null
 };
 File.WriteAllText(args[1], JsonSerializer.Serialize(evidence, new JsonSerializerOptions { WriteIndented = true }) + "\n");
 Console.WriteLine($"Parsed {actual.Length} actual iterations and {results.Length} filtered results.");

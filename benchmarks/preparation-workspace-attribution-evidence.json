@@ -1,0 +1,899 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "round": "APR74",
+  "kind": "Architectural attribution diagnostic",
+  "qualifiedGainClaim": false,
+  "productionChanged": false,
+  "baselineLibrarySha256": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676",
+  "diagnosticAssemblySha256": "7e5bcf3bf9f59ac4e220b4a7d295cd9f9ca3faba709d20d820360888002948b3",
+  "cases": [
+    {
+      "caseId": "LanczosReduce8",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "managedExact": true,
+      "originalOneShot": {
+        "samples": [
+          {
+            "operations": 132,
+            "elapsedNanoseconds": 106952874,
+            "nanosecondsPerOperation": 810249.0454545454,
+            "allocatedBytesPerOperation": 138415.51515151514
+          },
+          {
+            "operations": 132,
+            "elapsedNanoseconds": 107402997,
+            "nanosecondsPerOperation": 813659.0681818182,
+            "allocatedBytesPerOperation": 138415.51515151514
+          },
+          {
+            "operations": 132,
+            "elapsedNanoseconds": 106523974,
+            "nanosecondsPerOperation": 806999.803030303,
+            "allocatedBytesPerOperation": 138417.39393939395
+          }
+        ],
+        "observed": 51084,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "diagnosticOneShot": {
+        "samples": [
+          {
+            "operations": 124,
+            "elapsedNanoseconds": 101574116,
+            "nanosecondsPerOperation": 819146.0967741936,
+            "allocatedBytesPerOperation": 138416
+          },
+          {
+            "operations": 124,
+            "elapsedNanoseconds": 102774785,
+            "nanosecondsPerOperation": 828828.9112903225,
+            "allocatedBytesPerOperation": 138416
+          },
+          {
+            "operations": 124,
+            "elapsedNanoseconds": 100411726,
+            "nanosecondsPerOperation": 809771.9838709678,
+            "allocatedBytesPerOperation": 138416
+          }
+        ],
+        "observed": 47988,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "geometryOnly": {
+        "samples": [
+          {
+            "operations": 949,
+            "elapsedNanoseconds": 106358805,
+            "nanosecondsPerOperation": 112074.61011591149,
+            "allocatedBytesPerOperation": 23536
+          },
+          {
+            "operations": 949,
+            "elapsedNanoseconds": 99292240,
+            "nanosecondsPerOperation": 104628.28240252897,
+            "allocatedBytesPerOperation": 23536
+          },
+          {
+            "operations": 949,
+            "elapsedNanoseconds": 99229145,
+            "nanosecondsPerOperation": 104561.79662802951,
+            "allocatedBytesPerOperation": 23536
+          }
+        ],
+        "observed": 13087659,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "preparedAxes": {
+        "samples": [
+          {
+            "operations": 146,
+            "elapsedNanoseconds": 101266070,
+            "nanosecondsPerOperation": 693603.2191780822,
+            "allocatedBytesPerOperation": 114928
+          },
+          {
+            "operations": 146,
+            "elapsedNanoseconds": 101264238,
+            "nanosecondsPerOperation": 693590.6712328767,
+            "allocatedBytesPerOperation": 114928
+          },
+          {
+            "operations": 146,
+            "elapsedNanoseconds": 103658955,
+            "nanosecondsPerOperation": 709992.8424657534,
+            "allocatedBytesPerOperation": 114928
+          }
+        ],
+        "observed": 56502,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "phases": [
+        {
+          "phase": "Other",
+          "calls": 0,
+          "allocatedBytes": 56,
+          "elapsedNanoseconds": 757857
+        },
+        {
+          "phase": "Geometry",
+          "calls": 1,
+          "allocatedBytes": 23480,
+          "elapsedNanoseconds": 118650
+        },
+        {
+          "phase": "ResizeWorkspace",
+          "calls": 1,
+          "allocatedBytes": 114816,
+          "elapsedNanoseconds": 23716
+        },
+        {
+          "phase": "Output",
+          "calls": 1,
+          "allocatedBytes": 56,
+          "elapsedNanoseconds": 291
+        },
+        {
+          "phase": "Compute",
+          "calls": 1,
+          "allocatedBytes": 0,
+          "elapsedNanoseconds": 670616
+        }
+      ],
+      "retainedAxisAdmissionBytes": 24932,
+      "workspaceStillPreparedInsideEachExecution": true,
+      "preparedBoundary": "Diagnostic internal split only: axes retained/owned outside; same row/output allocation and exact computation inside; local limit includes borrowed axes. Not a public reusable API or qualified performance gain."
+    },
+    {
+      "caseId": "PngOptimal8",
+      "completePacketExact": true,
+      "packetBytes": 210973,
+      "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "originalOneShot": {
+        "samples": [
+          {
+            "operations": 4,
+            "elapsedNanoseconds": 101027990,
+            "nanosecondsPerOperation": 25256997.5,
+            "allocatedBytesPerOperation": 1325700
+          },
+          {
+            "operations": 4,
+            "elapsedNanoseconds": 101596241,
+            "nanosecondsPerOperation": 25399060.25,
+            "allocatedBytesPerOperation": 1325700
+          },
+          {
+            "operations": 4,
+            "elapsedNanoseconds": 101171707,
+            "nanosecondsPerOperation": 25292926.75,
+            "allocatedBytesPerOperation": 1325700
+          }
+        ],
+        "observed": 2531676,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "diagnosticOneShot": {
+        "samples": [
+          {
+            "operations": 5,
+            "elapsedNanoseconds": 125476335,
+            "nanosecondsPerOperation": 25095267,
+            "allocatedBytesPerOperation": 1325675.2
+          },
+          {
+            "operations": 5,
+            "elapsedNanoseconds": 124790346,
+            "nanosecondsPerOperation": 24958069.2,
+            "allocatedBytesPerOperation": 1325675.2
+          },
+          {
+            "operations": 5,
+            "elapsedNanoseconds": 124683895,
+            "nanosecondsPerOperation": 24936779,
+            "allocatedBytesPerOperation": 1325774.4
+          }
+        ],
+        "observed": 3164595,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "phases": [
+        {
+          "phase": "Other",
+          "calls": 0,
+          "allocatedBytes": 666496,
+          "elapsedNanoseconds": 25043015
+        },
+        {
+          "phase": "PngWorkspace",
+          "calls": 1,
+          "allocatedBytes": 659576,
+          "elapsedNanoseconds": 25789
+        }
+      ],
+      "admittedPeakOwnedBytes": 1116164,
+      "retainedRootBytesAfterOperation": 0,
+      "callerOwnedOutputCapacity": 266112,
+      "budgetScope": "Coarse admitted library-owned peak on separate shared-budget diagnostic; borrowed source/caller MemoryStream excluded. Default-path allocation samples measured separately."
+    },
+    {
+      "caseId": "PngFast8",
+      "completePacketExact": true,
+      "packetBytes": 236828,
+      "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "originalOneShot": {
+        "samples": [
+          {
+            "operations": 15,
+            "elapsedNanoseconds": 104143008,
+            "nanosecondsPerOperation": 6942867.2,
+            "allocatedBytesPerOperation": 1344404.2666666666
+          },
+          {
+            "operations": 15,
+            "elapsedNanoseconds": 104132924,
+            "nanosecondsPerOperation": 6942194.933333334,
+            "allocatedBytesPerOperation": 1344437.3333333333
+          },
+          {
+            "operations": 15,
+            "elapsedNanoseconds": 106062467,
+            "nanosecondsPerOperation": 7070831.133333334,
+            "allocatedBytesPerOperation": 1344404.2666666666
+          }
+        ],
+        "observed": 10657260,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "diagnosticOneShot": {
+        "samples": [
+          {
+            "operations": 15,
+            "elapsedNanoseconds": 105473314,
+            "nanosecondsPerOperation": 7031554.266666667,
+            "allocatedBytesPerOperation": 1344404.2666666666
+          },
+          {
+            "operations": 15,
+            "elapsedNanoseconds": 106143789,
+            "nanosecondsPerOperation": 7076252.6,
+            "allocatedBytesPerOperation": 1344437.3333333333
+          },
+          {
+            "operations": 15,
+            "elapsedNanoseconds": 106371945,
+            "nanosecondsPerOperation": 7091463,
+            "allocatedBytesPerOperation": 1344404.2666666666
+          }
+        ],
+        "observed": 10657260,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "phases": [
+        {
+          "phase": "Other",
+          "calls": 0,
+          "allocatedBytes": 685192,
+          "elapsedNanoseconds": 7127747
+        },
+        {
+          "phase": "PngWorkspace",
+          "calls": 1,
+          "allocatedBytes": 659576,
+          "elapsedNanoseconds": 12319
+        }
+      ],
+      "admittedPeakOwnedBytes": 1116164,
+      "retainedRootBytesAfterOperation": 0,
+      "callerOwnedOutputCapacity": 266112,
+      "budgetScope": "Coarse admitted library-owned peak on separate shared-budget diagnostic; borrowed source/caller MemoryStream excluded. Default-path allocation samples measured separately."
+    },
+    {
+      "caseId": "Vp8lPhotograph8",
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "packetBytes": 160032,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "completePacketExact": true,
+      "originalOneShot": {
+        "samples": [
+          {
+            "operations": 1,
+            "elapsedNanoseconds": 122598295,
+            "nanosecondsPerOperation": 122598295,
+            "allocatedBytesPerOperation": 20416808
+          },
+          {
+            "operations": 1,
+            "elapsedNanoseconds": 125289412,
+            "nanosecondsPerOperation": 125289412,
+            "allocatedBytesPerOperation": 20416808
+          },
+          {
+            "operations": 1,
+            "elapsedNanoseconds": 122554980,
+            "nanosecondsPerOperation": 122554980,
+            "allocatedBytesPerOperation": 20416808
+          }
+        ],
+        "observed": 480096,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "diagnosticOneShot": {
+        "samples": [
+          {
+            "operations": 1,
+            "elapsedNanoseconds": 122523953,
+            "nanosecondsPerOperation": 122523953,
+            "allocatedBytesPerOperation": 20416808
+          },
+          {
+            "operations": 1,
+            "elapsedNanoseconds": 121449922,
+            "nanosecondsPerOperation": 121449922,
+            "allocatedBytesPerOperation": 20416808
+          },
+          {
+            "operations": 1,
+            "elapsedNanoseconds": 122189939,
+            "nanosecondsPerOperation": 122189939,
+            "allocatedBytesPerOperation": 20416808
+          }
+        ],
+        "observed": 480096,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "phases": [
+        {
+          "phase": "Other",
+          "calls": 0,
+          "allocatedBytes": 2161288,
+          "elapsedNanoseconds": 87609376
+        },
+        {
+          "phase": "TokenStorage",
+          "calls": 11,
+          "allocatedBytes": 3326352,
+          "elapsedNanoseconds": 91788
+        },
+        {
+          "phase": "MatchIndex",
+          "calls": 4,
+          "allocatedBytes": 557320,
+          "elapsedNanoseconds": 15222
+        },
+        {
+          "phase": "MatchScratch",
+          "calls": 4,
+          "allocatedBytes": 1188976,
+          "elapsedNanoseconds": 384763
+        },
+        {
+          "phase": "TraceStorage",
+          "calls": 3,
+          "allocatedBytes": 3124304,
+          "elapsedNanoseconds": 1012984
+        },
+        {
+          "phase": "TraceCompute",
+          "calls": 3,
+          "allocatedBytes": 432,
+          "elapsedNanoseconds": 2444703
+        },
+        {
+          "phase": "Histogram",
+          "calls": 1,
+          "allocatedBytes": 9987984,
+          "elapsedNanoseconds": 28500173
+        },
+        {
+          "phase": "BodyCount",
+          "calls": 1,
+          "allocatedBytes": 70152,
+          "elapsedNanoseconds": 4077797
+        }
+      ],
+      "admittedPeakOwnedBytes": 12217052,
+      "retainedRootBytesAfterOperation": 0,
+      "callerOwnedOutputCapacity": 262144,
+      "budgetScope": "Coarse admitted owned peak measured separately; excludes borrowed input and caller-owned output storage. Not cumulative allocation or a CPU result."
+    },
+    {
+      "caseId": "Vp8lDiagram8",
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "packetBytes": 7234,
+      "packetSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "completePacketExact": true,
+      "originalOneShot": {
+        "samples": [
+          {
+            "operations": 9,
+            "elapsedNanoseconds": 110683086,
+            "nanosecondsPerOperation": 12298120.666666666,
+            "allocatedBytesPerOperation": 27417688
+          },
+          {
+            "operations": 9,
+            "elapsedNanoseconds": 109163241,
+            "nanosecondsPerOperation": 12129249,
+            "allocatedBytesPerOperation": 27417688
+          },
+          {
+            "operations": 9,
+            "elapsedNanoseconds": 109648604,
+            "nanosecondsPerOperation": 12183178.222222222,
+            "allocatedBytesPerOperation": 27417688
+          }
+        ],
+        "observed": 195318,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "diagnosticOneShot": {
+        "samples": [
+          {
+            "operations": 8,
+            "elapsedNanoseconds": 97838504,
+            "nanosecondsPerOperation": 12229813,
+            "allocatedBytesPerOperation": 27417688
+          },
+          {
+            "operations": 8,
+            "elapsedNanoseconds": 98157486,
+            "nanosecondsPerOperation": 12269685.75,
+            "allocatedBytesPerOperation": 27417688
+          },
+          {
+            "operations": 8,
+            "elapsedNanoseconds": 96951284,
+            "nanosecondsPerOperation": 12118910.5,
+            "allocatedBytesPerOperation": 27417688
+          }
+        ],
+        "observed": 173616,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "phases": [
+        {
+          "phase": "Other",
+          "calls": 0,
+          "allocatedBytes": 906760,
+          "elapsedNanoseconds": 3436398
+        },
+        {
+          "phase": "TokenStorage",
+          "calls": 3,
+          "allocatedBytes": 3188880,
+          "elapsedNanoseconds": 30747
+        },
+        {
+          "phase": "MatchIndex",
+          "calls": 1,
+          "allocatedBytes": 531496,
+          "elapsedNanoseconds": 6510
+        },
+        {
+          "phase": "MatchScratch",
+          "calls": 1,
+          "allocatedBytes": 1048600,
+          "elapsedNanoseconds": 17496
+        },
+        {
+          "phase": "TraceStorage",
+          "calls": 1,
+          "allocatedBytes": 2985472,
+          "elapsedNanoseconds": 630342
+        },
+        {
+          "phase": "TraceCompute",
+          "calls": 1,
+          "allocatedBytes": 4264,
+          "elapsedNanoseconds": 1552434
+        },
+        {
+          "phase": "Histogram",
+          "calls": 1,
+          "allocatedBytes": 18743184,
+          "elapsedNanoseconds": 6875460
+        },
+        {
+          "phase": "BodyCount",
+          "calls": 1,
+          "allocatedBytes": 9032,
+          "elapsedNanoseconds": 150557
+        }
+      ],
+      "admittedPeakOwnedBytes": 20929228,
+      "retainedRootBytesAfterOperation": 0,
+      "callerOwnedOutputCapacity": 8192,
+      "budgetScope": "Coarse admitted owned peak measured separately; excludes borrowed input and caller-owned output storage. Not cumulative allocation or a CPU result."
+    },
+    {
+      "caseId": "Vp8TransparentAlpha8",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "completePacketExact": true,
+      "originalOneShot": {
+        "samples": [
+          {
+            "operations": 2,
+            "elapsedNanoseconds": 150208110,
+            "nanosecondsPerOperation": 75104055,
+            "allocatedBytesPerOperation": 21348720
+          },
+          {
+            "operations": 2,
+            "elapsedNanoseconds": 149644239,
+            "nanosecondsPerOperation": 74822119.5,
+            "allocatedBytesPerOperation": 21348720
+          },
+          {
+            "operations": 2,
+            "elapsedNanoseconds": 149037082,
+            "nanosecondsPerOperation": 74518541,
+            "allocatedBytesPerOperation": 21348720
+          }
+        ],
+        "observed": 591540,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "diagnosticOneShot": {
+        "samples": [
+          {
+            "operations": 2,
+            "elapsedNanoseconds": 149749590,
+            "nanosecondsPerOperation": 74874795,
+            "allocatedBytesPerOperation": 21348720
+          },
+          {
+            "operations": 2,
+            "elapsedNanoseconds": 150188965,
+            "nanosecondsPerOperation": 75094482.5,
+            "allocatedBytesPerOperation": 21348720
+          },
+          {
+            "operations": 2,
+            "elapsedNanoseconds": 149628876,
+            "nanosecondsPerOperation": 74814438,
+            "allocatedBytesPerOperation": 21348720
+          }
+        ],
+        "observed": 591540,
+        "diagnosticOnly": true,
+        "outputDisposalIncluded": true
+      },
+      "phases": [
+        {
+          "phase": "Other",
+          "calls": 0,
+          "allocatedBytes": 3632736,
+          "elapsedNanoseconds": 58529657
+        },
+        {
+          "phase": "TokenStorage",
+          "calls": 12,
+          "allocatedBytes": 6385248,
+          "elapsedNanoseconds": 719126
+        },
+        {
+          "phase": "MatchIndex",
+          "calls": 5,
+          "allocatedBytes": 1064912,
+          "elapsedNanoseconds": 10495
+        },
+        {
+          "phase": "MatchScratch",
+          "calls": 5,
+          "allocatedBytes": 2107376,
+          "elapsedNanoseconds": 596751
+        },
+        {
+          "phase": "TraceStorage",
+          "calls": 2,
+          "allocatedBytes": 5955072,
+          "elapsedNanoseconds": 1029013
+        },
+        {
+          "phase": "TraceCompute",
+          "calls": 2,
+          "allocatedBytes": 4560,
+          "elapsedNanoseconds": 6999108
+        },
+        {
+          "phase": "Histogram",
+          "calls": 2,
+          "allocatedBytes": 2157856,
+          "elapsedNanoseconds": 7155703
+        },
+        {
+          "phase": "BodyCount",
+          "calls": 2,
+          "allocatedBytes": 40960,
+          "elapsedNanoseconds": 2100422
+        }
+      ],
+      "admittedPeakOwnedBytes": 6579383,
+      "retainedRootBytesAfterOperation": 0,
+      "callerOwnedOutputCapacity": 197178,
+      "budgetScope": "Coarse admitted owned peak measured separately; excludes borrowed input and caller-owned output storage. Not cumulative allocation or a CPU result."
+    }
+  ],
+  "nativeLanczos": [
+    {
+      "mode": "repeated",
+      "ready": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "lanczos3-resize",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 256,
+        "outputHeight": 129,
+        "outputBytes": 132096,
+        "independentLiveOutputs": true,
+        "initialCompletedOperations": 3,
+        "backend": "zimg (FFmpeg zscale backend)",
+        "scalar": false,
+        "radius": 3,
+        "haloPixels": 8,
+        "haloAndPackingTimed": true,
+        "outputAllocationAndRepackingTimed": true,
+        "premultipliedFloatOutput": true,
+        "unpremultiplicationAndQuantizationTimed": true,
+        "alphaTolerance1": true,
+        "scratchBytes": 367168
+      },
+      "samples": [
+        {
+          "state": "sample",
+          "operations": 137,
+          "elapsedNanoseconds": 74140387,
+          "completedOperations": 141,
+          "observed": 2397,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 137,
+          "elapsedNanoseconds": 74780847,
+          "completedOperations": 278,
+          "observed": 4726,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 137,
+          "elapsedNanoseconds": 74778193,
+          "completedOperations": 415,
+          "observed": 7055,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        }
+      ],
+      "qualityCheck": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 0,
+        "alphaMaximum": 0,
+        "rgbMeanSquared": 0,
+        "alphaMeanSquared": 0
+      },
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb"
+    },
+    {
+      "mode": "one-shot",
+      "ready": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "lanczos3-resize",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 256,
+        "outputHeight": 129,
+        "outputBytes": 132096,
+        "independentLiveOutputs": true,
+        "initialCompletedOperations": 3,
+        "backend": "zimg (FFmpeg zscale backend)",
+        "scalar": false,
+        "radius": 3,
+        "haloPixels": 8,
+        "haloAndPackingTimed": true,
+        "outputAllocationAndRepackingTimed": true,
+        "premultipliedFloatOutput": true,
+        "unpremultiplicationAndQuantizationTimed": true,
+        "alphaTolerance1": true,
+        "scratchBytes": 367168
+      },
+      "samples": [
+        {
+          "state": "sample",
+          "operations": 56,
+          "elapsedNanoseconds": 99014046,
+          "completedOperations": 60,
+          "observed": 1020,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 56,
+          "elapsedNanoseconds": 98386656,
+          "completedOperations": 116,
+          "observed": 1972,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 56,
+          "elapsedNanoseconds": 98741002,
+          "completedOperations": 172,
+          "observed": 2924,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        }
+      ],
+      "qualityCheck": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 0,
+        "alphaMaximum": 0,
+        "rgbMeanSquared": 0,
+        "alphaMeanSquared": 0
+      },
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb"
+    }
+  ],
+  "warmLanczosPhases": {
+    "project": "Lokad.Image",
+    "diagnosticOnly": true,
+    "productionChanged": false,
+    "phaseOnly": true,
+    "elapsedBatchesNotRepeated": true,
+    "exactPixels": true,
+    "retainedAxisAdmissionBytes": 24932,
+    "phases": [
+      {
+        "phase": "Other",
+        "calls": 0,
+        "allocatedBytes": 56,
+        "elapsedNanoseconds": 1363
+      },
+      {
+        "phase": "Geometry",
+        "calls": 1,
+        "allocatedBytes": 23480,
+        "elapsedNanoseconds": 187774
+      },
+      {
+        "phase": "ResizeWorkspace",
+        "calls": 1,
+        "allocatedBytes": 114816,
+        "elapsedNanoseconds": 17426
+      },
+      {
+        "phase": "Output",
+        "calls": 1,
+        "allocatedBytes": 56,
+        "elapsedNanoseconds": 431
+      },
+      {
+        "phase": "Compute",
+        "calls": 1,
+        "allocatedBytes": 0,
+        "elapsedNanoseconds": 689714
+      }
+    ],
+    "baselineLibrarySha256": "50090ce8a78c664ba3c9aabbe586569cec0f89d7789ed67063a69643d0d85676",
+    "diagnosticAssemblySha256": "82b92e6c6a4f0b432f7bd50a1450409dce090bfd4a069540be544121359a0a32",
+    "correction": "Initial first-ledger-use Other time included diagnostic JIT. Only the coarse Lanczos phases are refreshed after warming enabled ledger branches; original complete-operation samples remain valid and retained."
+  },
+  "histogramShapes": [
+    {
+      "caseId": "photograph",
+      "completePacketExact": true,
+      "packetBytes": 160032,
+      "shapes": [
+        {
+          "Tiles": 2145,
+          "UsedTiles": 2142,
+          "SymbolsPerHistogram": 1088,
+          "PopulationBytes": 9335040,
+          "RowIndexBytes": 134680,
+          "PairBytes": 118336,
+          "Quality": 75
+        }
+      ]
+    },
+    {
+      "caseId": "diagram",
+      "completePacketExact": true,
+      "packetBytes": 7234,
+      "shapes": [
+        {
+          "Tiles": 2145,
+          "UsedTiles": 265,
+          "SymbolsPerHistogram": 2112,
+          "PopulationBytes": 18120960,
+          "RowIndexBytes": 134680,
+          "PairBytes": 118336,
+          "Quality": 75
+        }
+      ]
+    },
+    {
+      "caseId": "alpha",
+      "completePacketExact": true,
+      "packetBytes": 98590,
+      "shapes": [
+        {
+          "Tiles": 153,
+          "UsedTiles": 153,
+          "SymbolsPerHistogram": 2112,
+          "PopulationBytes": 1292544,
+          "RowIndexBytes": 35224,
+          "PairBytes": 1024,
+          "Quality": 32
+        },
+        {
+          "Tiles": 153,
+          "UsedTiles": 153,
+          "SymbolsPerHistogram": 1120,
+          "PopulationBytes": 685440,
+          "RowIndexBytes": 35224,
+          "PairBytes": 1024,
+          "Quality": 32
+        }
+      ]
+    }
+  ],
+  "quietGuardsPassed": true,
+  "raw": {
+    "file": "preparation-workspace-attribution.tar.xz",
+    "bytes": 1214132,
+    "members": 511,
+    "sha256": "07a1e6dc52f6ac621363250ec202dba01cce3d7149c9080824bc5b0a466cf23e",
+    "vmMembersVerified": true,
+    "localMembersVerified": true
+  },
+  "boundaryFindings": {
+    "lanczos": "Existing native graph/input-plane/scratch setup is excluded; managed public Resize constructs axes/workspace inside. New native one-shot includes graph/input/scratch construction and disposal; both include halo/input packing, output ownership, normalization and disposal.",
+    "png": "Existing FFmpeg worker opens one AVCodecContext outside samples. Pinned pngenc initializes deflate in codec init and resets it per frame. Managed PngDeflater constructs history/dictionaries/tokens per encode.",
+    "preparedManaged": "Diagnostic internal axes split, not a public API: axes retained/charged outside; working arrays and independent output inside; local limits count borrowed axes."
+  },
+  "interpretation": "Phase diagnostics and direct complete-operation screens are attribution, not BenchmarkDotNet performance qualification, precise method subtraction, or broad parity claims. Initial first-ledger-use Other time contains diagnostic JIT; retain it and use the separately warmed coarse Lanczos phases. Root peaks are separate coarse admission diagnostics, excluding borrowed inputs/caller-owned output streams; not physical heap peaks.",
+  "next": "Prototype compact operation-owned histogram populations for empty spatial tiles and reuse rejected token capacity for tracing. Consider caller-owned resize preparation after lifecycle proof; PNG allocation reuse is material but constructor CPU is small. Preserve Q30/rational/certified exactness."
+}

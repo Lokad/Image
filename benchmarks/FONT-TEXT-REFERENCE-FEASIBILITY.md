@@ -1,8 +1,13 @@
 # Font and text reference feasibility
 
+The scoped FreeType reference, complete public text pipeline and 16-bit visual
+gates were approved on 2026-11-02. [Current measurements](TEXT-DRAWING-CURRENT.md)
+retain their narrow valid-face/integration scope. Original raw records preserve
+their pre-approval state; that historical flag is not a current blocker.
+
 The [complete public text adapter](PUBLIC-TEXT-LAYOUT-REFERENCE.md) now supplies
 the layout/fitting boundary identified below, with four existing controls and
-explicitly proposed timing/word-raster gates. The copied-font evidence remains valid.
+explicit timing/word-raster gates. The copied-font evidence remains valid.
 
 The existing DejaVu Sans 2.37 regular face has an equivalent **copy/open/retain/
 release** reference candidate using FreeType 2.13.2, FFmpeg's text backend.
@@ -17,8 +22,8 @@ both results valid. Disposal releases capacity, subsequent loads succeed,
 cancellation cleans up and the caller's root remains borrowed. Final charge is
 zero. These are retained-capacity figures, not measured allocations per operation.
 
-A proposed tooling-only FreeType exception for this one valid frozen font
-**awaits approval**. A future complete operation would include the input copy,
+A tooling-only FreeType exception for this one valid frozen font is approved.
+The complete operation includes the input copy,
 face initialization and disposal, excluding resident library/input setup, I/O and
 verification equally. The parsers' eager/lazy validation policies differ; this
 does not establish general parser equivalence. No timings or native allocation

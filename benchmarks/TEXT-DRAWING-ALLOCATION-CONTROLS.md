@@ -30,13 +30,15 @@ The standalone font worker and managed control are also prepared. Preflight
 verifies copied input, exact metrics, independent ownership and shutdown with
 **zero timed samples**. Invalid zero/oversized/unknown protocol requests are
 rejected before timing. One immutable generated selector supports the existing
-three/twelve cadence; it has not run a scored job. The proposed FreeType timing
-exception remains unapproved. No new protocol or quota model enters production.
+three/twelve cadence; this allocation round did not run a scored job. The
+FreeType timing exception was subsequently approved on 2026-11-02.
+No protocol or quota model enters production.
 
 Production and the actual package are unchanged; full 5,378-check/OS and same
 package qualification are reused. All 282 required paths and 110 selected time
-comparisons remain. Nine controls still lack elapsed-time evidence, pending the
-four scoped baseline/gate questions. No workload/font/settings grid is added.
+comparisons were retained at this checkpoint. The later
+[nine scoped timing comparisons](TEXT-DRAWING-CURRENT.md) reuse this allocation
+evidence where explicitly labeled. No workload/font/settings grid is added.
 
 [Evidence](text-drawing-allocation-controls-evidence.json). Retained
 text-drawing-allocation-controls.tar.xz: **322,192 bytes / 47 members**,

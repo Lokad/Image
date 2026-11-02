@@ -1,5 +1,32 @@
 # Material warm coverage
 
+Current architectural phase, 2026-11-02: preserve the original 268 controls and
+14 distinct text/drawing omissions (282 total). Publication is postponed.
+Compression/exact pixels, memory integration and CPU qualification remain distinct.
+
+- [Current summary](../docs/benchmark.md): 119 selected comparisons with explicit
+  reference/boundary labels; this selection does not narrow required scope.
+- [Text/drawing](TEXT-DRAWING-CURRENT.md): all nine formerly missing elapsed costs
+  are measured under the now-approved scopes. Four layout/fitting controls pass;
+  font loading, rasterization and compositing have measured gaps. Visual 16-bit
+  bounds are not sample exactness; the public text pipeline is integration work.
+- [Preparation/workspace attribution](PREPARATION-WORKSPACE-ATTRIBUTION.md): native
+  resize graphs and PNG contexts were reused while managed preparation was timed.
+  Retain the measurements, label them accurately, and develop equivalent one-shot
+  and reusable-state comparisons. Diagnostic screens are not qualified gains.
+- Next architectural work targets WebP candidate storage, shared resize
+  preparation/execution, then codec work ranked by useful absolute savings.
+  Pending items block their own dependencies, not independent work. Failed
+  implementations and inconclusive measurements inform revised designs; neither
+  fixed continuation thresholds nor permanent closed-family lists govern this phase.
+
+## Retained checkpoint history and full inventory
+
+The chronological entries below retain earlier statuses, approvals still pending
+at those dates, experiment decisions and raw evidence. Their old missing-timing
+counts and continuation rules are historical; the current status above supersedes
+them. All original named controls and cited archives remain preserved.
+
 The full objective remains independent quiet single-CPU warm performance with a
 conservative ratio upper bound ≤1× for every named material required path, plus
 functional, memory, compression and packaged-consumer correctness. Startup and
@@ -179,7 +206,7 @@ current totals are8PASS/STOP,17confirmedgaps,4confidence-open. Resolve remaining
 uncertainty before assuming further optimization is needed. Source preflight alone
 changes; marker/metadata/EOI rules, 4KiB cancellation, memory and owners remain.
 Fresh5369checks/OS,28internal/399public normal/scalar and SAMEactualReleasepackage/
-threeexamples bothOS pass. Onecorebuild perOS;zero test/harness/native/selector builds,
+threeexamples bothOS pass. Onecorebuild per OS;zero test/harness/native/selector builds,
 profiles,newcases or repeated validscores. Earlier affected costs below retain their
 producer-specific history/raw; current costs are the scan table. Unrelated paths
 reuse applicable unchanged evidence. All268required paths remain; no fullparity claim.
@@ -192,7 +219,7 @@ no new storage/owner/admission or RGBA intermediate. Caller RGB and affected own
 YCCK pass/stop; callerCMYK confirms1.044/upper1.059gap. These three costs supersede
 JDO36; other26decode costs and unrelated paths reuse applicable unchanged proof.
 Fresh5,369checks/OS,4internal/399public normal/scalar and sameactualReleasepackage/
-threeexamples bothOS pass. Onecore/internalbuild perOS, zero otherbuilds/profiles/
+threeexamples bothOS pass. Onecore/internalbuild per OS, zero otherbuilds/profiles/
 newcases, oneprimaryshort/12 and twoaffected12s. Full268objective remains open.
 
 [Direct retained RGB results](WARM-JPEG-DIRECT-RGB-RESULT.md) save 4.27% elapsed /
@@ -644,7 +671,7 @@ current; literal/runupper.726 PASS/STOP, indexed1.008/upper1.039confidenceopen,
 othersgaps. No pairedcompaniongainclaims or new matrix. Original packets/settings,
 exactRGBA/alpha/hiddenRGB,descriptors,owners,quietguards pass. Full5305/OS,
 58internal/306publicnormal/scalar+Linux512off,SAMEactualWindowspackage/DLL and
-3examples bothOS pass. Onecore/internalbuildperOS;zerootherbuilds/profiles/inputs.
+3examples bothOS pass. Onecore/internalbuildper OS;zerootherbuilds/profiles/inputs.
 Thirteen original-path sourcepins and freshstable3 reuse validoriginal12.
 Exact archived VGD1strategy reassessed under4.1%triage; new proof clearsdefault5%.
 No tile/width/inliningvariants. Currentproducer changed only ReadImageCore;
@@ -693,7 +720,7 @@ governed ownership. Current 76 costs/all 268 paths unchanged.
 0.45%raw/0.23%normalized gain, unchanged1,085,758B/op, exact pixels. Actual VBMI
 execution is verified. Candidate archived and production/core/public-core copies
 restored exact. Four useful actual-row controls remain; restored2,162internal
-checks perOS plus new scalar/ISA checks pass. Unchanged2,185public/948live and
+checks per OS plus new scalar/ISA checks pass. Unchanged2,185public/948live and
 sameactualpackage proof reused:5,295applicable checks/OS. No confirmation,
 variant, new profile/input or package repeat. Current76costs remain unchanged.
 
@@ -1872,7 +1899,7 @@ existingJPEG420 decode34.8% (6085.790→3965.366µs),3.936×/upper3.992,still a 
 Reported allocation757166→757268B/op; explicit256B stack/256B table and owned
 capacity unchanged. Generated weights,word bias,Int32 wrap/saturation/rounding
 and scalar fallback remain exact. BothOS5054full checks,39internal/293public
-scalar and SAME actual package/three examples pass. One corebuild perOS reuses
+scalar and SAME actual package/three examples pass. One corebuild per OS reuses
 all harnesses/workers/selectors; no scoring repeats. AllJPEG render/caller-sample
 costs are affected; only this named cost is refreshed. Pixel validation skips
 inverse/render,keeping its baseline420 pass; Identify/encoding/other codecs and
@@ -1884,7 +1911,7 @@ reduces the sameJPEG420 decode47.2% (3965.366→2095.452µs),2.079×/upper2.241,
 open. Reported757268→757298B/op,unchanged64B tiles/owned capacity. Centered1/3
 weights and shared clamped indices keep exact normal/scalar pixels. BothOS5054
 full checks and SAME actual package/three examples pass;293public scalar checks
-perOS and unchanged inverse proof are reused. No baseline retiming/harness/native/
+per OS and unchanged inverse proof are reused. No baseline retiming/harness/native/
 selector builds. A current6second/5780sample diagnostic,zero hostbuilds,places
 chroma22.4%,ACentropy20.2%,inverse kernel19.6% plusentry3.4%,color19.3%. Next:one
 SIMD chroma tile with integer edge/tail/single-pixel fallback. Only420/422YCbCr
@@ -2136,7 +2163,7 @@ HorizontalUp8 elapsed by16.2% filtered/16.1% all actuals, unchanged1,930,356B/op
 All six changed default-byte paths have current costs: Down8,Up8,Horizontal8,
 Vertical8,HorizontalUp8,VerticalUp8. All remain gaps; Horizontal8's independently
 confirmed upper1.008 is not a pass. Existing rational-half/native qualifications
-remain exact and unchanged. Full5,074perOS,89focusednormal/scalar andSAMEactual
+remain exact and unchanged. Full5,074per OS,89focusednormal/scalar andSAMEactual
 package/threeexamples pass. Word publication, including passing VerticalUp16,
 mixed-word/tight/wide kernels and other algorithms retain applicable evidence.
 This supersedes earlier byte-publication costs without expanding the inventory.
@@ -2145,7 +2172,7 @@ This supersedes earlier byte-publication costs without expanding the inventory.
 reduce the existing diagram/effort6 control by4.98% filtered/5.14% all actuals:
 1.439× / upper1.451,unchanged754,344B/op and exact6,818B packet. Public validation,
 cancellation, admission and ownership stay intact; only repeated private checks
-of caller-established invariants go. Full5,074perOS,21focusednormal/scalar and
+of caller-established invariants go. Full5,074per OS,21focusednormal/scalar and
 SAMEactualpackage/threeexamples pass. Other method5/6 callers selecting Apply
 need applicable current costs before CPU-pass claims. Methods0–4, other codecs,
 decoders, editing/text and passing resize cases retain applicable unchanged proof.
@@ -2165,7 +2192,7 @@ improves by 6.93% filtered / 6.90% all actuals: 1.433× / upper 1.438, unchanged
 809,072 B/op and exact 17,688-byte packet. Five affected companions have current
 short screens; all remain gaps, with unchanged allocations and packets. Other
 method0–6/depth/alpha/stream/async paths selecting ordinary quantization need
-applicable current costs before CPU-pass claims. Full 5,065 perOS, 41 focused
+applicable current costs before CPU-pass claims. Full 5,065 per OS, 41 focused
 normal/scalar, 27 public scalar and SAME actual package/three examples pass.
 Nine unreachable private invalid-input test rows go; all public/live checks,
 native hashes and 73,504 arithmetic blocks stay. Other codecs, decoding, editing/

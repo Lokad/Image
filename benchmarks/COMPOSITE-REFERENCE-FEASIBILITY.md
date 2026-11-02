@@ -1,5 +1,9 @@
 # Compositing reference feasibility
 
+The scoped RGBA8 tolerance and ImageSharp 3.1.12 RGBA16 reference/tolerance
+were approved on 2026-11-02. [Current measurements](TEXT-DRAWING-CURRENT.md)
+use those exact scopes; the original feasibility evidence below is retained.
+
 The fixed 513×259 RGBA8/RGBA16 controls pass an independent BigInteger
 source-over oracle on the current Windows and Linux DLLs. Both borrow separate
 source and destination images, composite at (17,19), and clip right/bottom.
@@ -19,8 +23,8 @@ the operation. A scored managed/native harness is still outstanding.
 Native RGBA8 differs from the exact rational result by at most **one RGB sample**,
 RMSE **0.386072**. Alpha, untouched pixels and zero-source-alpha pixels are exact.
 This reflects intermediate effective-alpha quantization. A proposed native-only
-bound of RGB ≤1 and RMSE ≤0.5 **awaits approval**. Managed pixels remain exact;
-no timings have been collected under an unapproved bound.
+bound of RGB ≤1 and RMSE ≤0.5 is now approved. Managed pixels remain exact;
+alpha, untouched pixels and zero-source-alpha pixels stay exact on both sides.
 
 This FFmpeg overlay has no full-precision RGBA16/GBRAP16 path. Its existing GEQ
 filter reproduces the exact 16-bit result using explicit integer rounding in
@@ -34,9 +38,11 @@ destination storage and source pixels on Windows/Linux. RGB/alpha maxima are
 one sample, with RMSE **0.040101/0.038991**; untouched and zero-source-alpha
 pixels are exact. This is a separate reference, **not FFmpeg performance**.
 A tooling-only exception for this fixed control, with RGB/alpha ≤1 and RMSE
-≤0.25 each, awaits approval. No timing or production change follows implicitly.
+≤0.25 each, is now approved. It remains explicitly labeled as an alternative
+reference; no production dependency or managed pixel relaxation follows.
 
-All nine outstanding audited paths remain unmeasured. Production, the actual
+At this feasibility checkpoint all nine audited paths were unmeasured; the
+current measurements linked above supersede that status. Production, the actual
 package and existing qualification are unchanged: reuse 5,378 checks per OS and
 the same package consumer proof. This round adds no production build, full-suite
 repeat, package rebuild, timing or new fixture.

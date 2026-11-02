@@ -49,6 +49,21 @@ equivalent workload boundaries, and do not publish local timing numbers.
 Single-component grayscale JPEG encoding uses the explicitly labeled SIMD-enabled
 libjpeg-turbo reference as an approved benchmark-tooling exception; production
 remains safe managed code with no dependencies or native bindings.
+Other approved tooling references include FreeType 2.13.2 owned font loading and
+the ImageSharp.Drawing 2.1.7 / Fonts 2.1.3 complete public-API text integration
+pipeline. Disclose font parser validation differences and include every layout
+call and fitting trial. RGBA16 compositing uses explicitly labeled ImageSharp
+3.1.12 Rgba64 SrcOver, not FFmpeg. Keep the recorded case-specific native pixel
+bounds and visual text tolerances distinct from exact managed pixel contracts.
+Distinguish one-shot operations from repeated operations with prepared state.
+Include necessary setup, working storage and independent output ownership on
+equivalent sides; label existing comparisons that retain native contexts/plans.
+Report total allocations, peak live capacity and retained state separately.
+Prefer operation-owned workspace reuse before cross-operation pools. Architectural
+experiments may span coherent changes and temporary regressions; use evidence
+to continue, revise or abandon them, without fixed percentage thresholds or
+permanent bans based on failed implementations. A pending item does not block
+independent codec, resizing or ownership work.
 Use the versioned idle/process guard in `tools/WarmReference/capture-vm-environment.py`.
 VM use is exclusive; do not wait for historical load average to decay after our own work.
 Maintain `docs/benchmark.md` after every accepted performance round. Keep at most

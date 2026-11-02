@@ -1,145 +1,45 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-01. These **110 selected comparisons** combine qualified
-**0.2.1 development** costs with the retained **0.2.0 baseline**. The
-[282-path coverage checklist](../benchmarks/WARM-COVERAGE.md) retains the original
-268 controls and adds [14 audited text/drawing paths](../benchmarks/MATERIAL-TEXT-DRAWING-COVERAGE-AUDIT.md);
-nine still lack warm measurements.
-It records validity, missing confirmations and gaps. Full warm parity is open.
+Updated 2026-11-02. These **119 selected comparisons** combine qualified
+**0.2.1 development** costs and the retained **0.2.0 baseline**. The
+[282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
+the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
+warm measurements. Four layout/fitting controls pass their scoped integration
+comparisons; loading, rasterization and compositing retain gaps. Full parity is open.
 
-[Allocation-only text/drawing controls](../benchmarks/TEXT-DRAWING-ALLOCATION-CONTROLS.md)
-now cover all nine pending boundaries. Compositing allocates **56 B/op** at either
-depth; prepared text drawing allocates **83,456 B/op** at either depth. These are
-stable allocated-byte diagnostics with both quiet guards, without elapsed-time
-or native comparisons; all nine timing results remain missing.
+**Boundaries matter.** Existing resize rows include managed axis/workspace
+preparation but reuse native zimg graphs/input planes/scratch. PNG encode rows
+create managed Deflate state per call while FFmpeg retains encoder/zlib context
+and resets it per frame. These measurements remain valid for those boundaries;
+they are not equivalent one-shot or prepared-session comparisons.
+[Architectural attribution](../benchmarks/PREPARATION-WORKSPACE-ATTRIBUTION.md)
+separates these costs and identifies WebP workspace allocations. Its additional
+screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Paired overlapping copy](../benchmarks/CURRENT-OVERLAPPING-COPY-COST.md)
-confirms a **1.106 / upper 1.152× gap**, 112 B/op. Both subjects count forward
-movement and reverse restoration on one borrowed canvas; these are per-pair
-costs. A bounded row-band trial has no useful gain and is restored exactly.
-Unchanged production qualification and package proof are reused.
+Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
+one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
+operations include declared normalization, output ownership and release; fixture
+setup, I/O, IPC, startup and checks are excluded. Native brackets and versioned
+idle/process guards pass. Times are µs; ratios use the faster native bracket.
+**Upper** includes conservative filtered/all-sample confidence. **B/op** is managed
+allocation, not peak/retained capacity; native allocation is unmeasured. Four
+canvas rows reuse independently verified allocation diagnostics, explicitly
+labeled in their evidence. Short screens do not establish independent parity.
 
-[Exact clipped rectangle fills](../benchmarks/WARM-RECTANGLE-FILL-PACKED.md)
-pass at **0.759 / upper 0.775×** for RGBA8 and **0.546 / upper 0.567×** for RGBA16,
-with unchanged 56 B/op. Native-order packed pixel filling reduces elapsed time
-94.1% / 88.3% from the first current baselines, preserving exact full canvases.
-Both platforms pass 5,378 checks and the same actual package verifies one-canvas
-shared admission, partial/zero alpha and untouched pixels. Both controls stop.
+FFmpeg is the reference, with labeled libwebp exact=1, SIMD libjpeg-turbo grayscale
+and zimg backend exceptions. Text rows compare COMPLETE PUBLIC-API INTEGRATION
+using ImageSharp.Drawing 2.1.7/Fonts 2.1.3, including multiple layout calls and the
+entire fitting search, not bare shaping-engine speed. Font loading uses
+FreeType 2.13.2 with eager/lazy validation differences; RGBA16 compositing uses
+ImageSharp 3.1.12 Rgba64 SrcOver and is not FFmpeg performance. Scoped visual/native
+tolerances preserve exact managed contracts and full 16-bit samples. See
+[text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
+[codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-[Exact rectangle copying](../benchmarks/WARM-RECTANGLE-COPY-SPANS.md) improves
-24.5% at RGBA8 and 17.4% at RGBA16, with unchanged 56 B/op and exact full canvases.
-Both subjects mutate an existing borrowed canvas; input/canvas preparation is
-excluded. Current ratios are 1.100 / upper 1.114 (gap) and 1.016 / upper 1.052
-(confidence open). Both platforms and the same actual package pass qualification.
-
-Sequential measurements use the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
-one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC.
-Complete operations include admission, labeled input delivery/normalization,
-fresh output ownership and release. Startup, benchmark IPC, preparation and
-checks are excluded. Native brackets and versioned idle/process guards pass.
-Times are µs; ratios use the faster native bracket. **Upper** includes conservative
-filtered/unfiltered confidence bounds. **B/op** is measured managed allocation,
-including harness costs; native allocation is unmeasured. Short screens do not
-establish independent parity, even when their upper bound is below one.
-
-FFmpeg is the reference. Approved exceptions are **libwebp exact=1** for lossless
-encoding, **SIMD libjpeg-turbo** for single-component JPEG encoding, and **zimg**
-(FFmpeg zscale backend) for bicubic/Lanczos3. Required packing, halos, alpha work
-and output ownership stay inside the declared boundaries. Exact packets/pixels,
-case-scoped native bounds and frozen settings remain; equal numerical quality
-settings do not establish equivalence. See [codec parity](codec-parity.md).
-
-Current production qualification covers **5,376 checks per OS**, including 948 live
-comparisons and the [probe contracts](../benchmarks/PROBE-COMPLETED-PATH-REJECTED.md).
-Focused wider-bicubic checks pass normal/scalar on both OSes and Linux without
-AVX512; applicable transpose, JPEG and unrelated qualification remains valid.
-The same actual Release package, governed/retained/async consumers and three
-examples pass both OSes. Applicable unchanged performance evidence is reused.
-The [accepted color-bin gain](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md) retains
-its explicit normalized-confidence-overlap exception, without a parity claim.
-All eight displayed VP8 encoder controls now have independent costs. The
-[RGBA16 alpha control](../benchmarks/CURRENT-VP8-ALPHA16-COST.md) includes full word
-normalization and confirms **1.311 / upper 1.365×**, with exact 98,590-byte packets.
-The [opaque byte control](../benchmarks/CURRENT-VP8-OPAQUE8-COST.md) confirms
-**1.268 / upper 1.308×**, with exact 72,380-byte packets.
-The four
-[refreshed companions](../benchmarks/WARM-VP8-QUANTIZATION-CALLER-INVARIANTS.md#current-companion-costs)
-confirm 1.298–1.333× gaps with exact packets and unchanged allocations.
-
-[JPEG 4:4:4 row normalization](../benchmarks/WARM-JPEG444-ROW-NORMALIZATION.md)
-saves **18.92% relative to FFmpeg** with separated confidence and exact packets.
-Resident byte/word and async controls independently pass; forward-only and
-live-token cases remain confidence-open at **upper 1.009/1.001×**. The raw
-25.90% elapsed gain includes an 8.61% faster native bracket between runs.
-[Exact JPEG vertical chroma rows](../benchmarks/WARM-JPEG-VERTICAL-CHROMA-ROWS.md)
-save **11.80% elapsed / 11.95% native-normalized** on caller-RGB420, preserving
-exact packets and allocation. All eleven existing affected boundaries now have
-independent costs: seven pass and stop, caller/restart remain confirmed gaps,
-and shared-budget/async cases are confidence-open. No broader parity claim follows.
-[RGBA16 transpose](../benchmarks/WARM-WORD-TRANSPOSE-MATRIX.md) independently saves
-**32.57% elapsed / 31.77% native-normalized**, with exact pixels and unchanged
-112 B/op. Its **upper 0.748×** passes and stops. [RGBA8 transpose](../benchmarks/WARM-BYTE-TRANSPOSE-MATRIX.md)
-now independently saves **31.02% elapsed / 32.38% native-normalized**, with exact
-pixels and unchanged 112 B/op; **0.691 / upper 0.711×** also passes and stops.
-The word kernel and common dispatch are unchanged; their evidence is reused.
-[Independent wider bicubic repair](../benchmarks/WARM-WIDE-BICUBIC-INDEPENDENT-REPAIR.md)
-saves **6.68% elapsed / 6.26% native-normalized** on RGBA8 →128×64, with exact
-pixels and unchanged owned capacity. It remains a gap at **1.423 / upper1.445×**.
-All eight affected controls have current costs: four pass and stop, three remain
-confirmed gaps, and byte64×32 is confidence-open. Other paths reuse valid evidence.
-[Direct retained RGB JPEG results](../benchmarks/WARM-JPEG-DIRECT-RGB-RESULT.md)
-save **4.27% elapsed / 4.56% native-normalized** with separated confidence and
-exact pixels. Direct-RGB444 allocation falls **966,367 → 10,088 B/op** on the
-default ungoverned control; retained output capacity remains owned and charged.
-That storage gain remains in production; current costs for all 29 affected JPEG
-boundaries come from the [bounded container scan](../benchmarks/WARM-JPEG-CONTAINER-SCAN.md).
-It independently saves **13.81% elapsed / 13.97% native-normalized** on the owned
-baseline444 control, which passes at **0.970 / upper 0.989×**, 948,077 B/op.
-Only the decoder preflight changes; exact pixels, marker/metadata limits, memory
-ownership and bounded cancellation remain. Passing cases stop.
-The [six-case confidence audit](../benchmarks/CURRENT-JPEG-CONFIDENCE.md) reuses the
-same DLL and confirms baseline420 decode and progressive420 validation gaps;
-four decoder cases remain confidence-open. No code change or gain claim follows.
-[Exact caller-YCCK RGB rows](../benchmarks/WARM-JPEG-CALLER-YCCK-ROWS.md) retain their
-**87.40% elapsed / 87.39% native-normalized** gain; their newer costs are in the
-scan report and table below. Unrelated paths reuse applicable unchanged evidence.
-
-[Completed header skips](../benchmarks/WARM-HEADER-SKIP-FAST-PATH.md) retain an
-8.25% seekable JPEG probe gain with unchanged 744 B/op. Its async companion's
-small 1.7% point cost increase is disclosed; all three refreshed read controls
-remain confirmed gaps.
-The [PNG dimension probe](../benchmarks/CURRENT-PNG-DIMENSION-PROBE-COST.md) also
-now confirms **1.284 / upper 1.328×**, 744 B/op. Its existing short lacked an
-independent twelve; WebP's unchanged confirmation is reused without retiming.
-
-The three existing [RGBA16 Fastest PNG boundaries](../benchmarks/CURRENT-FASTEST-WORD-PNG-COSTS.md)
-now confirm 1.331–1.372× gaps with exact complete 968,216-byte packets. Their
-older BCL-encoder timing passes are historical; this adds current costs for
-existing required paths, with unchanged production and reused qualification.
-The [existing byte-color PNG controls](../benchmarks/CURRENT-BYTE-COLOR-PNG-COSTS.md)
-likewise confirm 1.305–1.325× with exact packets; their old BCL-era costs are
-superseded. Reference inputs/settings and the finite required scope are unchanged.
-The [six named default/stored PNG controls](../benchmarks/CURRENT-PNG-ENCODE-COVERAGE.md)
-have independent confirmations. Qualified [word-color packing](../benchmarks/WARM-PNG-WORD-COLOR-PACKING.md)
-then improves Gray16 by **21.14%**, with unchanged allocation and exact packets.
-Gray16 is now **1.254 / upper 1.285**; RGB16/gray-alpha16 confirm **1.320/1.314×**.
-All three remain gaps; byte/RGBA/stored paths retain applicable unchanged costs.
-The [existing async PNG output boundary](../benchmarks/CURRENT-ASYNC-PNG-ENCODE-COST.md)
-now confirms **1.303 / upper 1.323**, 1,387,492 B/op and exact 210,973-byte packets.
-Its earlier BCL-encoder CPU pass is superseded; production and qualification remain.
-The [existing live-token PNG decode](../benchmarks/PNG-CANCELABLE-CURSOR-REASSESSMENT.md)
-confirms **1.150 / upper 1.182**, 4,472 B/op. The archived cursor reassessment
-misses 4.1% triage and is removed; accepted production and exact pixels remain.
-Two [tight PNG decoding costs](../benchmarks/CURRENT-TIGHT-PNG-DECODE-COSTS.md)
-are current: byte confirms **1.096 / upper 1.119**, 68,224 B/op; word is
-**confidence-open at 0.997 / upper 1.016**, 70,272 B/op, with no pass or gap claim.
-The existing [indexed lossless WebP diagram](../benchmarks/WARM-VP8L-COLOR-BIN-REUSE.md#indexed-diagram-current-cost)
-now independently confirms **1.116 / upper 1.142**, 27,418,912 B/op and exact
-7,234-byte packets. This replaces its retained release short without a speedup claim.
-
-Two [grayscale JPEG encoder boundaries](../benchmarks/CURRENT-GRAYSCALE-JPEG-COSTS.md)
-have independent current costs. Earlier experiments and individual acceptance
-histories remain in the coverage links and raw evidence.
+Unchanged production retains 5,378 checks per OS, affected scalar coverage and the
+same actual Release-package consumer/three examples on Windows/Linux. Current
+family evidence is linked below; individual experiments remain in
+[coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 
 **Codecs**
 
@@ -242,6 +142,15 @@ histories remain in the coverage links and raw evidence.
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.29 | 4.20 | 0.546 / 0.567 | 56 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 4.18 | 3.78 | 1.106 / 1.152 | 112 |
+| Font loading / FreeType 2.13.2 (gap) | 339.68 | 14.88 | 22.824 / 23.618 | 757,598 |
+| Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
+| Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
+| Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
+| Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
+| Prepared text RGBA8 / ImageSharp.Drawing (gap) | 926.31 | 51.59 | 17.954 / 23.296 | 83,456 |
+| Prepared text RGBA16 / ImageSharp.Drawing (gap) | 871.93 | 52.12 | 16.729 / 19.666 | 83,456 |
+| Composite RGBA8 / FFmpeg (gap) | 5,086.39 | 492.69 | 10.324 / 10.470 | 56 |
+| Composite RGBA16 / ImageSharp 3.1.12 (gap) | 5,247.40 | 696.04 | 7.539 / 7.708 | 56 |
 
 **Inspection and pixel-coding validation**
 
