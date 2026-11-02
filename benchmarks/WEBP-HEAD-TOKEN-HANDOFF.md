@@ -65,5 +65,5 @@ diagnostics, source/producers, package and qualification. Raw
 webp-head-token-handoff.tar.xz:12,735,004B /424members, SHA256
 fe5c32ee773e77e32c5cdfce4f50c79e76a53e440f02e372a9e75c5dfcbad91b,
 mirrored/member-verified, with reused before-confirmations pinned to the retained
-trace-forward-window archive. The next bounded audit examines constant color
-banks in the large clustering workspace; no unmeasured gain is assumed.
+trace-forward-window archive. The subsequent [constant-bank audit](WEBP-CONSTANT-BANK-AUDIT.md) bounds
+a material working-storage opportunity; its gains remain unimplemented.

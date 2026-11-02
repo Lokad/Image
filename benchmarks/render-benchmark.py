@@ -1744,6 +1744,8 @@ causal-regression claim. Three current anchors all retain confirmed CPU gaps.
 Native prepared wrappers/scratch retain their labels; full per-call import,
 encoding and output ownership stay timed. [Earlier ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
 remains a lead; its cost and other affected rows marked **H** are historical.
+A [constant-bank audit](../benchmarks/WEBP-CONSTANT-BANK-AUDIT.md) bounds the next
+working-storage proposal; modelled capacity is not a measured gain.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
