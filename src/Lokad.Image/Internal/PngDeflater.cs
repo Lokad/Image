@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -112,6 +113,15 @@ internal sealed partial class PngDeflater : Stream
         }
     }
     private byte Byte(long at) => history[(int)(at & (2 * Window - 1))];
+    // Adjacent rejection samples share one bounded read. Only the final
+    // physical ring byte needs the split path; logical input remains borrowed.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private ushort Pair(long at)
+    {
+        var offset = (int)(at & (2 * Window - 1));
+        return offset == 2 * Window - 1 ? (ushort)(history[offset] | history[0] << 8)
+            : BinaryPrimitives.ReadUInt16LittleEndian(history.AsSpan(offset, 2));
+    }
     private long Insert(long at)
     {
         var key = ((Byte(at) << 10) ^ (Byte(at + 1) << 5) ^ Byte(at + 2)) & (Window - 1);
@@ -138,16 +148,20 @@ internal sealed partial class PngDeflater : Stream
             if (prior > windowOrigin && position - prior <= Window - Lookahead)
             {
                 var searches = 4; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
+                var prefixPair = Pair(position); var tail = Byte(position + length);
                 do
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    if (length < available && Byte(prior + length) == Byte(position + length)
-                        && Byte(prior) == Byte(position) && Byte(prior + 1) == Byte(position + 1))
+                    if (length < available && Byte(prior + length) == tail && Pair(prior) == prefixPair)
                     {
                         var found = 2;
                         while (found < available && Byte(prior + found) == Byte(position + found)) found++;
                         context.Cancellation.ThrowIfCancellationRequested();
-                        if (found > length) { length = found; start = prior; if (found >= Math.Min(8, available)) break; }
+                        if (found > length)
+                        {
+                            length = found; start = prior; if (found >= Math.Min(8, available)) break;
+                            tail = Byte(position + length);
+                        }
                     }
                     prior = windowOrigin + older[(int)(prior & (Window - 1))];
                 } while (prior > limit && --searches != 0);
@@ -175,19 +189,22 @@ internal sealed partial class PngDeflater : Stream
                 var searches = level == 9 ? (deferredLength >= 32 ? 1024 : 4096) : deferredLength >= 8 ? 32 : 128;
                 var best = deferredLength; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
                 var available = (int)Math.Min(Maximum, filled - position); var enough = Math.Min(level == 9 ? 258 : 128, available);
+                var prefixPair = Pair(position); var tailPair = Pair(position + best - 1);
                 do
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    if (best < available && Byte(prior + best) == Byte(position + best)
-                        && Byte(prior + best - 1) == Byte(position + best - 1)
-                        && Byte(prior) == Byte(position) && Byte(prior + 1) == Byte(position + 1))
+                    if (best < available && Pair(prior + best - 1) == tailPair && Pair(prior) == prefixPair)
                     {
                         var found = 2;
                         var prefix = Math.Min(8, available);
                         while (found < prefix && Byte(prior + found) == Byte(position + found)) found++;
                         if (found == 8 && found < available) found = MatchLength(history, prior, position, found, available);
                         context.Cancellation.ThrowIfCancellationRequested();
-                        if (found > best) { best = found; start = prior; if (found >= enough) break; }
+                        if (found > best)
+                        {
+                            best = found; start = prior; if (found >= enough) break;
+                            tailPair = Pair(position + best - 1);
+                        }
                     }
                     prior = windowOrigin + older[(int)(prior & (Window - 1))];
                 } while (prior > limit && --searches != 0);

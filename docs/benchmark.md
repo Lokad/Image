@@ -18,10 +18,13 @@ Rows marked **H** retain historical affected costs pending refresh.
 fresh one-shot encoder state on both sides, including native codec/zlib setup
 and disposal; both retain only their borrowed resident input. Both have confirmed
 CPU gaps. [Compact Deflate dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md)
-reduce these allocations by 393,216 B/call. Optimal saves 3.96 ms raw / 16.2%;
-the reference-normalized gain is 9.6%, with separated confidence. Fastest is
-essentially unchanged. Codec workspace admission falls from 1 MiB to 384 KiB;
-retained scratch is zero. Other affected PNG encoding costs are historical (H).
+reduce these allocations by 393,216 B/call. Current
+[prepared match probes](../benchmarks/PNG-PREPARED-PROBES.md) save another
+**0.98 ms / 4.76% raw** for Optimal (4.69% normalized), with separated confidence.
+Fastest managed time is flat; its slightly adverse normalized point has overlapping
+confidence. Allocation remains 932,516 / 951,212 B/op; workspace admission is
+384 KiB and retained scratch zero. Other affected PNG encoding costs remain
+historical (H); a bounded word-depth screen is not a broader speedup claim.
 Other PNG encode rows create managed Deflate state per call while
 FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
 measurements retain their labeled boundaries, not current-cost proof or equivalent
@@ -93,9 +96,9 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,431 full/live checks per OS, 276 affected VP8L/alpha checks in
-normal/scalar modes and the same actual Release-package consumer/three examples
-on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
+Current production passes 5,456 full/live checks per OS,
+577 internal and 211 public affected PNG checks in normal/scalar modes, and the
+same actual Release-package consumer/three examples on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
 [coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 
@@ -125,7 +128,7 @@ family evidence is linked below; individual experiments remain in
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 6,093.28 | 4,433.27 | 1.374 / 1.398 | 951,212 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 6,094.99 | 4,338.76 | 1.405 / 1.431 | 951,212 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
 | PNG RGBA16, Fastest1 / native1 † H | 23,284.98 | 17,477.77 | 1.332 / 1.341 | 3,813,732 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
@@ -133,7 +136,7 @@ family evidence is linked below; individual experiments remain in
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 20,504.02 | 17,281.42 | 1.186 / 1.194 | 932,516 | 210,973 / 210,973 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 19,527.95 | 17,268.14 | 1.131 / 1.144 | 932,516 | 210,973 / 210,973 |
 | PNG RGBA16, Optimal6 / native6 † H | 26,842.58 | 20,081.34 | 1.337 / 1.359 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |

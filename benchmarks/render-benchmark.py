@@ -1560,9 +1560,10 @@ def render():
                                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                                   f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     rows[position:position] = current_webp_rows
-    png_one_shot = json.loads((ROOT / 'benchmarks/deflate-relative-links-evidence.json').read_text(encoding='utf-8'))
+    png_one_shot = json.loads((ROOT / 'benchmarks/png-prepared-probes-evidence.json').read_text(encoding='utf-8'))
     assert png_one_shot['acceptedReferenceBoundary'] and png_one_shot['productionAccepted']
-    assert png_one_shot['qualification']['fullChecksEachOs'] == 5418
+    assert png_one_shot['qualification']['windows']['full'] == png_one_shot['qualification']['linux']['full']
+    assert sum(png_one_shot['qualification']['windows']['full']) == png_one_shot['qualification']['fullChecksEachOs']
     assert png_one_shot['qualification']['actualPackage']['sha256'] == png_one_shot['qualification']['samePackageLinux']['sameActualPackageSha256']
     # All encoding instances use the new dictionary storage/working admission.
     # Decode/inspection paths are separate and retain their applicable costs.
@@ -1719,10 +1720,13 @@ Rows marked **H** retain historical affected costs pending refresh.
 fresh one-shot encoder state on both sides, including native codec/zlib setup
 and disposal; both retain only their borrowed resident input. Both have confirmed
 CPU gaps. [Compact Deflate dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md)
-reduce these allocations by 393,216 B/call. Optimal saves 3.96 ms raw / 16.2%;
-the reference-normalized gain is 9.6%, with separated confidence. Fastest is
-essentially unchanged. Codec workspace admission falls from 1 MiB to 384 KiB;
-retained scratch is zero. Other affected PNG encoding costs are historical (H).
+reduce these allocations by 393,216 B/call. Current
+[prepared match probes](../benchmarks/PNG-PREPARED-PROBES.md) save another
+**0.98 ms / 4.76% raw** for Optimal (4.69% normalized), with separated confidence.
+Fastest managed time is flat; its slightly adverse normalized point has overlapping
+confidence. Allocation remains 932,516 / 951,212 B/op; workspace admission is
+384 KiB and retained scratch zero. Other affected PNG encoding costs remain
+historical (H); a bounded word-depth screen is not a broader speedup claim.
 Other PNG encode rows create managed Deflate state per call while
 FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
 measurements retain their labeled boundaries, not current-cost proof or equivalent
@@ -1794,9 +1798,9 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,431 full/live checks per OS, 276 affected VP8L/alpha checks in
-normal/scalar modes and the same actual Release-package consumer/three examples
-on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
+Current production passes {png_one_shot['qualification']['fullChecksEachOs']:,} full/live checks per OS,
+577 internal and 211 public affected PNG checks in normal/scalar modes, and the
+same actual Release-package consumer/three examples on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
 [coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 
