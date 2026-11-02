@@ -1,5 +1,9 @@
 # Paired WebP histogram support
 
+The subsequent [prepared support stage](WEBP-PREPARED-COLOR-SUPPORT.md)
+implements this proposal and reports measured gains and current qualification.
+This audit remains the preceding design evidence.
+
 One isolated current-source projection adds a single read-only observation at
 paired population-cost entry. One existing complete RGBA8 encode preserves the
 exact183,812-byte packet, source identity and root cleanup; both quiet guards

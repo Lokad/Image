@@ -340,9 +340,9 @@ def render():
     opaque_vp8l = json.loads((ROOT / 'benchmarks/current-opaque-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
     assert not opaque_vp8l['productionChanged'] and opaque_vp8l['measurementBuilds'] == 0
     assert opaque_vp8l['independentQuietConfirmation'] and opaque_vp8l['status']['EncodeOpaque8'] == 'confirmed-gap'
-    rgba_vp8l = json.loads((ROOT / 'benchmarks/current-rgba-vp8l-attribution-evidence.json').read_text(encoding='utf-8'))
-    assert not rgba_vp8l['productionChanged'] and rgba_vp8l['measurementBuilds'] == 0
-    assert rgba_vp8l['independentQuietConfirmation']
+    webp_current = json.loads((ROOT / 'benchmarks/webp-prepared-color-support-evidence.json').read_text(encoding='utf-8'))
+    assert webp_current['productionAccepted'] and webp_current['decision']['cpuGainsVerified']
+    assert webp_current['independentQuietConfirmation']
     vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
     assert vp8l_bins['acceptance']['retained'] and vp8l_bins['independentQuietConfirmation']
     assert not vp8l_bins['acceptance']['normalizedConfidenceSeparated']
@@ -571,8 +571,8 @@ def render():
             producer = png_gfni
             observation = png_gfni['cases'][observation['receipt']['caseId']][-1]
         if case['id'] == 'case12':
-            producer = rgba_vp8l
-            observation = rgba_vp8l['cases']['Encode8']
+            producer = webp_current
+            observation = webp_current['cases']['Encode8']
             assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
             assert observation['completePacketExact'] and observation['quietGuardsPassed']
         elif case['id'] == 'case13':
@@ -1541,10 +1541,9 @@ def render():
     assert sum(historical_workspace(row) for _, row in rows) == 4
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
-    webp_current = json.loads((ROOT / 'benchmarks/webp-constant-bank-workspace-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
-    assert webp_current['decision']['storageGainsVerified']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5440
+    assert webp_current['decision']['storageTradeoffMeasured']
+    assert webp_current['qualification']['fullChecksEachOs'] == 5450
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
@@ -1734,27 +1733,26 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Current WebP workspace](../benchmarks/WEBP-CONSTANT-BANK-WORKSPACE.md) compacts
-constant literal-color banks in clustering scratch and publishes the same full
-histograms. Photograph/diagram/alpha allocate **13.6 / 6.7 / 11.5 MB/op**, with
-admitted peaks **10.0 / 4.8 / 4.1 MB**, excluding borrowed input/caller streams.
-No encoder scratch is retained. Matched direct diagnostics save another
-**2.19 / 0.27 / 0.62 MB/op** after the earlier
-[matching/token handoff](../benchmarks/WEBP-HEAD-TOKEN-HANDOFF.md).
-Raw times improve 6–9% alongside native clocks improving 8–9%; normalized
-before/after confidence overlaps, without an incremental CPU-gain claim.
-Photo/alpha retain confirmed CPU gaps; diagram confidence is open.
-Native prepared wrappers/scratch retain their labels; full per-call import,
-encoding and output ownership stay timed. [Current ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
-refreshes the varying-color/alpha case: **138.86 ms, 25.08 MB/op**, a confirmed
-**1.147× / upper1.162** gap with the exact **183,812-byte** packet. A one-second
-profile attributes 360/766 exclusive samples to paired histogram costs; these
-are a lead, not method times or promised savings. A
-[paired-bank support audit](../benchmarks/VP8L-PAIRED-BANK-SUPPORT-AUDIT.md)
-finds sparse literal-color populations and bounds a prepared-state proposal;
-its counts are not measured gains. Other affected rows marked **H** remain historical.
-The [preceding constant-bank audit](../benchmarks/WEBP-CONSTANT-BANK-AUDIT.md)
-records the original opportunity; current savings above are measured.
+[Prepared WebP color support](../benchmarks/WEBP-PREPARED-COLOR-SUPPORT.md) skips
+known-zero color bins using operation-owned metadata and shares exact run costing.
+Ordinary RGBA8 saves **5.72 ms / 4.12% raw** (4.43% reference-normalized); photo
+saves **2.09 ms / 2.15%** (2.19% normalized), with separated confidence.
+The text/diagram control passes **0.887× / upper0.905** and stops. Its raw gain is
+7.22%, normalized 14.28%, with a disclosed 8.24% native-clock rise. Alpha’s raw
+2.08% point gain overlaps; no gain claim. Ordinary/photo/alpha retain CPU gaps.
+Allocations are **25.29 / 13.74 / 6.69 / 11.53 MB/op** (ordinary/photo/diagram/alpha),
+including added metadata of 206 / 137 / 17 / 10 KB. Photo/diagram/alpha admitted peaks
+are **10.17 / 4.80 / 4.09 MB**, excluding borrowed input/caller streams; ordinary
+admitted/physical peak and native allocation are unmeasured. No encoder scratch
+is retained. Exact packets and full/package qualification pass. Native wrappers/
+scratch retain their prepared-state labels; full import, encoding and independent
+owned output remain timed. Four anchors are current; other affected WebP encoding
+rows marked **H** are historical. The
+[support audit](../benchmarks/VP8L-PAIRED-BANK-SUPPORT-AUDIT.md) and
+[earlier attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md) retain the lead,
+with pre-change cost/profile explicitly historical. Earlier
+[constant-bank storage gains](../benchmarks/WEBP-CONSTANT-BANK-WORKSPACE.md) remain
+part of the qualified implementation.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.

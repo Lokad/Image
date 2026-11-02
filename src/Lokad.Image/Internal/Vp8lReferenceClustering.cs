@@ -44,6 +44,10 @@ internal static class Vp8lReferenceClustering
 
     private const int SamplingPairs = 9;
 
+    private static int SupportWords(Vp8lHistogramLayout layout, int tiles)
+        => tiles < 64 ? 0 : (layout.RedSize == 256 ? 4 : 0)
+            + (layout.BlueSize == 256 ? 4 : 0) + (layout.AlphaSize == 256 ? 4 : 0);
+
     private static int PairCapacity(int tiles, int threshold)
     {
         var limit = Math.Min(tiles, threshold);
@@ -92,14 +96,19 @@ internal static class Vp8lReferenceClustering
         private readonly long emptyCost, redCost, blueCost, alphaCost;
         private readonly int[] working, slots, rowTokens, rowPositions;
         private readonly int[]? populationSlots;
+        private readonly ulong[]? support;
+        private readonly int supportWords, blueSupport, alphaSupport;
         private readonly Stats[] originals, items;
         private readonly Pair[] pool;
         private int count, originalCount, pairs, originalSlot;
         internal State(int tiles, int populations, int[]? populationSlots, int rowCells,
-            Vp8lHistogramLayout layout, uint literal, OperationContext context, int quality, int threshold)
+            Vp8lHistogramLayout layout, uint literal, int supportWords, OperationContext context, int quality, int threshold)
         {
             this.quality = quality; this.threshold = threshold; this.tiles = tiles; this.layout = layout; this.context = context;
-            this.populationSlots = populationSlots; this.literal = literal;
+            this.populationSlots = populationSlots; this.literal = literal; this.supportWords = supportWords;
+            blueSupport = layout.RedSize == 256 ? 4 : 0;
+            alphaSupport = blueSupport + (layout.BlueSize == 256 ? 4 : 0);
+            support = supportWords == 0 ? null : new ulong[populations * supportWords];
             working = new int[populations * layout.Total];
             if (layout.ConstantBanks != 0)
             {
@@ -122,15 +131,26 @@ internal static class Vp8lReferenceClustering
         private Span<int> Population(int slot)
             => working.AsSpan((populationSlots is null ? slot : populationSlots[slot]) * layout.Total, layout.Total);
 
+        private Span<ulong> Support(int slot) => support is null ? default
+            : support.AsSpan((populationSlots is null ? slot : populationSlots[slot]) * supportWords, supportWords);
+        private int SupportStart(int bank) => bank == 1 ? 0 : bank == 2 ? blueSupport : alphaSupport;
+        private void PrepareSupport(int slot)
+        {
+            if (support is null) return;
+            var counts = Population(slot); var words = Support(slot);
+            for (var bank = 1; bank < 4; bank++)
+                if (Size(bank) == 256) Vp8lReferenceEntropy.PrepareColorSupport(counts.Slice(Start(bank), 256), words.Slice(SupportStart(bank), 4), context);
+        }
+
         private int Start(int bank) => bank switch { 0 => 0, 1 => layout.Red, 2 => layout.Blue, 3 => layout.Alpha, _ => layout.Distance };
         private int Size(int bank) => bank switch { 0 => layout.GreenSize, 1 => layout.RedSize, 2 => layout.BlueSize, 3 => layout.AlphaSize, _ => 40 };
         private long ConstantCost(int bank) => bank == 1 ? redCost : bank == 2 ? blueCost : alphaCost;
         private int ConstantSymbol(int bank) => bank == 1 ? (int)(literal >> 16 & 255) : bank == 2 ? (int)(literal & 255) : (int)(literal >> 24);
         private static long Limit(long baseline, long change) => change > long.MaxValue - baseline ? long.MaxValue : baseline + change;
 
-        private Stats Initial(ReadOnlySpan<int> counts)
+        private Stats Initial(int slot)
         {
-            var result = new Stats();
+            var counts = Population(slot); var words = Support(slot); var result = new Stats();
             for (var bank = 0; bank < 5; bank++)
             {
                 var samples = counts.Slice(Start(bank), Size(bank)); var nonzero = 0; var last = -1;
@@ -142,7 +162,10 @@ internal static class Vp8lReferenceClustering
                     result.Total += logicalCost; result.Set(bank, logicalCost, used ? ConstantSymbol(bank) : -1);
                     continue;
                 }
-                for (var symbol = 0; symbol < samples.Length; symbol++) if (samples[symbol] != 0) { nonzero++; last = symbol; }
+                if (samples.Length == 256 && support is not null)
+                    (nonzero, last) = Vp8lReferenceEntropy.PrepareColorSupport(samples, words.Slice(SupportStart(bank), 4), context);
+                else
+                    for (var symbol = 0; symbol < samples.Length; symbol++) if (samples[symbol] != 0) { nonzero++; last = symbol; }
                 if (nonzero != 0) result.Used |= 1 << bank;
                 var cost = Vp8lReferenceEntropy.Population(samples, context); result.Total += cost;
                 result.Set(bank, cost, nonzero == 1 ? last : -1);
@@ -173,7 +196,7 @@ internal static class Vp8lReferenceClustering
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 if (originals[tile].Used == 0) continue;
-                var stats = Initial(Population(tile)); originals[tile] = items[tile] = stats;
+                var stats = Initial(tile); originals[tile] = items[tile] = stats;
                 if (stats.Used != 0) slots[count++] = tile;
             }
             originalCount = count;
@@ -183,7 +206,9 @@ internal static class Vp8lReferenceClustering
         {
             context.Cancellation.ThrowIfCancellationRequested(); pair = default; if (maximum <= 0) return false;
             var a = items[aSlot]; var b = fromOriginal ? originals[bSlot] : items[bSlot];
-            var aCounts = Population(aSlot); var bCounts = Population(fromOriginal ? originalSlot : bSlot);
+            var bPopulation = fromOriginal ? originalSlot : bSlot;
+            var aCounts = Population(aSlot); var bCounts = Population(bPopulation);
+            var aSupport = Support(aSlot); var bSupport = Support(bPopulation);
             for (var bank = 0; bank < 5; bank++)
             {
                 context.Cancellation.ThrowIfCancellationRequested(); var flag = 1 << bank; long cost;
@@ -196,7 +221,10 @@ internal static class Vp8lReferenceClustering
                     // flag. Preserve that flag's decision semantics, but score
                     // the still-constant logical bank rather than one word.
                     cost = size == 1 ? ConstantCost(bank)
-                        : Vp8lReferenceEntropy.PopulationSum(aCounts.Slice(start, size), bCounts.Slice(start, size), context);
+                        : size == 256 && support is not null
+                            ? Vp8lReferenceEntropy.PopulationSumColor(aCounts.Slice(start, size), bCounts.Slice(start, size),
+                                aSupport.Slice(SupportStart(bank), 4), bSupport.Slice(SupportStart(bank), 4), context)
+                            : Vp8lReferenceEntropy.PopulationSum(aCounts.Slice(start, size), bCounts.Slice(start, size), context);
                 }
                 pair.Set(bank, cost); pair.Total += cost; if (pair.Total >= maximum) return false;
             }
@@ -208,6 +236,8 @@ internal static class Vp8lReferenceClustering
             var a = items[aSlot]; var b = items[bSlot]; context.Cancellation.ThrowIfCancellationRequested();
             var aCounts = Population(aSlot); var bCounts = Population(bSlot);
             AddPopulation(aCounts, bCounts, context);
+            var aSupport = Support(aSlot); var bSupport = Support(bSlot);
+            for (var word = 0; word < aSupport.Length; word++) aSupport[word] |= bSupport[word];
             for (var bank = 0; bank < 5; bank++) a.Set(bank, costs.Cost(bank), a.Trivial(bank) == b.Trivial(bank) ? a.Trivial(bank) : -1);
             a.Total = costs.Total; a.Used |= b.Used; items[aSlot] = a;
         }
@@ -248,7 +278,7 @@ internal static class Vp8lReferenceClustering
                 if (first[bin] < 0) { first[bin] = at++; continue; }
                 Combine(slots[first[bin]], slots[at], default); Remove(at);
             }
-            for (var i = 0; i < count; i++) items[slots[i]] = Initial(Population(slots[i]));
+            for (var i = 0; i < count; i++) items[slots[i]] = Initial(slots[i]);
         }
 
         private void MergeBins()
@@ -355,6 +385,7 @@ internal static class Vp8lReferenceClustering
                     position += tokens[index++].Length;
                 }
             }
+            PrepareSupport(originalSlot);
         }
 
         internal Vp8lHistogramPlan Finish(bool lowEffort, int columns, int bits, ReadOnlySpan<Vp8lToken> tokens, int width, int height)
@@ -460,10 +491,12 @@ internal static class Vp8lReferenceClustering
                     | ((varying & 0x000000ffu) == 0 ? 4 : 0) | ((varying & 0xff000000u) == 0 ? 8 : 0);
                 layout = new Vp8lHistogramLayout(cacheBits, constantBanks);
             }
-            var requestedWorkspace = populations * layout.Total * 4L + tiles * 192L + rowCells * 8L + pairCapacity * 64L + 512;
+            var supportWords = SupportWords(layout, tiles);
+            var requestedWorkspace = populations * layout.Total * 4L + tiles * 192L + rowCells * 8L + pairCapacity * 64L + 512
+                + (supportWords == 0 ? 0 : 32 + populations * supportWords * 8L);
             context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(requestedWorkspace); reserved = requestedWorkspace;
             context.Cancellation.ThrowIfCancellationRequested();
-            var state = new State(tiles, populations, populationSlots, rowCells, layout, literal, context, quality, threshold);
+            var state = new State(tiles, populations, populationSlots, rowCells, layout, literal, supportWords, context, quality, threshold);
             state.Fill(tokens, width, height, tileBits); return state.Finish(lowEffort, columns, tileBits, tokens, width, height);
         }
         finally

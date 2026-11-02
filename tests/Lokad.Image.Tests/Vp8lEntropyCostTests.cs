@@ -82,6 +82,12 @@ public sealed class Vp8lEntropyCostTests
                 var before = Checksum(a, b);
                 var expected = Vp8lReferenceEntropy.Population(sum, context);
                 Assert.Equal(expected, Vp8lReferenceEntropy.PopulationSum(a, b, context));
+                if (length == 256)
+                {
+                    var aWords = new ulong[4]; var bWords = new ulong[4];
+                    Vp8lReferenceEntropy.PrepareColorSupport(a, aWords, context); Vp8lReferenceEntropy.PrepareColorSupport(b, bWords, context);
+                    Assert.Equal(expected, Vp8lReferenceEntropy.PopulationSumColor(a, b, aWords, bWords, context));
+                }
                 Assert.Equal(before, Checksum(a, b));
                 BinaryPrimitives.WriteInt64LittleEndian(encoded, expected); hash.AppendData(encoded);
                 cases++; pairedCounts += length;

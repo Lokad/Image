@@ -1,5 +1,9 @@
 # Current RGBA8 lossless WebP cost
 
+Elapsed/allocation and sampled attribution below precede the subsequent
+[prepared color-support stage](WEBP-PREPARED-COLOR-SUPPORT.md), which reports
+current qualified costs. The profile remains a historical design lead.
+
 One independent twelve-actual confirmation refreshes the existing 513×259 RGBA8
 control after matching/token and compact-working-bank changes. The current
 qualified immutable DLL is reused with the existing harness, typed selector and

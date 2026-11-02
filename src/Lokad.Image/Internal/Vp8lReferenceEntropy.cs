@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
@@ -17,90 +18,128 @@ internal static class Vp8lReferenceEntropy
         return value;
     }
 
+    // Both full and prepared-support traversals feed the same exact run model.
+    // Summing a repeated count's integer product is identical to per-bin addition.
+    private struct RunCost
+    {
+        private int sum, nonzero, maximum;
+        private long entropy;
+        private int zeroRuns, nonzeroRuns, shortZero, shortNonzero, longZero, longNonzero;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void Add(int count, int length)
+        {
+            if (count != 0)
+            {
+                sum += count * length; nonzero += length; maximum = Math.Max(maximum, count);
+                entropy -= Vp8lReferenceCost.SLog(count) * length;
+                if (length > 3) { nonzeroRuns++; longNonzero += length; }
+                else shortNonzero += length;
+            }
+            else if (length > 3) { zeroRuns++; longZero += length; }
+            else shortZero += length;
+        }
+
+        internal readonly long Finish()
+        {
+            var entropy = this.entropy + Vp8lReferenceCost.SLog(sum); long refined;
+            if (nonzero <= 1) refined = 0;
+            else if (nonzero == 2) refined = (99L * sum * Scale + entropy + 50) / 100;
+            else
+            {
+                var mix = nonzero == 3 ? 950 : nonzero == 4 ? 700 : 627;
+                long lower;
+                // With sum<=2^28, maximum<=sum and 0<=entropy<=2^53, the
+                // numerator is at most(950+2*373)*2^52+500<Int64.MaxValue.
+                if ((uint)sum <= 1u << 28 && maximum <= sum && (ulong)entropy <= 1UL << 53)
+                    lower = (mix * (2L * sum - maximum) * Scale + (1000 - mix) * entropy + 500) / 1000;
+                else
+                    lower = (long)(((Int128)mix * (2L * sum - maximum) * Scale + (Int128)(1000 - mix) * entropy + 500) / 1000);
+                refined = Math.Max(entropy, lower);
+            }
+            var overhead = 57 * Scale - (91 * Scale + 5) / 10;
+            overhead += (zeroRuns * 1600L + longZero * 240L + nonzeroRuns * 2640L + longNonzero * 720L
+                + shortZero * 1840L + shortNonzero * 3360L) * (Scale >> 10);
+            return refined + overhead;
+        }
+    }
+
     internal static long Population(ReadOnlySpan<int> counts, OperationContext context)
     {
-        context.Cancellation.ThrowIfCancellationRequested();
-        var sum = 0; var nonzero = 0; var maximum = 0; long entropy = 0;
-        foreach (var count in counts)
-        {
-            sum += count; if (count != 0) nonzero++; maximum = Math.Max(maximum, count);
-            entropy -= Vp8lReferenceCost.SLog(count);
-        }
-        entropy += Vp8lReferenceCost.SLog(sum);
-        long refined;
-        if (nonzero <= 1) refined = 0;
-        else if (nonzero == 2) refined = (99L * sum * Scale + entropy + 50) / 100;
-        else
-        {
-            var mix = nonzero == 3 ? 950 : nonzero == 4 ? 700 : 627;
-            var lower = ((Int128)mix * (2L * sum - maximum) * Scale + (Int128)(1000 - mix) * entropy + 500) / 1000;
-            refined = Math.Max(entropy, (long)lower);
-        }
-        var zeroRuns = 0; var nonzeroRuns = 0; var shortZero = 0; var shortNonzero = 0; var longZero = 0; var longNonzero = 0;
+        context.Cancellation.ThrowIfCancellationRequested(); var cost = new RunCost();
         for (var start = 0; start < counts.Length;)
         {
             var end = start + 1;
             while (end < counts.Length && counts[end] == counts[start]) end++;
-            var length = end - start;
-            if (length > 3)
-            {
-                if (counts[start] == 0) { zeroRuns++; longZero += length; }
-                else { nonzeroRuns++; longNonzero += length; }
-            }
-            else if (counts[start] == 0) shortZero += length; else shortNonzero += length;
-            start = end;
+            cost.Add(counts[start], end - start); start = end;
         }
-        var overhead = 57 * Scale - (91 * Scale + 5) / 10;
-        overhead += (zeroRuns * 1600L + longZero * 240L + nonzeroRuns * 2640L + longNonzero * 720L
-            + shortZero * 1840L + shortNonzero * 3360L) * (Scale >> 10);
-        return refined + overhead;
+        return cost.Finish();
     }
 
     internal static long PopulationSum(ReadOnlySpan<int> a, ReadOnlySpan<int> b, OperationContext context)
     {
         if (a.Length != b.Length) throw new ArgumentException("Population lengths must match.", nameof(b));
-        // Compute combined costs without allocating their sum. Equal summed
-        // runs share one exact integer logarithm.
-        context.Cancellation.ThrowIfCancellationRequested();
-        var sum = 0; var nonzero = 0; var maximum = 0; long entropy = 0;
-        var zeroRuns = 0; var nonzeroRuns = 0; var shortZero = 0; var shortNonzero = 0; var longZero = 0; var longNonzero = 0;
+        context.Cancellation.ThrowIfCancellationRequested(); var cost = new RunCost();
         for (var start = 0; start < a.Length;)
         {
             var count = a[start] + b[start]; var end = start + 1;
             while (end < a.Length && a[end] + b[end] == count) end++;
-            var length = end - start;
-            sum += count * length; if (count != 0) nonzero += length; maximum = Math.Max(maximum, count);
-            entropy -= Vp8lReferenceCost.SLog(count) * length;
-            if (length > 3)
-            {
-                if (count == 0) { zeroRuns++; longZero += length; }
-                else { nonzeroRuns++; longNonzero += length; }
-            }
-            else if (count == 0) shortZero += length; else shortNonzero += length;
-            start = end;
+            cost.Add(count, end - start); start = end;
         }
-        entropy += Vp8lReferenceCost.SLog(sum);
-        long refined;
-        if (nonzero <= 1) refined = 0;
-        else if (nonzero == 2) refined = (99L * sum * Scale + entropy + 50) / 100;
-        else
-        {
-            var mix = nonzero == 3 ? 950 : nonzero == 4 ? 700 : 627;
-            long lower;
-            // With sum<=2^28, maximum<=sum and 0<=entropy<=2^53, the numerator
-            // is at most (950+2*373)*2^52+500, strictly below Int64.MaxValue.
-            // All terms are nonnegative; integer division has identical rounding.
-            if ((uint)sum <= 1u << 28 && maximum <= sum && (ulong)entropy <= 1UL << 53)
-                lower = (mix * (2L * sum - maximum) * Scale + (1000 - mix) * entropy + 500) / 1000;
-            else
-                lower = (long)(((Int128)mix * (2L * sum - maximum) * Scale + (Int128)(1000 - mix) * entropy + 500) / 1000);
-            refined = Math.Max(entropy, lower);
-        }
-        var overhead = 57 * Scale - (91 * Scale + 5) / 10;
-        overhead += (zeroRuns * 1600L + longZero * 240L + nonzeroRuns * 2640L + longNonzero * 720L
-            + shortZero * 1840L + shortNonzero * 3360L) * (Scale >> 10);
-        return refined + overhead;
+        return cost.Finish();
     }
+
+    // Support belongs to a live working population, not to a cached pair result.
+    // Counts in encoder populations are nonnegative and their sums fit Int32.
+    internal static (int Count, int Last) PrepareColorSupport(ReadOnlySpan<int> counts, Span<ulong> support, OperationContext context)
+    {
+        if (counts.Length != 256 || support.Length != 4) throw new ArgumentException("Color support requires256counts and4words.");
+        var nonzero = 0; var last = -1;
+        for (var word = 0; word < 4; word++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); ulong active = 0;
+            for (var bit = 0; bit < 64; bit++)
+            {
+                var symbol = word * 64 + bit;
+                if (counts[symbol] != 0) { active |= 1UL << bit; nonzero++; last = symbol; }
+            }
+            support[word] = active;
+        }
+        return (nonzero, last);
+    }
+
+    internal static long PopulationSumColor(ReadOnlySpan<int> a, ReadOnlySpan<int> b,
+        ReadOnlySpan<ulong> aSupport, ReadOnlySpan<ulong> bSupport, OperationContext context)
+    {
+        if (a.Length != 256 || b.Length != 256 || aSupport.Length != 4 || bSupport.Length != 4)
+            throw new ArgumentException("Color support requires256counts and4words.");
+        context.Cancellation.ThrowIfCancellationRequested(); var nonzero = 0;
+        for (var word = 0; word < 4; word++) nonzero += BitOperations.PopCount(aSupport[word] | bSupport[word]);
+        // Dense banks retain the direct traversal; dispatch uses actual support,
+        // never image identity, remaining allowance or a failed reservation.
+        if (nonzero > 128) return PopulationSum(a, b, context);
+        var cost = new RunCost(); var next = 0; var previous = 0; var length = 0;
+        for (var word = 0; word < 4; word++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); var active = aSupport[word] | bSupport[word];
+            while (active != 0)
+            {
+                var symbol = word * 64 + BitOperations.TrailingZeroCount(active); var count = a[symbol] + b[symbol];
+                if (symbol == next && count == previous) length++;
+                else
+                {
+                    if (length != 0) cost.Add(previous, length);
+                    if (symbol != next) cost.Add(0, symbol - next);
+                    previous = count; length = 1;
+                }
+                next = symbol + 1; active &= active - 1;
+            }
+        }
+        if (length != 0) cost.Add(previous, length);
+        if (next != 256) cost.Add(0, 256 - next);
+        return cost.Finish();
+    }
+
 }
 
 internal static class Vp8lSymbols

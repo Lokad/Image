@@ -1,5 +1,9 @@
 # Compact constant WebP working histograms
 
+Elapsed/allocation figures below are historical after the subsequent
+[prepared color-support stage](WEBP-PREPARED-COLOR-SUPPORT.md). Its source,
+accepted storage gains, qualification and reproducible before evidence remain.
+
 Clustering scratch now stores one count for a globally constant literal red, blue
 or alpha bank. Green/cache and distance stay full. The existing large-tile scan
 infers constants from actual literal tokens; source opacity and green-only input
