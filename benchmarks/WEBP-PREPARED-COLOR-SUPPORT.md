@@ -1,5 +1,9 @@
 # Prepared WebP color support
 
+Elapsed/allocation figures below precede the subsequent
+[cache-prefix aggregation](WEBP-CACHE-PREFIX-AGGREGATION.md), which has current
+qualified costs. Historical proof and unchanged-method attribution leads remain.
+
 Clustering now prepares operation-owned support for full256-symbol color banks,
 ORs it during merges and rebuilds it during replay. Sparse pair scoring skips
 known-zero bins, accounting exactly for gaps and equal-count runs across words.

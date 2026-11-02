@@ -337,10 +337,7 @@ def render():
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_indexed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
-    opaque_vp8l = json.loads((ROOT / 'benchmarks/current-opaque-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not opaque_vp8l['productionChanged'] and opaque_vp8l['measurementBuilds'] == 0
-    assert opaque_vp8l['independentQuietConfirmation'] and opaque_vp8l['status']['EncodeOpaque8'] == 'confirmed-gap'
-    webp_current = json.loads((ROOT / 'benchmarks/webp-prepared-color-support-evidence.json').read_text(encoding='utf-8'))
+    webp_current = json.loads((ROOT / 'benchmarks/webp-cache-prefix-aggregation-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['cpuGainsVerified']
     assert webp_current['independentQuietConfirmation']
     vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
@@ -754,9 +751,9 @@ def render():
                      f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
-    observation = vp8l_bins['cases']['EncodeOpaque8'][-1]
+    observation = webp_current['cases']['EncodeOpaque8']
     receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == vp8l_bins['producers']['linuxSha256'] and receipt['completePacketExact']
+    assert receipt['librarySha256'] == webp_current['producers']['linuxSha256'] and receipt['completePacketExact']
     assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 121896
     assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
     assert all(q['passed'] for q in observation['quietness'].values())
@@ -1544,7 +1541,7 @@ def render():
             for kind, row in rows]
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
     assert webp_current['decision']['storageTradeoffMeasured']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5450
+    assert webp_current['qualification']['fullChecksEachOs'] == 5455
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
@@ -1734,29 +1731,28 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Prepared WebP color support](../benchmarks/WEBP-PREPARED-COLOR-SUPPORT.md) skips
-known-zero color bins using operation-owned metadata and shares exact run costing.
-Ordinary RGBA8 saves **5.72 ms / 4.12% raw** (4.43% reference-normalized); photo
-saves **2.09 ms / 2.15%** (2.19% normalized), with separated confidence.
-The text/diagram control passes **0.887× / upper0.905** and stops. Its raw gain is
-7.22%, normalized 14.28%, with a disclosed 8.24% native-clock rise. Alpha’s raw
-2.08% point gain overlaps; no gain claim. Ordinary/photo/alpha retain CPU gaps.
-Allocations are **25.29 / 13.74 / 6.69 / 11.53 MB/op** (ordinary/photo/diagram/alpha),
-including added metadata of 206 / 137 / 17 / 10 KB. Photo/diagram/alpha admitted peaks
-are **10.17 / 4.80 / 4.09 MB**, excluding borrowed input/caller streams; ordinary
-admitted/physical peak and native allocation are unmeasured. No encoder scratch
-is retained. Exact packets and full/package qualification pass. Native wrappers/
-scratch retain their prepared-state labels; full import, encoding and independent
-owned output remain timed. The [opaque control](../benchmarks/CURRENT-OPAQUE-VP8L-ENCODE-COST.md)
-now measures **77.94 ms, 13.35 MB/op, 1.095× / upper1.108**, with its exact
-121,896-byte packet. A current alpha profile motivates cache-prefix preparation,
-without treating sampled fractions as times or gains. Five anchors are current; other affected WebP encoding
-rows marked **H** are historical. The
-[support audit](../benchmarks/VP8L-PAIRED-BANK-SUPPORT-AUDIT.md) and
-[earlier attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md) retain the lead,
-with pre-change cost/profile explicitly historical. Earlier
-[constant-bank storage gains](../benchmarks/WEBP-CONSTANT-BANK-WORKSPACE.md) remain
-part of the qualified implementation.
+[WebP cache-prefix aggregation](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md)
+saves **2.18 ms / 3.25% raw** for transparent VP8 (3.08% reference-normalized)
+and **2.04 ms / 2.16%** for the photograph (2.01% normalized), with separated
+confidence. Ordinary/opaque normalized intervals overlap; no incremental gain
+claim. Diagram remains a pass at **0.947× / upper0.963** and stops. Its raw
+managed time is flat; a 6.59% faster native clock produces an adverse relative
+point, without a causal managed-regression claim. Four other anchors retain gaps.
+Allocations are **25.33 / 13.39 / 13.78 / 6.69 / 11.61 MB/op**
+(ordinary/opaque/photo/diagram/alpha). Scratch adds about 40 KiB per eligible history
+operation and is reused across two seeds; admitted peaks on the four direct
+controls are unchanged. No encoder scratch is retained. Ordinary/opaque admitted/
+physical peaks and native allocation are unmeasured. Exact packets, full checks
+and the same actual package pass both OSes. An enlarged authored noise patch
+checks packaged sync/async scoring and ownership under the same 6 MiB root.
+Complete normalization/preparation/candidate selection and owned output stay
+timed; native wrappers/scratch retain their prepared-state labels. All five
+current WebP rows now read the same qualified evidence; the opaque row’s previous
+renderer still selected an older result despite its refreshed narrative. Other
+affected encoding rows marked **H** remain historical. Earlier
+[prepared support](../benchmarks/WEBP-PREPARED-COLOR-SUPPORT.md) and
+[opaque/alpha attribution](../benchmarks/CURRENT-OPAQUE-VP8L-ENCODE-COST.md)
+retain their historical proof and design leads. No favorable resampling.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.

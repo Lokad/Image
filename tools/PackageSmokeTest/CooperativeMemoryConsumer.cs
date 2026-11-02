@@ -95,16 +95,18 @@ internal static class CooperativeMemoryConsumer
         // Authored flat regions and a small many-color patch exercise empty
         // spatial tiles independently of the photograph/diagram fixtures. The
         // frame is large enough to hand matching heads to ordinary token storage.
+        // An authored noise patch also reaches prefix-aggregated cache scoring.
         const int width = 513, height = 259, capacity = 6 * 1024 * 1024;
-        var pixels = new byte[width * height * 4];
+        var pixels = new byte[width * height * 4]; uint noise = 0x31415926;
         for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
         {
             var i = (y * width + x) * 4;
             pixels[i] = 32; pixels[i + 1] = 64; pixels[i + 2] = 96; pixels[i + 3] = 255;
-            if (x is >= 64 and < 96 && y is >= 32 and < 64)
+            if (x is >= 64 and < 192 && y is >= 32 and < 128)
             {
-                pixels[i] = (byte)(x * 7 + y * 3); pixels[i + 1] = (byte)(x * 3 + y * 11);
-                pixels[i + 2] = (byte)(x * 13 + y * 5); pixels[i + 3] = (byte)((x + y) % 7 == 0 ? 0 : 255);
+                noise ^= noise << 13; noise ^= noise >> 17; noise ^= noise << 5;
+                pixels[i] = (byte)noise; pixels[i + 1] = (byte)(noise >> 8);
+                pixels[i + 2] = (byte)(noise >> 16); pixels[i + 3] = (byte)((x + y) % 7 == 0 ? 0 : noise >> 24);
             }
         }
         using var root = new TestMemoryBudget(capacity); var limits = new ImageLimits { MemoryBudget = root };
@@ -138,6 +140,7 @@ internal static class CooperativeMemoryConsumer
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("WebP workspace leaked capacity or disposed the caller root.");
         Console.WriteLine("Packaged WebP candidate workspace preserves sync/async packets, hidden RGB and shared lifetimes.");
         Console.WriteLine("Packaged WebP head/token handoff preserves large-frame sync/async packets and shared ownership.");
+        Console.WriteLine("Packaged WebP cache-prefix scoring preserves noisy-patch sync/async packets and shared ownership.");
     }
     private static void VerifyRectangleFill()
     {

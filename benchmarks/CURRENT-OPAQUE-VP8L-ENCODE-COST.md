@@ -1,5 +1,9 @@
 # Current opaque WebP cost and alpha attribution
 
+Elapsed/allocation figures below precede the subsequent
+[cache-prefix aggregation](WEBP-CACHE-PREFIX-AGGREGATION.md), which has current
+qualified costs. Historical proof and unchanged-method attribution leads remain.
+
 One independent twelve-actual confirmation refreshes the existing513×259 opaque
 RGBA8 VP8L control on the qualified prepared-support DLL. Existing harness,
 original OLC1selector, libwebp worker and settings are reused; zero builds,

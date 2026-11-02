@@ -56,6 +56,15 @@ public sealed class Vp8lCacheHistoryTests
             var secondCounts = new int[firstCounts.Length];
             Vp8lReferenceCache.FillAllFromHistory(pixels, a, history, maximumBits, firstCounts);
             Vp8lReferenceCache.FillAllFromHistory(pixels, b, history, maximumBits, secondCounts);
+            if (maximumBits != 0)
+            {
+                var mass = Enumerable.Repeat(-1, maximumBits * (1 << maximumBits)).ToArray(); var folded = new int[firstCounts.Length];
+                Vp8lReferenceCache.FillAllFromHistory(pixels, a, history, maximumBits, folded, mass);
+                Assert.Equal(firstCounts, folded);
+                // Reuse nonzero scratch for a different seed: no candidate data escapes.
+                Vp8lReferenceCache.FillAllFromHistory(pixels, b, history, maximumBits, folded, mass);
+                Assert.Equal(secondCounts, folded);
+            }
             for (var bits = 0; bits <= maximumBits; bits++)
             for (var side = 0; side < 2; side++)
             {

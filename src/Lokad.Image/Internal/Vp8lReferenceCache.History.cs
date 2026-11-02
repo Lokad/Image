@@ -8,13 +8,23 @@ internal static partial class Vp8lReferenceCache
         return pixelCount + (entries + (long)HistogramValues(maximumBits)) * 4 + 128;
     }
 
+    // Prefix folding has fixed O(bits * 2^bits) preparation. Keep short seeds
+    // on direct counting; this choice precedes admission and uses no fixture or
+    // shared remaining-capacity information.
+    private static int PrefixMassWords(int tokenCount, int maximumBits)
+    {
+        if ((uint)maximumBits > 10) throw new ArgumentOutOfRangeException(nameof(maximumBits));
+        return maximumBits >= 4 && tokenCount >= 8 * (1 << maximumBits) ? maximumBits * (1 << maximumBits) : 0;
+    }
+
     internal static bool TryBestBitsWithHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> first,
         ReadOnlySpan<Vp8lToken> second, int maximumBits, OperationContext context, out int firstBits, out int secondBits)
     {
         firstBits = secondBits = 0;
         // These cases need the original individual cancellation checks.
         if (maximumBits == 0 || context.Cancellation.CanBeCanceled) return false;
-        var reserved = HistoryBytes(pixels.Length, maximumBits);
+        var massWords = Math.Max(PrefixMassWords(first.Length, maximumBits), PrefixMassWords(second.Length, maximumBits));
+        var reserved = HistoryBytes(pixels.Length, maximumBits) + (massWords == 0 ? 0 : massWords * 4L + 32);
         if (reserved > context.RemainingWorkingBytes)
             return false;
         // Eligibility uses only declared local allowances. Shared refusal below
@@ -26,9 +36,10 @@ internal static partial class Vp8lReferenceCache
             var minimum = new byte[pixels.Length];
             var cache = new uint[(1 << (maximumBits + 1)) - 2];
             var counts = new int[HistogramValues(maximumBits)];
+            var mass = massWords == 0 ? Array.Empty<int>() : new int[massWords];
             BuildHistory(pixels, maximumBits, cache, minimum);
-            firstBits = ScoreHistory(pixels, first, maximumBits, minimum, counts, context);
-            secondBits = ScoreHistory(pixels, second, maximumBits, minimum, counts, context);
+            firstBits = ScoreHistory(pixels, first, maximumBits, minimum, counts, mass, context);
+            secondBits = ScoreHistory(pixels, second, maximumBits, minimum, counts, mass, context);
             return true;
         }
         finally { context.Release(reserved); }
@@ -64,9 +75,10 @@ internal static partial class Vp8lReferenceCache
     }
 
     private static int ScoreHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> seed, int maximumBits,
-        ReadOnlySpan<byte> minimum, Span<int> counts, OperationContext context)
+        ReadOnlySpan<byte> minimum, Span<int> counts, Span<int> mass, OperationContext context)
     {
-        FillAllFromHistory(pixels, seed, minimum, maximumBits, counts);
+        FillAllFromHistory(pixels, seed, minimum, maximumBits, counts,
+            PrefixMassWords(seed.Length, maximumBits) == 0 ? default : mass);
         var best = 0; var bestCost = long.MaxValue;
         for (var bits = 0; bits <= maximumBits; bits++)
         {
@@ -88,9 +100,11 @@ internal static partial class Vp8lReferenceCache
     // its channels once at the last miss, then form lower-width suffix sums.
     // Copy-length populations are independent of cache width.
     internal static void FillAllFromHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> seed,
-        ReadOnlySpan<byte> minimum, int maximumBits, Span<int> counts)
+        ReadOnlySpan<byte> minimum, int maximumBits, Span<int> counts, Span<int> prefixMass = default)
     {
-        counts[..HistogramValues(maximumBits)].Clear();
+        if (!prefixMass.IsEmpty && (maximumBits == 0 || prefixMass.Length != maximumBits * (1 << maximumBits)))
+            throw new ArgumentException("Prefix mass capacity differs from the cache alphabets.", nameof(prefixMass));
+        counts[..HistogramValues(maximumBits)].Clear(); prefixMass.Clear();
         Span<int> offsets = stackalloc int[11];
         for (var bits = 0; bits <= maximumBits; bits++) offsets[bits] = HistogramOffset(bits);
         var position = 0;
@@ -107,12 +121,18 @@ internal static partial class Vp8lReferenceCache
                 counts[offset + layout.Blue + (int)(pixel & 255)]++;
                 counts[offset + layout.Alpha + (int)(pixel >> 24)]++;
                 var hash = unchecked(pixel * 0x1e35a7bdu);
-                for (var bits = threshold; bits <= maximumBits; bits++)
-                    counts[offsets[bits] + 280 + (int)(hash >> (32 - bits))]++;
+                if (prefixMass.IsEmpty)
+                {
+                    for (var bits = threshold; bits <= maximumBits; bits++)
+                        counts[offsets[bits] + 280 + (int)(hash >> (32 - bits))]++;
+                }
+                else if (threshold <= maximumBits)
+                    prefixMass[((threshold - 1) << maximumBits) + (int)(hash >> (32 - maximumBits))]++;
             }
             position += token.Length;
         }
         if (position != pixels.Length) throw new ArgumentException("Token seed does not cover its source.", nameof(seed));
+        if (!prefixMass.IsEmpty) FoldPrefixMass(prefixMass, maximumBits, offsets, counts);
         for (var bits = maximumBits - 1; bits >= 0; bits--)
         {
             var lower = new Vp8lHistogramLayout(bits); var upper = new Vp8lHistogramLayout(bits + 1);
@@ -126,4 +146,26 @@ internal static partial class Vp8lReferenceCache
         for (var bits = 1; bits <= maximumBits; bits++)
             counts.Slice(256, 24).CopyTo(counts.Slice(offsets[bits] + 256, 24));
     }
+
+    private static void FoldPrefixMass(ReadOnlySpan<int> mass, int maximumBits, ReadOnlySpan<int> offsets, Span<int> counts)
+    {
+        var size = 1 << maximumBits;
+        // The maximum-width cache bank is initially zero and becomes the final
+        // cumulative leaf population. It supplies scratch without another array.
+        var leaves = counts.Slice(offsets[maximumBits] + 280, size);
+        for (var bits = 1; bits <= maximumBits; bits++)
+        {
+            var row = mass.Slice((bits - 1) * size, size);
+            for (var value = 0; value < size; value++) leaves[value] += row[value];
+            if (bits == maximumBits) break;
+            var output = counts.Slice(offsets[bits] + 280, 1 << bits); var shift = maximumBits - bits;
+            for (var prefix = 0; prefix < output.Length; prefix++)
+            {
+                var sum = 0; var start = prefix << shift; var end = (prefix + 1) << shift;
+                for (var value = start; value < end; value++) sum += leaves[value];
+                output[prefix] = sum;
+            }
+        }
+    }
+
 }
