@@ -27,7 +27,9 @@ One one-second profile yields 783 workload samples. Paired histogram population
 costs receive 359 exclusive samples (45.8%), color histogram construction 67
 (8.6%). These are attribution, not method timings or guaranteed savings.
 Instrumented timing is discarded. Exact packets and both quiet guards pass.
-The next audit examines repeated bank scans and run-cost preparation. The earlier
+The [run-boundary follow-up](VP8L-RUN-BOUNDARIES-INCONCLUSIVE.md) had an
+unpromising screen and was restored; current costs remain unchanged. Further
+work needs a different bank-scan or preparation design. The earlier
 [window experiment](VP8L-WINDOW-POPULATIONS-DEFERRED.md) was inconclusive;
 its implementation and sparse/pair-cache diagnostics are evidence to consider,
 not gains to replay or permanent bans on a materially different design.

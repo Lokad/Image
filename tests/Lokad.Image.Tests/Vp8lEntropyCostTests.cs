@@ -95,6 +95,32 @@ public sealed class Vp8lEntropyCostTests
     }
 
     [Fact]
+    public void PairedRunBoundariesPreserveUnalignedVectorBlockTailsAndCancellingChanges()
+    {
+        using var context = new OperationContext(ImageLimits.Default, default);
+        foreach (var length in Enumerable.Range(0, 146).Concat(new[] { 255, 256, 257, 279, 280, 281, 1303, 1304, 1305 }))
+        foreach (var offset in new[] { 0, 1, 5 })
+        foreach (var run in new[] { 1, 2, 3, 4, 15, 16, 17, 63, 64, 65 })
+        {
+            var a = Enumerable.Repeat(-13, length + offset + 7).ToArray();
+            var b = Enumerable.Repeat(-29, length + offset + 11).ToArray();
+            var combined = new int[length];
+            for (var i = 0; i < length; i++)
+            {
+                var count = (i / run % 5) switch { 0 => 0, 1 => 1, 2 => 2, 3 => 65537, _ => 100003 };
+                combined[i] = count;
+                // Opposite changes in the inputs must not create a summed run.
+                a[offset + i] = (i & 1) == 0 ? count : count / 3;
+                b[offset + i] = count - a[offset + i];
+            }
+            var originalA = (int[])a.Clone(); var originalB = (int[])b.Clone();
+            Assert.Equal(Vp8lReferenceEntropy.Population(combined, context),
+                Vp8lReferenceEntropy.PopulationSum(a.AsSpan(offset, length), b.AsSpan(offset, length), context));
+            Assert.Equal(originalA, a); Assert.Equal(originalB, b);
+        }
+    }
+
+    [Fact]
     public void PairedPopulationRejectsMismatchedLengths()
     {
         int[] a = [0, 1, 1, 1, 1];
