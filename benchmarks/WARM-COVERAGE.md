@@ -52,9 +52,12 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   overlaps. Other affected bicubic costs are historical. All adverse designs,
   raw evidence and unchanged allocation/admission are retained;5416checks/OS,
   scalar and same actual-package checks pass.
+- [Post-workspace WebP attribution](POST-WORKSPACE-WEBP-ATTRIBUTION.md) refreshes
+  two one-second diagnostic captures without builds or timing claims. Photo
+  color search32.2%, prediction26.0%, clustering20.7%; lossless alpha68.9%.
+  Inclusive fractions overlap. All packets/guards pass; unchanged proof is reused.
 - Next architectural work targets remaining material codec costs from current
-  attribution, with further resize
-  preparation/execution, then codec work ranked by useful absolute savings.
+  attribution and further resize preparation/execution, ranked by useful savings.
   Pending items block their own dependencies, not independent work. Failed
   implementations and inconclusive measurements inform revised designs; neither
   fixed continuation thresholds nor permanent closed-family lists govern this phase.

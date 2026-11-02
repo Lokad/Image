@@ -1,0 +1,222 @@
+{
+  "project": "Lokad.Image",
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "productionChanged": false,
+  "builds": 0,
+  "cases": {
+    "photograph": {
+      "workloadSamples": 793,
+      "managedSamples": 791,
+      "exclusiveTop": [
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform.Histogram(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,bool,int32,int32,int32,value class System.Span`1<int32>,value class System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)",
+          "samples": 123,
+          "fraction": 0.15510718789407313
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.PopulationSum(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)",
+          "samples": 106,
+          "fraction": 0.13366960907944514
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceCost.PreparedPredictionEntropy(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int64>,int64)",
+          "samples": 103,
+          "fraction": 0.12988650693568726
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lColorCost.Evaluate(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int64>,int64,value class System.ReadOnlySpan`1<int32>)",
+          "samples": 87,
+          "fraction": 0.10970996216897856
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext)",
+          "samples": 44,
+          "fraction": 0.05548549810844893
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lPredictorHistogram.AccumulateInterior(value class System.Span`1<int32>,unsigned int32,unsigned int32,unsigned int32,unsigned int32,unsigned int32)",
+          "samples": 42,
+          "fraction": 0.05296343001261034
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceCost.SmallResidualBias(value class System.ReadOnlySpan`1<int32>)",
+          "samples": 25,
+          "fraction": 0.031525851197982346
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.Population(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)",
+          "samples": 25,
+          "fraction": 0.031525851197982346
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lColorCost.Prepare(value class System.ReadOnlySpan`1<int32>,int32,value class System.Span`1<int64>)",
+          "samples": 24,
+          "fraction": 0.03026481715006305
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform+Search.Score(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,unsigned int32,unsigned int32,bool,int32,int32,int32)",
+          "samples": 19,
+          "fraction": 0.02395964691046658
+        }
+      ],
+      "selectedInclusive": [
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform+Search.SelectAndApply(value class System.Span`1<unsigned int32>,int32,int32,int32,int32,value class System.Span`1<unsigned int32>)",
+          "samples": 255,
+          "fraction": 0.32156368221941994
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferencePredictor+Analysis.Visit(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32)",
+          "samples": 206,
+          "fraction": 0.2597730138713745
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceClustering.Build(value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32,bool,class Lokad.Image.Internal.OperationContext,int32)",
+          "samples": 164,
+          "fraction": 0.2068095838587642
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMainParsing.Encode(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<unsigned int32>,int32,bool,int32,class Lokad.Image.Internal.OperationContext,bool)",
+          "samples": 64,
+          "fraction": 0.0807061790668348
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext)",
+          "samples": 46,
+          "fraction": 0.058007566204287514
+        }
+      ],
+      "librarySha256": "f6e459d441d551757b3afa84cbb0212e6153b33b6322aaeb1daac41b430f99a3",
+      "benchmarkAssemblySha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "samplerSha256": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+      "traceSha256": "ffbd238624634e7a24eb1640f2a832e7f7995f9846d32a5792fc5feb03c5b4c9",
+      "summarySha256": "f40e3d12a697d744495234ff54d253873b9e359a438062f334adbf04bc401f3f",
+      "traceBytes": 1507762,
+      "quietGuardsPassed": true,
+      "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "completePacketExact": true,
+      "managedPacketSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "referencePacketSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "managedPacketBytes": 160032,
+      "referencePacketBytes": 160032
+    },
+    "alpha": {
+      "workloadSamples": 779,
+      "managedSamples": 779,
+      "exclusiveTop": [
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext)",
+          "samples": 102,
+          "fraction": 0.13093709884467267
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8FrameEncoding.Coefficients(value class Cursor&,value class System.ReadOnlySpan`1<int16>,int32,int32,int32,value class System.ReadOnlySpan`1<unsigned int8>)",
+          "samples": 54,
+          "fraction": 0.0693196405648267
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8MacroblockDecision.Luma4(value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class Lokad.Image.Internal.Vp8QuantizationMatrix,value class Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,value class System.ReadOnlySpan`1<unsigned int16>,int32,int64,value class System.Span`1<unsigned int8>,value class System.Span`1<int16>,value class System.Span`1<unsigned int8>,class Lokad.Image.Internal.OperationContext,bool,value class Metric&,unsigned int32&)",
+          "samples": 53,
+          "fraction": 0.06803594351732992
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceLz.Trace(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<unsigned int32>,int32,value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.Vp8lTokenBuffer)",
+          "samples": 40,
+          "fraction": 0.051347881899871634
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceCache.FillAllFromHistory(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,value class System.ReadOnlySpan`1<unsigned int8>,int32,value class System.Span`1<int32>)",
+          "samples": 39,
+          "fraction": 0.05006418485237484
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceLz.Repeats(value class System.ReadOnlySpan`1<unsigned int32>,int32,class Lokad.Image.Internal.OperationContext)",
+          "samples": 31,
+          "fraction": 0.03979460847240052
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lGreenPredictorHistogram.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,value class System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)",
+          "samples": 30,
+          "fraction": 0.038510911424903725
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceCache.BuildHistory(value class System.ReadOnlySpan`1<unsigned int32>,int32,value class System.Span`1<unsigned int32>,value class System.Span`1<unsigned int8>)",
+          "samples": 30,
+          "fraction": 0.038510911424903725
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.PopulationSum(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)",
+          "samples": 29,
+          "fraction": 0.037227214377406934
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8MacroblockDecision.Luma16(value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,value class System.ReadOnlySpan`1<unsigned int8>,bool,bool,value class Lokad.Image.Internal.Vp8QuantizationMatrix,value class Lokad.Image.Internal.Vp8QuantizationMatrix,value class Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,value class System.ReadOnlySpan`1<unsigned int16>,value class System.Span`1<unsigned int8>,value class System.Span`1<int16>,class Lokad.Image.Internal.OperationContext,bool,int32&,unsigned int32&,int32&)",
+          "samples": 28,
+          "fraction": 0.03594351732991014
+        }
+      ],
+      "selectedInclusive": [
+        {
+          "method": "Lokad.Image.Internal.Vp8AlphaEncoding.Create(value class System.ReadOnlySpan`1<unsigned int8>,int32,class Lokad.Image.Internal.OperationContext,int32)",
+          "samples": 537,
+          "fraction": 0.6893453145057766
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMainParsing.Encode(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<unsigned int32>,int32,bool,int32,class Lokad.Image.Internal.OperationContext,bool)",
+          "samples": 213,
+          "fraction": 0.2734274711168164
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext)",
+          "samples": 121,
+          "fraction": 0.15532734274711169
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceLz.Trace(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<unsigned int32>,int32,value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.Vp8lTokenBuffer)",
+          "samples": 79,
+          "fraction": 0.10141206675224647
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceClustering.Build(value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32,bool,class Lokad.Image.Internal.OperationContext,int32)",
+          "samples": 70,
+          "fraction": 0.08985879332477535
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferencePredictor+Analysis.Visit(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32)",
+          "samples": 52,
+          "fraction": 0.06675224646983312
+        }
+      ],
+      "librarySha256": "f6e459d441d551757b3afa84cbb0212e6153b33b6322aaeb1daac41b430f99a3",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "samplerSha256": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+      "traceSha256": "1238431abc0351eed4d127a9bae9c38dccc34a50d0a3b3d338c07885ac6d0ae1",
+      "summarySha256": "035824b44feadb9ad340364f34fff3d32f76b322f9002a436700dd2a153d9616",
+      "traceBytes": 1562486,
+      "quietGuardsPassed": true,
+      "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "completePacketExact": true,
+      "managedPacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "referencePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedPacketBytes": 98590,
+      "referencePacketBytes": 98590
+    }
+  },
+  "rawArchive": {
+    "file": "post-workspace-webp-attribution.tar.xz",
+    "bytes": 286680,
+    "members": 37,
+    "sha256": "c42042d699b3ba2ebebcf2ad3e51b7a7c3a7369ef971aac9ef8043b13a7ba182",
+    "vmMembersVerified": true,
+    "producerDependency": "vp8l-trace-forward-window.tar.xz",
+    "producerDependencySha256": "43fc1fba702cfad183f961d149de19a1db207ea172b528000aa395284b478211",
+    "localMembersVerified": true
+  },
+  "currentValidity": "TWS83 immutable encoder runtime; subsequent BC85 production changes only cached bicubic files. WebP production paths, reference fixtures/settings, output hashes and gates remain unchanged.",
+  "qualificationReused": "BC85 Windows/Linux5416checks, affected scalar and same actual package. No production inputs changed by this diagnostic stage; no repeated full/package proof.",
+  "limits": "One one-second capture per existing complete control. Method/inlining attribution only, not measured phase times, savings or an elapsed upper bound. Inclusive fractions overlap. Profiled job timings discarded.",
+  "validationRecovery": "Both captures completed once. The alpha schema uses managedEncodedSha256; field-name correction resumed validation/analysis on the retained trace without recollecting or changing a gate.",
+  "nextHypothesis": "Bounded color-search audit: quantify candidate-independent tile decoding, coefficient products and histogram/cost work already shared. Preserve adaptive order/ties, exact fixed-point costs, recursive packets and caller-owned admission; choose a concrete design only where material repeated work remains.",
+  "noNewWorkloadsOrSettings": true
+}
