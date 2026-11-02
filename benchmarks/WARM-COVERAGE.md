@@ -56,6 +56,10 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   two one-second diagnostic captures without builds or timing claims. Photo
   color search32.2%, prediction26.0%, clustering20.7%; lossless alpha68.9%.
   Inclusive fractions overlap. All packets/guards pass; unchanged proof is reused.
+- [Partial color preparation](WEBP-PARTIAL-COLOR-TRIAL.md) is inconclusive and
+  restored. Arithmetic reuse69.36% did not demonstrate useful complete elapsed
+  savings in the direct screen; all adverse data is retained without confirmation
+  or resampling. Exact source/core/package and current costs are unchanged.
 - Next architectural work targets remaining material codec costs from current
   attribution and further resize preparation/execution, ranked by useful savings.
   Pending items block their own dependencies, not independent work. Failed

@@ -1,0 +1,188 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "candidateMerged": false,
+  "status": "inconclusive-direct-screen-restored",
+  "decision": "Four-slot partial blue planes remove repeated arithmetic, but the ordered direct screen demonstrates no useful complete-operation gain. Stop this implementation; do not confirm or resample it. Revised designs remain possible with distinct evidence.",
+  "countAudit": {
+    "summary": {
+      "tiles": 2145,
+      "population": 132867,
+      "redUniqueHistograms": 26395,
+      "blueUniqueHistograms": 68497,
+      "bluePixelVisits": 4242107,
+      "redPixelVisits": 1635199,
+      "idealOneCoefficientProductReuse": 0.7188748421480176,
+      "green1SlotPixelProductReuse": 0.3780345474548379,
+      "green4SlotPixelProductReuse": 0.7157141486530161,
+      "green4SlotFifoPixelProductReuse": 0.6936168748218751,
+      "mediumProductCalls": 2393052,
+      "distinctMediumProducts": 45640,
+      "mediumRepeatFraction": 0.9809281202414323,
+      "maximumTilePopulation": 64,
+      "onePlaneScratchBytes": 64,
+      "tableBytesForAllMediumCounts": 524288
+    },
+    "verification": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "diagnosticCountsOnly": true,
+      "productionSha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "instrumentedSha256": "a2f5a7db3222625313b395cd1662e51622e77256a2f1c2df0a5bea643bc02be4",
+      "originalSources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "9b219077dfdb140417c99052c9a0253b8f2b0de083a713e0d02bae4eb94a6ec1",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "f7371c46f8447ab160881ee206507caa93ce120e9ba766db5bd90f96ba1055ef"
+      },
+      "instrumentedSources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "a94851a42c054088b6c76cf3c4ee9a4242debfb96745c4b885d452b9f26f94c3",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "99ca5856e80cb062d1eaf3d5ad4621e6bd71d838bc5ab340416c49a36c867eaa"
+      },
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "sourceRestoredExactly": true,
+      "coreAndSourceManifestUnchanged": true,
+      "instrumentedCoreBuilds": 1,
+      "auditBuilds": 1,
+      "encodes": 1,
+      "quietGuardsPassed": true
+    },
+    "scope": "One original513x259 photograph, exact160032-byte packet; counts only, no statistical timing. Instrumented source/core are diagnostic only and original source/core/manifest restored."
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "stage": "CT87 operation-owned partial blue planes",
+    "productionAccepted": false,
+    "design": "Four byte planes in the existing Search owner, FIFO by signed green coefficient, reset each tile. Cache misses fill while building the original histogram; hits reuse blue-minus-green and subtract only red. Exact costs/order/ties and selected output ownership unchanged.",
+    "removedWork": "Measured69.36% of blue pixel visits reuse a prepared green contribution with four FIFO slots; no cross-operation reuse. This is an arithmetic-visit count, not a CPU gain.",
+    "memory": "ExistingSearch header allowance128->192; new4*min(width,2^bits)*min(height,2^bits)bytes. All reserved in the existing owner before allocation; no new owner or pool.",
+    "boundaries": "Existing complete photograph and diagram controls first; alpha skips color search and is unchanged. Exact prepared/miss scalar oracles and complete packets required; full qualification only if coherent stage helps.",
+    "setbacks": "Extra capture stores on misses and lookup/retained scratch may offset saved arithmetic. Candidate not accepted without complete-operation evidence.",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "c6ff61e34800065c406b08f8702843b95f9c9c2518702253807107bc3f506e5d",
+      "tests/Lokad.Image.Tests/Vp8lReferenceColorTransformTests.cs": "da6a4f6deb2986dd8c336e267e2f1c322bfae73e512b355f409af6701e5275ae"
+    }
+  },
+  "screen": [
+    {
+      "caseId": "photograph",
+      "baselineMicroseconds": 106303.335,
+      "candidateMicroseconds": 109061.065,
+      "pointGain": -0.025942083566804275,
+      "beforeAllocated": 16834504,
+      "afterAllocated": 16834816,
+      "beforeAdmittedPeak": 12217052,
+      "afterAdmittedPeak": 12217052,
+      "completePacketExact": true,
+      "retainedRootBytes": 0,
+      "diagnosticOnly": true
+    },
+    {
+      "caseId": "diagram",
+      "baselineMicroseconds": 9841.698151515151,
+      "candidateMicroseconds": 10133.575233333335,
+      "pointGain": -0.029657186933054636,
+      "beforeAllocated": 7987568,
+      "afterAllocated": 7987568,
+      "beforeAdmittedPeak": 5055600,
+      "afterAdmittedPeak": 5055600,
+      "completePacketExact": true,
+      "retainedRootBytes": 0,
+      "diagnosticOnly": true
+    },
+    {
+      "caseId": "alpha",
+      "baselineMicroseconds": 72796.58166666667,
+      "candidateMicroseconds": 72463.464,
+      "pointGain": 0.0045760069915371515,
+      "beforeAllocated": 14237048,
+      "afterAllocated": 14237048,
+      "beforeAdmittedPeak": 4085883,
+      "afterAdmittedPeak": 4085883,
+      "completePacketExact": true,
+      "retainedRootBytes": 0,
+      "diagnosticOnly": true
+    },
+    {
+      "caseId": "authored-bars",
+      "baselineMicroseconds": 905.442225,
+      "candidateMicroseconds": 926.3732294372295,
+      "pointGain": -0.02311688571540782,
+      "beforeAllocated": 933288,
+      "afterAllocated": 933288,
+      "beforeAdmittedPeak": 312716,
+      "afterAdmittedPeak": 312716,
+      "completePacketExact": true,
+      "retainedRootBytes": 0,
+      "diagnosticOnly": true
+    }
+  ],
+  "producers": {
+    "baselineSha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+    "candidateSha256": "a03b83a0fb3a07acf9e869a5126790dfd0d89b5095ba2ddf495f46fa2fc450e1",
+    "candidateSourceSha256": "da1dbac12aa2c8d20b30ce73125ee34268b007a1918ef3211b4583e76b0223fb",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "c6ff61e34800065c406b08f8702843b95f9c9c2518702253807107bc3f506e5d",
+      "tests/Lokad.Image.Tests/Vp8lReferenceColorTransformTests.cs": "da6a4f6deb2986dd8c336e267e2f1c322bfae73e512b355f409af6701e5275ae"
+    },
+    "originals": {
+      "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "9b219077dfdb140417c99052c9a0253b8f2b0de083a713e0d02bae4eb94a6ec1",
+      "tests/Lokad.Image.Tests/Vp8lReferenceColorTransformTests.cs": "ab685021a5710d00529f419e19e9a20fb7b176f89f43b27d4327a41d7fc32e01"
+    }
+  },
+  "validation": {
+    "fourCompletePacketsExact": true,
+    "linuxCandidateNormalScalar": {
+      "normal": 234,
+      "scalar": 234
+    },
+    "windowsCandidateNormalScalar": 13,
+    "compilerScopingErrorCorrectedBeforeVmBuild": true,
+    "sourceScalarFloorOracleExtendedToPreparedAndMissKernels": true,
+    "exactPixelsInputOwnershipAndAdmissionPassed": true,
+    "linuxRestored": {
+      "project": "Lokad.Image",
+      "productionSourceRestored": true,
+      "coreAndPublicCopiesRestoredExactly": true,
+      "linuxSha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "normal": 234,
+      "scalar": 234,
+      "reusedFullPackageQualification": true
+    },
+    "windowsRestored": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "allOwnedSourcesRestoredExactly": true,
+      "windowsSha256": "8c6c0c414bfaa3f76e748f61d4906aeec39e4167eb61e738638c9bb3ec0417d5",
+      "normal": 234,
+      "scalar": 234,
+      "actualPackageUnchanged": "0e89e52c806fe2253bd3068e6fe3629cba96f94d0dc54f2637df4a8893ab944e",
+      "reusedFullPackageQualification": true
+    }
+  },
+  "workflow": {
+    "countAuditEncodes": 1,
+    "instrumentedCoreBuilds": 1,
+    "auditBuilds": 1,
+    "productionCandidateCoreBuilds": 1,
+    "candidateInternalBuilds": 3,
+    "screenHarnessNativeSelectorBuilds": 0,
+    "existingDirectBatches": 3,
+    "independentConfirmations": 0,
+    "sourceAndCoreRestoredExactly": true,
+    "fullPackageProofReused": true,
+    "note": "All development/restore/check logs and every direct sample retained. No new content/settings or native worker; no repeated broad qualification/package build for restored production."
+  },
+  "memory": "Photograph allocation+312B/op; complete admitted peak12217052B unchanged because another phase determines it. No retained scratch. Other three controls skip the changed color search and allocate unchanged.",
+  "evidenceLimits": "The three direct batches are diagnostic, not confidence-qualified comparison. Unchanged diagram is2.97%slower while photograph is2.59%slower, suggesting drift; neither a confirmed regression nor a demonstrated gain. No claim follows solely from69.36%arithmetic reuse or98.09%entropy-product count repetition.",
+  "next": "Fresh one-second attribution of the existing equivalent one-shot PNG Optimal control; preserve all existing timing/packet evidence, and use current attribution before further codec redesign.",
+  "rawArchive": {
+    "file": "webp-partial-color-trial-inconclusive.tar.xz",
+    "bytes": 1008488,
+    "members": 120,
+    "sha256": "dba34a677cab18eae0397625030efb1c5ccf83f5d3bb422b17eda540bb1a93ae",
+    "vmMembersVerified": true,
+    "unchangedProductionQualificationDependency": "bicubic-shared-cached-driver.tar.xz",
+    "unchangedProductionQualificationDependencySha256": "193df11fcd7d104e6226e38b1f001577162fef6f442d64448fa5339665b4bba3",
+    "localMembersVerified": true
+  }
+}
