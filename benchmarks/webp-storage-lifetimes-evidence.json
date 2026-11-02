@@ -1,0 +1,142 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "diagnosticOnly": true,
+  "timingClaim": false,
+  "allocationClaim": false,
+  "librarySha256": "cde312b0bf60ff71b6af14d2c8ea48a5d183c26fd4b8c1a16a03c37591f0be1a",
+  "identities": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "auditToolBuilds": 1,
+    "auditToolRebuilds": 0,
+    "folder": "tmp/ws95/bin/Release/net10.0",
+    "hashes": {
+      "Lokad.Image.pdb": "f43e31a5a099ecd816ef1f0db928603fcf928513b5b4ed6f340a3fa5ce272312",
+      "Ws95.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+      "Ws95.dll": "6d4a7f09477f7878984e1e58d6b59f27ae035544e26331c45b24da0dc5a0fa62",
+      "Lokad.Image.dll": "cde312b0bf60ff71b6af14d2c8ea48a5d183c26fd4b8c1a16a03c37591f0be1a",
+      "Ws95.pdb": "8c952ee09e090ff673061ef1f937bafb814c893d774595d127d64445f5cc4aa5",
+      "Ws95.deps.json": "bc04ab587d833c91fd45cfa077c75fbfecf132165b845263b39dc86efd646158"
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/ws95/bin/Release/net10.0/Ws95.dll",
+      "."
+    ],
+    "quietGuardsPassed": true,
+    "frozenExpectedEvidenceSha256": "011554d4a5fe5ceaea268c876482a4ee71a70a7c7a7c57efd7c91b73ebd51c10",
+    "initialMissingEvidenceBeforeAnyEncode": true,
+    "initialFailureLogRetained": true
+  },
+  "analysis": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "completeEncodes": 2,
+    "timingClaim": false,
+    "allocationClaim": false,
+    "cases": [
+      {
+        "caseId": "photograph",
+        "admissionEvents": 1101,
+        "packetBytes": 160032,
+        "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+        "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "denseHeadsAllocations": 1,
+        "denseHeadsAdmittedBytes": 1048576,
+        "followingGreedySeedCapacities": [
+          1062936
+        ],
+        "admittedPeakOwnedBytes": 12217052,
+        "retainedRootBytes": 0,
+        "proposedHandoff": [
+          {
+            "indexSequence": 87,
+            "headsSequence": 88,
+            "headsReleaseSequence": 89,
+            "seedSequence": 90,
+            "headsBytes": 1048576,
+            "seedBytes": 1062936,
+            "stageIncreaseBytes": 14360
+          }
+        ],
+        "modeledHandoffPeak": 12217052,
+        "modeledPeakNotMeasurement": true,
+        "predictedPayloadCapacitySavings": 1048576,
+        "allocationSavingsNotMeasured": true
+      },
+      {
+        "caseId": "alpha",
+        "admissionEvents": 779,
+        "packetBytes": 98590,
+        "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "denseHeadsAllocations": 2,
+        "denseHeadsAdmittedBytes": 2097152,
+        "followingGreedySeedCapacities": [
+          1062936,
+          1062936
+        ],
+        "admittedPeakOwnedBytes": 4085883,
+        "retainedRootBytes": 0,
+        "proposedHandoff": [
+          {
+            "indexSequence": 49,
+            "headsSequence": 50,
+            "headsReleaseSequence": 51,
+            "seedSequence": 52,
+            "headsBytes": 1048576,
+            "seedBytes": 1062936,
+            "stageIncreaseBytes": 14360
+          },
+          {
+            "indexSequence": 591,
+            "headsSequence": 592,
+            "headsReleaseSequence": 593,
+            "seedSequence": 594,
+            "headsBytes": 1048576,
+            "seedBytes": 1062936,
+            "stageIncreaseBytes": 14360
+          }
+        ],
+        "modeledHandoffPeak": 4085883,
+        "modeledPeakNotMeasurement": true,
+        "predictedPayloadCapacitySavings": 2097152,
+        "allocationSavingsNotMeasured": true
+      }
+    ],
+    "finding": "Dense matching heads end immediately before Greedy allocates the standard token buffer. Each original132867pixel frame needs1062936token bytes, enough for the1048576byte heads. Borrow a typed view of one admitted token owner during matching, then overwrite tokens after matching finishes. Match index remains independent; selected candidates remain independently owned.",
+    "caution": "Keeping a separate heads array alive across later phases can raise live peaks. The proposed same-owner handoff instead moves the existing seed earlier. Model on these traces preserves full admitted peak but raises the local matching-stage live capacity by14360bytes; implementation/other-input proof remains required. Model savings are not measured allocation or CPU gains.",
+    "next": "One coherent heads-to-token handoff with actual capacity selection, explicit transfer/cleanup and no pool/new owner/quota. Keep smaller inputs on existing path when seed capacity cannot cover heads; no refusal fallback. Preserve candidates, order/ties, exact packets, alpha, cancellation and shared admission."
+  },
+  "execution": {
+    "productionBuilds": 0,
+    "auditToolBuilds": 1,
+    "completeEncodes": 2,
+    "newRasterOrSettingsControls": 0,
+    "quietGuardsPassed": true,
+    "initialMissingExpectedEvidenceBeforeAnyEncode": true,
+    "missingFileSyncedWithoutRebuild": true,
+    "failedLogRetained": true
+  },
+  "contracts": "The existing shared root is decorated only in a private caller-side audit. No independent allowance or storage model; underlying test root enforces all admission. Exact frozen complete packets/source identity/root-zero/borrowed ownership checks pass. Diagnostic callbacks perturb execution; no CPU/GC-allocation claim.",
+  "hypothesis": "Dense heads and the next ordinary token buffer have disjoint uses. Allocate the existing token owner earlier, borrow a bounded int view for matching while its token count iszero, then hand that same owner to greedy parsing after matching completes. Independent match indices and selected candidates remain separate. No pool/new owner/cross-operation retention.",
+  "unproven": "Trace model is restricted to two controls and models admission only. Actual allocation/elapsed gains, general input bounds, smaller-input dispatch, failure/cancellation cleanup and real candidate peak require implementation qualification. This is not merge authorization or a measured saving.",
+  "qualificationReuse": "Unchanged qualified shared-compositing core/package:5423full/live checks eachOS and actual0.2.1package/3examples bothOS. Current cost summaries unchanged.",
+  "rawArchive": {
+    "file": "webp-storage-lifetimes.tar.xz",
+    "bytes": 654388,
+    "members": 35,
+    "sha256": "26ee17264fa4a5bd3d6b524b38ba77953a80fb56da7542d4fd4a25a20bc57124",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "compositing-shared-rows.tar.xz",
+    "qualifiedProductionDependencySha256": "32819eb8a3892d233c7bc134ae10b28cf0aa1d81a1c3f0878c8cff2f1b5c35a2",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}

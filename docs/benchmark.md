@@ -41,7 +41,9 @@ photograph/alpha retain gaps. [Current ordinary RGBA8 VP8L](../benchmarks/CURREN
 confirms a 1.124× gap, 137.37 ms and 26.13 MB/op; its exact 183,812-byte packet
 is unchanged. Native wrappers/scratch are prepared; full per-call import, encoding
 and output ownership remain timed. A one-second profile identifies paired
-histogram costs as the next lead. Rows marked **H** retain historical affected costs.
+histogram costs as a lead. A [two-encode lifetime audit](../benchmarks/WEBP-STORAGE-LIFETIMES.md)
+identifies a matching-to-token storage handoff to qualify. Rows marked **H**
+retain historical affected costs.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.

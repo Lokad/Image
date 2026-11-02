@@ -57,3 +57,7 @@ Raw vp8l-trace-forward-window.tar.xz: 13,238,792 B / 407 members, SHA256
 mirrored/member-verified, including original/selected sources, immutable runtimes
 and old/new package artifacts. No measurements or qualification jobs were repeated.
 Other affected encoder costs remain historical; unchanged paths reuse valid proof.
+
+A subsequent [two-encode lifetime audit](WEBP-STORAGE-LIFETIMES.md) identifies
+a possible matching-heads to greedy-token handoff. Its modeled capacity savings
+are unimplemented; the current costs and qualification above remain unchanged.
