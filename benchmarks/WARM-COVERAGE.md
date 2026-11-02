@@ -14,6 +14,13 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   resize graphs and PNG contexts were reused while managed preparation was timed.
   Retain the measurements, label them accurately, and develop equivalent one-shot
   and reusable-state comparisons. Diagnostic screens are not qualified gains.
+- [PNG one-shot boundary](PNG-ONE-SHOT-BOUNDARY.md): existing RGBA8 Optimal/Fastest
+  controls now include fresh native context/zlib/packet setup and disposal.
+  Ratios1.318/1.417, upper1.356/1.458: confirmed CPU gaps with exact complete
+  packets. No production or package rebuild; unchanged qualification reused.
+  Prior retained-context results remain history. Phase attribution does not
+  justify a managed session as the next CPU optimization; resize consolidation
+  and demonstrated millisecond gaps remain higher-value work.
 - [Accepted WebP workspace](WEBP-CANDIDATE-WORKSPACE.md): diagram allocation
   27.4→10.5 MB, peak admitted storage20.9→6.2 MB; exact packets and full
   Windows/Linux/scalar/actual-package checks pass. Prior VP8L/transparent-VP8

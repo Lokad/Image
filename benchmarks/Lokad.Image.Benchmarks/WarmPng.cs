@@ -25,6 +25,7 @@ public partial class WarmPng
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
     private bool smoke, ready;
+    private bool pngOneShot;
     private int cpu, sampleCount, managedOutputBytes, nativeOutputBytes;
     private DecodeOptions? decodeOptions;
     private long tightWorkingBytes;
@@ -82,6 +83,11 @@ public partial class WarmPng
     public void Setup()
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Warm native PNG runs require Linux.");
+        var oneShot = Environment.GetEnvironmentVariable("LOKAD_IMAGE_PNG_ONE_SHOT");
+        if (oneShot is not (null or "1")) throw new InvalidOperationException("PNG one-shot flag must be1.");
+        pngOneShot = oneShot == "1";
+        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8))
+            throw new InvalidOperationException("PNG one-shot reference is limited to the existing byte Optimal/Fastest controls.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -248,7 +254,7 @@ public partial class WarmPng
             }
             var rawPath = Path.Combine(state.DirectoryPath, "expected.raw");
             File.WriteAllBytes(rawPath, pixels); File.WriteAllBytes(state.Input, Encode ? pixels : encoded);
-            native = new NativeWarmReference(state, Depth, cpu, Encode ? Smallest ? Depth == 16 ? "png-smallest16-encode" : "png-smallest8-encode" : Fastest ? "png-fast16-encode" : NoCompression ? Depth == 16 ? "png-store16-encode" : "png-store-encode" : GrayAlpha ? "png-gray-alpha-encode" : Rgb ? "png-rgb-encode" : Gray ? "png-gray-encode" : "png-encode" : Interlaced ? "png-adam7-decode" : "png-decode", rawPath);
+            native = new NativeWarmReference(state, Depth, cpu, Encode ? Smallest ? Depth == 16 ? "png-smallest16-encode" : "png-smallest8-encode" : Fastest ? "png-fast16-encode" : NoCompression ? Depth == 16 ? "png-store16-encode" : "png-store-encode" : GrayAlpha ? "png-gray-alpha-encode" : Rgb ? "png-rgb-encode" : Gray ? "png-gray-encode" : "png-encode" : Interlaced ? "png-adam7-decode" : "png-decode", rawPath, pngOneShot: pngOneShot);
             if (native.Ready.GetProperty("colorType").GetInt32() != ColorType
                 || native.Ready.GetProperty("codedDepth").GetInt32() != CodedDepth
                 || native.Ready.GetProperty("conversionThreads").GetInt32() != (Encode && GrayAlpha || RgbTransparency ? 0 : Rgb || Gray || GrayAlpha || Palette ? 1 : 0)
@@ -630,7 +636,12 @@ public partial class WarmPng
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmPng).Assembly.Location), nativeBuild = native.BuildIdentity,
                 nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = (ForwardOutput ? "Fresh forward-only caller Stream over independent MemoryStream; wrapper creation/disposal and all span callbacks included, Length/Position/Seek unavailable, caller remains open. Native direct independent packet acquisition needs no seeking or equivalent wrapper. " : "") + (Tight
+                nativeCodecLifetime = pngOneShot ? "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed."
+                    : Encode ? "Repeated codec context: encoder/zlib retained and reset per operation; independent packet payload and disposal timed."
+                    : "Repeated decoder context; existing complete decode/conversion/output lifetime boundary.",
+                boundary = pngOneShot
+                    ? $"Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both {EncoderLevel}/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded."
+                    : (ForwardOutput ? "Fresh forward-only caller Stream over independent MemoryStream; wrapper creation/disposal and all span callbacks included, Length/Position/Seek unavailable, caller remains open. Native direct independent packet acquisition needs no seeking or equivalent wrapper. " : "") + (Tight
                     ? $"Warm identical frozen RGBA{Depth} PNG bytes to independent owned RGBA{Depth} pixels under exact managed working limit: encoded span + IDAT bytes + output + 256 KiB original inflater allowance + two rows. The optional whole-filter and 8 KiB read buffers cannot fit. Public Decode admission/framing/BCL inflation/{(Depth == 16 ? "word conversion/" : "")}output acquisition/disposal timed; preconstructed immutable options excluded. Native equivalent complete decode{(Depth == 16 ? " plus owned BE-to-LE conversion" : " without conversion")}/output acquisition/release, context/packet/frame wrappers reused. Native has no matching caller admission setting. Exact pixels/alpha/hidden RGB/source/two owners and one-byte-below rejection checked outside timing. Startup/IPC/file IO/hashes/validation excluded."
                     : RgbTransparency && Depth == 16
                     ? "Warm identical RGB16BE PNG bytes with six-byte full-word tRNS key to independent owned RGBA16 pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output acquisition/release. Native decoder performs exact full RGB-key alpha expansion to owned RGBA64BE inside every operation, followed by included endian conversion and second owned RGBA64LE output acquisition/release. No colorspace conversion. Full RGB/alpha/hidden RGB exact. Startup/IPC/file IO/hashes/validation excluded."

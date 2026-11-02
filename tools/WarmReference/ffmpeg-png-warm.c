@@ -1,6 +1,9 @@
 /* Original development-only public-API adapter. PNG signature/profile fields
  * follow https://www.w3.org/TR/png-3/. No upstream implementation is copied. */
 #define _GNU_SOURCE
+#ifndef LOKAD_IMAGE_PNG_ONE_SHOT
+#define LOKAD_IMAGE_PNG_ONE_SHOT 0
+#endif
 #include <errno.h>
 #include <inttypes.h>
 #include <sched.h>
@@ -138,9 +141,13 @@ typedef struct {
     int packed_key_filter;
     uint8_t *original, *encoded;
     size_t raw_bytes, encoded_bytes;
-    int encode, encode_smallest, encode_stored, encode_rgb, encode_gray, encode_gray_alpha, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth, gray_transparency, rgb_transparency;
+    int encode, encode_fast, encode_smallest, encode_stored, encode_rgb, encode_gray, encode_gray_alpha, width, height, depth, row_bytes, cpu, stride, output_bytes, rgb, gray, gray_alpha, palette, mono, coded_depth, gray_transparency, rgb_transparency;
     uint64_t completed, observed;
 } Work;
+static int encode_level(const Work *work)
+{
+    return work->encode_stored ? 0 : work->encode_smallest ? 9 : work->encode_fast ? 1 : 6;
+}
 static void gray16_graph(Work *work)
 {
     work->gray_graph = avfilter_graph_alloc(); if (!work->gray_graph) fail("Allocate gray16 filter graph failed.");
@@ -187,6 +194,9 @@ static void release(Work *work)
 {
     if (work->encode) {
         av_packet_unref(work->packet);
+#if LOKAD_IMAGE_PNG_ONE_SHOT
+        av_packet_free(&work->packet); avcodec_free_context(&work->codec);
+#endif
         if (work->gray_graph) av_frame_unref(work->prepared);
     }
     else { av_frame_unref(work->decoded); av_frame_unref(work->converted); if (work->keyed) av_frame_unref(work->keyed); }
@@ -207,6 +217,13 @@ static void check_frame(const AVFrame *value, const Work *work, int big_endian)
 }
 static void apply(Work *work)
 {
+#if LOKAD_IMAGE_PNG_ONE_SHOT
+    // The resident source belongs to the caller. All encoder preparation,
+    // independent packet acquisition and release belong to this operation.
+    if (work->codec || work->packet) fail("One-shot state survived its operation.");
+    work->codec = context(1, work->width, work->height, work->depth, 6, encode_level(work));
+    work->packet = av_packet_alloc(); if (!work->packet) fail("Allocate fresh PNG packet wrapper failed.");
+#endif
     if (work->encode) {
         AVFrame *input = work->source;
         if (work->gray_graph) {
@@ -363,15 +380,16 @@ static void check_and_write(Work *work, const char *path)
 }
 int main(int argc, char **argv)
 {
-    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-smallest8-encode") && strcmp(argv[1], "png-smallest16-encode") && strcmp(argv[1], "png-store-encode") && strcmp(argv[1], "png-rgb-encode") && strcmp(argv[1], "png-gray-encode") && strcmp(argv[1], "png-gray-alpha-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
-        fail("Usage: ffmpeg-png-warm png-encode|png-smallest8-encode|png-smallest16-encode|png-store-encode|png-rgb-encode|png-gray-encode|png-gray-alpha-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
+    if (argc < 7 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-fast16-encode") && strcmp(argv[1], "png-smallest8-encode") && strcmp(argv[1], "png-smallest16-encode") && strcmp(argv[1], "png-store-encode") && strcmp(argv[1], "png-rgb-encode") && strcmp(argv[1], "png-gray-encode") && strcmp(argv[1], "png-gray-alpha-encode") && strcmp(argv[1], "png-decode") && strcmp(argv[1], "png-adam7-decode")))
+        fail("Usage: ffmpeg-png-warm png-encode|png-fast16-encode|png-smallest8-encode|png-smallest16-encode|png-store-encode|png-rgb-encode|png-gray-encode|png-gray-alpha-encode|png-decode|png-adam7-decode INPUT WIDTH HEIGHT DEPTH OUTPUT [EXPECTED_RAW]");
     Work work = {0}; work.encode_rgb = !strcmp(argv[1], "png-rgb-encode"); work.encode_gray = !strcmp(argv[1], "png-gray-encode");
     const char *scalar = getenv("LOKAD_IMAGE_WARM_NATIVE_SCALAR");
     if (scalar) { if (strcmp(scalar, "1")) fail("Scalar verification flag must be 1."); av_force_cpu_flags(0); }
     work.encode_gray_alpha = !strcmp(argv[1], "png-gray-alpha-encode");
+    work.encode_fast = !strcmp(argv[1], "png-fast16-encode");
     work.encode_smallest = !strcmp(argv[1], "png-smallest8-encode") || !strcmp(argv[1], "png-smallest16-encode");
     work.encode_stored = !strcmp(argv[1], "png-store-encode");
-    work.encode = !strcmp(argv[1], "png-encode") || work.encode_smallest || work.encode_stored || work.encode_rgb || work.encode_gray || work.encode_gray_alpha; work.cpu = affinity_cpu();
+    work.encode = !strcmp(argv[1], "png-encode") || work.encode_fast || work.encode_smallest || work.encode_stored || work.encode_rgb || work.encode_gray || work.encode_gray_alpha; work.cpu = affinity_cpu();
     int interlace = !strcmp(argv[1], "png-adam7-decode");
     if (argc != (work.encode ? 7 : 8)) fail("PNG argument count differs.");
     uint16_t endian = 1; if (*(uint8_t *)&endian != 1) fail("This reference requires a little-endian host.");
@@ -380,15 +398,20 @@ int main(int argc, char **argv)
     if (work.depth != 8 && work.depth != 16) fail("Depth must be 8 or 16.");
     if (work.encode_smallest && work.depth != (!strcmp(argv[1], "png-smallest8-encode") ? 8 : 16)) fail("SmallestSize reference requires its declared RGBA8/16 input.");
     if (work.encode_stored && work.depth != 8) fail("Stored PNG encode reference requires RGBA8 input.");
+#if LOKAD_IMAGE_PNG_ONE_SHOT
+    if (work.depth != 8 || (strcmp(argv[1], "png-encode") && strcmp(argv[1], "png-fast16-encode")))
+        fail("One-shot PNG qualification is scoped to RGBA8 Optimal/Fastest.");
+#endif
     work.row_bytes = work.width * work.depth / 8 * 4; work.raw_bytes = (size_t)work.row_bytes * work.height;
     if (work.raw_bytes > 512U * 1024U * 1024U) fail("Reference raster exceeds 512 MiB.");
     size_t original_bytes;
     work.original = read_file(work.encode ? argv[2] : argv[7], &original_bytes);
     if (original_bytes != work.raw_bytes) fail("Original raster size differs.");
-    work.codec = context(work.encode, work.width, work.height, work.depth, work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : 6, work.encode_stored ? 0 : work.encode_smallest ? 9 : 6);
-    work.packet = av_packet_alloc(); work.input = av_packet_alloc();
+    if (!LOKAD_IMAGE_PNG_ONE_SHOT)
+        work.codec = context(work.encode, work.width, work.height, work.depth, work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : 6, encode_level(&work));
+    work.packet = LOKAD_IMAGE_PNG_ONE_SHOT ? NULL : av_packet_alloc(); work.input = av_packet_alloc();
     work.decoded = av_frame_alloc(); work.converted = av_frame_alloc();
-    if (!work.packet || !work.input || !work.decoded || !work.converted) fail("Allocate wrappers failed.");
+    if ((!LOKAD_IMAGE_PNG_ONE_SHOT && !work.packet) || !work.input || !work.decoded || !work.converted) fail("Allocate wrappers failed.");
     if (work.encode) {
         work.source = frame(work.width, work.height, work.depth == 8 ? AV_PIX_FMT_RGBA : AV_PIX_FMT_RGBA64LE);
         for (int y = 0; y < work.height; y++) memcpy(work.source->data[0] + (size_t)y * work.source->linesize[0],
@@ -496,9 +519,9 @@ int main(int argc, char **argv)
         memcpy(work.input->data, work.encoded, work.encoded_bytes);
     }
     check_independent_owners(&work); check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbTransparencyExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayTransparencyExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"grayAlphaPackingTimed\":%s,\"grayAlphaStoragePackingTimed\":%s,\"paletteExpansionTimed\":%s,\"packedTransparencyFilterTimed\":%s,\"filterThreads\":%d,\"scalarMode\":%s,\"cpuFlags\":%d,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
-        argv[1], work.width, work.height, work.depth, work.encode ? work.depth : work.coded_depth, work.cpu, work.encode ? (work.encode_stored ? 0 : work.encode_smallest ? 9 : 6) : -1, work.encode ? 0 : -1,
-        work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || (work.rgb && !work.rgb_transparency) || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb && !work.rgb_transparency ? "true" : "false", work.rgb_transparency ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.gray_transparency ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.packed_key_filter ? "true" : "false", work.key_graph || work.gray_graph ? 1 : 0, scalar ? "true" : "false", av_get_cpu_flags(), work.output_bytes, work.completed, av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"%s\",\"width\":%d,\"height\":%d,\"depth\":%d,\"codedDepth\":%d,\"cpu\":%d,\"affinityCount\":1,\"codecThreads\":1,\"threadType\":0,\"activeThreadType\":0,\"compressionLevel\":%d,\"filter\":%d,\"colorType\":%d,\"conversionThreads\":%d,\"rgbExpansionTimed\":%s,\"rgbTransparencyExpansionTimed\":%s,\"rgbPackingTimed\":%s,\"grayExpansionTimed\":%s,\"grayTransparencyExpansionTimed\":%s,\"grayPackingTimed\":%s,\"grayPlaneExtractionTimed\":%s,\"grayFilterOutputAllocationTimed\":%s,\"grayAlphaExpansionTimed\":%s,\"grayAlphaPackingTimed\":%s,\"grayAlphaStoragePackingTimed\":%s,\"paletteExpansionTimed\":%s,\"packedTransparencyFilterTimed\":%s,\"filterThreads\":%d,\"scalarMode\":%s,\"cpuFlags\":%d,\"outputBytes\":%d,\"initialCompletedOperations\":%" PRIu64 ",\"codecPreparationTimed\":%s,\"packetWrapperPreparationTimed\":%s,\"codecRetainedBetweenOperations\":%s,\"borrowedResidentSource\":%s,\"independentLiveOutputs\":true,\"ffmpegVersion\":\"%s\",\"avcodecVersion\":%u,\"avutilVersion\":%u}\n",
+        argv[1], work.width, work.height, work.depth, work.encode ? work.depth : work.coded_depth, work.cpu, work.encode ? encode_level(&work) : -1, work.encode ? 0 : -1,
+        work.encode_gray_alpha ? 4 : work.encode_gray ? 0 : work.encode_rgb ? 2 : work.palette ? 3 : work.gray_alpha ? 4 : work.gray ? 0 : work.rgb ? 2 : 6, work.encode_gray || work.encode_rgb || (work.rgb && !work.rgb_transparency) || work.gray || work.gray_alpha || work.palette ? 1 : 0, work.rgb && !work.rgb_transparency ? "true" : "false", work.rgb_transparency ? "true" : "false", work.encode_rgb ? "true" : "false", work.gray ? "true" : "false", work.gray_transparency ? "true" : "false", work.encode_gray ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_graph ? "true" : "false", work.gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.encode_gray_alpha ? "true" : "false", work.palette ? "true" : "false", work.packed_key_filter ? "true" : "false", work.key_graph || work.gray_graph ? 1 : 0, scalar ? "true" : "false", av_get_cpu_flags(), work.output_bytes, work.completed, LOKAD_IMAGE_PNG_ONE_SHOT ? "true" : "false", LOKAD_IMAGE_PNG_ONE_SHOT ? "true" : "false", LOKAD_IMAGE_PNG_ONE_SHOT ? "false" : "true", work.encode ? "true" : "false", av_version_info(), avcodec_version(), avutil_version()); fflush(stdout);
     char line[128];
     while (fgets(line, sizeof(line), stdin)) {
         if (!strcmp(line, "quit\n")) break;

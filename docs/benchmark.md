@@ -13,10 +13,12 @@ rows compare equivalent one-shot or prepared operations on both sides.
 [Prepared Lanczos3](../benchmarks/LANCZOS3-PREPARED-EXECUTION.md) retains 139,800 B
 per managed plan and allocates 139 B/call; prepared CPU parity remains open.
 Rows marked **§** retain pre-consolidation enlargement costs pending refresh.
-PNG encode rows
-create managed Deflate state per call while FFmpeg retains encoder/zlib context
-and resets it per frame. These measurements remain valid for those boundaries;
-they are not equivalent one-shot or prepared-session comparisons.
+[PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
+fresh one-shot encoder state on both sides, including native codec/zlib setup
+and disposal; both retain only their borrowed resident input. Both have confirmed
+CPU gaps. Other PNG encode rows create managed Deflate state per call while
+FFmpeg retains its encoder/zlib context and resets it per frame. Those measurements remain
+valid for their labeled boundaries, not equivalent one-shot/session comparisons.
 [Architectural attribution](../benchmarks/PREPARATION-WORKSPACE-ATTRIBUTION.md)
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
@@ -82,7 +84,7 @@ family evidence is linked below; individual experiments remain in
 | VP8L async, fresh nonseekable output / libwebp exact=1 † ‡ | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | PNG RGBA8, SmallestSize9 / native9 † | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
-| PNG RGBA8, Fastest1 / native1 † | 6,083.65 | 4,351.80 | 1.398 / 1.420 | 1,344,428 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 6,589.28 | 4,649.33 | 1.417 / 1.458 | 1,344,428 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
 | PNG RGBA16, Fastest1 / native1 † | 23,284.98 | 17,477.77 | 1.332 / 1.341 | 3,813,732 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, live cancelable token † | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
@@ -90,7 +92,7 @@ family evidence is linked below; individual experiments remain in
 | PNG grayscale8, Optimal6 / native6 † | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, Optimal6 / native6 † | 24,157.64 | 17,999.79 | 1.342 / 1.373 | 1,325,732 | 210,973 / 210,973 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 24,970.38 | 18,944.11 | 1.318 / 1.356 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, Optimal6 / native6 † | 26,842.58 | 20,081.34 | 1.337 / 1.359 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |

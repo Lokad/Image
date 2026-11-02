@@ -1544,6 +1544,25 @@ def render():
                                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                                   f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     rows[position:position] = current_webp_rows
+    png_one_shot = json.loads((ROOT / 'benchmarks/png-one-shot-boundary-evidence.json').read_text(encoding='utf-8'))
+    assert png_one_shot['acceptedReferenceBoundary'] and not png_one_shot['productionChanged']
+    assert png_one_shot['qualificationReused']['productionInputsUnchanged']
+    for case, old_label, label in [
+            ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6'),
+            ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1')]:
+        observation = png_one_shot['cases'][case]; receipt = observation['receipt']
+        assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
+        assert observation['librarySha256'] == png_one_shot['producers']['linuxSha256']
+        assert observation['completePacketExact'] and observation['quietGuardsPassed']
+        assert len(observation['managed']['actual']) == 12
+        assert receipt['nativeReady']['codecPreparationTimed'] and not receipt['nativeReady']['codecRetainedBetweenOperations']
+        assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
+        stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
+        position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| ' + old_label + ' † |'))
+        rows[position] = ('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
+                          f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1642,10 +1661,12 @@ rows compare equivalent one-shot or prepared operations on both sides.
 [Prepared Lanczos3](../benchmarks/LANCZOS3-PREPARED-EXECUTION.md) retains 139,800 B
 per managed plan and allocates 139 B/call; prepared CPU parity remains open.
 Rows marked **§** retain pre-consolidation enlargement costs pending refresh.
-PNG encode rows
-create managed Deflate state per call while FFmpeg retains encoder/zlib context
-and resets it per frame. These measurements remain valid for those boundaries;
-they are not equivalent one-shot or prepared-session comparisons.
+[PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
+fresh one-shot encoder state on both sides, including native codec/zlib setup
+and disposal; both retain only their borrowed resident input. Both have confirmed
+CPU gaps. Other PNG encode rows create managed Deflate state per call while
+FFmpeg retains its encoder/zlib context and resets it per frame. Those measurements remain
+valid for their labeled boundaries, not equivalent one-shot/session comparisons.
 [Architectural attribution](../benchmarks/PREPARATION-WORKSPACE-ATTRIBUTION.md)
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
