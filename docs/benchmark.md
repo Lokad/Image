@@ -36,7 +36,11 @@ borrowed inputs/caller streams. No trace workspace is retained between encodes.
 The latest storage stage has mixed CPU results, including a slower raw diagram;
 normalized before/after confidence overlaps. Three current costs are refreshed,
 without an incremental CPU-gain claim. Diagram parity confidence is open;
-photograph/alpha retain gaps. Rows marked **H** retain historical affected costs.
+photograph/alpha retain gaps. [Current ordinary RGBA8 VP8L](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
+confirms a 1.124× gap, 137.37 ms and 26.13 MB/op; its exact 183,812-byte packet
+is unchanged. Native wrappers/scratch are prepared; full per-call import, encoding
+and output ownership remain timed. A one-second profile identifies paired
+histogram costs as the next lead. Rows marked **H** retain historical affected costs.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
@@ -91,7 +95,7 @@ family evidence is linked below; individual experiments remain in
 | VP8 RGBA8 + lossless alpha † | 68,339.72 | 54,643.25 | 1.251 / 1.301 | 14,238,680 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 103,705.27 | 86,982.67 | 1.192 / 1.231 | 16,835,524 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 (confidence open) † | 10,392.20 | 10,057.04 | 1.033 / 1.075 | 7,988,537 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † H | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
+| VP8L RGBA8 / libwebp exact=1 † | 137,365.44 | 122,207.95 | 1.124 / 1.139 | 26,131,848 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † H | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |

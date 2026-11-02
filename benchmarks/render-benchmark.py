@@ -340,6 +340,9 @@ def render():
     opaque_vp8l = json.loads((ROOT / 'benchmarks/current-opaque-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
     assert not opaque_vp8l['productionChanged'] and opaque_vp8l['measurementBuilds'] == 0
     assert opaque_vp8l['independentQuietConfirmation'] and opaque_vp8l['status']['EncodeOpaque8'] == 'confirmed-gap'
+    rgba_vp8l = json.loads((ROOT / 'benchmarks/current-rgba-vp8l-attribution-evidence.json').read_text(encoding='utf-8'))
+    assert not rgba_vp8l['productionChanged'] and rgba_vp8l['measurementBuilds'] == 0
+    assert rgba_vp8l['independentQuietConfirmation']
     vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
     assert vp8l_bins['acceptance']['retained'] and vp8l_bins['independentQuietConfirmation']
     assert not vp8l_bins['acceptance']['normalizedConfidenceSeparated']
@@ -567,9 +570,14 @@ def render():
         if case['id'] in {'case17', 'case18', 'case19', 'case20'}:
             producer = png_gfni
             observation = png_gfni['cases'][observation['receipt']['caseId']][-1]
-        if case['id'] in {'case12', 'case13'}:
+        if case['id'] == 'case12':
+            producer = rgba_vp8l
+            observation = rgba_vp8l['cases']['Encode8']
+            assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
+            assert observation['completePacketExact'] and observation['quietGuardsPassed']
+        elif case['id'] == 'case13':
             producer = vp8l_bins
-            observation = vp8l_bins['cases'][{'case12': 'Encode8', 'case13': 'Encode16'}[case['id']]][-1]
+            observation = vp8l_bins['cases']['Encode16'][-1]
         receipt = observation['receipt']
         stats = observation['managed']['statistics']
         native = min(b['mean'] for b in observation['nativeBrackets'])
@@ -1517,9 +1525,10 @@ def render():
     assert workspace['qualification']['fullChecksEachOs'] == 5383
     assert workspace['qualification']['actualPackage']['sha256'] == workspace['qualification']['samePackageLinux']['sameActualPackageSha256']
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
+                                      and not row.startswith('| VP8L RGBA8 /')
                                       or row.startswith('| VP8 RGBA8 †')
                                       or row.startswith('| VP8 RGBA16 + alpha,'))
-    assert sum(historical_workspace(row) for _, row in rows) == 5
+    assert sum(historical_workspace(row) for _, row in rows) == 4
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
     webp_current = json.loads((ROOT / 'benchmarks/vp8l-trace-forward-window-evidence.json').read_text(encoding='utf-8'))
@@ -1721,7 +1730,11 @@ borrowed inputs/caller streams. No trace workspace is retained between encodes.
 The latest storage stage has mixed CPU results, including a slower raw diagram;
 normalized before/after confidence overlaps. Three current costs are refreshed,
 without an incremental CPU-gain claim. Diagram parity confidence is open;
-photograph/alpha retain gaps. Rows marked **H** retain historical affected costs.
+photograph/alpha retain gaps. [Current ordinary RGBA8 VP8L](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
+confirms a 1.124× gap, 137.37 ms and 26.13 MB/op; its exact 183,812-byte packet
+is unchanged. Native wrappers/scratch are prepared; full per-call import, encoding
+and output ownership remain timed. A one-second profile identifies paired
+histogram costs as the next lead. Rows marked **H** retain historical affected costs.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
