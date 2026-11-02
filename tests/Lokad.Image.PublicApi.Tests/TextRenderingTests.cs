@@ -1,4 +1,6 @@
 using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using Lokad.Image.Tooling;
 
 namespace Lokad.Image.PublicApi.Tests;
@@ -145,6 +147,38 @@ public sealed class TextRenderingTests
         var failure = Assert.Throws<ImageLimitException>(() => ImageDrawing.DrawText(canvas, layout, 0, 0, Ink, limits));
         Assert.Equal(kind, failure.Limit); Assert.Equal(ImageLimitScope.Operation, failure.Scope);
         for (var y = 0; y < canvas.Height; y++) Assert.True(before.GetRow8(y).SequenceEqual(canvas.GetRow8(y)));
+    }
+
+    // Frozen with the previous all-pairs implementation. These original outlines
+    // combine crossings, touching intervals, nested contours and quadratic edges.
+    [Theory]
+    [InlineData(8, "eb901bf157734333b82dd0d7b812b8df4492d4ff30fef5fd048e583d725ebe33")]
+    [InlineData(16, "057386b4b48143380d16b74942c6ecc4f030ead377c81ffbc8b7dd9902c71ea0")]
+    public void OverlappingEdgeIntervalsPreserveExactClippedMixedAlphaFrames(int depth, string expected)
+    {
+        var outline = AuthoredTrueType.Outline([
+            [(0, 0, true), (750, 700, true), (50, 700, true), (700, 0, true)],
+            [(100, 150, true), (100, 550, true), (650, 550, true), (650, 150, true)],
+            [(100, 550, true), (450, 950, false), (650, 550, true), (400, -150, false)],
+            [(100, 550, true), (100, 650, true), (300, 650, true), (300, 550, true)]]);
+        using var font = TrueTypeFont.Load(AuthoredTrueType.Build(glyphOverrides: new Dictionary<int, byte[]> { [2] = outline }));
+        using var layout = TextLayout.Create(font, "A gA", new TextOptions { FontSize = 13.25 });
+        using var canvas = ImageBuffer.Create(32, 24, depth);
+        for (var y = 0; y < canvas.Height; y++)
+        for (var x = 0; x < canvas.Width; x++)
+        for (var c = 0; c < 4; c++)
+        {
+            var value = (x * 1237 + y * 979 + c * 16381) & 65535;
+            if (depth == 8) canvas.GetRow8(y)[4 * x + c] = (byte)(value >> 8);
+            else canvas.GetRow16(y)[4 * x + c] = (ushort)value;
+        }
+        ImageDrawing.DrawText(canvas, layout, -.375, 1.625, new(12345, 54321, 32769, 45678));
+        ImageDrawing.DrawText(canvas, layout, 4.125, -2.375, new(65535, 1, 1234, 1));
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        for (var y = 0; y < canvas.Height; y++)
+            hash.AppendData(depth == 8 ? canvas.GetRow8(y) : MemoryMarshal.AsBytes(canvas.GetRow16(y)));
+        var actual = Convert.ToHexStringLower(hash.GetHashAndReset());
+        Assert.Equal(expected, actual);
     }
 
     [Fact]

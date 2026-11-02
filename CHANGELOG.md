@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Text raster preparation skips disjoint edge pairs and reuses scan-conversion
+  storage, preserving exact pixels, cancellation and shared admission.
+
 - Reusable caller-owned Lanczos3 plans retain admitted geometry and working rows,
   preserving exact pixels, cancellation and independent result lifetimes.
 - Lossless WebP compacts sparse histograms, reuses rejected token storage and

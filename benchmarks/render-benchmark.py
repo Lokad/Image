@@ -1493,8 +1493,18 @@ def render():
     assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
     assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
+    raster = json.loads((ROOT / 'benchmarks/text-edge-interval-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert raster['productionAccepted'] and raster['independentQuietConfirmation']
+    assert raster['qualification']['fullChecksEachOs'] == 5466
+    assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert all(c['rawGainConfidenceSeparates'] and c['normalizedGainConfidenceSeparates'] for c in raster['comparison'])
     for case_id, previous in text_current['observations'].items():
-        case = composites['cases'].get(case_id, previous)
+        case = raster['cases'].get(case_id, composites['cases'].get(case_id, previous))
+        if case_id in raster['cases']:
+            assert case['librarySha256'] == raster['producers']['linuxSha256']
+            assert case['validation']['frozenManagedObservationsExact']
+            assert case['managedMemory']['BytesAllocatedPerOperation'] == 83712
+            assert case['admittedWorkspacePeak'] == 48544 and case['retainedDrawingWorkspace'] == 0
         if case_id in composites['cases']:
             assert case['librarySha256'] == composites['producers']['linuxSha256']
             assert case['validation']['exactManagedPixels'] and case['managedMemory']['BytesAllocatedPerOperation'] == 56
@@ -1702,13 +1712,21 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-02. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-03. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
 warm measurements. Four layout/fitting controls and RGBA16 compositing pass their
 scoped comparisons; loading, rasterization and RGBA8 compositing retain gaps.
 Full parity is open.
+
+[Interval-ordered text preparation](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md)
+saves **0.50 / 0.40 ms** on the two prepared drawing controls, **58.24% / 50.35% raw**
+(55.95% / 54.54% reference-normalized), with separated confidence and exact pixels.
+Both retain gaps against ImageSharp.Drawing. Allocation is 83,712 B/draw (+256 B);
+admitted drawing workspace peaks at 48,544 B (previously 44,416), with zero retained
+scratch. These measurements include preparation and cleanup, with borrowed
+font/layout setup and per-operation canvas reset excluded equally.
 
 **Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
 managed preparation but reuse native graphs/scratch. Current Lanczos reduction
@@ -1786,7 +1804,7 @@ idle/process guards pass. Times are µs; ratios use the faster native bracket.
 **Upper** includes conservative filtered/all-sample confidence. **B/op** is managed
 allocation, not peak/retained capacity; native allocation is unmeasured. Canvas
 rows use separate verified allocation diagnostics, including current-core
-compositing observations. Short screens do not establish independent parity.
+compositing and drawing observations. Short screens do not establish independent parity.
 
 FFmpeg is the reference, with labeled libwebp exact=1, SIMD libjpeg-turbo grayscale
 and zimg backend exceptions. Text rows compare COMPLETE PUBLIC-API INTEGRATION
@@ -1798,9 +1816,10 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes {png_one_shot['qualification']['fullChecksEachOs']:,} full/live checks per OS,
-577 internal and 211 public affected PNG checks in normal/scalar modes, and the
-same actual Release-package consumer/three examples on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
+Current production passes {raster['qualification']['fullChecksEachOs']:,} full/live checks per OS,
+111 internal and 142 public affected text checks in normal/scalar modes, and the
+same actual Release-package consumer/three examples on Windows/Linux. Unchanged
+paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
 [coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 

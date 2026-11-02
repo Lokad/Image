@@ -45,12 +45,15 @@ internal sealed class TextRasterizer : IDisposable
                 context.Cancellation.ThrowIfCancellationRequested(); var shape = p.Shape!;
                 if (shapes.ContainsKey(shape)) continue;
                 Admit(512); var prepared = new RasterShape(this);
-                try { prepared.Build(shape.Outline, layout.FontSize / layout.Font.UnitsPerEm); shapes.Add(shape, prepared); }
+                try { prepared.BuildEdges(shape.Outline, layout.FontSize / layout.Font.UnitsPerEm); shapes.Add(shape, prepared); }
                 catch { prepared.Dispose(); throw; }
                 maximum = Math.Max(maximum, prepared.Count);
             }
             Admit(32 + maximum * 16L); Admit(32 + width * 8L);
             crossings = new Crossing[maximum]; row = new double[width];
+            // Preparation and scan conversion do not overlap. Reuse the crossing
+            // storage to order edge intervals before it holds scan-band crossings.
+            foreach (var prepared in shapes.Values) prepared.BuildEvents(crossings);
         }
         catch { Dispose(); throw; }
     }
@@ -193,7 +196,7 @@ internal sealed class TextRasterizer : IDisposable
         internal double MinY, MaxY;
         private long edgeBytes, eventBytes;
 
-        internal void Build(FontOutline outline, double scale)
+        internal void BuildEdges(FontOutline outline, double scale)
         {
             const int depthLimit = 24;
             owner.Admit((depthLimit + 1) * 64);
@@ -220,17 +223,34 @@ internal sealed class TextRasterizer : IDisposable
                 }
             }
             finally { owner.Release((depthLimit + 1) * 64); }
-            for (var i = 0; i < Count; i++) { Event(Edges[i].MinY); Event(Edges[i].MaxY); }
+        }
+        internal void BuildEvents(Crossing[] order)
+        {
             for (var i = 0; i < Count; i++)
-            for (var j = i + 1; j < Count; j++)
             {
-                owner.context.Cancellation.ThrowIfCancellationRequested(); var a = Edges[i]; var b = Edges[j];
-                var low = Math.Max(a.MinY, b.MinY); var high = Math.Min(a.MaxY, b.MaxY); if (low >= high) continue;
-                var d0 = a.X(low) - b.X(low); var d1 = a.X(high) - b.X(high);
-                if (d0 < 0 && d1 > 0 || d0 > 0 && d1 < 0)
+                owner.context.Cancellation.ThrowIfCancellationRequested();
+                Event(Edges[i].MinY); Event(Edges[i].MaxY);
+                order[i] = new(Edges[i].MinY, i);
+            }
+            Sort(order, Count, owner.crossingComparer);
+            for (var i = 0; i < Count; i++)
+            {
+                owner.context.Cancellation.ThrowIfCancellationRequested();
+                var index = order[i].Index; var maximum = Edges[index].MaxY;
+                for (var j = i + 1; j < Count && order[j].X < maximum; j++)
                 {
-                    var y = low + (high - low) * (d0 / (d0 - d1));
-                    if (low < y && y < high) Event(y);
+                    owner.context.Cancellation.ThrowIfCancellationRequested();
+                    // Preserve original edge-index orientation and arithmetic:
+                    // sorting changes which pairs are visited, not their results.
+                    var other = order[j].Index;
+                    var a = Edges[Math.Min(index, other)]; var b = Edges[Math.Max(index, other)];
+                    var low = Math.Max(a.MinY, b.MinY); var high = Math.Min(a.MaxY, b.MaxY);
+                    var d0 = a.X(low) - b.X(low); var d1 = a.X(high) - b.X(high);
+                    if (d0 < 0 && d1 > 0 || d0 > 0 && d1 < 0)
+                    {
+                        var y = low + (high - low) * (d0 / (d0 - d1));
+                        if (low < y && y < high) Event(y);
+                    }
                 }
             }
             Sort(Events, EventCount, owner.eventComparer);

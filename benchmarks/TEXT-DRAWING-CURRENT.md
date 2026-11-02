@@ -1,9 +1,10 @@
 # Current text and drawing comparisons
 
-All nine controls have independent twelve-actual measurements with native
-brackets and passing quiet-VM guards. Seven unchanged paths reuse valid evidence;
-[shared compositing rows](COMPOSITING-SHARED-ROWS.md) refresh the other two.
-Times are µs; upper bounds conservatively include filtered/all-sample confidence.
+All nine controls have independent twelve-actual measurements with reference
+brackets and passing quiet-VM guards. Five unchanged font/layout/fitting controls
+reuse valid costs; shared compositing rows and interval-ordered raster preparation
+provide the other four current comparisons. Times are µs; upper bounds include
+filtered/all-sample confidence.
 
 | Complete operation / reference | Lokad µs | Reference µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -12,46 +13,40 @@ Times are µs; upper bounds conservatively include filtered/all-sample confidenc
 | Latin OpenType layout / SixLabors public API | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 | Confirmed pass |
 | Arabic OpenType layout / SixLabors public API | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 | Confirmed pass |
 | Complete fitting search / SixLabors public API | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 | Confirmed pass |
-| Prepared text RGBA8 / ImageSharp.Drawing | 926.31 | 51.59 | 17.954 / 23.296 | 83,456 | Confirmed gap |
-| Prepared text RGBA16 / ImageSharp.Drawing | 871.93 | 52.12 | 16.729 / 19.666 | 83,456 | Confirmed gap |
+| Prepared text RGBA8 / ImageSharp.Drawing | 360.59 | 45.27 | 7.966 / 9.721 | 83,712 | Confirmed gap |
+| Prepared text RGBA16 / ImageSharp.Drawing | 392.22 | 50.08 | 7.832 / 10.030 | 83,712 | Confirmed gap |
 | Composite RGBA8 / FFmpeg | 625.41 | 498.73 | 1.254 / 1.270 | 56 | Confirmed gap |
 | Composite RGBA16 / ImageSharp 3.1.12 | 627.24 | 696.25 | 0.901 / 0.922 | 56 | Confirmed pass |
 
-Text is a COMPLETE PUBLIC-API INTEGRATION workload using ImageSharp.Drawing 2.1.7 /
-Fonts 2.1.3, including multiple public layout calls, retained paths/metadata, or all
-fitting trials plus the selected winner. These are not bare shaping-engine results.
-Prepared drawing includes rasterization/compositing; resident font/layout setup
-and canvas reset are excluded equally. RGBA16 retains full samples and approved
-visual alpha tolerances in normalized 0..255 units: mean≤8, RMSE≤16, coverage≤2%,
-edges≤1 pixel. Glyph/cluster/line/fit and position/bounds requirements remain.
+Text uses the COMPLETE PUBLIC-API INTEGRATION pipeline of ImageSharp.Drawing 2.1.7 /
+Fonts 2.1.3, including multiple layout calls or the complete fitting search and
+winner reconstruction. It is not a bare shaping comparison. Prepared drawing
+includes raster preparation, scan conversion, composition and disposal; resident
+font/layout setup and per-call canvas reset are excluded equally. Exact managed
+frames and glyph/cluster/line/fitting checks remain. Approved RGBA16 visual gates
+use normalized 0..255 errors: mean≤8, RMSE≤16, coverage≤2%, edges≤1 pixel, preserving
+full sixteen-bit samples.
 
-Font loading copies/opens/retains/disposes the frozen DejaVu Sans 2.37 face against
-FreeType 2.13.2. Eager/lazy validation differs; this is not general parser equivalence.
-RGBA8 composites use FFmpeg with native RGB≤1/RMSE≤.5 and exact alpha/untouched/
-zero-source-alpha pixels. RGBA16 uses ImageSharp 3.1.12 Rgba64 SrcOver, RGB/alpha≤1
-and RMSE≤.25 each; it is not FFmpeg performance. Managed composites remain exact.
+[Interval-ordered preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) cuts drawing time
+58.24% / 50.35% raw, with separated raw/normalized confidence. Allocation rises
+256 B/draw; admitted Latin workspace rises 44,416→48,544 B, with no retained scratch.
+Eight existing frames remain exact; Windows/Linux full checks and the same actual
+Release package pass. Claims cover the two frozen drawing controls.
 
-Each timed canvas operation starts from the original pixels, with reset outside
-both timers. The generated driver originally declared unroll 1 while executing 16;
-four initial canvas runs are invalid and retained. Those four were corrected,
-now checking exactly one operation and exact full output after every iteration.
-The five valid font/layout/fitting confirmations were reused. Extra diagnostics
-passes are disabled for canvas jobs. Raster allocations reuse
-[ALC68](TEXT-DRAWING-ALLOCATION-CONTROLS.md); compositing reruns that same
-allocation diagnostic on the current core and retains56B/op. Missing GC counters
-never mean zero.
+Font loading compares copy/open/retain/dispose on the frozen DejaVu Sans face
+against FreeType 2.13.2. Eager/lazy validation differs; this is not general parser
+equivalence. RGBA8 composites use FFmpeg with native RGB≤1/RMSE≤.5 and exact alpha,
+untouched and zero-source-alpha pixels. RGBA16 uses explicitly labeled ImageSharp
+3.1.12 Rgba64 SrcOver, RGB/alpha≤1 and RMSE≤.25 each; it is not FFmpeg performance.
+Managed composition remains exact.
 
-The largest relative gap here is font loading, but its absolute difference is
-about 325µs. Compositing now costs about0.63ms; RGBA16 passes against ImageSharp,
-while RGBA8 retains about127µs absolute overhead against FFmpeg. These remain
-visible alongside larger codec/resizing work; they never globally block progress.
+Passing layout/fitting and RGBA16 compositing controls stop. Drawing, font loading
+and RGBA8 compositing gaps stay visible alongside larger codec/resizing costs.
 
-[Current compositing evidence](compositing-shared-rows-evidence.json) supersedes
-its two original costs. The [initial evidence](text-drawing-current-evidence.json)
-retains every original actual, bracket,
-confidence interval, allocation provenance and producer identity. Raw
-text-drawing-current-comparisons.tar.xz: 1,926,060 B / 185 members,
-SHA256 a09482d3ccd62804378dc09da442126e0d8cd01cbbfbc300508d8a6c0db1ba02,
-mirrored/member-verified, preserving initial failures, corrected drivers/harnesses,
-actual producers and replay scripts. Use the current ParseBenchmarkLog tool,
-which preserves absent extra statistics, to parse logs without rerunning jobs.
+Current evidence: [raster preparation](text-edge-interval-preparation-evidence.json),
+[shared compositing rows](compositing-shared-rows-evidence.json). The
+[original confirmations](text-drawing-current-evidence.json) and
+[allocation controls](TEXT-DRAWING-ALLOCATION-CONTROLS.md) retain superseded drawing
+costs, initial driver failures/corrections and raw archive identities. Their
+unchanged font/layout/fitting results remain valid; historical costs are not
+substituted for refreshed drawing measurements.

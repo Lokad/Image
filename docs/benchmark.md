@@ -1,12 +1,20 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-02. These **121 selected comparisons** combine qualified
+Updated 2026-11-03. These **121 selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
 warm measurements. Four layout/fitting controls and RGBA16 compositing pass their
 scoped comparisons; loading, rasterization and RGBA8 compositing retain gaps.
 Full parity is open.
+
+[Interval-ordered text preparation](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md)
+saves **0.50 / 0.40 ms** on the two prepared drawing controls, **58.24% / 50.35% raw**
+(55.95% / 54.54% reference-normalized), with separated confidence and exact pixels.
+Both retain gaps against ImageSharp.Drawing. Allocation is 83,712 B/draw (+256 B);
+admitted drawing workspace peaks at 48,544 B (previously 44,416), with zero retained
+scratch. These measurements include preparation and cleanup, with borrowed
+font/layout setup and per-operation canvas reset excluded equally.
 
 **Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
 managed preparation but reuse native graphs/scratch. Current Lanczos reduction
@@ -84,7 +92,7 @@ idle/process guards pass. Times are µs; ratios use the faster native bracket.
 **Upper** includes conservative filtered/all-sample confidence. **B/op** is managed
 allocation, not peak/retained capacity; native allocation is unmeasured. Canvas
 rows use separate verified allocation diagnostics, including current-core
-compositing observations. Short screens do not establish independent parity.
+compositing and drawing observations. Short screens do not establish independent parity.
 
 FFmpeg is the reference, with labeled libwebp exact=1, SIMD libjpeg-turbo grayscale
 and zimg backend exceptions. Text rows compare COMPLETE PUBLIC-API INTEGRATION
@@ -96,9 +104,10 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,456 full/live checks per OS,
-577 internal and 211 public affected PNG checks in normal/scalar modes, and the
-same actual Release-package consumer/three examples on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
+Current production passes 5,466 full/live checks per OS,
+111 internal and 142 public affected text checks in normal/scalar modes, and the
+same actual Release-package consumer/three examples on Windows/Linux. Unchanged
+paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
 [coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 
@@ -210,8 +219,8 @@ family evidence is linked below; individual experiments remain in
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Prepared text RGBA8 / ImageSharp.Drawing (gap) | 926.31 | 51.59 | 17.954 / 23.296 | 83,456 |
-| Prepared text RGBA16 / ImageSharp.Drawing (gap) | 871.93 | 52.12 | 16.729 / 19.666 | 83,456 |
+| Prepared text RGBA8 / ImageSharp.Drawing (gap) | 360.59 | 45.27 | 7.966 / 9.721 | 83,712 |
+| Prepared text RGBA16 / ImageSharp.Drawing (gap) | 392.22 | 50.08 | 7.832 / 10.030 | 83,712 |
 | Composite RGBA8 / FFmpeg (gap) | 625.41 | 498.73 | 1.254 / 1.270 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 
