@@ -1,7 +1,8 @@
 # Current text and drawing comparisons
 
-All nine previously missing controls now have twelve actual iterations with
-before/after native brackets and passing quiet-VM guards. Production is unchanged.
+All nine controls have independent twelve-actual measurements with native
+brackets and passing quiet-VM guards. Seven unchanged paths reuse valid evidence;
+[shared compositing rows](COMPOSITING-SHARED-ROWS.md) refresh the other two.
 Times are µs; upper bounds conservatively include filtered/all-sample confidence.
 
 | Complete operation / reference | Lokad µs | Reference µs | Ratio / upper | Managed B/op | Status |
@@ -13,8 +14,8 @@ Times are µs; upper bounds conservatively include filtered/all-sample confidenc
 | Complete fitting search / SixLabors public API | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 | Confirmed pass |
 | Prepared text RGBA8 / ImageSharp.Drawing | 926.31 | 51.59 | 17.954 / 23.296 | 83,456 | Confirmed gap |
 | Prepared text RGBA16 / ImageSharp.Drawing | 871.93 | 52.12 | 16.729 / 19.666 | 83,456 | Confirmed gap |
-| Composite RGBA8 / FFmpeg | 5,086.39 | 492.69 | 10.324 / 10.470 | 56 | Confirmed gap |
-| Composite RGBA16 / ImageSharp 3.1.12 | 5,247.40 | 696.04 | 7.539 / 7.708 | 56 | Confirmed gap |
+| Composite RGBA8 / FFmpeg | 625.41 | 498.73 | 1.254 / 1.270 | 56 | Confirmed gap |
+| Composite RGBA16 / ImageSharp 3.1.12 | 627.24 | 696.25 | 0.901 / 0.922 | 56 | Confirmed pass |
 
 Text is a COMPLETE PUBLIC-API INTEGRATION workload using ImageSharp.Drawing 2.1.7 /
 Fonts 2.1.3, including multiple public layout calls, retained paths/metadata, or all
@@ -32,17 +33,22 @@ and RMSE≤.25 each; it is not FFmpeg performance. Managed composites remain exa
 
 Each timed canvas operation starts from the original pixels, with reset outside
 both timers. The generated driver originally declared unroll 1 while executing 16;
-four initial canvas runs are invalid and retained. Only those four were corrected,
+four initial canvas runs are invalid and retained. Those four were corrected,
 now checking exactly one operation and exact full output after every iteration.
 The five valid font/layout/fitting confirmations were reused. Extra diagnostics
-passes are disabled for canvas jobs; their allocations explicitly reuse
-[ALC68](TEXT-DRAWING-ALLOCATION-CONTROLS.md). Missing GC counters never mean zero.
+passes are disabled for canvas jobs. Raster allocations reuse
+[ALC68](TEXT-DRAWING-ALLOCATION-CONTROLS.md); compositing reruns that same
+allocation diagnostic on the current core and retains56B/op. Missing GC counters
+never mean zero.
 
 The largest relative gap here is font loading, but its absolute difference is
-about 325µs. Compositing costs around 5ms. These remain visible alongside larger
-codec/resizing work; they do not globally block architectural progress.
+about 325µs. Compositing now costs about0.63ms; RGBA16 passes against ImageSharp,
+while RGBA8 retains about127µs absolute overhead against FFmpeg. These remain
+visible alongside larger codec/resizing work; they never globally block progress.
 
-[Evidence](text-drawing-current-evidence.json) contains every actual, bracket,
+[Current compositing evidence](compositing-shared-rows-evidence.json) supersedes
+its two original costs. The [initial evidence](text-drawing-current-evidence.json)
+retains every original actual, bracket,
 confidence interval, allocation provenance and producer identity. Raw
 text-drawing-current-comparisons.tar.xz: 1,926,060 B / 185 members,
 SHA256 a09482d3ccd62804378dc09da442126e0d8cd01cbbfbc300508d8a6c0db1ba02,

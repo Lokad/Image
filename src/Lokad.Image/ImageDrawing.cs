@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Runtime.InteropServices;
 using Lokad.Image.Internal;
 
@@ -108,31 +109,55 @@ public static partial class ImageDrawing
         context.PixelBytes(region.Width, region.Height, canvas.BitDepth);
         var backwardsY = ReferenceEquals(source, canvas) && region.DestinationY > region.SourceY;
         var backwardsX = ReferenceEquals(source, canvas) && region.DestinationX > region.SourceX;
-        ulong sMax = source.BitDepth == 8 ? 255u : 65535u, dMax = canvas.BitDepth == 8 ? 255u : 65535u;
+        if (source.BitDepth == 8)
+        {
+            if (canvas.BitDepth == 8) CompositeRows<byte, byte>(canvas, source, region, backwardsX, backwardsY, context);
+            else CompositeRows<byte, ushort>(canvas, source, region, backwardsX, backwardsY, context);
+        }
+        else if (canvas.BitDepth == 8) CompositeRows<ushort, byte>(canvas, source, region, backwardsX, backwardsY, context);
+        else CompositeRows<ushort, ushort>(canvas, source, region, backwardsX, backwardsY, context);
+    }
+
+    private static void CompositeRows<TSource, TCanvas>(ImageBuffer canvas, ImageBuffer source, Region region,
+        bool backwardsX, bool backwardsY, OperationContext context)
+        where TSource : unmanaged, IBinaryInteger<TSource>, IMinMaxValue<TSource>
+        where TCanvas : unmanaged, IBinaryInteger<TCanvas>, IMinMaxValue<TCanvas>
+    {
+        var sourcePixels = MemoryMarshal.Cast<byte, TSource>(source.Pixels);
+        var canvasPixels = MemoryMarshal.Cast<byte, TCanvas>(canvas.Pixels);
+        var sourceStride = source.Width * 4; var canvasStride = canvas.Width * 4;
+        var sMax = ulong.CreateTruncating(TSource.MaxValue); var dMax = ulong.CreateTruncating(TCanvas.MaxValue);
         for (var row = 0; row < region.Height; row++)
         {
             var offsetY = backwardsY ? region.Height - row - 1 : row;
-            var sy = region.SourceY + offsetY; var dy = region.DestinationY + offsetY;
+            var sourceRow = sourcePixels.Slice((region.SourceY + offsetY) * sourceStride + region.SourceX * 4, region.Width * 4);
+            var canvasRow = canvasPixels.Slice((region.DestinationY + offsetY) * canvasStride + region.DestinationX * 4, region.Width * 4);
             for (var first = 0; first < region.Width;)
             {
                 var count = Math.Min(256, region.Width - first); context.Cancellation.ThrowIfCancellationRequested();
                 for (var i = first; i < first + count; i++)
                 {
-                    var offsetX = backwardsX ? region.Width - i - 1 : i;
-                    var sx = region.SourceX + offsetX; var dx = region.DestinationX + offsetX;
-                    var sa = (ulong)source.Sample(sx, sy, 3); if (sa == 0) continue;
-                    var da = (ulong)canvas.Sample(dx, dy, 3);
-                    var coverage = sa * dMax + da * (sMax - sa);
+                    var at = (backwardsX ? region.Width - i - 1 : i) * 4;
+                    var sa = ulong.CreateTruncating(sourceRow[at + 3]); if (sa == 0) continue;
+                    var da = ulong.CreateTruncating(canvasRow[at + 3]);
+                    var sourceWeight = sa * dMax; var canvasWeight = da * (sMax - sa);
+                    var coverage = sourceWeight + canvasWeight;
                     var denominator = sMax * coverage;
+                    if (typeof(TSource) == typeof(TCanvas))
+                        denominator = coverage;
+                    else { sourceWeight *= dMax; canvasWeight *= sMax; }
                     for (var channel = 0; channel < 3; channel++)
                     {
                         // W3C Compositing 1, 9.1.4: exact rational source-over.
-                        // Max numerator + rounding < 65535^4 + 65535^3/2 < ulong.MaxValue.
-                        var numerator = (ulong)source.Sample(sx, sy, channel) * sa * dMax * dMax
-                            + (ulong)canvas.Sample(dx, dy, channel) * da * (sMax - sa) * sMax;
-                        canvas.SetSample(dx, dy, channel, (int)((numerator + denominator / 2) / denominator));
+                        // Equal depths cancel a common maximum in numerator and
+                        // denominator; positive half-up rounding is unchanged.
+                        // Mixed depths retain the original full rational weights.
+                        // Numerator + rounding < 65535^4 + 65535^3/2 < ulong.MaxValue.
+                        var numerator = ulong.CreateTruncating(sourceRow[at + channel]) * sourceWeight
+                            + ulong.CreateTruncating(canvasRow[at + channel]) * canvasWeight;
+                        canvasRow[at + channel] = TCanvas.CreateTruncating((numerator + denominator / 2) / denominator);
                     }
-                    canvas.SetSample(dx, dy, 3, (int)((coverage + sMax / 2) / sMax));
+                    canvasRow[at + 3] = TCanvas.CreateTruncating((coverage + sMax / 2) / sMax);
                 }
                 first += count;
             }

@@ -4,8 +4,9 @@ Updated 2026-11-02. These **121 selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
-warm measurements. Four layout/fitting controls pass their scoped integration
-comparisons; loading, rasterization and compositing retain gaps. Full parity is open.
+warm measurements. Four layout/fitting controls and RGBA16 compositing pass their
+scoped comparisons; loading, rasterization and RGBA8 compositing retain gaps.
+Full parity is open.
 
 **Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
 managed preparation but reuse native graphs/scratch. Current Lanczos reduction
@@ -49,15 +50,22 @@ saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
 and admission are unchanged. Other bicubic rows marked **H** retain historical
 costs after the changed dispatch; their kernels and exact-pixel checks remain.
 
+[Shared compositing rows](../benchmarks/COMPOSITING-SHARED-ROWS.md) remove repeated
+per-channel preparation across all depth pairs. Both measured controls now take
+about 0.63 ms, saving 4.46 / 4.62 ms (87.7% / 88.0%) with exact rational samples
+and unchanged 56 B/op. RGBA16 passes against labeled ImageSharp 3.1.12; RGBA8
+retains a 1.254× FFmpeg gap. Mixed-depth/overlap correctness passes; their CPU cost
+is unmeasured. No compositing workspace is allocated or retained.
+
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
 operations include declared normalization, output ownership and release; fixture
 setup, I/O, IPC, startup and checks are excluded. Native brackets and versioned
 idle/process guards pass. Times are µs; ratios use the faster native bracket.
 **Upper** includes conservative filtered/all-sample confidence. **B/op** is managed
-allocation, not peak/retained capacity; native allocation is unmeasured. Four
-canvas rows reuse independently verified allocation diagnostics, explicitly
-labeled in their evidence. Short screens do not establish independent parity.
+allocation, not peak/retained capacity; native allocation is unmeasured. Canvas
+rows use separate verified allocation diagnostics, including current-core
+compositing observations. Short screens do not establish independent parity.
 
 FFmpeg is the reference, with labeled libwebp exact=1, SIMD libjpeg-turbo grayscale
 and zimg backend exceptions. Text rows compare COMPLETE PUBLIC-API INTEGRATION
@@ -69,7 +77,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,418 full/live checks per OS, 577 affected PNG checks in
+Current production passes 5,423 full/live checks per OS, 76 affected drawing checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -185,8 +193,8 @@ family evidence is linked below; individual experiments remain in
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Prepared text RGBA8 / ImageSharp.Drawing (gap) | 926.31 | 51.59 | 17.954 / 23.296 | 83,456 |
 | Prepared text RGBA16 / ImageSharp.Drawing (gap) | 871.93 | 52.12 | 16.729 / 19.666 | 83,456 |
-| Composite RGBA8 / FFmpeg (gap) | 5,086.39 | 492.69 | 10.324 / 10.470 | 56 |
-| Composite RGBA16 / ImageSharp 3.1.12 (gap) | 5,247.40 | 696.04 | 7.539 / 7.708 | 56 |
+| Composite RGBA8 / FFmpeg (gap) | 625.41 | 498.73 | 1.254 / 1.270 | 56 |
+| Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 
 **Inspection and pixel-coding validation**
 

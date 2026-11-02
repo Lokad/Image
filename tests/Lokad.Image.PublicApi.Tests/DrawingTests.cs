@@ -91,6 +91,30 @@ public sealed class DrawingTests
     }
 
     [Theory]
+    [InlineData(8, 8)] [InlineData(8, 16)] [InlineData(16, 8)] [InlineData(16, 16)]
+    public void CompositeFullAlphaRangeAndByteAlphaPairsKeepExactFinalRounding(int sourceDepth, int canvasDepth)
+    {
+        using var source = OriginalPixels.Buffer(8192, 8, sourceDepth);
+        using var canvas = OriginalPixels.Buffer(8192, 8, canvasDepth);
+        var canvasMax = canvasDepth == 8 ? 255 : 65535;
+        for (var y = 0; y < 8; y++) for (var x = 0; x < 8192; x++)
+        {
+            var sample = y * 8192 + x;
+            Set(source, x, y, 3, sourceDepth == 8 ? sample & 255 : sample);
+            Set(canvas, x, y, 3, canvasDepth == 8 ? sample >> 8 : (sample * 40503 + 17) & 65535);
+            for (var c = 0; c < 3; c++) Set(canvas, x, y, c, canvasMax - Sample(canvas, x, y, c));
+        }
+        using var before = canvas.Clone(); var saved = OriginalPixels.Bytes(source);
+        ImageDrawing.Composite(canvas, source, 0, 0);
+        for (var y = 0; y < 8; y++) for (var x = 0; x < 8192; x++)
+        {
+            var expected = Reference(source, x, y, before, x, y);
+            for (var c = 0; c < 4; c++) Assert.Equal(expected[c], Sample(canvas, x, y, c));
+        }
+        Assert.Equal(saved, OriginalPixels.Bytes(source));
+    }
+
+    [Theory]
     [InlineData(8, 1, 0)] [InlineData(8, -1, 1)] [InlineData(8, 0, 0)]
     [InlineData(16, 1, 1)] [InlineData(16, -1, -1)] [InlineData(16, 0, 0)]
     public void CompositeSelfOverlapUsesOriginalSourceAndDestination(int depth, int dx, int dy)

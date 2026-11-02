@@ -2,6 +2,61 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyCompositingRows()
+    {
+        foreach (var sourceDepth in new[] { 8, 16 })
+        foreach (var canvasDepth in new[] { 8, 16 })
+        {
+            using var root = new TestMemoryBudget(4096); var limits = new ImageLimits { MemoryBudget = root };
+            using var source = ImageBuffer.Create(3, 1, sourceDepth, limits);
+            using var canvas = ImageBuffer.Create(3, 1, canvasDepth, limits);
+            var sourceMax = sourceDepth == 8 ? 255 : 65535; var canvasMax = canvasDepth == 8 ? 255 : 65535;
+            for (var x = 0; x < 3; x++)
+            {
+                for (var c = 0; c < 3; c++)
+                {
+                    Set(source, x, c, (37 + x * 47 + c * 59) * (sourceDepth == 8 ? 1 : 257));
+                    Set(canvas, x, c, (229 - x * 43 - c * 67) * (canvasDepth == 8 ? 1 : 257));
+                }
+                Set(source, x, 3, x == 0 ? 0 : x == 1 ? sourceMax / 3 : sourceMax);
+                Set(canvas, x, 3, x == 0 ? canvasMax : x == 1 ? canvasMax / 2 : 1);
+            }
+            var expected = new int[12]; var original = OriginalPixels.Bytes(source);
+            for (var x = 0; x < 3; x++)
+            {
+                var sa = (System.Numerics.BigInteger)Sample(source, x, 3) * (sourceDepth == 8 ? 257 : 1);
+                var da = (System.Numerics.BigInteger)Sample(canvas, x, 3) * (canvasDepth == 8 ? 257 : 1);
+                var coverage = sa * 65535 + da * (65535 - sa);
+                for (var c = 0; c < 3; c++)
+                {
+                    var sc = (System.Numerics.BigInteger)Sample(source, x, c) * (sourceDepth == 8 ? 257 : 1);
+                    var dc = (System.Numerics.BigInteger)Sample(canvas, x, c) * (canvasDepth == 8 ? 257 : 1);
+                    expected[x * 4 + c] = sa == 0 ? Sample(canvas, x, c)
+                        : Round((sc * sa * 65535 + dc * da * (65535 - sa)) * canvasMax, coverage * 65535);
+                }
+                expected[x * 4 + 3] = sa == 0 ? Sample(canvas, x, 3) : Round(coverage * canvasMax, (System.Numerics.BigInteger)65535 * 65535);
+            }
+            var ownedBytes = source.Stride + canvas.Stride;
+            ImageDrawing.Composite(canvas, source, 0, 0, limits);
+            for (var x = 0; x < 3; x++) for (var c = 0; c < 4; c++)
+                if (Sample(canvas, x, c) != expected[x * 4 + c]) throw new Exception("Packaged compositing changed exact rational samples.");
+            if (root.Bytes != ownedBytes || !original.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
+                throw new Exception("Packaged compositing changed source or borrowed ownership.");
+            source.Dispose(); canvas.Dispose();
+            if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged compositing lost caller ownership.");
+        }
+        Console.WriteLine("Packaged compositing preserves exact rational samples and shared ownership for every depth pair.");
+
+        static int Sample(ImageBuffer image, int x, int c) => image.BitDepth == 8 ? image.GetRow8(0)[x * 4 + c] : image.GetRow16(0)[x * 4 + c];
+        static void Set(ImageBuffer image, int x, int c, int value)
+        { if (image.BitDepth == 8) image.GetRow8(0)[x * 4 + c] = (byte)value; else image.GetRow16(0)[x * 4 + c] = (ushort)value; }
+        static int Round(System.Numerics.BigInteger numerator, System.Numerics.BigInteger denominator)
+        {
+            var quotient = System.Numerics.BigInteger.DivRem(numerator, denominator, out var remainder);
+            return (int)(quotient + (2 * remainder >= denominator ? 1 : 0));
+        }
+    }
+
     private static async Task VerifyLanczosPlans()
     {
         foreach (var depth in new[] { 8, 16 })
@@ -328,6 +383,7 @@ internal static class CooperativeMemoryConsumer
         VerifyWideBicubicRepair();
         VerifyRectangleCopy();
         VerifyRectangleFill();
+        VerifyCompositingRows();
         await VerifyWebpCandidateWorkspace();
         await VerifyLanczosPlans();
         await VerifyCompactPngDictionary(budget, limits);

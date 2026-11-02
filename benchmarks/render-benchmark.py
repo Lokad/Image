@@ -1490,7 +1490,17 @@ def render():
     assert allocation_values['DrawText8'] == allocation_values['DrawText16']
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    for case in text_current['observations'].values():
+    composites = json.loads((ROOT / 'benchmarks/compositing-shared-rows-evidence.json').read_text(encoding='utf-8'))
+    assert composites['productionAccepted'] and composites['independentQuietConfirmation']
+    assert composites['qualification']['fullChecksEachOs'] == 5423
+    assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
+    assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
+    for case_id, previous in text_current['observations'].items():
+        case = composites['cases'].get(case_id, previous)
+        if case_id in composites['cases']:
+            assert case['librarySha256'] == composites['producers']['linuxSha256']
+            assert case['validation']['exactManagedPixels'] and case['managedMemory']['BytesAllocatedPerOperation'] == 56
         assert len(case['managed']['actual']) == 12 and case['quietGuardsPassed']
         assert case['approvedScopeDate'] == '2026-11-02'
         native_mean = min(bracket['mean'] for bracket in case['nativeBrackets'])
@@ -1698,8 +1708,9 @@ Updated 2026-11-02. These **{displayed_count} selected comparisons** combine qua
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
-warm measurements. Four layout/fitting controls pass their scoped integration
-comparisons; loading, rasterization and compositing retain gaps. Full parity is open.
+warm measurements. Four layout/fitting controls and RGBA16 compositing pass their
+scoped comparisons; loading, rasterization and RGBA8 compositing retain gaps.
+Full parity is open.
 
 **Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
 managed preparation but reuse native graphs/scratch. Current Lanczos reduction
@@ -1743,15 +1754,22 @@ saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
 and admission are unchanged. Other bicubic rows marked **H** retain historical
 costs after the changed dispatch; their kernels and exact-pixel checks remain.
 
+[Shared compositing rows](../benchmarks/COMPOSITING-SHARED-ROWS.md) remove repeated
+per-channel preparation across all depth pairs. Both measured controls now take
+about 0.63 ms, saving 4.46 / 4.62 ms (87.7% / 88.0%) with exact rational samples
+and unchanged 56 B/op. RGBA16 passes against labeled ImageSharp 3.1.12; RGBA8
+retains a 1.254× FFmpeg gap. Mixed-depth/overlap correctness passes; their CPU cost
+is unmeasured. No compositing workspace is allocated or retained.
+
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
 operations include declared normalization, output ownership and release; fixture
 setup, I/O, IPC, startup and checks are excluded. Native brackets and versioned
 idle/process guards pass. Times are µs; ratios use the faster native bracket.
 **Upper** includes conservative filtered/all-sample confidence. **B/op** is managed
-allocation, not peak/retained capacity; native allocation is unmeasured. Four
-canvas rows reuse independently verified allocation diagnostics, explicitly
-labeled in their evidence. Short screens do not establish independent parity.
+allocation, not peak/retained capacity; native allocation is unmeasured. Canvas
+rows use separate verified allocation diagnostics, including current-core
+compositing observations. Short screens do not establish independent parity.
 
 FFmpeg is the reference, with labeled libwebp exact=1, SIMD libjpeg-turbo grayscale
 and zimg backend exceptions. Text rows compare COMPLETE PUBLIC-API INTEGRATION
@@ -1763,7 +1781,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,418 full/live checks per OS, 577 affected PNG checks in
+Current production passes 5,423 full/live checks per OS, 76 affected drawing checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
