@@ -1,38 +1,58 @@
-# Current opaque VP8L encoding cost
+# Current opaque WebP cost and alpha attribution
 
-Historical verdict/cost. The exact candidate is subsequently retained by explicit
-acceptance; [current qualification and costs](WARM-VP8L-COLOR-BIN-REUSE.md)
-preserve the normalized-confidence caveat. Original records below remain intact.
+One independent twelve-actual confirmation refreshes the existing513×259 opaque
+RGBA8 VP8L control on the qualified prepared-support DLL. Existing harness,
+original OLC1selector, libwebp worker and settings are reused; zero builds,
+new controls or repeated broad/package qualification. Both quiet guards pass.
 
-The existing513×259opaqueRGBA8 control independently confirms **1.455× /
-upper1.483** (lower1.427): **103,346.218µs,19,992,640B/op**. Managed and libwebp
-packets are exactly **121,896bytes**, SHA465b7001…. This is a current gap, replacing
-superseded evidence without a causal gain claim.
+| Complete warm opaque encode | Lokad µs | libwebp exact=1 µs | Ratio / upper | Allocated B/op | Complete packet B, both |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Original RGB, alpha255 | 77,936.24 | 71,184.75 | 1.095 / 1.108 | 13,346,352 | 121,896 |
 
-One12-actual job reuses the qualified JMR1core,compatible harness and original
-opaque selector. Frozen RGB/alpha255,input/reference/settings,normalization,
-independent packet/release,native normal/scalar pixels and idle-v2 gates pass.
-Reference remains libwebp exact=1,explicitly labeled FFmpeg's encoder backend,
-lossless1/effort4/compression-quality75. Native allocation is unmeasured.
-No production,harness,native or selector build,new case or successful retiming.
-Unchanged source reuses5,240checks/OS and the SAMEactualpackage/threeexamples.
+Lower bound1.080 establishes a current CPU gap. Libwebp exact=1 is explicitly
+FFmpeg’s encoder backend, method4/compression-quality75. Frozen RGB/alpha255,
+complete packet, source/settings, native normal/scalar pixels and independent
+owned output gates pass. Packet SHA256465b7001… is unchanged. Historical
+99,191.77µs /19,992,640B/op is replaced without a causal speedup claim across
+intervening production changes. Total allocation includes output growth; admitted/
+physical peak and native allocations are unmeasured. No encoder scratch is retained.
 
-One6-second diagnostic profile points to color-cost evaluation (16.2% of5,940
-samples) and combined-population cost (12.0%). Fractions are not component times.
-An untimed instrumented copy keeps the exact packet and observes628,569nonzero
-bins in25,391,104color-bin inspections (**2.48%**); only12.3% of those are ones.
-These data favor eliminating the rescan using bins discovered during histogram
-construction. The existing inactive-plane scratch has room for the indices.
-They do not justify a unit-count cache or a larger product lookup table.
+Complete managed admission, normalization/preparation/candidates and fresh owned
+output growth/release remain timed. Native wrappers/BGRA scratch are prepared;
+full per-call import, encoding and independent packet acquisition/release remain
+timed. Startup/I/O/IPC/checks are excluded. This is not a newly equivalent
+one-shot native-context comparison. Claims cover this frozen control/settings.
 
-Two diagnostic executables are original throwaway tooling,with production never
-edited. A diagnostic source-exclusion compile failure and its recovery are
-retained; no production rebuild or scored job was repeated.
+This opaque gap is6.75ms, smaller than the current transparent encode’s13.77ms.
+One one-second profile therefore targets the existing complete transparent VP8
+control on the same immutable DLL, preserving its exact98,590-byte packet and
+all current gates/guards. Instrumented timings are discarded. Of783samples,
+alpha encoding has551inclusive, main parsing225inclusive, matching134inclusive
+(121exclusive), trace84inclusive (45exclusive), and cache history77inclusive.
+Cache-history population filling45exclusive and history building32exclusive
+identify repeated width updates as a concrete preparation lead. Inclusive paths
+overlap and cannot be added; samples are not method times or promised savings.
 
-[Evidence](current-opaque-vp8l-encode-cost-evidence.json) pins producers,original
-selector,packet,boundaries and mirrored/member-verified `current-opaque-vp8l-encode-cost.tar.xz`, SHA256 80d3cd73390e68c7549ba756837687319a5c71b64fa1db34e794d34e0322cc7b.
-The full268-path warm single-CPU upper≤1x objective remains open.
+The next coherent prototype counts cache hits by minimum-hit threshold and
+maximum-width hash once, then folds cumulative mass by hash prefix into each
+cache-width histogram. This can remove a loop over eligible widths per literal,
+with bounded prospective40KiB scratch at10bits, reused across sequential seeds.
+Preserve every integer population, cache-bit/candidate order, tie and packet.
+Charge actual capacity before allocation through actual users; no pool/governor,
+fixture-specific behavior or retry after refusal. Small-work direct execution
+may remain when selected from data/work before admission. New storage/CPU/update
+costs require complete-operation evidence, not acceptance from this profile.
 
-The subsequent [color-bin reuse trial](VP8L-COLOR-BIN-REUSE-REJECTED.md) misses
-its normalized confidence gate. Exact qualified production is restored; this
-current cost remains applicable. The tracking family is closed without variants.
+Unchanged production reuses5,450full/live checks perOS,295affected normal/scalar
+checks and the SAMEactual0.2.1Release package/consumer with three usage examples
+on Windows/Linux; see[qualified prepared support](WEBP-PREPARED-COLOR-SUPPORT.md).
+Diagram remains a confirmed pass and is not retuned. Publication stays postponed.
+
+[Evidence](current-opaque-vp8l-encode-cost-evidence.json) retains all opaque actuals,
+brackets, source/producers, current alpha profile and gates. Raw current-webp-opaque-alpha-evidence.tar.xz:
+12,639,432B /545members, SHA256
+6670dd13c8899470d696ac5fa6de8365afb7ff8c7c47a967b071fe5ddf28295a, mirrored/member-verified. Current source,
+immutable target/collector runtimes and workers are included. Qualification
+requires webp-prepared-color-support.tar.xz (SHA256
+4974a1aecef6f89d389ab193d91252ef7f24201bf27df10f3993c9c5d88f9406).
+Earlier opaque reports/profiles remain in Git history and retained raw archives.

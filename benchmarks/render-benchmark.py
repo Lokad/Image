@@ -1534,11 +1534,12 @@ def render():
     assert workspace['productionAccepted'] and not workspace['qualifiedCpuGainClaim']
     assert workspace['qualification']['fullChecksEachOs'] == 5383
     assert workspace['qualification']['actualPackage']['sha256'] == workspace['qualification']['samePackageLinux']['sameActualPackageSha256']
+    current_vp8l_prefixes = ('| VP8L RGBA8 /', '| VP8L opaque RGBA8 /')
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
-                                      and not row.startswith('| VP8L RGBA8 /')
+                                      and not row.startswith(current_vp8l_prefixes)
                                       or row.startswith('| VP8 RGBA8 †')
                                       or row.startswith('| VP8 RGBA16 + alpha,'))
-    assert sum(historical_workspace(row) for _, row in rows) == 4
+    assert all(sum(row.startswith(prefix) for _, row in rows) == 1 for prefix in current_vp8l_prefixes)
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
@@ -1746,7 +1747,10 @@ are **10.17 / 4.80 / 4.09 MB**, excluding borrowed input/caller streams; ordinar
 admitted/physical peak and native allocation are unmeasured. No encoder scratch
 is retained. Exact packets and full/package qualification pass. Native wrappers/
 scratch retain their prepared-state labels; full import, encoding and independent
-owned output remain timed. Four anchors are current; other affected WebP encoding
+owned output remain timed. The [opaque control](../benchmarks/CURRENT-OPAQUE-VP8L-ENCODE-COST.md)
+now measures **77.94 ms, 13.35 MB/op, 1.095× / upper1.108**, with its exact
+121,896-byte packet. A current alpha profile motivates cache-prefix preparation,
+without treating sampled fractions as times or gains. Five anchors are current; other affected WebP encoding
 rows marked **H** are historical. The
 [support audit](../benchmarks/VP8L-PAIRED-BANK-SUPPORT-AUDIT.md) and
 [earlier attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md) retain the lead,

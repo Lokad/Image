@@ -43,7 +43,10 @@ are **10.17 / 4.80 / 4.09 MB**, excluding borrowed input/caller streams; ordinar
 admitted/physical peak and native allocation are unmeasured. No encoder scratch
 is retained. Exact packets and full/package qualification pass. Native wrappers/
 scratch retain their prepared-state labels; full import, encoding and independent
-owned output remain timed. Four anchors are current; other affected WebP encoding
+owned output remain timed. The [opaque control](../benchmarks/CURRENT-OPAQUE-VP8L-ENCODE-COST.md)
+now measures **77.94 ms, 13.35 MB/op, 1.095× / upper1.108**, with its exact
+121,896-byte packet. A current alpha profile motivates cache-prefix preparation,
+without treating sampled fractions as times or gains. Five anchors are current; other affected WebP encoding
 rows marked **H** are historical. The
 [support audit](../benchmarks/VP8L-PAIRED-BANK-SUPPORT-AUDIT.md) and
 [earlier attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md) retain the lead,
@@ -112,7 +115,7 @@ family evidence is linked below; individual experiments remain in
 | VP8L photograph / libwebp exact=1 † | 94,867.74 | 83,054.28 | 1.142 / 1.151 | 13,736,480 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 9,075.67 | 10,233.72 | 0.887 / 0.905 | 6,686,461 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 133,142.31 | 121,487.41 | 1.096 / 1.111 | 25,289,136 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † H | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
