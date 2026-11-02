@@ -1,0 +1,181 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "productionRestored": true,
+  "status": "Inconclusive direct screen; no material elapsed gain",
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "hypothesis": "Use safe exact BCL uint prefix comparisons in bounded256sample chunks; remove per-sample scalar comparison/cancellation overhead. Native reference uses a vector mismatch kernel; no source copied.",
+    "unchanged": "Preliminary already probe, exact uint prefixes, candidate order/ties/packets/owned indices/admission and bounded cooperative cancellation; no storage.",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "ffd06c35c9c49524933cb7c7e8280e0fbe8096814b2f8c5b19459804fb26fb8b",
+      "tests/Lokad.Image.Tests/Vp8lReferenceMatcherTests.cs": "6d3aeb01218565eb2d241348a11a65fc19ad1b8597a9461e3734e3f5113e169b"
+    }
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "diagnosticScreen": true,
+    "qualifiedCpuGainClaim": false,
+    "builds": 0,
+    "existingControls": 4,
+    "newPerformanceControls": 0,
+    "quietGuardsPassed": true,
+    "cases": [
+      {
+        "caseId": "photograph",
+        "baselineMicroseconds": 104792.52966666667,
+        "candidateMicroseconds": 105470.73966666668,
+        "rawGain": -0.0064719307965683814,
+        "allocatedBytesBefore": [
+          16834504,
+          16834504,
+          16834504
+        ],
+        "allocatedBytesAfter": [
+          16834504,
+          16834504,
+          16834504
+        ],
+        "admittedPeakBefore": 12217052,
+        "admittedPeakAfter": 12217052,
+        "exactPacket": true
+      },
+      {
+        "caseId": "diagram",
+        "baselineMicroseconds": 9539.849424242424,
+        "candidateMicroseconds": 9647.03412121212,
+        "rawGain": -0.011235470519830537,
+        "allocatedBytesBefore": [
+          7987568,
+          7987568,
+          7987568
+        ],
+        "allocatedBytesAfter": [
+          7987568,
+          7987568,
+          7987568
+        ],
+        "admittedPeakBefore": 5055600,
+        "admittedPeakAfter": 5055600,
+        "exactPacket": true
+      },
+      {
+        "caseId": "alpha",
+        "baselineMicroseconds": 70992.91816666667,
+        "candidateMicroseconds": 71555.99533333333,
+        "rawGain": -0.007931455435382206,
+        "allocatedBytesBefore": [
+          14237048,
+          14237048,
+          14237048
+        ],
+        "allocatedBytesAfter": [
+          14237048,
+          14237048,
+          14237048
+        ],
+        "admittedPeakBefore": 4085883,
+        "admittedPeakAfter": 4085883,
+        "exactPacket": true
+      },
+      {
+        "caseId": "authored-bars",
+        "baselineMicroseconds": 907.5340632911393,
+        "candidateMicroseconds": 892.666975,
+        "rawGain": 0.016381851538689762,
+        "allocatedBytesBefore": [
+          933288,
+          933288,
+          933288
+        ],
+        "allocatedBytesAfter": [
+          933288,
+          933288,
+          933288
+        ],
+        "admittedPeakBefore": 312716,
+        "admittedPeakAfter": 312716,
+        "exactPacket": true
+      }
+    ],
+    "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. One fresh qualified current before then candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+  },
+  "attribution": {
+    "source": "post-workspace-webp-attribution-evidence.json; full retained AT86 trace",
+    "workloadSamples": 779,
+    "exclusive": [
+      {
+        "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext)",
+        "samples": 102,
+        "fraction": 0.13093709884467267
+      },
+      {
+        "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Length(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext)",
+        "samples": 9,
+        "fraction": 0.011553273427471117
+      }
+    ],
+    "interpretation": "Broad matching15.5%inclusive attribution did not establish prefix-loop headroom. Existing detailed trace assigns9/779exclusive samples toLength versus102/779toBuild. Fractions are attribution, not method timings or exact bounds."
+  },
+  "implementation": "Existing preliminary already-probe retained, followed by safe BCL uint CommonPrefixLength on at most256samples between cancellation checks. No owned storage, candidate/tie/order or packet change. Native vector-mismatch strategy informed the independent BCL choice; no upstream code copied.",
+  "correctness": {
+    "candidateNormalScalarEachOs": 236,
+    "restoredNormalScalarEachOs": 235,
+    "completePacketsExact": true,
+    "sourceAndOutputOwnershipPreserved": true,
+    "candidateBoundaries": "Exact whole-sample overlap, prefix/tail/chunk boundaries and preliminary-probe behavior checked against independent authored comparisons. Candidate-only direct helper exposure/test removed on restoration; frozen production index/packet coverage remains.",
+    "testSetupCorrection": "Initial Windows test constructed an already-cancelled context outside its assertion. Corrected only test ordering, reused unchanged core build. Failed and corrected logs retained."
+  },
+  "restoration": {
+    "windows": {
+      "productionRestored": true,
+      "focused": {
+        "normal": 235,
+        "scalar": 235
+      },
+      "newBehavioralTestRetained": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionRestored": true,
+      "linuxSha256": "cde312b0bf60ff71b6af14d2c8ea48a5d183c26fd4b8c1a16a03c37591f0be1a",
+      "focused": {
+        "normal": 235,
+        "scalar": 235
+      },
+      "newBehavioralTestRetained": false,
+      "sourceSha256": "5ec76f560f090d149c27e3855a1012fe4e6dcf99c7d95f653825aaad1a781fc1",
+      "fullPackageQualificationReused": true,
+      "decision": "Inconclusive direct screen: photo-.65%,diagram-1.12%,alpha-.79%gain; authoredbars+1.64%. No material gain, causal regression or independent confirmation. Restore complete source/tests/core and reuse valid full/package proof."
+    }
+  },
+  "workflow": {
+    "coreBuildsEachOs": 1,
+    "candidateInternalBuildsWindows": 2,
+    "candidateInternalBuildsLinux": 1,
+    "restoredInternalBuildsEachOs": 1,
+    "harnessNativeSelectorBuilds": 0,
+    "diagnosticBeforeCandidatePairs": 1,
+    "directBatchesPerWorkload": 3,
+    "existingScreenWorkloads": 4,
+    "newPerformanceControls": 0,
+    "independentTimingJobs": 0,
+    "fullPackageQualificationReused": true,
+    "packageRegenerated": false
+  },
+  "decision": "Restore complete source/tests/DLLs. Main control points-.65%photo/-1.12%diagram/-.79%alpha gains; authoredbars+1.64%. No statistical gain/regression or parity claim. Do not independently confirm an unpromising unchanged implementation.",
+  "next": "A bounded two-encode cooperative-admission lifetime trace on the qualified current DLL, photograph and alpha. Attribute substantial matching/token/trace/histogram capacity across complete phases before another storage redesign. No CPU measurement or production instrumentation; distinguish allocation, admitted peak and retention. Detailed current attribution first, not another prefix replay.",
+  "qualificationReuse": "Accepted shared-compositing production restored exactly:5423full/live checks eachOS,76affectednormal/scalar/OS and same actual0.2.1package/3examples bothOS. Package9ea51bd4cc62df2c22a7a674cf23c937cf3baafbf6af907a78cb667bd8835eb3 unchanged. CI41495258047GREEN.",
+  "rawArchive": {
+    "file": "webp-match-prefix-inconclusive.tar.xz",
+    "bytes": 932508,
+    "members": 84,
+    "sha256": "38238665746647993609c235dd14715a747cbf6e50ccd614ab3295813ad389a1",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "compositing-shared-rows.tar.xz",
+    "qualifiedProductionDependencySha256": "32819eb8a3892d233c7bc134ae10b28cf0aa1d81a1c3f0878c8cff2f1b5c35a2",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}
