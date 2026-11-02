@@ -1563,6 +1563,33 @@ def render():
                           f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                           f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                           f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+    cached_resize = json.loads((ROOT / 'benchmarks/bicubic-shared-cached-driver-evidence.json').read_text(encoding='utf-8'))
+    assert cached_resize['productionAccepted'] and cached_resize['decision']['wideControlParityPreserved']
+    assert cached_resize['qualification']['fullChecksEachOs'] == 5416
+    assert cached_resize['qualification']['actualPackage']['sha256'] == cached_resize['qualification']['samePackageLinux']['sameActualPackageSha256']
+    current_cached = {'Bicubic resize RGBA8': 'Down8', 'Bicubic upscale RGBA16': 'Up16',
+                      'Bicubic RGBA8, 32×16 / default workspace': 'Down32x16_8'}
+    refreshed_cached = set()
+    for i, (kind, row) in enumerate(rows):
+        if kind != 'editing' or not row.startswith('| Bicubic'):
+            continue
+        label = row.split('|')[1].strip()
+        case = next((case for prefix, case in current_cached.items() if label.startswith(prefix)), None)
+        if case is None:
+            rows[i] = (kind, row.replace(' →', ' ¶ →', 1))
+            continue
+        observation = cached_resize['cases'][case]
+        assert observation['librarySha256'] == cached_resize['producers']['linuxSha256']
+        assert observation['receipt']['managedRationalReferenceExact'] and observation['quietGuardsPassed']
+        assert len(observation['managed']['actual']) == 12
+        if '†' not in label:
+            label = label.replace(' →', ' † →', 1)
+        stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
+        rows[i] = (kind, f'| {label} | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                         f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                         f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
+        refreshed_cached.add(case)
+    assert refreshed_cached == set(current_cached.values())
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1680,6 +1707,13 @@ normalized before/after confidence overlaps. Three current costs are refreshed,
 without an incremental CPU-gain claim. Diagram parity confidence is open;
 photograph/alpha retain gaps. Rows marked **‡** retain historical affected costs.
 
+[Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
+removes duplicate preparation/scheduling and preserves measured kernels.
+Three current controls are refreshed; wide reduction still passes. Enlargement
+saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
+and admission are unchanged. Other bicubic rows marked **¶** retain historical
+costs after the changed dispatch; their kernels and exact-pixel checks remain.
+
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
 operations include declared normalization, output ownership and release; fixture
@@ -1700,7 +1734,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,411 full/live checks per OS, 234 affected checks in
+Current production passes 5,416 full/live checks per OS, 63 affected resize checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -1724,8 +1758,8 @@ Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
 displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
 and Lanczos3 have twelve measured iterations. Retained
 [RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
-[RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md)
-also have independent twelves and proven unchanged executed paths.
+[current bicubic controls](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
+also have independent twelves; ¶ costs predate the changed cached driver.
 Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode

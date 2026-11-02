@@ -45,7 +45,15 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   allocate139B/call with139800B retained. Shared one-shot/prepared ownership and
   execution passes all four frozen controls, lifecycle and full/package checks.
   Earlier enlargement timings remain historical; bicubic consolidation is open.
-- Next architectural work targets WebP candidate storage, shared resize
+- [Shared cached bicubic execution](BICUBIC-SHARED-CACHED-DRIVER.md) removes
+  87 duplicated lines, retaining specialized kernels and exact repair. Three
+  current costs: RGBA8 reduction1.332/upper1.366, RGBA16 enlargement1.187/1.230,
+  wide reduction.945/.970. Raw enlargement saves222us; normalized confidence
+  overlaps. Other affected bicubic costs are historical. All adverse designs,
+  raw evidence and unchanged allocation/admission are retained;5416checks/OS,
+  scalar and same actual-package checks pass.
+- Next architectural work targets remaining material codec costs from current
+  attribution, with further resize
   preparation/execution, then codec work ranked by useful absolute savings.
   Pending items block their own dependencies, not independent work. Failed
   implementations and inconclusive measurements inform revised designs; neither

@@ -32,6 +32,13 @@ normalized before/after confidence overlaps. Three current costs are refreshed,
 without an incremental CPU-gain claim. Diagram parity confidence is open;
 photograph/alpha retain gaps. Rows marked **‡** retain historical affected costs.
 
+[Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
+removes duplicate preparation/scheduling and preserves measured kernels.
+Three current controls are refreshed; wide reduction still passes. Enlargement
+saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
+and admission are unchanged. Other bicubic rows marked **¶** retain historical
+costs after the changed dispatch; their kernels and exact-pixel checks remain.
+
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
 operations include declared normalization, output ownership and release; fixture
@@ -52,7 +59,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,411 full/live checks per OS, 234 affected checks in
+Current production passes 5,416 full/live checks per OS, 63 affected resize checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -130,30 +137,30 @@ family evidence is linked below; individual experiments remain in
 | Bilinear resize RGBA8 † → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 † → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
 | Bilinear resize RGBA16 † → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
-| Bicubic resize RGBA8 † → 256×129 | 579.25 | 418.45 | 1.384 / 1.400 | 332,188 |
-| Bicubic upscale RGBA16 † → 1027×519 | 3,541.70 | 2,879.12 | 1.230 / 1.244 | 5,016,602 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
-| Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace → 32×16 | 342.09 | 379.01 | 0.903 / 0.927 | 199,369 |
+| Bicubic resize RGBA8 † → 256×129 | 595.64 | 447.21 | 1.332 / 1.366 | 332,188 |
+| Bicubic upscale RGBA16 † → 1027×519 | 3,591.82 | 3,026.52 | 1.187 / 1.230 | 5,016,602 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † ¶ → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
+| Bicubic RGBA8, 32×16 / input+output+4 KiB ¶ → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
+| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 371.49 | 393.29 | 0.945 / 0.970 | 199,371 |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 773.75 | 1,680.57 | 0.460 / 0.473 | 138,619 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 641.49 | 517.81 | 1.239 / 1.268 | 139 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 787.27 | 1,919.47 | 0.410 / 0.418 | 138,611 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 654.48 | 559.68 | 1.169 / 1.222 | 139 |
 | Lanczos3 enlargement RGBA8 † § → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
 | Lanczos3 enlargement RGBA16 † § → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
-| Bicubic RGBA8 wider-support reduction † → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 611.34 | 417.61 | 1.464 / 1.524 | 65,674 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
-| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
-| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † ¶ → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † ¶ → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † ¶ → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † ¶ → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
+| Bicubic RGBA8 wider-support reduction † ¶ → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † ¶ → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † ¶ → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † ¶ → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † ¶ → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † ¶ → 128×64 | 611.34 | 417.61 | 1.464 / 1.524 | 65,674 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † ¶ → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
+| Bicubic RGBA8, width down / height up, default workspace † ¶ → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
+| Bicubic RGBA16, width down / height up, default workspace † ¶ → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
 | Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
@@ -200,8 +207,8 @@ Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
 displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
 and Lanczos3 have twelve measured iterations. Retained
 [RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
-[RGBA8 bicubic reduction](../benchmarks/CURRENT-BICUBIC-BYTE-REDUCTION-COST.md)
-also have independent twelves and proven unchanged executed paths.
+[current bicubic controls](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
+also have independent twelves; ¶ costs predate the changed cached driver.
 Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode
