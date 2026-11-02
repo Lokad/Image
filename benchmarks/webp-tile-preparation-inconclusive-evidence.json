@@ -1,0 +1,246 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "candidatesRetained": false,
+  "qualifiedCpuGainClaim": false,
+  "independentConfirmations": 0,
+  "attribution": "Existing complete photograph diagnostic: 26395red+68497blue histograms and5,877,306pixel visits after exact score-cache reuse. Coarse histogram17.41ms/cost11.00ms are instrumented observations, not qualified component timings or promised gains.",
+  "attributionRaw": {
+    "file": "webp-color-preparation-audit.tar.xz",
+    "sha256": "c23ea83428c27670a44473ce1012f536a4bffce92b95e49652e8a8b0db1d8fa7"
+  },
+  "stages": [
+    {
+      "name": "tpc111",
+      "hypothesis": "Prepare signed green/raw red/raw blue once per small tile in the existing Search count array; flatten repeated histogram walks, preserve exact bin/active order, coefficient/tie/map/packet behavior. Extra capacity3*actualMaxTilePixelsInt32 admitted before allocation, retained through both search phases. Larger tiles remain strided, no fallback after refusal.",
+      "linuxSha256": "a8839b5a5d1e184f8c4bdcc2dda677a6a82c2367c4052259f0a5e3b00828dc62",
+      "windowsSha256": "33c2a87c6f5f05cf539c79074af8463659461cbf38ea4681c5078540623b8b44",
+      "focusedNormalScalarEachOs": 275,
+      "screen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": true,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 92457.702,
+            "candidateMicroseconds": 93047.17083333332,
+            "rawGain": -0.0063755514206196295,
+            "allocatedBytesBefore": [
+              13776240,
+              13776240,
+              13776240
+            ],
+            "allocatedBytesAfter": [
+              13777024,
+              13777024,
+              13777024
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 8725.868025641026,
+            "candidateMicroseconds": 8973.040777777778,
+            "rawGain": -0.028326437141890315,
+            "allocatedBytesBefore": [
+              6685696,
+              6685696,
+              6685696
+            ],
+            "allocatedBytesAfter": [
+              6685696,
+              6685696,
+              6685696
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 63617.69433333333,
+            "candidateMicroseconds": 64579.393,
+            "rawGain": -0.015116842519122375,
+            "allocatedBytesBefore": [
+              11607400,
+              11607400,
+              11607400
+            ],
+            "allocatedBytesAfter": [
+              11607400,
+              11607400,
+              11607400
+            ],
+            "admittedPeakBefore": 4085883,
+            "admittedPeakAfter": 4085883,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 792.540101754386,
+            "candidateMicroseconds": 824.6438388278387,
+            "rawGain": -0.040507397672858714,
+            "allocatedBytesBefore": [
+              933648,
+              933648,
+              933648
+            ],
+            "allocatedBytesAfter": [
+              933648,
+              933648,
+              933648
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312716,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Unchanged qualified CPA104 before reused, then one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      }
+    },
+    {
+      "name": "tpc111b",
+      "hypothesis": "Coherent second stage: reuse coefficient-dependent green/blue and red/blue residual planes, not only unpacked channels. Two disjoint eight-slot tables in the existing admitted Search array, with direct effective-byte-key lookup and per-tile reset. Missing contributions prepared once and reused across pairs; full score cache/order/preferences remain unchanged. Actual geometry<=256pixels, no budget-dependent fallback.",
+      "linuxSha256": "472e96625084d03ab7b8e6b8d0a95dc130e0f0b3127467289a436ca6d41d014f",
+      "windowsSha256": "4606e1aa1317ebea288e0074529ad4e780791b9c2f9de70f1f77160769e9edc8",
+      "focusedNormalScalarEachOs": 275,
+      "screen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": true,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 92457.702,
+            "candidateMicroseconds": 92729.38433333334,
+            "rawGain": -0.0029384499880098502,
+            "allocatedBytesBefore": [
+              13776240,
+              13776240,
+              13776240
+            ],
+            "allocatedBytesAfter": [
+              13782472,
+              13782472,
+              13782472
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 8725.868025641026,
+            "candidateMicroseconds": 8619.481538461538,
+            "rawGain": 0.01219208070381883,
+            "allocatedBytesBefore": [
+              6685696,
+              6685696,
+              6685696
+            ],
+            "allocatedBytesAfter": [
+              6685696,
+              6685696,
+              6685696
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 63617.69433333333,
+            "candidateMicroseconds": 63762.27616666666,
+            "rawGain": -0.002272666981229632,
+            "allocatedBytesBefore": [
+              11607400,
+              11607400,
+              11607400
+            ],
+            "allocatedBytesAfter": [
+              11607400,
+              11607400,
+              11607400
+            ],
+            "admittedPeakBefore": 4085883,
+            "admittedPeakAfter": 4085883,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 792.540101754386,
+            "candidateMicroseconds": 794.4823229166666,
+            "rawGain": -0.002450628249575315,
+            "allocatedBytesBefore": [
+              933648,
+              933648,
+              933648
+            ],
+            "allocatedBytesAfter": [
+              933648,
+              933648,
+              933648
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312716,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Unchanged qualified CPA104 before reused, then one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      }
+    }
+  ],
+  "verdict": "Both coherent stages are correct but show no useful complete-operation improvement. Stage1 prepares signed channel planes; stage2 materially revises it to reusable coefficient-dependent contributions. Photograph points are0.64%/0.29% higher elapsed, with784/6232extra allocated bytes; all four admitted peaks unchanged. No confirmation or favorable resampling. Direct screens are inconclusive CPU evidence, not causal regressions; actual unfavorable values retained.",
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionRestoredExactly": true,
+      "productionSha256": "c6b3f30282214d03db4892772d8c8c2ad9e3061787819f707c0aa097451288d2",
+      "productionBuilds": 0,
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "9b219077dfdb140417c99052c9a0253b8f2b0de083a713e0d02bae4eb94a6ec1",
+        "tests/Lokad.Image.Tests/Vp8lReferenceColorTransformTests.cs": "ab685021a5710d00529f419e19e9a20fb7b176f89f43b27d4327a41d7fc32e01"
+      }
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionRestoredExactly": true,
+      "productionSha256": "2931a800dc765dd98037d9e82191a60421307a5900139d0e54d3d2b088a0c1a7",
+      "productionBuilds": 0,
+      "sourceSha256": "a17117da75c4566baca1a5d5fc8c1c7995bb077728b99093d4bfbb3111022d9c",
+      "newRetainedCoverage": "tests/Lokad.Image.Tests/Vp8lColorHistogramBoundaryTests.cs"
+    },
+    "normalScalarEachOs": 274,
+    "retainedTests": "Six actual-production cases: independently calculated signed-floor populations and first-nonzero active-bin ordering across mixed/repeated, partial/edge tiles and all256coefficient residues; tiny/small/large map+scratch refusal before mutation, cleanup and subsequent successful admission. All obsolete candidate-only helpers/tests removed.",
+    "qualificationReuse": "Unchanged qualified PFP108 production source/DLLs and all public/differential/probe copies restored exactly. Reuse full5456/OS and SAMEactualRelease0.2.1package/threeexamplesbothOS; no core rebuild, broad/package repeat or new package. One internal-only retained-test build/OS. Added six cases are focused evidence, not a claim that full5462 has run.",
+    "actualPackageSha256": "cec8a9483237eabf8b4d434744934bb25b380bd78d5883b1db0d969a970f8bff"
+  },
+  "workflow": "Two core builds/OS for genuinely different coherent stages, zero harness/native/selector/public builds. Stage1 cancellation-test setup failed before production calls because its context constructor saw cancellation; failed logs retained. One test-only correction build/OS, production unchanged. Both stages reuse the existing four-control direct screen and verified unchanged relevant CPA104 before; only intervening PNG production edits are outside timed WebP operations. No new workload matrix, timing confirmations or scored repeats.",
+  "next": "Reuse already-valid CT87 entropy count distribution: current color-transform and SLog source files are byte-identical, with the same current histogram counts. Investigate a dense exact medium-product table prepared in the future token/matching owner rather than sparse term lookup or more tile-plane variants. No extra sampling merely to repeat valid counts. Preserve source identities, exact arithmetic and actual ownership handoff.",
+  "rawArchive": {
+    "file": "webp-tile-preparation-inconclusive.tar.xz",
+    "bytes": 2086944,
+    "members": 156,
+    "sha256": "148152e216d2d72a42ecea796f66bfb151d6f2b6c75a279135cea9ff3f8bccd9",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "png-prepared-probes.tar.xz",
+    "qualifiedProductionDependencySha256": "a99e642670a8d9462e89e40663898289f1abdb03a6bffbd4bbd995eab90b4263",
+    "attributionDependency": "webp-color-preparation-audit.tar.xz",
+    "attributionDependencySha256": "c23ea83428c27670a44473ce1012f536a4bffce92b95e49652e8a8b0db1d8fa7",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}
