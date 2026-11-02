@@ -12,7 +12,7 @@ complete packets remain exact.
 
 Optimal saves976.06µs/4.76% raw and4.69% reference-normalized, with separated
 filtered/all-sample and normalized confidence. Fastest managed time is flat;
-its adverse2.21% normalized point has overlapping confidence and a2.19% faster
+its adverse2.21% normalized point has overlapping confidence and a2.13% faster
 reference clock. No Fastest gain or causal regression claim. Both CPU gaps remain.
 
 Two short screens precede two independent12-actual confirmations, bracketed by
