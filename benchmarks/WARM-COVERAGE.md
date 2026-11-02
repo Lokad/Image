@@ -65,6 +65,13 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   gain is demonstrated; all exact packet/resource gates and575normal/scalar/OS
   checks pass. Current costs/package remain valid. Parser attribution motivates
   examining dictionary storage density next.
+- [Compact Deflate links](DEFLATE-RELATIVE-LINKS.md) reduce dictionary storage
+  512→128KiB and complete allocations by393216B/encode. Optimal saves3.96ms/
+  16.18%raw and9.61%normalized with separated confidence; Fastest is unchanged.
+  Current ratios1.186/upper1.194 and1.374/1.398 remain gaps. Exact14packets,
+  5418checks/OS,577normal/scalar/OS and sameactualpackage/3examples/OS pass.
+  Codec admission384KiB, retained0; physical/whole-operation peaks unmeasured.
+  Other affected PNG encoder costs historical; decoder/inspection paths unchanged.
 - Next architectural work targets remaining material codec costs from current
   attribution and further resize preparation/execution, ranked by useful savings.
   Pending items block their own dependencies, not independent work. Failed

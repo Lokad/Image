@@ -1,5 +1,7 @@
 using System.Buffers.Binary;
 using System.Numerics;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -8,13 +10,13 @@ namespace Lokad.Image.Internal;
 // The execution's borrowed context governs every substantial owned allocation.
 internal sealed partial class PngDeflater : Stream
 {
-    internal const int WorkspaceBytes = 1024 * 1024;
+    internal const int WorkspaceBytes = 384 * 1024;
     private const int Window = 32768, Minimum = 3, Maximum = 258, Lookahead = 262, TokenCapacity = 16383;
     private readonly Stream output;
     private readonly OperationContext context;
     private readonly int level;
     private byte[] history = [], encoded = [];
-    private long[] heads = [], older = [];
+    private ushort[] heads = [], older = [];
     private uint[] tokens = [];
     private long position, filled, windowOrigin, deferredStart, blockStart;
     private int storedCount;
@@ -26,12 +28,12 @@ internal sealed partial class PngDeflater : Stream
     {
         if (level is not (0 or 1 or 6 or 9)) throw new ArgumentOutOfRangeException(nameof(level));
         this.output = output; this.context = context; this.level = level;
-        // ~660 KiB fixed arrays plus <64 KiB of overlapping tree/code storage;
-        // 1 MiB conservatively covers actual retained capacities and minor owners.
+        // <261 KiB fixed arrays plus <64 KiB overlapping tree/code storage;
+        // 384 KiB covers retained capacities, metadata and small owners.
         context.Reserve(WorkspaceBytes);
         try
         {
-            history = new byte[2 * Window]; heads = new long[Window]; older = new long[Window];
+            history = new byte[2 * Window]; heads = new ushort[Window]; older = new ushort[Window];
             tokens = new uint[TokenCapacity]; encoded = new byte[4096];
         }
         catch { context.Release(WorkspaceBytes); throw; }
@@ -91,16 +93,33 @@ internal sealed partial class PngDeflater : Stream
 
     private void AdvanceOrigin()
     {
-        // Absolute dictionary indices avoid sliding/copying byte history. Index0
-        // in each virtual window remains reserved, matching deterministic ties.
-        if (position >= windowOrigin + 2 * Window - Lookahead + 1) windowOrigin += Window;
+        if(position<windowOrigin+2*Window-Lookahead+1)return;
+        // Only links move to the next relative coordinate system. Byte history
+        // stays in its ring. Positions at/before the new origin are invalid.
+        SlideLinks(heads);SlideLinks(older);windowOrigin+=Window;
+    }
+    private void SlideLinks(ushort[] links)
+    {
+        for(var start=0;start<links.Length;start+=4096)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var end=Math.Min(start+4096,links.Length);var i=start;
+            if(Avx2.IsSupported)
+                for(;i<=end-16;i+=16)
+                    Avx2.SubtractSaturate(Vector256.Create<ushort>(links.AsSpan(i)),
+                        Vector256.Create((ushort)Window)).CopyTo(links.AsSpan(i));
+            for(;i<end;i++)links[i]=(ushort)Math.Max(0,links[i]-Window);
+        }
     }
     private byte Byte(long at) => history[(int)(at & (2 * Window - 1))];
     private long Insert(long at)
     {
         var key = ((Byte(at) << 10) ^ (Byte(at + 1) << 5) ^ Byte(at + 2)) & (Window - 1);
-        var prior = heads[key]; older[(int)(at & (Window - 1))] = prior; heads[key] = at;
-        return prior;
+        var prior=heads[key];older[(int)(at&(Window-1))]=prior;
+        // Origin advances before relative position65275. Even lazy insertion
+        // through a pending258-byte match stays below65536.
+        heads[key]=checked((ushort)(at-windowOrigin));
+        return windowOrigin+prior;
     }
 
     private void Process(bool final)
@@ -130,7 +149,7 @@ internal sealed partial class PngDeflater : Stream
                         context.Cancellation.ThrowIfCancellationRequested();
                         if (found > length) { length = found; start = prior; if (found >= Math.Min(8, available)) break; }
                     }
-                    prior = older[(int)(prior & (Window - 1))];
+                    prior = windowOrigin + older[(int)(prior & (Window - 1))];
                 } while (prior > limit && --searches != 0);
             }
             if (length >= Minimum)
@@ -170,7 +189,7 @@ internal sealed partial class PngDeflater : Stream
                         context.Cancellation.ThrowIfCancellationRequested();
                         if (found > best) { best = found; start = prior; if (found >= enough) break; }
                     }
-                    prior = older[(int)(prior & (Window - 1))];
+                    prior = windowOrigin + older[(int)(prior & (Window - 1))];
                 } while (prior > limit && --searches != 0);
                 length = Math.Min(best, available);
                 if (length == Minimum && position - start > Window / 8) length = Minimum - 1;

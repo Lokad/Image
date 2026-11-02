@@ -330,6 +330,7 @@ internal static class CooperativeMemoryConsumer
         VerifyRectangleFill();
         await VerifyWebpCandidateWorkspace();
         await VerifyLanczosPlans();
+        await VerifyCompactPngDictionary(budget, limits);
         await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try
@@ -655,6 +656,39 @@ internal static class CooperativeMemoryConsumer
         if (budget.Bytes != 0 || budget.IsDisposed)
             throw new Exception("Packaged JPEG444 retained storage leaked.");
         Console.WriteLine("Packaged JPEG444 byte/word normalization, exact packets, async and shared ownership passed.");
+    }
+
+    private static async Task VerifyCompactPngDictionary(TestMemoryBudget budget, ImageLimits limits)
+    {
+        const int width = 513, height = 259, sourceBytes = width * height * 4;
+        using var seed = OriginalPixels.Buffer(width, height, 8);
+        seed.GetRow8(0)[3] = seed.GetRow8(0)[width * 4 - 1] = 0;
+        using var source = seed.Clone(limits); var pixels = OriginalPixels.Bytes(source);
+        var options = new PngEncodeOptions { ColorType = PngColorType.Rgba,
+            Compression = System.IO.Compression.CompressionLevel.Optimal, Limits = limits };
+        var working = sourceBytes + width * 4L + 65536 + 384 * 1024;
+        using var rejected = new MemoryStream();
+        try
+        {
+            ImageCodec.EncodePng(source, rejected, options with { Limits = limits with { MaxWorkingBytes = working - 1 } });
+            throw new Exception("Packaged compact PNG ignored its working-storage boundary.");
+        }
+        catch (ImageLimitException e) when (e.Limit == ImageLimitKind.WorkingBytes) { }
+        if (rejected.Length != 0 || budget.Bytes != sourceBytes) throw new Exception("Packaged compact PNG refusal leaked or wrote output.");
+        using var synchronous = new MemoryStream(); using var asynchronous = new MemoryStream();
+        ImageCodec.EncodePng(source, synchronous, options with { Limits = limits with { MaxWorkingBytes = working } });
+        await ImageCodec.EncodePngAsync(source, asynchronous, options);
+        var packet = synchronous.ToArray();
+        var hash = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet));
+        if (packet.Length != 210973 || hash != "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920"
+            || !packet.AsSpan().SequenceEqual(asynchronous.ToArray())
+            || !pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(source))
+            || budget.Bytes != sourceBytes)
+            throw new Exception("Packaged compact PNG changed complete packets, source or asynchronous storage lifetimes.");
+        source.Dispose();
+        if (budget.Bytes != 0 || budget.IsDisposed || !synchronous.CanWrite || !asynchronous.CanWrite)
+            throw new Exception("Packaged compact PNG lost independent output or borrowed-root ownership.");
+        Console.WriteLine("Packaged compact PNG preserves full packets, 384KiB admission and async ownership after dictionary slides.");
     }
 
     private static async Task VerifyWordPngPacking(TestMemoryBudget budget, ImageLimits limits)

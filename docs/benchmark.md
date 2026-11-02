@@ -12,13 +12,19 @@ managed preparation but reuse native graphs/scratch. Current Lanczos reduction
 rows compare equivalent one-shot or prepared operations on both sides.
 [Prepared Lanczos3](../benchmarks/LANCZOS3-PREPARED-EXECUTION.md) retains 139,800 B
 per managed plan and allocates 139 B/call; prepared CPU parity remains open.
-Rows marked **§** retain pre-consolidation enlargement costs pending refresh.
+Rows marked **H** retain historical affected costs pending refresh.
 [PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
 fresh one-shot encoder state on both sides, including native codec/zlib setup
 and disposal; both retain only their borrowed resident input. Both have confirmed
-CPU gaps. Other PNG encode rows create managed Deflate state per call while
-FFmpeg retains its encoder/zlib context and resets it per frame. Those measurements remain
-valid for their labeled boundaries, not equivalent one-shot/session comparisons.
+CPU gaps. [Compact Deflate dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md)
+reduce these allocations by 393,216 B/call. Optimal saves 3.96 ms raw / 16.2%;
+the reference-normalized gain is 9.6%, with separated confidence. Fastest is
+essentially unchanged. Codec workspace admission falls from 1 MiB to 384 KiB;
+retained scratch is zero. Other affected PNG encoding costs are historical (H).
+Other PNG encode rows create managed Deflate state per call while
+FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
+measurements retain their labeled boundaries, not current-cost proof or equivalent
+one-shot/session comparisons.
 [Architectural attribution](../benchmarks/PREPARATION-WORKSPACE-ATTRIBUTION.md)
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
@@ -30,13 +36,13 @@ borrowed inputs/caller streams. No trace workspace is retained between encodes.
 The latest storage stage has mixed CPU results, including a slower raw diagram;
 normalized before/after confidence overlaps. Three current costs are refreshed,
 without an incremental CPU-gain claim. Diagram parity confidence is open;
-photograph/alpha retain gaps. Rows marked **‡** retain historical affected costs.
+photograph/alpha retain gaps. Rows marked **H** retain historical affected costs.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
 Three current controls are refreshed; wide reduction still passes. Enlargement
 saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
-and admission are unchanged. Other bicubic rows marked **¶** retain historical
+and admission are unchanged. Other bicubic rows marked **H** retain historical
 costs after the changed dispatch; their kernels and exact-pixel checks remain.
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
@@ -59,7 +65,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,416 full/live checks per OS, 63 affected resize checks in
+Current production passes 5,418 full/live checks per OS, 577 affected PNG checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -76,7 +82,7 @@ family evidence is linked below; individual experiments remain in
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,353.14 | 2,517.95 | 1.332 / 1.346 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † ‡ | 71,441.15 | 54,514.34 | 1.311 / 1.365 | 21,350,352 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † H | 71,441.15 | 54,514.34 | 1.311 / 1.365 | 21,350,352 | 98,590 / 98,590 |
 | VP8 opaque RGBA8 † | 19,848.95 | 15,654.15 | 1.268 / 1.308 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 13,899.64 | 9,701.62 | 1.433 / 1.438 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 7,791.31 | 5,845.88 | 1.333 / 1.351 | 741,137 | 7,100 / 7,100 |
@@ -85,31 +91,31 @@ family evidence is linked below; individual experiments remain in
 | VP8 RGBA8 + lossless alpha † | 68,339.72 | 54,643.25 | 1.251 / 1.301 | 14,238,680 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 103,705.27 | 86,982.67 | 1.192 / 1.231 | 16,835,524 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 (confidence open) † | 10,392.20 | 10,057.04 | 1.033 / 1.075 | 7,988,537 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † ‡ | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † ‡ | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
-| VP8L RGBA16, including normalization / libwebp exact=1 † ‡ | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † ‡ | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
-| PNG RGBA8, SmallestSize9 / native9 † | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
-| PNG RGBA16, SmallestSize9 / native9 † | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 6,589.28 | 4,649.33 | 1.417 / 1.458 | 1,344,428 | 236,828 / 236,828 |
-| PNG RGBA16, NoCompression0 / native0 † | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG RGBA16, Fastest1 / native1 † | 23,284.98 | 17,477.77 | 1.332 / 1.341 | 3,813,732 | 968,216 / 968,216 |
-| PNG RGBA16 Fastest1, live cancelable token † | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
-| PNG RGBA16 Fastest1, forward-only output † | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
-| PNG grayscale8, Optimal6 / native6 † | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
-| PNG RGB8, Optimal6 / native6 † | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
-| PNG gray-alpha8, Optimal6 / native6 † | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 24,970.38 | 18,944.11 | 1.318 / 1.356 | 1,325,732 | 210,973 / 210,973 |
-| PNG RGBA16, Optimal6 / native6 † | 26,842.58 | 20,081.34 | 1.337 / 1.359 | 3,813,732 | 963,202 / 963,202 |
-| PNG RGB16, Optimal6 / native6 † | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
-| PNG grayscale16, Optimal6 / native6, red-plane reference † | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
-| PNG gray-alpha16, Optimal6 / native6 † | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |
-| PNG RGBA8, stored0 / native0 † | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
-| PNG RGBA8 async, fresh nonseekable output, Optimal6 / native6 † | 24,513.62 | 18,812.43 | 1.303 / 1.323 | 1,387,492 | 210,973 / 210,973 |
+| VP8L RGBA8 / libwebp exact=1 † H | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † H | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
+| PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
+| PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 6,093.28 | 4,433.27 | 1.374 / 1.398 | 951,212 | 236,828 / 236,828 |
+| PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
+| PNG RGBA16, Fastest1 / native1 † H | 23,284.98 | 17,477.77 | 1.332 / 1.341 | 3,813,732 | 968,216 / 968,216 |
+| PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
+| PNG RGBA16 Fastest1, forward-only output † H | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
+| PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
+| PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
+| PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 20,504.02 | 17,281.42 | 1.186 / 1.194 | 932,516 | 210,973 / 210,973 |
+| PNG RGBA16, Optimal6 / native6 † H | 26,842.58 | 20,081.34 | 1.337 / 1.359 | 3,813,732 | 963,202 / 963,202 |
+| PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
+| PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
+| PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |
+| PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
+| PNG RGBA8 async, fresh nonseekable output, Optimal6 / native6 † H | 24,513.62 | 18,812.43 | 1.303 / 1.323 | 1,387,492 | 210,973 / 210,973 |
 | PNG RGBA8 decode, live token † | 1,607.11 | 1,397.16 | 1.150 / 1.182 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,642.61 | 1,498.48 | 1.096 / 1.119 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit (confidence open) † | 3,120.34 | 3,128.99 | 0.997 / 1.016 | 70,272 | — |
-| PNG predictable RGBA16 3000², Optimal6 / mixed6 † | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
+| PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | JPEG baseline420, resident decode † | 1,062.27 | 1,017.29 | 1.044 / 1.078 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode (confidence open) † | 335.68 | 336.82 | 0.997 / 1.032 | 1,085,963 | — |
 | VP8L RGBA8, resident decode † | 3,224.25 | 3,019.22 | 1.068 / 1.079 | 152,728 | — |
@@ -139,28 +145,28 @@ family evidence is linked below; individual experiments remain in
 | Bilinear resize RGBA16 † → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 595.64 | 447.21 | 1.332 / 1.366 | 332,188 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,591.82 | 3,026.52 | 1.187 / 1.230 | 5,016,602 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † ¶ → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
-| Bicubic RGBA8, 32×16 / input+output+4 KiB ¶ → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † H → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
+| Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 371.49 | 393.29 | 0.945 / 0.970 | 199,371 |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 773.75 | 1,680.57 | 0.460 / 0.473 | 138,619 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 641.49 | 517.81 | 1.239 / 1.268 | 139 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 787.27 | 1,919.47 | 0.410 / 0.418 | 138,611 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 654.48 | 559.68 | 1.169 / 1.222 | 139 |
-| Lanczos3 enlargement RGBA8 † § → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
-| Lanczos3 enlargement RGBA16 † § → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † ¶ → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † ¶ → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † ¶ → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † ¶ → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
-| Bicubic RGBA8 wider-support reduction † ¶ → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † ¶ → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB † ¶ → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † ¶ → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † ¶ → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † ¶ → 128×64 | 611.34 | 417.61 | 1.464 / 1.524 | 65,674 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † ¶ → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
-| Bicubic RGBA8, width down / height up, default workspace † ¶ → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
-| Bicubic RGBA16, width down / height up, default workspace † ¶ → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
+| Lanczos3 enlargement RGBA8 † H → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
+| Lanczos3 enlargement RGBA16 † H → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † H → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † H → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † H → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † H → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
+| Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † H → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 611.34 | 417.61 | 1.464 / 1.524 | 65,674 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
+| Bicubic RGBA8, width down / height up, default workspace † H → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
+| Bicubic RGBA16, width down / height up, default workspace † H → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
 | Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
@@ -208,7 +214,8 @@ displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP ancho
 and Lanczos3 have twelve measured iterations. Retained
 [RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
 [current bicubic controls](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-also have independent twelves; ¶ costs predate the changed cached driver.
+also have independent twelves. H marks historical costs after the documented
+storage/execution changes; these are not current performance proof.
 Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode

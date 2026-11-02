@@ -1544,9 +1544,15 @@ def render():
                                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                                   f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     rows[position:position] = current_webp_rows
-    png_one_shot = json.loads((ROOT / 'benchmarks/png-one-shot-boundary-evidence.json').read_text(encoding='utf-8'))
-    assert png_one_shot['acceptedReferenceBoundary'] and not png_one_shot['productionChanged']
-    assert png_one_shot['qualificationReused']['productionInputsUnchanged']
+    png_one_shot = json.loads((ROOT / 'benchmarks/deflate-relative-links-evidence.json').read_text(encoding='utf-8'))
+    assert png_one_shot['acceptedReferenceBoundary'] and png_one_shot['productionAccepted']
+    assert png_one_shot['qualification']['fullChecksEachOs'] == 5418
+    assert png_one_shot['qualification']['actualPackage']['sha256'] == png_one_shot['qualification']['samePackageLinux']['sameActualPackageSha256']
+    # All encoding instances use the new dictionary storage/working admission.
+    # Decode/inspection paths are separate and retain their applicable costs.
+    rows = [(kind, row.replace(' † |', ' † H |', 1)
+             if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
+             else row) for kind, row in rows]
     for case, old_label, label in [
             ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6'),
             ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1')]:
@@ -1558,7 +1564,7 @@ def render():
         assert receipt['nativeReady']['codecPreparationTimed'] and not receipt['nativeReady']['codecRetainedBetweenOperations']
         assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
         stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
-        position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| ' + old_label + ' † |'))
+        position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| ' + old_label + ' † H |'))
         rows[position] = ('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                           f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                           f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
@@ -1590,6 +1596,10 @@ def render():
                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
         refreshed_cached.add(case)
     assert refreshed_cached == set(current_cached.values())
+    # One historical-cost marker covers all affected families. Their reports
+    # retain the distinct source changes and older observations.
+    rows = [(kind, row.replace(' ‡', ' H').replace(' §', ' H').replace(' ¶', ' H'))
+            for kind, row in rows]
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1687,13 +1697,19 @@ managed preparation but reuse native graphs/scratch. Current Lanczos reduction
 rows compare equivalent one-shot or prepared operations on both sides.
 [Prepared Lanczos3](../benchmarks/LANCZOS3-PREPARED-EXECUTION.md) retains 139,800 B
 per managed plan and allocates 139 B/call; prepared CPU parity remains open.
-Rows marked **§** retain pre-consolidation enlargement costs pending refresh.
+Rows marked **H** retain historical affected costs pending refresh.
 [PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
 fresh one-shot encoder state on both sides, including native codec/zlib setup
 and disposal; both retain only their borrowed resident input. Both have confirmed
-CPU gaps. Other PNG encode rows create managed Deflate state per call while
-FFmpeg retains its encoder/zlib context and resets it per frame. Those measurements remain
-valid for their labeled boundaries, not equivalent one-shot/session comparisons.
+CPU gaps. [Compact Deflate dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md)
+reduce these allocations by 393,216 B/call. Optimal saves 3.96 ms raw / 16.2%;
+the reference-normalized gain is 9.6%, with separated confidence. Fastest is
+essentially unchanged. Codec workspace admission falls from 1 MiB to 384 KiB;
+retained scratch is zero. Other affected PNG encoding costs are historical (H).
+Other PNG encode rows create managed Deflate state per call while
+FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
+measurements retain their labeled boundaries, not current-cost proof or equivalent
+one-shot/session comparisons.
 [Architectural attribution](../benchmarks/PREPARATION-WORKSPACE-ATTRIBUTION.md)
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
@@ -1705,13 +1721,13 @@ borrowed inputs/caller streams. No trace workspace is retained between encodes.
 The latest storage stage has mixed CPU results, including a slower raw diagram;
 normalized before/after confidence overlaps. Three current costs are refreshed,
 without an incremental CPU-gain claim. Diagram parity confidence is open;
-photograph/alpha retain gaps. Rows marked **‡** retain historical affected costs.
+photograph/alpha retain gaps. Rows marked **H** retain historical affected costs.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
 Three current controls are refreshed; wide reduction still passes. Enlargement
 saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
-and admission are unchanged. Other bicubic rows marked **¶** retain historical
+and admission are unchanged. Other bicubic rows marked **H** retain historical
 costs after the changed dispatch; their kernels and exact-pixel checks remain.
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
@@ -1734,7 +1750,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,416 full/live checks per OS, 63 affected resize checks in
+Current production passes 5,418 full/live checks per OS, 577 affected PNG checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -1759,7 +1775,8 @@ displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP ancho
 and Lanczos3 have twelve measured iterations. Retained
 [RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
 [current bicubic controls](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-also have independent twelves; ¶ costs predate the changed cached driver.
+also have independent twelves. H marks historical costs after the documented
+storage/execution changes; these are not current performance proof.
 Remaining short screens retain three and do not establish independent parity.
 
 FFmpeg is the reference, with approved backend boundaries: lossless WebP encode

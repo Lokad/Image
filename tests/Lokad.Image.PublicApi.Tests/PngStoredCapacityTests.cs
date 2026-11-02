@@ -13,7 +13,8 @@ public sealed class PngStoredCapacityTests
         var original = OriginalPixels.Bytes(source);
         var limits = ImageLimits.Default with
         {
-            MaxWorkingBytes = original.Length + source.Stride + 1024L * 1024 + 65536        };
+            MaxWorkingBytes = original.Length + source.Stride + 384L * 1024 + 65536
+        };
         var options = Options() with { Limits = limits };
         using (var rejected = new MemoryStream())
         {

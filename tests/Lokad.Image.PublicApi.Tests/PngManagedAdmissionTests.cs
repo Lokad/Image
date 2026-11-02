@@ -11,7 +11,7 @@ public sealed class PngManagedAdmissionTests
     public void NestedEncodesShareOneRootAndReleasedWorkspaceAdmitsTheNextOperation(CompressionLevel compression)
     {
         const int width = 32, height = 24, sourceBytes = width * height * 4;
-        using var root = new TestMemoryBudget(sourceBytes + width * 4 + 65536 + 1024 * 1024);
+        using var root = new TestMemoryBudget(sourceBytes + width * 4 + 65536 + 384 * 1024);
         var limits = ImageLimits.Default with { MemoryBudget = root };
         using var source = ImageBuffer.Create(width, height, 8, limits);
         var options = new PngEncodeOptions { Limits = limits, Compression = compression };

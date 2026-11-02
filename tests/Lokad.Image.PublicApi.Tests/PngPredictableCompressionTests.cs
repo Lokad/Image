@@ -42,7 +42,7 @@ public sealed class PngPredictableCompressionTests
     public void PredictionRowsShareTheCallerRootAndRefusalCleanupAdmitsTheNextEncode()
     {
         const int sourceBytes = 128 * 128 * 4, rowBytes = 128 * 4;
-        const int owned = rowBytes * 3 + 65536 + 1024 * 1024;
+        const int owned = rowBytes * 3 + 65536 + 384 * 1024;
         using var root = new TestMemoryBudget(sourceBytes + owned);
         using var source = OriginalPngGradient.Create(128, 8, budget: root);
         var options = new PngEncodeOptions { Limits = ImageLimits.Default with { MemoryBudget = root } };
