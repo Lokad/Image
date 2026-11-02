@@ -21,9 +21,14 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   CPU screens remain diagnostic.
 - [Fused prepared counting](VP8L-FUSED-PREPARED-COUNTING.md): independent
   photograph elapsed improves4.53% /5.43ms with separate raw confidence; normalized
-  confidence overlaps. Current photo/diagram/alpha costs are refreshed with exact
-  packets and5401checks/OS plus actual-package proof. Diagram parity confidence
-  is open; photo/alpha retain gaps. Other affected encode costs stay historical.
+  confidence overlaps. Retained stage history; current costs are refreshed below.
+- [Shared predictor preparation](VP8L-SHARED-PREDICTION.md): photograph improves
+  6.42% /7.29ms beyond the counting stage; raw/all and normalized confidence
+  separate. Current photo/diagram/alpha costs preserve exact packets and pass
+  5404checks/OS plus scalar/actual-package proof. Diagram parity confidence is
+  open; photo/alpha retain gaps. Other affected encode costs stay historical.
+  The preceding shared-prefix trial was inconclusive and restored, with all
+  results retained; it is not merged or treated as a permanent prohibition.
 - [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md): equivalent one-shot
   reductions pass; prepared execution retains confirmed CPU gaps. Both depths
   allocate139B/call with139800B retained. Shared one-shot/prepared ownership and

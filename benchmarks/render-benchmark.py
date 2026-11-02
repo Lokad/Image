@@ -1522,18 +1522,19 @@ def render():
     assert sum(historical_workspace(row) for _, row in rows) == 5
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
-    counting = json.loads((ROOT / 'benchmarks/vp8l-fused-prepared-counting-evidence.json').read_text(encoding='utf-8'))
-    assert counting['productionAccepted'] and counting['decision']['rawConfidenceSeparates']
-    assert counting['qualification']['fullChecksEachOs'] == 5401
-    assert counting['qualification']['actualPackage']['sha256'] == counting['qualification']['samePackageLinux']['sameActualPackageSha256']
+    prediction = json.loads((ROOT / 'benchmarks/vp8l-shared-prediction-evidence.json').read_text(encoding='utf-8'))
+    assert prediction['productionAccepted'] and prediction['decision']['rawConfidenceSeparates']
+    assert prediction['decision']['normalizedConfidenceSeparates']
+    assert prediction['qualification']['fullChecksEachOs'] == 5404
+    assert prediction['qualification']['actualPackage']['sha256'] == prediction['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
     for case, label in [('alpha', 'VP8 RGBA8 + lossless alpha'),
                         ('photograph', 'VP8L photograph / libwebp exact=1'),
                         ('diagram', 'VP8L text/diagram / libwebp exact=1 (confidence open)')]:
-        observation = counting['cases'][case]
+        observation = prediction['cases'][case]
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
-        assert observation['librarySha256'] == counting['producers']['linuxSha256']
+        assert observation['librarySha256'] == prediction['producers']['linuxSha256']
         assert len(observation['managed']['actual']) == 12
         stats = observation['managed']['statistics']; receipt = observation['receipt']
         native = min(b['mean'] for b in observation['nativeBrackets'])
@@ -1655,10 +1656,10 @@ from **20.9 to 6.2 MB**, preserving exact packets. Photograph/alpha allocations
 also fall. Rows marked **‡** retain pre-workspace CPU/allocation measurements;
 they are historical costs pending refresh, not current implementation proof.
 The workspace redesign's short CPU screen remains diagnostic.
-[Fused prepared counting](../benchmarks/VP8L-FUSED-PREPARED-COUNTING.md) now saves
-5.43 ms / 4.53% elapsed on an independent photograph pair. Raw confidence separates;
-normalized confidence overlaps. Three current WebP rows are refreshed; the
-diagram's parity confidence is open and other confirmed gaps remain.
+[Shared predictor preparation](../benchmarks/VP8L-SHARED-PREDICTION.md) saves
+7.29 ms / 6.42% elapsed beyond the retained counting stage on an independent
+photograph pair. Raw/all and normalized confidence separate. Three current WebP
+rows are refreshed; diagram parity confidence is open and confirmed gaps remain.
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
@@ -1680,7 +1681,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,401 full/live checks per OS, 224 affected checks in
+Current production passes 5,404 full/live checks per OS, 227 affected checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in

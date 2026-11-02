@@ -91,26 +91,7 @@ internal static class Vp8lReferencePredictor
             if (level == 0 && greenOnly)
                 Vp8lGreenPredictorHistogram.Build(pixels, width, height, x0, y0, bits, histogram, context);
             else if (level == 0)
-            {
-                for (var y = y0; y < Math.Min(y0 + (1 << bits), height); y++)
-                for (var x = x0; x < Math.Min(x0 + (1 << bits), width); x++)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    var at = y * width + x; var actual = pixels[at];
-                    for (var mode = 0; mode < 14; mode++)
-                    {
-                        var prediction = y == 0 ? x == 0 ? 0xff000000u : pixels[at - 1]
-                            : x == 0 ? pixels[at - width]
-                            : WebpLosslessDecoder.Predict(mode, pixels[at - 1], pixels[at - width], pixels[at - width - 1],
-                                pixels[x == width - 1 ? y * width : at - width + 1]);
-                        for (var plane = 0; plane < 4; plane++)
-                        {
-                            var shift = (3 - plane) * 8;
-                            histogram[mode * 1024 + plane * 256 + (int)(unchecked((actual >> shift) - (prediction >> shift)) & 255)]++;
-                        }
-                    }
-                }
-            }
+                Vp8lPredictorHistogram.Build(pixels, width, height, x0, y0, bits, histogram, context);
             else
             {
                 // Each square's children finish in quadrant order before its
