@@ -18,7 +18,7 @@ public sealed class Vp8lReferenceHuffmanTests
         ReadOnlySpan<(int Start, int Count)> slices = [(0, layout.GreenSize), (layout.Red, 256), (layout.Blue, 256), (layout.Alpha, 256), (layout.Distance, 40)];
         foreach (var (start, count) in slices)
         {
-            using var code = Vp8lHuffmanCode.Build(counts.AsSpan(start, count), context);
+            using var code = Vp8lHuffmanCode.Build(counts.AsSpan(start, count), context, out _);
             // An unused alphabet serializes as the simple symbol-zero tree.
             // Compare the tree visible to the packet reader, including that
             // placeholder; the owned construction lengths remain all zero.
@@ -94,7 +94,7 @@ public sealed class Vp8lReferenceHuffmanTests
         var original = populations.ToArray();
         using var root = new TestMemoryBudget(100_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        using var code = Vp8lHuffmanCode.Build(populations, context, maximum);
+        using var code = Vp8lHuffmanCode.Build(populations, context, out _, maximum);
         var sum = 0;
         foreach (var length in code.Lengths) { Assert.InRange(length, 1, maximum); sum += 1 << (maximum - length); }
         Assert.Equal(1 << maximum, sum); Assert.Equal(original, populations); Assert.Equal(symbols * 3L, root.Bytes);
@@ -104,16 +104,16 @@ public sealed class Vp8lReferenceHuffmanTests
     public void EmptySingleAndEqualWeightTreesKeepTheirExplicitFormatSemantics()
     {
         using var context = new OperationContext(ImageLimits.Default, default);
-        using var empty = Vp8lHuffmanCode.Build([], context); Assert.Empty(empty.Lengths.ToArray());
-        using var zero = Vp8lHuffmanCode.Build([0, 0, 0], context); Assert.Equal(new byte[3], zero.Lengths.ToArray());
-        using var single = Vp8lHuffmanCode.Build([0, 0, 7], context); Assert.Equal(new byte[] { 0, 0, 1 }, single.Lengths.ToArray());
-        using var tied = Vp8lHuffmanCode.Build([1, 1, 1], context); Assert.Equal(new byte[] { 1, 2, 2 }, tied.Lengths.ToArray());
+        using var empty = Vp8lHuffmanCode.Build([], context, out _); Assert.Empty(empty.Lengths.ToArray());
+        using var zero = Vp8lHuffmanCode.Build([0, 0, 0], context, out _); Assert.Equal(new byte[3], zero.Lengths.ToArray());
+        using var single = Vp8lHuffmanCode.Build([0, 0, 7], context, out _); Assert.Equal(new byte[] { 0, 0, 1 }, single.Lengths.ToArray());
+        using var tied = Vp8lHuffmanCode.Build([1, 1, 1], context, out _); Assert.Equal(new byte[] { 1, 2, 2 }, tied.Lengths.ToArray());
         using var output = new MemoryStream(); var writer = new WebpBitWriter(output, context);
         single.Write(writer, 2); Assert.Equal(0, writer.PendingBits); Assert.Equal(0, output.Length);
         Vp8lReferenceHuffman.WriteTree(writer, zero.Lengths, context); writer.Finish(); Assert.Equal(new byte[] { 1 }, output.ToArray());
-        Assert.Throws<ArgumentOutOfRangeException>(() => Vp8lHuffmanCode.Build([-1], context));
-        Assert.Throws<ArgumentOutOfRangeException>(() => Vp8lHuffmanCode.Build([1], context, 0));
-        Assert.Throws<ArgumentException>(() => Vp8lHuffmanCode.Build([1, 1, 1], context, 1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Vp8lHuffmanCode.Build([-1], context, out _));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Vp8lHuffmanCode.Build([1], context, out _, 0));
+        Assert.Throws<ArgumentException>(() => Vp8lHuffmanCode.Build([1, 1, 1], context, out _, 1));
     }
 
     [Fact]
@@ -122,8 +122,8 @@ public sealed class Vp8lReferenceHuffmanTests
         var populations = Enumerable.Repeat(1, 1304).ToArray();
         using var root = new TestMemoryBudget(200_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        using var first = Vp8lHuffmanCode.Build(populations, context); var hash = Hash(first.Lengths);
-        using var second = Vp8lHuffmanCode.Build(populations, context);
+        using var first = Vp8lHuffmanCode.Build(populations, context, out _); var hash = Hash(first.Lengths);
+        using var second = Vp8lHuffmanCode.Build(populations, context, out _);
         Assert.Equal(1304 * 6L, root.Bytes); Assert.Equal(1304 * 3L + 1304 * 54L + 512, root.Peak);
         first.Dispose(); first.Dispose(); Assert.Equal(1304 * 3L, root.Bytes);
         Assert.Throws<ObjectDisposedException>(() => first.Lengths.Length); Assert.Equal(hash, Hash(second.Lengths));
@@ -139,10 +139,10 @@ public sealed class Vp8lReferenceHuffmanTests
         using var root = new TestMemoryBudget(100_000) { RefuseAtGrowth = phase };
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var populations = Enumerable.Repeat(1, 1304).ToArray();
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lHuffmanCode.Build(populations, context));
+        var error = Assert.Throws<ImageLimitException>(() => Vp8lHuffmanCode.Build(populations, context, out _));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
         Assert.Equal(phase, root.GrowthAttempts); Assert.Equal(1, root.Refusals); Assert.Equal(0, root.Bytes);
-        root.RefuseAtGrowth = 0; using var next = Vp8lHuffmanCode.Build(populations, context);
+        root.RefuseAtGrowth = 0; using var next = Vp8lHuffmanCode.Build(populations, context, out _);
         next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
@@ -152,10 +152,10 @@ public sealed class Vp8lReferenceHuffmanTests
         using var root = new TestMemoryBudget(100_000); using var cancellation = new CancellationTokenSource();
         root.Admitted = _ => { if (root.GrowthAttempts == 2) cancellation.Cancel(); };
         using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
-        Assert.Throws<OperationCanceledException>(() => Vp8lHuffmanCode.Build([1, 2, 5, 9], context));
+        Assert.Throws<OperationCanceledException>(() => Vp8lHuffmanCode.Build([1, 2, 5, 9], context, out _));
         Assert.True(cancellation.IsCancellationRequested); Assert.Equal(0, root.Bytes); root.Admitted = null;
         using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
-        using var next = Vp8lHuffmanCode.Build([1, 2, 5, 9], nextContext);
+        using var next = Vp8lHuffmanCode.Build([1, 2, 5, 9], nextContext, out _);
         next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 }

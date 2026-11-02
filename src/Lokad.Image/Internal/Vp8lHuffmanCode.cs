@@ -12,7 +12,7 @@ internal sealed class Vp8lHuffmanCode : IDisposable
     private Vp8lHuffmanCode(OperationContext context, Vp8lHuffmanLengths lengths, ushort[] words, bool single)
     { this.context = context; this.lengths = lengths; this.words = words; this.single = single; }
 
-    internal static Vp8lHuffmanCode Build(ReadOnlySpan<int> populations, OperationContext context, int maximum = 15)
+    internal static Vp8lHuffmanCode Build(ReadOnlySpan<int> populations, OperationContext context, out long dataBits, int maximum = 15)
     {
         var lengths = Vp8lHuffmanLengths.Build(populations, context, maximum); long reserved = 0;
         try
@@ -23,16 +23,18 @@ internal sealed class Vp8lHuffmanCode : IDisposable
             Span<int> next = stackalloc int[16]; next.Clear();
             var nonzero = 0;
             foreach (var length in lengths.Values) { counts[length]++; if (length != 0) nonzero++; }
-            var code = 0;
+            var code = 0; long weightedBits = 0;
             for (var depth = 1; depth < 16; depth++)
             { code = (code + (depth == 1 ? 0 : counts[depth - 1])) << 1; next[depth] = code; }
             for (var symbol = 0; symbol < populations.Length; symbol++)
             {
                 context.Cancellation.ThrowIfCancellationRequested(); var depth = lengths.Values[symbol]; if (depth == 0) continue;
+                weightedBits += (long)populations[symbol] * depth;
                 var value = next[depth]++; var reversed = 0;
                 for (var i = 0; i < depth; i++) { reversed = reversed * 2 + (value & 1); value >>= 1; }
                 words[symbol] = (ushort)reversed;
             }
+            dataBits = nonzero <= 1 ? 0 : weightedBits;
             return new Vp8lHuffmanCode(context, lengths, words, nonzero <= 1);
         }
         catch { lengths.Dispose(); if (reserved != 0) context.Release(reserved); throw; }
@@ -44,7 +46,7 @@ internal sealed class Vp8lHuffmanCode : IDisposable
         var length = Lengths[symbol];
         if (length == 0) throw new InvalidOperationException("Symbol is absent from its Huffman alphabet.");
         // The stored length remains one for a single-symbol tree, while data
-        // consumes no bits (RFC 9649 section 5.2.1).
+        // consumes no bits (RFC 9649 section 3.7.2.1).
         writer.Write(storage[symbol], single ? 0 : length);
     }
 

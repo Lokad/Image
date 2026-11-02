@@ -48,7 +48,7 @@ internal static class Vp8lReferenceHuffman
                     }
                 }
             }
-            using var header = Vp8lHuffmanCode.Build(frequencies, context, 7);
+            using var header = Vp8lHuffmanCode.Build(frequencies, context, out _, 7);
             var headerLengths = header.Lengths; var used = 19;
             while (used > 4 && headerLengths[Order[used - 1]] == 0) used--;
             writer.Write(0, 1); writer.Write(used - 4, 4);
@@ -90,7 +90,7 @@ internal static class Vp8lReferenceHuffman
             try
             {
                 context.Cancellation.ThrowIfCancellationRequested(); var counts = new int[layout.Total]; layout.Fill(tokens, width, true, counts, context);
-                group = Vp8lHuffmanGroup.Build(counts, layout, context);
+                group = Vp8lHuffmanGroup.Build(counts, layout, context, out _);
             }
             finally { context.Release(reserved); }
             writer.Write(0, 1);

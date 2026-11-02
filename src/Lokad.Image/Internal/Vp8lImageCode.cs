@@ -11,6 +11,7 @@ internal sealed class Vp8lImageCode : IDisposable
     private Vp8lHuffmanGroup?[]? groups;
     private Vp8lImageCode? groupMap;
     private long groupReservation;
+    private long bodyBits;
     private readonly bool main;
     internal int Width { get; }
     internal int Height { get; }
@@ -25,7 +26,11 @@ internal sealed class Vp8lImageCode : IDisposable
         var reservation = count * 1024L + 64; context.Reserve(reservation);
         try { context.Cancellation.ThrowIfCancellationRequested(); groups = new Vp8lHuffmanGroup?[count]; groupReservation = reservation; }
         catch { context.Release(reservation); throw; }
-        for (var i = 0; i < count; i++) groups[i] = Vp8lHuffmanGroup.Build(counts.Slice(i * layout.Total, layout.Total), layout, context);
+        for (var i = 0; i < count; i++)
+        {
+            groups[i] = Vp8lHuffmanGroup.Build(counts.Slice(i * layout.Total, layout.Total), layout, context, out var dataBits);
+            bodyBits += dataBits;
+        }
     }
 
     internal static Vp8lImageCode Auxiliary(ReadOnlySpan<uint> pixels, int width, int quality, bool lowEffort, OperationContext context)
@@ -105,6 +110,7 @@ internal sealed class Vp8lImageCode : IDisposable
             if (groupMap is not null) { writer.Write(StoredTileBits - 2, 3); groupMap.Write(writer); }
         }
         foreach (var group in codes) group!.WriteTrees(writer);
+        if (writer.TryCountBits(bodyBits)) return;
         var position = 0;
         foreach (var token in ownedTokens.Tokens)
         {

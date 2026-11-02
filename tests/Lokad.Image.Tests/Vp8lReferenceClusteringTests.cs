@@ -8,6 +8,28 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8lReferenceClusteringTests
 {
+    [Fact]
+    public void ActualPopulationAdditionPreservesOffsetsGuardsAndIntegerBitsWithoutStorage()
+    {
+        using var context = new OperationContext(ImageLimits.Default, default);
+        foreach (var length in new[] { 0, 1, 7, 8, 15, 16, 17, 1088, 2112 })
+        {
+            var target = Enumerable.Repeat(0x13579bdf, length + 11).ToArray();
+            var source = Enumerable.Repeat(unchecked((int)0xfedcba98), length + 13).ToArray();
+            for (var i = 0; i < length; i++)
+            {
+                target[i + 3] = i % 3 == 0 ? int.MaxValue : unchecked(i * 123457 + int.MinValue);
+                source[i + 5] = i % 5 == 0 ? int.MinValue : unchecked(i * 987654 + 1);
+            }
+            var expected = (int[])target.Clone(); var originalSource = (int[])source.Clone();
+            for (var i = 0; i < length; i++) expected[i + 3] = unchecked(expected[i + 3] + source[i + 5]);
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            Vp8lReferenceClustering.AddPopulation(target.AsSpan(3, length), source.AsSpan(5, length), context);
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.Equal(expected, target); Assert.Equal(originalSource, source); Assert.Equal(0, allocated);
+        }
+    }
+
     private static readonly Vp8lToken[] Sparse = [Vp8lToken.Literal(0xff010203u), Vp8lToken.Copy(63, 1)];
 
     [Fact]

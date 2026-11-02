@@ -40,6 +40,12 @@ internal static class WebpLosslessEncoder
     internal sealed class CountStream(int maximum) : Stream
     {
         public int Count { get; private set; }
+        internal void Advance(long count)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(count);
+            if (count > maximum - Count) throw new ImageLimitException(ImageLimitKind.OutputBytes, "WebP encoded output limit exceeded.");
+            Count += (int)count;
+        }
         public override bool CanRead => false;
         public override bool CanSeek => false;
         public override bool CanWrite => true;

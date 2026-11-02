@@ -17,7 +17,13 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
 - [Accepted WebP workspace](WEBP-CANDIDATE-WORKSPACE.md): diagram allocation
   27.4→10.5 MB, peak admitted storage20.9→6.2 MB; exact packets and full
   Windows/Linux/scalar/actual-package checks pass. Prior VP8L/transparent-VP8
-  encoder costs are historical pending refresh; CPU screens remain diagnostic.
+  encoder costs are historical except the three refreshed cases below; workspace
+  CPU screens remain diagnostic.
+- [Fused prepared counting](VP8L-FUSED-PREPARED-COUNTING.md): independent
+  photograph elapsed improves4.53% /5.43ms with separate raw confidence; normalized
+  confidence overlaps. Current photo/diagram/alpha costs are refreshed with exact
+  packets and5401checks/OS plus actual-package proof. Diagram parity confidence
+  is open; photo/alpha retain gaps. Other affected encode costs stay historical.
 - [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md): equivalent one-shot
   reductions pass; prepared execution retains confirmed CPU gaps. Both depths
   allocate139B/call with139800B retained. Shared one-shot/prepared ownership and

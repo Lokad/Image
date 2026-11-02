@@ -56,9 +56,6 @@ def render():
     vp8l_word_cost = json.loads((ROOT / 'benchmarks/current-vp8l-rgba16-cost-evidence.json').read_text(encoding='utf-8'))
     assert not vp8l_word_cost['productionChanged'] and vp8l_word_cost['allBuilds'] == 0
     assert vp8l_word_cost['independentQuietConfirmation']
-    vp8l_photo_cost = json.loads((ROOT / 'benchmarks/vp8l-shared-color-mask-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert not vp8l_photo_cost['productionChanged'] and vp8l_photo_cost['candidateRejected']
-    assert vp8l_photo_cost['independentQuietConfirmation']
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-column-plans-evidence.json').read_text(encoding='utf-8'))
     assert jpeg['qualification']['fullChecksEachOs'] == 5163 and jpeg['decision']['passed']
     assert jpeg['qualification']['package']['sha256'] == jpeg['qualification']['linuxPackage']['sameActualPackageSha256']
@@ -349,7 +346,7 @@ def render():
     assert vp8l_bins['qualification']['fullChecksEachOs'] == 5240
     assert vp8l_bins['qualification']['sameActualPackageBothOs']
     assert vp8l_bins['qualification']['package']['sha256'] == vp8l_bins['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert set(vp8l_bins['cases']) == {'Encode8', 'Encode16', 'EncodeOpaque8', 'PhotographLossless8'}
+    assert {'Encode8', 'Encode16', 'EncodeOpaque8'} <= vp8l_bins['cases'].keys()
     webp_probe = json.loads((ROOT / 'benchmarks/current-webp-dimension-probe-cost-evidence.json').read_text(encoding='utf-8'))
     assert not webp_probe['productionChanged'] and webp_probe['allBuilds'] == 0
     assert webp_probe['independentQuietConfirmation'] and webp_probe['status']['ProbeDimensionsWebp'] == 'confirmed-gap'
@@ -533,35 +530,26 @@ def render():
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
     async_vp8l = json.loads((ROOT / 'benchmarks/current-async-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
-    diagram_vp8l = json.loads((ROOT / 'benchmarks/current-vp8l-diagram-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not diagram_vp8l['productionChanged'] and diagram_vp8l['allBuilds'] == 0
-    assert diagram_vp8l['independentQuietConfirmation'] and diagram_vp8l['status']['DiagramLossless8'] == 'confirmed-gap'
-    assert diagram_vp8l['comparisonLowerBounds']['DiagramLossless8'] > 1
-    assert len(diagram_vp8l['cases']['DiagramLossless8'][-1]['managed']['actual']) == 12
-    vp8_cases = {'case06': 'DiagramLossyDistortion8', 'case07': 'Alpha8',
+    vp8_cases = {'case06': 'DiagramLossyDistortion8',
                  'case08': 'PhotographLossy8', 'case09': 'DiagramLossy8',
                  'case10': 'DiagramLossyTrellis8', 'case11': 'Opaque16'}
     rows = []
     for case in evidence['cases']:
-        if case['id'] in {'case27', 'case28'}:
-            continue  # Replaced by the current equivalent-boundary family below.
+        if case['id'] in {'case07', 'case15', 'case16', 'case27', 'case28'}:
+            continue  # Replaced by current self-contained family evidence below.
         observation = case['observation']
-        vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
+        vp8l_case = case['id'] in {'case12', 'case13', 'case14'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case16', 'case17', 'case18', 'case19', 'case20'}
         producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8_stream if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] == 'case10':
             producer = trellis_cost
-        elif case['id'] in {'case06', 'case07', 'case09', 'case11'}:
+        elif case['id'] in {'case06', 'case09', 'case11'}:
             producer = vp8_companion_costs
         elif case['id'] == 'case13':
             producer = vp8l_word_cost
-        elif case['id'] == 'case15':
-            producer = vp8l_photo_cost
         elif case['id'] == 'case14':
             producer = async_vp8l
-        elif case['id'] == 'case16':
-            producer = diagram_vp8l
         if case['id'] in {'case17', 'case18'}:
             producer = predictive_cost
         elif case['id'] in {'case19', 'case20'}:
@@ -579,9 +567,9 @@ def render():
         if case['id'] in {'case17', 'case18', 'case19', 'case20'}:
             producer = png_gfni
             observation = png_gfni['cases'][observation['receipt']['caseId']][-1]
-        if case['id'] in {'case12', 'case13', 'case15'}:
+        if case['id'] in {'case12', 'case13'}:
             producer = vp8l_bins
-            observation = vp8l_bins['cases'][{'case12': 'Encode8', 'case13': 'Encode16', 'case15': 'PhotographLossless8'}[case['id']]][-1]
+            observation = vp8l_bins['cases'][{'case12': 'Encode8', 'case13': 'Encode16'}[case['id']]][-1]
         receipt = observation['receipt']
         stats = observation['managed']['statistics']
         native = min(b['mean'] for b in observation['nativeBrackets'])
@@ -1447,12 +1435,12 @@ def render():
         else:
             position = next(i for i, (kind, previous) in enumerate(rows) if previous.startswith('| ' + label))
             rows[position] = ('codec', row)
-    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8 RGBA8'))
-    rows.insert(position + 1, ('codec',
+    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8 opaque photograph'))
+    rows.insert(position, ('codec',
         f'| VP8 RGBA16 + alpha, including normalization † | {alpha16_cost["managedMicroseconds"]:,.2f} | '
         f'{alpha16_cost["nativeMicroseconds"]:,.2f} | {alpha16_cost["ratio"]:.3f} / {alpha16_cost["upper"]:.3f} | '
         f'{alpha16_cost["allocatedBytes"]:,} | {alpha16_cost["packetBytes"]:,} / {alpha16_cost["packetBytes"]:,} |'))
-    rows.insert(position + 2, ('codec',
+    rows.insert(position + 1, ('codec',
         f'| VP8 opaque RGBA8 † | {opaque8_cost["managedMicroseconds"]:,.2f} | '
         f'{opaque8_cost["nativeMicroseconds"]:,.2f} | {opaque8_cost["ratio"]:.3f} / {opaque8_cost["upper"]:.3f} | '
         f'{opaque8_cost["allocatedBytes"]:,} | {opaque8_cost["packetBytes"]:,} / {opaque8_cost["packetBytes"]:,} |'))
@@ -1531,9 +1519,30 @@ def render():
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
                                       or row.startswith('| VP8 RGBA8 †')
                                       or row.startswith('| VP8 RGBA16 + alpha,'))
-    assert sum(historical_workspace(row) for _, row in rows) == 8
+    assert sum(historical_workspace(row) for _, row in rows) == 5
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
+    counting = json.loads((ROOT / 'benchmarks/vp8l-fused-prepared-counting-evidence.json').read_text(encoding='utf-8'))
+    assert counting['productionAccepted'] and counting['decision']['rawConfidenceSeparates']
+    assert counting['qualification']['fullChecksEachOs'] == 5401
+    assert counting['qualification']['actualPackage']['sha256'] == counting['qualification']['samePackageLinux']['sameActualPackageSha256']
+    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
+    current_webp_rows = []
+    for case, label in [('alpha', 'VP8 RGBA8 + lossless alpha'),
+                        ('photograph', 'VP8L photograph / libwebp exact=1'),
+                        ('diagram', 'VP8L text/diagram / libwebp exact=1 (confidence open)')]:
+        observation = counting['cases'][case]
+        assert observation['completePacketExact'] and observation['quietGuardsPassed']
+        assert observation['librarySha256'] == counting['producers']['linuxSha256']
+        assert len(observation['managed']['actual']) == 12
+        stats = observation['managed']['statistics']; receipt = observation['receipt']
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        current_webp_rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | '
+                                  f'{native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / '
+                                  f'{observation["conservativeRatioUpper"]:.3f} | '
+                                  f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
+                                  f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
+    rows[position:position] = current_webp_rows
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1645,7 +1654,11 @@ reduces diagram allocation from **27.4 to 10.5 MB/op** and peak admitted storage
 from **20.9 to 6.2 MB**, preserving exact packets. Photograph/alpha allocations
 also fall. Rows marked **‡** retain pre-workspace CPU/allocation measurements;
 they are historical costs pending refresh, not current implementation proof.
-The redesign's short CPU screen is diagnostic; no CPU gain is claimed from it.
+The workspace redesign's short CPU screen remains diagnostic.
+[Fused prepared counting](../benchmarks/VP8L-FUSED-PREPARED-COUNTING.md) now saves
+5.43 ms / 4.53% elapsed on an independent photograph pair. Raw confidence separates;
+normalized confidence overlaps. Three current WebP rows are refreshed; the
+diagram's parity confidence is open and other confirmed gaps remain.
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
@@ -1667,7 +1680,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,400 full/live checks per OS, 83 affected checks in
+Current production passes 5,401 full/live checks per OS, 224 affected checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in

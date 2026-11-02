@@ -1,9 +1,36 @@
+using System.Runtime.Intrinsics;
+
 namespace Lokad.Image.Internal;
 
 // Independent spatial population clustering. Tile syntax is RFC 9649 section
 // 3.7.2.2; deterministic merge decisions use the admitted integer entropy model.
 internal static class Vp8lReferenceClustering
 {
+    // Both callers add distinct, complete populations. The address mapping of
+    // compact storage is resolved before this loop; logical merge order stays put.
+    internal static void AddPopulation(Span<int> target, ReadOnlySpan<int> source, OperationContext context)
+    {
+        if (target.Length != source.Length) throw new ArgumentException("Population lengths differ.");
+        context.Cancellation.ThrowIfCancellationRequested(); var i = 0;
+        if (Vector512.IsHardwareAccelerated)
+            for (; i <= target.Length - Vector512<int>.Count; i += Vector512<int>.Count)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                Vector512.Add(Vector512.Create<int>(target.Slice(i)), Vector512.Create<int>(source.Slice(i))).CopyTo(target.Slice(i));
+            }
+        if (Vector256.IsHardwareAccelerated)
+            for (; i <= target.Length - Vector256<int>.Count; i += Vector256<int>.Count)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                Vector256.Add(Vector256.Create<int>(target.Slice(i)), Vector256.Create<int>(source.Slice(i))).CopyTo(target.Slice(i));
+            }
+        for (; i < target.Length; i++)
+        {
+            if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            target[i] = unchecked(target[i] + source[i]);
+        }
+    }
+
     private const int SamplingPairs = 9;
 
     private static int PairCapacity(int tiles, int threshold)
@@ -144,7 +171,7 @@ internal static class Vp8lReferenceClustering
         {
             var a = items[aSlot]; var b = items[bSlot]; context.Cancellation.ThrowIfCancellationRequested();
             var aCounts = Population(aSlot); var bCounts = Population(bSlot);
-            for (var i = 0; i < layout.Total; i++) aCounts[i] += bCounts[i];
+            AddPopulation(aCounts, bCounts, context);
             for (var bank = 0; bank < 5; bank++) a.Set(bank, costs.Cost(bank), a.Trivial(bank) == b.Trivial(bank) ? a.Trivial(bank) : -1);
             a.Total = costs.Total; a.Used |= b.Used; items[aSlot] = a;
         }
@@ -329,7 +356,7 @@ internal static class Vp8lReferenceClustering
                     }
                     var start = map[tile] * layout.Total;
                     var counts = Population(originalSlot);
-                    for (var i = 0; i < layout.Total; i++) output[start + i] += counts[i];
+                    AddPopulation(output.Slice(start, layout.Total), counts, context);
                 }
                 return result;
             }

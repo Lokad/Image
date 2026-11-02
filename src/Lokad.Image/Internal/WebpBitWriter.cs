@@ -18,4 +18,17 @@ internal sealed class WebpBitWriter(Stream output, OperationContext context)
         if (available != 0) output.WriteByte((byte)bits);
         bits = 0; available = 0;
     }
+
+    // Only the sealed discard sink can substitute a prepared bit count.
+    // Real emission always visits the original tokens and writes their bits.
+    internal bool TryCountBits(long count)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(count);
+        if (output is not WebpLosslessEncoder.CountStream counter) return false;
+        context.Cancellation.ThrowIfCancellationRequested();
+        var pending = available + (int)(count & 7);
+        counter.Advance(count / 8 + (pending >> 3));
+        available = pending & 7; bits = 0;
+        return true;
+    }
 }
