@@ -60,6 +60,11 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   restored. Arithmetic reuse69.36% did not demonstrate useful complete elapsed
   savings in the direct screen; all adverse data is retained without confirmation
   or resampling. Exact source/core/package and current costs are unchanged.
+- [Shared Deflate hash preparation](PNG-ROLLING-HASH-INCONCLUSIVE.md) is restored
+  after one bounded revision and independent confirmation. No useful normalized
+  gain is demonstrated; all exact packet/resource gates and575normal/scalar/OS
+  checks pass. Current costs/package remain valid. Parser attribution motivates
+  examining dictionary storage density next.
 - Next architectural work targets remaining material codec costs from current
   attribution and further resize preparation/execution, ranked by useful savings.
   Pending items block their own dependencies, not independent work. Failed

@@ -1,0 +1,1704 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "candidateMerged": false,
+  "status": "inconclusive-confirmation-restored",
+  "profile": {
+    "profilingOnly": true,
+    "builds": 0,
+    "workloadSamples": 770,
+    "exclusiveTop": [
+      {
+        "method": "Lokad.Image.Internal.PngDeflater.ProcessLazy(bool)",
+        "samples": 689,
+        "fraction": 0.8948051948051948
+      },
+      {
+        "method": "System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+        "samples": 28,
+        "fraction": 0.03636363636363636
+      },
+      {
+        "method": "Lokad.Image.Internal.PngDeflater.Put(int32,int32)",
+        "samples": 16,
+        "fraction": 0.02077922077922078
+      },
+      {
+        "method": "Lokad.Image.Internal.PngDeflater.Block(bool)",
+        "samples": 14,
+        "fraction": 0.01818181818181818
+      },
+      {
+        "method": "Lokad.Image.Internal.PngDeflater.WriteTokens(unsigned int8[],unsigned int8[])",
+        "samples": 10,
+        "fraction": 0.012987012987012988
+      },
+      {
+        "method": "Lokad.Image.Internal.DeflateHuffman.Lengths(int32[],int32,class Lokad.Image.Internal.OperationContext)",
+        "samples": 3,
+        "fraction": 0.003896103896103896
+      },
+      {
+        "method": "Lokad.Image.Internal.PngDeflater.LengthSymbol(int32)",
+        "samples": 2,
+        "fraction": 0.0025974025974025974
+      },
+      {
+        "method": "Lokad.Image.Internal.Adler32.Append(value class System.ReadOnlySpan`1<unsigned int8>,unsigned int32&,unsigned int32&,value class System.Threading.CancellationToken)",
+        "samples": 2,
+        "fraction": 0.0025974025974025974
+      }
+    ],
+    "trace": "d3bfd07398ae0e2fad25486984f9644cd1004f9495bd665a4964064342ab388b",
+    "scope": "One one-second existing one-shot Optimal6 control; immutable PNG84runtime, inlined helpers included, instrumented timings discarded."
+  },
+  "initialDesign": {
+    "project": "Lokad.Image",
+    "productionAccepted": false,
+    "hypothesis": "Carry exact15-bit three-byte hash across consecutive Insert positions in both fast/lazy Deflate; recompute original key on jumps. No storage arrays, public APIs, context/session reuse or changes to match-chain/tie/parser order.",
+    "proof": "((b0<<10)^(b1<<5)^b2)<<5 XOR b3, masked15bits, equals (b1<<10)^(b2<<5)^b3; old byte drops. Previous absolute insertion index guards discontinuities.",
+    "boundaries": "Existing equivalent one-shot RGBA8Optimal6/Fastest1 controls; existing14complete PNG packet contracts and ring/overlap/chunk/cancellation/refusal behavior.",
+    "temporaryCost": "Two owner fields and consecutive-position check; preserve prior inlining explicitly. Record elapsed/allocation cost, not infer gain from fewer loads.",
+    "sources": {
+      "src/Lokad.Image/Internal/PngDeflater.cs": "fbb31770a518ee9eef20bdf90d0a58e51ac450171ad85776965c1360fcdc9fd5"
+    }
+  },
+  "revisedDesign": {
+    "project": "Lokad.Image",
+    "productionAccepted": false,
+    "stage": "RH89 revised parser-local hash preparation",
+    "design": "Rolling state is local to each fast/lazy processing batch. Each first insertion/jump computes original key; subsequent contiguous insertions share preparation. No persistent object fields or storage arrays. Same private inline Insert serves both paths.",
+    "rationale": "First stateful variant added16allocatedB/encoder and showed no useful complete gain. Move preparation to parser locals instead of per-insert object-field traffic; reuse valid baseline jobs and preserve first adverse implementation.",
+    "sourceSha256": "ea21bfeab10f5ba768aab524a6a79c6333a5badfd43cc212b998a367a88653be"
+  },
+  "firstScreens": [
+    {
+      "caseId": "Encode8",
+      "subject": "baseline",
+      "runId": "rh89-baseline-Encode8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.3189908070249228,
+      "conservativeRatioUpper": 2.3435588535426275,
+      "conservativeRatioLower": 0.8203765687201108,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1325732
+      },
+      "status": "Confidence open",
+      "quietGuardsPassed": true,
+      "librarySha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "2335d2cbbd34782238a8160d692d471323cc22a56fa43439c8dabea31d4eec5e",
+      "filtered": {
+        "OriginalValues": [
+          24354364,
+          24057424.5,
+          24048035.25
+        ],
+        "N": 3,
+        "Min": 24048035.25,
+        "LowerFence": 23822983.3125,
+        "Q1": 24052729.875,
+        "Median": 24057424.5,
+        "Mean": 24153274.583333332,
+        "Q3": 24205894.25,
+        "UpperFence": 24435640.8125,
+        "Max": 24354364,
+        "InterquartileRange": 153164.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 100581.23520384876,
+        "Variance": 30349754625.395832,
+        "StandardDeviation": 174211.80966110143,
+        "Skewness": 0.3836427726502549,
+        "Kurtosis": 0.6666666666666775,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 24153274.583333332,
+          "StandardError": 100581.23520384876,
+          "Level": 12,
+          "Margin": 3178271.9277110146,
+          "Lower": 20975002.65562232,
+          "Upper": 27331546.511044346
+        },
+        "Percentiles": {
+          "P0": 24048035.25,
+          "P25": 24052729.875,
+          "P50": 24057424.5,
+          "P67": 24158383.93,
+          "P80": 24235588.2,
+          "P85": 24265282.15,
+          "P90": 24294976.1,
+          "P95": 24324670.05,
+          "P100": 24354364
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          24354377.75,
+          24057438.25,
+          24048049
+        ],
+        "N": 3,
+        "Min": 24048049,
+        "LowerFence": 23822997.0625,
+        "Q1": 24052743.625,
+        "Median": 24057438.25,
+        "Mean": 24153288.333333332,
+        "Q3": 24205908,
+        "UpperFence": 24435654.5625,
+        "Max": 24354377.75,
+        "InterquartileRange": 153164.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 100581.23520384876,
+        "Variance": 30349754625.395832,
+        "StandardDeviation": 174211.80966110143,
+        "Skewness": 0.3836427726502549,
+        "Kurtosis": 0.6666666666666775,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 24153288.333333332,
+          "StandardError": 100581.23520384876,
+          "Level": 12,
+          "Margin": 3178271.9277110146,
+          "Lower": 20975016.40562232,
+          "Upper": 27331560.261044346
+        },
+        "Percentiles": {
+          "P0": 24048049,
+          "P25": 24052743.625,
+          "P50": 24057438.25,
+          "P67": 24158397.68,
+          "P80": 24235601.95,
+          "P85": 24265295.9,
+          "P90": 24294989.85,
+          "P95": 24324683.8,
+          "P100": 24354377.75
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 18311935.5,
+          "standardError": 109454.06008258671
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 18614973.5,
+          "standardError": 220024.19920336793
+        }
+      ],
+      "exactPacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973
+    },
+    {
+      "caseId": "Encode8",
+      "subject": "candidate",
+      "runId": "rh89-candidate-Encode8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.2957648818596759,
+      "conservativeRatioUpper": 1.5201635977109504,
+      "conservativeRatioLower": 1.0833489585348466,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1325748
+      },
+      "status": "Screen gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "3e970a7911465538f73d882fad9f01eb7e25235f26e28fa4c4d272f92a8c4713",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "99ddb3e5e5e0283fd0253f8905854f08eb761e0ff4f6811b6699e4d7228bd1d2",
+      "filtered": {
+        "OriginalValues": [
+          24373040.875,
+          24165398.625,
+          24178843.875
+        ],
+        "N": 3,
+        "Min": 24165398.625,
+        "LowerFence": 24016389.5625,
+        "Q1": 24172121.25,
+        "Median": 24178843.875,
+        "Mean": 24239094.458333332,
+        "Q3": 24275942.375,
+        "UpperFence": 24431674.0625,
+        "Max": 24373040.875,
+        "InterquartileRange": 103821.125,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 67085.58113899696,
+        "Variance": 13501425590.270834,
+        "StandardDeviation": 116195.63498802713,
+        "Skewness": 0.3791105315136321,
+        "Kurtosis": 0.6666666666666828,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 24239094.458333332,
+          "StandardError": 67085.58113899696,
+          "Level": 12,
+          "Margin": 2119840.9311252404,
+          "Lower": 22119253.52720809,
+          "Upper": 26358935.389458574
+        },
+        "Percentiles": {
+          "P0": 24165398.625,
+          "P25": 24172121.25,
+          "P50": 24178843.875,
+          "P67": 24244870.855,
+          "P80": 24295362.075,
+          "P85": 24314781.775,
+          "P90": 24334201.475,
+          "P95": 24353621.175,
+          "P100": 24373040.875
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          24373062.25,
+          24165420,
+          24178865.25
+        ],
+        "N": 3,
+        "Min": 24165420,
+        "LowerFence": 24016410.9375,
+        "Q1": 24172142.625,
+        "Median": 24178865.25,
+        "Mean": 24239115.833333332,
+        "Q3": 24275963.75,
+        "UpperFence": 24431695.4375,
+        "Max": 24373062.25,
+        "InterquartileRange": 103821.125,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 67085.58113899696,
+        "Variance": 13501425590.270834,
+        "StandardDeviation": 116195.63498802713,
+        "Skewness": 0.3791105315136321,
+        "Kurtosis": 0.6666666666666828,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 24239115.833333332,
+          "StandardError": 67085.58113899696,
+          "Level": 12,
+          "Margin": 2119840.9311252404,
+          "Lower": 22119274.90220809,
+          "Upper": 26358956.764458574
+        },
+        "Percentiles": {
+          "P0": 24165420,
+          "P25": 24172142.625,
+          "P50": 24178865.25,
+          "P67": 24244892.23,
+          "P80": 24295383.45,
+          "P85": 24314803.15,
+          "P90": 24334222.85,
+          "P95": 24353642.55,
+          "P100": 24373062.25
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 18878515.333333332,
+          "standardError": 48702.807521387076
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 18706398.666666668,
+          "standardError": 24510.334978897736
+        }
+      ],
+      "exactPacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973
+    },
+    {
+      "caseId": "EncodeFast8",
+      "subject": "baseline",
+      "runId": "rh89-baseline-EncodeFast8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.4326667570654414,
+      "conservativeRatioUpper": 2.0891014263988903,
+      "conservativeRatioLower": 0.9251841822362811,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1344428
+      },
+      "status": "Confidence open",
+      "quietGuardsPassed": true,
+      "librarySha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "2335d2cbbd34782238a8160d692d471323cc22a56fa43439c8dabea31d4eec5e",
+      "filtered": {
+        "OriginalValues": [
+          6632468.5,
+          6456927.75,
+          6505704
+        ],
+        "N": 3,
+        "Min": 6456927.75,
+        "LowerFence": 6349660.3125,
+        "Q1": 6481315.875,
+        "Median": 6505704,
+        "Mean": 6531700.083333333,
+        "Q3": 6569086.25,
+        "UpperFence": 6700741.8125,
+        "Max": 6632468.5,
+        "InterquartileRange": 87770.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 52314.707903691975,
+        "Variance": 8210485989.145834,
+        "StandardDeviation": 90611.7320723196,
+        "Skewness": 0.2632812869001918,
+        "Kurtosis": 0.6666666666666701,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6531700.083333333,
+          "StandardError": 52314.707903691975,
+          "Level": 12,
+          "Margin": 1653095.3035098875,
+          "Lower": 4878604.779823446,
+          "Upper": 8184795.38684322
+        },
+        "Percentiles": {
+          "P0": 6456927.75,
+          "P25": 6481315.875,
+          "P50": 6505704,
+          "P67": 6548803.93,
+          "P80": 6581762.7,
+          "P85": 6594439.15,
+          "P90": 6607115.6,
+          "P95": 6619792.05,
+          "P100": 6632468.5
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          6632481,
+          6456940.25,
+          6505716.5
+        ],
+        "N": 3,
+        "Min": 6456940.25,
+        "LowerFence": 6349672.8125,
+        "Q1": 6481328.375,
+        "Median": 6505716.5,
+        "Mean": 6531712.583333333,
+        "Q3": 6569098.75,
+        "UpperFence": 6700754.3125,
+        "Max": 6632481,
+        "InterquartileRange": 87770.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 52314.707903691975,
+        "Variance": 8210485989.145834,
+        "StandardDeviation": 90611.7320723196,
+        "Skewness": 0.2632812869001918,
+        "Kurtosis": 0.6666666666666701,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6531712.583333333,
+          "StandardError": 52314.707903691975,
+          "Level": 12,
+          "Margin": 1653095.3035098875,
+          "Lower": 4878617.279823446,
+          "Upper": 8184807.88684322
+        },
+        "Percentiles": {
+          "P0": 6456940.25,
+          "P25": 6481328.375,
+          "P50": 6505716.5,
+          "P67": 6548816.43,
+          "P80": 6581775.2,
+          "P85": 6594451.65,
+          "P90": 6607128.1,
+          "P95": 6619804.55,
+          "P100": 6632481
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 4595488.916666667,
+          "standardError": 21444.580004774245
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 4559120.291666667,
+          "standardError": 6726.680568972823
+        }
+      ],
+      "exactPacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "packetBytes": 236828
+    },
+    {
+      "caseId": "EncodeFast8",
+      "subject": "candidate",
+      "runId": "rh89-candidate-EncodeFast8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.3979414432252721,
+      "conservativeRatioUpper": 1.9706880188082987,
+      "conservativeRatioLower": 0.8660049513607208,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1344444
+      },
+      "status": "Confidence open",
+      "quietGuardsPassed": true,
+      "librarySha256": "3e970a7911465538f73d882fad9f01eb7e25235f26e28fa4c4d272f92a8c4713",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "99ddb3e5e5e0283fd0253f8905854f08eb761e0ff4f6811b6699e4d7228bd1d2",
+      "filtered": {
+        "OriginalValues": [
+          6748380.5,
+          6533001.75,
+          6516532
+        ],
+        "N": 3,
+        "Min": 6516532,
+        "LowerFence": 6350880.5,
+        "Q1": 6524766.875,
+        "Median": 6533001.75,
+        "Mean": 6599304.75,
+        "Q3": 6640691.125,
+        "UpperFence": 6814577.5,
+        "Max": 6748380.5,
+        "InterquartileRange": 115924.25,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 74689.35130439168,
+        "Variance": 16735497594.8125,
+        "StandardDeviation": 129365.75124356717,
+        "Skewness": 0.37789367406475244,
+        "Kurtosis": 0.6666666666666666,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6599304.75,
+          "StandardError": 74689.35130439168,
+          "Level": 12,
+          "Margin": 2360112.878595973,
+          "Lower": 4239191.871404028,
+          "Upper": 8959417.628595972
+        },
+        "Percentiles": {
+          "P0": 6516532,
+          "P25": 6524766.875,
+          "P50": 6533001.75,
+          "P67": 6606230.525,
+          "P80": 6662229,
+          "P85": 6683766.875,
+          "P90": 6705304.75,
+          "P95": 6726842.625,
+          "P100": 6748380.5
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          6748396.75,
+          6533018,
+          6516548.25
+        ],
+        "N": 3,
+        "Min": 6516548.25,
+        "LowerFence": 6350896.75,
+        "Q1": 6524783.125,
+        "Median": 6533018,
+        "Mean": 6599321,
+        "Q3": 6640707.375,
+        "UpperFence": 6814593.75,
+        "Max": 6748396.75,
+        "InterquartileRange": 115924.25,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 74689.35130439168,
+        "Variance": 16735497594.8125,
+        "StandardDeviation": 129365.75124356717,
+        "Skewness": 0.37789367406475244,
+        "Kurtosis": 0.6666666666666666,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6599321,
+          "StandardError": 74689.35130439168,
+          "Level": 12,
+          "Margin": 2360112.878595973,
+          "Lower": 4239208.121404028,
+          "Upper": 8959433.878595972
+        },
+        "Percentiles": {
+          "P0": 6516548.25,
+          "P25": 6524783.125,
+          "P50": 6533018,
+          "P67": 6606246.775,
+          "P80": 6662245.25,
+          "P85": 6683783.125,
+          "P90": 6705321,
+          "P95": 6726858.875,
+          "P100": 6748396.75
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 4720730.458333333,
+          "standardError": 5518.591805175736
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 4722029.708333333,
+          "standardError": 4438.1772167123345
+        }
+      ],
+      "exactPacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "packetBytes": 236828
+    }
+  ],
+  "revisedScreens": [
+    {
+      "caseId": "Encode8",
+      "subject": "baseline",
+      "runId": "rh89-baseline-Encode8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.3189908070249228,
+      "conservativeRatioUpper": 2.3435588535426275,
+      "conservativeRatioLower": 0.8203765687201108,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1325732
+      },
+      "status": "Confidence open",
+      "quietGuardsPassed": true,
+      "librarySha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "2335d2cbbd34782238a8160d692d471323cc22a56fa43439c8dabea31d4eec5e",
+      "filtered": {
+        "OriginalValues": [
+          24354364,
+          24057424.5,
+          24048035.25
+        ],
+        "N": 3,
+        "Min": 24048035.25,
+        "LowerFence": 23822983.3125,
+        "Q1": 24052729.875,
+        "Median": 24057424.5,
+        "Mean": 24153274.583333332,
+        "Q3": 24205894.25,
+        "UpperFence": 24435640.8125,
+        "Max": 24354364,
+        "InterquartileRange": 153164.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 100581.23520384876,
+        "Variance": 30349754625.395832,
+        "StandardDeviation": 174211.80966110143,
+        "Skewness": 0.3836427726502549,
+        "Kurtosis": 0.6666666666666775,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 24153274.583333332,
+          "StandardError": 100581.23520384876,
+          "Level": 12,
+          "Margin": 3178271.9277110146,
+          "Lower": 20975002.65562232,
+          "Upper": 27331546.511044346
+        },
+        "Percentiles": {
+          "P0": 24048035.25,
+          "P25": 24052729.875,
+          "P50": 24057424.5,
+          "P67": 24158383.93,
+          "P80": 24235588.2,
+          "P85": 24265282.15,
+          "P90": 24294976.1,
+          "P95": 24324670.05,
+          "P100": 24354364
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          24354377.75,
+          24057438.25,
+          24048049
+        ],
+        "N": 3,
+        "Min": 24048049,
+        "LowerFence": 23822997.0625,
+        "Q1": 24052743.625,
+        "Median": 24057438.25,
+        "Mean": 24153288.333333332,
+        "Q3": 24205908,
+        "UpperFence": 24435654.5625,
+        "Max": 24354377.75,
+        "InterquartileRange": 153164.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 100581.23520384876,
+        "Variance": 30349754625.395832,
+        "StandardDeviation": 174211.80966110143,
+        "Skewness": 0.3836427726502549,
+        "Kurtosis": 0.6666666666666775,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 24153288.333333332,
+          "StandardError": 100581.23520384876,
+          "Level": 12,
+          "Margin": 3178271.9277110146,
+          "Lower": 20975016.40562232,
+          "Upper": 27331560.261044346
+        },
+        "Percentiles": {
+          "P0": 24048049,
+          "P25": 24052743.625,
+          "P50": 24057438.25,
+          "P67": 24158397.68,
+          "P80": 24235601.95,
+          "P85": 24265295.9,
+          "P90": 24294989.85,
+          "P95": 24324683.8,
+          "P100": 24354377.75
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 18311935.5,
+          "standardError": 109454.06008258671
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 18614973.5,
+          "standardError": 220024.19920336793
+        }
+      ],
+      "exactPacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973
+    },
+    {
+      "caseId": "Encode8",
+      "subject": "candidate",
+      "runId": "rh89r-candidate-Encode8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.274368983229503,
+      "conservativeRatioUpper": 2.3376156408843416,
+      "conservativeRatioLower": 0.7007857402412973,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1325732
+      },
+      "status": "Confidence open",
+      "quietGuardsPassed": true,
+      "librarySha256": "4b0dae3eddf00c92b3ec9d0dc3582393a1da3b46ab932446fcd00d60adbcff14",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "7642472285fde105dba5ca24a840b640deecf072a88e8fd780d00a379a97abb1",
+      "filtered": {
+        "OriginalValues": [
+          23290211.5,
+          22679213.75,
+          23319618.25
+        ],
+        "N": 3,
+        "Min": 22679213.75,
+        "LowerFence": 22504409.25,
+        "Q1": 22984712.625,
+        "Median": 23290211.5,
+        "Mean": 23096347.833333332,
+        "Q3": 23304914.875,
+        "UpperFence": 23785218.25,
+        "Max": 23319618.25,
+        "InterquartileRange": 320202.25,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 208739.72776733697,
+        "Variance": 130716821845.14583,
+        "StandardDeviation": 361547.81405112357,
+        "Skewness": -0.382037559353716,
+        "Kurtosis": 0.6666666666666614,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 23096347.833333332,
+          "StandardError": 208739.72776733697,
+          "Level": 12,
+          "Margin": 6595978.023300117,
+          "Lower": 16500369.810033215,
+          "Upper": 29692325.856633447
+        },
+        "Percentiles": {
+          "P0": 22679213.75,
+          "P25": 22984712.625,
+          "P50": 23290211.5,
+          "P67": 23300209.795,
+          "P80": 23307855.55,
+          "P85": 23310796.225,
+          "P90": 23313736.9,
+          "P95": 23316677.575,
+          "P100": 23319618.25
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          23290226.5,
+          22679228.75,
+          23319633.25
+        ],
+        "N": 3,
+        "Min": 22679228.75,
+        "LowerFence": 22504424.25,
+        "Q1": 22984727.625,
+        "Median": 23290226.5,
+        "Mean": 23096362.833333332,
+        "Q3": 23304929.875,
+        "UpperFence": 23785233.25,
+        "Max": 23319633.25,
+        "InterquartileRange": 320202.25,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 208739.72776733697,
+        "Variance": 130716821845.14583,
+        "StandardDeviation": 361547.81405112357,
+        "Skewness": -0.382037559353716,
+        "Kurtosis": 0.6666666666666614,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 23096362.833333332,
+          "StandardError": 208739.72776733697,
+          "Level": 12,
+          "Margin": 6595978.023300117,
+          "Lower": 16500384.810033215,
+          "Upper": 29692340.856633447
+        },
+        "Percentiles": {
+          "P0": 22679228.75,
+          "P25": 22984727.625,
+          "P50": 23290226.5,
+          "P67": 23300224.795,
+          "P80": 23307870.55,
+          "P85": 23310811.225,
+          "P90": 23313751.9,
+          "P95": 23316692.575,
+          "P100": 23319633.25
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 18123752.333333332,
+          "standardError": 171580.2927195174
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 18438110.0,
+          "standardError": 20722.002967860033
+        }
+      ],
+      "exactPacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973
+    },
+    {
+      "caseId": "EncodeFast8",
+      "subject": "baseline",
+      "runId": "rh89-baseline-EncodeFast8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.4326667570654414,
+      "conservativeRatioUpper": 2.0891014263988903,
+      "conservativeRatioLower": 0.9251841822362811,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1344428
+      },
+      "status": "Confidence open",
+      "quietGuardsPassed": true,
+      "librarySha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "2335d2cbbd34782238a8160d692d471323cc22a56fa43439c8dabea31d4eec5e",
+      "filtered": {
+        "OriginalValues": [
+          6632468.5,
+          6456927.75,
+          6505704
+        ],
+        "N": 3,
+        "Min": 6456927.75,
+        "LowerFence": 6349660.3125,
+        "Q1": 6481315.875,
+        "Median": 6505704,
+        "Mean": 6531700.083333333,
+        "Q3": 6569086.25,
+        "UpperFence": 6700741.8125,
+        "Max": 6632468.5,
+        "InterquartileRange": 87770.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 52314.707903691975,
+        "Variance": 8210485989.145834,
+        "StandardDeviation": 90611.7320723196,
+        "Skewness": 0.2632812869001918,
+        "Kurtosis": 0.6666666666666701,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6531700.083333333,
+          "StandardError": 52314.707903691975,
+          "Level": 12,
+          "Margin": 1653095.3035098875,
+          "Lower": 4878604.779823446,
+          "Upper": 8184795.38684322
+        },
+        "Percentiles": {
+          "P0": 6456927.75,
+          "P25": 6481315.875,
+          "P50": 6505704,
+          "P67": 6548803.93,
+          "P80": 6581762.7,
+          "P85": 6594439.15,
+          "P90": 6607115.6,
+          "P95": 6619792.05,
+          "P100": 6632468.5
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          6632481,
+          6456940.25,
+          6505716.5
+        ],
+        "N": 3,
+        "Min": 6456940.25,
+        "LowerFence": 6349672.8125,
+        "Q1": 6481328.375,
+        "Median": 6505716.5,
+        "Mean": 6531712.583333333,
+        "Q3": 6569098.75,
+        "UpperFence": 6700754.3125,
+        "Max": 6632481,
+        "InterquartileRange": 87770.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 52314.707903691975,
+        "Variance": 8210485989.145834,
+        "StandardDeviation": 90611.7320723196,
+        "Skewness": 0.2632812869001918,
+        "Kurtosis": 0.6666666666666701,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6531712.583333333,
+          "StandardError": 52314.707903691975,
+          "Level": 12,
+          "Margin": 1653095.3035098875,
+          "Lower": 4878617.279823446,
+          "Upper": 8184807.88684322
+        },
+        "Percentiles": {
+          "P0": 6456940.25,
+          "P25": 6481328.375,
+          "P50": 6505716.5,
+          "P67": 6548816.43,
+          "P80": 6581775.2,
+          "P85": 6594451.65,
+          "P90": 6607128.1,
+          "P95": 6619804.55,
+          "P100": 6632481
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 4595488.916666667,
+          "standardError": 21444.580004774245
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 4559120.291666667,
+          "standardError": 6726.680568972823
+        }
+      ],
+      "exactPacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "packetBytes": 236828
+    },
+    {
+      "caseId": "EncodeFast8",
+      "subject": "candidate",
+      "runId": "rh89r-candidate-EncodeFast8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.397063718279928,
+      "conservativeRatioUpper": 1.9442918200567745,
+      "conservativeRatioLower": 0.926742933502126,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1344428
+      },
+      "status": "Confidence open",
+      "quietGuardsPassed": true,
+      "librarySha256": "4b0dae3eddf00c92b3ec9d0dc3582393a1da3b46ab932446fcd00d60adbcff14",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "7642472285fde105dba5ca24a840b640deecf072a88e8fd780d00a379a97abb1",
+      "filtered": {
+        "OriginalValues": [
+          6698559.5,
+          6522104.75,
+          6517182.5
+        ],
+        "N": 3,
+        "Min": 6517182.5,
+        "LowerFence": 6383610.875,
+        "Q1": 6519643.625,
+        "Median": 6522104.75,
+        "Mean": 6579282.25,
+        "Q3": 6610332.125,
+        "UpperFence": 6746364.875,
+        "Max": 6698559.5,
+        "InterquartileRange": 90688.5,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 59655.549928841494,
+        "Variance": 10676353911.9375,
+        "StandardDeviation": 103326.44343021538,
+        "Skewness": 0.3839177478670277,
+        "Kurtosis": 0.6666666666666666,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6579282.25,
+          "StandardError": 59655.549928841494,
+          "Level": 12,
+          "Margin": 1885058.9703609506,
+          "Lower": 4694223.279639049,
+          "Upper": 8464341.22036095
+        },
+        "Percentiles": {
+          "P0": 6517182.5,
+          "P25": 6519643.625,
+          "P50": 6522104.75,
+          "P67": 6582099.365,
+          "P80": 6627977.6,
+          "P85": 6645623.075,
+          "P90": 6663268.55,
+          "P95": 6680914.025,
+          "P100": 6698559.5
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          6698570.75,
+          6522116,
+          6517193.75
+        ],
+        "N": 3,
+        "Min": 6517193.75,
+        "LowerFence": 6383622.125,
+        "Q1": 6519654.875,
+        "Median": 6522116,
+        "Mean": 6579293.5,
+        "Q3": 6610343.375,
+        "UpperFence": 6746376.125,
+        "Max": 6698570.75,
+        "InterquartileRange": 90688.5,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 59655.549928841494,
+        "Variance": 10676353911.9375,
+        "StandardDeviation": 103326.44343021538,
+        "Skewness": 0.3839177478670277,
+        "Kurtosis": 0.6666666666666666,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 6579293.5,
+          "StandardError": 59655.549928841494,
+          "Level": 12,
+          "Margin": 1885058.9703609506,
+          "Lower": 4694234.529639049,
+          "Upper": 8464352.47036095
+        },
+        "Percentiles": {
+          "P0": 6517193.75,
+          "P25": 6519654.875,
+          "P50": 6522116,
+          "P67": 6582110.615,
+          "P80": 6627988.85,
+          "P85": 6645634.325,
+          "P90": 6663279.8,
+          "P95": 6680925.275,
+          "P100": 6698570.75
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 4709364.479166667,
+          "standardError": 11263.856366388092
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 4719994.104166667,
+          "standardError": 5581.456515908342
+        }
+      ],
+      "exactPacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "packetBytes": 236828
+    }
+  ],
+  "independent": [
+    {
+      "caseId": "Encode8",
+      "subject": "baseline",
+      "runId": "rh89r-baseline-Encode8-confirm",
+      "mode": "confirm",
+      "worstBracketRatio": 1.3126657955177663,
+      "conservativeRatioUpper": 1.3324893640432225,
+      "conservativeRatioLower": 1.2902928407994063,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1325732
+      },
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "2335d2cbbd34782238a8160d692d471323cc22a56fa43439c8dabea31d4eec5e",
+      "filtered": {
+        "OriginalValues": [
+          24517797.25,
+          24609280.75,
+          24533698.75,
+          24432655.75,
+          24527749.75,
+          24513493,
+          24404345.25,
+          24361890.75,
+          24356159.75,
+          24519579.75,
+          24315112.5
+        ],
+        "N": 11,
+        "Min": 24315112.5,
+        "LowerFence": 24172297.875,
+        "Q1": 24383118,
+        "Median": 24513493,
+        "Mean": 24462887.568181816,
+        "Q3": 24523664.75,
+        "UpperFence": 24734484.875,
+        "Max": 24609280.75,
+        "InterquartileRange": 140546.75,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 28157.365778014842,
+        "Variance": 8721209723.126135,
+        "StandardDeviation": 93387.41737046879,
+        "Skewness": -0.16280557325733175,
+        "Kurtosis": 1.4956729735459855,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 24462887.568181816,
+          "StandardError": 28157.365778014842,
+          "Level": 12,
+          "Margin": 129154.84812599343,
+          "Lower": 24333732.720055822,
+          "Upper": 24592042.41630781
+        },
+        "Percentiles": {
+          "P0": 24315112.5,
+          "P25": 24383118,
+          "P50": 24513493,
+          "P67": 24519045,
+          "P80": 24527749.75,
+          "P85": 24530724.25,
+          "P90": 24533698.75,
+          "P95": 24571489.75,
+          "P100": 24609280.75
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          24897966.75,
+          24517813.5,
+          24609297,
+          24533715,
+          24432672,
+          24527766,
+          24513509.25,
+          24404361.5,
+          24361907,
+          24356176,
+          24519596,
+          24315128.75
+        ],
+        "N": 12,
+        "Min": 24315128.75,
+        "LowerFence": 24190489.8125,
+        "Q1": 24393747.875,
+        "Median": 24515661.375,
+        "Mean": 24499159.0625,
+        "Q3": 24529253.25,
+        "UpperFence": 24732511.3125,
+        "Max": 24897966.75,
+        "InterquartileRange": 135505.375,
+        "LowerOutliers": [],
+        "UpperOutliers": [
+          24897966.75
+        ],
+        "AllOutliers": [
+          24897966.75
+        ],
+        "StandardError": 44442.5522092115,
+        "Variance": 23701685362.421875,
+        "StandardDeviation": 153953.51688877353,
+        "Skewness": 1.1866613713278737,
+        "Kurtosis": 4.074300471406405,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 24499159.0625,
+          "StandardError": 44442.5522092115,
+          "Level": 12,
+          "Margin": 197190.68584234087,
+          "Lower": 24301968.376657657,
+          "Upper": 24696349.748342343
+        },
+        "Percentiles": {
+          "P0": 24315128.75,
+          "P25": 24393747.875,
+          "P50": 24515661.375,
+          "P67": 24522618.9,
+          "P80": 24532525.200000003,
+          "P85": 24560168.700000003,
+          "P90": 24601738.8,
+          "P95": 24739198.387500003,
+          "P100": 24897966.75
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 18744218.604166668,
+          "standardError": 20338.38444502826
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 18636036.416666668,
+          "standardError": 22998.19458206245
+        }
+      ],
+      "exactPacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973
+    },
+    {
+      "caseId": "Encode8",
+      "subject": "candidate",
+      "runId": "rh89r-candidate-Encode8-confirm",
+      "mode": "confirm",
+      "worstBracketRatio": 1.2914757001852633,
+      "conservativeRatioUpper": 1.3138993739423006,
+      "conservativeRatioLower": 1.2697207564199338,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1325732
+      },
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "4b0dae3eddf00c92b3ec9d0dc3582393a1da3b46ab932446fcd00d60adbcff14",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "7642472285fde105dba5ca24a840b640deecf072a88e8fd780d00a379a97abb1",
+      "filtered": {
+        "OriginalValues": [
+          24385800,
+          24124747,
+          24096439.25,
+          24181828.25,
+          24189522.75,
+          24184843,
+          24204240,
+          24256171,
+          24312366.25,
+          24191200.25,
+          24179121.75
+        ],
+        "N": 11,
+        "Min": 24096439.25,
+        "LowerFence": 24105879.25,
+        "Q1": 24180475,
+        "Median": 24189522.75,
+        "Mean": 24209661.772727273,
+        "Q3": 24230205.5,
+        "UpperFence": 24304801.25,
+        "Max": 24385800,
+        "InterquartileRange": 49730.5,
+        "LowerOutliers": [
+          24096439.25
+        ],
+        "UpperOutliers": [
+          24312366.25,
+          24385800
+        ],
+        "AllOutliers": [
+          24096439.25,
+          24312366.25,
+          24385800
+        ],
+        "StandardError": 24654.895216090972,
+        "Variance": 6686502439.280681,
+        "StandardDeviation": 81771.03667730207,
+        "Skewness": 0.7490229581224576,
+        "Kurtosis": 2.637100058471901,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 24209661.772727273,
+          "StandardError": 24654.895216090972,
+          "Level": 12,
+          "Margin": 113089.38741999792,
+          "Lower": 24096572.385307275,
+          "Upper": 24322751.160147272
+        },
+        "Percentiles": {
+          "P0": 24096439.25,
+          "P25": 24180475,
+          "P50": 24189522.75,
+          "P67": 24200328.075,
+          "P80": 24256171,
+          "P85": 24284268.625,
+          "P90": 24312366.25,
+          "P95": 24349083.125,
+          "P100": 24385800
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          24385812.5,
+          24124759.5,
+          24096451.75,
+          24181840.75,
+          24998783.5,
+          24189535.25,
+          24184855.5,
+          24204252.5,
+          24256183.5,
+          24312378.75,
+          24191212.75,
+          24179134.25
+        ],
+        "N": 12,
+        "Min": 24096451.75,
+        "LowerFence": 24047561.84375,
+        "Q1": 24181164.125,
+        "Median": 24190374,
+        "Mean": 24275433.375,
+        "Q3": 24270232.3125,
+        "UpperFence": 24403834.59375,
+        "Max": 24998783.5,
+        "InterquartileRange": 89068.1875,
+        "LowerOutliers": [],
+        "UpperOutliers": [
+          24998783.5
+        ],
+        "AllOutliers": [
+          24998783.5
+        ],
+        "StandardError": 69504.04842030446,
+        "Variance": 57969752961.744316,
+        "StandardDeviation": 240769.08639138937,
+        "Skewness": 2.189223312015534,
+        "Kurtosis": 6.839965304302055,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 24275433.375,
+          "StandardError": 69504.04842030446,
+          "Level": 12,
+          "Margin": 308388.0266889441,
+          "Lower": 23967045.348311055,
+          "Upper": 24583821.401688945
+        },
+        "Percentiles": {
+          "P0": 24096451.75,
+          "P25": 24181164.125,
+          "P50": 24190374,
+          "P67": 24223466.97,
+          "P80": 24301139.700000003,
+          "P85": 24338080.5625,
+          "P90": 24378469.125,
+          "P95": 24661649.45,
+          "P100": 24998783.5
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 18826551.1875,
+          "standardError": 11108.553648605392
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 18745735.416666668,
+          "standardError": 7922.924814536165
+        }
+      ],
+      "exactPacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "packetBytes": 210973
+    },
+    {
+      "caseId": "EncodeFast8",
+      "subject": "baseline",
+      "runId": "rh89r-baseline-EncodeFast8-confirm",
+      "mode": "confirm",
+      "worstBracketRatio": 1.3759227799783296,
+      "conservativeRatioUpper": 1.4246968235758852,
+      "conservativeRatioLower": 1.3329183964404838,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1344428
+      },
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "2335d2cbbd34782238a8160d692d471323cc22a56fa43439c8dabea31d4eec5e",
+      "filtered": {
+        "OriginalValues": [
+          6060734.875,
+          6058150.875,
+          6067938.125,
+          6078429.125,
+          6056623.375,
+          6048891.625,
+          6067427.125,
+          6071806.375,
+          6052259.375,
+          6045914.875
+        ],
+        "N": 10,
+        "Min": 6045914.875,
+        "LowerFence": 6031660.375,
+        "Q1": 6053350.375,
+        "Median": 6059442.875,
+        "Mean": 6060817.575,
+        "Q3": 6067810.375,
+        "UpperFence": 6089500.375,
+        "Max": 6078429.125,
+        "InterquartileRange": 14460,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 3312.5682921262164,
+        "Variance": 109731086.89999999,
+        "StandardDeviation": 10475.260707972857,
+        "Skewness": 0.14908727551226375,
+        "Kurtosis": 1.5824518607140252,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 6060817.575,
+          "StandardError": 3312.5682921262164,
+          "Level": 12,
+          "Margin": 15837.09943523072,
+          "Lower": 6044980.4755647695,
+          "Upper": 6076654.674435231
+        },
+        "Percentiles": {
+          "P0": 6045914.875,
+          "P25": 6053350.375,
+          "P50": 6059442.875,
+          "P67": 6067442.455,
+          "P80": 6068711.775,
+          "P85": 6070452.487500001,
+          "P90": 6072468.65,
+          "P95": 6075448.887499999,
+          "P100": 6078429.125
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          6250473.5,
+          6120852.25,
+          6060743.75,
+          6058159.75,
+          6067947,
+          6078438,
+          6056632.25,
+          6048900.5,
+          6067436,
+          6071815.25,
+          6052268.25,
+          6045923.75
+        ],
+        "N": 12,
+        "Min": 6045923.75,
+        "LowerFence": 6028646.71875,
+        "Q1": 6055541.25,
+        "Median": 6064089.875,
+        "Mean": 6081632.520833333,
+        "Q3": 6073470.9375,
+        "UpperFence": 6100365.46875,
+        "Max": 6250473.5,
+        "InterquartileRange": 17929.6875,
+        "LowerOutliers": [],
+        "UpperOutliers": [
+          6120852.25,
+          6250473.5
+        ],
+        "AllOutliers": [
+          6120852.25,
+          6250473.5
+        ],
+        "StandardError": 16367.458712053469,
+        "Variance": 3214724456.2892995,
+        "StandardDeviation": 56698.54016012493,
+        "Skewness": 2.15958091341357,
+        "Kurtosis": 6.608298219182909,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 6081632.520833333,
+          "StandardError": 16367.458712053469,
+          "Level": 12,
+          "Margin": 72622.0761069852,
+          "Lower": 6009010.444726348,
+          "Upper": 6154254.596940318
+        },
+        "Percentiles": {
+          "P0": 6045923.75,
+          "P25": 6055541.25,
+          "P50": 6064089.875,
+          "P67": 6069378.2524999995,
+          "P80": 6077113.449999999,
+          "P85": 6093282.9875,
+          "P90": 6116610.825,
+          "P95": 6179181.8125,
+          "P100": 6250473.5
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 4413927.489583333,
+          "standardError": 21238.164181656237
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 4404911.135416667,
+          "standardError": 17477.378681695453
+        }
+      ],
+      "exactPacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "packetBytes": 236828
+    },
+    {
+      "caseId": "EncodeFast8",
+      "subject": "candidate",
+      "runId": "rh89r-candidate-EncodeFast8-confirm",
+      "mode": "confirm",
+      "worstBracketRatio": 1.3848716100038134,
+      "conservativeRatioUpper": 1.4154714370066888,
+      "conservativeRatioLower": 1.3479586475753522,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 1344428
+      },
+      "status": "Confirmed gap",
+      "quietGuardsPassed": true,
+      "librarySha256": "4b0dae3eddf00c92b3ec9d0dc3582393a1da3b46ab932446fcd00d60adbcff14",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "producerSourceSha256": "7642472285fde105dba5ca24a840b640deecf072a88e8fd780d00a379a97abb1",
+      "filtered": {
+        "OriginalValues": [
+          6601482.75,
+          6571650.25,
+          6559118.75,
+          6526279,
+          6512110,
+          6488880,
+          6531359,
+          6556532.25,
+          6539506.5,
+          6486451.25,
+          6469107.25
+        ],
+        "N": 11,
+        "Min": 6469107.25,
+        "LowerFence": 6414499.25,
+        "Q1": 6500495,
+        "Median": 6531359,
+        "Mean": 6531134.2727272725,
+        "Q3": 6557825.5,
+        "UpperFence": 6643821.25,
+        "Max": 6601482.75,
+        "InterquartileRange": 57330.5,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 12099.447709712289,
+        "Variance": 1610362983.6806817,
+        "StandardDeviation": 40129.328223640645,
+        "Skewness": 0.060840127442970945,
+        "Kurtosis": 1.7643005562606215,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 6531134.2727272725,
+          "StandardError": 12099.447709712289,
+          "Level": 12,
+          "Margin": 55498.88237686075,
+          "Lower": 6475635.390350412,
+          "Upper": 6586633.155104133
+        },
+        "Percentiles": {
+          "P0": 6469107.25,
+          "P25": 6500495,
+          "P50": 6531359,
+          "P67": 6551424.525,
+          "P80": 6559118.75,
+          "P85": 6565384.5,
+          "P90": 6571650.25,
+          "P95": 6586566.5,
+          "P100": 6601482.75
+        }
+      },
+      "allActual": {
+        "OriginalValues": [
+          6761943.25,
+          6601495.25,
+          6571662.75,
+          6559131.25,
+          6526291.5,
+          6512122.5,
+          6488892.5,
+          6531371.5,
+          6556544.75,
+          6539519,
+          6486463.75,
+          6469119.75
+        ],
+        "N": 12,
+        "Min": 6469119.75,
+        "LowerFence": 6422391.3125,
+        "Q1": 6506315,
+        "Median": 6535445.25,
+        "Mean": 6550379.8125,
+        "Q3": 6562264.125,
+        "UpperFence": 6646187.8125,
+        "Max": 6761943.25,
+        "InterquartileRange": 55949.125,
+        "LowerOutliers": [],
+        "UpperOutliers": [
+          6761943.25
+        ],
+        "AllOutliers": [
+          6761943.25
+        ],
+        "StandardError": 22178.976861719617,
+        "Variance": 5902884175.59233,
+        "StandardDeviation": 76830.22956878581,
+        "Skewness": 1.5628144169196398,
+        "Kurtosis": 4.992780126590839,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 6550379.8125,
+          "StandardError": 22178.976861719617,
+          "Level": 12,
+          "Margin": 98407.66205450772,
+          "Lower": 6451972.150445492,
+          "Upper": 6648787.474554508
+        },
+        "Percentiles": {
+          "P0": 6469119.75,
+          "P25": 6506315,
+          "P50": 6535445.25,
+          "P67": 6557501.755,
+          "P80": 6569156.45,
+          "P85": 6582104.125,
+          "P90": 6598512,
+          "P95": 6673696.85,
+          "P100": 6761943.25
+        }
+      },
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 4716057.59375,
+          "standardError": 4244.517916101908
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 4744707.348958333,
+          "standardError": 9413.830999556647
+        }
+      ],
+      "exactPacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "packetBytes": 236828
+    }
+  ],
+  "comparison": [
+    {
+      "caseId": "Encode8",
+      "rawGain": 0.010351427023844395,
+      "allActualGain": 0.00913197415998046,
+      "absoluteMicroseconds": 253.2257954545431,
+      "normalizedGain": 0.016142795374770036,
+      "nativeDrift": 0.005886391158899773,
+      "rawGainConfidenceSeparates": false,
+      "rawLossConfidenceSeparates": false,
+      "normalizedGainConfidenceSeparates": false,
+      "normalizedLossConfidenceSeparates": false
+    },
+    {
+      "caseId": "EncodeFast8",
+      "rawGain": -0.07759954691051263,
+      "allActualGain": -0.07707589862769892,
+      "absoluteMicroseconds": -470.3166977272723,
+      "normalizedGain": -0.006503875185222885,
+      "nativeDrift": 0.07063626229179332,
+      "rawGainConfidenceSeparates": false,
+      "rawLossConfidenceSeparates": true,
+      "normalizedGainConfidenceSeparates": false,
+      "normalizedLossConfidenceSeparates": false
+    }
+  ],
+  "decision": "No demonstrated useful complete-operation gain. Revised short Optimal pointgain4.38% shrinks to1.04% in independent confirmation; raw/all/normalized intervals overlap. Fastest rawloss7.76% accompanies native+7.06%drift, normalized confidence overlaps. Restore, preserve adverse evidence and do not resample unchanged candidates.",
+  "verification": {
+    "eachCandidateInternalNormalScalar": 575,
+    "eachCandidatePublicPacketsAndAdmissionLinux": 69,
+    "windowsRestored": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "sourceCoreRestoredExactly": true,
+      "normal": 575,
+      "scalar": 575,
+      "windowsSha256": "8c6c0c414bfaa3f76e748f61d4906aeec39e4167eb61e738638c9bb3ec0417d5",
+      "actualPackageUnchanged": "0e89e52c806fe2253bd3068e6fe3629cba96f94d0dc54f2637df4a8893ab944e",
+      "fullPackageQualificationReused": true
+    },
+    "linuxRestored": {
+      "project": "Lokad.Image",
+      "sourceCoreManifestRestoredExactly": true,
+      "publicCoreCopiesRestored": true,
+      "normal": 575,
+      "scalar": 575,
+      "linuxSha256": "92b21d0078c76e85e085bc34306e633447a7f5f24ae3b003f7e43b4966b42a3a",
+      "fullPackageQualificationReused": true
+    },
+    "allOriginalSourcePixelPacketOwnershipQuietGates": true,
+    "wholeQualificationReused": "Same BC85actualpackage and5416full/livechecks/OS; exact restored source/core/public copies. No repeated full/package cycle."
+  },
+  "workflow": {
+    "scoredJobs": 10,
+    "shortActuals": 3,
+    "independentActuals": 12,
+    "operationsPerActual": 4,
+    "sourceVersions": 2,
+    "coreCandidateBuilds": 2,
+    "internalCandidateBuildsEachOs": 2,
+    "harnessNativeSelectorBuilds": 0,
+    "allMeasurementBuilds": 0,
+    "newControls": 0
+  },
+  "memory": "First owner-field variant+16B/encoder. Revised parser-local variant has unchanged allocation/admission/retention; no added arrays, cache or owner. All prototype production/test assemblies restored.",
+  "next": "Audit compact relative Deflate dictionary links: currently twoInt64[32768] arrays use524288B for a32KiBwindow. Preserve exact chain/tie/parser behavior, explicit workspace admission and guarded portable sliding.",
+  "rawArchive": {
+    "file": "png-rolling-hash-inconclusive.tar.xz",
+    "bytes": 8076648,
+    "members": 391,
+    "sha256": "2296e677e4a2961d0a8920eb3326ec2a067766f56cfa0cc4155f032dfd1d7e72",
+    "vmMembersVerified": true,
+    "unchangedQualificationDependency": "bicubic-shared-cached-driver.tar.xz",
+    "unchangedQualificationDependencySha256": "193df11fcd7d104e6226e38b1f001577162fef6f442d64448fa5339665b4bba3",
+    "profileRuntimeDependency": "png-one-shot-boundary.tar.xz",
+    "profileRuntimeDependencySha256": "270931e460dca327c115652edf615516ab344925bd2cef5e2fcbabda578241fe",
+    "localMembersVerified": true
+  }
+}
