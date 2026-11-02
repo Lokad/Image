@@ -5,7 +5,8 @@
 - Reusable caller-owned Lanczos3 plans retain admitted geometry and working rows,
   preserving exact pixels, cancellation and independent result lifetimes.
 - Lossless WebP compacts sparse histograms, reuses rejected token storage and
-  shares predictor preparation and prepared-body counting, preserving exact packets.
+  bounds trace working state, with shared predictor preparation and prepared-body
+  counting preserving exact packets.
 
 - Vectorized complete-pixel rectangle filling preserves full sample precision,
   hidden RGB, clipping, cancellation and existing memory ownership.

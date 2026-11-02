@@ -1522,19 +1522,19 @@ def render():
     assert sum(historical_workspace(row) for _, row in rows) == 5
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
-    prediction = json.loads((ROOT / 'benchmarks/vp8l-shared-prediction-evidence.json').read_text(encoding='utf-8'))
-    assert prediction['productionAccepted'] and prediction['decision']['rawConfidenceSeparates']
-    assert prediction['decision']['normalizedConfidenceSeparates']
-    assert prediction['qualification']['fullChecksEachOs'] == 5404
-    assert prediction['qualification']['actualPackage']['sha256'] == prediction['qualification']['samePackageLinux']['sameActualPackageSha256']
+    webp_current = json.loads((ROOT / 'benchmarks/vp8l-trace-forward-window-evidence.json').read_text(encoding='utf-8'))
+    assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
+    assert webp_current['decision']['storageGainsVerified']
+    assert webp_current['qualification']['fullChecksEachOs'] == 5411
+    assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
     for case, label in [('alpha', 'VP8 RGBA8 + lossless alpha'),
                         ('photograph', 'VP8L photograph / libwebp exact=1'),
                         ('diagram', 'VP8L text/diagram / libwebp exact=1 (confidence open)')]:
-        observation = prediction['cases'][case]
+        observation = webp_current['cases'][case]
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
-        assert observation['librarySha256'] == prediction['producers']['linuxSha256']
+        assert observation['librarySha256'] == webp_current['producers']['linuxSha256']
         assert len(observation['managed']['actual']) == 12
         stats = observation['managed']['statistics']; receipt = observation['receipt']
         native = min(b['mean'] for b in observation['nativeBrackets'])
@@ -1650,16 +1650,14 @@ they are not equivalent one-shot or prepared-session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Accepted WebP workspace redesign](../benchmarks/WEBP-CANDIDATE-WORKSPACE.md)
-reduces diagram allocation from **27.4 to 10.5 MB/op** and peak admitted storage
-from **20.9 to 6.2 MB**, preserving exact packets. Photograph/alpha allocations
-also fall. Rows marked **‡** retain pre-workspace CPU/allocation measurements;
-they are historical costs pending refresh, not current implementation proof.
-The workspace redesign's short CPU screen remains diagnostic.
-[Shared predictor preparation](../benchmarks/VP8L-SHARED-PREDICTION.md) saves
-7.29 ms / 6.42% elapsed beyond the retained counting stage on an independent
-photograph pair. Raw/all and normalized confidence separate. Three current WebP
-rows are refreshed; diagram parity confidence is open and confirmed gaps remain.
+[Current WebP workspace](../benchmarks/VP8L-TRACE-FORWARD-WINDOW.md) uses bounded
+trace state and independent selected candidates. Photograph/diagram/alpha allocate
+**16.8 / 8.0 / 14.2 MB/op**, with admitted peaks **12.2 / 5.1 / 4.1 MB**, excluding
+borrowed inputs/caller streams. No trace workspace is retained between encodes.
+The latest storage stage has mixed CPU results, including a slower raw diagram;
+normalized before/after confidence overlaps. Three current costs are refreshed,
+without an incremental CPU-gain claim. Diagram parity confidence is open;
+photograph/alpha retain gaps. Rows marked **‡** retain historical affected costs.
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
@@ -1681,7 +1679,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,404 full/live checks per OS, 227 affected checks in
+Current production passes 5,411 full/live checks per OS, 234 affected checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in

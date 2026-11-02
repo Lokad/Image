@@ -24,11 +24,15 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   confidence overlaps. Retained stage history; current costs are refreshed below.
 - [Shared predictor preparation](VP8L-SHARED-PREDICTION.md): photograph improves
   6.42% /7.29ms beyond the counting stage; raw/all and normalized confidence
-  separate. Current photo/diagram/alpha costs preserve exact packets and pass
-  5404checks/OS plus scalar/actual-package proof. Diagram parity confidence is
-  open; photo/alpha retain gaps. Other affected encode costs stay historical.
+  separate. Retained stage history; current costs are refreshed below.
   The preceding shared-prefix trial was inconclusive and restored, with all
   results retained; it is not merged or treated as a permanent prohibition.
+- [Bounded trace state](VP8L-TRACE-FORWARD-WINDOW.md): photograph/diagram allocate
+  2.49MB less, alpha4.99MB less; diagram/alpha admitted peaks fall to5.06/4.09MB.
+  Exact packets,5411checks/OS,scalar and actual-package checks pass. Current three
+  costs are refreshed; mixed raw CPU results and inconclusive normalized changes
+  are retained without an incremental speed claim. Diagram parity confidence is
+  open; photo/alpha retain gaps. Other affected encode costs stay historical.
 - [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md): equivalent one-shot
   reductions pass; prepared execution retains confirmed CPU gaps. Both depths
   allocate139B/call with139800B retained. Shared one-shot/prepared ownership and

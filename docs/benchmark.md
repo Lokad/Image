@@ -21,16 +21,14 @@ they are not equivalent one-shot or prepared-session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Accepted WebP workspace redesign](../benchmarks/WEBP-CANDIDATE-WORKSPACE.md)
-reduces diagram allocation from **27.4 to 10.5 MB/op** and peak admitted storage
-from **20.9 to 6.2 MB**, preserving exact packets. Photograph/alpha allocations
-also fall. Rows marked **‡** retain pre-workspace CPU/allocation measurements;
-they are historical costs pending refresh, not current implementation proof.
-The workspace redesign's short CPU screen remains diagnostic.
-[Shared predictor preparation](../benchmarks/VP8L-SHARED-PREDICTION.md) saves
-7.29 ms / 6.42% elapsed beyond the retained counting stage on an independent
-photograph pair. Raw/all and normalized confidence separate. Three current WebP
-rows are refreshed; diagram parity confidence is open and confirmed gaps remain.
+[Current WebP workspace](../benchmarks/VP8L-TRACE-FORWARD-WINDOW.md) uses bounded
+trace state and independent selected candidates. Photograph/diagram/alpha allocate
+**16.8 / 8.0 / 14.2 MB/op**, with admitted peaks **12.2 / 5.1 / 4.1 MB**, excluding
+borrowed inputs/caller streams. No trace workspace is retained between encodes.
+The latest storage stage has mixed CPU results, including a slower raw diagram;
+normalized before/after confidence overlaps. Three current costs are refreshed,
+without an incremental CPU-gain claim. Diagram parity confidence is open;
+photograph/alpha retain gaps. Rows marked **‡** retain historical affected costs.
 
 Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
 one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
@@ -52,7 +50,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,404 full/live checks per OS, 227 affected checks in
+Current production passes 5,411 full/live checks per OS, 234 affected checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -75,9 +73,9 @@ family evidence is linked below; individual experiments remain in
 | VP8 opaque text/diagram † | 7,791.31 | 5,845.88 | 1.333 / 1.351 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,568.52 | 15,639.99 | 1.315 / 1.319 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 75,554.89 | 58,496.32 | 1.292 / 1.314 | 19,226,096 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 106,259.96 | 91,719.77 | 1.159 / 1.183 | 19,329,130 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 (confidence open) † | 10,031.92 | 10,313.08 | 0.973 / 1.014 | 10,483,979 | 7,234 / 7,234 |
+| VP8 RGBA8 + lossless alpha † | 68,339.72 | 54,643.25 | 1.251 / 1.301 | 14,238,680 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 103,705.27 | 86,982.67 | 1.192 / 1.231 | 16,835,524 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 (confidence open) † | 10,392.20 | 10,057.04 | 1.033 / 1.075 | 7,988,537 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † ‡ | 158,892.27 | 121,442.06 | 1.308 / 1.335 | 29,696,928 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † ‡ | 99,191.77 | 71,204.07 | 1.393 / 1.447 | 19,992,640 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † ‡ | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |

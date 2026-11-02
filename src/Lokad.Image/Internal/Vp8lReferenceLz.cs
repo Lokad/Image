@@ -85,6 +85,11 @@ internal static class Vp8lReferenceLz
 
     private sealed class TraceState : IDisposable
     {
+        // At forward iteration a, lookahead touches only [a-1, a+8188]:
+        // extension runs when reach < a+length-1, next <= reach+1, and both
+        // lengths are <=4095. Only the backtracking path survives the sweep.
+        // Expire a-2 before Literal(a); its future alias a+8190 is still untouched.
+        private const int Window = 8192, Mask = Window - 1;
         private readonly OperationContext context;
         private readonly long reserved;
         private readonly Vp8lHistogramLayout layout;
@@ -99,17 +104,18 @@ internal static class Vp8lReferenceLz
             this.context = context;
             layout = new(cacheBits);
             var lengths = Math.Min(4095, length);
-            reserved = layout.Total * 12L + lengths * 8L + length * 22L + layout.CacheSize * 4L + 320;
+            var slots = Math.Min(Window, length);
+            reserved = layout.Total * 12L + lengths * 8L + length * 2L + slots * 20L + layout.CacheSize * 4L + 320;
             context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
             try
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 histogram = new int[layout.Total]; prices = new long[layout.Total]; lengthPrices = new long[lengths];
-                costs = new long[length]; pending = new long[length]; path = new ushort[length]; pendingSource = new int[length];
+                costs = new long[slots]; pending = new long[slots]; path = new ushort[length]; pendingSource = new int[slots];
                 cache = new uint[layout.CacheSize];
-                for (var at = 0; at < length; at += 4096)
+                for (var at = 0; at < slots; at += 4096)
                 {
-                    var count = Math.Min(4096, length - at); context.Cancellation.ThrowIfCancellationRequested();
+                    var count = Math.Min(4096, slots - at); context.Cancellation.ThrowIfCancellationRequested();
                     costs.AsSpan(at, count).Fill(long.MaxValue); pending.AsSpan(at, count).Fill(long.MaxValue);
                 }
                 layout.Fill(seed, width, true, histogram, context);
@@ -137,10 +143,11 @@ internal static class Vp8lReferenceLz
         internal void Resolve(int at)
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            if (pending![at] < costs![at]) { costs[at] = pending[at]; path![at] = (ushort)(at - pendingSource![at] + 1); }
+            var slot = at & Mask;
+            if (pending![slot] < costs![slot]) { costs[slot] = pending[slot]; path![at] = (ushort)(at - pendingSource![slot] + 1); }
         }
 
-        internal long CostAt(int at) => costs![at];
+        internal long CostAt(int at) => costs![at & Mask];
         internal int PathAt(int at) => path![at];
         internal long DistancePrice(int distance, int width)
         {
@@ -151,6 +158,11 @@ internal static class Vp8lReferenceLz
         internal void Literal(ReadOnlySpan<uint> pixels, int at, long prior)
         {
             context.Cancellation.ThrowIfCancellationRequested();
+            if (at >= 2)
+            {
+                var expired = (at - 2) & Mask;
+                costs![expired] = pending![expired] = long.MaxValue;
+            }
             var pixel = pixels[at]; var hit = false; var key = 0;
             if (layout.CacheBits != 0)
             {
@@ -161,7 +173,8 @@ internal static class Vp8lReferenceLz
                 : prices![(int)(pixel >> 8 & 255)] + prices[layout.Red + (int)(pixel >> 16 & 255)]
                     + prices[layout.Blue + (int)(pixel & 255)] + prices[layout.Alpha + (int)(pixel >> 24)];
             var value = prior + (price * (hit ? 68 : 82) + 50) / 100;
-            if (value < costs![at]) { costs[at] = value; path![at] = 1; }
+            var slot = at & Mask;
+            if (value < costs![slot]) { costs[slot] = value; path![at] = 1; }
         }
 
         internal void Push(int at, int length, long prior)
@@ -169,12 +182,12 @@ internal static class Vp8lReferenceLz
             for (var i = 0; i < length; i++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                var value = prior + lengthPrices![i]; var end = at + i;
+                var value = prior + lengthPrices![i]; var end = at + i; var slot = end & Mask;
                 if (length < 10)
                 {
-                    if (value < costs![end]) { costs[end] = value; path![end] = (ushort)(i + 1); }
+                    if (value < costs![slot]) { costs[slot] = value; path![end] = (ushort)(i + 1); }
                 }
-                else if (value < pending![end]) { pending[end] = value; pendingSource![end] = at; }
+                else if (value < pending![slot]) { pending[slot] = value; pendingSource![slot] = at; }
             }
         }
 
