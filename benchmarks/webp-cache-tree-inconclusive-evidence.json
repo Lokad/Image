@@ -1,0 +1,619 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "candidateRetained": false,
+  "measurementOutcome": "Unpromising screen; inconclusive CPU effect, not a causal regression",
+  "independentConfirmationJobs": 0,
+  "qualifiedCpuGainClaim": false,
+  "hypothesis": "Prepare one maximum-depth implicit cache-tree node; derive binary-search prefixes by shifting it and update missed ancestors in reverse order. Same cache cells, thresholds, packets and storage, fewer repeated index calculations.",
+  "candidate": {
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lReferenceCache.History.cs": "34c56abd84c3b1ef5d1a96c98827f1a45172cc11abccfb3a1c0c665d078c5ff3",
+      "tests/Lokad.Image.Tests/Vp8lHistoryTreeTests.cs": "fc115db4c0a10ba6e1ab823b6ce675c699a579f7743f10eba27d69fcb4a08422"
+    },
+    "linuxSha256": "15ce5eef18161cf00720ac45c190b744cc87f7721980f92bbcfdfd8ae3ca9fcd",
+    "windowsSha256": "6f97b199be4556cc04f58034237505a7eb4189039feed2e95b6ee0f43036eeb6",
+    "focusedNormalScalarEachOs": 301
+  },
+  "directScreen": {
+    "project": "Lokad.Image",
+    "diagnosticScreen": true,
+    "qualifiedCpuGainClaim": false,
+    "builds": 0,
+    "unchangedBeforeReused": true,
+    "existingControls": 4,
+    "newPerformanceControls": 0,
+    "quietGuardsPassed": true,
+    "cases": [
+      {
+        "caseId": "photograph",
+        "baselineMicroseconds": 92457.702,
+        "candidateMicroseconds": 93411.381,
+        "rawGain": -0.010314759932060547,
+        "allocatedBytesBefore": [
+          13776240,
+          13776240,
+          13776240
+        ],
+        "allocatedBytesAfter": [
+          13776240,
+          13776240,
+          13776240
+        ],
+        "admittedPeakBefore": 10166464,
+        "admittedPeakAfter": 10166464,
+        "exactPacket": true
+      },
+      {
+        "caseId": "diagram",
+        "baselineMicroseconds": 8725.868025641026,
+        "candidateMicroseconds": 8928.514717948718,
+        "rawGain": -0.023223671468811213,
+        "allocatedBytesBefore": [
+          6685696,
+          6685696,
+          6685696
+        ],
+        "allocatedBytesAfter": [
+          6685696,
+          6685696,
+          6685696
+        ],
+        "admittedPeakBefore": 4802292,
+        "admittedPeakAfter": 4802292,
+        "exactPacket": true
+      },
+      {
+        "caseId": "alpha",
+        "baselineMicroseconds": 63617.69433333333,
+        "candidateMicroseconds": 63645.19983333333,
+        "rawGain": -0.00043235612809033874,
+        "allocatedBytesBefore": [
+          11607400,
+          11607400,
+          11607400
+        ],
+        "allocatedBytesAfter": [
+          11607400,
+          11607400,
+          11607400
+        ],
+        "admittedPeakBefore": 4085883,
+        "admittedPeakAfter": 4085883,
+        "exactPacket": true
+      },
+      {
+        "caseId": "authored-bars",
+        "baselineMicroseconds": 792.540101754386,
+        "candidateMicroseconds": 821.7885403508773,
+        "rawGain": -0.036904679689704345,
+        "allocatedBytesBefore": [
+          933648,
+          933648,
+          933648
+        ],
+        "allocatedBytesAfter": [
+          933648,
+          933648,
+          933648
+        ],
+        "admittedPeakBefore": 312716,
+        "admittedPeakAfter": 312716,
+        "exactPacket": true
+      }
+    ],
+    "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Unchanged qualified CPA104 before reused, then one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+  },
+  "ordinaryShort": {
+    "caseId": "Encode8",
+    "subject": "candidate",
+    "runId": "hpt105-Encode8-short",
+    "mode": "short",
+    "managed": {
+      "statistics": {
+        "OriginalValues": [
+          132010226,
+          131934717,
+          131002089.5
+        ],
+        "N": 3,
+        "Min": 131002089.5,
+        "LowerFence": 130712300.875,
+        "Q1": 131468403.25,
+        "Median": 131934717,
+        "Mean": 131649010.83333333,
+        "Q3": 131972471.5,
+        "UpperFence": 132728573.875,
+        "Max": 132010226,
+        "InterquartileRange": 504068.25,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 324194.2889233674,
+        "Variance": 315305810911.5834,
+        "StandardDeviation": 561520.9799389364,
+        "Skewness": -0.37708486578471867,
+        "Kurtosis": 0.6666666666666532,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 131649010.83333333,
+          "StandardError": 324194.2889233674,
+          "Level": 12,
+          "Margin": 10244232.987605475,
+          "Lower": 121404777.84572786,
+          "Upper": 141893243.8209388
+        },
+        "Percentiles": {
+          "P0": 131002089.5,
+          "P25": 131468403.25,
+          "P50": 131934717,
+          "P67": 131960390.06,
+          "P80": 131980022.4,
+          "P85": 131987573.3,
+          "P90": 131995124.2,
+          "P95": 132002675.10000001,
+          "P100": 132010226
+        }
+      },
+      "unfilteredActualStatistics": {
+        "OriginalValues": [
+          132010226,
+          131934717,
+          131002089.5
+        ],
+        "N": 3,
+        "Min": 131002089.5,
+        "LowerFence": 130712300.875,
+        "Q1": 131468403.25,
+        "Median": 131934717,
+        "Mean": 131649010.83333333,
+        "Q3": 131972471.5,
+        "UpperFence": 132728573.875,
+        "Max": 132010226,
+        "InterquartileRange": 504068.25,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 324194.2889233674,
+        "Variance": 315305810911.5834,
+        "StandardDeviation": 561520.9799389364,
+        "Skewness": -0.37708486578471867,
+        "Kurtosis": 0.6666666666666532,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 131649010.83333333,
+          "StandardError": 324194.2889233674,
+          "Level": 12,
+          "Margin": 10244232.987605475,
+          "Lower": 121404777.84572786,
+          "Upper": 141893243.8209388
+        },
+        "Percentiles": {
+          "P0": 131002089.5,
+          "P25": 131468403.25,
+          "P50": 131934717,
+          "P67": 131960390.06,
+          "P80": 131980022.4,
+          "P85": 131987573.3,
+          "P90": 131995124.2,
+          "P95": 132002675.10000001,
+          "P100": 132010226
+        }
+      },
+      "actual": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 2,
+          "Nanoseconds": 264020452
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 2,
+          "Nanoseconds": 263869434
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 2,
+          "Nanoseconds": 262004179
+        }
+      ],
+      "results": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 2,
+          "Nanoseconds": 264020452
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 2,
+          "Nanoseconds": 263869434
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 2,
+          "Nanoseconds": 262004179
+        }
+      ],
+      "rawGc": "// GC:  1 1 1 50658608 2",
+      "rawThreading": "// Threading:  0 0 2",
+      "extraStatsRecorded": true
+    },
+    "nativeBrackets": [
+      {
+        "side": "nativeBefore",
+        "mean": 121416632.33333333,
+        "standardError": 212426.33863713272,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121044901,
+            "CompletedOperations": 8,
+            "Observed": 888,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121044901
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121424350,
+            "CompletedOperations": 9,
+            "Observed": 999,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121424350
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121780646,
+            "CompletedOperations": 10,
+            "Observed": 1110,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121780646
+          }
+        ]
+      },
+      {
+        "side": "nativeAfter",
+        "mean": 121902113.33333333,
+        "standardError": 483077.77203894523,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 122635661,
+            "CompletedOperations": 14,
+            "Observed": 1554,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 122635661
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 122079879,
+            "CompletedOperations": 15,
+            "Observed": 1665,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 122079879
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 120990800,
+            "CompletedOperations": 16,
+            "Observed": 1776,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 120990800
+          }
+        ]
+      }
+    ],
+    "worstBracketRatio": 1.0842749325472012,
+    "conservativeRatioUpper": 1.3306153397785991,
+    "conservativeRatioLower": 0.8850879134646096,
+    "managedMemory": {
+      "BytesAllocatedPerOperation": 25329304
+    },
+    "status": "Confidence open",
+    "quietGuardsPassed": true,
+    "librarySha256": "15ce5eef18161cf00720ac45c190b744cc87f7721980f92bbcfdfd8ae3ca9fcd",
+    "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+    "producerSourceSha256": "aa6c0ae7e00c8814f467f558c30fe2209be543292fea5dd58f12869706ec82fc",
+    "sourceNote": "Candidate HPT105 core, existing verified PSB101 cached harness and C34 typed WarmWebpLossless Encode8 short selector. Exact full operation, same sources/settings/gates; not an accepted change or CPU-gain proof. No new build, control or reference setting.",
+    "receipt": {
+      "schemaVersion": 1,
+      "name": "WarmWebpLossless",
+      "caseId": "Encode8",
+      "smoke": false,
+      "runId": "hpt105-Encode8-short",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "encodedDepth": 8,
+      "cpu": 0,
+      "managedAffinityCount": 1,
+      "processorCount": 1,
+      "serverGc": false,
+      "gcConfiguration": {
+        "ServerGC": false,
+        "ConcurrentGC": false,
+        "RetainVM": false,
+        "NoAffinitize": false,
+        "GCCpuGroup": false,
+        "GCLargePages": false,
+        "LOHThreshold": 85000,
+        "HeapCount": 1,
+        "MaxHeapCount": 0,
+        "GCHeapAffinitizeMask": 0,
+        "GCHeapAffinitizeRanges": "",
+        "GCHighMemPercent": 90,
+        "GCGen0MaxBudget": 134217728,
+        "GCHeapHardLimit": 0,
+        "GCHeapHardLimitPercent": 0,
+        "GCRegionRange": 33532829696,
+        "GCRegionSize": 0,
+        "UOHWaitBGCSizeIncPercent": 200,
+        "GCHeapHardLimitSOH": 0,
+        "GCHeapHardLimitLOH": 0,
+        "GCHeapHardLimitPOH": 0,
+        "GCHeapHardLimitSOHPercent": 0,
+        "GCHeapHardLimitLOHPercent": 0,
+        "GCHeapHardLimitPOHPercent": 0,
+        "GCConserveMem": 0,
+        "GCName": "",
+        "GCPath": "",
+        "GCDynamicAdaptationMode": 1,
+        "GCDTargetTCP": 0,
+        "GCDGen0GrowthPercent": 0,
+        "GCDGen0GrowthMinFactor": 0,
+        "GCDGen0GrowthMaxFactor": 0
+      },
+      "runtime": ".NET 10.0.8",
+      "platform": "linux-x64",
+      "sourceIdentity": {
+        "sourceSha256": "aa6c0ae7e00c8814f467f558c30fe2209be543292fea5dd58f12869706ec82fc",
+        "sourceRevision": "fee5380bd9eaf9c1a91acd321e665046a4bd1358"
+      },
+      "codec": "VP8L",
+      "lossless": true,
+      "effort": 4,
+      "nativeCompressionQuality": 75,
+      "nativeExactRgb": true,
+      "baselineBackend": "libwebp exact=1 (FFmpeg encoder backend)",
+      "originalRasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "sourceOpaque": false,
+      "rasterRecipe": "Existing original RGBA raster unchanged.",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "referenceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "fullSourceNormalizationTimed": false,
+      "normalizedReferenceExact": true,
+      "managedOutputBytes": 183812,
+      "nativeOutputBytes": 183812,
+      "managedOutputSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "nativeOutputSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "completePacketExact": true,
+      "allRgbaSamplesExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeCliPixelsExact": true,
+      "nativeCliNormalScalarPixelsExact": true,
+      "bitstreamSyntaxVerified": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeExitCode": 0,
+      "librarySha256": "15ce5eef18161cf00720ac45c190b744cc87f7721980f92bbcfdfd8ae3ca9fcd",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only libwebp exact=1 FFmpeg encoder-backend worker",
+        "sourceSha256": "bb2b3525a4d93305c5780d81bc8f73ea7335fdb5b2fde29cce71fd53cf6116c0",
+        "buildScriptSha256": "260bff49dd7711f1884873859b1c333e20accf86e08bbb0c80adea3051c89db1",
+        "workerSha256": "d2475ce3bceac9120e4958ab1e718f46745ad959c5c2cafcfbb28cf7d09906b1",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lwebp -lm -L{native-prefix}/lib -lsharpyuv -lm"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "webp-lossless-encode",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "codecThreads": 1,
+        "threadType": 0,
+        "activeThreadType": 0,
+        "conversionThreads": 1,
+        "quality": 75,
+        "effort": 4,
+        "lossless": true,
+        "exactRgb": true,
+        "baselineBackend": "libwebp exact=1 (FFmpeg encoder backend)",
+        "inputFormat": "BGRA",
+        "repackingTimed": true,
+        "fullSourceNormalizationTimed": false,
+        "normalizedReferenceExact": false,
+        "inputImportAllocationTimed": true,
+        "outputBytes": 183812,
+        "initialCompletedOperations": 3,
+        "independentLiveOutputs": true,
+        "bitstreamDeterministic": true,
+        "libwebpEncoderVersion": 67072
+      },
+      "nativeBefore": [
+        {
+          "State": "sample",
+          "Operations": 1,
+          "ElapsedNanoseconds": 121044901,
+          "CompletedOperations": 8,
+          "Observed": 888,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 183812,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 121044901
+        },
+        {
+          "State": "sample",
+          "Operations": 1,
+          "ElapsedNanoseconds": 121424350,
+          "CompletedOperations": 9,
+          "Observed": 999,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 183812,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 121424350
+        },
+        {
+          "State": "sample",
+          "Operations": 1,
+          "ElapsedNanoseconds": 121780646,
+          "CompletedOperations": 10,
+          "Observed": 1110,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 183812,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 121780646
+        }
+      ],
+      "nativeAfter": [
+        {
+          "State": "sample",
+          "Operations": 1,
+          "ElapsedNanoseconds": 122635661,
+          "CompletedOperations": 14,
+          "Observed": 1554,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 183812,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 122635661
+        },
+        {
+          "State": "sample",
+          "Operations": 1,
+          "ElapsedNanoseconds": 122079879,
+          "CompletedOperations": 15,
+          "Observed": 1665,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 183812,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 122079879
+        },
+        {
+          "State": "sample",
+          "Operations": 1,
+          "ElapsedNanoseconds": 120990800,
+          "CompletedOperations": 16,
+          "Observed": 1776,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 183812,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 120990800
+        }
+      ],
+      "boundary": "One resident original 513x259 RGBA8 raster to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration."
+    }
+  },
+  "restoration": {
+    "windows": {
+      "coreSha256": "04b14c24bba31d6afb67fa3f570a13577bd0e6cd77452561f0db31e8fd5bc938",
+      "restoredHistorySha256": "6409d8b2fe96c484879e9730cca81ba0af1d7f680f4545592c9862cf59867ff3",
+      "newOracleSha256": "fc115db4c0a10ba6e1ab823b6ce675c699a579f7743f10eba27d69fcb4a08422",
+      "productionBuilds": 0,
+      "internalBuilds": 1
+    },
+    "linux": {
+      "coreSha256": "60b4e2514a1bfc858c05374ecaa2aa054337ed433ae7238d14436ad601f45be9",
+      "restoredHistorySha256": "6409d8b2fe96c484879e9730cca81ba0af1d7f680f4545592c9862cf59867ff3",
+      "newOracleSha256": "fc115db4c0a10ba6e1ab823b6ce675c699a579f7743f10eba27d69fcb4a08422",
+      "sourceSha256": "c45e61f3a80db03bbdcac99ba8db4301d064a143d40c651cfb0d63ee09a9fd7d",
+      "productionBuilds": 0,
+      "internalBuilds": 1
+    },
+    "normalScalarEachOs": 301,
+    "actualPackageSha256": "84f7c28bff36d4dfac816341ebe4f2a759c1703292f329c600d3d48ee83f0b1d",
+    "productionBuilds": 0,
+    "internalOracleBuildsEachOs": 1,
+    "unchangedQualificationReuse": "Full5455/OS,300affectednormal/scalar/OS and SAMEactual0.2.1package/3examplesbothOS from CPA104 remain valid. Added cache-state oracle runs in301restorationchecks; no broad repeat or package regeneration."
+  },
+  "retainedCoverage": "One independent per-width simulation compares every hit minimum and final cache entry on widths0..10, empty/tail/repeated/collision-rich/original-random inputs and guarded source/cache/minimum spans. It tests the actual restored production method, not a removed helper.",
+  "workflow": "One core/internal candidate build perOS; cached complete-operation tools/workers/selectors, one four-control direct screen and one ordinary3-actual/native-bracket screen. No new images/settings, independent confirmation or favorable resampling. Candidate code/binaries and adverse values retained; original production DLL/source restored exactly. One internal-only oracle build perOS and normal/scalar checks; no core rebuild.",
+  "next": "Use the existing dominant unchanged Matcher.Build lead for bounded setup/chaining/search attribution on one warmed complete alpha encode. Do not replay length-prefix/cache-node microtrials; phase observations are diagnostic and need exact packet/source/ownership gates.",
+  "rawArchive": {
+    "file": "webp-cache-tree-inconclusive.tar.xz",
+    "bytes": 6766056,
+    "members": 190,
+    "sha256": "87fac88b8ae78ccfcd71210ccd5d33d38b94af30ddb07acca8be16007552d130",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "webp-cache-prefix-aggregation.tar.xz",
+    "qualifiedProductionDependencySha256": "34e5bbd505797c124e14330bdfaa3e1cb0992c3c6f04a7fc9861d7b10e28cd06",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}

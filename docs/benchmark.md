@@ -51,7 +51,13 @@ renderer still selected an older result despite its refreshed narrative. Other
 affected encoding rows marked **H** remain historical. Earlier
 [prepared support](../benchmarks/WEBP-PREPARED-COLOR-SUPPORT.md) and
 [opaque/alpha attribution](../benchmarks/CURRENT-OPAQUE-VP8L-ENCODE-COST.md)
-retain their historical proof and design leads. No favorable resampling.
+retain their historical proof and design leads. A subsequent
+[cache-tree address trial](../benchmarks/WEBP-CACHE-TREE-INCONCLUSIVE.md) is restored
+after an unpromising short screen; current costs/allocations remain unchanged.
+Its independent cache-state oracle is retained. A bounded
+[matching phase diagnostic](../benchmarks/WEBP-MATCHING-PHASE-AUDIT.md) points to
+search rather than chain setup; instrumented observations are not benchmark gains.
+No favorable resampling.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
