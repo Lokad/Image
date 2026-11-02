@@ -1,5 +1,9 @@
 # WebP matching storage becomes token storage
 
+Elapsed/allocation figures below are historical after the subsequent
+[compact working-bank stage](WEBP-CONSTANT-BANK-WORKSPACE.md). This report retains
+the handoff design, its accepted qualification and reproducible before evidence.
+
 The existing empty token owner now supplies dense matching-head storage, then
 transfers to greedy/main parsing after matching returns. The independent match
 index and selected candidates keep separate ownership. Capacity selection uses
@@ -65,5 +69,5 @@ diagnostics, source/producers, package and qualification. Raw
 webp-head-token-handoff.tar.xz:12,735,004B /424members, SHA256
 fe5c32ee773e77e32c5cdfce4f50c79e76a53e440f02e372a9e75c5dfcbad91b,
 mirrored/member-verified, with reused before-confirmations pinned to the retained
-trace-forward-window archive. The subsequent [constant-bank audit](WEBP-CONSTANT-BANK-AUDIT.md) bounds
-a material working-storage opportunity; its gains remain unimplemented.
+trace-forward-window archive. The subsequent [constant-bank audit](WEBP-CONSTANT-BANK-AUDIT.md) bounded
+the material working-storage opportunity now implemented by the linked stage.

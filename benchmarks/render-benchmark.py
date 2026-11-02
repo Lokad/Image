@@ -1540,10 +1540,10 @@ def render():
     assert sum(historical_workspace(row) for _, row in rows) == 5
     rows = [(kind, row.replace(' † |', ' † ‡ |', 1) if historical_workspace(row) else row)
             for kind, row in rows]
-    webp_current = json.loads((ROOT / 'benchmarks/webp-head-token-handoff-evidence.json').read_text(encoding='utf-8'))
+    webp_current = json.loads((ROOT / 'benchmarks/webp-constant-bank-workspace-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
     assert webp_current['decision']['storageGainsVerified']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5431
+    assert webp_current['qualification']['fullChecksEachOs'] == 5440
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
@@ -1733,19 +1733,22 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Current WebP workspace](../benchmarks/WEBP-HEAD-TOKEN-HANDOFF.md) hands matching
-storage to the next token owner, preserving exact packets and independent selected
-candidates. Photograph/diagram/alpha allocate **15.8 / 6.9 / 12.1 MB/op**, with
-unchanged admitted peaks **12.2 / 5.1 / 4.1 MB**, excluding borrowed input/caller
-streams. No encoder scratch is retained. Matched direct diagnostics save about
-**1 / 1 / 2 MiB/op**. Raw times were slower alongside shifted native clocks;
-normalized before/after confidence overlaps, without an incremental CPU-gain or
-causal-regression claim. Three current anchors all retain confirmed CPU gaps.
+[Current WebP workspace](../benchmarks/WEBP-CONSTANT-BANK-WORKSPACE.md) compacts
+constant literal-color banks in clustering scratch and publishes the same full
+histograms. Photograph/diagram/alpha allocate **13.6 / 6.7 / 11.5 MB/op**, with
+admitted peaks **10.0 / 4.8 / 4.1 MB**, excluding borrowed input/caller streams.
+No encoder scratch is retained. Matched direct diagnostics save another
+**2.19 / 0.27 / 0.62 MB/op** after the earlier
+[matching/token handoff](../benchmarks/WEBP-HEAD-TOKEN-HANDOFF.md).
+Raw times improve 6–9% alongside native clocks improving 8–9%; normalized
+before/after confidence overlaps, without an incremental CPU-gain claim.
+Photo/alpha retain confirmed CPU gaps; diagram confidence is open.
 Native prepared wrappers/scratch retain their labels; full per-call import,
-encoding and output ownership stay timed. [Earlier ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
+encoding and output ownership stay timed. The
+[earlier ordinary RGBA8 attribution](../benchmarks/CURRENT-RGBA-VP8L-ATTRIBUTION.md)
 remains a lead; its cost and other affected rows marked **H** are historical.
-A [constant-bank audit](../benchmarks/WEBP-CONSTANT-BANK-AUDIT.md) bounds the next
-working-storage proposal; modelled capacity is not a measured gain.
+The [preceding constant-bank audit](../benchmarks/WEBP-CONSTANT-BANK-AUDIT.md)
+records the original opportunity; current savings above are measured.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.

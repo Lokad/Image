@@ -31,6 +31,17 @@ internal static class Vp8lReferenceClustering
         }
     }
 
+    // A single nonzero logical 256-symbol bank has zero refined entropy.
+    // Its run cost depends on the symbol position, but never its positive count.
+    // The caller supplies unused, zeroed admitted storage and gets it back zeroed.
+    internal static long ConstantPopulationCost(Span<int> zeroCounts, int symbol, OperationContext context)
+    {
+        if (zeroCounts.Length != 256 || (uint)symbol > 255) throw new ArgumentOutOfRangeException(nameof(symbol));
+        zeroCounts[symbol] = 1;
+        try { return Vp8lReferenceEntropy.Population(zeroCounts, context); }
+        finally { zeroCounts[symbol] = 0; }
+    }
+
     private const int SamplingPairs = 9;
 
     private static int PairCapacity(int tiles, int threshold)
@@ -77,17 +88,29 @@ internal static class Vp8lReferenceClustering
         private readonly OperationContext context;
         private readonly Vp8lHistogramLayout layout;
         private readonly int tiles, quality, threshold;
+        private readonly uint literal;
+        private readonly long emptyCost, redCost, blueCost, alphaCost;
         private readonly int[] working, slots, rowTokens, rowPositions;
         private readonly int[]? populationSlots;
         private readonly Stats[] originals, items;
         private readonly Pair[] pool;
         private int count, originalCount, pairs, originalSlot;
         internal State(int tiles, int populations, int[]? populationSlots, int rowCells,
-            Vp8lHistogramLayout layout, OperationContext context, int quality, int threshold)
+            Vp8lHistogramLayout layout, uint literal, OperationContext context, int quality, int threshold)
         {
             this.quality = quality; this.threshold = threshold; this.tiles = tiles; this.layout = layout; this.context = context;
-            this.populationSlots = populationSlots;
+            this.populationSlots = populationSlots; this.literal = literal;
             working = new int[populations * layout.Total];
+            if (layout.ConstantBanks != 0)
+            {
+                // Green has at least 280 words and has not yet been filled.
+                // Reuse it for logical-bank preparation without another owner.
+                var scratch = working.AsSpan(0, 256);
+                emptyCost = Vp8lReferenceEntropy.Population(scratch, context);
+                if (layout.RedSize == 1) redCost = ConstantPopulationCost(scratch, (int)(literal >> 16 & 255), context);
+                if (layout.BlueSize == 1) blueCost = ConstantPopulationCost(scratch, (int)(literal & 255), context);
+                if (layout.AlphaSize == 1) alphaCost = ConstantPopulationCost(scratch, (int)(literal >> 24), context);
+            }
             rowTokens = new int[rowCells]; rowTokens.AsSpan().Fill(-1); rowPositions = new int[rowCells];
             slots = new int[tiles]; originals = new Stats[tiles]; items = new Stats[tiles];
             pool = new Pair[PairCapacity(tiles, threshold)];
@@ -100,7 +123,9 @@ internal static class Vp8lReferenceClustering
             => working.AsSpan((populationSlots is null ? slot : populationSlots[slot]) * layout.Total, layout.Total);
 
         private int Start(int bank) => bank switch { 0 => 0, 1 => layout.Red, 2 => layout.Blue, 3 => layout.Alpha, _ => layout.Distance };
-        private int Size(int bank) => bank == 0 ? layout.GreenSize : bank == 4 ? 40 : 256;
+        private int Size(int bank) => bank switch { 0 => layout.GreenSize, 1 => layout.RedSize, 2 => layout.BlueSize, 3 => layout.AlphaSize, _ => 40 };
+        private long ConstantCost(int bank) => bank == 1 ? redCost : bank == 2 ? blueCost : alphaCost;
+        private int ConstantSymbol(int bank) => bank == 1 ? (int)(literal >> 16 & 255) : bank == 2 ? (int)(literal & 255) : (int)(literal >> 24);
         private static long Limit(long baseline, long change) => change > long.MaxValue - baseline ? long.MaxValue : baseline + change;
 
         private Stats Initial(ReadOnlySpan<int> counts)
@@ -110,6 +135,13 @@ internal static class Vp8lReferenceClustering
             {
                 var samples = counts.Slice(Start(bank), Size(bank)); var nonzero = 0; var last = -1;
                 context.Cancellation.ThrowIfCancellationRequested();
+                if (samples.Length == 1)
+                {
+                    var used = samples[0] != 0; var logicalCost = used ? ConstantCost(bank) : emptyCost;
+                    if (used) result.Used |= 1 << bank;
+                    result.Total += logicalCost; result.Set(bank, logicalCost, used ? ConstantSymbol(bank) : -1);
+                    continue;
+                }
                 for (var symbol = 0; symbol < samples.Length; symbol++) if (samples[symbol] != 0) { nonzero++; last = symbol; }
                 if (nonzero != 0) result.Used |= 1 << bank;
                 var cost = Vp8lReferenceEntropy.Population(samples, context); result.Total += cost;
@@ -160,7 +192,11 @@ internal static class Vp8lReferenceClustering
                 else
                 {
                     var start = Start(bank); var size = Size(bank);
-                    cost = Vp8lReferenceEntropy.PopulationSum(aCounts.Slice(start, size), bCounts.Slice(start, size), context);
+                    // A prior merge with an empty bank can erase the trivial
+                    // flag. Preserve that flag's decision semantics, but score
+                    // the still-constant logical bank rather than one word.
+                    cost = size == 1 ? ConstantCost(bank)
+                        : Vp8lReferenceEntropy.PopulationSum(aCounts.Slice(start, size), bCounts.Slice(start, size), context);
                 }
                 pair.Set(bank, cost); pair.Total += cost; if (pair.Total >= maximum) return false;
             }
@@ -337,7 +373,8 @@ internal static class Vp8lReferenceClustering
                 while (originals[originalSlot].Bin != 0
                     || populationSlots is not null && populationSlots[originalSlot] < 0) originalSlot++;
             }
-            var result = new Vp8lHistogramPlan(context, layout, count, tiles, columns, bits);
+            var full = new Vp8lHistogramLayout(layout.CacheBits);
+            var result = new Vp8lHistogramPlan(context, full, count, tiles, columns, bits);
             try
             {
                 var map = result.WritableMap; var output = result.WritablePopulations;
@@ -354,9 +391,9 @@ internal static class Vp8lReferenceClustering
                         if (Evaluate(slot, tile, true, Limit(items[slot].Total, best), out var costs))
                         { best = costs.Total - items[slot].Total; map[tile] = group; }
                     }
-                    var start = map[tile] * layout.Total;
+                    var start = map[tile] * full.Total;
                     var counts = Population(originalSlot);
-                    AddPopulation(output.Slice(start, layout.Total), counts, context);
+                    layout.AddToFull(output.Slice(start, full.Total), counts, literal, context);
                 }
                 return result;
             }
@@ -384,7 +421,7 @@ internal static class Vp8lReferenceClustering
         long reserved = 0, mapBytes = 0;
         try
         {
-            int[]? populationSlots = null; var populations = tiles;
+            int[]? populationSlots = null; var populations = tiles; uint literal = 0, varying = 0; var hasLiteral = false;
             if (tiles >= 64)
             {
                 // Decide from token starts, never from remaining allowance. A
@@ -401,6 +438,11 @@ internal static class Vp8lReferenceClustering
                     var row = position / width; var column = (position % width) >> tileBits;
                     var tile = (row >> tileBits) * columns + column;
                     if (populationSlots[tile] < 0) populationSlots[tile] = populations++;
+                    if (token.Code == 0)
+                    {
+                        if (!hasLiteral) { literal = token.Value; hasLiteral = true; }
+                        else varying |= literal ^ token.Value;
+                    }
                     position += token.Length;
                 }
                 if (position != width * height) throw new ArgumentException("Tokens do not cover their image.", nameof(tokens));
@@ -412,10 +454,16 @@ internal static class Vp8lReferenceClustering
                     context.Release(mapBytes); mapBytes = 0;
                 }
             }
+            if (hasLiteral)
+            {
+                var constantBanks = ((varying & 0x00ff0000u) == 0 ? 2 : 0)
+                    | ((varying & 0x000000ffu) == 0 ? 4 : 0) | ((varying & 0xff000000u) == 0 ? 8 : 0);
+                layout = new Vp8lHistogramLayout(cacheBits, constantBanks);
+            }
             var requestedWorkspace = populations * layout.Total * 4L + tiles * 192L + rowCells * 8L + pairCapacity * 64L + 512;
             context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(requestedWorkspace); reserved = requestedWorkspace;
             context.Cancellation.ThrowIfCancellationRequested();
-            var state = new State(tiles, populations, populationSlots, rowCells, layout, context, quality, threshold);
+            var state = new State(tiles, populations, populationSlots, rowCells, layout, literal, context, quality, threshold);
             state.Fill(tokens, width, height, tileBits); return state.Finish(lowEffort, columns, tileBits, tokens, width, height);
         }
         finally

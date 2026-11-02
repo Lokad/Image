@@ -1,5 +1,9 @@
 # Constant color banks in WebP clustering
 
+This preceding audit is retained as design evidence. The subsequent
+[implemented working-bank stage](WEBP-CONSTANT-BANK-WORKSPACE.md) reports measured
+savings and current qualification; the audit itself is not current-cost proof.
+
 Two existing complete encodes use an isolated current-source projection with one
 clustering-entry observation. Production DLL/source/package remain unchanged.
 No timing or actual-allocation claim comes from instrumented code. Both quiet
