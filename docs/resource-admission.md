@@ -29,7 +29,9 @@ reservations/scopes idempotently without throwing; scope disposal refunds and
 invalidates descendants. It does not cancel operations or dispose their storage.
 Callers synchronize ancestor disposal with all users.
 
-Images, fonts and layouts own retained charges until explicit disposal. Prepared
+Images, fonts, layouts and Lanczos3 resize plans own retained charges until disposal.
+Resize plans retain axes/working rows, report `StorageBytes`, and return independently
+charged images that survive plan disposal. Prepared
 layouts own decoded outlines and remain usable after font disposal. Finish all
 row-span/async users before disposing their owner. No refund depends on collection,
 finalizers or weak-table tracking. Caller roots, inputs and streams stay borrowed.

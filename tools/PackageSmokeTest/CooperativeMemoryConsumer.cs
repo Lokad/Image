@@ -2,6 +2,39 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyLanczosPlans()
+    {
+        foreach (var depth in new[] { 8, 16 })
+        {
+            using var root = new TestMemoryBudget(3 * 1024 * 1024);
+            var limits = new ImageLimits { MemoryBudget = root };
+            using var original = OriginalPixels.Buffer(31, 19, depth);
+            using var source = original.Clone(limits);
+            using var plan = Lanczos3ResizePlan.Create(31, 19, 17, 11, depth, limits);
+            if (root.Bytes != source.Stride * source.Height + plan.StorageBytes)
+                throw new Exception("Packaged Lanczos preparation lost its retained admission.");
+            using var first = plan.Resize(source);
+            using var changed = OriginalPixels.Buffer(31, 19, depth, phase: 2);
+            for (var y = 0; y < source.Height; y++)
+                if (depth == 8) changed.GetRow8(y).CopyTo(source.GetRow8(y));
+                else changed.GetRow16(y).CopyTo(source.GetRow16(y));
+            using var expected = ImageTransforms.Resize(changed, 17, 11, ResizeFilter.Lanczos3);
+            using var survivor = plan.Resize(source);
+            var pixels = OriginalPixels.Bytes(expected);
+            if (!pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor)))
+                throw new Exception("Packaged Lanczos plan cached source pixels or changed exact results.");
+            first.Dispose(); source.Dispose(); plan.Dispose();
+            if (root.Bytes != pixels.Length || plan.StorageBytes != 0)
+                throw new Exception("Packaged Lanczos survivor lost ownership or retained plan storage.");
+            using var output = new MemoryStream();
+            await ImageCodec.EncodePngAsync(survivor, output, new PngEncodeOptions { Limits = limits });
+            if (root.Bytes != pixels.Length || !pixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor)))
+                throw new Exception("Packaged Lanczos survivor lost admission during asynchronous encoding.");
+            survivor.Dispose();
+            if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged Lanczos plan leaked admission or disposed the caller root.");
+        }
+        Console.WriteLine("Packaged Lanczos plans preserve exact reuse, retained admission and asynchronous surviving outputs.");
+    }
     private static async Task VerifyWebpCandidateWorkspace()
     {
         // Authored flat regions and a small many-color patch exercise empty
@@ -296,6 +329,7 @@ internal static class CooperativeMemoryConsumer
         VerifyRectangleCopy();
         VerifyRectangleFill();
         await VerifyWebpCandidateWorkspace();
+        await VerifyLanczosPlans();
         await VerifyDirectRgbResult();
         using var empty = new TestMemoryBudget(0);
         try

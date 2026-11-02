@@ -74,6 +74,14 @@ an explicit `BackgroundRgb` for transparent input; flattening and depth reductio
 share that rounding. WebP encoding defaults to lossless; set
 `WebpEncodeOptions.Lossless = false` explicitly for lossy encoding.
 
+For repeated Lanczos3 resizing, call `Lanczos3ResizePlan.Create(sourceWidth,
+sourceHeight, width, height, bitDepth, limits)`, then `plan.Resize(source, token)`.
+Every source must match the declared shape/depth. The plan borrows the creation
+limits' memory root and reports retained capacity through `StorageBytes`. Use one
+execution at a time and dispose after it finishes; results remain independent.
+Include `Create`/`Dispose` when measuring one-shot use; repeated-use measurements
+may exclude that explicit preparation while reporting its retained storage.
+
 ## Share memory admission and use asynchronous streams
 
 The caller supplies its `IMemoryBudget` root and owns both streams. Forward that

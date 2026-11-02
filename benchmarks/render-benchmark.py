@@ -382,15 +382,6 @@ def render():
     assert all(q['passed'] for q in horizontal_word_observation['quietness'].values())
     assert horizontal_word_current['qualificationReused']['sameActualPackageBothOs']
     assert horizontal_word_current['recovery']['measurementReruns'] == 0
-    lanczos_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-reduce8-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not lanczos_cost['productionChanged'] and lanczos_cost['productionHarnessNativeBuilds'] == 0
-    assert lanczos_cost['selectorBuilds'] == 1 and lanczos_cost['independentQuietConfirmation']
-    lanczos_word_cost = json.loads((ROOT / 'benchmarks/lanczos3-centered-word-products-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert not lanczos_word_cost['productionChanged'] and lanczos_word_cost['candidateRejected']
-    assert lanczos_word_cost['originalRestored'] and lanczos_word_cost['independentQuietConfirmation']
-    assert lanczos_word_cost['qualificationReuse']['sameActualPackageBothOs']
-    assert lanczos_word_cost['comparisonLowerBounds']['Reduce16'] > 1
-    assert len(lanczos_word_cost['cases']['Reduce16'][-1]['managed']['actual']) == 12
     lanczos_enlarge8_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-enlarge8-cost-evidence.json').read_text(encoding='utf-8'))
     assert not lanczos_enlarge8_cost['productionChanged'] and lanczos_enlarge8_cost['allBuilds'] == 0
     assert lanczos_enlarge8_cost['independentQuietConfirmation']
@@ -440,14 +431,11 @@ def render():
                      'case22': bicubic_byte_cost['cases']['Down8'][-1],
                      'case23': word_publication['cases']['Up16'][-1],
                      'case24': cross16_cost['cases']['TightCross16'][-1],
-                     'case27': lanczos_cost['cases']['Reduce8'][-1],
-                     'case28': lanczos_word_cost['cases']['Reduce16'][-1],
                      'case29': lanczos_enlarge8_cost['cases']['Enlarge8'][-1],
                      'case30': lanczos_enlarge16_cost['cases']['Enlarge16'][-1]}
     editing_producers = {'case21': bilinear_word_cost,
                          'case22': bicubic_byte_cost, 'case23': word_publication,
-                         'case24': cross16_cost, 'case27': lanczos_cost,
-                         'case28': lanczos_word_cost, 'case29': lanczos_enlarge8_cost,
+                         'case24': cross16_cost, 'case29': lanczos_enlarge8_cost,
                          'case30': lanczos_enlarge16_cost}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
@@ -555,6 +543,8 @@ def render():
                  'case10': 'DiagramLossyTrellis8', 'case11': 'Opaque16'}
     rows = []
     for case in evidence['cases']:
+        if case['id'] in {'case27', 'case28'}:
+            continue  # Replaced by the current equivalent-boundary family below.
         observation = case['observation']
         vp8l_case = case['id'] in {'case12', 'case13', 'case14', 'case15'}
         vp8_case = case['id'] in vp8_cases
@@ -1512,6 +1502,28 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}) | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    prepared_resize = json.loads((ROOT / 'benchmarks/lanczos3-prepared-execution-evidence.json').read_text(encoding='utf-8'))
+    assert prepared_resize['productionAccepted'] and prepared_resize['qualification']['fullChecksEachOs'] == 5400
+    assert prepared_resize['qualification']['actualPackage']['sha256'] == prepared_resize['qualification']['samePackageLinux']['sameActualPackageSha256']
+    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| Lanczos3 enlargement'))
+    current_resize_rows = []
+    for case, label in [('OneShot8', 'Lanczos3 one-shot RGBA8 / zimg one-shot'),
+                        ('Repeated8', 'Lanczos3 prepared RGBA8 / zimg prepared'),
+                        ('OneShot16', 'Lanczos3 one-shot RGBA16 / zimg one-shot'),
+                        ('Repeated16', 'Lanczos3 prepared RGBA16 / zimg prepared')]:
+        observation = prepared_resize['cases'][case]
+        assert observation['managedExact'] and observation['nativeQualityPassed'] and observation['quietGuardsPassed']
+        assert observation['librarySha256'] == prepared_resize['producers']['linuxSha256']
+        assert len(observation['managed']['actual']) == 12
+        stats = observation['managed']['statistics']
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        current_resize_rows.append(('editing', f'| {label} † → 256×129 | {stats["Mean"] / 1000:,.2f} | '
+                                    f'{native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / '
+                                    f'{observation["conservativeRatioUpper"]:.3f} | '
+                                    f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    rows[position:position] = current_resize_rows
+    rows = [(kind, row.replace(' † →', ' † § →') if row.startswith('| Lanczos3 enlargement') else row)
+            for kind, row in rows]
     workspace = json.loads((ROOT / 'benchmarks/webp-candidate-workspace-evidence.json').read_text(encoding='utf-8'))
     assert workspace['productionAccepted'] and not workspace['qualifiedCpuGainClaim']
     assert workspace['qualification']['fullChecksEachOs'] == 5383
@@ -1614,8 +1626,13 @@ the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
 warm measurements. Four layout/fitting controls pass their scoped integration
 comparisons; loading, rasterization and compositing retain gaps. Full parity is open.
 
-**Boundaries matter.** Existing resize rows include managed axis/workspace
-preparation but reuse native zimg graphs/input planes/scratch. PNG encode rows
+**Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
+managed preparation but reuse native graphs/scratch. Current Lanczos reduction
+rows compare equivalent one-shot or prepared operations on both sides.
+[Prepared Lanczos3](../benchmarks/LANCZOS3-PREPARED-EXECUTION.md) retains 139,800 B
+per managed plan and allocates 139 B/call; prepared CPU parity remains open.
+Rows marked **§** retain pre-consolidation enlargement costs pending refresh.
+PNG encode rows
 create managed Deflate state per call while FFmpeg retains encoder/zlib context
 and resets it per frame. These measurements remain valid for those boundaries;
 they are not equivalent one-shot or prepared-session comparisons.
@@ -1650,7 +1667,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,383 full/live checks per OS, 67 affected checks in
+Current production passes 5,400 full/live checks per OS, 83 affected checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in

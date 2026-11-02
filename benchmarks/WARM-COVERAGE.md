@@ -4,7 +4,7 @@ Current architectural phase, 2026-11-02: preserve the original 268 controls and
 14 distinct text/drawing omissions (282 total). Publication is postponed.
 Compression/exact pixels, memory integration and CPU qualification remain distinct.
 
-- [Current summary](../docs/benchmark.md): 119 selected comparisons with explicit
+- [Current summary](../docs/benchmark.md): 121 selected comparisons with explicit
   reference/boundary labels; this selection does not narrow required scope.
 - [Text/drawing](TEXT-DRAWING-CURRENT.md): all nine formerly missing elapsed costs
   are measured under the now-approved scopes. Four layout/fitting controls pass;
@@ -18,6 +18,11 @@ Compression/exact pixels, memory integration and CPU qualification remain distin
   27.4→10.5 MB, peak admitted storage20.9→6.2 MB; exact packets and full
   Windows/Linux/scalar/actual-package checks pass. Prior VP8L/transparent-VP8
   encoder costs are historical pending refresh; CPU screens remain diagnostic.
+- [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md): equivalent one-shot
+  reductions pass; prepared execution retains confirmed CPU gaps. Both depths
+  allocate139B/call with139800B retained. Shared one-shot/prepared ownership and
+  execution passes all four frozen controls, lifecycle and full/package checks.
+  Earlier enlargement timings remain historical; bicubic consolidation is open.
 - Next architectural work targets WebP candidate storage, shared resize
   preparation/execution, then codec work ranked by useful absolute savings.
   Pending items block their own dependencies, not independent work. Failed

@@ -8,6 +8,20 @@ namespace Lokad.Image.Tests;
 
 public sealed class LanczosFmaTests
 {
+    [Theory]
+    [InlineData(8)] [InlineData(16)]
+    public void PreparedResultsCopyCurrentOrientationWithoutRetainingTheSource(int depth)
+    {
+        using var source = OriginalPixels.Buffer(7, 5, depth);
+        using var plan = Lanczos3ResizePlan.Create(7, 5, 11, 9, depth);
+        source.Orientation = ImageOrientation.Rotate90;
+        using var first = plan.Resize(source); Assert.Equal(source.Orientation, first.Orientation);
+        source.Orientation = ImageOrientation.Transpose;
+        using var second = plan.Resize(source); Assert.Equal(source.Orientation, second.Orientation);
+        source.Dispose(); plan.Dispose(); Assert.Equal(ImageOrientation.Rotate90, first.Orientation);
+        Assert.Equal(ImageOrientation.Transpose, second.Orientation);
+    }
+
     private static bool Supported => Avx512F.IsSupported && Avx512DQ.IsSupported && Avx512DQ.VL.IsSupported && Avx2.IsSupported && Fma.IsSupported && Sse41.IsSupported;
     private static int Round(BigInteger n, BigInteger d, int maximum)
         => n <= 0 ? 0 : (int)BigInteger.Min(maximum, (2 * n + d) / (2 * d));
@@ -21,11 +35,11 @@ public sealed class LanczosFmaTests
         using var root = new TestMemoryBudget(0);
         using var admitted = new OperationContext(new() { MemoryBudget = root }, default);
 var bytes = admitted.RemainingWorkingBytes;
-        Assert.Equal(Supported, LanczosFmaResize.CanUse(source, 5, 3, h, v, admitted));
+        Assert.Equal(Supported, LanczosFmaResize.CanUse(source.BitDepth, 5, 3, h, v, admitted));
 Assert.Equal(bytes, admitted.RemainingWorkingBytes);
         Assert.Equal(0, root.GrowthAttempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
         using var tightMemory = new OperationContext(new() { MaxWorkingBytes = 1 }, default);
-        Assert.False(LanczosFmaResize.CanUse(source, 5, 3, h, v, tightMemory));
+        Assert.False(LanczosFmaResize.CanUse(source.BitDepth, 5, 3, h, v, tightMemory));
     }
 
     [Theory]

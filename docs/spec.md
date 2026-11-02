@@ -61,6 +61,14 @@ alpha has zero RGB; identity resizing preserves hidden RGB. Lanczos3 uses
 `sinc(x) * sinc(x/3)` within radius three, normalized Q30 weights and exact final
 integer rounding. SIMD and portable paths preserve the same defined pixels.
 
+`Lanczos3ResizePlan` retains admitted axes and working rows for a fixed source
+shape, destination shape and depth. Each `Resize` reads the current borrowed
+source and returns an independent image with its current orientation. Identity
+plans copy hidden RGB. The creation limits/root apply to every call; the creation
+token governs preparation only. `StorageBytes` reports retained capacity until
+disposal. Overlapping executions and disposal during execution fail promptly;
+results survive plan disposal. No source, output or global cache is retained.
+
 `ImageDrawing` mutates coded canvas coordinates without applying orientation.
 Rectangle fills replace samples; region copies require matching depths and an
 in-bounds source rectangle. Destinations clip. Source-over compositing supports

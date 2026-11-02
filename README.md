@@ -5,7 +5,7 @@ No unsafe code, native bindings, subprocess codecs or vendored sources.
 
 - PNG, JPEG and WebP encode/decode, including progressive/CMYK/YCCK JPEG decode.
 - 8/16-bit RGBA editing: crop, orientation, flips, rotations, nearest/bilinear/
-  bicubic/Lanczos3 resizing, drawing and alpha compositing.
+  bicubic/Lanczos3 resizing, reusable Lanczos3 plans, drawing and alpha compositing.
 - Supplied TrueType text measurement, wrapping, alignment, fitting and rendering;
   explicit OpenType mode for supported Latin, Hebrew and Arabic shaping.
 - Caller JPEG sample buffers, async streams, bounded header inspection, typed

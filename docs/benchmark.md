@@ -1,14 +1,19 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-02. These **119 selected comparisons** combine qualified
+Updated 2026-11-02. These **121 selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
 warm measurements. Four layout/fitting controls pass their scoped integration
 comparisons; loading, rasterization and compositing retain gaps. Full parity is open.
 
-**Boundaries matter.** Existing resize rows include managed axis/workspace
-preparation but reuse native zimg graphs/input planes/scratch. PNG encode rows
+**Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
+managed preparation but reuse native graphs/scratch. Current Lanczos reduction
+rows compare equivalent one-shot or prepared operations on both sides.
+[Prepared Lanczos3](../benchmarks/LANCZOS3-PREPARED-EXECUTION.md) retains 139,800 B
+per managed plan and allocates 139 B/call; prepared CPU parity remains open.
+Rows marked **§** retain pre-consolidation enlargement costs pending refresh.
+PNG encode rows
 create managed Deflate state per call while FFmpeg retains encoder/zlib context
 and resets it per frame. These measurements remain valid for those boundaries;
 they are not equivalent one-shot or prepared-session comparisons.
@@ -43,7 +48,7 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,383 full/live checks per OS, 67 affected checks in
+Current production passes 5,400 full/live checks per OS, 83 affected checks in
 normal/scalar modes and the same actual Release-package consumer/three examples
 on Windows/Linux. Unchanged paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -126,10 +131,12 @@ family evidence is linked below; individual experiments remain in
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace → 32×16 | 342.09 | 379.01 | 0.903 / 0.927 | 199,369 |
-| Lanczos3 reduction RGBA8 † → 256×129 | 735.82 | 490.45 | 1.500 / 1.511 | 138,451 |
-| Lanczos3 reduction RGBA16 † → 256×129 | 726.96 | 507.57 | 1.432 / 1.446 | 138,437 |
-| Lanczos3 enlargement RGBA8 † → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
-| Lanczos3 enlargement RGBA16 † → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 773.75 | 1,680.57 | 0.460 / 0.473 | 138,619 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 641.49 | 517.81 | 1.239 / 1.268 | 139 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 787.27 | 1,919.47 | 0.410 / 0.418 | 138,611 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 654.48 | 559.68 | 1.169 / 1.222 | 139 |
+| Lanczos3 enlargement RGBA8 † § → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
+| Lanczos3 enlargement RGBA16 † § → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |

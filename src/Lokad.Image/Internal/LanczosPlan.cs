@@ -12,6 +12,7 @@ internal sealed class LanczosPlan : IDisposable
     internal int MaximumCount;
     private readonly OperationContext context;
     private long storage;
+    internal long StorageBytes => storage;
     private bool disposed;
     private LanczosPlan(OperationContext context) { this.context = context; context.Reserve(128); storage = 128; }
 
