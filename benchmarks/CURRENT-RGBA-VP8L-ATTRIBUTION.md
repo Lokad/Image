@@ -33,11 +33,11 @@ costs receive360exclusive samples (47.0%); color histogram construction60 (7.8%)
 These are attribution, not method times or guaranteed savings. Instrumented
 timings are discarded; exact packets and both quiet guards pass.
 
-The next bounded audit measures individual combined support/zero runs and count
-ranges before considering prepared sparse-bank execution. That would remove
-per-pair zero-bin/logarithm work using owned support metadata, while retaining
-full logical costs and a portable dense path. Added metadata/preparation and
-correct RLE gap accounting must justify the design on complete workloads.
+The [paired-bank support audit](VP8L-PAIRED-BANK-SUPPORT-AUDIT.md) now finds
+87.2% zero bins in literal-color pair scans;68.3% of those calls have fewer
+than16active combined symbols. This supports investigating prepared individual
+support, while retaining exact RLE gaps, costs and dense fallback. Added
+metadata/preparation must still justify the design on complete workloads.
 Earlier [window statistics](VP8L-WINDOW-POPULATIONS-DEFERRED.md) and
 [run-boundary SIMD](VP8L-RUN-BOUNDARIES-INCONCLUSIVE.md) were inconclusive and are
 not replayed. Whole-empty64-bin/pair-cache diagnostics do not establish the cost

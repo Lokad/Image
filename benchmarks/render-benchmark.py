@@ -1749,8 +1749,10 @@ encoding and output ownership stay timed. [Current ordinary RGBA8 attribution](.
 refreshes the varying-color/alpha case: **138.86 ms, 25.08 MB/op**, a confirmed
 **1.147× / upper1.162** gap with the exact **183,812-byte** packet. A one-second
 profile attributes 360/766 exclusive samples to paired histogram costs; these
-are a lead, not method times or promised savings. Other affected rows marked
-**H** remain historical.
+are a lead, not method times or promised savings. A
+[paired-bank support audit](../benchmarks/VP8L-PAIRED-BANK-SUPPORT-AUDIT.md)
+finds sparse literal-color populations and bounds a prepared-state proposal;
+its counts are not measured gains. Other affected rows marked **H** remain historical.
 The [preceding constant-bank audit](../benchmarks/WEBP-CONSTANT-BANK-AUDIT.md)
 records the original opportunity; current savings above are measured.
 
