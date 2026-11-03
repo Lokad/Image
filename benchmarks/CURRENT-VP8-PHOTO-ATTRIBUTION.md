@@ -1,26 +1,44 @@
 # Current VP8 photograph attribution
 
-One six-second trace on the current qualified DLL captures **5,910 samples**
-for the existing 513×259 photograph/effort4 control. Its exact 17,688-byte packet,
-reconstruction, source/output ownership and idle-v2 guards pass. No production,
-harness, native or host build; no repeated correctness/package qualification.
-Instrumented elapsed times are discarded. Samples describe attribution, not
-phase timings or predicted gains; the existing independent CPU cost is unchanged.
+One two-second capture on the qualified RSP186 DLL uses the existing complete
+513×259 opaque photograph/Q75/effort4 control. The 17,688-byte packet, frozen
+quality, normalization, source/output ownership and quiet guards pass. No builds
+or repeated suite/package qualification. CPU0 executes; CPU1 collects. Profiled
+elapsed is discarded: samples and instruction skid are not component timings.
 
-- Luma4 decisions: 1,016 samples (17.2%).
-- Ordinary quantization helpers: 751 (12.7%).
-- Reconstruction: 502 (8.5%), including AddVector 434 (7.3%).
-- Coefficient emission: 421 (7.1%).
+| Current sampled location | Samples, out of 1,961 |
+| --- | ---: |
+| Luma4 decisions, including inlined scoring | 357 |
+| Quantization helpers | 242 |
+| Reconstruction AddVector | 165 |
+| Coefficient emission | 154 |
+| Luma16 decisions | 108 |
+| Token statistics | 85 |
 
-The earlier QIV1b trace predates the accepted quantizer guard cleanup. This trace
-resolves that attribution uncertainty without retuning a confirmed case.
-[Paired prepared quantization](VP8-PREPARED-QUANTIZATION-PAIR-REJECTED.md) has now
-been screened and rejected: 2.39% elapsed / 2.92% native-normalized, unchanged
-allocation and exact packet. Source and binaries are restored without rebuilding;
-no confirmation or variants. This trace remains current attribution, not a gain
-claim. Closed reconstruction, trellis and width-only variants remain closed.
+Luma4's 6,685-byte body has 111 samples in IG91/95, covering residual-magnitude
+preparation/validation and scalar table summation. The existing quantizer already
+forms zigzag levels before writing them; scoring reloads them for flatness,
+magnitudes, nonzero/last position and rates. These are concrete repeated-work
+leads, not a claimed saving. Coefficient emission spans a 3,931-byte body; its
+costs are distributed, with no isolated gain established.
 
-[Evidence](current-vp8-photo-attribution-evidence.json). Mirrored/member-verified
-current-vp8-photo-attribution.tar.xz, 47 members, SHA256 d04385dc49b612e4a1b03fd830b7a89fbc7fc96f993faaff0bb0f49558a41121.
-Raw retains the event trace, same-process map, targeted JIT text, guards/validation,
-actual host/library/worker binaries and pinned reused dependencies.
+Current code already shares source texture, batches forward predictions, reuses
+uniform predictions and applies rate/SSD bounds. [Paired quantization](VP8-QUANTIZATION-PAIR-CONFIRMATION.md)
+has no useful independent gain. [Packed quantization](VP8-PACKED-QUANTIZATION-REJECTED.md),
+the earlier [residual-summary screen](VP8-RESIDUAL-SUMMARY-DEFERRED.md) and
+[combined prices](WARM-VP8-COMBINED-PRICES-SCREEN.md) retain their specific adverse
+or inconclusive evidence. Their old thresholds and family-closure wording do not
+ban a materially different architectural design; they do not justify replaying
+unchanged candidates.
+
+The next bounded hypothesis shares quantization byproducts with candidate scoring,
+preserving level caps, exact costs, ordered decisions/ties, trellis and portable
+execution. Use existing complete photograph/alpha controls; verify gains before
+acceptance. Existing costs remain unchanged. [Earlier attribution](https://github.com/lokad/image/blob/66340be3e4d3e14163ce9efeb58b8574207331b9/benchmarks/CURRENT-VP8-PHOTO-ATTRIBUTION.md)
+and its raw archive remain history.
+
+[Evidence](current-vp8-photo-attribution-evidence.json) pins current sources,
+instructions, actual producers and quality/source gates. Raw
+`vp8-current-decision-pipeline-attribution.tar.xz`: 1,081,224 B / 35 members,
+SHA256 `a4dfe14c4aef46feb8b38a9613e264841df213dcb758e50b3160aa1d1c3876ca`,
+mirrored/member-verified, with the pinned qualified-baseline dependency.

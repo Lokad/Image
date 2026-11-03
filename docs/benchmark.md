@@ -63,9 +63,9 @@ overlapping interleaved confidence are both retained. All eight displayed affect
 WebP costs are refreshed on one immutable DLL; original/diagram/depth/async pass
 and stop, while photo/opaque/transparency retain gaps. Other adaptive costs marked
 **H** remain historical. Native allocation and physical heap peaks are unmeasured.
-The same actual Release package and three examples pass both OSes, alongside
-5,529 full/live checks per OS and affected normal/scalar checks. The same actual
-Release package and all three examples pass both OSes, including retained resize
+The current build passes 5,529 full/live checks per OS and affected normal/scalar
+checks. The same actual Release package and all three examples pass both OSes,
+including retained resize
 admission and asynchronous surviving outputs. Other codec/editing paths reuse
 applicable unchanged evidence; this is not a full release refresh.
 [Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md) retains its
