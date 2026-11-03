@@ -1658,6 +1658,36 @@ def render():
                              f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                              f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                              f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+    # The output allocator changes both filters; overlay only refreshed controls.
+    overwrite = json.loads((ROOT / 'benchmarks/resize-overwrite-output-storage-evidence.json').read_text(encoding='utf-8'))
+    assert overwrite['productionAccepted'] and overwrite['independentQuietConfirmation']
+    assert overwrite['qualification']['fullChecksEachOs'] == 5497
+    assert overwrite['qualification']['actualPackage']['sha256'] == overwrite['qualification']['samePackageLinux']['sameActualPackageSha256']
+    rows = [(kind, row.replace(' →', ' H →', 1)
+             if kind == 'editing' and row.startswith(('| Bicubic', '| Bilinear')) and ' H ' not in row
+             else row) for kind, row in rows]
+    labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
+              'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
+              'Up8': 'Bicubic upscale RGBA8, default workspace'}
+    assert set(overwrite['cases']) == set(labels)
+    for case, label in labels.items():
+        observation = overwrite['cases'][case]; receipt = observation['receipt']
+        assert receipt['librarySha256'] == overwrite['producers']['linuxSha256']
+        assert receipt['managedRationalReferenceExact'] and observation['quietGuardsPassed']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert (observation['conservativeRatioUpper'] <= 1) == (case == 'Down32x16_8')
+        stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
+        row = ('editing', f'| {label} † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
+               f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+               f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+               f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
+        positions = [i for i, (_, old_row) in enumerate(rows) if old_row.startswith('| ' + label + ' †')]
+        if case == 'Up8':
+            assert not positions
+            rows.insert(next(i for i, (_, old_row) in enumerate(rows) if old_row.startswith('| Bicubic upscale RGBA16 †')) + 1, row)
+        else:
+            assert len(positions) == 1, label
+            rows[positions[0]] = row
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1804,12 +1834,19 @@ were restored after flat complete-encode screens. Other affected costs marked
 **H** remain historical. Total allocations, admitted peak and retention are
 separate; physical heap peaks and native allocation remain unmeasured.
 
-[Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-removes duplicate preparation/scheduling and preserves measured kernels.
-Three current controls are refreshed; wide reduction still passes. Enlargement
-saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
-and admission are unchanged. Other bicubic rows marked **H** retain historical
-costs after the changed dispatch; their kernels and exact-pixel checks remain.
+[Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
+removes redundant output initialization using the existing complete-overwrite
+allocator. Byte enlargement saves **0.385 ms / 10.08% raw / 8.94% normalized**, with
+separated confidence; allocations fall **2.885 → 0.752 MB/op**. Word enlargement
+saves 0.048 ms with separated raw/normalized confidence. Four existing costs are
+refreshed; three retain gaps and wide reduction still passes. Its adverse raw
+9.57% point accompanies a 7.39% slower native clock; normalized intervals overlap.
+Unbudgeted byte enlargement retains one 2,132,052 B idle output array within the
+existing shared 4 MiB ceiling. Governed calls never use that pool; admitted peaks
+are unchanged and ownership stays explicit. Allocation, live capacity and idle
+retention are separate. Other affected bilinear/bicubic rows marked **H** remain
+historical. The [shared cached driver](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
+retains its geometry, scheduling, specialized kernels and exact repair.
 
 [Shared compositing rows](../benchmarks/COMPOSITING-SHARED-ROWS.md) remove repeated
 per-channel preparation across all depth pairs. Both measured controls now take
@@ -1838,8 +1875,8 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes {texture['qualification']['fullChecksEachOs']:,} full/live checks per OS,
-726 internal and 194 public affected WebP checks in normal/scalar modes, and the
+Current production passes {overwrite['qualification']['fullChecksEachOs']:,} full/live checks per OS,
+193 internal and 796 public affected resize checks in normal/scalar modes, and the
 same actual Release-package consumer/three examples on Windows/Linux. Unchanged
 paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in

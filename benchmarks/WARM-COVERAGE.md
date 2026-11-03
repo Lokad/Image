@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-03. **282 material required paths** remain
-in scope; the 121 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 122 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs current passing evidence for every named path, with scope stated.
@@ -15,11 +15,12 @@ Completion needs current passing evidence for every named path, with scope state
 | Other WebP encoding boundaries | Existing word-depth, async and method/effort controls retain their names and recipes. Costs affected by adaptive predictor changes remain historical until reconciled; no blanket family pass. Low-effort paths must be distinguished by actual calls. |
 | PNG encoding | [Contiguous history](PNG-CONTIGUOUS-HISTORY.md) qualifies current one-shot RGBA8 Optimal/Fastest gaps. Other affected compressed costs marked H remain historical; the bounded word-depth screen does not refresh the family. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
-| Bicubic and Lanczos3 | [Shared cached bicubic](BICUBIC-SHARED-CACHED-DRIVER.md) and [prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md) define current boundaries. Lanczos one-shot reductions pass; prepared reductions retain gaps. Other affected costs marked H need reconciliation. Exact Q30/rational/certified pixels remain required. |
+| Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) refreshes four existing bicubic controls: byte enlargement has a confirmed gain, wide reduction still passes, three retain gaps. Idle retention and governed peaks are reported separately. Other affected bilinear/bicubic costs marked H need reconciliation. [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md) retains one-shot reduction passes and prepared gaps. Exact Q30/rational/certified pixels remain required. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
-Seven existing resident VP8 controls were refreshed in the latest round.
-The current immutable production build passes 5,489 full/live checks per OS,
+Four existing bicubic controls were refreshed in the latest round; the preceding
+seven resident VP8 and four lossless controls retain valid unchanged-path costs.
+The current immutable production build passes 5,497 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.
@@ -146,6 +147,12 @@ word/async/method/quality costs remain historical until reconciled. Low-effort
 bypasses, lossless-alpha encoding itself, decoders, PNG/JPEG, resizing/editing/text
 retain applicable unchanged-path proof. Older whole-profile fractions of changed
 bodies are attribution history, not current component costs or available savings.
+
+Current resize invalidation: the common bilinear/bicubic output allocator changes;
+unrefreshed filter/pipeline costs are historical, while pixel/repair kernels and
+governed geometry admission remain unchanged. Lanczos/nearest and codec/read/text/
+drawing paths reuse applicable evidence. The existing Up8 case checks the
+2 MiB-versus-4 MiB retention boundary without adding a material required path.
 
 Current priorities: preparation/reuse and operation-owned workspace, then shared
 resize execution and further codec work selected from attribution. The

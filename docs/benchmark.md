@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-03. These **121 selected comparisons** combine qualified
+Updated 2026-11-03. These **122 selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
@@ -61,12 +61,19 @@ were restored after flat complete-encode screens. Other affected costs marked
 **H** remain historical. Total allocations, admitted peak and retention are
 separate; physical heap peaks and native allocation remain unmeasured.
 
-[Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-removes duplicate preparation/scheduling and preserves measured kernels.
-Three current controls are refreshed; wide reduction still passes. Enlargement
-saves 222 µs in raw elapsed, with overlapping normalized confidence. Allocation
-and admission are unchanged. Other bicubic rows marked **H** retain historical
-costs after the changed dispatch; their kernels and exact-pixel checks remain.
+[Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
+removes redundant output initialization using the existing complete-overwrite
+allocator. Byte enlargement saves **0.385 ms / 10.08% raw / 8.94% normalized**, with
+separated confidence; allocations fall **2.885 → 0.752 MB/op**. Word enlargement
+saves 0.048 ms with separated raw/normalized confidence. Four existing costs are
+refreshed; three retain gaps and wide reduction still passes. Its adverse raw
+9.57% point accompanies a 7.39% slower native clock; normalized intervals overlap.
+Unbudgeted byte enlargement retains one 2,132,052 B idle output array within the
+existing shared 4 MiB ceiling. Governed calls never use that pool; admitted peaks
+are unchanged and ownership stays explicit. Allocation, live capacity and idle
+retention are separate. Other affected bilinear/bicubic rows marked **H** remain
+historical. The [shared cached driver](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
+retains its geometry, scheduling, specialized kernels and exact repair.
 
 [Shared compositing rows](../benchmarks/COMPOSITING-SHARED-ROWS.md) remove repeated
 per-channel preparation across all depth pairs. Both measured controls now take
@@ -95,8 +102,8 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes 5,489 full/live checks per OS,
-726 internal and 194 public affected WebP checks in normal/scalar modes, and the
+Current production passes 5,497 full/live checks per OS,
+193 internal and 796 public affected resize checks in normal/scalar modes, and the
 same actual Release-package consumer/three examples on Windows/Linux. Unchanged
 paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
@@ -171,14 +178,15 @@ family evidence is linked below; individual experiments remain in
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Bilinear resize RGBA8 † → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
-| Bilinear upscale RGBA8 † → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
-| Bilinear resize RGBA16 † → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
-| Bicubic resize RGBA8 † → 256×129 | 595.64 | 447.21 | 1.332 / 1.366 | 332,188 |
-| Bicubic upscale RGBA16 † → 1027×519 | 3,591.82 | 3,026.52 | 1.187 / 1.230 | 5,016,602 |
+| Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
+| Bilinear upscale RGBA8 † H → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
+| Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
+| Bicubic resize RGBA8 † → 256×129 | 549.84 | 418.61 | 1.313 / 1.321 | 199,981 |
+| Bicubic upscale RGBA16 † → 1027×519 | 3,336.56 | 2,872.72 | 1.161 / 1.167 | 5,016,602 |
+| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,434.17 | 3,198.46 | 1.074 / 1.082 | 751,975 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † H → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 371.49 | 393.29 | 0.945 / 0.970 | 199,371 |
+| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 773.75 | 1,680.57 | 0.460 / 0.473 | 138,619 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 641.49 | 517.81 | 1.239 / 1.268 | 139 |
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 787.27 | 1,919.47 | 0.410 / 0.418 | 138,611 |

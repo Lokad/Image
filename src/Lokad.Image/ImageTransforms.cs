@@ -115,7 +115,9 @@ public static class ImageTransforms
         var radius = filter == ResizeFilter.Bicubic ? 2 : 1;
         var tapsX = (long)Math.Ceiling(2 * radius * scaleX) + 1;
         var tapsY = (long)Math.Ceiling(2 * radius * scaleY) + 1;
-        var result = ImageBuffer.Allocate(width, height, source.BitDepth, context);
+        // Every selected filter writes all samples; failed private results are
+        // disposed below. Share the overwrite ownership policy with Lanczos.
+        var result = ImageBuffer.AllocateForOverwrite(width, height, source.BitDepth, context);
         try
         {
             var maximum = source.BitDepth == 8 ? 255 : 65535;
