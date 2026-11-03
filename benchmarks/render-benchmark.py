@@ -1833,6 +1833,8 @@ retain useful history. Two [compact green predictor stages](../benchmarks/WEBP-C
 were restored after flat complete-encode screens. Other affected costs marked
 **H** remain historical. Total allocations, admitted peak and retention are
 separate; physical heap peaks and native allocation remain unmeasured.
+A [phase-local color-product cache](../benchmarks/WEBP-COLOR-PRODUCT-CACHE-INCONCLUSIVE.md)
+was restored after an adverse complete-encode screen; current costs are unchanged.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite
