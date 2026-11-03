@@ -1,5 +1,12 @@
 # Fused prepared VP8L counting
 
+Current production retains both mechanisms: canonical-code construction supplies
+the prepared body-bit count, and sparse population merges call the shared SIMD/
+scalar addition helper. This supersedes the separate [body-count trial](VP8L-PREPARED-BODY-COUNT-REJECTED.md)
+and [histogram-addition trial](VP8L-HISTOGRAM-ADDITION-UNQUALIFIED.md); their fixed
+continuation thresholds and closure language describe historical decisions.
+The results below retain their original producers, not current timing claims.
+
 The accepted BCR79 stage saves **5.43 ms / 4.53% elapsed** on the independent
 photograph pair, with separate raw confidence intervals in both filtered and
 all-actual views. The native-normalized point gain is 5.78%; **normalized confidence
