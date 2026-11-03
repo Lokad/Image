@@ -26,11 +26,9 @@ Both normal/live complete decodes retain exact pixels and release the borrowed
 root's charges; only the live reader is instrumented. One diagnostic-tool build,
 zero production/harness/native/package builds. No allocation or CPU-gain claim.
 
-The next hypothesis retains operation-local lookahead across an AC refinement
-scan and chooses its invariant table/eligibility once. It must preserve logical
-read/cancellation checkpoints, exact cursor/error/restart behavior, pixels and
-portable fallbacks, with no new buffer or owner. Earlier speculative grouped
-coefficient updates are a separate rejected implementation and are not replayed.
+The [completed scan-state trial](JPEG-SCAN-REFINEMENT-INCONCLUSIVE.md) retains
+lookahead across the scan but establishes no useful elapsed gain. It is restored;
+stronger field/cancellation tests remain. Instruction-level attribution is next.
 The inspected [FFmpeg refinement decoder](https://github.com/FFmpeg/FFmpeg/blob/9047fa1b084f76b1b4d065af2d743df1b40dfb56/libavcodec/mjpegdec.c#L1015)
 retains shared reader state and last-nonzero metadata; this is algorithmic insight,
 not attribution of its timing. No upstream implementation is copied.

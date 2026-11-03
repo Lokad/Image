@@ -167,8 +167,10 @@ reduces alpha allocation by8,672B/op but has no elapsed lead; production is
 restored and current costs remain unchanged. Its exhaustive admission-refusal
 coverage remains against the actual parser.
 The [current JPEG refinement profile and lifetime audit](JPEG-REFINEMENT-STATE-ATTRIBUTION.md)
-support investigating scan-level lookahead reuse; their sample shares/counts are
-not CPU gains, and no numerical or cancellation policy change is proposed.
+locate a material live-refinement cost. The [scan-state redesign](JPEG-SCAN-REFINEMENT-INCONCLUSIVE.md)
+does not establish a useful gain and is restored; two stronger behavioral tests
+remain. Current costs stay unchanged. Instruction attribution is next; sample
+shares and byte counts are not CPU gains.
 Passing text/reference decisions do not block
 independent codec/resizing work. PLAN.md remains local and ignored.
 
