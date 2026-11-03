@@ -162,6 +162,10 @@ resize execution and further codec work selected from attribution. The
 rejected-token handoff. The [photograph profile before invariant scoring](WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
 identifies a transform-search lead; its whole-profile fractions are now historical.
 Trial failures are leads to reassess only with a materially revised design.
+The [cache-history lifetime trial](WEBP-CACHE-HISTORY-REUSE-INCONCLUSIVE.md)
+reduces alpha allocation by8,672B/op but has no elapsed lead; production is
+restored and current costs remain unchanged. Its exhaustive admission-refusal
+coverage remains against the actual parser.
 Passing text/reference decisions do not block
 independent codec/resizing work. PLAN.md remains local and ignored.
 

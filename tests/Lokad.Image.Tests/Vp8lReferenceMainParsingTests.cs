@@ -130,23 +130,26 @@ public sealed class Vp8lReferenceMainParsingTests
         Assert.Equal((6, 56L, 1), (tokens.Count, tokens.CapacityBytes, tokens.CacheBits)); Assert.Equal(baseline, root.Bytes);
     }
 
-    [Theory]
-    [InlineData(3)]
-    [InlineData(5)]
-    [InlineData(7)]
-    public void CacheChoiceConversionAndHistogramRefusalsAreTerminalAndRefundCandidates(int phase)
+    [Fact]
+    public void EveryRemainingCacheAndHistogramAdmissionRefusalIsTerminalAndRefundsCandidates()
     {
         using var root = new TestMemoryBudget(2_000_000);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var pixels = Hidden(context); var original = pixels.ToArray();
         using var matches = Vp8lReferenceMatcher.Build(pixels, 19, 75, false, context);
-        var baseline = root.Bytes; root.RefuseAtGrowth = root.GrowthAttempts + phase;
-        var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceMainParsing.Encode(pixels, matches.Values, 19, false, 10, context));
-        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
-        Assert.Equal(1, root.Refusals); Assert.Equal(root.RefuseAtGrowth, root.GrowthAttempts);
-        Assert.Equal(baseline, root.Bytes); Assert.Equal(original, pixels); root.RefuseAtGrowth = 0;
-        using var next = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, 19, false, 10, context);
-        next.Dispose(); Assert.Equal(baseline, root.Bytes); Assert.False(root.IsDisposed);
+        var baseline = root.Bytes; var firstGrowth = root.GrowthAttempts;
+        using (var complete = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, 19, false, 10, context)) { }
+        var admissions = root.GrowthAttempts - firstGrowth; Assert.True(admissions > 0); Assert.Equal(baseline, root.Bytes);
+        for (var phase = 1; phase <= admissions; phase++)
+        {
+            var refusals = root.Refusals; root.RefuseAtGrowth = root.GrowthAttempts + phase;
+            var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceMainParsing.Encode(pixels, matches.Values, 19, false, 10, context));
+            Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
+            Assert.Equal(refusals + 1, root.Refusals); Assert.Equal(root.RefuseAtGrowth, root.GrowthAttempts);
+            Assert.Equal(baseline, root.Bytes); Assert.Equal(original, pixels); root.RefuseAtGrowth = 0;
+            using var next = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, 19, false, 10, context);
+            next.Dispose(); Assert.Equal(baseline, root.Bytes); Assert.False(root.IsDisposed);
+        }
     }
 
     [Fact]
