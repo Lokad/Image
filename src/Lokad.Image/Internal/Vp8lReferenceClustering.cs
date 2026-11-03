@@ -198,6 +198,11 @@ internal static class Vp8lReferenceClustering
             var a = items[aSlot]; var b = fromOriginal ? originals[bSlot] : items[bSlot];
             var aCounts = Population(aSlot); var bCounts = Population(bSlot, 1, fromOriginal);
             var aSupport = Support(aSlot); var bSupport = Support(bSlot, 1, fromOriginal);
+            // Preserve the measured support traversal for 256-symbol colors.
+            // The larger green/cache alphabet reuses unchanged A run models.
+            var leaf = fromOriginal || !populations.IsMerged(bSlot);
+            var entries = leaf ? populations.Leaf(bSlot) : default; var greenEnd = 0;
+            if (leaf) while (greenEnd < entries.Length && (entries[greenEnd] & 4095) < layout.GreenSize) greenEnd++;
             for (var bank = 0; bank < 5; bank++)
             {
                 context.Cancellation.ThrowIfCancellationRequested(); var flag = 1 << bank; long cost;
@@ -210,6 +215,7 @@ internal static class Vp8lReferenceClustering
                     // flag. Preserve that flag's decision semantics, but score
                     // the still-constant logical bank rather than one word.
                     cost = size == 1 ? ConstantCost(bank)
+                        : bank == 0 && leaf ? populations.SumGreenLeaf(aSlot, entries[..greenEnd])
                         : size == 256 && supportWords != 0
                             ? Vp8lReferenceEntropy.PopulationSumColor(aCounts.Slice(start, size), bCounts.Slice(start, size),
                                 aSupport.Slice(SupportStart(bank), 4), bSupport.Slice(SupportStart(bank), 4), context)

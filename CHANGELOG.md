@@ -16,7 +16,8 @@
   exact packets.
 - WebP clustering retains immutable sparse leaves and recycles merged populations
   within each encode, reducing allocations and admitted peak storage while
-  preserving exact packets and independent output ownership.
+  preserving exact packets and independent output ownership. Prepared green
+  population models reduce repeated candidate-cost computation.
 
 - Vectorized complete-pixel rectangle filling preserves full sample precision,
   hidden RGB, clipping, cancellation and existing memory ownership.

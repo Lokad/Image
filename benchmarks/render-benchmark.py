@@ -337,7 +337,7 @@ def render():
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_indexed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
-    webp_current = json.loads((ROOT / 'benchmarks/webp-sparse-clustering-workspace-evidence.json').read_text(encoding='utf-8'))
+    webp_current = json.loads((ROOT / 'benchmarks/webp-prepared-clustering-costs-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['exactPacketsPreserved']
     assert webp_current['independentQuietConfirmation']
     vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
@@ -570,7 +570,7 @@ def render():
         if case['id'] == 'case12':
             producer = webp_current
             observation = webp_current['cases']['Encode8']
-            assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
+            assert (observation['conservativeRatioUpper'] <= 1) == (observation['status'] == 'Confirmed pass')
             assert observation['completePacketExact'] and observation['quietGuardsPassed']
         elif case['id'] == 'case13':
             producer = vp8l_bins
@@ -1547,7 +1547,7 @@ def render():
             for kind, row in rows]
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
     assert webp_current['decision']['storageTradeoffMeasured']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5502
+    assert webp_current['qualification']['fullChecksEachOs'] == 5506
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
@@ -1824,18 +1824,21 @@ controls below use the newer clustering build. All retain gaps. Only the photogr
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Sparse clustering ownership](../benchmarks/WEBP-SPARSE-CLUSTERING-WORKSPACE.md)
-replaces persistent dense tile slabs with immutable sparse leaves and recycled
-merged populations. Original lossless saves **5.07 ms / 3.79% raw** with separated
-raw confidence; normalized intervals overlap. Allocation falls **24.90 → 7.28 MB**.
-Photograph allocation falls **13.35 → 6.52 MB** and admitted peak **10.17 → 3.47 MB**;
-its adverse 4.58% timing point has overlapping confidence, so no speedup is claimed.
-Six costs are refreshed; diagram passes at **0.848x / upper0.864**, five retain gaps.
+[Prepared clustering costs](../benchmarks/WEBP-PREPARED-CLUSTERING-COSTS.md)
+reuse unchanged green/cache run models while preserving measured color kernels.
+Original lossless saves **17.63 ms / 12.67% raw / 13.14% normalized**, with separated
+raw/normalized confidence, at **194,816 B/op** extra allocation. It now passes at
+**0.922x / upper0.934**; diagram also passes. Photograph/opaque confidence remains
+open; transparent8/16 retain gaps. Photograph's adverse 4.09% raw point has
+overlapping intervals. Transparent8's separated adverse 2.94% raw point accompanies
+a 5.35% slower native clock; normalized intervals overlap, so no causal gain or
+regression is claimed. Six current costs replace the preceding ownership stage.
+Prepared capacity is admitted before allocation and released with the operation;
+diagnostic complete-operation admitted peaks are unchanged and scratch retention
+is zero. Allocations, admitted peaks and physical heap usage are distinct.
 Other affected adaptive VP8L/transparent ALPH costs marked **H** remain historical.
-Scratch retention is zero. Allocations, admitted peaks and retention are separate;
-physical heap peaks and native allocation remain unmeasured.
-[Earlier stages and adverse experiments](../benchmarks/WEBP-OPAQUE-HISTOGRAM-STAGES-INCONCLUSIVE.md)
-stay linked as history, separate from current costs.
+[Sparse ownership and earlier evidence](../benchmarks/WEBP-SPARSE-CLUSTERING-WORKSPACE.md)
+retain the allocation reductions, rejected stages and exact restoration history.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite

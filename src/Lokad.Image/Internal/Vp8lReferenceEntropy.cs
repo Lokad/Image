@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
-internal static class Vp8lReferenceEntropy
+internal static partial class Vp8lReferenceEntropy
 {
     private const long Scale = Vp8lReferenceCost.Scale;
 
@@ -20,7 +20,7 @@ internal static class Vp8lReferenceEntropy
 
     // Both full and prepared-support traversals feed the same exact run model.
     // Summing a repeated count's integer product is identical to per-bin addition.
-    private struct RunCost
+    internal partial struct RunCost
     {
         private int sum, nonzero, maximum;
         private long entropy;

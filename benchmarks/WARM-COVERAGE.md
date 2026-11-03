@@ -10,8 +10,8 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Sparse clustering storage](WEBP-SPARSE-CLUSTERING-WORKSPACE.md) refreshes four controls: original/opaque/photograph gaps and passing diagram. Original saves 5.07ms with separated raw confidence; photograph timing is variable with an adverse point. Allocations and governed peaks fall; exact packets remain. |
-| Resident VP8 encoding | [Source texture preparation](VP8-SOURCE-TEXTURE-PREPARATION.md) remains valid for five unchanged opaque/word/trellis controls. [Clustering storage](WEBP-SPARSE-CLUSTERING-WORKSPACE.md) refreshes transparent RGBA8/16 and reduces alpha-path allocations. All seven retain gaps; do not infer incremental CPU gains from historical costs. |
+| Resident lossless WebP | [Prepared clustering costs](WEBP-PREPARED-CLUSTERING-COSTS.md) refreshes four controls. Original saves 17.63ms with separated raw/normalized confidence and now passes (upper0.934); diagram still passes. Photograph/opaque confidence is open; resolve measurement before assuming optimization is needed. Prepared capacity adds allocation while preserving exact packets. |
+| Resident VP8 encoding | [Source texture preparation](VP8-SOURCE-TEXTURE-PREPARATION.md) remains valid for five unchanged opaque/word/trellis controls. [Prepared clustering](WEBP-PREPARED-CLUSTERING-COSTS.md) refreshes transparent RGBA8/16; both retain gaps. Alpha8's adverse raw point accompanies a slower native clock and overlapping normalized confidence; no causal gain/regression claim. |
 | Other WebP encoding boundaries | Existing word-depth, async and method/effort controls retain their names and recipes. Costs affected by adaptive predictor changes remain historical until reconciled; no blanket family pass. Low-effort paths must be distinguished by actual calls. |
 | PNG encoding | [Contiguous history](PNG-CONTIGUOUS-HISTORY.md) qualifies current one-shot RGBA8 Optimal/Fastest gaps. Other affected compressed costs marked H remain historical; the bounded word-depth screen does not refresh the family. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
@@ -21,7 +21,7 @@ Completion needs current passing evidence for every named path, with scope state
 Six existing WebP controls were refreshed in the latest round; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,502 full/live checks per OS,
+The current immutable production build passes 5,506 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.
