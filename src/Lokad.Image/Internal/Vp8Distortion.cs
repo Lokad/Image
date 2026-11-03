@@ -147,21 +147,44 @@ internal static class Vp8Distortion
         return Vector256.Sum(Avx2.MultiplyAddAdjacent(magnitudes, importance));
     }
 
-    private static int Texture(ReadOnlySpan<byte> a, int aStride, ReadOnlySpan<byte> b, int bStride, ReadOnlySpan<ushort> weights)
-        => Math.Abs(Energy(a, aStride, weights) - Energy(b, bStride, weights)) >> 5;
-
-    internal static int Texture4(ReadOnlySpan<byte> a, int aStride, ReadOnlySpan<byte> b, int bStride, ReadOnlySpan<ushort> weights)
+    // Source pixels and importance stay fixed across ordered candidate scores.
+    // The caller owns the energy storage and keeps weights unchanged throughout
+    // this borrowed view's lifetime. No candidate pixels or results are retained.
+    internal readonly ref struct Texture
     {
-        Check(a, aStride, 4, 4); Check(b, bStride, 4, 4); CheckWeights(weights);
-        return Texture(a, aStride, b, bStride, weights);
-    }
+        private readonly ReadOnlySpan<int> energies;
+        private readonly ReadOnlySpan<ushort> weights;
 
-    internal static int Texture16(ReadOnlySpan<byte> a, int aStride, ReadOnlySpan<byte> b, int bStride, ReadOnlySpan<ushort> weights)
-    {
-        Check(a, aStride, 16, 16); Check(b, bStride, 16, 16); CheckWeights(weights);
-        var total = 0;
-        for (var y = 0; y < 16; y += 4) for (var x = 0; x < 16; x += 4)
-            total += Texture(a[(y * aStride + x)..], aStride, b[(y * bStride + x)..], bStride, weights);
-        return total;
+        internal Texture(ReadOnlySpan<byte> source, int stride, ReadOnlySpan<ushort> weights,
+            Span<int> energies, int size = 16)
+        {
+            if (size is not (4 or 16)) throw new ArgumentOutOfRangeException(nameof(size));
+            Check(source, stride, size, size); CheckWeights(weights);
+            var count = size * size / 16;
+            if (energies.Length < count) throw new ArgumentException("Incomplete source texture storage.");
+            var bytes = MemoryMarshal.AsBytes(energies[..count]);
+            if (source.Overlaps(bytes) || MemoryMarshal.AsBytes(weights).Overlaps(bytes))
+                throw new ArgumentException("Source texture storage must not overlap its inputs.");
+            this.energies = energies[..count]; this.weights = weights[..16];
+            var at = 0;
+            for (var y = 0; y < size; y += 4) for (var x = 0; x < size; x += 4)
+                energies[at++] = Energy(source[(y * stride + x)..], stride, this.weights);
+        }
+
+        internal int Compare4(int block, ReadOnlySpan<byte> candidate, int stride)
+        {
+            Check(candidate, stride, 4, 4);
+            return Math.Abs(energies[block] - Energy(candidate, stride, weights)) >> 5;
+        }
+
+        internal int Compare16(ReadOnlySpan<byte> candidate, int stride)
+        {
+            Check(candidate, stride, 16, 16);
+            if (energies.Length != 16) throw new ArgumentException("Texture comparison requires16source blocks.");
+            var total = 0; var at = 0;
+            for (var y = 0; y < 16; y += 4) for (var x = 0; x < 16; x += 4)
+                total += Math.Abs(energies[at++] - Energy(candidate[(y * stride + x)..], stride, weights)) >> 5;
+            return total;
+        }
     }
 }

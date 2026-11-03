@@ -59,7 +59,7 @@ internal static class Vp8MacroblockDecision
 
     private static Metric Luma16(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> contexts,
         bool hasTop, bool hasLeft, Vp8QuantizationMatrix y1, Vp8QuantizationMatrix y2, Vp8QuantizationCosts costs,
-        Vp8RatePlan rate, ReadOnlySpan<ushort> weights, Span<byte> pixels, Span<short> levels,
+        Vp8RatePlan rate, Vp8Distortion.Texture textureSource, Span<byte> pixels, Span<short> levels,
         OperationContext context, bool trellis, out int bestMode, out uint nonzero, out int maximumEdge)
     {
         Span<byte> trial = stackalloc byte[256]; Span<short> coefficients = stackalloc short[256];
@@ -99,7 +99,7 @@ internal static class Vp8MacroblockDecision
             Vp8BlockReconstruction.WriteWalshDc(walsh, coefficients);
             for (var b = 0; b < 16; b++) Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), trial[Block(b)..], 16);
             long distortion = Vp8Distortion.Squared(source, 16, trial, 16, 16, 16);
-            var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, Vp8Distortion.Texture16(source, 16, trial, 16, weights));
+            var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, textureSource.Compare16(trial, 16));
             long bits = rate.Residual(trialLevels[..16], 1, 0, contexts[8] + contexts[17], out _);
             contexts[..4].CopyTo(top); contexts.Slice(9, 4).CopyTo(left);
             for (var by = 0; by < 4; by++) for (var bx = 0; bx < 4; bx++)
@@ -121,7 +121,7 @@ internal static class Vp8MacroblockDecision
 
     private static bool Luma4(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> modeContexts,
         ReadOnlySpan<byte> contexts, Vp8QuantizationMatrix matrix, Vp8QuantizationCosts costs, Vp8RatePlan rate,
-        ReadOnlySpan<ushort> weights, int headerLimit, long previousScore, Span<byte> pixels, Span<short> levels,
+        Vp8Distortion.Texture textureSource, int headerLimit, long previousScore, Span<byte> pixels, Span<short> levels,
         Span<byte> modes, OperationContext context, bool trellis, out Metric result, out uint nonzero)
     {
         result = new Metric(0, 0, rate.Entropy[145], 0).Price(costs.Mode); nonzero = 0;
@@ -192,7 +192,7 @@ internal static class Vp8MacroblockDecision
                 // Texture is nonnegative. Once rate plus reconstructed SSD
                 // cannot win, its two spectral transforms cannot change that.
                 if (bestMode >= 0 && (rateCost + header) * costs.Luma4 + 256L * distortion >= best.Total) continue;
-                var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, Vp8Distortion.Texture4(source[offset..], 16, trial, 4, weights));
+                var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, textureSource.Compare4(b, trial, 4));
                 var score = new Metric(distortion, texture, header, rateCost).Price(costs.Luma4);
                 if (uniform) { uniformScore = score; uniformFlat = Flat(trialLevels, 1, 3); }
                 if (bestMode >= 0 && score.Total >= best.Total) continue;
@@ -387,10 +387,14 @@ internal static class Vp8MacroblockDecision
         Span<sbyte> errorInput = stackalloc sbyte[8]; diffusion[..8].CopyTo(errorInput);
         Span<ushort> importance = stackalloc ushort[16]; weights[..16].CopyTo(importance);
         var sourceCopy = snapshot[..384]; var neighborsCopy = snapshot.Slice(384, 71); var modeCopy = snapshot.Slice(455, 8); var coefficientCopy = snapshot.Slice(463, 18);
+        // Both luma searches score the same immutable source. An extra64 stack
+        // bytes fits ScratchBytes; preparation remains part of every operation.
+        Span<int> sourceEnergy = stackalloc int[16];
+        var textureSource = costs.Texture == 0 ? default : new Vp8Distortion.Texture(sourceCopy, 16, importance, sourceEnergy);
         Span<byte> smallPixels = stackalloc byte[256]; Span<short> smallLevels = stackalloc short[256]; Span<byte> smallModes = stackalloc byte[16];
-        var best = Luma16(sourceCopy, neighborsCopy, coefficientCopy, hasTop, hasLeft, luma, walsh, costs, rate, importance,
+        var best = Luma16(sourceCopy, neighborsCopy, coefficientCopy, hasTop, hasLeft, luma, walsh, costs, rate, textureSource,
             pixels[..256], levels[..272], context, method == 6, out var lumaMode, out var nz, out var maxEdge);
-        var intra16 = !Luma4(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, importance, headerLimit,
+        var intra16 = !Luma4(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
             best.Total, smallPixels, smallLevels, smallModes, context, method == 6, out var smallScore, out var smallNz);
         if (intra16) modes[..16].Clear();
         else

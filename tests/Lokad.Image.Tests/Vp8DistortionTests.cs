@@ -7,6 +7,68 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8DistortionTests
 {
+    private static int Texture4(ReadOnlySpan<byte> source, int sourceStride, ReadOnlySpan<byte> candidate,
+        int candidateStride, ReadOnlySpan<ushort> weights)
+    {
+        Span<int> energy = stackalloc int[1];
+        var texture = new Vp8Distortion.Texture(source, sourceStride, weights, energy, 4);
+        return texture.Compare4(0, candidate, candidateStride);
+    }
+
+    private static int Texture16(ReadOnlySpan<byte> source, int sourceStride, ReadOnlySpan<byte> candidate,
+        int candidateStride, ReadOnlySpan<ushort> weights)
+    {
+        Span<int> energies = stackalloc int[16];
+        var texture = new Vp8Distortion.Texture(source, sourceStride, weights, energies);
+        return texture.Compare16(candidate, candidateStride);
+    }
+
+    [Fact]
+    public void PreparedSourceScoresRepeatedCandidatesWithIndependentBlockRounding()
+    {
+        var source = new byte[512]; var candidate = new byte[512]; var weights = new ushort[16];
+        Vp8Distortion.TextureWeights(weights); uint state = 0x73391fc1;
+        foreach (var storage in new[] { source, candidate }) for (var p = 0; p < storage.Length; p++)
+        { state ^= state << 13; state ^= state >> 17; state ^= state << 5; storage[p] = (byte)state; }
+        var original = source.ToArray(); var originalWeights = weights.ToArray();
+        Span<int> energies = stackalloc int[18]; energies.Fill(-1);
+        var texture = new Vp8Distortion.Texture(source.AsSpan(3), 31, weights, energies);
+        Assert.Equal(-1, energies[16]); Assert.Equal(-1, energies[17]);
+        // The prepared view retains energies, not the original source pixels.
+        source.AsSpan().Clear(); var sawIndependentRounding = false;
+        for (var pass = 0; pass < 12; pass++)
+        {
+            var total = 0; var signedDifference = 0;
+            for (var block = 0; block < 16; block++)
+            {
+                var offset = block / 4 * 4 * 31 + block % 4 * 4;
+                var expectedSource = ExpectedEnergy(original.AsSpan(3 + offset), 31, weights);
+                var expectedCandidate = ExpectedEnergy(candidate.AsSpan(1 + offset), 31, weights);
+                Assert.Equal(expectedSource, energies[block]);
+                var expected = Math.Abs(expectedSource - expectedCandidate) >> 5;
+                Assert.Equal(expected, texture.Compare4(block, candidate.AsSpan(1 + offset), 31));
+                total += expected; signedDifference += expectedSource - expectedCandidate;
+            }
+            Assert.Equal(total, texture.Compare16(candidate.AsSpan(1), 31));
+            sawIndependentRounding |= total != (Math.Abs(signedDifference) >> 5);
+            for (var p = 0; p < candidate.Length; p++) candidate[p] = (byte)(candidate[p] + pass + 1);
+        }
+        Assert.True(sawIndependentRounding); Assert.Equal(originalWeights, weights);
+    }
+
+    [Fact]
+    public void PreparedTextureRejectsIncompleteAndOverlappingStorageBeforeWriting()
+    {
+        var pixels = new byte[512]; var weights = new ushort[16]; var energies = Enumerable.Repeat(-1, 18).ToArray();
+        Vp8Distortion.TextureWeights(weights);
+        Assert.Throws<ArgumentException>(() => { _ = new Vp8Distortion.Texture(pixels, 16, weights, energies.AsSpan(0, 15)); });
+        Assert.Throws<ArgumentOutOfRangeException>(() => { _ = new Vp8Distortion.Texture(pixels, 16, weights, energies, 8); });
+        Assert.Throws<ArgumentException>(() => { _ = new Vp8Distortion.Texture(pixels.AsSpan(0, 255), 16, weights, energies); });
+        Assert.Throws<ArgumentException>(() => { _ = new Vp8Distortion.Texture(pixels, 16, weights,
+            System.Runtime.InteropServices.MemoryMarshal.Cast<byte, int>(pixels.AsSpan(0, 64))); });
+        Assert.All(energies, value => Assert.Equal(-1, value)); Assert.All(pixels, value => Assert.Equal((byte)0, value));
+    }
+
     [Fact]
     public void SquaredMetricPreservesAllSupportedRectanglesStridesTailsAndOverlaps()
     {
@@ -69,11 +131,11 @@ public sealed class Vp8DistortionTests
                 // A zero second block and one weight of256 expose the complete
                 // coefficient magnitude through the existing metric, without
                 // losing any bits to its final division by32.
-                var magnitude = Vp8Distortion.Texture4(input, stride, zero, 4, isolatedWeights);
+                var magnitude = Texture4(input, stride, zero, 4, isolatedWeights);
                 Assert.Equal(Math.Abs(expected) * 8, magnitude);
                 energy += weights[v * 4 + u] * (magnitude / 8);
             }
-            Assert.Equal(energy >> 5, Vp8Distortion.Texture4(input, stride, zero, 4, weights));
+            Assert.Equal(energy >> 5, Texture4(input, stride, zero, 4, weights));
             Assert.Equal(before, PixelChecksum(pixels));
             BinaryPrimitives.WriteInt32LittleEndian(packed, energy); hash.AppendData(packed);
         }
@@ -89,9 +151,9 @@ public sealed class Vp8DistortionTests
         var a = new byte[256]; var b = new byte[256]; var weights = new ushort[16];
         for (var i = 0; i < a.Length; i++) { a[i] = (byte)(i * 13); b[i] = (byte)(i * 17 + 3); }
         Vp8Distortion.TextureWeights(weights); var result = 0;
-        for (var i = 0; i < 1024; i++) result ^= Vp8Distortion.Texture16(a, 16, b, 16, weights);
+        for (var i = 0; i < 1024; i++) result ^= Texture16(a, 16, b, 16, weights);
         var before = GC.GetAllocatedBytesForCurrentThread();
-        for (var i = 0; i < 1024; i++) result ^= Vp8Distortion.Texture16(a, 16, b, 16, weights);
+        for (var i = 0; i < 1024; i++) result ^= Texture16(a, 16, b, 16, weights);
         var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
         Assert.Equal(0, result); Assert.Equal(0, allocated);
     }
@@ -112,9 +174,9 @@ public sealed class Vp8DistortionTests
             foreach (var stride in new[] { 4, 7, 9 })
             {
                 var candidate = pixels.AsSpan(offset); var expected = Math.Abs(expectedSource - ExpectedEnergy(candidate, stride, weights)) >> 5;
-                Assert.Equal(expected, Vp8Distortion.Texture4(source, 7, candidate, stride, weights));
+                Assert.Equal(expected, Texture4(source, 7, candidate, stride, weights));
             }
-            Assert.Equal(0, Vp8Distortion.Texture4(source, 7, source, 7, weights));
+            Assert.Equal(0, Texture4(source, 7, source, 7, weights));
             Assert.Equal(original, pixels);
         }
         Assert.True(sawLowBits);
@@ -159,13 +221,13 @@ public sealed class Vp8DistortionTests
         Span<int> results = stackalloc int[35];
         results[0] = Vp8Distortion.Squared(a, 32, b, 32, 16, 16);
         results[1] = Vp8Distortion.Squared(a[16..], 32, b[16..], 32, 16, 8);
-        results[2] = Vp8Distortion.Texture16(a, 32, b, 32, weights);
+        results[2] = Texture16(a, 32, b, 32, weights);
         var at = 3;
         for (var y = 0; y < 16; y += 4) for (var x = 0; x < 16; x += 4)
         {
             var aa = a[(y * 32 + x)..]; var bb = b[(y * 32 + x)..];
             results[at++] = Vp8Distortion.Squared(aa, 32, bb, 32, 4, 4);
-            results[at++] = Vp8Distortion.Texture4(aa, 32, bb, 32, weights);
+            results[at++] = Texture4(aa, 32, bb, 32, weights);
         }
         Span<byte> packed = stackalloc byte[140];
         for (var p = 0; p < 35; p++) BinaryPrimitives.WriteInt32LittleEndian(packed[(p * 4)..], results[p]);
@@ -248,10 +310,10 @@ a.Fill(0x4d); b.Fill(0x4d);
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); Append(a, b, weights, hash);
         Assert.Equal(expected, Convert.ToHexStringLower(hash.GetHashAndReset()));
         Assert.True(a.SequenceEqual(beforeA)); Assert.True(b.SequenceEqual(beforeB));
-        Assert.Equal(Vp8Distortion.Texture16(a, 32, b, 32, weights), Vp8Distortion.Texture16(b, 32, a, 32, weights));
+        Assert.Equal(Texture16(a, 32, b, 32, weights), Texture16(b, 32, a, 32, weights));
         Assert.Equal(Vp8Distortion.Squared(a, 32, b, 32, 16, 16), Vp8Distortion.Squared(b, 32, a, 32, 16, 16));
-        if (fragment is 1 or 3) Assert.Equal(77_520, Vp8Distortion.Texture16(a, 32, b, 32, weights));
-        if (fragment == 2) { Assert.Equal(16_646_400, Vp8Distortion.Squared(a, 32, b, 32, 16, 16)); Assert.Equal(0, Vp8Distortion.Texture16(a, 32, b, 32, weights)); }
+        if (fragment is 1 or 3) Assert.Equal(77_520, Texture16(a, 32, b, 32, weights));
+        if (fragment == 2) { Assert.Equal(16_646_400, Vp8Distortion.Squared(a, 32, b, 32, 16, 16)); Assert.Equal(0, Texture16(a, 32, b, 32, weights)); }
     }
 
     [Fact]
@@ -262,7 +324,7 @@ a.Fill(0x4d); b.Fill(0x4d);
         for (var y = 0; y < 4; y++) { a.Slice(y * 32, 4).CopyTo(compactA.Slice(y * 7, 4)); b.Slice(y * 32, 4).CopyTo(compactB.Slice(y * 9, 4)); }
         Span<ushort> weights = stackalloc ushort[16]; Vp8Distortion.TextureWeights(weights);
         Assert.Equal(16, Vp8Distortion.Squared(compactA, 7, compactB, 9, 4, 4));
-        Assert.Equal(19, Vp8Distortion.Texture4(compactA, 7, compactB, 9, weights));
+        Assert.Equal(19, Texture4(compactA, 7, compactB, 9, weights));
     }
 
     [Fact]
@@ -273,8 +335,8 @@ a.Fill(0x4d); b.Fill(0x4d);
         Vp8Distortion.TextureWeights(weights);
         Assert.Throws<ArgumentException>(() => Vp8Distortion.Squared(pixels, -1, pixels, 16, 16, 16));
         Assert.Throws<ArgumentException>(() => Vp8Distortion.Squared(pixels, int.MaxValue, pixels, 16, 16, 16));
-        Assert.Throws<ArgumentException>(() => Vp8Distortion.Texture4(pixels, 16, pixels, 16, weights.AsSpan(0, 15)));
-        weights[0]++; Assert.Throws<ArgumentException>(() => Vp8Distortion.Texture16(pixels, 16, pixels, 16, weights));
+        Assert.Throws<ArgumentException>(() => Texture4(pixels, 16, pixels, 16, weights.AsSpan(0, 15)));
+        weights[0]++; Assert.Throws<ArgumentException>(() => Texture16(pixels, 16, pixels, 16, weights));
         Assert.All(pixels, v => Assert.Equal((byte)0, v));
     }
 }

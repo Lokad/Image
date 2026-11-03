@@ -1627,6 +1627,37 @@ def render():
     # retain the distinct source changes and older observations.
     rows = [(kind, row.replace(' ‡', ' H').replace(' §', ' H').replace(' ¶', ' H'))
             for kind, row in rows]
+    # Current VP8 family costs use one canonical receipt shape, independently of
+    # the experiment reports retained above for unaffected paths and history.
+    texture = json.loads((ROOT / 'benchmarks/vp8-source-texture-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert texture['productionAccepted'] and texture['independentQuietConfirmation']
+    assert texture['qualification']['fullChecksEachOs'] == 5489
+    assert texture['qualification']['actualPackage']['sha256'] == texture['qualification']['samePackageLinux']['sameActualPackageSha256']
+    labels = {
+        'PhotographLossy8': 'VP8 opaque photograph',
+        'DiagramLossy8': 'VP8 opaque text/diagram',
+        'DiagramLossyTrellis8': 'VP8 diagram, effort6 / trellis',
+        'Opaque8': 'VP8 opaque RGBA8',
+        'Opaque16': 'VP8 opaque RGBA16, including normalization',
+        'Alpha8': 'VP8 RGBA8 + lossless alpha',
+        'Alpha16': 'VP8 RGBA16 + alpha, including normalization',
+    }
+    assert set(texture['cases']) == set(labels)
+    for case, label in labels.items():
+        observation = texture['cases'][case]; receipt = observation['receipt']
+        assert receipt['librarySha256'] == texture['producers']['linuxSha256']
+        assert observation['completePacketExact'] and observation['quietGuardsPassed']
+        assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes']
+        assert receipt.get('managedOutputSha256', receipt.get('managedEncodedSha256')) == receipt['nativeOutputSha256']
+        positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
+        assert len(positions) == 1, label
+        stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
+        rows[positions[0]] = ('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                             f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                             f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
+                             f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1755,28 +1786,23 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[Invariant WebP alpha scoring](../benchmarks/WEBP-INVARIANT-ALPHA-SCORING.md)
-prepares an identical plane once per tile instead of repeating it for fourteen
-predictor modes. Photograph elapsed falls **1.42 ms / 1.54% raw**, with separated
-raw confidence; its 2.03% normalized point has narrowly overlapping confidence.
-All five resident controls are refreshed: diagram still passes at **0.947x /
-upper0.958**; four other cases remain gaps. The transparent control's adverse
-0.61% raw point has overlapping confidence and is retained. Ordinary/opaque
-comparisons retain the preceding wider native-clock uncertainty.
-Allocations are **24.90 / 12.96 / 13.35 / 6.26 / 10.75 MB/op**
-(ordinary/opaque/photo/diagram/alpha). Direct allocations and admitted peaks are
-unchanged, with no new storage or retained scratch. Physical heap peaks, native
-allocation and ordinary/opaque admitted peaks remain unmeasured. Exact packets,
-full Windows/Linux checks, affected scalar paths and the same actual Release
-package pass. Complete normalization/preparation/selection/output ownership stays
-timed; native wrappers retain their prepared-state labels. Affected word/async/
-method/effort rows marked **H** remain historical.
-[Trace-storage reuse](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md),
-[earlier cache-prefix work](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md) and
-[current photograph attribution](../benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
-retain design/history separately. No retuning or scored candidate rerun.
-A [compact green predictor trial](../benchmarks/WEBP-COMPACT-GREEN-INCONCLUSIVE.md)
-is restored after two flat complete-encode screens; current costs stay unchanged.
+[VP8 source texture preparation](../benchmarks/VP8-SOURCE-TEXTURE-PREPARATION.md)
+shares fixed source scores across luma candidates. The opaque photograph saves
+**0.214 ms / 1.54% raw** (1.29% normalized), with separated confidence and unchanged
+809,072 B/op. Seven existing VP8 costs are refreshed, including word-depth
+normalization and transparent encoding; all retain gaps. Only the photograph has
+an incremental speedup claim. Direct transparent elapsed is flat; allocation,
+admitted peaks and retained scratch are unchanged. Preparation stays timed.
+
+[Invariant alpha scoring](../benchmarks/WEBP-INVARIANT-ALPHA-SCORING.md) retains
+valid costs for the four unchanged resident lossless controls: diagram passes
+at **0.947x / upper0.958**, while ordinary/opaque/photograph remain gaps.
+The [trace-storage design](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md) and
+[earlier photograph attribution](../benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
+retain useful history. Two [compact green predictor stages](../benchmarks/WEBP-COMPACT-GREEN-INCONCLUSIVE.md)
+were restored after flat complete-encode screens. Other affected costs marked
+**H** remain historical. Total allocations, admitted peak and retention are
+separate; physical heap peaks and native allocation remain unmeasured.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
@@ -1812,8 +1838,8 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes {png_one_shot['qualification']['fullChecksEachOs']:,} full/live checks per OS,
-577 internal and 211 public affected PNG checks in normal/scalar modes, and the
+Current production passes {texture['qualification']['fullChecksEachOs']:,} full/live checks per OS,
+726 internal and 194 public affected WebP checks in normal/scalar modes, and the
 same actual Release-package consumer/three examples on Windows/Linux. Unchanged
 paths reuse valid performance evidence. Current
 family evidence is linked below; individual experiments remain in
