@@ -7,10 +7,10 @@ public sealed class Vp8lPredictionCostTests
 {
     // Independent expression of the four-plane bias and two Shannon terms.
     // Dense summation remains independent of sparse-mask traversal.
-    private static long Expected(int[] current, int[] previous)
+    internal static long Expected(int[] current, int[] previous)
     {
         long result = 0;
-        for (var plane = 0; plane < 4; plane++)
+        for (var plane = 0; plane < current.Length / 256; plane++)
         {
             var offset = plane * 256;
             var weight = 94 * Vp8lReferenceCost.Scale;

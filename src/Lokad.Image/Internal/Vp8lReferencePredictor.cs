@@ -36,6 +36,16 @@ internal static class Vp8lReferencePredictor
     private const int LevelSize = HistogramSize + 1024 + 14;
     private static int Ceil(int value, int bits) => (value + (1 << bits) - 1) >> bits;
 
+    // Every actual mode histogram has nonnegative counts summing to samples.
+    // Bin zero holding that mass proves all other alpha bins are zero. Check
+    // every mode: an opaque tile can still read translucent neighbours.
+    internal static bool HasSharedZeroAlpha(ReadOnlySpan<int> histogram, int samples)
+    {
+        for (var mode = 0; mode < 14; mode++)
+            if (histogram[mode * 1024] != samples) return false;
+        return true;
+    }
+
     private sealed class Analysis : IDisposable
     {
         private readonly OperationContext context;
@@ -115,12 +125,26 @@ internal static class Vp8lReferencePredictor
             // Children have finished before pricing starts. One admitted 8KiB
             // product array is reused by every completed visit, not per level.
             Span<long> baselines = stackalloc long[4];
-            if (!greenOnly) Vp8lReferenceCost.PreparePrediction(histogram[..1024], history, products, baselines, context);
+            ReadOnlySpan<int> scoreHistory = history;
+            ReadOnlySpan<long> scoreProducts = products, scoreBaselines = baselines;
+            var first = 0; long sharedCost = 0;
+            if (!greenOnly)
+            {
+                Vp8lReferenceCost.PreparePrediction(histogram[..1024], history, products, baselines, context);
+                var samples = Math.Min(1 << bits, width - x0) * Math.Min(1 << bits, height - y0);
+                if (HasSharedZeroAlpha(histogram, samples))
+                {
+                    sharedCost = Vp8lReferenceCost.Prediction(histogram[..256], history[..256],
+                        products.AsSpan(0, 256), baselines[..1], context);
+                    first = 256; scoreHistory = history[256..];
+                    scoreProducts = products.AsSpan(256); scoreBaselines = baselines[1..];
+                }
+            }
             for (var mode = 0; mode < 14; mode++)
             {
                 var candidate = histogram.Slice(mode * 1024, 1024);
                 var cost = greenOnly ? Vp8lReferenceCost.PredictionGreen(candidate, history, context)
-                    : Vp8lReferenceCost.Prediction(candidate, history, products, baselines, context);
+                    : sharedCost + Vp8lReferenceCost.Prediction(candidate[first..], scoreHistory, scoreProducts, scoreBaselines, context);
                 if (tx != 0 && modes[tile - 1] == mode) cost -= 15 * Vp8lReferenceCost.Scale;
                 if (ty != 0 && modes[tile - columns[level]] == mode) cost -= 15 * Vp8lReferenceCost.Scale;
                 if (cost < best) { best = cost; chosen = mode; }

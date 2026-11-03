@@ -337,8 +337,8 @@ def render():
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_indexed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
-    webp_current = json.loads((ROOT / 'benchmarks/webp-trace-output-storage-evidence.json').read_text(encoding='utf-8'))
-    assert webp_current['productionAccepted'] and webp_current['decision']['storageReuseVerified']
+    webp_current = json.loads((ROOT / 'benchmarks/webp-invariant-alpha-scoring-evidence.json').read_text(encoding='utf-8'))
+    assert webp_current['productionAccepted'] and webp_current['decision']['exactScoringReuseVerified']
     assert webp_current['independentQuietConfirmation']
     vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
     assert vp8l_bins['acceptance']['retained'] and vp8l_bins['independentQuietConfirmation']
@@ -1551,7 +1551,7 @@ def render():
             for kind, row in rows]
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
     assert webp_current['decision']['storageTradeoffMeasured']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5476
+    assert webp_current['qualification']['fullChecksEachOs'] == 5483
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
@@ -1755,23 +1755,26 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[WebP trace storage](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md) borrows idle
-output capacity for forward parsing, then backtracks into the output tail.
-The five complete controls allocate **24.90 / 12.96 / 13.35 / 6.26 / 10.75 MB/op**
-(ordinary/opaque/photo/diagram/alpha), about 430 KB less per operation, or 860 KB
-for transparency. The transparent control's admitted peak falls from 4,085,883 to
-3,847,888 B; photograph and diagram peaks stay unchanged. No scratch is retained;
-physical heap peak, native allocation and ordinary/opaque admitted peaks remain
-unmeasured. Independent timings do not establish an incremental CPU gain.
-Adverse ordinary/opaque points and uncertainty are retained in the evidence.
-Diagram passes at **0.939× / upper0.959**; four other controls remain gaps.
-Exact packets, full Windows/Linux checks, affected scalar paths and the same
-actual Release-package consumer pass. Complete normalization, preparation,
-candidate selection, output ownership and disposal stay timed. Native wrappers
-retain their prepared-state labels. Other affected encode rows marked **H**
-remain historical. [Earlier cache-prefix work](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md)
-and [matching attribution](../benchmarks/WEBP-MATCHING-PHASE-AUDIT.md) retain
-history and reproducibility separately. No candidate retuning or scored rerun.
+[Invariant WebP alpha scoring](../benchmarks/WEBP-INVARIANT-ALPHA-SCORING.md)
+prepares an identical plane once per tile instead of repeating it for fourteen
+predictor modes. Photograph elapsed falls **1.42 ms / 1.54% raw**, with separated
+raw confidence; its 2.03% normalized point has narrowly overlapping confidence.
+All five resident controls are refreshed: diagram still passes at **0.947x /
+upper0.958**; four other cases remain gaps. The transparent control's adverse
+0.61% raw point has overlapping confidence and is retained. Ordinary/opaque
+comparisons retain the preceding wider native-clock uncertainty.
+Allocations are **24.90 / 12.96 / 13.35 / 6.26 / 10.75 MB/op**
+(ordinary/opaque/photo/diagram/alpha). Direct allocations and admitted peaks are
+unchanged, with no new storage or retained scratch. Physical heap peaks, native
+allocation and ordinary/opaque admitted peaks remain unmeasured. Exact packets,
+full Windows/Linux checks, affected scalar paths and the same actual Release
+package pass. Complete normalization/preparation/selection/output ownership stays
+timed; native wrappers retain their prepared-state labels. Affected word/async/
+method/effort rows marked **H** remain historical.
+[Trace-storage reuse](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md),
+[earlier cache-prefix work](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md) and
+[current photograph attribution](../benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
+retain design/history separately. No retuning or scored candidate rerun.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.

@@ -1,5 +1,10 @@
 # Current WebP photograph attribution
 
+Captured before [invariant alpha scoring](WEBP-INVARIANT-ALPHA-SCORING.md).
+That change supersedes these whole-profile fractions as current CPU evidence.
+Unchanged histogram implementations and count observations remain useful leads;
+the archived capture is retained without retiming.
+
 One one-second capture of the unchanged, qualified photograph encoder contains
 756 workload samples. The immutable public-operation worker, original fixture,
 libwebp exact=1 reference, complete 160,032-byte packet and source/ownership gates

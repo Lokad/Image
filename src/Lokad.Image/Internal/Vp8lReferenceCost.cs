@@ -55,12 +55,17 @@ internal static partial class Vp8lReferenceCost
         }
     }
 
+    // Independent channel planes can be priced separately with the same exact
+    // arithmetic. A selector may prepare an invariant plane once per tile.
     internal static long Prediction(ReadOnlySpan<int> current, ReadOnlySpan<int> previous,
         ReadOnlySpan<long> products, ReadOnlySpan<long> baselines, OperationContext context)
     {
         context.Cancellation.ThrowIfCancellationRequested();
+        if (baselines.Length is < 1 or > 4 || current.Length != baselines.Length * 256
+            || previous.Length != current.Length || products.Length != current.Length)
+            throw new ArgumentException("Expected matching prediction planes.");
         long cost = 0;
-        for (var plane = 0; plane < 4; plane++)
+        for (var plane = 0; plane < baselines.Length; plane++)
         {
             var tile = current.Slice(plane * 256, 256);
             var prior = previous.Slice(plane * 256, 256);

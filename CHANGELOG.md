@@ -12,7 +12,8 @@
   preserving exact pixels, cancellation and independent result lifetimes.
 - Lossless WebP compacts sparse histograms, reuses rejected token storage and
   borrows idle output capacity for trace working state, with shared predictor
-  preparation and prepared-body counting preserving exact packets.
+  preparation, invariant alpha scoring and prepared-body counting preserving
+  exact packets.
 
 - Vectorized complete-pixel rectangle filling preserves full sample precision,
   hidden RGB, clipping, cancellation and existing memory ownership.

@@ -43,23 +43,26 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[WebP trace storage](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md) borrows idle
-output capacity for forward parsing, then backtracks into the output tail.
-The five complete controls allocate **24.90 / 12.96 / 13.35 / 6.26 / 10.75 MB/op**
-(ordinary/opaque/photo/diagram/alpha), about 430 KB less per operation, or 860 KB
-for transparency. The transparent control's admitted peak falls from 4,085,883 to
-3,847,888 B; photograph and diagram peaks stay unchanged. No scratch is retained;
-physical heap peak, native allocation and ordinary/opaque admitted peaks remain
-unmeasured. Independent timings do not establish an incremental CPU gain.
-Adverse ordinary/opaque points and uncertainty are retained in the evidence.
-Diagram passes at **0.939× / upper0.959**; four other controls remain gaps.
-Exact packets, full Windows/Linux checks, affected scalar paths and the same
-actual Release-package consumer pass. Complete normalization, preparation,
-candidate selection, output ownership and disposal stay timed. Native wrappers
-retain their prepared-state labels. Other affected encode rows marked **H**
-remain historical. [Earlier cache-prefix work](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md)
-and [matching attribution](../benchmarks/WEBP-MATCHING-PHASE-AUDIT.md) retain
-history and reproducibility separately. No candidate retuning or scored rerun.
+[Invariant WebP alpha scoring](../benchmarks/WEBP-INVARIANT-ALPHA-SCORING.md)
+prepares an identical plane once per tile instead of repeating it for fourteen
+predictor modes. Photograph elapsed falls **1.42 ms / 1.54% raw**, with separated
+raw confidence; its 2.03% normalized point has narrowly overlapping confidence.
+All five resident controls are refreshed: diagram still passes at **0.947x /
+upper0.958**; four other cases remain gaps. The transparent control's adverse
+0.61% raw point has overlapping confidence and is retained. Ordinary/opaque
+comparisons retain the preceding wider native-clock uncertainty.
+Allocations are **24.90 / 12.96 / 13.35 / 6.26 / 10.75 MB/op**
+(ordinary/opaque/photo/diagram/alpha). Direct allocations and admitted peaks are
+unchanged, with no new storage or retained scratch. Physical heap peaks, native
+allocation and ordinary/opaque admitted peaks remain unmeasured. Exact packets,
+full Windows/Linux checks, affected scalar paths and the same actual Release
+package pass. Complete normalization/preparation/selection/output ownership stays
+timed; native wrappers retain their prepared-state labels. Affected word/async/
+method/effort rows marked **H** remain historical.
+[Trace-storage reuse](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md),
+[earlier cache-prefix work](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md) and
+[current photograph attribution](../benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
+retain design/history separately. No retuning or scored candidate rerun.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
@@ -119,11 +122,11 @@ family evidence is linked below; individual experiments remain in
 | VP8 opaque text/diagram † | 7,791.31 | 5,845.88 | 1.333 / 1.351 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,568.52 | 15,639.99 | 1.315 / 1.319 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 64,644.85 | 53,505.59 | 1.208 / 1.217 | 10,749,072 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 92,272.76 | 82,578.65 | 1.117 / 1.123 | 13,346,868 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 9,140.17 | 9,733.81 | 0.939 / 0.959 | 6,256,838 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 139,765.51 | 124,164.44 | 1.126 / 1.173 | 24,899,424 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 79,957.44 | 71,971.99 | 1.111 / 1.202 | 12,957,560 | 121,896 / 121,896 |
+| VP8 RGBA8 + lossless alpha † | 65,037.57 | 53,579.15 | 1.214 / 1.223 | 10,749,072 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 90,849.86 | 82,988.87 | 1.095 / 1.105 | 13,346,868 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 9,113.69 | 9,621.89 | 0.947 / 0.958 | 6,256,838 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 129,759.50 | 121,487.63 | 1.068 / 1.081 | 24,899,424 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 76,053.83 | 69,943.04 | 1.087 / 1.096 | 12,956,744 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
