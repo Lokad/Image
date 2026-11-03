@@ -1,0 +1,129 @@
+{
+  "project": "Lokad.Image",
+  "stage": "OPH204",
+  "productionChanged": false,
+  "statisticalTiming": false,
+  "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+  "sourceSha256": "f6da6990e69b77bef935e316b97c52cd9b5bd241ac7b5ff250db467fd4169ee0",
+  "scope": "One two-second capture of the existing complete lossless EncodeOpaque8 encode on immutable qualified HSP200. CPU0; sampler CPU1. Original frozen settings/inputs, complete packet validated by original receipt, normalization/output ownership unchanged. Profiled elapsed discarded; samples and skid are not component times or predicted savings.",
+  "allBuilds": 0,
+  "quietGuardsPassed": true,
+  "totalSamples": 1983,
+  "managedSamples": 1905,
+  "methods": [
+    {
+      "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceColorTransform::Histogram(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,int32,int32,int32,bool,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 257
+    },
+    {
+      "name": "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PopulationSum(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 182
+    },
+    {
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8lPredictorHistogram::AccumulateInterior(valuetype [System.Runtime]System.Span`1<int32>,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+      "samples": 175
+    },
+    {
+      "name": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+      "samples": 147
+    },
+    {
+      "name": "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::PreparedPredictionEntropy(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>,int64)[Optimized]",
+      "samples": 119
+    },
+    {
+      "name": "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::ResidualBias(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>)[Optimized]",
+      "samples": 97
+    },
+    {
+      "name": "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::LargeSLog(int32)[Optimized]",
+      "samples": 63
+    },
+    {
+      "name": "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lColorCost::Prepare(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.Span`1<int64>)[Optimized]",
+      "samples": 60
+    },
+    {
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::BuildHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.Span`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      "samples": 54
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lPopulationWorkspace::Replay(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32&)[Optimized]",
+      "samples": 48
+    }
+  ],
+  "populationRegions": {
+    "method": "Vp8lReferenceEntropy.PopulationSum",
+    "jitCodeBytes": 547,
+    "samples": 182,
+    "regions": {
+      "sum/run discovery": 67,
+      "run model accumulation": 111,
+      "setup/finish/call boundary": 4
+    },
+    "note": "Relative offsets use matching547B actual-module JIT, emitted by existing untimed audit. Sample skid/regions do not give component costs or available savings."
+  },
+  "untimedAudit": {
+    "toolBuilds": 0,
+    "newCpuCaptures": 0,
+    "receipt": "tmp/oph204a-audit-receipt.json",
+    "sameActualModule": true,
+    "gates": "Exact complete packets/source, borrowed root survives with no retained scratch; no timing/allocation claim."
+  },
+  "validation": {
+    "caseId": "EncodeOpaque8",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "managedOutputBytes": 121896,
+    "nativeOutputBytes": 121896,
+    "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+    "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Original development-only libwebp exact=1 FFmpeg encoder-backend worker",
+      "sourceSha256": "bb2b3525a4d93305c5780d81bc8f73ea7335fdb5b2fde29cce71fd53cf6116c0",
+      "buildScriptSha256": "260bff49dd7711f1884873859b1c333e20accf86e08bbb0c80adea3051c89db1",
+      "workerSha256": "d2475ce3bceac9120e4958ab1e718f46745ad959c5c2cafcfbb28cf7d09906b1",
+      "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "staticArchives": {
+        "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+        "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+        "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+        "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+        "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+        "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+        "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+        "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+        "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+        "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+        "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+        "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+        "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+      },
+      "libraries": "-L{native-prefix}/lib -lwebp -lm -L{native-prefix}/lib -lsharpyuv -lm"
+    },
+    "boundary": "One resident original 513x259 RGBA8 raster with RGB unchanged and alpha255 to complete independently owned VP8L. Public managed EncodeWebp, admission, fresh MemoryStream creation/growth and disposal; no redundant ToArray. Native libwebp exact=1 (FFmpeg encoder backend), lossless1, effort4, quality75 fixed compression control; Full channel normalization and RGBA-to-BGRA full-frame repacking inside every call, fresh pixel import/allocation, encode and independently owned packet acquisition/release. Codec/input/frame/packet wrappers and BGRA workspace reused; every pixel reprocessed. Exact RGBA/alpha/hidden RGB required. Equal pixels do not imply equal compression ratios; output sizes recorded. Startup, I/O, IPC, preparation, hashing and validation excluded. One CPU/codec/conversion thread, normal SIMD. No source/quality/effort/profile enumeration."
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-current-lossless-opaque-attribution.tar.xz",
+    "bytes": 1129704,
+    "members": 54,
+    "sha256": "4c29db971cdb993e21c0af4dafe577b87f1dfd85cb5e4ef0c14db6332b25f31e",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "baselineDependency": "webp-color-histogram-separation-qualified.tar.xz",
+    "baselineDependencySha256": "3e026e25c70e9ec7ad3ad02c104f150cbdad08e3a828da5917c215e821f9541f",
+    "localMembersVerified": true
+  },
+  "unchangedQualification": "HSP200 full/live5541 each OS, normal/scalar WebP and SAME actual Release package/three examples; no repeated broad/package checks."
+}

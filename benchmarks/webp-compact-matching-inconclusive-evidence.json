@@ -1,0 +1,149 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CPI202",
+  "accepted": false,
+  "statisticalGainClaim": false,
+  "scope": "One bounded three-actual complete-operation screen of each existing alpha and lossless photograph control on the quiet single-CPU VM. All original frozen packet, input, settings, native, source and ownership gates retained.",
+  "design": "After the final forward-head lookup, reuse the admitted token seed for exact green+alpha ushort samples only when every red/blue sample is constant. Full-color hashing, chain order, pruning, distances, ties and packet coding stay unchanged; one generic reverse scheduler specializes for uint/ushort. Safe BCL compact prefixes check cancellation in bounded256-sample chunks.",
+  "boundary": "Preparation remains timed; no new allocation, reservation, owner, pool or cross-operation cache. Noneligible sources keep full-color comparisons before any additional admission. Selected tokens remain independently owned.",
+  "observations": [
+    {
+      "caseId": "alpha",
+      "baseline": {
+        "microseconds": 68812.88583333333,
+        "ratio": 1.2080100970498824,
+        "allocated": {
+          "BytesAllocatedPerOperation": 8146632
+        },
+        "packetBytes": 98590,
+        "statistics": "tmp/cpi202-baseline-alpha-short-statistics.json",
+        "receipt": "tmp/cpi202-baseline-alpha-short-receipt.json",
+        "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca"
+      },
+      "candidate": {
+        "microseconds": 69601.38341666668,
+        "ratio": 1.2217119850881082,
+        "allocated": {
+          "BytesAllocatedPerOperation": 8146632
+        },
+        "packetBytes": 98590,
+        "statistics": "tmp/cpi202-candidate-alpha-short-statistics.json",
+        "receipt": "tmp/cpi202-candidate-alpha-short-receipt.json",
+        "librarySha256": "891693af672c8cb27549defe4850ae41845c9fc7f8f49942bfa214be8b4a86fb"
+      }
+    },
+    {
+      "caseId": "photograph",
+      "baseline": {
+        "microseconds": 86650.61866666668,
+        "ratio": 0.9915801580028503,
+        "allocated": {
+          "BytesAllocatedPerOperation": 6516744
+        },
+        "packetBytes": 160032,
+        "statistics": "tmp/cpi202-baseline-photograph-short-statistics.json",
+        "receipt": "tmp/cpi202-baseline-photograph-short-receipt.json",
+        "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca"
+      },
+      "candidate": {
+        "microseconds": 87873.3455,
+        "ratio": 0.9982678661390003,
+        "allocated": {
+          "BytesAllocatedPerOperation": 6516744
+        },
+        "packetBytes": 160032,
+        "statistics": "tmp/cpi202-candidate-photograph-short-statistics.json",
+        "receipt": "tmp/cpi202-candidate-photograph-short-receipt.json",
+        "librarySha256": "891693af672c8cb27549defe4850ae41845c9fc7f8f49942bfa214be8b4a86fb"
+      }
+    }
+  ],
+  "preparation": {
+    "windows": {
+      "baselineSha256": "6e50c152368a5db73d34321d2db001da60a1a2e85d4cb5a94bf24f2be6bbe5c4",
+      "candidateSha256": "1acbcaa160a17ab7763041fa78af39ee23094f9604f75f916edf23afd8ae3571",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "e728d07a25f2f584e7dfbf3c6d1a0d007b839a323907e6c94f5e81776385c16a",
+        "tests/Lokad.Image.Tests/Vp8lMatchLengthTests.cs": "76a0056eb5e8a1da1bb0a2ee9ff01f17bf8102f8aa556be3b8e88cc7988a968f",
+        "tests/Lokad.Image.Tests/Vp8lCompactMatchingTests.cs": "6a2568e614fbd247a28c9086246bea671c5f808f495dba88a8e85eb0b2e2d2ea"
+      },
+      "focused": {
+        "internal-normal": 820,
+        "internal-scalar": 820,
+        "public-normal": 194,
+        "public-scalar": 194
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "internalTestAssemblySha256": "ef67f6c98b4c53aad234ecc579ee34b4e291b8671e53d7d667205acdbd961bb0"
+    },
+    "linux": {
+      "baselineSha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+      "candidateSha256": "891693af672c8cb27549defe4850ae41845c9fc7f8f49942bfa214be8b4a86fb",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "e728d07a25f2f584e7dfbf3c6d1a0d007b839a323907e6c94f5e81776385c16a",
+        "tests/Lokad.Image.Tests/Vp8lMatchLengthTests.cs": "76a0056eb5e8a1da1bb0a2ee9ff01f17bf8102f8aa556be3b8e88cc7988a968f",
+        "tests/Lokad.Image.Tests/Vp8lCompactMatchingTests.cs": "6a2568e614fbd247a28c9086246bea671c5f808f495dba88a8e85eb0b2e2d2ea"
+      },
+      "focused": {
+        "internal-normal": 820,
+        "internal-scalar": 820,
+        "public-normal": 194,
+        "public-scalar": 194
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "internalTestAssemblySha256": "f74af73f66c74529aafce0969eed432e5a0c476723c2904d87e862d6aecee2b4"
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionChanged": false,
+      "productionSha256": "6e50c152368a5db73d34321d2db001da60a1a2e85d4cb5a94bf24f2be6bbe5c4",
+      "packageSha256": "f7fb9b73aebcb06461e49db17f27076ad63574b38134008a19a7bfb7db7f8fc6",
+      "productionSourcesRestored": true,
+      "corePdbXmlAndInternalAssembliesRestored": true,
+      "builds": 0,
+      "unchangedQualificationReused": "HSP200 full/live5541 each OS, affected normal/scalar and SAME actual Release package/three examples; CI41730944049 green",
+      "removedHelperOnlyTests": [
+        "tests/Lokad.Image.Tests/Vp8lCompactMatchingTests.cs"
+      ]
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionChanged": false,
+      "productionSha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+      "packageSha256": "f7fb9b73aebcb06461e49db17f27076ad63574b38134008a19a7bfb7db7f8fc6",
+      "productionSourcesRestored": true,
+      "corePdbXmlAndInternalAssembliesRestored": true,
+      "builds": 0,
+      "unchangedQualificationReused": "HSP200 full/live5541 each OS, affected normal/scalar and SAME actual Release package/three examples; CI41730944049 green",
+      "removedHelperOnlyTests": [
+        "tests/Lokad.Image.Tests/Vp8lCompactMatchingTests.cs"
+      ]
+    }
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-compact-matching-inconclusive.tar.xz",
+    "bytes": 2321104,
+    "members": 266,
+    "sha256": "a54e9791512040c6fcb05b055f0be1ce64661596d46477a40ea3d821317aec19",
+    "vmMembersVerified": true,
+    "productionAccepted": false,
+    "baselineDependency": "webp-color-histogram-separation-qualified.tar.xz",
+    "baselineDependencySha256": "3e026e25c70e9ec7ad3ad02c104f150cbdad08e3a828da5917c215e821f9541f",
+    "capacityDependency": "webp-alpha-comparison-capacity-audit.tar.xz",
+    "capacityDependencySha256": "14ddbadec5b059f2f9f5716c9ffa9ceb2f319accf11ffbed3c8a1123094c9a2e",
+    "localMembersVerified": true
+  },
+  "capacityAudit": {
+    "file": "webp-alpha-comparison-capacity-audit.tar.xz",
+    "sha256": "14ddbadec5b059f2f9f5716c9ffa9ceb2f319accf11ffbed3c8a1123094c9a2e",
+    "conclusion": "Both frozen alpha filters require green AND alpha. The1MiB forward heads have no users during reverse queries; the retired charged seed fits265734B. Capacity feasibility is not CPU evidence."
+  },
+  "decision": "No useful lead or allocation benefit. No independent confirmation or CPI203 job was started. Restore all production sources, original tests, actual DLL/PDB/XML and Linux source manifest byte-exact; remove candidate-only tests. Reuse unchanged HSP200 qualification and actual package; no broad/package repeat or restoration build. This inconclusive implementation does not permanently exclude a materially revised design."
+}

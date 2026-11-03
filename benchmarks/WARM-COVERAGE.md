@@ -165,6 +165,12 @@ governed geometry admission remain unchanged. Lanczos/nearest and codec/read/tex
 drawing paths reuse applicable evidence. The existing Up8 case checks the
 2 MiB-versus-4 MiB retention boundary without adding a material required path.
 
+The [compact matching trial](WEBP-COMPACT-MATCHING-INCONCLUSIVE.md) preserves
+exact packets but establishes no CPU/allocation gain; production is restored.
+The [current opaque capture](WEBP-OPAQUE-CURRENT-ATTRIBUTION.md) identifies dense
+scoring and predictor/histogram work for a bounded reuse audit, without timing or
+available-savings claims. No affected qualification is invalidated.
+
 Current priorities: preparation/reuse and operation-owned workspace, then shared
 resize execution and further codec work selected from attribution. The
 [parsing-lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md) does not justify a simple

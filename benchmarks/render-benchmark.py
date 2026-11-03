@@ -1920,11 +1920,9 @@ tolerances preserve exact managed contracts and full 16-bit samples. See
 [text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
 [codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
 
-Current production passes {overwrite['qualification']['fullChecksEachOs']:,} full/live checks per OS,
-193 internal and 796 public affected resize checks in normal/scalar modes, and the
-same actual Release-package consumer/three examples on Windows/Linux. Unchanged
-paths reuse valid performance evidence. Current
-family evidence is linked below; individual experiments remain in
+Unchanged resize paths reuse their normal/scalar and package qualification;
+current build checks are stated above. Family evidence is linked below;
+individual experiments remain in
 [coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
 
 **Codecs**
