@@ -5,25 +5,26 @@ namespace Lokad.Image.Tests;
 public sealed class PngDeflaterMatchLengthTests
 {
     [Fact]
-    public void EarliestMismatchAndExactLookaheadHoldAcrossBothRingEdgesAndOverlap()
+    public void EarliestMismatchAndExactLookaheadHoldAtContiguousHistoryEdgesAndOverlap()
     {
-        const int ring = 65536, mask = ring - 1;
-        (long Prior, long Current)[] layouts =
+        const int capacity = 65536;
+        (int Prior, int Current)[] layouts =
         [
-            (3L * ring + 101, 3L * ring + 10007),
-            (3L * ring + ring - 29, 4L * ring + 5001),
-            (3L * ring + 50001, 3L * ring + ring - 17),
-            (3L * ring + ring - 23, 3L * ring + ring - 19)
+            (0, 10007),
+            (32768 - 29, 32768 + 5001),
+            (50001, capacity - 258),
+            (capacity - 262, capacity - 258),
+            (0, 4)
         ];
-        var history = new byte[ring]; Array.Fill(history, (byte)0xa5);
+        var history = new byte[capacity]; Array.Fill(history, (byte)0xa5);
         foreach (var (prior, current) in layouts)
         {
             for (var mismatch = 8; mismatch <= 258; mismatch++)
             {
-                var index = (int)((current + mismatch) & mask); var bit = (byte)(1 << (mismatch & 7));
+                var index = current + mismatch; var bit = (byte)(1 << (mismatch & 7));
                 if (mismatch < 258) history[index] ^= bit;
                 var expected = 8;
-                while (expected < 258 && history[(int)((prior + expected) & mask)] == history[(int)((current + expected) & mask)]) expected++;
+                while (expected < 258 && history[prior + expected] == history[current + expected]) expected++;
                 Assert.Equal(expected, PngDeflater.MatchLength(history, prior, current, 8, 258));
                 // The changed byte just beyond the requested limit is invisible.
                 Assert.Equal(mismatch, PngDeflater.MatchLength(history, prior, current, 8, mismatch));

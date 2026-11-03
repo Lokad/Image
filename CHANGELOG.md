@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- PNG encoding shares contiguous history with its relative dictionary, reducing
+  search overhead while preserving exact packets and existing storage bounds.
+
 - Text raster preparation skips disjoint edge pairs and reuses scan-conversion
   storage, preserving exact pixels, cancellation and shared admission.
 

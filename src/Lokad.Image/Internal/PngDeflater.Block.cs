@@ -70,10 +70,8 @@ internal sealed partial class PngDeflater
             Put(final ? 1 : 0, 3); Align();
             OutputByte((byte)expanded); OutputByte((byte)(expanded >> 8));
             OutputByte((byte)~expanded); OutputByte((byte)(~expanded >> 8));
-            var offset = (int)(blockStart & (2 * Window - 1));
-            var first = Math.Min(expanded, history.Length - offset);
-            OutputBytes(history.AsSpan(offset, first));
-            OutputBytes(history.AsSpan(0, expanded - first));
+            var offset = (int)(blockStart - windowOrigin);
+            OutputBytes(history.AsSpan(offset, expanded));
         }
         else
         {

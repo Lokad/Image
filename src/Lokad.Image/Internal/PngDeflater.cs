@@ -49,9 +49,8 @@ internal sealed partial class PngDeflater : Stream
         while (!data.IsEmpty)
         {
             AdvanceOrigin();
-            var offset = (int)(filled & (2 * Window - 1));
-            var count = (int)Math.Min(data.Length, 2 * Window - (filled - windowOrigin));
-            count = Math.Min(count, history.Length - offset);
+            var offset = (int)(filled - windowOrigin);
+            var count = Math.Min(data.Length, history.Length - offset);
             if (count == 0) throw new InvalidOperationException("PNG history did not advance.");
             data[..count].CopyTo(history.AsSpan(offset));
             Adler32.Append(data[..count], ref adlerA, ref adlerB, context.Cancellation);
@@ -95,8 +94,11 @@ internal sealed partial class PngDeflater : Stream
     private void AdvanceOrigin()
     {
         if(position<windowOrigin+2*Window-Lookahead+1)return;
-        // Only links move to the next relative coordinate system. Byte history
-        // stays in its ring. Positions at/before the new origin are invalid.
+        // Byte history and dictionary links share the same relative origin.
+        // The oldest eligible match is above Window at this boundary, including
+        // a deferred match. Retain the upper half without allocating new storage.
+        context.Cancellation.ThrowIfCancellationRequested();
+        history.AsSpan(Window, Window).CopyTo(history);
         SlideLinks(heads);SlideLinks(older);windowOrigin+=Window;
     }
     private void SlideLinks(ushort[] links)
@@ -112,24 +114,18 @@ internal sealed partial class PngDeflater : Stream
             for(;i<end;i++)links[i]=(ushort)Math.Max(0,links[i]-Window);
         }
     }
-    private byte Byte(long at) => history[(int)(at & (2 * Window - 1))];
-    // Adjacent rejection samples share one bounded read. Only the final
-    // physical ring byte needs the split path; logical input remains borrowed.
+    private byte Byte(int at) => history[at];
+    // Input history is contiguous in the current dictionary coordinate system.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private ushort Pair(long at)
-    {
-        var offset = (int)(at & (2 * Window - 1));
-        return offset == 2 * Window - 1 ? (ushort)(history[offset] | history[0] << 8)
-            : BinaryPrimitives.ReadUInt16LittleEndian(history.AsSpan(offset, 2));
-    }
-    private long Insert(long at)
+    private ushort Pair(int at) => BinaryPrimitives.ReadUInt16LittleEndian(history.AsSpan(at, 2));
+
+    private int Insert(int at)
     {
         var key = ((Byte(at) << 10) ^ (Byte(at + 1) << 5) ^ Byte(at + 2)) & (Window - 1);
-        var prior=heads[key];older[(int)(at&(Window-1))]=prior;
-        // Origin advances before relative position65275. Even lazy insertion
-        // through a pending258-byte match stays below65536.
-        heads[key]=checked((ushort)(at-windowOrigin));
-        return windowOrigin+prior;
+        var prior = heads[key]; older[at & (Window - 1)] = prior;
+        // Even insertion through a deferred 258-byte match remains below 65536.
+        heads[key] = checked((ushort)at);
+        return prior;
     }
 
     private void Process(bool final)
@@ -142,38 +138,39 @@ internal sealed partial class PngDeflater : Stream
         while (position < filled && (final || filled - position >= Lookahead))
         {
             context.Cancellation.ThrowIfCancellationRequested(); AdvanceOrigin();
-            var prior = position + Minimum <= filled ? Insert(position) : 0;
-            var length = Minimum - 1; long start = 0;
+            var current = (int)(position - windowOrigin);
+            var prior = position + Minimum <= filled ? Insert(current) : 0;
+            var length = Minimum - 1; var start = 0;
             var available = (int)Math.Min(Maximum, filled - position);
-            if (prior > windowOrigin && position - prior <= Window - Lookahead)
+            if (prior > 0 && current - prior <= Window - Lookahead)
             {
-                var searches = 4; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
-                var prefixPair = Pair(position); var tail = Byte(position + length);
+                var searches = 4; var limit = Math.Max(0, current - (Window - Lookahead));
+                var prefixPair = Pair(current); var tail = Byte(current + length);
                 do
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
                     if (length < available && Byte(prior + length) == tail && Pair(prior) == prefixPair)
                     {
                         var found = 2;
-                        while (found < available && Byte(prior + found) == Byte(position + found)) found++;
+                        while (found < available && Byte(prior + found) == Byte(current + found)) found++;
                         context.Cancellation.ThrowIfCancellationRequested();
                         if (found > length)
                         {
                             length = found; start = prior; if (found >= Math.Min(8, available)) break;
-                            tail = Byte(position + length);
+                            tail = Byte(current + length);
                         }
                     }
-                    prior = windowOrigin + older[(int)(prior & (Window - 1))];
+                    prior = older[prior & (Window - 1)];
                 } while (prior > limit && --searches != 0);
             }
             if (length >= Minimum)
             {
-                Emit((uint)length | (uint)(position - start) << 9);
+                Emit((uint)length | (uint)(current - start) << 9);
                 if (length <= 4 && filled - position - length >= Minimum)
-                    for (var at = position + 1; at < position + length; at++) Insert(at);
+                    for (var at = current + 1; at < current + length; at++) Insert(at);
                 position += length;
             }
-            else { Emit(Byte(position)); position++; }
+            else { Emit(Byte(current)); position++; }
         }
     }
 
@@ -182,14 +179,16 @@ internal sealed partial class PngDeflater : Stream
         while (position < filled && (final || filled - position >= Lookahead))
         {
             context.Cancellation.ThrowIfCancellationRequested(); AdvanceOrigin();
-            var prior = position + Minimum <= filled ? Insert(position) : 0;
-            var length = Minimum - 1; long start = 0;
-            if (prior > windowOrigin && position - prior <= Window - Lookahead && deferredLength < (level == 9 ? 258 : 16))
+            var current = (int)(position - windowOrigin);
+            var prior = position + Minimum <= filled ? Insert(current) : 0;
+            var length = Minimum - 1; var start = 0;
+            if (prior > 0 && current - prior <= Window - Lookahead && deferredLength < (level == 9 ? 258 : 16))
             {
                 var searches = level == 9 ? (deferredLength >= 32 ? 1024 : 4096) : deferredLength >= 8 ? 32 : 128;
-                var best = deferredLength; var limit = Math.Max(windowOrigin, position - (Window - Lookahead));
+                var best = deferredLength; var limit = Math.Max(0, current - (Window - Lookahead));
                 var available = (int)Math.Min(Maximum, filled - position); var enough = Math.Min(level == 9 ? 258 : 128, available);
-                var prefixPair = Pair(position); var tailPair = Pair(position + best - 1);
+                var prefixPair = Pair(current);
+                var tailPair = best < available ? Pair(current + best - 1) : (ushort)0;
                 do
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -197,31 +196,32 @@ internal sealed partial class PngDeflater : Stream
                     {
                         var found = 2;
                         var prefix = Math.Min(8, available);
-                        while (found < prefix && Byte(prior + found) == Byte(position + found)) found++;
-                        if (found == 8 && found < available) found = MatchLength(history, prior, position, found, available);
+                        while (found < prefix && Byte(prior + found) == Byte(current + found)) found++;
+                        if (found == 8 && found < available) found = MatchLength(history, prior, current, found, available);
                         context.Cancellation.ThrowIfCancellationRequested();
                         if (found > best)
                         {
                             best = found; start = prior; if (found >= enough) break;
-                            tailPair = Pair(position + best - 1);
+                            tailPair = Pair(current + best - 1);
                         }
                     }
-                    prior = windowOrigin + older[(int)(prior & (Window - 1))];
+                    prior = older[prior & (Window - 1)];
                 } while (prior > limit && --searches != 0);
                 length = Math.Min(best, available);
-                if (length == Minimum && position - start > Window / 8) length = Minimum - 1;
+                if (length == Minimum && current - start > Window / 8) length = Minimum - 1;
             }
             if (deferredLength >= Minimum && deferredLength >= length)
             {
                 Emit((uint)deferredLength | (uint)(position - 1 - deferredStart) << 9);
-                var after = position + deferredLength - 1;
-                for (var at = position + 1; at < after && at + Minimum <= filled; at++) Insert(at);
-                position = after; deferredLength = Minimum - 1; hasDeferredByte = false;
+                var after = current + deferredLength - 1;
+                var lastInsert = (int)(filled - windowOrigin) - Minimum;
+                for (var at = current + 1; at < after && at <= lastInsert; at++) Insert(at);
+                position = windowOrigin + after; deferredLength = Minimum - 1; hasDeferredByte = false;
             }
             else
             {
-                if (hasDeferredByte) Emit(Byte(position - 1));
-                hasDeferredByte = true; deferredLength = length; deferredStart = start; position++;
+                if (hasDeferredByte) Emit(Byte(current - 1));
+                hasDeferredByte = true; deferredLength = length; deferredStart = windowOrigin + start; position++;
             }
         }
     }
@@ -232,26 +232,18 @@ internal sealed partial class PngDeflater : Stream
         if (tokenCount == TokenCapacity) Block(false);
     }
 
-    // The caller verified the prefix. Input history is immutable during search,
-    // including overlapping matches. Split at either 64KiB ring edge so every
-    // word is bounded by both the retained array and the <=258-byte lookahead.
-    internal static int MatchLength(ReadOnlySpan<byte> history, long prior, long current, int found, int available)
+    // The caller verified the prefix. Both ranges are inside acquired immutable
+    // history, including overlapping matches. Every word stays inside lookahead.
+    internal static int MatchLength(ReadOnlySpan<byte> history, int prior, int current, int found, int available)
     {
-        while (found < available)
+        var left = history.Slice(prior, available); var right = history.Slice(current, available);
+        for (; found <= available - 8; found += 8)
         {
-            var leftOffset = (int)((prior + found) & (2 * Window - 1));
-            var rightOffset = (int)((current + found) & (2 * Window - 1));
-            var count = Math.Min(available - found, Math.Min(2 * Window - leftOffset, 2 * Window - rightOffset));
-            var left = history.Slice(leftOffset, count); var right = history.Slice(rightOffset, count); var i = 0;
-            for (; i <= count - 8; i += 8)
-            {
-                var different = BinaryPrimitives.ReadUInt64LittleEndian(left.Slice(i, 8))
-                    ^ BinaryPrimitives.ReadUInt64LittleEndian(right.Slice(i, 8));
-                if (different != 0) return found + i + (BitOperations.TrailingZeroCount(different) >> 3);
-            }
-            for (; i < count; i++) if (left[i] != right[i]) return found + i;
-            found += count;
+            var different = BinaryPrimitives.ReadUInt64LittleEndian(left.Slice(found, 8))
+                ^ BinaryPrimitives.ReadUInt64LittleEndian(right.Slice(found, 8));
+            if (different != 0) return found + (BitOperations.TrailingZeroCount(different) >> 3);
         }
+        for (; found < available; found++) if (left[found] != right[found]) return found;
         return found;
     }
 
@@ -264,7 +256,7 @@ internal sealed partial class PngDeflater : Stream
         else
         {
             Process(true);
-            if (hasDeferredByte) { Emit(Byte(position - 1)); hasDeferredByte = false; }
+            if (hasDeferredByte) { Emit(Byte((int)(position - windowOrigin) - 1)); hasDeferredByte = false; }
             Block(true);
         }
         Align();
