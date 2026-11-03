@@ -7,6 +7,8 @@ internal sealed class Vp8lImageCode : IDisposable
 {
     private readonly OperationContext context;
     private Vp8lTokenBuffer? tokens;
+    internal Vp8lTokenBuffer DetachTokens()
+        => Interlocked.Exchange(ref tokens, null) ?? throw new ObjectDisposedException(nameof(Vp8lImageCode));
     private Vp8lHistogramPlan? histograms;
     private Vp8lHuffmanGroup?[]? groups;
     private Vp8lImageCode? groupMap;

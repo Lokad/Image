@@ -65,6 +65,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             throw new ArgumentException("Expected complete VP8 alpha rows.");
         context.Cancellation.ThrowIfCancellationRequested(); context.PixelBytes(width, alpha.Length / width, 8);
         var result = new Vp8AlphaEncoding(width, alpha.Length / width, context);
+        Vp8lTokenBuffer? spare = null;
         try
         {
             context.Reserve(128); result.capacity = 128; context.Cancellation.ThrowIfCancellationRequested();
@@ -82,30 +83,40 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                         // carried in green: this is an internal exact image.
                         working[i] = (uint)((alpha[i] - Predict(alpha, width, i, filter)) & 255) << 8;
                     }
-                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 6 ? 100 : 8 * method, greenOnly: true);
-                    var body = prepared.PayloadBytes - 5; var compressed = body <= alpha.Length;
-                    var length = 1 + (compressed ? body : alpha.Length);
-                    if (result.payload is not null && length >= result.payload.Length) continue;
-                    // Old and new capacities overlap until emission succeeds.
-                    context.Reserve(length);
+                    var seed = spare; spare = null;
+                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 6 ? 100 : 8 * method, greenOnly: true, matchingSeed: seed);
                     try
                     {
-                        context.Cancellation.ThrowIfCancellationRequested(); var next = new byte[length]; next[0] = (byte)((filter << 2) | (compressed ? 1 : 0));
-                        if (compressed)
+                        var body = prepared.PayloadBytes - 5; var compressed = body <= alpha.Length;
+                        var length = 1 + (compressed ? body : alpha.Length);
+                        if (result.payload is not null && length >= result.payload.Length) continue;
+                        // Old and new capacities overlap until emission succeeds.
+                        context.Reserve(length);
+                        try
                         {
-                            using var output = new MemoryStream(next, 1, length - 1, writable: true);
-                            prepared.WriteAlphaBody(output);
-                            if (output.Position != length - 1) throw new InvalidOperationException("ALPH size changed after preparation.");
+                            context.Cancellation.ThrowIfCancellationRequested(); var next = new byte[length]; next[0] = (byte)((filter << 2) | (compressed ? 1 : 0));
+                            if (compressed)
+                            {
+                                using var output = new MemoryStream(next, 1, length - 1, writable: true);
+                                prepared.WriteAlphaBody(output);
+                                if (output.Position != length - 1) throw new InvalidOperationException("ALPH size changed after preparation.");
+                            }
+                            else
+                            {
+                                for (var i = 0; i < alpha.Length; i++)
+                                { context.Cancellation.ThrowIfCancellationRequested(); next[i + 1] = unchecked((byte)(alpha[i] - Predict(alpha, width, i, filter))); }
+                            }
+                            var old = result.payload; result.payload = next; result.capacity += length;
+                            if (old is not null) { result.capacity -= old.Length; context.Release(old.Length); }
                         }
-                        else
-                        {
-                            for (var i = 0; i < alpha.Length; i++)
-                            { context.Cancellation.ThrowIfCancellationRequested(); next[i + 1] = unchecked((byte)(alpha[i] - Predict(alpha, width, i, filter))); }
-                        }
-                        var old = result.payload; result.payload = next; result.capacity += length;
-                        if (old is not null) { result.capacity -= old.Length; context.Release(old.Length); }
+                        catch { context.Release(length); throw; }
                     }
-                    catch { context.Release(length); throw; }
+                    finally
+                    {
+                        // All emission users are finished. Method6 searches multiple
+                        // independent families; keep its existing ownership unchanged.
+                        if (method != 6) spare = prepared.DetachMainTokens();
+                    }
                 }
             }
             finally { context.Release(scratch); }
@@ -114,6 +125,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             return result;
         }
         catch { result.Dispose(); throw; }
+        finally { spare?.Dispose(); }
     }
 
     public void Dispose()

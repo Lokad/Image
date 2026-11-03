@@ -10,9 +10,9 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Shared scoring preparation](WEBP-SCORING-PREPARATION.md) refreshes four controls. Original/diagram still pass. Fresh interleaved photo/opaque comparisons confirm gains of3.276/2.081ms and remaining gaps, alongside lower allocations. Distinct global-bracket time estimates are retained. Exact packets and partial-refusal ownership pass. |
-| Resident VP8 encoding | [Source texture preparation](VP8-SOURCE-TEXTURE-PREPARATION.md) remains valid for five unchanged opaque/word/trellis controls. [Shared scoring](WEBP-SCORING-PREPARATION.md) refreshes transparent RGBA8/16; both retain gaps. No incremental CPU claim from historical time differences. |
-| Other WebP encoding boundaries | [Current depth and async confirmations](CURRENT-LOSSLESS-WEBP-BOUNDARIES.md) pass on the immutable production build, including normalization and fresh nonseekable output ownership. Stop those two controls. Other affected method/effort costs remain historical until reconciled; no blanket family pass. Low-effort paths must be distinguished by actual calls. |
+| Resident lossless WebP | [Alpha workspace qualification](WEBP-ALPHA-TOKEN-REUSE.md) refreshes the four existing lossless controls on the accepted build. Original/diagram pass and stop; photo/opaque remain gaps. Earlier scoring gains retain their original producer/estimator. Exact packets and ownership pass. |
+| Resident VP8 encoding | [Source texture preparation](VP8-SOURCE-TEXTURE-PREPARATION.md) remains valid for five unchanged opaque/word/trellis controls. [Retired-token reuse](WEBP-ALPHA-TOKEN-REUSE.md) refreshes transparent RGBA8/16 and saves1,063,408B/op with unchanged admitted peak. Both retain CPU gaps; no established incremental CPU gain or regression. |
+| Other WebP encoding boundaries | [Refreshed depth and async confirmations](WEBP-ALPHA-TOKEN-REUSE.md) pass on the immutable accepted build, including normalization and fresh nonseekable output ownership. Stop those two controls. Other affected method/effort costs remain historical until reconciled; no blanket family pass. Low-effort paths must be distinguished by actual calls. |
 | PNG encoding | [Contiguous history](PNG-CONTIGUOUS-HISTORY.md) qualifies current one-shot RGBA8 Optimal/Fastest gaps. The [bounded-region execution trial](PNG-BOUNDED-REGION-INCONCLUSIVE.md) is inconclusive and restored; accepted costs stay unchanged. Other affected compressed costs marked H remain historical; the bounded word-depth screen does not refresh the family. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
 | Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) refreshes four existing bicubic controls: byte enlargement has a confirmed gain, wide reduction still passes, three retain gaps. Idle retention and governed peaks are reported separately. Other affected bilinear/bicubic costs marked H need reconciliation. [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md) retains one-shot reduction passes and prepared gaps. Exact Q30/rational/certified pixels remain required. |
@@ -21,7 +21,7 @@ Completion needs current passing evidence for every named path, with scope state
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,507 full/live checks per OS,
+The current immutable production build passes 5,524 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.
@@ -163,9 +163,10 @@ rejected-token handoff. The [photograph profile before invariant scoring](WEBP-P
 identifies a transform-search lead; its whole-profile fractions are now historical.
 Trial failures are leads to reassess only with a materially revised design.
 The [current alpha-filter lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md#reuse-after-alpha-filter-emission)
-identifies 1,062,936 B of potentially reusable token capacity without a modeled
-admitted-peak increase on the existing transparent control. Actual reuse, allocation,
-failure and CPU acceptance remain unproved; no current cost changes.
+identified reusable token capacity. The [completed handoff](WEBP-ALPHA-TOKEN-REUSE.md)
+now proves an11% complete-operation allocation reduction, unchanged admitted peak,
+exact packets and full package ownership qualification. CPU gain/regression is
+unproved; adverse global and overlapping interleaved evidence are both retained.
 The [cache-history lifetime trial](WEBP-CACHE-HISTORY-REUSE-INCONCLUSIVE.md)
 reduces alpha allocation by8,672B/op but has no elapsed lead; production is
 restored and current costs remain unchanged. Its exhaustive admission-refusal

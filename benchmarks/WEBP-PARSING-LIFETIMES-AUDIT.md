@@ -45,7 +45,7 @@ mirrored/member-verified, with the qualified production/source dependency pinned
 
 ## Reuse after alpha-filter emission
 
-A current-code audit of the existing complete transparent Q75/effort4 control
+An audit before the handoff change, on the existing transparent Q75/effort4 control
 finds a different handoff: both filters retain a 1,062,936-byte main-token owner
 until emission, then dispose it before preparing the next filter. The selected
 encoded ALPH payload has independent ownership.
@@ -63,10 +63,11 @@ pass. A diagnostic method named Main initially triggered the compiler's entrypoi
 warning-as-error; the corrected tool builds once successfully. No production,
 harness, native, selector or package rebuild and no timing/repeated confirmation.
 
-Next, transfer only retired token ownership after its final user. Check actual
-allocation/live-peak behavior, failure/cancellation cleanup, palette and all-family
-boundaries before any acceptance. This is separate from the earlier rejected
-token-to-histogram handoff, which increased modeled live capacity.
+The [completed handoff](WEBP-ALPHA-TOKEN-REUSE.md) qualifies actual allocation,
+admitted peak, failure/cancellation cleanup, palette/all-family boundaries and
+the same package on both OSes. It establishes no CPU gain or regression. This
+is separate from the rejected token-to-histogram handoff, which increased
+modeled live capacity.
 
 [Current evidence](webp-alpha-interfilter-lifetime-evidence.json) pins the model's
 assumptions and limited scope. Raw `webp-alpha-interfilter-lifetime-audit.tar.xz`:

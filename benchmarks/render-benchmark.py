@@ -1688,6 +1688,37 @@ def render():
         else:
             assert len(positions) == 1, label
             rows[positions[0]] = row
+    # One compact owner for the eight current prepared WebP costs. Older reports
+    # above retain their source-specific proofs; do not copy their experiment
+    # histories or substitute old costs for this accepted stage's current rows.
+    alpha_workspace = json.loads((ROOT / 'benchmarks/webp-alpha-token-reuse-evidence.json').read_text(encoding='utf-8'))
+    assert alpha_workspace['productionAccepted'] and not alpha_workspace['cpuGainClaim']
+    assert alpha_workspace['memory']['savedBytesPerOperation'] == 1063408
+    qualification = alpha_workspace['qualification']
+    assert qualification['windows']['total'] == qualification['linux']['total'] == 5524
+    assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
+    current_labels = {
+        'ordinary': 'VP8L RGBA8 / libwebp exact=1',
+        'photograph': 'VP8L photograph / libwebp exact=1',
+        'diagram': 'VP8L text/diagram / libwebp exact=1',
+        'opaque': 'VP8L opaque RGBA8 / libwebp exact=1',
+        'rgba16': 'VP8L RGBA16, including normalization / libwebp exact=1',
+        'async': 'VP8L async, fresh nonseekable output / libwebp exact=1',
+        'alpha': 'VP8 RGBA8 + lossless alpha',
+        'alpha16': 'VP8 RGBA16 + alpha, including normalization',
+    }
+    assert set(alpha_workspace['cases']) == set(current_labels)
+    for case, label in current_labels.items():
+        current = alpha_workspace['cases'][case]
+        assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
+        assert current['librarySha256'] == alpha_workspace['producers']['linuxSha256']
+        assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
+        assert (current['upper'] <= 1) == (case in {'ordinary', 'diagram', 'rgba16', 'async'})
+        positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
+        assert len(positions) == 1, label
+        rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
+                             f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1824,22 +1855,21 @@ controls below use the newer clustering build. All retain gaps. Only the photogr
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Shared scoring preparation](../benchmarks/WEBP-SCORING-PREPARATION.md) removes
-repeated invariant-weight generation and unused compact-bank preparation.
-Fresh interleaved comparisons save **3.276 ms / 3.21% raw / 2.49% normalized** on
-photograph and **2.081 ms / 2.54% raw / 3.24% normalized** on opaque lossless,
-with separated raw/normalized confidence. Their allocations fall **44,096 / 48,280 B**.
-Both retain confirmed paired gaps (upper1.119 /1.054); the table preserves distinct
-global-bracket time estimates. Original and diagram still pass; transparency
-retains gaps. [RGBA16 normalization and async output](../benchmarks/CURRENT-LOSSLESS-WEBP-BOUNDARIES.md)
-now also pass on this immutable core (upper 0.921 / 0.967). These two current-code
-confirmations close historical apparent gaps without a production change.
-Eight costs are current; other adaptive VP8L/ALPH costs marked **H**
-remain historical. Complete-operation diagnostic peaks are unchanged, per-operation
-scratch retention is zero, and fixed coefficients retain256B payload plus headers
-per process. Allocation, admission and physical heap usage remain distinct.
-[Earlier prepared-cost stages](../benchmarks/WEBP-PREPARED-CLUSTERING-COSTS.md)
-retain their gains, adverse results and byte-exact ownership evidence.
+[Alpha token reuse](../benchmarks/WEBP-ALPHA-TOKEN-REUSE.md) saves **1,063,408 B/op
+(10.98%)** on transparent RGBA8/16, now **8,622,560 B/op**. Retired candidate
+capacity becomes the next compatible filter's matching seed. Exact packets and
+the **3,847,888 B** admitted peak are unchanged; retained operation scratch is zero.
+There is **no established CPU gain or regression**: the adverse global point and
+overlapping interleaved confidence are both retained. All eight displayed affected
+WebP costs are refreshed on one immutable DLL; original/diagram/depth/async pass
+and stop, while photo/opaque/transparency retain gaps. Other adaptive costs marked
+**H** remain historical. Native allocation and physical heap peaks are unmeasured.
+The same actual Release package and three examples pass both OSes, alongside
+5,524 full/live checks per OS and affected normal/scalar checks.
+[Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md) retains its
+source-specific 3.276/2.081 ms photo/opaque gains; these are not new-stage CPU
+claims. Fixed bias constants retain 256 B/process plus headers. Allocation,
+admitted capacity and retention remain separate metrics.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite

@@ -1,0 +1,439 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "version": "0.2.1",
+  "date": "2026-11-03",
+  "round": "ALR177",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "independentQuietConfirmation": true,
+  "cpuGainClaim": false,
+  "causalRegressionClaim": false,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "4a03945162aecb4e875ff1a653d38124404c977f3297f68371459ac5dec2a830",
+    "linuxSha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+    "baselineWindowsSha256": "cc62cdcf2abee73c3a10f777b2a8e276a702dd62b520c7cad2761f27fbe92611",
+    "baselineLinuxSha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8AlphaEncoding.cs": "9c8a1f42524ff2865d95e6fd3183ece209df17ca14f96e7248addf84e7691812",
+      "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "943cb65635b5618773ff5d270dec7fac112ea130daae34b51cbe5cbd9ae0c4bd",
+      "src/Lokad.Image/Internal/Vp8lImageCode.cs": "6da72b152c898766525cb3c6afe9e24b244949f763a1989857401dfd91c635e9",
+      "tests/Lokad.Image.Tests/Vp8lMatchingSeedTests.cs": "6dc3725bff78b8e41df1b6bb3b16d49338d79c0f306e929b0490d62c33e70b33"
+    },
+    "sourceSha256": "514097e29826dced76e57a12af72b2a687fcddf050008331be0d87dd5d2252cd"
+  },
+  "implementation": {
+    "removed": "New full token capacity between consecutive compatible ALPH filters; matching heads and parsing already have non-overlapping use of this same owner.",
+    "endState": "After final emission, detach retired main tokens; dispose prepared metadata; transfer existing operation-owned tokens to next compatible early matching seed. Unused seed is a preparation local, no extra retained-object field, pool or admission abstraction.",
+    "scope": "Existing alpha8/16 Q75 effort4 complete encodes. Compatible single-family methods may reuse; method6 all-family search remains unchanged. Smaller/incompatible capacity and packed palettes release spare deterministically before replacement/transform work, without budget-dependent fallback.",
+    "preserve": "Candidate order/ties, complete packets/metadata exceptions, pixels, cancellation, owned capacity charges through actual users, independent selected payloads, terminal refusal and caller-root ownership."
+  },
+  "cases": {
+    "ordinary": {
+      "runId": "alr177-current-ordinary-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "managedUs": 118534.31045833333,
+      "nativeUs": 130510.76625,
+      "ratio": 0.908233963099066,
+      "lower": 0.8996983108676216,
+      "upper": 0.9162858672780921,
+      "allocatedBytes": 7476640,
+      "managedPacketBytes": 183812,
+      "nativePacketBytes": 183812,
+      "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "nativePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "status": "pass",
+      "observation": "alr177-current-ordinary-confirm-observation.json",
+      "receipt": "alr177-current-ordinary-confirm-receipt.json"
+    },
+    "photograph": {
+      "runId": "alr177-current-photograph-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "managedUs": 97745.16983522727,
+      "nativeUs": 90242.47241666667,
+      "ratio": 1.0831393158635905,
+      "lower": 1.0587249568212629,
+      "upper": 1.0940016053680475,
+      "allocatedBytes": 6517386,
+      "managedPacketBytes": 160032,
+      "nativePacketBytes": 160032,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "nativePacketSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "status": "gap",
+      "observation": "alr177-current-photograph-confirm-observation.json",
+      "receipt": "alr177-current-photograph-confirm-receipt.json"
+    },
+    "diagram": {
+      "runId": "alr177-current-diagram-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "managedUs": 7735.665349999999,
+      "nativeUs": 9574.9094375,
+      "ratio": 0.8079100278174302,
+      "lower": 0.74384730700865,
+      "upper": 0.8349868093428268,
+      "allocatedBytes": 4560910,
+      "managedPacketBytes": 7234,
+      "nativePacketBytes": 7234,
+      "packetSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "nativePacketSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "status": "pass",
+      "observation": "alr177-current-diagram-confirm-observation.json",
+      "receipt": "alr177-current-diagram-confirm-receipt.json"
+    },
+    "opaque": {
+      "runId": "alr177-current-opaque-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "managedUs": 79410.77984090909,
+      "nativeUs": 76132.6105,
+      "ratio": 1.0430586751114899,
+      "lower": 1.0295841854840515,
+      "upper": 1.0575909775176973,
+      "allocatedBytes": 5983424,
+      "managedPacketBytes": 121896,
+      "nativePacketBytes": 121896,
+      "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "nativePacketSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "status": "gap",
+      "observation": "alr177-current-opaque-confirm-observation.json",
+      "receipt": "alr177-current-opaque-confirm-receipt.json"
+    },
+    "rgba16": {
+      "runId": "alr177-current-rgba16-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "managedUs": 120011.00833333333,
+      "nativeUs": 131175.4365,
+      "ratio": 0.9148893385487864,
+      "lower": 0.905146446177888,
+      "upper": 0.9231150617500464,
+      "allocatedBytes": 7476640,
+      "managedPacketBytes": 183812,
+      "nativePacketBytes": 183812,
+      "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "nativePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "status": "pass",
+      "observation": "alr177-current-rgba16-confirm-observation.json",
+      "receipt": "alr177-current-rgba16-confirm-receipt.json"
+    },
+    "async": {
+      "runId": "alr177-current-async-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "managedUs": 118966.92475,
+      "nativeUs": 130932.635,
+      "ratio": 0.9086117051719,
+      "lower": 0.898636974764137,
+      "upper": 0.9187198770236666,
+      "allocatedBytes": 7477024,
+      "managedPacketBytes": 183812,
+      "nativePacketBytes": 183812,
+      "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "nativePacketSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "status": "pass",
+      "observation": "alr177-current-async-confirm-observation.json",
+      "receipt": "alr177-current-async-confirm-receipt.json"
+    },
+    "alpha": {
+      "runId": "alr177-candidate-alpha-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "managedUs": 68388.43475,
+      "nativeUs": 54552.55983333333,
+      "ratio": 1.2536246687403385,
+      "lower": 1.122286028915585,
+      "upper": 1.3526467766452184,
+      "allocatedBytes": 8622560,
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "status": "gap",
+      "observation": "alr177-candidate-alpha-confirm-observation.json",
+      "receipt": "alr177-candidate-alpha-confirm-receipt.json"
+    },
+    "alpha16": {
+      "runId": "alr177-candidate-alpha16-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "managedUs": 70448.98577083333,
+      "nativeUs": 57590.90925,
+      "ratio": 1.2232657321838225,
+      "lower": 1.2100212179412213,
+      "upper": 1.234995453746507,
+      "allocatedBytes": 8622560,
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "status": "gap",
+      "observation": "alr177-candidate-alpha16-confirm-observation.json",
+      "receipt": "alr177-candidate-alpha16-confirm-receipt.json"
+    }
+  },
+  "memory": {
+    "warmAllocatedBefore": 9685968,
+    "warmAllocatedAfter": 8622560,
+    "savedBytesPerOperation": 1063408,
+    "reduction": 0.10978851055464978,
+    "reusedTokenCapacityBytes": 1062936,
+    "completeAdmittedPeakBefore": 3847888,
+    "completeAdmittedPeakAfter": 3847888,
+    "retainedOperationScratchBytes": 0,
+    "fixedRetainedBiasPayloadBytes": 256,
+    "nativeAllocationMeasured": false,
+    "physicalHeapPeakMeasured": false,
+    "generalization": [
+      {
+        "caseId": "photograph",
+        "allocatedBytesBefore": [
+          6516744,
+          6516744,
+          6516744
+        ],
+        "allocatedBytesAfter": [
+          6516744,
+          6516744,
+          6516744
+        ],
+        "admittedPeakBefore": 3470059,
+        "admittedPeakAfter": 3470059,
+        "exactPacket": true
+      },
+      {
+        "caseId": "diagram",
+        "allocatedBytesBefore": [
+          4559992,
+          4559992,
+          4559992
+        ],
+        "allocatedBytesAfter": [
+          4559992,
+          4559992,
+          4559992
+        ],
+        "admittedPeakBefore": 3386043,
+        "admittedPeakAfter": 3386043,
+        "exactPacket": true
+      },
+      {
+        "caseId": "alpha",
+        "allocatedBytesBefore": [
+          9684744,
+          9684744,
+          9684744
+        ],
+        "allocatedBytesAfter": [
+          8621744,
+          8621744,
+          8621744
+        ],
+        "admittedPeakBefore": 3847888,
+        "admittedPeakAfter": 3847888,
+        "exactPacket": true
+      },
+      {
+        "caseId": "authored-bars",
+        "allocatedBytesBefore": [
+          922936,
+          922936,
+          922936
+        ],
+        "allocatedBytesAfter": [
+          922936,
+          922936,
+          922936
+        ],
+        "admittedPeakBefore": 312716,
+        "admittedPeakAfter": 312716,
+        "exactPacket": true
+      }
+    ],
+    "note": "BDN complete-operation allocations, direct governed capacity peaks and idle retained storage are distinct metrics. Source normalization/output acquisition/disposal stay timed. Native allocation and physical heap peaks are unmeasured."
+  },
+  "timing": {
+    "short": {
+      "baselineUs": 71130.84716666667,
+      "candidateUs": 70615.95841666668
+    },
+    "independent": {
+      "baselineUs": 65828.34692499999,
+      "candidateUs": 68388.43475,
+      "baselineRatio": 1.2310796705183022,
+      "candidateRatio": 1.2536246687403385,
+      "pointAdverse": true,
+      "confidenceOverlaps": true
+    },
+    "targetedInterleaved": {
+      "normalizedGain": 0.0031086995646463222,
+      "rawGain": 0.051162623823339026,
+      "absoluteMicroseconds": 3509.785125,
+      "rawGainConfidenceSeparates": false,
+      "rawLossConfidenceSeparates": false,
+      "normalizedGainConfidenceSeparates": false,
+      "normalizedLossConfidenceSeparates": false,
+      "nativeFasterDrift": -0.04813378288216086,
+      "allocatedBytesSaved": 1063000.0
+    },
+    "decision": "Accepted material allocation reduction with unchanged admitted peak and exact packets. CPU gain/regression unproved; transparent CPU gap remains. Preserve adverse global confirmation and distinct interleaved estimator; no further sampling of unchanged handoff."
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "4a03945162aecb4e875ff1a653d38124404c977f3297f68371459ac5dec2a830",
+      "full": [
+        2301,
+        2275,
+        948
+      ],
+      "total": 5524,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 799,
+        "internal-scalar": 799,
+        "public-normal": 194,
+        "public-scalar": 194
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "full": [
+        2301,
+        2275,
+        948
+      ],
+      "total": 5524,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 799,
+        "internal-scalar": 799,
+        "public-normal": 194,
+        "public-scalar": 194
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreHarnessNativeSelectorBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "dce7da3150b41e5ec98e039bb88fc86fa9a9225d6d9500ccd57f69f9b9914c84",
+      "symbolsSha256": "7c4d3a5b46d2f859fad7d4e3541499072fa64b0ea8551957d78e6df6ec5e8d42",
+      "bytes": 400388,
+      "librarySha256": "4a03945162aecb4e875ff1a653d38124404c977f3297f68371459ac5dec2a830",
+      "actualConsumerPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "dce7da3150b41e5ec98e039bb88fc86fa9a9225d6d9500ccd57f69f9b9914c84",
+      "librarySha256": "4a03945162aecb4e875ff1a653d38124404c977f3297f68371459ac5dec2a830",
+      "actualConsumerPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "newOwnershipCases": 9,
+    "normalScalarEachOs": true,
+    "fullChecksEachOs": 5524
+  },
+  "workflow": {
+    "coreVersionsEachOs": 1,
+    "internalVersionsWindows": 2,
+    "internalVersionsLinux": 1,
+    "prototypeToolVersions": 1,
+    "selectorHarnessNativeBuilds": 0,
+    "packageBuilds": 1,
+    "currentCostConfirmations": 8,
+    "incrementalAlphaBeforeConfirmation": 1,
+    "targetedInterleavedJobs": 2,
+    "generalizationControls": 4,
+    "failedAsyncPreflightActuals": 0,
+    "completedJobsReused": true,
+    "note": "Reuse frozen selectors/workers/fixtures and same verified builds. Shared preparation entry changed, so eight displayed affected resident/depth/async costs are refreshed once at this accepted milestone; no passing case retuning or expanded matrix. Async producer proof is refreshed using existing exact managed/native/scalar/CLI checks, with failed preflight retained and five completed jobs reused."
+  },
+  "freshness": {
+    "current": "Eight displayed adaptive VP8L/ALPH costs now use the same ALR177 Linux DLL. Passing original/diagram/depth/async stop. Opaque VP8 arithmetic, decoders, PNG/JPEG, resizing, drawing and text are unchanged and reuse applicable evidence.",
+    "historical": "Other adaptive quality/effort and ALPH boundaries marked H remain historical until reconciled. Earlier WSP152 incremental scoring gains retain their original producer and estimator, not a new ALR177 CPU-gain claim."
+  },
+  "raw": {
+    "file": "webp-alpha-token-reuse-qualified.tar.xz",
+    "bytes": 4204040,
+    "members": 327,
+    "sha256": "4db1eac56708656b7ae8871b910a0cc3b14eb1ebac4d8db99b27510a22a2a3ae",
+    "vmMembersVerified": true,
+    "productionChanged": true,
+    "baselineDependency": "webp-scoring-preparation.tar.xz",
+    "baselineDependencySha256": "ea578b0ee58a17382a77b8118d39aa8f263fe23ea5258e238d3459ba959f4965",
+    "asyncReferenceDependency": "webp-current-lossless-boundaries.tar.xz",
+    "asyncReferenceDependencySha256": "f6e0253b14cafb1ccf07a5ea1788bb18b273251c0892897749e0ea82e7b0c7c4",
+    "pairedMethodDependency": "webp-prepared-coefficient-pipeline.tar.xz",
+    "pairedMethodDependencySha256": "2eb33a37482b30b97f3d536cfe6e719afa538b058f31012d226486f48cfeb96a",
+    "localMembersVerified": true
+  }
+}

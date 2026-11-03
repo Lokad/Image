@@ -27,16 +27,25 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     }
 
     private void MainCandidates(ReadOnlySpan<uint> pixels, int width, int height, Vp8lFramePrefix candidatePrefix,
-        Vp8lEncodingAnalysis analysis, int effort, int paletteColors, int quality)
+        Vp8lEncodingAnalysis analysis, int effort, int paletteColors, int quality, ref Vp8lTokenBuffer? matchingSeed)
     {
         var tryNoCache = effort == 5 && quality >= 75 || effort == 6 && quality == 100;
         var low = effort == 0; var maximumCacheBits = quality <= 25 ? 0 : paletteColors == 0 ? 10 : BitOperations.Log2((uint)paletteColors) + 1;
-        Vp8lTokenBuffer? seed = null;
+        var seed = matchingSeed; matchingSeed = null;
         try
         {
+            if (seed is not null)
+            {
+                if (pixels.Length * 8L < Vp8lReferenceMatcher.HeadCount * 4L || seed.CapacityBytes != pixels.Length * 8L)
+                { seed.Dispose(); seed = null; }
+                else
+                {
+                    seed.ResetForReuse(context, pixels.Length);
+                }
+            }
             // The table and first parsing candidate have disjoint uses. Select
             // by physical capacity before admission, never by available budget.
-            if (pixels.Length * 8L >= Vp8lReferenceMatcher.HeadCount * 4L)
+            if (seed is null && pixels.Length * 8L >= Vp8lReferenceMatcher.HeadCount * 4L)
                 seed = new Vp8lTokenBuffer(context, pixels.Length);
             using var matches = Vp8lReferenceMatcher.Build(pixels, width, quality, low, context, seed);
             if (low)
@@ -103,12 +112,26 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     // Returned prepared state owns no reference to this buffer.
     // greenOnly declares the normalized ALPH input representation, not an
     // encoding option. Palette/subtract-green/all-family trials keep generic analysis.
-    internal static Vp8lPreparedEncoding Prepare(Span<uint> working, int width, int effort, OperationContext context, int quality = 75, bool greenOnly = false)
+    // Ownership of matchingSeed transfers on entry, including validation/failure.
+    internal static Vp8lPreparedEncoding Prepare(Span<uint> working, int width, int effort, OperationContext context, int quality = 75, bool greenOnly = false, Vp8lTokenBuffer? matchingSeed = null)
     {
-        if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
-        var analysis = Vp8lEncodingAnalysis.Select(working, width, effort, context);
-        if (effort == 6 && quality == 100) return PrepareAllFamilies(working, width, analysis, context);
-        return PrepareCore(working, width, effort, context, quality, analysis, comparePalettePrediction: effort == 5 && quality >= 75, greenOnly: greenOnly);
+        try
+        {
+            if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
+            var analysis = Vp8lEncodingAnalysis.Select(working, width, effort, context);
+            // A packed palette changes the main representation. Release incompatible
+            // retained capacity before its transform and auxiliary preparation.
+            if (analysis.Transform is Vp8lTransformKind.Palette or Vp8lTransformKind.PalettePrediction)
+            { matchingSeed?.Dispose(); matchingSeed = null; }
+            if (effort == 6 && quality == 100)
+            {
+                matchingSeed?.Dispose(); matchingSeed = null;
+                return PrepareAllFamilies(working, width, analysis, context);
+            }
+            return PrepareCore(working, width, effort, context, quality, analysis,
+                comparePalettePrediction: effort == 5 && quality >= 75, greenOnly: greenOnly, matchingSeed: matchingSeed);
+        }
+        catch { matchingSeed?.Dispose(); throw; }
     }
 
     // One admitted mutable trial is reset from the borrowed untransformed input.
@@ -163,7 +186,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     }
 
     private static Vp8lPreparedEncoding PrepareCore(Span<uint> working, int width, int effort,
-        OperationContext context, int quality, Vp8lEncodingAnalysis analysis, bool comparePalettePrediction, Vp8lPaletteOrder? paletteOrder = null, bool greenOnly = false)
+        OperationContext context, int quality, Vp8lEncodingAnalysis analysis, bool comparePalettePrediction, Vp8lPaletteOrder? paletteOrder = null, bool greenOnly = false, Vp8lTokenBuffer? matchingSeed = null)
     {
         var height = working.Length / width; var result = new Vp8lPreparedEncoding(context);
         var candidatePrefix = new Vp8lFramePrefix(width, height, analysis.HasNonOpaqueAlpha);
@@ -178,13 +201,13 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                 var input = working[..plan.PackedPixelCount];
                 if (analysis.Transform == Vp8lTransformKind.PalettePrediction)
                     candidatePrefix = result.Predict(input, plan.CodedWidth, height, effort, analysis.TransformBits, candidatePrefix, quality);
-                result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount, quality);
+                result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount, quality, ref matchingSeed);
                 if (comparePalettePrediction)
                 {
                     // Selected plain tokens contain all literal values and copy
                     // distances. They survive this in-place spatial transform.
                     candidatePrefix = result.Predict(input, plan.CodedWidth, height, effort, analysis.TransformBits, candidatePrefix, quality);
-                    result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount, quality);
+                    result.MainCandidates(input, plan.CodedWidth, height, candidatePrefix, analysis, effort, plan.ColorCount, quality, ref matchingSeed);
                 }
             }
             else
@@ -203,7 +226,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                         candidatePrefix = candidatePrefix with { Color = result.color, ColorBits = plan.StoredBits };
                     }
                 }
-                result.MainCandidates(working, width, height, candidatePrefix, analysis, effort, 0, quality);
+                result.MainCandidates(working, width, height, candidatePrefix, analysis, effort, 0, quality, ref matchingSeed);
             }
             if (!ReferenceEquals(result.prefix.Prediction, result.prediction))
             { result.prediction?.Dispose(); result.prediction = null; }
@@ -212,6 +235,18 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
             return result;
         }
         catch { result.Dispose(); throw; }
+        finally { matchingSeed?.Dispose(); }
+    }
+
+    // Consume only after the final Write/WriteAlphaBody user has finished.
+    // Remaining prepared metadata is disposed normally; it no longer owns tokens.
+    internal Vp8lTokenBuffer? DetachMainTokens()
+    {
+        var owned = (image ?? throw new ObjectDisposedException(nameof(Vp8lPreparedEncoding))).DetachTokens();
+        // Smaller buffers cannot cover the early matching seed. Do not retain
+        // them through another filter's preparation merely to discard them later.
+        if (owned.CapacityBytes >= Vp8lReferenceMatcher.HeadCount * 4L) return owned;
+        owned.Dispose(); return null;
     }
 
     internal void Write(Stream output)
