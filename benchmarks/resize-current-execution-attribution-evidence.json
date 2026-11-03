@@ -1,0 +1,712 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "statisticalTiming": false,
+  "analysis": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1995,
+    "methods": [
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1130
+      ],
+      [
+        "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::Apply(class Lokad.Image.ImageBuffer,int32,int32,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosPlan,class Lokad.Image.Internal.LanczosWorkspace,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        391
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::Accumulate(valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.Span`1<float64>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        386
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosFmaResize::Horizontal(class Lokad.Image.ImageBuffer,int32,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<float64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        66
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal(class Lokad.Image.ImageBuffer,int32,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        3
+      ]
+    ],
+    "hotHorizontalInstructions": [
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x134",
+        "samples": 120,
+        "instruction": {
+          "group": "G_M000_IG07",
+          "assembly": "lea      r14d, [rbx-0x04]"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x13b",
+        "samples": 76,
+        "instruction": {
+          "group": "G_M000_IG07",
+          "assembly": "jle      G_M000_IG03"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xde",
+        "samples": 67,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vmovdqu  xmm7, xmmword ptr [rcx]"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x105",
+        "samples": 65,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vpmovzxdq zmm9, zmm9"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x85",
+        "samples": 62,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "cmp      r13, r12"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xbc",
+        "samples": 52,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "je       G_M000_IG19"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x111",
+        "samples": 49,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vpaddq   zmm4, zmm8, zmm4"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xb5",
+        "samples": 46,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "mov      r13, gword ptr [rdx+0x10]"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x124",
+        "samples": 46,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vpmuldq  zmm6, zmm6, zmm7"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xe2",
+        "samples": 43,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vxorps   xmm8, xmm8, xmm8"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x154",
+        "samples": 39,
+        "instruction": {
+          "group": "G_M000_IG08",
+          "assembly": "vpaddq   ymm4, ymm4, ymm5"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x7b",
+        "samples": 37,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "mov      r13d, r14d"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xf3",
+        "samples": 37,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vpermq   zmm8, zmm2, zmm7"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xcd",
+        "samples": 34,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "cmp      r12, rcx"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xa4",
+        "samples": 34,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vpshufd  zmm6, zmm6, -1"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x91",
+        "samples": 32,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "vpmovzxbd zmm6, xmmword ptr [r14]"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x23b",
+        "samples": 25,
+        "instruction": {
+          "group": "G_M000_IG15",
+          "assembly": "mov      r11d, dword ptr [r10]"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x20f",
+        "samples": 20,
+        "instruction": {
+          "group": "G_M000_IG13",
+          "assembly": "lea      r10, bword ptr [rcx+8*r10]"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x5d",
+        "samples": 18,
+        "instruction": {
+          "group": "G_M000_IG04",
+          "assembly": "cmp      gword ptr [rbp-0x30], 0"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x258",
+        "samples": 16,
+        "instruction": {
+          "group": "G_M000_IG16",
+          "assembly": "vxorps   ymm4, ymm4, ymm4"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x222",
+        "samples": 16,
+        "instruction": {
+          "group": "G_M000_IG14",
+          "assembly": "cmp      dword ptr [r10+0x08], eax"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x1fc",
+        "samples": 16,
+        "instruction": {
+          "group": "G_M000_IG13",
+          "assembly": "mov      r11d, r10d"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x21a",
+        "samples": 15,
+        "instruction": {
+          "group": "G_M000_IG13",
+          "assembly": "mov      bword ptr [rbp-0x38], rcx"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x24e",
+        "samples": 14,
+        "instruction": {
+          "group": "G_M000_IG15",
+          "assembly": "cmp      gword ptr [rbp-0x30], 0"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x53",
+        "samples": 12,
+        "instruction": {
+          "group": "G_M000_IG03",
+          "assembly": "jne      SHORT G_M000_IG06"
+        }
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.LanczosResize::Horizontal8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.LanczosPlan,valuetype [System.Runtime]System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x88",
+        "samples": 12,
+        "instruction": {
+          "group": "G_M000_IG06",
+          "assembly": "ja       G_M000_IG19"
+        }
+      }
+    ],
+    "structuralGeometry": {
+      "sourceWidth": 513,
+      "sourceHeight": 259,
+      "targetWidth": 256,
+      "targetHeight": 129,
+      "horizontalTapsPerSourceRow": 3060,
+      "sourcePixelsPerRow": 513,
+      "maximumVerticalSupport": 13,
+      "note": "Geometry-derived tap/read counts, not measured time. Horizontal code repeats sample widening and alpha premultiplication for each output tap. No zero-Q30 or actual row-cache execution count inferred."
+    },
+    "interpretation": "Exact horizontal source preparation/filtering dominates sampled execution. Repair has no observed samples; absence is not a zero-cost proof. Investigate operation-owned source-row premultiplication shared across overlapping horizontal windows before changing certified rounding. Existing bicubic cached rows already decode source products once per row."
+  },
+  "proof": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "productionChanged": false,
+    "allBuilds": 0,
+    "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+    "sourceSha256": "7a54ca3447317e775eb7708cc07dd07af8b236bdda0f9d96415da86437a45e2d",
+    "validation": {
+      "project": "Lokad.Image",
+      "caseId": "Repeated8",
+      "frozenCase": "Reduce8",
+      "mode": "confirm",
+      "oneShot": false,
+      "correctnessOnly": false,
+      "timingClaim": true,
+      "depth": 8,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+      "managedExact": true,
+      "quality": {
+        "state": "checked",
+        "matched": true,
+        "sourceUnchanged": true,
+        "rgbMaximum": 0,
+        "alphaMaximum": 0,
+        "rgbMeanSquared": 0,
+        "alphaMeanSquared": 0
+      },
+      "nativeBefore": [
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50495123,
+          "completedOperations": 100,
+          "observed": 1700,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50529665,
+          "completedOperations": 195,
+          "observed": 3315,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50518067,
+          "completedOperations": 290,
+          "observed": 4930,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50630948,
+          "completedOperations": 385,
+          "observed": 6545,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50461561,
+          "completedOperations": 480,
+          "observed": 8160,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50499809,
+          "completedOperations": 575,
+          "observed": 9775,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50514982,
+          "completedOperations": 670,
+          "observed": 11390,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50440870,
+          "completedOperations": 765,
+          "observed": 13005,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50585950,
+          "completedOperations": 860,
+          "observed": 14620,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50441010,
+          "completedOperations": 955,
+          "observed": 16235,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50516966,
+          "completedOperations": 1050,
+          "observed": 17850,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50584949,
+          "completedOperations": 1145,
+          "observed": 19465,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        }
+      ],
+      "nativeAfter": [
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50241538,
+          "completedOperations": 1240,
+          "observed": 21080,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50195839,
+          "completedOperations": 1335,
+          "observed": 22695,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50284995,
+          "completedOperations": 1430,
+          "observed": 24310,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50319787,
+          "completedOperations": 1525,
+          "observed": 25925,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50781546,
+          "completedOperations": 1620,
+          "observed": 27540,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50678119,
+          "completedOperations": 1715,
+          "observed": 29155,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50481662,
+          "completedOperations": 1810,
+          "observed": 30770,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50657718,
+          "completedOperations": 1905,
+          "observed": 32385,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50631870,
+          "completedOperations": 2000,
+          "observed": 34000,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50585630,
+          "completedOperations": 2095,
+          "observed": 35615,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50550556,
+          "completedOperations": 2190,
+          "observed": 37230,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        },
+        {
+          "state": "sample",
+          "operations": 95,
+          "elapsedNanoseconds": 50532349,
+          "completedOperations": 2285,
+          "observed": 38845,
+          "outputStride": 1024,
+          "outputBytes": 132096,
+          "cpu": 0
+        }
+      ],
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "lanczos3-resize",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 256,
+        "outputHeight": 129,
+        "outputBytes": 132096,
+        "independentLiveOutputs": true,
+        "initialCompletedOperations": 3,
+        "backend": "zimg (FFmpeg zscale backend)",
+        "scalar": false,
+        "radius": 3,
+        "haloPixels": 8,
+        "haloAndPackingTimed": true,
+        "outputAllocationAndRepackingTimed": true,
+        "premultipliedFloatOutput": true,
+        "unpremultiplicationAndQuantizationTimed": true,
+        "alphaTolerance1": true,
+        "scratchBytes": 367168
+      },
+      "retainedManagedBytes": 139800,
+      "nativeScratchBytes": 367168,
+      "librarySha256": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "harnessSha256": "d92ea139e0dcffd87f4ed333acf6a6b49b09f4195e6c11b390bfa6bb1bab3187",
+      "nativeWorkerSha256": "a47088aaca94d1cae1bd275afc2f3e4fb99fd4df00ae79dd8a9f35a67b07295e",
+      "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+      "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+      "parserScope": "Q30/rational certified managed pixels versus float native intermediates; existing native max error/RMSE gates unchanged"
+    },
+    "identities": {
+      "tmp/rac182-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/rac182-runtime/Lokad.Image.pdb": "5c96a01f7377c6b0c53948e6efa1db97f9da28c01fb8665385c37ce325a1f9cc",
+      "tmp/rac182-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/rac182-runtime/ResizeHarness.deps.json": "2b86be0022ba6ef64e85bd4ec3be2bee34dac8c3d41ec2d0dd898af25dd46ee4",
+      "tmp/rac182-runtime/Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+      "tmp/rac182-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/rac182-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/rac182-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/rac182-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/rac182-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/rac182-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/rac182-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/rac182-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/rac182-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/rac182-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/rac182-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/rac182-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/rac182-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/rac182-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/rac182-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/rac182-runtime/ResizeHarness.dll": "d92ea139e0dcffd87f4ed333acf6a6b49b09f4195e6c11b390bfa6bb1bab3187",
+      "tmp/rac182-runtime/ResizeDriver.deps.json": "efe90a889d3c9bf0119e591400d5d3c830fdef54392ceeab863a93fed15e2ee5",
+      "tmp/rac182-runtime/Lokad.Image.dll": "3f6343ca1ac86546c70f9a98d9a855fac2b72580012f9811481349821bacdcf9",
+      "tmp/rac182-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/rac182-runtime/ResizeDriver.dll": "1d70f8cb981c555a0773bb80da59897a52c275c265bf6b75a9ad09ed21574411",
+      "tmp/rac182-runtime/ResizeDriver": "4efe6c76d1a32ea9b637e17cc003b8b8934b984bdb582b51c4c853d80eecfb9c",
+      "tmp/rac182-runtime/ResizeHarness.pdb": "b8f8c586a1d3746ce1d160e6b7151422a82583027e349a358fd4806333e6e57c",
+      "tmp/rac182-runtime/ResizeDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rac182-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/rac182-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/rac182-runtime/ResizeHarness.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rac182-runtime/ResizeDriver.pdb": "3ba0b3948db2caa85169a74e60cb8e2bf7245c506d1e9a5108bf67694a597b73",
+      "tmp/rac182-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/rac182-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/rac182-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/rac182-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/rac182-runtime/ResizeDriver.deps.json",
+      "--runtimeconfig",
+      "tmp/rac182-runtime/ResizeDriver.runtimeconfig.json",
+      "tmp/rac182-runtime/ResizeDriver.dll",
+      "--benchmarkName",
+      "WarmPreparedLanczos.Managed(Case: Repeated8)",
+      "--job",
+      "WarmConfirm",
+      "--benchmarkId",
+      "0"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "2565349",
+      "-o",
+      "tmp/rac182b-prepared-profile.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "quietGuardsPassed": true,
+    "traceSha256": "19e78eb893cc82c271f5e699727fb848b55099b03ae73510deb27fc589c977ec",
+    "traceBytes": 688616,
+    "scope": "One two-second capture of current complete prepared Lanczos RGBA8 reduction using the frozen RPL78 public API worker, CPU0; sampler CPU1. Original inputs/settings and exact pixels, current input processing, independent result ownership/disposal included. Preparation excluded on both sides as explicitly prepared operations. Profiled elapsed discarded; samples and skid are not component times or predicted savings."
+  },
+  "sourceFiles": {
+    "src/Lokad.Image/Internal/LanczosResize.cs": "7ef8dee80effbed44c00d569b3c7f0c8827517fdc878f6e7decd503314129a7d",
+    "src/Lokad.Image/Internal/LanczosFmaResize.cs": "4728ae8f889f751c68a62b67872079c999a9830d7a5faaaf65dc2b13d02e25ad",
+    "src/Lokad.Image/Internal/LanczosWorkspace.cs": "7b13dffb1d88938c0c28145e9fa2cd64278fa3adffcb6ba6247affc5cd7ecae6",
+    "src/Lokad.Image/Internal/LanczosPlan.cs": "d2ce78ef950a78587c4285754bcf720ee5a7de459273732ac2866c2707028ba1",
+    "src/Lokad.Image/Lanczos3ResizePlan.cs": "031bdf35aba8b1b1c624e8b12b4f30e6e7c125a3179ccfe4c17938a6fd0851dc",
+    "src/Lokad.Image/Internal/CachedBicubicResize.cs": "a89e80361f1c9ec19a2d4c793586b81661df1ce4e859615b06bd489f100e5f97",
+    "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "b13dea1fca6a6ef6a0008990609692449d4b960988f336d53c6bd55ef096d60c"
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "resize-current-execution-attribution.tar.xz",
+    "bytes": 802928,
+    "members": 48,
+    "sha256": "0be7f373e434e447e83b8863a8f318e1e9a8fa28717b1d43544e50f4f21a8175",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "baselineDependency": "webp-alpha-token-reuse-qualified.tar.xz",
+    "baselineDependencySha256": "4db1eac56708656b7ae8871b910a0cc3b14eb1ebac4d8db99b27510a22a2a3ae",
+    "preparedWorkerDependency": "lanczos3-prepared-execution.tar.xz",
+    "preparedWorkerDependencySha256": "72918e61a1584f3494a384cb7cef8effe8cb001d5f9c35aa019c1b3627f529d6",
+    "localMembersVerified": true
+  },
+  "preparationEvidence": "LANCZOS3-PREPARED-EXECUTION.md unchanged production resize paths; its historical preparation/execution costs are retained, not a current release refresh",
+  "remainingHypothesis": {
+    "repeatedWork": "Sample widening and alpha premultiplication repeat for overlapping horizontal windows: 3060 geometric tap products versus 513 source pixels per prepared byte-reduction row.",
+    "endState": "Prepare source products once in operation-owned admitted row capacity; share exact integer filtering preparation between byte/word execution while retaining useful specialized multiplication and portable fallbacks. No generic dispatch in each pixel or new cache framework.",
+    "completeControls": [
+      "Existing prepared RGBA8 reduction",
+      "Existing prepared RGBA16 reduction",
+      "Existing one-shot boundaries for any accepted setup/retention tradeoff"
+    ],
+    "correctness": "Unchanged Q30 coefficients, exact signed64/Int128 sums and certified rounding; hidden RGB/alpha, edges, ownership, refusal/cancellation and plan/result lifetimes.",
+    "tradeoff": "Additional source-row capacity and preparation can increase one-shot work and retained plan storage. Admit before allocation and report actual bytes; no CPU-gain claim from sample counts.",
+    "continuation": "One coherent row-preparation/filter execution stage, exact normal/scalar checks, then bounded complete-operation screen; independent confirmation and broad/same-package qualification only if useful. Revise or stop using elapsed, retention and simplification together."
+  },
+  "qualificationReused": "No production changes or builds. Reuse ALR177 correctness/package proof and existing unchanged resize normal/scalar/dirty-output evidence.",
+  "setupFailure": "First worker invocation omitted its required benchmark-root environment variable and stopped before any actual or capture. Correct environment on the same immutable runtime, retain failed setup, no rebuild or completed-work repeat."
+}
