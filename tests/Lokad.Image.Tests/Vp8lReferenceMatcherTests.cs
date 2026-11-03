@@ -9,6 +9,23 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8lReferenceMatcherTests
 {
     [Fact]
+    public void GrowingBestMatchRefreshesPruningAfterACloserSuffixStopsLeftExtension()
+    {
+        // The nearer A/B candidate matches three samples; the oldest matches
+        // five. A closer B/C/D/E suffix prevents left extension from bypassing
+        // the A/B query. Its pruning sample must change from A to D after growth.
+        uint[] pixels = [1, 2, 3, 4, 5, 13, 1, 2, 3, 17, 19,
+            29, 2, 3, 4, 5, 31, 1, 2, 3, 4, 5, 43, 47];
+        var original = pixels.ToArray();
+        using var root = new TestMemoryBudget(100_000);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var result = Vp8lReferenceMatcher.Build(pixels, pixels.Length, 32, false, context);
+        Assert.Equal((17u << 12) | 5u, result.Values[17]);
+        Assert.Equal(original, pixels); result.Dispose();
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
     public void FrozenIndicesKeepChainOrderAcrossStorageBoundaries()
     {
         // Frozen against the qualified separate-chain implementation before
