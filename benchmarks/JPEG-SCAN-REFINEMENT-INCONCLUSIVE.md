@@ -27,7 +27,9 @@ restart/EOB/overflow behavior, independent output and shared admission. Each OS
 passes normal/scalar JPEG checks:364/331 internal/public initially,365/331 after
 scan scheduling,366/331 after grouping. Two useful retained Facts exercise all
 65,536 correction fields and concurrent cancellation against the actual restored
-production reader. Restoration passes37 focused checks per OS and mode.
+production reader. These two Facts require AVX2/BMI2 and return where unsupported;
+existing tests retain scalar-fallback coverage. Restoration passes 37 focused
+checks per OS and mode.
 
 The complete operation includes public Decode, normalization and owned output
 disposal on the frozen513×259,132,961-byte progressive444 packet. Native context
@@ -38,8 +40,8 @@ the existing expected-frame metadata projection is restored byte for byte.
 No production/package rebuild is required for restoration. One retained-test
 build per OS supplements unchanged WSP152 full/live/scalar and same actual
 Release-package consumer qualification. No accepted allocation/CPU gain. Next,
-inspect instruction-level attribution: method shares and reacquired-byte counts
-did not establish which inlined work costs time.
+the [instruction capture](JPEG-REFINEMENT-STATE-ATTRIBUTION.md#current-instruction-attribution)
+completes attribution without a production change.
 
 [Evidence](jpeg-scan-refinement-inconclusive-evidence.json) records exact producers,
 all stages, gates, restoration and dependent archives. All source variants, actual

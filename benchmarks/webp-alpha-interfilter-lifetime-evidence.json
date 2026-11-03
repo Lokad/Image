@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "version": "0.2.1",
+  "date": "2026-11-03",
+  "productionChanged": false,
+  "qualifiedTimingClaim": false,
+  "allocationClaim": false,
+  "actualReuseImplemented": false,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "librarySha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+  "auditAssemblySha256": "49bb439417472cb7df9c604dec3b812bd2f331ec12883c7ee6e86825beec165e",
+  "toolBuilds": 1,
+  "failedToolCompileAttempts": 1,
+  "productionHarnessNativePackageBuilds": 0,
+  "quietGuardsPassed": true,
+  "scope": "One existing complete transparent513x259 RGBA8 WebP Q75/effort4 encode. Original input, unchanged candidate order, exact full98590Bpacket, borrowed root empty after disposal. No new workload/settings or timing.",
+  "encodes": [
+    {
+      "name": "alpha",
+      "warmup": true,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "packetBytes": 98590,
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "retainedRootBytes": 0
+    }
+  ],
+  "rows": [
+    {
+      "phase": "filter-start",
+      "filter": 0,
+      "capacity": 0,
+      "seedBeforeMatching": false,
+      "actualBytes": 880527,
+      "extraRetainedBytes": 0,
+      "modeledBytes": 880527
+    },
+    {
+      "phase": "before-main",
+      "filter": -1,
+      "capacity": 1062936,
+      "seedBeforeMatching": true,
+      "actualBytes": 886103,
+      "extraRetainedBytes": 0,
+      "modeledBytes": 886103
+    },
+    {
+      "phase": "selected",
+      "filter": -1,
+      "capacity": 1062936,
+      "seedBeforeMatching": false,
+      "actualBytes": 1999451,
+      "extraRetainedBytes": 0,
+      "modeledBytes": 1999451
+    },
+    {
+      "phase": "filter-start",
+      "filter": 1,
+      "capacity": 0,
+      "seedBeforeMatching": false,
+      "actualBytes": 946745,
+      "extraRetainedBytes": 1062936,
+      "modeledBytes": 2009681
+    },
+    {
+      "phase": "before-main",
+      "filter": -1,
+      "capacity": 1062936,
+      "seedBeforeMatching": true,
+      "actualBytes": 952321,
+      "extraRetainedBytes": 1062936,
+      "modeledBytes": 2015257
+    },
+    {
+      "phase": "selected",
+      "filter": -1,
+      "capacity": 1062936,
+      "seedBeforeMatching": false,
+      "actualBytes": 2020317,
+      "extraRetainedBytes": 0,
+      "modeledBytes": 2020317
+    },
+    {
+      "phase": "alpha-end",
+      "filter": -1,
+      "capacity": 1062936,
+      "seedBeforeMatching": false,
+      "actualBytes": 905115,
+      "extraRetainedBytes": 0,
+      "modeledBytes": 905115
+    }
+  ],
+  "actualAdmittedPeak": 3847888,
+  "modeledCarryPeak": 3847888,
+  "reusableTokenCapacity": 1062936,
+  "modelValidForThisControl": true,
+  "model": "Hypothetically retain one retired selected main-token capacity after emission/disposal, through the next alpha filter transform, and reuse it as the early matching seed only when capacity matches exactly. Sum retained capacity with every actual admission until reuse; no actual charge or storage is changed. This control has two candidates (filters0/1).",
+  "limitations": "Not an actual allocation reduction, physical heap peak, admission-refusal proof, CPU gain or general all-method/shape result. Other representations and all-family effort6 need actual lifetime/generalization checks before acceptance.",
+  "hypothesis": {
+    "remove": "One new full token allocation between consecutive ALPH filters; no repeated clearing/copying needed for the retired token storage.",
+    "endState": "Transfer operation-owned retired selected token capacity after its final emission user into the next compatible matching/parsing seed; dispose unused/incompatible capacity promptly. No cross-operation pool or cache.",
+    "preserve": "Independent selected encoded payloads, candidate order/ties, exact packets and managed pixels, cancellation/refusal cleanup, caller-root accounting through actual users. No retry, waiting or budget-dependent fallback.",
+    "development": "Focused actual-owner handoff and partial-failure tests, complete frozen alpha operation and small palette/all-family sentinels; record actual allocations and admitted peak before timing. Existing alpha short then independent confirmation only if useful, broad Win/Linux/scalar/SAMEpackage at accepted coherent milestone."
+  },
+  "raw": {
+    "file": "webp-alpha-interfilter-lifetime-audit.tar.xz",
+    "bytes": 872920,
+    "members": 273,
+    "sha256": "a08ee17b76f383bce47da51c1621a874011321787b4d7459b60a398290f56e61",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "toolBuilds": 1,
+    "failedToolCompileAttempts": 1,
+    "productionHarnessNativePackageBuilds": 0,
+    "qualifiedTimingClaim": false,
+    "allocationClaim": false,
+    "baselineDependency": "webp-scoring-preparation.tar.xz",
+    "baselineDependencySha256": "ea578b0ee58a17382a77b8118d39aa8f263fe23ea5258e238d3459ba959f4965",
+    "localMembersVerified": true
+  },
+  "qualificationReused": "Unchanged WSP152 production/full/live/scalar/SAME actual Release package proof."
+}

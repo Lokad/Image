@@ -162,6 +162,10 @@ resize execution and further codec work selected from attribution. The
 rejected-token handoff. The [photograph profile before invariant scoring](WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
 identifies a transform-search lead; its whole-profile fractions are now historical.
 Trial failures are leads to reassess only with a materially revised design.
+The [current alpha-filter lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md#reuse-after-alpha-filter-emission)
+identifies 1,062,936 B of potentially reusable token capacity without a modeled
+admitted-peak increase on the existing transparent control. Actual reuse, allocation,
+failure and CPU acceptance remain unproved; no current cost changes.
 The [cache-history lifetime trial](WEBP-CACHE-HISTORY-REUSE-INCONCLUSIVE.md)
 reduces alpha allocation by8,672B/op but has no elapsed lead; production is
 restored and current costs remain unchanged. Its exhaustive admission-refusal
@@ -169,8 +173,9 @@ coverage remains against the actual parser.
 The [current JPEG refinement profile and lifetime audit](JPEG-REFINEMENT-STATE-ATTRIBUTION.md)
 locate a material live-refinement cost. The [scan-state redesign](JPEG-SCAN-REFINEMENT-INCONCLUSIVE.md)
 does not establish a useful gain and is restored; two stronger behavioral tests
-remain. Current costs stay unchanged. Instruction attribution is next; sample
-shares and byte counts are not CPU gains.
+remain. Current costs stay unchanged. The current instruction capture locates symbol/sign, position-mask and correction
+work; its sample shares and byte counts are not CPU gains. No further sampling of
+the unchanged scan-state design is justified.
 Passing text/reference decisions do not block
 independent codec/resizing work. PLAN.md remains local and ignored.
 

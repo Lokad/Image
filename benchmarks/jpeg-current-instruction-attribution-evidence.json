@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "version": "0.2.1",
+  "date": "2026-11-03",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "cpuGainClaim": false,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "librarySha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+  "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+  "validation": {
+    "schemaVersion": 1,
+    "name": "WarmJpegDecode",
+    "caseId": "ProgressiveCancelable444",
+    "smoke": false,
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "cpu": 0,
+    "managedAffinityCount": 1,
+    "processorCount": 1,
+    "serverGc": false,
+    "runtime": ".NET 10.0.8",
+    "platform": "linux-x64",
+    "cancellationCanBeCanceled": true,
+    "cancellationRequested": false,
+    "alreadyCanceledRejected": true,
+    "inputAnchorCase": "Progressive444",
+    "cancellationBoundary": "Live cancelable token, never signaled; token/source setup/disposal outside timing. Native has no equivalent cancellation setting; complete decode/conversion/owned output release remain timed.",
+    "inputOrigin": "lossless-progressive-native-444",
+    "sampling": "1x2,1x2,1x2",
+    "progressive": true,
+    "inputBytes": 132961,
+    "directRgb": false,
+    "markerOnlyInterpretation": false,
+    "rgbCenteredPhaseCorrectionTimed": false,
+    "uncorrectedRgbPhaseNegativeControl": false,
+    "rgbComponentPlaneInterpretationTimed": false,
+    "misinterpretedRgbPlanesNegativeControl": false,
+    "restartInterval": 0,
+    "restartMarkers": 0,
+    "freshSeekableStream": false,
+    "inputView": false,
+    "inputCopiesTimed": false,
+    "callerInputLifetimeChecked": false,
+    "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+    "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "managedOutputBytes": 531468,
+    "nativeOutputBytes": 531468,
+    "managedOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "nativeOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "alphaExact": true,
+    "decoderAgreementWithinBounds": true,
+    "decoderMaximum": 0,
+    "decoderRmse": 0,
+    "nativeCliPixelsExact": true,
+    "scalarCliAgreementWithinBounds": true,
+    "scalarDecoderMaximum": 0,
+    "scalarDecoderRmse": 0,
+    "nativeSampleTargetMilliseconds": "50",
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "nativeExitCode": 0,
+    "librarySha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+    "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+    "boundary": "Identical resident prepared 8-bit JPEG to independent owned RGBA8. Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, full-range BT.601 conversion, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
+  },
+  "quietGuardsPassed": true,
+  "expectationRestoration": {
+    "path": "artifacts/warm-reference/jpeg-progressive-444.json",
+    "sha256": "652fe5ac4af646bc56fdfe1cdb672ee8a27d2c02cda5acde89ac128f4847a55e",
+    "byteExactRestored": true,
+    "productionLibrarySha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043"
+  },
+  "totalProcessSamples": 1925,
+  "targetSamples": 1089,
+  "targetMethods": [
+    {
+      "address": "0x7395cfeb9720",
+      "size": 2662,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBufferedCancelableRefinementBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32,int32,int32,int32&)[Optimized]"
+    }
+  ],
+  "methodCodeBytes": 2662,
+  "stackAllocationInstructionBytes": 200,
+  "groups": [
+    {
+      "region": "Entry/eligibility",
+      "firstGroup": 1,
+      "lastGroup": 14,
+      "samples": 10
+    },
+    {
+      "region": "Initial nonzero mask",
+      "firstGroup": 15,
+      "lastGroup": 19,
+      "samples": 35
+    },
+    {
+      "region": "Symbol/header",
+      "firstGroup": 20,
+      "lastGroup": 42,
+      "samples": 206
+    },
+    {
+      "region": "Sign/EOB field",
+      "firstGroup": 43,
+      "lastGroup": 57,
+      "samples": 199
+    },
+    {
+      "region": "Run/position masks",
+      "firstGroup": 58,
+      "lastGroup": 68,
+      "samples": 250
+    },
+    {
+      "region": "Correction traversal/update",
+      "firstGroup": 69,
+      "lastGroup": 89,
+      "samples": 278
+    },
+    {
+      "region": "Iteration/publication",
+      "firstGroup": 90,
+      "lastGroup": 97,
+      "samples": 111
+    },
+    {
+      "region": "Error tails",
+      "firstGroup": 98,
+      "lastGroup": 120,
+      "samples": 0
+    }
+  ],
+  "scope": "One current complete operation, immutable current core, existing selector/harness/native and frozen original input/settings. CPU0 target; perf sampler CPU1. One two-second capture; instrumented elapsed values discarded. IP sample skid/inlining limits attribution; shares are not times or predicted savings.",
+  "initialAnalysisFailure": "Initial parser expected exactly3 whitespace fields and ignored managed DSO names containing spaces. Corrected postprocessing of SAME capture; no rerun.",
+  "raw": {
+    "file": "jpeg-current-instruction-attribution.tar.xz",
+    "bytes": 132612,
+    "members": 71,
+    "sha256": "d4b241db0a86d651283453a69f34a712a934990af2edd973c4122112f12c9840",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "allBuilds": 0,
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "baselineDependency": "webp-scoring-preparation.tar.xz",
+    "baselineDependencySha256": "ea578b0ee58a17382a77b8118d39aa8f263fe23ea5258e238d3459ba959f4965",
+    "runtimeInputAndReferenceDependency": "jpeg-current-refinement-attribution.tar.xz",
+    "runtimeInputAndReferenceDependencySha256": "6ee23eede90b214ecc156d37242a0552453cf68c311190d7058ae17c7df793de",
+    "localMembersVerified": true
+  },
+  "qualificationReused": "Unchanged WSP152 full/live/scalar and SAME actual Release package on Windows/Linux. New retained refinement tests qualified separately. No source or producer changed.",
+  "conclusion": "Samples span symbol/sign handling, run-position construction and correction execution. These broad code regions include branches and inlined instructions; sample skid prevents per-instruction cost conclusions. Reacquired-byte counts did not establish lookahead publication as the dominant removable cost. No additional scan-state retiming justified.",
+  "next": "Prioritize complete transparent WebP operation-owned storage/work attribution. A distinct JPEG design should address measured symbol/position/correction work, not merely repeat lookahead reuse. Keep exact errors/pixels and cooperative cancellation; any policy proposal must be explicit."
+}

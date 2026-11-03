@@ -28,7 +28,7 @@ zero production/harness/native/package builds. No allocation or CPU-gain claim.
 
 The [completed scan-state trial](JPEG-SCAN-REFINEMENT-INCONCLUSIVE.md) retains
 lookahead across the scan but establishes no useful elapsed gain. It is restored;
-stronger field/cancellation tests remain. Instruction-level attribution is next.
+stronger field/cancellation tests remain. The instruction capture below completes the next attribution step.
 The inspected [FFmpeg refinement decoder](https://github.com/FFmpeg/FFmpeg/blob/9047fa1b084f76b1b4d065af2d743df1b40dfb56/libavcodec/mjpegdec.c#L1015)
 retains shared reader state and last-nonzero metadata; this is algorithmic insight,
 not attribution of its timing. No upstream implementation is copied.
@@ -41,3 +41,39 @@ Mirrored/member-verified raw archives retain sources, tools and reproduction:
   SHA256 `6ee23eede90b214ecc156d37242a0552453cf68c311190d7058ae17c7df793de`.
 - `jpeg-refinement-lookahead-lifetime-audit.tar.xz`: 611,448 B / 29 members,
   SHA256 `46db3d06c4753872822d8f91306cc78a503b2d9843c7df32215fc8942d8ad389`.
+
+## Current instruction attribution
+
+One two-second CPU0 capture on the same qualified DLL contains1,925 process
+samples;1,089 map into the buffered refinement method. All target offsets map
+to its generated code (2,662bytes;200-byte stack-allocation instruction). No
+production, harness, selector, native worker or diagnostic-tool build.
+
+| Broad generated-code region | Target samples | Share of target |
+| --- | ---: | ---: |
+| Entry/eligibility | 10 | 0.92% |
+| Initial nonzero mask | 35 | 3.21% |
+| Symbol/header | 206 | 18.92% |
+| Sign/EOB field | 199 | 18.27% |
+| Run/position masks | 250 | 22.96% |
+| Correction traversal/update | 278 | 25.53% |
+| Iteration/publication | 111 | 10.19% |
+| Error tails | 0 | 0.00% |
+
+These are regions of one compiled method, including inlined instructions and
+branches. Sampling skid prevents individual-instruction cost claims; the shares
+are neither component timings nor predicted savings. The distribution motivates
+examining symbol/position/correction execution rather than repeating lookahead
+reuse. It does not prove any proposed redesign useful.
+
+The existing complete-operation worker, frozen packet/native frame, source/output
+ownership and quiet gates pass; the expected-frame metadata projection is restored
+byte for byte. Instrumented elapsed values are discarded. Initial postprocessing
+ignored DSO names containing spaces; correcting the parser reused the same capture,
+with no remeasurement. Unchanged qualification and current benchmark costs remain.
+
+[Instruction evidence](jpeg-current-instruction-attribution-evidence.json) records
+code offsets, region mapping, actual producer and gates. Raw
+`jpeg-current-instruction-attribution.tar.xz`:132,612B/71members, SHA256
+`d4b241db0a86d651283453a69f34a712a934990af2edd973c4122112f12c9840`,
+mirrored/member-verified, retaining trace, map, code, parser correction and source.
