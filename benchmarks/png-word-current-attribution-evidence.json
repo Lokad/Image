@@ -1,0 +1,82 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PWA210",
+  "productionChanged": false,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "allBuilds": 0,
+  "captures": 1,
+  "collectorSeconds": 1,
+  "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+  "sourceSha256": "ef11881be12601a1c57307e763bf9fd1f647fe2ccdda8c28378d66f460c521f6",
+  "totalSamples": 992,
+  "managedSamples": 967,
+  "methods": [
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+      "samples": 653
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+      "samples": 82
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+      "samples": 51
+    },
+    {
+      "name": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|1_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+      "samples": 48
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+      "samples": 41
+    },
+    {
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::AdvanceOrigin()[Optimized]",
+      "samples": 29
+    },
+    {
+      "name": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|1_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+      "samples": 16
+    },
+    {
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+      "samples": 11
+    },
+    {
+      "name": "int32[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(uint8[])[Optimized]",
+      "samples": 8
+    },
+    {
+      "name": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(int32[],int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      "samples": 7
+    }
+  ],
+  "targetCode": [
+    {
+      "address": "0x7b0010ca4e60",
+      "size": 1497,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]"
+    }
+  ],
+  "packetBytes": 963202,
+  "packetSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+  "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+  "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+  "quietGuardsPassed": true,
+  "nativeWordWorkspaceTimed": true,
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-current-word-execution-attribution.tar.xz",
+    "bytes": 1061104,
+    "members": 28,
+    "sha256": "e87850d5218d41b6988d3efddacbbdba46e8c3397d381d463a8fc07fadc63eb2",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "baselineDependency": "png-word-one-shot-boundary.tar.xz",
+    "baselineDependencySha256": "05ee89429234e33939e2bb2efd4979fca998a233ee461a17ddd6123205b4e13e",
+    "localMembersVerified": true
+  },
+  "decision": "Compare current lazy-parser state/publication with the retained bounded-region trial before a coherent cursor proposal. No predicted savings or cancellation relaxation; current qualified costs unchanged."
+}

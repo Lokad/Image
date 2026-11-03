@@ -1571,20 +1571,28 @@ def render():
     assert png_one_shot['qualification']['windows']['full'] == png_one_shot['qualification']['linux']['full']
     assert sum(png_one_shot['qualification']['windows']['full']) == png_one_shot['qualification']['fullChecksEachOs']
     assert png_one_shot['qualification']['actualPackage']['sha256'] == png_one_shot['qualification']['samePackageLinux']['sameActualPackageSha256']
+    png_word = json.loads((ROOT / 'benchmarks/png-word-one-shot-boundary-evidence.json').read_text(encoding='utf-8'))
+    assert png_word['acceptedReferenceBoundary'] and png_word['independentQuietConfirmation']
+    assert not png_word['productionChanged'] and png_word['qualificationReuse']['sameActualPackageBothOs']
     # All encoding instances use the new dictionary storage/working admission.
     # Decode/inspection paths are separate and retain their applicable costs.
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
              else row) for kind, row in rows]
-    for case, old_label, label in [
-            ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6'),
-            ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1')]:
-        observation = png_one_shot['cases'][case]; receipt = observation['receipt']
+    for case, old_label, label, owner in [
+            ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6', png_one_shot),
+            ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1', png_one_shot),
+            ('Encode16', 'PNG RGBA16, Optimal6 / native6', 'PNG RGBA16, one-shot Optimal6 / native6', png_word),
+            ('EncodeFast16', 'PNG RGBA16, Fastest1 / native1', 'PNG RGBA16, one-shot Fastest1 / native1', png_word)]:
+        observation = owner['cases'][case]; receipt = observation['receipt']
         assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
-        assert observation['librarySha256'] == png_one_shot['producers']['linuxSha256']
+        assert observation['librarySha256'] == owner['producers']['linuxSha256']
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
         assert len(observation['managed']['actual']) == 12
         assert receipt['nativeReady']['codecPreparationTimed'] and not receipt['nativeReady']['codecRetainedBetweenOperations']
+        if receipt['depth'] == 16:
+            assert receipt['nativeReady']['wordWorkspacePreparationTimed']
+            assert not receipt['nativeReady']['wordWorkspaceRetainedBetweenOperations']
         assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
         stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
         position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| ' + old_label + ' † H |'))
@@ -1805,7 +1813,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-03. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-04. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
@@ -1840,8 +1848,13 @@ reduce these allocations by 393,216 B/call. Current
 Fastest's 4.72% raw / 5.30% normalized point gains have overlapping confidence;
 no confirmed Fastest gain or causal regression claim. Allocation remains
 932,516 / 951,212 B/op; workspace admission is 384 KiB and retained scratch zero.
-The in-place 32 KiB slide copy stays timed. Other affected PNG encoding costs
-remain historical (H); a bounded word-depth screen is not a broader speedup claim.
+The in-place 32 KiB slide copy stays timed. Current
+[word one-shot comparisons](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md) include
+fresh native codec/zlib/packet and endian-conversion frame allocation, conversion
+and disposal. RGBA16 Optimal/Fastest retain confirmed gaps (upper 1.201 / 1.204),
+with 3,420,516 B/op each and exact complete packets. This corrects the comparison
+boundary without a production speedup claim. Other affected PNG encoding costs
+remain historical (H).
 [Prepared probes](../benchmarks/PNG-PREPARED-PROBES.md) retain earlier costs/history.
 Other PNG encode rows create managed Deflate state per call while
 FFmpeg retains its encoder/zlib context and resets it per frame. Those historical

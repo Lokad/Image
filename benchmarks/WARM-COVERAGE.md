@@ -176,7 +176,12 @@ ownership Facts supplement unchanged qualification. No useful gain is establishe
 
 Current priorities: preparation/reuse and operation-owned workspace, then shared
 resize execution and further codec work selected from attribution. The
-[parsing-lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md) does not justify a simple
+existing [word PNG controls](PNG-WORD-ONE-SHOT-BOUNDARY.md) now have current,
+equivalent one-shot measurements including native endian workspace ownership;
+both retain confirmed gaps. Other affected word PNG boundaries remain historical.
+The [current word capture](PNG-WORD-CURRENT-ATTRIBUTION.md) identifies lazy-parser
+and token/bit/tree work; compare prior cursor experiments before another redesign.
+The [parsing-lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md) does not justify a simple
 rejected-token handoff. The [photograph profile before invariant scoring](WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
 identifies a transform-search lead; its whole-profile fractions are now historical.
 Trial failures are leads to reassess only with a materially revised design.

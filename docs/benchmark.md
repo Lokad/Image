@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-03. These **122 selected comparisons** combine qualified
+Updated 2026-11-04. These **122 selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
@@ -35,8 +35,13 @@ reduce these allocations by 393,216 B/call. Current
 Fastest's 4.72% raw / 5.30% normalized point gains have overlapping confidence;
 no confirmed Fastest gain or causal regression claim. Allocation remains
 932,516 / 951,212 B/op; workspace admission is 384 KiB and retained scratch zero.
-The in-place 32 KiB slide copy stays timed. Other affected PNG encoding costs
-remain historical (H); a bounded word-depth screen is not a broader speedup claim.
+The in-place 32 KiB slide copy stays timed. Current
+[word one-shot comparisons](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md) include
+fresh native codec/zlib/packet and endian-conversion frame allocation, conversion
+and disposal. RGBA16 Optimal/Fastest retain confirmed gaps (upper 1.201 / 1.204),
+with 3,420,516 B/op each and exact complete packets. This corrects the comparison
+boundary without a production speedup claim. Other affected PNG encoding costs
+remain historical (H).
 [Prepared probes](../benchmarks/PNG-PREPARED-PROBES.md) retain earlier costs/history.
 Other PNG encode rows create managed Deflate state per call while
 FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
@@ -146,14 +151,14 @@ individual experiments remain in
 | PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,911.28 | 4,366.42 | 1.354 / 1.432 | 951,212 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG RGBA16, Fastest1 / native1 † H | 23,284.98 | 17,477.77 | 1.332 / 1.341 | 3,813,732 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 24,076.62 | 20,160.55 | 1.194 / 1.204 | 3,420,516 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, forward-only output † H | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
 | PNG RGBA8, one-shot Optimal6 / native6 † | 20,087.00 | 18,665.52 | 1.076 / 1.083 | 932,516 | 210,973 / 210,973 |
-| PNG RGBA16, Optimal6 / native6 † H | 26,842.58 | 20,081.34 | 1.337 / 1.359 | 3,813,732 | 963,202 / 963,202 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 26,230.66 | 22,267.87 | 1.178 / 1.201 | 3,420,516 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
 | PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |
