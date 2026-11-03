@@ -21,7 +21,8 @@ internal static class LanczosFmaResize
         var rows = channels * slots;
         // Keep the original local workspace boundary. Selection precedes any
         // new reservation; shared refusal is never caught to try another path.
-        var originalBytes = 128 + rows * 8 + channels * 16 + slots * 4L;
+        var originalBytes = 128 + rows * 8 + channels * 16 + slots * 4L
+            + (bitDepth == 16 ? 32 + horizontal.SourceLength * 16L : 0);
         var pixels = (long)width * height;
         if (rows * 8 > Array.MaxLength || channels * 16 > Array.MaxLength
             || originalBytes + pixels * (bitDepth / 8) * 4 > context.RemainingWorkingBytes) return false;
@@ -48,7 +49,7 @@ internal static class LanczosFmaResize
                     context.Cancellation.ThrowIfCancellationRequested(); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
                     var sy = window.First + tap; var slot = sy % slots;
                     var row = rows.AsSpan(slot * channels, channels);
-                    if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, context); rowIds[slot] = sy; }
+                    if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, workspace.Products, context); rowIds[slot] = sy; }
                     context.Cancellation.ThrowIfCancellationRequested(); Accumulate(row, sums, weight, context);
                 }
                 context.Cancellation.ThrowIfCancellationRequested();
@@ -107,12 +108,14 @@ internal static class LanczosFmaResize
         pixel = Avx.ConvertToVector128Int32WithTruncation(rounded); return true;
     }
 
-    internal static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<double> output, OperationContext context)
+    internal static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<double> output,
+        Span<uint> products, OperationContext context)
     {
+
         // Reuse one admitted backing store through two private views. No full
         // frame or extra row copy: exact signed sums are converted in place.
         var integer = MemoryMarshal.Cast<double, long>(output);
-        LanczosResize.Horizontal(source, y, plan, integer, context);
+        LanczosResize.Horizontal(source, y, plan, integer, products, context);
         context.Cancellation.ThrowIfCancellationRequested();
         var i = 0;
         for (; i <= output.Length - 8; i += 8)

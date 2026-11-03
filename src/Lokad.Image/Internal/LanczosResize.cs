@@ -14,7 +14,7 @@ internal static class LanczosResize
         using var horizontal = LanczosPlan.Create(source.Width, width, context);
         using var vertical = LanczosPlan.Create(source.Height, height, context);
         var fast = LanczosFmaResize.CanUse(source.BitDepth, width, height, horizontal, vertical, context);
-        using var workspace = new LanczosWorkspace(width, vertical, fast, context);
+        using var workspace = new LanczosWorkspace(horizontal, vertical, source.BitDepth, fast, context);
         return Execute(source, width, height, horizontal, vertical, workspace, context);
     }
 
@@ -38,7 +38,7 @@ internal static class LanczosResize
                     context.Cancellation.ThrowIfCancellationRequested(); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
                     var sy = window.First + tap; var slot = sy % slots;
                     var row = rows.AsSpan(slot * (int)channels, (int)channels);
-                    if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, context); rowIds[slot] = sy; }
+                    if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, workspace.Products, context); rowIds[slot] = sy; }
                     context.Cancellation.ThrowIfCancellationRequested();
                     AccumulateVertical(row, sums, weight, context);
                 }
@@ -153,14 +153,19 @@ internal static class LanczosResize
         return ((Int128)limbs[sums.Length + index] << 32) + limbs[index];
     }
 
-    internal static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<long> output, OperationContext context)
+    internal static bool PreparedHorizontalSupported(int bitDepth)
+        => bitDepth == 16 && Avx2.IsSupported && Avx512DQ.VL.IsSupported;
+
+    internal static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<long> output,
+        Span<uint> products, OperationContext context)
     {
+        context.Cancellation.ThrowIfCancellationRequested();
         ReadOnlySpan<byte> input8 = default; ReadOnlySpan<ushort> input16 = default;
         if (source.BitDepth == 8) input8 = source.GetRow8(y); else input16 = source.GetRow16(y);
         if (source.BitDepth == 8 && Avx2.IsSupported)
         { Horizontal8(input8, plan, output, context); return; }
-        if (source.BitDepth == 16 && Avx2.IsSupported && Avx512DQ.VL.IsSupported)
-        { Horizontal16(input16, plan, output, context); return; }
+        if (PreparedHorizontalSupported(source.BitDepth))
+        { PrepareWordProducts(input16, products, context); FilterWordProducts(products, plan, output, context); return; }
         for (var x = 0; x < plan.Windows.Length; x++)
         {
             var window = plan.Windows[x]; context.Cancellation.ThrowIfCancellationRequested();
@@ -180,52 +185,6 @@ internal static class LanczosResize
         }
     }
 
-    private static void Horizontal16(ReadOnlySpan<ushort> input, LanczosPlan plan, Span<long> output, OperationContext context)
-    {
-        var keepRgb = Vector512.Create(Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0),
-            Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0));
-        var alphaOne = Vector512.Create(Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1),
-            Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1));
-        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
-        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
-        for (var x = 0; x < plan.Windows.Length; x++)
-        {
-            var window = plan.Windows[x]; context.Cancellation.ThrowIfCancellationRequested();
-            var sum = Vector256<long>.Zero; var i = 0;
-            if (Avx512DQ.IsSupported)
-            {
-                // Four tap subsets retain the certified absolute-weight bound.
-                // All prefixes and their disjoint recombination fit Int64.
-                var first = Vector512<long>.Zero; var second = Vector512<long>.Zero;
-                for (; i <= window.Count - 4; i += 4)
-                {
-                    if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                    var samples = Avx512F.ConvertToVector512Int32(Vector256.Create(input.Slice((window.First + i) * 4, 16)));
-                    var rgbOne = Avx512F.Or(Avx512F.And(samples, keepRgb), alphaOne);
-                    var products = Avx512F.MultiplyLow(rgbOne, Avx512F.Shuffle(samples, 255)).AsUInt32();
-                    var at = window.Offset + i;
-                    // One bounded coefficient load, signed extension and exact
-                    // lane replication replace four scalar broadcasts.
-                    var coefficients = Avx512F.ConvertToVector512Int64(Vector256.Create(Vector128.Create(plan.Weights.AsSpan(at, 4)), Vector128<int>.Zero));
-                    var weights01 = Avx512F.PermuteVar8x64(coefficients, replicate01);
-                    var weights23 = Avx512F.PermuteVar8x64(coefficients, replicate23);
-                    first = Avx512F.Add(first, Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(products.GetLower()), weights01));
-                    second = Avx512F.Add(second, Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(products.GetUpper()), weights23));
-                }
-                var paired = Avx512F.Add(first, second);
-                sum = Avx2.Add(paired.GetLower(), paired.GetUpper());
-            }
-            for (; i < window.Count; i++)
-            {
-                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                var samples = Sse41.ConvertToVector128Int32(Vector128.CreateScalar(MemoryMarshal.Read<ulong>(MemoryMarshal.AsBytes(input.Slice((window.First + i) * 4, 4)))).AsUInt16());
-                var products = Sse41.MultiplyLow(Sse41.Insert(samples, 1, 3), Sse2.Shuffle(samples, 255)).AsUInt32();
-                // UInt32 products need unsigned extension before signed64 weighting.
-                sum = Avx2.Add(sum, Avx512DQ.VL.MultiplyLow(Avx2.ConvertToVector256Int64(products), Vector256.Create((long)plan.Weights[window.Offset + i])));
-            }
-            sum.CopyTo(output.Slice(x * 4, 4));
-        }
-    }
     private static void Horizontal8(ReadOnlySpan<byte> input, LanczosPlan plan, Span<long> output, OperationContext context)
     {
         var keepRgb = Vector512.Create(Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0),
@@ -270,6 +229,78 @@ internal static class LanczosResize
                 // products; the axis bound keeps all prefixes below2^47.
                 var values = Avx2.ConvertToVector256Int64(premultiplied).AsInt32();
                 sum = Avx2.Add(sum, Avx2.Multiply(values, Vector256.Create(plan.Weights[window.Offset + i])));
+            }
+            sum.CopyTo(output.Slice(x * 4, 4));
+        }
+    }
+
+    // Source pixels are shared by overlapping output windows. Form their exact
+    // unsigned word alpha products once, then borrow them for the entire row.
+    private static void PrepareWordProducts(ReadOnlySpan<ushort> input, Span<uint> products,
+        OperationContext context)
+    {
+        var at = 0;
+        if (Avx512F.IsSupported)
+        {
+            var keepRgb = Vector512.Create(Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0),
+                Vector256.Create(-1, -1, -1, 0, -1, -1, -1, 0));
+            var alphaOne = Vector512.Create(Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1),
+                Vector256.Create(0, 0, 0, 1, 0, 0, 0, 1));
+            for (; at <= input.Length - 16; at += 16)
+            {
+                if ((at & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var samples = Avx512F.ConvertToVector512Int32(Vector256.Create(input.Slice(at, 16)));
+                var rgbOne = Avx512F.Or(Avx512F.And(samples, keepRgb), alphaOne);
+                Avx512F.MultiplyLow(rgbOne, Avx512F.Shuffle(samples, 255)).AsUInt32().CopyTo(products.Slice(at, 16));
+            }
+        }
+        for (; at < input.Length; at += 4)
+        {
+            if ((at & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            var alpha = (uint)input[at + 3];
+            products[at] = alpha * (uint)input[at];
+            products[at + 1] = alpha * (uint)input[at + 1];
+            products[at + 2] = alpha * (uint)input[at + 2];
+            products[at + 3] = alpha;
+        }
+    }
+
+    private static void FilterWordProducts(ReadOnlySpan<uint> input, LanczosPlan plan,
+        Span<long> output, OperationContext context)
+    {
+        var replicate01 = Vector512.Create(0L, 0, 0, 0, 1, 1, 1, 1);
+        var replicate23 = Vector512.Create(2L, 2, 2, 2, 3, 3, 3, 3);
+        for (var x = 0; x < plan.Windows.Length; x++)
+        {
+            var window = plan.Windows[x]; context.Cancellation.ThrowIfCancellationRequested();
+            var sum = Vector256<long>.Zero; var i = 0;
+            if (Avx512DQ.IsSupported)
+            {
+                // Q30 absolute-weight bounds certify every disjoint subset
+                // and its reduction in signed64, including full RGBA16 products.
+                var first = Vector512<long>.Zero; var second = Vector512<long>.Zero;
+                for (; i <= window.Count - 4; i += 4)
+                {
+                    if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                    var products = Vector512.Create(input.Slice((window.First + i) * 4, 16));
+                    var coefficients = Avx512F.ConvertToVector512Int64(Vector256.Create(Vector128.Create(plan.Weights.AsSpan(window.Offset + i, 4)), Vector128<int>.Zero));
+                    var weights01 = Avx512F.PermuteVar8x64(coefficients, replicate01);
+                    var weights23 = Avx512F.PermuteVar8x64(coefficients, replicate23);
+                    var values01 = Avx512F.ConvertToVector512Int64(products.GetLower());
+                    var values23 = Avx512F.ConvertToVector512Int64(products.GetUpper());
+                    first = Avx512F.Add(first, Avx512DQ.MultiplyLow(values01, weights01));
+                    second = Avx512F.Add(second, Avx512DQ.MultiplyLow(values23, weights23));
+                }
+                var paired = Avx512F.Add(first, second);
+                sum = Avx2.Add(paired.GetLower(), paired.GetUpper());
+            }
+            for (; i < window.Count; i++)
+            {
+                if ((i & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+                var values = Avx2.ConvertToVector256Int64(Vector128.Create(input.Slice((window.First + i) * 4, 4)));
+                var weight = plan.Weights[window.Offset + i];
+                var weighted = Avx512DQ.VL.MultiplyLow(values, Vector256.Create((long)weight));
+                sum = Avx2.Add(sum, weighted);
             }
             sum.CopyTo(output.Slice(x * 4, 4));
         }

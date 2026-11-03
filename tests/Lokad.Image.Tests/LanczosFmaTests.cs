@@ -65,7 +65,7 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
             for (var y = 0; y < 3; y++)
             {
                 rows[y] = new double[dw * 4]; exact[y] = new BigInteger[dw * 4];
-                LanczosFmaResize.Horizontal(source, y, h, rows[y], context);
+                LanczosFmaResize.Horizontal(source, y, h, rows[y], new uint[sw * 4], context);
                 for (var x = 0; x < dw; x++)
                 for (var c = 0; c < 4; c++)
                 {

@@ -1514,8 +1514,8 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}) | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    prepared_resize = json.loads((ROOT / 'benchmarks/lanczos3-prepared-execution-evidence.json').read_text(encoding='utf-8'))
-    assert prepared_resize['productionAccepted'] and prepared_resize['qualification']['fullChecksEachOs'] == 5400
+    prepared_resize = json.loads((ROOT / 'benchmarks/lanczos-word-row-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert prepared_resize['productionAccepted'] and prepared_resize['qualification']['fullChecksEachOs'] == 5529
     assert prepared_resize['qualification']['actualPackage']['sha256'] == prepared_resize['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| Lanczos3 enlargement'))
     current_resize_rows = []
@@ -1823,8 +1823,11 @@ font/layout setup and per-operation canvas reset excluded equally.
 **Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
 managed preparation but reuse native graphs/scratch. Current Lanczos reduction
 rows compare equivalent one-shot or prepared operations on both sides.
-[Prepared Lanczos3](../benchmarks/LANCZOS3-PREPARED-EXECUTION.md) retains 139,800 B
-per managed plan and allocates 139 B/call; prepared CPU parity remains open.
+[Word-row preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) saves 25.61 µs
+on prepared word reduction (4.00% elapsed / 4.26% normalized). Plans retain
+139,800 B for RGBA8 / 148,040 B for RGBA16 and allocate 139 B/call. Word one-shot
+allocation rises by 8,256 B; prepared CPU parity remains open. Enlargement's short
+generalization is flat and establishes no broader gain.
 Rows marked **H** retain historical affected costs pending refresh.
 [PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
 fresh one-shot encoder state on both sides, including native codec/zlib setup
@@ -1865,7 +1868,10 @@ WebP costs are refreshed on one immutable DLL; original/diagram/depth/async pass
 and stop, while photo/opaque/transparency retain gaps. Other adaptive costs marked
 **H** remain historical. Native allocation and physical heap peaks are unmeasured.
 The same actual Release package and three examples pass both OSes, alongside
-5,524 full/live checks per OS and affected normal/scalar checks.
+5,529 full/live checks per OS and affected normal/scalar checks. The same actual
+Release package and all three examples pass both OSes, including retained resize
+admission and asynchronous surviving outputs. Other codec/editing paths reuse
+applicable unchanged evidence; this is not a full release refresh.
 [Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md) retains its
 source-specific 3.276/2.081 ms photo/opaque gains; these are not new-stage CPU
 claims. Fixed bias constants retain 256 B/process plus headers. Allocation,

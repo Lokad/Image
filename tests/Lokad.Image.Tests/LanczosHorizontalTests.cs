@@ -25,7 +25,7 @@ public sealed class LanczosHorizontalTests
             using var plan = LanczosPlan.Create(width, target, context);
             var storage = context.RemainingWorkingBytes;
             var output = new long[target * 4 + 2]; Array.Fill(output, long.MinValue + 73);
-            LanczosResize.Horizontal(source, 0, plan, output.AsSpan(1, target * 4), context);
+            LanczosResize.Horizontal(source, 0, plan, output.AsSpan(1, target * 4), new uint[width * 4], context);
             Assert.Equal(storage, context.RemainingWorkingBytes);
             Assert.Equal(long.MinValue + 73, output[0]); Assert.Equal(long.MinValue + 73, output[^1]);
             for (var x = 0; x < target; x++)
@@ -66,7 +66,7 @@ public sealed class LanczosHorizontalTests
             using var plan = LanczosPlan.Create(width, target, context);
             var output = new long[target * 4 + 2]; Array.Fill(output, long.MinValue + 37);
 var storage = context.RemainingWorkingBytes;
-            LanczosResize.Horizontal(source, 1, plan, output.AsSpan(1, target * 4), context);
+            LanczosResize.Horizontal(source, 1, plan, output.AsSpan(1, target * 4), new uint[width * 4], context);
             Assert.Equal(storage, context.RemainingWorkingBytes);
             Assert.Equal(long.MinValue + 37, output[0]); Assert.Equal(long.MinValue + 37, output[^1]);
             for (var x = 0; x < target; x++)
@@ -90,7 +90,7 @@ var storage = context.RemainingWorkingBytes;
         using var plan = LanczosPlan.Create(7, 13, context);
         var output = new long[52]; Array.Fill(output, 123456789);
         cancellation.Cancel();
-        Assert.Throws<OperationCanceledException>(() => LanczosResize.Horizontal(source, 0, plan, output, context));
+        Assert.Throws<OperationCanceledException>(() => LanczosResize.Horizontal(source, 0, plan, output, new uint[7 * 4], context));
         Assert.All(output, value => Assert.Equal(123456789, value));
     }
 }

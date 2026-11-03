@@ -51,7 +51,7 @@ public sealed class Lanczos3ResizePlan : IDisposable
                 plan.vertical = LanczosPlan.Create(sourceHeight, height, context);
                 var fast = LanczosFmaResize.CanUse(bitDepth, width, height, plan.horizontal, plan.vertical, context);
                 context.ReserveBorrowed(outputBytes);
-                plan.workspace = new LanczosWorkspace(width, plan.vertical, fast, context);
+                plan.workspace = new LanczosWorkspace(plan.horizontal, plan.vertical, bitDepth, fast, context);
                 plan.storageBytes = plan.horizontal.StorageBytes + plan.vertical.StorageBytes + plan.workspace.Bytes;
             }
             else context.ReserveBorrowed(outputBytes);

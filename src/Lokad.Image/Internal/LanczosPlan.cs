@@ -10,15 +10,17 @@ internal sealed class LanczosPlan : IDisposable
     internal Window[] Windows = [];
     internal int[] Weights = [];
     internal int MaximumCount;
+    internal readonly int SourceLength;
     private readonly OperationContext context;
     private long storage;
     internal long StorageBytes => storage;
     private bool disposed;
-    private LanczosPlan(OperationContext context) { this.context = context; context.Reserve(128); storage = 128; }
+    private LanczosPlan(int sourceLength, OperationContext context)
+    { SourceLength = sourceLength; this.context = context; context.Reserve(128); storage = 128; }
 
     internal static LanczosPlan Create(int source, int target, OperationContext context)
     {
-        var plan = new LanczosPlan(context); long temporary = 0;
+        var plan = new LanczosPlan(source, context); long temporary = 0;
         try
         {
             var windowsBytes = 32 + target * 16L;

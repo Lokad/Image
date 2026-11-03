@@ -15,13 +15,13 @@ Completion needs current passing evidence for every named path, with scope state
 | Other WebP encoding boundaries | [Refreshed depth and async confirmations](WEBP-ALPHA-TOKEN-REUSE.md) pass on the immutable accepted build, including normalization and fresh nonseekable output ownership. Stop those two controls. Other affected method/effort costs remain historical until reconciled; no blanket family pass. Low-effort paths must be distinguished by actual calls. |
 | PNG encoding | [Contiguous history](PNG-CONTIGUOUS-HISTORY.md) qualifies current one-shot RGBA8 Optimal/Fastest gaps. The [bounded-region execution trial](PNG-BOUNDED-REGION-INCONCLUSIVE.md) is inconclusive and restored; accepted costs stay unchanged. Other affected compressed costs marked H remain historical; the bounded word-depth screen does not refresh the family. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
-| Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) refreshes four existing bicubic controls: byte enlargement has a confirmed gain, wide reduction still passes, three retain gaps. Idle retention and governed peaks are reported separately. Other affected bilinear/bicubic costs marked H need reconciliation. [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md) retains one-shot reduction passes and prepared gaps. Exact Q30/rational/certified pixels remain required. |
+| Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) retains its scoped bicubic gains and gaps. Other affected bilinear/bicubic costs marked H need reconciliation. [Word-row preparation](LANCZOS-WORD-ROW-PREPARATION.md) refreshes all four reduction comparisons: word prepared/one-shot improve with higher retained/allocated storage; one-shot depths pass and prepared depths retain gaps. Enlargement's generalization screen is flat, not confirmation. Exact Q30/rational/certified pixels remain required. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,524 full/live checks per OS,
+The current immutable production build passes 5,529 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.
