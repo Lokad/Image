@@ -337,8 +337,8 @@ def render():
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_indexed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
-    webp_current = json.loads((ROOT / 'benchmarks/webp-invariant-alpha-scoring-evidence.json').read_text(encoding='utf-8'))
-    assert webp_current['productionAccepted'] and webp_current['decision']['exactScoringReuseVerified']
+    webp_current = json.loads((ROOT / 'benchmarks/webp-sparse-clustering-workspace-evidence.json').read_text(encoding='utf-8'))
+    assert webp_current['productionAccepted'] and webp_current['decision']['exactPacketsPreserved']
     assert webp_current['independentQuietConfirmation']
     vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
     assert vp8l_bins['acceptance']['retained'] and vp8l_bins['independentQuietConfirmation']
@@ -1537,10 +1537,6 @@ def render():
     rows[position:position] = current_resize_rows
     rows = [(kind, row.replace(' † →', ' † § →') if row.startswith('| Lanczos3 enlargement') else row)
             for kind, row in rows]
-    workspace = json.loads((ROOT / 'benchmarks/webp-candidate-workspace-evidence.json').read_text(encoding='utf-8'))
-    assert workspace['productionAccepted'] and not workspace['qualifiedCpuGainClaim']
-    assert workspace['qualification']['fullChecksEachOs'] == 5383
-    assert workspace['qualification']['actualPackage']['sha256'] == workspace['qualification']['samePackageLinux']['sameActualPackageSha256']
     current_vp8l_prefixes = ('| VP8L RGBA8 /', '| VP8L opaque RGBA8 /')
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
                                       and not row.startswith(current_vp8l_prefixes)
@@ -1551,7 +1547,7 @@ def render():
             for kind, row in rows]
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
     assert webp_current['decision']['storageTradeoffMeasured']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5483
+    assert webp_current['qualification']['fullChecksEachOs'] == 5502
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
@@ -1644,8 +1640,12 @@ def render():
     }
     assert set(texture['cases']) == set(labels)
     for case, label in labels.items():
-        observation = texture['cases'][case]; receipt = observation['receipt']
-        assert receipt['librarySha256'] == texture['producers']['linuxSha256']
+        # One current owner for affected lossless-alpha costs; opaque VP8
+        # reuses its unchanged source-texture evidence. No history overlay chain.
+        producer = webp_current if case in {'Alpha8', 'Alpha16'} else texture
+        observation = producer['cases'][{'Alpha8': 'alpha', 'Alpha16': 'alpha16'}.get(case, case)]
+        receipt = observation['receipt']
+        assert receipt['librarySha256'] == producer['producers']['linuxSha256']
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
         assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
         assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
@@ -1819,23 +1819,23 @@ screens are diagnostic, not qualified gains or replacements for the tables below
 [VP8 source texture preparation](../benchmarks/VP8-SOURCE-TEXTURE-PREPARATION.md)
 shares fixed source scores across luma candidates. The opaque photograph saves
 **0.214 ms / 1.54% raw** (1.29% normalized), with separated confidence and unchanged
-809,072 B/op. Seven existing VP8 costs are refreshed, including word-depth
-normalization and transparent encoding; all retain gaps. Only the photograph has
-an incremental speedup claim. Direct transparent elapsed is flat; allocation,
-admitted peaks and retained scratch are unchanged. Preparation stays timed.
+809,072 B/op. Five unchanged opaque VP8 costs retain valid evidence; the two transparent
+controls below use the newer clustering build. All retain gaps. Only the photograph has
+an incremental speedup claim. The source-texture stage leaves allocation,
+admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Invariant alpha scoring](../benchmarks/WEBP-INVARIANT-ALPHA-SCORING.md) retains
-valid costs for the four unchanged resident lossless controls: diagram passes
-at **0.947x / upper0.958**, while ordinary/opaque/photograph remain gaps.
-The [trace-storage design](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md) and
-[earlier photograph attribution](../benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
-retain useful history. Two [compact green predictor stages](../benchmarks/WEBP-COMPACT-GREEN-INCONCLUSIVE.md)
-were restored after flat complete-encode screens. Other affected costs marked
-**H** remain historical. Total allocations, admitted peak and retention are
-separate; physical heap peaks and native allocation remain unmeasured.
-[Recent architectural experiments](../benchmarks/WEBP-OPAQUE-HISTOGRAM-STAGES-INCONCLUSIVE.md)
-retain staged designs, adverse results and exact source/binary restoration.
-Their history stays separate from the unchanged qualified costs above.
+[Sparse clustering ownership](../benchmarks/WEBP-SPARSE-CLUSTERING-WORKSPACE.md)
+replaces persistent dense tile slabs with immutable sparse leaves and recycled
+merged populations. Original lossless saves **5.07 ms / 3.79% raw** with separated
+raw confidence; normalized intervals overlap. Allocation falls **24.90 → 7.28 MB**.
+Photograph allocation falls **13.35 → 6.52 MB** and admitted peak **10.17 → 3.47 MB**;
+its adverse 4.58% timing point has overlapping confidence, so no speedup is claimed.
+Six costs are refreshed; diagram passes at **0.848x / upper0.864**, five retain gaps.
+Other affected adaptive VP8L/transparent ALPH costs marked **H** remain historical.
+Scratch retention is zero. Allocations, admitted peaks and retention are separate;
+physical heap peaks and native allocation remain unmeasured.
+[Earlier stages and adverse experiments](../benchmarks/WEBP-OPAQUE-HISTOGRAM-STAGES-INCONCLUSIVE.md)
+stay linked as history, separate from current costs.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite

@@ -10,17 +10,18 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Invariant alpha scoring](WEBP-INVARIANT-ALPHA-SCORING.md) remains valid for ordinary/opaque/photograph gaps and the passing diagram. Exact packets and unchanged direct allocations/admitted peaks. |
-| Resident VP8 encoding | [Shared source texture preparation](VP8-SOURCE-TEXTURE-PREPARATION.md) refreshes seven opaque/transparent/word-depth/trellis controls. All retain gaps; the opaque photograph has a confirmed incremental gain. Exact packets, unchanged allocation and admitted peaks. |
+| Resident lossless WebP | [Sparse clustering storage](WEBP-SPARSE-CLUSTERING-WORKSPACE.md) refreshes four controls: original/opaque/photograph gaps and passing diagram. Original saves 5.07ms with separated raw confidence; photograph timing is variable with an adverse point. Allocations and governed peaks fall; exact packets remain. |
+| Resident VP8 encoding | [Source texture preparation](VP8-SOURCE-TEXTURE-PREPARATION.md) remains valid for five unchanged opaque/word/trellis controls. [Clustering storage](WEBP-SPARSE-CLUSTERING-WORKSPACE.md) refreshes transparent RGBA8/16 and reduces alpha-path allocations. All seven retain gaps; do not infer incremental CPU gains from historical costs. |
 | Other WebP encoding boundaries | Existing word-depth, async and method/effort controls retain their names and recipes. Costs affected by adaptive predictor changes remain historical until reconciled; no blanket family pass. Low-effort paths must be distinguished by actual calls. |
 | PNG encoding | [Contiguous history](PNG-CONTIGUOUS-HISTORY.md) qualifies current one-shot RGBA8 Optimal/Fastest gaps. Other affected compressed costs marked H remain historical; the bounded word-depth screen does not refresh the family. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
 | Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) refreshes four existing bicubic controls: byte enlargement has a confirmed gain, wide reduction still passes, three retain gaps. Idle retention and governed peaks are reported separately. Other affected bilinear/bicubic costs marked H need reconciliation. [Prepared Lanczos3](LANCZOS3-PREPARED-EXECUTION.md) retains one-shot reduction passes and prepared gaps. Exact Q30/rational/certified pixels remain required. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
-Four existing bicubic controls were refreshed in the latest round; the preceding
-seven resident VP8 and four lossless controls retain valid unchanged-path costs.
-The current immutable production build passes 5,497 full/live checks per OS,
+Six existing WebP controls were refreshed in the latest round; unchanged opaque
+VP8, resizing and other codec algorithms retain applicable evidence. Other
+adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
+The current immutable production build passes 5,502 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.

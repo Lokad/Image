@@ -100,22 +100,23 @@ public sealed class Vp8lReferenceClusteringTests
     }
 
     [Fact]
-    public void IndexedWorkspaceFitsSharedCapacityThatCannotHoldTheOriginalSlab()
+    public void SparseWorkspaceFits16KiBAndKeepsSharedRefusalAtomic()
     {
-        // This existing sparse four-tile layout needs24,208B at its ownership
-        // peak, including the retained plan. Two full slabs alone need34,816B.
-        using var root = new TestMemoryBudget(24_208);
+        const long capacity = 16_384;
+        using var root = new TestMemoryBudget(capacity);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         using (var plan = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context))
         {
-            Assert.Equal(24_208, root.Peak);
+            Assert.InRange(root.Peak, 1, capacity);
             Assert.Equal((plan.Populations.Length + plan.Map.Length) * 4L, root.Bytes);
         }
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
-        using var held = root.CreateScope(); Assert.True(held.TryReserve(1, out var reservation));
+        // Borrowed caller storage leaves one byte less than the observed peak.
+        var heldBytes = capacity - root.Peak + 1;
+        using var held = root.CreateScope(); Assert.True(held.TryReserve(heldBytes, out var reservation));
         var error = Assert.Throws<ImageLimitException>(() => Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context));
         Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
-        Assert.Equal(1, root.Bytes); Assert.Equal(1, root.Refusals); reservation.Dispose();
+        Assert.Equal(heldBytes, root.Bytes); Assert.Equal(1, root.Refusals); reservation.Dispose();
         using var later = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context);
         later.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }

@@ -76,6 +76,30 @@ internal static class Vp8lReferenceEntropy
         return cost.Finish();
     }
 
+    // The immutable leaf entries retain ascending physical alphabet indices.
+    // Restore the same logical zero gaps and equal-count runs without expanding
+    // the population. The exact run model is shared with the dense kernels.
+    internal static long SparsePopulation(ReadOnlySpan<uint> entries, int start, int size, OperationContext context)
+    {
+        context.Cancellation.ThrowIfCancellationRequested();
+        var cost = new RunCost(); var next = 0; var previous = 0; var length = 0;
+        foreach (var entry in entries)
+        {
+            var symbol = (int)(entry & 4095) - start; var count = (int)(entry >> 12);
+            if (symbol == next && count == previous) length++;
+            else
+            {
+                if (length != 0) cost.Add(previous, length);
+                if (symbol != next) cost.Add(0, symbol - next);
+                previous = count; length = 1;
+            }
+            next = symbol + 1;
+        }
+        if (length != 0) cost.Add(previous, length);
+        if (next != size) cost.Add(0, size - next);
+        return cost.Finish();
+    }
+
     internal static long PopulationSum(ReadOnlySpan<int> a, ReadOnlySpan<int> b, OperationContext context)
     {
         if (a.Length != b.Length) throw new ArgumentException("Population lengths must match.", nameof(b));

@@ -46,23 +46,23 @@ screens are diagnostic, not qualified gains or replacements for the tables below
 [VP8 source texture preparation](../benchmarks/VP8-SOURCE-TEXTURE-PREPARATION.md)
 shares fixed source scores across luma candidates. The opaque photograph saves
 **0.214 ms / 1.54% raw** (1.29% normalized), with separated confidence and unchanged
-809,072 B/op. Seven existing VP8 costs are refreshed, including word-depth
-normalization and transparent encoding; all retain gaps. Only the photograph has
-an incremental speedup claim. Direct transparent elapsed is flat; allocation,
-admitted peaks and retained scratch are unchanged. Preparation stays timed.
+809,072 B/op. Five unchanged opaque VP8 costs retain valid evidence; the two transparent
+controls below use the newer clustering build. All retain gaps. Only the photograph has
+an incremental speedup claim. The source-texture stage leaves allocation,
+admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Invariant alpha scoring](../benchmarks/WEBP-INVARIANT-ALPHA-SCORING.md) retains
-valid costs for the four unchanged resident lossless controls: diagram passes
-at **0.947x / upper0.958**, while ordinary/opaque/photograph remain gaps.
-The [trace-storage design](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md) and
-[earlier photograph attribution](../benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
-retain useful history. Two [compact green predictor stages](../benchmarks/WEBP-COMPACT-GREEN-INCONCLUSIVE.md)
-were restored after flat complete-encode screens. Other affected costs marked
-**H** remain historical. Total allocations, admitted peak and retention are
-separate; physical heap peaks and native allocation remain unmeasured.
-[Recent architectural experiments](../benchmarks/WEBP-OPAQUE-HISTOGRAM-STAGES-INCONCLUSIVE.md)
-retain staged designs, adverse results and exact source/binary restoration.
-Their history stays separate from the unchanged qualified costs above.
+[Sparse clustering ownership](../benchmarks/WEBP-SPARSE-CLUSTERING-WORKSPACE.md)
+replaces persistent dense tile slabs with immutable sparse leaves and recycled
+merged populations. Original lossless saves **5.07 ms / 3.79% raw** with separated
+raw confidence; normalized intervals overlap. Allocation falls **24.90 → 7.28 MB**.
+Photograph allocation falls **13.35 → 6.52 MB** and admitted peak **10.17 → 3.47 MB**;
+its adverse 4.58% timing point has overlapping confidence, so no speedup is claimed.
+Six costs are refreshed; diagram passes at **0.848x / upper0.864**, five retain gaps.
+Other affected adaptive VP8L/transparent ALPH costs marked **H** remain historical.
+Scratch retention is zero. Allocations, admitted peaks and retention are separate;
+physical heap peaks and native allocation remain unmeasured.
+[Earlier stages and adverse experiments](../benchmarks/WEBP-OPAQUE-HISTOGRAM-STAGES-INCONCLUSIVE.md)
+stay linked as history, separate from current costs.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite
@@ -123,17 +123,17 @@ family evidence is linked below; individual experiments remain in
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,353.14 | 2,517.95 | 1.332 / 1.346 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 70,818.32 | 57,929.11 | 1.222 / 1.236 | 10,749,072 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 64,762.39 | 53,504.39 | 1.210 / 1.230 | 9,594,864 | 98,590 / 98,590 |
 | VP8 opaque RGBA8 † | 21,160.69 | 16,885.52 | 1.253 / 1.265 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 13,670.07 | 9,706.88 | 1.408 / 1.418 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 8,091.60 | 6,264.06 | 1.292 / 1.319 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 13,518.03 | 9,816.75 | 1.377 / 1.394 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,367.41 | 15,593.58 | 1.306 / 1.331 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 67,390.45 | 58,098.07 | 1.160 / 1.200 | 10,749,072 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 90,849.86 | 82,988.87 | 1.095 / 1.105 | 13,346,868 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 9,113.69 | 9,621.89 | 0.947 / 0.958 | 6,256,838 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 129,759.50 | 121,487.63 | 1.068 / 1.081 | 24,899,424 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 76,053.83 | 69,943.04 | 1.087 / 1.096 | 12,956,744 | 121,896 / 121,896 |
+| VP8 RGBA8 + lossless alpha † | 65,561.30 | 53,420.09 | 1.227 / 1.278 | 9,594,864 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 95,779.05 | 83,539.55 | 1.147 / 1.208 | 6,517,238 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 8,545.82 | 10,074.23 | 0.848 / 0.864 | 4,461,854 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 128,500.88 | 122,922.14 | 1.045 / 1.068 | 7,281,824 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 75,206.46 | 69,709.03 | 1.079 / 1.092 | 5,983,408 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
