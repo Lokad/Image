@@ -43,34 +43,23 @@ one-shot/session comparisons.
 separates these costs and identifies WebP workspace allocations. Its additional
 screens are diagnostic, not qualified gains or replacements for the tables below.
 
-[WebP cache-prefix aggregation](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md)
-saves **2.18 ms / 3.25% raw** for transparent VP8 (3.08% reference-normalized)
-and **2.04 ms / 2.16%** for the photograph (2.01% normalized), with separated
-confidence. Ordinary/opaque normalized intervals overlap; no incremental gain
-claim. Diagram remains a pass at **0.947× / upper0.963** and stops. Its raw
-managed time is flat; a 6.59% faster native clock produces an adverse relative
-point, without a causal managed-regression claim. Four other anchors retain gaps.
-Allocations are **25.33 / 13.39 / 13.78 / 6.69 / 11.61 MB/op**
-(ordinary/opaque/photo/diagram/alpha). Scratch adds about 40 KiB per eligible history
-operation and is reused across two seeds; admitted peaks on the four direct
-controls are unchanged. No encoder scratch is retained. Ordinary/opaque admitted/
-physical peaks and native allocation are unmeasured. Exact packets, full checks
-and the same actual package pass both OSes. An enlarged authored noise patch
-checks packaged sync/async scoring and ownership under the same 6 MiB root.
-Complete normalization/preparation/candidate selection and owned output stay
-timed; native wrappers/scratch retain their prepared-state labels. All five
-current WebP rows now read the same qualified evidence; the opaque row’s previous
-renderer still selected an older result despite its refreshed narrative. Other
-affected encoding rows marked **H** remain historical. Earlier
-[prepared support](../benchmarks/WEBP-PREPARED-COLOR-SUPPORT.md) and
-[opaque/alpha attribution](../benchmarks/CURRENT-OPAQUE-VP8L-ENCODE-COST.md)
-retain their historical proof and design leads. A subsequent
-[cache-tree address trial](../benchmarks/WEBP-CACHE-TREE-INCONCLUSIVE.md) is restored
-after an unpromising short screen; current costs/allocations remain unchanged.
-Its independent cache-state oracle is retained. A bounded
-[matching phase diagnostic](../benchmarks/WEBP-MATCHING-PHASE-AUDIT.md) points to
-search rather than chain setup; instrumented observations are not benchmark gains.
-No favorable resampling.
+[WebP trace storage](../benchmarks/WEBP-TRACE-OUTPUT-STORAGE.md) borrows idle
+output capacity for forward parsing, then backtracks into the output tail.
+The five complete controls allocate **24.90 / 12.96 / 13.35 / 6.26 / 10.75 MB/op**
+(ordinary/opaque/photo/diagram/alpha), about 430 KB less per operation, or 860 KB
+for transparency. The transparent control's admitted peak falls from 4,085,883 to
+3,847,888 B; photograph and diagram peaks stay unchanged. No scratch is retained;
+physical heap peak, native allocation and ordinary/opaque admitted peaks remain
+unmeasured. Independent timings do not establish an incremental CPU gain.
+Adverse ordinary/opaque points and uncertainty are retained in the evidence.
+Diagram passes at **0.939× / upper0.959**; four other controls remain gaps.
+Exact packets, full Windows/Linux checks, affected scalar paths and the same
+actual Release-package consumer pass. Complete normalization, preparation,
+candidate selection, output ownership and disposal stay timed. Native wrappers
+retain their prepared-state labels. Other affected encode rows marked **H**
+remain historical. [Earlier cache-prefix work](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md)
+and [matching attribution](../benchmarks/WEBP-MATCHING-PHASE-AUDIT.md) retain
+history and reproducibility separately. No candidate retuning or scored rerun.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.
@@ -130,11 +119,11 @@ family evidence is linked below; individual experiments remain in
 | VP8 opaque text/diagram † | 7,791.31 | 5,845.88 | 1.333 / 1.351 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 15,835.32 | 11,306.07 | 1.401 / 1.415 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,568.52 | 15,639.99 | 1.315 / 1.319 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 65,098.06 | 53,424.71 | 1.219 / 1.231 | 11,608,624 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 92,822.92 | 82,933.52 | 1.119 / 1.127 | 13,777,464 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 9,055.80 | 9,559.13 | 0.947 / 0.963 | 6,686,461 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 129,622.35 | 120,894.60 | 1.072 / 1.086 | 25,329,304 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 76,982.83 | 70,099.66 | 1.098 / 1.107 | 13,387,336 | 121,896 / 121,896 |
+| VP8 RGBA8 + lossless alpha † | 64,644.85 | 53,505.59 | 1.208 / 1.217 | 10,749,072 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 92,272.76 | 82,578.65 | 1.117 / 1.123 | 13,346,868 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 9,140.17 | 9,733.81 | 0.939 / 0.959 | 6,256,838 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 139,765.51 | 124,164.44 | 1.126 / 1.173 | 24,899,424 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 79,957.44 | 71,971.99 | 1.111 / 1.202 | 12,957,560 | 121,896 / 121,896 |
 | VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |

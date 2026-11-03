@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Auxiliary and main-image parsing. All candidates borrow the same
@@ -87,7 +89,7 @@ internal static class Vp8lReferenceLz
         finally { context.Release(layout.Total * 4L); }
     }
 
-    private sealed class TraceState : IDisposable
+    private ref struct TraceState
     {
         // At forward iteration a, lookahead touches only [a-1, a+8188]:
         // extension runs when reach < a+length-1, next <= reach+1, and both
@@ -97,30 +99,50 @@ internal static class Vp8lReferenceLz
         private readonly OperationContext context;
         private readonly long reserved;
         private readonly Vp8lHistogramLayout layout;
-        private int[]? histogram;
-        private long[]? prices, lengthPrices, costs, pending;
-        private ushort[]? path;
-        private int[]? pendingSource;
-        private uint[]? cache;
+        private Span<int> histogram, pendingSource;
+        private Span<long> prices, lengthPrices, costs, pending;
+        private Span<ushort> path;
+        private Span<uint> cache;
 
-        internal TraceState(int length, ReadOnlySpan<Vp8lToken> seed, int width, int cacheBits, OperationContext context)
+        internal static long ScratchBytes(int length) => ((length * 2L + 7) & ~7L) + Math.Min(Window, length) * 20L;
+
+        internal TraceState(int length, ReadOnlySpan<Vp8lToken> seed, int width, int cacheBits, Span<int> scratch, OperationContext context)
         {
+            this = default;
             this.context = context;
             layout = new(cacheBits);
             var lengths = Math.Min(4095, length);
             var slots = Math.Min(Window, length);
-            reserved = layout.Total * 12L + lengths * 8L + length * 2L + slots * 20L + layout.CacheSize * 4L + 320;
+            reserved = layout.Total * 12L + lengths * 8L + layout.CacheSize * 4L + 320
+                + (scratch.IsEmpty ? length * 2L + slots * 20L : 0);
             context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
             try
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 histogram = new int[layout.Total]; prices = new long[layout.Total]; lengthPrices = new long[lengths];
-                costs = new long[slots]; pending = new long[slots]; path = new ushort[length]; pendingSource = new int[slots];
+                if (scratch.IsEmpty)
+                {
+                    costs = new long[slots]; pending = new long[slots]; path = new ushort[length]; pendingSource = new int[slots];
+                }
+                else
+                {
+                    // All bytes are already charged to the empty output owner.
+                    // Forward work dies before token writes; only path remains live.
+                    path = MemoryMarshal.Cast<int, ushort>(scratch)[..length];
+                    var offset = (length + 3) / 4 * 2; // Align the long windows.
+                    costs = MemoryMarshal.Cast<int, long>(scratch.Slice(offset, slots * 2)); offset += slots * 2;
+                    pending = MemoryMarshal.Cast<int, long>(scratch.Slice(offset, slots * 2)); offset += slots * 2;
+                    pendingSource = scratch.Slice(offset, slots);
+                    for (var at = 0; at < path.Length; at += 4096)
+                    { context.Cancellation.ThrowIfCancellationRequested(); path.Slice(at, Math.Min(4096, path.Length - at)).Clear(); }
+                    for (var at = 0; at < pendingSource.Length; at += 4096)
+                    { context.Cancellation.ThrowIfCancellationRequested(); pendingSource.Slice(at, Math.Min(4096, pendingSource.Length - at)).Clear(); }
+                }
                 cache = new uint[layout.CacheSize];
                 for (var at = 0; at < slots; at += 4096)
                 {
                     var count = Math.Min(4096, slots - at); context.Cancellation.ThrowIfCancellationRequested();
-                    costs.AsSpan(at, count).Fill(long.MaxValue); pending.AsSpan(at, count).Fill(long.MaxValue);
+                    costs.Slice(at, count).Fill(long.MaxValue); pending.Slice(at, count).Fill(long.MaxValue);
                 }
                 layout.Fill(seed, width, true, histogram, context);
                 PricePlane(0, layout.GreenSize); PricePlane(layout.Red, 256); PricePlane(layout.Blue, 256);
@@ -138,25 +160,25 @@ internal static class Vp8lReferenceLz
         private void PricePlane(int start, int length)
         {
             context.Cancellation.ThrowIfCancellationRequested(); var sum = 0; var nonzero = 0;
-            for (var i = start; i < start + length; i++) { sum += histogram![i]; if (histogram[i] != 0) nonzero++; }
+            for (var i = start; i < start + length; i++) { sum += histogram[i]; if (histogram[i] != 0) nonzero++; }
             if (nonzero <= 1) return;
             var total = Vp8lReferenceEntropy.Log(sum);
-            for (var i = start; i < start + length; i++) prices![i] = total - Vp8lReferenceEntropy.Log(histogram![i]);
+            for (var i = start; i < start + length; i++) prices[i] = total - Vp8lReferenceEntropy.Log(histogram[i]);
         }
 
         internal void Resolve(int at)
         {
             context.Cancellation.ThrowIfCancellationRequested();
             var slot = at & Mask;
-            if (pending![slot] < costs![slot]) { costs[slot] = pending[slot]; path![at] = (ushort)(at - pendingSource![slot] + 1); }
+            if (pending[slot] < costs[slot]) { costs[slot] = pending[slot]; path[at] = (ushort)(at - pendingSource[slot] + 1); }
         }
 
-        internal long CostAt(int at) => costs![at & Mask];
-        internal int PathAt(int at) => path![at];
+        internal long CostAt(int at) => costs[at & Mask];
+        internal int PathAt(int at) => path[at];
         internal long DistancePrice(int distance, int width)
         {
             var prefix = Vp8lSymbols.Prefix(Vp8lSymbols.Plane(distance, width));
-            return prices![layout.Distance + prefix.Code] + prefix.Extra * Scale;
+            return prices[layout.Distance + prefix.Code] + prefix.Extra * Scale;
         }
 
         internal void Literal(ReadOnlySpan<uint> pixels, int at, long prior)
@@ -165,20 +187,20 @@ internal static class Vp8lReferenceLz
             if (at >= 2)
             {
                 var expired = (at - 2) & Mask;
-                costs![expired] = pending![expired] = long.MaxValue;
+                costs[expired] = pending[expired] = long.MaxValue;
             }
             var pixel = pixels[at]; var hit = false; var key = 0;
             if (layout.CacheBits != 0)
             {
-                key = Vp8lReferenceCache.Key(pixel, layout.CacheBits); hit = cache![key] == pixel;
+                key = Vp8lReferenceCache.Key(pixel, layout.CacheBits); hit = cache[key] == pixel;
                 if (!hit) cache[key] = pixel;
             }
-            var price = hit ? prices![280 + key]
-                : prices![(int)(pixel >> 8 & 255)] + prices[layout.Red + (int)(pixel >> 16 & 255)]
+            var price = hit ? prices[280 + key]
+                : prices[(int)(pixel >> 8 & 255)] + prices[layout.Red + (int)(pixel >> 16 & 255)]
                     + prices[layout.Blue + (int)(pixel & 255)] + prices[layout.Alpha + (int)(pixel >> 24)];
             var value = prior + (price * (hit ? 68 : 82) + 50) / 100;
             var slot = at & Mask;
-            if (value < costs![slot]) { costs[slot] = value; path![at] = 1; }
+            if (value < costs[slot]) { costs[slot] = value; path[at] = 1; }
         }
 
         internal void Push(int at, int length, long prior)
@@ -186,19 +208,19 @@ internal static class Vp8lReferenceLz
             for (var i = 0; i < length; i++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                var value = prior + lengthPrices![i]; var end = at + i; var slot = end & Mask;
+                var value = prior + lengthPrices[i]; var end = at + i; var slot = end & Mask;
                 if (length < 10)
                 {
-                    if (value < costs![slot]) { costs[slot] = value; path![end] = (ushort)(i + 1); }
+                    if (value < costs[slot]) { costs[slot] = value; path[end] = (ushort)(i + 1); }
                 }
-                else if (value < pending![slot]) { pending[slot] = value; pendingSource![slot] = at; }
+                else if (value < pending[slot]) { pending[slot] = value; pendingSource[slot] = at; }
             }
         }
 
         public void Dispose()
         {
-            if (Interlocked.Exchange(ref histogram, null) is null) return;
-            prices = lengthPrices = costs = pending = null; path = null; pendingSource = null; cache = null;
+            if (histogram.IsEmpty) return;
+            histogram = pendingSource = default; prices = lengthPrices = costs = pending = default; path = default; cache = default;
             context.Release(reserved);
         }
     }
@@ -214,49 +236,63 @@ internal static class Vp8lReferenceLz
             Validate(pixels.Length, width);
             if (pixels.Length != matches.Length) throw new ArgumentException("Expected matching source/index lengths.");
             result ??= new Vp8lTokenBuffer(context, pixels.Length);
-            if (seed.Overlaps(result.Tokens)) throw new ArgumentException("Trace seed must not alias its scratch.", nameof(seed));
+            if (result.OverlapsStorage(seed) || result.OverlapsStorage(pixels) || result.OverlapsStorage(matches))
+                throw new ArgumentException("Trace inputs must not alias output capacity.", nameof(seed));
             result.ResetForReuse(context, pixels.Length);
-            using var state = new TraceState(pixels.Length, seed, width, cacheBits, context);
-            state.Literal(pixels, 0, 0);
-            var previousDistance = -1; var previousLength = -1; var firstConstant = false; var reach = 0; long distancePrice = -1;
-            for (var at = 1; at < pixels.Length; at++)
+            // Choose from actual capacity before admission; refusal never retries
+            // the separate-storage path. All selected candidates stay independent.
+            var borrow = TraceState.ScratchBytes(pixels.Length) <= result.CapacityBytes;
+            var words = borrow ? result.BorrowScratchWords(context, pixels.Length * 2) : default;
+            var output = MemoryMarshal.Cast<int, Vp8lToken>(words);
+            var tail = output.Length;
+            var state = new TraceState(pixels.Length, seed, width, cacheBits, words, context);
+            try
             {
-                state.Literal(pixels, at, state.CostAt(at - 1));
-                var distance = (int)(matches[at] >> 12); var length = (int)(matches[at] & 4095);
-                if (length >= 2)
+                state.Literal(pixels, 0, 0);
+                var previousDistance = -1; var previousLength = -1; var firstConstant = false; var reach = 0; long distancePrice = -1;
+                for (var at = 1; at < pixels.Length; at++)
                 {
-                    if (distance != previousDistance)
+                    state.Literal(pixels, at, state.CostAt(at - 1));
+                    var distance = (int)(matches[at] >> 12); var length = (int)(matches[at] & 4095);
+                    if (length >= 2)
                     {
-                        distancePrice = state.DistancePrice(distance, width); firstConstant = true;
-                        state.Push(at, length, state.CostAt(at - 1) + distancePrice);
-                    }
-                    else
-                    {
-                        if (firstConstant) { reach = at - 1 + previousLength - 1; firstConstant = false; }
-                        if (at + length - 1 > reach)
+                        if (distance != previousDistance)
                         {
-                            var next = at; var nextLength = 0;
-                            for (; next <= reach; next++)
+                            distancePrice = state.DistancePrice(distance, width); firstConstant = true;
+                            state.Push(at, length, state.CostAt(at - 1) + distancePrice);
+                        }
+                        else
+                        {
+                            if (firstConstant) { reach = at - 1 + previousLength - 1; firstConstant = false; }
+                            if (at + length - 1 > reach)
                             {
-                                context.Cancellation.ThrowIfCancellationRequested(); nextLength = (int)(matches[next + 1] & 4095);
-                                if ((int)(matches[next + 1] >> 12) != distance) { nextLength = (int)(matches[next] & 4095); break; }
+                                var next = at; var nextLength = 0;
+                                for (; next <= reach; next++)
+                                {
+                                    context.Cancellation.ThrowIfCancellationRequested(); nextLength = (int)(matches[next + 1] & 4095);
+                                    if ((int)(matches[next + 1] >> 12) != distance) { nextLength = (int)(matches[next] & 4095); break; }
+                                }
+                                state.Resolve(next - 1); state.Resolve(next);
+                                state.Push(next, nextLength, state.CostAt(next - 1) + distancePrice); reach = next + nextLength - 1;
                             }
-                            state.Resolve(next - 1); state.Resolve(next);
-                            state.Push(next, nextLength, state.CostAt(next - 1) + distancePrice); reach = next + nextLength - 1;
                         }
                     }
+                    state.Resolve(at); previousDistance = distance; previousLength = length;
                 }
-                state.Resolve(at); previousDistance = distance; previousLength = length;
+                for (var end = pixels.Length - 1; end >= 0;)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested(); var length = state.PathAt(end);
+                    if (length < 1) throw new InvalidOperationException("Incomplete VP8L parse path.");
+                    var start = end - length + 1;
+                    var token = length == 1 ? Vp8lToken.Literal(pixels[start]) : Vp8lToken.Copy(length, (int)(matches[start] >> 12));
+                    // After k+1 tokens consume S>=k+1 pixels, unread path ends at
+                    // 2*(N-S), below this tail write at 8*(N-k-1). Copies only help.
+                    if (borrow) output[--tail] = token; else result.Add(token);
+                    end -= length;
+                }
             }
-            for (var end = pixels.Length - 1; end >= 0;)
-            {
-                context.Cancellation.ThrowIfCancellationRequested(); var length = state.PathAt(end);
-                if (length < 1) throw new InvalidOperationException("Incomplete VP8L parse path.");
-                var start = end - length + 1;
-                result.Add(length == 1 ? Vp8lToken.Literal(pixels[start]) : Vp8lToken.Copy(length, (int)(matches[start] >> 12)));
-                end -= length;
-            }
-            result.Reverse(); state.Dispose();
+            finally { state.Dispose(); }
+            if (borrow) result.CommitTail(context, tail); else result.Reverse();
             if (cacheBits != 0) Vp8lReferenceCache.Apply(pixels, result, cacheBits, context);
             return result;
         }

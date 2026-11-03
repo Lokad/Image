@@ -35,16 +35,41 @@ internal sealed class Vp8lTokenBuffer : IDisposable
         Count = 0; CacheBits = 0;
     }
 
-    // Matching finishes before this owner's first tokens are written. Borrow
+    // Matching/forward tracing finish before output tokens are written. Borrow
     // only unused, already admitted capacity; no selected candidate may alias it.
     internal Span<int> BorrowScratchWords(OperationContext owner, int words)
     {
         var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
         if (!ReferenceEquals(context, owner) || Count != 0 || CacheBits != 0)
-            throw new ArgumentException("Matching scratch must be an empty token owner in the same operation.");
+            throw new ArgumentException("Scratch must be an empty token owner in the same operation.");
         ArgumentOutOfRangeException.ThrowIfNegative(words);
-        if (words > storage.Length * 2) throw new ArgumentException("Token capacity does not cover the matching table.", nameof(words));
+        if (words > storage.Length * 2) throw new ArgumentException("Token capacity does not cover scratch.", nameof(words));
         return MemoryMarshal.Cast<Vp8lToken, int>(storage.AsSpan())[..words];
+    }
+
+    // Aliasing must include idle capacity before it is reused as workspace.
+    internal bool OverlapsStorage<T>(ReadOnlySpan<T> input) where T : unmanaged
+    {
+        var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
+        return MemoryMarshal.AsBytes(input).Overlaps(MemoryMarshal.AsBytes(storage.AsSpan()));
+    }
+
+    // Backtracking filled this tail in forward token order, after every path
+    // read completed. Move toward the front in bounded, overlap-safe chunks.
+    internal void CommitTail(OperationContext owner, int first)
+    {
+        var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
+        if (!ReferenceEquals(context, owner) || Count != 0 || CacheBits != 0)
+            throw new ArgumentException("Trace tail must belong to the empty output owner.");
+        if ((uint)first > (uint)storage.Length) throw new ArgumentOutOfRangeException(nameof(first));
+        var count = storage.Length - first;
+        context.Cancellation.ThrowIfCancellationRequested();
+        if (first != 0) for (var at = 0; at < count; at += 1024)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); var length = Math.Min(1024, count - at);
+            storage.AsSpan(first + at, length).CopyTo(storage.AsSpan(at, length));
+        }
+        Count = count;
     }
 
     internal Vp8lTokenBuffer(OperationContext context, int capacity)
