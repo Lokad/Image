@@ -42,3 +42,7 @@ instructions, actual producers and quality/source gates. Raw
 `vp8-current-decision-pipeline-attribution.tar.xz`: 1,081,224 B / 35 members,
 SHA256 `a4dfe14c4aef46feb8b38a9613e264841df213dcb758e50b3160aa1d1c3876ca`,
 mirrored/member-verified, with the pinned qualified-baseline dependency.
+
+The resulting [quantizer/scoring handoff trial](VP8-QUANTIZED-SCORING-INCONCLUSIVE.md)
+preserves packets but establishes no normalized lead in either coherent stage.
+Production is restored; this attribution remains diagnostic, not a speed claim.

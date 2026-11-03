@@ -1,0 +1,244 @@
+{
+  "project": "Lokad.Image",
+  "schema": 1,
+  "productionChanged": false,
+  "decision": "Neither producer/scoring handoff stage establishes a useful normalized complete-operation lead. Restore qualified RSP186 source/assemblies/package. Preserve adverse points; no independent confirmation or causal regression/parity claim.",
+  "hypothesis": "Reuse actual quantizer zigzag magnitudes/nonzero mask for luma4 flatness and residual scoring; borrow rate storage once. Stage2 merges both bounded actual quantizer producers into one scoring body; no change to trellis quantization or general validation.",
+  "screens": [
+    {
+      "stage": "vqr192",
+      "subject": "baseline",
+      "caseId": "photograph",
+      "microseconds": 14518.588871794873,
+      "ratio": 1.4050962081324143,
+      "upper": 1.5358258084746506,
+      "memory": {
+        "BytesAllocatedPerOperation": 809072
+      },
+      "librarySha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
+      "rawObservationPath": "tmp/vqr192-baseline-photograph-short-observation.json"
+    },
+    {
+      "stage": "vqr192",
+      "subject": "baseline",
+      "caseId": "alpha",
+      "microseconds": 67393.57408333333,
+      "ratio": 1.2082750435936345,
+      "upper": 1.4810025499695636,
+      "memory": {
+        "BytesAllocatedPerOperation": 8622560
+      },
+      "librarySha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
+      "rawObservationPath": "tmp/vqr192-baseline-alpha-short-observation.json"
+    },
+    {
+      "stage": "vqr192",
+      "subject": "candidate",
+      "caseId": "photograph",
+      "microseconds": 14718.573666666665,
+      "ratio": 1.447321094967309,
+      "upper": 1.5206535071721823,
+      "memory": {
+        "BytesAllocatedPerOperation": 809072
+      },
+      "librarySha256": "24f7e333cd16bebafb0fd05e26e8776d16c9da135783efb40ad975c7f8628da5",
+      "rawObservationPath": "tmp/vqr192-candidate-photograph-short-observation.json"
+    },
+    {
+      "stage": "vqr192",
+      "subject": "candidate",
+      "caseId": "alpha",
+      "microseconds": 65889.75066666666,
+      "ratio": 1.2339722645783384,
+      "upper": 1.648723108243608,
+      "memory": {
+        "BytesAllocatedPerOperation": 8622560
+      },
+      "librarySha256": "24f7e333cd16bebafb0fd05e26e8776d16c9da135783efb40ad975c7f8628da5",
+      "rawObservationPath": "tmp/vqr192-candidate-alpha-short-observation.json"
+    },
+    {
+      "stage": "vqr193",
+      "subject": "candidate",
+      "caseId": "photograph",
+      "microseconds": 13861.955476190476,
+      "ratio": 1.4273443508591395,
+      "upper": 1.5249376944150175,
+      "memory": {
+        "BytesAllocatedPerOperation": 809072
+      },
+      "librarySha256": "8576fba0396dec58a4ff696caf69ec8424d2b2888ccc4fb1f85985183b227f0a",
+      "rawObservationPath": "tmp/vqr193-candidate-photograph-short-observation.json"
+    },
+    {
+      "stage": "vqr193",
+      "subject": "candidate",
+      "caseId": "alpha",
+      "microseconds": 65073.429,
+      "ratio": 1.216985503163076,
+      "upper": 1.3158086158575872,
+      "memory": {
+        "BytesAllocatedPerOperation": 8622560
+      },
+      "librarySha256": "8576fba0396dec58a4ff696caf69ec8424d2b2888ccc4fb1f85985183b227f0a",
+      "rawObservationPath": "tmp/vqr193-candidate-alpha-short-observation.json"
+    }
+  ],
+  "stages": {
+    "vqr192": {
+      "windows": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "windows",
+        "baselineSha256": "e547e0f7a9390b25f0b9d3d6f43c87d4333079e5184647ecd1a2d194403d4a8a",
+        "candidateSha256": "068ef53c850261daaae05f4ef5bf62dcecdd6419140964d8e04525da74ce3135",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "436f6985189a2d0ee0109ea30f51fdd3c2352f99ee414211e0c51a821b77de52",
+          "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "8f0d08ca9df8a9b82e193897d837c5e986f49dab4d288852b74e1e8f487f1446",
+          "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "845ef1e6f1f4ca2eb5c2493ccca75fb71d54d2c23424c3ed59cdc7a17fb9069e",
+          "tests/Lokad.Image.Tests/Vp8QuantizedScoringTests.cs": "547e3213611e11bcb3108c1a980584f147f142dc9910a9e56fc20e5a72dbc2a6"
+        },
+        "focused": {
+          "internal-normal": 804,
+          "internal-scalar": 804,
+          "public-normal": 194,
+          "public-scalar": 194
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "a6302381b3f13399f0fa7e0669c9a6cf54bcb9e64e64ca0b56abfd2714e22d44",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "linux",
+        "baselineSha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
+        "candidateSha256": "24f7e333cd16bebafb0fd05e26e8776d16c9da135783efb40ad975c7f8628da5",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "436f6985189a2d0ee0109ea30f51fdd3c2352f99ee414211e0c51a821b77de52",
+          "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "8f0d08ca9df8a9b82e193897d837c5e986f49dab4d288852b74e1e8f487f1446",
+          "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "845ef1e6f1f4ca2eb5c2493ccca75fb71d54d2c23424c3ed59cdc7a17fb9069e",
+          "tests/Lokad.Image.Tests/Vp8QuantizedScoringTests.cs": "547e3213611e11bcb3108c1a980584f147f142dc9910a9e56fc20e5a72dbc2a6"
+        },
+        "focused": {
+          "internal-normal": 804,
+          "internal-scalar": 804,
+          "public-normal": 194,
+          "public-scalar": 194
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "ad6c59f1f8b6149bcca3d40a3aaf97012924b62d5ff2ecafc3234cf21d42b12e",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      }
+    },
+    "vqr193": {
+      "windows": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "windows",
+        "baselineSha256": "e547e0f7a9390b25f0b9d3d6f43c87d4333079e5184647ecd1a2d194403d4a8a",
+        "candidateSha256": "e8103c086f81c9a6cfce466aaae75f0f939f8fcb4d27f73cca23c6d526cf8441",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "436f6985189a2d0ee0109ea30f51fdd3c2352f99ee414211e0c51a821b77de52",
+          "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "8f0d08ca9df8a9b82e193897d837c5e986f49dab4d288852b74e1e8f487f1446",
+          "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "420f6939705b0f4a86cd29ba5f8c00f151c4d2403c3332da3d7ef1ab920d0c17",
+          "tests/Lokad.Image.Tests/Vp8QuantizedScoringTests.cs": "547e3213611e11bcb3108c1a980584f147f142dc9910a9e56fc20e5a72dbc2a6"
+        },
+        "focused": {
+          "internal-normal": 804,
+          "internal-scalar": 804,
+          "public-normal": 194,
+          "public-scalar": 194
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "5fa89ab66c48a2397bd3e57103d949e96f834d7986fe958ae0164509c52bb527",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "linux",
+        "baselineSha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
+        "candidateSha256": "8576fba0396dec58a4ff696caf69ec8424d2b2888ccc4fb1f85985183b227f0a",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "436f6985189a2d0ee0109ea30f51fdd3c2352f99ee414211e0c51a821b77de52",
+          "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "8f0d08ca9df8a9b82e193897d837c5e986f49dab4d288852b74e1e8f487f1446",
+          "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "420f6939705b0f4a86cd29ba5f8c00f151c4d2403c3332da3d7ef1ab920d0c17",
+          "tests/Lokad.Image.Tests/Vp8QuantizedScoringTests.cs": "547e3213611e11bcb3108c1a980584f147f142dc9910a9e56fc20e5a72dbc2a6"
+        },
+        "focused": {
+          "internal-normal": 804,
+          "internal-scalar": 804,
+          "public-normal": 194,
+          "public-scalar": 194
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "d83d8d27b19740d6057da0a52e0175a87a5181d89bbd74ad211c68391266723b",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      }
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionChanged": false,
+      "productionSha256": "e547e0f7a9390b25f0b9d3d6f43c87d4333079e5184647ecd1a2d194403d4a8a",
+      "packageSha256": "f8d8b1a87b706fcac683119375b185b8729ab0887ef918814060354e823d7ba6",
+      "productionSourcesRestored": true,
+      "corePdbXmlAndInternalAssembliesRestored": true,
+      "builds": 0,
+      "unchangedQualificationReused": "RSP186 full/live5529 each OS, affected normal/scalar and SAME actual Release package/three examples; both0eec285f/66340be3 CI green",
+      "removedHelperOnlyTests": [
+        "tests/Lokad.Image.Tests/Vp8QuantizedScoringTests.cs"
+      ]
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionChanged": false,
+      "productionSha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
+      "packageSha256": "f8d8b1a87b706fcac683119375b185b8729ab0887ef918814060354e823d7ba6",
+      "productionSourcesRestored": true,
+      "corePdbXmlAndInternalAssembliesRestored": true,
+      "builds": 0,
+      "unchangedQualificationReused": "RSP186 full/live5529 each OS, affected normal/scalar and SAME actual Release package/three examples; both0eec285f/66340be3 CI green",
+      "removedHelperOnlyTests": [
+        "tests/Lokad.Image.Tests/Vp8QuantizedScoringTests.cs"
+      ]
+    }
+  },
+  "diagnostic": {
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "stage": "vqr192",
+    "totalSamples": 1970,
+    "luma4CodeBytesBefore": 6685,
+    "luma4CodeBytesCandidate": 7590,
+    "finding": "Two inlined residual-scoring bodies in first-stage generated code; stage2 unifies the producer handoff. Samples and skid do not establish component costs.",
+    "receipt": "tmp/vqr192-photograph-profile-receipt.json"
+  },
+  "storage": "No added heap/owner/reservation. Added candidate vectors fit the existing16KiB admitted stack envelope. Allocation remains809072B/photo and8622560B/alpha. Physical peak/admitted peak and retention not remeasured.",
+  "qualificationReused": "Exact restored RSP186 source, actual DLL/PDB/XML and internal test assemblies;5529 full/live per OS, affected normal/scalar and SAME actual Release package/three examples. Prior checkpoint1ecc9998 CI green. No restoration builds, broad-suite repeats or package regeneration.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "vp8-quantized-scoring-inconclusive.tar.xz",
+    "bytes": 2655844,
+    "members": 243,
+    "sha256": "a504406c93ad1c9ff328c2502468612f7502250d226a3d88a9c40ccf11beca47",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "baselineDependency": "lanczos-word-source-row-preparation.tar.xz",
+    "baselineDependencySha256": "c4834c33d827b7c5f1313c45225d5b7862a6f2bb7aa6b8149277b7ff4d1c02d2",
+    "workerDependency": "webp-alpha-token-reuse-qualified.tar.xz",
+    "workerDependencySha256": "4db1eac56708656b7ae8871b910a0cc3b14eb1ebac4d8db99b27510a22a2a3ae",
+    "attributionDependency": "vp8-current-decision-pipeline-attribution.tar.xz",
+    "attributionDependencySha256": "a4dfe14c4aef46feb8b38a9613e264841df213dcb758e50b3160aa1d1c3876ca",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}
