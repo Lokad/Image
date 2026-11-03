@@ -170,6 +170,9 @@ exact packets but establishes no CPU/allocation gain; production is restored.
 The [current opaque capture](WEBP-OPAQUE-CURRENT-ATTRIBUTION.md) identifies dense
 scoring and predictor/histogram work for a bounded reuse audit, without timing or
 available-savings claims. No affected qualification is invalidated.
+The [final-assignment redesign](WEBP-FINAL-REMAP-INCONCLUSIVE.md) retains both exact
+stages and their adverse screens. Production/package are restored; two frozen-map/
+ownership Facts supplement unchanged qualification. No useful gain is established.
 
 Current priorities: preparation/reuse and operation-owned workspace, then shared
 resize execution and further codec work selected from attribution. The

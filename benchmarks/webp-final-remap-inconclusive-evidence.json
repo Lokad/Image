@@ -1,0 +1,263 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "FRP206",
+    "FRP207"
+  ],
+  "accepted": false,
+  "productionRestored": true,
+  "statisticalGainOrRegressionClaim": false,
+  "scope": "Existing opaque lossless, transparent VP8 and lossless photograph complete-operation controls. Nine3-actual jobs, all frozen input/settings/packets/native/ownership and quiet gates retained. Stage2 reuses unchanged HSP200 before; no independent confirmation.",
+  "cases": [
+    {
+      "caseId": "opaque",
+      "baseline": {
+        "microseconds": 70329.7565,
+        "ratio": 0.9933491585511602,
+        "upper": 1.0645244885191654,
+        "allocation": {
+          "BytesAllocatedPerOperation": 5983424
+        },
+        "packetBytes": 121896,
+        "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+        "statistics": "tmp/frp206-baseline-opaque-short-statistics.json",
+        "receipt": "tmp/frp206-baseline-opaque-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "first": {
+        "microseconds": 71276.05025,
+        "ratio": 1.0194778826858923,
+        "upper": 1.2068769522376246,
+        "allocation": {
+          "BytesAllocatedPerOperation": 5983480
+        },
+        "packetBytes": 121896,
+        "librarySha256": "f898834a3ab1dc2f1e7ee5e35be76ab8bc5965b5f09f557944e689a28fd9100d",
+        "statistics": "tmp/frp206-candidate-opaque-short-statistics.json",
+        "receipt": "tmp/frp206-candidate-opaque-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "second": {
+        "microseconds": 70340.57341666667,
+        "ratio": 1.0041296278717464,
+        "upper": 1.116448386502709,
+        "allocation": {
+          "BytesAllocatedPerOperation": 5983424
+        },
+        "packetBytes": 121896,
+        "librarySha256": "9ffe6ec7e1b648e2046b571e0d746423129d5873f83d9a2bb58614c781ccf3d3",
+        "statistics": "tmp/frp207-candidate-opaque-short-statistics.json",
+        "receipt": "tmp/frp207-candidate-opaque-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      }
+    },
+    {
+      "caseId": "alpha",
+      "baseline": {
+        "microseconds": 65183.463416666666,
+        "ratio": 1.2235584586094932,
+        "upper": 1.347578707110007,
+        "allocation": {
+          "BytesAllocatedPerOperation": 8146632
+        },
+        "packetBytes": 98590,
+        "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+        "statistics": "tmp/frp206-baseline-alpha-short-statistics.json",
+        "receipt": "tmp/frp206-baseline-alpha-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "first": {
+        "microseconds": 66700.84466666667,
+        "ratio": 1.241954398854606,
+        "upper": 1.3797585437570228,
+        "allocation": {
+          "BytesAllocatedPerOperation": 8146744
+        },
+        "packetBytes": 98590,
+        "librarySha256": "f898834a3ab1dc2f1e7ee5e35be76ab8bc5965b5f09f557944e689a28fd9100d",
+        "statistics": "tmp/frp206-candidate-alpha-short-statistics.json",
+        "receipt": "tmp/frp206-candidate-alpha-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "second": {
+        "microseconds": 65497.10258333333,
+        "ratio": 1.2288686008613257,
+        "upper": 1.3428006253428264,
+        "allocation": {
+          "BytesAllocatedPerOperation": 8146632
+        },
+        "packetBytes": 98590,
+        "librarySha256": "9ffe6ec7e1b648e2046b571e0d746423129d5873f83d9a2bb58614c781ccf3d3",
+        "statistics": "tmp/frp207-candidate-alpha-short-statistics.json",
+        "receipt": "tmp/frp207-candidate-alpha-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      }
+    },
+    {
+      "caseId": "photograph",
+      "baseline": {
+        "microseconds": 82364.9895,
+        "ratio": 1.0061584605695002,
+        "upper": 1.086090992030936,
+        "allocation": {
+          "BytesAllocatedPerOperation": 6516744
+        },
+        "packetBytes": 160032,
+        "librarySha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+        "statistics": "tmp/frp206-baseline-photograph-short-statistics.json",
+        "receipt": "tmp/frp206-baseline-photograph-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "first": {
+        "microseconds": 85630.50516666667,
+        "ratio": 1.0403854206530778,
+        "upper": 1.185855843303196,
+        "allocation": {
+          "BytesAllocatedPerOperation": 6516800
+        },
+        "packetBytes": 160032,
+        "librarySha256": "f898834a3ab1dc2f1e7ee5e35be76ab8bc5965b5f09f557944e689a28fd9100d",
+        "statistics": "tmp/frp206-candidate-photograph-short-statistics.json",
+        "receipt": "tmp/frp206-candidate-photograph-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      },
+      "second": {
+        "microseconds": 84285.49483333333,
+        "ratio": 1.0220748830586945,
+        "upper": 1.1554817380567277,
+        "allocation": {
+          "BytesAllocatedPerOperation": 6516744
+        },
+        "packetBytes": 160032,
+        "librarySha256": "9ffe6ec7e1b648e2046b571e0d746423129d5873f83d9a2bb58614c781ccf3d3",
+        "statistics": "tmp/frp207-candidate-photograph-short-statistics.json",
+        "receipt": "tmp/frp207-candidate-photograph-short-receipt.json",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true
+      }
+    }
+  ],
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "productionSha256": "6e50c152368a5db73d34321d2db001da60a1a2e85d4cb5a94bf24f2be6bbe5c4",
+      "packageUnchanged": true,
+      "productionSourcesRestored": true,
+      "actualCorePdbXmlRestored": true,
+      "retainedTestSha256": "3a6f8383642df6d7bec5f08a91c10e8b4147e4f3b48a0a688d0a45e8ad4097d5",
+      "internalAssemblySha256": "37b39424e5688ba469d157fe539eb762f725a26498edeb58be8ffcbe6ba10f95",
+      "focused": {
+        "normal": 814,
+        "scalar": 814
+      },
+      "retainedFacts": 2,
+      "productionRestorationBuilds": 0,
+      "internalRestorationBuilds": 1,
+      "unchangedQualification": "HSP2005541 full/live each OS, normal/scalar and SAME actual package/three examples reused; two new focused actual-production facts supplement it."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "productionSha256": "54b424c4857eb9e228ab590054c2f5cbf9cae908a8a9309d3f1bbb7db65445ca",
+      "packageUnchanged": true,
+      "productionSourcesRestored": true,
+      "actualCorePdbXmlRestored": true,
+      "retainedTestSha256": "44220eebd1641307af757ac3a13884023cb3018c4a6d751ff0a08322ad93dfe2",
+      "internalAssemblySha256": "8da04b1268380ff5b1e0dce473623a3dfeca2be256e4b6cbf12d710e3c0c7685",
+      "focused": {
+        "normal": 814,
+        "scalar": 814
+      },
+      "retainedFacts": 2,
+      "productionRestorationBuilds": 0,
+      "internalRestorationBuilds": 1,
+      "unchangedQualification": "HSP2005541 full/live each OS, normal/scalar and SAME actual package/three examples reused; two new focused actual-production facts supplement it."
+    }
+  },
+  "qualification": {
+    "frp206": {
+      "windows": {
+        "internal-normal": 816,
+        "internal-scalar": 816,
+        "public-normal": 194,
+        "public-scalar": 194
+      },
+      "linux": {
+        "internal-normal": 816,
+        "internal-scalar": 816,
+        "public-normal": 194,
+        "public-scalar": 194
+      }
+    },
+    "frp207": {
+      "windows": {
+        "internal-normal": 816,
+        "internal-scalar": 816,
+        "public-normal": 194,
+        "public-scalar": 194
+      },
+      "linux": {
+        "internal-normal": 816,
+        "internal-scalar": 816,
+        "public-normal": 194,
+        "public-scalar": 194
+      }
+    }
+  },
+  "builds": {
+    "productionEachOs": 2,
+    "windowsInternalSuccessful": 5,
+    "windowsInternalFailed": 1,
+    "linuxInternalSuccessful": 3,
+    "restorationProduction": 0,
+    "harnessNativeSelectorPackage": 0
+  },
+  "setupFailures": "Counter type and aggregate-admission callback corrected in tests. A no-build invocation after failed compilation ran the baseline vector assembly; not candidate evidence. Successful immutable-stage full focused logs are authoritative.",
+  "storage": {
+    "stageOneStateAllocatedAddition": [
+      56,
+      112,
+      56
+    ],
+    "stageTwoHeapAddition": 0,
+    "stageTwoStackAdmittedBytes": 320,
+    "completePeaksMeasured": false
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-final-remap-inconclusive.tar.xz",
+    "bytes": 2882068,
+    "members": 555,
+    "sha256": "898bf9c8fb6fff882a8b6d9a1e0396b9dff0fee3e43f3b398632f43bf13786dd",
+    "vmMembersVerified": true,
+    "productionAccepted": false,
+    "baselineDependency": "webp-color-histogram-separation-qualified.tar.xz",
+    "baselineDependencySha256": "3e026e25c70e9ec7ad3ad02c104f150cbdad08e3a828da5917c215e821f9541f",
+    "capacityDependency": "webp-remap-reuse-audit.tar.xz",
+    "capacityDependencySha256": "26ab804635ed053e7b39e2dbcf0c754ed2f6e461abb878377914ffcdc299c45c",
+    "localMembersVerified": true
+  },
+  "precedingAudit": {
+    "project": "Lokad.Image",
+    "file": "webp-remap-reuse-audit.tar.xz",
+    "bytes": 866452,
+    "members": 35,
+    "sha256": "26ab804635ed053e7b39e2dbcf0c754ed2f6e461abb878377914ffcdc299c45c",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "productionSourceCommit": "5a9e9d342ca313c3eff824aca8293cc3ffb2115f",
+    "baselineDependency": "webp-color-histogram-separation-qualified.tar.xz",
+    "baselineDependencySha256": "3e026e25c70e9ec7ad3ad02c104f150cbdad08e3a828da5917c215e821f9541f",
+    "localMembersVerified": true
+  },
+  "decision": "Restore both implementations; retain two meaningful actual-production Facts. No useful complete lead/heap benefit, no confirmation or blind replay; independent codec work proceeds."
+}
