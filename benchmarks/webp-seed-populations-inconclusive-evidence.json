@@ -1,0 +1,446 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "candidatesRestored": true,
+  "qualifiedCpuGainClaim": false,
+  "stages": [
+    {
+      "label": "Retained seed populations and distance-only replay",
+      "design": {
+        "project": "Lokad.Image",
+        "experiment": "VSE117",
+        "productionChanged": false,
+        "baselineCommit": "73ce8846a121f399d295a5cd19dd8405687bbc94",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "b424185fa9da1e866ccebe6f4d7b2c6408fa664401445168230f88bd01e4d98b",
+          "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "e46226a670b104fc13bf5dee39084695885b00aad1427074b450be83d3049192",
+          "src/Lokad.Image/Internal/Vp8lHistogramLayout.cs": "7ba09ed00193bbb6c30c278337d35b41d78d0287cd758971818fe34e3a47f56f"
+        },
+        "repeatedWork": "The winning standard seed is counted for raw-distance Estimate, then its unchanged literal/cache/length population is counted again to initialize plane-distance Trace prices.",
+        "endState": "Prepare operation-owned per-seed counts and raw estimated cost once. Retain the standard seed preparation across repeated-seed comparison. If tracing is selected, rebuild ONLY40distance bins from copy tokens using Plane+Prefix, then price borrowed prepared populations. Independent traced/selected token owners remain unchanged. No global cache or public API.",
+        "stages": [
+          "Extract maintained seed-population cost/preparation with explicit raw versus plane-distance representations. Keep complete-token Fill as the actual standalone production fallback, not a test-only implementation.",
+          "Integrate main and boxed parsing reuse; evaluate auxiliary parsing only where the same concrete repeated seed path is present. No shape/depth/filter/quality grid.",
+          "If useful, later consolidate one-token versus complete-span accumulation without adding a generic per-pixel abstraction; do not mix an unsupported second hypothesis into initial scoring."
+        ],
+        "correctness": [
+          "Every non-distance count and both distance representations equal independent original full Fill results for literal/cache/copy mixtures. Retain raw cost despite later plane remapping.",
+          "Exact Estimate values, trace prices, selected token/index words, cache bits, candidate ties and complete frozen packets. Do not reuse counts across different seeds/cache representations.",
+          "Borrow inputs/root. Reserve capacity before allocation, track any earlier overlap, no denial fallback, clean refusal/cancel/exception at every ownership boundary. Disposing preparation must not invalidate independent surviving token output."
+        ],
+        "temporaryCosts": "The standard histogram remains live during repeated-seed estimation, potentially increasing an early local peak by one small alphabet-sized buffer. Trace no longer allocates/refills the same literal histogram. Distance-only second pass remains necessary; wrapper/object and lifetime complexity must earn its cost. Measure actual allocation/peak/retention; no assumed CPU gain.",
+        "workloads": [
+          "Existing transparent lossy Encode8 with lossless alpha, FFmpeg complete-operation and exact98590Bpacket gates.",
+          "Existing lossless photograph, explicitly labeled libwebp exact=1 and exact160032Bpacket gates.",
+          "One existing authored small control only if useful for generalization; diagram passing performance stays stopped."
+        ],
+        "cadence": "Focused correctness first, reuse immutable builds for short complete-operation screens, independent confirmation if justified, broad Win/Linux/scalar/differential/same actual package at accepted coherent milestone. Preserve adverse/inconclusive data; no favorable resampling.",
+        "publicationPostponed": true
+      },
+      "linuxSha256": "2b862978b605249b8132d187ebbf600711e2278e3fb66535b09d2c963019f389",
+      "windowsSha256": "def98586d1d2e68b90b0d3dd8b4e881179f79efdc871532c9c4969f6f3f686cb",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "518d44956180ea4b827ccdb50771f2608c8d41a8772d1374f1881e980afcc289",
+        "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "cbc5cb60e4e6b2eae5ebe3c2695c7e6db9702e80d9b78f517703414685110ec3",
+        "src/Lokad.Image/Internal/Vp8lSeedStatistics.cs": "df6436bdc1c0b7ff6afb39a15948f77978c3988fae4546a41d45e8fdd0d10d22",
+        "tests/Lokad.Image.Tests/Vp8lSeedStatisticsTests.cs": "a6d85146ca42ad24bfbcd1b388d81bbc278a8d1559576181fe4dac0a0bbe4c39"
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": false,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 94237.22983333333,
+            "candidateMicroseconds": 93978.39783333332,
+            "rawGain": 0.002746600260404186,
+            "allocatedBytesBefore": [
+              13776240,
+              13776240,
+              13776240
+            ],
+            "allocatedBytesAfter": [
+              13772456,
+              13772456,
+              13772456
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 8959.594166666666,
+            "candidateMicroseconds": 8942.574,
+            "rawGain": 0.0018996582155459407,
+            "allocatedBytesBefore": [
+              6685696,
+              6685696,
+              6685696
+            ],
+            "allocatedBytesAfter": [
+              6677384,
+              6677384,
+              6677384
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 64472.4295,
+            "candidateMicroseconds": 64135.85,
+            "rawGain": 0.005220518330242285,
+            "allocatedBytesBefore": [
+              11607400,
+              11607400,
+              11607400
+            ],
+            "allocatedBytesAfter": [
+              11595080,
+              11595080,
+              11595080
+            ],
+            "admittedPeakBefore": 4085883,
+            "admittedPeakAfter": 4085883,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 817.7588090277776,
+            "candidateMicroseconds": 828.253329787234,
+            "rawGain": -0.012833271428690729,
+            "allocatedBytesBefore": [
+              933648,
+              933648,
+              933648
+            ],
+            "allocatedBytesAfter": [
+              925272,
+              925272,
+              925272
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312716,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Fresh verified current baseline and one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      },
+      "normalScalarChecksEachOs": 280
+    },
+    {
+      "label": "Population collection fused with cache conversion",
+      "design": {
+        "project": "Lokad.Image",
+        "experiment": "VSE117B",
+        "productionChanged": false,
+        "baselineCommit": "73ce8846a121f399d295a5cd19dd8405687bbc94",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "b424185fa9da1e866ccebe6f4d7b2c6408fa664401445168230f88bd01e4d98b",
+          "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "e46226a670b104fc13bf5dee39084695885b00aad1427074b450be83d3049192",
+          "src/Lokad.Image/Internal/Vp8lHistogramLayout.cs": "7ba09ed00193bbb6c30c278337d35b41d78d0287cd758971818fe34e3a47f56f"
+        },
+        "repeatedWork": "Stage1 still traversed the selected seed again for plane distances and counted both seed streams after cache application. Fused conversion now collects final token populations in its existing pass, with40additional plane-distance bins only for possible traced seed.",
+        "endState": "Main/boxed parsing admits one seed population owner before cache conversion, collects exact final literal/cache/length/raw-distance symbols during Apply, and precomputes plane distances for possible trace. Trace replaces40bins in constant space, reuses every other bank, and selected token lifetimes remain independent.",
+        "stages": [
+          "Extract maintained seed-population cost/preparation with explicit raw versus plane-distance representations. Keep complete-token Fill as the actual standalone production fallback, not a test-only implementation.",
+          "Integrate main and boxed parsing reuse; evaluate auxiliary parsing only where the same concrete repeated seed path is present. No shape/depth/filter/quality grid.",
+          "If useful, later consolidate one-token versus complete-span accumulation without adding a generic per-pixel abstraction; do not mix an unsupported second hypothesis into initial scoring."
+        ],
+        "correctness": [
+          "Every non-distance count and both distance representations equal independent original full Fill results for literal/cache/copy mixtures. Retain raw cost despite later plane remapping.",
+          "Exact Estimate values, trace prices, selected token/index words, cache bits, candidate ties and complete frozen packets. Do not reuse counts across different seeds/cache representations.",
+          "Borrow inputs/root. Reserve capacity before allocation, track any earlier overlap, no denial fallback, clean refusal/cancel/exception at every ownership boundary. Disposing preparation must not invalidate independent surviving token output."
+        ],
+        "temporaryCosts": "Shared Cache.Apply has one predictable optional statistics branch per token. Potential trace seeds carry160additional owned bytes, and plane-prefix work may be unused when repeated candidate wins. Uncached paths still need one population traversal; standalone estimates retain original complete Fill. Stage1 files/runtimes/results retained, no replay or new inputs.",
+        "workloads": [
+          "Existing transparent lossy Encode8 with lossless alpha, FFmpeg complete-operation and exact98590Bpacket gates.",
+          "Existing lossless photograph, explicitly labeled libwebp exact=1 and exact160032Bpacket gates.",
+          "One existing authored small control only if useful for generalization; diagram passing performance stays stopped."
+        ],
+        "cadence": "Focused correctness first, reuse immutable builds for short complete-operation screens, independent confirmation if justified, broad Win/Linux/scalar/differential/same actual package at accepted coherent milestone. Preserve adverse/inconclusive data; no favorable resampling.",
+        "publicationPostponed": true,
+        "parent": "VSE117",
+        "stage1Outcome": {
+          "project": "Lokad.Image",
+          "diagnosticScreen": true,
+          "qualifiedCpuGainClaim": false,
+          "builds": 0,
+          "unchangedBeforeReused": false,
+          "existingControls": 4,
+          "newPerformanceControls": 0,
+          "quietGuardsPassed": true,
+          "cases": [
+            {
+              "caseId": "photograph",
+              "baselineMicroseconds": 94237.22983333333,
+              "candidateMicroseconds": 93978.39783333332,
+              "rawGain": 0.002746600260404186,
+              "allocatedBytesBefore": [
+                13776240,
+                13776240,
+                13776240
+              ],
+              "allocatedBytesAfter": [
+                13772456,
+                13772456,
+                13772456
+              ],
+              "admittedPeakBefore": 10166464,
+              "admittedPeakAfter": 10166464,
+              "exactPacket": true
+            },
+            {
+              "caseId": "diagram",
+              "baselineMicroseconds": 8959.594166666666,
+              "candidateMicroseconds": 8942.574,
+              "rawGain": 0.0018996582155459407,
+              "allocatedBytesBefore": [
+                6685696,
+                6685696,
+                6685696
+              ],
+              "allocatedBytesAfter": [
+                6677384,
+                6677384,
+                6677384
+              ],
+              "admittedPeakBefore": 4802292,
+              "admittedPeakAfter": 4802292,
+              "exactPacket": true
+            },
+            {
+              "caseId": "alpha",
+              "baselineMicroseconds": 64472.4295,
+              "candidateMicroseconds": 64135.85,
+              "rawGain": 0.005220518330242285,
+              "allocatedBytesBefore": [
+                11607400,
+                11607400,
+                11607400
+              ],
+              "allocatedBytesAfter": [
+                11595080,
+                11595080,
+                11595080
+              ],
+              "admittedPeakBefore": 4085883,
+              "admittedPeakAfter": 4085883,
+              "exactPacket": true
+            },
+            {
+              "caseId": "authored-bars",
+              "baselineMicroseconds": 817.7588090277776,
+              "candidateMicroseconds": 828.253329787234,
+              "rawGain": -0.012833271428690729,
+              "allocatedBytesBefore": [
+                933648,
+                933648,
+                933648
+              ],
+              "allocatedBytesAfter": [
+                925272,
+                925272,
+                925272
+              ],
+              "admittedPeakBefore": 312716,
+              "admittedPeakAfter": 312716,
+              "exactPacket": true
+            }
+          ],
+          "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Fresh verified current baseline and one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+        },
+        "candidateSources": {
+          "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "10bfa0eafbf4c59d5dddb247cc0f4b6fcaebd920b1cd1647d6ec043fa87a3e9f",
+          "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "0895ad256dc2ff6fa46c12e5cf220eed4ce94c49497d4f92e465883f938fe446",
+          "src/Lokad.Image/Internal/Vp8lSeedStatistics.cs": "1cd56183885047dafbfd619858591c3e9ef424ed3fd353d3bbf8d2f985df7559",
+          "src/Lokad.Image/Internal/Vp8lReferenceCache.cs": "48b9c04c284c0a86c2a11df03659cd6d2553c0179c62e2b5601f254cd7c9d1bf",
+          "tests/Lokad.Image.Tests/Vp8lSeedStatisticsTests.cs": "11d9bbb71c6e04f237e86a01210bbc40658f19b5670e344a3b245ae4bba29166"
+        }
+      },
+      "linuxSha256": "c0a1791219c6e2c36f38a936a3a014952d4518248f21c36c25286b7d7ff90a58",
+      "windowsSha256": "be09eda981d957966988557011961516a8db32af8e280afd5cb2dae25fe30184",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "10bfa0eafbf4c59d5dddb247cc0f4b6fcaebd920b1cd1647d6ec043fa87a3e9f",
+        "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "0895ad256dc2ff6fa46c12e5cf220eed4ce94c49497d4f92e465883f938fe446",
+        "src/Lokad.Image/Internal/Vp8lSeedStatistics.cs": "1cd56183885047dafbfd619858591c3e9ef424ed3fd353d3bbf8d2f985df7559",
+        "src/Lokad.Image/Internal/Vp8lReferenceCache.cs": "48b9c04c284c0a86c2a11df03659cd6d2553c0179c62e2b5601f254cd7c9d1bf",
+        "tests/Lokad.Image.Tests/Vp8lSeedStatisticsTests.cs": "11d9bbb71c6e04f237e86a01210bbc40658f19b5670e344a3b245ae4bba29166"
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": false,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 93776.81883333332,
+            "candidateMicroseconds": 94253.48533333333,
+            "rawGain": -0.005082988588546167,
+            "allocatedBytesBefore": [
+              13776240,
+              13776240,
+              13776240
+            ],
+            "allocatedBytesAfter": [
+              13772616,
+              13772616,
+              13772616
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 8935.610555555557,
+            "candidateMicroseconds": 9012.789222222222,
+            "rawGain": -0.008637201250750737,
+            "allocatedBytesBefore": [
+              6685696,
+              6685696,
+              6685696
+            ],
+            "allocatedBytesAfter": [
+              6677544,
+              6677544,
+              6677544
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 64755.0365,
+            "candidateMicroseconds": 65246.9355,
+            "rawGain": -0.007596304883559224,
+            "allocatedBytesBefore": [
+              11607400,
+              11607400,
+              11607400
+            ],
+            "allocatedBytesAfter": [
+              11595400,
+              11595400,
+              11595400
+            ],
+            "admittedPeakBefore": 4085883,
+            "admittedPeakAfter": 4086043,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 827.0131397849462,
+            "candidateMicroseconds": 819.7086086956522,
+            "rawGain": 0.008832424465702537,
+            "allocatedBytesBefore": [
+              933648,
+              933648,
+              933648
+            ],
+            "allocatedBytesAfter": [
+              925592,
+              925592,
+              925592
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312876,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Fresh verified current baseline and one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      },
+      "normalScalarChecksEachOs": 280
+    }
+  ],
+  "conclusion": "Both complete-operation screens are near flat or adverse points without demonstrated material elapsed improvement. Small allocation reductions and no retained scratch do not justify added population ownership/state on this evidence. No causal regression or native-parity claim; no independent confirmation or favorable resampling.",
+  "correctness": {
+    "completePacketsExact": true,
+    "sourceUnchanged": true,
+    "retainedRootBytes": 0,
+    "normalScalarCandidateChecksEachOs": 280,
+    "stage2PublicWindowsEachMode": 194,
+    "newCandidateOnlyTests": 6,
+    "allCandidateOnlyHelpersAndTestsRemoved": true,
+    "rawAndPlaneDistanceHistogramsCompared": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionRestoredByteExactly": true,
+      "productionSha256": "5c8865e13bc6553ed86265866a9847c2d8c8859dac0e6ff6ffa4d2d9cf5a71ee",
+      "candidateStage2Sha256": "be09eda981d957966988557011961516a8db32af8e280afd5cb2dae25fe30184",
+      "candidateOnlyFilesRemoved": true,
+      "corePublicCopiesRestored": true,
+      "originalTestAssemblyRestored": true,
+      "restoredFocused": {
+        "normal": 32,
+        "scalar": 32
+      },
+      "builds": 0,
+      "priorFullAndActualPackageProofReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionRestoredByteExactly": true,
+      "productionSha256": "adbf45ed9b068aa5debed6aa5bf1f779c67827bc3522625cf065204bafb8294d",
+      "candidateStage2Sha256": "c0a1791219c6e2c36f38a936a3a014952d4518248f21c36c25286b7d7ff90a58",
+      "candidateOnlyFilesRemoved": true,
+      "corePublicCopiesRestored": true,
+      "originalTestAssemblyRestored": true,
+      "restoredFocused": {
+        "normal": 32,
+        "scalar": 32
+      },
+      "builds": 0,
+      "priorFullAndActualPackageProofReused": true
+    }
+  },
+  "qualificationReused": {
+    "fullChecksEachOs": 5466,
+    "actualPackageSha256": "fd0cbb0a97d614110735d9525683781484a60dc5798040f80cc52873d4cc811e",
+    "sameActualPackageBothOs": true,
+    "usageExamplesBothOs": 3,
+    "sourceEvidence": "png-contiguous-history-evidence.json",
+    "productionUnchangedByteExactly": true
+  },
+  "workflow": {
+    "coherentCandidateStages": 2,
+    "coreInternalBuildsEachOsPerStage": 1,
+    "harnessNativeBuilds": 0,
+    "newPerformanceControls": 0,
+    "restorationBuilds": 0,
+    "broadAndPackageRepetitions": 0,
+    "independentTimingConfirmations": 0
+  },
+  "next": "Trace price-run preparation and exact deferred range updates, a different repeated-work/storage hypothesis. Mathematical prefix partition proof alone does not establish CPU gain.",
+  "rawArchive": {
+    "file": "webp-seed-populations-inconclusive.tar.xz",
+    "bytes": 1947292,
+    "members": 142,
+    "sha256": "bd204d160aad3354571b99b08a46fe2ed5321feb83f3db9fd4209b4dfffcd301",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "png-contiguous-history.tar.xz",
+    "qualifiedProductionDependencySha256": "227c02a66b970e723abecc931e842a9e02f805ebb7fb19d7ff517b41c0085229",
+    "webpSourceDependency": "webp-cache-prefix-aggregation.tar.xz",
+    "webpSourceDependencySha256": "34e5bbd505797c124e14330bdfaa3e1cb0992c3c6f04a7fc9861d7b10e28cd06",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}
