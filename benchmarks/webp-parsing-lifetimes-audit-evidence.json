@@ -1,0 +1,296 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "qualifiedTimingClaim": false,
+  "allocationClaim": false,
+  "productionBuilds": 0,
+  "privateProjectionBuilds": 2,
+  "benchmarkHarnessNativeSelectorBuilds": 0,
+  "existingControls": 2,
+  "newPerformanceControls": 0,
+  "result": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "sourceProjectionInstrumented": true,
+    "qualifiedTimingClaim": false,
+    "allocationClaim": false,
+    "completeEncodes": 4,
+    "encodes": [
+      {
+        "name": "photograph",
+        "warmup": true,
+        "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+        "packetBytes": 160032,
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "retainedRootBytes": 0
+      },
+      {
+        "name": "photograph",
+        "warmup": false,
+        "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+        "packetBytes": 160032,
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "retainedRootBytes": 0
+      },
+      {
+        "name": "alpha",
+        "warmup": true,
+        "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "packetBytes": 98590,
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "retainedRootBytes": 0
+      },
+      {
+        "name": "alpha",
+        "warmup": false,
+        "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "packetBytes": 98590,
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "retainedRootBytes": 0
+      }
+    ],
+    "families": [
+      {
+        "Id": 1,
+        "Case": "photograph",
+        "Pixels": 132867,
+        "Width": 513,
+        "Effort": 4,
+        "Quality": 75,
+        "PaletteColors": 0,
+        "Complete": true
+      },
+      {
+        "Id": 2,
+        "Case": "alpha",
+        "Pixels": 132867,
+        "Width": 513,
+        "Effort": 4,
+        "Quality": 32,
+        "PaletteColors": 0,
+        "Complete": true
+      },
+      {
+        "Id": 3,
+        "Case": "alpha",
+        "Pixels": 132867,
+        "Width": 513,
+        "Effort": 4,
+        "Quality": 32,
+        "PaletteColors": 0,
+        "Complete": true
+      }
+    ],
+    "calls": [
+      {
+        "Id": 1,
+        "Family": 1,
+        "Case": "photograph",
+        "Pixels": 132867,
+        "Width": 513,
+        "NoCache": false,
+        "MaximumBits": 10,
+        "Trace": true,
+        "BorrowedSeed": true,
+        "Box": false,
+        "ChosenTokens": 125974,
+        "ChosenCacheBits": 0,
+        "ChosenCapacityBytes": 1062936,
+        "DiscardedBuffers": 1,
+        "DiscardedCapacityBytes": 1062936,
+        "Complete": true
+      },
+      {
+        "Id": 2,
+        "Family": 2,
+        "Case": "alpha",
+        "Pixels": 132867,
+        "Width": 513,
+        "NoCache": false,
+        "MaximumBits": 10,
+        "Trace": true,
+        "BorrowedSeed": true,
+        "Box": false,
+        "ChosenTokens": 78270,
+        "ChosenCacheBits": 10,
+        "ChosenCapacityBytes": 1062936,
+        "DiscardedBuffers": 1,
+        "DiscardedCapacityBytes": 1062936,
+        "Complete": true
+      },
+      {
+        "Id": 3,
+        "Family": 3,
+        "Case": "alpha",
+        "Pixels": 132867,
+        "Width": 513,
+        "NoCache": false,
+        "MaximumBits": 10,
+        "Trace": true,
+        "BorrowedSeed": true,
+        "Box": false,
+        "ChosenTokens": 18989,
+        "ChosenCacheBits": 5,
+        "ChosenCapacityBytes": 1062936,
+        "DiscardedBuffers": 1,
+        "DiscardedCapacityBytes": 1062936,
+        "Complete": true
+      }
+    ],
+    "clustering": [
+      {
+        "Case": "photograph",
+        "Family": 1,
+        "tiles": 2145,
+        "populations": 2145,
+        "rowCells": 16835,
+        "words": 833,
+        "supportWords": 8,
+        "pairs": 1849,
+        "workingBytes": 7147140,
+        "admittedWorkspace": 7949820
+      },
+      {
+        "Case": "alpha",
+        "Family": 2,
+        "tiles": 153,
+        "populations": 153,
+        "rowCells": 4403,
+        "words": 1602,
+        "supportWords": 4,
+        "pairs": 16,
+        "workingBytes": 980424,
+        "admittedWorkspace": 1051488
+      },
+      {
+        "Case": "alpha",
+        "Family": 3,
+        "tiles": 153,
+        "populations": 153,
+        "rowCells": 4403,
+        "words": 610,
+        "supportWords": 4,
+        "pairs": 16,
+        "workingBytes": 373320,
+        "admittedWorkspace": 444384
+      }
+    ],
+    "auditAssemblySha256": "0d438b893ed6a37d83b3f9d542992a47bbfe731ac3745a6546b9e9004a8ab261"
+  },
+  "source": {
+    "qualifiedProductionSha256": "dd891c65a08c1c4c4aa512006c1b2c1414d5488a9edf71b8d16257b3a5b4c192",
+    "productionRevision": "9712d753b0d6c69b5c09d2a5f25cab87533c91b1",
+    "projectedFiles": {
+      "tmp/prr120-audit/Vp8lPreparedEncoding.cs": "3fad8bb0c7a657c4dec3995abb2f2a85632092be041c0ec3200964282bdade99",
+      "tmp/prr120-audit/Vp8lReferenceClustering.cs": "554d80836433d5262b43a65792b7b950b5f0b1995795956f7fe6369a09fcf025",
+      "tmp/prr120-audit/Vp8lReferenceMainParsing.cs": "5623f55d0b000a536bc792260d8404e0fe375821b5a8096d10c94273b82b6d92"
+    },
+    "originalFiles": {
+      "src/Lokad.Image/Internal/Vp8AlphaEncoding.cs": "fedf6ec5ee26e409de5b2b47cb9cbc12d7738808c4235171e3fab98b1f0791de",
+      "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "23d82ef8644d5c80b5b5d803be57fb0154b7c0fa18b599a27f359e20e84fad37",
+      "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": "bb25399d6c4c7d471e3e82bd62d0c5578bf78c4aea96d90b07222354baab26d8",
+      "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "b424185fa9da1e866ccebe6f4d7b2c6408fa664401445168230f88bd01e4d98b",
+      "src/Lokad.Image/Internal/Vp8lTokenBuffer.cs": "a0ad00f81b40fa7a99461710e4e64655afa42cec19e2d5305cdfeb782d02025b"
+    }
+  },
+  "quietness": {
+    "before": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.0003377120010555,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.002,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0,
+      "ioWaitFraction": 0.0,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.373046875,
+        0.1611328125,
+        0.20654296875
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    },
+    "after": {
+      "protocol": "exclusive-vm-idle-v2",
+      "sampleSeconds": 5.000384271144867,
+      "cpuSamples": {
+        "cpu": {
+          "cpuBusyFraction": 0.0004997501249375312,
+          "ioWaitFraction": 0.0004997501249375312,
+          "stealFraction": 0.0
+        },
+        "cpu0": {
+          "cpuBusyFraction": 0.0,
+          "ioWaitFraction": 0.0,
+          "stealFraction": 0.0
+        }
+      },
+      "overlappingJobsBefore": [],
+      "overlappingJobsAfter": [],
+      "loadAverageDiagnosticOnly": true,
+      "cpuBusyFraction": 0.0004997501249375312,
+      "ioWaitFraction": 0.0004997501249375312,
+      "stealFraction": 0.0,
+      "loadAverage": [
+        0.3427734375,
+        0.158203125,
+        0.205078125
+      ],
+      "passed": true,
+      "thresholds": {
+        "maxCpuBusyFraction": 0.05,
+        "maxIoWaitFraction": 0.01,
+        "maxStealFraction": 0.01
+      },
+      "scope": "Five-second aggregate and CPU0 idle samples plus live build/codec/profiler process checks. Load averages are diagnostic only: dedicated VM use is exclusive and historical own work requires no cooldown. Recheck immediately before and after every statistical run; does not prove future hypervisor isolation."
+    }
+  },
+  "interpretation": [
+    "One parsing call per observed family; no successive cached/uncached/boxed calls inside these families.",
+    "Discarded physical token capacity is1062936B per family; retaining it across alpha filters or into clustering changes substantial lifetimes.",
+    "Photograph working histogram7147140B cannot fit the discarded token capacity.",
+    "Borrowing that capacity only for alpha working histograms980424/373320B implies82512/689616B more live capacity than disposing it first. This is capacity arithmetic, not a measured total allocation or peak claim.",
+    "No production handoff justified from these counts alone; scope is the two frozen controls, not a permanent family ban."
+  ],
+  "evidenceReuse": {
+    "qualifiedProductionUnchanged": true,
+    "actualPackageSha256": "e04f7e85577513c2d89a00e6f19bf21403c1c3c1fe3b9741ff680d22a077adef",
+    "fullChecksEachOs": 5476,
+    "sameActualPackageBothOs": true,
+    "additionalBroadOrPackageChecks": 0
+  },
+  "next": "One bounded current photograph profile using immutable BTS119 and existing complete-operation harness, with profiling durations discarded. Attribute phases before selecting a histogram/matching redesign. No new performance control; these counts alone do not justify implementation.",
+  "rawArchive": {
+    "file": "webp-parsing-lifetimes-audit.tar.xz",
+    "bytes": 459836,
+    "members": 36,
+    "sha256": "70849d06040a49a24349bdc5ded06c201ff235f9dfb544e7aedb6079620274c0",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "webp-trace-output-storage.tar.xz",
+    "qualifiedProductionDependencySha256": "7c75987b28285ad5dc4077f17ce4253232dfaff40d00bf72210af0c654580496",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}
