@@ -166,6 +166,9 @@ The [cache-history lifetime trial](WEBP-CACHE-HISTORY-REUSE-INCONCLUSIVE.md)
 reduces alpha allocation by8,672B/op but has no elapsed lead; production is
 restored and current costs remain unchanged. Its exhaustive admission-refusal
 coverage remains against the actual parser.
+The [current JPEG refinement profile and lifetime audit](JPEG-REFINEMENT-STATE-ATTRIBUTION.md)
+support investigating scan-level lookahead reuse; their sample shares/counts are
+not CPU gains, and no numerical or cancellation policy change is proposed.
 Passing text/reference decisions do not block
 independent codec/resizing work. PLAN.md remains local and ignored.
 
