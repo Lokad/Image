@@ -7,7 +7,7 @@ public sealed class Vp8lColorHistogramBoundaryTests
 {
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void BinsAndFirstNonzeroOrderMatchSignedFloorOracleAcrossPartialTiles(bool redPlane)
+    public void BinsAndNewNonzeroMembershipMatchSignedFloorOracleAcrossPartialTiles(bool redPlane)
     {
         const int width = 40, height = 19;
         using var root = new TestMemoryBudget(1);
@@ -40,7 +40,8 @@ public sealed class Vp8lColorHistogramBoundaryTests
                     }
                     var activeCount = Vp8lReferenceColorTransform.Histogram(pixels, width, 1, 1, 1 + shape.Item1, 1 + shape.Item2,
                         redPlane, gr, gb, rb, histogram.AsSpan(4, 256), active.AsSpan(4, 256), context);
-                    Assert.Equal(expected, histogram.AsSpan(4, 256).ToArray()); Assert.Equal(order, active.AsSpan(4, activeCount).ToArray());
+                    Assert.Equal(expected, histogram.AsSpan(4, 256).ToArray()); // Integer pricing is independent of discovery order; retain exact new membership.
+                    Assert.Equal(order.OrderBy(v => v), active.AsSpan(4, activeCount).ToArray());
                     Assert.All(histogram.Take(4).Concat(histogram.TakeLast(4)), value => Assert.Equal(-719, value));
                     Assert.All(active.Take(4).Concat(active.Skip(4 + activeCount)), value => Assert.Equal(-719, value));
                 }
@@ -57,7 +58,7 @@ public sealed class Vp8lColorHistogramBoundaryTests
     {
         var pixels = new uint[width * height];
         var mapBytes = ((width + (1 << bits) - 1) >> bits) * ((height + (1 << bits) - 1) >> bits) * 4;
-        const int scratch = 7296;
+        const int scratch = 7328;
         using var root = new TestMemoryBudget(mapBytes + scratch);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         Assert.True(root.TryReserve(1, out var held));

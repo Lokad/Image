@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
@@ -99,7 +100,10 @@ internal static class Vp8lReferenceColorTransform
     internal static int Histogram(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
         bool red, int gr, int gb, int rb, Span<int> histogram, Span<int> active, OperationContext context)
     {
-        var activeCount = 0;
+        context.Cancellation.ThrowIfCancellationRequested();
+        histogram = histogram[..256]; active = active[..256];
+        Span<ulong> previous = stackalloc ulong[4];
+        for (var part = 0; part < 4; part++) previous[part] = Nonzero64(histogram.Slice(part * 64, 64));
         Span<int> values = stackalloc int[8];
         var redCoefficient = Vector256.Create((int)unchecked((sbyte)gr));
         var greenCoefficient = Vector256.Create((int)unchecked((sbyte)gb));
@@ -119,7 +123,7 @@ internal static class Vp8lReferenceColorTransform
                         : pixels.AsInt32() - (greenCoefficient * green >> 5)
                             - (blueCoefficient * ((pixels << 8).AsInt32() >> 24) >> 5);
                     (transformed & Vector256.Create(255)).CopyTo(values);
-                    foreach (var value in values) Increment(histogram, active, ref activeCount, value);
+                    foreach (var value in values) histogram[value & 255]++;
                 }
             }
             for (; x < row.Length; x++)
@@ -128,23 +132,51 @@ internal static class Vp8lReferenceColorTransform
                 var transformed = red ? (int)(pixel >> 16) - (unchecked((sbyte)gr) * green >> 5)
                     : (int)pixel - (unchecked((sbyte)gb) * green >> 5)
                         - (unchecked((sbyte)rb) * unchecked((sbyte)(pixel >> 16)) >> 5);
-                Increment(histogram, active, ref activeCount, transformed & 255);
+                histogram[transformed & 255]++;
+            }
+        }
+        // Integer color pricing depends only on counts and new-bin membership.
+        // Discover support once, outside the pixel update dependency chain.
+        var activeCount = 0;
+        for (var part = 0; part < 4; part++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var added = Nonzero64(histogram.Slice(part * 64, 64)) & ~previous[part];
+            while (added != 0)
+            {
+                active[activeCount++] = part * 64 + BitOperations.TrailingZeroCount(added);
+                added &= added - 1;
             }
         }
         return activeCount;
     }
 
-    // Record newly nonzero bins. Search starts from zero, so its list is complete;
-    // callers accumulating into prior counts still retain every increment.
+    // Counts are nonnegative populations. Search starts from zero; accumulating
+    // callers also retain every increment and only newly nonzero membership.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void Increment(Span<int> histogram, Span<int> active, ref int count, int value)
+    private static ulong Nonzero64(ReadOnlySpan<int> counts)
     {
-        if (histogram[value]++ == 0) active[count++] = value;
+        ulong result = 0;
+        if (Vector512.IsHardwareAccelerated)
+        {
+            for (var at = 0; at < 64; at += 16)
+                result |= (~Vector512.ExtractMostSignificantBits(Vector512.Equals(Vector512.Create(counts.Slice(at, 16)), Vector512<int>.Zero)) & 0xffffUL) << at;
+        }
+        else if (Vector256.IsHardwareAccelerated)
+        {
+            for (var at = 0; at < 64; at += 8)
+                result |= (ulong)(~Vector256.ExtractMostSignificantBits(Vector256.Equals(Vector256.Create(counts.Slice(at, 8)), Vector256<int>.Zero)) & 0xffU) << at;
+        }
+        else
+        {
+            for (var at = 0; at < 64; at++) if (counts[at] != 0) result |= 1UL << at;
+        }
+        return result;
     }
 
     private sealed class Search : IDisposable
     {
-        private const long ScratchBytes = 3 * 256 * 4L + 2 * 256 * 8L + 128;
+        private const long ScratchBytes = 3 * 256 * 4L + 2 * 256 * 8L + 128 + 32;
         private const int TrialCapacity = 64;
         private readonly OperationContext context;
         private int[]? counts;

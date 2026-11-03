@@ -1,860 +1,240 @@
 {
+  "schemaVersion": 2,
   "project": "Lokad.Image",
   "productionChanged": false,
   "profilingOnly": true,
-  "qualifiedTimingClaim": false,
-  "allocationClaim": false,
-  "builds": 0,
-  "newPerformanceControls": 0,
-  "captures": 1,
-  "captureSeconds": 1,
-  "workloadSamples": 756,
-  "managedSamples": 751,
-  "exclusive": [
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform.Histogram(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,bool,int32,int32,int32,value class System.Span`1<int32>,value class System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 118,
-      "fraction": 0.15608465608465608
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceCost.PreparedPredictionEntropy(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int64>,int64)",
-      "samples": 92,
-      "fraction": 0.12169312169312169
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lColorCost.Evaluate(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int64>,int64,value class System.ReadOnlySpan`1<int32>)",
-      "samples": 61,
-      "fraction": 0.08068783068783068
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.PopulationSum(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 57,
-      "fraction": 0.07539682539682539
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lPredictorHistogram.AccumulateInterior(value class System.Span`1<int32>,unsigned int32,unsigned int32,unsigned int32,unsigned int32,unsigned int32)",
-      "samples": 48,
-      "fraction": 0.06349206349206349
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)",
-      "samples": 38,
-      "fraction": 0.05026455026455026
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.PopulationSumColor(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<unsigned int64>,value class System.ReadOnlySpan`1<unsigned int64>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 38,
-      "fraction": 0.05026455026455026
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform+Search.Score(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,unsigned int32,unsigned int32,bool,int32,int32,int32)",
-      "samples": 32,
-      "fraction": 0.042328042328042326
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceCost.SmallResidualBias(value class System.ReadOnlySpan`1<int32>)",
-      "samples": 24,
-      "fraction": 0.031746031746031744
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lColorCost.Prepare(value class System.ReadOnlySpan`1<int32>,int32,value class System.Span`1<int64>)",
-      "samples": 18,
-      "fraction": 0.023809523809523808
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lHistogramLayout.Fill(value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,int32,bool,value class System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 17,
-      "fraction": 0.022486772486772486
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform+Search.SelectAndApply(value class System.Span`1<unsigned int32>,int32,int32,int32,int32,value class System.Span`1<unsigned int32>)",
-      "samples": 16,
-      "fraction": 0.021164021164021163
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceCache.BuildHistory(value class System.ReadOnlySpan`1<unsigned int32>,int32,value class System.Span`1<unsigned int32>,value class System.Span`1<unsigned int8>)",
-      "samples": 14,
-      "fraction": 0.018518518518518517
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferencePredictor+Analysis.Visit(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32)",
-      "samples": 14,
-      "fraction": 0.018518518518518517
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceLz.Trace(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<unsigned int32>,int32,value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.Vp8lTokenBuffer)",
-      "samples": 14,
-      "fraction": 0.018518518518518517
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.Population(value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 13,
-      "fraction": 0.017195767195767195
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceCache.FillAllFromHistory(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,value class System.ReadOnlySpan`1<unsigned int8>,int32,value class System.Span`1<int32>,value class System.Span`1<int32>)",
-      "samples": 11,
-      "fraction": 0.01455026455026455
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lHuffmanGroup.WriteToken(class Lokad.Image.Internal.WebpBitWriter,value class Lokad.Image.Internal.Vp8lToken,int32)",
-      "samples": 10,
-      "fraction": 0.013227513227513227
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceClustering+State.Fill(value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,int32,int32,int32)",
-      "samples": 9,
-      "fraction": 0.011904761904761904
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.PrepareColorSupport(value class System.ReadOnlySpan`1<int32>,value class System.Span`1<unsigned int64>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 8,
-      "fraction": 0.010582010582010581
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lEncodingAnalysis.Select(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,class Lokad.Image.Internal.OperationContext)",
-      "samples": 7,
-      "fraction": 0.009259259259259259
-    },
-    {
-      "method": "System.SpanHelpers.ClearWithoutReferences(unsigned int8&,unsigned int)",
-      "samples": 7,
-      "fraction": 0.009259259259259259
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceCost.PreparePrediction(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.Span`1<int64>,value class System.Span`1<int64>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 6,
-      "fraction": 0.007936507936507936
-    },
-    {
-      "method": "System.Buffer.ZeroMemoryInternal(unsigned int8&,unsigned int)",
-      "samples": 6,
-      "fraction": 0.007936507936507936
-    }
+  "statisticalTiming": false,
+  "capturedBefore": "HSP200",
+  "wholeProfileSuperseded": true,
+  "supersededBy": "WEBP-COLOR-HISTOGRAM-SEPARATION.md",
+  "producerSha256": "b5a6099790f7e8e574be9d2d03d8080c3b9f47fcd9a67b9809d218e88de26230",
+  "sourceSha256": "1a0265cb47b44b4320fa228a7c66ef63539e045592dce8d2ae64eebc23ebf910",
+  "totalProcessSamples": 1989,
+  "managedSamples": 1915,
+  "methods": [
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceColorTransform::Histogram(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,int32,int32,int32,bool,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      326
+    ],
+    [
+      "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::PreparedPredictionEntropy(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>,int64)[Optimized]",
+      176
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Vp8lPredictorHistogram::AccumulateInterior(valuetype [System.Runtime]System.Span`1<int32>,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+      137
+    ],
+    [
+      "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::LargeSLog(int32)[Optimized]",
+      136
+    ],
+    [
+      "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PopulationSum(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      130
+    ],
+    [
+      "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+      100
+    ],
+    [
+      "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PopulationSumColor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      91
+    ],
+    [
+      "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lColorCost::Evaluate(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>,int64,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>)[Optimized]",
+      90
+    ],
+    [
+      "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCost::ResidualBias(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int64>)[Optimized]",
+      83
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lPopulationWorkspace::Replay(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32&)[Optimized]",
+      45
+    ]
   ],
-  "inclusive": [
-    {
-      "method": "Lokad.Image.Internal.WebpLosslessEncoder.Encode(class Lokad.Image.ImageBuffer,class System.IO.Stream,class Lokad.Image.WebpEncodeOptions,class Lokad.Image.Internal.OperationContext)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "Lokad.Image.ImageCodec.EncodeWebp(class Lokad.Image.ImageBuffer,class System.IO.Stream,class Lokad.Image.WebpEncodeOptions,value class System.Threading.CancellationToken)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "WarmCompression.Managed()",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "BenchmarkDotNet.Autogenerated.Runnable_0.WorkloadActionUnroll(int64)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "BenchmarkDotNet.Engines.Engine.Measure(class System.Action`1<int64>,int64)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "BenchmarkDotNet.Engines.Engine.RunIteration(value class BenchmarkDotNet.Engines.IterationData)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "BenchmarkDotNet.Engines.Engine.Run()",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "BenchmarkDotNet.Autogenerated.Runnable_0.Run(class BenchmarkDotNet.Engines.IHost,class System.String)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(class System.Object,int*)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(class System.Object,value class System.Span`1<class System.Object>,value class System.Reflection.BindingFlags)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "System.Reflection.RuntimeMethodInfo.Invoke(class System.Object,value class System.Reflection.BindingFlags,class System.Reflection.Binder,class System.Object[],class System.Globalization.CultureInfo)",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "BenchmarkDotNet.Autogenerated.UniqueProgramName.AfterAssemblyLoadingAttached(class System.String[])",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "BenchmarkDotNet.Autogenerated.UniqueProgramName.Main(class System.String[])",
-      "samples": 756,
-      "fraction": 1
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lPreparedEncoding.Prepare(value class System.Span`1<unsigned int32>,int32,int32,class Lokad.Image.Internal.OperationContext,int32,bool)",
-      "samples": 719,
-      "fraction": 0.951058201058201
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lPreparedEncoding.PrepareCore(value class System.Span`1<unsigned int32>,int32,int32,class Lokad.Image.Internal.OperationContext,int32,value class Lokad.Image.Internal.Vp8lEncodingAnalysis,bool,value class System.Nullable`1<value class Lokad.Image.Internal.Vp8lPaletteOrder>,bool)",
-      "samples": 711,
-      "fraction": 0.9404761904761905
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lPreparedEncoding.MainCandidates(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,value class Lokad.Image.Internal.Vp8lFramePrefix,value class Lokad.Image.Internal.Vp8lEncodingAnalysis,int32,int32,int32)",
-      "samples": 253,
-      "fraction": 0.33465608465608465
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform+Search.SelectAndApply(value class System.Span`1<unsigned int32>,int32,int32,int32,int32,value class System.Span`1<unsigned int32>)",
-      "samples": 238,
-      "fraction": 0.3148148148148148
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform.SelectAndApply(value class System.Span`1<unsigned int32>,int32,int32,int32,class Lokad.Image.Internal.OperationContext)",
-      "samples": 238,
-      "fraction": 0.3148148148148148
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform+Search.Score(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,unsigned int32,unsigned int32,bool,int32,int32,int32)",
-      "samples": 219,
-      "fraction": 0.2896825396825397
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lPreparedEncoding.Predict(value class System.Span`1<unsigned int32>,int32,int32,int32,int32,value class Lokad.Image.Internal.Vp8lFramePrefix,int32,bool)",
-      "samples": 218,
-      "fraction": 0.28835978835978837
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferencePredictor.SelectAndApply(value class System.Span`1<unsigned int32>,int32,int32,int32,bool,class Lokad.Image.Internal.OperationContext,bool)",
-      "samples": 216,
-      "fraction": 0.2857142857142857
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferencePredictor+Analysis.Visit(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32)",
-      "samples": 211,
-      "fraction": 0.2791005291005291
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferencePredictor+Analysis.Select(value class System.ReadOnlySpan`1<unsigned int32>)",
-      "samples": 211,
-      "fraction": 0.2791005291005291
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lImageCode.TakeMain(class Lokad.Image.Internal.Vp8lTokenBuffer,int32,int32,int32,bool,class Lokad.Image.Internal.OperationContext,int32)",
-      "samples": 155,
-      "fraction": 0.20502645502645503
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceClustering.Build(value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32,bool,class Lokad.Image.Internal.OperationContext,int32)",
-      "samples": 150,
-      "fraction": 0.1984126984126984
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform.Histogram(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,bool,int32,int32,int32,value class System.Span`1<int32>,value class System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 118,
-      "fraction": 0.15608465608465608
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceCost.Prediction(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int64>,value class System.ReadOnlySpan`1<int64>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 116,
-      "fraction": 0.15343915343915343
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceClustering+State.Finish(bool,int32,int32,value class System.ReadOnlySpan`1<value class Lokad.Image.Internal.Vp8lToken>,int32,int32)",
-      "samples": 114,
-      "fraction": 0.15079365079365079
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceClustering+State.Evaluate(int32,int32,bool,int64,value class Pair&)",
-      "samples": 102,
-      "fraction": 0.1349206349206349
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceCost.PreparedPredictionEntropy(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int64>,int64)",
-      "samples": 92,
-      "fraction": 0.12169312169312169
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceColorTransform+Search.Cost(bool,value class System.ReadOnlySpan`1<int32>)",
-      "samples": 62,
-      "fraction": 0.082010582010582
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lColorCost.Evaluate(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int64>,int64,value class System.ReadOnlySpan`1<int32>)",
-      "samples": 61,
-      "fraction": 0.08068783068783068
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceMainParsing.Encode(value class System.ReadOnlySpan`1<unsigned int32>,value class System.ReadOnlySpan`1<unsigned int32>,int32,bool,int32,class Lokad.Image.Internal.OperationContext,bool,class Lokad.Image.Internal.Vp8lTokenBuffer)",
-      "samples": 59,
-      "fraction": 0.07804232804232804
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.PopulationSum(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 57,
-      "fraction": 0.07539682539682539
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lPredictorHistogram.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,int32,int32,int32,value class System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 54,
-      "fraction": 0.07142857142857142
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lPredictorHistogram.AccumulateInterior(value class System.Span`1<int32>,unsigned int32,unsigned int32,unsigned int32,unsigned int32,unsigned int32)",
-      "samples": 48,
-      "fraction": 0.06349206349206349
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceMatcher.Build(value class System.ReadOnlySpan`1<unsigned int32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)",
-      "samples": 44,
-      "fraction": 0.0582010582010582
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceEntropy.PopulationSumColor(value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<int32>,value class System.ReadOnlySpan`1<unsigned int64>,value class System.ReadOnlySpan`1<unsigned int64>,class Lokad.Image.Internal.OperationContext)",
-      "samples": 39,
-      "fraction": 0.051587301587301584
-    },
-    {
-      "method": "Lokad.Image.Internal.Vp8lReferenceFrame.Write(class System.IO.Stream,value class Lokad.Image.Internal.Vp8lFramePrefix,class Lokad.Image.Internal.Vp8lImageCode,int32,class Lokad.Image.Internal.OperationContext)",
-      "samples": 33,
-      "fraction": 0.04365079365079365
-    }
-  ],
-  "sources": {
-    "src/Lokad.Image/Internal/Vp8lColorCost.cs": "718a76065ded79b986a4897fe58a0f202a0b48235dba4a8edb74edab683169ba",
-    "src/Lokad.Image/Internal/Vp8lPredictorHistogram.cs": "b285f1d1d670fbae688906a57d030dd169f4dc905c63f445745167413d1929a3",
-    "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": "bb25399d6c4c7d471e3e82bd62d0c5578bf78c4aea96d90b07222354baab26d8",
-    "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "9b219077dfdb140417c99052c9a0253b8f2b0de083a713e0d02bae4eb94a6ec1",
-    "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "f7371c46f8447ab160881ee206507caa93ce120e9ba766db5bd90f96ba1055ef",
-    "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "62f7dd05db8734789eb858998c36151b8129f3eef0c70ddc71f9b9989316a788",
-    "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "77f2ec403f0f1b96f7069ca3725dd18b7a5a1a915a54396bc419fd2880002ef3",
-    "src/Lokad.Image/Internal/Vp8lTokenBuffer.cs": "a0ad00f81b40fa7a99461710e4e64655afa42cec19e2d5305cdfeb782d02025b"
-  },
-  "receipt": {
-    "project": "Lokad.Image",
-    "profilingOnly": true,
+  "retainedInstructionAnalysis": {
     "statisticalTiming": false,
-    "productionChanged": false,
+    "newCpuCaptures": 0,
     "builds": 0,
-    "caseId": "PhotographLossless8",
-    "quietGuardsPassed": true,
-    "librarySha256": "dd891c65a08c1c4c4aa512006c1b2c1414d5488a9edf71b8d16257b3a5b4c192",
-    "benchmarkAssemblySha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
-    "samplerSha256": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
-    "traceBytes": 1519070,
-    "traceSha256": "5e124e6c0c395390a920b37183c7d149ebb28508b97d78cd01a73d7e9556bb7f",
-    "summarySha256": "ceb553f0546f478cab0beae64ce03e316b60e6ae52953a38bcf3a02fcbffd064",
-    "workloadSamples": 756,
-    "managedSamples": 751,
-    "validation": {
-      "schemaVersion": 1,
-      "name": "WarmCompression",
-      "caseId": "PhotographLossless8",
-      "inputName": "Photograph8",
-      "smoke": false,
-      "runId": "pca121-PhotographLossless8-profile",
-      "sourceIdentity": {
-        "sourceSha256": "0aed671b14704f2599029711c6979bdcf744872e7cbc75e4f145bb6f19d0111c",
-        "sourceRevision": "fee5380bd9eaf9c1a91acd321e665046a4bd1358"
-      },
-      "width": 513,
-      "height": 259,
-      "depth": 8,
-      "encodedDepth": 8,
-      "cpu": 0,
-      "managedAffinityCount": 1,
-      "processorCount": 1,
-      "serverGc": false,
-      "gcConfiguration": {
-        "ServerGC": false,
-        "ConcurrentGC": false,
-        "RetainVM": false,
-        "NoAffinitize": false,
-        "GCCpuGroup": false,
-        "GCLargePages": false,
-        "LOHThreshold": 85000,
-        "HeapCount": 1,
-        "MaxHeapCount": 0,
-        "GCHeapAffinitizeMask": 0,
-        "GCHeapAffinitizeRanges": "",
-        "GCHighMemPercent": 90,
-        "GCGen0MaxBudget": 134217728,
-        "GCHeapHardLimit": 0,
-        "GCHeapHardLimitPercent": 0,
-        "GCRegionRange": 33532829696,
-        "GCRegionSize": 0,
-        "UOHWaitBGCSizeIncPercent": 200,
-        "GCHeapHardLimitSOH": 0,
-        "GCHeapHardLimitLOH": 0,
-        "GCHeapHardLimitPOH": 0,
-        "GCHeapHardLimitSOHPercent": 0,
-        "GCHeapHardLimitLOHPercent": 0,
-        "GCHeapHardLimitPOHPercent": 0,
-        "GCConserveMem": 0,
-        "GCName": "",
-        "GCPath": "",
-        "GCDynamicAdaptationMode": 1,
-        "GCDTargetTCP": 0,
-        "GCDGen0GrowthPercent": 0,
-        "GCDGen0GrowthMinFactor": 0,
-        "GCDGen0GrowthMaxFactor": 0
-      },
-      "runtime": ".NET 10.0.8",
-      "platform": "linux-x64",
-      "lossless": true,
-      "effort": 4,
-      "managedQuality": 85,
-      "nativeQuality": 75,
-      "baselineBackend": "libwebp exact=1 (FFmpeg encoder backend)",
-      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
-      "rasterSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
-      "managedOutputBytes": 160032,
-      "managedOutputSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
-      "nativeOutputBytes": 160032,
-      "nativeOutputSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
-      "completePacketExact": true,
-      "qualityMatched": true,
-      "qualityGate": "Frozen complete packet equality, including reconstructed pixels; no equal-quality-number inference.",
-      "allRgbaSamplesExact": true,
-      "allReconstructedSamplesExact": true,
-      "alphaExact": true,
-      "hiddenRgbExact": true,
-      "nativeCliNormalScalarPixelsExact": true,
-      "decoderAgreementWithinBounds": true,
-      "bitstreamSyntaxVerified": true,
-      "sourceUnchanged": true,
-      "independentOwnedOutput": true,
-      "nativeExitCode": 0,
-      "librarySha256": "dd891c65a08c1c4c4aa512006c1b2c1414d5488a9edf71b8d16257b3a5b4c192",
-      "benchmarkAssemblySha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
-      "nativeBuild": {
-        "schemaVersion": 1,
-        "project": "Lokad.Image",
-        "purpose": "Original development-only libwebp exact=1 FFmpeg encoder-backend worker",
-        "sourceSha256": "bb2b3525a4d93305c5780d81bc8f73ea7335fdb5b2fde29cce71fd53cf6116c0",
-        "buildScriptSha256": "260bff49dd7711f1884873859b1c333e20accf86e08bbb0c80adea3051c89db1",
-        "workerSha256": "d2475ce3bceac9120e4958ab1e718f46745ad959c5c2cafcfbb28cf7d09906b1",
-        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
-        "flags": [
-          "-std=c11",
-          "-O3",
-          "-Wall",
-          "-Wextra",
-          "-Werror"
+    "sameProducerAndCodeSizes": true,
+    "methods": {
+      "Vp8lReferenceColorTransform::Histogram": {
+        "codeBytes": 1078,
+        "samples": 326,
+        "groups": [
+          [
+            "G_M000_IG16",
+            186
+          ],
+          [
+            "G_M000_IG18",
+            33
+          ],
+          [
+            "G_M000_IG17",
+            31
+          ],
+          [
+            "G_M000_IG19",
+            11
+          ],
+          [
+            "G_M000_IG12",
+            10
+          ],
+          [
+            "G_M000_IG14",
+            8
+          ],
+          [
+            "G_M000_IG01",
+            7
+          ],
+          [
+            "G_M000_IG09",
+            7
+          ],
+          [
+            "G_M000_IG23",
+            5
+          ],
+          [
+            "G_M000_IG03",
+            4
+          ],
+          [
+            "G_M000_IG15",
+            4
+          ],
+          [
+            "G_M000_IG13",
+            4
+          ],
+          [
+            "G_M000_IG07",
+            3
+          ],
+          [
+            "G_M000_IG04",
+            3
+          ],
+          [
+            "G_M000_IG20",
+            3
+          ],
+          [
+            "G_M000_IG31",
+            2
+          ],
+          [
+            "G_M000_IG08",
+            2
+          ],
+          [
+            "G_M000_IG26",
+            2
+          ],
+          [
+            "G_M000_IG21",
+            1
+          ]
         ],
-        "staticArchives": {
-          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
-          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
-          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
-          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
-          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
-          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
-          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
-          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
-          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
-          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
-          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
-          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
-          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
-        },
-        "libraries": "-L{native-prefix}/lib -lwebp -lm -L{native-prefix}/lib -lsharpyuv -lm"
+        "unmappedSamples": 0
       },
-      "nativeReady": {
-        "schemaVersion": 1,
-        "state": "ready",
-        "operation": "webp-lossless-encode",
-        "width": 513,
-        "height": 259,
-        "depth": 8,
-        "cpu": 0,
-        "affinityCount": 1,
-        "codecThreads": 1,
-        "threadType": 0,
-        "activeThreadType": 0,
-        "conversionThreads": 1,
-        "quality": 75,
-        "effort": 4,
-        "lossless": true,
-        "exactRgb": true,
-        "baselineBackend": "libwebp exact=1 (FFmpeg encoder backend)",
-        "inputFormat": "BGRA",
-        "repackingTimed": true,
-        "fullSourceNormalizationTimed": false,
-        "normalizedReferenceExact": false,
-        "inputImportAllocationTimed": true,
-        "outputBytes": 160032,
-        "initialCompletedOperations": 3,
-        "independentLiveOutputs": true,
-        "bitstreamDeterministic": true,
-        "libwebpEncoderVersion": 67072
-      },
-      "nativeBefore": [
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84617392,
-          "CompletedOperations": 8,
-          "Observed": 800,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84617392
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84513385,
-          "CompletedOperations": 9,
-          "Observed": 900,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84513385
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84312201,
-          "CompletedOperations": 10,
-          "Observed": 1000,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84312201
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84527346,
-          "CompletedOperations": 11,
-          "Observed": 1100,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84527346
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 85264392,
-          "CompletedOperations": 12,
-          "Observed": 1200,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 85264392
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84777816,
-          "CompletedOperations": 13,
-          "Observed": 1300,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84777816
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84367234,
-          "CompletedOperations": 14,
-          "Observed": 1400,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84367234
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84133080,
-          "CompletedOperations": 15,
-          "Observed": 1500,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84133080
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 83881809,
-          "CompletedOperations": 16,
-          "Observed": 1600,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 83881809
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 83772014,
-          "CompletedOperations": 17,
-          "Observed": 1700,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 83772014
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84250998,
-          "CompletedOperations": 18,
-          "Observed": 1800,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84250998
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84852589,
-          "CompletedOperations": 19,
-          "Observed": 1900,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84852589
-        }
-      ],
-      "nativeAfter": [
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 83845989,
-          "CompletedOperations": 23,
-          "Observed": 2300,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 83845989
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84569726,
-          "CompletedOperations": 24,
-          "Observed": 2400,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84569726
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84118061,
-          "CompletedOperations": 25,
-          "Observed": 2500,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84118061
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84150821,
-          "CompletedOperations": 26,
-          "Observed": 2600,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84150821
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84496144,
-          "CompletedOperations": 27,
-          "Observed": 2700,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84496144
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 83597101,
-          "CompletedOperations": 28,
-          "Observed": 2800,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 83597101
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84980990,
-          "CompletedOperations": 29,
-          "Observed": 2900,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84980990
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84324735,
-          "CompletedOperations": 30,
-          "Observed": 3000,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84324735
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84320619,
-          "CompletedOperations": 31,
-          "Observed": 3100,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84320619
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84441532,
-          "CompletedOperations": 32,
-          "Observed": 3200,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84441532
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84291204,
-          "CompletedOperations": 33,
-          "Observed": 3300,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84291204
-        },
-        {
-          "State": "sample",
-          "Operations": 1,
-          "ElapsedNanoseconds": 84367730,
-          "CompletedOperations": 34,
-          "Observed": 3400,
-          "OutputStride": 0,
-          "Cpu": 0,
-          "OutputBytes": 160032,
-          "CpuElapsedNanoseconds": null,
-          "NanosecondsPerOperation": 84367730
-        }
-      ],
-      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
+      "Vp8lReferenceCost::PreparedPredictionEntropy": {
+        "codeBytes": 373,
+        "samples": 176,
+        "groups": [
+          [
+            "G_M000_IG03",
+            40
+          ],
+          [
+            "G_M000_IG10",
+            28
+          ],
+          [
+            "G_M000_IG16",
+            26
+          ],
+          [
+            "G_M000_IG14",
+            18
+          ],
+          [
+            "G_M000_IG17",
+            14
+          ],
+          [
+            "G_M000_IG08",
+            14
+          ],
+          [
+            "G_M000_IG05",
+            13
+          ],
+          [
+            "G_M000_IG12",
+            10
+          ],
+          [
+            "G_M000_IG09",
+            4
+          ],
+          [
+            "G_M000_IG11",
+            3
+          ],
+          [
+            "G_M000_IG07",
+            3
+          ],
+          [
+            "G_M000_IG01",
+            3
+          ]
+        ],
+        "unmappedSamples": 0
+      }
     },
-    "workloadCommand": [
-      "taskset",
-      "-c",
-      "0",
-      "dotnet",
-      "exec",
-      "--depsfile",
-      "tmp/bts119-candidate-photograph-confirm-runtime/Lokad.Image.Benchmarks.deps.json",
-      "--runtimeconfig",
-      "tmp/bts119-candidate-photograph-confirm-runtime/Vcm1Confirm.runtimeconfig.json",
-      "tmp/bts119-candidate-photograph-confirm-runtime/Vcm1Confirm.dll",
-      "--benchmarkName",
-      "WarmCompression.Managed(Case: PhotographLossless8)",
-      "--job",
-      "WarmConfirm",
-      "--benchmarkId",
-      "0"
-    ],
-    "samplerCommand": [
-      "taskset",
-      "-c",
-      "1",
-      "dotnet",
-      "exec",
-      "--depsfile",
-      "tmp/tws83-candidate-alpha-confirm-runtime/Lokad.Image.Benchmarks.deps.json",
-      "--runtimeconfig",
-      "tmp/tws83-candidate-alpha-confirm-runtime/Vcc31Alpha8Confirm.runtimeconfig.json",
-      "tmp/tws83-candidate-alpha-confirm-runtime/E172Sampler.dll",
-      "collect",
-      "{completed-process-id}",
-      "tmp/pca121-PhotographLossless8-profile.nettrace"
-    ],
-    "sourceNote": "Reuse immutable BTS119 photograph runtime, libwebp exact1 backend, frozen original public complete operation. Current source guards and exact packets unchanged. One one-second capture, no production/harness/native/sampler builds, no new control or timing claim; instrumented timings discarded."
+    "fullAnalysisPathInQualifiedArchive": "tmp/hpa199-instruction-analysis.json"
   },
-  "findings": [
-    "Current photograph color selection has238inclusive samples, predictor216, clustering150 out of756 workload samples. These overlap and are not component timings.",
-    "Color Histogram118exclusive and ColorCost.Evaluate61exclusive differ from predictor PreparedPredictionEntropy92exclusive.",
-    "Matching38exclusive is a smaller observed fraction than on the existing transparent control; do not treat the latter as a photograph model.",
-    "Existing channel-plane/coefficient/dense entropy-table implementations remain inconclusive; this profile is a new attribution, not proof or automatic replay."
-  ],
-  "next": "Count repeated exact per-tile predictor/color score terms before considering lazy trial-shared preparation. Preserve integer arithmetic, ties, candidate order, cancellation/admission and complete operations. No production variant until the repeated work and lookup/preparation tradeoff are established.",
-  "evidenceReuse": {
-    "qualifiedProductionSha256": "dd891c65a08c1c4c4aa512006c1b2c1414d5488a9edf71b8d16257b3a5b4c192",
-    "actualPackageSha256": "e04f7e85577513c2d89a00e6f19bf21403c1c3c1fe3b9741ff680d22a077adef",
-    "fullChecksEachOs": 5476,
-    "sameActualPackageBothOs": true,
-    "additionalBroadOrPackageChecks": 0
-  },
-  "rawArchive": {
-    "file": "webp-photograph-current-attribution.tar.xz",
-    "bytes": 1177428,
-    "members": 30,
-    "sha256": "73e403fee9ce992d600bf9e0c41436b404845e7cc1e79031d86a3452ab6d934b",
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "builds": 0,
+  "newCpuCapturesForJit": 0,
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-current-lossless-photo-attribution.tar.xz",
+    "bytes": 1086888,
+    "members": 38,
+    "sha256": "ea58a729ef4b9149a6f0e39d9202d463bc9684d2c337cc94aa32180526671f61",
     "vmMembersVerified": true,
-    "qualifiedProductionDependency": "webp-trace-output-storage.tar.xz",
-    "qualifiedProductionDependencySha256": "7c75987b28285ad5dc4077f17ce4253232dfaff40d00bf72210af0c654580496",
+    "productionChanged": false,
+    "baselineDependency": "webp-token-tail-history-qualified.tar.xz",
+    "baselineDependencySha256": "f764f66ac2e53a286685b2b76536e43ab57355917f9e14b9b49df62b77a151c4",
     "localMembersVerified": true
   },
-  "publicationPostponed": true,
-  "subsequentInvalidation": "ICA123 changes predictor alpha scoring, so this captured whole-profile distribution is historical. Unchanged histogram bodies and exact count observations remain leads; instrumented timings are not current proof."
+  "jitRetention": {
+    "project": "Lokad.Image",
+    "file": "webp-color-histogram-separation-qualified.tar.xz",
+    "bytes": 4190704,
+    "members": 308,
+    "sha256": "3e026e25c70e9ec7ad3ad02c104f150cbdad08e3a828da5917c215e821f9541f",
+    "vmMembersVerified": true,
+    "productionAccepted": true,
+    "baselineDependency": "webp-token-tail-history-qualified.tar.xz",
+    "baselineDependencySha256": "f764f66ac2e53a286685b2b76536e43ab57355917f9e14b9b49df62b77a151c4",
+    "attributionDependency": "webp-current-lossless-photo-attribution.tar.xz",
+    "attributionDependencySha256": "ea58a729ef4b9149a6f0e39d9202d463bc9684d2c337cc94aa32180526671f61",
+    "workerDependency": "webp-alpha-token-reuse-qualified.tar.xz",
+    "workerDependencySha256": "4db1eac56708656b7ae8871b910a0cc3b14eb1ebac4d8db99b27510a22a2a3ae",
+    "localMembersVerified": true
+  },
+  "priorReport": "https://github.com/Lokad/Image/blob/42f666042e2ccd648ee731d27e8703596834e3b3/benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md",
+  "priorRaw": {
+    "file": "webp-photograph-current-attribution.tar.xz",
+    "sha256": "73e403fee9ce992d600bf9e0c41436b404845e7cc1e79031d86a3452ab6d934b"
+  }
 }

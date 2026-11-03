@@ -155,14 +155,14 @@ public sealed class Vp8lReferenceColorTransformTests
         Assert.Equal(9, color.StoredBits); Assert.Equal(2, color.Coefficients.Length);
         Assert.All(color.Coefficients.ToArray(), value => Assert.Equal(0xff000000u, value));
         Assert.Equal(65 * 4, color.CapacityBytes); Assert.Equal(4104 + 260, root.Bytes);
-        Assert.Equal(4104 + 260 + 7296, root.Peak); Assert.Equal(original, pixels);
+        Assert.Equal(4104 + 260 + 7328, root.Peak); Assert.Equal(original, pixels);
         color.Dispose(); Assert.Equal(4104, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Fact]
     public void OverlappingResultCapacityRefusesOnceThenSucceedsAfterPriorOwnerEnds()
     {
-        using var root = new TestMemoryBudget(4104 + 260 + 7296);
+        using var root = new TestMemoryBudget(4104 + 260 + 7328);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var pixels = Packed(context);
         using var first = Vp8lReferenceColorTransform.SelectAndApply(pixels, 513, 3, 75, context);

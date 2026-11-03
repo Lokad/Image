@@ -1688,14 +1688,14 @@ def render():
         else:
             assert len(positions) == 1, label
             rows[positions[0]] = row
-    # One compact owner for the eight current prepared WebP costs. Older reports
+    # One compact owner for the eight current WebP costs with scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_current = json.loads((ROOT / 'benchmarks/webp-token-tail-history-evidence.json').read_text(encoding='utf-8'))
-    assert webp_current['productionAccepted'] and not webp_current['cpuGainClaim']
-    assert webp_current['memory']['alpha8Saved'] > 0 and webp_current['memory']['admittedPeakSaved'] > 0
+    webp_current = json.loads((ROOT / 'benchmarks/webp-color-histogram-separation-evidence.json').read_text(encoding='utf-8'))
+    assert webp_current['productionAccepted'] and webp_current['cpuGainClaim']
+    assert webp_current['confirmation']['photograph']['rawGainConfidenceSeparates'] and webp_current['confirmation']['photograph']['normalizedGainConfidenceSeparates']
     qualification = webp_current['qualification']
-    assert qualification['windows']['total'] == qualification['linux']['total'] == 5537
+    assert qualification['windows']['total'] == qualification['linux']['total'] == 5541
     assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
@@ -1711,7 +1711,8 @@ def render():
     for case, label in current_labels.items():
         current = webp_current['cases'][case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        assert current['librarySha256'] == webp_current['producers']['linuxSha256']
+        expected_producer = webp_current['producers']['unchangedAlphaLinuxSha256'] if case in {'alpha', 'alpha16'} else webp_current['producers']['linuxSha256']
+        assert current['librarySha256'] == expected_producer
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
@@ -1858,23 +1859,25 @@ controls below use the current workspace build. All retain gaps. Only the photog
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Token-tail history workspace](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) removes
-**475,928 B/op (5.52%)** on transparent RGBA8 after the earlier
-[token handoff](../benchmarks/WEBP-ALPHA-TOKEN-REUSE.md), now **8,146,632 B/op**.
-The diagram saves **196,980 B/op (4.32%)**. Alpha8's admitted peak falls
-**3,847,888 → 3,656,309 B**; retained operation scratch is zero. There is no
-established CPU gain or regression. The adverse photograph global point remains;
-targeted interleaved confidence overlaps. All eight affected displayed costs use
-one immutable core and twelve actuals: original/diagram/depth/async pass and stop;
-photograph/transparency retain gaps, opaque confidence is open. Other affected
-**H** costs remain historical. Native allocation and physical peaks are unmeasured.
-The current build passes **5,537 full/live checks per OS** and affected normal/
-scalar checks. The same actual Release package and all three examples pass both
-OSes, including retained resize admission and asynchronous surviving outputs.
-Unchanged codec/editing paths reuse valid proof; this is not a full release refresh.
-[Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md) retains its
-source-specific gains, not a new-stage CPU claim. Allocation, admitted capacity
-and retention remain separate metrics.
+[Color histogram construction](../benchmarks/WEBP-COLOR-HISTOGRAM-SEPARATION.md)
+reduces complete photograph elapsed **11.32% / 7.65% reference-normalized**,
+saving **10.75 ms**, with separated independent confidence and unchanged packets/
+allocations. Strict parity remains open: global upper **1.004**, stricter paired
+upper **1.022**. Six existing lossless rows are refreshed on one immutable core;
+original/diagram/depth/async pass and stop, photograph is near parity and opaque
+retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
+
+[Token-tail history reuse](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) retains its
+**475,928 B/op (5.52%)** alpha8 saving, now **8,146,632 B/op**. Its admitted peak
+remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
+adds **32 B** to the admitted search workspace; measured complete peaks/allocations
+are unchanged. Native allocation and physical peaks are unmeasured. Other affected
+**H** costs remain historical. The current build passes **5,541 full/live checks
+per OS** and affected normal/scalar checks. The same actual Release package and
+all three examples pass both OSes, including retained resize admission and async
+surviving outputs. Unchanged paths reuse valid proof; this is not a full release
+refresh. [Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md)
+retains its scoped history. Allocation, admission and retention are separate.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite

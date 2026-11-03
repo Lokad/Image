@@ -54,23 +54,25 @@ controls below use the current workspace build. All retain gaps. Only the photog
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Token-tail history workspace](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) removes
-**475,928 B/op (5.52%)** on transparent RGBA8 after the earlier
-[token handoff](../benchmarks/WEBP-ALPHA-TOKEN-REUSE.md), now **8,146,632 B/op**.
-The diagram saves **196,980 B/op (4.32%)**. Alpha8's admitted peak falls
-**3,847,888 → 3,656,309 B**; retained operation scratch is zero. There is no
-established CPU gain or regression. The adverse photograph global point remains;
-targeted interleaved confidence overlaps. All eight affected displayed costs use
-one immutable core and twelve actuals: original/diagram/depth/async pass and stop;
-photograph/transparency retain gaps, opaque confidence is open. Other affected
-**H** costs remain historical. Native allocation and physical peaks are unmeasured.
-The current build passes **5,537 full/live checks per OS** and affected normal/
-scalar checks. The same actual Release package and all three examples pass both
-OSes, including retained resize admission and asynchronous surviving outputs.
-Unchanged codec/editing paths reuse valid proof; this is not a full release refresh.
-[Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md) retains its
-source-specific gains, not a new-stage CPU claim. Allocation, admitted capacity
-and retention remain separate metrics.
+[Color histogram construction](../benchmarks/WEBP-COLOR-HISTOGRAM-SEPARATION.md)
+reduces complete photograph elapsed **11.32% / 7.65% reference-normalized**,
+saving **10.75 ms**, with separated independent confidence and unchanged packets/
+allocations. Strict parity remains open: global upper **1.004**, stricter paired
+upper **1.022**. Six existing lossless rows are refreshed on one immutable core;
+original/diagram/depth/async pass and stop, photograph is near parity and opaque
+retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
+
+[Token-tail history reuse](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) retains its
+**475,928 B/op (5.52%)** alpha8 saving, now **8,146,632 B/op**. Its admitted peak
+remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
+adds **32 B** to the admitted search workspace; measured complete peaks/allocations
+are unchanged. Native allocation and physical peaks are unmeasured. Other affected
+**H** costs remain historical. The current build passes **5,541 full/live checks
+per OS** and affected normal/scalar checks. The same actual Release package and
+all three examples pass both OSes, including retained resize admission and async
+surviving outputs. Unchanged paths reuse valid proof; this is not a full release
+refresh. [Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md)
+retains its scoped history. Allocation, admission and retention are separate.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite
@@ -138,10 +140,10 @@ family evidence is linked below; individual experiments remain in
 | VP8 diagram, effort6 / trellis † | 13,518.03 | 9,816.75 | 1.377 / 1.394 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,367.41 | 15,593.58 | 1.306 / 1.331 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 71,184.35 | 58,346.34 | 1.220 / 1.230 | 8,146,632 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 96,960.25 | 82,466.31 | 1.176 / 1.188 | 6,517,320 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 7,701.43 | 9,764.93 | 0.789 / 0.837 | 4,363,930 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 117,937.45 | 129,843.12 | 0.908 / 0.917 | 7,476,640 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 75,418.92 | 69,896.83 | 1.079 / 1.111 | 5,983,424 | 121,896 / 121,896 |
+| VP8L photograph / libwebp exact=1 † | 89,006.19 | 89,280.53 | 0.997 / 1.004 | 6,517,254 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 8,036.29 | 9,483.21 | 0.847 / 0.867 | 4,363,930 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 115,497.65 | 130,268.92 | 0.887 / 0.895 | 7,476,640 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 74,747.90 | 71,999.01 | 1.038 / 1.072 | 5,983,424 | 121,896 / 121,896 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,911.28 | 4,366.42 | 1.354 / 1.432 | 951,212 | 236,828 / 236,828 |
@@ -171,8 +173,8 @@ family evidence is linked below; individual experiments remain in
 | JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
 | JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
 | JPEG 4:1:0, resident decode (confirmed pass) † | 372.23 | 509.10 | 0.731 / 0.756 | 720,838 | — |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 110,831.66 | 121,561.12 | 0.912 / 0.929 | 7,476,640 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 118,053.59 | 130,701.04 | 0.903 / 0.908 | 7,477,024 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 108,444.64 | 120,791.93 | 0.898 / 0.911 | 7,476,640 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 106,786.87 | 120,901.44 | 0.883 / 0.896 | 7,477,024 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
