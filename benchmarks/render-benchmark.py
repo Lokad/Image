@@ -53,9 +53,6 @@ def render():
     trellis_cost = json.loads((ROOT / 'benchmarks/current-vp8-effort6-cost-evidence.json').read_text(encoding='utf-8'))
     assert not trellis_cost['productionChanged'] and trellis_cost['allBuilds'] == 0
     assert trellis_cost['independentQuietConfirmation']
-    vp8l_word_cost = json.loads((ROOT / 'benchmarks/current-vp8l-rgba16-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not vp8l_word_cost['productionChanged'] and vp8l_word_cost['allBuilds'] == 0
-    assert vp8l_word_cost['independentQuietConfirmation']
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-column-plans-evidence.json').read_text(encoding='utf-8'))
     assert jpeg['qualification']['fullChecksEachOs'] == 5163 and jpeg['decision']['passed']
     assert jpeg['qualification']['package']['sha256'] == jpeg['qualification']['linuxPackage']['sameActualPackageSha256']
@@ -347,13 +344,10 @@ def render():
         assert case['pairs'] == case['statistics']['N'] == 12
         assert case['statistics']['ConfidenceInterval']['Lower'] > 1
         assert case['allOriginalGatesPassed'] and case['quietGuardsPassed']
-    vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
-    assert vp8l_bins['acceptance']['retained'] and vp8l_bins['independentQuietConfirmation']
-    assert not vp8l_bins['acceptance']['normalizedConfidenceSeparated']
-    assert vp8l_bins['qualification']['fullChecksEachOs'] == 5240
-    assert vp8l_bins['qualification']['sameActualPackageBothOs']
-    assert vp8l_bins['qualification']['package']['sha256'] == vp8l_bins['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert {'Encode8', 'Encode16', 'EncodeOpaque8'} <= vp8l_bins['cases'].keys()
+    lossless_boundaries = json.loads((ROOT / 'benchmarks/current-lossless-webp-boundaries-evidence.json').read_text(encoding='utf-8'))
+    assert not lossless_boundaries['productionChanged'] and lossless_boundaries['allBuilds'] == 0
+    assert lossless_boundaries['independentQuietConfirmation']
+    assert lossless_boundaries['producers']['linuxSha256'] == webp_current['producers']['linuxSha256']
     webp_probe = json.loads((ROOT / 'benchmarks/current-webp-dimension-probe-cost-evidence.json').read_text(encoding='utf-8'))
     assert not webp_probe['productionChanged'] and webp_probe['allBuilds'] == 0
     assert webp_probe['independentQuietConfirmation'] and webp_probe['status']['ProbeDimensionsWebp'] == 'confirmed-gap'
@@ -536,13 +530,12 @@ def render():
     assert vp8l['version'] == '0.2.1' and vp8l['independentQuietConfirmationThisPair']
     assert current['version'] == '0.2.1' and current['independentQuietConfirmationThisPair']
     assert set(current['cases']) == {'EncodeFast8', 'EncodeSmallest8', 'EncodeSmallest16'}
-    async_vp8l = json.loads((ROOT / 'benchmarks/current-async-vp8l-encode-cost-evidence.json').read_text(encoding='utf-8'))
     vp8_cases = {'case06': 'DiagramLossyDistortion8',
                  'case08': 'PhotographLossy8', 'case09': 'DiagramLossy8',
                  'case10': 'DiagramLossyTrellis8', 'case11': 'Opaque16'}
     rows = []
     for case in evidence['cases']:
-        if case['id'] in {'case07', 'case15', 'case16', 'case27', 'case28'}:
+        if case['id'] in {'case07', 'case13', 'case14', 'case15', 'case16', 'case27', 'case28'}:
             continue  # Replaced by current self-contained family evidence below.
         observation = case['observation']
         vp8l_case = case['id'] in {'case12', 'case13', 'case14'}
@@ -553,10 +546,6 @@ def render():
             producer = trellis_cost
         elif case['id'] in {'case06', 'case09', 'case11'}:
             producer = vp8_companion_costs
-        elif case['id'] == 'case13':
-            producer = vp8l_word_cost
-        elif case['id'] == 'case14':
-            producer = async_vp8l
         if case['id'] in {'case17', 'case18'}:
             producer = predictive_cost
         elif case['id'] in {'case19', 'case20'}:
@@ -579,9 +568,6 @@ def render():
             observation = webp_current['cases']['Encode8']
             assert (observation['conservativeRatioUpper'] <= 1) == (observation['status'] == 'Confirmed pass')
             assert observation['completePacketExact'] and observation['quietGuardsPassed']
-        elif case['id'] == 'case13':
-            producer = vp8l_bins
-            observation = vp8l_bins['cases']['Encode16'][-1]
         receipt = observation['receipt']
         stats = observation['managed']['statistics']
         native = min(b['mean'] for b in observation['nativeBrackets'])
@@ -768,16 +754,22 @@ def render():
     opaque_row = f'| VP8L opaque RGBA8 / libwebp exact=1 † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 121,896 / 121,896 |'
     position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     rows.insert(position + 1, ('codec', opaque_row))
-    assert not async_vp8l['productionChanged'] and async_vp8l['allBuilds'] == 0
-    assert async_vp8l['independentQuietConfirmation'] and async_vp8l['qualificationReuse']['sameActualPackageBothOs']
-    assert async_vp8l['comparisonLowerBounds']['WebpLossless8AsyncNonSeekable'] > 1
-    observation = async_vp8l['cases']['WebpLossless8AsyncNonSeekable'][-1]
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == async_vp8l['producers']['linuxSha256'] and receipt['completePacketExact']
-    assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 183812
-    assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    assert all(q['passed'] for q in observation['quietness'].values())
+    for case, label in [('Encode16', 'VP8L RGBA16, including normalization / libwebp exact=1'),
+                        ('WebpLossless8AsyncNonSeekable', 'VP8L async, fresh nonseekable output / libwebp exact=1')]:
+        observation = lossless_boundaries['cases'][case]
+        receipt, stats = observation['receipt'], observation['managed']['statistics']
+        assert receipt['librarySha256'] == lossless_boundaries['producers']['linuxSha256']
+        assert receipt['completePacketExact'] and observation['allOriginalGatesPassed']
+        assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 183812
+        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
+        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
+        assert all(q['passed'] for q in observation['quietness'].values())
+        assert (observation['conservativeRatioUpper'] <= 1) == (lossless_boundaries['status'][case] == 'confirmed-pass')
+        native = min(b['mean'] for b in observation['nativeBrackets'])
+        assert math.isclose(stats['Mean'] / native, observation['worstBracketRatio'], rel_tol=1e-12)
+        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
+                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
+                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 183,812 / 183,812 |'))
     for filename, case, label, managed_bytes, native_bytes, build_key in [
             ('current-async-jpeg-rgb420-cost-evidence.json', 'JpegRgb420AsyncSamples',
              'JPEG caller RGB24 async nonseekable, 420', 52091, 52093, 'allMeasurementBuilds'),
@@ -1544,7 +1536,8 @@ def render():
     rows[position:position] = current_resize_rows
     rows = [(kind, row.replace(' † →', ' † § →') if row.startswith('| Lanczos3 enlargement') else row)
             for kind, row in rows]
-    current_vp8l_prefixes = ('| VP8L RGBA8 /', '| VP8L opaque RGBA8 /')
+    current_vp8l_prefixes = ('| VP8L RGBA8 /', '| VP8L opaque RGBA8 /',
+                             '| VP8L RGBA16, including normalization /', '| VP8L async, fresh nonseekable output /')
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
                                       and not row.startswith(current_vp8l_prefixes)
                                       or row.startswith('| VP8 RGBA8 †')
@@ -1838,7 +1831,10 @@ photograph and **2.081 ms / 2.54% raw / 3.24% normalized** on opaque lossless,
 with separated raw/normalized confidence. Their allocations fall **44,096 / 48,280 B**.
 Both retain confirmed paired gaps (upper1.119 /1.054); the table preserves distinct
 global-bracket time estimates. Original and diagram still pass; transparency
-retains gaps. Six costs are refreshed; other adaptive VP8L/ALPH costs marked **H**
+retains gaps. [RGBA16 normalization and async output](../benchmarks/CURRENT-LOSSLESS-WEBP-BOUNDARIES.md)
+now also pass on this immutable core (upper 0.921 / 0.967). These two current-code
+confirmations close historical apparent gaps without a production change.
+Eight costs are current; other adaptive VP8L/ALPH costs marked **H**
 remain historical. Complete-operation diagnostic peaks are unchanged, per-operation
 scratch retention is zero, and fixed coefficients retain256B payload plus headers
 per process. Allocation, admission and physical heap usage remain distinct.

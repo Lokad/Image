@@ -58,7 +58,10 @@ photograph and **2.081 ms / 2.54% raw / 3.24% normalized** on opaque lossless,
 with separated raw/normalized confidence. Their allocations fall **44,096 / 48,280 B**.
 Both retain confirmed paired gaps (upper1.119 /1.054); the table preserves distinct
 global-bracket time estimates. Original and diagram still pass; transparency
-retains gaps. Six costs are refreshed; other adaptive VP8L/ALPH costs marked **H**
+retains gaps. [RGBA16 normalization and async output](../benchmarks/CURRENT-LOSSLESS-WEBP-BOUNDARIES.md)
+now also pass on this immutable core (upper 0.921 / 0.967). These two current-code
+confirmations close historical apparent gaps without a production change.
+Eight costs are current; other adaptive VP8L/ALPH costs marked **H**
 remain historical. Complete-operation diagnostic peaks are unchanged, per-operation
 scratch retention is zero, and fixed coefficients retain256B payload plus headers
 per process. Allocation, admission and physical heap usage remain distinct.
@@ -135,8 +138,6 @@ family evidence is linked below; individual experiments remain in
 | VP8L text/diagram / libwebp exact=1 † | 8,439.00 | 11,032.69 | 0.765 / 0.781 | 4,560,910 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 119,655.48 | 132,957.76 | 0.900 / 0.912 | 7,476,640 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 74,136.07 | 73,214.47 | 1.013 / 1.033 | 5,983,424 | 121,896 / 121,896 |
-| VP8L RGBA16, including normalization / libwebp exact=1 † H | 166,167.06 | 122,510.98 | 1.356 / 1.385 | 29,696,928 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † H | 156,836.69 | 121,322.88 | 1.293 / 1.316 | 29,697,312 | 183,812 / 183,812 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,911.28 | 4,366.42 | 1.354 / 1.432 | 951,212 | 236,828 / 236,828 |
@@ -166,6 +167,8 @@ family evidence is linked below; individual experiments remain in
 | JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
 | JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
 | JPEG 4:1:0, resident decode (confirmed pass) † | 372.23 | 509.10 | 0.731 / 0.756 | 720,838 | — |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 119,050.51 | 131,006.84 | 0.909 / 0.921 | 7,476,640 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 124,488.45 | 130,150.20 | 0.956 / 0.967 | 7,477,024 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
