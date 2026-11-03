@@ -14,7 +14,8 @@ internal static class Vp8lReferenceMainParsing
             repeated = Vp8lReferenceLz.Repeats(pixels, width, context);
             var standardBits = 0; var repeatedBits = 0;
             if (!disableCache && !Vp8lReferenceCache.TryBestBitsWithHistory(pixels, standard.Tokens,
-                repeated.Tokens, maximumCacheBits, context, out standardBits, out repeatedBits))
+                repeated.Tokens, maximumCacheBits, context, out standardBits, out repeatedBits,
+                scratch: standard.Count <= repeated.Count ? standard : repeated))
             {
                 standardBits = Vp8lReferenceCache.BestBits(pixels, standard.Tokens, maximumCacheBits, context);
                 repeatedBits = Vp8lReferenceCache.BestBits(pixels, repeated.Tokens, maximumCacheBits, context);

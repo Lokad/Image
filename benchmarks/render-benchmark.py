@@ -1691,11 +1691,11 @@ def render():
     # One compact owner for the eight current prepared WebP costs. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    alpha_workspace = json.loads((ROOT / 'benchmarks/webp-alpha-token-reuse-evidence.json').read_text(encoding='utf-8'))
-    assert alpha_workspace['productionAccepted'] and not alpha_workspace['cpuGainClaim']
-    assert alpha_workspace['memory']['savedBytesPerOperation'] == 1063408
-    qualification = alpha_workspace['qualification']
-    assert qualification['windows']['total'] == qualification['linux']['total'] == 5524
+    webp_current = json.loads((ROOT / 'benchmarks/webp-token-tail-history-evidence.json').read_text(encoding='utf-8'))
+    assert webp_current['productionAccepted'] and not webp_current['cpuGainClaim']
+    assert webp_current['memory']['alpha8Saved'] > 0 and webp_current['memory']['admittedPeakSaved'] > 0
+    qualification = webp_current['qualification']
+    assert qualification['windows']['total'] == qualification['linux']['total'] == 5537
     assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
@@ -1707,13 +1707,13 @@ def render():
         'alpha': 'VP8 RGBA8 + lossless alpha',
         'alpha16': 'VP8 RGBA16 + alpha, including normalization',
     }
-    assert set(alpha_workspace['cases']) == set(current_labels)
+    assert set(webp_current['cases']) == set(current_labels)
     for case, label in current_labels.items():
-        current = alpha_workspace['cases'][case]
+        current = webp_current['cases'][case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        assert current['librarySha256'] == alpha_workspace['producers']['linuxSha256']
+        assert current['librarySha256'] == webp_current['producers']['linuxSha256']
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
-        assert (current['upper'] <= 1) == (case in {'ordinary', 'diagram', 'rgba16', 'async'})
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
         assert len(positions) == 1, label
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
@@ -1854,28 +1854,27 @@ screens are diagnostic, not qualified gains or replacements for the tables below
 shares fixed source scores across luma candidates. The opaque photograph saves
 **0.214 ms / 1.54% raw** (1.29% normalized), with separated confidence and unchanged
 809,072 B/op. Five unchanged opaque VP8 costs retain valid evidence; the two transparent
-controls below use the newer clustering build. All retain gaps. Only the photograph has
+controls below use the current workspace build. All retain gaps. Only the photograph has
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Alpha token reuse](../benchmarks/WEBP-ALPHA-TOKEN-REUSE.md) saves **1,063,408 B/op
-(10.98%)** on transparent RGBA8/16, now **8,622,560 B/op**. Retired candidate
-capacity becomes the next compatible filter's matching seed. Exact packets and
-the **3,847,888 B** admitted peak are unchanged; retained operation scratch is zero.
-There is **no established CPU gain or regression**: the adverse global point and
-overlapping interleaved confidence are both retained. All eight displayed affected
-WebP costs are refreshed on one immutable DLL; original/diagram/depth/async pass
-and stop, while photo/opaque/transparency retain gaps. Other adaptive costs marked
-**H** remain historical. Native allocation and physical heap peaks are unmeasured.
-The current build passes 5,529 full/live checks per OS and affected normal/scalar
-checks. The same actual Release package and all three examples pass both OSes,
-including retained resize
-admission and asynchronous surviving outputs. Other codec/editing paths reuse
-applicable unchanged evidence; this is not a full release refresh.
+[Token-tail history workspace](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) removes
+**475,928 B/op (5.52%)** on transparent RGBA8 after the earlier
+[token handoff](../benchmarks/WEBP-ALPHA-TOKEN-REUSE.md), now **8,146,632 B/op**.
+The diagram saves **196,980 B/op (4.32%)**. Alpha8's admitted peak falls
+**3,847,888 → 3,656,309 B**; retained operation scratch is zero. There is no
+established CPU gain or regression. The adverse photograph global point remains;
+targeted interleaved confidence overlaps. All eight affected displayed costs use
+one immutable core and twelve actuals: original/diagram/depth/async pass and stop;
+photograph/transparency retain gaps, opaque confidence is open. Other affected
+**H** costs remain historical. Native allocation and physical peaks are unmeasured.
+The current build passes **5,537 full/live checks per OS** and affected normal/
+scalar checks. The same actual Release package and all three examples pass both
+OSes, including retained resize admission and asynchronous surviving outputs.
+Unchanged codec/editing paths reuse valid proof; this is not a full release refresh.
 [Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md) retains its
-source-specific 3.276/2.081 ms photo/opaque gains; these are not new-stage CPU
-claims. Fixed bias constants retain 256 B/process plus headers. Allocation,
-admitted capacity and retention remain separate metrics.
+source-specific gains, not a new-stage CPU claim. Allocation, admitted capacity
+and retention remain separate metrics.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite

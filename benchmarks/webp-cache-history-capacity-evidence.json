@@ -1,0 +1,201 @@
+{
+  "project": "Lokad.Image",
+  "schema": 1,
+  "productionChanged": false,
+  "scope": "Existing complete513x259 photograph lossless/Q85/effort4 and transparent lossy/Q75/effort4 stream encodes; one warmup and one observed encode per control per diagnostic. Borrowed caller input/output excluded from encoder-owned admission. No timing, total-allocation or physical-peak claim.",
+  "actualDllAudit": {
+    "librarySha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
+    "sourceSha256": "56f1b320cb425fce33547daa080ced45c8817c269de581a8f514af15f203401a",
+    "builds": {
+      "production": 0,
+      "audit": 1,
+      "harnessNativeSelector": 0,
+      "package": 0
+    },
+    "quietGuardsPassed": true,
+    "identities": {
+      "tmp/cwa195-audit/bin/Release/net10.0/Cwa195Audit.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/cwa195-audit/bin/Release/net10.0/Lokad.Image.pdb": "03cb9030de2d13a8cbc5894557930c3cfec0f61c29dd754adc2e53614239ecae",
+      "tmp/cwa195-audit/bin/Release/net10.0/Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+      "tmp/cwa195-audit/bin/Release/net10.0/Cwa195Audit.deps.json": "2e3a773fb9a17a15fc2df2836b6033d137ceedf5e97d79b25a6366def1c4e575",
+      "tmp/cwa195-audit/bin/Release/net10.0/Cwa195Audit.dll": "0432dbdb5be98eab2b5c6c4af9ea00408e058a28ad5502ccc050b0337423031a",
+      "tmp/cwa195-audit/bin/Release/net10.0/Cwa195Audit.pdb": "8d103e4142a31679d6b5ab7e2a36084e92329614935d8e46c151cdc40d996206",
+      "tmp/cwa195-audit/bin/Release/net10.0/Lokad.Image.dll": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2"
+    },
+    "encodes": [
+      {
+        "name": "photograph",
+        "warmup": true,
+        "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+        "packetBytes": 160032,
+        "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "borrowedRootSurvives": true,
+        "retainedRootBytes": 0,
+        "admittedPeakBytes": 3470059,
+        "admissionAttempts": 1130
+      },
+      {
+        "name": "photograph",
+        "warmup": false,
+        "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+        "packetBytes": 160032,
+        "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "borrowedRootSurvives": true,
+        "retainedRootBytes": 0,
+        "admittedPeakBytes": 3470059,
+        "admissionAttempts": 1130
+      },
+      {
+        "name": "alpha",
+        "warmup": true,
+        "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "packetBytes": 98590,
+        "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "borrowedRootSurvives": true,
+        "retainedRootBytes": 0,
+        "admittedPeakBytes": 3847888,
+        "admissionAttempts": 818
+      },
+      {
+        "name": "alpha",
+        "warmup": false,
+        "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "packetBytes": 98590,
+        "sourceSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "completePacketExact": true,
+        "sourceUnchanged": true,
+        "borrowedRootSurvives": true,
+        "retainedRootBytes": 0,
+        "admittedPeakBytes": 3847888,
+        "admissionAttempts": 818
+      }
+    ],
+    "peakGrowth": [
+      {
+        "case": "photograph",
+        "growthEvents": 579,
+        "peakEvent": {
+          "sequence": 59,
+          "liveBytes": 3470059,
+          "peakBytes": 3470059,
+          "frames": [
+            "OperationContext.Reserve",
+            "Vp8lReferenceCache.TryBestBitsWithHistory",
+            "Vp8lReferenceMainParsing.Encode",
+            "Vp8lPreparedEncoding.MainCandidates",
+            "Vp8lPreparedEncoding.PrepareCore",
+            "Vp8lPreparedEncoding.Prepare",
+            "WebpLosslessEncoder.Encode"
+          ]
+        }
+      },
+      {
+        "case": "alpha",
+        "growthEvents": 429,
+        "peakEvent": {
+          "sequence": 340,
+          "liveBytes": 3847888,
+          "peakBytes": 3847888,
+          "frames": [
+            "OperationContext.Reserve",
+            "Vp8lReferenceCache.TryBestBitsWithHistory",
+            "Vp8lReferenceMainParsing.Encode",
+            "Vp8lPreparedEncoding.MainCandidates",
+            "Vp8lPreparedEncoding.PrepareCore",
+            "Vp8lPreparedEncoding.Prepare",
+            "Vp8AlphaEncoding.Create"
+          ]
+        }
+      }
+    ]
+  },
+  "countProjection": {
+    "productionCoreSha256": "85fe89d6fb09d241da57e41469f2d0f672a4ee42463addad8d24c1238f36bfb2",
+    "sourceSha256": "56f1b320cb425fce33547daa080ced45c8817c269de581a8f514af15f203401a",
+    "builds": {
+      "production": 0,
+      "audit": 1,
+      "harnessNativeSelector": 0,
+      "package": 0
+    },
+    "quietGuardsPassed": true,
+    "calls": [
+      {
+        "name": "photograph",
+        "pixels": 132867,
+        "bits": 10,
+        "noCache": false,
+        "cancelable": false,
+        "standardCount": 122198,
+        "repeatedCount": 130165,
+        "standardCapacity": 1062936,
+        "repeatedCapacity": 1062936,
+        "standardTail": 85352,
+        "repeatedTail": 21616,
+        "massWords": 10240,
+        "payloadBytes": 238068,
+        "originalHistoryReservation": 238227,
+        "singleTailFits": false
+      },
+      {
+        "name": "alpha",
+        "pixels": 132867,
+        "bits": 10,
+        "noCache": false,
+        "cancelable": false,
+        "standardCount": 59864,
+        "repeatedCount": 126472,
+        "standardCapacity": 1062936,
+        "repeatedCapacity": 1062936,
+        "standardTail": 584024,
+        "repeatedTail": 51160,
+        "massWords": 10240,
+        "payloadBytes": 238068,
+        "originalHistoryReservation": 238227,
+        "singleTailFits": true
+      },
+      {
+        "name": "alpha",
+        "pixels": 132867,
+        "bits": 10,
+        "noCache": false,
+        "cancelable": false,
+        "standardCount": 16871,
+        "repeatedCount": 121501,
+        "standardCapacity": 1062936,
+        "repeatedCapacity": 1062936,
+        "standardTail": 927968,
+        "repeatedTail": 90928,
+        "massWords": 10240,
+        "payloadBytes": 238068,
+        "originalHistoryReservation": 238227,
+        "singleTailFits": true
+      }
+    ],
+    "allCompletePacketsAndSourcesExact": true,
+    "allRootsReleased": true
+  },
+  "interpretation": "Both actual-DLL peaks occur during cache-history preparation. Alpha standard-token tails584024/927968B exceed the derived238068B history workspace. Photo tails85352/21616B do not fit. Candidate prefixes must remain immutable; growth snapshots alone do not prove lending safety or a CPU/allocation/peak reduction.",
+  "next": "Bounded token-tail scratch proposal using existing operation-owned capacity; no pool/cache/new ownership abstraction. Validate disjoint live prefixes and later users, exact packets, eligibility/refusal/cancellation and cleanup before benchmarking a candidate.",
+  "qualification": "Qualified RSP186 production and actual package unchanged. Reuse5529full/live each OS, affected normal/scalar and SAME actual Release package/three examples. Commit52d0bf8f CI41715881255 green Windows/Linux/live and actual-package jobs.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-cache-history-capacity-audit.tar.xz",
+    "bytes": 1155040,
+    "members": 49,
+    "sha256": "dde8c47e21aaa6b15904cb2344a4152d6ad8330270c37fd4796a45b1b8dc81ab",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "productionSourceCommit": "52d0bf8fa4b6d52baa165aa71111e69456d95551",
+    "baselineDependency": "lanczos-word-source-row-preparation.tar.xz",
+    "baselineDependencySha256": "c4834c33d827b7c5f1313c45225d5b7862a6f2bb7aa6b8149277b7ff4d1c02d2",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}

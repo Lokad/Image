@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 internal static partial class Vp8lReferenceCache
@@ -18,7 +20,8 @@ internal static partial class Vp8lReferenceCache
     }
 
     internal static bool TryBestBitsWithHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> first,
-        ReadOnlySpan<Vp8lToken> second, int maximumBits, OperationContext context, out int firstBits, out int secondBits)
+        ReadOnlySpan<Vp8lToken> second, int maximumBits, OperationContext context, out int firstBits, out int secondBits,
+        Vp8lTokenBuffer? scratch = null)
     {
         firstBits = secondBits = 0;
         // These cases need the original individual cancellation checks.
@@ -29,20 +32,42 @@ internal static partial class Vp8lReferenceCache
             return false;
         // Eligibility uses only declared local allowances. Shared refusal below
         // is terminal and never selects a second, lower-memory attempt.
-        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
+        var cacheWords = (1 << (maximumBits + 1)) - 2;
+        var countWords = HistogramValues(maximumBits);
+        var alignedPixels = checked((pixels.Length + 3) & ~3);
+        var payloadBytes = checked(alignedPixels + (cacheWords + countWords + massWords) * 4);
+        var workspace = scratch is null ? default : scratch.BorrowTailBytes(context, payloadBytes);
+        var borrowed = !workspace.IsEmpty;
+        if (borrowed && (workspace.Overlaps(MemoryMarshal.AsBytes(pixels))
+            || workspace.Overlaps(MemoryMarshal.AsBytes(first)) || workspace.Overlaps(MemoryMarshal.AsBytes(second))))
+            throw new ArgumentException("History scratch must not overlap live source or token samples.", nameof(scratch));
+        context.Cancellation.ThrowIfCancellationRequested();
+        if (!borrowed) context.Reserve(reserved);
         try
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            var minimum = new byte[pixels.Length];
-            var cache = new uint[(1 << (maximumBits + 1)) - 2];
-            var counts = new int[HistogramValues(maximumBits)];
-            var mass = massWords == 0 ? Array.Empty<int>() : new int[massWords];
+            Span<byte> minimum; Span<uint> cache; Span<int> counts, mass;
+            if (borrowed)
+            {
+                minimum = workspace[..pixels.Length];
+                var words = MemoryMarshal.Cast<byte, int>(workspace[alignedPixels..]);
+                cache = MemoryMarshal.Cast<int, uint>(words[..cacheWords]);
+                counts = words.Slice(cacheWords, countWords); mass = words[(cacheWords + countWords)..];
+                // Fresh arrays were zeroed. Token tails contain arbitrary old
+                // values; every other workspace region is initialized by users.
+                cache.Clear();
+            }
+            else
+            {
+                minimum = new byte[pixels.Length]; cache = new uint[cacheWords];
+                counts = new int[countWords]; mass = massWords == 0 ? Array.Empty<int>() : new int[massWords];
+            }
             BuildHistory(pixels, maximumBits, cache, minimum);
             firstBits = ScoreHistory(pixels, first, maximumBits, minimum, counts, mass, context);
             secondBits = ScoreHistory(pixels, second, maximumBits, minimum, counts, mass, context);
             return true;
         }
-        finally { context.Release(reserved); }
+        finally { if (!borrowed) context.Release(reserved); }
     }
 
     // Each width has its own segment. Cache hits are monotone across widths:

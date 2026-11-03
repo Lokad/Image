@@ -50,28 +50,27 @@ screens are diagnostic, not qualified gains or replacements for the tables below
 shares fixed source scores across luma candidates. The opaque photograph saves
 **0.214 ms / 1.54% raw** (1.29% normalized), with separated confidence and unchanged
 809,072 B/op. Five unchanged opaque VP8 costs retain valid evidence; the two transparent
-controls below use the newer clustering build. All retain gaps. Only the photograph has
+controls below use the current workspace build. All retain gaps. Only the photograph has
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Alpha token reuse](../benchmarks/WEBP-ALPHA-TOKEN-REUSE.md) saves **1,063,408 B/op
-(10.98%)** on transparent RGBA8/16, now **8,622,560 B/op**. Retired candidate
-capacity becomes the next compatible filter's matching seed. Exact packets and
-the **3,847,888 B** admitted peak are unchanged; retained operation scratch is zero.
-There is **no established CPU gain or regression**: the adverse global point and
-overlapping interleaved confidence are both retained. All eight displayed affected
-WebP costs are refreshed on one immutable DLL; original/diagram/depth/async pass
-and stop, while photo/opaque/transparency retain gaps. Other adaptive costs marked
-**H** remain historical. Native allocation and physical heap peaks are unmeasured.
-The current build passes 5,529 full/live checks per OS and affected normal/scalar
-checks. The same actual Release package and all three examples pass both OSes,
-including retained resize
-admission and asynchronous surviving outputs. Other codec/editing paths reuse
-applicable unchanged evidence; this is not a full release refresh.
+[Token-tail history workspace](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) removes
+**475,928 B/op (5.52%)** on transparent RGBA8 after the earlier
+[token handoff](../benchmarks/WEBP-ALPHA-TOKEN-REUSE.md), now **8,146,632 B/op**.
+The diagram saves **196,980 B/op (4.32%)**. Alpha8's admitted peak falls
+**3,847,888 → 3,656,309 B**; retained operation scratch is zero. There is no
+established CPU gain or regression. The adverse photograph global point remains;
+targeted interleaved confidence overlaps. All eight affected displayed costs use
+one immutable core and twelve actuals: original/diagram/depth/async pass and stop;
+photograph/transparency retain gaps, opaque confidence is open. Other affected
+**H** costs remain historical. Native allocation and physical peaks are unmeasured.
+The current build passes **5,537 full/live checks per OS** and affected normal/
+scalar checks. The same actual Release package and all three examples pass both
+OSes, including retained resize admission and asynchronous surviving outputs.
+Unchanged codec/editing paths reuse valid proof; this is not a full release refresh.
 [Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md) retains its
-source-specific 3.276/2.081 ms photo/opaque gains; these are not new-stage CPU
-claims. Fixed bias constants retain 256 B/process plus headers. Allocation,
-admitted capacity and retention remain separate metrics.
+source-specific gains, not a new-stage CPU claim. Allocation, admitted capacity
+and retention remain separate metrics.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite
@@ -132,17 +131,17 @@ family evidence is linked below; individual experiments remain in
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,353.14 | 2,517.95 | 1.332 / 1.346 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 70,448.99 | 57,590.91 | 1.223 / 1.235 | 8,622,560 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 67,047.81 | 53,839.15 | 1.245 / 1.274 | 8,146,224 | 98,590 / 98,590 |
 | VP8 opaque RGBA8 † | 21,160.69 | 16,885.52 | 1.253 / 1.265 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 13,670.07 | 9,706.88 | 1.408 / 1.418 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 8,091.60 | 6,264.06 | 1.292 / 1.319 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 13,518.03 | 9,816.75 | 1.377 / 1.394 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,367.41 | 15,593.58 | 1.306 / 1.331 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 68,388.43 | 54,552.56 | 1.254 / 1.353 | 8,622,560 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 97,745.17 | 90,242.47 | 1.083 / 1.094 | 6,517,386 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 7,735.67 | 9,574.91 | 0.808 / 0.835 | 4,560,910 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 118,534.31 | 130,510.77 | 0.908 / 0.916 | 7,476,640 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 79,410.78 | 76,132.61 | 1.043 / 1.058 | 5,983,424 | 121,896 / 121,896 |
+| VP8 RGBA8 + lossless alpha † | 71,184.35 | 58,346.34 | 1.220 / 1.230 | 8,146,632 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 96,960.25 | 82,466.31 | 1.176 / 1.188 | 6,517,320 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 7,701.43 | 9,764.93 | 0.789 / 0.837 | 4,363,930 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 117,937.45 | 129,843.12 | 0.908 / 0.917 | 7,476,640 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 75,418.92 | 69,896.83 | 1.079 / 1.111 | 5,983,424 | 121,896 / 121,896 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,911.28 | 4,366.42 | 1.354 / 1.432 | 951,212 | 236,828 / 236,828 |
@@ -172,8 +171,8 @@ family evidence is linked below; individual experiments remain in
 | JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
 | JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
 | JPEG 4:1:0, resident decode (confirmed pass) † | 372.23 | 509.10 | 0.731 / 0.756 | 720,838 | — |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 120,011.01 | 131,175.44 | 0.915 / 0.923 | 7,476,640 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 118,966.92 | 130,932.63 | 0.909 / 0.919 | 7,477,024 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 110,831.66 | 121,561.12 | 0.912 / 0.929 | 7,476,640 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 118,053.59 | 130,701.04 | 0.903 / 0.908 | 7,477,024 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |

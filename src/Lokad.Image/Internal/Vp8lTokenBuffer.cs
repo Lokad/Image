@@ -47,6 +47,19 @@ internal sealed class Vp8lTokenBuffer : IDisposable
         return MemoryMarshal.Cast<Vp8lToken, int>(storage.AsSpan())[..words];
     }
 
+    // History reads the live prefix without writing tokens. Its temporary users
+    // finish before cache application or further Add calls. Keep all capacity
+    // charged to this owner; insufficient capacity is decided before admission.
+    internal Span<byte> BorrowTailBytes(OperationContext owner, int bytes)
+    {
+        var storage = tokens ?? throw new ObjectDisposedException(nameof(Vp8lTokenBuffer));
+        if (!ReferenceEquals(context, owner) || CacheBits != 0)
+            throw new ArgumentException("History scratch must belong to the uncached candidate's operation.");
+        ArgumentOutOfRangeException.ThrowIfNegative(bytes);
+        var tail = MemoryMarshal.AsBytes(storage.AsSpan(Count));
+        return bytes <= tail.Length ? tail[..bytes] : default;
+    }
+
     // Aliasing must include idle capacity before it is reused as workspace.
     internal bool OverlapsStorage<T>(ReadOnlySpan<T> input) where T : unmanaged
     {
