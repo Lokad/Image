@@ -100,11 +100,11 @@ public sealed class Vp8lReferenceClusteringTests
     }
 
     [Fact]
-    public void PreparedSparseWorkspaceFits32KiBAndKeepsSharedRefusalAtomic()
+    public void CompactSparseWorkspaceFits16KiBAndKeepsSharedRefusalAtomic()
     {
-        // Includes the retained prepared run maps; two original dense slabs
-        // alone exceed this capacity. Refusal remains one byte below the peak.
-        const long capacity = 32_768;
+        // Compact banks need no prepared capacity. Refusal remains one byte
+        // below the observed peak, including the independent retained plan.
+        const long capacity = 16_384;
         using var root = new TestMemoryBudget(capacity);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         using (var plan = Vp8lReferenceClustering.Build(Sparse, 8, 8, 2, 0, false, context))

@@ -337,10 +337,10 @@ def render():
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_indexed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
-    webp_current = json.loads((ROOT / 'benchmarks/webp-prepared-clustering-costs-evidence.json').read_text(encoding='utf-8'))
+    webp_current = json.loads((ROOT / 'benchmarks/webp-scoring-preparation-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['exactPacketsPreserved']
     assert webp_current['independentQuietConfirmation']
-    paired_webp = json.loads((ROOT / 'benchmarks/webp-interleaved-confidence-evidence.json').read_text(encoding='utf-8'))
+    paired_webp = webp_current['interleavedConfidence']
     assert not paired_webp['productionChanged'] and paired_webp['productionBuilds'] == 0
     for case in paired_webp['cases']:
         assert case['librarySha256'] == webp_current['producers']['linuxSha256']
@@ -1554,7 +1554,7 @@ def render():
             for kind, row in rows]
     assert webp_current['productionAccepted'] and webp_current['decision']['accepted']
     assert webp_current['decision']['storageTradeoffMeasured']
-    assert webp_current['qualification']['fullChecksEachOs'] == 5506
+    assert webp_current['qualification']['fullChecksEachOs'] == 5507
     assert webp_current['qualification']['actualPackage']['sha256'] == webp_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     current_webp_rows = []
@@ -1831,23 +1831,19 @@ controls below use the newer clustering build. All retain gaps. Only the photogr
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
 
-[Prepared clustering costs](../benchmarks/WEBP-PREPARED-CLUSTERING-COSTS.md)
-reuse unchanged green/cache run models while preserving measured color kernels.
-Original lossless saves **17.63 ms / 12.67% raw / 13.14% normalized**, with separated
-raw/normalized confidence, at **194,816 B/op** extra allocation. It now passes at
-**0.922x / upper0.934**; diagram also passes. Photograph/opaque global-bracket intervals cross parity;
-the [interleaved check](../benchmarks/WEBP-PREPARED-CLUSTERING-COSTS.md#interleaved-confidence-check)
-independently confirms both gaps using all twelve paired ratios. The table retains
-its global-bracket time estimates. Transparent8/16 retain gaps. Photograph's adverse 4.09% raw point has
-overlapping intervals. Transparent8's separated adverse 2.94% raw point accompanies
-a 5.35% slower native clock; normalized intervals overlap, so no causal gain or
-regression is claimed. Six current costs replace the preceding ownership stage.
-Prepared capacity is admitted before allocation and released with the operation;
-diagnostic complete-operation admitted peaks are unchanged and scratch retention
-is zero. Allocations, admitted peaks and physical heap usage are distinct.
-Other affected adaptive VP8L/transparent ALPH costs marked **H** remain historical.
-[Sparse ownership and earlier evidence](../benchmarks/WEBP-SPARSE-CLUSTERING-WORKSPACE.md)
-retain the allocation reductions, rejected stages and exact restoration history.
+[Shared scoring preparation](../benchmarks/WEBP-SCORING-PREPARATION.md) removes
+repeated invariant-weight generation and unused compact-bank preparation.
+Fresh interleaved comparisons save **3.276 ms / 3.21% raw / 2.49% normalized** on
+photograph and **2.081 ms / 2.54% raw / 3.24% normalized** on opaque lossless,
+with separated raw/normalized confidence. Their allocations fall **44,096 / 48,280 B**.
+Both retain confirmed paired gaps (upper1.119 /1.054); the table preserves distinct
+global-bracket time estimates. Original and diagram still pass; transparency
+retains gaps. Six costs are refreshed; other adaptive VP8L/ALPH costs marked **H**
+remain historical. Complete-operation diagnostic peaks are unchanged, per-operation
+scratch retention is zero, and fixed coefficients retain256B payload plus headers
+per process. Allocation, admission and physical heap usage remain distinct.
+[Earlier prepared-cost stages](../benchmarks/WEBP-PREPARED-CLUSTERING-COSTS.md)
+retain their gains, adverse results and byte-exact ownership evidence.
 
 [Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
 removes redundant output initialization using the existing complete-overwrite

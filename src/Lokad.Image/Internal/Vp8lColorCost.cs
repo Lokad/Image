@@ -26,13 +26,6 @@ internal static class Vp8lColorCost
             var count = histogram[i];
             cost -= Vp8lReferenceCost.SLog(count) + Vp8lReferenceCost.SLog(count + history[i]) - products[i];
         }
-        var weighted = histogram[0] * 3 * Vp8lReferenceCost.Scale;
-        var weight = 240 * Vp8lReferenceCost.Scale;
-        for (var magnitude = 1; magnitude < 16; magnitude++)
-        {
-            weighted += (weight * (histogram[magnitude] + histogram[256 - magnitude]) + 50) / 100;
-            weight = (weight * 6 + 5) / 10;
-        }
-        return cost - (weighted + 5) / 10;
+        return cost + Vp8lReferenceCost.ResidualBias(histogram, 3, Vp8lReferenceCost.ColorBiasWeights);
     }
 }

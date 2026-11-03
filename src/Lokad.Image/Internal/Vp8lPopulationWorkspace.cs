@@ -26,14 +26,13 @@ internal sealed class Vp8lPopulationWorkspace : IDisposable
         // Every materialized live cluster contains at least two distinct leaves.
         var capacity = tiles / 2;
         var bytes = (tiles + 1L + tiles + capacity + 2L * layout.Total) * sizeof(int)
-            + 3L * capacity * IntPtr.Size + 2L * supportWords * sizeof(ulong) + 512;
+            + 2L * capacity * IntPtr.Size + 2L * supportWords * sizeof(ulong) + 512;
         context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(bytes); reserved = bytes;
         try
         {
             context.Cancellation.ThrowIfCancellationRequested();
             offsets = new int[tiles + 1]; denseMap = new int[tiles]; denseMap.AsSpan().Fill(-1);
             freeSlots = new int[capacity]; blocks = new int[capacity][]; supports = new ulong[capacity][];
-            prepared = new PreparedPopulation[capacity];
             firstScratch = new int[layout.Total]; secondScratch = new int[layout.Total];
             firstSupport = new ulong[supportWords]; secondSupport = new ulong[supportWords];
         }
@@ -208,6 +207,20 @@ internal sealed class Vp8lPopulationWorkspace : IDisposable
     internal long SumGreenLeaf(int tile, ReadOnlySpan<uint> leaf)
     {
         var counts = Read(tile, 0)[..layout.GreenSize]; var slot = denseMap![tile];
+        if (slot >= 0 && prepared is null)
+        {
+            // Compact-alphabet operations never need this reference capacity.
+            // If a later map reservation fails, these actual references remain
+            // charged until the failed operation's workspace is disposed.
+            var bytes = blocks!.Length * (long)IntPtr.Size + 32;
+            context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(bytes);
+            try
+            {
+                context.Cancellation.ThrowIfCancellationRequested(); prepared = new PreparedPopulation[blocks.Length];
+                reserved += bytes;
+            }
+            catch { context.Release(bytes); throw; }
+        }
         var item = slot >= 0 ? prepared![slot] : firstPrepared;
         if (item is null)
         {
@@ -239,7 +252,7 @@ internal sealed class Vp8lPopulationWorkspace : IDisposable
         {
             // Logical A survives. B's finished storage can become A's target;
             // nonnegative integer population addition is commutative and exact.
-            if (prepared![bSlot] is { } transferred) transferred.Ready = 0;
+            if (prepared?[bSlot] is { } transferred) transferred.Ready = 0;
             Vp8lReferenceClustering.AddPopulation(second, first, context);
             for (var i = 0; i < supportWords; i++) secondWords[i] |= firstWords[i];
             map[a] = bSlot; map[b] = -1;
@@ -249,7 +262,7 @@ internal sealed class Vp8lPopulationWorkspace : IDisposable
         {
             aSlot = TakeDenseSlot(); first.CopyTo(blocks![aSlot]); firstWords.CopyTo(supports![aSlot]); map[a] = aSlot;
         }
-        if (prepared![aSlot] is { } changed) changed.Ready = 0;
+        if (prepared?[aSlot] is { } changed) changed.Ready = 0;
         Vp8lReferenceClustering.AddPopulation(blocks![aSlot], second, context);
         var targetWords = supports![aSlot].AsSpan();
         for (var i = 0; i < supportWords; i++) targetWords[i] |= secondWords[i];

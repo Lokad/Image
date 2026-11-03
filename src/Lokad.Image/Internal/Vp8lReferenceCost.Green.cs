@@ -16,6 +16,6 @@ internal static partial class Vp8lReferenceCost
         cost -= SLog(zero) + SLog(zero + priorZero) + SLog(one) + SLog(one + priorOne);
         cost += SLog(zero + one) + SLog(zero + one + priorZero + priorOne);
         var green = current.Slice(512, 256); var prior = previous.Slice(512, 256);
-        return cost + SmallResidualBias(green) + PredictionEntropy(green, prior);
+        return cost + ResidualBias(green, 1, PredictionBiasWeights) + PredictionEntropy(green, prior);
     }
 }

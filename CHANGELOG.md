@@ -17,7 +17,8 @@
 - WebP clustering retains immutable sparse leaves and recycles merged populations
   within each encode, reducing allocations and admitted peak storage while
   preserving exact packets and independent output ownership. Prepared green
-  population models reduce repeated candidate-cost computation.
+  population models and shared fixed-weight bias pricing reduce recurring
+  candidate-cost computation; compact banks avoid unused prepared storage.
 
 - Vectorized complete-pixel rectangle filling preserves full sample precision,
   hidden RGB, clipping, cancellation and existing memory ownership.

@@ -199,8 +199,9 @@ internal static class Vp8lReferenceClustering
             var aCounts = Population(aSlot); var bCounts = Population(bSlot, 1, fromOriginal);
             var aSupport = Support(aSlot); var bSupport = Support(bSlot, 1, fromOriginal);
             // Preserve the measured support traversal for 256-symbol colors.
-            // The larger green/cache alphabet reuses unchanged A run models.
-            var leaf = fromOriginal || !populations.IsMerged(bSlot);
+            // Large cache alphabets reuse unchanged A run models. Compact banks
+            // keep their direct scan rather than prepare/repair short runs.
+            var leaf = layout.CacheBits >= 8 && (fromOriginal || !populations.IsMerged(bSlot));
             var entries = leaf ? populations.Leaf(bSlot) : default; var greenEnd = 0;
             if (leaf) while (greenEnd < entries.Length && (entries[greenEnd] & 4095) < layout.GreenSize) greenEnd++;
             for (var bank = 0; bank < 5; bank++)

@@ -79,6 +79,24 @@ public sealed class Vp8lPreparedPopulationTests
     }
 
     [Fact]
+    public void RefusalAfterReferenceAdmissionKeepsActualCapacityUntilCleanup()
+    {
+        using var root = new TestMemoryBudget(1 << 24);
+        using var context = new OperationContext(new ImageLimits { MemoryBudget = root }, default);
+        var layout = new Vp8lHistogramLayout(10);
+        using var owner = Vp8lPopulationWorkspace.Create(Tokens(), 17, 17, 2, layout, 12, context);
+        owner.Merge(0, 1); var before = root.Bytes;
+        root.RefuseAtGrowth = root.GrowthAttempts + 2; // Admit references, refuse their first run map.
+        var error = Assert.Throws<ImageLimitException>(() => owner.SumGreenLeaf(0, Green(owner, 2, layout)));
+        Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
+        Assert.True(root.Bytes > before); Assert.Equal(1, root.Refusals);
+        owner.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        using var next = Vp8lPopulationWorkspace.Create(Tokens(), 17, 17, 2, layout, 12, context);
+        next.Merge(0, 1); next.SumGreenLeaf(0, Green(next, 2, layout));
+        next.Dispose(); Assert.Equal(0, root.Bytes);
+    }
+
+    [Fact]
     public void CancellationKeepsPreparedStorageChargedUntilItsOwnerIsDisposed()
     {
         using var root = new TestMemoryBudget(1 << 24); using var cancellation = new CancellationTokenSource();

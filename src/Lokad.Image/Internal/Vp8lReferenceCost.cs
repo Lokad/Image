@@ -9,6 +9,21 @@ internal static partial class Vp8lReferenceCost
 {
     internal const long Scale = 1L << 23;
 
+    // Fixed integer recurrences, independent of input/history/trials.
+    // Keep the coupled +/- residual rounding once per magnitude.
+    private static readonly long[] PredictionBiasWeights = BiasWeights(94);
+    private static readonly long[] ColorWeights = BiasWeights(240);
+    internal static ReadOnlySpan<long> ColorBiasWeights => ColorWeights;
+
+    private static long[] BiasWeights(int initial)
+    {
+        var result = new long[16]; var weight = initial * Scale;
+        for (var magnitude = 1; magnitude < result.Length; magnitude++)
+        { result[magnitude] = weight; weight = (weight * 6 + 5) / 10; }
+        return result;
+    }
+
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static long SLog(int count)
     {
@@ -28,14 +43,12 @@ internal static partial class Vp8lReferenceCost
         return count * log + (long)(Scale / Math.Log(2)) * (count - (head << shift));
     }
 
-    private static long SmallResidualBias(ReadOnlySpan<int> histogram)
+    internal static long ResidualBias(ReadOnlySpan<int> histogram, int zeroWeight, ReadOnlySpan<long> weights)
     {
-        var weighted = histogram[0] * Scale;
-        var weight = 94 * Scale;
+        var weighted = histogram[0] * (long)zeroWeight * Scale;
         for (var distance = 1; distance < 16; distance++)
         {
-            weighted += (weight * (histogram[distance] + histogram[256 - distance]) + 50) / 100;
-            weight = (weight * 6 + 5) / 10;
+            weighted += (weights[distance] * (histogram[distance] + histogram[256 - distance]) + 50) / 100;
         }
         return -(weighted + 5) / 10;
     }
@@ -69,7 +82,8 @@ internal static partial class Vp8lReferenceCost
         {
             var tile = current.Slice(plane * 256, 256);
             var prior = previous.Slice(plane * 256, 256);
-            cost += SmallResidualBias(tile) + PreparedPredictionEntropy(tile, prior, products.Slice(plane * 256, 256), baselines[plane]);
+            cost += ResidualBias(tile, 1, PredictionBiasWeights)
+                + PreparedPredictionEntropy(tile, prior, products.Slice(plane * 256, 256), baselines[plane]);
         }
         return cost;
     }
