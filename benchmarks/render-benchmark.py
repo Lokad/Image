@@ -1775,6 +1775,8 @@ method/effort rows marked **H** remain historical.
 [earlier cache-prefix work](../benchmarks/WEBP-CACHE-PREFIX-AGGREGATION.md) and
 [current photograph attribution](../benchmarks/WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
 retain design/history separately. No retuning or scored candidate rerun.
+A [compact green predictor trial](../benchmarks/WEBP-COMPACT-GREEN-INCONCLUSIVE.md)
+is restored after two flat complete-encode screens; current costs stay unchanged.
 
 [Shared cached bicubic execution](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
 removes duplicate preparation/scheduling and preserves measured kernels.

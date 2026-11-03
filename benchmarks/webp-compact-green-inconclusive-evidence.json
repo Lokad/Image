@@ -1,0 +1,518 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "qualifiedCpuGainClaim": false,
+  "decision": "Both compact-storage and revised shared-price stages pass exactness/ownership checks but show no useful complete target CPU gain. Modest allocation savings and unchanged whole admitted peak do not justify added layout/history machinery. Both stages restored; not a permanent family ban.",
+  "stages": [
+    {
+      "stage": 1,
+      "design": {
+        "project": "Lokad.Image",
+        "phase": "PPL124",
+        "productionChanged": false,
+        "hypothesis": "Compact green-only predictor preparation to one actual green histogram plane plus exact two-scalar history metadata, retaining shared geometry, owner and selection scheduling.",
+        "repeatedWork": "Current alpha control has two one-level513x259 green analyses,62161B admitted each,153visits each. Proposed16089B each removes92144B payload and13160448B zeroed histogram bytes across complete encode; no measured CPU/total allocation/peak claim.",
+        "endState": [
+          "Use256 mode words for green-only and1024 for general full-color. Flat per-level storage contains14mode histograms,256green history counts+2scalar history totals for green-only (1024 full-color), and14mode frequencies. No new arrays, owner, cache or governor.",
+          "Use existing green pixel predictor kernel with compact256-word mode stride. General color kernel and ICA123 invariant alpha scoring stay intact; no generic abstraction in the pixel loop.",
+          "Compute per-tile sample count from clipped geometry. The number of current alpha-one residuals is interiorPixels+origin for mode0, origin for all other modes. Maintain prior sample count and prior alpha-one count per level.",
+          "Preserve exact red/blue singleton bias, two-bin alpha entropy/bias and green entropy/bias in PredictionGreen. Hierarchy winner cost keeps alpha two-bin Shannon, green Shannon and mode frequencies; red/blue singleton Shannon is exactly zero.",
+          "Children aggregate only their per-mode green histograms. Parent scalar current statistics derive from the same global pixel geometry, which partitions additively. Update per-level history scalar counts only for chosen mode, matching the current full histories.",
+          "Remove obsolete full-layout green helper contracts and update actual-production tests; no compatibility wrappers. Full-color production predictor remains an independent useful oracle."
+        ],
+        "proof": [
+          "Normalized ALPH green-only pixels have A/R/B zero; caller already restricts greenOnly to representation-preserving transforms. Do not broaden that routing or apply it to packed palette/subtract-green data implicitly.",
+          "At global origin every mode predicts black A255, so residual A1. Interior mode0 also predicts A255; all other valid alpha predictors are zero. Border left/top predictors read zero alpha. Hence per-mode alpha-one count formula is exact.",
+          "R/B residuals are always zero, with mass equal to clipped tile area; their entropy cancels, but their bias remains twice the original integer division.",
+          "Alpha history has only bins0/1, sums to prior pixels, and depends on chosen modes. Keep both scalar total and ones. Preserve integer rounding and operation ordering where division occurs.",
+          "For each hierarchy level, clipping and quadrant traversal partition the same source area. Green counts, alpha metadata and final Shannon/mode costs must match the generic four-plane implementation exactly."
+        ],
+        "workloads": [
+          "Existing complete transparent VP8 control plus photo/diagram/authored generalization from immutable WorkspaceScreen. Preserve original FFmpeg/libwebp references, source delivery, complete outputs and exact packets. No new workload matrix.",
+          "Existing16,384 frozen specialized/general numeric cost cases, exact leaf/interior histograms, border/wrap/partial-tile/parent levels, full selector maps/residuals/costs, admission refusal at each phase, cancellation and independent root recovery."
+        ],
+        "temporaryCosts": "Variable per-level layout offsets and scalar metadata may affect caller/indexing codegen. No elapsed gain inferred from fewer bytes or cache set geometry. Keep all preparation/clearing/output lifetimes timed, screen whole operations before independent confidence/acceptance.",
+        "qualifying": "One immutable build per coherent experiment. Focused bothOS normal/scalar first; complete quietVM screen then independent confirmation if promising; broad full/live/scalar/same actual-package only at accepted milestone. Reuse unchanged production proof.",
+        "publicationPostponed": true
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "baselineSha256": "4a1341b562cb58a6fd5492ac9b2302a89958812ddaf830d0fb5a32300d0e8e2b",
+        "candidateSha256": "09d9c7ef088a64d482405baebb9195a6510cc22b85ea0dd86d830202c50c0c11",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "3cc1db7ad244d1380dec5272af40c368d846249d74662cb67428663d30cf362f",
+          "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "085fa6a466483d05ebc1b0bbb6a126b8715b1f4952e55f8e4f0ebe93110fb4aa",
+          "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "099b1164dd9473a38d7ea73bcd8eb61080b34cb11c92e0bed7e5560328752c34",
+          "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "77af6047664dc47c8e2e29412635c6d7fb50c8f2a419d1b0a1c96f335b0800c7",
+          "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "8cac86b2e558d3016b3e0ff4aac3067fba08efea355505ebb2d2ecca40299e2a"
+        },
+        "sourceSha256": "82a79c4bfa9f50cfb608abe2d7520af92affd32f64965fd7d87510a815133f16",
+        "focused": {
+          "normal": 296,
+          "scalar": 296
+        },
+        "folder": "tmp/ppl124-runtime",
+        "hashes": {
+          "Lokad.Image.pdb": "822e5bf7eea3cd3c6e5a29824904f47ca0c0515ae9d6d7254b6b11dc43e8afec",
+          "Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+          "WorkspaceScreen.dll": "ef621c6c865cec1ad7e83cbb08046e34b2108857c004e89f3c1320b526ae5651",
+          "Lokad.Image.dll": "09d9c7ef088a64d482405baebb9195a6510cc22b85ea0dd86d830202c50c0c11",
+          "WorkspaceScreen.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+          "WorkspaceScreen.deps.json": "47eb388977681c7986eaa6c3713467d9768571358c4ccfab785eb6aeb1fca197"
+        },
+        "harnessSha256": "ef621c6c865cec1ad7e83cbb08046e34b2108857c004e89f3c1320b526ae5651",
+        "baselineFolder": "tmp/ppl124-baseline-runtime",
+        "baselineHashes": {
+          "Lokad.Image.pdb": "82301f2c02a5073b6339111e2d447c909c28643fd30426a2d9085715da4bdd6d",
+          "Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+          "WorkspaceScreen.dll": "ef621c6c865cec1ad7e83cbb08046e34b2108857c004e89f3c1320b526ae5651",
+          "Lokad.Image.dll": "4a1341b562cb58a6fd5492ac9b2302a89958812ddaf830d0fb5a32300d0e8e2b",
+          "WorkspaceScreen.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+          "WorkspaceScreen.deps.json": "47eb388977681c7986eaa6c3713467d9768571358c4ccfab785eb6aeb1fca197"
+        },
+        "coreBuilds": 1,
+        "internalBuilds": 1,
+        "harnessNativeSelectorBuilds": 0
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": false,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 90656.7655,
+            "candidateMicroseconds": 91736.8385,
+            "rawGain": -0.011913870895824186,
+            "allocatedBytesBefore": [
+              13346256,
+              13346256,
+              13346256
+            ],
+            "allocatedBytesAfter": [
+              13346272,
+              13346272,
+              13346272
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 9388.092606060607,
+            "candidateMicroseconds": 8981.39506060606,
+            "rawGain": 0.0433205724016823,
+            "allocatedBytesBefore": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "allocatedBytesAfter": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 63138.76,
+            "candidateMicroseconds": 63168.0825,
+            "rawGain": -0.00046441361851257135,
+            "allocatedBytesBefore": [
+              10747848,
+              10747848,
+              10747848
+            ],
+            "allocatedBytesAfter": [
+              10655736,
+              10655736,
+              10655736
+            ],
+            "admittedPeakBefore": 3847888,
+            "admittedPeakAfter": 3847888,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 784.8236516853933,
+            "candidateMicroseconds": 826.8804827586207,
+            "rawGain": -0.05358761931156275,
+            "allocatedBytesBefore": [
+              933440,
+              933440,
+              933440
+            ],
+            "allocatedBytesAfter": [
+              933440,
+              933440,
+              933440
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312716,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Fresh verified current baseline and one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      },
+      "windows": {
+        "focused": {
+          "normal": 296,
+          "scalar": 296
+        },
+        "sha256": "c83df55f0b714f9ac67254bb0467c6840d6097a869556759c459f5582040945f"
+      }
+    },
+    {
+      "stage": 2,
+      "design": {
+        "project": "Lokad.Image",
+        "phase": "PPL124",
+        "productionChanged": false,
+        "hypothesis": "Compact green-only predictor preparation to one actual green histogram plane plus exact two-scalar history metadata, retaining shared geometry, owner and selection scheduling.",
+        "repeatedWork": "Current alpha control has two one-level513x259 green analyses,62161B admitted each,153visits each. Proposed16089B each removes92144B payload and13160448B zeroed histogram bytes across complete encode; no measured CPU/total allocation/peak claim.",
+        "endState": [
+          "Use256 mode words for green-only and1024 for general full-color. Flat per-level storage contains14mode histograms,256green history counts+2scalar history totals for green-only (1024 full-color), and14mode frequencies. No new arrays, owner, cache or governor.",
+          "Use existing green pixel predictor kernel with compact256-word mode stride. General color kernel and ICA123 invariant alpha scoring stay intact; no generic abstraction in the pixel loop.",
+          "Compute per-tile sample count from clipped geometry. The number of current alpha-one residuals is interiorPixels+origin for mode0, origin for all other modes. Maintain prior sample count and prior alpha-one count per level.",
+          "Preserve exact red/blue singleton bias, two-bin alpha entropy/bias and green entropy/bias in PredictionGreen. Hierarchy winner cost keeps alpha two-bin Shannon, green Shannon and mode frequencies; red/blue singleton Shannon is exactly zero.",
+          "Children aggregate only their per-mode green histograms. Parent scalar current statistics derive from the same global pixel geometry, which partitions additively. Update per-level history scalar counts only for chosen mode, matching the current full histories.",
+          "Remove obsolete full-layout green helper contracts and update actual-production tests; no compatibility wrappers. Full-color production predictor remains an independent useful oracle."
+        ],
+        "proof": [
+          "Normalized ALPH green-only pixels have A/R/B zero; caller already restricts greenOnly to representation-preserving transforms. Do not broaden that routing or apply it to packed palette/subtract-green data implicitly.",
+          "At global origin every mode predicts black A255, so residual A1. Interior mode0 also predicts A255; all other valid alpha predictors are zero. Border left/top predictors read zero alpha. Hence per-mode alpha-one count formula is exact.",
+          "R/B residuals are always zero, with mass equal to clipped tile area; their entropy cancels, but their bias remains twice the original integer division.",
+          "Alpha history has only bins0/1, sums to prior pixels, and depends on chosen modes. Keep both scalar total and ones. Preserve integer rounding and operation ordering where division occurs.",
+          "For each hierarchy level, clipping and quadrant traversal partition the same source area. Green counts, alpha metadata and final Shannon/mode costs must match the generic four-plane implementation exactly."
+        ],
+        "workloads": [
+          "Existing complete transparent VP8 control plus photo/diagram/authored generalization from immutable WorkspaceScreen. Preserve original FFmpeg/libwebp references, source delivery, complete outputs and exact packets. No new workload matrix.",
+          "Existing16,384 frozen specialized/general numeric cost cases, exact leaf/interior histograms, border/wrap/partial-tile/parent levels, full selector maps/residuals/costs, admission refusal at each phase, cancellation and independent root recovery."
+        ],
+        "temporaryCosts": "Two bounded price preparations/cancellation checkpoints per tile and two scalar prices; mode-loop selects by mode0. Shared-driver locals may affect full-color codegen. Screen complete fixed controls against the original qualified ICA123 baseline, not the unaccepted stage1. No elapsed savings inferred from counts.",
+        "qualifying": "One immutable build per coherent experiment. Focused bothOS normal/scalar first; complete quietVM screen then independent confirmation if promising; broad full/live/scalar/same actual-package only at accepted milestone. Reuse unchanged production proof.",
+        "publicationPostponed": true,
+        "stage1Screen": {
+          "project": "Lokad.Image",
+          "diagnosticScreen": true,
+          "qualifiedCpuGainClaim": false,
+          "builds": 0,
+          "unchangedBeforeReused": false,
+          "existingControls": 4,
+          "newPerformanceControls": 0,
+          "quietGuardsPassed": true,
+          "cases": [
+            {
+              "caseId": "photograph",
+              "baselineMicroseconds": 90656.7655,
+              "candidateMicroseconds": 91736.8385,
+              "rawGain": -0.011913870895824186,
+              "allocatedBytesBefore": [
+                13346256,
+                13346256,
+                13346256
+              ],
+              "allocatedBytesAfter": [
+                13346272,
+                13346272,
+                13346272
+              ],
+              "admittedPeakBefore": 10166464,
+              "admittedPeakAfter": 10166464,
+              "exactPacket": true
+            },
+            {
+              "caseId": "diagram",
+              "baselineMicroseconds": 9388.092606060607,
+              "candidateMicroseconds": 8981.39506060606,
+              "rawGain": 0.0433205724016823,
+              "allocatedBytesBefore": [
+                6255920,
+                6255920,
+                6255920
+              ],
+              "allocatedBytesAfter": [
+                6255920,
+                6255920,
+                6255920
+              ],
+              "admittedPeakBefore": 4802292,
+              "admittedPeakAfter": 4802292,
+              "exactPacket": true
+            },
+            {
+              "caseId": "alpha",
+              "baselineMicroseconds": 63138.76,
+              "candidateMicroseconds": 63168.0825,
+              "rawGain": -0.00046441361851257135,
+              "allocatedBytesBefore": [
+                10747848,
+                10747848,
+                10747848
+              ],
+              "allocatedBytesAfter": [
+                10655736,
+                10655736,
+                10655736
+              ],
+              "admittedPeakBefore": 3847888,
+              "admittedPeakAfter": 3847888,
+              "exactPacket": true
+            },
+            {
+              "caseId": "authored-bars",
+              "baselineMicroseconds": 784.8236516853933,
+              "candidateMicroseconds": 826.8804827586207,
+              "rawGain": -0.05358761931156275,
+              "allocatedBytesBefore": [
+                933440,
+                933440,
+                933440
+              ],
+              "allocatedBytesAfter": [
+                933440,
+                933440,
+                933440
+              ],
+              "admittedPeakBefore": 312716,
+              "admittedPeakAfter": 312716,
+              "exactPacket": true
+            }
+          ],
+          "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Fresh verified current baseline and one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+        },
+        "stage1Decision": "Exact compact layout passes296 normal/scalar perOS; allocation -92112B/alpha, direct admitted peak unchanged. Complete alpha raw point -.046% flat; no CPU gain claim. Do not confirm this storage-only stage.",
+        "revision": "Retain the compact owner/layout, but prepare the TWO possible exact A/R/B prices per tile before scoring green. Mode0 differs in its alpha-one count; other13 modes share origin-only alpha-one count, fixed prior history and singleton R/B mass. Evaluate unchanged green cost per mode and add exact prepared price. No new storage/owner; reduce repeated SLog/bias arithmetic and call arguments. Stage1 source/DLL/tests saved on bothOS; no scored job repeated."
+      },
+      "preparation": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "baselineSha256": "4a1341b562cb58a6fd5492ac9b2302a89958812ddaf830d0fb5a32300d0e8e2b",
+        "candidateSha256": "e9392c219a6b8a8a82f420d5949db01caf6ad75eafc1042aa88f94ef58fe1de6",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "98fda326dfc580e518ff9aee3bd94342988973f86f1e20a97fc0a0cd43af1e5a",
+          "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "8f42ff4ebc6919118a2ffd010dcc98dcc38f490fe39d04d568d7975e35c15175",
+          "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "099b1164dd9473a38d7ea73bcd8eb61080b34cb11c92e0bed7e5560328752c34",
+          "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "b751c3077360f1b690444e4f4dbcc5ca2c66f52315beb8dfc49331a139d3bba6",
+          "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "8cac86b2e558d3016b3e0ff4aac3067fba08efea355505ebb2d2ecca40299e2a"
+        },
+        "sourceSha256": "93276c4a557860c70fad48d59a4e6988c47062eb8ce2d2d034ee7f799e56b444",
+        "focused": {
+          "normal": 296,
+          "scalar": 296
+        },
+        "folder": "tmp/ppl124b-runtime",
+        "hashes": {
+          "Lokad.Image.pdb": "d00e9bcc51f9ac2581641b2987e61f6283366c8ba1b86a1463b5176e2c498f89",
+          "Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+          "WorkspaceScreen.dll": "ef621c6c865cec1ad7e83cbb08046e34b2108857c004e89f3c1320b526ae5651",
+          "Lokad.Image.dll": "e9392c219a6b8a8a82f420d5949db01caf6ad75eafc1042aa88f94ef58fe1de6",
+          "WorkspaceScreen.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+          "WorkspaceScreen.deps.json": "47eb388977681c7986eaa6c3713467d9768571358c4ccfab785eb6aeb1fca197"
+        },
+        "harnessSha256": "ef621c6c865cec1ad7e83cbb08046e34b2108857c004e89f3c1320b526ae5651",
+        "baselineFolder": "tmp/ppl124b-baseline-runtime",
+        "baselineHashes": {
+          "Lokad.Image.pdb": "82301f2c02a5073b6339111e2d447c909c28643fd30426a2d9085715da4bdd6d",
+          "Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+          "WorkspaceScreen.dll": "ef621c6c865cec1ad7e83cbb08046e34b2108857c004e89f3c1320b526ae5651",
+          "Lokad.Image.dll": "4a1341b562cb58a6fd5492ac9b2302a89958812ddaf830d0fb5a32300d0e8e2b",
+          "WorkspaceScreen.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+          "WorkspaceScreen.deps.json": "47eb388977681c7986eaa6c3713467d9768571358c4ccfab785eb6aeb1fca197"
+        },
+        "coreBuilds": 1,
+        "internalBuilds": 1,
+        "harnessNativeSelectorBuilds": 0
+      },
+      "screen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": false,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 92540.80383333332,
+            "candidateMicroseconds": 92555.224,
+            "rawGain": -0.00015582495579624656,
+            "allocatedBytesBefore": [
+              13346256,
+              13346256,
+              13346256
+            ],
+            "allocatedBytesAfter": [
+              13346272,
+              13346272,
+              13346272
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 9275.425727272726,
+            "candidateMicroseconds": 9265.363515151515,
+            "rawGain": 0.0010848248282151474,
+            "allocatedBytesBefore": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "allocatedBytesAfter": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 63429.00283333334,
+            "candidateMicroseconds": 63457.51583333334,
+            "rawGain": -0.0004495262218597862,
+            "allocatedBytesBefore": [
+              10747848,
+              10747848,
+              10747848
+            ],
+            "allocatedBytesAfter": [
+              10655736,
+              10655736,
+              10655736
+            ],
+            "admittedPeakBefore": 3847888,
+            "admittedPeakAfter": 3847888,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 833.9597196969697,
+            "candidateMicroseconds": 836.7843725490196,
+            "rawGain": -0.0033870375095290672,
+            "allocatedBytesBefore": [
+              933440,
+              933440,
+              933440
+            ],
+            "allocatedBytesAfter": [
+              933440,
+              933440,
+              933440
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312716,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Fresh verified current baseline and one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      },
+      "windows": {
+        "focused": {
+          "normal": 296,
+          "scalar": 296
+        },
+        "sha256": "d62b47bdb1cb9833452bac1323a3f32562c681912a37707f9cc9e3aa001024ff"
+      }
+    }
+  ],
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionRestoredByteExact": true,
+      "sourceHashes": {
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ac3f7d1fc9a5be53f1d7790f60d0780865847138c79cf982c187801f8f633332",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "72704c1f75c04dd52dd2273c783c33d68294d5baa39c6455aed699e78e226225",
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500"
+      },
+      "librarySha256": "c45103a67611806d8f484a92e887cd10fb6b2097c70122719d3571363fb9d2bd",
+      "packageUnchanged": true,
+      "restorationBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionRestoredByteExact": true,
+      "sourceHashes": {
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ac3f7d1fc9a5be53f1d7790f60d0780865847138c79cf982c187801f8f633332",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "72704c1f75c04dd52dd2273c783c33d68294d5baa39c6455aed699e78e226225",
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500"
+      },
+      "librarySha256": "4a1341b562cb58a6fd5492ac9b2302a89958812ddaf830d0fb5a32300d0e8e2b",
+      "packageUnchanged": true,
+      "restorationBuilds": 0
+    },
+    "windowsFocused": {
+      "focused": {
+        "normal": 295,
+        "scalar": 295
+      },
+      "sha256": "c45103a67611806d8f484a92e887cd10fb6b2097c70122719d3571363fb9d2bd"
+    },
+    "linuxFocused": {
+      "project": "Lokad.Image",
+      "focused": {
+        "normal": 295,
+        "scalar": 295
+      },
+      "productionBuilds": 0,
+      "internalTestBuilds": 1,
+      "librarySha256": "4a1341b562cb58a6fd5492ac9b2302a89958812ddaf830d0fb5a32300d0e8e2b"
+    },
+    "productionBuilds": 0,
+    "internalTestBuildsEachOs": 1,
+    "retainedNewGeometryCases": 4,
+    "removedCandidateOnlyCases": 1,
+    "fullQualificationReused": "5483full/live checks perOS and same actual0.2.1package/three examples. Four new focused geometry cases are not a new full-suite claim.",
+    "packageSha256": "81f23e121dff2dc571ccc1c680594d6211ec241944e1d3dad8582ff25eb4aab5"
+  },
+  "memory": {
+    "arrayPayloadReductionBytesPerCompleteAlphaEncode": 92144,
+    "allocatedBytesReductionObserved": 92112,
+    "additionalOwnerObjectBytesPerAlphaEncode": 32,
+    "alphaAdmittedPeakBeforeAfter": 3847888,
+    "newRetainedStorage": 0,
+    "nativeAllocationMeasured": false,
+    "physicalHeapPeakMeasured": false
+  },
+  "workflow": {
+    "stages": 2,
+    "completePairedScreens": 2,
+    "directBatchesEach": 3,
+    "coreBuildsEachStageEachOs": 1,
+    "internalBuildsEachStageEachOs": 1,
+    "harnessNativeSelectorBuilds": 0,
+    "newPerformanceControls": 0,
+    "independentNativeConfirmations": 0,
+    "scoredReruns": 0,
+    "additionalBroadPackageChecks": 0
+  },
+  "rawArchive": {
+    "file": "webp-compact-green-inconclusive.tar.xz",
+    "bytes": 2005752,
+    "members": 201,
+    "sha256": "c604040410e9c73fda0eea72b353c61e23da4d216fcc1ec65d0a88923ce87499",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "webp-invariant-alpha-scoring.tar.xz",
+    "qualifiedProductionDependencySha256": "2a268262dcb92ffa5b239174937a0a06cccb846d173d3a7eb417c3e50f231dac",
+    "localMembersVerified": true
+  },
+  "next": "Reuse unchanged Luma4/coefficient writer/transform/rate source attribution for existing opaque VP8 photograph,4.198ms confirmed gap. Verify changed helper scope before treating old whole-profile fractions as current; establish a concrete shared-preparation or execution design before production edits.",
+  "publicationPostponed": true
+}

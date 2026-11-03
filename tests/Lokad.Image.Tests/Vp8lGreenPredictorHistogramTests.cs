@@ -67,29 +67,33 @@ public sealed class Vp8lGreenPredictorHistogramTests
         Assert.Equal("0fe435db47a1b0397a9502f72ddf651e5c2ef5e43c898e62a0c890f8f97e7689", Convert.ToHexStringLower(hash.GetHashAndReset()));
     }
 
-    private static uint[] Input(OperationContext context)
+    private static uint[] Input(OperationContext context, int width = 19, int height = 7)
     {
-        var rgba = OriginalPixels.Generate(19, 7, 8); context.Reserve(rgba.Length);
-        var result = new uint[19 * 7];
+        var rgba = OriginalPixels.Generate(width, height, 8); context.Reserve(rgba.Length);
+        var result = new uint[width * height];
         for (var i = 0; i < result.Length; i++) result[i] = (uint)rgba[i * 4 + 3] << 8;
         return result;
     }
 
     [Theory]
-    [InlineData(2, 3)]
-    [InlineData(5, 5)]
-    public void SpecializedAndGenericPlansKeepResidualsCostsAndLifetime(int minimum, int maximum)
+    [InlineData(19, 7, 2, 3)]
+    [InlineData(19, 7, 5, 5)]
+    [InlineData(1, 1, 2, 5)]
+    [InlineData(1, 17, 2, 5)]
+    [InlineData(17, 1, 2, 5)]
+    [InlineData(33, 19, 2, 5)]
+    public void SpecializedAndGenericPlansKeepResidualsCostsAndLifetime(int width, int height, int minimum, int maximum)
     {
         using var root = new TestMemoryBudget(2_000_000);
         using var generic = new OperationContext(new() { MemoryBudget = root }, default);
         using var specialized = new OperationContext(new() { MemoryBudget = root }, default);
-        var first = Input(generic); var second = Input(specialized);
-        using var a = Vp8lReferencePredictor.SelectAndApply(first, 19, minimum, maximum, false, generic);
-        using var b = Vp8lReferencePredictor.SelectAndApply(second, 19, minimum, maximum, false, specialized, greenOnly: true);
+        var first = Input(generic, width, height); var second = Input(specialized, width, height);
+        using var a = Vp8lReferencePredictor.SelectAndApply(first, width, minimum, maximum, false, generic);
+        using var b = Vp8lReferencePredictor.SelectAndApply(second, width, minimum, maximum, false, specialized, greenOnly: true);
         Assert.Equal((a.SelectedBits, a.StoredBits, a.EntropyCost), (b.SelectedBits, b.StoredBits, b.EntropyCost));
         Assert.True(a.Modes.SequenceEqual(b.Modes)); Assert.Equal(first, second);
-        Assert.Equal(2 * 19 * 7 * 4 + a.Modes.Length + b.Modes.Length, root.Bytes);
-        a.Dispose(); b.Dispose(); Assert.Equal(2 * 19 * 7 * 4, root.Bytes); Assert.False(root.IsDisposed);
+        Assert.Equal(2 * width * height * 4 + a.Modes.Length + b.Modes.Length, root.Bytes);
+        a.Dispose(); b.Dispose(); Assert.Equal(2 * width * height * 4, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Theory]
