@@ -20,8 +20,9 @@ Fresh independent baseline/candidate confirmation shows the original control
 saving **17.63 ms / 12.67% raw / 13.14% normalized**, with separated filtered and
 all-actual raw/normalized confidence. Allocation increases **194,816 B/op**.
 Original and diagram now pass and stop. Transparent controls retain gaps.
-Photograph and opaque confidence intervals cross parity; those costs remain
-uncertain and must be resolved before assuming an optimization is needed.
+Photograph and opaque global-bracket confidence intervals cross parity. The
+interleaved check below independently confirms both gaps; the table retains
+its original time estimates and wider intervals.
 
 Photograph's adverse **3.79 ms / 4.09% raw** point has overlapping raw/normalized
 intervals. Transparent RGBA8 has a separated **2.02 ms / 2.94% adverse raw** point,
@@ -78,3 +79,28 @@ Unchanged codec, resize, reading and text algorithms reuse applicable evidence.
 Full 282-path parity remains open; publication is postponed.
 Raw `webp-prepared-clustering-costs.tar.xz`: 32,565,148 B / 1,466 members,
 SHA256 `eb32174c05cb8d782f3a3da07b56212004a0e8ce55e1362425223674eae823fe`.
+
+## Interleaved confidence check
+
+Unchanged production, fixtures, compiled public benchmark methods and native
+workers pass every original packet/settings/ownership gate. Twelve fixed blocks
+place native sampling before and after two complete managed calls. Each ratio
+uses the fastest of six adjacent individual native samples, favoring the native
+reference; all twelve ratios enter the pinned BDN 99.9% interval without filtering.
+Native calibration/warmup stays outside measured complete operations. This reduces
+exposure to clock changes between global setup and cleanup; it does not establish
+host-frequency stability or replace the table's aggregate-time estimator.
+
+| Existing control | Mean paired ratio | 99.9% interval | Status |
+| --- | ---: | ---: | --- |
+| Photograph VP8L | 1.150 | 1.132–1.168 | Gap |
+| Opaque RGBA8 VP8L | 1.065 | 1.056–1.074 | Gap |
+
+This is complementary confidence evidence, not an incremental speedup or broader
+claim. No production, benchmark, selector or native rebuild; one small measurement
+tool needs two compile attempts to resolve a statistics reference. Windows/Linux,
+scalar and same-package proof remain valid. [Interleaved evidence](webp-interleaved-confidence-evidence.json)
+pins the raw pairs, original gates and producer identities. Raw
+`webp-interleaved-confidence.tar.xz`: 4,454,740 B / 51 members, SHA256
+`2b3cde75ef3260a8e0c75df6a02cb07f2c68c32b014896db540d27abd2285a7e`,
+mirrored and member-verified. Earlier adverse/global-bracket evidence is retained.

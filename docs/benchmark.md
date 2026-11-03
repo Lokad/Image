@@ -55,8 +55,10 @@ admitted peaks and retained scratch unchanged. Preparation stays timed.
 reuse unchanged green/cache run models while preserving measured color kernels.
 Original lossless saves **17.63 ms / 12.67% raw / 13.14% normalized**, with separated
 raw/normalized confidence, at **194,816 B/op** extra allocation. It now passes at
-**0.922x / upper0.934**; diagram also passes. Photograph/opaque confidence remains
-open; transparent8/16 retain gaps. Photograph's adverse 4.09% raw point has
+**0.922x / upper0.934**; diagram also passes. Photograph/opaque global-bracket intervals cross parity;
+the [interleaved check](../benchmarks/WEBP-PREPARED-CLUSTERING-COSTS.md#interleaved-confidence-check)
+independently confirms both gaps using all twelve paired ratios. The table retains
+its global-bracket time estimates. Transparent8/16 retain gaps. Photograph's adverse 4.09% raw point has
 overlapping intervals. Transparent8's separated adverse 2.94% raw point accompanies
 a 5.35% slower native clock; normalized intervals overlap, so no causal gain or
 regression is claimed. Six current costs replace the preceding ownership stage.

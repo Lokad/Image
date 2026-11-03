@@ -340,6 +340,13 @@ def render():
     webp_current = json.loads((ROOT / 'benchmarks/webp-prepared-clustering-costs-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['exactPacketsPreserved']
     assert webp_current['independentQuietConfirmation']
+    paired_webp = json.loads((ROOT / 'benchmarks/webp-interleaved-confidence-evidence.json').read_text(encoding='utf-8'))
+    assert not paired_webp['productionChanged'] and paired_webp['productionBuilds'] == 0
+    for case in paired_webp['cases']:
+        assert case['librarySha256'] == webp_current['producers']['linuxSha256']
+        assert case['pairs'] == case['statistics']['N'] == 12
+        assert case['statistics']['ConfidenceInterval']['Lower'] > 1
+        assert case['allOriginalGatesPassed'] and case['quietGuardsPassed']
     vp8l_bins = json.loads((ROOT / 'benchmarks/warm-vp8l-color-bin-reuse-evidence.json').read_text(encoding='utf-8'))
     assert vp8l_bins['acceptance']['retained'] and vp8l_bins['independentQuietConfirmation']
     assert not vp8l_bins['acceptance']['normalizedConfidenceSeparated']
@@ -1828,8 +1835,10 @@ admitted peaks and retained scratch unchanged. Preparation stays timed.
 reuse unchanged green/cache run models while preserving measured color kernels.
 Original lossless saves **17.63 ms / 12.67% raw / 13.14% normalized**, with separated
 raw/normalized confidence, at **194,816 B/op** extra allocation. It now passes at
-**0.922x / upper0.934**; diagram also passes. Photograph/opaque confidence remains
-open; transparent8/16 retain gaps. Photograph's adverse 4.09% raw point has
+**0.922x / upper0.934**; diagram also passes. Photograph/opaque global-bracket intervals cross parity;
+the [interleaved check](../benchmarks/WEBP-PREPARED-CLUSTERING-COSTS.md#interleaved-confidence-check)
+independently confirms both gaps using all twelve paired ratios. The table retains
+its global-bracket time estimates. Transparent8/16 retain gaps. Photograph's adverse 4.09% raw point has
 overlapping intervals. Transparent8's separated adverse 2.94% raw point accompanies
 a 5.35% slower native clock; normalized intervals overlap, so no causal gain or
 regression is claimed. Six current costs replace the preceding ownership stage.
