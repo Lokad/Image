@@ -1,0 +1,785 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-11-03",
+  "round": "CTA128",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "timingClaim": false,
+  "allocationGainClaim": false,
+  "scope": "Bounded grouped source-tuple histogram preparation on existing complete lossless/transparent encode controls.",
+  "design": {
+    "maximumSamples": 64,
+    "hashSlots": 96,
+    "borrowedTupleBytes": 768,
+    "newOwnedCapacity": 0,
+    "redKey": "R/G",
+    "blueKey": "RGB",
+    "alphaIgnoredOnlyForHistogram": true,
+    "exactSignedByteFloorModuloArithmetic": true,
+    "preserved": "Source application/history, coefficient order/preferences, trial cache, integer cost arithmetic, tie-breaking and original large-tile fallback."
+  },
+  "producer": {
+    "linuxLibrarySha256": "3c1f65935d2d6498127191edc6537e787d129612b6d9c253a466257794728054",
+    "windowsLibrarySha256": "5873b08854076df1939c87a9baaa48a33aa49aeebbd60ae13d1554a23ce1758c"
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "diagnosticScreen": true,
+    "qualifiedCpuGainClaim": false,
+    "builds": 0,
+    "unchangedBeforeReused": false,
+    "existingControls": 4,
+    "newPerformanceControls": 0,
+    "quietGuardsPassed": true,
+    "cases": [
+      {
+        "caseId": "photograph",
+        "baselineMicroseconds": 90773.01366666667,
+        "candidateMicroseconds": 92322.41966666667,
+        "rawGain": -0.01706901575053643,
+        "allocatedBytesBefore": [
+          13346256,
+          13346256,
+          13346256
+        ],
+        "allocatedBytesAfter": [
+          13346256,
+          13346256,
+          13346256
+        ],
+        "admittedPeakBefore": 10166464,
+        "admittedPeakAfter": 10166464,
+        "exactPacket": true
+      },
+      {
+        "caseId": "diagram",
+        "baselineMicroseconds": 8889.475303030304,
+        "candidateMicroseconds": 9219.44796969697,
+        "rawGain": -0.037119476169103605,
+        "allocatedBytesBefore": [
+          6255920,
+          6255920,
+          6255920
+        ],
+        "allocatedBytesAfter": [
+          6255920,
+          6255920,
+          6255920
+        ],
+        "admittedPeakBefore": 4802292,
+        "admittedPeakAfter": 4802292,
+        "exactPacket": true
+      },
+      {
+        "caseId": "alpha",
+        "baselineMicroseconds": 62368.357833333335,
+        "candidateMicroseconds": 63045.0605,
+        "rawGain": -0.010850095948894634,
+        "allocatedBytesBefore": [
+          10747848,
+          10747848,
+          10747848
+        ],
+        "allocatedBytesAfter": [
+          10747848,
+          10747848,
+          10747848
+        ],
+        "admittedPeakBefore": 3847888,
+        "admittedPeakAfter": 3847888,
+        "exactPacket": true
+      },
+      {
+        "caseId": "authored-bars",
+        "baselineMicroseconds": 789.1757727272728,
+        "candidateMicroseconds": 826.6615670498085,
+        "rawGain": -0.0474999304565451,
+        "allocatedBytesBefore": [
+          933440,
+          933440,
+          933440
+        ],
+        "allocatedBytesAfter": [
+          933440,
+          933440,
+          933440
+        ],
+        "admittedPeakBefore": 312716,
+        "admittedPeakAfter": 312716,
+        "exactPacket": true
+      }
+    ],
+    "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Fresh verified current baseline and one candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+  },
+  "ordinaryShort": {
+    "cases": {
+      "baseline": {
+        "meanMicroseconds": 128458.80883333333,
+        "nativeMeanMicroseconds": 120180.956,
+        "actuals": [
+          129484114.5,
+          127859054,
+          128033258
+        ],
+        "filtered": {
+          "OriginalValues": [
+            129484114.5,
+            127859054,
+            128033258
+          ],
+          "N": 3,
+          "Min": 127859054,
+          "LowerFence": 126727360.625,
+          "Q1": 127946156,
+          "Median": 128033258,
+          "Mean": 128458808.83333333,
+          "Q3": 128758686.25,
+          "UpperFence": 129977481.625,
+          "Max": 129484114.5,
+          "InterquartileRange": 812530.25,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 515113.43119034905,
+          "Variance": 796025540978.0834,
+          "StandardDeviation": 892202.6344828194,
+          "Skewness": 0.36845805535863174,
+          "Kurtosis": 0.6666666666666747,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 128458808.83333333,
+            "StandardError": 515113.43119034905,
+            "Level": 12,
+            "Margin": 16277097.359374436,
+            "Lower": 112181711.4739589,
+            "Upper": 144735906.19270778
+          },
+          "Percentiles": {
+            "P0": 127859054,
+            "P25": 127946156,
+            "P50": 128033258,
+            "P67": 128526549.21000001,
+            "P80": 128903771.9,
+            "P85": 129048857.55,
+            "P90": 129193943.2,
+            "P95": 129339028.85,
+            "P100": 129484114.5
+          }
+        },
+        "allActual": {
+          "OriginalValues": [
+            129484114.5,
+            127859054,
+            128033258
+          ],
+          "N": 3,
+          "Min": 127859054,
+          "LowerFence": 126727360.625,
+          "Q1": 127946156,
+          "Median": 128033258,
+          "Mean": 128458808.83333333,
+          "Q3": 128758686.25,
+          "UpperFence": 129977481.625,
+          "Max": 129484114.5,
+          "InterquartileRange": 812530.25,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 515113.43119034905,
+          "Variance": 796025540978.0834,
+          "StandardDeviation": 892202.6344828194,
+          "Skewness": 0.36845805535863174,
+          "Kurtosis": 0.6666666666666747,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 128458808.83333333,
+            "StandardError": 515113.43119034905,
+            "Level": 12,
+            "Margin": 16277097.359374436,
+            "Lower": 112181711.4739589,
+            "Upper": 144735906.19270778
+          },
+          "Percentiles": {
+            "P0": 127859054,
+            "P25": 127946156,
+            "P50": 128033258,
+            "P67": 128526549.21000001,
+            "P80": 128903771.9,
+            "P85": 129048857.55,
+            "P90": 129193943.2,
+            "P95": 129339028.85,
+            "P100": 129484114.5
+          }
+        },
+        "nativeSamples": [
+          120092095,
+          120761629,
+          120518090,
+          119625928,
+          119687192,
+          120400802
+        ],
+        "allocatedBytesPerOperation": 24899424,
+        "packetBytes": 183812,
+        "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "librarySha256": "3257ef9658d99c669153fc15a14f410ef714e2ca99220083037252d8c0034c89"
+      },
+      "candidate": {
+        "meanMicroseconds": 131290.22483333334,
+        "nativeMeanMicroseconds": 120996.4045,
+        "actuals": [
+          132031884,
+          130986041,
+          130852749.5
+        ],
+        "filtered": {
+          "OriginalValues": [
+            132031884,
+            130986041,
+            130852749.5
+          ],
+          "N": 3,
+          "Min": 130852749.5,
+          "LowerFence": 130035044.375,
+          "Q1": 130919395.25,
+          "Median": 130986041,
+          "Mean": 131290224.83333333,
+          "Q3": 131508962.5,
+          "UpperFence": 132393313.375,
+          "Max": 132031884,
+          "InterquartileRange": 589567.25,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 372820.5089220027,
+          "Variance": 416985395618.58325,
+          "StandardDeviation": 645744.0635565945,
+          "Skewness": 0.366532763441642,
+          "Kurtosis": 0.6666666666666783,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 131290224.83333333,
+            "StandardError": 372820.5089220027,
+            "Level": 12,
+            "Margin": 11780775.560970578,
+            "Lower": 119509449.27236275,
+            "Upper": 143071000.39430392
+          },
+          "Percentiles": {
+            "P0": 130852749.5,
+            "P25": 130919395.25,
+            "P50": 130986041,
+            "P67": 131341627.62,
+            "P80": 131613546.8,
+            "P85": 131718131.1,
+            "P90": 131822715.39999999,
+            "P95": 131927299.7,
+            "P100": 132031884
+          }
+        },
+        "allActual": {
+          "OriginalValues": [
+            132031884,
+            130986041,
+            130852749.5
+          ],
+          "N": 3,
+          "Min": 130852749.5,
+          "LowerFence": 130035044.375,
+          "Q1": 130919395.25,
+          "Median": 130986041,
+          "Mean": 131290224.83333333,
+          "Q3": 131508962.5,
+          "UpperFence": 132393313.375,
+          "Max": 132031884,
+          "InterquartileRange": 589567.25,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 372820.5089220027,
+          "Variance": 416985395618.58325,
+          "StandardDeviation": 645744.0635565945,
+          "Skewness": 0.366532763441642,
+          "Kurtosis": 0.6666666666666783,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 131290224.83333333,
+            "StandardError": 372820.5089220027,
+            "Level": 12,
+            "Margin": 11780775.560970578,
+            "Lower": 119509449.27236275,
+            "Upper": 143071000.39430392
+          },
+          "Percentiles": {
+            "P0": 130852749.5,
+            "P25": 130919395.25,
+            "P50": 130986041,
+            "P67": 131341627.62,
+            "P80": 131613546.8,
+            "P85": 131718131.1,
+            "P90": 131822715.39999999,
+            "P95": 131927299.7,
+            "P100": 132031884
+          }
+        },
+        "nativeSamples": [
+          121342321,
+          120203175,
+          120810586,
+          121118193,
+          121451789,
+          121052363
+        ],
+        "allocatedBytesPerOperation": 24899424,
+        "packetBytes": 183812,
+        "packetSha256": "08ddac115f1770d778e6dbc76373440224b32e6f93b616605e234c63206eebde",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "librarySha256": "3c1f65935d2d6498127191edc6537e787d129612b6d9c253a466257794728054"
+      }
+    },
+    "rawGainPoint": -0.02204143122386859,
+    "normalizedGainPoint": -0.015153440167660515,
+    "qualifiedCpuGainClaim": false
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionRestoredByteExactly": true,
+      "productionBuilds": 0,
+      "testBuilds": 0,
+      "restoredAssets": {
+        "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "9b219077dfdb140417c99052c9a0253b8f2b0de083a713e0d02bae4eb94a6ec1",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "085a138f49ce79e94831cb18560d9089561fa07da26a8c384c158fe8fcd0699e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "0d815b544ed5ca9b301a461b1d012dee2482b69674542697c4792fb5f26ddb3a",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "817c97bf24c570fad54646de0c8657020e0d9c6a8efb13a37e3a15f61911de2a",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "fae595f2cc9043947951d51e33a97f7ea27bbf6f062c1ffc40dc8100cd82fe4d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "dad8056a3223afc451ad31495970a25e2931833225d0e3647b205960deec688c"
+      },
+      "candidateOnlyFilesRemoved": [
+        "src/Lokad.Image/Internal/Vp8lColorTuples.cs",
+        "tests/Lokad.Image.Tests/Vp8lColorTupleTests.cs"
+      ],
+      "packageUnchanged": true,
+      "librarySha256": "085a138f49ce79e94831cb18560d9089561fa07da26a8c384c158fe8fcd0699e"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionRestoredByteExactly": true,
+      "productionBuilds": 0,
+      "testBuilds": 0,
+      "restoredAssets": {
+        "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "9b219077dfdb140417c99052c9a0253b8f2b0de083a713e0d02bae4eb94a6ec1",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "3257ef9658d99c669153fc15a14f410ef714e2ca99220083037252d8c0034c89",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "2b88f28522d3f0ea2d203caca154f848167cc64fabed80ae24f6486eb46ae321",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "891762c42e2987edfc049cf56efceae0164b74e34bc490c87155bb33d1ae8ba3",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "b07c99cda8c020f6927efdb1db2c1c58c23f358ff4157b18ae74a8c8bff983f0",
+        "tmp/benchmark-source.json": "73c5522e9b47635a4bed279d158aed9401e1e2c64a97138b7b3af2d05a55ce03"
+      },
+      "candidateOnlyFilesRemoved": [
+        "src/Lokad.Image/Internal/Vp8lColorTuples.cs",
+        "tests/Lokad.Image.Tests/Vp8lColorTupleTests.cs"
+      ],
+      "packageUnchanged": true,
+      "librarySha256": "3257ef9658d99c669153fc15a14f410ef714e2ca99220083037252d8c0034c89"
+    }
+  },
+  "qualification": {
+    "candidateAffectedInternalEachModeEachOs": 299,
+    "newCandidateTests": 4,
+    "candidateOnlyTestsRemoved": true,
+    "independentDenseHistogramOracle": true,
+    "forced64HashCollisionsAndZeroKey": true,
+    "noWarmHelperAllocation": true,
+    "fullChecksEachOsReused": 5497,
+    "sameActualPackageBothOsReused": true,
+    "productionRestorationBuilds": 0,
+    "testRestorationBuilds": 0,
+    "source": "resize-overwrite-output-storage-evidence.json",
+    "packageSha256": "cd5e3b37bc82e7bea0acbf69215872e4aedeb9256ed210138c192efe54539c18"
+  },
+  "decision": "Restore the qualified implementation: no useful complete-operation gain or allocation/peak saving earns the weighted preparation machinery. No independent confirmation or scored rerun. These short observations do not establish a causal regression or a permanent family ban.",
+  "next": "Bounded clustering-population audit: distinguish existing color support from omitted green/distance scans; count setup/merge/storage and exact prospective costs before a production redesign.",
+  "rawArchive": {
+    "file": "webp-source-tuple-preparation-inconclusive.tar.xz",
+    "bytes": 7796260,
+    "members": 285,
+    "sha256": "114c66e2e8ac6fcdc8710dcabd6ff116da650c389f98da00093175f1342bf706",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "resize-overwrite-output-storage.tar.xz",
+    "qualifiedProductionDependencySha256": "ba460618fcec926a216ae5f03701ab7752dda0019b7945b97f41d1072446c21e",
+    "countDependency": "webp-source-tuple-audit.tar.xz",
+    "countDependencySha256": "6c9dc6727116bb4bfcbd45037f45dfbe6e5ca11241c5a8e2e2a6c03e0a016124",
+    "localMembersVerified": true
+  },
+  "subsequentClusteringAudit": {
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "privateProjectionBuilds": 1,
+    "completeEncodes": 6,
+    "quietGuardsPassed": true,
+    "allPacketsSourcesAndRootCleanupExact": true,
+    "qualifiedTimingClaim": false,
+    "allocationClaim": false,
+    "exactProspectiveSupportCosts": 185163,
+    "families": [
+      {
+        "Operation": "photograph",
+        "Tiles": 2145,
+        "Populations": 2145,
+        "CacheBits": 0,
+        "HistogramWords": 833,
+        "GreenSize": 280,
+        "ExistingSupportWords": 8,
+        "AdditionalSupportWords": 6,
+        "InitialPreparations": 2142,
+        "ReplayPreparations": 2142,
+        "Merges": 2133,
+        "Banks": [
+          {
+            "Alphabet": 280,
+            "Calls": 22453,
+            "DenseBinVisits": 6286840,
+            "UnionNonzeroVisits": 1848266,
+            "Runs": 1953277,
+            "ZeroRuns": 301490,
+            "Empty": 0,
+            "AtMostQuarter": 7027,
+            "AtMostHalf": 13263,
+            "MoreThanHalf": 2163,
+            "MaximumUnionNonzero": 163,
+            "ExactSparseCosts": 22453
+          },
+          {
+            "Alphabet": 256,
+            "Calls": 22422,
+            "DenseBinVisits": 5740032,
+            "UnionNonzeroVisits": 899798,
+            "Runs": 1005233,
+            "ZeroRuns": 191483,
+            "Empty": 0,
+            "AtMostQuarter": 19970,
+            "AtMostHalf": 2452,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 110,
+            "ExactSparseCosts": 22422
+          },
+          {
+            "Alphabet": 256,
+            "Calls": 22422,
+            "DenseBinVisits": 5740032,
+            "UnionNonzeroVisits": 793230,
+            "Runs": 919010,
+            "ZeroRuns": 192159,
+            "Empty": 0,
+            "AtMostQuarter": 17712,
+            "AtMostHalf": 4710,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 107,
+            "ExactSparseCosts": 22422
+          },
+          {
+            "Alphabet": 0,
+            "Calls": 0,
+            "DenseBinVisits": 0,
+            "UnionNonzeroVisits": 0,
+            "Runs": 0,
+            "ZeroRuns": 0,
+            "Empty": 0,
+            "AtMostQuarter": 0,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 0,
+            "ExactSparseCosts": 0
+          },
+          {
+            "Alphabet": 40,
+            "Calls": 3338,
+            "DenseBinVisits": 133520,
+            "UnionNonzeroVisits": 82014,
+            "Runs": 87273,
+            "ZeroRuns": 13789,
+            "Empty": 0,
+            "AtMostQuarter": 270,
+            "AtMostHalf": 646,
+            "MoreThanHalf": 2422,
+            "MaximumUnionNonzero": 32,
+            "ExactSparseCosts": 3338
+          }
+        ]
+      },
+      {
+        "Operation": "ordinary",
+        "Tiles": 2145,
+        "Populations": 2145,
+        "CacheBits": 10,
+        "HistogramWords": 2112,
+        "GreenSize": 1304,
+        "ExistingSupportWords": 12,
+        "AdditionalSupportWords": 22,
+        "InitialPreparations": 2145,
+        "ReplayPreparations": 2145,
+        "Merges": 2136,
+        "Banks": [
+          {
+            "Alphabet": 1304,
+            "Calls": 24876,
+            "DenseBinVisits": 32438304,
+            "UnionNonzeroVisits": 15500456,
+            "Runs": 17802620,
+            "ZeroRuns": 3215279,
+            "Empty": 0,
+            "AtMostQuarter": 8391,
+            "AtMostHalf": 5713,
+            "MoreThanHalf": 10772,
+            "MaximumUnionNonzero": 1180,
+            "ExactSparseCosts": 24876
+          },
+          {
+            "Alphabet": 256,
+            "Calls": 23211,
+            "DenseBinVisits": 5942016,
+            "UnionNonzeroVisits": 119895,
+            "Runs": 145511,
+            "ZeroRuns": 26021,
+            "Empty": 0,
+            "AtMostQuarter": 23211,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 8,
+            "ExactSparseCosts": 23211
+          },
+          {
+            "Alphabet": 256,
+            "Calls": 23161,
+            "DenseBinVisits": 5929216,
+            "UnionNonzeroVisits": 116673,
+            "Runs": 141886,
+            "ZeroRuns": 25539,
+            "Empty": 0,
+            "AtMostQuarter": 23161,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 7,
+            "ExactSparseCosts": 23161
+          },
+          {
+            "Alphabet": 256,
+            "Calls": 23311,
+            "DenseBinVisits": 5967616,
+            "UnionNonzeroVisits": 2053954,
+            "Runs": 2158672,
+            "ZeroRuns": 217243,
+            "Empty": 0,
+            "AtMostQuarter": 2877,
+            "AtMostHalf": 18056,
+            "MoreThanHalf": 2378,
+            "MaximumUnionNonzero": 145,
+            "ExactSparseCosts": 23311
+          },
+          {
+            "Alphabet": 40,
+            "Calls": 16051,
+            "DenseBinVisits": 642040,
+            "UnionNonzeroVisits": 350537,
+            "Runs": 408780,
+            "ZeroRuns": 85496,
+            "Empty": 0,
+            "AtMostQuarter": 2312,
+            "AtMostHalf": 3344,
+            "MoreThanHalf": 10395,
+            "MaximumUnionNonzero": 33,
+            "ExactSparseCosts": 16051
+          }
+        ]
+      },
+      {
+        "Operation": "alpha",
+        "Tiles": 153,
+        "Populations": 153,
+        "CacheBits": 10,
+        "HistogramWords": 1602,
+        "GreenSize": 1304,
+        "ExistingSupportWords": 4,
+        "AdditionalSupportWords": 22,
+        "InitialPreparations": 153,
+        "ReplayPreparations": 153,
+        "Merges": 147,
+        "Banks": [
+          {
+            "Alphabet": 1304,
+            "Calls": 1760,
+            "DenseBinVisits": 2295040,
+            "UnionNonzeroVisits": 423545,
+            "Runs": 719540,
+            "ZeroRuns": 339128,
+            "Empty": 0,
+            "AtMostQuarter": 1548,
+            "AtMostHalf": 212,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 519,
+            "ExactSparseCosts": 1760
+          },
+          {
+            "Alphabet": 0,
+            "Calls": 0,
+            "DenseBinVisits": 0,
+            "UnionNonzeroVisits": 0,
+            "Runs": 0,
+            "ZeroRuns": 0,
+            "Empty": 0,
+            "AtMostQuarter": 0,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 0,
+            "ExactSparseCosts": 0
+          },
+          {
+            "Alphabet": 0,
+            "Calls": 0,
+            "DenseBinVisits": 0,
+            "UnionNonzeroVisits": 0,
+            "Runs": 0,
+            "ZeroRuns": 0,
+            "Empty": 0,
+            "AtMostQuarter": 0,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 0,
+            "ExactSparseCosts": 0
+          },
+          {
+            "Alphabet": 256,
+            "Calls": 66,
+            "DenseBinVisits": 16896,
+            "UnionNonzeroVisits": 99,
+            "Runs": 165,
+            "ZeroRuns": 66,
+            "Empty": 0,
+            "AtMostQuarter": 66,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 2,
+            "ExactSparseCosts": 66
+          },
+          {
+            "Alphabet": 40,
+            "Calls": 1456,
+            "DenseBinVisits": 58240,
+            "UnionNonzeroVisits": 33928,
+            "Runs": 37866,
+            "ZeroRuns": 5094,
+            "Empty": 0,
+            "AtMostQuarter": 25,
+            "AtMostHalf": 499,
+            "MoreThanHalf": 932,
+            "MaximumUnionNonzero": 30,
+            "ExactSparseCosts": 1456
+          }
+        ]
+      },
+      {
+        "Operation": "alpha",
+        "Tiles": 153,
+        "Populations": 153,
+        "CacheBits": 5,
+        "HistogramWords": 610,
+        "GreenSize": 312,
+        "ExistingSupportWords": 4,
+        "AdditionalSupportWords": 6,
+        "InitialPreparations": 153,
+        "ReplayPreparations": 153,
+        "Merges": 152,
+        "Banks": [
+          {
+            "Alphabet": 312,
+            "Calls": 315,
+            "DenseBinVisits": 98280,
+            "UnionNonzeroVisits": 7459,
+            "Runs": 9744,
+            "ZeroRuns": 3004,
+            "Empty": 0,
+            "AtMostQuarter": 315,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 31,
+            "ExactSparseCosts": 315
+          },
+          {
+            "Alphabet": 0,
+            "Calls": 0,
+            "DenseBinVisits": 0,
+            "UnionNonzeroVisits": 0,
+            "Runs": 0,
+            "ZeroRuns": 0,
+            "Empty": 0,
+            "AtMostQuarter": 0,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 0,
+            "ExactSparseCosts": 0
+          },
+          {
+            "Alphabet": 0,
+            "Calls": 0,
+            "DenseBinVisits": 0,
+            "UnionNonzeroVisits": 0,
+            "Runs": 0,
+            "ZeroRuns": 0,
+            "Empty": 0,
+            "AtMostQuarter": 0,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 0,
+            "ExactSparseCosts": 0
+          },
+          {
+            "Alphabet": 256,
+            "Calls": 6,
+            "DenseBinVisits": 1536,
+            "UnionNonzeroVisits": 12,
+            "Runs": 18,
+            "ZeroRuns": 6,
+            "Empty": 0,
+            "AtMostQuarter": 6,
+            "AtMostHalf": 0,
+            "MoreThanHalf": 0,
+            "MaximumUnionNonzero": 2,
+            "ExactSparseCosts": 6
+          },
+          {
+            "Alphabet": 40,
+            "Calls": 315,
+            "DenseBinVisits": 12600,
+            "UnionNonzeroVisits": 7527,
+            "Runs": 8233,
+            "ZeroRuns": 940,
+            "Empty": 0,
+            "AtMostQuarter": 10,
+            "AtMostHalf": 44,
+            "MoreThanHalf": 261,
+            "MaximumUnionNonzero": 27,
+            "ExactSparseCosts": 315
+          }
+        ]
+      }
+    ],
+    "rawArchive": {
+      "file": "webp-clustering-support-audit.tar.xz",
+      "bytes": 456564,
+      "members": 28,
+      "sha256": "d4c96779e9a39890b651bfd8be23ce17e203425ee14b330afc2253bcde6b4af9",
+      "vmMembersVerified": true,
+      "qualifiedProductionDependency": "resize-overwrite-output-storage.tar.xz",
+      "qualifiedProductionDependencySha256": "ba460618fcec926a216ae5f03701ab7752dda0019b7945b97f41d1072446c21e",
+      "localMembersVerified": true
+    },
+    "decision": "Prototype green support within the existing per-population owner. Existing color support stays; leave the short mostly dense distance bank unchanged. Dense union fallback uses actual support. Include preparation, merge, replay and admitted capacity costs."
+  }
+}
