@@ -1,0 +1,1004 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "version": "0.2.1",
+  "date": "2026-11-03",
+  "accepted": false,
+  "productionRestored": true,
+  "measurement": "inconclusive",
+  "warmParityComplete": false,
+  "requiredMaterialPaths": 282,
+  "hypothesis": "Prepare acquired contiguous PNG regions once, execute greedy/lazy search with local Int32 coordinates, retain wide logical state and publish position in finally. No new storage, cache, session or altered matching/cancellation.",
+  "profiling": {
+    "currentImmutableCoreSha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+    "statisticalTiming": false,
+    "allBuilds": 0,
+    "cases": [
+      {
+        "caseId": "Encode8",
+        "workloadSamples": 716,
+        "topExclusive": [
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.ProcessLazy(bool)",
+            "samples": 634,
+            "fraction": 0.8854748603351955
+          },
+          {
+            "method": "System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+            "samples": 20,
+            "fraction": 0.027932960893854747
+          },
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.Block(bool)",
+            "samples": 19,
+            "fraction": 0.02653631284916201
+          },
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.Put(int32,int32)",
+            "samples": 18,
+            "fraction": 0.025139664804469275
+          },
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.WriteTokens(unsigned int8[],unsigned int8[])",
+            "samples": 13,
+            "fraction": 0.018156424581005588
+          },
+          {
+            "method": "Lokad.Image.Internal.DeflateHuffman.Lengths(int32[],int32,class Lokad.Image.Internal.OperationContext)",
+            "samples": 5,
+            "fraction": 0.006983240223463687
+          },
+          {
+            "method": "System.Buffer.ZeroMemoryInternal(unsigned int8&,unsigned int)",
+            "samples": 4,
+            "fraction": 0.00558659217877095
+          },
+          {
+            "method": "Lokad.Image.Internal.DeflateHuffman.<Lengths>g__Sink|1_1(int32,value class <>c__DisplayClass1_0&)",
+            "samples": 2,
+            "fraction": 0.002793296089385475
+          }
+        ]
+      },
+      {
+        "caseId": "EncodeFast8",
+        "workloadSamples": 171,
+        "topExclusive": [
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.ProcessFast(bool)",
+            "samples": 94,
+            "fraction": 0.5497076023391813
+          },
+          {
+            "method": "System.Buffer.MemmoveInternal(unsigned int8&,unsigned int8&,unsigned int)",
+            "samples": 21,
+            "fraction": 0.12280701754385964
+          },
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.Put(int32,int32)",
+            "samples": 15,
+            "fraction": 0.08771929824561403
+          },
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.WriteTokens(unsigned int8[],unsigned int8[])",
+            "samples": 14,
+            "fraction": 0.08187134502923976
+          },
+          {
+            "method": "Lokad.Image.Internal.DeflateHuffman.Lengths(int32[],int32,class Lokad.Image.Internal.OperationContext)",
+            "samples": 6,
+            "fraction": 0.03508771929824561
+          },
+          {
+            "method": "System.Buffer.ZeroMemoryInternal(unsigned int8&,unsigned int)",
+            "samples": 6,
+            "fraction": 0.03508771929824561
+          },
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.Block(bool)",
+            "samples": 6,
+            "fraction": 0.03508771929824561
+          },
+          {
+            "method": "Lokad.Image.Internal.PngDeflater.SlideLinks(unsigned int16[])",
+            "samples": 2,
+            "fraction": 0.011695906432748537
+          }
+        ]
+      }
+    ]
+  },
+  "producers": {
+    "baselineLinuxSha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+    "candidateLinuxSha256": "9764356076f13c8dfa36eb32a7aafa305e1c9c405c9b128cd228db425c9d21cc",
+    "candidateWindowsSha256": "50123e25101be506bc3f7530cd4244abb83f3fd7a3115f2a3421736a915af3a2",
+    "candidateSources": {
+      "src/Lokad.Image/Internal/PngDeflater.cs": "416e0394467d4a3cad5c31f6a0728541646bef5a1fd6f1ceaf751b02f4ddc7dc"
+    }
+  },
+  "short": [
+    {
+      "caseId": "Encode8",
+      "rawGain": 0.0002215871003921066,
+      "normalizedGain": -0.0015997585741718279,
+      "absoluteMicroseconds": 4.082875,
+      "nativeClockShift": -0.0018184366149975872,
+      "rawGainConfidenceSeparates": false,
+      "normalizedGainConfidenceSeparates": false,
+      "normalizedLossConfidenceSeparates": false,
+      "allocationBefore": 932516,
+      "allocationAfter": 932516
+    },
+    {
+      "caseId": "EncodeFast8",
+      "rawGain": 0.030554617810825246,
+      "normalizedGain": 0.02370971766630492,
+      "absoluteMicroseconds": 197.92716666666698,
+      "nativeClockShift": -0.007011132107305751,
+      "rawGainConfidenceSeparates": false,
+      "normalizedGainConfidenceSeparates": false,
+      "normalizedLossConfidenceSeparates": false,
+      "allocationBefore": 951212,
+      "allocationAfter": 951212
+    }
+  ],
+  "independentConfirmation": [
+    {
+      "caseId": "Encode8",
+      "rawGain": -0.0861636891797295,
+      "normalizedGain": 0.005498972504940469,
+      "absoluteMicroseconds": -1589.1674545454532,
+      "nativeClockShift": 0.09216949922671169,
+      "rawGainConfidenceSeparates": false,
+      "normalizedGainConfidenceSeparates": false,
+      "normalizedLossConfidenceSeparates": false,
+      "allocationBefore": 932516,
+      "allocationAfter": 932516
+    },
+    {
+      "caseId": "EncodeFast8",
+      "rawGain": 0.09380829077871888,
+      "normalizedGain": 0.039413995316824435,
+      "absoluteMicroseconds": 594.9774340909096,
+      "nativeClockShift": -0.05662615861224729,
+      "rawGainConfidenceSeparates": true,
+      "normalizedGainConfidenceSeparates": false,
+      "normalizedLossConfidenceSeparates": false,
+      "allocationBefore": 951212,
+      "allocationAfter": 951212
+    }
+  ],
+  "targetedInterleaved": {
+    "reason": "Native clock shifts +9.22%/-5.66% leave attribution uncertain in separate complete jobs.",
+    "method": "Existing CLS148 method, fixed12pairs,2complete public Managed calls/pair,fastest6adjacent native samples,allpairs without filtering,pinned BenchmarkDotNet confidence.",
+    "observations": {
+      "baseline-Encode8": {
+        "statistics": {
+          "OriginalValues": [
+            1.0916836587380083,
+            1.145166379902856,
+            1.0892777149738277,
+            1.0901434287028333,
+            1.1144293500758715,
+            1.11752544414234,
+            1.0820324328227207,
+            1.0925003971719467,
+            1.0716279036764977,
+            1.0720487792754279,
+            1.0744534183613883,
+            1.0817558508791028
+          ],
+          "N": 12,
+          "Min": 1.0716279036764977,
+          "LowerFence": 1.0528516537772936,
+          "Q1": 1.0799302427496742,
+          "Median": 1.0897105718383306,
+          "Mean": 1.0935537298935687,
+          "Q3": 1.0979826353979278,
+          "UpperFence": 1.1250612243703082,
+          "Max": 1.145166379902856,
+          "InterquartileRange": 0.018052392648253646,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            1.145166379902856
+          ],
+          "AllOutliers": [
+            1.145166379902856
+          ],
+          "StandardError": 0.006329810584800242,
+          "Variance": 0.0004807980244733901,
+          "StandardDeviation": 0.021927107070322572,
+          "Skewness": 1.0245078290384595,
+          "Kurtosis": 2.967506488617421,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1.0935537298935687,
+            "StandardError": 0.006329810584800242,
+            "Level": 12,
+            "Margin": 0.028085238772812004,
+            "Lower": 1.0654684911207566,
+            "Upper": 1.1216389686663808
+          },
+          "Percentiles": {
+            "P0": 1.0716279036764977,
+            "P25": 1.0799302427496742,
+            "P50": 1.0897105718383306,
+            "P67": 1.0919858519585655,
+            "P80": 1.1100435594950866,
+            "P85": 1.1155129829991355,
+            "P90": 1.117215834735693,
+            "P95": 1.129963865234572,
+            "P100": 1.145166379902856
+          }
+        },
+        "managedStatistics": {
+          "OriginalValues": [
+            19969866.5,
+            21093042,
+            20048811,
+            20106138,
+            19255360.5,
+            19197177,
+            18582531.5,
+            18775238.5,
+            18425489,
+            18429139.5,
+            18457652.5,
+            18598921.5
+          ],
+          "N": 12,
+          "Min": 18425489,
+          "LowerFence": 16393875.4375,
+          "Q1": 18551311.75,
+          "Median": 18986207.75,
+          "Mean": 19244947.291666668,
+          "Q3": 19989602.625,
+          "UpperFence": 22147038.9375,
+          "Max": 21093042,
+          "InterquartileRange": 1438290.875,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 251734.23230355475,
+          "Variance": 760441484561.5206,
+          "StandardDeviation": 872032.9607082066,
+          "Skewness": 0.7044804961437638,
+          "Kurtosis": 2.1043425346078863,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 19244947.291666668,
+            "StandardError": 251734.23230355475,
+            "Level": 12,
+            "Margin": 1116939.587183394,
+            "Lower": 18128007.704483274,
+            "Upper": 20361886.87885006
+          },
+          "Percentiles": {
+            "P0": 18425489,
+            "P25": 18551311.75,
+            "P50": 18986207.75,
+            "P67": 19519727.720000003,
+            "P80": 20033022.1,
+            "P85": 20068875.450000003,
+            "P90": 20100405.3,
+            "P95": 20550244.799999997,
+            "P100": 21093042
+          }
+        },
+        "nativeFasterStatistics": {
+          "OriginalValues": [
+            18292722.75,
+            18419194.25,
+            18405601,
+            18443571.25,
+            17278224.5,
+            17178290.75,
+            17173728.75,
+            17185566.75,
+            17193924.25,
+            17190579.25,
+            17178643.75,
+            17193271
+          ],
+          "N": 12,
+          "Min": 17173728.75,
+          "LowerFence": 15478176.53125,
+          "Q1": 17183836,
+          "Median": 17193597.625,
+          "Mean": 17594443.1875,
+          "Q3": 18320942.3125,
+          "UpperFence": 20026601.78125,
+          "Max": 18443571.25,
+          "InterquartileRange": 1137106.3125,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 170149.47995868602,
+          "Variance": 347410146362.5355,
+          "StandardDeviation": 589415.0883397332,
+          "Skewness": 0.6244270759121556,
+          "Kurtosis": 1.2846829789076109,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 17594443.1875,
+            "StandardError": 170149.47995868602,
+            "Level": 12,
+            "Margin": 754949.7268029695,
+            "Lower": 16839493.46069703,
+            "Upper": 18349392.91430297
+          },
+          "Percentiles": {
+            "P0": 17173728.75,
+            "P25": 17183836,
+            "P50": 17193597.625,
+            "P67": 17653588.8525,
+            "P80": 18383025.35,
+            "P85": 18410358.6375,
+            "P90": 18417834.925,
+            "P95": 18430163.9,
+            "P100": 18443571.25
+          }
+        },
+        "meanAllocatedBytesPerOperation": 932433.3333333334,
+        "librarySha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+        "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+        "toolAssemblySha256": "95d5ab62a5ac00a266e2dde60d9f7ae29094165ad8e83ce49e0493dced7d79a8"
+      },
+      "candidate-Encode8": {
+        "statistics": {
+          "OriginalValues": [
+            1.090895101296124,
+            1.1286016663304077,
+            1.071967610019817,
+            1.0642209114154664,
+            1.070383184057263,
+            1.1124268437445006,
+            1.0704344574517402,
+            1.070600920852827,
+            1.0697206478789125,
+            1.0642880571697568,
+            1.0689149990143885,
+            1.0691488689271833
+          ],
+          "N": 12,
+          "Min": 1.0642209114154664,
+          "LowerFence": 1.0576767793641206,
+          "Q1": 1.0690904014489846,
+          "Median": 1.0704088207545017,
+          "Mean": 1.0793002723465321,
+          "Q3": 1.0766994828388938,
+          "UpperFence": 1.0881131049237576,
+          "Max": 1.1286016663304077,
+          "InterquartileRange": 0.0076090813899092336,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            1.090895101296124,
+            1.1124268437445006,
+            1.1286016663304077
+          ],
+          "AllOutliers": [
+            1.090895101296124,
+            1.1124268437445006,
+            1.1286016663304077
+          ],
+          "StandardError": 0.0059705266374321,
+          "Variance": 0.00042776625993943505,
+          "StandardDeviation": 0.020682510967951522,
+          "Skewness": 1.3698020389373753,
+          "Kurtosis": 3.3174726943541577,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1.0793002723465321,
+            "StandardError": 0.0059705266374321,
+            "Level": 12,
+            "Margin": 0.026491103322171004,
+            "Lower": 1.052809169024361,
+            "Upper": 1.1057913756687032
+          },
+          "Percentiles": {
+            "P0": 1.0642209114154664,
+            "P25": 1.0690904014489846,
+            "P50": 1.0704088207545017,
+            "P67": 1.0711065958446133,
+            "P80": 1.0871096030408627,
+            "P85": 1.0984312111530559,
+            "P90": 1.110273669499663,
+            "P95": 1.1197055139081589,
+            "P100": 1.1286016663304077
+          }
+        },
+        "managedStatistics": {
+          "OriginalValues": [
+            18803556.5,
+            19402478,
+            18497823.5,
+            18361983,
+            18491569,
+            19171233,
+            18446956.5,
+            18457738,
+            18449525.5,
+            18364436.5,
+            18442254.5,
+            18458113.5
+          ],
+          "N": 12,
+          "Min": 18361983,
+          "LowerFence": 18253067.375,
+          "Q1": 18445781,
+          "Median": 18457925.75,
+          "Mean": 18612305.625,
+          "Q3": 18574256.75,
+          "UpperFence": 18766970.375,
+          "Max": 19402478,
+          "InterquartileRange": 128475.75,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            18803556.5,
+            19171233,
+            19402478
+          ],
+          "AllOutliers": [
+            18803556.5,
+            19171233,
+            19402478
+          ],
+          "StandardError": 97528.33887532781,
+          "Variance": 114141322605.36932,
+          "StandardDeviation": 337848.0762197253,
+          "Skewness": 1.339129485076214,
+          "Kurtosis": 3.199969693377022,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 18612305.625,
+            "StandardError": 97528.33887532781,
+            "Level": 12,
+            "Margin": 432731.224376084,
+            "Lower": 18179574.400623918,
+            "Upper": 19045036.849376082
+          },
+          "Percentiles": {
+            "P0": 18361983,
+            "P25": 18445781,
+            "P50": 18457925.75,
+            "P67": 18493883.165,
+            "P80": 18742409.900000002,
+            "P85": 18932243.275,
+            "P90": 19134465.35,
+            "P95": 19275293.25,
+            "P100": 19402478
+          }
+        },
+        "nativeFasterStatistics": {
+          "OriginalValues": [
+            17236814.5,
+            17191608.5,
+            17255953.75,
+            17253920.5,
+            17275653.5,
+            17233702.25,
+            17233149,
+            17240540,
+            17247050,
+            17255137.25,
+            17253247,
+            17264306.25
+          ],
+          "N": 12,
+          "Min": 17191608.5,
+          "LowerFence": 17207079.03125,
+          "Q1": 17236036.4375,
+          "Median": 17250148.5,
+          "Mean": 17245090.208333332,
+          "Q3": 17255341.375,
+          "UpperFence": 17284298.78125,
+          "Max": 17275653.5,
+          "InterquartileRange": 19304.9375,
+          "LowerOutliers": [
+            17191608.5
+          ],
+          "UpperOutliers": [],
+          "AllOutliers": [
+            17191608.5
+          ],
+          "StandardError": 6088.017071082893,
+          "Variance": 444767422.29356074,
+          "StandardDeviation": 21089.509768924472,
+          "Skewness": -1.0450832330865163,
+          "Kurtosis": 3.903884517303339,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 17245090.208333332,
+            "StandardError": 6088.017071082893,
+            "Level": 12,
+            "Margin": 27012.405948591997,
+            "Lower": 17218077.80238474,
+            "Upper": 17272102.614281923
+          },
+          "Percentiles": {
+            "P0": 17191608.5,
+            "P25": 17236036.4375,
+            "P50": 17250148.5,
+            "P67": 17254370.697499998,
+            "P80": 17255790.45,
+            "P85": 17258877.125,
+            "P90": 17263471,
+            "P95": 17269412.512500003,
+            "P100": 17275653.5
+          }
+        },
+        "meanAllocatedBytesPerOperation": 932433.3333333334,
+        "librarySha256": "9764356076f13c8dfa36eb32a7aafa305e1c9c405c9b128cd228db425c9d21cc",
+        "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+        "toolAssemblySha256": "95d5ab62a5ac00a266e2dde60d9f7ae29094165ad8e83ce49e0493dced7d79a8"
+      },
+      "baseline-EncodeFast8": {
+        "statistics": {
+          "OriginalValues": [
+            1.5788979085105297,
+            1.3463625883626045,
+            1.3452296454567574,
+            1.3689650398712936,
+            1.4869839575433783,
+            1.3546836557355237,
+            1.375491795047937,
+            1.3538884956503017,
+            1.3515297354456952,
+            1.4137913528046684,
+            1.403964778533593,
+            1.5305643537620344
+          ],
+          "N": 12,
+          "Min": 1.3452296454567574,
+          "LowerFence": 1.2351127580138568,
+          "Q1": 1.3532988055991502,
+          "Median": 1.3722284174596153,
+          "Mean": 1.409196108893693,
+          "Q3": 1.4320895039893458,
+          "UpperFence": 1.5502755515746391,
+          "Max": 1.5788979085105297,
+          "InterquartileRange": 0.07879069839019559,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            1.5788979085105297
+          ],
+          "AllOutliers": [
+            1.5788979085105297
+          ],
+          "StandardError": 0.022991865134052207,
+          "Variance": 0.006343510348109346,
+          "StandardDeviation": 0.07964615714589968,
+          "Skewness": 0.9911995423718067,
+          "Kurtosis": 2.3783182073163127,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1.409196108893693,
+            "StandardError": 0.022991865134052207,
+            "Level": 12,
+            "Margin": 0.10201443052225641,
+            "Lower": 1.3071816783714367,
+            "Upper": 1.5112105394159494
+          },
+          "Percentiles": {
+            "P0": 1.3452296454567574,
+            "P25": 1.3532988055991502,
+            "P50": 1.3722284174596153,
+            "P67": 1.407600611013891,
+            "P80": 1.4723454365956363,
+            "P85": 1.502237096219908,
+            "P90": 1.5262063141401687,
+            "P95": 1.552314453398857,
+            "P100": 1.5788979085105297
+          }
+        },
+        "managedStatistics": {
+          "OriginalValues": [
+            6886500,
+            5865950.5,
+            5882926,
+            5983899,
+            6492028,
+            5903682.5,
+            6009162.5,
+            5896476.5,
+            5911524.5,
+            6176971.5,
+            6129374.5,
+            6651435.5
+          ],
+          "N": 12,
+          "Min": 5865950.5,
+          "LowerFence": 5371099.0625,
+          "Q1": 5901881,
+          "Median": 5996530.75,
+          "Mean": 6149160.916666667,
+          "Q3": 6255735.625,
+          "UpperFence": 6786517.5625,
+          "Max": 6886500,
+          "InterquartileRange": 353854.625,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            6886500
+          ],
+          "AllOutliers": [
+            6886500
+          ],
+          "StandardError": 98981.62560082907,
+          "Variance": 117568346478.99239,
+          "StandardDeviation": 342882.40911279246,
+          "Skewness": 0.9813271507153908,
+          "Kurtosis": 2.3906151121135086,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6149160.916666667,
+            "StandardError": 98981.62560082907,
+            "Level": 12,
+            "Margin": 439179.42754808284,
+            "Lower": 5709981.489118584,
+            "Upper": 6588340.3442147495
+          },
+          "Percentiles": {
+            "P0": 5865950.5,
+            "P25": 5901881,
+            "P50": 5996530.75,
+            "P67": 6146985.390000001,
+            "P80": 6429016.700000001,
+            "P85": 6547820.625,
+            "P90": 6635494.75,
+            "P95": 6757214.524999999,
+            "P100": 6886500
+          }
+        },
+        "nativeFasterStatistics": {
+          "OriginalValues": [
+            4361586.625,
+            4356887.625,
+            4373176,
+            4371111.625,
+            4365903.1875,
+            4357978.6875,
+            4368737.4375,
+            4355215.75,
+            4373950.75,
+            4369082.8125,
+            4365760.875,
+            4345740.5
+          ],
+          "N": 12,
+          "Min": 4345740.5,
+          "LowerFence": 4339879.78125,
+          "Q1": 4357705.921875,
+          "Median": 4365832.03125,
+          "Mean": 4363760.989583333,
+          "Q3": 4369590.015625,
+          "UpperFence": 4387416.15625,
+          "Max": 4373950.75,
+          "InterquartileRange": 11884.09375,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 2448.4782687889256,
+          "Variance": 71940549.99277936,
+          "StandardDeviation": 8481.777525541409,
+          "Skewness": -0.6040126946345106,
+          "Kurtosis": 2.2086576786451992,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 4363760.989583333,
+            "StandardError": 2448.4782687889256,
+            "Level": 12,
+            "Margin": 10863.847486069519,
+            "Lower": 4352897.142097264,
+            "Upper": 4374624.837069402
+          },
+          "Percentiles": {
+            "P0": 4345740.5,
+            "P25": 4357705.921875,
+            "P50": 4365832.03125,
+            "P67": 4368865.22625,
+            "P80": 4370705.8625,
+            "P85": 4371834.15625,
+            "P90": 4372969.5625,
+            "P95": 4373524.6375,
+            "P100": 4373950.75
+          }
+        },
+        "meanAllocatedBytesPerOperation": 951129.3333333334,
+        "librarySha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+        "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+        "toolAssemblySha256": "95d5ab62a5ac00a266e2dde60d9f7ae29094165ad8e83ce49e0493dced7d79a8"
+      },
+      "candidate-EncodeFast8": {
+        "statistics": {
+          "OriginalValues": [
+            1.6257943608222658,
+            1.3234143040971127,
+            1.3259279774082484,
+            1.3835490267022006,
+            1.443013778818315,
+            1.310262328174186,
+            1.3167975882599476,
+            1.3154526197313776,
+            1.3995197479129926,
+            1.3879154937742588,
+            1.3910966639851756,
+            1.5226643238846338
+          ],
+          "N": 12,
+          "Min": 1.310262328174186,
+          "LowerFence": 1.1888104293855688,
+          "Q1": 1.3217601251378215,
+          "Median": 1.3857322602382296,
+          "Mean": 1.3954506844642263,
+          "Q3": 1.4103932556393233,
+          "UpperFence": 1.543342951391576,
+          "Max": 1.6257943608222658,
+          "InterquartileRange": 0.08863313050150179,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            1.6257943608222658
+          ],
+          "AllOutliers": [
+            1.6257943608222658
+          ],
+          "StandardError": 0.027743879124142713,
+          "Variance": 0.0092366739462605,
+          "StandardDeviation": 0.0961076164841294,
+          "Skewness": 1.132048546886561,
+          "Kurtosis": 3.1885290840288003,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1.3954506844642263,
+            "StandardError": 0.027743879124142713,
+            "Level": 12,
+            "Margin": 0.12309901840612067,
+            "Lower": 1.2723516660581056,
+            "Upper": 1.518549702870347
+          },
+          "Percentiles": {
+            "P0": 1.310262328174186,
+            "P25": 1.3217601251378215,
+            "P50": 1.3857322602382296,
+            "P67": 1.394213205038468,
+            "P80": 1.4343149726372506,
+            "P85": 1.4708914695915265,
+            "P90": 1.514699269378002,
+            "P95": 1.5690728405065681,
+            "P100": 1.6257943608222658
+          }
+        },
+        "managedStatistics": {
+          "OriginalValues": [
+            7108020.5,
+            5748487.5,
+            5751111.5,
+            6043023.5,
+            6306998,
+            5733705,
+            5760846,
+            5752012.5,
+            6086864.5,
+            6344359.5,
+            6035757.5,
+            6608900
+          ],
+          "N": 12,
+          "Min": 5733705,
+          "LowerFence": 4904960.5625,
+          "Q1": 5751787.25,
+          "Median": 6039390.5,
+          "Mean": 6106673.833333333,
+          "Q3": 6316338.375,
+          "UpperFence": 7163165.0625,
+          "Max": 7108020.5,
+          "InterquartileRange": 564551.125,
+          "LowerOutliers": [],
+          "UpperOutliers": [],
+          "AllOutliers": [],
+          "StandardError": 123098.65293408727,
+          "Variance": 181839340250.24243,
+          "StandardDeviation": 426426.2424502536,
+          "Skewness": 0.9917410482276632,
+          "Kurtosis": 2.912853275660897,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 6106673.833333333,
+            "StandardError": 123098.65293408727,
+            "Level": 12,
+            "Margin": 546186.1794991549,
+            "Lower": 5560487.653834178,
+            "Upper": 6652860.012832488
+          },
+          "Percentiles": {
+            "P0": 5733705,
+            "P25": 5751787.25,
+            "P50": 6039390.5,
+            "P67": 6168313.895,
+            "P80": 6336887.199999999,
+            "P85": 6436948.675,
+            "P90": 6582445.95,
+            "P95": 6833504.225,
+            "P100": 7108020.5
+          }
+        },
+        "nativeFasterStatistics": {
+          "OriginalValues": [
+            4372029.25,
+            4343679.4375,
+            4337423.75,
+            4367769.6875,
+            4370712.25,
+            4375997.75,
+            4374891.0625,
+            4372648.9375,
+            4349252.3125,
+            4571142.5,
+            4338848.375,
+            4340352.5625
+          ],
+          "N": 12,
+          "Min": 4337423.75,
+          "LowerFence": 4297305.09375,
+          "Q1": 4342847.71875,
+          "Median": 4369240.96875,
+          "Mean": 4376228.989583333,
+          "Q3": 4373209.46875,
+          "UpperFence": 4418752.09375,
+          "Max": 4571142.5,
+          "InterquartileRange": 30361.75,
+          "LowerOutliers": [],
+          "UpperOutliers": [
+            4571142.5
+          ],
+          "AllOutliers": [
+            4571142.5
+          ],
+          "StandardError": 18278.787649963662,
+          "Variance": 4009368935.429569,
+          "StandardDeviation": 63319.57782099916,
+          "Skewness": 2.361153320524867,
+          "Kurtosis": 7.5213524593884795,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 4376228.989583333,
+            "StandardError": 18278.787649963662,
+            "Level": 12,
+            "Margin": 81102.60311098353,
+            "Lower": 4295126.386472349,
+            "Upper": 4457331.592694317
+          },
+          "Percentiles": {
+            "P0": 4337423.75,
+            "P25": 4342847.71875,
+            "P50": 4369240.96875,
+            "P67": 4372258.534375,
+            "P80": 4374442.6375,
+            "P85": 4375278.403125,
+            "P90": 4375887.08125,
+            "P95": 4463812.887499999,
+            "P100": 4571142.5
+          }
+        },
+        "meanAllocatedBytesPerOperation": 951129.3333333334,
+        "librarySha256": "9764356076f13c8dfa36eb32a7aafa305e1c9c405c9b128cd228db425c9d21cc",
+        "benchmarkAssemblySha256": "ca9e80af315f42cc367b5cae67790c94b996d9eedfebf312b52dbfb64579dceb",
+        "toolAssemblySha256": "95d5ab62a5ac00a266e2dde60d9f7ae29094165ad8e83ce49e0493dced7d79a8"
+      }
+    },
+    "decisions": {
+      "Encode8": {
+        "normalizedGain": 0.013034071538875147,
+        "rawGain": 0.032873130649758164,
+        "absoluteMicroseconds": 632.6416666666679,
+        "normalizedGainConfidenceSeparates": false,
+        "normalizedLossConfidenceSeparates": false,
+        "rawGainConfidenceSeparates": false,
+        "rawLossConfidenceSeparates": false,
+        "nativeFasterDrift": -0.019855870142845178,
+        "allocatedBytesSaved": 0.0
+      },
+      "EncodeFast8": {
+        "normalizedGain": 0.009754089116991493,
+        "rawGain": 0.006909411529331888,
+        "absoluteMicroseconds": 42.487083333333956,
+        "normalizedGainConfidenceSeparates": false,
+        "normalizedLossConfidenceSeparates": false,
+        "rawGainConfidenceSeparates": false,
+        "rawLossConfidenceSeparates": false,
+        "nativeFasterDrift": 0.0028571683989480068,
+        "allocatedBytesSaved": 0.0
+      }
+    }
+  },
+  "correctness": {
+    "focusedEachOs": {
+      "internal-normal": 577,
+      "internal-scalar": 577,
+      "public-normal": 211,
+      "public-scalar": 211
+    },
+    "completePacketBytes": {
+      "Encode8": 210973,
+      "EncodeFast8": 236828
+    },
+    "allOriginalGatesAndQuietGuardsPassed": true,
+    "largeLogicalOriginsAndDeliveryChunksExact": true,
+    "normalScalarBothOs": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionChanged": false,
+      "sourceSha256": "897c2815d4c46bdf91c858a3d1581529d8fd1b694ba82d4a28cfb86a68c5803f",
+      "librarySha256": "cc62cdcf2abee73c3a10f777b2a8e276a702dd62b520c7cad2761f27fbe92611",
+      "testAssemblySha256": "ab1e8e4305016aa297be72d11212a067da87b61e50209a6f76a191cb7632ad58",
+      "focused": {
+        "normal": 26,
+        "scalar": 26
+      },
+      "restorationBuilds": 0,
+      "packageBuilds": 0,
+      "candidateMainAndTestSnapshotsSeparateAndVerified": true,
+      "qualificationReused": "WSP152 full/live/scalar/same actual Release package and CI41646216621 all three jobs green"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionChanged": false,
+      "sourceSha256": "897c2815d4c46bdf91c858a3d1581529d8fd1b694ba82d4a28cfb86a68c5803f",
+      "librarySha256": "46467a38085dfce254fa57927cf63e8653eb05471559684ecf36ca0296a31043",
+      "testAssemblySha256": "47b2b46f77a915d83da339f45bb62fa38515d4b462caa87754f387a5853bb43a",
+      "focused": {
+        "normal": 26,
+        "scalar": 26
+      },
+      "restorationBuilds": 0,
+      "packageBuilds": 0,
+      "candidateMainAndTestSnapshotsSeparateAndVerified": true,
+      "qualificationReused": "WSP152 full/live/scalar/same actual Release package and CI41646216621 all three jobs green"
+    }
+  },
+  "qualificationReuse": {
+    "reference": "webp-scoring-preparation-evidence.json",
+    "fullLiveEachOs": 5507,
+    "sameActualPackageBothOs": true,
+    "packageSha256": "dafd4c1ac6dea278f57bb6c19e5f95828939ec6b6d2def9687139d132dcf9484",
+    "ci": "41646216621",
+    "productionSourceAndDllsRestoredByteForByte": true
+  },
+  "storage": {
+    "allocatedBytesUnchanged": true,
+    "workspaceAllowanceBytes": 393216,
+    "operationRetainedScratchBytes": 0,
+    "completeOperationPhysicalAdmittedPeak": "unmeasured; no new owner or capacity"
+  },
+  "builds": {
+    "coreEachOs": 1,
+    "privateComparisonTool": 1,
+    "testHarnessNativeSelectorPackage": 0,
+    "restoration": 0
+  },
+  "raw": {
+    "file": "png-bounded-region-inconclusive.tar.xz",
+    "bytes": 9186348,
+    "members": 223,
+    "sha256": "1c8e60732498f0399be5c62b673259f2d718a20fc97b5213d4037b1e31dcceb3",
+    "vmMembersVerified": true,
+    "accepted": false,
+    "baselineDependency": "webp-scoring-preparation.tar.xz",
+    "baselineDependencySha256": "ea578b0ee58a17382a77b8118d39aa8f263fe23ea5258e238d3459ba959f4965",
+    "unchangedPngHarnessAndReferenceDependency": "png-contiguous-history.tar.xz",
+    "unchangedPngHarnessAndReferenceDependencySha256": "227c02a66b970e723abecc931e842a9e02f805ebb7fb19d7ff517b41c0085229",
+    "bothMeasuredCandidateCoresAndSourcesRetained": true,
+    "allBuilds": {
+      "coreEachOs": 1,
+      "privateComparisonTool": 1,
+      "testHarnessNativeSelectorPackage": 0,
+      "restoration": 0
+    },
+    "localMembersVerified": true
+  },
+  "decision": "No established raw/normalized gain or allocation/retention benefit in targeted resolution. Restore qualified producer; keep adverse observations and no causal regression claim. No further sampling of unchanged design. Materially revised architectures remain eligible.",
+  "next": "Independent WebP cache-history lifetime audit: current preparation is discarded before two complete cache application passes. Establish reuse feasibility and correctness/admission boundaries before any production or timing change."
+}
