@@ -1,0 +1,656 @@
+{
+  "schemaVersion": 1,
+  "project": "Lokad.Image",
+  "date": "2026-11-03",
+  "round": "OPA133/OPA134",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "qualifiedCpuGainClaim": false,
+  "allocationGainClaim": false,
+  "scope": "Existing complete photograph/opaque/original/diagram/transparent/authored controls; no new shape, quality or input grid.",
+  "stages": [
+    {
+      "round": "OPA133",
+      "linuxLibrarySha256": "86c2e5227d4cc9882dc85a8a838a506b99c8b030213d1187c5a710f2f46efb56",
+      "windowsLibrarySha256": "0222c9ffc88ece9a2350337ac71079568e647decccd6133c7977b353fe45cab2",
+      "design": {
+        "project": "Lokad.Image",
+        "round": "OPA133",
+        "productionAccepted": false,
+        "removedWork": "Use existing global opacity analysis before histogram accumulation; replace repeated mode alpha updates with exact per-tile logical counts and omit known alpha clamp/error contribution.",
+        "endState": "Existing full histogram owner/layout/history and exact scoring unchanged. Forward scalar eligibility only through nonpalette alpha-preserving transforms; palette/ALPH remain general. No new input scan, owner, array, pool or admission request.",
+        "workloads": [
+          "existing lossless photograph",
+          "existing lossless opaque",
+          "existing original nonopaque",
+          "existing transparent VP8 ALPH",
+          "existing diagram"
+        ],
+        "correctness": "Exact all14 mode histograms and full packets, boundaries/right wrap, clipping/axis, parent accumulation, nonopaque neighbors, palette normalization, exact mode11/clamp arithmetic/ties, cancellation/root ownership.",
+        "temporaryCosts": "Opaque flag checks in shared accumulation may cost nonopaque inputs; all code stays timed. Evaluate complete targets and generalization, revise only from attribution.",
+        "auditArchive": "webp-opaque-alpha-updates-audit.tar.xz",
+        "auditSha256": "7ee80727f03985d27de357f2a1e55d895ee2ba94e387210c86717575e943d0ae"
+      },
+      "focusedInternalEachModeEachOs": 299,
+      "directScreen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": true,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 90621.87066666667,
+            "candidateMicroseconds": 89382.56516666667,
+            "rawGain": 0.013675567397615551,
+            "allocatedBytesBefore": [
+              13346256,
+              13346256,
+              13346256
+            ],
+            "allocatedBytesAfter": [
+              13346256,
+              13346256,
+              13346256
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 8848.74693939394,
+            "candidateMicroseconds": 8861.168454545455,
+            "rawGain": -0.0014037597906904065,
+            "allocatedBytesBefore": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "allocatedBytesAfter": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 62559.27416666666,
+            "candidateMicroseconds": 62555.974,
+            "rawGain": 5.2752636769293204e-05,
+            "allocatedBytesBefore": [
+              10747848,
+              10747848,
+              10747848
+            ],
+            "allocatedBytesAfter": [
+              10747848,
+              10747848,
+              10747848
+            ],
+            "admittedPeakBefore": 3847888,
+            "admittedPeakAfter": 3847888,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 782.5207265917603,
+            "candidateMicroseconds": 782.6594494382022,
+            "rawGain": -0.00017727689724722495,
+            "allocatedBytesBefore": [
+              933440,
+              933440,
+              933440
+            ],
+            "allocatedBytesAfter": [
+              933440,
+              933440,
+              933440
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312716,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Reuse verified unchanged GSP130 baseline and one revised candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      },
+      "originalShort": {
+        "managedMicroseconds": 133425.80016666668,
+        "unfilteredMicroseconds": 133425.80016666668,
+        "baselineMicroseconds": 128737.01366666667,
+        "actuals": 3,
+        "allOriginalGatesPassed": true,
+        "librarySha256": "86c2e5227d4cc9882dc85a8a838a506b99c8b030213d1187c5a710f2f46efb56",
+        "nativeBefore": [
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121370622,
+            "CompletedOperations": 8,
+            "Observed": 888,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121370622
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121306395,
+            "CompletedOperations": 9,
+            "Observed": 999,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121306395
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 120771255,
+            "CompletedOperations": 10,
+            "Observed": 1110,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 120771255
+          }
+        ],
+        "nativeAfter": [
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121525627,
+            "CompletedOperations": 14,
+            "Observed": 1554,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121525627
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 120306141,
+            "CompletedOperations": 15,
+            "Observed": 1665,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 120306141
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 120654508,
+            "CompletedOperations": 16,
+            "Observed": 1776,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 120654508
+          }
+        ],
+        "qualifiedCpuGainClaim": false
+      }
+    },
+    {
+      "round": "OPA134",
+      "linuxLibrarySha256": "d32b9fbdf4d8167a97051db1ed2616ecf0ae05746852a9f61c30d9b9d6e55c24",
+      "windowsLibrarySha256": "6cd9c846979bce9f07b8688960dc9b448ff3da8d28d28abbc3f3664a1a6115e5",
+      "design": {
+        "project": "Lokad.Image",
+        "round": "OPA134",
+        "productionAccepted": false,
+        "removedWork": "Use existing global opacity analysis before histogram accumulation; replace repeated mode alpha updates with exact per-tile logical counts and omit known alpha clamp/error contribution.",
+        "endState": "Existing full histogram owner/layout/history and exact scoring unchanged. Forward scalar eligibility only through nonpalette alpha-preserving transforms; palette/ALPH remain general. No new input scan, owner, array, pool or admission request.",
+        "workloads": [
+          "existing lossless photograph",
+          "existing lossless opaque",
+          "existing original nonopaque",
+          "existing transparent VP8 ALPH",
+          "existing diagram"
+        ],
+        "correctness": "Exact all14 mode histograms and full packets, boundaries/right wrap, clipping/axis, parent accumulation, nonopaque neighbors, palette normalization, exact mode11/clamp arithmetic/ties, cancellation/root ownership.",
+        "temporaryCosts": "Opaque flag checks in shared accumulation may cost nonopaque inputs; all code stays timed. Evaluate complete targets and generalization, revise only from attribution.",
+        "auditArchive": "webp-opaque-alpha-updates-audit.tar.xz",
+        "auditSha256": "7ee80727f03985d27de357f2a1e55d895ee2ba94e387210c86717575e943d0ae",
+        "revision": "Dispatch once per tile into two value-type-specialized instantiations of the SAME predictor formulas. Opaque policy becomes a JIT constant; retain original full-alpha arithmetic without a per-update branch. No new storage/owner/input pass or generic public API.",
+        "previousStage": "OPA133 exact299focused per mode/EACHOS; photo short1.37%gain, original short3.64%adverse; allocation/peak flat, no independent CPU claim. Retain first-stage assets and adverse observations."
+      },
+      "focusedInternalEachModeEachOs": 299,
+      "directScreen": {
+        "project": "Lokad.Image",
+        "diagnosticScreen": true,
+        "qualifiedCpuGainClaim": false,
+        "builds": 0,
+        "unchangedBeforeReused": true,
+        "existingControls": 4,
+        "newPerformanceControls": 0,
+        "quietGuardsPassed": true,
+        "cases": [
+          {
+            "caseId": "photograph",
+            "baselineMicroseconds": 90621.87066666667,
+            "candidateMicroseconds": 89949.60216666668,
+            "rawGain": 0.007418391333730012,
+            "allocatedBytesBefore": [
+              13346256,
+              13346256,
+              13346256
+            ],
+            "allocatedBytesAfter": [
+              13346256,
+              13346256,
+              13346256
+            ],
+            "admittedPeakBefore": 10166464,
+            "admittedPeakAfter": 10166464,
+            "exactPacket": true
+          },
+          {
+            "caseId": "diagram",
+            "baselineMicroseconds": 8848.74693939394,
+            "candidateMicroseconds": 8874.684060606061,
+            "rawGain": -0.002931163179348051,
+            "allocatedBytesBefore": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "allocatedBytesAfter": [
+              6255920,
+              6255920,
+              6255920
+            ],
+            "admittedPeakBefore": 4802292,
+            "admittedPeakAfter": 4802292,
+            "exactPacket": true
+          },
+          {
+            "caseId": "alpha",
+            "baselineMicroseconds": 62559.27416666666,
+            "candidateMicroseconds": 62684.15666666666,
+            "rawGain": -0.001996226805114354,
+            "allocatedBytesBefore": [
+              10747848,
+              10747848,
+              10747848
+            ],
+            "allocatedBytesAfter": [
+              10747848,
+              10747848,
+              10747848
+            ],
+            "admittedPeakBefore": 3847888,
+            "admittedPeakAfter": 3847888,
+            "exactPacket": true
+          },
+          {
+            "caseId": "authored-bars",
+            "baselineMicroseconds": 782.5207265917603,
+            "candidateMicroseconds": 780.953543071161,
+            "rawGain": 0.002002737393838827,
+            "allocatedBytesBefore": [
+              933440,
+              933440,
+              933440
+            ],
+            "allocatedBytesAfter": [
+              933440,
+              933440,
+              933440
+            ],
+            "admittedPeakBefore": 312716,
+            "admittedPeakAfter": 312716,
+            "exactPacket": true
+          }
+        ],
+        "note": "Reuse existing complete public WorkspaceScreen unchanged: photo/diagram/transparentVP8/authoredbars. Reuse verified unchanged GSP130 baseline and one revised candidate, three direct batches, packet/source/ownership/peak checks. No reference timing or independent confidence claim; only a continuation screen."
+      },
+      "originalShort": {
+        "managedMicroseconds": 131785.88,
+        "unfilteredMicroseconds": 131785.88,
+        "baselineMicroseconds": 128737.01366666667,
+        "actuals": 3,
+        "allOriginalGatesPassed": true,
+        "librarySha256": "d32b9fbdf4d8167a97051db1ed2616ecf0ae05746852a9f61c30d9b9d6e55c24",
+        "nativeBefore": [
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121103014,
+            "CompletedOperations": 8,
+            "Observed": 888,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121103014
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 120197102,
+            "CompletedOperations": 9,
+            "Observed": 999,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 120197102
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 120436204,
+            "CompletedOperations": 10,
+            "Observed": 1110,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 120436204
+          }
+        ],
+        "nativeAfter": [
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 120432319,
+            "CompletedOperations": 14,
+            "Observed": 1554,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 120432319
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 122108086,
+            "CompletedOperations": 15,
+            "Observed": 1665,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 122108086
+          },
+          {
+            "State": "sample",
+            "Operations": 1,
+            "ElapsedNanoseconds": 121000439,
+            "CompletedOperations": 16,
+            "Observed": 1776,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 183812,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 121000439
+          }
+        ],
+        "qualifiedCpuGainClaim": false
+      }
+    }
+  ],
+  "opaqueConfirmation": {
+    "runId": "opa134-opaque-EncodeOpaque8-confirm",
+    "librarySha256": "d32b9fbdf4d8167a97051db1ed2616ecf0ae05746852a9f61c30d9b9d6e55c24",
+    "actuals": 12,
+    "managedMicroseconds": 75293.88510416668,
+    "nativeMicroseconds": 70131.621,
+    "ratio": 1.0736082245149683,
+    "ratioUpper": 1.083709027237201,
+    "ratioLower": 1.062807351355089,
+    "allocatedBytes": 12956744,
+    "status": "Confirmed gap",
+    "packetBytes": 121896,
+    "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+    "allOriginalGatesPassed": true,
+    "producerNote": "The bootstrap runtime note inherited older round labels; actual library/source hashes, original inputs/settings, full packets and all native gates identify this candidate. No historical point subtraction establishes a causal gain."
+  },
+  "jitDiagnostics": {
+    "qualifiedTimingClaim": false,
+    "allElapsedNumbersDiscarded": true,
+    "opaque": {
+      "qualifiedTimingClaim": false,
+      "allElapsedNumbersDiscarded": true,
+      "quietGuardsPassed": true,
+      "rows": [
+        {
+          "subject": "baseline",
+          "librarySha256": "3257ef9658d99c669153fc15a14f410ef714e2ca99220083037252d8c0034c89",
+          "methods": [
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:Build(System.ReadOnlySpan`1[uint],int,int,int,int,int,System.Span`1[int],Lokad.Image.Internal.OperationContext) (FullOpts)",
+              "codeBytes": 651,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            },
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:AccumulateInterior(System.Span`1[int],uint,uint,uint,uint,uint) (FullOpts)",
+              "codeBytes": 2331,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            }
+          ],
+          "jitSha256": "b1e0416ffe1ac3b51d61b14a40c78317ed43bbdcb074b86b170c7f64643ec85a",
+          "jitBytes": 46400
+        },
+        {
+          "subject": "candidate",
+          "librarySha256": "d32b9fbdf4d8167a97051db1ed2616ecf0ae05746852a9f61c30d9b9d6e55c24",
+          "methods": [
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:Build[Lokad.Image.Internal.Vp8lPredictorHistogram+OpaqueAlpha](System.ReadOnlySpan`1[uint],int,int,int,int,int,System.Span`1[int],Lokad.Image.Internal.OperationContext) (FullOpts)",
+              "codeBytes": 693,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            },
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:AccumulateInterior[Lokad.Image.Internal.Vp8lPredictorHistogram+OpaqueAlpha](System.Span`1[int],uint,uint,uint,uint,uint) (FullOpts)",
+              "codeBytes": 1965,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            }
+          ],
+          "jitSha256": "b17cab4a2dbbf0d57787832025bd790ee925f0512e5ff8bce0fae01a2100e4fe",
+          "jitBytes": 40126
+        }
+      ]
+    },
+    "nonopaque": {
+      "qualifiedTimingClaim": false,
+      "allElapsedNumbersDiscarded": true,
+      "quietGuardsPassed": true,
+      "rows": [
+        {
+          "subject": "baseline",
+          "librarySha256": "3257ef9658d99c669153fc15a14f410ef714e2ca99220083037252d8c0034c89",
+          "methods": [
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:Build(System.ReadOnlySpan`1[uint],int,int,int,int,int,System.Span`1[int],Lokad.Image.Internal.OperationContext) (FullOpts)",
+              "codeBytes": 651,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            },
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:AccumulateInterior(System.Span`1[int],uint,uint,uint,uint,uint) (FullOpts)",
+              "codeBytes": 2331,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            }
+          ],
+          "jitSha256": "0159a8e69abd2c46bae89f41a90a683ede1f9f9382c29679200c86cdc0e29708",
+          "jitBytes": 46400
+        },
+        {
+          "subject": "candidate",
+          "librarySha256": "d32b9fbdf4d8167a97051db1ed2616ecf0ae05746852a9f61c30d9b9d6e55c24",
+          "methods": [
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:Build[Lokad.Image.Internal.Vp8lPredictorHistogram+FullAlpha](System.ReadOnlySpan`1[uint],int,int,int,int,int,System.Span`1[int],Lokad.Image.Internal.OperationContext) (FullOpts)",
+              "codeBytes": 651,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            },
+            {
+              "method": "Lokad.Image.Internal.Vp8lPredictorHistogram:AccumulateInterior[Lokad.Image.Internal.Vp8lPredictorHistogram+FullAlpha](System.Span`1[int],uint,uint,uint,uint,uint) (FullOpts)",
+              "codeBytes": 2280,
+              "alphaGetterCallLines": [],
+              "runtimeHandleCallLines": [],
+              "rangeCheckFailureSites": 1
+            }
+          ],
+          "jitSha256": "3050fb69f133627cf74c6f13e23cd5d9471648a6d99ccd2278082f1ab745c4bf",
+          "jitBytes": 46621
+        }
+      ]
+    },
+    "conclusion": "The policy is constant-folded: no alpha getter/runtime policy calls remain. Accumulators are2331B baseline,1965B opaque and2280B full-alpha candidate. This rules out residual policy dispatch as an explanation, not other JIT/layout costs or measurement uncertainty."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionRestoredByteExactly": true,
+      "productionBuilds": 0,
+      "testBuilds": 0,
+      "restoredAssets": {
+        "src/Lokad.Image/Internal/Vp8lPredictorHistogram.cs": "b285f1d1d670fbae688906a57d030dd169f4dc905c63f445745167413d1929a3",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ac3f7d1fc9a5be53f1d7790f60d0780865847138c79cf982c187801f8f633332",
+        "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "23d82ef8644d5c80b5b5d803be57fb0154b7c0fa18b599a27f359e20e84fad37",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "085a138f49ce79e94831cb18560d9089561fa07da26a8c384c158fe8fcd0699e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "0d815b544ed5ca9b301a461b1d012dee2482b69674542697c4792fb5f26ddb3a",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "817c97bf24c570fad54646de0c8657020e0d9c6a8efb13a37e3a15f61911de2a",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "fae595f2cc9043947951d51e33a97f7ea27bbf6f062c1ffc40dc8100cd82fe4d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "dad8056a3223afc451ad31495970a25e2931833225d0e3647b205960deec688c"
+      },
+      "candidateOnlyFileRemoved": "tests/Lokad.Image.Tests/Vp8lOpaquePredictorHistogramTests.cs",
+      "packageUnchanged": true,
+      "librarySha256": "085a138f49ce79e94831cb18560d9089561fa07da26a8c384c158fe8fcd0699e"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionRestoredByteExactly": true,
+      "productionBuilds": 0,
+      "testBuilds": 0,
+      "restoredAssets": {
+        "src/Lokad.Image/Internal/Vp8lPredictorHistogram.cs": "b285f1d1d670fbae688906a57d030dd169f4dc905c63f445745167413d1929a3",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ac3f7d1fc9a5be53f1d7790f60d0780865847138c79cf982c187801f8f633332",
+        "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "23d82ef8644d5c80b5b5d803be57fb0154b7c0fa18b599a27f359e20e84fad37",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "3257ef9658d99c669153fc15a14f410ef714e2ca99220083037252d8c0034c89",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "2b88f28522d3f0ea2d203caca154f848167cc64fabed80ae24f6486eb46ae321",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "891762c42e2987edfc049cf56efceae0164b74e34bc490c87155bb33d1ae8ba3",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "b07c99cda8c020f6927efdb1db2c1c58c23f358ff4157b18ae74a8c8bff983f0",
+        "tmp/benchmark-source.json": "73c5522e9b47635a4bed279d158aed9401e1e2c64a97138b7b3af2d05a55ce03"
+      },
+      "candidateOnlyFileRemoved": "tests/Lokad.Image.Tests/Vp8lOpaquePredictorHistogramTests.cs",
+      "packageUnchanged": true,
+      "librarySha256": "3257ef9658d99c669153fc15a14f410ef714e2ca99220083037252d8c0034c89"
+    }
+  },
+  "qualification": {
+    "fullChecksEachOsReused": 5497,
+    "sameActualPackageBothOsReused": true,
+    "productionRestorationBuilds": 0,
+    "testRestorationBuilds": 0,
+    "actualPackageSha256": "cd5e3b37bc82e7bea0acbf69215872e4aedeb9256ed210138c192efe54539c18",
+    "source": "resize-overwrite-output-storage-evidence.json"
+  },
+  "decision": "Restore qualified production. Small opaque/photo points do not establish sufficient complete-operation benefit against adverse original short points and added specialization machinery. No confirmed original causal regression or qualified incremental gain is claimed. No further scored round or another opaque-histogram implementation follows without a materially revised design.",
+  "subsequentPredictionPriceAudit": {
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "privateProjectionBuilds": 1,
+    "completeEncodes": 8,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "qualifiedTimingClaim": false,
+    "allocationClaim": false,
+    "scope": "RGB planes only. Alpha14-mode calls are an exact reordering oracle, not current-work counters because existing shared-alpha scoring already removes repetition.",
+    "originalAndPlaneOrderedModeScoresExact": true,
+    "summary": [
+      {
+        "caseId": "photograph",
+        "NonzeroTerms": 1539944,
+        "HeavyCombinedCalls": 924567,
+        "DistinctHeavyContributions": 420513,
+        "HeavyCount1Terms": 241796,
+        "FullCount1PreparationHeavyCalls": 96032,
+        "ActualHeavyCount1Bins": 70891,
+        "RepeatedHeavyCount1Terms": 170905,
+        "repeatContributionUpperBound": 504054
+      },
+      {
+        "caseId": "opaque",
+        "NonzeroTerms": 723875,
+        "HeavyCombinedCalls": 332542,
+        "DistinctHeavyContributions": 227272,
+        "HeavyCount1Terms": 57288,
+        "FullCount1PreparationHeavyCalls": 117409,
+        "ActualHeavyCount1Bins": 36006,
+        "RepeatedHeavyCount1Terms": 21282,
+        "repeatContributionUpperBound": 105270
+      },
+      {
+        "caseId": "ordinary",
+        "NonzeroTerms": 724132,
+        "HeavyCombinedCalls": 331234,
+        "DistinctHeavyContributions": 226112,
+        "HeavyCount1Terms": 56738,
+        "FullCount1PreparationHeavyCalls": 116493,
+        "ActualHeavyCount1Bins": 35664,
+        "RepeatedHeavyCount1Terms": 21074,
+        "repeatContributionUpperBound": 105122
+      }
+    ],
+    "rawArchive": {
+      "file": "webp-prediction-price-audit.tar.xz",
+      "bytes": 445864,
+      "members": 25,
+      "sha256": "ca9920f350127f28dbc94d543685016fd2a85588fd57cfad315ae1cb2a60bec2",
+      "vmMembersVerified": true,
+      "qualifiedProductionDependency": "resize-overwrite-output-storage.tar.xz",
+      "qualifiedProductionDependencySha256": "ba460618fcec926a216ae5f03701ab7752dda0019b7945b97f41d1072446c21e",
+      "localMembersVerified": true
+    },
+    "conclusion": "Eager count1 preparation has fewer heavy calls on photograph but more on opaque/original. Do not implement that general table. Repeated heavy contributions instead justify a bounded last-count direct-cache simulation, separating medium/large calls and accounting resets/access costs. No production authorization or speed claim from counts."
+  },
+  "rawArchive": {
+    "file": "webp-opaque-histogram-stages-inconclusive.tar.xz",
+    "bytes": 14152368,
+    "members": 486,
+    "sha256": "ddc08cbbe22136cc621ddf0f9e7634647fdad15450791949a26e1113e512bb22",
+    "vmMembersVerified": true,
+    "qualifiedProductionDependency": "resize-overwrite-output-storage.tar.xz",
+    "qualifiedProductionDependencySha256": "ba460618fcec926a216ae5f03701ab7752dda0019b7945b97f41d1072446c21e",
+    "auditDependency": "webp-opaque-alpha-updates-audit.tar.xz",
+    "auditDependencySha256": "7ee80727f03985d27de357f2a1e55d895ee2ba94e387210c86717575e943d0ae",
+    "localMembersVerified": true
+  }
+}
