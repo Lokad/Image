@@ -1650,15 +1650,12 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-alpha-match-index-reuse-evidence.json').read_text(encoding='utf-8'))
-    assert webp_owned['productionAccepted'] and webp_owned['independentQuietConfirmation']
-    assert not webp_owned['cpuGainClaim']
-    assert webp_owned['qualification']['fullChecksEachOs'] == 5575
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-matcher-cancellation-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert webp_owned['productionAccepted'] and webp_owned['pairedComparison']['allPairsRetained']
+    assert webp_owned['pairedComparison']['pairs'] == 12 and webp_owned['pairedComparison']['ratioConfidence'][1] < 1
+    assert webp_owned['qualification']['fullChecksEachOs'] == 5634
     assert webp_owned['qualification']['actualPackage']['sha256'] == webp_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert webp_owned['photographPairedFollowup']['pairs'] == 12
-    assert webp_owned['photographPairedFollowup']['lower'] < 1 < webp_owned['photographPairedFollowup']['upper']
-    assert webp_owned['storage']['alpha8AllocationSavedBytes'] == 531528
-    assert webp_owned['storage']['measured']['alpha']['admittedPeakBytes'] == 3656309
+    assert webp_owned['storage']['newOwnedCapacityBytes'] == 0
     streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
     assert streaming['qualification']['fullChecksEachOs'] == 5587
@@ -1697,7 +1694,7 @@ def render():
     })
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
-        owner = vp8_owned if case in {'alpha', 'alpha16', 'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
+        owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']

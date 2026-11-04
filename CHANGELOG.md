@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Specialize WebP matching for uncancelable tokens while retaining every live
+  cancellation checkpoint, exact packets and unchanged memory ownership.
+
 - Share Lanczos RGB and certificate preparation in SIMD lanes, preserving exact
   pixels, portable fallbacks, cancellation and memory ownership.
 

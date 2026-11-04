@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
@@ -103,6 +104,26 @@ internal static class Vp8lReferenceMatcher
         Validate(pixels.Length, width);
         if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
         result.ResetStorage(pixels.Length, context);
+        // The token is immutable: an uncancelable token cannot acquire a source.
+        // Specialize this worker once, keeping every live-token checkpoint in
+        // the same source body and all ownership/admission outside that choice.
+        if (context.Cancellation.CanBeCanceled)
+            FillCore<Cancelable>(pixels, width, quality, lowEffort, context, result, headStorage);
+        else FillCore<Uncancelable>(pixels, width, quality, lowEffort, context, result, headStorage);
+    }
+
+    private readonly struct Cancelable { }
+    private readonly struct Uncancelable { }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void Check<TCancellation>(OperationContext context) where TCancellation : struct
+    {
+        if (typeof(TCancellation) == typeof(Cancelable)) context.Cancellation.ThrowIfCancellationRequested();
+    }
+
+    private static void FillCore<TCancellation>(ReadOnlySpan<uint> pixels, int width, int quality, bool lowEffort,
+        OperationContext context, Vp8lMatchIndex result, Vp8lTokenBuffer? headStorage) where TCancellation : struct
+    {
         long scratch = 0;
         try
         {
@@ -127,21 +148,21 @@ internal static class Vp8lReferenceMatcher
             var position = 0; var repeated = pixels[0] == pixels[1];
             while (position < pixels.Length - 2)
             {
-                context.Cancellation.ThrowIfCancellationRequested();
+                Check<TCancellation>(context);
                 var nextRepeat = pixels[position + 1] == pixels[position + 2];
                 if (repeated && nextRepeat)
                 {
                     var run = 1;
                     while (position + run + 2 < pixels.Length)
                     {
-                        context.Cancellation.ThrowIfCancellationRequested();
+                        Check<TCancellation>(context);
                         if (pixels[position + run + 2] != pixels[position]) break;
                         run++;
                     }
                     if (run > MaximumLength) { position += run - MaximumLength; run = MaximumLength; }
                     while (run > 0)
                     {
-                        context.Cancellation.ThrowIfCancellationRequested();
+                        Check<TCancellation>(context);
                         var key = Key(pixels[position], (uint)run--);
                         previous[position] = heads.Get(key); heads.Set(key, position++);
                     }
@@ -160,7 +181,7 @@ internal static class Vp8lReferenceMatcher
             position = pixels.Length - 2;
             while (position > 0)
             {
-                context.Cancellation.ThrowIfCancellationRequested();
+                Check<TCancellation>(context);
                 var limit = Math.Min(MaximumLength, pixels.Length - 1 - position);
                 var enough = Math.Min(256, limit); var minimum = Math.Max(0, position - window);
                 var candidate = previous[position]; var remaining = checks; var length = 0; var distance = 0;
@@ -168,21 +189,21 @@ internal static class Vp8lReferenceMatcher
                 {
                     if (position >= width)
                     {
-                        var found = Length(pixels, position - width, position, length, limit, context);
+                        var found = Length<TCancellation>(pixels, position - width, position, length, limit, context);
                         if (found > length) { length = found; distance = width; }
                         remaining--;
                     }
-                    var left = Length(pixels, position - 1, position, length, limit, context);
+                    var left = Length<TCancellation>(pixels, position - 1, position, length, limit, context);
                     if (left > length) { length = left; distance = 1; }
                     remaining--;
                     if (length == MaximumLength) candidate = minimum - 1;
                 }
                 while (candidate >= minimum && --remaining != 0)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
+                    Check<TCancellation>(context);
                     if (pixels[candidate + length] == pixels[position + length])
                     {
-                        var found = Length(pixels, candidate, position, 0, limit, context);
+                        var found = Length<TCancellation>(pixels, candidate, position, 0, limit, context);
                         if (found > length)
                         { length = found; distance = position - candidate; if (length >= enough) break; }
                     }
@@ -191,7 +212,7 @@ internal static class Vp8lReferenceMatcher
                 var extensionOrigin = position;
                 while (true)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
+                    Check<TCancellation>(context);
                     values[position] = (uint)(distance << 12 | length); position--;
                     if (distance == 0 || position == 0 || position < distance || pixels[position - distance] != pixels[position]) break;
                     if (length == MaximumLength && distance != 1 && position + MaximumLength < extensionOrigin) break;
@@ -204,14 +225,14 @@ internal static class Vp8lReferenceMatcher
         finally { if (scratch != 0) context.Release(scratch); }
     }
 
-    private static int Length(ReadOnlySpan<uint> pixels, int first, int second,
-        int already, int limit, OperationContext context)
+    private static int Length<TCancellation>(ReadOnlySpan<uint> pixels, int first, int second,
+        int already, int limit, OperationContext context) where TCancellation : struct
     {
-        context.Cancellation.ThrowIfCancellationRequested();
+        Check<TCancellation>(context);
         if (pixels[first + already] != pixels[second + already]) return 0;
         var n = 0;
         while (n < limit)
-        { context.Cancellation.ThrowIfCancellationRequested(); if (pixels[first + n] != pixels[second + n]) break; n++; }
+        { Check<TCancellation>(context); if (pixels[first + n] != pixels[second + n]) break; n++; }
         return n;
     }
 

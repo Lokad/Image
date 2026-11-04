@@ -111,17 +111,17 @@ settings do not establish matched quality.
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,522.60 | 2,709.10 | 1.300 / 1.311 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 70,165.60 | 57,652.08 | 1.217 / 1.229 | 7,165,472 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 66,646.83 | 55,294.63 | 1.205 / 1.292 | 7,165,472 | 98,590 / 98,590 |
 | VP8 opaque RGBA8 † | 20,366.51 | 16,737.93 | 1.217 / 1.225 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 14,482.28 | 10,521.42 | 1.376 / 1.391 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 8,123.43 | 6,270.92 | 1.295 / 1.304 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 14,550.71 | 10,511.03 | 1.384 / 1.402 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 21,738.20 | 16,813.65 | 1.293 / 1.304 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 69,657.13 | 57,733.16 | 1.207 / 1.217 | 7,165,880 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 86,323.75 | 83,862.10 | 1.029 / 1.090 | 6,517,254 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 8,159.66 | 9,566.19 | 0.853 / 0.871 | 4,363,930 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 115,815.96 | 130,140.89 | 0.890 / 0.906 | 7,476,640 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 77,597.76 | 75,729.69 | 1.025 / 1.036 | 5,983,424 | 121,896 / 121,896 |
+| VP8 RGBA8 + lossless alpha † | 63,619.93 | 53,597.57 | 1.187 / 1.206 | 7,165,880 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 85,943.43 | 82,810.76 | 1.038 / 1.104 | 6,517,254 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 7,775.79 | 9,818.65 | 0.792 / 0.841 | 4,363,930 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 106,912.76 | 121,611.71 | 0.879 / 0.895 | 7,476,640 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 71,696.93 | 69,558.01 | 1.031 / 1.063 | 5,983,424 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 19,417.24 | 18,696.87 | 1.039 / 1.049 | 820,444 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 23,814.57 | 22,718.51 | 1.048 / 1.065 | 2,437,652 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,940.17 | 4,734.88 | 1.255 / 1.276 | 820,908 | 236,828 / 236,828 |
@@ -151,8 +151,8 @@ settings do not establish matched quality.
 | JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
 | JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
 | JPEG 4:1:0, resident decode (confirmed pass) † | 372.23 | 509.10 | 0.731 / 0.756 | 720,838 | — |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 108,771.66 | 121,544.11 | 0.895 / 0.924 | 7,476,640 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 109,097.10 | 121,293.70 | 0.899 / 0.950 | 7,477,024 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 113,569.15 | 121,818.12 | 0.932 / 0.974 | 7,476,640 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 106,857.94 | 122,045.01 | 0.876 / 0.892 | 7,477,024 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
