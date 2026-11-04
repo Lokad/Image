@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-04. These **122 selected comparisons** combine qualified
+Updated 2026-11-04. These **124 selected comparisons** combine qualified
 **0.2.1 development** costs and the retained **0.2.0 baseline**. The
 [282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
 the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
@@ -16,14 +16,19 @@ admitted drawing workspace peaks at 48,544 B (previously 44,416), with zero reta
 scratch. These measurements include preparation and cleanup, with borrowed
 font/layout setup and per-operation canvas reset excluded equally.
 
-**Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
-managed preparation but reuse native graphs/scratch. Current Lanczos reduction
-rows compare equivalent one-shot or prepared operations on both sides.
+**Boundaries matter.** Bicubic rows include managed preparation but reuse native
+graphs/scratch. Current Lanczos reduction and
+[enlargement rows](../benchmarks/LANCZOS-CURRENT-ENLARGEMENT.md) compare equivalent
+one-shot or prepared operations on both sides. Byte enlargement passes both and
+stops. Prepared word enlargement retains a gap (upper **1.239**); word one-shot
+is confidence-open (upper **1.014**). No speedup is inferred from correcting
+comparison boundaries. Enlargement plans retain **325,156 / 333,396 B** for
+byte/word; native graph/input-plane retention and physical peaks are unmeasured.
 [Word-row preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) saves 25.61 µs
 on prepared word reduction (4.00% elapsed / 4.26% normalized). Plans retain
 139,800 B for RGBA8 / 148,040 B for RGBA16 and allocate 139 B/call. Word one-shot
-allocation rises by 8,256 B; prepared CPU parity remains open. Enlargement's short
-generalization is flat and establishes no broader gain.
+allocation rises by 8,256 B; prepared CPU parity remains open. The earlier
+enlargement generalization screen is retained as history without a gain claim.
 Rows marked **H** retain historical affected costs pending refresh.
 [PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
 fresh one-shot encoder state on both sides, including native codec/zlib setup
@@ -200,6 +205,14 @@ individual experiments remain in
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 720.25 | 1,566.64 | 0.460 / 0.462 | 138,643 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 614.45 | 492.45 | 1.248 / 1.255 | 139 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 750.21 | 1,814.57 | 0.413 / 0.417 | 146,864 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 613.92 | 511.12 | 1.201 / 1.207 | 139 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,219.49 | 5,228.71 | 0.807 / 0.812 | 319,229 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,953.90 | 4,059.53 | 0.974 / 0.978 | 148 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot (confidence open) † → 1027×519 | 5,130.98 | 5,107.53 | 1.005 / 1.014 | 4,592,777 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,807.95 | 3,903.64 | 1.232 / 1.239 | 4,265,302 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 † H → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
@@ -209,12 +222,6 @@ individual experiments remain in
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † H → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 720.25 | 1,566.64 | 0.460 / 0.462 | 138,643 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 614.45 | 492.45 | 1.248 / 1.255 | 139 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 750.21 | 1,814.57 | 0.413 / 0.417 | 146,864 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 613.92 | 511.12 | 1.201 / 1.207 | 139 |
-| Lanczos3 enlargement RGBA8 † H → 1027×519 | 4,198.93 | 4,066.37 | 1.033 / 1.038 | 319,038 |
-| Lanczos3 enlargement RGBA16 † H → 1027×519 | 5,399.64 | 4,260.84 | 1.267 / 1.453 | 4,583,983 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † H → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † H → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † H → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |

@@ -1,0 +1,205 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PAF213",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newCpuCaptures": 1,
+  "statisticalTiming": false,
+  "librarySha256": "6c835821fa9bc2ac75ef232c6ef8d1e5b1f8d87b621e9dbd6152ed6cf8c511cc",
+  "sourceSha256": "e69f7c9363370990e53b712b918b02af3921a52b4a6e2ab0b88a21d2673554e5",
+  "benchmarkAssemblySha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+  "scope": "One2-second capture of existing513x259 transparent VP8+lossless ALPH complete encode on qualified PCE212. CPU0/samplerCPU1. Original CTS197 inputs/settings/worker/selector/harness reused; profiled elapsed discarded.",
+  "gates": {
+    "quietGuardsPassed": true,
+    "managedPacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+    "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+    "packetBytes": 98590,
+    "completePacketExact": true,
+    "originalReceiptBooleansPreserved": true
+  },
+  "attribution": {
+    "totalSamples": 1944,
+    "methods": [
+      [
+        "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        285
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        126
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lGreenPredictorHistogram::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        91
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,bool,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+        82
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::BuildHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.Span`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        75
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]",
+        67
+      ],
+      [
+        "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PreparedPopulationSum(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype Lokad.Image.Internal.Vp8lReferenceEntropy/RunCost,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        65
+      ],
+      [
+        "valuetype Lokad.Image.Internal.Vp8lEncodingAnalysis [Lokad.Image] Lokad.Image.Internal.Vp8lEncodingAnalysis::Select(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        54
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::Apply(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,class Lokad.Image.Internal.Vp8lTokenBuffer,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        52
+      ],
+      [
+        "class Lokad.Image.Internal.Vp8lTokenBuffer [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz::Repeats(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        48
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::FillAllFromHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        44
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz+TraceState::Literal(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int64)[Optimized]",
+        43
+      ]
+    ],
+    "targetCode": [
+      {
+        "address": "0x7d16280d9600",
+        "size": 2819,
+        "name": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]"
+      },
+      {
+        "address": "0x7d16280e0540",
+        "size": 327,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::BuildHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.Span`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x7d16280e18a0",
+        "size": 2084,
+        "name": "class Lokad.Image.Internal.Vp8lTokenBuffer [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz::Trace(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]"
+      }
+    ],
+    "hotOffsets": [
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x634",
+        "samples": 38
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x6d1",
+        "samples": 24
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x5e6",
+        "samples": 24
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x6fc",
+        "samples": 21
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x5d1",
+        "samples": 19
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x64a",
+        "samples": 17
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::BuildHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.Span`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xb4",
+        "samples": 12
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x703",
+        "samples": 10
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::BuildHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.Span`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xba",
+        "samples": 10
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x72e",
+        "samples": 9
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x5f6",
+        "samples": 9
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x669",
+        "samples": 9
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x656",
+        "samples": 7
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x708",
+        "samples": 7
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x61a",
+        "samples": 7
+      },
+      {
+        "method": "class Lokad.Image.Internal.Vp8lMatchIndex [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::Build(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+        "offset": "0x834",
+        "samples": 7
+      }
+    ]
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "7592a0b26f4045f0a0c118867342625f195cfbcf4998b0294c62869b8b56afd7",
+    "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "62f7dd05db8734789eb858998c36151b8129f3eef0c70ddc71f9b9989316a788",
+    "src/Lokad.Image/Internal/Vp8lReferenceCache.History.cs": "59c96a0076f6c9ba3c362f1ba338de87128523a932fc4dbe33931f5ae5eb6e34"
+  },
+  "priorEvidence": [
+    "WEBP-MATCHING-PREPARATION-INCONCLUSIVE.md",
+    "WEBP-MATCH-PREFIX-INCONCLUSIVE.md",
+    "WEBP-COMPACT-MATCHING-INCONCLUSIVE.md",
+    "WEBP-PREPARED-PARSING-INCONCLUSIVE.md"
+  ],
+  "qualificationReuse": {
+    "evidence": "png-local-execution-state-evidence.json",
+    "fullChecksEachOs": 5543,
+    "sameActualPackageBothOs": true,
+    "invalidatedPaths": []
+  },
+  "decision": "Matcher remains largest individual sampled body, with candidate/probe/prefix regions overlapping prior inconclusive designs. Samples are not component costs or available savings. No new matching implementation or unchanged prefix/compact/preparation replay justified by this capture alone. Reconcile existing uncertain Lanczos enlargement one-shot/prepared boundaries independently before another redesign.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-current-alpha-execution-attribution.tar.xz",
+    "bytes": 261412,
+    "members": 22,
+    "sha256": "a9ce200e792628392960adcd4190c65f1aa4cf9709b7c448f4a17fe8cb0e4e89",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "qualificationDependency": "png-local-execution-state-qualified.tar.xz",
+    "qualificationDependencySha256": "80499ff9fdf5d68e1a23d57c69c813c97bfcd8cb446f31970a556e39d678de00",
+    "runtimeReferenceDependency": "webp-token-tail-history-qualified.tar.xz",
+    "runtimeReferenceDependencySha256": "f764f66ac2e53a286685b2b76536e43ab57355917f9e14b9b49df62b77a151c4",
+    "localMembersVerified": true
+  },
+  "publicationPostponed": true
+}

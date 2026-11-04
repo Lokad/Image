@@ -1,7 +1,7 @@
 # Material warm coverage
 
 Current architectural phase, 2026-11-04. **282 material required paths** remain
-in scope; the 122 displayed comparisons in [benchmark.md](../docs/benchmark.md)
+in scope; the 124 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs current passing evidence for every named path, with scope stated.
@@ -15,7 +15,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Other WebP encoding boundaries | [Current depth/async confirmations](WEBP-COLOR-HISTOGRAM-SEPARATION.md) pass on the accepted core, including normalization and fresh nonseekable output. Stop those controls. Other affected H cases remain historical; no blanket family pass. |
 | PNG encoding | [Execution-local parsing](PNG-LOCAL-EXECUTION-STATE.md) saves 1.23 ms / 4.52% raw on word Optimal with separated raw/normalized confidence and unchanged allocations. Word/byte Optimal and unchanged Fastest have current equivalent one-shot costs; all four retain gaps. Other affected level6/9 costs remain historical. The earlier [bounded-region trial](PNG-BOUNDED-REGION-INCONCLUSIVE.md) remains an inconclusive implementation, not a family ban. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
-| Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) retains its scoped bicubic gains and gaps. Other affected bilinear/bicubic costs marked H need reconciliation. [Word-row preparation](LANCZOS-WORD-ROW-PREPARATION.md) refreshes all four reduction comparisons: word prepared/one-shot improve with higher retained/allocated storage; one-shot depths pass and prepared depths retain gaps. Enlargement's generalization screen is flat, not confirmation. Exact Q30/rational/certified pixels remain required. |
+| Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) retains scoped bicubic gains/gaps; other affected bilinear/bicubic H costs need reconciliation. [Word-row preparation](LANCZOS-WORD-ROW-PREPARATION.md) improves reduction; one-shot depths pass and prepared depths retain gaps. [Equivalent enlargement](LANCZOS-CURRENT-ENLARGEMENT.md) passes both byte boundaries, retains a prepared-word gap and one-shot-word uncertainty. Exact Q30/rational/certified pixels remain required. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
 The [current WebP capacity audit](WEBP-CACHE-HISTORY-CAPACITY.md) identifies
@@ -170,6 +170,9 @@ exact packets but establishes no CPU/allocation gain; production is restored.
 The [current opaque capture](WEBP-OPAQUE-CURRENT-ATTRIBUTION.md) identifies dense
 scoring and predictor/histogram work for a bounded reuse audit, without timing or
 available-savings claims. No affected qualification is invalidated.
+The [current transparent capture](WEBP-ALPHA-CURRENT-ATTRIBUTION.md) retains matcher,
+VP8, predictor and cache-history attribution. Its hot regions overlap earlier
+inconclusive matching designs; the capture alone does not justify replaying them.
 The [final-assignment redesign](WEBP-FINAL-REMAP-INCONCLUSIVE.md) retains both exact
 stages and their adverse screens. Production/package are restored; two frozen-map/
 ownership Facts supplement unchanged qualification. No useful gain is established.

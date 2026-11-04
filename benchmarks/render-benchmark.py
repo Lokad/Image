@@ -380,12 +380,6 @@ def render():
     assert all(q['passed'] for q in horizontal_word_observation['quietness'].values())
     assert horizontal_word_current['qualificationReused']['sameActualPackageBothOs']
     assert horizontal_word_current['recovery']['measurementReruns'] == 0
-    lanczos_enlarge8_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-enlarge8-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not lanczos_enlarge8_cost['productionChanged'] and lanczos_enlarge8_cost['allBuilds'] == 0
-    assert lanczos_enlarge8_cost['independentQuietConfirmation']
-    lanczos_enlarge16_cost = json.loads((ROOT / 'benchmarks/current-lanczos3-enlarge16-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not lanczos_enlarge16_cost['productionChanged'] and lanczos_enlarge16_cost['allBuilds'] == 0
-    assert lanczos_enlarge16_cost['independentQuietConfirmation']
     assert not down8_cost['productionChanged'] and down8_cost['independentQuietConfirmation']
     assert down8_cost['preparation']['productionSha256'] == predictive_cost['producers']['linuxSha256']
     assert horizontal_cost['productionChanged'] and horizontal_cost['independentQuietConfirmationThisPair']
@@ -428,13 +422,10 @@ def render():
     editing_costs = {'case21': bilinear_word,
                      'case22': bicubic_byte_cost['cases']['Down8'][-1],
                      'case23': word_publication['cases']['Up16'][-1],
-                     'case24': cross16_cost['cases']['TightCross16'][-1],
-                     'case29': lanczos_enlarge8_cost['cases']['Enlarge8'][-1],
-                     'case30': lanczos_enlarge16_cost['cases']['Enlarge16'][-1]}
+                     'case24': cross16_cost['cases']['TightCross16'][-1]}
     editing_producers = {'case21': bilinear_word_cost,
                          'case22': bicubic_byte_cost, 'case23': word_publication,
-                         'case24': cross16_cost, 'case29': lanczos_enlarge8_cost,
-                         'case30': lanczos_enlarge16_cost}
+                         'case24': cross16_cost}
     streamed = json.loads((ROOT / 'benchmarks/warm-png-streaming-validation-evidence.json').read_text(encoding='utf-8'))
     reconciled = json.loads((ROOT / 'benchmarks/warm-read-reconciliation-evidence.json').read_text(encoding='utf-8'))
     header_skips = json.loads((ROOT / 'benchmarks/warm-header-skip-fast-path-evidence.json').read_text(encoding='utf-8'))
@@ -535,7 +526,7 @@ def render():
                  'case10': 'DiagramLossyTrellis8', 'case11': 'Opaque16'}
     rows = []
     for case in evidence['cases']:
-        if case['id'] in {'case07', 'case13', 'case14', 'case15', 'case16', 'case27', 'case28'}:
+        if case['id'] in {'case07', 'case13', 'case14', 'case15', 'case16', 'case27', 'case28', 'case29', 'case30'}:
             continue  # Replaced by current self-contained family evidence below.
         observation = case['observation']
         vp8l_case = case['id'] in {'case12', 'case13', 'case14'}
@@ -1517,25 +1508,31 @@ def render():
     prepared_resize = json.loads((ROOT / 'benchmarks/lanczos-word-row-preparation-evidence.json').read_text(encoding='utf-8'))
     assert prepared_resize['productionAccepted'] and prepared_resize['qualification']['fullChecksEachOs'] == 5529
     assert prepared_resize['qualification']['actualPackage']['sha256'] == prepared_resize['qualification']['samePackageLinux']['sameActualPackageSha256']
-    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| Lanczos3 enlargement'))
+    enlarged_resize = json.loads((ROOT / 'benchmarks/lanczos-current-enlargement-evidence.json').read_text(encoding='utf-8'))
+    assert not enlarged_resize['productionChanged'] and enlarged_resize['allBuilds'] == 0
+    assert enlarged_resize['independentQuietConfirmation'] and enlarged_resize['qualificationReuse']['relevantResizeSourcesUnchanged']
+    position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
-    for case, label in [('OneShot8', 'Lanczos3 one-shot RGBA8 / zimg one-shot'),
-                        ('Repeated8', 'Lanczos3 prepared RGBA8 / zimg prepared'),
-                        ('OneShot16', 'Lanczos3 one-shot RGBA16 / zimg one-shot'),
-                        ('Repeated16', 'Lanczos3 prepared RGBA16 / zimg prepared')]:
-        observation = prepared_resize['cases'][case]
+    for case, label, size, owner in [
+            ('OneShot8', 'Lanczos3 one-shot RGBA8 / zimg one-shot', '256×129', prepared_resize),
+            ('Repeated8', 'Lanczos3 prepared RGBA8 / zimg prepared', '256×129', prepared_resize),
+            ('OneShot16', 'Lanczos3 one-shot RGBA16 / zimg one-shot', '256×129', prepared_resize),
+            ('Repeated16', 'Lanczos3 prepared RGBA16 / zimg prepared', '256×129', prepared_resize),
+            ('OneShotEnlarge8', 'Lanczos3 one-shot RGBA8 / zimg one-shot', '1027×519', enlarged_resize),
+            ('RepeatedEnlarge8', 'Lanczos3 prepared RGBA8 / zimg prepared', '1027×519', enlarged_resize),
+            ('OneShotEnlarge16', 'Lanczos3 one-shot RGBA16 / zimg one-shot (confidence open)', '1027×519', enlarged_resize),
+            ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519', enlarged_resize)]:
+        observation = owner['cases'][case]
         assert observation['managedExact'] and observation['nativeQualityPassed'] and observation['quietGuardsPassed']
-        assert observation['librarySha256'] == prepared_resize['producers']['linuxSha256']
+        assert observation['librarySha256'] == owner['producers']['linuxSha256']
         assert len(observation['managed']['actual']) == 12
         stats = observation['managed']['statistics']
         native = min(b['mean'] for b in observation['nativeBrackets'])
-        current_resize_rows.append(('editing', f'| {label} † → 256×129 | {stats["Mean"] / 1000:,.2f} | '
+        current_resize_rows.append(('editing', f'| {label} † → {size} | {stats["Mean"] / 1000:,.2f} | '
                                     f'{native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / '
                                     f'{observation["conservativeRatioUpper"]:.3f} | '
                                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     rows[position:position] = current_resize_rows
-    rows = [(kind, row.replace(' † →', ' † § →') if row.startswith('| Lanczos3 enlargement') else row)
-            for kind, row in rows]
     current_vp8l_prefixes = ('| VP8L RGBA8 /', '| VP8L opaque RGBA8 /',
                              '| VP8L RGBA16, including normalization /', '| VP8L async, fresh nonseekable output /')
     historical_workspace = lambda row: (row.startswith('| VP8L ') and 'decode' not in row
@@ -1835,14 +1832,19 @@ admitted drawing workspace peaks at 48,544 B (previously 44,416), with zero reta
 scratch. These measurements include preparation and cleanup, with borrowed
 font/layout setup and per-operation canvas reset excluded equally.
 
-**Boundaries matter.** Bicubic and historical Lanczos enlargement rows include
-managed preparation but reuse native graphs/scratch. Current Lanczos reduction
-rows compare equivalent one-shot or prepared operations on both sides.
+**Boundaries matter.** Bicubic rows include managed preparation but reuse native
+graphs/scratch. Current Lanczos reduction and
+[enlargement rows](../benchmarks/LANCZOS-CURRENT-ENLARGEMENT.md) compare equivalent
+one-shot or prepared operations on both sides. Byte enlargement passes both and
+stops. Prepared word enlargement retains a gap (upper **1.239**); word one-shot
+is confidence-open (upper **1.014**). No speedup is inferred from correcting
+comparison boundaries. Enlargement plans retain **325,156 / 333,396 B** for
+byte/word; native graph/input-plane retention and physical peaks are unmeasured.
 [Word-row preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) saves 25.61 µs
 on prepared word reduction (4.00% elapsed / 4.26% normalized). Plans retain
 139,800 B for RGBA8 / 148,040 B for RGBA16 and allocate 139 B/call. Word one-shot
-allocation rises by 8,256 B; prepared CPU parity remains open. Enlargement's short
-generalization is flat and establishes no broader gain.
+allocation rises by 8,256 B; prepared CPU parity remains open. The earlier
+enlargement generalization screen is retained as history without a gain claim.
 Rows marked **H** retain historical affected costs pending refresh.
 [PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
 fresh one-shot encoder state on both sides, including native codec/zlib setup

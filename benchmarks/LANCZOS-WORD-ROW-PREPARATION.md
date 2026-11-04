@@ -38,7 +38,9 @@ Prepared images retain independent ownership after source/plan disposal.
 The existing word-enlargement generalization screen is flat: 4,754.97 → 4,753.35 µs,
 ratios 1.2177 → 1.2158, wide intervals; allocation is unchanged at 4,265,302 B/op,
 plan retention 325,156 → 333,396 B. Three actuals establish no enlargement gain,
-regression or parity. Do not extrapolate the reduction result.
+regression or parity. Do not extrapolate the reduction result. The subsequent
+[current enlargement confirmations](LANCZOS-CURRENT-ENLARGEMENT.md) supersede
+this screen as current-cost evidence without an incremental gain claim.
 
 Byte UInt32 preparation has a mixed screen. An exact-double paired implementation
 is initially three times slower; instruction evidence exposes temporary vector
