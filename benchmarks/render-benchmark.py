@@ -1505,11 +1505,13 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}) | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-row-output-evidence.json').read_text(encoding='utf-8'))
+    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-shared-row-driver-evidence.json').read_text(encoding='utf-8'))
     assert lanczos_current['productionAccepted'] and lanczos_current['independentQuietConfirmation']
-    assert lanczos_current['qualification']['fullChecksEachOs'] == 5545
+    assert lanczos_current['qualification']['fullChecksEachOs'] == 5569
     assert lanczos_current['qualification']['actualPackage']['sha256'] == lanczos_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert len(lanczos_current['cases']) == 8
+    assert all(lanczos_current['comparisons']['Repeated8']['rawConfidenceSeparates'].values())
+    assert lanczos_current['comparisons']['Repeated8']['normalizedConfidenceSeparates']
     assert sum(c['status'] == 'Confirmed pass' for c in lanczos_current['cases'].values()) == 5
     position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
@@ -1850,9 +1852,12 @@ Current priorities and scope:
   batching), without a CPU gain/equivalence/regression claim. Five current gaps;
   byte Optimal6 remains uncertain (upper 1.055), to resolve before tuning. Existing
   384 KiB admission; 12,648 B tree payload during operation, zero after disposal.
-- **Resizing:** [current Lanczos3](../benchmarks/LANCZOS-PAIRED-ROW-OUTPUT.md)
+- **Resizing:** [shared Lanczos driver](../benchmarks/LANCZOS-SHARED-ROW-DRIVER.md)
+  saves 24 µs / 3.98% raw on prepared byte reduction, with unchanged allocations/
+  retention and exact pixels. Word point increases have overlapping confidence;
+  refreshed native-clock movements are disclosed in the report. Current coverage
   has five passing boundaries; prepared byte reduction and word reduction/
-  enlargement retain gaps (uppers 1.240/1.115/1.080). One-shot and prepared calls
+  enlargement retain gaps (uppers 1.201/1.121/1.100). One-shot and prepared calls
   compare equivalent setup/ownership. Plans retain 139,800/148,040 B for byte/word
   reduction and 325,156/333,396 B for enlargement. Managed Q30/rational/certified
   pixels stay exact; zimg uses float. [Bicubic](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)

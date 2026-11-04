@@ -29,38 +29,7 @@ internal static class LanczosFmaResize
         return true;
     }
 
-    internal static ImageBuffer Apply(ImageBuffer source, int width, int height, LanczosPlan horizontal,
-        LanczosPlan vertical, LanczosWorkspace workspace, OperationContext context)
-    {
-        var slots = workspace.RowIds.Length; var channels = width * 4;
-        var rows = workspace.FastRows!; var sums = workspace.FastSums!;
-        var rowIds = workspace.RowIds; Array.Fill(rowIds, -1);
-        var result = ImageBuffer.AllocateForOverwrite(width, height, source.BitDepth, context);
-        try
-        {
-            var maximum = source.BitDepth == 8 ? 255 : 65535;
-            var errors = Errors(vertical.MaximumCount);
-            var numeratorError = errors.Rgb + 65535d * errors.Alpha;
-            for (var y = 0; y < height; y++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested(); sums.AsSpan().Clear(); var window = vertical.Windows[y];
-                for (var tap = 0; tap < window.Count; tap++)
-                {
-                    context.Cancellation.ThrowIfCancellationRequested(); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
-                    var sy = window.First + tap; var slot = sy % slots;
-                    var row = rows.AsSpan(slot * channels, channels);
-                    if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, workspace.Products, context); rowIds[slot] = sy; }
-                    context.Cancellation.ThrowIfCancellationRequested(); Accumulate(row, sums, weight, context);
-                }
-                context.Cancellation.ThrowIfCancellationRequested();
-                WriteRow(source, result, y, horizontal, vertical, sums, numeratorError, errors.Alpha, maximum, context);
-            }
-            result.Orientation = source.Orientation; return result;
-        }
-        catch { result.Dispose(); throw; }
-    }
-
-    private static void WriteRow(ImageBuffer source, ImageBuffer result, int y, LanczosPlan horizontal,
+    internal static void WriteRow(ImageBuffer source, ImageBuffer result, int y, LanczosPlan horizontal,
         LanczosPlan vertical, ReadOnlySpan<double> sums, double numeratorError, double alphaError,
         int maximum, OperationContext context)
     {

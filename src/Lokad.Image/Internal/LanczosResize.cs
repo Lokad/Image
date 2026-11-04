@@ -21,51 +21,73 @@ internal static class LanczosResize
     internal static ImageBuffer Execute(ImageBuffer source, int width, int height, LanczosPlan horizontal,
         LanczosPlan vertical, LanczosWorkspace workspace, OperationContext context)
     {
-        if (workspace.Fast) return LanczosFmaResize.Apply(source, width, height, horizontal, vertical, workspace, context);
         var slots = workspace.RowIds.Length; var channels = width * 4L;
-        var rows = workspace.ExactRows!; var sums = workspace.ExactSums!;
         var rowIds = workspace.RowIds; Array.Fill(rowIds, -1);
         var result = ImageBuffer.AllocateForOverwrite(width, height, source.BitDepth, context);
         try
         {
             var maximum = source.BitDepth == 8 ? 255 : 65535;
+            var errors = workspace.Fast ? LanczosFmaResize.Errors(vertical.MaximumCount) : default;
+            var numeratorError = errors.Rgb + 65535d * errors.Alpha;
             for (var y = 0; y < height; y++)
             {
-                context.Cancellation.ThrowIfCancellationRequested(); sums.AsSpan().Clear();
+                context.Cancellation.ThrowIfCancellationRequested();
+                if (workspace.Fast) workspace.FastSums.AsSpan().Clear();
+                else workspace.ExactSums.AsSpan().Clear();
                 var window = vertical.Windows[y];
                 for (var tap = 0; tap < window.Count; tap++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested(); var weight = vertical.Weights[window.Offset + tap]; if (weight == 0) continue;
                     var sy = window.First + tap; var slot = sy % slots;
-                    var row = rows.AsSpan(slot * (int)channels, (int)channels);
-                    if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, workspace.Products, context); rowIds[slot] = sy; }
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    AccumulateVertical(row, sums, weight, context);
-                }
-                context.Cancellation.ThrowIfCancellationRequested();
-                Span<byte> destination8 = default; Span<ushort> destination16 = default;
-                if (source.BitDepth == 8) destination8 = result.GetRow8(y); else destination16 = result.GetRow16(y);
-                for (var x = 0; x < width; x++)
-                {
-                    if ((x & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                    var at = x * 4; var pixel = Normalize(sums, at, maximum);
-                    var r = pixel.GetElement(0); var g = pixel.GetElement(1);
-                    var b = pixel.GetElement(2); var a = pixel.GetElement(3);
-                    if (source.BitDepth == 8)
+                    // Geometry, cache publication and result ownership are shared.
+                    // The typed kernels retain their arithmetic and private views.
+                    if (workspace.Fast)
                     {
-                        destination8[at] = (byte)r; destination8[at + 1] = (byte)g;
-                        destination8[at + 2] = (byte)b; destination8[at + 3] = (byte)a;
+                        var row = workspace.FastRows.AsSpan(slot * (int)channels, (int)channels);
+                        if (rowIds[slot] != sy) { LanczosFmaResize.Horizontal(source, sy, horizontal, row, workspace.Products, context); rowIds[slot] = sy; }
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        LanczosFmaResize.Accumulate(row, workspace.FastSums, weight, context);
                     }
                     else
                     {
-                        destination16[at] = (ushort)r; destination16[at + 1] = (ushort)g;
-                        destination16[at + 2] = (ushort)b; destination16[at + 3] = (ushort)a;
+                        var row = workspace.ExactRows.AsSpan(slot * (int)channels, (int)channels);
+                        if (rowIds[slot] != sy) { Horizontal(source, sy, horizontal, row, workspace.Products, context); rowIds[slot] = sy; }
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        AccumulateVertical(row, workspace.ExactSums, weight, context);
                     }
                 }
+                context.Cancellation.ThrowIfCancellationRequested();
+                if (workspace.Fast) LanczosFmaResize.WriteRow(source, result, y, horizontal, vertical,
+                    workspace.FastSums, numeratorError, errors.Alpha, maximum, context);
+                else WriteExactRow(result, y, workspace.ExactSums, maximum, context);
             }
             result.Orientation = source.Orientation; return result;
         }
         catch { result.Dispose(); throw; }
+    }
+
+    private static void WriteExactRow(ImageBuffer result, int y, ReadOnlySpan<Int128> sums,
+        int maximum, OperationContext context)
+    {
+        Span<byte> destination8 = default; Span<ushort> destination16 = default;
+        if (maximum == 255) destination8 = result.GetRow8(y); else destination16 = result.GetRow16(y);
+        for (var x = 0; x < result.Width; x++)
+        {
+            if ((x & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            var at = x * 4; var pixel = Normalize(sums, at, maximum);
+            var r = pixel.GetElement(0); var g = pixel.GetElement(1);
+            var b = pixel.GetElement(2); var a = pixel.GetElement(3);
+            if (maximum == 255)
+            {
+                destination8[at] = (byte)r; destination8[at + 1] = (byte)g;
+                destination8[at + 2] = (byte)b; destination8[at + 3] = (byte)a;
+            }
+            else
+            {
+                destination16[at] = (ushort)r; destination16[at + 1] = (ushort)g;
+                destination16[at + 2] = (ushort)b; destination16[at + 3] = (ushort)a;
+            }
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
