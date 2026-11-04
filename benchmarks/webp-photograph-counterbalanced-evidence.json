@@ -1,0 +1,118 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WPC299",
+  "productionChanged": false,
+  "newMaterialCases": 0,
+  "currentCostOnly": true,
+  "incrementalCpuAllocationClaim": false,
+  "current": {
+    "caseId": "PhotographLossless8",
+    "managedUs": 83428.218875,
+    "nativeUs": 82763.9265625,
+    "ratio": 1.0080263508522442,
+    "lower": 0.9896983163150521,
+    "upper": 1.0200701524195928,
+    "status": "uncertain",
+    "allocatedBytes": 6516744,
+    "actualIterations": 12,
+    "operationsPerSubjectPerPair": 4,
+    "allActualsRetained": true,
+    "managedPacketBytes": 160032,
+    "nativePacketBytes": 160032,
+    "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+    "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+    "managedQuality": 85,
+    "nativeQuality": 75,
+    "effort": 4,
+    "exactRgb": true,
+    "completePacketExact": true,
+    "librarySha256": "5206ac4dfe9b8375d36c3867dbee99594acff9584f200688c31765b8772d9112",
+    "benchmarkAssemblySha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "method": "Twelve fixed adjacent managed/native pairs with alternating order and four complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/BGRA scratch retained. No timing or baseline-setting changes in production.",
+  "pairedRatioConfidence": [
+    0.9923093962235994,
+    1.0148516246185326
+  ],
+  "nativeBrackets": [
+    {
+      "position": "before",
+      "meanUs": 82780.0345,
+      "standardErrorUs": 83.3607535236645,
+      "actuals": 12
+    },
+    {
+      "position": "paired",
+      "meanUs": 83136.20164583332,
+      "standardErrorUs": 141.376910178075,
+      "actuals": 12
+    },
+    {
+      "position": "after",
+      "meanUs": 82763.9265625,
+      "standardErrorUs": 103.65740625595112,
+      "actuals": 12
+    }
+  ],
+  "confidenceViews": [
+    {
+      "view": "allActual",
+      "actuals": 12,
+      "lower": 0.9896983163150521,
+      "upper": 1.0200701524195928
+    },
+    {
+      "view": "upperOutlierDiagnostic",
+      "actuals": 12,
+      "lower": 0.9896983163150521,
+      "upper": 1.0200701524195928
+    }
+  ],
+  "correctness": "Reuse the existing frozen public benchmark subject and all complete-packet, exact RGBA/alpha/hidden RGB, normal/scalar CLI, source and independent-owner gates before/after. Native Sample checks operation/CPU/output/cumulative counters; native final Check and Stop retain source/packet validation. Quality85/75 and effort4 remain frozen; equal numeric qualities are not the criterion.",
+  "qualificationReused": {
+    "sourceEvidence": "vp8-residual-preparation-evidence.json",
+    "fullChecksEachOs": 5636,
+    "normalScalar": true,
+    "sameActualPackageAllThreeExamplesBothOs": true,
+    "actualPackageSha256": "e754742fe0c255208a216d56947d92bb83cbca40be9ea204a6babb6e719597a5",
+    "productionSourcesAndDllsUnchanged": true
+  },
+  "workflow": {
+    "privateDriverBuilds": 1,
+    "productionTestHarnessNativeSelectorPackageBuilds": 0,
+    "measurementJobs": 1,
+    "statisticalPairs": 12,
+    "nativeBracketBatches": 24,
+    "operationsPerBatch": 4,
+    "warmupPairs": 4,
+    "completedJobsRepeated": 0
+  },
+  "storage": "Paired managed allocation6516744 B/op is unchanged. Native allocations and physical/admitted peaks unmeasured. No production allocation, ownership, memory admission or retained-state change.",
+  "decision": "Still uncertain: do not claim parity or assume an optimization gap. Preserve this narrower comparable-clock evidence and stop unchanged sampling. Continue independent demonstrated codec/resizing gaps. No CPU or allocation gain/regression follows from replacing older production/clock/schedule evidence.",
+  "toolSha256": "0042410e340d9649074f4ac215803b11601b0318abae6da44d2f14e34015f2f4",
+  "driverSourceSha256": "09b83ae110c3cd31091ab56c28cf2e29b4d79462ed0facb80b354be00086ff2e",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-photograph-counterbalanced.tar.xz",
+    "bytes": 1020904,
+    "members": 42,
+    "sha256": "7f1031ae298c2119ebc112adda0e1472a492cd91a200dee6f93c5a00c5716520",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-residual-preparation-qualified.tar.xz",
+        "sha256": "6b33714fbe4c8bd0a1ae6cbd59a32c0881205ce59ace99f88ac8c97d04c2ccb1"
+      },
+      {
+        "file": "webp-matcher-cancellation-preparation-qualified.tar.xz",
+        "sha256": "6f908eec7c3dc44733d93f9daa04a3adb22586efd460a97adb6f8703099f025b"
+      }
+    ],
+    "dependencyScope": "Unchanged qualified source/core/package, frozen controls/workers/harness/framework retained by dependencies. Private counterbalanced driver source/DLL, selected runtime, all raw pairs/brackets/statistics, guards and original correctness receipt retained here."
+  },
+  "requiredMaterialPaths": 282,
+  "publication": "postponed"
+}

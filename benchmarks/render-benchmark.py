@@ -1705,6 +1705,20 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
+    photo_check = json.loads((ROOT / 'benchmarks/webp-photograph-counterbalanced-evidence.json').read_text(encoding='utf-8'))
+    current = photo_check['current']
+    assert not photo_check['productionChanged'] and photo_check['newMaterialCases'] == 0 and photo_check['currentCostOnly']
+    assert current['actualIterations'] == 12 and current['allActualsRetained'] and current['operationsPerSubjectPerPair'] == 4
+    assert current['completePacketExact'] and current['managedPacketBytes'] == current['nativePacketBytes'] == 160032
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['status'] == 'uncertain' and current['lower'] <= 1 < current['upper']
+    assert photo_check['qualificationReused']['productionSourcesAndDllsUnchanged']
+    assert photo_check['qualificationReused']['sameActualPackageAllThreeExamplesBothOs']
+    label = 'VP8L photograph / libwebp exact=1'
+    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| ' + label + ' †'))
+    rows[position] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
+                      f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
     column = json.loads((ROOT / 'benchmarks/bicubic-column-preparation-evidence.json').read_text(encoding='utf-8'))
     current = column['cases']['TightDown8']
     assert column['productionAccepted'] and current['actualIterations'] == 12
@@ -1887,7 +1901,10 @@ Current priorities and scope:
   the coefficient phase carries 82,668 B extra. Physical peak is unmeasured.
   [Unchanged VP8L paths](../benchmarks/WEBP-MATCHER-CANCELLATION-PREPARATION.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
-  Photograph remains uncertain; no unchanged resampling follows. Earlier
+  [Photograph's counterbalanced check](../benchmarks/WEBP-PHOTOGRAPH-COUNTERBALANCED.md)
+  remains uncertain (interval 0.990–1.020); twelve alternating pairs retain all
+  actuals and native brackets, with unchanged frozen settings/packets. No repeated
+  unchanged sampling follows. Earlier
   [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md) and matcher
   gains retain their scoped evidence, without substituting older VP8 costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)

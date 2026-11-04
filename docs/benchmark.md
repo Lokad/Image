@@ -30,7 +30,10 @@ Current priorities and scope:
   the coefficient phase carries 82,668 B extra. Physical peak is unmeasured.
   [Unchanged VP8L paths](../benchmarks/WEBP-MATCHER-CANCELLATION-PREPARATION.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
-  Photograph remains uncertain; no unchanged resampling follows. Earlier
+  [Photograph's counterbalanced check](../benchmarks/WEBP-PHOTOGRAPH-COUNTERBALANCED.md)
+  remains uncertain (interval 0.990–1.020); twelve alternating pairs retain all
+  actuals and native brackets, with unchanged frozen settings/packets. No repeated
+  unchanged sampling follows. Earlier
   [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md) and matcher
   gains retain their scoped evidence, without substituting older VP8 costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
@@ -124,7 +127,7 @@ settings do not establish matched quality.
 | VP8 diagram, effort6 / trellis † | 12,979.43 | 9,828.25 | 1.321 / 1.325 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 18,397.96 | 15,576.92 | 1.181 / 1.187 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 61,821.92 | 53,387.59 | 1.158 / 1.168 | 7,165,880 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 85,943.43 | 82,810.76 | 1.038 / 1.104 | 6,517,254 | 160,032 / 160,032 |
+| VP8L photograph / libwebp exact=1 † | 83,428.22 | 82,763.93 | 1.008 / 1.020 | 6,516,744 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,775.79 | 9,818.65 | 0.792 / 0.841 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 106,912.76 | 121,611.71 | 0.879 / 0.895 | 7,476,640 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 71,696.93 | 69,558.01 | 1.031 / 1.063 | 5,983,424 | 121,896 / 121,896 |
