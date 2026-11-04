@@ -2,7 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
-- PNG encoding batches literal codes through local bit state and reuses
+- PNG encoding reuses operation-owned Huffman workspace, batches literal codes
+  through local bit state and reuses
   contiguous dictionary history, preserving exact packets, cancellation and
   memory ownership.
 

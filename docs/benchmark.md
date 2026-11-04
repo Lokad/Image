@@ -33,18 +33,19 @@ Rows marked **H** retain historical affected costs pending refresh.
 All six current PNG Optimal/Fastest/Smallest rows compare fresh encoder state, complete
 encoding and independent output/disposal on both sides. Word native endian-frame
 allocation/conversion/disposal stays timed.
-[Local token output](../benchmarks/PNG-TOKEN-OUTPUT.md) saves **0.75 ms / 3.19% raw /
-4.09% normalized** on word SmallestSize9, with separated filtered/all-actual raw
-and normalized confidence. Its native clock is **0.929% slower**. Byte normalized
-bounds overlap, so no byte incremental gain is claimed. Six current PNG controls
-retain gaps: Smallest uppers **1.092 word / 1.052 byte**, Optimal **1.085 / 1.047**,
-Fastest **1.111 / 1.284**. Level-1/6 native clocks are **8–9% slower** than their
-older runs; their refreshed costs establish no raw speedup or causal regression.
-Word Optimal/Fastest allocation is **3,420,516 B/op**, Smallest **3,420,448 B/op**;
-Smallest batches nine operations versus the original eight, not an allocation
-saving. Byte Optimal/Smallest **932,516 B/op**, Fastest **951,212 B/op**.
-Workspace admission stays **384 KiB**, retained scratch zero; complete admitted/
-physical peaks and native allocation are not newly measured.
+[Tree workspace reuse](../benchmarks/PNG-TREE-WORKSPACE.md) saves **834,544 B/op
+(24.4%) word / 94,960 B/op (10.2%) byte** on SmallestSize9 at identical batching.
+CPU intervals overlap; no incremental speedup, equivalence or causal regression
+is claimed. Byte raw elapsed rises8.77% while its native clock rises8.46%.
+Five current PNG controls have confirmed gaps: Smallest uppers **1.104 word /
+1.061 byte**, word Optimal **1.064**, Fastest **1.124 / 1.282**. Byte Optimal
+remains uncertain (**upper1.055**); resolve that measurement before tuning it.
+Word Optimal/Fastest allocate **2,585,972 B/op**, Smallest **2,585,904 B/op**;
+byte Optimal/Smallest **837,556 B/op**, Fastest **840,844 B/op**.
+The operation owns **12,648 B** tree-array payload, released at disposal.
+Workspace admission stays **384 KiB**, scratch retained after disposal zero;
+complete admitted/physical peaks and native allocation are not newly measured.
+[Earlier token output](../benchmarks/PNG-TOKEN-OUTPUT.md),
 [Dictionary preparation](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md),
 [greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md),
 [one-shot reconciliation](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md) and
@@ -88,7 +89,7 @@ controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,566 full/live checks
+**H** costs remain historical. The current build passes **5,569 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release
@@ -163,18 +164,18 @@ individual experiments remain in
 | VP8L text/diagram / libwebp exact=1 † | 8,036.29 | 9,483.21 | 0.847 / 0.867 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,497.65 | 130,268.92 | 0.887 / 0.895 | 7,476,640 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 70,681.22 | 70,344.26 | 1.005 / 1.037 | 5,983,424 | 121,896 / 121,896 |
-| PNG RGBA8, one-shot SmallestSize9 / native9 † | 18,021.83 | 17,232.20 | 1.046 / 1.052 | 932,516 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot SmallestSize9 / native9 † | 22,805.59 | 21,063.43 | 1.083 / 1.092 | 3,420,448 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 5,939.86 | 4,718.00 | 1.259 / 1.284 | 951,212 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 19,603.10 | 18,690.15 | 1.049 / 1.061 | 837,556 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 22,770.12 | 21,242.05 | 1.072 / 1.104 | 2,585,904 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 5,956.95 | 4,745.88 | 1.255 / 1.282 | 840,844 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 21,990.88 | 20,137.44 | 1.092 / 1.111 | 3,420,516 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 22,154.97 | 20,225.47 | 1.095 / 1.124 | 2,585,972 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, forward-only output † H | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 19,268.37 | 18,681.39 | 1.031 / 1.047 | 932,516 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 23,863.19 | 22,409.38 | 1.065 / 1.085 | 3,420,516 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 17,820.47 | 17,246.94 | 1.033 / 1.055 | 837,556 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 21,775.28 | 20,741.61 | 1.050 / 1.064 | 2,585,972 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
 | PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |

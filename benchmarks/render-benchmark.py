@@ -1563,14 +1563,13 @@ def render():
                                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                                   f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     rows[position:position] = current_webp_rows
-    png_output = json.loads((ROOT / 'benchmarks/png-token-output-evidence.json').read_text(encoding='utf-8'))
+    png_output = json.loads((ROOT / 'benchmarks/png-tree-workspace-evidence.json').read_text(encoding='utf-8'))
     assert png_output['productionAccepted'] and png_output['independentQuietConfirmation']
-    assert png_output['qualification']['fullChecksEachOs'] == 5566
+    assert png_output['qualification']['fullChecksEachOs'] == 5569
     assert png_output['qualification']['actualPackage']['sha256'] == png_output['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert png_output['comparisons']['EncodeSmallest16']['rawConfidenceSeparates']
-    assert png_output['comparisons']['EncodeSmallest16']['normalizedConfidenceSeparates']
-    assert not png_output['comparisons']['EncodeSmallest8']['normalizedConfidenceSeparates']
-    # All encoding instances use the new dictionary storage/working admission.
+    assert png_output['storage']['allocationSavingsSameBatch'] == {'EncodeSmallest16': 834544, 'EncodeSmallest8': 94960}
+    assert not any(c['cpuGainOrRegressionClaim'] for c in png_output['comparisons'].values())
+    # Dynamic encoding instances reuse operation-owned tree preparation storage.
     # Decode/inspection paths are separate and retain their applicable costs.
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
@@ -1583,7 +1582,9 @@ def render():
             ('EncodeSmallest8', 'PNG RGBA8, SmallestSize9 / native9', 'PNG RGBA8, one-shot SmallestSize9 / native9'),
             ('EncodeSmallest16', 'PNG RGBA16, SmallestSize9 / native9', 'PNG RGBA16, one-shot SmallestSize9 / native9')]:
         observation = png_output['cases'][case]; receipt = observation['receipt']
-        assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
+        assert observation['status'] == ('Uncertain parity' if case == 'Encode8' else 'Confirmed gap')
+        if observation['status'] == 'Confirmed gap':
+            assert observation['conservativeRatioLower'] > 1
         assert observation['librarySha256'] == png_output['producers']['linuxSha256']
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
         assert len(observation['managed']['actual']) == 12
@@ -1853,18 +1854,19 @@ Rows marked **H** retain historical affected costs pending refresh.
 All six current PNG Optimal/Fastest/Smallest rows compare fresh encoder state, complete
 encoding and independent output/disposal on both sides. Word native endian-frame
 allocation/conversion/disposal stays timed.
-[Local token output](../benchmarks/PNG-TOKEN-OUTPUT.md) saves **0.75 ms / 3.19% raw /
-4.09% normalized** on word SmallestSize9, with separated filtered/all-actual raw
-and normalized confidence. Its native clock is **0.929% slower**. Byte normalized
-bounds overlap, so no byte incremental gain is claimed. Six current PNG controls
-retain gaps: Smallest uppers **1.092 word / 1.052 byte**, Optimal **1.085 / 1.047**,
-Fastest **1.111 / 1.284**. Level-1/6 native clocks are **8–9% slower** than their
-older runs; their refreshed costs establish no raw speedup or causal regression.
-Word Optimal/Fastest allocation is **3,420,516 B/op**, Smallest **3,420,448 B/op**;
-Smallest batches nine operations versus the original eight, not an allocation
-saving. Byte Optimal/Smallest **932,516 B/op**, Fastest **951,212 B/op**.
-Workspace admission stays **384 KiB**, retained scratch zero; complete admitted/
-physical peaks and native allocation are not newly measured.
+[Tree workspace reuse](../benchmarks/PNG-TREE-WORKSPACE.md) saves **834,544 B/op
+(24.4%) word / 94,960 B/op (10.2%) byte** on SmallestSize9 at identical batching.
+CPU intervals overlap; no incremental speedup, equivalence or causal regression
+is claimed. Byte raw elapsed rises8.77% while its native clock rises8.46%.
+Five current PNG controls have confirmed gaps: Smallest uppers **1.104 word /
+1.061 byte**, word Optimal **1.064**, Fastest **1.124 / 1.282**. Byte Optimal
+remains uncertain (**upper1.055**); resolve that measurement before tuning it.
+Word Optimal/Fastest allocate **2,585,972 B/op**, Smallest **2,585,904 B/op**;
+byte Optimal/Smallest **837,556 B/op**, Fastest **840,844 B/op**.
+The operation owns **12,648 B** tree-array payload, released at disposal.
+Workspace admission stays **384 KiB**, scratch retained after disposal zero;
+complete admitted/physical peaks and native allocation are not newly measured.
+[Earlier token output](../benchmarks/PNG-TOKEN-OUTPUT.md),
 [Dictionary preparation](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md),
 [greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md),
 [one-shot reconciliation](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md) and
@@ -1908,7 +1910,7 @@ controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,566 full/live checks
+**H** costs remain historical. The current build passes **5,569 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release

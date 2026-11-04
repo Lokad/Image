@@ -41,14 +41,14 @@ internal sealed partial class PngDeflater
                 literalFrequency[LengthSymbol(length)]++; distanceFrequency[DistanceSymbol(back)]++;
             }
         }
-        var literals = DeflateHuffman.Lengths(literalFrequency, 15, context);
-        var distances = DeflateHuffman.Lengths(distanceFrequency, 15, context);
+        var literals = DeflateHuffman.Lengths(literalFrequency, 15, context, treeWorkspace!);
+        var distances = DeflateHuffman.Lengths(distanceFrequency, 15, context, treeWorkspace!);
         Span<DeflateHuffman.Run> runs = stackalloc DeflateHuffman.Run[316];
         var runCount = DeflateHuffman.Runs(literals, runs);
         runCount += DeflateHuffman.Runs(distances, runs[runCount..]);
         var lengthFrequency = new int[19];
         for (var index = 0; index < runCount; index++) lengthFrequency[runs[index].Symbol]++;
-        var lengths = DeflateHuffman.Lengths(lengthFrequency, 7, context); Array.Resize(ref lengths, 19);
+        var lengths = DeflateHuffman.Lengths(lengthFrequency, 7, context, treeWorkspace!); Array.Resize(ref lengths, 19);
         var lengthCount = 19;
         while (lengthCount > 4 && lengths[Order[lengthCount - 1]] == 0) lengthCount--;
         var dynamicBits = 3 + 5 + 5 + 4 + lengthCount * 3; var fixedBits = 3;

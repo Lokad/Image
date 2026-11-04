@@ -19,6 +19,7 @@ internal sealed partial class PngDeflater : Stream
     private byte[] history = [], encoded = [];
     private ushort[] heads = [], older = [];
     private uint[] tokens = [];
+    private DeflateHuffman.Workspace? treeWorkspace;
     private long position, filled, windowOrigin, deferredStart, blockStart;
     private int storedCount;
     private int deferredLength = Minimum - 1, tokenCount, encodedCount, pendingBits;
@@ -36,6 +37,7 @@ internal sealed partial class PngDeflater : Stream
         {
             history = new byte[2 * Window]; heads = new ushort[Window]; older = new ushort[Window];
             tokens = new uint[TokenCapacity]; encoded = new byte[4096];
+            if (level != 0) treeWorkspace = new();
         }
         catch { context.Release(WorkspaceBytes); throw; }
     }
@@ -376,6 +378,7 @@ internal sealed partial class PngDeflater : Stream
         if (disposing && !disposed)
         {
             disposed = true; history = []; heads = []; older = []; tokens = []; encoded = [];
+            treeWorkspace = null;
             context.Release(WorkspaceBytes);
         }
         base.Dispose(disposing);

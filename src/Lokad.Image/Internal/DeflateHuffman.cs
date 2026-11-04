@@ -6,12 +6,32 @@ internal static class DeflateHuffman
 {
     internal readonly record struct Run(int Symbol, int Extra, int Bits);
 
-    internal static byte[] Lengths(int[] counts, int maximumBits, OperationContext context)
+    // Operation-owned preparation storage. All three RFC1951 alphabets fit the
+    // literal/length capacity; returned trees have separate ownership.
+    internal sealed class Workspace
+    {
+        internal readonly int[] Weights = new int[572], Depth = new int[572], Parent = new int[572];
+        internal readonly int[] Heap = new int[286], Removal = new int[572], Bits = new int[572];
+        internal readonly int[] BitCounts = new int[16];
+
+        internal void Reset(int symbols, int maximumBits)
+        {
+            if ((uint)symbols > 286 || maximumBits is < 1 or > 15)
+                throw new ArgumentException("Tree exceeds the Deflate workspace.");
+            // Counts replace every leaf weight. Heap/removal prefixes, active
+            // parents and internal weights/depths are assigned before use.
+            // Inactive leaves still need zero lengths; the root is reset below.
+            Array.Clear(Depth, 0, symbols); Array.Clear(Bits, 0, symbols);
+            Array.Clear(BitCounts, 0, maximumBits + 1);
+        }
+    }
+
+    internal static byte[] Lengths(int[] counts, int maximumBits, OperationContext context, Workspace workspace)
     {
         context.Cancellation.ThrowIfCancellationRequested();
-        var capacity = counts.Length * 2;
-        var weights = new int[capacity]; var depth = new int[capacity]; var parent = new int[capacity];
-        var heap = new int[counts.Length]; var removal = new int[capacity];
+        workspace.Reset(counts.Length, maximumBits);
+        var weights = workspace.Weights; var depth = workspace.Depth; var parent = workspace.Parent;
+        var heap = workspace.Heap; var removal = workspace.Removal;
         counts.CopyTo(weights, 0);
         var size = 0; var largest = -1; var removed = 0;
         for (var symbol = 0; symbol < counts.Length; symbol++)
@@ -45,7 +65,8 @@ internal static class DeflateHuffman
             weights[next] = weights[a] + weights[b]; depth[next] = Math.Max(depth[a], depth[b]) + 1;
             heap[0] = next++; Sink(0);
         }
-        var bits = new int[capacity]; var bitCounts = new int[maximumBits + 1]; var overflow = 0;
+        var bits = workspace.Bits; var bitCounts = workspace.BitCounts; var overflow = 0;
+        bits[next - 1] = 0;
         for (var node = next - 2; node >= 0; node--)
         {
             if (weights[node] == 0) continue;
