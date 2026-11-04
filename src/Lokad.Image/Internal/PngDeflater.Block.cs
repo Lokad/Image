@@ -29,7 +29,9 @@ internal sealed partial class PngDeflater
     private void Block(bool final)
     {
         context.Cancellation.ThrowIfCancellationRequested();
-        var literalFrequency = new int[286]; var distanceFrequency = new int[30]; literalFrequency[256] = 1;
+        var workspace = treeWorkspace!;
+        var frequencies = workspace.BlockFrequencies.AsSpan(); frequencies.Clear();
+        var literalFrequency = frequencies[..286]; var distanceFrequency = frequencies.Slice(286, 30); literalFrequency[256] = 1;
         var expanded = 0;
         for (var index = 0; index < tokenCount; index++)
         {
@@ -46,7 +48,7 @@ internal sealed partial class PngDeflater
         Span<DeflateHuffman.Run> runs = stackalloc DeflateHuffman.Run[316];
         var runCount = DeflateHuffman.Runs(literals, runs);
         runCount += DeflateHuffman.Runs(distances, runs[runCount..]);
-        var lengthFrequency = new int[19];
+        var lengthFrequency = frequencies.Slice(316, 19);
         for (var index = 0; index < runCount; index++) lengthFrequency[runs[index].Symbol]++;
         var lengths = DeflateHuffman.Lengths(lengthFrequency, 7, context, treeWorkspace!); Array.Resize(ref lengths, 19);
         var lengthCount = 19;
@@ -87,7 +89,7 @@ internal sealed partial class PngDeflater
             {
                 Put(literals.Length - 257, 5); Put(distances.Length - 1, 5); Put(lengthCount - 4, 4);
                 for (var index = 0; index < lengthCount; index++) Put(lengths[Order[index]], 3);
-                var codes = DeflateHuffman.Codes(lengths);
+                var codes = workspace.BlockCodes.AsSpan(0, 19); DeflateHuffman.Codes(lengths, codes);
                 for (var index = 0; index < runCount; index++)
                 { var run = runs[index]; Put(codes[run.Symbol], lengths[run.Symbol]); Put(run.Extra, run.Bits); }
             }
@@ -98,7 +100,8 @@ internal sealed partial class PngDeflater
 
     private void WriteTokens(byte[] literalLengths, byte[] distanceLengths)
     {
-        var literals = DeflateHuffman.Codes(literalLengths); var distances = DeflateHuffman.Codes(distanceLengths);
+        var literals = treeWorkspace!.BlockCodes.AsSpan(0, 288); var distances = treeWorkspace.BlockCodes.AsSpan(288, 32);
+        DeflateHuffman.Codes(literalLengths, literals); DeflateHuffman.Codes(distanceLengths, distances);
         var input = tokens; var count = tokenCount; var cursor = new TokenCursor(this);
         try
         {

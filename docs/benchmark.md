@@ -27,11 +27,13 @@ Current priorities and scope:
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
   Photograph remains uncertain, including its adjacent-sample interval
   0.995–1.044; no unchanged resampling follows.
-- **PNG:** [operation-owned tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md)
-  saves 834,544/94,960 B per complete word/byte Smallest9 encode (24.4%/10.2%, same
-  batching), without a CPU gain/equivalence/regression claim. Five current gaps;
-  byte Optimal6 remains uncertain (upper 1.055), to resolve before tuning. Existing
-  384 KiB admission; 12,648 B tree payload during operation, zero after disposal.
+- **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
+  saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
+  at equal batching, without a CPU gain/equivalence/regression claim. Six current
+  one-shot costs retain five gaps; byte Optimal6 remains uncertain (upper 1.045).
+  Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
+  zero retained scratch after disposal. Complete physical/admitted peaks are
+  unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
 - **Resizing:** [shared Lanczos driver](../benchmarks/LANCZOS-SHARED-ROW-DRIVER.md)
   saves 24 µs / 3.98% raw on prepared byte reduction, with unchanged allocations/
   retention and exact pixels. Word point increases have overlapping confidence;
@@ -58,7 +60,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,603 full/live checks per OS**, affected normal/scalar
+The current build passes **5,607 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
@@ -105,18 +107,18 @@ settings do not establish matched quality.
 | VP8L text/diagram / libwebp exact=1 † | 8,159.66 | 9,566.19 | 0.853 / 0.871 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,815.96 | 130,140.89 | 0.890 / 0.906 | 7,476,640 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 77,597.76 | 75,729.69 | 1.025 / 1.036 | 5,983,424 | 121,896 / 121,896 |
-| PNG RGBA8, one-shot SmallestSize9 / native9 † | 19,603.10 | 18,690.15 | 1.049 / 1.061 | 837,556 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot SmallestSize9 / native9 † | 22,770.12 | 21,242.05 | 1.072 / 1.104 | 2,585,904 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 5,956.95 | 4,745.88 | 1.255 / 1.282 | 840,844 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 19,417.24 | 18,696.87 | 1.039 / 1.049 | 820,444 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 23,814.57 | 22,718.51 | 1.048 / 1.065 | 2,437,652 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 5,940.17 | 4,734.88 | 1.255 / 1.276 | 820,908 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 22,154.97 | 20,225.47 | 1.095 / 1.124 | 2,585,972 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 21,689.76 | 20,151.55 | 1.076 / 1.085 | 2,437,652 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, forward-only output † H | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 17,820.47 | 17,246.94 | 1.033 / 1.055 | 837,556 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 21,775.28 | 20,741.61 | 1.050 / 1.064 | 2,585,972 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 17,723.94 | 17,294.12 | 1.025 / 1.045 | 820,444 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 23,400.62 | 22,554.07 | 1.038 / 1.047 | 2,437,652 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
 | PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |

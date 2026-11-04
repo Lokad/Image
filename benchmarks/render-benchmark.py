@@ -1565,12 +1565,14 @@ def render():
                                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                                   f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     rows[position:position] = current_webp_rows
-    png_output = json.loads((ROOT / 'benchmarks/png-tree-workspace-evidence.json').read_text(encoding='utf-8'))
-    assert png_output['productionAccepted'] and png_output['independentQuietConfirmation']
-    assert png_output['qualification']['fullChecksEachOs'] == 5569
+    png_output = json.loads((ROOT / 'benchmarks/png-block-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert png_output['productionAccepted'] and not png_output['cpuGainEquivalenceOrCausalRegressionClaim']
+    assert png_output['qualification']['fullChecksEachOs'] == 5607
     assert png_output['qualification']['actualPackage']['sha256'] == png_output['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert png_output['storage']['allocationSavingsSameBatch'] == {'EncodeSmallest16': 834544, 'EncodeSmallest8': 94960}
-    assert not any(c['cpuGainOrRegressionClaim'] for c in png_output['comparisons'].values())
+    assert png_output['allocation']['EncodeSmallest16']['saved'] == 148320
+    assert png_output['allocation']['EncodeFast8']['saved'] == 19936
+    assert png_output['design']['workspaceAdmissionBytes'] == 393216
+    assert png_output['design']['codeLengthCodesEndBeforeLiteralCodes']
     # Dynamic encoding instances reuse operation-owned tree preparation storage.
     # Decode/inspection paths are separate and retain their applicable costs.
     rows = [(kind, row.replace(' † |', ' † H |', 1)
@@ -1583,24 +1585,21 @@ def render():
             ('EncodeFast16', 'PNG RGBA16, Fastest1 / native1', 'PNG RGBA16, one-shot Fastest1 / native1'),
             ('EncodeSmallest8', 'PNG RGBA8, SmallestSize9 / native9', 'PNG RGBA8, one-shot SmallestSize9 / native9'),
             ('EncodeSmallest16', 'PNG RGBA16, SmallestSize9 / native9', 'PNG RGBA16, one-shot SmallestSize9 / native9')]:
-        observation = png_output['cases'][case]; receipt = observation['receipt']
-        assert observation['status'] == ('Uncertain parity' if case == 'Encode8' else 'Confirmed gap')
-        if observation['status'] == 'Confirmed gap':
-            assert observation['conservativeRatioLower'] > 1
+        observation = png_output['cases'][case]
+        assert observation['status'] == ('pass' if observation['upper'] <= 1 else 'gap' if observation['lower'] > 1 else 'uncertain')
         assert observation['librarySha256'] == png_output['producers']['linuxSha256']
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
-        assert len(observation['managed']['actual']) == 12
-        assert receipt['nativeReady']['codecPreparationTimed'] and not receipt['nativeReady']['codecRetainedBetweenOperations']
-        if receipt['depth'] == 16:
-            assert receipt['nativeReady']['wordWorkspacePreparationTimed']
-            assert not receipt['nativeReady']['wordWorkspaceRetainedBetweenOperations']
-        assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
-        stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
+        assert observation['actualIterations'] == len(observation['managedActualNanoseconds']) == 12
+        assert observation['allOriginalGatesPassed'] and observation['codecPreparationTimed']
+        assert not observation['nativeCodecRetainedBetweenOperations']
+        if observation['depth'] == 16:
+            assert observation['nativeWordWorkspacePreparationTimed']
+        assert observation['packetSha256'] == observation['nativePacketSha256']
         position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| ' + old_label + ' † H |'))
-        rows[position] = ('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
-                          f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+        rows[position] = ('codec', f'| {label} † | {observation["managedUs"]:,.2f} | {observation["nativeUs"]:,.2f} | '
+                          f'{observation["ratio"]:.3f} / {observation["upper"]:.3f} | '
+                          f'{observation["allocatedBytes"]:,} | '
+                          f'{observation["packetBytes"]:,} / {observation["nativePacketBytes"]:,} |')
     cached_resize = json.loads((ROOT / 'benchmarks/bicubic-shared-cached-driver-evidence.json').read_text(encoding='utf-8'))
     assert cached_resize['productionAccepted'] and cached_resize['decision']['wideControlParityPreserved']
     assert cached_resize['qualification']['fullChecksEachOs'] == 5416
@@ -1870,11 +1869,13 @@ Current priorities and scope:
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
   Photograph remains uncertain, including its adjacent-sample interval
   0.995–1.044; no unchanged resampling follows.
-- **PNG:** [operation-owned tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md)
-  saves 834,544/94,960 B per complete word/byte Smallest9 encode (24.4%/10.2%, same
-  batching), without a CPU gain/equivalence/regression claim. Five current gaps;
-  byte Optimal6 remains uncertain (upper 1.055), to resolve before tuning. Existing
-  384 KiB admission; 12,648 B tree payload during operation, zero after disposal.
+- **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
+  saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
+  at equal batching, without a CPU gain/equivalence/regression claim. Six current
+  one-shot costs retain five gaps; byte Optimal6 remains uncertain (upper 1.045).
+  Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
+  zero retained scratch after disposal. Complete physical/admitted peaks are
+  unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
 - **Resizing:** [shared Lanczos driver](../benchmarks/LANCZOS-SHARED-ROW-DRIVER.md)
   saves 24 µs / 3.98% raw on prepared byte reduction, with unchanged allocations/
   retention and exact pixels. Word point increases have overlapping confidence;
@@ -1901,7 +1902,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,603 full/live checks per OS**, affected normal/scalar
+The current build passes **5,607 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

@@ -1,0 +1,1018 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PCC264/PCB265",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "cpuGainEquivalenceOrCausalRegressionClaim": false,
+  "producers": {
+    "windowsSha256": "139c126639439846118450a6e9b89caeb9f6138d351d4dc9e2f8e61cbee2af94",
+    "linuxSha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/PngDeflater.Block.cs": "742910df31720b2276cc192bf4d058b4875ed1c678bde3537f8eef8b19edf501",
+    "tests/Lokad.Image.Tests/PngDeflateTreeWorkspaceTests.cs": "c2af996ea3ec7637dc312dc4d2817694ce3be900016273a56b0aad8a6298a0b4",
+    "src/Lokad.Image/Internal/DeflateHuffman.cs": "d880531eb1ca9d2cf314ef9985e78986fdfbba8726cfa8daa09af8f305641c27",
+    "tests/Lokad.Image.Tests/PngCanonicalCodesTests.cs": "d800ce1f86de2d2dde74940d83f4756a4a10932635efcd8eef1c829721ca09e4"
+  },
+  "cases": {
+    "EncodeSmallest16": {
+      "caseId": "EncodeSmallest16",
+      "runId": "pcb265-candidate-EncodeSmallest16-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": 4,
+      "managedUs": 23814.573818181816,
+      "nativeUs": 22718.507625,
+      "ratio": 1.0482455190839948,
+      "lower": 1.028499428923317,
+      "upper": 1.0645203239639385,
+      "status": "gap",
+      "allocatedBytes": 2437652,
+      "packetBytes": 963202,
+      "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+      "nativePacketBytes": 963202,
+      "nativePacketSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "nativeWorkerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 9,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        24235496.75,
+        23889275.0,
+        23893121.0,
+        23785638.25,
+        23802831.75,
+        23758379.5,
+        23828049.75,
+        23729641.0,
+        23792578.5,
+        23810485.75,
+        23820741.25,
+        23849707.75
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 11,
+          "Mean": 23814573.818181816,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 23814573.818181816,
+            "StandardError": 15090.933560874877,
+            "Level": 12,
+            "Margin": 69220.51045187174,
+            "Lower": 23745353.307729945,
+            "Upper": 23883794.32863369
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 23849662.1875,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 23849662.1875,
+            "StandardError": 37684.1722505411,
+            "Level": 12,
+            "Margin": 167203.89361313303,
+            "Lower": 23682458.293886866,
+            "Upper": 24016866.081113134
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 22847670.916666668,
+          "confidenceLower": 22669117.77535908,
+          "confidenceUpper": 23026224.057974257
+        },
+        {
+          "mean": 22718507.625,
+          "confidenceLower": 22555894.820875674,
+          "confidenceUpper": 22881120.429124326
+        }
+      ],
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "receipt": "tmp/pcb265-candidate-EncodeSmallest16-confirm-receipt.json",
+      "observation": "tmp/pcb265-candidate-EncodeSmallest16-confirm-observation.json"
+    },
+    "EncodeSmallest8": {
+      "caseId": "EncodeSmallest8",
+      "runId": "pcb265-candidate-EncodeSmallest8-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": 4,
+      "managedUs": 19417.236477272727,
+      "nativeUs": 18696.868208333333,
+      "ratio": 1.038528819955971,
+      "lower": 1.0118707395946522,
+      "upper": 1.0486028565758279,
+      "status": "gap",
+      "allocatedBytes": 820444,
+      "packetBytes": 210973,
+      "packetSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+      "nativePacketBytes": 210973,
+      "nativePacketSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "nativeWorkerSha256": "ba1d1eb15ae441d600fa86d001deb218d87efc9972bb9e046c5d3f18d9deb407",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "level": 9,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        19606086.5,
+        19413384.75,
+        19468423.25,
+        19400064.75,
+        19411044.0,
+        19402744.0,
+        19373737.25,
+        19400135.0,
+        19388950.25,
+        19455461.0,
+        19443365.5,
+        19432511.5
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 11,
+          "Mean": 19417236.477272727,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 19417236.477272727,
+            "StandardError": 8811.193414322912,
+            "Level": 12,
+            "Margin": 40416.00894797416,
+            "Lower": 19376820.46832475,
+            "Upper": 19457652.486220703
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 19432992.3125,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 19432992.3125,
+            "StandardError": 17672.411214103853,
+            "Level": 12,
+            "Margin": 78412.12339454082,
+            "Lower": 19354580.18910546,
+            "Upper": 19511404.43589454
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 18984846.416666668,
+          "confidenceLower": 18842170.4811614,
+          "confidenceUpper": 19127522.352171935
+        },
+        {
+          "mean": 18696868.208333332,
+          "confidenceLower": 18604013.938119818,
+          "confidenceUpper": 18789722.478546847
+        }
+      ],
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": null,
+      "receipt": "tmp/pcb265-candidate-EncodeSmallest8-confirm-receipt.json",
+      "observation": "tmp/pcb265-candidate-EncodeSmallest8-confirm-observation.json"
+    },
+    "Encode16": {
+      "caseId": "Encode16",
+      "runId": "pcb265-candidate-Encode16-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": 4,
+      "managedUs": 23400.621772727274,
+      "nativeUs": 22554.071541666668,
+      "ratio": 1.0375342531611944,
+      "lower": 1.0254828339199944,
+      "upper": 1.046884348416413,
+      "status": "gap",
+      "allocatedBytes": 2437652,
+      "packetBytes": 963202,
+      "packetSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+      "nativePacketBytes": 963202,
+      "nativePacketSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "nativeWorkerSha256": "7aa2df40bbe8b3cb2afea67cd8d22f384f11746fde516ba97530b8afd561a8b4",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        23679835.5,
+        23448655.75,
+        23395648.0,
+        23453871.0,
+        23436312.0,
+        23513043.0,
+        23467424.0,
+        23381046.0,
+        23312359.5,
+        23351749.0,
+        23375652.75,
+        23271339.75
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 11,
+          "Mean": 23400621.772727273,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 23400621.772727273,
+            "StandardError": 21625.241710983744,
+            "Level": 12,
+            "Margin": 99192.68836755925,
+            "Lower": 23301429.084359713,
+            "Upper": 23499814.461094834
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 23423911.354166668,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 23423911.354166668,
+            "StandardError": 30512.426077174157,
+            "Level": 12,
+            "Margin": 135383.004030642,
+            "Lower": 23288528.350136027,
+            "Upper": 23559294.35819731
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 22605300.75,
+          "confidenceLower": 22500783.666079104,
+          "confidenceUpper": 22709817.833920896
+        },
+        {
+          "mean": 22554071.541666668,
+          "confidenceLower": 22510207.857118864,
+          "confidenceUpper": 22597935.226214472
+        }
+      ],
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "receipt": "tmp/pcb265-candidate-Encode16-confirm-receipt.json",
+      "observation": "tmp/pcb265-candidate-Encode16-confirm-observation.json"
+    },
+    "Encode8": {
+      "caseId": "Encode8",
+      "runId": "pcb265-candidate-Encode8-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "operationsPerActual": 4,
+      "managedUs": 17723.936149999998,
+      "nativeUs": 17294.11602083333,
+      "ratio": 1.0248535472208515,
+      "lower": 0.9771123290840305,
+      "upper": 1.0447890348524709,
+      "status": "uncertain",
+      "allocatedBytes": 820444,
+      "packetBytes": 210973,
+      "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "nativePacketBytes": 210973,
+      "nativePacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "nativeWorkerSha256": "019918d5b1855fa5d5c38850a146d568a62a9a969cb43228b58954ddf05fdc65",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        17873955.5,
+        17719273.75,
+        17732378.75,
+        17741908.25,
+        17788010.25,
+        17759091.5,
+        17729481.75,
+        17719864.75,
+        17728460.0,
+        17696744.75,
+        17696121.25,
+        17716174.25
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 10,
+          "Mean": 17723936.15,
+          "ConfidenceInterval": {
+            "N": 10,
+            "Mean": 17723936.15,
+            "StandardError": 6048.867454738945,
+            "Level": 12,
+            "Margin": 28919.106537043906,
+            "Lower": 17695017.043462954,
+            "Upper": 17752855.256537043
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 17741788.729166668,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 17741788.729166668,
+            "StandardError": 14056.087415940567,
+            "Level": 12,
+            "Margin": 62366.56942565795,
+            "Lower": 17679422.15974101,
+            "Upper": 17804155.298592325
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 17294116.020833332,
+          "confidenceLower": 17117691.357203867,
+          "confidenceUpper": 17470540.684462797
+        },
+        {
+          "mean": 17547587.666666668,
+          "confidenceLower": 17001634.15745426,
+          "confidenceUpper": 18093541.175879076
+        }
+      ],
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 6/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": null,
+      "receipt": "tmp/pcb265-candidate-Encode8-confirm-receipt.json",
+      "observation": "tmp/pcb265-candidate-Encode8-confirm-observation.json"
+    },
+    "EncodeFast16": {
+      "caseId": "EncodeFast16",
+      "runId": "pcb265-candidate-EncodeFast16-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": 4,
+      "managedUs": 21689.756083333334,
+      "nativeUs": 20151.547333333332,
+      "ratio": 1.076332041632138,
+      "lower": 1.0657982292280328,
+      "upper": 1.0854242309774864,
+      "status": "gap",
+      "allocatedBytes": 2437652,
+      "packetBytes": 968216,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativePacketBytes": 968216,
+      "nativePacketSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "nativeWorkerSha256": "7aa2df40bbe8b3cb2afea67cd8d22f384f11746fde516ba97530b8afd561a8b4",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 1,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        21798645.75,
+        21640401.25,
+        21742142.75,
+        21835929.75,
+        21742508.25,
+        21670226.5,
+        21650501.75,
+        21791783.25,
+        21592193.5,
+        21607531.5,
+        21627932.5,
+        21577426.25
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 21689756.083333332,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 21689756.083333332,
+            "StandardError": 25560.102772964747,
+            "Level": 12,
+            "Margin": 113409.64785899413,
+            "Lower": 21576346.435474336,
+            "Upper": 21803165.731192328
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 21689768.583333332,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 21689768.583333332,
+            "StandardError": 25560.102772964747,
+            "Level": 12,
+            "Margin": 113409.64785899413,
+            "Lower": 21576358.935474336,
+            "Upper": 21803178.231192328
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 20201254.666666668,
+          "confidenceLower": 20158202.443179954,
+          "confidenceUpper": 20244306.890153382
+        },
+        {
+          "mean": 20151547.333333332,
+          "confidenceLower": 20087241.107154317,
+          "confidenceUpper": 20215853.559512347
+        }
+      ],
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "receipt": "tmp/pcb265-candidate-EncodeFast16-confirm-receipt.json",
+      "observation": "tmp/pcb265-candidate-EncodeFast16-confirm-observation.json"
+    },
+    "EncodeFast8": {
+      "caseId": "EncodeFast8",
+      "runId": "pcb265-candidate-EncodeFast8-confirm",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": 4,
+      "managedUs": 5940.174083333333,
+      "nativeUs": 4734.882104166667,
+      "ratio": 1.2545558585515817,
+      "lower": 1.2302249069743638,
+      "upper": 1.275984853838709,
+      "status": "gap",
+      "allocatedBytes": 820908,
+      "packetBytes": 236828,
+      "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "nativePacketBytes": 236828,
+      "nativePacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "nativeWorkerSha256": "019918d5b1855fa5d5c38850a146d568a62a9a969cb43228b58954ddf05fdc65",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "level": 1,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        6047091.0,
+        5916022.75,
+        5913794.25,
+        5978780.25,
+        5973074.0,
+        5975828.25,
+        5947002.25,
+        5917322.25,
+        5887086.25,
+        5891080.0,
+        5919763.25,
+        5915484.5
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 5940174.083333333,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 5940174.083333333,
+            "StandardError": 13308.125751877225,
+            "Level": 12,
+            "Margin": 59047.87897723095,
+            "Lower": 5881126.204356102,
+            "Upper": 5999221.962310564
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 5940194.083333333,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 5940194.083333333,
+            "StandardError": 13308.125751877225,
+            "Level": 12,
+            "Margin": 59047.87897723095,
+            "Lower": 5881146.204356102,
+            "Upper": 5999241.962310564
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 4741092.692708333,
+          "confidenceLower": 4701656.092752413,
+          "confidenceUpper": 4780529.292664253
+        },
+        {
+          "mean": 4734882.104166667,
+          "confidenceLower": 4721174.521012116,
+          "confidenceUpper": 4748589.687321218
+        }
+      ],
+      "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": null,
+      "receipt": "tmp/pcb265-candidate-EncodeFast8-confirm-receipt.json",
+      "observation": "tmp/pcb265-candidate-EncodeFast8-confirm-observation.json"
+    }
+  },
+  "shorts": {
+    "pcc264": {
+      "EncodeFast8": {
+        "caseId": "EncodeFast8",
+        "runId": "pcc264-candidate-EncodeFast8-short",
+        "actualIterations": 3,
+        "filteredIterations": 3,
+        "operationsPerActual": 48,
+        "managedUs": 6085.4551875,
+        "nativeUs": 4726.332541666667,
+        "ratio": 1.2875639058088917,
+        "lower": 1.142630462906738,
+        "upper": 1.4400615874943496,
+        "status": "gap",
+        "allocatedBytes": 840785,
+        "packetBytes": 236828,
+        "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+        "nativePacketBytes": 236828,
+        "nativePacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+        "librarySha256": "bee6d881e445798056eb0a4f618ba2a8ad5799852b38134f2f9bb2d214844492",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "nativeWorkerSha256": "019918d5b1855fa5d5c38850a146d568a62a9a969cb43228b58954ddf05fdc65",
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "depth": 8,
+        "level": 1,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "completePacketExact": true,
+        "managedActualNanoseconds": [
+          6108669.875,
+          6066549.645833333,
+          6081155.729166667
+        ],
+        "managedStatistics": {
+          "statistics": {
+            "N": 3,
+            "Mean": 6085455.1875,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 6085455.1875,
+              "StandardError": 12347.918394816033,
+              "Level": 12,
+              "Margin": 390182.545684312,
+              "Lower": 5695272.641815688,
+              "Upper": 6475637.733184312
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 6085458.416666667,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 6085458.416666667,
+              "StandardError": 12347.918394816272,
+              "Level": 12,
+              "Margin": 390182.5456843196,
+              "Lower": 5695275.870982347,
+              "Upper": 6475640.962350987
+            }
+          }
+        },
+        "nativeBrackets": [
+          {
+            "mean": 4740566.375,
+            "confidenceLower": 4496780.567293894,
+            "confidenceUpper": 4984352.182706106
+          },
+          {
+            "mean": 4726332.541666667,
+            "confidenceLower": 4656151.997930366,
+            "confidenceUpper": 4796513.085402968
+          }
+        ],
+        "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+        "codecPreparationTimed": true,
+        "nativeCodecRetainedBetweenOperations": false,
+        "nativeWordWorkspacePreparationTimed": null,
+        "receipt": "tmp/pcc264-candidate-EncodeFast8-short-receipt.json",
+        "observation": "tmp/pcc264-candidate-EncodeFast8-short-observation.json"
+      },
+      "EncodeSmallest16": {
+        "caseId": "EncodeSmallest16",
+        "runId": "pcc264-candidate-EncodeSmallest16-short",
+        "actualIterations": 3,
+        "filteredIterations": 3,
+        "operationsPerActual": 8,
+        "managedUs": 24244.483916666668,
+        "nativeUs": 22710.14258333333,
+        "ratio": 1.067561941881394,
+        "lower": 0.9959049865294817,
+        "upper": 1.123282415235423,
+        "status": "uncertain",
+        "allocatedBytes": 2585910,
+        "packetBytes": 963202,
+        "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+        "nativePacketBytes": 963202,
+        "nativePacketSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+        "librarySha256": "bee6d881e445798056eb0a4f618ba2a8ad5799852b38134f2f9bb2d214844492",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "nativeWorkerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "depth": 16,
+        "level": 9,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "completePacketExact": true,
+        "managedActualNanoseconds": [
+          24258841.5,
+          24247232.75,
+          24227377.5
+        ],
+        "managedStatistics": {
+          "statistics": {
+            "N": 3,
+            "Mean": 24244483.916666668,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24244483.916666668,
+              "StandardError": 9186.27395485303,
+              "Level": 12,
+              "Margin": 290277.5708788971,
+              "Lower": 23954206.34578777,
+              "Upper": 24534761.487545565
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 24244483.916666668,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24244483.916666668,
+              "StandardError": 9186.27395485303,
+              "Level": 12,
+              "Margin": 290277.5708788971,
+              "Lower": 23954206.34578777,
+              "Upper": 24534761.487545565
+            }
+          }
+        },
+        "nativeBrackets": [
+          {
+            "mean": 22710142.583333332,
+            "confidenceLower": 22287840.254415616,
+            "confidenceUpper": 23132444.912251048
+          },
+          {
+            "mean": 22947363.25,
+            "confidenceLower": 21842024.013527755,
+            "confidenceUpper": 24052702.486472245
+          }
+        ],
+        "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+        "codecPreparationTimed": true,
+        "nativeCodecRetainedBetweenOperations": false,
+        "nativeWordWorkspacePreparationTimed": true,
+        "receipt": "tmp/pcc264-candidate-EncodeSmallest16-short-receipt.json",
+        "observation": "tmp/pcc264-candidate-EncodeSmallest16-short-observation.json"
+      }
+    },
+    "pcb265": {
+      "EncodeFast8": {
+        "caseId": "EncodeFast8",
+        "runId": "pcb265-candidate-EncodeFast8-short",
+        "actualIterations": 3,
+        "filteredIterations": 3,
+        "operationsPerActual": 48,
+        "managedUs": 6082.6745,
+        "nativeUs": 4699.878041666667,
+        "ratio": 1.294219646993854,
+        "lower": 1.180756956480194,
+        "upper": 1.4221010762265076,
+        "status": "gap",
+        "allocatedBytes": 820849,
+        "packetBytes": 236828,
+        "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+        "nativePacketBytes": 236828,
+        "nativePacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+        "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "nativeWorkerSha256": "019918d5b1855fa5d5c38850a146d568a62a9a969cb43228b58954ddf05fdc65",
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "depth": 8,
+        "level": 1,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "completePacketExact": true,
+        "managedActualNanoseconds": [
+          6094708.854166667,
+          6080367.354166667,
+          6072958.229166667
+        ],
+        "managedStatistics": {
+          "statistics": {
+            "N": 3,
+            "Mean": 6082674.5,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 6082674.5,
+              "StandardError": 6384.283843097526,
+              "Level": 12,
+              "Margin": 201737.33277317538,
+              "Lower": 5880937.167226825,
+              "Upper": 6284411.832773175
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 6082678.145833333,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 6082678.145833333,
+              "StandardError": 6384.283843097526,
+              "Level": 12,
+              "Margin": 201737.33277317538,
+              "Lower": 5880940.813060158,
+              "Upper": 6284415.478606508
+            }
+          }
+        },
+        "nativeBrackets": [
+          {
+            "mean": 4699878.041666667,
+            "confidenceLower": 4419106.056288186,
+            "confidenceUpper": 4980650.0270451475
+          },
+          {
+            "mean": 4719879.583333333,
+            "confidenceLower": 4601796.183316738,
+            "confidenceUpper": 4837962.983349928
+          }
+        ],
+        "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+        "codecPreparationTimed": true,
+        "nativeCodecRetainedBetweenOperations": false,
+        "nativeWordWorkspacePreparationTimed": null,
+        "receipt": "tmp/pcb265-candidate-EncodeFast8-short-receipt.json",
+        "observation": "tmp/pcb265-candidate-EncodeFast8-short-observation.json"
+      },
+      "EncodeSmallest16": {
+        "caseId": "EncodeSmallest16",
+        "runId": "pcb265-candidate-EncodeSmallest16-short",
+        "actualIterations": 3,
+        "filteredIterations": 3,
+        "operationsPerActual": 8,
+        "managedUs": 24416.903583333333,
+        "nativeUs": 22705.1865,
+        "ratio": 1.075388814063841,
+        "lower": 1.0424930855911343,
+        "upper": 1.1086823121147567,
+        "status": "gap",
+        "allocatedBytes": 2437590,
+        "packetBytes": 963202,
+        "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+        "nativePacketBytes": 963202,
+        "nativePacketSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+        "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "nativeWorkerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "depth": 16,
+        "level": 9,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "completePacketExact": true,
+        "managedActualNanoseconds": [
+          24409957.625,
+          24425970.625,
+          24414782.5
+        ],
+        "managedStatistics": {
+          "statistics": {
+            "N": 3,
+            "Mean": 24416903.583333332,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24416903.583333332,
+              "StandardError": 4742.653551554176,
+              "Level": 12,
+              "Margin": 149863.3678062724,
+              "Lower": 24267040.21552706,
+              "Upper": 24566766.951139603
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 24416903.583333332,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24416903.583333332,
+              "StandardError": 4742.653551554176,
+              "Level": 12,
+              "Margin": 149863.3678062724,
+              "Lower": 24267040.21552706,
+              "Upper": 24566766.951139603
+            }
+          }
+        },
+        "nativeBrackets": [
+          {
+            "mean": 22722270.666666668,
+            "confidenceLower": 22166650.524334155,
+            "confidenceUpper": 23277890.80899918
+          },
+          {
+            "mean": 22705186.5,
+            "confidenceLower": 22158527.003357444,
+            "confidenceUpper": 23251845.996642556
+          }
+        ],
+        "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+        "codecPreparationTimed": true,
+        "nativeCodecRetainedBetweenOperations": false,
+        "nativeWordWorkspacePreparationTimed": true,
+        "receipt": "tmp/pcb265-candidate-EncodeSmallest16-short-receipt.json",
+        "observation": "tmp/pcb265-candidate-EncodeSmallest16-short-observation.json"
+      }
+    }
+  },
+  "allocation": {
+    "EncodeFast8": {
+      "before": 840785,
+      "after": 820849,
+      "saved": 19936,
+      "operationsPerActual": 48
+    },
+    "EncodeSmallest16": {
+      "before": 2585910,
+      "after": 2437590,
+      "saved": 148320,
+      "operationsPerActual": 8
+    }
+  },
+  "design": {
+    "singlePassCanonicalAssignment": true,
+    "originalWidthSymbolOrdering": true,
+    "boundedBitReversal": true,
+    "newOwnerPoolCacheSession": false,
+    "blockFrequencyInts": 335,
+    "blockCodeInts": 320,
+    "extraRetainedOperationArrayPayloadBytes": 2620,
+    "knownFixedArrayPayloadBytesBefore": 278884,
+    "knownFixedArrayPayloadBytesAfter": 281504,
+    "workspaceAdmissionBytes": 393216,
+    "postOperationScratchBytes": 0,
+    "codeLengthCodesEndBeforeLiteralCodes": true,
+    "selectedLengthsRemainIndependent": true,
+    "borrowedCodeLogicalPrefixCleared": true,
+    "outputOwnershipUnchanged": true,
+    "physicalPeakMeasured": false,
+    "completeAdmittedPeakMeasured": false,
+    "nativeAllocationMeasured": false
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "139c126639439846118450a6e9b89caeb9f6138d351d4dc9e2f8e61cbee2af94",
+      "full": [
+        2372,
+        2287,
+        948
+      ],
+      "total": 5607,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 580,
+        "internal-scalar": 580,
+        "public-normal": 211,
+        "public-scalar": 211
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "full": [
+        2372,
+        2287,
+        948
+      ],
+      "total": 5607,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 580,
+        "internal-scalar": 580,
+        "public-normal": 211,
+        "public-scalar": 211
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 5607,
+    "internalAffectedEachModeOs": 580,
+    "publicAffectedEachModeOs": 211,
+    "newCanonicalCases": 4,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "9adbf43a0b86a1ac9b5330e9b2195edbcf811320e595b6fb41e588c54ec89e8c",
+      "symbolsSha256": "3e0236137878befdbd318657f4aa505d97471a96db92e98519d7fc97ee3f1480",
+      "bytes": 404558,
+      "librarySha256": "139c126639439846118450a6e9b89caeb9f6138d351d4dc9e2f8e61cbee2af94",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "9adbf43a0b86a1ac9b5330e9b2195edbcf811320e595b6fb41e588c54ec89e8c",
+      "librarySha256": "139c126639439846118450a6e9b89caeb9f6138d351d4dc9e2f8e61cbee2af94",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "existingPngPackagePacketAdmissionAsyncConsumerReused": true
+  },
+  "workflow": {
+    "coreVersionsEachOs": 2,
+    "internalTestVersionsEachOs": 2,
+    "publicHarnessNativeSelectorAuditBuilds": 0,
+    "actualPackageBuilds": 1,
+    "stage1UnchangedConfirmationRuns": 0,
+    "stage1CompleteScreens": 2,
+    "stage2CompleteScreens": 2,
+    "currentTwelveActualConfirmations": 6,
+    "timingReplays": 0,
+    "broadQualificationMilestones": 1
+  },
+  "invalidation": "Only Deflate block/tree/code preparation changes. Six existing one-shot PNG1/6/9 byte/word costs are reconciled; other affected historical encoding boundaries remain historical. Stored/no-compression bypasses this workspace. PNG decoding/inspection, other codecs, text/drawing and resizing reuse unchanged-path evidence.",
+  "scope": "Existing513x259 original RGBA8/16, color6/filterNone, levels1/6/9 complete fresh codec/zlib/workspace/packet and independent owned output/disposal. Native word endian-frame allocation/conversion/disposal stays timed. No image/settings grid or general content/speed claim.",
+  "decision": "Retain meaningful recurring word/byte allocation savings and shared block storage without another owner or cache. Stage1 alone had no useful CPU lead. Combined independent CPU estimates retain overlapping confidence/native clock changes; no CPU gain/equivalence/causal-regression claim. Preserve adverse screens and every actual. Full282-path parity is still open.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-block-preparation-qualified.tar.xz",
+    "bytes": 8242468,
+    "members": 363,
+    "sha256": "85f6f2f28169e5bb79a3f7cfc9a28e17389a03a3b7bd5535731449e2f7f521db",
+    "vmMembersVerified": true,
+    "productionAccepted": true,
+    "dependencies": [
+      {
+        "file": "webp-alpha-coefficient-storage-qualified.tar.xz",
+        "sha256": "2099f230bee1b3e162eb4e735b3f01ba67d75fdd172391247ec8458b9f2d9192"
+      },
+      {
+        "file": "png-tree-workspace-qualified.tar.xz",
+        "sha256": "ac86ee3d5fd76da7608e47f5d256812aeb748f20e5938e0557bba72900b27321"
+      }
+    ],
+    "frozenReferenceDependencies": "The unchanged one-shot1/6/9 byte/word worker, harness, selectors/frameworks and reference preparation are pinned in HFW251-254 raw and its dependency chain. Stage runtimes/selectors and exact source/output receipts remain here; no native/harness rebuild.",
+    "localMembersVerified": true
+  },
+  "baselineDependency": {
+    "file": "png-tree-workspace-qualified.tar.xz",
+    "sha256": "ac86ee3d5fd76da7608e47f5d256812aeb748f20e5938e0557bba72900b27321",
+    "bytes": 5679252,
+    "members": 346
+  }
+}

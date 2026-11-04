@@ -13,6 +13,10 @@ internal static class DeflateHuffman
         internal readonly int[] Weights = new int[572], Depth = new int[572], Parent = new int[572];
         internal readonly int[] Heap = new int[286], Removal = new int[572], Bits = new int[572];
         internal readonly int[] BitCounts = new int[16];
+        // Frequencies for the286/30/19alphabets coexist through block pricing.
+        // Header codes finish before literal/distance codes use the same prefix.
+        internal readonly int[] BlockFrequencies = new int[286 + 30 + 19];
+        internal readonly int[] BlockCodes = new int[288 + 32];
 
         internal void Reset(int symbols, int maximumBits)
         {
@@ -26,13 +30,13 @@ internal static class DeflateHuffman
         }
     }
 
-    internal static byte[] Lengths(int[] counts, int maximumBits, OperationContext context, Workspace workspace)
+    internal static byte[] Lengths(ReadOnlySpan<int> counts, int maximumBits, OperationContext context, Workspace workspace)
     {
         context.Cancellation.ThrowIfCancellationRequested();
         workspace.Reset(counts.Length, maximumBits);
         var weights = workspace.Weights; var depth = workspace.Depth; var parent = workspace.Parent;
         var heap = workspace.Heap; var removal = workspace.Removal;
-        counts.CopyTo(weights, 0);
+        counts.CopyTo(weights);
         var size = 0; var largest = -1; var removed = 0;
         for (var symbol = 0; symbol < counts.Length; symbol++)
             if (counts[symbol] != 0) heap[size++] = largest = symbol;
@@ -96,21 +100,30 @@ internal static class DeflateHuffman
         return result;
     }
 
-    internal static int[] Codes(byte[] lengths)
+    internal static void Codes(ReadOnlySpan<byte> lengths, Span<int> codes)
     {
-        var codes = new int[lengths.Length]; var next = 0;
+        codes = codes[..lengths.Length]; codes.Clear();
+        // RFC1951 section3.2.2: each width's first code follows the last
+        // shorter code. Assign equal-width codes in symbol order in one pass.
+        Span<int> counts = stackalloc int[16]; counts.Clear();
+        Span<int> next = stackalloc int[16];
+        foreach (var width in lengths) if (width <= 15) counts[width]++;
+        var value = 0; counts[0] = 0;
         for (var width = 1; width <= 15; width++)
         {
-            for (var symbol = 0; symbol < lengths.Length; symbol++)
-            {
-                if (lengths[symbol] != width) continue;
-                var reverse = 0; var value = next++;
-                for (var bit = 0; bit < width; bit++) { reverse = reverse << 1 | value & 1; value >>= 1; }
-                codes[symbol] = reverse;
-            }
-            next <<= 1;
+            value = (value + counts[width - 1]) << 1; next[width] = value;
         }
-        return codes;
+        for (var symbol = 0; symbol < lengths.Length; symbol++)
+        {
+            var width = lengths[symbol]; if (width is 0 or > 15) continue;
+            var bits = (uint)next[width]++;
+            // Reverse the low16bits, then retain the code's original width.
+            bits = (bits >> 1 & 0x5555u) | (bits & 0x5555u) << 1;
+            bits = (bits >> 2 & 0x3333u) | (bits & 0x3333u) << 2;
+            bits = (bits >> 4 & 0x0f0fu) | (bits & 0x0f0fu) << 4;
+            bits = (bits >> 8) | (bits & 255) << 8;
+            codes[symbol] = (int)(bits >> (16 - width));
+        }
     }
 
     internal static int Runs(byte[] lengths, Span<Run> output)

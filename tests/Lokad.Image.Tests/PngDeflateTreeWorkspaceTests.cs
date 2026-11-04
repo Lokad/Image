@@ -34,7 +34,7 @@ public sealed class PngDeflateTreeWorkspaceTests
             var original = counts.ToArray();
             var result = DeflateHuffman.Lengths(counts, maximumBits, context, workspace);
             Assert.Equal(Expected[name].Lengths, Hash(result));
-            Assert.Equal(Expected[name].Codes, CodeHash(DeflateHuffman.Codes(result)));
+            Assert.Equal(Expected[name].Codes, CodeHash(result, workspace.BlockCodes));
             Assert.Equal(original, counts); Assert.All(result, width => Assert.InRange((int)width, 0, maximumBits));
             foreach (var previous in retained) Assert.Equal(previous.Snapshot, previous.Result);
             retained.Add((result, result.ToArray()));
@@ -51,11 +51,12 @@ public sealed class PngDeflateTreeWorkspaceTests
             // Poison all preparation slots, including the root, unused symbols
             // and the suffixes left behind when alphabet sizes shrink.
             foreach (var array in new[] { workspace.Weights, workspace.Depth, workspace.Parent,
-                workspace.Heap, workspace.Removal, workspace.Bits, workspace.BitCounts }) Array.Fill(array, 12345);
+                workspace.Heap, workspace.Removal, workspace.Bits, workspace.BitCounts,
+                workspace.BlockFrequencies, workspace.BlockCodes }) Array.Fill(array, 12345);
             var original = counts.ToArray();
             var result = DeflateHuffman.Lengths(counts, maximumBits, context, workspace);
             Assert.Equal(Expected[name].Lengths, Hash(result));
-            Assert.Equal(Expected[name].Codes, CodeHash(DeflateHuffman.Codes(result))); Assert.Equal(original, counts);
+            Assert.Equal(Expected[name].Codes, CodeHash(result, workspace.BlockCodes)); Assert.Equal(original, counts);
         }
     }
 
@@ -74,8 +75,10 @@ public sealed class PngDeflateTreeWorkspaceTests
     }
 
     private static string Hash(ReadOnlySpan<byte> bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
-    private static string CodeHash(int[] codes)
+    private static string CodeHash(byte[] lengths, int[] storage)
     {
+        DeflateHuffman.Codes(lengths, storage);
+        var codes = storage.AsSpan(0, lengths.Length);
         var bytes = new byte[codes.Length * sizeof(int)];
         for (var i = 0; i < codes.Length; i++) BinaryPrimitives.WriteInt32LittleEndian(bytes.AsSpan(i * sizeof(int)), codes[i]);
         return Hash(bytes);

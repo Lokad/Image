@@ -5,10 +5,9 @@
 - Share bicubic streaming schedulers and avoid repeated row filtering within the
   existing 4 KiB workspace, preserving exact pixels and independent output ownership.
 
-- PNG encoding reuses operation-owned Huffman workspace, batches literal codes
-  through local bit state and reuses
-  contiguous dictionary history, preserving exact packets, cancellation and
-  memory ownership.
+- PNG encoding shares block/tree workspace, prepares canonical codes in one pass
+  and batches literal output with compact dictionary history, preserving exact
+  packets, cancellation and memory ownership.
 
 - Transparent WebP encoding reuses match storage across sequential alpha filters
   and hands completed alpha workspace to frame coefficients, preserving exact
