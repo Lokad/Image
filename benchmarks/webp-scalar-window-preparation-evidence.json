@@ -1,0 +1,180 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WAA293/WMP294",
+  "productionAccepted": false,
+  "currentCostsChanged": false,
+  "requiredMaterialPaths": 282,
+  "hypothesis": "After the existing pruning probe, validate equal-length source windows once and compare in one scalar body. Reuse the known first sample only for uncancelable tokens. Keep live-token checkpoints, candidate/tie order, exact packets, owners and admission. No BCL chunks, separate reverse worker, new buffer/pool/cache/API or quota.",
+  "originalCurrentProfile": {
+    "productionSha256": "7ee89181a42794ab59c64757e4a651e20871740cf285a8c3402a648dfbc3a9b5",
+    "totalSamples": 1962,
+    "managedSamples": 1914,
+    "selectedExclusiveSamples": {
+      "matcher": 289,
+      "coefficientEmission": 131,
+      "greenHistogram": 88,
+      "cacheHistory": 84,
+      "intra4": 77
+    },
+    "matcherCodeBytes": 2362,
+    "allBuilds": 0,
+    "quietGuardsPassed": true,
+    "exactPacketBytes": 98590,
+    "profiledElapsedDiscarded": true,
+    "limits": "One two-second current original capture. Samples/skid/code size are attribution, not component times or savings. Original instruction map confirms repeated scalar prefix bounds checks."
+  },
+  "codegen": {
+    "candidateNoCancelMatcherBytes": 2671,
+    "originalNoCancelMatcherBytes": 2362,
+    "fullOptsFastPrefixLoopBoundsChecksHoisted": true,
+    "knownFirstSampleReusedOnlyForUncancelableTokens": true,
+    "liveCheckpointsPreserved": true,
+    "defaultTierCaptureRetainedButNotUsedForBenchmarkCodegen": true,
+    "oneAdditionalFrozenPublicFactUsesBenchmarkTieroffWithoutBuild": true
+  },
+  "cases": {
+    "alpha": {
+      "managedUs": 63642.4545,
+      "nativeUs": 53479.309,
+      "ratio": 1.1900388335234473,
+      "lower": 1.083051997142905,
+      "upper": 1.2981113179982022,
+      "allocatedBytes": 7165880,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "b098eb0c76464af9960dc62efb41eca58be7e37558c7087d9cf6268e76ff43bf",
+      "actuals": 3,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    "photograph": {
+      "managedUs": 82524.94516666667,
+      "nativeUs": 82853.38433333334,
+      "ratio": 0.9960358992054532,
+      "lower": 0.884656660083858,
+      "upper": 1.1180454040611396,
+      "allocatedBytes": 6516744,
+      "packetBytes": 160032,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "librarySha256": "b098eb0c76464af9960dc62efb41eca58be7e37558c7087d9cf6268e76ff43bf",
+      "actuals": 3,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    }
+  },
+  "pairedComparison": {
+    "caseId": "PhotographLossless8",
+    "pairs": 12,
+    "operationsPerSubjectPerPair": 4,
+    "allPairsRetained": true,
+    "counterbalancedOrder": true,
+    "originalUs": 82559.2841875,
+    "candidateUs": 83473.51072916666,
+    "ratio": 1.011091819320705,
+    "logConfidence": {
+      "N": 12,
+      "Mean": 0.01102094379921807,
+      "StandardError": 0.0013370170684489403,
+      "Level": 12,
+      "Margin": 0.005932317106120585,
+      "Lower": 0.005088626693097485,
+      "Upper": 0.016953260905338656
+    },
+    "ratioConfidence": [
+      1.0051015957427942,
+      1.0170977829847179
+    ],
+    "exactPackets": true,
+    "independentOwners": true,
+    "sourceSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+    "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+    "allocatedBytesBoth": 6516744,
+    "scope": "Twelve fixed adjacent original/candidate pairs, alternating order, four complete public RGBA8 WebP encodes per subject, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+  },
+  "decision": "Reject this completed implementation: same-process photographic comparison measures1.11%slower, conservative ratio interval1.00510\u20131.01710. The short photo lead is not confirmed; alpha short is flat. No more variant or favorable repeat. This is a measured scoped regression, distinct from inconclusive short/native measurements; it does not close a family.",
+  "qualification": {
+    "candidateLinux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "candidateSha256": "b098eb0c76464af9960dc62efb41eca58be7e37558c7087d9cf6268e76ff43bf",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "41a50f507c0d4936b31751033b66b16cc4c3a66bd7ab8e691eb0116a893da62d"
+      },
+      "focused": {
+        "internal-normal": 394,
+        "internal-scalar": 394,
+        "public-normal": 195,
+        "public-scalar": 195
+      },
+      "coreBuilds": 1,
+      "internalBuilds": 1,
+      "publicHarnessNativeSelectorPackageBuilds": 0,
+      "productionAccepted": false
+    },
+    "windowsCandidateCompiled": false,
+    "restorationWindows": {
+      "project": "Lokad.Image",
+      "restored": true,
+      "builds": 0,
+      "windowsCandidateCompiled": false,
+      "productionSha256": "e79c9471fe6f8402cadd081e6b50344f254306a2ba95c99bbcb581b57481de40",
+      "sourceSha256": "cfde1520ef4f8fa2c1ac6f6b455f720fe76fd93f092a54ce90fc4f51648c44aa"
+    },
+    "restorationLinux": {
+      "project": "Lokad.Image",
+      "restored": true,
+      "builds": 0,
+      "productionSha256": "7ee89181a42794ab59c64757e4a651e20871740cf285a8c3402a648dfbc3a9b5",
+      "sourceSha256": "cfde1520ef4f8fa2c1ac6f6b455f720fe76fd93f092a54ce90fc4f51648c44aa",
+      "candidateSnapshotsPreserved": true,
+      "qualificationReused": "WCS291 full/live/scalar/SAMEactualpackage/all-three-example; production byte-identical."
+    },
+    "restorationBuilds": 0,
+    "unchangedFullChecksEachOs": 5634,
+    "unchangedScalarAndSameActualPackageAllThreeExamplesBothOsReused": true,
+    "actualPackageSha256": "9ac91e81613e943ed60ecedc391cc60c4d0a36d1133c2a54852671e9b06f23d7"
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newPoolCacheOrOwner": false,
+    "allocationSavingClaim": false,
+    "physicalOrNativePeakMeasured": false,
+    "pairedAllocationSame": true
+  },
+  "workflow": {
+    "candidateCoreBuilds": 1,
+    "candidateInternalBuilds": 1,
+    "windowsProductionBuilds": 0,
+    "publicHarnessNativeSelectorPackageBuilds": 0,
+    "pairedToolBuilds": 1,
+    "pairedDriverAcceptsProducerSourcePacketPinsForReuse": true,
+    "shortJobs": 2,
+    "independentPairs": 12,
+    "completedMeasurementRepeats": 0,
+    "restorationBuilds": 0
+  },
+  "corrections": "An optimized-JIT capture is needed because the initial focused-test capture uses default tiering; preserve it and run only one existing frozen public fact with benchmark tieroff settings, without rebuilding. A stale private-tool precondition stops before compilation; correct it before its sole successful build. No completed measurement repeats.",
+  "remaining": "Restored current warm costs remain valid. Retain adverse original/candidate data and current attribution; choose a genuinely different supported design, preserving compression and exactness ahead of CPU.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-scalar-window-preparation-rejected.tar.xz",
+    "bytes": 3519180,
+    "members": 184,
+    "sha256": "f2d860261351a3ea969d55fcffc71425031b5ea09e5d38ab0fd1d1a62ac60d0f",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-matcher-cancellation-preparation-qualified.tar.xz",
+        "sha256": "6f908eec7c3dc44733d93f9daa04a3adb22586efd460a97adb6f8703099f025b"
+      },
+      {
+        "file": "png-gray-alpha16-one-shot-current.tar.xz",
+        "sha256": "03444bfd9d910b101a3c0432bc9ba764a945dbe02572c9edaa9ba9e5d9ec0ba0"
+      }
+    ],
+    "dependencyScope": "Qualified original/current source tree, prior actual package, frozen controls/native workers and unchanged harness/selectors/framework. Original/candidate/restored modules and sources, Linux normal/scalar checks, all short/bracket/guard actuals, original current profile, JIT/instruction maps, reusable paired driver and twelve counterbalanced photo pairs retained here. Windows candidate is explicitly source-only; unchanged full/platform/package qualification is reused."
+  },
+  "publication": "postponed",
+  "receiptNoteCorrection": "The copied optimized-JIT receipt inherits a preflightCorrection note from WCA290. That older condition did not occur in WMP294; this run used the public candidate directly. The current capture correction concerns default tiering versus benchmark FullOpts. No completed measurement repeated."
+}

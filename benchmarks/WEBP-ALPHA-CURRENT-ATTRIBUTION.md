@@ -1,7 +1,30 @@
-# Current transparent WebP attribution
+# Transparent WebP attribution
+
+## WCS291 current-production capture
+
+One current two-second capture reuses the immutable WCS291 DLL and its frozen
+transparent RGBA8 control. All 98,590-byte packet/source/owner gates and both quiet
+guards pass; zero builds or new fixtures. Profiled elapsed is discarded.
+
+| Exclusive location | Samples, out of 1,962 |
+| --- | ---: |
+| Specialized VP8L matcher | 289 |
+| VP8 coefficient coding | 131 |
+| Green predictor histogram | 88 |
+| Cache history | 84 |
+| VP8 intra4 decisions | 77 |
+
+The 2,362 B current matcher retains scalar prefix bounds checks. A bounded
+[window-preparation experiment](WEBP-SCALAR-WINDOW-PREPARATION.md) hoists them,
+but its counterbalanced photograph comparison measures 1.11% slower. It restores
+exactly without builds; current costs and qualification remain valid. Samples,
+skid and code size are attribution, not component times or predicted savings.
+The same report retains current raw profile/JIT/maps and the adverse experiment.
+
+## Earlier capture (PAF213)
 
 One two-second capture reuses the existing 513×259 transparent Q75/effort4 control,
-worker, harness and selector with the qualified current DLL. Both quiet guards,
+worker, harness and selector with the then-qualified DLL. Both quiet guards,
 frozen settings/source/output ownership and exact 98,590-byte packet pass. No
 build or production change; profiled elapsed is discarded.
 

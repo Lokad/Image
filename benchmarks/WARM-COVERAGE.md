@@ -20,6 +20,12 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
+The [current transparent capture](WEBP-ALPHA-CURRENT-ATTRIBUTION.md) motivates
+[scalar-window preparation](WEBP-SCALAR-WINDOW-PREPARATION.md). Its same-process
+photograph comparison measures a scoped 1.11% regression despite fewer bounds
+checks. The candidate restores exactly; current costs remain unchanged. Keep
+adverse evidence and choose a materially different design before further trials.
+
 The [current WebP capacity audit](WEBP-CACHE-HISTORY-CAPACITY.md) identifies
 cache-history preparation at the prior peaks and unused alpha-token capacity.
 The earlier [token-tail reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes its scoped
