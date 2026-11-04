@@ -33,8 +33,10 @@ Current priorities and scope:
   gains retain their scoped evidence, without substituting older VP8 costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
-  at equal batching, without a CPU gain/equivalence/regression claim. Eleven current
-  one-shot costs retain ten gaps; byte Optimal6 remains uncertain (upper 1.045).
+  at equal batching, without a CPU gain/equivalence/regression claim. Fifteen current
+  one-shot costs retain thirteen gaps; byte Optimal6 remains uncertain (upper 1.045).
+  [Color setup reconciliation](../benchmarks/PNG-COLOR-ONE-SHOT.md) adds one scoped
+  gray16 pass (upper 0.987), preserving the original red-plane/endian graph.
   [Delivery/cancellation comparisons](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
   include native codec preparation: word token/forward uppers 1.116/1.140;
   byte async upper 1.029. Word-workspace and complete async delivery stay timed.
@@ -86,7 +88,7 @@ admitted peaks are not inferred from allocation reductions.
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The eleven current one-shot PNG rows time fresh codec/zlib/packet state and independent
+The fifteen current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
 disposal. Other native codec workers retain their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.
@@ -131,13 +133,13 @@ settings do not establish matched quality.
 | PNG RGBA16, one-shot Fastest1 / native1 † | 21,689.76 | 20,151.55 | 1.076 / 1.085 | 2,437,652 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 22,117.18 | 20,058.57 | 1.103 / 1.116 | 2,437,652 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, forward-only output † | 21,681.81 | 19,863.09 | 1.092 / 1.140 | 2,437,684 | 968,216 / 968,216 |
-| PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
-| PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
-| PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 2,255.69 | 1,964.05 | 1.148 / 1.185 | 551,356 | 72,586 / 72,586 |
+| PNG RGB8, one-shot Optimal6 / native6 † | 10,026.74 | 9,878.14 | 1.015 / 1.023 | 819,876 | 168,729 / 168,729 |
+| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,578.16 | 4,428.73 | 1.034 / 1.050 | 552,324 | 120,366 / 120,366 |
 | PNG RGBA8, one-shot Optimal6 / native6 † | 17,723.94 | 17,294.12 | 1.025 / 1.045 | 820,444 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot Optimal6 / native6 † | 23,400.62 | 22,554.07 | 1.038 / 1.047 | 2,437,652 | 963,202 / 963,202 |
 | PNG RGB16, one-shot Optimal6 / native6 † | 18,413.80 | 17,724.93 | 1.039 / 1.048 | 2,431,484 | 739,472 / 739,472 |
-| PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
+| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 5,215.54 | 5,407.47 | 0.965 / 0.987 | 822,732 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,935.23 | 10,483.28 | 1.043 / 1.052 | 1,360,892 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 19,366.24 | 18,983.03 | 1.020 / 1.029 | 882,204 | 210,973 / 210,973 |

@@ -1755,6 +1755,23 @@ def render():
     rows[position] = ('codec', f'| PNG gray-alpha16, one-shot Optimal6 / native6 † | {current["managedUs"]:,.2f} | '
                       f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                       f'{current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["packetBytes"]:,} |')
+    color_png = json.loads((ROOT / 'benchmarks/png-color-one-shot-evidence.json').read_text(encoding='utf-8'))
+    assert not color_png['productionChanged'] and color_png['newMaterialCases'] == 0 and color_png['currentCostOnly']
+    assert color_png['qualificationReused']['sameActualPackageAllThreeExamplesBothOs']
+    assert len(color_png['cases']) == 4 and sum(c['status'] == 'pass' for c in color_png['cases'].values()) == 1
+    for case, label in {'EncodeRgb8': 'PNG RGB8', 'EncodeGray8': 'PNG grayscale8',
+                        'EncodeGrayAlpha8': 'PNG gray-alpha8', 'EncodeGray16': 'PNG grayscale16'}.items():
+        current = color_png['cases'][case]
+        assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['librarySha256'] == color_png['producers']['linuxSha256']
+        assert current['equivalentOneShotBoundary'] and current['managedAndNativePacketsExact']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        position = next(i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + label + ','))
+        qualifier = ', red-plane reference' if case == 'EncodeGray16' else ''
+        rows[position] = ('codec', f'| {label}, one-shot Optimal6 / native6{qualifier} † | '
+                          f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                          f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
+                          f'{current["packetBytes"]:,} / {current["packetBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1873,8 +1890,10 @@ Current priorities and scope:
   gains retain their scoped evidence, without substituting older VP8 costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
-  at equal batching, without a CPU gain/equivalence/regression claim. Eleven current
-  one-shot costs retain ten gaps; byte Optimal6 remains uncertain (upper 1.045).
+  at equal batching, without a CPU gain/equivalence/regression claim. Fifteen current
+  one-shot costs retain thirteen gaps; byte Optimal6 remains uncertain (upper 1.045).
+  [Color setup reconciliation](../benchmarks/PNG-COLOR-ONE-SHOT.md) adds one scoped
+  gray16 pass (upper 0.987), preserving the original red-plane/endian graph.
   [Delivery/cancellation comparisons](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
   include native codec preparation: word token/forward uppers 1.116/1.140;
   byte async upper 1.029. Word-workspace and complete async delivery stay timed.
@@ -1926,7 +1945,7 @@ admitted peaks are not inferred from allocation reductions.
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The eleven current one-shot PNG rows time fresh codec/zlib/packet state and independent
+The fifteen current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
 disposal. Other native codec workers retain their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.

@@ -117,12 +117,11 @@ internal sealed partial class NativeWarmReference : IDisposable
         if (jpegSampling is not (null or "444" or "420" or "422") || jpegSampling is not null && operation is not ("jpeg-encode" or "jpeg-restart-encode"))
             throw new ArgumentException("JPEG sampling applies only to the 444/420/422 encode worker.", nameof(jpegSampling));
         if (operation is not ("hflip" or "hflip-retained2" or "normal-orient" or "transverse" or "transpose" or "quarter-turn-ccw" or "quarter-turn-cw" or "half-turn" or "vflip" or "crop" or "png-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-fast16-encode" or "png-store16-encode" or "png-store-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode" or "png-decode" or "png-stream-decode" or "png-stream16-decode" or "png-stream-crop-fit" or "png-stream16-crop-fit" or "png-adam7-decode" or "jpeg-encode" or "jpeg-restart-encode" or "jpeg-decode" or "jpeg420-stream-decode" or "jpeg420-decode" or "jpeg422-decode" or "jpeg-gray-decode" or "jpeg-rgb-decode" or "jpeg-rgb422-decode" or "jpeg-rgb420-decode" or "webp-encode" or "webp-opaque-encode" or "webp-lossless-encode" or "webp-decode" or "webp-stream-decode" or "vp8-decode" or "vp8-stream-decode" or "nearest-resize" or "bilinear-resize" or "bicubic-resize")) throw new ArgumentOutOfRangeException(nameof(operation));
-        if (pngOneShot && (depth is not (8 or 16) || operation is not ("png-encode" or "png-fast16-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-rgb-encode" or "png-gray-alpha-encode")))
-            throw new ArgumentException("One-shot PNG reference requires an existing RGBA8/16 Optimal/Fastest/Smallest or RGB16/gray-alpha16 Optimal control.", nameof(pngOneShot));
-        var pngOneShotRgb = pngOneShot && operation == "png-rgb-encode";
-        if (pngOneShotRgb && depth != 16) throw new ArgumentException("One-shot RGB requires its existing16-bit control.", nameof(depth));
-        var pngOneShotGrayAlpha = pngOneShot && operation == "png-gray-alpha-encode";
-        if (pngOneShotGrayAlpha && depth != 16) throw new ArgumentException("One-shot gray-alpha requires its existing 16-bit control.", nameof(depth));
+        if (pngOneShot && (depth is not (8 or 16) || operation is not ("png-encode" or "png-fast16-encode" or "png-smallest8-encode" or "png-smallest16-encode" or "png-rgb-encode" or "png-gray-encode" or "png-gray-alpha-encode")))
+            throw new ArgumentException("One-shot PNG reference requires an existing RGBA Optimal/Fastest/Smallest or RGB/gray/gray-alpha Optimal control.", nameof(pngOneShot));
+        var pngOneShotRgb = pngOneShot && depth == 16 && operation == "png-rgb-encode";
+        var pngOneShotGrayAlpha = pngOneShot && depth == 16 && operation == "png-gray-alpha-encode";
+        var pngOneShotColor = pngOneShot && (operation == "png-gray-encode" || depth == 8 && operation is ("png-rgb-encode" or "png-gray-alpha-encode"));
         var pngOneShot9 = pngOneShot && operation is ("png-smallest8-encode" or "png-smallest16-encode");
         if (pngOneShot9 && operation != (depth == 16 ? "png-smallest16-encode" : "png-smallest8-encode"))
             throw new ArgumentException("SmallestSize control and source depth differ.", nameof(depth));
@@ -170,6 +169,7 @@ internal sealed partial class NativeWarmReference : IDisposable
         if (pngOneShot) { stem = depth == 16 ? "ffmpeg-png-one-shot16-warm" : "ffmpeg-png-one-shot-warm"; buildScript = depth == 16 ? "build-png-one-shot16-linux.sh" : "build-png-one-shot-linux.sh"; }
         if (pngOneShotRgb) { stem = "ffmpeg-png-one-shot-rgb16-warm"; buildScript = "build-png-one-shot-rgb16-linux.sh"; }
         if (pngOneShotGrayAlpha) { stem = "ffmpeg-png-one-shot-gray-alpha16-warm"; buildScript = "build-png-one-shot-gray-alpha16-linux.sh"; }
+        if (pngOneShotColor) { stem = "ffmpeg-png-one-shot-color-warm"; buildScript = "build-png-one-shot-color-linux.sh"; }
         if (pngOneShot9) { stem = $"ffmpeg-png-one-shot9-{depth}-warm"; buildScript = "build-png-one-shot9-linux.sh"; }
         Executable = Path.Combine(state.Root, "external", "warm-reference", stem);
         var identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, operation == "png-store16-encode" ? "png-store16-identity.json" : operation == "png-fast16-encode" ? "png-fast16-identity.json" : operation == "vp8-stream-decode" ? "vp8-stream-identity.json" : operation == "jpeg420-stream-decode" ? "jpeg-stream-identity.json" : operation == "webp-opaque-encode" ? depth == 16 ? "webp-opaque16-identity.json" : "webp-opaque-identity.json" : jpegRestart ? "jpeg-restart-identity.json" : pngStream16 ? "png-stream16-identity.json" : pngComposition16 ? "png-composition16-identity.json" : pngComposition ? "png-composition-identity.json" : pngStream ? "png-stream-identity.json" : retainedFlip ? "hflip-retained2-identity.json" : bicubicOnePixel ? "bicubic-down1x1-8-identity.json" : bicubicNineRows ? depth == 16 ? "bicubic-down2x9-16-identity.json" : "bicubic-down2x9-8-identity.json" : bicubicBeyond1024 ? depth == 16 ? "bicubic-down2x2-16-identity.json" : "bicubic-down2x2-8-identity.json" : bicubicPackedNineRows ? depth == 16 ? "bicubic-down4x9-16-identity.json" : "bicubic-down4x9-8-identity.json" : bicubicBeyond512 ? depth == 16 ? "bicubic-down4x2-16-identity.json" : "bicubic-down4x2-8-identity.json" : bicubicSeventeenRows ? depth == 16 ? "bicubic-down8x17-16-identity.json" : "bicubic-down8x17-8-identity.json" : bicubicBeyond256 ? depth == 16 ? "bicubic-down8x4-16-identity.json" : "bicubic-down8x4-8-identity.json" : bicubicBeyond128 ? depth == 16 ? "bicubic-down16x8-16-identity.json" : "bicubic-down16x8-8-identity.json" : bicubicBeyond64 ? depth == 16 ? "bicubic-down32x16-16-identity.json" : "bicubic-down32x16-8-identity.json" : bicubicVerticalUp ? depth == 16 ? "bicubic-vertical-up16-identity.json" : "bicubic-vertical-up8-identity.json" : bicubicHorizontalUp ? depth == 16 ? "bicubic-horizontal-up16-identity.json" : "bicubic-horizontal-up8-identity.json" : bicubicVertical ? depth == 16 ? "bicubic-vertical16-identity.json" : "bicubic-vertical8-identity.json" : bicubicBeyond32 ? depth == 16 ? "bicubic-down64x32-16-identity.json" : "bicubic-down64x32-8-identity.json" : bicubicHorizontal ? depth == 16 ? "bicubic-horizontal16-identity.json" : "bicubic-horizontal8-identity.json" : bicubicWide ? depth == 16 ? "bicubic-wide16-identity.json" : "bicubic-wide8-identity.json" : bicubicCross ? depth == 16 ? "bicubic-cross16-identity.json" : "bicubic-cross8-identity.json" : bicubicMixed ? depth == 16 ? "bicubic-mixed16-identity.json" : "bicubic-mixed8-identity.json" : bicubicUpsample ? depth == 16 ? "bicubic-up16-identity.json" : "bicubic-up8-identity.json" : bicubic ? depth == 16 ? "bicubic16-identity.json" : "bicubic-identity.json" : transverse ? "transverse-identity.json" : transpose ? "transpose-identity.json" : counterclockwise ? "counterclockwise-identity.json" : normal ? "normal-orient-identity.json" : clockwise ? "clockwise-identity.json" : halfTurn ? "halfturn-identity.json" : vertical ? "vflip-identity.json" : crop ? "crop-identity.json" : bilinear ? "bilinear-identity.json" : nearest ? "nearest-identity.json" : vp8Decode ? "vp8-decode-identity.json" : webpDecode ? "webp-decode-identity.json" : jpegDecode ? "jpeg-decode-identity.json" : webpLossless ? "libwebp-lossless-identity.json" : webp ? "webp-identity.json" : jpeg ? "jpeg-identity.json" : codec ? "png-identity.json" : "identity.json");
@@ -177,12 +177,13 @@ internal sealed partial class NativeWarmReference : IDisposable
         if (pngOneShot) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, depth == 16 ? "png-one-shot16-identity.json" : "png-one-shot-identity.json");
         if (pngOneShotRgb) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "png-one-shot-rgb16-identity.json");
         if (pngOneShotGrayAlpha) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "png-one-shot-gray-alpha16-identity.json");
+        if (pngOneShotColor) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, "png-one-shot-color-identity.json");
         if (pngOneShot9) identityPath = Path.Combine(Path.GetDirectoryName(Executable)!, $"png-one-shot9-{depth}-identity.json");
         if (!File.Exists(Executable) || !File.Exists(identityPath))
             throw new InvalidOperationException("Build the pinned Linux warm reference with its tools/WarmReference build script.");
         using (var document = JsonDocument.Parse(File.ReadAllText(identityPath))) BuildIdentity = document.RootElement.Clone();
-        if (pngOneShot && (depth == 16 || pngOneShot9) && BuildIdentity.GetProperty("compiledSourceSha256").GetString()
-            != JpegBenchmarkCase.HashFile(Path.Combine(Path.GetDirectoryName(Executable)!, pngOneShotRgb ? "ffmpeg-png-one-shot-rgb16-generated.c" : pngOneShotGrayAlpha ? "ffmpeg-png-one-shot-gray-alpha16-generated.c" : pngOneShot9 ? $"ffmpeg-png-one-shot9-{depth}-generated.c" : "ffmpeg-png-one-shot16-generated.c")))
+        if (pngOneShot && (depth == 16 || pngOneShot9 || pngOneShotColor) && BuildIdentity.GetProperty("compiledSourceSha256").GetString()
+            != JpegBenchmarkCase.HashFile(Path.Combine(Path.GetDirectoryName(Executable)!, pngOneShotRgb ? "ffmpeg-png-one-shot-rgb16-generated.c" : pngOneShotGrayAlpha ? "ffmpeg-png-one-shot-gray-alpha16-generated.c" : pngOneShotColor ? "ffmpeg-png-one-shot-color-generated.c" : pngOneShot9 ? $"ffmpeg-png-one-shot9-{depth}-generated.c" : "ffmpeg-png-one-shot16-generated.c")))
             throw new InvalidOperationException("PNG projected reference source differs.");
         if (pngOneShot && depth == 16 && (!BuildIdentity.GetProperty("wordWorkspacePreparationTimed").GetBoolean()
             || BuildIdentity.GetProperty("wordWorkspaceRetainedBetweenOperations").GetBoolean()))
@@ -198,6 +199,11 @@ internal sealed partial class NativeWarmReference : IDisposable
             throw new InvalidOperationException("PNG gray-alpha16 packing build boundary differs.");
         if (pngOneShot9 && (BuildIdentity.GetProperty("encoderLevel").GetInt32() != 9 || BuildIdentity.GetProperty("inputDepth").GetInt32() != depth))
             throw new InvalidOperationException("PNG SmallestSize build settings differ.");
+        if (pngOneShotColor && (!BuildIdentity.GetProperty("colorWorkspacePreparationTimed").GetBoolean()
+            || BuildIdentity.GetProperty("colorWorkspaceRetainedBetweenOperations").GetBoolean()
+            || !BuildIdentity.GetProperty("identicalConversionOrPackingPreserved").GetBoolean()
+            || BuildIdentity.GetProperty("encoderLevel").GetInt32() != 6))
+            throw new InvalidOperationException("PNG color preparation build boundary differs.");
         if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
             || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", (pngOneShot ? "ffmpeg-png-warm" : derivedVp8 ? "ffmpeg-webp-opaque-warm" : bicubicOnePixel || bicubicMixed || bicubicCross || bicubicWide || bicubicHorizontal || bicubicBeyond32 || bicubicVertical || bicubicHorizontalUp || bicubicVerticalUp || bicubicBeyond64 || bicubicBeyond128 || bicubicBeyond256 || bicubicBeyond512 || bicubicBeyond1024 ? "zimg-bicubic-mixed8-warm" : stem) + ".c"))
             || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools", "WarmReference", buildScript)))
@@ -245,6 +251,9 @@ internal sealed partial class NativeWarmReference : IDisposable
             if (pngOneShot && depth == 16 && (!Ready.GetProperty("wordWorkspacePreparationTimed").GetBoolean()
                 || Ready.GetProperty("wordWorkspaceRetainedBetweenOperations").GetBoolean()))
                 throw new InvalidOperationException("PNG word workspace lifetime differs.");
+            if (pngOneShotColor && (!Ready.GetProperty("colorWorkspacePreparationTimed").GetBoolean()
+                || Ready.GetProperty("colorWorkspaceRetainedBetweenOperations").GetBoolean()))
+                throw new InvalidOperationException("PNG color workspace lifetime differs.");
             if (pngOneShotRgb && (!Ready.GetProperty("conversionPreparationTimed").GetBoolean()
                 || Ready.GetProperty("conversionRetainedBetweenOperations").GetBoolean()))
                 throw new InvalidOperationException("PNG RGB16 conversion lifetime differs.");
