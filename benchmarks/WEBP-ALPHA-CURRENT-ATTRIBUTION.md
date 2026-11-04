@@ -24,10 +24,9 @@ instruction skid and code size are attribution, not method times or predicted
 savings. They do not justify replaying those unchanged implementations.
 
 No candidate is accepted or family closed. A materially different repeated-work
-or workspace design remains eligible with concrete evidence. Meanwhile, reconcile
-the already named uncertain Lanczos enlargement one-shot/prepared comparisons.
-All current costs and the selected build's 5,543 full/live checks per OS and
-same actual package/three-example qualification remain valid; no broad repeat.
+or workspace design remains eligible with concrete evidence. The [Lanczos preparation/output work](LANCZOS-PAIRED-ROW-OUTPUT.md) is now
+qualified. Unchanged production retains applicable current correctness/package
+proof; no broad repeat follows this attribution.
 
 [Evidence](webp-current-alpha-execution-attribution-evidence.json) pins selected
 samples, exact-source JIT, producers, output gates and prior investigations. Raw
@@ -36,3 +35,61 @@ samples, exact-source JIT, producers, output gates and prior investigations. Raw
 mirrored/member-verified. The trace, map, complete analysis, JIT, guard logs,
 current owned sources and reproduction scripts are retained, with qualified-core
 and existing reference/runtime archives pinned. Publication remains postponed.
+
+
+## Bounded neighbor-query reuse audit
+
+One untimed complete encode on the original transparent control validates exact
+consecutive-query suffix recurrences and conservative bounds. Across two main
+and three auxiliary match builds:
+
+| Query | Calls | Original prefix comparisons | Logically avoidable comparisons |
+| --- | ---: | ---: | ---: |
+| above | 132,610 | 208,720 | 34,933 |
+| left | 132,834 | 189,050 | 26,818 |
+| chain | 386,441 | 2,103,847 | 0 |
+
+Only61,751of2,501,617prefix comparisons (2.47%)could be removed before adding
+cache-state/branch costs. **No neighbor-cache prototype follows.** These counts
+exclude other matcher work, including the outer chain's best-length probe; they
+are not CPU-time shares or savings bounds. Existing FAST alpha candidate selection
+and fused prepared body counting are already present, so neither is replayed.
+
+The one private source-projection build retains the exact98,590Bpacket, unchanged
+original input and borrowed-root cleanup; both quiet guards pass. Telemetry and
+extra diagnostic head comparisons are tool storage/work, with no production,
+timing, allocation or peak claim. [Evidence](webp-neighbor-prefix-reuse-audit-evidence.json)
+retains all five build/query counts, recurrence checks and producer identities.
+Raw `webp-neighbor-prefix-reuse-audit.tar.xz`:317,616B/23members, SHA256
+`d271feb4f501ed4ef90beda559b8865132c4172613f25807150331c7c3a2f886`,
+mirrored/member-verified. The qualified baseline source/package dependency is pinned.
+Next reconcile already required PNG9 costs before selecting further tuning.
+
+
+## Bounded neighbor-query reuse audit
+
+One untimed complete encode on the original transparent control validates exact
+consecutive-query suffix recurrences and conservative bounds. Across two main
+and three auxiliary match builds:
+
+| Query | Calls | Original prefix comparisons | Logically avoidable comparisons |
+| --- | ---: | ---: | ---: |
+| above | 132,610 | 208,720 | 34,933 |
+| left | 132,834 | 189,050 | 26,818 |
+| chain | 386,441 | 2,103,847 | 0 |
+
+Only61,751of2,501,617prefix comparisons (2.47%)could be removed before adding
+cache-state/branch costs. **No neighbor-cache prototype follows.** These counts
+exclude other matcher work, including the outer chain's best-length probe; they
+are not CPU-time shares or savings bounds. Existing FAST alpha candidate selection
+and fused prepared body counting are already present, so neither is replayed.
+
+The one private source-projection build retains the exact98,590Bpacket, unchanged
+original input and borrowed-root cleanup; both quiet guards pass. Telemetry and
+extra diagnostic head comparisons are tool storage/work, with no production,
+timing, allocation or peak claim. [Evidence](webp-neighbor-prefix-reuse-audit-evidence.json)
+retains all five build/query counts, recurrence checks and producer identities.
+Raw `webp-neighbor-prefix-reuse-audit.tar.xz`:317,616B/23members, SHA256
+`d271feb4f501ed4ef90beda559b8865132c4172613f25807150331c7c3a2f886`,
+mirrored/member-verified. The qualified baseline source/package dependency is pinned.
+Next reconcile already required PNG9 costs before selecting further tuning.
