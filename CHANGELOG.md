@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share bicubic streaming schedulers and avoid repeated row filtering within the
+  existing 4 KiB workspace, preserving exact pixels and independent output ownership.
+
 - PNG encoding reuses operation-owned Huffman workspace, batches literal codes
   through local bit state and reuses
   contiguous dictionary history, preserving exact packets, cancellation and

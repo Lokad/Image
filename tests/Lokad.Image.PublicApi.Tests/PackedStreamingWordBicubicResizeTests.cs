@@ -66,6 +66,7 @@ public sealed class PackedStreamingWordBicubicResizeTests
     [Theory]
     [InlineData(9, false)] [InlineData(17, false)] [InlineData(33, false)]
     [InlineData(9, true)] [InlineData(17, true)]
+    [InlineData(13, false)] [InlineData(14, false)] [InlineData(14, true)]
     public void BlockBoundariesAndTailsKeepFullPrecision(int height, bool tiny)
     {
         using var source = OriginalPixels.Buffer(271, 133, 16);

@@ -81,6 +81,23 @@ public sealed class StreamingWordBicubicResizeTests
         Assert.Equal(input, OriginalPixels.Bytes(source));
     }
 
+    [Theory]
+    [InlineData(18, false)] [InlineData(19, false)] [InlineData(19, true)]
+    public void FullCoefficientBlockBoundaryKeepsExactPixels(int height, bool tiny)
+    {
+        // Horizontal support is271taps: the full-coefficient streaming path.
+        using var source = OriginalPixels.Buffer(135, 133, 16);
+        if (tiny)
+            for (var y = 0; y < source.Height; y++)
+            for (var x = 0; x < source.Width; x++)
+                source.GetRow16(y)[x * 4 + 3] = (ushort)((x + y) % 7 == 0 ? 65535 : (x + y) % 3 == 0 ? 1 : 0);
+        var input = OriginalPixels.Bytes(source);
+        using var output = ImageTransforms.Resize(source, 2, height, ResizeFilter.Bicubic,
+            new ImageLimits { MaxWorkingBytes = input.Length + 2L * height * 8 + 4096 });
+        Assert.Equal(ExactResizeReference.Resize(input, 135, 133, 16, 2, height, ResizeFilter.Bicubic), OriginalPixels.Bytes(output));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+    }
+
     [Fact]
     public void BlockedTinyAlphaUnwindsBeforeExactScratch()
     {

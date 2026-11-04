@@ -2,6 +2,63 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyStreamingBicubic()
+    {
+        foreach (var (depth, width, height, expectedHash) in new[]
+        {
+            (8, 8, 17, "481df76194da6537d6ecfbc24f37c842ae750b7752791f35d40d43454532eee1"),
+            (16, 8, 17, "9f1aaa6ef72a650982022d0a36563789f9ae50d79a094f97141af8ed50051b6c"),
+            (8, 4, 9, "df49ddc41185b3feaa2a0fc283fb3cd2432e463aa4aa7294a041cd76036effd1"),
+            (16, 4, 9, "367e7576a57e596e44740e0f6b4e66c72772689e2d784011e29e39608bcdff76")
+        })
+        {
+            var sourceBytes = 513L * 259 * (depth / 2);
+            var outputBytes = (long)width * height * (depth / 2);
+            using var root = new TestMemoryBudget(sourceBytes + 2 * outputBytes + 4096);
+            var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = sourceBytes + outputBytes + 4096 };
+            using var seed = OriginalPixels.Buffer(513, 259, depth);
+            using var source = ImageBuffer.Create(513, 259, depth, limits);
+            if (depth == 8) seed.GetRow8(0)[3] = seed.GetRow8(0)[513 * 4 - 1] = 0;
+            else seed.GetRow16(0)[3] = seed.GetRow16(0)[513 * 4 - 1] = 0;
+            for (var y = 0; y < 259; y++)
+                if (depth == 8) seed.GetRow8(y).CopyTo(source.GetRow8(y));
+                else seed.GetRow16(y).CopyTo(source.GetRow16(y));
+            using var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+            using var survivor = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+            string Hash(ImageBuffer image) => Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(OriginalPixels.Bytes(image)));
+            if (Hash(first) != expectedHash || Hash(survivor) != expectedHash || root.Bytes != sourceBytes + 2 * outputBytes)
+                throw new Exception("Packaged streaming bicubic changed pixels or retained charges.");
+            using (var caller = root.CreateScope())
+            {
+                if (!caller.TryReserve(4096, out var held)) throw new Exception("Packaged streaming refusal setup differs.");
+                try
+                {
+                    using var refused = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+                    throw new Exception("Packaged streaming bicubic ignored shared refusal.");
+                }
+                catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget && e.Limit == ImageLimitKind.WorkingBytes) { }
+                if (root.Bytes != sourceBytes + 2 * outputBytes + held.Bytes || root.Refusals != 1)
+                    throw new Exception("Packaged streaming bicubic refusal leaked ownership.");
+            }
+            try
+            {
+                using var canceled = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits, new CancellationToken(true));
+                throw new Exception("Packaged streaming bicubic ignored cancellation.");
+            }
+            catch (OperationCanceledException) { }
+            if (!OriginalPixels.Bytes(source).AsSpan().SequenceEqual(OriginalPixels.Bytes(seed)))
+                throw new Exception("Packaged streaming bicubic changed caller samples.");
+            source.Dispose(); first.Dispose();
+            if (root.Bytes != outputBytes || Hash(survivor) != expectedHash)
+                throw new Exception("Packaged streaming bicubic survivor lost ownership.");
+            survivor.Dispose();
+            using (var next = ImageTransforms.Resize(seed, width, height, ResizeFilter.Bicubic, limits))
+                if (Hash(next) != expectedHash || root.Bytes != outputBytes) throw new Exception("Packaged streaming bicubic did not recover.");
+            if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged streaming bicubic disposed or leaked the caller root.");
+        }
+        Console.WriteLine("Packaged streaming bicubic preserves exact blocks, shared admission and independent survivors.");
+    }
+
     private static void VerifyCompositingRows()
     {
         foreach (var sourceDepth in new[] { 8, 16 })
@@ -356,6 +413,7 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
+        VerifyStreamingBicubic();
         using var budget = new TestMemoryBudget(4 * 1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = budget };
         using (var input = ImageBuffer.Create(19, 13, 8, limits))

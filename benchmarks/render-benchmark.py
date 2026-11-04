@@ -1700,12 +1700,6 @@ def render():
     # One compact owner for the eight current WebP costs with scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_current = json.loads((ROOT / 'benchmarks/webp-color-histogram-separation-evidence.json').read_text(encoding='utf-8'))
-    assert webp_current['productionAccepted'] and webp_current['cpuGainClaim']
-    assert webp_current['confirmation']['photograph']['rawGainConfidenceSeparates'] and webp_current['confirmation']['photograph']['normalizedGainConfidenceSeparates']
-    qualification = webp_current['qualification']
-    assert qualification['windows']['total'] == qualification['linux']['total'] == 5541
-    assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
     webp_owned = json.loads((ROOT / 'benchmarks/webp-alpha-match-index-reuse-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted'] and webp_owned['independentQuietConfirmation']
     assert not webp_owned['cpuGainClaim']
@@ -1715,6 +1709,16 @@ def render():
     assert webp_owned['photographPairedFollowup']['lower'] < 1 < webp_owned['photographPairedFollowup']['upper']
     assert webp_owned['storage']['alpha8AllocationSavedBytes'] == 531528
     assert webp_owned['storage']['measured']['alpha']['admittedPeakBytes'] == 3656309
+    streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
+    assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
+    assert streaming['qualification']['fullChecksEachOs'] == 5587
+    assert streaming['qualification']['actualPackage']['sha256'] == streaming['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert len(streaming['cases']) == 8 and sum(c['status'] == 'pass' for c in streaming['cases'].values()) == 6
+    for current in streaming['cases'].values():
+        assert current['actualIterations'] == 12 and current['managedExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['librarySha256'] == streaming['producers']['linuxSha256']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1860,9 +1864,12 @@ Current priorities and scope:
   enlargement retain gaps (uppers 1.201/1.121/1.100). One-shot and prepared calls
   compare equivalent setup/ownership. Plans retain 139,800/148,040 B for byte/word
   reduction and 325,156/333,396 B for enlargement. Managed Q30/rational/certified
-  pixels stay exact; zimg uses float. [Bicubic](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-  retains native graphs/scratch while managed preparation is timed; affected H
-  costs need reconciliation.
+  pixels stay exact; zimg uses float. [Shared bicubic streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  saves 66.62/51.17 µs (11.24%/9.95%) on byte/word 8×17, with unchanged allocations.
+  Two schedulers serve four exact kernels within 4 KiB. Eight existing tight
+  controls have current costs: six pass and stop; RGBA8 8×17/4×9 retain gaps
+  (uppers 1.127/1.269). Managed preparation stays timed; native graphs/scratch are
+  retained. Other affected bicubic/bilinear H costs still need reconciliation.
 - **JPEG and reading:** current table statuses and
   [coverage](../benchmarks/WARM-COVERAGE.md) retain their named color/sampling/
   delivery scope. Sub-microsecond probe/copy gaps remain visible, with expensive
@@ -1875,7 +1882,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,575 full/live checks per OS**, affected normal/scalar
+The current build passes **5,587 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

@@ -5,117 +5,40 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
-/// <summary>Streaming source rows feed a bounded set of output accumulators.</summary>
+/// <summary>Word filtering and exact publication for the shared streaming driver.</summary>
 internal static class PackedStreamingWordBicubicResize
 {
-    private const int Capacity = 544;
-    private const int OutputRowsPerBlock = 8;
-    private const int WorkspaceBytes = 4096;
+    private const int Capacity = BicubicMath.PackedStreamingTapCapacity;
 
-    internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
+    internal static bool WriteBlock(ImageBuffer source, ImageBuffer result, int x, int blockStart,
+        double centerX, int firstX, int countX, double scaleX, double scaleY,
+        double normalizerX, double horizontalMagnitude, double coefficientError,
+        ReadOnlySpan<Vector256<double>> totals, ReadOnlySpan<double> normalizers,
+        ReadOnlySpan<double> verticalMagnitudes, ReadOnlySpan<double> centers,
+        ReadOnlySpan<int> first, ReadOnlySpan<int> last, OperationContext context)
     {
-        if (source.BitDepth != 16 || result.Width >= source.Width || result.Height >= source.Height
-            || tapsX > Capacity || tapsY > Capacity
-            || tapsX <= 304 && tapsY <= 304
-            || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
-            || context.RemainingWorkingBytes < WorkspaceBytes) return false;
-        context.Reserve(WorkspaceBytes);
-        try
+        var height = totals.Length;
+        for (var y = 0; y < height; y++)
         {
-            // Fixed arrays occupy 3,776 bytes. Only the last horizontal result
-            // is retained, including repeated clamped edge rows.
-            Span<uint> coefficientLow = stackalloc uint[Capacity];
-            Span<ushort> coefficientHigh = stackalloc ushort[Capacity];
-            Span<Vector256<double>> totals = stackalloc Vector256<double>[OutputRowsPerBlock];
-            Span<double> centers = stackalloc double[OutputRowsPerBlock];
-            Span<int> first = stackalloc int[OutputRowsPerBlock];
-            Span<int> last = stackalloc int[OutputRowsPerBlock];
-            Span<double> normalizers = stackalloc double[OutputRowsPerBlock];
-            Span<double> verticalMagnitudes = stackalloc double[OutputRowsPerBlock];
-            var input = source.Pixels;
-            var stride = source.Stride;
-            for (var x = 0; x < result.Width; x++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var centerX = (x + .5) * source.Width / result.Width - .5;
-                var firstX = (int)Math.Ceiling(centerX - 2 * scaleX);
-                var countX = (int)Math.Floor(centerX + 2 * scaleX) - firstX + 1;
-                var sourceFirst = Math.Clamp(firstX, 0, source.Width - 1);
-                double normalizerX = 0, horizontalMagnitude = 0, coefficientError = 0;
-                for (var t = 0; t < countX; t++)
-                {
-                    var w = ImageTransforms.Kernel((firstX + t - centerX) / scaleX, ResizeFilter.Bicubic);
-                    normalizerX += w; horizontalMagnitude += Math.Abs(w);
-                    // Preserve sign/exponent and 36 fraction bits in six bytes.
-                    // The omitted error is measured from the original coefficient.
-                    var bits = BitConverter.DoubleToUInt64Bits(w);
-                    coefficientLow[t] = (uint)(bits >> 16);
-                    coefficientHigh[t] = (ushort)(bits >> 48);
-                    coefficientError += Math.Abs(w - BicubicMath.Coefficient(coefficientLow[t], coefficientHigh[t]));
-                }
-                var sourceCount = Math.Clamp(firstX + countX - 1, 0, source.Width - 1) - sourceFirst + 1;
-                // Reuse the same bounded arrays for each output-row block.
-                // Original global coordinates and full tap order are preserved.
-                for (var blockStart = 0; blockStart < result.Height; blockStart += OutputRowsPerBlock)
-                {
-                    var height = Math.Min(OutputRowsPerBlock, result.Height - blockStart);
-                    for (var y = 0; y < height; y++)
-                    {
-                        centers[y] = (blockStart + y + .5) * source.Height / result.Height - .5;
-                        first[y] = (int)Math.Ceiling(centers[y] - 2 * scaleY);
-                        last[y] = (int)Math.Floor(centers[y] + 2 * scaleY);
-                    }
-                    totals.Clear(); normalizers.Clear(); verticalMagnitudes.Clear();
-                    var previousRow = -1;
-                    var horizontal = Vector256<double>.Zero;
-                    // Unclamped coordinates are visited in increasing order. Each
-                    // output receives exactly its original vertical taps, including
-                    // separate contributions from duplicated clamped edge samples.
-                    for (var coordinate = first[0]; coordinate <= last[height - 1]; coordinate++)
-                    {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        var sy = Math.Clamp(coordinate, 0, source.Height - 1);
-                        if (sy != previousRow)
-                        {
-                            previousRow = sy;
-                            var row = input.Slice(sy * stride + sourceFirst * 8, sourceCount * 8);
-                            horizontal = FilterRow(row, coefficientLow[..countX], coefficientHigh[..countX], firstX, sourceFirst, source.Width);
-                        }
-                        for (var y = 0; y < height; y++)
-                        {
-                            if (coordinate < first[y] || coordinate > last[y]) continue;
-                            var w = ImageTransforms.Kernel((coordinate - centers[y]) / scaleY, ResizeFilter.Bicubic);
-                            normalizers[y] += w; verticalMagnitudes[y] += Math.Abs(w);
-                            totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
-                        }
-                    }
-                    for (var y = 0; y < height; y++)
-                    {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        var normalizer = normalizerX * normalizers[y];
-                        // Eight-times-epsilon scaled by full support and actual L1
-                        // magnitudes covers both original and separable sums. Twice
-                        // the measured coefficient loss covers positive bound rounding.
-                        var unitError = (double)Capacity * Capacity / (1L << 40)
-                            * Math.Max(1, horizontalMagnitude * verticalMagnitudes[y] / 1024)
-                            + 2 * coefficientError * verticalMagnitudes[y];
-                        if (!TryWrite(totals[y], normalizer, unitError, result.Pixels.Slice((blockStart + y) * result.Stride + x * 8, 8)))
-                        {
-                            if (!(normalizer >= .5)
-                                || !OriginalWord(source, result, x, blockStart + y, centerX, firstX, countX, scaleX,
-                                    centers[y], first[y], last[y], scaleY, context)) return false;
-                        }
-                    }
-                }
-            }
             context.Cancellation.ThrowIfCancellationRequested();
-            return true;
+            var normalizer = normalizerX * normalizers[y];
+            // Eight-times-epsilon scaled by full support and actual L1
+            // magnitudes covers both original and separable sums. Twice
+            // the measured coefficient loss covers positive bound rounding.
+            var unitError = (double)Capacity * Capacity / (1L << 40)
+                * Math.Max(1, horizontalMagnitude * verticalMagnitudes[y] / 1024)
+                + 2 * coefficientError * verticalMagnitudes[y];
+            if (!TryWrite(totals[y], normalizer, unitError, result.Pixels.Slice((blockStart + y) * result.Stride + x * 8, 8)))
+            {
+                if (!(normalizer >= .5)
+                    || !OriginalWord(source, result, x, blockStart + y, centerX, firstX, countX, scaleX,
+                        centers[y], first[y], last[y], scaleY, context)) return false;
+            }
         }
-        finally { context.Release(WorkspaceBytes); }
+        return true;
     }
 
-    private static Vector256<double> FilterRow(ReadOnlySpan<byte> row,
+    internal static Vector256<double> FilterRow(ReadOnlySpan<byte> row,
         ReadOnlySpan<uint> low, ReadOnlySpan<ushort> high, int firstX, int sourceFirst, int sourceWidth)
     {
         var sum = Vector256<double>.Zero;

@@ -10,6 +10,30 @@ namespace Lokad.Image.Internal;
 // their own geometry, tap order and portable fallback selection.
 internal static class BicubicMath
 {
+    internal const int StreamingWorkspaceBytes = 4096;
+    internal const int StreamingTapCapacity = 304;
+    internal const int PackedStreamingTapCapacity = 544;
+    // One vector total, center/normalizer and first/last coordinate per row.
+    private const int StreamingRowBytes = 6 * sizeof(double) + 2 * sizeof(int);
+    internal const int StreamingRows = (StreamingWorkspaceBytes
+        - StreamingTapCapacity * (sizeof(double) + sizeof(ushort))) / StreamingRowBytes;
+    internal const int PackedStreamingRows = (StreamingWorkspaceBytes
+        - PackedStreamingTapCapacity * (sizeof(uint) + sizeof(ushort))) / (StreamingRowBytes + sizeof(double));
+
+    // Geometry is bounded by the caller's admitted block, without pixel dispatch.
+    internal static int PrepareStreamingRows(int sourceHeight, int targetHeight, int blockStart,
+        double scale, Span<double> centers, Span<int> first, Span<int> last)
+    {
+        var height = Math.Min(centers.Length, targetHeight - blockStart);
+        for (var y = 0; y < height; y++)
+        {
+            centers[y] = (blockStart + y + .5) * sourceHeight / targetHeight - .5;
+            first[y] = (int)Math.Ceiling(centers[y] - 2 * scale);
+            last[y] = (int)Math.Floor(centers[y] + 2 * scale);
+        }
+        return height;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static bool TryWriteBytePair(Vector512<double> sum, double n0, double n1, Span<byte> output)
     {

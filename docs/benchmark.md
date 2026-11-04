@@ -38,9 +38,12 @@ Current priorities and scope:
   enlargement retain gaps (uppers 1.201/1.121/1.100). One-shot and prepared calls
   compare equivalent setup/ownership. Plans retain 139,800/148,040 B for byte/word
   reduction and 325,156/333,396 B for enlargement. Managed Q30/rational/certified
-  pixels stay exact; zimg uses float. [Bicubic](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-  retains native graphs/scratch while managed preparation is timed; affected H
-  costs need reconciliation.
+  pixels stay exact; zimg uses float. [Shared bicubic streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  saves 66.62/51.17 µs (11.24%/9.95%) on byte/word 8×17, with unchanged allocations.
+  Two schedulers serve four exact kernels within 4 KiB. Eight existing tight
+  controls have current costs: six pass and stop; RGBA8 8×17/4×9 retain gaps
+  (uppers 1.127/1.269). Managed preparation stays timed; native graphs/scratch are
+  retained. Other affected bicubic/bilinear H costs still need reconciliation.
 - **JPEG and reading:** current table statuses and
   [coverage](../benchmarks/WARM-COVERAGE.md) retain their named color/sampling/
   delivery scope. Sub-microsecond probe/copy gaps remain visible, with expensive
@@ -53,7 +56,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,575 full/live checks per OS**, affected normal/scalar
+The current build passes **5,587 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

@@ -15,7 +15,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-ALPHA-MATCH-INDEX-REUSE.md) includes depth normalization and fresh async nonseekable output. Passing cases stop; other affected H costs remain historical. Existing input/settings/packet/ownership gates remain. |
 | PNG encoding | [Tree workspace reuse](PNG-TREE-WORKSPACE.md) saves834,544/94,960B per complete word/byte Smallest9 encode (24.4%/10.2%, same batching), without a CPU gain/equivalence/regression claim. Six equivalent one-shot costs are current. Five gaps: Smallest word/byte uppers1.104/1.061, wordOptimal1.064, Fastest1.124/1.282. ByteOptimal is uncertain (upper1.055); resolve before tuning. Existing384KiB admission,12,648B tree payload duringoperation/zero scratch afterdisposal; completephysical peaks unmeasured. Other affectedH costs stay historical. Prior token-output gain stays linked history. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
-| Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) retains scoped bicubic gains/gaps; affected bilinear/bicubic H costs need reconciliation. [Shared Lanczos driver](LANCZOS-SHARED-ROW-DRIVER.md) saves24µs/3.98%raw/4.34%normalized on prepared byte reduction with separated confidence, unchanged allocation/retention and exact pixels. Word points rise with overlapping intervals; clocks are disclosed. All eight costs current: five pass and stop; prepared byte reduction and word reduction/enlargement retain gaps (uppers1.201/1.121/1.100). Earlier paired-output gains remain linked history. |
+| Bicubic and Lanczos3 | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers and unchanged exact kernels within4KiB, saving66.62/51.17µs (11.24%/9.95%) on byte/word8×17. Eight streaming costs are current: six pass/stop; RGBA8 8×17/4×9 gaps retain uppers1.127/1.269. Allocation unchanged. [Shared Lanczos driver](LANCZOS-SHARED-ROW-DRIVER.md) retains its scoped24µs gain and five passing boundaries; prepared byte/word reduction and word enlargement remain gaps (uppers1.201/1.121/1.100). Numeric contracts and native clock disclosures remain. Other affected bilinear/bicubic H costs still need reconciliation. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
 The [current WebP capacity audit](WEBP-CACHE-HISTORY-CAPACITY.md) identifies
@@ -53,10 +53,11 @@ restored exactly without rebuilds before the current token-output milestone. Its
 count audit also rules out useful wider filtering on the word control. Older
 attribution is history, not current machine-code or available-savings proof.
 
-Eight existing WebP controls now have current costs; unchanged opaque
-VP8, resizing and other codec algorithms retain applicable evidence. Other
+Eight existing WebP controls and eight streaming resize controls have current
+costs; unchanged opaque VP8, Lanczos and other codec algorithms retain applicable
+evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,575 full/live checks per OS,
+The current immutable production build passes 5,587 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.

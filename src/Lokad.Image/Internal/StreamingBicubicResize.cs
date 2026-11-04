@@ -8,14 +8,14 @@ namespace Lokad.Image.Internal;
 /// <summary>Streaming source rows feed a bounded set of output accumulators.</summary>
 internal static class StreamingBicubicResize
 {
-    private const int Capacity = 304;
-    private const int OutputRowsPerBlock = 16;
-    private const int WorkspaceBytes = 4096;
+    private const int Capacity = BicubicMath.StreamingTapCapacity;
+    private const int OutputRowsPerBlock = BicubicMath.StreamingRows;
+    private const int WorkspaceBytes = BicubicMath.StreamingWorkspaceBytes;
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
     {
-        if (source.BitDepth != 8 || result.Width >= source.Width || result.Height >= source.Height
+        if (source.BitDepth is not (8 or 16) || result.Width >= source.Width || result.Height >= source.Height
             || tapsX > Capacity || tapsY > Capacity
             || tapsX <= 72 && tapsY <= 72
             || !Avx512F.IsSupported || !Avx2.IsSupported || !Avx.IsSupported || !Sse41.IsSupported
@@ -23,7 +23,7 @@ internal static class StreamingBicubicResize
         context.Reserve(WorkspaceBytes);
         try
         {
-            // Fixed arrays occupy 3,936 bytes. Only the last horizontal result
+            // Fixed arrays occupy 4,048 bytes. Only the last horizontal result
             // is retained, including repeated clamped edge rows.
             Span<double> weights = stackalloc double[Capacity];
             Span<ushort> offsets = stackalloc ushort[Capacity];
@@ -32,6 +32,8 @@ internal static class StreamingBicubicResize
             Span<int> first = stackalloc int[OutputRowsPerBlock];
             Span<int> last = stackalloc int[OutputRowsPerBlock];
             Span<double> normalizers = stackalloc double[OutputRowsPerBlock];
+            var word = source.BitDepth == 16;
+            var pixelBytes = word ? 8 : 4;
             var input = source.Pixels;
             var stride = source.Stride;
             for (var x = 0; x < result.Width; x++)
@@ -55,14 +57,9 @@ internal static class StreamingBicubicResize
                 // Each output keeps original global coordinates and full tap order.
                 for (var blockStart = 0; blockStart < result.Height; blockStart += OutputRowsPerBlock)
                 {
-                    var height = Math.Min(OutputRowsPerBlock, result.Height - blockStart);
-                    for (var y = 0; y < height; y++)
-                    {
-                        centers[y] = (blockStart + y + .5) * source.Height / result.Height - .5;
-                        first[y] = (int)Math.Ceiling(centers[y] - 2 * scaleY);
-                        last[y] = (int)Math.Floor(centers[y] + 2 * scaleY);
-                    }
-                    totals.Clear(); normalizers.Clear();
+                    var height = BicubicMath.PrepareStreamingRows(source.Height, result.Height,
+                        blockStart, scaleY, centers, first, last);
+                    totals[..height].Clear(); normalizers[..height].Clear();
                     var previousRow = -1;
                     var horizontal = Vector256<double>.Zero;
                     // Unclamped coordinates are visited in increasing order. Each
@@ -75,8 +72,9 @@ internal static class StreamingBicubicResize
                         if (sy != previousRow)
                         {
                             previousRow = sy;
-                            var row = input.Slice(sy * stride + sourceFirst * 4, sourceCount * 4);
-                            horizontal = FilterRow(row, weights[..countX], offsets[..countX]);
+                            var row = input.Slice(sy * stride + sourceFirst * pixelBytes, sourceCount * pixelBytes);
+                            horizontal = word ? StreamingWordBicubicResize.FilterRow(row, weights[..countX], offsets[..countX])
+                                : FilterRow(row, weights[..countX], offsets[..countX]);
                         }
                         for (var y = 0; y < height; y++)
                         {
@@ -86,23 +84,40 @@ internal static class StreamingBicubicResize
                             totals[y] = Avx.Add(totals[y], Avx.Multiply(horizontal, Vector256.Create(w)));
                         }
                     }
-                    for (var y = 0; y < height; y++)
+                    if (word)
                     {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        var normalizer = normalizerX * normalizers[y];
-                        if (!TryWrite(totals[y], normalizer, result.Pixels.Slice((blockStart + y) * result.Stride + x * 4, 4)))
-                        {
-                            if (!(normalizer >= .5 && totals[y].GetElement(3) / normalizer >= 2)
-                                || !OriginalByte(source, result, x, blockStart + y, weights[..countX], offsets[..countX],
-                                    sourceFirst, centers[y], first[y], last[y], scaleY, context)) return false;
-                        }
+                        if (!StreamingWordBicubicResize.WriteBlock(source, result, x, blockStart, weights[..countX], offsets[..countX], sourceFirst,
+                            normalizerX, totals[..height], normalizers[..height], centers[..height], first[..height], last[..height], scaleY, context)) return false;
                     }
+                    else if (!WriteBlock(source, result, x, blockStart, weights[..countX], offsets[..countX], sourceFirst,
+                            normalizerX, totals[..height], normalizers[..height], centers[..height], first[..height], last[..height], scaleY, context)) return false;
                 }
             }
             context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
         finally { context.Release(WorkspaceBytes); }
+    }
+
+    private static bool WriteBlock(ImageBuffer source, ImageBuffer result, int x, int blockStart,
+        ReadOnlySpan<double> weights, ReadOnlySpan<ushort> offsets, int sourceFirst,
+        double normalizerX, ReadOnlySpan<Vector256<double>> totals, ReadOnlySpan<double> normalizers,
+        ReadOnlySpan<double> centers, ReadOnlySpan<int> first, ReadOnlySpan<int> last,
+        double scaleY, OperationContext context)
+    {
+        var height = totals.Length;
+        for (var y = 0; y < height; y++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var normalizer = normalizerX * normalizers[y];
+            if (!TryWrite(totals[y], normalizer, result.Pixels.Slice((blockStart + y) * result.Stride + x * 4, 4)))
+            {
+                if (!(normalizer >= .5 && totals[y].GetElement(3) / normalizer >= 2)
+                    || !OriginalByte(source, result, x, blockStart + y, weights, offsets,
+                        sourceFirst, centers[y], first[y], last[y], scaleY, context)) return false;
+            }
+        }
+        return true;
     }
 
     private static Vector256<double> FilterRow(ReadOnlySpan<byte> row,
