@@ -29,6 +29,11 @@ The [current tree-preparation audit](WEBP-ALPHA-CURRENT-ATTRIBUTION.md#current-t
 confirms repeated header construction on complete alpha/photo encodes. Its scoped
 instrumented activity remains a lower-priority lead; no production or cost change.
 
+The [current one-shot RGB16 control](PNG-RGB16-ONE-SHOT.md) replaces its historical
+cost:18.41/17.72ms, upper1.048,2,431,484B/op and exact739,472B packet. Fresh native
+codec, conversion context and working frame preparation/disposal are included.
+The gap remains; this boundary/current-code reconciliation is not a speedup claim.
+
 The [current PNG byteFastest capture](PNG-FAST8-CURRENT-ATTRIBUTION.md) identifies
 parser and token-output work. The [two prepared-token stages](PNG-PREPARED-TOKENS-INCONCLUSIVE.md)
 remove repeated classification but have inconclusive short results and identical

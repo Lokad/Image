@@ -1736,6 +1736,19 @@ def render():
     rows.insert(positions[0] + 1, ('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | '
                                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
+    rgb16 = json.loads((ROOT / 'benchmarks/png-rgb16-one-shot-evidence.json').read_text(encoding='utf-8'))
+    current = rgb16['current']
+    assert not rgb16['productionChanged'] and rgb16['currentCostOnly'] and rgb16['newMaterialCases'] == 0
+    assert current['actualIterations'] == 12 and current['filteredResults'] == 10
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['equivalentOneShotBoundary']
+    assert current['managedAndNativePacketsExact'] and current['packetBytes'] == 739472
+    assert current['librarySha256'] == word_column['producers']['linuxSha256']
+    assert current['status'] == 'gap' and current['lower'] > 1
+    assert rgb16['qualificationReused']['actualPackageSha256'] == word_column['qualification']['actualPackage']['sha256']
+    position = next(i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| PNG RGB16, Optimal6'))
+    rows[position] = ('codec', f'| PNG RGB16, one-shot Optimal6 / native6 † | {current["managedUs"]:,.2f} | '
+                      f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+                      f'{current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["packetBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',

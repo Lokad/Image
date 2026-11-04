@@ -41,6 +41,12 @@ Native workers report ready/affinity evidence, internally timed `sample COUNT`,
 untimed `check` and `quit`. Use reported elapsed/count; timing IPC measures another
 operation. Invalid affinity, counts, protocol tokens and output checks must fail.
 
+`build-png-one-shot-rgb16-linux.sh` prepares the existing RGB16 Optimal6 reference
+with fresh codec/zlib, RGB48BE storage and identical single-thread conversion
+context setup/disposal inside each operation. Use `LOKAD_IMAGE_PNG_ONE_SHOT=1`
+with `EncodeRgb16`; the [current scoped comparison](../../benchmarks/PNG-RGB16-ONE-SHOT.md)
+retains exact packets and distinguishes earlier retained-context costs.
+
 ## Prepare once, screen, confirm
 
 Reuse verified immutable production/harness/native/fixture/selector artifacts while
