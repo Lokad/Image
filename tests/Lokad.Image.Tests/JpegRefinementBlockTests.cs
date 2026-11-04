@@ -166,6 +166,56 @@ var eob = 1; OverflowException? failure = null;
         }
     }
 
+    [Theory]
+    [InlineData(0x01)] [InlineData(0x11)] [InlineData(0x71)]
+    [InlineData(0xF1)] [InlineData(0xF0)]
+    public void ZeroRunBoundariesKeepCorrectionsErrorsAndTheLogicalTail(int symbol)
+    {
+        if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
+        using var tables = new OperationContext(ImageLimits.Default, default);
+        var counts = new byte[16]; counts[1] = 2;
+        var table = new JpegHuffman(counts, [(byte)symbol, 0], tables);
+        using var cancellation = new CancellationTokenSource();
+        using var root = new Lokad.Image.Tooling.TestMemoryBudget(0);
+        using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
+        byte[] data = [0x03, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 0x5A, 255, 0xD9];
+        foreach (var (start, end) in new[] { (1, 5), (1, 63), (31, 63), (48, 63), (63, 63) })
+        for (var pattern = 0; pattern < 5; pattern++)
+        foreach (var prefix in new[] { 0, 3 })
+        foreach (var length in new[] { 1, 3, data.Length })
+        foreach (var low in new[] { 0, 13 })
+        foreach (var overflow in new[] { false, true })
+        {
+            Assert.Equal(Run(false), Run(true));
+
+            string Run(bool fused)
+            {
+                var values = new int[64];
+                for (var at = 0; at < 64; at++)
+                {
+                    var zero = pattern switch { 0 => true, 1 => false, 2 => at % 3 == 0, 3 => at == start, _ => at == end };
+                    values[at] = zero ? 0 : (2 + at % 2) * (1 << low) * (at % 3 == 0 ? -1 : 1);
+                }
+                if (overflow)
+                    for (var at = start; at <= end; at++) if (values[at] != 0) { values[at] = int.MinValue; break; }
+                var reader = new JpegEntropyReader(data.AsSpan(0, length), 0, context); var eob = 0;
+                Exception? failure = null; Exception? tailFailure = null; var tail = -1;
+                try
+                {
+                    if (prefix != 0) reader.ReadBits(prefix);
+                    if (fused) Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values, start, end, low, ref eob));
+                    else Reference(ref reader, values, table, start, end, low, ref eob);
+                }
+                catch (Exception error) when (error is ImageDataException or OverflowException) { failure = error; }
+                var logicalPosition = reader.Position;
+                try { tail = reader.ReadBits(3); }
+                catch (ImageDataException error) { tailFailure = error; }
+                return $"{failure?.GetType()}:{failure?.Message}:{logicalPosition}:{eob}:{string.Join(',', values)}:{tail}:{tailFailure?.GetType()}:{reader.Position}";
+            }
+        }
+        Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
+    }
+
     // Independent T.81 G.1.2 traversal using the established one-bit reader;
     // it neither reads correction fields nor constructs nonzero/run masks.
     internal static void Reference(ref JpegEntropyReader reader, Span<int> block, JpegHuffman table,

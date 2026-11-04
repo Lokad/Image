@@ -36,6 +36,13 @@ its helpers/tests are removed and exact production/package identities restored.
 20affected checks pass perOS/mode; unchanged full/package proof is reused.
 Do not repeat those measurements or assume the global/paired estimators agree.
 
+The [JPEG reader frontier investigation](JPEG-REFINEMENT-FRONTIER-INCONCLUSIVE.md)
+also restores production after two completed stages show no useful elapsed lead.
+Five actual-reader cases add independent failure/correction/tail coverage;
+42refinement/cancellation checks pass perOS/mode. Existing full/package evidence
+and displayed costs stay valid. Return to the larger transparent WebP gap by
+counting repeated matching queries before a materially different redesign.
+
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
