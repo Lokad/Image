@@ -86,8 +86,8 @@ public partial class WarmPng
         var oneShot = Environment.GetEnvironmentVariable("LOKAD_IMAGE_PNG_ONE_SHOT");
         if (oneShot is not (null or "1")) throw new InvalidOperationException("PNG one-shot flag must be1.");
         pngOneShot = oneShot == "1";
-        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16))
-            throw new InvalidOperationException("PNG one-shot reference is limited to the existing RGBA8/16 Optimal/Fastest controls.");
+        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16))
+            throw new InvalidOperationException("PNG one-shot reference is limited to the existing RGBA8/16 Optimal/Fastest/Smallest controls.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -625,7 +625,7 @@ public partial class WarmPng
                 originalTwoRowBytes = Tight ? source.Stride * 2 : (int?)null,
                 allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true,
                 nativeCliNormalScalarPixelsExact = true,
-                nativeDecodeEndianConversionTimed = !Encode && Depth == 16, nativeEndianRepackingTimed = (Encode || RgbTransparency) && Depth == 16, nativeEndianWorkspaceReused = Encode && Depth == 16 && !Gray,
+                nativeDecodeEndianConversionTimed = !Encode && Depth == 16, nativeEndianRepackingTimed = (Encode || RgbTransparency) && Depth == 16, nativeEndianWorkspaceReused = Encode && Depth == 16 && !Gray && !pngOneShot,
                 nativeRgbPackingTimed = Encode && Rgb, nativeRgbWorkspaceReused = Encode && Rgb,
                 nativeGrayPackingTimed = Encode && Gray, nativeGrayWorkspaceReused = Encode && Gray && Depth == 8,
                 nativeGrayPlaneExtractionTimed = Encode && Gray && Depth == 16, nativeGrayFilterOutputAllocationTimed = Encode && Gray && Depth == 16,

@@ -30,7 +30,7 @@ physical peaks and native allocation/graph/input-plane retention are not newly
 measured. [Earlier preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) and
 [boundary reconciliation](../benchmarks/LANCZOS-CURRENT-ENLARGEMENT.md) retain history.
 Rows marked **H** retain historical affected costs pending refresh.
-All four current PNG Optimal/Fastest rows compare fresh encoder state, complete
+All six current PNG Optimal/Fastest/Smallest rows compare fresh encoder state, complete
 encoding and independent output/disposal on both sides. Word native endian-frame
 allocation/conversion/disposal stays timed.
 [Sequential dictionary hashing](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md)
@@ -43,6 +43,10 @@ All four retain gaps: Optimal uppers **1.113 word / 1.057 byte**, Fastest
 **1.144 word / 1.350 byte**. Word allocation stays **3,420,516 B/op** each;
 byte Optimal/Fastest **932,516 / 951,212 B/op**. Workspace admission is **384 KiB**,
 retained operation scratch zero, no newly measured complete/physical peak.
+[Current SmallestSize9](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md)
+confirms gaps with uppers **1.137 word / 1.065 byte** and allocations
+**3,420,454 / 932,516 B/op**. These refresh two historical costs without a
+production change or incremental gain claim; batch amortization differs.
 [Earlier lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md),
 [Compact dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md),
 [contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) and
@@ -157,8 +161,8 @@ individual experiments remain in
 | VP8L text/diagram / libwebp exact=1 † | 8,036.29 | 9,483.21 | 0.847 / 0.867 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,497.65 | 130,268.92 | 0.887 / 0.895 | 7,476,640 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 70,681.22 | 70,344.26 | 1.005 / 1.037 | 5,983,424 | 121,896 / 121,896 |
-| PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
-| PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 18,221.17 | 17,251.11 | 1.056 / 1.065 | 932,516 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 23,558.06 | 20,869.52 | 1.129 / 1.137 | 3,420,454 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,757.79 | 4,343.39 | 1.326 / 1.350 | 951,212 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 20,918.85 | 18,611.95 | 1.124 / 1.144 | 3,420,516 | 968,216 / 968,216 |
