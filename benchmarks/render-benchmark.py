@@ -426,11 +426,12 @@ def render():
     assert set(header_skips['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
     png_output = json.loads((ROOT / 'benchmarks/png-block-preparation-evidence.json').read_text(encoding='utf-8'))
     png_boundaries = json.loads((ROOT / 'benchmarks/png-boundary-one-shot-evidence.json').read_text(encoding='utf-8'))
-    assert not png_boundaries['productionChanged'] and png_boundaries['independentQuietConfirmations'] == 2
-    assert png_boundaries['harnessBuilds'] == 1 and png_boundaries['allOtherBuilds'] == 0
+    assert not png_boundaries['productionChanged'] and png_boundaries['independentQuietConfirmations'] == 3
+    assert png_boundaries['harnessBuilds'] == 2 and png_boundaries['nativeBuilds'] == 1 and png_boundaries['allOtherBuilds'] == 0
     png_boundary_labels = {
         'EncodeFastCancelable16': 'PNG RGBA16, one-shot Fastest1, live cancelable token',
         'EncodeFastForward16': 'PNG RGBA16, one-shot Fastest1, forward-only output'}
+    png_async_label = 'PNG RGBA8 async, one-shot Optimal6, nonseekable output'
     byte_color_png = json.loads((ROOT / 'benchmarks/current-byte-color-png-costs-evidence.json').read_text(encoding='utf-8'))
     assert not byte_color_png['productionChanged'] and byte_color_png['allBuilds'] == 0
     assert byte_color_png['independentQuietConfirmations'] == 3
@@ -447,11 +448,6 @@ def render():
     assert word_color_png['qualification']['sameActualPackageBothOs']
     assert word_color_png['qualification']['package']['sha256'] == word_color_png['qualification']['linuxPackage']['sameActualPackageSha256']
     assert set(word_color_png['cases']) == {'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16'}
-    async_png_cost = json.loads((ROOT / 'benchmarks/current-async-png-encode-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not async_png_cost['productionChanged'] and async_png_cost['independentQuietConfirmation']
-    assert async_png_cost['producers'] == word_color_png['producers']
-    assert async_png_cost['qualificationReused']['packageSha256'] == word_color_png['qualification']['package']['sha256']
-    assert async_png_cost['builds'] == dict(core=0, publicTests=0, internalTests=0, differential=0, selector=0, native=0, harnessEachOs=1)
     cursor_reassessment = json.loads((ROOT / 'benchmarks/png-cancelable-cursor-reassessment-evidence.json').read_text(encoding='utf-8'))
     assert cursor_reassessment['candidateRejected'] and not cursor_reassessment['productionChanged']
     assert cursor_reassessment['independentQuietConfirmation'] and not cursor_reassessment['independentCandidateConfirmation']
@@ -586,7 +582,7 @@ def render():
         receipt = observation['receipt']
         assert observation['status'] == 'gap' and observation['lower'] > 1
         assert receipt['librarySha256'] == png_boundaries['producers']['linuxSha256']
-        assert receipt['benchmarkAssemblySha256'] == png_boundaries['producers']['benchmarkSha256']
+        assert receipt['benchmarkAssemblySha256'] == png_boundaries['producers']['benchmarkSha256ByCase'][case]
         assert observation['actualIterations'] == len(observation['managedActualNanoseconds']) == 12
         assert observation['quietGuardsPassed'] and observation['allOriginalGatesPassed']
         assert observation['codecPreparationTimed'] and not observation['nativeCodecRetainedBetweenOperations']
@@ -634,20 +630,23 @@ def render():
         rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {packet_bytes:,} / {packet_bytes:,} |'))
-    observation = async_png_cost['cases']['Png8AsyncNonSeekable'][-1]
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert async_png_cost['status']['Png8AsyncNonSeekable'] == 'confirmed-gap'
-    assert receipt['librarySha256'] == async_png_cost['producers']['linuxSha256']
+    observation = png_boundaries['cases']['Png8AsyncNonSeekable']
+    receipt = observation['receipt']
+    assert observation['status'] == 'gap' and observation['lower'] > 1
+    assert receipt['librarySha256'] == png_boundaries['producers']['linuxSha256']
+    assert receipt['benchmarkAssemblySha256'] == png_boundaries['producers']['benchmarkSha256ByCase']['Png8AsyncNonSeekable']
     assert receipt['managedLevel'] == receipt['nativeLevel'] == 6 and receipt['filterNone']
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    assert all(q['passed'] for q in observation['quietness'].values())
+    assert observation['actualIterations'] == len(observation['managedActualNanoseconds']) == 12
+    assert all(len(b['samples']) == 12 for b in observation['nativeBrackets'])
+    assert observation['quietGuardsPassed'] and observation['allOriginalGatesPassed']
+    assert observation['codecPreparationTimed'] and observation['nativePacketWrapperPreparationTimed']
+    assert not observation['nativeCodecRetainedBetweenOperations']
     assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 210973
     assert receipt['managedOutputSha256'] == 'ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920'
     assert receipt['completePacketSizeGate'] and receipt['allRgbaSamplesExact'] and receipt['resourceAndCancellationGates']
-    native = min(b['mean'] for b in observation['nativeBrackets'])
-    rows.append(('codec', f'| PNG RGBA8 async, fresh nonseekable output, Optimal6 / native6 † | {stats["Mean"] / 1000:,.2f} | '
-                 f'{native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 210,973 / 210,973 |'))
+    rows.append(('codec', f'| {png_async_label} † | {observation["managedUs"]:,.2f} | '
+                 f'{observation["nativeUs"]:,.2f} | {observation["ratio"]:.3f} / {observation["upper"]:.3f} | '
+                 f'{observation["allocatedBytes"]:,} | 210,973 / 210,973 |'))
     observation = cursor_reassessment['cases']['DecodeCancelable8'][-1]
     receipt, stats = observation['receipt'], observation['managed']['statistics']
     assert cursor_reassessment['status']['DecodeCancelable8'] == 'confirmed-gap'
@@ -1532,7 +1531,7 @@ def render():
     # Decode/inspection paths are separate and retain their applicable costs.
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
-             and row.split('|')[1].strip().removesuffix(' †') not in png_boundary_labels.values()
+             and row.split('|')[1].strip().removesuffix(' †') not in (*png_boundary_labels.values(), png_async_label)
              else row) for kind, row in rows]
     for case, old_label, label in [
             ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6'),
@@ -1827,10 +1826,11 @@ Current priorities and scope:
   0.995–1.044; no unchanged resampling follows.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
-  at equal batching, without a CPU gain/equivalence/regression claim. Eight current
-  one-shot costs retain seven gaps; byte Optimal6 remains uncertain (upper 1.045).
-  [Cancelable/forward-only word encoding](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
-  now includes native codec and word-workspace preparation (uppers 1.116/1.140).
+  at equal batching, without a CPU gain/equivalence/regression claim. Nine current
+  one-shot costs retain eight gaps; byte Optimal6 remains uncertain (upper 1.045).
+  [Delivery/cancellation comparisons](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
+  include native codec preparation: word token/forward uppers 1.116/1.140;
+  byte async upper 1.029. Word-workspace and complete async delivery stay timed.
   Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
   zero retained scratch after disposal. Complete physical/admitted peaks are
   unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
@@ -1873,7 +1873,7 @@ admitted peaks are not inferred from allocation reductions.
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The eight current one-shot PNG rows time fresh codec/zlib/packet state and independent
+The nine current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
 disposal. Other native codec workers retain their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.

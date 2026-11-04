@@ -3,16 +3,20 @@ using System.Text.Json;
 
 internal sealed partial class NativeWarmReference
 {
-    public NativeWarmReference(JpegBenchmarkCase state, int cpu, bool asyncPngEncode)
+    public NativeWarmReference(JpegBenchmarkCase state, int cpu, bool asyncPngEncode, bool pngOneShot = false)
     {
         if (!asyncPngEncode) throw new ArgumentOutOfRangeException(nameof(asyncPngEncode));
-        Executable = Path.Combine(state.Root, "external/warm-reference/ffmpeg-png-nonseekable-encode-warm");
-        using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external/warm-reference/png-nonseekable-encode-identity.json"))))
+        var stem = pngOneShot ? "png-one-shot-nonseekable-encode" : "png-nonseekable-encode";
+        Executable = Path.Combine(state.Root, "external/warm-reference/ffmpeg-" + stem + "-warm");
+        using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "external/warm-reference/" + stem + "-identity.json"))))
             BuildIdentity = document.RootElement.Clone();
         if (BuildIdentity.GetProperty("workerSha256").GetString() != JpegBenchmarkCase.HashFile(Executable)
             || BuildIdentity.GetProperty("sourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools/WarmReference/ffmpeg-png-nonseekable-encode-warm.c"))
-            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools/WarmReference/build-png-nonseekable-encode-linux.sh")))
+            || BuildIdentity.GetProperty("buildScriptSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "tools/WarmReference/build-" + stem + "-linux.sh")))
             throw new InvalidOperationException("Nonseekable PNG encode reference identity differs.");
+        if (pngOneShot && (!BuildIdentity.GetProperty("oneShotCodec").GetBoolean()
+            || BuildIdentity.GetProperty("compiledSourceSha256").GetString() != JpegBenchmarkCase.HashFile(Path.Combine(state.Root, "external/warm-reference/ffmpeg-" + stem + "-generated.c"))))
+            throw new InvalidOperationException("One-shot nonseekable PNG compiled source differs.");
         var start = new ProcessStartInfo(Executable) { RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
         foreach (var argument in new[] { "png-nonseekable-encode", state.Input, "513", "259", "8", state.NativeOutput }) start.ArgumentList.Add(argument);
         process = Process.Start(start) ?? throw new InvalidOperationException("Could not start nonseekable PNG encode reference.");
@@ -35,6 +39,10 @@ internal sealed partial class NativeWarmReference
                     "streamAcquisitionAndReleaseTimed", "residentCallbacksImmediate", "callerOutputLeftOpen", "independentLiveOutputs", "independentOutputFromStaging" }
                     .Any(key => !Ready.GetProperty(key).GetBoolean()))
                 throw new InvalidOperationException("Nonseekable PNG encode output/ownership/settings/CPU boundary differs.");
+            if (pngOneShot && (!Ready.GetProperty("codecPreparationTimed").GetBoolean()
+                || !Ready.GetProperty("packetWrapperPreparationTimed").GetBoolean()
+                || Ready.GetProperty("codecRetainedBetweenOperations").GetBoolean()))
+                throw new InvalidOperationException("One-shot nonseekable PNG preparation is outside the operation.");
             completed = Ready.GetProperty("initialCompletedOperations").GetInt64();
         }
         catch { Dispose(); throw; }

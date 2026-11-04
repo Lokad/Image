@@ -103,7 +103,7 @@ public partial class WarmPng
         if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_ENCODE_ASYNC_NONSEEKABLE") == "1")
         {
             if (Case != WarmPngCase.Encode8) throw new ArgumentOutOfRangeException(nameof(Case));
-            asyncOutput = new WarmAsyncPngEncode(); asyncOutput.Setup(cpu, smoke, sampleCount); return;
+            asyncOutput = new WarmAsyncPngEncode(); asyncOutput.Setup(cpu, smoke, sampleCount, pngOneShot); return;
         }
         if (Environment.GetEnvironmentVariable("LOKAD_IMAGE_MEMORY_RETAINED2") == "1")
         {

@@ -15,7 +15,7 @@ internal sealed class WarmAsyncPngEncode
     private NativeWarmSample[] before = [];
     private JsonElement proof, sourceIdentity;
     private int cpu, count, nativeBytes, nativeIdat;
-    private bool smoke, ready;
+    private bool smoke, ready, oneShot;
 
     private void Prepare()
     {
@@ -27,13 +27,14 @@ internal sealed class WarmAsyncPngEncode
             throw new InvalidOperationException("Original PNG encode input/profile differs.");
     }
 
-    public void Setup(int cpu, bool smoke, int count)
+    public void Setup(int cpu, bool smoke, int count, bool oneShot = false)
     {
-        this.cpu = cpu; this.smoke = smoke; this.count = count;
+        this.cpu = cpu; this.smoke = smoke; this.count = count; this.oneShot = oneShot;
         try
         {
             Prepare();
-            using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/png-optimal8-async-proof.json")))) proof = document.RootElement.Clone();
+            using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root,
+                oneShot ? "tmp/png-optimal8-async-one-shot-proof.json" : "tmp/png-optimal8-async-proof.json")))) proof = document.RootElement.Clone();
             // Validate exercises the actual producer on every setup. Reuse an
             // unchanged packet/native-boundary proof across unrelated changes.
             if (proof.GetProperty("timing").GetBoolean()
@@ -44,7 +45,7 @@ internal sealed class WarmAsyncPngEncode
             using (var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(state.Root, "tmp/benchmark-source.json"))))
                 sourceIdentity = JsonSerializer.SerializeToElement(new { sourceSha256 = document.RootElement.GetProperty("sourceSha256").GetString(), sourceRevision = document.RootElement.GetProperty("sourceRevision").GetString() });
             Validate(); File.WriteAllBytes(state.Input, pixels);
-            native = new NativeWarmReference(state, cpu, asyncPngEncode: true);
+            native = new NativeWarmReference(state, cpu, asyncPngEncode: true, pngOneShot: oneShot);
             if (proof.GetProperty("nativeBuild").GetProperty("workerSha256").GetString() != native.BuildIdentity.GetProperty("workerSha256").GetString())
                 throw new InvalidOperationException("Prepared PNG encode worker differs.");
             RequireNative(); before = native.Measure(smoke, sampleCount: count); ready = true;
@@ -158,7 +159,12 @@ internal sealed class WarmAsyncPngEncode
                 resourceAndCancellationGates = true, sinkFailureCleanupAndRecovery = true, preparedEquivalentBoundaryControls = true, preparation = proof,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageCodec).Assembly.Location), benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmAsyncPngEncode).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after, nativeExitCode = 0,
-                boundary = "Same resident borrowed RGBA8 to a fresh independently owned nonseekable caller output. Managed EncodePngAsync includes complete PNG encoding into admitted segmented staging, actual WriteAsync copies into caller-owned growing output, awaited completion and all staging/output release. Native single-thread FFmpeg PNG encoding into fresh owned packet staging, fresh nonseekable AVIO/scratch, output growth/callback copies, internal AVIO flush to finish writes, staging/AVIO/output release are timed. Both callbacks complete immediately; caller output remains alive after staging release and is disposed by its owner inside each complete operation. No final snapshot copy, input normalization for already-RGBA8 source, forced scheduling, real I/O, seek/length/output view or cached encoded content. Prepared source/context/wrappers and released private storage may be reused. Managed default Optimal maps to level6/native frozen level6/filterNone, exact alpha/hidden RGB and complete-packet byte equality. Native internal flush does not require managed caller FlushAsync. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, preparation/hashing and validation excluded."
+                nativeCodecLifetime = oneShot ? "One-shot: codec/options/zlib and packet wrapper preparation/disposal timed; resident source borrowed."
+                    : "Repeated: codec/zlib and packet wrapper retained; source borrowed.",
+                boundary = "Same resident borrowed RGBA8 to a fresh independently owned nonseekable caller output. Managed EncodePngAsync includes complete PNG encoding into admitted segmented staging, actual WriteAsync copies into caller-owned growing output, awaited completion and all staging/output release. Native single-thread FFmpeg PNG encoding into fresh owned packet staging, fresh nonseekable AVIO/scratch, output growth/callback copies, internal AVIO flush to finish writes, staging/AVIO/output release are timed. Both callbacks complete immediately; caller output remains alive after staging release and is disposed by its owner inside each complete operation. No final snapshot copy, input normalization for already-RGBA8 source, forced scheduling, real I/O, seek/length/output view or cached encoded content. "
+                    + (oneShot ? "Fresh native codec/options/zlib and packet wrapper preparation/disposal also timed. Both sources are borrowed resident frames; no codec state survives an operation. "
+                        : "Prepared source/context/wrappers and released private storage may be reused. ")
+                    + "Managed default Optimal maps to level6/native frozen level6/filterNone, exact alpha/hidden RGB and complete-packet byte equality. Native internal flush does not require managed caller FlushAsync. One CPU/thread, normal SIMD, nonconcurrent workstation GC. Startup, I/O, IPC, source preparation/hashing and validation excluded."
             }, EncoderQualityCalibration.Json) + "\n");
         }
         finally { Dispose(); }
