@@ -138,26 +138,32 @@ public sealed class Vp8lMatchingSeedTests
     {
         var green = OriginalGreen(); var source = green.Select(p => (byte)(p >> 8)).ToArray();
         int firstPayload;
-        using (var sizing = new OperationContext(new(), default))
-        using (var prepared = Vp8lPreparedEncoding.Prepare(green.ToArray(), 513, 4, sizing, 32, greenOnly: true))
+        long preparationEntryBytes = 0;
+        using (var entryRoot = new TestMemoryBudget(32_000_000))
+        using (var sizing = new OperationContext(new() { MemoryBudget = entryRoot }, default))
+        {
+            // Learn this preparation's first admitted capacity from the actual
+            // producer, without depending on private call frames or inlining.
+            entryRoot.Admitted = used => { if (preparationEntryBytes == 0) preparationEntryBytes = used; };
+            using var prepared = Vp8lPreparedEncoding.Prepare(green.ToArray(), 513, 4, sizing, 32, greenOnly: true);
             firstPayload = 1 + Math.Min(prepared.PayloadBytes - 5, source.Length);
+            Assert.True(preparationEntryBytes > 0);
+        }
         long phase = 0;
         using (var sizingRoot = new TestMemoryBudget(32_000_000))
         using (var sizing = new OperationContext(new() { MemoryBudget = sizingRoot }, default))
         {
-            var emitted = false;
+            var payloadAdmitted = false;
             sizingRoot.Admitted = used =>
             {
                 // The root callback precedes OperationContext's local increment,
                 // so their difference is the currently admitted capacity.
                 var requested = used - (sizing.Limits.MaxWorkingBytes - sizing.RemainingWorkingBytes);
-                // Target preparation after the first payload was emitted. The
-                // second filter now borrows its match index, so it need not
-                // reserve another full-frame index at this boundary.
-                if (emitted && phase == 0 && new System.Diagnostics.StackTrace().GetFrames().Any(frame =>
-                    frame.GetMethod()?.DeclaringType == typeof(Vp8lPreparedEncoding) && frame.GetMethod()?.Name == "MainCandidates"))
+                // Emission consumes already prepared state. The next matching
+                // entry reservation starts preparation of the second filter.
+                if (payloadAdmitted && phase == 0 && requested == preparationEntryBytes)
                     phase = sizingRoot.GrowthAttempts;
-                if (requested == firstPayload) emitted = true;
+                if (requested == firstPayload) payloadAdmitted = true;
             };
             using var encoded = Vp8AlphaEncoding.Create(source, 513, sizing);
             Assert.Equal(24588, encoded.Bytes.Length); encoded.Dispose(); Assert.Equal(0, sizingRoot.Bytes);
