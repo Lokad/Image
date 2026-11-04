@@ -55,6 +55,38 @@ public sealed class PngDeflaterBitOracleTests
         }
     }
 
+    [Fact]
+    public void EveryLengthAndDistanceBucketBoundaryKeepsTheIndependentBitstream()
+    {
+        // Enumerate the RFC distance ranges independently by their doubling
+        // widths, rather than the encoder's logarithm-based classification.
+        var boundaries = new HashSet<int>(); var start = 1; var width = 1;
+        for (var code = 0; code < 30; code++)
+        {
+            if (code >= 4 && (code & 1) == 0) width *= 2;
+            boundaries.Add(start); boundaries.Add(start + width - 1); start += width;
+        }
+        Assert.Equal(32769, start);
+        var input = (from length in Enumerable.Range(3, 256)
+                     from distance in boundaries.Order()
+                     select (uint)length | (uint)distance << 9).ToArray();
+        byte[] lengths = [.. Enumerable.Repeat((byte)8, 226), .. Enumerable.Repeat((byte)9, 60)];
+        byte[] distances = [4, 4, .. Enumerable.Repeat((byte)5, 28)];
+        var expected = Reference(input, lengths, distances, [], 0, 0);
+        using var output = new MemoryStream();
+        using var context = new OperationContext(ImageLimits.Default, default);
+        using (var encoder = new PngDeflater(output, context, 9))
+        {
+            var owned = (uint[])typeof(PngDeflater).GetField("tokens", Private)!.GetValue(encoder)!;
+            Assert.True(input.Length <= owned.Length);
+            input.CopyTo(owned, 0);
+            typeof(PngDeflater).GetField("tokenCount", Private)!.SetValue(encoder, input.Length);
+            typeof(PngDeflater).GetMethod("WriteTokens", Private)!.Invoke(encoder, [lengths, distances]);
+            typeof(PngDeflater).GetMethod("Align", Private)!.Invoke(encoder, null); encoder.Flush();
+        }
+        Assert.Equal(expected, output.ToArray());
+    }
+
     private static byte[] Reference(uint[] tokens, byte[] lengths, byte[] distances,
         byte[] prefix, uint pending, int initialBits)
     {

@@ -1,0 +1,542 @@
+{
+  "project": "Lokad.Image",
+  "stages": [
+    "PTP283",
+    "PTV284",
+    "PTB285"
+  ],
+  "decision": "Inconclusive implementations restored; retain one independent actual-writer boundary fact. No current performance/allocation/package change or causal regression claim.",
+  "hypothesis": "Prepare copy symbols and residuals once in existing uint token slots during frequency collection; unchanged cursor emits them later. No additional array, pool, cache, owner or reservation.",
+  "revision": "First stage returns by-reference frequency symbols alongside the prepared value. Generated code motivates deriving frequencies from one returned value instead. Code size/calls are not elapsed attribution.",
+  "correctness": "Exact complete packets, token order, ties, block selection, cancellation, flush/failure cleanup and output ownership preserved. Stored blocks may prepare unused fields.",
+  "linuxPreparation": [
+    {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+      "candidateSha256": "da1710f308f1471162357936eb3e67b16d9bc03beaaab3369e8509a73a0825f4",
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "e7f1a34af7cc37364c5b57cb11dc1fddf47166bbd7afd5f50dc5c38fafc868e3",
+        "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs": "88e56e775953367b9a927cf6e0d7e4c7a0b3b50bff6a861d48e08d9915437854"
+      },
+      "focused": {
+        "internal-normal": 581,
+        "internal-scalar": 581,
+        "public-normal": 211,
+        "public-scalar": 211
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "06304de24f8b32502e5316adcbdb58ed3ef8b0c529178d5018b055ec8738ca14"
+    },
+    {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "da1710f308f1471162357936eb3e67b16d9bc03beaaab3369e8509a73a0825f4",
+      "candidateSha256": "feaa1e0050f0c1151639a16a92e6a8e295ececcbd8784a76fb7cced7cafee804",
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "9f63632fe0b3c5496f55852f04082a9bb70408b596b39f0b9439e7ddca4cd40e",
+        "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs": "3476be3ea65202a03ee3666c251db0884fa27c356b51cc2451ad6b328be2c7c3"
+      },
+      "focused": {
+        "internal-normal": 581,
+        "internal-scalar": 581,
+        "public-normal": 211,
+        "public-scalar": 211
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "93013c3219d2dc2ddf81a3e4504c534aa992788a9bb0d69e7fd6d9cfd40f2718"
+    }
+  ],
+  "windowsCandidateBuilds": 0,
+  "candidateSourceSnapshots": "Both platforms retain stage sources; only Linux snapshots contain compiled candidate modules. Windows compiledCandidate=false.",
+  "measurements": [
+    {
+      "method": "EncodeFast8",
+      "measurements": {
+        "original": {
+          "rawObservation": "ptb285-baseline-EncodeFast8-short-observation.json",
+          "managedUs": 5673.312638888888,
+          "ratio": 1.3029004183227308,
+          "conservativeUpper": 2.839796814742064,
+          "nativeBracketUs": [
+            4354.371645833333,
+            4537.0151875
+          ],
+          "managedAllocatedBop": 820849,
+          "actualCount": 3,
+          "operationsPerActual": [
+            48,
+            48,
+            48
+          ],
+          "producerSha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+          "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+          "packetBytes": 236828,
+          "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "encoderLevel": 1,
+          "oneShotNativeWorkerSha256": "019918d5b1855fa5d5c38850a146d568a62a9a969cb43228b58954ddf05fdc65",
+          "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true
+        },
+        "firstStage": {
+          "rawObservation": "ptp283-candidate-EncodeFast8-short-observation.json",
+          "managedUs": 5840.815475694444,
+          "ratio": 1.3104930782365092,
+          "conservativeUpper": 2.077542798631906,
+          "nativeBracketUs": [
+            4530.590375,
+            4456.9601875
+          ],
+          "managedAllocatedBop": 820849,
+          "actualCount": 3,
+          "operationsPerActual": [
+            48,
+            48,
+            48
+          ],
+          "producerSha256": "da1710f308f1471162357936eb3e67b16d9bc03beaaab3369e8509a73a0825f4",
+          "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+          "packetBytes": 236828,
+          "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "encoderLevel": 1,
+          "oneShotNativeWorkerSha256": "019918d5b1855fa5d5c38850a146d568a62a9a969cb43228b58954ddf05fdc65",
+          "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true
+        },
+        "singleValueStage": {
+          "rawObservation": "ptv284-candidate-EncodeFast8-short-observation.json",
+          "managedUs": 5746.220527777777,
+          "ratio": 1.322822288840823,
+          "conservativeUpper": 1.4212617761379698,
+          "nativeBracketUs": [
+            4350.854208333333,
+            4343.909666666667
+          ],
+          "managedAllocatedBop": 820849,
+          "actualCount": 3,
+          "operationsPerActual": [
+            48,
+            48,
+            48
+          ],
+          "producerSha256": "feaa1e0050f0c1151639a16a92e6a8e295ececcbd8784a76fb7cced7cafee804",
+          "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+          "packetBytes": 236828,
+          "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "encoderLevel": 1,
+          "oneShotNativeWorkerSha256": "019918d5b1855fa5d5c38850a146d568a62a9a969cb43228b58954ddf05fdc65",
+          "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true
+        }
+      },
+      "firstStageVsFreshOriginal": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": -167.50283680555597,
+        "rawReduction": -0.029524697027513147,
+        "normalizedReduction": -0.005827505929848931,
+        "nativeClockChange": 0.023559895665964392,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 4256824.180585178,
+            "rawCandidateUpper": 6859933.147372341,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 0.6471853866049635,
+            "normalizedCandidateUpper": 2.0775417544248116,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 4256827.513918522,
+            "rawCandidateUpper": 6859936.595289016,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 0.6471858933876112,
+            "normalizedCandidateUpper": 2.077542798631906,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "singleValueStageVsFreshOriginal": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": -72.90788888888899,
+        "rawReduction": -0.01285102611640454,
+        "normalizedReduction": -0.015290401505694717,
+        "nativeClockChange": -0.0024026380882479215,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 4256824.180585178,
+            "rawCandidateUpper": 6041901.887962273,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 0.6471853866049635,
+            "normalizedCandidateUpper": 1.421261065535105,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 4256827.513918522,
+            "rawCandidateUpper": 6041904.908795598,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 0.6471858933876112,
+            "normalizedCandidateUpper": 1.4212617761379698,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "firstStageVsRetainedBaseline": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": 99.358607638889,
+        "rawReduction": 0.01672654811879415,
+        "normalizedReduction": -0.044587269114910955,
+        "nativeClockChange": -0.058696692030007935,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 5881126.204356102,
+            "rawCandidateUpper": 6859933.147372341,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.2302249069743638,
+            "normalizedCandidateUpper": 2.0775417544248116,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 5881146.204356102,
+            "rawCandidateUpper": 6859936.595289016,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.2302290906115252,
+            "normalizedCandidateUpper": 2.077542798631906,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "singleValueStageVsRetainedBaseline": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": 193.95355555555597,
+        "rawReduction": 0.03265115682379438,
+        "normalizedReduction": -0.05441481925568192,
+        "nativeClockChange": -0.08257279250014415,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 5881126.204356102,
+            "rawCandidateUpper": 6041901.887962273,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.2302249069743638,
+            "normalizedCandidateUpper": 1.421261065535105,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 5881146.204356102,
+            "rawCandidateUpper": 6041904.908795598,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.2302290906115252,
+            "normalizedCandidateUpper": 1.4212617761379698,
+            "normalizedSeparated": false
+          }
+        ]
+      }
+    },
+    {
+      "method": "EncodeSmallest16",
+      "measurements": {
+        "original": {
+          "rawObservation": "ptb285-baseline-EncodeSmallest16-short-observation.json",
+          "managedUs": 22436.655777777774,
+          "ratio": 1.0722412512657387,
+          "conservativeUpper": 1.1232470626488242,
+          "nativeBracketUs": [
+            20925.007083333334,
+            20953.681083333333
+          ],
+          "managedAllocatedBop": 2437584,
+          "actualCount": 3,
+          "operationsPerActual": [
+            9,
+            9,
+            9
+          ],
+          "producerSha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+          "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+          "packetBytes": 963202,
+          "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "encoderLevel": 9,
+          "oneShotNativeWorkerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+          "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true
+        },
+        "firstStage": {
+          "rawObservation": "ptp283-candidate-EncodeSmallest16-short-observation.json",
+          "managedUs": 22662.28266666667,
+          "ratio": 1.0871899262218125,
+          "conservativeUpper": 1.5032346550137903,
+          "nativeBracketUs": [
+            21046.08941666667,
+            20844.824
+          ],
+          "managedAllocatedBop": 2437584,
+          "actualCount": 3,
+          "operationsPerActual": [
+            9,
+            9,
+            9
+          ],
+          "producerSha256": "da1710f308f1471162357936eb3e67b16d9bc03beaaab3369e8509a73a0825f4",
+          "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+          "packetBytes": 963202,
+          "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "encoderLevel": 9,
+          "oneShotNativeWorkerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+          "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true
+        },
+        "singleValueStage": {
+          "rawObservation": "ptv284-candidate-EncodeSmallest16-short-observation.json",
+          "managedUs": 22565.04077777778,
+          "ratio": 1.0829228121598684,
+          "conservativeUpper": 1.129792887814975,
+          "nativeBracketUs": [
+            20843.945916666667,
+            20837.1645
+          ],
+          "managedAllocatedBop": 2437584,
+          "actualCount": 3,
+          "operationsPerActual": [
+            9,
+            9,
+            9
+          ],
+          "producerSha256": "feaa1e0050f0c1151639a16a92e6a8e295ececcbd8784a76fb7cced7cafee804",
+          "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+          "packetBytes": 963202,
+          "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "encoderLevel": 9,
+          "oneShotNativeWorkerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+          "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true
+        }
+      },
+      "firstStageVsFreshOriginal": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": -225.62688888889178,
+        "rawReduction": -0.010056172859431278,
+        "normalizedReduction": -0.013941521964788706,
+        "nativeClockChange": -0.0038319262217691996,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 22168763.725648213,
+            "rawCandidateUpper": 24995591.174702235,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.0245908853941448,
+            "normalizedCandidateUpper": 1.5032346550137903,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 22168763.725648213,
+            "rawCandidateUpper": 24995591.174702235,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.0245908853941448,
+            "normalizedCandidateUpper": 1.5032346550137903,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "singleValueStageVsFreshOriginal": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": -128.3850000000037,
+        "rawReduction": -0.005722109447663826,
+        "normalizedReduction": -0.009961900721055628,
+        "nativeClockChange": -0.004197971498097974,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 22168763.725648213,
+            "rawCandidateUpper": 23145821.76294566,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.0245908853941448,
+            "normalizedCandidateUpper": 1.129792887814975,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 22168763.725648213,
+            "rawCandidateUpper": 23145821.76294566,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.0245908853941448,
+            "normalizedCandidateUpper": 1.129792887814975,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "firstStageVsRetainedBaseline": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": 1152.2911515151486,
+        "rawReduction": 0.04838596568272002,
+        "normalizedReduction": -0.03715199009087988,
+        "nativeClockChange": -0.08247388675029665,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 23745353.307729945,
+            "rawCandidateUpper": 24995591.174702235,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.031230880405971,
+            "normalizedCandidateUpper": 1.5032346550137903,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 23682458.293886866,
+            "rawCandidateUpper": 24995591.174702235,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.028760154665629,
+            "normalizedCandidateUpper": 1.5032346550137903,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "singleValueStageVsRetainedBaseline": {
+        "project": "Lokad.Image",
+        "mode": "short",
+        "rawSavedUs": 1249.5330404040367,
+        "rawReduction": 0.05246925894806698,
+        "normalizedReduction": -0.033081270031257715,
+        "nativeClockChange": -0.08281103477632146,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 23745353.307729945,
+            "rawCandidateUpper": 23145821.76294566,
+            "rawSeparated": true,
+            "normalizedBeforeLower": 1.031230880405971,
+            "normalizedCandidateUpper": 1.129792887814975,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 23682458.293886866,
+            "rawCandidateUpper": 23145821.76294566,
+            "rawSeparated": true,
+            "normalizedBeforeLower": 1.028760154665629,
+            "normalizedCandidateUpper": 1.129792887814975,
+            "normalizedSeparated": false
+          }
+        ]
+      }
+    }
+  ],
+  "comparisonPolicy": "Reuse valid twelve-actual PCB265 baselines initially. Native6–8% faster movement makes raw/normalized comparisons disagree. One fresh original short per control resolves that scope; reuse all candidate actuals. All fresh raw/normalized confidence views overlap; no useful lead or allocation/simplification benefit. Do not resample for a favorable result.",
+  "postprocessingCorrection": "Fresh-original observer prefix corrected after logs/receipts/statistics were collected; no operation or sample repeated.",
+  "generatedCode": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "generatedCodeOnly": true,
+    "performanceMeasured": false,
+    "immutableCoreSha256": "da1710f308f1471162357936eb3e67b16d9bc03beaaab3369e8509a73a0825f4"
+  },
+  "generatedCodeScope": "One untimed check with six existing packet cases; first-stage helper267B, writer2039B versus original2215B. No timing claim.",
+  "retainedQualification": [
+    {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "0ce4f86d6778ca057eb49267525c7e2fee94dcf93d9e5f34dc794657662537e6",
+      "productionRebuilds": 0,
+      "internalTestBuilds": 1,
+      "retainedActualWriterCases": {
+        "normal": 2,
+        "scalar": 2
+      },
+      "retainedTestSha256": "b11b5529f7de0f379aa7c66e83f695c328c8348df936f83e3e86e0dae1a586d5",
+      "qualificationReuse": "UnchangedWCP2815628full/live perOS and SAMEactualpackageb9e43cf9/all3examples. One additional actual-writer boundary fact is focused qualified only; no new full5629claim."
+    },
+    {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+      "productionRebuilds": 0,
+      "internalTestBuilds": 1,
+      "retainedActualWriterCases": {
+        "normal": 2,
+        "scalar": 2
+      },
+      "retainedTestSha256": "b11b5529f7de0f379aa7c66e83f695c328c8348df936f83e3e86e0dae1a586d5",
+      "qualificationReuse": "UnchangedWCP2815628full/live perOS and SAMEactualpackageb9e43cf9/all3examples. One additional actual-writer boundary fact is focused qualified only; no new full5629claim."
+    }
+  ],
+  "retainedTest": {
+    "newFacts": 1,
+    "copyTokens": 14336,
+    "lengths": 256,
+    "independentDistanceEndpoints": 56,
+    "maxDistance": 32768,
+    "priorAlignmentAndFlushCombinations": 576,
+    "oracle": "Independent canonical codes/extra bits against actual restored original WriteTokens."
+  },
+  "workflow": {
+    "linuxCandidateCoreBuilds": 2,
+    "linuxCandidateInternalBuilds": 2,
+    "windowsCandidateCoreBuilds": 0,
+    "retainedInternalOnlyBuildsPerOS": 1,
+    "restorationBuilds": 0,
+    "publicHarnessNativeSelectorPackageBuilds": 0,
+    "shortJobs": 6,
+    "actualsPerJob": 3,
+    "candidateTimingRepeats": 0,
+    "independentConfirmations": 0,
+    "fullSuiteRepeats": 0
+  },
+  "qualifiedPackageSha256": "b9e43cf9386e81ab9c96e4adb800d3ddc9eca54f1eac99ffa8ddcfe2b28743f3",
+  "qualificationReuse": "WCP2815628full/live checks perOS and SAMEactualpackage/all3examples unchanged. One additional focused fact does not establish a fresh5629full run.",
+  "metrics": "Total allocations identical at equivalent batch sizes. No retained-capacity change; physical peak and native allocations unmeasured. Three-actual screens do not replace current independent costs or prove parity.",
+  "fullMaterialPathObjective": 282,
+  "publication": "postponed",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-prepared-tokens-inconclusive.tar.xz",
+    "bytes": 3069824,
+    "members": 289,
+    "sha256": "2824e489704ada5a70a2b5050c0fb0608e7119b057717593afc46cf77e7a0ec4",
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-word-column-preparation-qualified.tar.xz",
+        "sha256": "eec4f826efca86a9ec4ab8ab06dbb0183f4985a05987250c07be42e2bef21384"
+      },
+      {
+        "file": "png-fast8-current-attribution.tar.xz",
+        "sha256": "c564f226981f2a32d861b9c19c8a94c703dac71528578a1718a0ed1e3d10d2ef"
+      }
+    ],
+    "dependencyScope": "Qualified baseline/package, frozen controls/worker/framework dependencies and motivating trace. Both candidate sources/modules/tests, current original baseline, all actuals/brackets/guards, codegen evidence, restoration and retained actual-writer qualification are retained here.",
+    "localMembersVerified": true
+  }
+}

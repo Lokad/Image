@@ -26,8 +26,10 @@ are recorded, raw copy fields have no remaining consumer. Investigate preparing
 symbols/residuals in the same uint token slots during that existing scan, then
 emitting them through the unchanged cursor. Preserve order/ties, block selection,
 all packets, publication/cancellation/failure boundaries, admission and ownership.
-No new array, pool, cache or reservation is proposed. This is an unmeasured design,
-not a speedup or merge claim; use existing complete byteFastest/wordSmallest controls.
+No new array, pool, cache or reservation is proposed. The subsequent
+[two-stage investigation](PNG-PREPARED-TOKENS-INCONCLUSIVE.md) is exact but
+inconclusive and restored; it retains an independent writer-boundary test.
+This capture alone establishes no speedup or merge claim.
 
 The cached full-time selector provides enough actual managed work for attachment;
 the four-operation selector would be too short. The already package-qualified
