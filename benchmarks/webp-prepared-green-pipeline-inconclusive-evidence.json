@@ -1,0 +1,751 @@
+{
+  "project": "Lokad.Image",
+  "stage": "GPP271/GPE272",
+  "productionAccepted": false,
+  "productionRestoredExactly": true,
+  "cpuGainEquivalenceOrCausalRegressionClaim": false,
+  "currentCostsUnchanged": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "design": {
+    "first": "Prepare unchanged green-history entropy products/population once per tile in the existing Analysis owner, then reuse the existing prepared entropy kernel across14ordered modes. Remove the separate unprepared routine.",
+    "revision": "Keep the same counters/products and prepare the two actual non-green prices once. Use one common prepared plane-scoring execution for both green/full-color.",
+    "preserved": "Exact integer entropy/log rounding, mode order/preferences/ties, recursive map/history, complete encoder packets, direct cancellation and shared admission. No new pool/cache/session/owner framework.",
+    "capacityTrade": "256longs=2048B additional admitted payload per green Analysis. Two owners add4144allocated B/complete alpha encode; selected plan/packet owns no product storage."
+  },
+  "decision": "Neither completed stage establishes a useful normalized CPU gain. Stage1 raw1.16% gain has a1.24%faster reference clock; normalized point is0.08%adverse and intervals overlap. Revision raw0.24%adverse/normalized0.47%point gain also overlaps. Restore both exact implementations; no unchanged sampling or further variants. This is inconclusive evidence, without a causal-regression claim or permanent family ban.",
+  "cases": [
+    {
+      "stage": "gpp271",
+      "mode": "measure",
+      "subject": "baseline",
+      "runId": "gpp271-measure-baseline-alpha",
+      "managedUs": 70980.86475,
+      "nativeUs": 57759.03466666667,
+      "ratio": 1.2289136264073297,
+      "lower": 1.02234072517063,
+      "upper": 1.454117664262112,
+      "status": "gap",
+      "allocatedBytes": 7165880,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6",
+      "actualIterations": 3,
+      "filteredIterations": 3,
+      "operationsPerActual": 4,
+      "managedActualNanoseconds": [
+        71521046.5,
+        70767499.75,
+        70654048.0
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 3,
+          "Mean": 70980864.75,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 70980864.75,
+            "StandardError": 272069.27253263554,
+            "Level": 12,
+            "Margin": 8597131.756542046,
+            "Lower": 62383732.99345796,
+            "Upper": 79577996.50654204
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 3,
+          "Mean": 70980864.75,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 70980864.75,
+            "StandardError": 272069.27253263554,
+            "Level": 12,
+            "Margin": 8597131.756542046,
+            "Lower": 62383732.99345796,
+            "Upper": 79577996.50654204
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 58268540.333333336,
+          "standardError": 87089.65155771635,
+          "confidenceLower": 55516589.69185392,
+          "confidenceUpper": 61020490.97481275
+        },
+        {
+          "mean": 57759034.666666664,
+          "standardError": 95986.0000787152,
+          "confidenceLower": 54725967.823878735,
+          "confidenceUpper": 60792101.50945459
+        }
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    {
+      "stage": "gpp271",
+      "mode": "measure",
+      "subject": "candidate",
+      "runId": "gpp271-measure-candidate-alpha",
+      "managedUs": 70065.89558333333,
+      "nativeUs": 58613.47833333333,
+      "ratio": 1.1953888009319358,
+      "lower": 1.0317487099619282,
+      "upper": 1.3628492805208368,
+      "status": "gap",
+      "allocatedBytes": 7170024,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "6fac7a843891d893c3a0d6488d9a2d7e765ad0d37bac7207f75d04eabcc37f86",
+      "actualIterations": 3,
+      "filteredIterations": 3,
+      "operationsPerActual": 4,
+      "managedActualNanoseconds": [
+        70492286.0,
+        70124666.25,
+        69580734.5
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 3,
+          "Mean": 70065895.58333333,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 70065895.58333333,
+            "StandardError": 264777.91180118977,
+            "Level": 12,
+            "Margin": 8366731.651784914,
+            "Lower": 61699163.93154842,
+            "Upper": 78432627.23511824
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 3,
+          "Mean": 70065895.58333333,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 70065895.58333333,
+            "StandardError": 264777.91180118977,
+            "Level": 12,
+            "Margin": 8366731.651784914,
+            "Lower": 61699163.93154842,
+            "Upper": 78432627.23511824
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 58675525.333333336,
+          "standardError": 35603.83605424812,
+          "confidenceLower": 57550477.77927713,
+          "confidenceUpper": 59800572.88738954
+        },
+        {
+          "mean": 58613478.333333336,
+          "standardError": 14063.876200314686,
+          "confidenceLower": 58169073.14352162,
+          "confidenceUpper": 59057883.52314505
+        }
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    {
+      "stage": "gpp271",
+      "mode": "confirm",
+      "subject": "baseline",
+      "runId": "gpp271-confirm-baseline-alpha",
+      "managedUs": 70876.31472916667,
+      "nativeUs": 58309.37533333334,
+      "ratio": 1.215521763421281,
+      "lower": 1.1974973317927065,
+      "upper": 1.2285614002377465,
+      "status": "gap",
+      "allocatedBytes": 7165880,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": 4,
+      "managedActualNanoseconds": [
+        71329925.5,
+        70798681.0,
+        70511984.5,
+        70484002.0,
+        70409561.75,
+        70821170.25,
+        71273888.25,
+        70776084.5,
+        70644683.0,
+        71294742.25,
+        71123040.0,
+        71048013.75
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 70876314.72916667,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 70876314.72916667,
+            "StandardError": 95605.50028124897,
+            "Level": 12,
+            "Margin": 424199.62926548766,
+            "Lower": 70452115.09990118,
+            "Upper": 71300514.35843216
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 70876314.72916667,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 70876314.72916667,
+            "StandardError": 95605.50028124897,
+            "Level": 12,
+            "Margin": 424199.62926548766,
+            "Lower": 70452115.09990118,
+            "Upper": 71300514.35843216
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 58626404.833333336,
+          "standardError": 46515.93024809844,
+          "confidenceLower": 58420014.61197436,
+          "confidenceUpper": 58832795.05469231
+        },
+        {
+          "mean": 58309375.333333336,
+          "standardError": 61663.398702311264,
+          "confidenceLower": 58035776.10743293,
+          "confidenceUpper": 58582974.55923374
+        }
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    {
+      "stage": "gpp271",
+      "mode": "confirm",
+      "subject": "candidate",
+      "runId": "gpp271-confirm-candidate-alpha",
+      "managedUs": 70052.28095833333,
+      "nativeUs": 57584.2295,
+      "ratio": 1.2165185080462582,
+      "lower": 1.1862245179730118,
+      "upper": 1.227073210081385,
+      "status": "gap",
+      "allocatedBytes": 7170024,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "6fac7a843891d893c3a0d6488d9a2d7e765ad0d37bac7207f75d04eabcc37f86",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": 4,
+      "managedActualNanoseconds": [
+        70518134.5,
+        69660926.5,
+        69676680.25,
+        70176151.75,
+        70035859.25,
+        70161709.75,
+        69651434.5,
+        70329604.0,
+        69895404.0,
+        70471045.5,
+        70167864.25,
+        69882557.25
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 70052280.95833333,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 70052280.95833333,
+            "StandardError": 87843.16865668396,
+            "Level": 12,
+            "Margin": 389758.32423921133,
+            "Lower": 69662522.63409412,
+            "Upper": 70442039.28257254
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 70052280.95833333,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 70052280.95833333,
+            "StandardError": 87843.16865668396,
+            "Level": 12,
+            "Margin": 389758.32423921133,
+            "Lower": 69662522.63409412,
+            "Upper": 70442039.28257254
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 58473461.833333336,
+          "standardError": 56973.98892873853,
+          "confidenceLower": 58220669.42170169,
+          "confidenceUpper": 58726254.24496498
+        },
+        {
+          "mean": 57584229.5,
+          "standardError": 40045.2054353085,
+          "confidenceLower": 57406549.75093173,
+          "confidenceUpper": 57761909.24906827
+        }
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    {
+      "stage": "gpe272",
+      "mode": "measure",
+      "subject": "candidate",
+      "runId": "gpe272-measure-candidate-alpha",
+      "managedUs": 64005.881,
+      "nativeUs": 53375.632333333335,
+      "ratio": 1.1991592080873208,
+      "lower": 1.0429140110184416,
+      "upper": 1.3557151450680365,
+      "status": "gap",
+      "allocatedBytes": 7170024,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "27770967eb0ba04b54fd299e97e7330ea69a4de63fc1cfeb7aee166429a21b09",
+      "actualIterations": 3,
+      "filteredIterations": 3,
+      "operationsPerActual": 4,
+      "managedActualNanoseconds": [
+        64286472.5,
+        64011657.25,
+        63719513.25
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 3,
+          "Mean": 64005881,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 64005881,
+            "StandardError": 163692.51824501887,
+            "Level": 12,
+            "Margin": 5172528.7968481695,
+            "Lower": 58833352.20315183,
+            "Upper": 69178409.79684816
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 3,
+          "Mean": 64005881,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 64005881,
+            "StandardError": 163692.51824501887,
+            "Level": 12,
+            "Margin": 5172528.7968481695,
+            "Lower": 58833352.20315183,
+            "Upper": 69178409.79684816
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 53719856.333333336,
+          "standardError": 85211.74723462592,
+          "confidenceLower": 51027245.692808464,
+          "confidenceUpper": 56412466.97385821
+        },
+        {
+          "mean": 53375632.333333336,
+          "standardError": 38193.79500360992,
+          "confidenceLower": 52168744.52541668,
+          "confidenceUpper": 54582520.14124999
+        }
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    {
+      "stage": "gpe272",
+      "mode": "confirm",
+      "subject": "candidate",
+      "runId": "gpe272-confirm-candidate-alpha",
+      "managedUs": 71044.19379166666,
+      "nativeUs": 58722.32666666667,
+      "ratio": 1.2098327471754355,
+      "lower": 1.1293056182963932,
+      "upper": 1.2623445372478994,
+      "status": "gap",
+      "allocatedBytes": 7170024,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "27770967eb0ba04b54fd299e97e7330ea69a4de63fc1cfeb7aee166429a21b09",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": 4,
+      "managedActualNanoseconds": [
+        70797601.5,
+        70468130.5,
+        70731922.0,
+        70719433.0,
+        70512562.75,
+        71186973.0,
+        71150099.5,
+        71287269.75,
+        71338567.25,
+        71489798.5,
+        71248255.5,
+        71599712.25
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 71044193.79166667,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 71044193.79166667,
+            "StandardError": 110248.3612459799,
+            "Level": 12,
+            "Margin": 489169.7008027128,
+            "Lower": 70555024.09086396,
+            "Upper": 71533363.49246939
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 71044193.79166667,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 71044193.79166667,
+            "StandardError": 110248.3612459799,
+            "Level": 12,
+            "Margin": 489169.7008027128,
+            "Lower": 70555024.09086396,
+            "Upper": 71533363.49246939
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 58722326.666666664,
+          "standardError": 42117.6258718462,
+          "confidenceLower": 58535451.630943604,
+          "confidenceUpper": 58909201.702389725
+        },
+        {
+          "mean": 59571766.916666664,
+          "standardError": 654656.8927706545,
+          "confidenceLower": 56667067.81052252,
+          "confidenceUpper": 62476466.02281081
+        }
+      ],
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    }
+  ],
+  "independentComparisons": {
+    "gpp271": {
+      "measure": {
+        "project": "Lokad.Image",
+        "mode": "measure",
+        "rawSavedUs": 914.9691666666622,
+        "rawReduction": 0.012890363760560741,
+        "normalizedReduction": 0.027280050245192755,
+        "nativeClockChange": 0.014793247006251953,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 62383732.99345796,
+            "rawCandidateUpper": 78432627.23511824,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.02234072517063,
+            "normalizedCandidateUpper": 1.3628492805208368,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 62383732.99345796,
+            "rawCandidateUpper": 78432627.23511824,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.02234072517063,
+            "normalizedCandidateUpper": 1.3628492805208368,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "confirm": {
+        "project": "Lokad.Image",
+        "mode": "confirm",
+        "rawSavedUs": 824.0337708333391,
+        "rawReduction": 0.011626363108496074,
+        "normalizedReduction": -0.000820013803925379,
+        "nativeClockChange": -0.012436179073912923,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 70452115.09990118,
+            "rawCandidateUpper": 70442039.28257254,
+            "rawSeparated": true,
+            "normalizedBeforeLower": 1.1974973317927065,
+            "normalizedCandidateUpper": 1.227073210081385,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 70452115.09990118,
+            "rawCandidateUpper": 70442039.28257254,
+            "rawSeparated": true,
+            "normalizedBeforeLower": 1.1974973317927065,
+            "normalizedCandidateUpper": 1.227073210081385,
+            "normalizedSeparated": false
+          }
+        ]
+      }
+    },
+    "gpe272": {
+      "measure": {
+        "project": "Lokad.Image",
+        "mode": "measure",
+        "rawSavedUs": 6974.983749999992,
+        "rawReduction": 0.09826569138832575,
+        "normalizedReduction": 0.024211968750801893,
+        "nativeClockChange": -0.07589119795076904,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 62383732.99345796,
+            "rawCandidateUpper": 69178409.79684816,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.02234072517063,
+            "normalizedCandidateUpper": 1.3557151450680365,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 62383732.99345796,
+            "rawCandidateUpper": 69178409.79684816,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.02234072517063,
+            "normalizedCandidateUpper": 1.3557151450680365,
+            "normalizedSeparated": false
+          }
+        ]
+      },
+      "confirm": {
+        "project": "Lokad.Image",
+        "mode": "confirm",
+        "rawSavedUs": -167.8790624999965,
+        "rawReduction": -0.0023686200833310522,
+        "normalizedReduction": 0.004680308010144296,
+        "nativeClockChange": 0.007082074382938286,
+        "views": [
+          {
+            "view": "statistics",
+            "rawBeforeLower": 70452115.09990118,
+            "rawCandidateUpper": 71533363.49246939,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.1974973317927065,
+            "normalizedCandidateUpper": 1.2623445372478994,
+            "normalizedSeparated": false
+          },
+          {
+            "view": "unfilteredActualStatistics",
+            "rawBeforeLower": 70452115.09990118,
+            "rawCandidateUpper": 71533363.49246939,
+            "rawSeparated": false,
+            "normalizedBeforeLower": 1.1974973317927065,
+            "normalizedCandidateUpper": 1.2623445372478994,
+            "normalizedSeparated": false
+          }
+        ]
+      }
+    }
+  },
+  "stage1ActualDllMemory": {
+    "baseline": [
+      {
+        "name": "photograph",
+        "warmup": true,
+        "admittedPeakBytes": 3470059,
+        "retainedRootBytes": 0,
+        "packetBytes": 160032,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      },
+      {
+        "name": "photograph",
+        "warmup": false,
+        "admittedPeakBytes": 3470059,
+        "retainedRootBytes": 0,
+        "packetBytes": 160032,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      },
+      {
+        "name": "alpha",
+        "warmup": true,
+        "admittedPeakBytes": 3656309,
+        "retainedRootBytes": 0,
+        "packetBytes": 98590,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      },
+      {
+        "name": "alpha",
+        "warmup": false,
+        "admittedPeakBytes": 3656309,
+        "retainedRootBytes": 0,
+        "packetBytes": 98590,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      }
+    ],
+    "candidate": [
+      {
+        "name": "photograph",
+        "warmup": true,
+        "admittedPeakBytes": 3470059,
+        "retainedRootBytes": 0,
+        "packetBytes": 160032,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      },
+      {
+        "name": "photograph",
+        "warmup": false,
+        "admittedPeakBytes": 3470059,
+        "retainedRootBytes": 0,
+        "packetBytes": 160032,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      },
+      {
+        "name": "alpha",
+        "warmup": true,
+        "admittedPeakBytes": 3656309,
+        "retainedRootBytes": 0,
+        "packetBytes": 98590,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      },
+      {
+        "name": "alpha",
+        "warmup": false,
+        "admittedPeakBytes": 3656309,
+        "retainedRootBytes": 0,
+        "packetBytes": 98590,
+        "completePacketExact": true,
+        "borrowedRootSurvives": true
+      }
+    ]
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionRestoredExactly": true,
+      "coreSha256": "5fb834b4cad9dd6598a1a7e7a0dd445ca73bf63bb767161839c2a6eade39ae96",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ac3f7d1fc9a5be53f1d7790f60d0780865847138c79cf982c187801f8f633332",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "148bc45e697392e89b95e1466cfaf9970f1025ee4b1dd8d2a9cd5f8b465dcbce",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "1daa1ba1d5924d124656a62ef34b8996a0df113008ed36e5887acae1259b8f49"
+      },
+      "retainedTestSourceSha256": "1d517b854e84356978473de8e923ccf9ccb5912b1123b24967942ec18a02c38b",
+      "focused": {
+        "normal": 15,
+        "scalar": 15
+      },
+      "newRetainedCases": 2,
+      "internalTestAssemblySha256": "1dee4225156ec2efd4e68503370271a45757683f15b47e603feac4e3e363cd2a",
+      "restorationCorePublicHarnessNativePackageBuilds": 0,
+      "restorationInternalTestBuilds": 1,
+      "packageSha256": "27b78865aa309eafc41b197872c8a06dc0fd8a57e1f898492b37b72a81ad47c7",
+      "qualificationReuse": "Unchanged JGB269 production/full5615/live/same actual27b78865 package proof remains valid. Two new internal cancellation/owner cases additionally pass normal/scalar; no freshfull5617 claim."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionRestoredExactly": true,
+      "coreSha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ac3f7d1fc9a5be53f1d7790f60d0780865847138c79cf982c187801f8f633332",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "148bc45e697392e89b95e1466cfaf9970f1025ee4b1dd8d2a9cd5f8b465dcbce",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "1daa1ba1d5924d124656a62ef34b8996a0df113008ed36e5887acae1259b8f49"
+      },
+      "retainedTestSourceSha256": "20593dc9adf618b394a8d56774b54b15d8eca6a2f38aa88b7fc54fcfe4360d03",
+      "focused": {
+        "normal": 15,
+        "scalar": 15
+      },
+      "newRetainedCases": 2,
+      "internalTestAssemblySha256": "b5cc8fcbfeed514856514a414d03b2da9b99b28b2975b1b941a1054240583c71",
+      "restorationCorePublicHarnessNativePackageBuilds": 0,
+      "restorationInternalTestBuilds": 1,
+      "packageSha256": "27b78865aa309eafc41b197872c8a06dc0fd8a57e1f898492b37b72a81ad47c7",
+      "qualificationReuse": "Unchanged JGB269 production/full5615/live/same actual27b78865 package proof remains valid. Two new internal cancellation/owner cases additionally pass normal/scalar; no freshfull5617 claim."
+    }
+  },
+  "qualification": {
+    "stagesEachOs": {
+      "internalNormalAndScalar": 843,
+      "publicNormalAndScalar": 357
+    },
+    "actualFrozenGreenScores": 16384,
+    "existingHistogramControls": 8613,
+    "independentReusedHistoryCases": 84,
+    "originalScalarAndGenericPlansExact": true,
+    "completePacketBytes": 98590,
+    "retainedNewCases": 2,
+    "restoredGreenChecksEachOsAndMode": 15,
+    "fullLive5615AndSameActualPackageProofReused": true,
+    "freshFull5617Claim": false,
+    "baselineEvidence": "jpeg-grayscale-row-batch-evidence.json#/qualification"
+  },
+  "workflow": {
+    "coreVersionsPerOs": 2,
+    "internalVersionsPerOs": 2,
+    "restorationInternalOnlyVersionsPerOs": 1,
+    "corePublicHarnessNativeAuditSelectorPackageRestorationBuilds": 0,
+    "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+    "shortJobs": 3,
+    "independentJobs": 3,
+    "unchangedOriginalShortAndIndependentBaselinesReused": true,
+    "newProfiles": 0,
+    "newPerformanceControls": 0,
+    "allActualsRetained": true
+  },
+  "memoryScope": "GPP271 actual-DLL baseline/candidate alpha admittedpeak3656309B and photograph3470059B, each unchanged. Callerinput/streamcapacity excluded; retainedoperation scratch0 and exact packets. GPE272 totalallocation measured, physical/admitted peak not newly measured. Allocation, admittedpeak and retention are separate.",
+  "scope": "Existing513x259 transparent RGBA8 VP8Q75/effort4 complete public encode versus FFmpeg. Normalization, fullALPH/color preparation, fresh independent output/growth and disposal timed. Frozen input/settings, complete98590Bpacket, existingquality/alpha/source/owner gates. No shape/depth/settings grid. GPE272 reuses the completed qualified-original3/12baselines; it is not compared against GPP271 as the production baseline.",
+  "next": "Return to larger codec/resizing work. Bounded VP8 decision-boundary audit may check actual caller ownership and repeated validation/copies/stack preparation before any redesign. Preserve earlier quantizer/emission/alias evidence; no guessed profile or automatic prototype.",
+  "rawArchive": {
+    "project": "Lokad.Image",
+    "file": "webp-prepared-green-pipeline-inconclusive.tar.xz",
+    "bytes": 4067400,
+    "members": 359,
+    "sha256": "227742c1f9118903f419963c109b58d75974fb7c3844b87144f963d23b9a0b89",
+    "vmMembersVerified": true,
+    "productionAccepted": false,
+    "productionRestoredExactly": true,
+    "dependencies": [
+      {
+        "file": "jpeg-grayscale-row-batch-qualified.tar.xz",
+        "sha256": "6468a48369bf6b1037e31547d99e0e78353cb760918ed41b44e0694acacfb204"
+      },
+      {
+        "file": "webp-alpha-coefficient-storage-qualified.tar.xz",
+        "sha256": "2099f230bee1b3e162eb4e735b3f01ba67d75fdd172391247ec8458b9f2d9192"
+      }
+    ],
+    "dependencyScope": "Current qualified core/package, unchanged CTS197/ALR177 benchmark/native/selectors/fixtures/frameworks and actual-DLL memory probe. Dependencies retain reference source and complete preparation. No harness/native/probe rebuild.",
+    "localMembersVerified": true
+  }
+}

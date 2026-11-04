@@ -50,6 +50,24 @@ public sealed class Vp8lGreenPredictionCostTests
         Assert.Equal("844c370b8ffaf7560f80fb26a5debb23d948d1d806bc44cc4f6e96595aeed7c7", digest);
     }
 
+    [Theory] [InlineData(1)] [InlineData(2)]
+    public void CancellationAtAnalysisOrResultAdmissionReleasesWorkspaceAndAllowsRecovery(int phase)
+    {
+        var pixels = Enumerable.Range(0, 19 * 7).Select(i => (uint)((i * 73 + i / 19) & 255) << 8).ToArray();
+        var original = pixels.ToArray(); using var root = new TestMemoryBudget(100_000);
+        using var cancellation = new CancellationTokenSource();
+        using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
+        var target = root.GrowthAttempts + phase;
+        root.Admitted = _ => { if (root.GrowthAttempts == target) cancellation.Cancel(); };
+        Assert.Throws<OperationCanceledException>(() => Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, context, greenOnly: true));
+        Assert.Equal(original, pixels); Assert.Equal(0, root.Bytes); Assert.Equal(0, root.Refusals);
+        root.Admitted = null;
+        using var next = new OperationContext(new() { MemoryBudget = root }, default);
+        using var result = Vp8lReferencePredictor.SelectAndApply(pixels, 19, 5, 5, false, next, greenOnly: true);
+        Assert.Equal(result.Modes.Length, root.Bytes);
+        result.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     [Theory]
 
     [InlineData(true)]

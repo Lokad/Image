@@ -29,9 +29,11 @@ restores both exact implementations after inconclusive/adverse short screens.
 Six useful actual-renderer arithmetic/row/failure tests remain; current costs and
 unchanged full/package proof are reused. No favorable repeated sampling follows.
 
-The [compact green predictor stage](WEBP-COMPACT-GREEN-PREDICTOR.md) is exact
-but establishes no CPU gain, with only1.2% complete allocation reduction. Production
-is restored byte-for-byte without builds; current costs and package proof remain.
+The [prepared green pipeline](WEBP-PREPARED-GREEN-PIPELINE-INCONCLUSIVE.md) and
+earlier [compact-counter stage](WEBP-COMPACT-GREEN-PREDICTOR.md) are exact but
+establish no useful CPU gain. Production restores byte-for-byte; current costs and
+package proof remain. Two useful admission-cancellation cases are retained against
+the selected encoder. Linked reports preserve adverse data.
 
 Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md),
 [alpha preparation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) and
