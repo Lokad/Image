@@ -1,5 +1,9 @@
 # RGBA16 PNG: equivalent one-shot operations
 
+Optimal's costs below precede the accepted
+[execution-local parser](PNG-LOCAL-EXECUTION-STATE.md); use that report for its
+current result. Fastest and the reference boundary remain unchanged and valid.
+
 The existing Optimal/Fastest word controls now compare complete one-shot encoding
 on both sides. FFmpeg creates and releases its codec/options/zlib context, packet
 wrapper and independently owned payload inside each operation. Its endian-conversion
@@ -44,4 +48,5 @@ source/producer identities and unchanged qualification. Raw
 `png-word-one-shot-boundary.tar.xz`: 21,019,160 B / 202 members, SHA256
 `05ee89429234e33939e2bb2efd4979fca998a233ee461a17ddd6123205b4e13e`,
 mirrored/member-verified, with the qualified-core and existing runtime archives
-pinned as dependencies. Next, attribute current word computation before tuning.
+pinned as dependencies. The subsequent attribution and parser stage reuse this
+reference without worker or harness rebuilds.

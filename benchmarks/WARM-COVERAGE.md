@@ -1,6 +1,6 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-03. **282 material required paths** remain
+Current architectural phase, 2026-11-04. **282 material required paths** remain
 in scope; the 122 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
@@ -13,7 +13,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Resident lossless WebP | [Histogram separation](WEBP-COLOR-HISTOGRAM-SEPARATION.md) saves 10.75 ms on the complete photograph, with separated raw/normalized confidence. Six current lossless rows retain exact packets. Original/diagram/depth/async pass and stop; photograph remains near parity (global upper1.004, paired1.022), opaque is now a demonstrated gap. |
 | Resident VP8 encoding | Five unchanged opaque/word/trellis controls reuse [source texture proof](VP8-SOURCE-TEXTURE-PREPARATION.md). [Token-tail history](WEBP-TOKEN-TAIL-HISTORY.md) refreshes transparent RGBA8/16, saving about 476 KB/op; the measured alpha8 admitted peak falls 191,579 B. CPU gaps remain, with no established incremental gain/regression. |
 | Other WebP encoding boundaries | [Current depth/async confirmations](WEBP-COLOR-HISTOGRAM-SEPARATION.md) pass on the accepted core, including normalization and fresh nonseekable output. Stop those controls. Other affected H cases remain historical; no blanket family pass. |
-| PNG encoding | [Contiguous history](PNG-CONTIGUOUS-HISTORY.md) qualifies current one-shot RGBA8 Optimal/Fastest gaps. The [bounded-region execution trial](PNG-BOUNDED-REGION-INCONCLUSIVE.md) is inconclusive and restored; accepted costs stay unchanged. Other affected compressed costs marked H remain historical; the bounded word-depth screen does not refresh the family. |
+| PNG encoding | [Execution-local parsing](PNG-LOCAL-EXECUTION-STATE.md) saves 1.23 ms / 4.52% raw on word Optimal with separated raw/normalized confidence and unchanged allocations. Word/byte Optimal and unchanged Fastest have current equivalent one-shot costs; all four retain gaps. Other affected level6/9 costs remain historical. The earlier [bounded-region trial](PNG-BOUNDED-REGION-INCONCLUSIVE.md) remains an inconclusive implementation, not a family ban. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
 | Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) retains its scoped bicubic gains and gaps. Other affected bilinear/bicubic costs marked H need reconciliation. [Word-row preparation](LANCZOS-WORD-ROW-PREPARATION.md) refreshes all four reduction comparisons: word prepared/one-shot improve with higher retained/allocated storage; one-shot depths pass and prepared depths retain gaps. Enlargement's generalization screen is flat, not confirmation. Exact Q30/rational/certified pixels remain required. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
@@ -30,7 +30,7 @@ restored without established gains; existing family costs and proof remain valid
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,541 full/live checks per OS,
+The current immutable production build passes 5,543 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.
@@ -176,11 +176,14 @@ ownership Facts supplement unchanged qualification. No useful gain is establishe
 
 Current priorities: preparation/reuse and operation-owned workspace, then shared
 resize execution and further codec work selected from attribution. The
-existing [word PNG controls](PNG-WORD-ONE-SHOT-BOUNDARY.md) now have current,
-equivalent one-shot measurements including native endian workspace ownership;
-both retain confirmed gaps. Other affected word PNG boundaries remain historical.
-The [current word capture](PNG-WORD-CURRENT-ATTRIBUTION.md) identifies lazy-parser
-and token/bit/tree work; compare prior cursor experiments before another redesign.
+existing [word PNG controls](PNG-WORD-ONE-SHOT-BOUNDARY.md) have equivalent
+one-shot boundaries including native endian workspace ownership. The accepted
+[execution-local parser](PNG-LOCAL-EXECUTION-STATE.md) refreshes byte/word Optimal;
+its byte incremental gain is inconclusive and both retain gaps. Level6/9 parsing
+changes invalidate other affected encoding costs, including SmallestSize and
+async/color variants. Level1/0, decoding/inspection and all other families retain
+unchanged-path proof. The [word capture](PNG-WORD-CURRENT-ATTRIBUTION.md) is now
+pre-change attribution; hot offsets/shares are not current component costs.
 The [parsing-lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md) does not justify a simple
 rejected-token handoff. The [photograph profile before invariant scoring](WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
 identifies a transform-search lead; its whole-profile fractions are now historical.

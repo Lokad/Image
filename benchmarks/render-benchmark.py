@@ -1574,15 +1574,21 @@ def render():
     png_word = json.loads((ROOT / 'benchmarks/png-word-one-shot-boundary-evidence.json').read_text(encoding='utf-8'))
     assert png_word['acceptedReferenceBoundary'] and png_word['independentQuietConfirmation']
     assert not png_word['productionChanged'] and png_word['qualificationReuse']['sameActualPackageBothOs']
+    png_local = json.loads((ROOT / 'benchmarks/png-local-execution-state-evidence.json').read_text(encoding='utf-8'))
+    assert png_local['productionAccepted'] and png_local['independentQuietConfirmation']
+    assert png_local['qualification']['fullChecksEachOs'] == 5543
+    assert png_local['qualification']['actualPackage']['sha256'] == png_local['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert png_local['comparisons']['Encode16']['normalizedConfidenceSeparates']
+    assert not png_local['comparisons']['Encode8']['normalizedConfidenceSeparates']
     # All encoding instances use the new dictionary storage/working admission.
     # Decode/inspection paths are separate and retain their applicable costs.
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
              else row) for kind, row in rows]
     for case, old_label, label, owner in [
-            ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6', png_one_shot),
+            ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6', png_local),
             ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1', png_one_shot),
-            ('Encode16', 'PNG RGBA16, Optimal6 / native6', 'PNG RGBA16, one-shot Optimal6 / native6', png_word),
+            ('Encode16', 'PNG RGBA16, Optimal6 / native6', 'PNG RGBA16, one-shot Optimal6 / native6', png_local),
             ('EncodeFast16', 'PNG RGBA16, Fastest1 / native1', 'PNG RGBA16, one-shot Fastest1 / native1', png_word)]:
         observation = owner['cases'][case]; receipt = observation['receipt']
         assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
@@ -1848,10 +1854,16 @@ reduce these allocations by 393,216 B/call. Current
 Fastest's 4.72% raw / 5.30% normalized point gains have overlapping confidence;
 no confirmed Fastest gain or causal regression claim. Allocation remains
 932,516 / 951,212 B/op; workspace admission is 384 KiB and retained scratch zero.
-The in-place 32 KiB slide copy stays timed. Current
+The in-place 32 KiB slide copy stays timed. The subsequent
+[execution-local parser](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md) saves
+**1.23 ms / 4.52% raw / 4.31% normalized** on word Optimal, with separated
+independent confidence and unchanged allocations. The byte companion's all-actual
+and normalized intervals overlap: no incremental byte gain or regression claim.
+Both current Optimal controls retain gaps (upper **1.144 word / 1.078 byte**).
+Current
 [word one-shot comparisons](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md) include
 fresh native codec/zlib/packet and endian-conversion frame allocation, conversion
-and disposal. RGBA16 Optimal/Fastest retain confirmed gaps (upper 1.201 / 1.204),
+and disposal. RGBA16 Fastest retains its unchanged confirmed gap (upper 1.204),
 with 3,420,516 B/op each and exact complete packets. This corrects the comparison
 boundary without a production speedup claim. Other affected PNG encoding costs
 remain historical (H).
@@ -1885,7 +1897,7 @@ retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,541 full/live checks
+**H** costs remain historical. The current build passes **5,543 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release

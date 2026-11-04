@@ -1,4 +1,9 @@
-# Current word PNG execution attribution
+# Word PNG execution attribution before local parser state
+
+This capture describes the pre-change HSP200 parser. The subsequent
+[execution-local state change](PNG-LOCAL-EXECUTION-STATE.md) invalidates its hot
+offsets and component shares as current attribution. Retain the trace and JIT as
+the reproducible basis for that experiment; they are not remaining savings.
 
 One one-second quiet-VM capture reuses the qualified production DLL, frozen
 513×259 RGBA16 Optimal control and equivalent one-shot reference worker. The
@@ -23,8 +28,8 @@ This is broader work than a single hash or cancellation poll. Existing byte
 attribution remains applicable history for its unchanged path; the word capture
 does not establish that removing checks or changing insertion alone would help.
 
-Next, compare parser-state loads/stores and flush/publication points with the
-retained bounded-region implementation before proposing an execution cursor.
+The source audit compares parser-state loads/stores and publication with the
+retained bounded-region implementation before the execution-local experiment.
 Preserve exact matching/ties/packets, writer-failure prefixes, cancellation,
 admission and independently owned output. Prepared input state must include its
 complete costs; no new cross-operation cache or numerical-policy change.
@@ -35,4 +40,5 @@ producer, gates and selected attribution. Raw
 `e87850d5218d41b6988d3efddacbbdba46e8c3397d381d463a8fc07fadc63eb2`,
 mirrored/member-verified, with the qualified word-boundary archive as dependency.
 The original trace, exact-source JIT, offsets and reproduction are retained.
-Current benchmark costs and unchanged package qualification remain valid.
+Unchanged-path qualification remains applicable; the accepted parser has its own
+current measurements and full package qualification.

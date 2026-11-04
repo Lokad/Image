@@ -35,10 +35,16 @@ reduce these allocations by 393,216 B/call. Current
 Fastest's 4.72% raw / 5.30% normalized point gains have overlapping confidence;
 no confirmed Fastest gain or causal regression claim. Allocation remains
 932,516 / 951,212 B/op; workspace admission is 384 KiB and retained scratch zero.
-The in-place 32 KiB slide copy stays timed. Current
+The in-place 32 KiB slide copy stays timed. The subsequent
+[execution-local parser](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md) saves
+**1.23 ms / 4.52% raw / 4.31% normalized** on word Optimal, with separated
+independent confidence and unchanged allocations. The byte companion's all-actual
+and normalized intervals overlap: no incremental byte gain or regression claim.
+Both current Optimal controls retain gaps (upper **1.144 word / 1.078 byte**).
+Current
 [word one-shot comparisons](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md) include
 fresh native codec/zlib/packet and endian-conversion frame allocation, conversion
-and disposal. RGBA16 Optimal/Fastest retain confirmed gaps (upper 1.201 / 1.204),
+and disposal. RGBA16 Fastest retains its unchanged confirmed gap (upper 1.204),
 with 3,420,516 B/op each and exact complete packets. This corrects the comparison
 boundary without a production speedup claim. Other affected PNG encoding costs
 remain historical (H).
@@ -72,7 +78,7 @@ retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,541 full/live checks
+**H** costs remain historical. The current build passes **5,543 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release
@@ -157,8 +163,8 @@ individual experiments remain in
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 20,087.00 | 18,665.52 | 1.076 / 1.083 | 932,516 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 26,230.66 | 22,267.87 | 1.178 / 1.201 | 3,420,516 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 20,178.17 | 19,010.96 | 1.061 / 1.078 | 932,516 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 25,943.81 | 22,945.50 | 1.131 / 1.144 | 3,420,516 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
 | PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |
