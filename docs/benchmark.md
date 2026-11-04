@@ -23,7 +23,8 @@ Current priorities and scope:
   affected costs are current. Original/diagram/depth/async lossless cases pass
   and stop; opaque/ALPH retain gaps. Photograph is confidence-open (upper 1.090),
   with about 7% native before/after clock movement. No CPU gain/equivalence/causal
-  regression claim. Earlier paired bounds are historical for this changed matcher.
+  regression claim. A reused adjacent-sample check also stays uncertain
+  (1.020; interval 0.995–1.044); no unchanged resampling follows.
 - **PNG:** [operation-owned tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md)
   saves 834,544/94,960 B per complete word/byte Smallest9 encode (24.4%/10.2%, same
   batching), without a CPU gain/equivalence/regression claim. Five current gaps;

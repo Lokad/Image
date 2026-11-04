@@ -1,0 +1,136 @@
+{
+  "project": "Lokad.Image",
+  "stage": "GPH260",
+  "productionAccepted": false,
+  "productionChangedAfterRestoration": false,
+  "cpuGainClaim": false,
+  "hypothesis": "Replace four-plane ALPH predictor histograms with260counts: alpha0/1, singleton red,256green,singletonblue. Existing owner handles capacity, leaf clearing, parent/history sums and final entropy together. Full-color layout remains unchanged; no new owner/pool/cache.",
+  "scope": "Existing513x259 complete transparent RGBA8 Q75/method4, exact98590Bpacket, full normalization/preparation/independent output/disposal. Existing FFmpeg boundary and source/settings/pixel/quality/ownership gates.",
+  "before": {
+    "managedUs": 65641.70320454545,
+    "nativeUs": 53332.84575,
+    "ratio": 1.2307931872273186,
+    "upper": 1.2455521496443984,
+    "allocatedBytes": 7615104,
+    "managedPacketBytes": 98590,
+    "librarySha256": "81ba10e393be14a768bca1787831a3678aa68edbc1dc44836fcef45cb3330fec"
+  },
+  "screen": {
+    "actuals": 3,
+    "operationsPerActual": 4,
+    "managedUs": 69613.49225,
+    "nativeUs": 57665.600666666665,
+    "ratio": 1.207192701458146,
+    "upper": 1.3873710786154063,
+    "allocatedBytes": 7523456,
+    "allocationSavedBytes": 91648,
+    "actualNanoseconds": [
+      70039081.5,
+      69355096,
+      69446299.25
+    ],
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "librarySha256": "1b0fb5edef9aebe6f765149957502574c4a01590625083a8b768881e23789792",
+    "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10"
+  },
+  "storage": {
+    "fullCountsPerMode": 1024,
+    "compactCountsPerMode": 260,
+    "derivedPayloadSavedPerLevelBytes": 45840,
+    "completeAllocationSavingFraction": 0.012035029331181819,
+    "admittedPeakMeasured": false,
+    "physicalPeakMeasured": false,
+    "retainedScratchAfterOperationBytes": 0
+  },
+  "preparation": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionAccepted": false,
+      "system": "windows",
+      "baselineSha256": "45d409344a5988f203ad9f5e917a8617db1f0fa95ecc74d7206e4751212e6156",
+      "candidateSha256": "d1867a17a671b6e9d5ba16e2cf569208f0214c7ea519c30bab44e567adf2778b",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ae8d8f4f05a350b8ab528ae700f76bece39532f8d13efca20703f6a58af2f4c4",
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "9c68ed7890d0bfef9e26dcc0d4ebf569b9c8a2bdcf8e01035e558f5e1edb0b59",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "62284e95a86cdb3a62d117dd689fbd72a182cfa72b38f8641dc608ead695711e",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "cb5d98478953a2ca348e1c9c56d2d0c5d00b2f46aefeaef983856d95489a7b62",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "4782ed6d94d424c417be2580810eb1223222492095e113f3d3d45f196fc92563"
+      },
+      "focused": {
+        "internal-normal": 824,
+        "internal-scalar": 824,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "otherBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionAccepted": false,
+      "system": "linux",
+      "baselineSha256": "81ba10e393be14a768bca1787831a3678aa68edbc1dc44836fcef45cb3330fec",
+      "candidateSha256": "1b0fb5edef9aebe6f765149957502574c4a01590625083a8b768881e23789792",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "ae8d8f4f05a350b8ab528ae700f76bece39532f8d13efca20703f6a58af2f4c4",
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "9c68ed7890d0bfef9e26dcc0d4ebf569b9c8a2bdcf8e01035e558f5e1edb0b59",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "62284e95a86cdb3a62d117dd689fbd72a182cfa72b38f8641dc608ead695711e",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "cb5d98478953a2ca348e1c9c56d2d0c5d00b2f46aefeaef983856d95489a7b62",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "4782ed6d94d424c417be2580810eb1223222492095e113f3d3d45f196fc92563"
+      },
+      "focused": {
+        "internal-normal": 824,
+        "internal-scalar": 824,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "otherBuilds": 0
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionAccepted": false,
+      "system": "windows",
+      "allSavedSourcesCorePdbXmlAndLinkedTestBinariesRestored": true,
+      "coreSha256": "45d409344a5988f203ad9f5e917a8617db1f0fa95ecc74d7206e4751212e6156",
+      "restorationBuilds": 0,
+      "focused": {
+        "normal": 39,
+        "scalar": 39
+      },
+      "packageSha256": "6fc724c773ba9d7a6070fe83a1e3e862b15268f7f5ea7b716b39ebdd818f48d7"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionAccepted": false,
+      "system": "linux",
+      "allSavedSourcesCorePdbXmlAndLinkedTestBinariesRestored": true,
+      "coreSha256": "81ba10e393be14a768bca1787831a3678aa68edbc1dc44836fcef45cb3330fec",
+      "restorationBuilds": 0,
+      "focused": {
+        "normal": 39,
+        "scalar": 39
+      },
+      "packageSha256": "6fc724c773ba9d7a6070fe83a1e3e862b15268f7f5ea7b716b39ebdd818f48d7"
+    }
+  },
+  "decision": "Completed representation stage is exact but offers only1.2percent complete allocation reduction without an established elapsed gain. Short raw is adverse while native clock is slower; no causal regression or normalized-gain claim. Restore exact sources/binaries without builds. No confirmation/generalization or new full/package run: accepted production is unchanged. This implementation is inconclusive, not a permanent ban on green-plane work.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-compact-green-predictor-inconclusive.tar.xz",
+    "bytes": 2506772,
+    "members": 134,
+    "sha256": "98c771415caca0c459145802fbd1155b41ea4fd2a6127cc88a1458c0b048b647",
+    "vmMembersVerified": true,
+    "productionAccepted": false,
+    "restorationBuilds": 0,
+    "baselineDependency": "webp-alpha-match-index-reuse-qualified.tar.xz",
+    "baselineDependencySha256": "cf2d7eb6670e793581a69e74a4a7dbe4252ac90483588cfa64de2782fc11d214",
+    "localMembersVerified": true
+  }
+}

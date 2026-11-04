@@ -10,7 +10,7 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Current operation-owned index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md) refreshes all affected costs. Original/diagram/depth/async lossless cases pass and stop. Opaque has a confirmed gap (upper1.036); photograph is confidence-open (upper1.090) with native within-run clock movement. Earlier paired bounds are historical for this changed matcher; resolve uncertainty before tuning photo. Exact packets remain. |
+| Resident lossless WebP | [Current operation-owned index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md) refreshes all affected costs. Original/diagram/depth/async lossless cases pass and stop. Opaque has a confirmed gap (upper1.036); photograph is confidence-open (upper1.090) with native within-run clock movement. A current adjacent-sample check is also uncertain (1.020; interval0.995–1.044). Do not assume a photo gap or repeat unchanged sampling. Exact packets remain. |
 | Resident VP8 encoding | Five opaque/word/trellis controls reuse unchanged [source texture proof](VP8-SOURCE-TEXTURE-PREPARATION.md). [ALPH match-index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md) saves531,528B/op (6.5%) on alpha8, now7,615,104B/op; admittedpeak3,656,309B and retainedscratch0 unchanged. Word alpha current7,614,288B/op. Both retain CPU gaps; no incremental CPU claim. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-ALPHA-MATCH-INDEX-REUSE.md) includes depth normalization and fresh async nonseekable output. Passing cases stop; other affected H costs remain historical. Existing input/settings/packet/ownership gates remain. |
 | PNG encoding | [Tree workspace reuse](PNG-TREE-WORKSPACE.md) saves834,544/94,960B per complete word/byte Smallest9 encode (24.4%/10.2%, same batching), without a CPU gain/equivalence/regression claim. Six equivalent one-shot costs are current. Five gaps: Smallest word/byte uppers1.104/1.061, wordOptimal1.064, Fastest1.124/1.282. ByteOptimal is uncertain (upper1.055); resolve before tuning. Existing384KiB admission,12,648B tree payload duringoperation/zero scratch afterdisposal; completephysical peaks unmeasured. Other affectedH costs stay historical. Prior token-output gain stays linked history. |
@@ -23,6 +23,10 @@ cache-history preparation at the prior peaks and unused alpha-token capacity.
 The earlier [token-tail reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes its scoped
 allocation/admitted-peak savings. [Current index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md)
 adds an allocation saving with unchanged peak, without a CPU gain claim.
+
+The [compact green predictor stage](WEBP-COMPACT-GREEN-PREDICTOR.md) is exact
+but establishes no CPU gain, with only1.2% complete allocation reduction. Production
+is restored byte-for-byte without builds; current costs and package proof remain.
 
 Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md),
 [alpha preparation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) and

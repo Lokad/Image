@@ -70,3 +70,19 @@ proof refresh, guards and reproduction remain; baseline/reference dependencies
 are pinned. [Earlier token-tail reuse](WEBP-TOKEN-TAIL-HISTORY.md) and
 [photo/opaque reconciliation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md)
 retain history. The full282-path objective stays open.
+
+## Photograph uncertainty follow-up
+
+One reused adjacent-sample check addresses the roughly 7% native clock movement.
+Twelve fixed native/managed/native blocks give ratio **1.020**, 99.9% interval
+**0.995–1.044**: uncertainty remains. All pairs are retained, using two complete
+managed operations and the fastest of six adjacent native samples. Mean managed /
+native costs are 85,611.57 / 83,979.64 µs; direct allocation is 6,516,744 B/op.
+This different estimator and harness accounting do not replace the table.
+Exact packets and every original source/settings/ownership/quiet gate pass.
+Zero builds; the accepted immutable runtime, tool and reference are reused.
+No further unchanged sampling or optimization based on an assumed photo gap.
+
+Raw `webp-alpha-index-paired-followup.tar.xz`: 19,600 B / 14 members, SHA256
+`56e6a6fd35836cfdf4482aa3ec29af02290e2336ade3b5cef11d2ea6964b0d7c`,
+mirrored/member-verified, with runtime/tool dependencies pinned in the evidence.
