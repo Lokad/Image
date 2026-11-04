@@ -72,6 +72,8 @@ summary with `python benchmarks/render-benchmark.py --check`.
 Keep current summaries focused on valid evidence, remaining gaps and next actions.
 Link superseded experiments instead of repeating their history; retain their raw
 evidence and reproducibility. Reuse qualification for unchanged production paths.
+Keep rejected-experiment checks out of renderer dependencies when they supply no
+displayed results; their own reports retain that evidence.
 
 Keep artifacts manageable without an arbitrary checkout-size cap. Routine builds
 and package verification must not be blocked by negligible workspace growth;

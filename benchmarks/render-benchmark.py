@@ -9,6 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def render():
+    # Check current measurement owners; rejected experiments retain their own
+    # linked evidence without becoming inputs to every summary update.
     evidence = json.loads((ROOT / 'benchmarks/release-0.2.0-benchmark-evidence.json').read_text(encoding='utf-8'))
     assert evidence['version'] == '0.2.0' and len(evidence['cases']) == 31
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
@@ -235,18 +237,6 @@ def render():
         assert len(o['managed']['actual']) == 12 and all(q['passed'] for q in o['quietness'].values())
         assert o['receipt']['librarySha256'] == png_sparse_palette['producers']['linuxSha256']
         assert (o['conservativeRatioUpper'] <= 1) == (png_sparse_palette['status'][case] == 'confirmed-pass')
-    png_materialized_rejected = json.loads((ROOT / 'benchmarks/png-cancelable-materialized-cursor-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert png_materialized_rejected['candidateRejected'] and not png_materialized_rejected['productionChanged']
-    assert not png_materialized_rejected['decision']['passed']
-    assert png_materialized_rejected['qualification']['confirmationRuns'] == 0
-    vp8l_histogram_rejected = json.loads((ROOT / 'benchmarks/vp8l-shared-predictor-histogram-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert vp8l_histogram_rejected['candidateRejected'] and not vp8l_histogram_rejected['productionChanged']
-    assert not vp8l_histogram_rejected['decision']['passed']
-    assert vp8l_histogram_rejected['qualification']['confirmationRuns'] == 0
-    vp8_inverse_rejected = json.loads((ROOT / 'benchmarks/vp8-packed-inverse-reconstruction-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_inverse_rejected['candidateRejected'] and not vp8_inverse_rejected['productionChanged']
-    assert not vp8_inverse_rejected['decision']['passed']
-    assert vp8_inverse_rejected['qualification']['confirmationRuns'] == 0
     png_sparse_gray = json.loads((ROOT / 'benchmarks/warm-png-sparse-gray-expansion-evidence.json').read_text(encoding='utf-8'))
     assert png_sparse_gray['productionChanged'] and png_sparse_gray['decision']['passed']
     assert png_sparse_gray['qualification']['fullChecksEachOs'] == 5157
@@ -948,14 +938,6 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    integer_dot = json.loads((ROOT / 'benchmarks/bicubic-integer-dot-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert integer_dot['candidateRejected'] and not integer_dot['productionChanged']
-    assert not integer_dot['decision']['passed']
-    assert all(v['productionSourceRestored'] and v['sourceManifestRestored'] for v in integer_dot['restoration'].values())
-    separable_alpha = json.loads((ROOT / 'benchmarks/exact-alpha-separable-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert separable_alpha['candidateRejected'] and not separable_alpha['productionChanged']
-    assert not separable_alpha['decision']['passed'] and separable_alpha['decision']['allocatedDifference'] == 0
-    assert all(v['productionSourceRestored'] and v['sourceManifestRestored'] for v in separable_alpha['restoration'].values())
     first_ac = json.loads((ROOT / 'benchmarks/jpeg-first-ac-confidence-open-evidence.json').read_text(encoding='utf-8'))
     assert first_ac['confidenceOpen'] and not first_ac['accepted'] and not first_ac['productionChanged']
     assert all(v['productionSourceAndConsumerRestored'] for v in first_ac['restoration'].values())
@@ -1046,9 +1028,6 @@ def render():
         matches = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + label) ]
         assert len(matches) == 1, (key, matches)
         rows[matches[0]] = ('codec', new_row)
-    wide_view = json.loads((ROOT / 'benchmarks/bicubic-wide-tap-view-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert wide_view['candidateRejected'] and not wide_view['productionChanged'] and not wide_view['decision']['passed']
-    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in wide_view['restoration'].values())
     wide_current = json.loads((ROOT / 'benchmarks/wide-bicubic-independent-repair-evidence.json').read_text(encoding='utf-8'))
     assert wide_current['accepted'] and wide_current['decision']['normalizedSeparated']
     assert wide_current['independentQuietConfirmations'] == len(wide_current['cases']) == 8
@@ -1118,24 +1097,6 @@ def render():
                          f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    body_count = json.loads((ROOT / 'benchmarks/vp8l-prepared-body-count-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert body_count['candidateRejected'] and not body_count['productionChanged'] and not body_count['decision']['passed']
-    assert not body_count['independentCandidateConfirmationRun']
-    assert body_count['qualification']['applicableTotalChecksEachOs'] == 5321
-    assert body_count['qualification']['full5314BothOsAndSameActualPackageProofReused']
-    assert all(r['productionSourceRestoredByteExact'] for r in body_count['restoration'].values())
-    alternating_taps = json.loads((ROOT / 'benchmarks/bicubic-alternating-tap-sums-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert alternating_taps['candidateRejected'] and not alternating_taps['productionChanged']
-    assert not alternating_taps['decision']['passed'] and not alternating_taps['independentCandidateConfirmationRun']
-    assert alternating_taps['qualification']['applicableTotalChecksEachOs'] == 5325
-    assert alternating_taps['qualification']['focusedPublicEachMode'] == 221
-    assert all(r['productionSourceRestoredByteExact'] for r in alternating_taps['restoration'].values())
-    enlargement_geometry = json.loads((ROOT / 'benchmarks/enlargement-vertical-geometry-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert enlargement_geometry['candidateRejected'] and not enlargement_geometry['productionChanged']
-    assert not enlargement_geometry['decision']['passed']
-    assert enlargement_geometry['qualification']['applicableChecksEachOs'] == 5330
-    assert enlargement_geometry['qualification']['prototypeOnlyInternalTestsRemoved'] == 3
-    assert all(r['productionSourceRestoredByteExact'] for r in enlargement_geometry['restoration'].values())
     governed_jpeg16 = json.loads((ROOT / 'benchmarks/current-governed-jpeg-rgba16-cost-evidence.json').read_text(encoding='utf-8'))
     assert not governed_jpeg16['productionChanged'] and governed_jpeg16['independentQuietConfirmation']
     assert governed_jpeg16['allBuilds'] == governed_jpeg16['newProfiles'] == governed_jpeg16['newInputs'] == 0
@@ -1180,11 +1141,6 @@ def render():
     assert all(v == 'confirmed-gap' for v in jpeg16_companions['status'].values())
     assert all(len(v[-1]['managed']['actual']) == 12 and v[-1]['receipt']['completePacketExact']
                for v in jpeg16_companions['cases'].values())
-    opaque_alpha = json.loads((ROOT / 'benchmarks/vp8l-opaque-alpha-analysis-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert opaque_alpha['candidateRejected'] and not opaque_alpha['productionChanged']
-    assert not opaque_alpha['decision']['independentCandidateConfirmation']
-    assert opaque_alpha['qualification']['applicableChecksEachOs'] == 5332
-    assert all(r['productionSourceRestoredByteExact'] for r in opaque_alpha['qualification']['restoration'].values())
     grayscale_costs = json.loads((ROOT / 'benchmarks/current-grayscale-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
     assert not grayscale_costs['productionChanged'] and grayscale_costs['allBuilds'] == 0
     assert grayscale_costs['producers'] == factored_jpeg16['producers']
@@ -1223,29 +1179,6 @@ def render():
     assert baseline_gray_cost['correctness']['allSixPixelOutputsExact']
     assert baseline_gray_cost['pixelReconciliation']['catalog']['firstSetupActuals'] == 0
     assert len(baseline_gray_cost['cases']['OwnedDecodeGray'][-1]['managed']['actual']) == 12
-    cmyk_pack = json.loads((ROOT / 'benchmarks/cmyk-vbmi-packing-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert cmyk_pack['candidateRejected'] and not cmyk_pack['productionChanged'] and not cmyk_pack['decision']['passed']
-    assert cmyk_pack['actualIntrinsicProof']['actualVbmiPackingExecuted']
-    assert cmyk_pack['qualification']['totalApplicableEachOs'] == 5295
-    assert cmyk_pack['qualification']['sameActualReleasePackageProofReused']
-    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in cmyk_pack['restoration'].values())
-    color_rows = json.loads((ROOT / 'benchmarks/cmyk-completed-color-rows-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert color_rows['candidateRejected'] and not color_rows['productionChanged'] and not color_rows['decision']['passed']
-    assert color_rows['qualification']['totalApplicableEachOs'] == 5303
-    assert color_rows['qualification']['sameActualReleasePackageProofReused']
-    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] and v['originalAcDerivedFixtureRestoredByteExact'] for v in color_rows['restoration'].values())
-    assert color_rows['diagnostic']['profilingOnly'] and color_rows['diagnostic']['noTimingClaim']
-    overwrite_cmyk = json.loads((ROOT / 'benchmarks/cmyk-overwrite-allocation-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert overwrite_cmyk['candidateRejected'] and not overwrite_cmyk['productionChanged'] and not overwrite_cmyk['decision']['passed']
-    assert overwrite_cmyk['restoration']['productionSourceAndCoreCopiesRestoredByteExact']
-    assert overwrite_cmyk['restoration']['internalAssembliesRestoredByteExact']
-    assert overwrite_cmyk['qualification']['totalApplicableEachOs'] == 5303
-    assert overwrite_cmyk['qualification']['sameActualReleasePackageProofReused']
-    block_window = json.loads((ROOT / 'benchmarks/jpeg-cross-block-lookahead-rejected-evidence.json').read_text(encoding='utf-8'))
-    assert block_window['candidateRejected'] and not block_window['productionChanged'] and not block_window['decision']['passed']
-    assert block_window['qualification']['totalApplicableEachOs'] == 5305
-    assert block_window['qualification']['sameActualReleasePackageProofReused']
-    assert all(v['productionSourceRestored'] and v['coreAndPublicCoreCopiesByteExact'] for v in block_window['restoration'].values())
     owned_cmyk_current = json.loads((ROOT / 'benchmarks/current-owned-cmyk-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
     assert not owned_cmyk_current['productionChanged'] and owned_cmyk_current['allBuilds'] == 0
     assert owned_cmyk_current['status']['CmykAdobe'] == 'confirmed-confidence-open'
