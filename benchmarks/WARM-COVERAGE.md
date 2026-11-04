@@ -23,11 +23,11 @@ cache-history preparation at the prior peaks and unused alpha-token capacity.
 The separately [qualified reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes current
 allocation/admitted-peak savings without a CPU gain claim.
 
-Recent [prepared-parsing](WEBP-PREPARED-PARSING-INCONCLUSIVE.md),
-[quantized-scoring](VP8-QUANTIZED-SCORING-INCONCLUSIVE.md) and
-[coefficient-state](VP8-COEFFICIENT-STATE-INCONCLUSIVE.md) investigations leave
-production unchanged without established gains. Current family costs/proof remain
-valid; coefficient-event storage counts inform the next shared-pass design.
+Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md) work leaves
+production unchanged: photo allocation falls, but opaque allocation grows without
+a demonstrated CPU gain. Its report links earlier parser/scoring/state history.
+Current family costs/proof remain valid; two actual-frame failure checks supplement
+the unchanged qualified core.
 
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other

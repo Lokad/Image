@@ -1,0 +1,663 @@
+{
+  "project": "Lokad.Image",
+  "schema": 1,
+  "productionChanged": false,
+  "statisticalTiming": false,
+  "summary": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1048,
+    "managedSamples": 985,
+    "methods": [
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        686
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+        93
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        51
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|1_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+        51
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        30
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|1_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+        17
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        14
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+        12
+      ],
+      [
+        "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(int32[],int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        9
+      ],
+      [
+        "int32[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(uint8[])[Optimized]",
+        7
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        3
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+        2
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        2
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ComputeChunk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        2
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.PngCodec::Paeth(int32,int32,int32)[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        1
+      ],
+      [
+        "instance bool [Lokad.Image.Benchmarks] WarmPng::get_Fastest()[Optimized]",
+        1
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.PngRowPrediction::Useful(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        1
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngCodec+IdatWriter::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        1
+      ]
+    ],
+    "targetCode": [
+      {
+        "address": "0x71b4cccc4e60",
+        "size": 1867,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]"
+      },
+      {
+        "address": "0x71b4cccc55e0",
+        "size": 165,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]"
+      },
+      {
+        "address": "0x71b4cccc56a0",
+        "size": 199,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::MatchLength(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32)[Optimized]"
+      }
+    ],
+    "offsets": [
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x354",
+        "samples": 59
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x16c",
+        "samples": 56
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x4e5",
+        "samples": 56
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x4b6",
+        "samples": 53
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x4a4",
+        "samples": 45
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x57",
+        "samples": 30
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x65a",
+        "samples": 28
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x498",
+        "samples": 26
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x14b",
+        "samples": 25
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x634",
+        "samples": 24
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x351",
+        "samples": 16
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x613",
+        "samples": 16
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x341",
+        "samples": 13
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x88",
+        "samples": 13
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x30c",
+        "samples": 10
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x488",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x303",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x32e",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x1dc",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0xfc",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x2ed",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x13b",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x34c",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x646",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x11f",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x2ff",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x6be",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x60a",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x242",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x1a7",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x1ca",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x272",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x298",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x33b",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x2fb",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x4f4",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x481",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x362",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x5e2",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x307",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x3d1",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x338",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x2c9",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x58c",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x69",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x7f",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x628",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0xd8",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x157",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x3d8",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x15d",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x4a6",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x3a8",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x322",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x228",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x6a8",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x44",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x33d",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x92",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x37a",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x63",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x114",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x3b7",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x452",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x19b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x6a5",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x94",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x1f0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x4aa",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x47d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x2e6",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x117",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x1be",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x344",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x524",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x49c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x22",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x111",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x41e",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x170",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x3ab",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x294",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x138",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x268",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x366",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x4ad",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x31f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0xdc",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x83",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x2cc",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x3de",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x1df",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x4b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x23e",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x237",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x357",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x29f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x1a4",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x585",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x61d",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x26f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x6b3",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+        "offset": "0x194",
+        "samples": 1
+      }
+    ]
+  },
+  "scope": "One two-second capture of existing complete RGBA16 PNG Optimal6 on immutable qualified PFE218 (lazy path unchanged since PCE212) with equivalent one-shot reference boundary. CPU0; sampler CPU1. Original frozen settings/inputs, complete packet validated by original receipt, normalization/output ownership unchanged. Profiled elapsed discarded; samples and skid are not component times or predicted savings.",
+  "librarySha256": "fead2b0ab04d168a6b033e0bc3dd8e7cafc9d3e0add0e4b4fdd433657d1688c3",
+  "producerSourceSha256": "f64206458965cacfadecffd4807783d25f628dbc415f41ae647de771c9c2ea5b",
+  "allOriginalGatesAndQuietnessPassed": true,
+  "packetBytes": 963202,
+  "packetSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+  "builds": 0,
+  "corrections": "A copied Fastest packet literal is corrected to frozen Optimal963202B. Installed perf wrapper omits arguments in its header; recover unique sampled pid and reconstruct source collector command. Postprocessing/transfer corrections reuse the same capture; no collection repeated.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-current-optimal-word-attribution.tar.xz",
+    "bytes": 1066948,
+    "members": 37,
+    "sha256": "1564ecf46c308e1fd34160d17f455a1f19171ca64fd6a05d3872290009e402c8",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "qualificationDependency": "png-fast-local-execution-state-qualified.tar.xz",
+    "qualificationDependencySha256": "2e43ed736a2e97be6bae9bde4159a5067b61f9955910169845c3920cdc5f5d7f",
+    "baselineDependency": "png-word-one-shot-boundary.tar.xz",
+    "baselineDependencySha256": "05ee89429234e33939e2bb2efd4979fca998a233ee461a17ddd6123205b4e13e",
+    "localMembersVerified": true
+  },
+  "next": "Inspect sequential dictionary insertion and reuse the current three-byte hash across consecutive insertions; keep chain/link/search/tie/packet order and refresh local state on origin slides or discontinuities. Samples are not method times or predicted savings.",
+  "publicationPostponed": true
+}

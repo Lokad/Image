@@ -107,6 +107,37 @@ public sealed class Vp8FrameEncodingTests
         }
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void FrameGrowthRefusalOrCancellationReleasesPartialStorage(bool cancellation)
+    {
+        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("diagram", root);
+        var growth = root.GrowthAttempts;
+        using (var reference = input.Frame()) { }
+        var boundaries = root.GrowthAttempts - growth; Assert.True(boundaries >= 3);
+        for (var offset = 1L; offset <= boundaries; offset++)
+        {
+            using var cancel = new CancellationTokenSource();
+            using var operation = new OperationContext(new() { MemoryBudget = root }, cancel.Token);
+            var baseline = root.Bytes; var target = root.GrowthAttempts + offset; var refusals = root.Refusals;
+            if (cancellation) root.Admitted = _ => { if (root.GrowthAttempts == target) cancel.Cancel(); };
+            else root.RefuseAtGrowth = target;
+            if (cancellation) Assert.ThrowsAny<OperationCanceledException>(() => input.Frame(operation));
+            else
+            {
+                var error = Assert.Throws<ImageLimitException>(() => input.Frame(operation));
+                Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
+                Assert.Equal(refusals + 1, root.Refusals);
+            }
+            Assert.Equal(baseline, root.Bytes); Assert.False(root.IsDisposed);
+            root.Admitted = null; root.RefuseAtGrowth = 0;
+            using (var next = input.Frame())
+            using (var packet = Vp8FrameEncoding.Create(next, input.Context)) Assert.Equal(7100, packet.WebpLength);
+            Assert.Equal(baseline, root.Bytes);
+        }
+    }
+
     [Fact]
     public void PartitionCreationRefusalAndFinalOutputLimitReleaseEveryBuffer()
     {
