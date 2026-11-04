@@ -10,7 +10,7 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Histogram separation](WEBP-COLOR-HISTOGRAM-SEPARATION.md) saves 10.75 ms on the complete photograph, with separated raw/normalized confidence. Six current lossless rows retain exact packets. Original/diagram/depth/async pass and stop; photograph remains near parity (global upper1.004, paired1.022), opaque is now a demonstrated gap. |
+| Resident lossless WebP | [Histogram separation](WEBP-COLOR-HISTOGRAM-SEPARATION.md) saves 10.75 ms on the complete photograph. [Current reconciliation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) restores the unchanged qualified encoder after an inconclusive preparation trial. Global photograph/opaque uppers are0.997/1.037; stricter paired uppers1.026/1.028 keep both OPEN. Exact packets/allocations remain. Original/diagram/depth/async pass and stop. |
 | Resident VP8 encoding | Five unchanged opaque/word/trellis controls reuse [source texture proof](VP8-SOURCE-TEXTURE-PREPARATION.md). [Token-tail history](WEBP-TOKEN-TAIL-HISTORY.md) refreshes transparent RGBA8/16, saving about 476 KB/op; the measured alpha8 admitted peak falls 191,579 B. CPU gaps remain, with no established incremental gain/regression. |
 | Other WebP encoding boundaries | [Current depth/async confirmations](WEBP-COLOR-HISTOGRAM-SEPARATION.md) pass on the accepted core, including normalization and fresh nonseekable output. Stop those controls. Other affected H cases remain historical; no blanket family pass. |
 | PNG encoding | [Sequential dictionary hashing](PNG-SEQUENTIAL-DICTIONARY-HASH.md) saves 0.56 ms / 2.40% raw / 2.55% normalized on word Optimal; [local greedy state](PNG-FAST-LOCAL-EXECUTION-STATE.md) retains 1.35 ms / 6.05% raw / 3.14% normalized on word Fastest. Native clock differences are disclosed. Both have separated raw/normalized confidence; byte gains remain inconclusive. Four equivalent one-shot costs are current and retain gaps. Other affected level1/6/9 costs remain historical; earlier trials stay linked history, without closing families. |
@@ -28,6 +28,13 @@ production unchanged: photo allocation falls, but opaque allocation grows withou
 a demonstrated CPU gain. Its report links earlier parser/scoring/state history.
 Current family costs/proof remain valid; two actual-frame failure checks supplement
 the unchanged qualified core.
+
+The current opaque audit finds only8/1wide color-search rows, so no16-lane
+arithmetic change follows. Repeated entropy operands do not justify caching.
+Invariant-alpha preparation has overlapping independent before/candidate bounds;
+its helpers/tests are removed and exact production/package identities restored.
+20affected checks pass perOS/mode; unchanged full/package proof is reused.
+Do not repeat those measurements or assume the global/paired estimators agree.
 
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other

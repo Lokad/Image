@@ -68,10 +68,14 @@ admitted peaks and retained scratch unchanged. Preparation stays timed.
 [Color histogram construction](../benchmarks/WEBP-COLOR-HISTOGRAM-SEPARATION.md)
 reduces complete photograph elapsed **11.32% / 7.65% reference-normalized**,
 saving **10.75 ms**, with separated independent confidence and unchanged packets/
-allocations. Strict parity remains open: global upper **1.004**, stricter paired
-upper **1.022**. Six existing lossless rows are refreshed on one immutable core;
-original/diagram/depth/async pass and stop, photograph is near parity and opaque
-retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
+allocations. [Current reconciliation](../benchmarks/VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md)
+retains the qualified implementation after an inconclusive alpha-preparation trial.
+The current photograph global upper is **0.997**, opaque **1.037**; stricter paired
+uppers are **1.026 / 1.028** respectively. **Strict parity remains open for both**;
+the photograph's global pass alone does not close it. The table displays the global
+estimator, distinct from the fastest-adjacent-sample paired check. Other unchanged
+original/diagram/depth/async lossless controls pass and stop. The two transparent
+controls reuse unchanged CTS197 evidence.
 
 [Token-tail history reuse](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) retains its
 **475,928 B/op (5.52%)** alpha8 saving, now **8,146,632 B/op**. Its admitted peak
@@ -149,10 +153,10 @@ individual experiments remain in
 | VP8 diagram, effort6 / trellis † | 13,518.03 | 9,816.75 | 1.377 / 1.394 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 20,367.41 | 15,593.58 | 1.306 / 1.331 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 71,184.35 | 58,346.34 | 1.220 / 1.230 | 8,146,632 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 89,006.19 | 89,280.53 | 0.997 / 1.004 | 6,517,254 | 160,032 / 160,032 |
+| VP8L photograph / libwebp exact=1 † | 82,037.88 | 83,327.52 | 0.985 / 0.997 | 6,517,254 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 8,036.29 | 9,483.21 | 0.847 / 0.867 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,497.65 | 130,268.92 | 0.887 / 0.895 | 7,476,640 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 74,747.90 | 71,999.01 | 1.038 / 1.072 | 5,983,424 | 121,896 / 121,896 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 70,681.22 | 70,344.26 | 1.005 / 1.037 | 5,983,424 | 121,896 / 121,896 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,757.79 | 4,343.39 | 1.326 / 1.350 | 951,212 | 236,828 / 236,828 |

@@ -1706,6 +1706,11 @@ def render():
     qualification = webp_current['qualification']
     assert qualification['windows']['total'] == qualification['linux']['total'] == 5541
     assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
+    webp_reconciled = json.loads((ROOT / 'benchmarks/vp8l-invariant-alpha-preparation-inconclusive-evidence.json').read_text(encoding='utf-8'))
+    assert not webp_reconciled['productionChanged'] and not webp_reconciled['productionAccepted'] and not webp_reconciled['cpuGainClaim']
+    assert set(webp_reconciled['currentCosts']) == {'opaque', 'photograph'}
+    assert all(webp_reconciled['restoration'][os]['corePdbXmlSourcesAndInternalModuleRestored'] for os in ['windows', 'linux'])
+    assert webp_reconciled['restoration']['windows']['packageSha256'] == webp_reconciled['restoration']['linux']['packageSha256']
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1718,12 +1723,16 @@ def render():
     }
     assert set(webp_current['cases']) == set(current_labels)
     for case, label in current_labels.items():
-        current = webp_current['cases'][case]
+        current = webp_reconciled['currentCosts'].get(case, webp_current['cases'][case])
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        expected_producer = webp_current['producers']['unchangedAlphaLinuxSha256'] if case in {'alpha', 'alpha16'} else webp_current['producers']['linuxSha256']
+        expected_producer = (webp_reconciled['restoration']['linux']['productionSha256'] if case in webp_reconciled['currentCosts']
+                             else webp_current['producers']['unchangedAlphaLinuxSha256'] if case in {'alpha', 'alpha16'} else webp_current['producers']['linuxSha256'])
         assert current['librarySha256'] == expected_producer
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        if case in webp_reconciled['currentCosts']:
+            assert current['strictParityStatus'] == 'open' and current['pairedLower'] > 1
+            assert current['pairedUpper'] == webp_reconciled['pairedCurrentCosts'][case]['upper']
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
         assert len(positions) == 1, label
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
@@ -1882,10 +1891,14 @@ admitted peaks and retained scratch unchanged. Preparation stays timed.
 [Color histogram construction](../benchmarks/WEBP-COLOR-HISTOGRAM-SEPARATION.md)
 reduces complete photograph elapsed **11.32% / 7.65% reference-normalized**,
 saving **10.75 ms**, with separated independent confidence and unchanged packets/
-allocations. Strict parity remains open: global upper **1.004**, stricter paired
-upper **1.022**. Six existing lossless rows are refreshed on one immutable core;
-original/diagram/depth/async pass and stop, photograph is near parity and opaque
-retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
+allocations. [Current reconciliation](../benchmarks/VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md)
+retains the qualified implementation after an inconclusive alpha-preparation trial.
+The current photograph global upper is **0.997**, opaque **1.037**; stricter paired
+uppers are **1.026 / 1.028** respectively. **Strict parity remains open for both**;
+the photograph's global pass alone does not close it. The table displays the global
+estimator, distinct from the fastest-adjacent-sample paired check. Other unchanged
+original/diagram/depth/async lossless controls pass and stop. The two transparent
+controls reuse unchanged CTS197 evidence.
 
 [Token-tail history reuse](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) retains its
 **475,928 B/op (5.52%)** alpha8 saving, now **8,146,632 B/op**. Its admitted peak
