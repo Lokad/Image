@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Current operation-owned index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md) refreshes all affected costs. Original/diagram/depth/async lossless cases pass and stop. Opaque has a confirmed gap (upper1.036); photograph is confidence-open (upper1.090) with native within-run clock movement. A current adjacent-sample check is also uncertain (1.020; interval0.995–1.044). Do not assume a photo gap or repeat unchanged sampling. Exact packets remain. |
-| Resident VP8 encoding | Five opaque/word/trellis controls reuse unchanged [source texture proof](VP8-SOURCE-TEXTURE-PREPARATION.md). [ALPH match-index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md) saves531,528B/op (6.5%) on alpha8, now7,615,104B/op; admittedpeak3,656,309B and retainedscratch0 unchanged. Word alpha current7,614,288B/op. Both retain CPU gaps; no incremental CPU claim. |
+| Resident VP8 encoding | [ALPH-to-frame reuse](WEBP-ALPHA-COEFFICIENT-STORAGE.md) saves about449KB/op (5.9%) for both depths, now7,165,880/7,165,472B/op. Admitted alpha8peak3,656,309B and retainedscratch0 unchanged; coefficient phase carries82,668B extra. All eight existing opaque/alpha/depth/effort costs are current and retain CPU gaps. No incremental CPU claim; word-alpha within-run clock movement and adverse point/wide bound remain. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-ALPHA-MATCH-INDEX-REUSE.md) includes depth normalization and fresh async nonseekable output. Passing cases stop; other affected H costs remain historical. Existing input/settings/packet/ownership gates remain. |
 | PNG encoding | [Tree workspace reuse](PNG-TREE-WORKSPACE.md) saves834,544/94,960B per complete word/byte Smallest9 encode (24.4%/10.2%, same batching), without a CPU gain/equivalence/regression claim. Six equivalent one-shot costs are current. Five gaps: Smallest word/byte uppers1.104/1.061, wordOptimal1.064, Fastest1.124/1.282. ByteOptimal is uncertain (upper1.055); resolve before tuning. Existing384KiB admission,12,648B tree payload duringoperation/zero scratch afterdisposal; completephysical peaks unmeasured. Other affectedH costs stay historical. Prior token-output gain stays linked history. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
@@ -53,11 +53,12 @@ restored exactly without rebuilds before the current token-output milestone. Its
 count audit also rules out useful wider filtering on the word control. Older
 attribution is history, not current machine-code or available-savings proof.
 
-Eight existing WebP controls and eight streaming resize controls have current
-costs; unchanged opaque VP8, Lanczos and other codec algorithms retain applicable
-evidence. Other
+Fourteen existing WebP controls and eight streaming resize controls have current
+costs. Eight VP8 costs supersede the affected frame/ALPH evidence; the six VP8L
+costs reuse unchanged-path proof. Lanczos and other codec algorithms retain
+applicable evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,587 full/live checks per OS,
+The current immutable production build passes 5,603 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.

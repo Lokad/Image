@@ -1,12 +1,16 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Exact ALPH (RFC 9649 section 2.2.1), for pinned method0..6 policies.
 // Alpha is borrowed only during preparation. The selected payload owns its
-// admitted capacity; no source, filtered plane or encoded frame is retained.
+// admitted capacity. Completed working storage may transfer to the later frame
+// owner; no borrowed source or encoded frame is retained.
 internal sealed class Vp8AlphaEncoding : IDisposable
 {
     private readonly OperationContext context;
     private byte[]? payload;
+    private short[]? coefficientStorage;
     private long capacity;
     internal int Width { get; }
     internal int Height { get; }
@@ -58,8 +62,9 @@ internal sealed class Vp8AlphaEncoding : IDisposable
         return (method > 3 || count > 192 ? 1 : 0) | (1 << best);
     }
 
-    internal static Vp8AlphaEncoding Create(ReadOnlySpan<byte> alpha, int width, OperationContext context, int method = 4)
+    internal static Vp8AlphaEncoding Create(ReadOnlySpan<byte> alpha, int width, OperationContext context, int method = 4, int coefficientLength = 0)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(coefficientLength);
         if (method is < 0 or > 6) throw new ArgumentOutOfRangeException(nameof(method));
         if (width is < 1 or > 16383 || alpha.Length == 0 || alpha.Length % width != 0 || alpha.Length / width > 16383)
             throw new ArgumentException("Expected complete VP8 alpha rows.");
@@ -72,7 +77,13 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             var scratch = alpha.Length * 4L + 512; context.Reserve(scratch);
             try
             {
-                context.Cancellation.ThrowIfCancellationRequested(); var working = new uint[alpha.Length]; var candidates = Candidates(alpha, width, context, method);
+                context.Cancellation.ThrowIfCancellationRequested();
+                // Physical fit is decided before allocation, independently of
+                // shared availability. The same charge moves between owners.
+                var reusable = coefficientLength > 0 && alpha.Length * 2L >= coefficientLength
+                    ? new short[checked(alpha.Length * 2)] : null;
+                Span<uint> working = reusable is null ? new uint[alpha.Length] : MemoryMarshal.Cast<short, uint>(reusable.AsSpan());
+                var candidates = Candidates(alpha, width, context, method);
                 // All index users finish during preparation. Keep only one
                 // operation-owned buffer across the sequential filter trials.
                 using var matchStorage = method != 6 && (candidates & (candidates - 1)) != 0 ? new Vp8lMatchIndex(context, 0) : null;
@@ -121,6 +132,12 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                         if (method != 6) spare = prepared.DetachMainTokens();
                     }
                 }
+                if (reusable is not null)
+                {
+                    result.coefficientStorage = reusable;
+                    var retained = reusable.LongLength * sizeof(short);
+                    result.capacity += retained; scratch -= retained;
+                }
             }
             finally { context.Release(scratch); }
             if (result.Bytes.Length > context.Limits.MaxOutputBytes)
@@ -131,8 +148,26 @@ internal sealed class Vp8AlphaEncoding : IDisposable
         finally { spare?.Dispose(); }
     }
 
+    // The receiving frame exists before this call and adopts the still-live
+    // charge immediately. No admission credit is released during transfer.
+    internal short[]? DetachCoefficientStorage(int requiredLength, OperationContext borrower)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(requiredLength);
+        if (!ReferenceEquals(context, borrower)) throw new ArgumentException("Coefficient storage belongs to another operation.");
+        _ = Memory;
+        context.Cancellation.ThrowIfCancellationRequested();
+        var storage = coefficientStorage;
+        if (storage is null) return null;
+        coefficientStorage = null;
+        var bytes = storage.LongLength * sizeof(short); capacity -= bytes;
+        if (storage.Length >= requiredLength) return storage;
+        // A capacity miss is selected before fresh admission, never after refusal.
+        context.Release(bytes); return null;
+    }
+
     public void Dispose()
     {
-        payload = null; var owned = Interlocked.Exchange(ref capacity, 0); if (owned != 0) context.Release(owned);
+        payload = null; coefficientStorage = null;
+        var owned = Interlocked.Exchange(ref capacity, 0); if (owned != 0) context.Release(owned);
     }
 }

@@ -1697,7 +1697,7 @@ def render():
         else:
             assert len(positions) == 1, label
             rows[positions[0]] = row
-    # One compact owner for the eight current WebP costs with scoped unchanged-path reuse. Older reports
+    # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
     webp_owned = json.loads((ROOT / 'benchmarks/webp-alpha-match-index-reuse-evidence.json').read_text(encoding='utf-8'))
@@ -1719,6 +1719,13 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
+    vp8_owned = json.loads((ROOT / 'benchmarks/webp-alpha-coefficient-storage-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_owned['productionAccepted'] and not vp8_owned['cpuGainClaim']
+    assert vp8_owned['qualification']['fullChecksEachOs'] == 5603
+    assert vp8_owned['qualification']['actualPackage']['sha256'] == vp8_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert vp8_owned['design']['continuousSameOperationChargeTransfer'] and vp8_owned['design']['selectedPayloadIndependent']
+    assert vp8_owned['storage']['measured']['alpha']['admittedPeakBytes'] == 3656309
+    assert len(vp8_owned['cases']) == 8
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1730,10 +1737,20 @@ def render():
         'alpha16': 'VP8 RGBA16 + alpha, including normalization',
     }
     assert set(webp_owned['cases']) == set(current_labels)
+    current_labels.update({
+        'opaque8': 'VP8 opaque RGBA8',
+        'opaque16': 'VP8 opaque RGBA16, including normalization',
+        'photograph-vp8': 'VP8 opaque photograph',
+        'diagram-vp8': 'VP8 opaque text/diagram',
+        'distortion': 'VP8 diagram, effort2 / distortion-only search',
+        'trellis': 'VP8 diagram, effort6 / trellis',
+    })
     for case, label in current_labels.items():
-        current = webp_owned['cases'][case]
+        current_case = case.removesuffix('-vp8')
+        owner = vp8_owned if case in {'alpha', 'alpha16', 'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
+        current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        assert current['librarySha256'] == webp_owned['producers']['linuxSha256']
+        assert current['librarySha256'] == owner['producers']['linuxSha256']
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
@@ -1843,14 +1860,16 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [operation-owned match-index reuse](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md)
-  saves 531,528 B/op (6.5%) on complete alpha8 encoding, now 7,615,104 B/op,
-  with unchanged 3,656,309 B admitted peak and zero retained scratch. All eight
-  affected costs are current. Original/diagram/depth/async lossless cases pass
-  and stop; opaque/ALPH retain gaps. Photograph is confidence-open (upper 1.090),
-  with about 7% native before/after clock movement. No CPU gain/equivalence/causal
-  regression claim. A reused adjacent-sample check also stays uncertain
-  (1.020; interval 0.995–1.044); no unchanged resampling follows.
+- **WebP:** [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
+  saves about 449 KB/op (5.9%) for both input depths, now 7,165,880/7,165,472 B/op.
+  Admitted alpha8 peak stays 3,656,309 B; retained scratch is zero. The coefficient
+  phase carries 82,668 B extra capacity; physical peak is unmeasured. Eight VP8
+  costs are current and retain CPU gaps, without an incremental CPU claim.
+  Word-alpha clocks move within its run; its adverse point and wide bound remain.
+  [Unchanged VP8L paths](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md) reuse valid
+  proof: original/diagram/depth/async pass and stop; opaque retains a gap.
+  Photograph remains uncertain, including its adjacent-sample interval
+  0.995–1.044; no unchanged resampling follows.
 - **PNG:** [operation-owned tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md)
   saves 834,544/94,960 B per complete word/byte Smallest9 encode (24.4%/10.2%, same
   batching), without a CPU gain/equivalence/regression claim. Five current gaps;
@@ -1882,7 +1901,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,587 full/live checks per OS**, affected normal/scalar
+The current build passes **5,603 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

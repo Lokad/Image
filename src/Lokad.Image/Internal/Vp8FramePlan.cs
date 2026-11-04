@@ -28,7 +28,7 @@ internal sealed class Vp8FramePlan : IDisposable
     internal (byte Root, byte Left, byte Right) SegmentProbabilities { get; private set; }
     internal bool UpdateMap => SegmentCount > 1 && SegmentProbabilities != ((byte)255, (byte)255, (byte)255);
     internal long CapacityBytes => capacity;
-    internal ReadOnlySpan<short> Coefficients => coefficients ?? throw new ObjectDisposedException(nameof(Vp8FramePlan));
+    internal ReadOnlySpan<short> Coefficients => (coefficients ?? throw new ObjectDisposedException(nameof(Vp8FramePlan))).AsSpan(0, checked(Count * 400));
     internal ReadOnlySpan<byte> BlockData => blocks ?? throw new ObjectDisposedException(nameof(Vp8FramePlan));
     internal ReadOnlySpan<byte> Probabilities => probabilities ?? throw new ObjectDisposedException(nameof(Vp8FramePlan));
     private ReadOnlySpan<int> Parameters => parameters ?? throw new ObjectDisposedException(nameof(Vp8FramePlan));
@@ -41,6 +41,9 @@ internal sealed class Vp8FramePlan : IDisposable
         this.context = context; Width = input.Width; Height = input.Height; Columns = input.Stride / 16; Rows = input.StorageHeight / 16;
         SegmentCount = segments.SegmentCount; Deltas = quantization.QuantizerDeltas; HeaderLimit = headerLimit;
     }
+
+    internal static int RequiredCoefficientLength(Vp8PreparedInput input)
+        => checked((input.Stride / 16) * (input.StorageHeight / 16) * 400);
 
     internal Vp8FrameBlock Block(int index)
     {
@@ -79,14 +82,14 @@ internal sealed class Vp8FramePlan : IDisposable
     }
 
     internal static Vp8FramePlan Create(Vp8PreparedInput input, Vp8SourceSegments segments, Vp8QuantizationPlan quantization,
-        OperationContext context, int headerLimit = 65536, bool correctDc = true, int method = 4)
+        OperationContext context, int headerLimit = 65536, bool correctDc = true, int method = 4, Vp8AlphaEncoding? coefficientStorage = null)
     {
         if (method is < 3 or > 6 || headerLimit is < 0 or > 65536 || segments.Width != input.Stride / 16 || segments.Height != input.StorageHeight / 16
             || quantization.SegmentCount != segments.SegmentCount) throw new ArgumentException("Inconsistent VP8 frame preparation.");
         context.Cancellation.ThrowIfCancellationRequested(); var result = new Vp8FramePlan(input, segments, quantization, headerLimit, context);
         try
         {
-            result.Initialize(segments);
+            result.Initialize(segments, coefficientStorage);
             var scratch = Vp8MacroblockDecision.ScratchBytes + 4096L + 49L * result.Columns + 4224 + 512;
             context.Reserve(scratch);
             try
@@ -99,11 +102,25 @@ internal sealed class Vp8FramePlan : IDisposable
         catch { result.Dispose(); throw; }
     }
 
-    private void Initialize(Vp8SourceSegments segments)
+    private void Initialize(Vp8SourceSegments segments, Vp8AlphaEncoding? coefficientStorage)
     {
+        var length = checked(Count * 400);
+        coefficients = coefficientStorage?.DetachCoefficientStorage(length, context);
         var bytes = Count * 820L + 1056 + 16 * sizeof(int) + MetadataBytes;
-        context.Reserve(bytes); capacity = bytes; context.Cancellation.ThrowIfCancellationRequested();
-        coefficients = new short[checked(Count * 400)]; blocks = new byte[checked(Count * BlockBytes)];
+        if (coefficients is not null)
+        {
+            capacity = coefficients.LongLength * sizeof(short);
+            bytes -= length * (long)sizeof(short);
+        }
+        context.Reserve(bytes); capacity += bytes; context.Cancellation.ThrowIfCancellationRequested();
+        if (coefficients is null) coefficients = new short[length];
+        else
+            for (var at = 0; at < length; at += 4096)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                coefficients.AsSpan(at, Math.Min(4096, length - at)).Clear();
+            }
+        blocks = new byte[checked(Count * BlockBytes)];
         probabilities = Vp8Tables.CoefficientProbabilities.ToArray(); parameters = new int[16];
         for (var s = 0; s < 4; s++) { parameters[s] = segments.Parameters[s].Quantizer; parameters[4 + s] = segments.Parameters[s].InitialFilter; }
     }
@@ -122,7 +139,7 @@ internal sealed class Vp8FramePlan : IDisposable
     }
 
     internal static Vp8FramePlan CreateDistortion(Vp8PreparedInput input, Vp8SourceAnalysis analysis,
-        Vp8SourceSegments segments, Vp8QuantizationPlan quantization, int method, OperationContext context, bool correctDc = true)
+        Vp8SourceSegments segments, Vp8QuantizationPlan quantization, int method, OperationContext context, bool correctDc = true, Vp8AlphaEncoding? coefficientStorage = null)
     {
         if (method is < 0 or > 2 || analysis.Width != input.Stride / 16 || analysis.Height != input.StorageHeight / 16
             || segments.Width != analysis.Width || segments.Height != analysis.Height || quantization.SegmentCount != segments.SegmentCount)
@@ -130,7 +147,7 @@ internal sealed class Vp8FramePlan : IDisposable
         context.Cancellation.ThrowIfCancellationRequested(); var result = new Vp8FramePlan(input, segments, quantization, 65536, context);
         try
         {
-            result.Initialize(segments);
+            result.Initialize(segments, coefficientStorage);
             var scratch = Vp8DistortionDecision.ScratchBytes + 4096L + 45L * result.Columns + 4224 + 512;
             context.Reserve(scratch);
             try { context.Cancellation.ThrowIfCancellationRequested(); result.PrepareDistortion(input, analysis, segments, quantization, method, correctDc); }

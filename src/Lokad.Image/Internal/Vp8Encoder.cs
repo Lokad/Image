@@ -30,14 +30,15 @@ internal static class Vp8Encoder
         try
         {
             using var input = Vp8PreparedInput.Create(image, context);
-            if (input.HasAlpha) alpha = Vp8AlphaEncoding.Create(input.Alpha, input.Width, context, options.Effort);
+            if (input.HasAlpha) alpha = Vp8AlphaEncoding.Create(input.Alpha, input.Width, context, options.Effort,
+                coefficientLength: Vp8FramePlan.RequiredCoefficientLength(input));
             input.CleanupTransparentArea();
             using var analysis = Vp8SourceAnalysis.Create(input, context, options.Effort, options.Quality);
             using var segments = Vp8SourceSegments.Create(analysis, options.Quality, false, context);
             using var quantization = Vp8QuantizationPlan.Create(segments, analysis.MeanChromaScore, context, options.Effort);
             using var frame = options.Effort <= 2
-                ? Vp8FramePlan.CreateDistortion(input, analysis, segments, quantization, options.Effort, context, options.Quality <= 98)
-                : Vp8FramePlan.Create(input, segments, quantization, context, correctDc: options.Quality <= 98, method: options.Effort);
+                ? Vp8FramePlan.CreateDistortion(input, analysis, segments, quantization, options.Effort, context, options.Quality <= 98, coefficientStorage: alpha)
+                : Vp8FramePlan.Create(input, segments, quantization, context, correctDc: options.Quality <= 98, method: options.Effort, coefficientStorage: alpha);
             packet = Vp8FrameEncoding.Create(frame, context);
             // Validate the complete transparent container before any caller I/O.
             // Opaque size was checked when its partitions were prepared.

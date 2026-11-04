@@ -17,14 +17,16 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [operation-owned match-index reuse](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md)
-  saves 531,528 B/op (6.5%) on complete alpha8 encoding, now 7,615,104 B/op,
-  with unchanged 3,656,309 B admitted peak and zero retained scratch. All eight
-  affected costs are current. Original/diagram/depth/async lossless cases pass
-  and stop; opaque/ALPH retain gaps. Photograph is confidence-open (upper 1.090),
-  with about 7% native before/after clock movement. No CPU gain/equivalence/causal
-  regression claim. A reused adjacent-sample check also stays uncertain
-  (1.020; interval 0.995–1.044); no unchanged resampling follows.
+- **WebP:** [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
+  saves about 449 KB/op (5.9%) for both input depths, now 7,165,880/7,165,472 B/op.
+  Admitted alpha8 peak stays 3,656,309 B; retained scratch is zero. The coefficient
+  phase carries 82,668 B extra capacity; physical peak is unmeasured. Eight VP8
+  costs are current and retain CPU gaps, without an incremental CPU claim.
+  Word-alpha clocks move within its run; its adverse point and wide bound remain.
+  [Unchanged VP8L paths](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md) reuse valid
+  proof: original/diagram/depth/async pass and stop; opaque retains a gap.
+  Photograph remains uncertain, including its adjacent-sample interval
+  0.995–1.044; no unchanged resampling follows.
 - **PNG:** [operation-owned tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md)
   saves 834,544/94,960 B per complete word/byte Smallest9 encode (24.4%/10.2%, same
   batching), without a CPU gain/equivalence/regression claim. Five current gaps;
@@ -56,7 +58,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,587 full/live checks per OS**, affected normal/scalar
+The current build passes **5,603 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
@@ -91,14 +93,14 @@ settings do not establish matched quality.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search † | 3,353.14 | 2,517.95 | 1.332 / 1.346 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 65,789.20 | 53,515.74 | 1.229 / 1.238 | 7,614,288 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 21,160.69 | 16,885.52 | 1.253 / 1.265 | 1,201,552 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 13,670.07 | 9,706.88 | 1.408 / 1.418 | 809,072 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 8,091.60 | 6,264.06 | 1.292 / 1.319 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 13,518.03 | 9,816.75 | 1.377 / 1.394 | 754,344 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 20,367.41 | 15,593.58 | 1.306 / 1.331 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 65,641.70 | 53,332.85 | 1.231 / 1.246 | 7,615,104 | 98,590 / 98,590 |
+| VP8 diagram, effort2 / distortion-only search † | 3,668.86 | 2,782.13 | 1.319 / 1.330 | 741,375 | 7,330 / 7,330 |
+| VP8 RGBA16 + alpha, including normalization † | 69,162.74 | 54,409.27 | 1.271 / 1.367 | 7,165,472 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 21,216.18 | 17,040.99 | 1.245 / 1.254 | 1,201,552 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 14,823.50 | 10,540.55 | 1.406 / 1.415 | 809,072 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 8,383.74 | 6,338.83 | 1.323 / 1.334 | 741,137 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 14,711.12 | 10,635.25 | 1.383 / 1.391 | 754,344 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 22,291.75 | 16,939.47 | 1.316 / 1.331 | 1,201,552 | 72,380 / 72,380 |
+| VP8 RGBA8 + lossless alpha † | 64,709.57 | 53,431.55 | 1.211 / 1.219 | 7,165,880 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 86,323.75 | 83,862.10 | 1.029 / 1.090 | 6,517,254 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 8,159.66 | 9,566.19 | 0.853 / 0.871 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,815.96 | 130,140.89 | 0.890 / 0.906 | 7,476,640 | 183,812 / 183,812 |
