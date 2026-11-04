@@ -24,6 +24,11 @@ The earlier [token-tail reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes its scope
 allocation/admitted-peak savings. [Current index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md)
 adds an allocation saving with unchanged peak, without a CPU gain claim.
 
+The [text row/composition investigation](TEXT-ROW-COMPOSITION-INCONCLUSIVE.md)
+restores both exact implementations after inconclusive/adverse short screens.
+Six useful actual-renderer arithmetic/row/failure tests remain; current costs and
+unchanged full/package proof are reused. No favorable repeated sampling follows.
+
 The [compact green predictor stage](WEBP-COMPACT-GREEN-PREDICTOR.md) is exact
 but establishes no CPU gain, with only1.2% complete allocation reduction. Production
 is restored byte-for-byte without builds; current costs and package proof remain.

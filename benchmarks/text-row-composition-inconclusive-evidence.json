@@ -1,0 +1,479 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TRB267/TRB268",
+  "productionAccepted": false,
+  "productionRestoredExactly": true,
+  "cpuGainOrCausalRegressionClaim": false,
+  "newPerformanceControls": 0,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "design": {
+    "first": "Factor the destination maximum out of the exact text composition quotient; track actual integer Band ranges instead of clearing/scanning the entire row each glyph row. Persistent range fields add eight owner bytes.",
+    "revision": "Move range state into Draw locals, pass through Band and clear the row in finally, removing owner fields. Same exact integer factorization and original trapezoid/pixel order.",
+    "arithmetic": "For d=255 or65535 and scale=65535/d, divide original numerator/divisor by d. The equivalent rounded numerator is at most65535^4+floor(65535^3/2)<UInt64.MaxValue. Both integer denominators have matching half-up quotients.",
+    "preserved": "No float approximation, changed glyph bounds, pixel rounding, cache, plan, pool, output alias, cancellation or admission policy."
+  },
+  "decision": "Neither coherent stage demonstrates a convincing useful complete-operation lead. Shorts are inconclusive/adverse evidence, not independently confirmed gains or causal regressions. Restore both; no unchanged confirmation or additional variants. Preserve materially revised designs as eligible, without a family ban.",
+  "cases": [
+    {
+      "stage": "trb267",
+      "subject": "baseline",
+      "caseId": "DrawText8",
+      "managedUs": 407.64983333333333,
+      "managedActualNanoseconds": [
+        409630.0,
+        404362.0,
+        409079.0
+      ],
+      "referenceUs": {
+        "nativeBefore": 66.24374615384615,
+        "nativeAfter": 50.253833974358976
+      },
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeOperationTimed": true,
+      "receipt": "trb267-measure-baseline-DrawText8-receipt.json"
+    },
+    {
+      "stage": "trb267",
+      "subject": "candidate",
+      "caseId": "DrawText8",
+      "managedUs": 416.92466666666667,
+      "managedActualNanoseconds": [
+        448339.0,
+        396521.0,
+        406034.0
+      ],
+      "referenceUs": {
+        "nativeBefore": 65.14748929663608,
+        "nativeAfter": 49.173388990825686
+      },
+      "librarySha256": "e448d095bba69791218ff02687050c463571873950b72758510b5248ea319be3",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeOperationTimed": true,
+      "receipt": "trb267-measure-candidate-DrawText8-receipt.json"
+    },
+    {
+      "stage": "trb267",
+      "subject": "baseline",
+      "caseId": "DrawText16",
+      "managedUs": 408.489,
+      "managedActualNanoseconds": [
+        413807.0,
+        403271.0,
+        408569.0
+      ],
+      "referenceUs": {
+        "nativeBefore": 63.72509976525822,
+        "nativeAfter": 50.10052053990611
+      },
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeOperationTimed": true,
+      "receipt": "trb267-measure-baseline-DrawText16-receipt.json"
+    },
+    {
+      "stage": "trb267",
+      "subject": "candidate",
+      "caseId": "DrawText16",
+      "managedUs": 494.619,
+      "managedActualNanoseconds": [
+        504975.0,
+        496271.0,
+        482731.0
+      ],
+      "referenceUs": {
+        "nativeBefore": 64.00361938534279,
+        "nativeAfter": 50.32501595744681
+      },
+      "librarySha256": "e448d095bba69791218ff02687050c463571873950b72758510b5248ea319be3",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeOperationTimed": true,
+      "receipt": "trb267-measure-candidate-DrawText16-receipt.json"
+    },
+    {
+      "stage": "trb268",
+      "subject": "candidate",
+      "caseId": "DrawText8",
+      "managedUs": 404.78266666666667,
+      "managedActualNanoseconds": [
+        420637.0,
+        403621.0,
+        390180.0
+      ],
+      "referenceUs": {
+        "nativeBefore": 65.3713781461019,
+        "nativeAfter": 50.0869766728054
+      },
+      "librarySha256": "4965e0767032889d881150b43892e6ca5ab58e931d199a90bc606345d6a4f1b1",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeOperationTimed": true,
+      "receipt": "trb268-measure-candidate-DrawText8-receipt.json"
+    },
+    {
+      "stage": "trb268",
+      "subject": "candidate",
+      "caseId": "DrawText16",
+      "managedUs": 395.6253333333333,
+      "managedActualNanoseconds": [
+        406375.0,
+        391272.0,
+        389349.0
+      ],
+      "referenceUs": {
+        "nativeBefore": 63.13117913043478,
+        "nativeAfter": 49.979416811594206
+      },
+      "librarySha256": "4965e0767032889d881150b43892e6ca5ab58e931d199a90bc606345d6a4f1b1",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completeOperationTimed": true,
+      "receipt": "trb268-measure-candidate-DrawText16-receipt.json"
+    }
+  ],
+  "resourceScreen": {
+    "baseline": {
+      "record": {
+        "project": "Lokad.Image",
+        "timingClaim": false,
+        "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+        "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "allEightFrozenFramesExact": true,
+        "sourceUnchanged": true,
+        "cases": [
+          {
+            "name": "NarrowLongWord",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 7424,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "NarrowLongWord",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 7424,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "LatinKerning",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": 83712,
+            "allocationSamples": [
+              83712,
+              83712,
+              83712
+            ],
+            "allocationOperationsPerSample": 16,
+            "admittedDrawingWorkspacePeak": 48544,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "LatinKerning",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": 83712,
+            "allocationSamples": [
+              83712,
+              83712,
+              83712
+            ],
+            "allocationOperationsPerSample": 16,
+            "admittedDrawingWorkspacePeak": 48544,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ArabicMarksDigits",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 275776,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ArabicMarksDigits",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 275776,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ConstrainedFit",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 47896,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ConstrainedFit",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 47896,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          }
+        ],
+        "scope": "Existing frozen layout/fit/Arabic frames. Latin drawing allocations:4warmups+3x16 complete draws, reset/check outside counter. Separate draw-only admission root measures owned raster capacity; borrowed font/layout/canvas owned elsewhere. No elapsed samples."
+      },
+      "hashes": {
+        "Lokad.Image.pdb": "f15c1851cf29d170dd86f194aaeca472490db3c999d12c78b04d309fb9b603af",
+        "Lokad.Image.xml": "e661d2a3f3e53f8f9c58da00eacecf9fb2f32b651756ff219b33664e8373f907",
+        "Resources.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "Resources.pdb": "1f097c3c4a605b02e9c38642d2a54e99ec767bf7a35ea6db81074b7aa50c6b5b",
+        "Resources.deps.json": "ede8e2dee0f69654ae1af88b105e92193a7da15c8942ecc6c3cba9da369fb995",
+        "Lokad.Image.dll": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+        "Resources.dll": "315969e46969f550e22fb9707dcec3a3c41d534bbc003f253e5251252c509cba"
+      },
+      "folder": "tmp/trb267-baseline-resources",
+      "quietGuardsPassed": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/trb267-baseline-resources/Resources.dll",
+        "."
+      ]
+    },
+    "candidate": {
+      "record": {
+        "project": "Lokad.Image",
+        "timingClaim": false,
+        "librarySha256": "e448d095bba69791218ff02687050c463571873950b72758510b5248ea319be3",
+        "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "allEightFrozenFramesExact": true,
+        "sourceUnchanged": true,
+        "cases": [
+          {
+            "name": "NarrowLongWord",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 7424,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "NarrowLongWord",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 7424,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "LatinKerning",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": 83720,
+            "allocationSamples": [
+              83720,
+              83720,
+              83720
+            ],
+            "allocationOperationsPerSample": 16,
+            "admittedDrawingWorkspacePeak": 48544,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "LatinKerning",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": 83720,
+            "allocationSamples": [
+              83720,
+              83720,
+              83720
+            ],
+            "allocationOperationsPerSample": 16,
+            "admittedDrawingWorkspacePeak": 48544,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ArabicMarksDigits",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 275776,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ArabicMarksDigits",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 275776,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ConstrainedFit",
+            "depth": 8,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 47896,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "ConstrainedFit",
+            "depth": 16,
+            "exactFrozenFrame": true,
+            "allocatedBytesPerOperation": null,
+            "allocationSamples": [],
+            "allocationOperationsPerSample": 0,
+            "admittedDrawingWorkspacePeak": 47896,
+            "retainedDrawingWorkspace": 0,
+            "borrowedRootAlive": true
+          }
+        ],
+        "scope": "Existing frozen layout/fit/Arabic frames. Latin drawing allocations:4warmups+3x16 complete draws, reset/check outside counter. Separate draw-only admission root measures owned raster capacity; borrowed font/layout/canvas owned elsewhere. No elapsed samples."
+      },
+      "hashes": {
+        "Lokad.Image.pdb": "9fbd317896f6d940fba5e665bc047199069efec296934b20301302933212a799",
+        "Lokad.Image.xml": "e661d2a3f3e53f8f9c58da00eacecf9fb2f32b651756ff219b33664e8373f907",
+        "Resources.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "Resources.pdb": "1f097c3c4a605b02e9c38642d2a54e99ec767bf7a35ea6db81074b7aa50c6b5b",
+        "Resources.deps.json": "ede8e2dee0f69654ae1af88b105e92193a7da15c8942ecc6c3cba9da369fb995",
+        "Lokad.Image.dll": "e448d095bba69791218ff02687050c463571873950b72758510b5248ea319be3",
+        "Resources.dll": "315969e46969f550e22fb9707dcec3a3c41d534bbc003f253e5251252c509cba"
+      },
+      "folder": "tmp/trb267-candidate-resources",
+      "quietGuardsPassed": true,
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "tmp/trb267-candidate-resources/Resources.dll",
+        "."
+      ]
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionRestoredExactly": true,
+      "coreSha256": "139c126639439846118450a6e9b89caeb9f6138d351d4dc9e2f8e61cbee2af94",
+      "sourceSha256": "e78c968b4f95837fc6c79ee405720eda455298337c8231fcb3c00ed9aa99a9c5",
+      "retainedTestsSha256": "134f16cc56b28e120b7a8087002b57b06a2236d12e519bdb9c81415959ddddfd",
+      "focused": {
+        "internal-normal": 117,
+        "internal-scalar": 117,
+        "public-normal": 66,
+        "public-scalar": 66
+      },
+      "internalTestAssemblySha256": "c8fb040044377dc7bf60da10a9547e48b19b547314340038545cc99d29f7497a",
+      "restorationCorePublicHarnessNativePackageBuilds": 0,
+      "restorationInternalTestBuilds": 1,
+      "qualificationReuse": "Unchanged PCC264/PCB265 core: full/live, actual package and consumers remain valid. Six new internal behavioral cases pass against restored production on both paths."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionRestoredExactly": true,
+      "coreSha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "sourceSha256": "e78c968b4f95837fc6c79ee405720eda455298337c8231fcb3c00ed9aa99a9c5",
+      "retainedTestsSha256": "5d1db4bceb5908d3f9bead38b58d01c07019168147b1c803cb06ccd37d718c52",
+      "focused": {
+        "internal-normal": 117,
+        "internal-scalar": 117,
+        "public-normal": 66,
+        "public-scalar": 66
+      },
+      "internalTestAssemblySha256": "5932331cde707e38b800c1c20f0e355618f16f0719497f2e10e2682b9bbd4f20",
+      "restorationCorePublicHarnessNativePackageBuilds": 0,
+      "restorationInternalTestBuilds": 1,
+      "qualificationReuse": "Unchanged PCC264/PCB265 core: full/live, actual package and consumers remain valid. Six new internal behavioral cases pass against restored production on both paths."
+    }
+  },
+  "retainedCoverage": {
+    "cases": 6,
+    "actualArithmeticCases": 44608,
+    "scope": "Actual production Blend versus an independent BigInteger rational; both-depth sparse/overlapping multiline glyphs; failed/reused raster owners and shared-root cleanup/recovery. No obsolete implementation or production test hook.",
+    "productionSourceSha256": "e78c968b4f95837fc6c79ee405720eda455298337c8231fcb3c00ed9aa99a9c5"
+  },
+  "workflow": {
+    "stages": 2,
+    "coreVersionsPerOs": 2,
+    "internalVersionsPerOs": 2,
+    "restorationInternalOnlyVersionsPerOs": 1,
+    "publicHarnessNativeSelectorPackageBuilds": 0,
+    "failedWindowsInternalCompileAttempts": 1,
+    "failedCompile": "Initial target-typed new against IReadOnlyDictionary; corrected only test source and reused already-built core. Original log retained.",
+    "shortJobs": 6,
+    "independentConfirmationJobs": 0,
+    "fullPackageQualificationReused": "PCC264/PCB265 unchanged production core/full/live/same actual9adbf43a package. Full baseline5607 checks perOS remains applicable; six new cases additionally pass normal/scalar. No claim of a new full5613 run."
+  },
+  "currentCostsUnchanged": true,
+  "rawArchive": {
+    "project": "Lokad.Image",
+    "file": "text-row-composition-inconclusive.tar.xz",
+    "bytes": 5651476,
+    "members": 349,
+    "sha256": "379e76f2f5e63cba891848f748a9f045eab4ca837801d46ea099cbc09289723e",
+    "vmMembersVerified": true,
+    "productionAccepted": false,
+    "restoredExactly": true,
+    "dependencies": [
+      {
+        "file": "png-block-preparation-qualified.tar.xz",
+        "sha256": "85f6f2f28169e5bb79a3f7cfc9a28e17389a03a3b7bd5535731449e2f7f521db"
+      },
+      {
+        "file": "text-edge-interval-preparation.tar.xz",
+        "sha256": "51f2a6e4d249e07bb43610c0efe8179fbd84c5cf4655a8cca3799108f16c21bf"
+      }
+    ],
+    "dependencyScope": "Qualified core/package, unchanged native integration/harness/resources/fixtures/frameworks. No harness/native/probe rebuild.",
+    "localMembersVerified": true
+  },
+  "scope": "Two existing prepared-layout drawing controls: frozen DejaVu Sans, AV To,18px,384x160canvas,origin8/8. Complete DrawText includes preparation/scan conversion/composition/cleanup; resident layout/font and equally excluded reset. Labeled ImageSharp.Drawing2.1.7/Fonts2.1.3 reference; no bare-shaping or general-font performance claim. Inherited ready.performanceBaselineApproved=false is a historical harness annotation; scoped approval is recorded in AGENTS.md and TEXT-DRAWING-CURRENT.md.",
+  "next": "Return to an independent justified codec preparation path. Fastest rolling hashing already has a local-state independent trial, so do not replay it unchanged. Review exact grayscale JPEG block preparation for batched conversion with unchanged binary64 order and complete-operation evidence."
+}
