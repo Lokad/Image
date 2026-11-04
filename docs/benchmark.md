@@ -29,8 +29,10 @@ Current priorities and scope:
   0.995–1.044; no unchanged resampling follows.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
-  at equal batching, without a CPU gain/equivalence/regression claim. Six current
-  one-shot costs retain five gaps; byte Optimal6 remains uncertain (upper 1.045).
+  at equal batching, without a CPU gain/equivalence/regression claim. Eight current
+  one-shot costs retain seven gaps; byte Optimal6 remains uncertain (upper 1.045).
+  [Cancelable/forward-only word encoding](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
+  now includes native codec and word-workspace preparation (uppers 1.116/1.140).
   Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
   zero retained scratch after disposal. Complete physical/admitted peaks are
   unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
@@ -73,7 +75,7 @@ admitted peaks are not inferred from allocation reductions.
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The six current one-shot PNG rows time fresh codec/zlib/packet state and independent
+The eight current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
 disposal. Other native codec workers retain their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.
@@ -116,8 +118,8 @@ settings do not establish matched quality.
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,940.17 | 4,734.88 | 1.255 / 1.276 | 820,908 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 21,689.76 | 20,151.55 | 1.076 / 1.085 | 2,437,652 | 968,216 / 968,216 |
-| PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
-| PNG RGBA16 Fastest1, forward-only output † H | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, live cancelable token † | 22,117.18 | 20,058.57 | 1.103 / 1.116 | 2,437,652 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, forward-only output † | 21,681.81 | 19,863.09 | 1.092 / 1.140 | 2,437,684 | 968,216 / 968,216 |
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |

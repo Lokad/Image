@@ -424,10 +424,13 @@ def render():
     assert header_skips['qualification']['sameActualPackageBothOs']
     assert header_skips['qualification']['package']['sha256'] == header_skips['qualification']['linuxPackage']['sameActualPackageSha256']
     assert set(header_skips['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'PngHeaders'}
-    fastest_word = json.loads((ROOT / 'benchmarks/current-fastest-word-png-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not fastest_word['productionChanged'] and fastest_word['independentQuietConfirmations'] == 3
-    assert fastest_word['producers'] == header_skips['producers']
-    assert fastest_word['qualificationReused']['packageSha256'] == header_skips['qualification']['package']['sha256']
+    png_output = json.loads((ROOT / 'benchmarks/png-block-preparation-evidence.json').read_text(encoding='utf-8'))
+    png_boundaries = json.loads((ROOT / 'benchmarks/png-boundary-one-shot-evidence.json').read_text(encoding='utf-8'))
+    assert not png_boundaries['productionChanged'] and png_boundaries['independentQuietConfirmations'] == 2
+    assert png_boundaries['harnessBuilds'] == 1 and png_boundaries['allOtherBuilds'] == 0
+    png_boundary_labels = {
+        'EncodeFastCancelable16': 'PNG RGBA16, one-shot Fastest1, live cancelable token',
+        'EncodeFastForward16': 'PNG RGBA16, one-shot Fastest1, forward-only output'}
     byte_color_png = json.loads((ROOT / 'benchmarks/current-byte-color-png-costs-evidence.json').read_text(encoding='utf-8'))
     assert not byte_color_png['productionChanged'] and byte_color_png['allBuilds'] == 0
     assert byte_color_png['independentQuietConfirmations'] == 3
@@ -574,21 +577,27 @@ def render():
             packet = f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,}' if case['operation'] == 'encode' else '—'
             cells.append(packet)
         rows.append((case['kind'], '| ' + ' | '.join(cells) + ' |'))
-    for case, label in [('EncodeFast16', 'PNG RGBA16, Fastest1 / native1'),
-                        ('EncodeFastCancelable16', 'PNG RGBA16 Fastest1, live cancelable token'),
-                        ('EncodeFastForward16', 'PNG RGBA16 Fastest1, forward-only output')]:
-        observation = fastest_word['cases'][case][-1]
+    observation = png_output['cases']['EncodeFast16']
+    rows.append(('codec', f'| PNG RGBA16, one-shot Fastest1 / native1 † | {observation["managedUs"]:,.2f} | '
+                 f'{observation["nativeUs"]:,.2f} | {observation["ratio"]:.3f} / {observation["upper"]:.3f} | '
+                 f'{observation["allocatedBytes"]:,} | 968,216 / 968,216 |'))
+    for case, label in png_boundary_labels.items():
+        observation = png_boundaries['cases'][case]
         receipt = observation['receipt']
-        assert fastest_word['status'][case] == 'confirmed-gap'
-        assert receipt['librarySha256'] == fastest_word['producers']['linuxSha256']
-        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
+        assert observation['status'] == 'gap' and observation['lower'] > 1
+        assert receipt['librarySha256'] == png_boundaries['producers']['linuxSha256']
+        assert receipt['benchmarkAssemblySha256'] == png_boundaries['producers']['benchmarkSha256']
+        assert observation['actualIterations'] == len(observation['managedActualNanoseconds']) == 12
+        assert observation['quietGuardsPassed'] and observation['allOriginalGatesPassed']
+        assert observation['codecPreparationTimed'] and not observation['nativeCodecRetainedBetweenOperations']
+        assert observation['nativeWordWorkspacePreparationTimed'] and not observation['nativeWordWorkspaceRetainedBetweenOperations']
+        assert receipt['cancellationCanBeCanceled'] == (case == 'EncodeFastCancelable16')
+        assert receipt['forwardOnlyOutput'] == (case == 'EncodeFastForward16') and receipt['callerOutputLeftOpen']
         assert receipt['managedOutputBytes'] == receipt['nativeOutputBytes'] == 968216
         assert receipt['managedEncodedSha256'] == receipt['nativeOutputSha256']
-        stats = observation['managed']['statistics']
-        native = min(b['mean'] for b in observation['nativeBrackets'])
-        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 968,216 / 968,216 |'))
+        rows.append(('codec', f'| {label} † | {observation["managedUs"]:,.2f} | {observation["nativeUs"]:,.2f} | '
+                     f'{observation["ratio"]:.3f} / {observation["upper"]:.3f} | '
+                     f'{observation["allocatedBytes"]:,} | 968,216 / 968,216 |'))
     for case, label in [('EncodeGray8', 'PNG grayscale8, Optimal6 / native6'),
                         ('EncodeRgb8', 'PNG RGB8, Optimal6 / native6'),
                         ('EncodeGrayAlpha8', 'PNG gray-alpha8, Optimal6 / native6')]:
@@ -1512,7 +1521,6 @@ def render():
                                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                                   f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     rows[position:position] = current_webp_rows
-    png_output = json.loads((ROOT / 'benchmarks/png-block-preparation-evidence.json').read_text(encoding='utf-8'))
     assert png_output['productionAccepted'] and not png_output['cpuGainEquivalenceOrCausalRegressionClaim']
     assert png_output['qualification']['fullChecksEachOs'] == 5607
     assert png_output['qualification']['actualPackage']['sha256'] == png_output['qualification']['samePackageLinux']['sameActualPackageSha256']
@@ -1524,12 +1532,13 @@ def render():
     # Decode/inspection paths are separate and retain their applicable costs.
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
+             and row.split('|')[1].strip().removesuffix(' †') not in png_boundary_labels.values()
              else row) for kind, row in rows]
     for case, old_label, label in [
             ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6'),
             ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1'),
             ('Encode16', 'PNG RGBA16, Optimal6 / native6', 'PNG RGBA16, one-shot Optimal6 / native6'),
-            ('EncodeFast16', 'PNG RGBA16, Fastest1 / native1', 'PNG RGBA16, one-shot Fastest1 / native1'),
+            ('EncodeFast16', 'PNG RGBA16, one-shot Fastest1 / native1', 'PNG RGBA16, one-shot Fastest1 / native1'),
             ('EncodeSmallest8', 'PNG RGBA8, SmallestSize9 / native9', 'PNG RGBA8, one-shot SmallestSize9 / native9'),
             ('EncodeSmallest16', 'PNG RGBA16, SmallestSize9 / native9', 'PNG RGBA16, one-shot SmallestSize9 / native9')]:
         observation = png_output['cases'][case]
@@ -1818,8 +1827,10 @@ Current priorities and scope:
   0.995–1.044; no unchanged resampling follows.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
-  at equal batching, without a CPU gain/equivalence/regression claim. Six current
-  one-shot costs retain five gaps; byte Optimal6 remains uncertain (upper 1.045).
+  at equal batching, without a CPU gain/equivalence/regression claim. Eight current
+  one-shot costs retain seven gaps; byte Optimal6 remains uncertain (upper 1.045).
+  [Cancelable/forward-only word encoding](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
+  now includes native codec and word-workspace preparation (uppers 1.116/1.140).
   Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
   zero retained scratch after disposal. Complete physical/admitted peaks are
   unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
@@ -1862,7 +1873,7 @@ admitted peaks are not inferred from allocation reductions.
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The six current one-shot PNG rows time fresh codec/zlib/packet state and independent
+The eight current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
 disposal. Other native codec workers retain their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.

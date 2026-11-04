@@ -86,8 +86,8 @@ public partial class WarmPng
         var oneShot = Environment.GetEnvironmentVariable("LOKAD_IMAGE_PNG_ONE_SHOT");
         if (oneShot is not (null or "1")) throw new InvalidOperationException("PNG one-shot flag must be1.");
         pngOneShot = oneShot == "1";
-        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16))
-            throw new InvalidOperationException("PNG one-shot reference is limited to the existing RGBA8/16 Optimal/Fastest/Smallest controls.");
+        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16))
+            throw new InvalidOperationException("PNG one-shot reference requires an existing RGBA8/16 Optimal/Fastest/Smallest encode control.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -643,6 +643,8 @@ public partial class WarmPng
                 boundary = pngOneShot
                     ? $"Warm identical borrowed resident RGBA{Depth} input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both {EncoderLevel}/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. "
                         + (Depth == 16 ? "Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. " : "")
+                        + (ForwardOutput ? "Managed forward-only wrapper creation/disposal and span callbacks remain timed; Length/Position/Seek unavailable, caller remains open. Native independent packet acquisition needs no seeking or equivalent wrapper. " : "")
+                        + (EncodeCancelable ? "Managed receives a live cancelable token; token-source creation and cancellation correctness checks are outside timing. Native has no equivalent caller token. " : "")
                         + "Startup/IPC/file IO/hashes/validation excluded."
                     : (ForwardOutput ? "Fresh forward-only caller Stream over independent MemoryStream; wrapper creation/disposal and all span callbacks included, Length/Position/Seek unavailable, caller remains open. Native direct independent packet acquisition needs no seeking or equivalent wrapper. " : "") + (Tight
                     ? $"Warm identical frozen RGBA{Depth} PNG bytes to independent owned RGBA{Depth} pixels under exact managed working limit: encoded span + IDAT bytes + output + 256 KiB original inflater allowance + two rows. The optional whole-filter and 8 KiB read buffers cannot fit. Public Decode admission/framing/BCL inflation/{(Depth == 16 ? "word conversion/" : "")}output acquisition/disposal timed; preconstructed immutable options excluded. Native equivalent complete decode{(Depth == 16 ? " plus owned BE-to-LE conversion" : " without conversion")}/output acquisition/release, context/packet/frame wrappers reused. Native has no matching caller admission setting. Exact pixels/alpha/hidden RGB/source/two owners and one-byte-below rejection checked outside timing. Startup/IPC/file IO/hashes/validation excluded."
