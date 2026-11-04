@@ -17,11 +17,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md)
-  saves 733.52 µs / 5.43% on the frozen opaque photographic control in one
-  counterbalanced immutable-build comparison. All eight affected VP8 costs are
-  current and retain gaps, with unchanged per-operation allocations. One 64 B
-  immutable format vector is separate from operation-owned storage.
+- **WebP:** [shared residual preparation](../benchmarks/VP8-RESIDUAL-PREPARATION.md)
+  saves 475.19 µs / 3.80% on the frozen photographic control in one counterbalanced
+  comparison. Separate opaque16 captures improve 894.59 µs / 4.64% raw (4.52%
+  normalized, native clock 0.12% faster), with both confidence views separated.
+  All eight VP8 costs are current and retain gaps. Paired allocation is unchanged;
+  effort2's 11 B/op difference uses unequal 80/64-operation batches, without an
+  allocation-regression or saving claim. No owned capacity is added.
   [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
   retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
   Its measured alpha8 admission peak is 3,656,309 B, retained scratch zero;
@@ -29,7 +31,7 @@ Current priorities and scope:
   [Unchanged VP8L paths](../benchmarks/WEBP-MATCHER-CANCELLATION-PREPARATION.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
   Photograph remains uncertain; no unchanged resampling follows. Earlier
-  [packed reconstruction](../benchmarks/VP8-PACKED-RECONSTRUCTION.md) and matcher
+  [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md) and matcher
   gains retain their scoped evidence, without substituting older VP8 costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
@@ -79,8 +81,8 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,634 full/live checks per OS**, affected normal/scalar
-and AVX512-disabled checks, and the **same actual Release package/all three examples on Windows/Linux**.
+The current build passes **5,636 full/live checks per OS**, affected normal/scalar
+checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.
@@ -114,14 +116,14 @@ settings do not establish matched quality.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search † | 3,247.97 | 2,514.89 | 1.291 / 1.297 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 63,809.97 | 53,547.84 | 1.192 / 1.200 | 7,165,472 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 18,282.69 | 15,499.96 | 1.180 / 1.186 | 1,201,552 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 12,495.75 | 9,711.95 | 1.287 / 1.295 | 809,072 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 6,988.34 | 5,816.29 | 1.202 / 1.208 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 13,227.51 | 9,824.29 | 1.346 / 1.349 | 754,344 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 19,292.55 | 15,595.81 | 1.237 / 1.242 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 62,978.73 | 53,594.45 | 1.175 / 1.185 | 7,165,880 | 98,590 / 98,590 |
+| VP8 diagram, effort2 / distortion-only search † | 3,037.56 | 2,505.76 | 1.212 / 1.218 | 741,386 | 7,330 / 7,330 |
+| VP8 RGBA16 + alpha, including normalization † | 62,712.50 | 53,763.68 | 1.166 / 1.182 | 7,165,472 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 17,090.79 | 15,514.93 | 1.102 / 1.115 | 1,201,552 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 12,273.06 | 9,714.77 | 1.263 / 1.276 | 809,072 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 6,776.22 | 5,820.65 | 1.164 / 1.182 | 741,137 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 12,979.43 | 9,828.25 | 1.321 / 1.325 | 754,344 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 18,397.96 | 15,576.92 | 1.181 / 1.187 | 1,201,552 | 72,380 / 72,380 |
+| VP8 RGBA8 + lossless alpha † | 61,821.92 | 53,387.59 | 1.158 / 1.168 | 7,165,880 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 85,943.43 | 82,810.76 | 1.038 / 1.104 | 6,517,254 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,775.79 | 9,818.65 | 0.792 / 0.841 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 106,912.76 | 121,611.71 | 0.879 / 0.895 | 7,476,640 | 183,812 / 183,812 |

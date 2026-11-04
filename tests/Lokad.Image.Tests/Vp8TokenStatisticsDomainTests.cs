@@ -4,6 +4,46 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8TokenStatisticsDomainTests
 {
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void EveryPositionPreservesTerminationAndRejectsOutOfRangeBeforeMutation(int first)
+    {
+        var levels = new short[18]; var actual = new uint[1058]; var expected = new uint[1058];
+        short[] values = [short.MinValue, -2048, -2047, -67, -1, 0, 1, 67, 2047, 2048, short.MaxValue];
+        static int Band(int p) => p switch { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
+        for (var position = first; position < 16; position++) foreach (var signed in values)
+        {
+            Array.Clear(levels); levels[position] = signed; levels[16] = short.MinValue; levels[17] = short.MaxValue;
+            Array.Fill(actual, 0xfffefffdu); Array.Fill(expected, 0xfffefffdu);
+            var type = position % 4; var initial = position % 3; var tokenBuffer = (position & 1) != 0;
+            if (signed is < -2047 or > 2047)
+            {
+                Assert.Throws<ArgumentException>(() => Vp8TokenStatistics.Record(levels, type, first, initial, actual, tokenBuffer));
+                Assert.Equal(expected, actual); continue;
+            }
+            void Event(int index, bool bit)
+            {
+                var packed = expected[index];
+                if (packed >= 0xfffe0000u) packed = (unchecked(packed + 1u) >> 1) & 0x7fff7fff;
+                expected[index] = packed + 65536u + (bit ? 1u : 0u);
+            }
+            var at = ((type * 8 + Band(first)) * 3 + initial) * 11;
+            Event(at, signed != 0);
+            if (signed != 0)
+            {
+                for (var p = first; p < position; p++)
+                { Event(at + 1, false); at = (type * 8 + Band(p + 1)) * 33; }
+                Event(at + 1, true);
+                foreach (var (node, bit) in Branches(Math.Abs((int)signed)))
+                    Event(at + (tokenBuffer && node == 10 ? 9 : node), bit);
+                if (position < 15) Event(((type * 8 + Band(position + 1)) * 3 + Math.Min(Math.Abs((int)signed), 2)) * 11, false);
+            }
+            Assert.Equal(signed != 0, Vp8TokenStatistics.Record(levels, type, first, initial, actual, tokenBuffer));
+            Assert.Equal(expected, actual); Assert.Equal(short.MinValue, levels[16]); Assert.Equal(short.MaxValue, levels[17]);
+        }
+    }
+
     // An independent branch oracle retains the RFC6386 tree, rather than
     // deriving expectations from the compact production representation.
     private static List<(int Node, bool Bit)> Branches(int level)

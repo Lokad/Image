@@ -24,12 +24,7 @@ internal static class Vp8TokenStatistics
             || first == 1 && levels[0] != 0) throw new ArgumentException("Invalid VP8 coefficient statistics input.");
         if (MemoryMarshal.AsBytes(levels[..16]).Overlaps(MemoryMarshal.AsBytes(statistics[..1056])))
             throw new ArgumentException("Coefficient inputs must not overlap writable statistics.");
-        var last = -1;
-        for (var p = first; p < 16; p++)
-        {
-            if (levels[p] is < -2047 or > 2047) throw new ArgumentException("VP8 residual level exceeds 2,047.");
-            if (levels[p] != 0) last = p;
-        }
+        var last = Vp8ResidualSummary.Last(levels, first, validate: true);
         var n = first; var at = ((type * 8 + Band(n)) * 3 + initialContext) * 11;
         Event(statistics, at, last >= 0); if (last < 0) return false;
         while (n < 16)

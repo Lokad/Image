@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share exact VP8 residual preparation between statistics and partition encoding,
+  with vectorized validation/termination and a portable scalar path.
+
 - Quantize complete VP8 coefficient blocks with AVX512F, preserving exact packets,
   zero per-block allocation and the AVX2/scalar fallbacks.
 

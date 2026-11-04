@@ -68,7 +68,7 @@ internal sealed class Vp8FrameEncoding : IDisposable
 
     private static bool Coefficients(ref Vp8PartitionWriter.Cursor writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities)
     {
-        var last = -1; for (var n = first; n < 16; n++) if (levels[n] != 0) last = n;
+        var last = Vp8ResidualSummary.Last(levels, first, validate: false);
         var at = ((type * 8 + Band(first)) * 3 + initialContext) * 11;
         Bit(ref writer, last >= 0, probabilities[at]); if (last < 0) return false;
         for (var n = first; n <= last; n++)

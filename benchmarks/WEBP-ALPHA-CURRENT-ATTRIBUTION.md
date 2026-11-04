@@ -17,8 +17,9 @@ guards pass; zero builds or new fixtures. Profiled elapsed is discarded.
 The 2,362 B matcher retains scalar prefix bounds checks. A bounded
 [window-preparation experiment](WEBP-SCALAR-WINDOW-PREPARATION.md) hoists them,
 but its counterbalanced photograph comparison measures 1.11% slower. It restores
-exactly without builds. The later [full-block quantization](VP8-FULL-BLOCK-QUANTIZATION.md)
-changes VP8 execution; these whole-execution shares predate that stage. The matcher
+exactly without builds. Later [full-block quantization](VP8-FULL-BLOCK-QUANTIZATION.md)
+and [residual preparation](VP8-RESIDUAL-PREPARATION.md) change VP8 execution;
+these whole-execution shares predate both stages. The matcher
 itself is unchanged. Samples,
 skid and code size are attribution, not component times or predicted savings.
 The same report retains the pinned raw profile/JIT/maps and adverse experiment.

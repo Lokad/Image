@@ -1666,9 +1666,9 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-full-block-quantization-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-residual-preparation-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
-    assert vp8_owned['qualification']['fullChecksEachOs'] == 5634
+    assert vp8_owned['qualification']['fullChecksEachOs'] == 5636
     assert vp8_owned['qualification']['actualPackage']['sha256'] == vp8_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert vp8_owned['pairedComparison']['pairs'] == 12 and vp8_owned['pairedComparison']['ratioConfidence'][1] < 1
     assert vp8_owned['design']['newOwnedCapacityBytes'] == 0
@@ -1874,11 +1874,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md)
-  saves 733.52 µs / 5.43% on the frozen opaque photographic control in one
-  counterbalanced immutable-build comparison. All eight affected VP8 costs are
-  current and retain gaps, with unchanged per-operation allocations. One 64 B
-  immutable format vector is separate from operation-owned storage.
+- **WebP:** [shared residual preparation](../benchmarks/VP8-RESIDUAL-PREPARATION.md)
+  saves 475.19 µs / 3.80% on the frozen photographic control in one counterbalanced
+  comparison. Separate opaque16 captures improve 894.59 µs / 4.64% raw (4.52%
+  normalized, native clock 0.12% faster), with both confidence views separated.
+  All eight VP8 costs are current and retain gaps. Paired allocation is unchanged;
+  effort2's 11 B/op difference uses unequal 80/64-operation batches, without an
+  allocation-regression or saving claim. No owned capacity is added.
   [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
   retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
   Its measured alpha8 admission peak is 3,656,309 B, retained scratch zero;
@@ -1886,7 +1888,7 @@ Current priorities and scope:
   [Unchanged VP8L paths](../benchmarks/WEBP-MATCHER-CANCELLATION-PREPARATION.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
   Photograph remains uncertain; no unchanged resampling follows. Earlier
-  [packed reconstruction](../benchmarks/VP8-PACKED-RECONSTRUCTION.md) and matcher
+  [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md) and matcher
   gains retain their scoped evidence, without substituting older VP8 costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
@@ -1936,8 +1938,8 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,634 full/live checks per OS**, affected normal/scalar
-and AVX512-disabled checks, and the **same actual Release package/all three examples on Windows/Linux**.
+The current build passes **5,636 full/live checks per OS**, affected normal/scalar
+checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.
