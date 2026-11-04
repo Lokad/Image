@@ -28,6 +28,10 @@ Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md),
 [shared magnitude grammar](VP8-MAGNITUDE-GRAMMAR-INCONCLUSIVE.md) investigations
 leave production unchanged after inconclusive completed stages. Their linked
 reports retain adverse results, ownership/correctness checks and raw evidence.
+The [bounded-checkpoint investigation](VP8-BOUNDED-CHECKPOINT.md) also has no
+useful short lead; qualified sources, assemblies and package are restored
+exactly without builds. Its current profile identifies coefficient emission,
+without equating samples to time or proving cancellation dispatch is the cause.
 The [opaque audit](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) found no exercised 16-wide
 color row; the [neighbor audit](WEBP-ALPHA-CURRENT-ATTRIBUTION.md) found little
 reusable consecutive prefix work. Neither result closes a family or proves a CPU

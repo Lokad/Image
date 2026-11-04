@@ -1,146 +1,78 @@
 # Lokad.Image benchmarks
 
 Updated 2026-11-04. These **124 selected comparisons** combine qualified
-**0.2.1 development** costs and the retained **0.2.0 baseline**. The
-[282-path inventory](../benchmarks/WARM-COVERAGE.md) preserves material scope;
-the [nine text/drawing controls](../benchmarks/TEXT-DRAWING-CURRENT.md) now have
-warm measurements. Four layout/fitting controls and RGBA16 compositing pass their
-scoped comparisons; loading, rasterization and RGBA8 compositing retain gaps.
-Full parity is open.
+**0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
+open across the [282 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+development costs; **H** marks affected historical costs that are not current
+performance proof. Publication is postponed.
 
-[Interval-ordered text preparation](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md)
-saves **0.50 / 0.40 ms** on the two prepared drawing controls, **58.24% / 50.35% raw**
-(55.95% / 54.54% reference-normalized), with separated confidence and exact pixels.
-Both retain gaps against ImageSharp.Drawing. Allocation is 83,712 B/draw (+256 B);
-admitted drawing workspace peaks at 48,544 B (previously 44,416), with zero retained
-scratch. These measurements include preparation and cleanup, with borrowed
-font/layout setup and per-operation canvas reset excluded equally.
+All measurements use the dedicated quiet Ubuntu x64/AMD EPYC 9V45 VM, sequential
+warm operations on one pinned CPU, .NET 10 with tiering off and nonconcurrent
+workstation GC. Times are **µs per complete operation**. Ratios use the faster
+native bracket; **upper** includes conservative filtered/all-actual confidence.
+Short screens do not establish independent parity. **B/op** is total managed
+allocation, separate from peak live capacity and retained storage. Native
+allocations are unmeasured. Normalization, output ownership and disposal stay
+timed; setup, delivery and retained state follow the stated case boundaries.
 
-**Boundaries matter.** Bicubic rows include managed preparation but reuse native
-graphs/scratch. All eight current Lanczos rows compare equivalent one-shot or
-prepared operations. [Paired row output](../benchmarks/LANCZOS-PAIRED-ROW-OUTPUT.md)
-saves **598 µs / 12.50% raw / 12.43% normalized** on prepared word enlargement,
-and **51 µs / 8.35% / 8.41%** on prepared word reduction, with separated independent
-confidence and unchanged word allocations/retention. Five boundaries pass and
-stop, including word one-shot enlargement. Prepared byte reduction and word
-reduction/enlargement retain gaps (uppers **1.240 / 1.115 / 1.080**).
-Plans retain **139,800 / 148,040 B** for byte/word reduction and **325,156 /
-333,396 B** for enlargement. Admission capacity is unchanged; complete admitted/
-physical peaks and native allocation/graph/input-plane retention are not newly
-measured. [Earlier preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) and
-[boundary reconciliation](../benchmarks/LANCZOS-CURRENT-ENLARGEMENT.md) retain history.
-Rows marked **H** retain historical affected costs pending refresh.
-All six current PNG Optimal/Fastest/Smallest rows compare fresh encoder state, complete
-encoding and independent output/disposal on both sides. Word native endian-frame
-allocation/conversion/disposal stays timed.
-[Tree workspace reuse](../benchmarks/PNG-TREE-WORKSPACE.md) saves **834,544 B/op
-(24.4%) word / 94,960 B/op (10.2%) byte** on SmallestSize9 at identical batching.
-CPU intervals overlap; no incremental speedup, equivalence or causal regression
-is claimed. Byte raw elapsed rises8.77% while its native clock rises8.46%.
-Five current PNG controls have confirmed gaps: Smallest uppers **1.104 word /
-1.061 byte**, word Optimal **1.064**, Fastest **1.124 / 1.282**. Byte Optimal
-remains uncertain (**upper1.055**); resolve that measurement before tuning it.
-Word Optimal/Fastest allocate **2,585,972 B/op**, Smallest **2,585,904 B/op**;
-byte Optimal/Smallest **837,556 B/op**, Fastest **840,844 B/op**.
-The operation owns **12,648 B** tree-array payload, released at disposal.
-Workspace admission stays **384 KiB**, scratch retained after disposal zero;
-complete admitted/physical peaks and native allocation are not newly measured.
-[Earlier token output](../benchmarks/PNG-TOKEN-OUTPUT.md),
-[Dictionary preparation](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md),
-[greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md),
-[one-shot reconciliation](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md) and
-[restored search stages](../benchmarks/PNG-SEARCH-EXECUTION-INCONCLUSIVE.md)
-retain history. Other affected encoding costs stay historical (H).
-[Prepared probes](../benchmarks/PNG-PREPARED-PROBES.md) retain earlier costs/history.
-Other PNG encode rows create managed Deflate state per call while
-FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
-measurements retain their labeled boundaries, not current-cost proof or equivalent
-one-shot/session comparisons.
-[Architectural attribution](../benchmarks/PREPARATION-WORKSPACE-ATTRIBUTION.md)
-separates these costs and identifies WebP workspace allocations. Its additional
-screens are diagnostic, not qualified gains or replacements for the tables below.
+Current priorities and scope:
 
-[VP8 source texture preparation](../benchmarks/VP8-SOURCE-TEXTURE-PREPARATION.md)
-shares fixed source scores across luma candidates. The opaque photograph saves
-**0.214 ms / 1.54% raw** (1.29% normalized), with separated confidence and unchanged
-809,072 B/op. Five unchanged opaque VP8 costs retain valid evidence; the two transparent
-controls below use the current workspace build. All retain gaps. Only the photograph has
-an incremental speedup claim. The source-texture stage leaves allocation,
-admitted peaks and retained scratch unchanged. Preparation stays timed.
-The [shared magnitude grammar](../benchmarks/VP8-MAGNITUDE-GRAMMAR-INCONCLUSIVE.md)
-investigation restores production after two stages show no useful complete-encode
-lead; allocations and current costs stay unchanged. Two exhaustive production
-statistics tests remain. Its adverse/flat screens are not causal regression proof.
+- **WebP:** [qualified candidate/token workspace reuse](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md)
+  leaves alpha8 at 8,146,632 B/op, admitted peak 3,656,309 B and zero retained scratch.
+  [Lossless photograph/opaque](../benchmarks/VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md)
+  retain strict paired gaps (uppers 1.026/1.028), despite photograph's global
+  upper 0.997. Original/diagram/depth/async passing cases stop. VP8 CPU gaps remain;
+  [checkpoint screens](../benchmarks/VP8-BOUNDED-CHECKPOINT.md) are inconclusive
+  and leave production/costs unchanged.
+- **PNG:** [operation-owned tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md)
+  saves 834,544/94,960 B per complete word/byte Smallest9 encode (24.4%/10.2%, same
+  batching), without a CPU gain/equivalence/regression claim. Five current gaps;
+  byte Optimal6 remains uncertain (upper 1.055), to resolve before tuning. Existing
+  384 KiB admission; 12,648 B tree payload during operation, zero after disposal.
+- **Resizing:** [current Lanczos3](../benchmarks/LANCZOS-PAIRED-ROW-OUTPUT.md)
+  has five passing boundaries; prepared byte reduction and word reduction/
+  enlargement retain gaps (uppers 1.240/1.115/1.080). One-shot and prepared calls
+  compare equivalent setup/ownership. Plans retain 139,800/148,040 B for byte/word
+  reduction and 325,156/333,396 B for enlargement. Managed Q30/rational/certified
+  pixels stay exact; zimg uses float. [Bicubic](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
+  retains native graphs/scratch while managed preparation is timed; affected H
+  costs need reconciliation.
+- **JPEG and reading:** current table statuses and
+  [coverage](../benchmarks/WARM-COVERAGE.md) retain their named color/sampling/
+  delivery scope. Sub-microsecond probe/copy gaps remain visible, with expensive
+  codec/resize paths prioritized. Inspection, complete Identify and coding
+  validation are distinct: PNG header inspection skips CRCs; Identify validates
+  the container and nine source facts without pixel decoding; validation checks
+  coding syntax without retaining an RGBA result.
+- **Text/drawing:** [layout/fitting and RGBA16 compositing](../benchmarks/TEXT-DRAWING-CURRENT.md)
+  pass their scoped comparisons. Loading, RGBA8 compositing and
+  [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
+  These independent cases do not block codecs or resizing.
 
-[Color histogram construction](../benchmarks/WEBP-COLOR-HISTOGRAM-SEPARATION.md)
-reduces complete photograph elapsed **11.32% / 7.65% reference-normalized**,
-saving **10.75 ms**, with separated independent confidence and unchanged packets/
-allocations. [Current reconciliation](../benchmarks/VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md)
-retains the qualified implementation after an inconclusive alpha-preparation trial.
-The current photograph global upper is **0.997**, opaque **1.037**; stricter paired
-uppers are **1.026 / 1.028** respectively. **Strict parity remains open for both**;
-the photograph's global pass alone does not close it. The table displays the global
-estimator, distinct from the fastest-adjacent-sample paired check. Other unchanged
-original/diagram/depth/async lossless controls pass and stop. The two transparent
-controls reuse unchanged CTS197 evidence.
+The current build passes **5,569 full/live checks per OS**, affected normal/scalar
+checks, and the **same actual Release package/all three examples on Windows/Linux**.
+Unchanged paths reuse valid evidence. This is correctness/package qualification,
+not a full release refresh or whole-library performance pass. Complete physical/
+admitted peaks are not inferred from allocation reductions.
 
-[Token-tail history reuse](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md) retains its
-**475,928 B/op (5.52%)** alpha8 saving, now **8,146,632 B/op**. Its admitted peak
-remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
-adds **32 B** to the admitted search workspace; measured complete peaks/allocations
-are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,569 full/live checks
-per OS** and affected normal/scalar checks. The same actual Release package and
-all three examples pass both OSes, including retained resize admission and async
-surviving outputs. Unchanged paths reuse valid proof; this is not a full release
-refresh. [Earlier shared scoring](../benchmarks/WEBP-SCORING-PREPARATION.md)
-retains its scoped history. Allocation, admission and retention are separate.
+**References and boundaries.** FFmpeg is the reference except for explicitly
+labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
+**libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
+The six current one-shot PNG rows time fresh codec/zlib/packet state and independent
+output on both sides, including native word-frame endian conversion/allocation/
+disposal. Other native codec workers retain their documented wrappers/contexts.
+Stream rows include declared acquisition, copies, EOF and release.
 
-[Shared resize output ownership](../benchmarks/RESIZE-OVERWRITE-OUTPUT-STORAGE.md)
-removes redundant output initialization using the existing complete-overwrite
-allocator. Byte enlargement saves **0.385 ms / 10.08% raw / 8.94% normalized**, with
-separated confidence; allocations fall **2.885 → 0.752 MB/op**. Word enlargement
-saves 0.048 ms with separated raw/normalized confidence. Four existing costs are
-refreshed; three retain gaps and wide reduction still passes. Its adverse raw
-9.57% point accompanies a 7.39% slower native clock; normalized intervals overlap.
-Unbudgeted byte enlargement retains one 2,132,052 B idle output array within the
-existing shared 4 MiB ceiling. Governed calls never use that pool; admitted peaks
-are unchanged and ownership stays explicit. Allocation, live capacity and idle
-retention are separate. Other affected bilinear/bicubic rows marked **H** remain
-historical. The [shared cached driver](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-retains its geometry, scheduling, specialized kernels and exact repair.
-
-[Shared compositing rows](../benchmarks/COMPOSITING-SHARED-ROWS.md) remove repeated
-per-channel preparation across all depth pairs. Both measured controls now take
-about 0.63 ms, saving 4.46 / 4.62 ms (87.7% / 88.0%) with exact rational samples
-and unchanged 56 B/op. RGBA16 passes against labeled ImageSharp 3.1.12; RGBA8
-retains a 1.254× FFmpeg gap. Mixed-depth/overlap correctness passes; their CPU cost
-is unmeasured. No compositing workspace is allocated or retained.
-
-Measurements run sequentially on the dedicated quiet Ubuntu x64 VM, AMD EPYC 9V45,
-one pinned CPU, warm .NET 10, tiering off and nonconcurrent workstation GC. Timed
-operations include declared normalization, output ownership and release; fixture
-setup, I/O, IPC, startup and checks are excluded. Native brackets and versioned
-idle/process guards pass. Times are µs; ratios use the faster native bracket.
-**Upper** includes conservative filtered/all-sample confidence. **B/op** is managed
-allocation, not peak/retained capacity; native allocation is unmeasured. Canvas
-rows use separate verified allocation diagnostics, including current-core
-compositing and drawing observations. Short screens do not establish independent parity.
-
-FFmpeg is the reference, with labeled libwebp exact=1, SIMD libjpeg-turbo grayscale
-and zimg backend exceptions. Text rows compare COMPLETE PUBLIC-API INTEGRATION
-using ImageSharp.Drawing 2.1.7/Fonts 2.1.3, including multiple layout calls and the
-entire fitting search, not bare shaping-engine speed. Font loading uses
-FreeType 2.13.2 with eager/lazy validation differences; RGBA16 compositing uses
-ImageSharp 3.1.12 Rgba64 SrcOver and is not FFmpeg performance. Scoped visual/native
-tolerances preserve exact managed contracts and full 16-bit samples. See
-[text/drawing scope](../benchmarks/TEXT-DRAWING-CURRENT.md) and
-[codec parity](codec-parity.md); equal numeric quality settings are not equivalence.
-
-Unchanged resize paths reuse their normal/scalar and package qualification;
-current build checks are stated above. Family evidence is linked below;
-individual experiments remain in
-[coverage/history](../benchmarks/WARM-COVERAGE.md), with raw evidence retained.
+Text compares the complete **ImageSharp.Drawing 2.1.7/Fonts 2.1.3 public integration**,
+including multiple layout calls and the full fitting search, not bare shaping.
+Font load compares **FreeType 2.13.2 copy/open/retain/dispose**, with eager/lazy
+validation differences; it does not establish general parser equivalence.
+RGBA16 SrcOver compares **ImageSharp 3.1.12 Rgba64**, not FFmpeg performance.
+[Scoped native/visual tolerances](../benchmarks/TEXT-DRAWING-CURRENT.md) retain
+exact managed contracts and full 16-bit samples; visual gates are not sample
+exactness. Complete packet claims, metadata exceptions and codec pixel contracts
+retain their declared [case scope](codec-parity.md). Equal numerical quality
+settings do not establish matched quality.
 
 **Codecs**
 
@@ -281,34 +213,7 @@ individual experiments remain in
 | Identify PNG8, fresh seekable Stream, adapter reference | 19.537 | 15.929 | 1.226 / 1.232 | 192 | Confirmed gap |
 | Identify PNG8, async nonseekable, adapter reference | 20.312 | 19.321 | 1.051 / 1.060 | 8,400 | Confirmed gap |
 
-† identifies qualified development-path costs. PNG encodes use the cached
-four-invocation selector; predictable PNG16 native samples also batch four.
-Every value is per complete operation. JPEG baseline decode, caller-CMYK, all
-displayed PNG CRC callers, VP8/VP8L stream decode, the indicated JPEG/WebP anchors, bicubic word anchors
-and Lanczos3 have twelve measured iterations. Retained
-[RGBA16 bilinear](../benchmarks/WARM-BILINEAR-WORD-GEOMETRY.md) and
-[current bicubic controls](../benchmarks/BICUBIC-SHARED-CACHED-DRIVER.md)
-also have independent twelves. H marks historical costs after the documented
-storage/execution changes; these are not current performance proof.
-Remaining short screens retain three and do not establish independent parity.
-
-FFmpeg is the reference, with approved backend boundaries: lossless WebP encode
-uses **libwebp exact=1** to preserve hidden RGB; grayscale JPEG uses explicitly
-labeled SIMD **libjpeg-turbo**. Bicubic/Lanczos3 use **zimg**, FFmpeg's zscale
-backend, including required packing, halos and alpha normalization. Existing
-case-scoped native-only pixel bounds remain; managed pixels stay exact.
-Equal numeric quality settings establish no quality equivalence. Encoded sizes
-and fixed packet claims retain their declared input/settings scope.
-
-Probe/header inspection, complete Identify and pixel-coding validation have
-distinct boundaries. Header inspection skips PNG CRCs; Identify validates the
-complete container and nine source facts without decoding pixels. Validation
-checks coding syntax without retaining an RGBA result. Stream rows include
-actual acquisition, copies, EOF and release as declared.
-
-[CRC evidence](../benchmarks/warm-png-gfni-crc-evidence.json),
-[JPEG traversal](../benchmarks/WARM-JPEG-BASELINE-DC-AC-FUSION.md),
-[codec parity](codec-parity.md) and
-[coverage/history](../benchmarks/WARM-COVERAGE.md) retain scope, producer identities,
-remaining gaps and raw evidence. Update with `python benchmarks/render-benchmark.py`;
-verify with `--check`.
+[Coverage and linked family reports](../benchmarks/WARM-COVERAGE.md) retain producer
+identities, confidence decisions, ownership/correctness gates and reproducible raw
+evidence. Historical experiment reports remain separate. Update with
+`python benchmarks/render-benchmark.py`; verify with `--check`.
