@@ -23,25 +23,23 @@ cache-history preparation at the prior peaks and unused alpha-token capacity.
 The separately [qualified reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes current
 allocation/admitted-peak savings without a CPU gain claim.
 
-Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md) work leaves
-production unchanged: photo allocation falls, but opaque allocation grows without
-a demonstrated CPU gain. Its report links earlier parser/scoring/state history.
-Current family costs/proof remain valid; two actual-frame failure checks supplement
-the unchanged qualified core.
+Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md),
+[alpha preparation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) and
+[shared magnitude grammar](VP8-MAGNITUDE-GRAMMAR-INCONCLUSIVE.md) investigations
+leave production unchanged after inconclusive completed stages. Their linked
+reports retain adverse results, ownership/correctness checks and raw evidence.
+The [opaque audit](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) found no exercised 16-wide
+color row; the [neighbor audit](WEBP-ALPHA-CURRENT-ATTRIBUTION.md) found little
+reusable consecutive prefix work. Neither result closes a family or proves a CPU
+savings bound. Do not replay unchanged candidates or retime unchanged passing paths.
 
-The current opaque audit finds only8/1wide color-search rows, so no16-lane
-arithmetic change follows. Repeated entropy operands do not justify caching.
-Invariant-alpha preparation has overlapping independent before/candidate bounds;
-its helpers/tests are removed and exact production/package identities restored.
-20affected checks pass perOS/mode; unchanged full/package proof is reused.
-Do not repeat those measurements or assume the global/paired estimators agree.
-
-The [JPEG reader frontier investigation](JPEG-REFINEMENT-FRONTIER-INCONCLUSIVE.md)
-also restores production after two completed stages show no useful elapsed lead.
-Five actual-reader cases add independent failure/correction/tail coverage;
-42refinement/cancellation checks pass perOS/mode. Existing full/package evidence
-and displayed costs stay valid. Return to the larger transparent WebP gap by
-counting repeated matching queries before a materially different redesign.
+The [JPEG frontier](JPEG-REFINEMENT-FRONTIER-INCONCLUSIVE.md) and magnitude rounds
+retain five actual-reader and two exhaustive actual-statistics cases respectively.
+Restored statistics/frame/rate/writer checks pass 70 per OS/mode. Reuse applicable
+full/package proof and displayed costs. The
+[current PNG9 attribution](PNG-CURRENT-SMALLEST-WORD-ATTRIBUTION.md) selects a
+smaller dictionary-search execution region for investigation;
+older pre-hash lazy-parser offsets are historical, not current machine-code proof.
 
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other

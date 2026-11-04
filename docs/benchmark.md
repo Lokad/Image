@@ -68,6 +68,10 @@ shares fixed source scores across luma candidates. The opaque photograph saves
 controls below use the current workspace build. All retain gaps. Only the photograph has
 an incremental speedup claim. The source-texture stage leaves allocation,
 admitted peaks and retained scratch unchanged. Preparation stays timed.
+The [shared magnitude grammar](../benchmarks/VP8-MAGNITUDE-GRAMMAR-INCONCLUSIVE.md)
+investigation restores production after two stages show no useful complete-encode
+lead; allocations and current costs stay unchanged. Two exhaustive production
+statistics tests remain. Its adverse/flat screens are not causal regression proof.
 
 [Color histogram construction](../benchmarks/WEBP-COLOR-HISTOGRAM-SEPARATION.md)
 reduces complete photograph elapsed **11.32% / 7.65% reference-normalized**,
