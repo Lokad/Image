@@ -169,14 +169,14 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |
 | --- | ---: | ---: | ---: | ---: |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 774.18 | 1,707.18 | 0.453 / 0.457 | 138,647 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 579.45 | 490.59 | 1.181 / 1.201 | 139 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 761.86 | 1,949.02 | 0.391 / 0.395 | 146,864 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 568.64 | 509.71 | 1.116 / 1.121 | 139 |
-| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,235.82 | 5,671.99 | 0.747 / 0.756 | 319,229 |
-| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,991.24 | 4,392.76 | 0.909 / 0.915 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,528.68 | 5,069.81 | 0.893 / 0.897 | 4,592,777 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,211.41 | 3,894.83 | 1.081 / 1.100 | 4,265,302 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 256×129 | 711.35 | 1,588.55 | 0.448 / 0.457 | 138,647 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 256×129 | 563.84 | 489.93 | 1.151 / 1.158 | 139 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 256×129 | 752.13 | 1,946.83 | 0.386 / 0.391 | 146,864 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 558.34 | 512.94 | 1.089 / 1.097 | 139 |
+| Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 4,016.44 | 5,281.52 | 0.760 / 0.783 | 319,224 |
+| Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,775.71 | 4,085.82 | 0.924 / 0.946 | 148 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,337.24 | 5,079.02 | 0.854 / 0.860 | 4,592,777 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,375.20 | 4,239.10 | 1.032 / 1.052 | 4,265,302 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 † H → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |

@@ -139,6 +139,42 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
         Assert.Equal(expected, cleared.GetLower()); Assert.Equal(Vector128<int>.Zero, cleared.GetUpper());
     }
 
+    [Theory]
+    [InlineData(255)] [InlineData(65535)]
+    public void PairMasksAndCertifiedSamplesMatchIndependentSinglePixelDecisions(int maximum)
+    {
+        if (!Supported) return;
+        const double q = 1152921504606846976d;
+        for (var i = 0; i < 4096; i++)
+        {
+            var taps = (i & 3) switch { 0 => 1, 1 => 6, 2 => 17, _ => int.MaxValue };
+            var e = LanczosFmaResize.Errors(taps); var numerator = e.Rgb + 65535d * e.Alpha;
+            var first = Value(i); var second = Value(i * 73 + 19);
+            var safeFirst = LanczosFmaResize.TryNormalize(first, numerator, e.Alpha, maximum, out var p0);
+            var safeSecond = LanczosFmaResize.TryNormalize(second, numerator, e.Alpha, maximum, out var p1);
+            var mask = LanczosFmaResize.NormalizePair(Vector512.Create(first, second), numerator, e.Alpha, maximum, out var result);
+            Assert.Equal((safeFirst ? 1 : 0) | (safeSecond ? 2 : 0), mask);
+            if (safeFirst) Assert.Equal(p0, result.GetLower());
+            if (safeSecond) Assert.Equal(p1, result.GetUpper());
+
+            Vector256<double> Value(int seed)
+            {
+                var alpha = (seed % 9) switch
+                {
+                    0 => q / 2, 1 => Math.BitDecrement(q / 2 - e.Alpha),
+                    2 => Math.BitIncrement(q / 2 + e.Alpha), 3 => 7 * q,
+                    4 => maximum * q, 5 => Math.ScaleB(q, 18),
+                    6 => -q, 7 => Math.BitDecrement(q / 2 + e.Alpha), _ => q
+                };
+                var sample = (seed % 7) switch
+                { 0 => -.5, 1 => 0, 2 => .5, 3 => 17.5, 4 => maximum - .5, 5 => maximum + 1d, _ => 13d };
+                var red = alpha * sample;
+                return Vector256.Create((seed & 1) == 0 ? Math.BitIncrement(red) : Math.BitDecrement(red),
+                    alpha * (seed % (maximum + 3)), -red, alpha);
+            }
+        }
+    }
+
     [Fact]
     public void ErrorEnvelopeKeepsAllInt32TapPrefixesInsideItsExponentBounds()
     {

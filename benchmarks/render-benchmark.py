@@ -1460,14 +1460,13 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}) | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-shared-row-driver-evidence.json').read_text(encoding='utf-8'))
-    assert lanczos_current['productionAccepted'] and lanczos_current['independentQuietConfirmation']
-    assert lanczos_current['qualification']['fullChecksEachOs'] == 5569
+    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-certificate-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert lanczos_current['productionAccepted'] and lanczos_current['selectedStage'] == 1
+    assert lanczos_current['pairedComparison']['pairs'] == 12 and lanczos_current['pairedComparison']['ratioConfidence'][1] < 1
+    assert lanczos_current['qualification']['fullChecksEachOs'] == 5631
     assert lanczos_current['qualification']['actualPackage']['sha256'] == lanczos_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert len(lanczos_current['cases']) == 8
-    assert all(lanczos_current['comparisons']['Repeated8']['rawConfidenceSeparates'].values())
-    assert lanczos_current['comparisons']['Repeated8']['normalizedConfidenceSeparates']
-    assert sum(c['status'] == 'Confirmed pass' for c in lanczos_current['cases'].values()) == 5
+    assert sum(c['status'] == 'pass' for c in lanczos_current['cases'].values()) == 5
     position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
     for case, label, size in [
@@ -1480,15 +1479,12 @@ def render():
             ('OneShotEnlarge16', 'Lanczos3 one-shot RGBA16 / zimg one-shot', '1027×519'),
             ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519')]:
         observation = lanczos_current['cases'][case]
-        assert observation['managedExact'] and observation['nativeQualityPassed'] and observation['quietGuardsPassed']
+        assert observation['managedExact'] and observation['allOriginalGatesPassed'] and observation['quietGuardsPassed']
         assert observation['librarySha256'] == lanczos_current['producers']['linuxSha256']
-        assert len(observation['managed']['actual']) == 12
-        stats = observation['managed']['statistics']
-        native = min(b['mean'] for b in observation['nativeBrackets'])
-        current_resize_rows.append(('editing', f'| {label} † → {size} | {stats["Mean"] / 1000:,.2f} | '
-                                    f'{native / 1000:,.2f} | {observation["worstBracketRatio"]:.3f} / '
-                                    f'{observation["conservativeRatioUpper"]:.3f} | '
-                                    f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+        assert observation['actualIterations'] == 12
+        current_resize_rows.append(('editing', f'| {label} † → {size} | {observation["managedUs"]:,.2f} | '
+                                    f'{observation["nativeUs"]:,.2f} | {observation["ratio"]:.3f} / '
+                                    f'{observation["upper"]:.3f} | {observation["allocatedBytes"]:,} |'))
     rows[position:position] = current_resize_rows
     current_vp8l_prefixes = ('| VP8L RGBA8 /', '| VP8L opaque RGBA8 /',
                              '| VP8L RGBA16, including normalization /', '| VP8L async, fresh nonseekable output /')

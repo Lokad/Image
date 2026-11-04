@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share Lanczos RGB and certificate preparation in SIMD lanes, preserving exact
+  pixels, portable fallbacks, cancellation and memory ownership.
+
 - Share word bicubic geometry preparation and widen eligible row strips within
   the same 4 KiB admission, preserving exact pixels and output ownership.
 

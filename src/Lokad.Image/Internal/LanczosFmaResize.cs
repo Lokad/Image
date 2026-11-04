@@ -107,14 +107,23 @@ internal static class LanczosFmaResize
             var second = TryNormalize(value.GetUpper(), numeratorError, alphaError, maximum, out var p1);
             pixels = Vector256.Create(p0, p1); return (first ? 1 : 0) | (second ? 2 : 0);
         }
-        var divisors = Vector512.Create(a0, a0, a0, Q60, a1, a1, a1, Q60);
-        var estimate = Avx512F.Min(Avx512F.Max(Avx512F.Divide(value, divisors), Vector512<double>.Zero), Vector512.Create((double)maximum));
+        // The alpha quotients scale normal bounded values by an exact power of
+        // two. Reuse those division lanes for the two existing certificate radii;
+        // RGB/radius operands and the certificate's operation order stay exact.
+        var alphaLanes = Vector512.Create(0L, 0, 0, -1, 0, 0, 0, -1).AsDouble();
+        var alphaIndices = Vector512.Create(3L, 3, 3, 3, 7, 7, 7, 7);
+        var alphas = Vector512.Shuffle(value, alphaIndices);
+        var divisors = Avx512F.Subtract(alphas, Vector512.ConditionalSelect(alphaLanes, Vector512.Create(alphaError), Vector512<double>.Zero));
+        var numerators = Vector512.ConditionalSelect(alphaLanes, Vector512.Create(numeratorError), value);
+        var divided = Avx512F.Divide(numerators, divisors);
+        var quotients = Vector512.ConditionalSelect(alphaLanes, Avx512F.Multiply(value, Vector512.Create(1d / Q60)), divided);
+        var estimate = Avx512F.Min(Avx512F.Max(quotients, Vector512<double>.Zero), Vector512.Create((double)maximum));
         var rounded = Avx512F.RoundScale(estimate, 0);
         var distance = Avx512F.AndNot(Vector512.Create(long.MinValue), Avx512F.Subtract(estimate, rounded).AsInt64()).AsDouble();
-        var m0 = .5 - (numeratorError / (a0 - alphaError) + Guard);
-        var m1 = .5 - (numeratorError / (a1 - alphaError) + Guard);
+        var radii = Vector512.Shuffle(divided, alphaIndices);
+        var rgbMargins = Avx512F.Subtract(Vector512.Create(.5), Avx512F.Add(radii, Vector512.Create(Guard)));
         var ma = .5 - alphaError / Q60 - Guard;
-        var margins = Vector512.Create(m0, m0, m0, ma, m1, m1, m1, ma);
+        var margins = Vector512.ConditionalSelect(alphaLanes, Vector512.Create(ma), rgbMargins);
         var mask = Vector512.ExtractMostSignificantBits(Avx512F.CompareLessThan(distance, margins));
         pixels = Avx512F.ConvertToVector256Int32WithTruncation(rounded);
         return ((mask & 15) == 15 ? 1 : 0) | ((mask & 240) == 240 ? 2 : 0);
