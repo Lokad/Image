@@ -1706,11 +1706,13 @@ def render():
     qualification = webp_current['qualification']
     assert qualification['windows']['total'] == qualification['linux']['total'] == 5541
     assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
-    webp_reconciled = json.loads((ROOT / 'benchmarks/vp8l-invariant-alpha-preparation-inconclusive-evidence.json').read_text(encoding='utf-8'))
-    assert not webp_reconciled['productionChanged'] and not webp_reconciled['productionAccepted'] and not webp_reconciled['cpuGainClaim']
-    assert set(webp_reconciled['currentCosts']) == {'opaque', 'photograph'}
-    assert all(webp_reconciled['restoration'][os]['corePdbXmlSourcesAndInternalModuleRestored'] for os in ['windows', 'linux'])
-    assert webp_reconciled['restoration']['windows']['packageSha256'] == webp_reconciled['restoration']['linux']['packageSha256']
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-alpha-match-index-reuse-evidence.json').read_text(encoding='utf-8'))
+    assert webp_owned['productionAccepted'] and webp_owned['independentQuietConfirmation']
+    assert not webp_owned['cpuGainClaim']
+    assert webp_owned['qualification']['fullChecksEachOs'] == 5575
+    assert webp_owned['qualification']['actualPackage']['sha256'] == webp_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert webp_owned['storage']['alpha8AllocationSavedBytes'] == 531528
+    assert webp_owned['storage']['measured']['alpha']['admittedPeakBytes'] == 3656309
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1721,18 +1723,13 @@ def render():
         'alpha': 'VP8 RGBA8 + lossless alpha',
         'alpha16': 'VP8 RGBA16 + alpha, including normalization',
     }
-    assert set(webp_current['cases']) == set(current_labels)
+    assert set(webp_owned['cases']) == set(current_labels)
     for case, label in current_labels.items():
-        current = webp_reconciled['currentCosts'].get(case, webp_current['cases'][case])
+        current = webp_owned['cases'][case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        expected_producer = (webp_reconciled['restoration']['linux']['productionSha256'] if case in webp_reconciled['currentCosts']
-                             else webp_current['producers']['unchangedAlphaLinuxSha256'] if case in {'alpha', 'alpha16'} else webp_current['producers']['linuxSha256'])
-        assert current['librarySha256'] == expected_producer
+        assert current['librarySha256'] == webp_owned['producers']['linuxSha256']
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-        if case in webp_reconciled['currentCosts']:
-            assert current['strictParityStatus'] == 'open' and current['pairedLower'] > 1
-            assert current['pairedUpper'] == webp_reconciled['pairedCurrentCosts'][case]['upper']
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
         assert len(positions) == 1, label
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
@@ -1840,13 +1837,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [qualified candidate/token workspace reuse](../benchmarks/WEBP-TOKEN-TAIL-HISTORY.md)
-  leaves alpha8 at 8,146,632 B/op, admitted peak 3,656,309 B and zero retained scratch.
-  [Lossless photograph/opaque](../benchmarks/VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md)
-  retain strict paired gaps (uppers 1.026/1.028), despite photograph's global
-  upper 0.997. Original/diagram/depth/async passing cases stop. VP8 CPU gaps remain;
-  [checkpoint screens](../benchmarks/VP8-BOUNDED-CHECKPOINT.md) are inconclusive
-  and leave production/costs unchanged.
+- **WebP:** [operation-owned match-index reuse](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md)
+  saves 531,528 B/op (6.5%) on complete alpha8 encoding, now 7,615,104 B/op,
+  with unchanged 3,656,309 B admitted peak and zero retained scratch. All eight
+  affected costs are current. Original/diagram/depth/async lossless cases pass
+  and stop; opaque/ALPH retain gaps. Photograph is confidence-open (upper 1.090),
+  with about 7% native before/after clock movement. No CPU gain/equivalence/causal
+  regression claim. Earlier paired bounds are historical for this changed matcher.
 - **PNG:** [operation-owned tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md)
   saves 834,544/94,960 B per complete word/byte Smallest9 encode (24.4%/10.2%, same
   batching), without a CPU gain/equivalence/regression claim. Five current gaps;
@@ -1875,7 +1872,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,569 full/live checks per OS**, affected normal/scalar
+The current build passes **5,575 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

@@ -73,6 +73,9 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             try
             {
                 context.Cancellation.ThrowIfCancellationRequested(); var working = new uint[alpha.Length]; var candidates = Candidates(alpha, width, context, method);
+                // All index users finish during preparation. Keep only one
+                // operation-owned buffer across the sequential filter trials.
+                using var matchStorage = method != 6 && (candidates & (candidates - 1)) != 0 ? new Vp8lMatchIndex(context, 0) : null;
                 for (var filter = 0; filter < 4; filter++)
                 {
                     if ((candidates & (1 << filter)) == 0) continue;
@@ -84,7 +87,7 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                         working[i] = (uint)((alpha[i] - Predict(alpha, width, i, filter)) & 255) << 8;
                     }
                     var seed = spare; spare = null;
-                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 6 ? 100 : 8 * method, greenOnly: true, matchingSeed: seed);
+                    using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 6 ? 100 : 8 * method, greenOnly: true, matchingSeed: seed, matchStorage: matchStorage);
                     try
                     {
                         var body = prepared.PayloadBytes - 5; var compressed = body <= alpha.Length;

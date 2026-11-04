@@ -151,7 +151,12 @@ public sealed class Vp8lMatchingSeedTests
                 // The root callback precedes OperationContext's local increment,
                 // so their difference is the currently admitted capacity.
                 var requested = used - (sizing.Limits.MaxWorkingBytes - sizing.RemainingWorkingBytes);
-                if (emitted && requested == source.Length * 4L && phase == 0) phase = sizingRoot.GrowthAttempts;
+                // Target preparation after the first payload was emitted. The
+                // second filter now borrows its match index, so it need not
+                // reserve another full-frame index at this boundary.
+                if (emitted && phase == 0 && new System.Diagnostics.StackTrace().GetFrames().Any(frame =>
+                    frame.GetMethod()?.DeclaringType == typeof(Vp8lPreparedEncoding) && frame.GetMethod()?.Name == "MainCandidates"))
+                    phase = sizingRoot.GrowthAttempts;
                 if (requested == firstPayload) emitted = true;
             };
             using var encoded = Vp8AlphaEncoding.Create(source, 513, sizing);

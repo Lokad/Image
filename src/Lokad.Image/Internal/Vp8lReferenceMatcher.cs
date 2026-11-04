@@ -18,7 +18,27 @@ internal sealed class Vp8lMatchIndex : IDisposable
         this.context = context;
         context.Cancellation.ThrowIfCancellationRequested();
         context.Reserve(length * 4L);
-        try { context.Cancellation.ThrowIfCancellationRequested(); values = new int[length]; }
+        try { context.Cancellation.ThrowIfCancellationRequested(); values = length == 0 ? [] : new int[length]; }
+        catch { context.Release(length * 4L); throw; }
+    }
+
+    // All prior readers must have finished. These are scratch results, so a
+    // changed shape discards the old capacity rather than copying live data.
+    internal void ResetStorage(int length, OperationContext borrower)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(length);
+        if (!ReferenceEquals(context, borrower)) throw new ArgumentException("Match storage belongs to another operation.");
+        context.Cancellation.ThrowIfCancellationRequested();
+        var previousLength = Storage.Length;
+        if (previousLength == length) return;
+        values = []; context.Release(previousLength * 4L);
+        context.Reserve(length * 4L);
+        try
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            int[] next = length == 0 ? [] : new int[length];
+            context.Cancellation.ThrowIfCancellationRequested(); values = next;
+        }
         catch { context.Release(length * 4L); throw; }
     }
 
@@ -71,10 +91,22 @@ internal static class Vp8lReferenceMatcher
         Validate(pixels.Length, width);
         if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
         var result = new Vp8lMatchIndex(context, pixels.Length);
+        try { Fill(pixels, width, quality, lowEffort, context, result, headStorage); return result; }
+        catch { result.Dispose(); throw; }
+    }
+
+    // The borrower owns neither the index nor its admission. Selected token/
+    // tree owners never retain this storage; every link/result is overwritten.
+    internal static void Fill(ReadOnlySpan<uint> pixels, int width, int quality, bool lowEffort,
+        OperationContext context, Vp8lMatchIndex result, Vp8lTokenBuffer? headStorage = null)
+    {
+        Validate(pixels.Length, width);
+        if (quality is < 0 or > 100) throw new ArgumentOutOfRangeException(nameof(quality));
+        result.ResetStorage(pixels.Length, context);
         long scratch = 0;
         try
         {
-            if (pixels.Length <= 2) return result;
+            if (pixels.Length <= 2) { result.Writable.Clear(); return; }
             // Dictionary backing capacity has a coarse allowance for its buckets,
             // entries and prime rounding. No dictionary grows after construction:
             // there can be at most pixels.Length inserted keys.
@@ -168,9 +200,7 @@ internal static class Vp8lReferenceMatcher
             }
             // These entries contain chain sentinels until every link is read.
             values[0] = values[^1] = 0;
-            return result;
         }
-        catch { result.Dispose(); throw; }
         finally { if (scratch != 0) context.Release(scratch); }
     }
 
