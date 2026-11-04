@@ -1,0 +1,2059 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PLS241/PLS242/PLS243/PLS244",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "productionRestoredExactly": true,
+  "currentCostsChanged": false,
+  "independentConfirmationPerformed": false,
+  "baseline": {
+    "EncodeSmallest16": {
+      "caseId": "EncodeSmallest16",
+      "runId": "p9r236-current-EncodeSmallest16-short",
+      "mode": "short",
+      "worstBracketRatio": 1.124174579602983,
+      "conservativeRatioUpper": 1.2450248290426393,
+      "conservativeRatioLower": 1.0106414615583732,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 3420454
+      },
+      "status": "Confirmed gap",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "librarySha256": "baaf6287e1d99d8b0de772483d5e9cfb9c13c38e23465ba94e04cd2be56442b6",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "managed": {
+        "statistics": {
+          "N": 3,
+          "Mean": 23466101.958333332,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 23466101.958333332,
+            "StandardError": 30589.876126405277,
+            "Level": 12,
+            "Margin": 966611.1612933442,
+            "Lower": 22499490.79703999,
+            "Upper": 24432713.119626675
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 3,
+          "Mean": 23466101.958333332,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 23466101.958333332,
+            "StandardError": 30589.876126405277,
+            "Level": 12,
+            "Margin": 966611.1612933442,
+            "Lower": 22499490.79703999,
+            "Upper": 24432713.119626675
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 8,
+            "Nanoseconds": 187417958
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 8,
+            "Nanoseconds": 187556849
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 8,
+            "Nanoseconds": 188211640
+          }
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 20874072.75,
+          "standardError": 10804.784016621217,
+          "confidenceLower": 20532651.79155373,
+          "confidenceUpper": 21215493.70844627
+        },
+        {
+          "mean": 20943431.083333332,
+          "standardError": 41746.60606323119,
+          "confidenceLower": 19624277.805298217,
+          "confidenceUpper": 22262584.361368448
+        }
+      ],
+      "receipt": {
+        "caseId": "EncodeSmallest16",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "codedDepth": 16,
+        "colorType": 6,
+        "filter": 0,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "managedEncodedSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+        "nativeOutputSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+        "managedOutputBytes": 963202,
+        "nativeOutputBytes": 963202,
+        "managedEncoderLevel": 9,
+        "nativeEncoderLevel": 9,
+        "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+        "nativeCodecLifetime": "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed. Word endian-conversion frame allocation, conversion and disposal timed; no retained working frame.",
+        "nativeExitCode": 0,
+        "allRgbaSamplesExact": true,
+        "alphaExact": true,
+        "hiddenRgbExact": true,
+        "nativeCliNormalScalarPixelsExact": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "callerOutputLeftOpen": true,
+        "nativeReady": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-smallest16-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 9,
+          "filter": 0,
+          "colorType": 6,
+          "conversionThreads": 0,
+          "rgbExpansionTimed": false,
+          "rgbTransparencyExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayTransparencyExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "packedTransparencyFilterTimed": false,
+          "filterThreads": 0,
+          "scalarMode": false,
+          "cpuFlags": 8377307,
+          "outputBytes": 963202,
+          "initialCompletedOperations": 3,
+          "codecPreparationTimed": true,
+          "packetWrapperPreparationTimed": true,
+          "codecRetainedBetweenOperations": false,
+          "borrowedResidentSource": true,
+          "wordWorkspacePreparationTimed": true,
+          "wordWorkspaceRetainedBetweenOperations": false,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Complete one-shot RGBA16 PNG level9 FFmpeg adapter",
+        "oneShotCodec": true,
+        "scope": "Existing RGBA16 SmallestSize9 control only",
+        "inputDepth": 16,
+        "encoderLevel": 9,
+        "wordWorkspacePreparationTimed": true,
+        "wordWorkspaceRetainedBetweenOperations": false,
+        "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+        "buildScriptSha256": "9ceb21c397464f3865a0e24cb11ed2cbfeb54d8af7aca09b70d05dc52a57d3c6",
+        "compiledSourceSha256": "6af530999ebaa60ea2006d37685fa8cce9f93b5eaedaad470ec5769b5420448c",
+        "workerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      }
+    },
+    "EncodeSmallest8": {
+      "caseId": "EncodeSmallest8",
+      "runId": "p9r236-current-EncodeSmallest8-short",
+      "mode": "short",
+      "worstBracketRatio": 1.055553861330217,
+      "conservativeRatioUpper": 1.1492269825708468,
+      "conservativeRatioLower": 0.9699562258217765,
+      "managedMemory": {
+        "BytesAllocatedPerOperation": 932438
+      },
+      "status": "Uncertain parity",
+      "completePacketExact": true,
+      "quietGuardsPassed": true,
+      "librarySha256": "baaf6287e1d99d8b0de772483d5e9cfb9c13c38e23465ba94e04cd2be56442b6",
+      "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+      "managed": {
+        "statistics": {
+          "N": 3,
+          "Mean": 18215772.151515152,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 18215772.151515152,
+            "StandardError": 16806.482391084188,
+            "Level": 12,
+            "Margin": 531068.9521648309,
+            "Lower": 17684703.19935032,
+            "Upper": 18746841.103679985
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 3,
+          "Mean": 18215772.151515152,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 18215772.151515152,
+            "StandardError": 16806.482391084188,
+            "Level": 12,
+            "Margin": 531068.9521648309,
+            "Lower": 17684703.19935032,
+            "Upper": 18746841.103679985
+          }
+        },
+        "actual": [
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 1,
+            "Operations": 11,
+            "Nanoseconds": 200031423
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 2,
+            "Operations": 11,
+            "Nanoseconds": 200422985
+          },
+          {
+            "IterationMode": 1,
+            "IterationStage": 3,
+            "LaunchIndex": 0,
+            "IterationIndex": 3,
+            "Operations": 11,
+            "Nanoseconds": 200666073
+          }
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 17272520.833333332,
+          "standardError": 30379.22373800244,
+          "confidenceLower": 16312566.08833085,
+          "confidenceUpper": 18232475.578335814
+        },
+        {
+          "mean": 17257075.0,
+          "standardError": 11146.198144808539,
+          "confidenceLower": 16904865.677927624,
+          "confidenceUpper": 17609284.322072376
+        }
+      ],
+      "receipt": {
+        "caseId": "EncodeSmallest8",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "codedDepth": 8,
+        "colorType": 6,
+        "filter": 0,
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "managedEncodedSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+        "nativeOutputSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+        "managedOutputBytes": 210973,
+        "nativeOutputBytes": 210973,
+        "managedEncoderLevel": 9,
+        "nativeEncoderLevel": 9,
+        "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+        "nativeCodecLifetime": "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed.",
+        "nativeExitCode": 0,
+        "allRgbaSamplesExact": true,
+        "alphaExact": true,
+        "hiddenRgbExact": true,
+        "nativeCliNormalScalarPixelsExact": true,
+        "sourceUnchanged": true,
+        "independentOwnedOutput": true,
+        "callerOutputLeftOpen": true,
+        "nativeReady": {
+          "schemaVersion": 1,
+          "state": "ready",
+          "operation": "png-smallest8-encode",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "cpu": 0,
+          "affinityCount": 1,
+          "codecThreads": 1,
+          "threadType": 0,
+          "activeThreadType": 0,
+          "compressionLevel": 9,
+          "filter": 0,
+          "colorType": 6,
+          "conversionThreads": 0,
+          "rgbExpansionTimed": false,
+          "rgbTransparencyExpansionTimed": false,
+          "rgbPackingTimed": false,
+          "grayExpansionTimed": false,
+          "grayTransparencyExpansionTimed": false,
+          "grayPackingTimed": false,
+          "grayPlaneExtractionTimed": false,
+          "grayFilterOutputAllocationTimed": false,
+          "grayAlphaExpansionTimed": false,
+          "grayAlphaPackingTimed": false,
+          "grayAlphaStoragePackingTimed": false,
+          "paletteExpansionTimed": false,
+          "packedTransparencyFilterTimed": false,
+          "filterThreads": 0,
+          "scalarMode": false,
+          "cpuFlags": 8377307,
+          "outputBytes": 210973,
+          "initialCompletedOperations": 3,
+          "codecPreparationTimed": true,
+          "packetWrapperPreparationTimed": true,
+          "codecRetainedBetweenOperations": false,
+          "borrowedResidentSource": true,
+          "independentLiveOutputs": true,
+          "ffmpegVersion": "n8.1",
+          "avcodecVersion": 4070500,
+          "avutilVersion": 3938916
+        }
+      },
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Complete one-shot RGBA8 PNG level9 FFmpeg adapter",
+        "oneShotCodec": true,
+        "scope": "Existing RGBA8 SmallestSize9 control only",
+        "inputDepth": 8,
+        "encoderLevel": 9,
+        "wordWorkspacePreparationTimed": false,
+        "wordWorkspaceRetainedBetweenOperations": false,
+        "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+        "buildScriptSha256": "9ceb21c397464f3865a0e24cb11ed2cbfeb54d8af7aca09b70d05dc52a57d3c6",
+        "compiledSourceSha256": "a174a82e4f6165545dec8131852efdb8a92c1353334c1a0bf787c0cbd2e3d541",
+        "workerSha256": "ba1d1eb15ae441d600fa86d001deb218d87efc9972bb9e046c5d3f18d9deb407",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      }
+    }
+  },
+  "stages": {
+    "pls241": {
+      "EncodeSmallest16": {
+        "caseId": "EncodeSmallest16",
+        "runId": "pls241-candidate-EncodeSmallest16-short",
+        "mode": "short",
+        "worstBracketRatio": 1.1609598080597054,
+        "conservativeRatioUpper": 1.213640257043308,
+        "conservativeRatioLower": 1.1106691700249969,
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 3420454
+        },
+        "status": "Confirmed gap",
+        "completePacketExact": true,
+        "quietGuardsPassed": true,
+        "librarySha256": "d314afbb49538ef7684ce88e8d368cabb8ca4dd3602bc9ee7c3f18138b5ad4bc",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "managed": {
+          "statistics": {
+            "N": 3,
+            "Mean": 24234913.125,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24234913.125,
+              "StandardError": 10883.984343405682,
+              "Level": 12,
+              "Margin": 343923.61388467817,
+              "Lower": 23890989.51111532,
+              "Upper": 24578836.73888468
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 24234913.125,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24234913.125,
+              "StandardError": 10883.984343405682,
+              "Level": 12,
+              "Margin": 343923.61388467817,
+              "Lower": 23890989.51111532,
+              "Upper": 24578836.73888468
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 8,
+              "Nanoseconds": 194046415
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 8,
+              "Nanoseconds": 193838179
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 8,
+              "Nanoseconds": 193753321
+            }
+          ]
+        },
+        "nativeBrackets": [
+          {
+            "mean": 20881303.166666668,
+            "standardError": 19910.187798552055,
+            "confidenceLower": 20252160.058338933,
+            "confidenceUpper": 21510446.274994403
+          },
+          {
+            "mean": 20874894.166666668,
+            "standardError": 7995.101576295187,
+            "confidenceLower": 20622256.516635455,
+            "confidenceUpper": 21127531.81669788
+          }
+        ],
+        "receipt": {
+          "caseId": "EncodeSmallest16",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "colorType": 6,
+          "filter": 0,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "managedEncodedSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "nativeOutputSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "managedOutputBytes": 963202,
+          "nativeOutputBytes": 963202,
+          "managedEncoderLevel": 9,
+          "nativeEncoderLevel": 9,
+          "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+          "nativeCodecLifetime": "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed. Word endian-conversion frame allocation, conversion and disposal timed; no retained working frame.",
+          "nativeExitCode": 0,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "callerOutputLeftOpen": true,
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-smallest16-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 16,
+            "codedDepth": 16,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 9,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "packedTransparencyFilterTimed": false,
+            "filterThreads": 0,
+            "scalarMode": false,
+            "cpuFlags": 8377307,
+            "outputBytes": 963202,
+            "initialCompletedOperations": 3,
+            "codecPreparationTimed": true,
+            "packetWrapperPreparationTimed": true,
+            "codecRetainedBetweenOperations": false,
+            "borrowedResidentSource": true,
+            "wordWorkspacePreparationTimed": true,
+            "wordWorkspaceRetainedBetweenOperations": false,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          }
+        },
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Complete one-shot RGBA16 PNG level9 FFmpeg adapter",
+          "oneShotCodec": true,
+          "scope": "Existing RGBA16 SmallestSize9 control only",
+          "inputDepth": 16,
+          "encoderLevel": 9,
+          "wordWorkspacePreparationTimed": true,
+          "wordWorkspaceRetainedBetweenOperations": false,
+          "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+          "buildScriptSha256": "9ceb21c397464f3865a0e24cb11ed2cbfeb54d8af7aca09b70d05dc52a57d3c6",
+          "compiledSourceSha256": "6af530999ebaa60ea2006d37685fa8cce9f93b5eaedaad470ec5769b5420448c",
+          "workerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+        }
+      },
+      "EncodeSmallest8": {
+        "caseId": "EncodeSmallest8",
+        "runId": "pls241-candidate-EncodeSmallest8-short",
+        "mode": "short",
+        "worstBracketRatio": 1.0653427844540901,
+        "conservativeRatioUpper": 1.0943028148663596,
+        "conservativeRatioLower": 1.0332711618516022,
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 932438
+        },
+        "status": "Confirmed gap",
+        "completePacketExact": true,
+        "quietGuardsPassed": true,
+        "librarySha256": "d314afbb49538ef7684ce88e8d368cabb8ca4dd3602bc9ee7c3f18138b5ad4bc",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "managed": {
+          "statistics": {
+            "N": 3,
+            "Mean": 18349530.969696973,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 18349530.969696973,
+              "StandardError": 4133.6927858454255,
+              "Level": 12,
+              "Margin": 130620.78341359767,
+              "Lower": 18218910.186283376,
+              "Upper": 18480151.75311057
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 18349530.969696973,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 18349530.969696973,
+              "StandardError": 4133.6927858454255,
+              "Level": 12,
+              "Margin": 130620.78341359767,
+              "Lower": 18218910.186283376,
+              "Upper": 18480151.75311057
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 11,
+              "Nanoseconds": 201785040
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 11,
+              "Nanoseconds": 201815406
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 11,
+              "Nanoseconds": 201934076
+            }
+          ]
+        },
+        "nativeBrackets": [
+          {
+            "mean": 17259933.75,
+            "standardError": 11782.96390539466,
+            "confidenceLower": 16887603.23198788,
+            "confidenceUpper": 17632264.26801212
+          },
+          {
+            "mean": 17224062.75,
+            "standardError": 10470.653275743272,
+            "confidenceLower": 16893200.00702767,
+            "confidenceUpper": 17554925.49297233
+          }
+        ],
+        "receipt": {
+          "caseId": "EncodeSmallest8",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "colorType": 6,
+          "filter": 0,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "managedEncodedSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+          "nativeOutputSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+          "managedOutputBytes": 210973,
+          "nativeOutputBytes": 210973,
+          "managedEncoderLevel": 9,
+          "nativeEncoderLevel": 9,
+          "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+          "nativeCodecLifetime": "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed.",
+          "nativeExitCode": 0,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "callerOutputLeftOpen": true,
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-smallest8-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "codedDepth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 9,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "packedTransparencyFilterTimed": false,
+            "filterThreads": 0,
+            "scalarMode": false,
+            "cpuFlags": 8377307,
+            "outputBytes": 210973,
+            "initialCompletedOperations": 3,
+            "codecPreparationTimed": true,
+            "packetWrapperPreparationTimed": true,
+            "codecRetainedBetweenOperations": false,
+            "borrowedResidentSource": true,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          }
+        },
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Complete one-shot RGBA8 PNG level9 FFmpeg adapter",
+          "oneShotCodec": true,
+          "scope": "Existing RGBA8 SmallestSize9 control only",
+          "inputDepth": 8,
+          "encoderLevel": 9,
+          "wordWorkspacePreparationTimed": false,
+          "wordWorkspaceRetainedBetweenOperations": false,
+          "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+          "buildScriptSha256": "9ceb21c397464f3865a0e24cb11ed2cbfeb54d8af7aca09b70d05dc52a57d3c6",
+          "compiledSourceSha256": "a174a82e4f6165545dec8131852efdb8a92c1353334c1a0bf787c0cbd2e3d541",
+          "workerSha256": "ba1d1eb15ae441d600fa86d001deb218d87efc9972bb9e046c5d3f18d9deb407",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+        }
+      }
+    },
+    "pls243": {
+      "EncodeSmallest16": {
+        "caseId": "EncodeSmallest16",
+        "runId": "pls243-candidate-EncodeSmallest16-short",
+        "mode": "short",
+        "worstBracketRatio": 1.163453219008314,
+        "conservativeRatioUpper": 1.2114016317044056,
+        "conservativeRatioLower": 1.117664232658389,
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 3420454
+        },
+        "status": "Confirmed gap",
+        "completePacketExact": true,
+        "quietGuardsPassed": true,
+        "librarySha256": "ac96b1c646386f1bfe65234503734f6c1806508293dac4cc2b0ee05debada5da",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "managed": {
+          "statistics": {
+            "N": 3,
+            "Mean": 24317409.125,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24317409.125,
+              "StandardError": 2328.7463499703013,
+              "Level": 12,
+              "Margin": 73586.18270962418,
+              "Lower": 24243822.942290377,
+              "Upper": 24390995.307709623
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 24317409.125,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 24317409.125,
+              "StandardError": 2328.7463499703013,
+              "Level": 12,
+              "Margin": 73586.18270962418,
+              "Lower": 24243822.942290377,
+              "Upper": 24390995.307709623
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 8,
+              "Nanoseconds": 194576499
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 8,
+              "Nanoseconds": 194519283
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 8,
+              "Nanoseconds": 194522037
+            }
+          ]
+        },
+        "nativeBrackets": [
+          {
+            "mean": 20913016.166666668,
+            "standardError": 24636.563143583517,
+            "confidenceLower": 20134524.066466898,
+            "confidenceUpper": 21691508.266866438
+          },
+          {
+            "mean": 20901063.083333332,
+            "standardError": 3303.5851400830857,
+            "confidenceLower": 20796672.916616354,
+            "confidenceUpper": 21005453.25005031
+          }
+        ],
+        "receipt": {
+          "caseId": "EncodeSmallest16",
+          "width": 513,
+          "height": 259,
+          "depth": 16,
+          "codedDepth": 16,
+          "colorType": 6,
+          "filter": 0,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "managedEncodedSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "nativeOutputSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+          "managedOutputBytes": 963202,
+          "nativeOutputBytes": 963202,
+          "managedEncoderLevel": 9,
+          "nativeEncoderLevel": 9,
+          "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+          "nativeCodecLifetime": "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed. Word endian-conversion frame allocation, conversion and disposal timed; no retained working frame.",
+          "nativeExitCode": 0,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "callerOutputLeftOpen": true,
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-smallest16-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 16,
+            "codedDepth": 16,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 9,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "packedTransparencyFilterTimed": false,
+            "filterThreads": 0,
+            "scalarMode": false,
+            "cpuFlags": 8377307,
+            "outputBytes": 963202,
+            "initialCompletedOperations": 3,
+            "codecPreparationTimed": true,
+            "packetWrapperPreparationTimed": true,
+            "codecRetainedBetweenOperations": false,
+            "borrowedResidentSource": true,
+            "wordWorkspacePreparationTimed": true,
+            "wordWorkspaceRetainedBetweenOperations": false,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          }
+        },
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Complete one-shot RGBA16 PNG level9 FFmpeg adapter",
+          "oneShotCodec": true,
+          "scope": "Existing RGBA16 SmallestSize9 control only",
+          "inputDepth": 16,
+          "encoderLevel": 9,
+          "wordWorkspacePreparationTimed": true,
+          "wordWorkspaceRetainedBetweenOperations": false,
+          "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+          "buildScriptSha256": "9ceb21c397464f3865a0e24cb11ed2cbfeb54d8af7aca09b70d05dc52a57d3c6",
+          "compiledSourceSha256": "6af530999ebaa60ea2006d37685fa8cce9f93b5eaedaad470ec5769b5420448c",
+          "workerSha256": "2d719c515b7e87a379d8b11c5431b26ede5b47f726f3bdfeb4530310fcf59121",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+        }
+      },
+      "EncodeSmallest8": {
+        "caseId": "EncodeSmallest8",
+        "runId": "pls243-candidate-EncodeSmallest8-short",
+        "mode": "short",
+        "worstBracketRatio": 1.0620266622755676,
+        "conservativeRatioUpper": 1.0888718429312725,
+        "conservativeRatioLower": 1.0358770679901796,
+        "managedMemory": {
+          "BytesAllocatedPerOperation": 932438
+        },
+        "status": "Confirmed gap",
+        "completePacketExact": true,
+        "quietGuardsPassed": true,
+        "librarySha256": "ac96b1c646386f1bfe65234503734f6c1806508293dac4cc2b0ee05debada5da",
+        "benchmarkAssemblySha256": "87094c23c5d5e0f30527df986bd8bfc14b0fbb59b452d5cf9a12fccb726b6975",
+        "managed": {
+          "statistics": {
+            "N": 3,
+            "Mean": 18318740.363636363,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 18318740.363636363,
+              "StandardError": 6565.612178691868,
+              "Level": 12,
+              "Margin": 207467.13672268987,
+              "Lower": 18111273.226913672,
+              "Upper": 18526207.500359055
+            }
+          },
+          "unfilteredActualStatistics": {
+            "N": 3,
+            "Mean": 18318740.363636363,
+            "ConfidenceInterval": {
+              "N": 3,
+              "Mean": 18318740.363636363,
+              "StandardError": 6565.612178691868,
+              "Level": 12,
+              "Margin": 207467.13672268987,
+              "Lower": 18111273.226913672,
+              "Upper": 18526207.500359055
+            }
+          },
+          "actual": [
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 1,
+              "Operations": 11,
+              "Nanoseconds": 201634118
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 2,
+              "Operations": 11,
+              "Nanoseconds": 201500165
+            },
+            {
+              "IterationMode": 1,
+              "IterationStage": 3,
+              "LaunchIndex": 0,
+              "IterationIndex": 3,
+              "Operations": 11,
+              "Nanoseconds": 201384149
+            }
+          ]
+        },
+        "nativeBrackets": [
+          {
+            "mean": 17258427.0,
+            "standardError": 7138.555998939842,
+            "confidenceLower": 17032855.38030532,
+            "confidenceUpper": 17483998.61969468
+          },
+          {
+            "mean": 17248851.666666668,
+            "standardError": 7428.111155622119,
+            "confidenceLower": 17014130.37781012,
+            "confidenceUpper": 17483572.955523215
+          }
+        ],
+        "receipt": {
+          "caseId": "EncodeSmallest8",
+          "width": 513,
+          "height": 259,
+          "depth": 8,
+          "codedDepth": 8,
+          "colorType": 6,
+          "filter": 0,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "managedEncodedSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+          "nativeOutputSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+          "managedOutputBytes": 210973,
+          "nativeOutputBytes": 210973,
+          "managedEncoderLevel": 9,
+          "nativeEncoderLevel": 9,
+          "boundary": "Warm identical borrowed resident RGBA8 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 9/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Startup/IPC/file IO/hashes/validation excluded.",
+          "nativeCodecLifetime": "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed.",
+          "nativeExitCode": 0,
+          "allRgbaSamplesExact": true,
+          "alphaExact": true,
+          "hiddenRgbExact": true,
+          "nativeCliNormalScalarPixelsExact": true,
+          "sourceUnchanged": true,
+          "independentOwnedOutput": true,
+          "callerOutputLeftOpen": true,
+          "nativeReady": {
+            "schemaVersion": 1,
+            "state": "ready",
+            "operation": "png-smallest8-encode",
+            "width": 513,
+            "height": 259,
+            "depth": 8,
+            "codedDepth": 8,
+            "cpu": 0,
+            "affinityCount": 1,
+            "codecThreads": 1,
+            "threadType": 0,
+            "activeThreadType": 0,
+            "compressionLevel": 9,
+            "filter": 0,
+            "colorType": 6,
+            "conversionThreads": 0,
+            "rgbExpansionTimed": false,
+            "rgbTransparencyExpansionTimed": false,
+            "rgbPackingTimed": false,
+            "grayExpansionTimed": false,
+            "grayTransparencyExpansionTimed": false,
+            "grayPackingTimed": false,
+            "grayPlaneExtractionTimed": false,
+            "grayFilterOutputAllocationTimed": false,
+            "grayAlphaExpansionTimed": false,
+            "grayAlphaPackingTimed": false,
+            "grayAlphaStoragePackingTimed": false,
+            "paletteExpansionTimed": false,
+            "packedTransparencyFilterTimed": false,
+            "filterThreads": 0,
+            "scalarMode": false,
+            "cpuFlags": 8377307,
+            "outputBytes": 210973,
+            "initialCompletedOperations": 3,
+            "codecPreparationTimed": true,
+            "packetWrapperPreparationTimed": true,
+            "codecRetainedBetweenOperations": false,
+            "borrowedResidentSource": true,
+            "independentLiveOutputs": true,
+            "ffmpegVersion": "n8.1",
+            "avcodecVersion": 4070500,
+            "avutilVersion": 3938916
+          }
+        },
+        "nativeBuild": {
+          "schemaVersion": 1,
+          "project": "Lokad.Image",
+          "purpose": "Complete one-shot RGBA8 PNG level9 FFmpeg adapter",
+          "oneShotCodec": true,
+          "scope": "Existing RGBA8 SmallestSize9 control only",
+          "inputDepth": 8,
+          "encoderLevel": 9,
+          "wordWorkspacePreparationTimed": false,
+          "wordWorkspaceRetainedBetweenOperations": false,
+          "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+          "buildScriptSha256": "9ceb21c397464f3865a0e24cb11ed2cbfeb54d8af7aca09b70d05dc52a57d3c6",
+          "compiledSourceSha256": "a174a82e4f6165545dec8131852efdb8a92c1353334c1a0bf787c0cbd2e3d541",
+          "workerSha256": "ba1d1eb15ae441d600fa86d001deb218d87efc9972bb9e046c5d3f18d9deb407",
+          "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+          "flags": [
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+          ],
+          "staticArchives": {
+            "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+            "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+            "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+            "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+            "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+            "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+            "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+            "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+            "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+            "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+            "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+            "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+            "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+          },
+          "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+        }
+      }
+    }
+  },
+  "scope": "Only existing513x259 RGBA16/8 PNG9/filterNone complete one-shot controls. Original immutable baseline short/confirmation evidence reused; four new candidate short runs. No new controls/settings grid or favorable resampling.",
+  "hypotheses": {
+    "pls241": "Separate exact chain search from pending/output parser state. Borrow history/links/cancellation once per search; explicit no-inline execution boundary. No new owned storage.",
+    "pls243": "Captured candidate JIT keeps the out-result pointer live in r13 and spills the search counter. Replace only the result representation with a named two-int value pair; exact search/checkpoints unchanged."
+  },
+  "preparation": {
+    "pls241": {
+      "windows": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "windows",
+        "baselineSha256": "04f40f6387398fea63baef9378a6092c9bb7b6dab087add6d62c3247d5f5e291",
+        "candidateSha256": "463a64bdc4c4051fc20783444fb1c8cfe8f04d074018e3e7221cbe0c3f77e082",
+        "sources": {
+          "src/Lokad.Image/Internal/PngDeflater.cs": "cd807a3ca3192ba90d75db0f4b5a747eadb4d32117f0edb451ba87b3d9afbf3d"
+        },
+        "focused": {
+          "internal-normal": 563,
+          "internal-scalar": 563,
+          "public-normal": 211,
+          "public-scalar": 211
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "156aa004f70f99051529a1ac6e350b81378cf44313e9ec4296ad75a4f7f4c4dd",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "linux",
+        "baselineSha256": "baaf6287e1d99d8b0de772483d5e9cfb9c13c38e23465ba94e04cd2be56442b6",
+        "candidateSha256": "d314afbb49538ef7684ce88e8d368cabb8ca4dd3602bc9ee7c3f18138b5ad4bc",
+        "sources": {
+          "src/Lokad.Image/Internal/PngDeflater.cs": "cd807a3ca3192ba90d75db0f4b5a747eadb4d32117f0edb451ba87b3d9afbf3d"
+        },
+        "focused": {
+          "internal-normal": 563,
+          "internal-scalar": 563,
+          "public-normal": 211,
+          "public-scalar": 211
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "19c0740025a16a6d6e73e071f771ab2334784584380533b6217bbbe253953ea5",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      }
+    },
+    "pls243": {
+      "windows": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "windows",
+        "baselineSha256": "04f40f6387398fea63baef9378a6092c9bb7b6dab087add6d62c3247d5f5e291",
+        "previousStageSha256": "463a64bdc4c4051fc20783444fb1c8cfe8f04d074018e3e7221cbe0c3f77e082",
+        "candidateSha256": "d9657fd14d86be790168c7e2f0ae919e13fe417d2926df4297da153e58994815",
+        "sources": {
+          "src/Lokad.Image/Internal/PngDeflater.cs": "876a86e842998d56184c9918d36c3df8e40630c40082e9db460dbd1f9239ca01"
+        },
+        "focused": {
+          "internal-normal": 563,
+          "internal-scalar": 563,
+          "public-normal": 211,
+          "public-scalar": 211
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "1918ecbe86ad07e107526b0607fba97bc5149af138f7fb1324713807b4afaa90",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "productionAccepted": false,
+        "system": "linux",
+        "baselineSha256": "baaf6287e1d99d8b0de772483d5e9cfb9c13c38e23465ba94e04cd2be56442b6",
+        "previousStageSha256": "d314afbb49538ef7684ce88e8d368cabb8ca4dd3602bc9ee7c3f18138b5ad4bc",
+        "candidateSha256": "ac96b1c646386f1bfe65234503734f6c1806508293dac4cc2b0ee05debada5da",
+        "sources": {
+          "src/Lokad.Image/Internal/PngDeflater.cs": "876a86e842998d56184c9918d36c3df8e40630c40082e9db460dbd1f9239ca01"
+        },
+        "focused": {
+          "internal-normal": 563,
+          "internal-scalar": 563,
+          "public-normal": 211,
+          "public-scalar": 211
+        },
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "internalTestAssemblySha256": "084f3586d5e4e8b83b7dcaca9d840226516eea3263b6945a993ee8b9bba1ca80",
+        "harnessNativeSelectorPublicPackageBuilds": 0
+      }
+    }
+  },
+  "profile": {
+    "summary": {
+      "project": "Lokad.Image",
+      "profilingOnly": true,
+      "statisticalTiming": false,
+      "totalSamples": 1958,
+      "managedSamples": 1927,
+      "methods": [
+        [
+          "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          775
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          653
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+          161
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+          76
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+          74
+        ],
+        [
+          "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|1_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+          73
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|1_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass1_0&)[Optimized]",
+          39
+        ],
+        [
+          "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+          30
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+          13
+        ],
+        [
+          "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(int32[],int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          12
+        ],
+        [
+          "int32[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(uint8[])[Optimized]",
+          6
+        ],
+        [
+          "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ComputeChunk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+          4
+        ],
+        [
+          "int32 [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Runs(uint8[],valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.DeflateHuffman/Run>)[Optimized]",
+          3
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+          2
+        ],
+        [
+          "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+          2
+        ],
+        [
+          "bool [Lokad.Image] Lokad.Image.Internal.PngRowPrediction::Useful(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+          1
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+          1
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.PngCodec::Encode(class Lokad.Image.ImageBuffer,class [System.Runtime]System.IO.Stream,class Lokad.Image.PngEncodeOptions,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          1
+        ],
+        [
+          "uint32 [Lokad.Image] Lokad.Image.Internal.Crc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+          1
+        ]
+      ],
+      "targetCode": [
+        {
+          "address": "0x7474ebe94d40",
+          "size": 1238,
+          "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]"
+        },
+        {
+          "address": "0x7474ebe95260",
+          "size": 751,
+          "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]"
+        },
+        {
+          "address": "0x7474ebe95580",
+          "size": 199,
+          "name": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::MatchLength(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32)[Optimized]"
+        }
+      ],
+      "offsets": [
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x13e",
+          "samples": 156
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x182",
+          "samples": 110
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x26e",
+          "samples": 89
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x25e",
+          "samples": 88
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x22f",
+          "samples": 69
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x2fd",
+          "samples": 46
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x169",
+          "samples": 45
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x227",
+          "samples": 44
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x291",
+          "samples": 40
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x272",
+          "samples": 40
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x292",
+          "samples": 37
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x2dc",
+          "samples": 31
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x31e",
+          "samples": 28
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x246",
+          "samples": 26
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x251",
+          "samples": 26
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x5e",
+          "samples": 25
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x6f",
+          "samples": 23
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x2e6",
+          "samples": 22
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0xd7",
+          "samples": 19
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x96",
+          "samples": 19
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x23f",
+          "samples": 18
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x404",
+          "samples": 17
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x0",
+          "samples": 17
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x16d",
+          "samples": 17
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x382",
+          "samples": 15
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0xee",
+          "samples": 14
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x14b",
+          "samples": 14
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x13",
+          "samples": 14
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x114",
+          "samples": 14
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x77",
+          "samples": 13
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x13b",
+          "samples": 12
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x2c",
+          "samples": 12
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x30a",
+          "samples": 12
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x1d8",
+          "samples": 11
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x2b6",
+          "samples": 10
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x10b",
+          "samples": 10
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x205",
+          "samples": 10
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x48",
+          "samples": 9
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x1b1",
+          "samples": 8
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x8c",
+          "samples": 8
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x15b",
+          "samples": 8
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x1b5",
+          "samples": 8
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0xb6",
+          "samples": 7
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x1",
+          "samples": 7
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x191",
+          "samples": 7
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x9a",
+          "samples": 7
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x136",
+          "samples": 6
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x265",
+          "samples": 6
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x12a",
+          "samples": 6
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0xe6",
+          "samples": 5
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x145",
+          "samples": 5
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x2f1",
+          "samples": 4
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x2e9",
+          "samples": 4
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x199",
+          "samples": 4
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x1d3",
+          "samples": 4
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x162",
+          "samples": 4
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0xd8",
+          "samples": 4
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x239",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x141",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x30d",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x20c",
+          "samples": 3
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x278",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x1fc",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x377",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x368",
+          "samples": 3
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x14f",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x431",
+          "samples": 3
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x317",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x152",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x1b2",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x38",
+          "samples": 2
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x37b",
+          "samples": 2
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x3fe",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x18e",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0xda",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x1ba",
+          "samples": 2
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x21b",
+          "samples": 2
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x221",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x29a",
+          "samples": 2
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x435",
+          "samples": 2
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x29b",
+          "samples": 2
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x197",
+          "samples": 2
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x485",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0xde",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x1cd",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x12d",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x237",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x3dd",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0xfc",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x2ba",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x3ce",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x243",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x2c3",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x3e8",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x3da",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x218",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x37e",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x207",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x96",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x239",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0xe2",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x155",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x428",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x373",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x3c2",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x36c",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x174",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x188",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x229",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x1d1",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x2d3",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x1df",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x3ef",
+          "samples": 1
+        },
+        {
+          "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessLazy(bool)[Optimized]",
+          "offset": "0x14c",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x222",
+          "samples": 1
+        },
+        {
+          "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FindLazyMatch(int32,int32,int32,int32,int32&)[Optimized]",
+          "offset": "0x123",
+          "samples": 1
+        }
+      ]
+    },
+    "librarySha256": "d314afbb49538ef7684ce88e8d368cabb8ca4dd3602bc9ee7c3f18138b5ad4bc",
+    "scope": "One two-second capture of existing complete RGBA16 PNG SmallestSize9 on immutable unaccepted PLS241 candidate with equivalent one-shot reference boundary. CPU0; sampler CPU1. Original frozen settings/inputs, complete packet validated by original receipt, normalization/output ownership unchanged. Profiled elapsed discarded; samples and skid are not component times or predicted savings.",
+    "traceSha256": "d3683c80634342240c927c8c62b5a9f0f74af310305c5125bf1b30db65b4eb7e",
+    "traceBytes": 682064,
+    "quietGuardsPassed": true,
+    "allBuilds": 0,
+    "profiledElapsedDiscarded": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionRestoredExactly": true,
+      "productionSha256": "04f40f6387398fea63baef9378a6092c9bb7b6dab087add6d62c3247d5f5e291",
+      "productionPdbXmlSha256": {
+        "pdb": "4667d10bbc69fb252feb1655418a7797271351a74b40795a1887bc2c91413463",
+        "xml": "817c97bf24c570fad54646de0c8657020e0d9c6a8efb13a37e3a15f61911de2a"
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "4604abac4a2cf1bcf8c6f94c513f0a39e4cb0534fb8a0a27dfdb63bcd5157eab"
+      },
+      "internalAssemblyRestoredExactly": true,
+      "internalAssemblySha256": "1a38dd807dc7946b5bca12bc73ee2820855b9393a8b6d4972478069692731f1f",
+      "allRestorationBuilds": 0,
+      "fullLiveEachOsReused": 5549,
+      "additionalReaderCasesSeparatelyQualified": 5,
+      "additionalStatisticsCasesSeparatelyQualified": 2,
+      "actualPackageSha256": "0b4ac4123cb90dc641b2dab6712264b0869a4233ea8fce5e5a16827cccc72979",
+      "packageQualificationReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionRestoredExactly": true,
+      "productionSha256": "baaf6287e1d99d8b0de772483d5e9cfb9c13c38e23465ba94e04cd2be56442b6",
+      "productionPdbXmlSha256": {
+        "pdb": "3244f9c3d675bf952fe587d9d9ab641f9137a6f8c54cad383e445490bd6ad308",
+        "xml": "bc8ea89a527b5664f4b26da1976e176a2d84578ee4c07c2b6ea5d2fb4c89f6c4"
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "4604abac4a2cf1bcf8c6f94c513f0a39e4cb0534fb8a0a27dfdb63bcd5157eab"
+      },
+      "internalAssemblyRestoredExactly": true,
+      "internalAssemblySha256": "b0995672c98ee45a6f2e019446015e97b60672e27bfd410d828a4a7ff58b1f46",
+      "allRestorationBuilds": 0,
+      "fullLiveEachOsReused": 5549,
+      "additionalReaderCasesSeparatelyQualified": 5,
+      "additionalStatisticsCasesSeparatelyQualified": 2,
+      "actualPackageSha256": "0b4ac4123cb90dc641b2dab6712264b0869a4233ea8fce5e5a16827cccc72979",
+      "packageQualificationReused": true
+    }
+  },
+  "storage": {
+    "managedDeflateAdmittedWorkspaceBytes": 393216,
+    "newOwnedArrays": 0,
+    "newReservations": 0,
+    "operationScratchRetainedBytes": 0,
+    "allocationUnchangedAtEqualBatching": true,
+    "physicalOrCompleteAdmittedPeaksNewlyMeasured": false,
+    "nativeAllocationsMeasured": false
+  },
+  "workflow": {
+    "coreVersionsEachOs": 2,
+    "internalVersionsEachOs": 2,
+    "harnessNativeProbeSelectorPublicPackageBuilds": 0,
+    "restorationBuilds": 0,
+    "newCompleteShortRuns": 4,
+    "baselineRunsReused": 2,
+    "profileCaptures": 1,
+    "confirmations": 0,
+    "metadataCorrection": "The first stage inherited a tooling-only productionChanged=false receipt flag. Corrected totrue after completion, preserving original metadata/source. Actual source/core identities and operation boundaries were already correct; no run repeated."
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-search-execution-inconclusive.tar.xz",
+    "bytes": 2880128,
+    "members": 238,
+    "sha256": "ad3e322e76665de865fdbd28c2e8df9d89a69046912187abab15aa6bb135436f",
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "qualificationDependency": "png-sequential-dictionary-hash-qualified.tar.xz",
+    "qualificationDependencySha256": "1af6c5b1db1cc0f911293c62438f870a4157bee97b051b70754a4f55563fe661",
+    "unchangedRuntimeDependency": "png-smallest-one-shot-current.tar.xz",
+    "unchangedRuntimeDependencySha256": "d27fbdcfa1c79cab6d9a87549e41595d8829298936e1c59c390543ee3b1745a7",
+    "localMembersVerified": true
+  },
+  "decision": "Neither completed stage has a useful complete-operation lead. Restore all production/core/PDB/XML/internal assemblies/package exactly. Reuse unchanged qualification and current costs. Next count current9 chain prefix/tail rejections and eligible stronger filters before another prototype; do not replay unchanged word/prefix or helper-ABI candidates. No family closed; full282objective remains OPEN.",
+  "publicationPostponed": true
+}

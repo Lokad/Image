@@ -47,6 +47,9 @@ retained operation scratch zero, no newly measured complete/physical peak.
 confirms gaps with uppers **1.137 word / 1.065 byte** and allocations
 **3,420,454 / 932,516 B/op**. These refresh two historical costs without a
 production change or incremental gain claim; batch amortization differs.
+[Search execution separation](../benchmarks/PNG-SEARCH-EXECUTION-INCONCLUSIVE.md)
+restores production after two stages show no useful complete-operation lead.
+Current costs and qualification remain unchanged; no extra confirmation follows.
 [Earlier lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md),
 [Compact dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md),
 [contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) and

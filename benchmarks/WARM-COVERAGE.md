@@ -37,9 +37,11 @@ The [JPEG frontier](JPEG-REFINEMENT-FRONTIER-INCONCLUSIVE.md) and magnitude roun
 retain five actual-reader and two exhaustive actual-statistics cases respectively.
 Restored statistics/frame/rate/writer checks pass 70 per OS/mode. Reuse applicable
 full/package proof and displayed costs. The
-[current PNG9 attribution](PNG-CURRENT-SMALLEST-WORD-ATTRIBUTION.md) selects a
-smaller dictionary-search execution region for investigation;
-older pre-hash lazy-parser offsets are historical, not current machine-code proof.
+[current PNG9 attribution](PNG-CURRENT-SMALLEST-WORD-ATTRIBUTION.md) led to two
+[search execution stages](PNG-SEARCH-EXECUTION-INCONCLUSIVE.md). Neither has a
+useful complete-operation lead; original sources, cores, tests and package are
+restored exactly without rebuilds. Next count prefix/tail rejection work before
+another prototype. Older pre-hash offsets remain historical machine-code evidence.
 
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other
