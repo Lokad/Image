@@ -25,6 +25,9 @@ cache-history preparation at the prior peaks and unused alpha-token capacity.
 The earlier [token-tail reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes its scoped
 allocation/admitted-peak savings. [Current index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md)
 adds an allocation saving with unchanged peak, without a CPU gain claim.
+The [current tree-preparation audit](WEBP-ALPHA-CURRENT-ATTRIBUTION.md#current-tree-preparation-lifetime-audit)
+confirms repeated header construction on complete alpha/photo encodes. Its scoped
+instrumented activity remains a lower-priority lead; no production or cost change.
 
 The [current PNG byteFastest capture](PNG-FAST8-CURRENT-ATTRIBUTION.md) identifies
 parser and token-output work. The [two prepared-token stages](PNG-PREPARED-TOKENS-INCONCLUSIVE.md)

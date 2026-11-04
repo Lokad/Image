@@ -64,3 +64,41 @@ Raw `webp-neighbor-prefix-reuse-audit.tar.xz`:317,616B/23members, SHA256
 `d271feb4f501ed4ef90beda559b8865132c4172613f25807150331c7c3a2f886`,
 mirrored/member-verified. The qualified baseline source/package dependency is pinned.
 Next reconcile already required PNG9 costs before selecting further tuning.
+
+
+## Current tree-preparation lifetime audit
+
+The current code already reuses match indexes, token tails, trace capacity,
+sparse populations and ALPH storage. A separate remaining repetition is real:
+tree counting and output each rebuild complex code-length runs and their
+19-symbol Huffman header. One warmup and one observed complete encode per
+existing control check this on the current source, without changing production.
+
+| Frozen complete control | Distinct trees / calls | Repeated calls | Allocated inside repeated calls, diagnostic B | Header bits, once per tree |
+| --- | ---: | ---: | ---: | ---: |
+| VP8 + lossless alpha | 50 / 100 | 50 | 40,816 | 11,096 |
+| Lossless photograph | 60 / 120 | 60 | 78,296 | 8,558 |
+
+All repeated tree bit counts agree; complete98,590/160,032B packets, frozen inputs,
+source ownership, borrowed-root cleanup and quiet guards pass. The source
+projection records roughly101–103µs of repeated instrumented tree calls. These
+ticks are **not production phase times or predicted savings**. Allocation inside
+those calls includes admission and the caller test-root implementation; it is
+neither an avoided-allocation prediction nor a complete allocation/peak measure.
+Per-tree byte ceilings total1,411/1,097B before owner/capacity overhead; retaining
+headers would require explicit admission and preserve independent candidates.
+
+Keep this as a lower-priority preparation lead. The observed repetition does not
+justify displacing the larger complete-operation gaps; no header prototype or
+timing confirmation follows. This does not close the family or establish a CPU
+savings bound. Current comparison rows and the actual qualified package stay
+unchanged, reusing applicable Windows/Linux/scalar/package proof. One diagnostic
+build, zero production/harness/native/package builds; no broader suite or timing
+repeat. Full282-path objective stays open; publication remains postponed.
+
+[Evidence](webp-tree-preparation-audit-evidence.json) pins current sources, driver,
+all calls, producer and guards. Mirrored/member-verified raw
+`webp-tree-preparation-audit.tar.xz`:857,836B/262members, SHA256
+`c2bcba51a795bb7979d85ae572592c86f17631e6d2a0566951fc6b6ef1917ad0`.
+All current owned sources and the diagnostic assembly are retained for replay;
+the qualified source/package/framework dependency is pinned separately.

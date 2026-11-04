@@ -1,0 +1,92 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WTH286",
+  "productionChanged": false,
+  "diagnosticBuilds": 1,
+  "allOtherBuilds": 0,
+  "statisticalTiming": false,
+  "currentCostsChanged": false,
+  "identities": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "diagnosticBuilds": 1,
+    "otherBuilds": 0,
+    "qualifiedUnchangedLibrarySha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+    "diagnosticAssemblySha256": "3c46250553b57f6b2d9a2aa78536d4f36ce6783a6cb97e937a9b7a0fef8de474",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/Wth286Audit.dll"
+    ],
+    "quietGuardsPassed": true
+  },
+  "currentSources": {
+    "src/Lokad.Image/Internal/Vp8lHuffmanGroup.cs": "85630c64b29e5f4044a0899d8217525d16f9b5c73f3d26315cde62a9dd2eb4c6",
+    "src/Lokad.Image/Internal/Vp8lReferenceHuffman.cs": "a05f778292342442b49ded070d3ffd1aeaef70937d1cb13dd817dae5e27fccf2",
+    "src/Lokad.Image/Internal/WebpBitWriter.cs": "002a220a19f0988e4d832fcd2cf6421aac22aa6d567bf15690889fd90b9f9750",
+    "tools/Shared/TestMemoryBudget.cs": "cc79e05d0cbc6b8fef82ad398036fb1047c526ad1bd68537b47c995da7deacd2"
+  },
+  "controls": [
+    {
+      "name": "alpha",
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "uniqueTrees": 50,
+      "treeCalls": 100,
+      "repeatCalls": 50,
+      "uniqueComplexTrees": 17,
+      "treeCallAllocatedBytes": 81632,
+      "repeatCallAllocatedBytes": 40816,
+      "instrumentedRepeatUs": 103.028,
+      "distinctHeaderBits": 11096,
+      "perTreeByteCeilings": 1411,
+      "allRepeatBitCountsExact": true,
+      "packetSourceOwnershipGatesPassed": true,
+      "retainedRootBytes": 0
+    },
+    {
+      "name": "photograph",
+      "packetBytes": 160032,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "uniqueTrees": 60,
+      "treeCalls": 120,
+      "repeatCalls": 60,
+      "uniqueComplexTrees": 40,
+      "treeCallAllocatedBytes": 148376,
+      "repeatCallAllocatedBytes": 78296,
+      "instrumentedRepeatUs": 101.275,
+      "distinctHeaderBits": 8558,
+      "perTreeByteCeilings": 1097,
+      "allRepeatBitCountsExact": true,
+      "packetSourceOwnershipGatesPassed": true,
+      "retainedRootBytes": 0
+    }
+  ],
+  "operation": "Existing frozen513x259alphaQ75/effort4 and losslessphotograph controls. One warmup and one observed complete public encode each; exact98590/160032B packets, input/settings/source/independentoutput/borrowedroot cleanup and both quiet guards.",
+  "finding": "Each prepared code tree is written twice on both controls: counting and real output. Complex trees rebuild run storage and the19-symbol Huffman code. Main token bodies already have prepared counts; major index/token-tail/trace/population/ALPH-frame reuse already exists.",
+  "limits": "Private source-projection counters alter execution. Per-call GC allocation observations include library admission and the caller TestMemoryBudget implementation; they are not avoided-production-allocation predictions, complete allocated totals, admitted/physical peaks or retention gains. Instrumented ticks are not production phase times, CPU shares or savings bounds. Per-tree packet byte ceilings exclude owner headers/capacity/layout requirements.",
+  "decision": "Keep compact owned tree-header preparation as a lower-priority architectural lead. Observed repeat activity does not justify displacing the much larger complete codec/resizing gaps. No prototype, timing repeat or permanent family ban; no current summary/package change.",
+  "qualificationReuse": "Unchanged WCP2815628full/live perOS, affected scalar and SAMEactualpackageb9e43cf9/all3examples; retained writer-oracle facts separately pass bothOS/modes. No repeated full/package qualification for read-only instrumentation.",
+  "preparationNote": "Quoted framework reference preflight corrected before the sole diagnostic compile. Manifest bytes all already valid; no source reconciliation needed. Missing local golden-manifest copy fetched for retention only; no operation repeated.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-tree-preparation-audit.tar.xz",
+    "bytes": 857836,
+    "members": 262,
+    "sha256": "c2bcba51a795bb7979d85ae572592c86f17631e6d2a0566951fc6b6ef1917ad0",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "diagnosticBuilds": 1,
+    "allOtherBuilds": 0,
+    "qualifiedDependency": "bicubic-word-column-preparation-qualified.tar.xz",
+    "qualifiedDependencySha256": "eec4f826efca86a9ec4ab8ab06dbb0183f4985a05987250c07be42e2bef21384",
+    "sourceReconstruction": "All current owned production sources, instrumented replacements/driver, compiler response, actual diagnostic assembly, original recipe/photograph and golden packets retained. Qualified framework/package proof is the pinned dependency; no upstream implementation."
+  },
+  "fullMaterialPathObjective": 282,
+  "publication": "postponed"
+}
