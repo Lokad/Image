@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare tight-memory bicubic column geometry in owned output storage, preserving
+  exact pixels, the 4 KiB workspace and independent output lifetimes.
+
 - Batch JPEG grayscale conversion with exact binary64 SIMD arithmetic, preserving
   encoder packets, scalar execution and memory ownership.
 

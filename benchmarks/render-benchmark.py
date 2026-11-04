@@ -1712,6 +1712,20 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
+    column = json.loads((ROOT / 'benchmarks/bicubic-column-preparation-evidence.json').read_text(encoding='utf-8'))
+    current = column['cases']['TightDown8']
+    assert column['productionAccepted'] and current['actualIterations'] == 12
+    assert current['managedExact'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
+    assert current['librarySha256'] == column['producers']['linuxSha256']
+    assert column['qualification']['actualPackage']['sha256'] == column['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in column['independentComparison']['views'])
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing'
+                 and row.startswith('| Bicubic RGBA8 reduction, input+output+4 KiB ')
+                 and '→ 256×129 |' in row]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | '
+                         f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                         f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1847,7 +1861,10 @@ Current priorities and scope:
   Two schedulers serve four exact kernels within 4 KiB. Eight existing tight
   controls have current costs: six pass and stop; RGBA8 8×17/4×9 retain gaps
   (uppers 1.127/1.269). Managed preparation stays timed; native graphs/scratch are
-  retained. Other affected bicubic/bilinear H costs still need reconciliation.
+  retained. [Column geometry preparation](../benchmarks/BICUBIC-COLUMN-PREPARATION.md)
+  saves 8.84 µs / 1.41% raw on byte 256×129 with the same 4 KiB allowance and
+  113 B/op; its remaining upper is 1.363. Native clock movement is +9.05%, disclosed
+  separately from the raw gain. Other affected bicubic/bilinear H costs still need reconciliation.
 - **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
   grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
@@ -1864,7 +1881,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,615 full/live checks per OS**, affected normal/scalar
+The current build passes **5,623 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

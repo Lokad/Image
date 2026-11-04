@@ -50,7 +50,10 @@ Current priorities and scope:
   Two schedulers serve four exact kernels within 4 KiB. Eight existing tight
   controls have current costs: six pass and stop; RGBA8 8×17/4×9 retain gaps
   (uppers 1.127/1.269). Managed preparation stays timed; native graphs/scratch are
-  retained. Other affected bicubic/bilinear H costs still need reconciliation.
+  retained. [Column geometry preparation](../benchmarks/BICUBIC-COLUMN-PREPARATION.md)
+  saves 8.84 µs / 1.41% raw on byte 256×129 with the same 4 KiB allowance and
+  113 B/op; its remaining upper is 1.363. Native clock movement is +9.05%, disclosed
+  separately from the raw gain. Other affected bicubic/bilinear H costs still need reconciliation.
 - **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
   grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
@@ -67,7 +70,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,615 full/live checks per OS**, affected normal/scalar
+The current build passes **5,623 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
@@ -181,7 +184,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 enlargement, input+output+4 KiB † H → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † H → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † H → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † H → 256×129 | 622.83 | 422.49 | 1.474 / 1.540 | 132,309 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † H → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |

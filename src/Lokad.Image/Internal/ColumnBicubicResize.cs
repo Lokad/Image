@@ -37,6 +37,8 @@ internal static class ColumnBicubicResize
             // Larger supports retain six-column strips with ten row slots.
             var rowSlots = scaleY < 2.25 ? 9 : 10;
             var stripColumns = rowSlots == 9 ? 8 : 6;
+            var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, 10,
+                stripColumns, context.Cancellation);
             for (var tile = 0; tile < result.Width; tile += stripColumns)
             {
                 var length = Math.Min(stripColumns, result.Width - tile);
@@ -65,15 +67,11 @@ internal static class ColumnBicubicResize
                 for (var y = 0; y < result.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (y + .5) * source.Height / result.Height - .5;
-                    var first = (int)Math.Ceiling(center - 2 * scaleY);
-                    var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
+                    geometry.Read(y, tile < geometry.PrefixColumns, vertical,
+                        out var first, out var count, out var normalizerY);
                     if (count > rowSlots) return false;
-                    double normalizerY = 0;
                     for (var t = 0; t < count; t++)
                     {
-                        var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
-                        vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
                         var slot = sy % rowSlots; rows[t] = slot * stripColumns;
                         if (rowIds[slot] == sy) continue;
