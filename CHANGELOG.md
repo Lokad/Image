@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Quantize complete VP8 coefficient blocks with AVX512F, preserving exact packets,
+  zero per-block allocation and the AVX2/scalar fallbacks.
+
 - Specialize WebP matching for uncancelable tokens while retaining every live
   cancellation checkpoint, exact packets and unchanged memory ownership.
 

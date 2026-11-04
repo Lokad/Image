@@ -1,6 +1,6 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-04. **282 material required paths** remain
+Current architectural phase, 2026-11-05. **282 material required paths** remain
 in scope; the 125 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Current matcher preparation](WEBP-MATCHER-CANCELLATION-PREPARATION.md) refreshes all eight affected costs. Four original/diagram/depth/async lossless boundaries pass and stop. Opaque remains a gap (upper 1.063); photograph is uncertain (upper 1.104), with no incremental photo CPU claim. Preserve exact packets and the earlier [index ownership](WEBP-ALPHA-MATCH-INDEX-REUSE.md) evidence. |
-| Resident VP8 encoding | [Matcher specialization](WEBP-MATCHER-CANCELLATION-PREPARATION.md) saves 1,564.36 µs/2.29% on complete RGBA8 + ALPH encoding in a counterbalanced comparison. Standalone normalized confidence overlaps; raw/native clock movement is retained. Alpha8/16 gaps remain (uppers 1.206/1.292), unchanged 7,165,880/7,165,472 B/op. Six opaque controls reuse valid [packed reconstruction](VP8-PACKED-RECONSTRUCTION.md) costs and its scoped photo gain. [ALPH storage reuse](WEBP-ALPHA-COEFFICIENT-STORAGE.md) retains earlier capacity evidence; no new peak measurement. |
+| Resident VP8 encoding | [Full-block quantization](VP8-FULL-BLOCK-QUANTIZATION.md) confirms733.52µs/5.43% scoped opaque-photo gain in twelve counterbalanced pairs. All eight VP8 costs are refreshed once and remain gaps: photo/alpha8/alpha16/opaque8/diagram/distortion/trellis/opaque16 uppers1.295/1.185/1.200/1.186/1.208/1.297/1.349/1.242. Per-operation allocations are unchanged;64B immutable format geometry is separate. Earlier [matcher](WEBP-MATCHER-CANCELLATION-PREPARATION.md), [packed reconstruction](VP8-PACKED-RECONSTRUCTION.md) and [ALPH storage](WEBP-ALPHA-COEFFICIENT-STORAGE.md) retain scoped evidence, not replacement current VP8 costs. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-MATCHER-CANCELLATION-PREPARATION.md) includes full depth normalization and fresh async nonseekable output; the async producer proof is refreshed without builds. Passing cases stop. Other affected H costs remain historical; source/settings/packet/ownership gates stay unchanged. |
 | PNG encoding | [Block preparation](PNG-BLOCK-PREPARATION.md) shares frequency/code storage and uses linear canonical assignment. Same-batch allocation saves148,320B (5.7%) on wordSmallest9 and19,936B (2.4%) on byteFastest1; no CPU gain/equivalence/regression claim. Eleven complete one-shot costs current: ten gaps; byteOptimal6 uncertain (upper1.045). [Delivery/cancellation boundaries](PNG-BOUNDARY-ONE-SHOT.md) include native codec preparation: word token/forward uppers1.116/1.140, asyncbyte1.029. Exact packets and complete delivery/ownership remain; no speedup claim follows the baseline change. Existing384KiB admission,2620B extra operation-array capacity, zero scratch afterdisposal; physical/complete admitted peaks unmeasured. Earlier tree/token preparation is linked history; other affectedH boundaries remain historical. |
 | JPEG and image reading | [Exact grayscale row batches](JPEG-GRAYSCALE-ROW-BATCH.md) save32.71µs/1.93%raw/4.04%normalized on the existing RGBA8→gray control, unchanged155,436B/op and exact packets. The gap remains (upper1.103); native clock change+2.19% is disclosed. Other image-grayscale timing affected by preparation is historical until refreshed. Caller-GRAY/RGB and other color/sampling/reading paths reuse valid proof; keep their named resident/stream/async/inspection/validation scope. |
@@ -20,92 +20,27 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
-The [current transparent capture](WEBP-ALPHA-CURRENT-ATTRIBUTION.md) motivates
-[scalar-window preparation](WEBP-SCALAR-WINDOW-PREPARATION.md). Its same-process
-photograph comparison measures a scoped 1.11% regression despite fewer bounds
-checks. The candidate restores exactly; current costs remain unchanged. Keep
-adverse evidence and choose a materially different design before further trials.
+The current build passes **5,634 full/live checks per OS**, affected normal/scalar
+and AVX512-disabled checks, and the same actual Release package/all three examples
+on Windows/Linux. That qualifies correctness and packaging, not all282 CPU gates.
+Fourteen displayed WebP and eight streaming-resize costs are current. Other
+affected boundaries marked H remain historical until their named reconciliation.
 
-The [current WebP capacity audit](WEBP-CACHE-HISTORY-CAPACITY.md) identifies
-cache-history preparation at the prior peaks and unused alpha-token capacity.
-The earlier [token-tail reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes its scoped
-allocation/admitted-peak savings. [Current index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md)
-adds an allocation saving with unchanged peak, without a CPU gain claim.
-The [current tree-preparation audit](WEBP-ALPHA-CURRENT-ATTRIBUTION.md#current-tree-preparation-lifetime-audit)
-confirms repeated header construction on complete alpha/photo encodes. Its scoped
-instrumented activity remains a lower-priority lead; no production or cost change.
+The [transparent capture before full-block quantization](WEBP-ALPHA-CURRENT-ATTRIBUTION.md)
+retains source-specific matching, coefficient, predictor and cache-history leads.
+The [scalar-window stage](WEBP-SCALAR-WINDOW-PREPARATION.md) is a measured1.11%
+photographic regression, restored exactly. Fewer checks or allocations alone do
+not establish elapsed gains; a revised design needs distinct supporting evidence.
 
-The [current one-shot RGB16 control](PNG-RGB16-ONE-SHOT.md) replaces its historical
-cost:18.41/17.72ms, upper1.048,2,431,484B/op and exact739,472B packet. The
-[current gray-alpha16 control](PNG-GRAY-ALPHA16-ONE-SHOT.md) is10.94/10.48ms,
-upper1.052,1,360,892B/op and exact506,887B packet. Fresh native codec/packet and
-working-frame preparation/disposal are included; RGB retains its identical SWS
-conversion preparation, gray-alpha retains timed direct packing without SWS.
-Both gaps remain. These current-boundary reconciliations are not speedup claims.
+The [RGB16](PNG-RGB16-ONE-SHOT.md) and
+[gray-alpha16](PNG-GRAY-ALPHA16-ONE-SHOT.md) PNG controls now include fresh native
+codec/packet/frame preparation and disposal. Their uppers1.048/1.052 remain gaps;
+boundary corrections are not incremental speedup claims.
 
-The [current PNG byteFastest capture](PNG-FAST8-CURRENT-ATTRIBUTION.md) identifies
-parser and token-output work. The [two prepared-token stages](PNG-PREPARED-TOKENS-INCONCLUSIVE.md)
-remove repeated classification but have inconclusive short results and identical
-allocations. Both restore exactly; a broader actual-writer oracle test remains.
-Current costs, exact packets and unchanged production/package proof remain valid.
-
-The [text row/composition investigation](TEXT-ROW-COMPOSITION-INCONCLUSIVE.md)
-restores both exact implementations after inconclusive/adverse short screens.
-Six useful actual-renderer arithmetic/row/failure tests remain; current costs and
-unchanged full/package proof are reused. No favorable repeated sampling follows.
-
-The [prepared green pipeline](WEBP-PREPARED-GREEN-PIPELINE-INCONCLUSIVE.md) and
-earlier [compact-counter stage](WEBP-COMPACT-GREEN-PREDICTOR.md) are exact but
-establish no useful CPU gain. Production restores byte-for-byte; current costs and
-package proof remain. Two useful admission-cancellation cases are retained against
-the selected encoder. Linked reports preserve adverse data.
-
-The [known-zero reconstruction trial](VP8-KNOWN-ZERO-RECONSTRUCTION-INCONCLUSIVE.md)
-has mixed independent results: diagram saves417µs in raw confidence views, but
-normalized confidence overlaps and photograph has an adverse point. Both caller
-guards restore exactly; a useful dequantized-zero assertion remains in existing
-trellis tests. Current costs and package proof are unchanged; all raw data remains.
-
-The [fused filter/analysis stage](WEBP-ALPHA-FILTER-ANALYSIS-INCONCLUSIVE.md)
-removes a complete ALPH preparation scan but has no useful short lead and saves
-only 4,144 B/op. It restores exactly without confirmation or rebuilds. Frozen
-packets, shared ownership, all adverse actuals and the corrected test-hook failure
-remain documented. No current comparison or package changes.
-
-Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md),
-[alpha preparation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) and
-[shared magnitude grammar](VP8-MAGNITUDE-GRAMMAR-INCONCLUSIVE.md) investigations
-leave production unchanged after inconclusive completed stages. Their linked
-reports retain adverse results, ownership/correctness checks and raw evidence.
-The [bounded-checkpoint investigation](VP8-BOUNDED-CHECKPOINT.md) also has no
-useful short lead; qualified sources, assemblies and package are restored
-exactly without builds. Its current profile identifies coefficient emission,
-without equating samples to time or proving cancellation dispatch is the cause.
-The [opaque audit](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) found no exercised 16-wide
-color row; the [neighbor audit](WEBP-ALPHA-CURRENT-ATTRIBUTION.md) found little
-reusable consecutive prefix work. Neither result closes a family or proves a CPU
-savings bound. Do not replay unchanged candidates or retime unchanged passing paths.
-
-The [JPEG frontier](JPEG-REFINEMENT-FRONTIER-INCONCLUSIVE.md) and magnitude rounds
-retain five actual-reader and two exhaustive actual-statistics cases respectively.
-Restored statistics/frame/rate/writer checks pass 70 per OS/mode. Reuse applicable
-full/package proof for unchanged paths. The
-[current PNG9 attribution](PNG-CURRENT-SMALLEST-WORD-ATTRIBUTION.md) led to two
-[search execution stages](PNG-SEARCH-EXECUTION-INCONCLUSIVE.md). Neither has a
-useful complete-operation lead; original sources, cores, tests and package are
-restored exactly without rebuilds before the current token-output milestone. Its
-count audit also rules out useful wider filtering on the word control. Older
-attribution is history, not current machine-code or available-savings proof.
-
-Fourteen existing WebP controls and eight streaming resize controls have current
-costs. Eight VP8 costs supersede the affected frame/ALPH evidence; the six VP8L
-costs reuse unchanged-path proof. Lanczos and other codec algorithms retain
-applicable evidence. Other
-adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,615 full/live checks per OS,
-affected normal/scalar checks and the same actual Release-package consumer with
-all three examples on Windows/Linux. That is correctness/package qualification,
-not a claim that all 282 CPU gates pass.
+Superseded experiments, attribution captures, useful retained tests and raw
+manifests remain in the [preceding coverage record](https://github.com/lokad/image/blob/14155d1596330af7b97dcfd8707e160ca3e39b10/benchmarks/WARM-COVERAGE.md)
+and linked family reports. Those records preserve adverse/inconclusive findings
+without turning this current checklist into accumulated experiment chronology.
 
 ## Finite required inventory
 
@@ -222,14 +157,12 @@ approved scopes and current evidence above.
   same-package qualification at coherent accepted production milestones. A release
   refresh measures every displayed row on the actual immutable package DLL.
 
-Current WebP invalidation: adaptive lossless predictor scoring and VP8 luma
-candidate scoring are separate changed paths. Four resident lossless, the named
-RGBA16/async lossless boundaries and seven resident VP8 costs are current through
-their respective receipts. Other affected method/quality costs remain historical
-until reconciled. Low-effort
-bypasses, lossless-alpha encoding itself, decoders, PNG/JPEG, resizing/editing/text
-retain applicable unchanged-path proof. Older whole-profile fractions of changed
-bodies are attribution history, not current component costs or available savings.
+Current WebP invalidation: ordinary quantization changes all eight displayed VP8
+encodes, including trellis chroma/Walsh and distortion-only selection; all eight
+are current. Other affected VP8 H boundaries remain historical. Six VP8L costs,
+decoders, PNG/JPEG, resizing and text/drawing reuse unchanged-path evidence. Earlier
+whole-execution profiles predate the new quantization path; unchanged-method
+source/JIT observations remain attributable without claiming current CPU shares.
 
 Current resize invalidation: the common bilinear/bicubic output allocator changes;
 unrefreshed filter/pipeline costs are historical, while pixel/repair kernels and
@@ -245,52 +178,11 @@ exact repair and portable integer execution remain unchanged, as do other famili
 The removed final-tap fusion stage has no useful screen lead; all adverse evidence
 is retained without another build or confirmation.
 
-The [compact matching trial](WEBP-COMPACT-MATCHING-INCONCLUSIVE.md) preserves
-exact packets but establishes no CPU/allocation gain; production is restored.
-The [current opaque capture](WEBP-OPAQUE-CURRENT-ATTRIBUTION.md) identifies dense
-scoring and predictor/histogram work for a bounded reuse audit, without timing or
-available-savings claims. No affected qualification is invalidated.
-The [current transparent capture](WEBP-ALPHA-CURRENT-ATTRIBUTION.md) retains matcher,
-VP8, predictor and cache-history attribution. Its hot regions overlap earlier
-inconclusive matching designs; the capture alone does not justify replaying them.
-The [final-assignment redesign](WEBP-FINAL-REMAP-INCONCLUSIVE.md) retains both exact
-stages and their adverse screens. Production/package are restored; two frozen-map/
-ownership Facts supplement unchanged qualification. No useful gain is established.
+Current priorities: equivalent preparation/reuse boundaries, substantial WebP
+workspace lifetimes, shared resize execution and further codec work selected from
+attribution. Keep passing cases stopped. Text/drawing proceeds independently;
+pending references never block justified codec/resizing work. PLAN.md stays ignored.
 
-Current priorities: preparation/reuse and operation-owned workspace, then shared
-resize execution and further codec work selected from attribution. The
-existing [word PNG controls](PNG-WORD-ONE-SHOT-BOUNDARY.md) have equivalent
-one-shot boundaries including native endian workspace ownership. The accepted
-[lazy parser](PNG-LOCAL-EXECUTION-STATE.md) refreshes byte/word Optimal; the
-[greedy parser](PNG-FAST-LOCAL-EXECUTION-STATE.md) refreshes byte/word Fastest.
-Byte gains remain inconclusive and all four retain gaps. Changed level6/9 and
-level1 bodies invalidate other affected color/depth/async costs, including
-SmallestSize and Fastest cancelable/forward-only boundaries. Stored0, decoding/
-inspection and all other families retain applicable proof. The [word capture](PNG-WORD-CURRENT-ATTRIBUTION.md) is now
-pre-change attribution; hot offsets/shares are not current component costs.
-The [parsing-lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md) does not justify a simple
-rejected-token handoff. The [photograph profile before invariant scoring](WEBP-PHOTOGRAPH-CURRENT-ATTRIBUTION.md)
-identifies a transform-search lead; its whole-profile fractions are now historical.
-Trial failures are leads to reassess only with a materially revised design.
-The [current alpha-filter lifetime audit](WEBP-PARSING-LIFETIMES-AUDIT.md#reuse-after-alpha-filter-emission)
-identified reusable token capacity. The [completed handoff](WEBP-ALPHA-TOKEN-REUSE.md)
-now proves an11% complete-operation allocation reduction, unchanged admitted peak,
-exact packets and full package ownership qualification. CPU gain/regression is
-unproved; adverse global and overlapping interleaved evidence are both retained.
-The [cache-history lifetime trial](WEBP-CACHE-HISTORY-REUSE-INCONCLUSIVE.md)
-reduces alpha allocation by8,672B/op but has no elapsed lead; production is
-restored and current costs remain unchanged. Its exhaustive admission-refusal
-coverage remains against the actual parser.
-The [current JPEG refinement profile and lifetime audit](JPEG-REFINEMENT-STATE-ATTRIBUTION.md)
-locate a material live-refinement cost. The [scan-state redesign](JPEG-SCAN-REFINEMENT-INCONCLUSIVE.md)
-does not establish a useful gain and is restored; two stronger behavioral tests
-remain. Current costs stay unchanged. The current instruction capture locates symbol/sign, position-mask and correction
-work; its sample shares and byte counts are not CPU gains. No further sampling of
-the unchanged scan-state design is justified.
-Passing text/reference decisions do not block
-independent codec/resizing work. PLAN.md remains local and ignored.
-
-The [previous full coverage document](https://github.com/lokad/image/blob/b20a8738f858fe6117783445c7c4a5b17a84c388/benchmarks/WARM-COVERAGE.md)
-retains checkpoint chronology, source-specific invalidation notes and every earlier
-report/raw-evidence link. Those historical records and all cited raw archives are
-preserved; they are not current blanket qualification or current experiment rules.
+All earlier reports, raw evidence, release packages and source-specific
+invalidation notes are retained through the linked history. They do not establish
+current blanket qualification or permanently close algorithm families.

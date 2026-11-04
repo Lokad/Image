@@ -1,8 +1,8 @@
 # Transparent WebP attribution
 
-## WCS291 current-production capture
+## WCS291 capture before full-block quantization
 
-One current two-second capture reuses the immutable WCS291 DLL and its frozen
+One two-second capture reuses the immutable WCS291 DLL and its frozen
 transparent RGBA8 control. All 98,590-byte packet/source/owner gates and both quiet
 guards pass; zero builds or new fixtures. Profiled elapsed is discarded.
 
@@ -14,12 +14,14 @@ guards pass; zero builds or new fixtures. Profiled elapsed is discarded.
 | Cache history | 84 |
 | VP8 intra4 decisions | 77 |
 
-The 2,362 B current matcher retains scalar prefix bounds checks. A bounded
+The 2,362 B matcher retains scalar prefix bounds checks. A bounded
 [window-preparation experiment](WEBP-SCALAR-WINDOW-PREPARATION.md) hoists them,
 but its counterbalanced photograph comparison measures 1.11% slower. It restores
-exactly without builds; current costs and qualification remain valid. Samples,
+exactly without builds. The later [full-block quantization](VP8-FULL-BLOCK-QUANTIZATION.md)
+changes VP8 execution; these whole-execution shares predate that stage. The matcher
+itself is unchanged. Samples,
 skid and code size are attribution, not component times or predicted savings.
-The same report retains current raw profile/JIT/maps and the adverse experiment.
+The same report retains the pinned raw profile/JIT/maps and adverse experiment.
 
 ## Earlier capture (PAF213)
 

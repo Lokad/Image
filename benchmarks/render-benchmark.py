@@ -1666,11 +1666,11 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-packed-reconstruction-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-full-block-quantization-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
-    assert vp8_owned['qualification']['fullChecksEachOs'] == 5625
+    assert vp8_owned['qualification']['fullChecksEachOs'] == 5634
     assert vp8_owned['qualification']['actualPackage']['sha256'] == vp8_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in vp8_owned['independentComparisons']['photograph']['views'])
+    assert vp8_owned['pairedComparison']['pairs'] == 12 and vp8_owned['pairedComparison']['ratioConfidence'][1] < 1
     assert vp8_owned['design']['newOwnedCapacityBytes'] == 0
     assert len(vp8_owned['cases']) == 8
     current_labels = {
@@ -1694,7 +1694,7 @@ def render():
     })
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
-        owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
+        owner = vp8_owned if case in {'alpha', 'alpha16', 'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']
@@ -1840,7 +1840,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-04. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-05. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [282 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -1857,34 +1857,36 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [exact packed reconstruction](../benchmarks/VP8-PACKED-RECONSTRUCTION.md)
-  saves 337.10 µs / 2.27% raw on the photograph (2.05% normalized, native clock
-  0.23% faster). Alpha's normalized confidence overlaps; its adverse short remains.
-  All eight affected VP8 costs are current and retain gaps, with unchanged allocations.
+- **WebP:** [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md)
+  saves 733.52 µs / 5.43% on the frozen opaque photographic control in one
+  counterbalanced immutable-build comparison. All eight affected VP8 costs are
+  current and retain gaps, with unchanged per-operation allocations. One 64 B
+  immutable format vector is separate from operation-owned storage.
   [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
   retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
   Its measured alpha8 admission peak is 3,656,309 B, retained scratch zero;
   the coefficient phase carries 82,668 B extra. Physical peak is unmeasured.
-  [Unchanged VP8L paths](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md) reuse valid
+  [Unchanged VP8L paths](../benchmarks/WEBP-MATCHER-CANCELLATION-PREPARATION.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
-  Photograph remains uncertain, including its adjacent-sample interval
-  0.995–1.044; no unchanged resampling follows.
+  Photograph remains uncertain; no unchanged resampling follows. Earlier
+  [packed reconstruction](../benchmarks/VP8-PACKED-RECONSTRUCTION.md) and matcher
+  gains retain their scoped evidence, without substituting older VP8 costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
-  at equal batching, without a CPU gain/equivalence/regression claim. Nine current
-  one-shot costs retain eight gaps; byte Optimal6 remains uncertain (upper 1.045).
+  at equal batching, without a CPU gain/equivalence/regression claim. Eleven current
+  one-shot costs retain ten gaps; byte Optimal6 remains uncertain (upper 1.045).
   [Delivery/cancellation comparisons](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
   include native codec preparation: word token/forward uppers 1.116/1.140;
   byte async upper 1.029. Word-workspace and complete async delivery stay timed.
   Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
   zero retained scratch after disposal. Complete physical/admitted peaks are
   unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
-- **Resizing:** [shared Lanczos driver](../benchmarks/LANCZOS-SHARED-ROW-DRIVER.md)
-  saves 24 µs / 3.98% raw on prepared byte reduction, with unchanged allocations/
-  retention and exact pixels. Word point increases have overlapping confidence;
-  refreshed native-clock movements are disclosed in the report. Current coverage
+- **Resizing:** [paired Lanczos preparation](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
+  confirms 175.99 µs / 4.20% elapsed improvement on prepared word enlargement,
+  with unchanged allocations/retention and exact pixels. Standalone raw/native
+  clock movement is disclosed separately. Current coverage
   has five passing boundaries; prepared byte reduction and word reduction/
-  enlargement retain gaps (uppers 1.201/1.121/1.100). One-shot and prepared calls
+  enlargement retain gaps (uppers 1.158/1.097/1.052). One-shot and prepared calls
   compare equivalent setup/ownership. Plans retain 139,800/148,040 B for byte/word
   reduction and 325,156/333,396 B for enlargement. Managed Q30/rational/certified
   pixels stay exact; zimg uses float. [Shared bicubic streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
@@ -1915,8 +1917,8 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,628 full/live checks per OS**, affected normal/scalar
-checks, and the **same actual Release package/all three examples on Windows/Linux**.
+The current build passes **5,634 full/live checks per OS**, affected normal/scalar
+and AVX512-disabled checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.
@@ -1924,7 +1926,7 @@ admitted peaks are not inferred from allocation reductions.
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
 **libjpeg-turbo** grayscale JPEG, and **zimg** resizing (FFmpeg's zscale backend).
-The nine current one-shot PNG rows time fresh codec/zlib/packet state and independent
+The eleven current one-shot PNG rows time fresh codec/zlib/packet state and independent
 output on both sides, including native word-frame endian conversion/allocation/
 disposal. Other native codec workers retain their documented wrappers/contexts.
 Stream rows include declared acquisition, copies, EOF and release.

@@ -10,6 +10,14 @@ namespace Lokad.Image.Internal;
 internal static class Vp8BlockQuantization
 {
     private static readonly Vector256<byte> ZigzagLow = ZigzagMask(false), ZigzagHigh = ZigzagMask(true);
+    private static readonly Vector512<int> ZigzagOrder = FullBlockOrder();
+
+    private static Vector512<int> FullBlockOrder()
+    {
+        Span<int> order = stackalloc int[16];
+        for (var p = 0; p < 16; p++) order[ScanRank(p)] = p;
+        return Vector512.Create(order);
+    }
 
     private static int ScanRank(int position)
     {
@@ -42,6 +50,7 @@ internal static class Vp8BlockQuantization
         // Private callers provide disjoint block buffers and a live generated
         // plan. Byte residuals, Walsh scaling and bounded DC diffusion establish
         // the coefficient domain before this per-block operation.
+        if (Avx512F.IsSupported) return ApplyFullBlock(coefficients, levels, matrix);
         if (Avx2.IsSupported) return ApplyVectors(coefficients, levels, matrix);
         var nonzero = false;
         for (var p = 0; p < 16; p++)
@@ -54,6 +63,25 @@ internal static class Vp8BlockQuantization
             levels[ScanRank(p)] = (short)level; nonzero |= level != 0;
         }
         return nonzero;
+    }
+
+    private static bool ApplyFullBlock(Span<short> coefficients, Span<short> levels, Vp8QuantizationMatrix matrix)
+    {
+        // Keep the same widened Q17 products and signed comparisons. One block
+        // loads each matrix vector once and needs no two-half lane reassembly.
+        var input = Avx512F.ConvertToVector512Int32(Vector256.Create(coefficients));
+        var magnitude = Avx512F.Add(Avx512F.Abs(input).AsInt32(), Vector512.Create(matrix.Sharpening));
+        var scaled = Avx512F.Add(Avx512F.MultiplyLow(magnitude, Vector512.Create(matrix.Reciprocals)),
+            Vector512.Create(matrix.Biases));
+        var level = Avx512F.Min(Vector512.Create(2047), Avx512F.ShiftRightArithmetic(scaled, 17));
+        var negative = Avx512F.CompareGreaterThan(Vector512<int>.Zero, input);
+        var signed = Avx512F.Subtract(Avx512F.Xor(level, negative), negative);
+        var quantized = Avx512F.And(signed, Avx512F.CompareGreaterThan(magnitude, Vector512.Create(matrix.ZeroThresholds)));
+        var raster = Avx512F.MultiplyLow(quantized, Vector512.Create(matrix.Steps));
+        var diagonal = Avx512F.PermuteVar16x32(quantized, ZigzagOrder);
+        Avx512F.ConvertToVector256Int16WithSaturation(raster).CopyTo(coefficients);
+        Avx512F.ConvertToVector256Int16WithSaturation(diagonal).CopyTo(levels);
+        return !Vector512.EqualsAll(quantized, Vector512<int>.Zero);
     }
 
     private static Vector256<int> QuantizedLevels(ReadOnlySpan<short> coefficients, Vp8QuantizationMatrix matrix, int offset)
