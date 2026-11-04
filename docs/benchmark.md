@@ -136,7 +136,7 @@ settings do not establish matched quality.
 | PNG RGBA16, one-shot Optimal6 / native6 † | 23,400.62 | 22,554.07 | 1.038 / 1.047 | 2,437,652 | 963,202 / 963,202 |
 | PNG RGB16, one-shot Optimal6 / native6 † | 18,413.80 | 17,724.93 | 1.039 / 1.048 | 2,431,484 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
-| PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |
+| PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,935.23 | 10,483.28 | 1.043 / 1.052 | 1,360,892 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 19,366.24 | 18,983.03 | 1.020 / 1.029 | 882,204 | 210,973 / 210,973 |
 | PNG RGBA8 decode, live token † | 1,607.11 | 1,397.16 | 1.150 / 1.182 | 4,472 | — |

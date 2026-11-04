@@ -86,8 +86,8 @@ public partial class WarmPng
         var oneShot = Environment.GetEnvironmentVariable("LOKAD_IMAGE_PNG_ONE_SHOT");
         if (oneShot is not (null or "1")) throw new InvalidOperationException("PNG one-shot flag must be1.");
         pngOneShot = oneShot == "1";
-        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16 or WarmPngCase.EncodeRgb16))
-            throw new InvalidOperationException("PNG one-shot reference requires an existing RGBA8/16 Optimal/Fastest/Smallest or RGB16 Optimal encode control.");
+        if (pngOneShot && Case is not (WarmPngCase.Encode8 or WarmPngCase.EncodeFast8 or WarmPngCase.Encode16 or WarmPngCase.EncodeFast16 or WarmPngCase.EncodeFastCancelable16 or WarmPngCase.EncodeFastForward16 or WarmPngCase.EncodeSmallest8 or WarmPngCase.EncodeSmallest16 or WarmPngCase.EncodeRgb16 or WarmPngCase.EncodeGrayAlpha16))
+            throw new InvalidOperationException("PNG one-shot reference requires an existing RGBA8/16 Optimal/Fastest/Smallest or RGB16/gray-alpha16 Optimal encode control.");
         cpu = int.Parse(Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CPU") ?? throw new InvalidOperationException("Missing warm CPU."));
         smoke = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "smoke";
         sampleCount = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_MODE") == "confirm" ? 12 : 3;
@@ -639,12 +639,14 @@ public partial class WarmPng
                 nativeCodecLifetime = pngOneShot ? "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed."
                     + (Depth == 16 ? " Word endian-conversion frame allocation, conversion and disposal timed; no retained working frame." : "")
                     + (Rgb ? " Identical single-thread RGB conversion context preparation and disposal also timed." : "")
+                    + (GrayAlpha ? " Direct red/alpha packing and endian conversion remain timed; no SWS context." : "")
                     : Encode ? "Repeated codec context: encoder/zlib retained and reset per operation; independent packet payload and disposal timed."
                     : "Repeated decoder context; existing complete decode/conversion/output lifetime boundary.",
                 boundary = pngOneShot
                     ? $"Warm identical borrowed resident RGBA{Depth} input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both {EncoderLevel}/filter None/color{ColorType} frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. "
                         + (Depth == 16 ? "Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. " : "")
                         + (Rgb ? "Native identical single-thread RGB conversion context/options/initialization and disposal timed; conversion state not retained. " : "")
+                        + (GrayAlpha ? "Native fresh gray-alpha frame allocation, direct red/alpha packing, endian conversion and disposal timed; no SWS context or retained workspace. " : "")
                         + (ForwardOutput ? "Managed forward-only wrapper creation/disposal and span callbacks remain timed; Length/Position/Seek unavailable, caller remains open. Native independent packet acquisition needs no seeking or equivalent wrapper. " : "")
                         + (EncodeCancelable ? "Managed receives a live cancelable token; token-source creation and cancellation correctness checks are outside timing. Native has no equivalent caller token. " : "")
                         + "Startup/IPC/file IO/hashes/validation excluded."

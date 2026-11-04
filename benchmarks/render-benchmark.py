@@ -1742,6 +1742,19 @@ def render():
     rows[position] = ('codec', f'| PNG RGB16, one-shot Optimal6 / native6 † | {current["managedUs"]:,.2f} | '
                       f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                       f'{current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["packetBytes"]:,} |')
+    gray_alpha16 = json.loads((ROOT / 'benchmarks/png-gray-alpha16-one-shot-evidence.json').read_text(encoding='utf-8'))
+    current = gray_alpha16['current']
+    assert not gray_alpha16['productionChanged'] and gray_alpha16['currentCostOnly'] and gray_alpha16['newMaterialCases'] == 0
+    assert current['actualIterations'] == 12 and current['filteredResults'] == 10
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['equivalentOneShotBoundary']
+    assert current['managedAndNativePacketsExact'] and current['packetBytes'] == 506887
+    assert current['librarySha256'] == gray_alpha16['producers']['linuxSha256']
+    assert current['status'] == 'gap' and current['lower'] > 1
+    assert gray_alpha16['qualificationReused']['sameActualPackageAllThreeExamplesBothOs']
+    position = next(i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| PNG gray-alpha16, Optimal6'))
+    rows[position] = ('codec', f'| PNG gray-alpha16, one-shot Optimal6 / native6 † | {current["managedUs"]:,.2f} | '
+                      f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+                      f'{current["allocatedBytes"]:,} | {current["packetBytes"]:,} / {current["packetBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
