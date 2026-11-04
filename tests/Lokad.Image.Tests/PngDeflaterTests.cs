@@ -101,8 +101,9 @@ public sealed class PngDeflaterTests
     }
 
     [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public void FailureAfterDictionarySlidesReleasesStorageAndTheBorrowedRootCanEncodeAgain(bool cancel)
+    [InlineData(1, false)] [InlineData(1, true)]
+    [InlineData(6, false)] [InlineData(6, true)]
+    public void FailureAfterDictionarySlidesReleasesStorageAndTheBorrowedRootCanEncodeAgain(int level, bool cancel)
     {
         var data = OriginalDeflateMatch.Create(false); var original = data.ToArray();
         using var root = new TestMemoryBudget(PngDeflater.WorkspaceBytes);
@@ -115,7 +116,7 @@ public sealed class PngDeflaterTests
             reachedSlide = origin > 0; Assert.True(reachedSlide);
             if (cancel) cancellation.Cancel();
         }, cancel);
-        using (compressor = new PngDeflater(sink, context, 6))
+        using (compressor = new PngDeflater(sink, context, level))
         {
             var error = Record.Exception(() => { compressor.Write(data); compressor.Complete(); });
             if (cancel) Assert.Equal(cancellation.Token, Assert.IsType<OperationCanceledException>(error).CancellationToken);
@@ -125,8 +126,9 @@ public sealed class PngDeflaterTests
         Assert.True(reachedSlide); Assert.Equal(0, root.Bytes); Assert.Equal(original, data);
         using var nextContext = new OperationContext(new() { MemoryBudget = root }, default);
         using var output = new MemoryStream();
-        using (var next = new PngDeflater(output, nextContext, 6)) { next.Write(data); next.Complete(); }
-        Assert.Equal("4f018a3e97ec49f78ddb73365caace2d6f8012beb026ffcb6033f38f11148ab7",
+        using (var next = new PngDeflater(output, nextContext, level)) { next.Write(data); next.Complete(); }
+        Assert.Equal(level == 1 ? "69e71b5130919c68443efb049041b9046d46271e15f4861b0538637e38a25527"
+            : "4f018a3e97ec49f78ddb73365caace2d6f8012beb026ffcb6033f38f11148ab7",
             Convert.ToHexStringLower(SHA256.HashData(output.ToArray())));
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }

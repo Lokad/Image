@@ -135,43 +135,65 @@ internal sealed partial class PngDeflater : Stream
 
     private void ProcessFast(bool final)
     {
-        while (position < filled && (final || filled - position >= Lookahead))
+        // This input extent stays fixed until the greedy sweep returns. Keep
+        // its cursor and token count local, publishing before shared-state work.
+        var cursorPosition = position; var inputEnd = filled; var origin = windowOrigin;
+        var usedTokens = tokenCount;
+        try
         {
-            context.Cancellation.ThrowIfCancellationRequested(); AdvanceOrigin();
-            var current = (int)(position - windowOrigin);
-            var prior = position + Minimum <= filled ? Insert(current) : 0;
-            var length = Minimum - 1; var start = 0;
-            var available = (int)Math.Min(Maximum, filled - position);
-            if (prior > 0 && current - prior <= Window - Lookahead)
+            while (cursorPosition < inputEnd && (final || inputEnd - cursorPosition >= Lookahead))
             {
-                var searches = 4; var limit = Math.Max(0, current - (Window - Lookahead));
-                var prefixPair = Pair(current); var tail = Byte(current + length);
-                do
+                context.Cancellation.ThrowIfCancellationRequested();
+                if (cursorPosition >= origin + 2 * Window - Lookahead + 1)
                 {
-                    context.Cancellation.ThrowIfCancellationRequested();
-                    if (length < available && Byte(prior + length) == tail && Pair(prior) == prefixPair)
+                    PublishFast(cursorPosition, usedTokens); AdvanceOrigin(); origin = windowOrigin;
+                }
+                var current = (int)(cursorPosition - origin);
+                var prior = cursorPosition + Minimum <= inputEnd ? Insert(current) : 0;
+                var length = Minimum - 1; var start = 0;
+                var available = (int)Math.Min(Maximum, inputEnd - cursorPosition);
+                if (prior > 0 && current - prior <= Window - Lookahead)
+                {
+                    var searches = 4; var limit = Math.Max(0, current - (Window - Lookahead));
+                    var prefixPair = Pair(current); var tail = Byte(current + length);
+                    do
                     {
-                        var found = 2;
-                        while (found < available && Byte(prior + found) == Byte(current + found)) found++;
                         context.Cancellation.ThrowIfCancellationRequested();
-                        if (found > length)
+                        if (length < available && Byte(prior + length) == tail && Pair(prior) == prefixPair)
                         {
-                            length = found; start = prior; if (found >= Math.Min(8, available)) break;
-                            tail = Byte(current + length);
+                            var found = 2;
+                            while (found < available && Byte(prior + found) == Byte(current + found)) found++;
+                            context.Cancellation.ThrowIfCancellationRequested();
+                            if (found > length)
+                            {
+                                length = found; start = prior; if (found >= Math.Min(8, available)) break;
+                                tail = Byte(current + length);
+                            }
                         }
-                    }
-                    prior = older[prior & (Window - 1)];
-                } while (prior > limit && --searches != 0);
+                        prior = older[prior & (Window - 1)];
+                    } while (prior > limit && --searches != 0);
+                }
+                var copied = length >= Minimum;
+                tokens[usedTokens++] = copied ? (uint)length | (uint)(current - start) << 9 : Byte(current);
+                if (usedTokens == TokenCapacity)
+                {
+                    PublishFast(cursorPosition, usedTokens); Block(false); usedTokens = tokenCount;
+                }
+                if (copied)
+                {
+                    if (length <= 4 && inputEnd - cursorPosition - length >= Minimum)
+                        for (var at = current + 1; at < current + length; at++) Insert(at);
+                    cursorPosition += length;
+                }
+                else cursorPosition++;
             }
-            if (length >= Minimum)
-            {
-                Emit((uint)length | (uint)(current - start) << 9);
-                if (length <= 4 && filled - position - length >= Minimum)
-                    for (var at = current + 1; at < current + length; at++) Insert(at);
-                position += length;
-            }
-            else { Emit(Byte(current)); position++; }
         }
+        finally { PublishFast(cursorPosition, usedTokens); }
+    }
+
+    private void PublishFast(long cursorPosition, int usedTokens)
+    {
+        position = cursorPosition; tokenCount = usedTokens;
     }
 
     private void ProcessLazy(bool final)

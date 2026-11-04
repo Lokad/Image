@@ -30,29 +30,23 @@ physical peaks and native allocation/graph/input-plane retention are not newly
 measured. [Earlier preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) and
 [boundary reconciliation](../benchmarks/LANCZOS-CURRENT-ENLARGEMENT.md) retain history.
 Rows marked **H** retain historical affected costs pending refresh.
-[PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
-fresh one-shot encoder state on both sides, including native codec/zlib setup
-and disposal; both retain only their borrowed resident input. Both have confirmed
-CPU gaps. [Compact Deflate dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md)
-reduce these allocations by 393,216 B/call. Current
-[contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) saves another
-**1.13 ms / 5.33% raw** for Optimal (5.60% normalized), with separated confidence.
-Fastest's 4.72% raw / 5.30% normalized point gains have overlapping confidence;
-no confirmed Fastest gain or causal regression claim. Allocation remains
-932,516 / 951,212 B/op; workspace admission is 384 KiB and retained scratch zero.
-The in-place 32 KiB slide copy stays timed. The subsequent
-[execution-local parser](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md) saves
-**1.23 ms / 4.52% raw / 4.31% normalized** on word Optimal, with separated
-independent confidence and unchanged allocations. The byte companion's all-actual
-and normalized intervals overlap: no incremental byte gain or regression claim.
-Both current Optimal controls retain gaps (upper **1.144 word / 1.078 byte**).
-Current
-[word one-shot comparisons](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md) include
-fresh native codec/zlib/packet and endian-conversion frame allocation, conversion
-and disposal. RGBA16 Fastest retains its unchanged confirmed gap (upper 1.204),
-with 3,420,516 B/op each and exact complete packets. This corrects the comparison
-boundary without a production speedup claim. Other affected PNG encoding costs
-remain historical (H).
+All four current PNG Optimal/Fastest rows compare fresh encoder state, complete
+encoding and independent output/disposal on both sides. Word native endian-frame
+allocation/conversion/disposal stays timed.
+[Local lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md) saves **1.23 ms /
+4.52% raw / 4.31% normalized** on word Optimal. The subsequent
+[local greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md) saves
+**1.35 ms raw / 6.05% raw / 3.14% normalized** on word Fastest, with separated
+independent confidence. Its native clock is **3.095% faster**, disclosed alongside
+the normalized gain. Neither byte companion establishes an incremental gain.
+All four retain gaps: Optimal uppers **1.144 word / 1.078 byte**, Fastest
+**1.144 word / 1.350 byte**. Word allocation stays **3,420,516 B/op** each;
+byte Optimal/Fastest **932,516 / 951,212 B/op**. Workspace admission is **384 KiB**,
+retained operation scratch zero, no newly measured complete/physical peak.
+[Compact dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md),
+[contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) and
+[one-shot boundary reconciliation](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md)
+retain earlier evidence. Other affected encoding costs stay historical (H).
 [Prepared probes](../benchmarks/PNG-PREPARED-PROBES.md) retain earlier costs/history.
 Other PNG encode rows create managed Deflate state per call while
 FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
@@ -83,7 +77,7 @@ retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,545 full/live checks
+**H** costs remain historical. The current build passes **5,547 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release
@@ -160,9 +154,9 @@ individual experiments remain in
 | VP8L opaque RGBA8 / libwebp exact=1 † | 74,747.90 | 71,999.01 | 1.038 / 1.072 | 5,983,424 | 121,896 / 121,896 |
 | PNG RGBA8, SmallestSize9 / native9 † H | 22,600.32 | 17,310.44 | 1.306 / 1.331 | 1,325,732 | 210,973 / 210,973 |
 | PNG RGBA16, SmallestSize9 / native9 † H | 26,874.29 | 20,094.40 | 1.337 / 1.347 | 3,813,732 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 5,911.28 | 4,366.42 | 1.354 / 1.432 | 951,212 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 5,757.79 | 4,343.39 | 1.326 / 1.350 | 951,212 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 24,076.62 | 20,160.55 | 1.194 / 1.204 | 3,420,516 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 20,918.85 | 18,611.95 | 1.124 / 1.144 | 3,420,516 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, forward-only output † H | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |

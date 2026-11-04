@@ -1,8 +1,9 @@
 # RGBA16 PNG: equivalent one-shot operations
 
-Optimal's costs below precede the accepted
-[execution-local parser](PNG-LOCAL-EXECUTION-STATE.md); use that report for its
-current result. Fastest and the reference boundary remain unchanged and valid.
+Costs below precede the accepted
+[lazy execution state](PNG-LOCAL-EXECUTION-STATE.md) and
+[greedy execution state](PNG-FAST-LOCAL-EXECUTION-STATE.md); use those reports for
+current Optimal/Fastest results. The equivalent reference boundary remains valid.
 
 The existing Optimal/Fastest word controls now compare complete one-shot encoding
 on both sides. FFmpeg creates and releases its codec/options/zlib context, packet
