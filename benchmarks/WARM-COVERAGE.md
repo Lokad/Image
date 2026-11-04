@@ -35,6 +35,12 @@ establish no useful CPU gain. Production restores byte-for-byte; current costs a
 package proof remain. Two useful admission-cancellation cases are retained against
 the selected encoder. Linked reports preserve adverse data.
 
+The [known-zero reconstruction trial](VP8-KNOWN-ZERO-RECONSTRUCTION-INCONCLUSIVE.md)
+has mixed independent results: diagram saves417µs in raw confidence views, but
+normalized confidence overlaps and photograph has an adverse point. Both caller
+guards restore exactly; a useful dequantized-zero assertion remains in existing
+trellis tests. Current costs and package proof are unchanged; all raw data remains.
+
 Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md),
 [alpha preparation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) and
 [shared magnitude grammar](VP8-MAGNITUDE-GRAMMAR-INCONCLUSIVE.md) investigations

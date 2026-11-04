@@ -118,6 +118,7 @@ public sealed class Vp8TrellisQuantizationTests
                 var nonzero = Vp8TrellisQuantization.Apply(coefficients, levels, matrix, input.Rate, weights, type, initial, lambda, context);
                 if (type == 0) { Assert.Equal(dc, coefficients[0]); Assert.Equal(77, levels[0]); }
                 Assert.Equal(nonzero, levels.Slice(type == 0 ? 1 : 0, type == 0 ? 15 : 16).ContainsAnyExcept((short)0));
+                Assert.Equal(nonzero, coefficients.Slice(type == 0 ? 1 : 0, type == 0 ? 15 : 16).ContainsAnyExcept((short)0));
                 record[0] = nonzero ? (byte)1 : (byte)0;
                 for (var p = 0; p < 16; p++)
                 {
