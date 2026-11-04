@@ -1563,37 +1563,28 @@ def render():
                                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | '
                                   f'{receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |'))
     rows[position:position] = current_webp_rows
-    png_fast = json.loads((ROOT / 'benchmarks/png-fast-local-execution-state-evidence.json').read_text(encoding='utf-8'))
-    assert png_fast['productionAccepted'] and png_fast['independentQuietConfirmation']
-    assert png_fast['qualification']['fullChecksEachOs'] == 5547
-    assert png_fast['qualification']['actualPackage']['sha256'] == png_fast['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert png_fast['comparisons']['EncodeFast16']['normalizedConfidenceSeparates']
-    assert not png_fast['comparisons']['EncodeFast8']['normalizedConfidenceSeparates']
-    png_local = json.loads((ROOT / 'benchmarks/png-sequential-dictionary-hash-evidence.json').read_text(encoding='utf-8'))
-    assert png_local['productionAccepted'] and png_local['independentQuietConfirmation']
-    assert png_local['qualification']['fullChecksEachOs'] == 5549
-    assert png_local['qualification']['actualPackage']['sha256'] == png_local['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert png_local['comparisons']['Encode16']['normalizedConfidenceSeparates']
-    assert not png_local['comparisons']['Encode8']['normalizedConfidenceSeparates']
-    png_smallest = json.loads((ROOT / 'benchmarks/png-smallest-one-shot-current-evidence.json').read_text(encoding='utf-8'))
-    assert not png_smallest['productionChanged'] and png_smallest['independentQuietConfirmation']
-    assert png_smallest['acceptedReferenceBoundary']
-    assert png_smallest['producers']['linuxSha256'] == png_local['producers']['linuxSha256']
+    png_output = json.loads((ROOT / 'benchmarks/png-token-output-evidence.json').read_text(encoding='utf-8'))
+    assert png_output['productionAccepted'] and png_output['independentQuietConfirmation']
+    assert png_output['qualification']['fullChecksEachOs'] == 5566
+    assert png_output['qualification']['actualPackage']['sha256'] == png_output['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert png_output['comparisons']['EncodeSmallest16']['rawConfidenceSeparates']
+    assert png_output['comparisons']['EncodeSmallest16']['normalizedConfidenceSeparates']
+    assert not png_output['comparisons']['EncodeSmallest8']['normalizedConfidenceSeparates']
     # All encoding instances use the new dictionary storage/working admission.
     # Decode/inspection paths are separate and retain their applicable costs.
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
              else row) for kind, row in rows]
-    for case, old_label, label, owner in [
-            ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6', png_local),
-            ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1', png_fast),
-            ('Encode16', 'PNG RGBA16, Optimal6 / native6', 'PNG RGBA16, one-shot Optimal6 / native6', png_local),
-            ('EncodeFast16', 'PNG RGBA16, Fastest1 / native1', 'PNG RGBA16, one-shot Fastest1 / native1', png_fast),
-            ('EncodeSmallest8', 'PNG RGBA8, SmallestSize9 / native9', 'PNG RGBA8, one-shot SmallestSize9 / native9', png_smallest),
-            ('EncodeSmallest16', 'PNG RGBA16, SmallestSize9 / native9', 'PNG RGBA16, one-shot SmallestSize9 / native9', png_smallest)]:
-        observation = owner['cases'][case]; receipt = observation['receipt']
+    for case, old_label, label in [
+            ('Encode8', 'PNG RGBA8, Optimal6 / native6', 'PNG RGBA8, one-shot Optimal6 / native6'),
+            ('EncodeFast8', 'PNG RGBA8, Fastest1 / native1', 'PNG RGBA8, one-shot Fastest1 / native1'),
+            ('Encode16', 'PNG RGBA16, Optimal6 / native6', 'PNG RGBA16, one-shot Optimal6 / native6'),
+            ('EncodeFast16', 'PNG RGBA16, Fastest1 / native1', 'PNG RGBA16, one-shot Fastest1 / native1'),
+            ('EncodeSmallest8', 'PNG RGBA8, SmallestSize9 / native9', 'PNG RGBA8, one-shot SmallestSize9 / native9'),
+            ('EncodeSmallest16', 'PNG RGBA16, SmallestSize9 / native9', 'PNG RGBA16, one-shot SmallestSize9 / native9')]:
+        observation = png_output['cases'][case]; receipt = observation['receipt']
         assert observation['status'] == 'Confirmed gap' and observation['conservativeRatioLower'] > 1
-        assert observation['librarySha256'] == owner['producers']['linuxSha256']
+        assert observation['librarySha256'] == png_output['producers']['linuxSha256']
         assert observation['completePacketExact'] and observation['quietGuardsPassed']
         assert len(observation['managed']['actual']) == 12
         assert receipt['nativeReady']['codecPreparationTimed'] and not receipt['nativeReady']['codecRetainedBetweenOperations']
@@ -1862,28 +1853,23 @@ Rows marked **H** retain historical affected costs pending refresh.
 All six current PNG Optimal/Fastest/Smallest rows compare fresh encoder state, complete
 encoding and independent output/disposal on both sides. Word native endian-frame
 allocation/conversion/disposal stays timed.
-[Sequential dictionary hashing](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md)
-saves **0.56 ms / 2.40% raw / 2.55% normalized** on word Optimal, with separated
-filtered/all-actual raw and normalized confidence. Its native clock is 0.155% slower.
-[Local greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md) retains the
-**1.35 ms / 6.05% raw / 3.14% normalized** word Fastest gain, with its 3.095% faster
-native clock disclosed. Neither byte companion establishes an incremental gain.
-All four retain gaps: Optimal uppers **1.113 word / 1.057 byte**, Fastest
-**1.144 word / 1.350 byte**. Word allocation stays **3,420,516 B/op** each;
-byte Optimal/Fastest **932,516 / 951,212 B/op**. Workspace admission is **384 KiB**,
-retained operation scratch zero, no newly measured complete/physical peak.
-[Current SmallestSize9](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md)
-confirms gaps with uppers **1.137 word / 1.065 byte** and allocations
-**3,420,454 / 932,516 B/op**. These refresh two historical costs without a
-production change or incremental gain claim; batch amortization differs.
-[Search execution separation](../benchmarks/PNG-SEARCH-EXECUTION-INCONCLUSIVE.md)
-restores production after two stages show no useful complete-operation lead.
-Current costs and qualification remain unchanged; no extra confirmation follows.
-[Earlier lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md),
-[Compact dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md),
-[contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) and
-[one-shot boundary reconciliation](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md)
-retain earlier evidence. Other affected encoding costs stay historical (H).
+[Local token output](../benchmarks/PNG-TOKEN-OUTPUT.md) saves **0.75 ms / 3.19% raw /
+4.09% normalized** on word SmallestSize9, with separated filtered/all-actual raw
+and normalized confidence. Its native clock is **0.929% slower**. Byte normalized
+bounds overlap, so no byte incremental gain is claimed. Six current PNG controls
+retain gaps: Smallest uppers **1.092 word / 1.052 byte**, Optimal **1.085 / 1.047**,
+Fastest **1.111 / 1.284**. Level-1/6 native clocks are **8–9% slower** than their
+older runs; their refreshed costs establish no raw speedup or causal regression.
+Word Optimal/Fastest allocation is **3,420,516 B/op**, Smallest **3,420,448 B/op**;
+Smallest batches nine operations versus the original eight, not an allocation
+saving. Byte Optimal/Smallest **932,516 B/op**, Fastest **951,212 B/op**.
+Workspace admission stays **384 KiB**, retained scratch zero; complete admitted/
+physical peaks and native allocation are not newly measured.
+[Dictionary preparation](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md),
+[greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md),
+[one-shot reconciliation](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md) and
+[restored search stages](../benchmarks/PNG-SEARCH-EXECUTION-INCONCLUSIVE.md)
+retain history. Other affected encoding costs stay historical (H).
 [Prepared probes](../benchmarks/PNG-PREPARED-PROBES.md) retain earlier costs/history.
 Other PNG encode rows create managed Deflate state per call while
 FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
@@ -1922,7 +1908,7 @@ controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,549 full/live checks
+**H** costs remain historical. The current build passes **5,566 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release

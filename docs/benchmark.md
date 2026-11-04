@@ -33,28 +33,23 @@ Rows marked **H** retain historical affected costs pending refresh.
 All six current PNG Optimal/Fastest/Smallest rows compare fresh encoder state, complete
 encoding and independent output/disposal on both sides. Word native endian-frame
 allocation/conversion/disposal stays timed.
-[Sequential dictionary hashing](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md)
-saves **0.56 ms / 2.40% raw / 2.55% normalized** on word Optimal, with separated
-filtered/all-actual raw and normalized confidence. Its native clock is 0.155% slower.
-[Local greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md) retains the
-**1.35 ms / 6.05% raw / 3.14% normalized** word Fastest gain, with its 3.095% faster
-native clock disclosed. Neither byte companion establishes an incremental gain.
-All four retain gaps: Optimal uppers **1.113 word / 1.057 byte**, Fastest
-**1.144 word / 1.350 byte**. Word allocation stays **3,420,516 B/op** each;
-byte Optimal/Fastest **932,516 / 951,212 B/op**. Workspace admission is **384 KiB**,
-retained operation scratch zero, no newly measured complete/physical peak.
-[Current SmallestSize9](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md)
-confirms gaps with uppers **1.137 word / 1.065 byte** and allocations
-**3,420,454 / 932,516 B/op**. These refresh two historical costs without a
-production change or incremental gain claim; batch amortization differs.
-[Search execution separation](../benchmarks/PNG-SEARCH-EXECUTION-INCONCLUSIVE.md)
-restores production after two stages show no useful complete-operation lead.
-Current costs and qualification remain unchanged; no extra confirmation follows.
-[Earlier lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md),
-[Compact dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md),
-[contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) and
-[one-shot boundary reconciliation](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md)
-retain earlier evidence. Other affected encoding costs stay historical (H).
+[Local token output](../benchmarks/PNG-TOKEN-OUTPUT.md) saves **0.75 ms / 3.19% raw /
+4.09% normalized** on word SmallestSize9, with separated filtered/all-actual raw
+and normalized confidence. Its native clock is **0.929% slower**. Byte normalized
+bounds overlap, so no byte incremental gain is claimed. Six current PNG controls
+retain gaps: Smallest uppers **1.092 word / 1.052 byte**, Optimal **1.085 / 1.047**,
+Fastest **1.111 / 1.284**. Level-1/6 native clocks are **8–9% slower** than their
+older runs; their refreshed costs establish no raw speedup or causal regression.
+Word Optimal/Fastest allocation is **3,420,516 B/op**, Smallest **3,420,448 B/op**;
+Smallest batches nine operations versus the original eight, not an allocation
+saving. Byte Optimal/Smallest **932,516 B/op**, Fastest **951,212 B/op**.
+Workspace admission stays **384 KiB**, retained scratch zero; complete admitted/
+physical peaks and native allocation are not newly measured.
+[Dictionary preparation](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md),
+[greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md),
+[one-shot reconciliation](../benchmarks/PNG-SMALLEST-ONE-SHOT-CURRENT.md) and
+[restored search stages](../benchmarks/PNG-SEARCH-EXECUTION-INCONCLUSIVE.md)
+retain history. Other affected encoding costs stay historical (H).
 [Prepared probes](../benchmarks/PNG-PREPARED-PROBES.md) retain earlier costs/history.
 Other PNG encode rows create managed Deflate state per call while
 FFmpeg retains its encoder/zlib context and resets it per frame. Those historical
@@ -93,7 +88,7 @@ controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,549 full/live checks
+**H** costs remain historical. The current build passes **5,566 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release
@@ -168,18 +163,18 @@ individual experiments remain in
 | VP8L text/diagram / libwebp exact=1 † | 8,036.29 | 9,483.21 | 0.847 / 0.867 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,497.65 | 130,268.92 | 0.887 / 0.895 | 7,476,640 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 70,681.22 | 70,344.26 | 1.005 / 1.037 | 5,983,424 | 121,896 / 121,896 |
-| PNG RGBA8, one-shot SmallestSize9 / native9 † | 18,221.17 | 17,251.11 | 1.056 / 1.065 | 932,516 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot SmallestSize9 / native9 † | 23,558.06 | 20,869.52 | 1.129 / 1.137 | 3,420,454 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 5,757.79 | 4,343.39 | 1.326 / 1.350 | 951,212 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 18,021.83 | 17,232.20 | 1.046 / 1.052 | 932,516 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 22,805.59 | 21,063.43 | 1.083 / 1.092 | 3,420,448 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 5,939.86 | 4,718.00 | 1.259 / 1.284 | 951,212 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 20,918.85 | 18,611.95 | 1.124 / 1.144 | 3,420,516 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 21,990.88 | 20,137.44 | 1.092 / 1.111 | 3,420,516 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, live cancelable token † H | 24,004.55 | 17,494.31 | 1.372 / 1.383 | 3,813,732 | 968,216 / 968,216 |
 | PNG RGBA16 Fastest1, forward-only output † H | 23,265.92 | 17,478.35 | 1.331 / 1.345 | 3,813,764 | 968,216 / 968,216 |
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 18,064.02 | 17,190.81 | 1.051 / 1.057 | 932,516 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 22,845.90 | 20,758.37 | 1.101 / 1.113 | 3,420,516 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 19,268.37 | 18,681.39 | 1.031 / 1.047 | 932,516 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 23,863.19 | 22,409.38 | 1.065 / 1.085 | 3,420,516 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
 | PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |

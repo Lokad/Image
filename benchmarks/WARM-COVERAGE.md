@@ -13,7 +13,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Resident lossless WebP | [Histogram separation](WEBP-COLOR-HISTOGRAM-SEPARATION.md) saves 10.75 ms on the complete photograph. [Current reconciliation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) restores the unchanged qualified encoder after an inconclusive preparation trial. Global photograph/opaque uppers are0.997/1.037; stricter paired uppers1.026/1.028 keep both OPEN. Exact packets/allocations remain. Original/diagram/depth/async pass and stop. |
 | Resident VP8 encoding | Five unchanged opaque/word/trellis controls reuse [source texture proof](VP8-SOURCE-TEXTURE-PREPARATION.md). [Token-tail history](WEBP-TOKEN-TAIL-HISTORY.md) refreshes transparent RGBA8/16, saving about 476 KB/op; the measured alpha8 admitted peak falls 191,579 B. CPU gaps remain, with no established incremental gain/regression. |
 | Other WebP encoding boundaries | [Current depth/async confirmations](WEBP-COLOR-HISTOGRAM-SEPARATION.md) pass on the accepted core, including normalization and fresh nonseekable output. Stop those controls. Other affected H cases remain historical; no blanket family pass. |
-| PNG encoding | [Sequential dictionary hashing](PNG-SEQUENTIAL-DICTIONARY-HASH.md) saves 0.56 ms / 2.40% raw / 2.55% normalized on word Optimal; [local greedy state](PNG-FAST-LOCAL-EXECUTION-STATE.md) retains 1.35 ms / 6.05% raw / 3.14% normalized on word Fastest. Native clock differences are disclosed. Both have separated raw/normalized confidence; byte gains remain inconclusive. Six equivalent one-shot costs are current and retain gaps, including [SmallestSize9](PNG-SMALLEST-ONE-SHOT-CURRENT.md) with word/byte uppers 1.137/1.065; its refresh changes no production code and claims no incremental gain. Other affected level1/6/9 costs remain historical; earlier trials stay linked history, without closing families. |
+| PNG encoding | [Local token output](PNG-TOKEN-OUTPUT.md) saves 0.75 ms / 3.19% raw / 4.09% normalized on word SmallestSize9, with separated independent confidence and 0.929% slower native clock disclosed. No byte incremental claim. Six equivalent one-shot costs are current and retain gaps: Smallest word/byte uppers1.092/1.052, Optimal1.085/1.047, Fastest1.111/1.284. Level1/6 clocks are8–9%slower; refreshed costs imply no raw speedup/regression. Allocation/admission/retention unchanged; other affectedH costs remain historical. Earlier preparation/trials stay linked history. |
 | JPEG and image reading | Keep the named gray/RGB/CMYK/YCCK/sampling and resident/stream/async/inspection/validation cases. This stage changes none of these paths; reuse valid proof. Current gaps and allocations remain in the summary and linked reports. |
 | Bicubic and Lanczos3 | [Shared output ownership](RESIZE-OVERWRITE-OUTPUT-STORAGE.md) retains scoped bicubic gains/gaps; affected bilinear/bicubic H costs need reconciliation. [Paired Lanczos row output](LANCZOS-PAIRED-ROW-OUTPUT.md) saves 598 µs / 12.50% raw on prepared word enlargement and 51 µs / 8.35% on reduction. All eight affected costs are current: five pass and stop; prepared byte reduction and word reduction/enlargement retain gaps. Exact Q30/rational/certified pixels remain required. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
@@ -36,17 +36,18 @@ savings bound. Do not replay unchanged candidates or retime unchanged passing pa
 The [JPEG frontier](JPEG-REFINEMENT-FRONTIER-INCONCLUSIVE.md) and magnitude rounds
 retain five actual-reader and two exhaustive actual-statistics cases respectively.
 Restored statistics/frame/rate/writer checks pass 70 per OS/mode. Reuse applicable
-full/package proof and displayed costs. The
+full/package proof for unchanged paths. The
 [current PNG9 attribution](PNG-CURRENT-SMALLEST-WORD-ATTRIBUTION.md) led to two
 [search execution stages](PNG-SEARCH-EXECUTION-INCONCLUSIVE.md). Neither has a
 useful complete-operation lead; original sources, cores, tests and package are
-restored exactly without rebuilds. Next count prefix/tail rejection work before
-another prototype. Older pre-hash offsets remain historical machine-code evidence.
+restored exactly without rebuilds before the current token-output milestone. Its
+count audit also rules out useful wider filtering on the word control. Older
+attribution is history, not current machine-code or available-savings proof.
 
 Eight existing WebP controls now have current costs; unchanged opaque
 VP8, resizing and other codec algorithms retain applicable evidence. Other
 adaptive VP8L/transparent ALPH boundaries remain historical until refreshed.
-The current immutable production build passes 5,549 full/live checks per OS,
+The current immutable production build passes 5,566 full/live checks per OS,
 affected normal/scalar checks and the same actual Release-package consumer with
 all three examples on Windows/Linux. That is correctness/package qualification,
 not a claim that all 282 CPU gates pass.

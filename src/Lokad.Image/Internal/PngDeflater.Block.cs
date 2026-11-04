@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace Lokad.Image.Internal;
 
@@ -98,18 +99,81 @@ internal sealed partial class PngDeflater
     private void WriteTokens(byte[] literalLengths, byte[] distanceLengths)
     {
         var literals = DeflateHuffman.Codes(literalLengths); var distances = DeflateHuffman.Codes(distanceLengths);
-        for (var index = 0; index < tokenCount; index++)
+        var input = tokens; var count = tokenCount; var cursor = new TokenCursor(this);
+        try
         {
-            var token = tokens[index]; var back = (int)(token >> 9);
-            if (back == 0) { Put(literals[(int)token], literalLengths[(int)token]); continue; }
-            var length = (int)(token & 511); var ls = LengthSymbol(length); var ds = DistanceSymbol(back);
-            var le = LengthExtra(ls); var de = DistanceExtra(ds);
-            var lb = ls < 265 ? ls - 254 : ls == 285 ? 258 : 3 + ((4 + (ls - 265) % 4) << le);
-            var db = ds < 4 ? ds + 1 : 1 + ((2 + ds % 2) << de);
-            Put(literals[ls], literalLengths[ls]); Put(length - lb, le);
-            Put(distances[ds], distanceLengths[ds]); Put(back - db, de);
+            for (var index = 0; index < count; index++)
+            {
+                var token = input[index]; var back = (int)(token >> 9);
+                if (back == 0)
+                {
+                    if (index + 2 < count && (input[index + 1] | input[index + 2]) < 256)
+                    {
+                        var second = (int)input[index + 1]; var third = (int)input[index + 2];
+                        var firstBits = literalLengths[(int)token]; var secondBits = literalLengths[second];
+                        var width = firstBits + secondBits + literalLengths[third];
+                        if (cursor.CanAppend(width))
+                        {
+                            var value = literals[(int)token] | literals[second] << firstBits
+                                | literals[third] << (firstBits + secondBits);
+                            cursor.Put(value, width); index += 2; continue;
+                        }
+                    }
+                    cursor.Put(literals[(int)token], literalLengths[(int)token]); continue;
+                }
+                var length = (int)(token & 511); var ls = LengthSymbol(length); var ds = DistanceSymbol(back);
+                var le = LengthExtra(ls); var de = DistanceExtra(ds);
+                var lb = ls < 265 ? ls - 254 : ls == 285 ? 258 : 3 + ((4 + (ls - 265) % 4) << le);
+                var db = ds < 4 ? ds + 1 : 1 + ((2 + ds % 2) << de);
+                cursor.Put(literals[ls], literalLengths[ls]); cursor.Put(length - lb, le);
+                cursor.Put(distances[ds], distanceLengths[ds]); cursor.Put(back - db, de);
+            }
+            cursor.Put(literals[256], literalLengths[256]);
         }
-        Put(literals[256], literalLengths[256]);
+        finally { cursor.Commit(); }
+    }
+
+    // A synchronous borrower of the existing encoded buffer. State is published
+    // before calling the output stream and on every exit, including failed writes.
+    private ref struct TokenCursor
+    {
+        private readonly PngDeflater owner;
+        private readonly byte[] buffer;
+        private uint pending;
+        private int pendingBits, position;
+
+        internal TokenCursor(PngDeflater owner)
+        {
+            this.owner = owner; buffer = owner.encoded;
+            pending = owner.pending; pendingBits = owner.pendingBits; position = owner.encodedCount;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal bool CanAppend(int width) => width <= 32 - pendingBits;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void Put(int value, int width)
+        {
+            pending |= (uint)value << pendingBits; pendingBits += width;
+            while (pendingBits >= 8)
+            {
+                buffer[position++] = (byte)pending;
+                if (position == buffer.Length) Flush();
+                pending >>= 8; pendingBits -= 8;
+            }
+        }
+
+        private void Flush()
+        {
+            Commit();
+            try { owner.Flush(); }
+            finally { position = owner.encodedCount; }
+        }
+
+        internal void Commit()
+        {
+            owner.pending = pending; owner.pendingBits = pendingBits; owner.encodedCount = position;
+        }
     }
 
     private static int FixedLength(int symbol) => symbol < 144 ? 8 : symbol < 256 ? 9 : symbol < 280 ? 7 : 8;
