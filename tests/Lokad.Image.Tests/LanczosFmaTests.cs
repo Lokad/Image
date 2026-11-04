@@ -100,10 +100,43 @@ Assert.Equal(bytes, admitted.RemainingWorkingBytes);
                     if (LanczosFmaResize.TryNormalize(Vector256.Create(sums.AsSpan(at, 4)), errors.Rgb + 65535d * errors.Alpha,
                         errors.Alpha, maximum, out var pixel))
                         for (var c = 0; c < 4; c++) Assert.Equal(expected[c], pixel.GetElement(c));
+                    if ((x & 1) == 0 && x + 1 < dw)
+                    {
+                        var certified = LanczosFmaResize.NormalizePair(Vector512.Create(sums.AsSpan(at, 8)),
+                            errors.Rgb + 65535d * errors.Alpha, errors.Alpha, maximum, out var pair);
+                        for (var p = 0; p < 2; p++)
+                        {
+                            if ((certified & (1 << p)) == 0) continue;
+                            var offset = at + p * 4; var a = Round(integer[offset + 3], BigInteger.One << 60, maximum);
+                            for (var c = 0; c < 4; c++) Assert.Equal(c == 3 ? a : a == 0 ? 0
+                                : Round(integer[offset + c], integer[offset + 3], maximum), pair.GetElement(p * 4 + c));
+                        }
+                    }
                 }
             }
             Assert.Equal(original, source.Pixels.ToArray());
         }
+    }
+
+    [Theory]
+    [InlineData(255)] [InlineData(65535)]
+    public void PairedCertificatesKeepAlphaAndRgbUncertaintyIndependent(int maximum)
+    {
+        if (!Supported) return;
+        const double q = 1152921504606846976d;
+        var e = LanczosFmaResize.Errors(1); var numerator = e.Rgb + 65535d * e.Alpha;
+        var safe = Vector256.Create(21 * q, 35 * q, 49 * q, 7 * q);
+        var expected = Vector128.Create(3, 5, 7, 7);
+        foreach (var uncertain in new[] { Vector256.Create(0d, 0, 0, q / 2), Vector256.Create(10.5 * q, 35 * q, 49 * q, 7 * q) })
+        {
+            Assert.Equal(1, LanczosFmaResize.NormalizePair(Vector512.Create(safe, uncertain), numerator, e.Alpha, maximum, out var first));
+            Assert.Equal(expected, first.GetLower());
+            Assert.Equal(2, LanczosFmaResize.NormalizePair(Vector512.Create(uncertain, safe), numerator, e.Alpha, maximum, out var second));
+            Assert.Equal(expected, second.GetUpper());
+        }
+        var zero = Vector256.Create(q, -q, 2 * q, -q);
+        Assert.Equal(3, LanczosFmaResize.NormalizePair(Vector512.Create(safe, zero), numerator, e.Alpha, maximum, out var cleared));
+        Assert.Equal(expected, cleared.GetLower()); Assert.Equal(Vector128<int>.Zero, cleared.GetUpper());
     }
 
     [Fact]

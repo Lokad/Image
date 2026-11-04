@@ -1,5 +1,9 @@
 # Lanczos word source-row preparation
 
+The retained source-product design is unchanged. Current complete-operation costs
+use the later [paired row output](LANCZOS-PAIRED-ROW-OUTPUT.md); timings below are
+the qualified history of this earlier preparation stage.
+
 Exact word alpha products are now formed once per source row and reused by
 overlapping horizontal windows. The existing operation/plan workspace owns the
 admitted UInt32 capacity. Signed64 filtering, Int128/certified vertical execution,

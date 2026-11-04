@@ -53,29 +53,46 @@ internal static class LanczosFmaResize
                     context.Cancellation.ThrowIfCancellationRequested(); Accumulate(row, sums, weight, context);
                 }
                 context.Cancellation.ThrowIfCancellationRequested();
-                Span<byte> output8 = default; Span<ushort> output16 = default;
-                if (source.BitDepth == 8) output8 = result.GetRow8(y); else output16 = result.GetRow16(y);
-                for (var x = 0; x < width; x++)
-                {
-                    if ((x & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
-                    var at = x * 4;
-                    if (!TryNormalize(Vector256.Create(sums.AsSpan(at, 4)), numeratorError, errors.Alpha, maximum, out var pixel))
-                        pixel = ExactPixel(source, x, y, horizontal, vertical, context);
-                    if (source.BitDepth == 8)
-                    {
-                        output8[at] = (byte)pixel.GetElement(0); output8[at + 1] = (byte)pixel.GetElement(1);
-                        output8[at + 2] = (byte)pixel.GetElement(2); output8[at + 3] = (byte)pixel.GetElement(3);
-                    }
-                    else
-                    {
-                        output16[at] = (ushort)pixel.GetElement(0); output16[at + 1] = (ushort)pixel.GetElement(1);
-                        output16[at + 2] = (ushort)pixel.GetElement(2); output16[at + 3] = (ushort)pixel.GetElement(3);
-                    }
-                }
+                WriteRow(source, result, y, horizontal, vertical, sums, numeratorError, errors.Alpha, maximum, context);
             }
             result.Orientation = source.Orientation; return result;
         }
         catch { result.Dispose(); throw; }
+    }
+
+    private static void WriteRow(ImageBuffer source, ImageBuffer result, int y, LanczosPlan horizontal,
+        LanczosPlan vertical, ReadOnlySpan<double> sums, double numeratorError, double alphaError,
+        int maximum, OperationContext context)
+    {
+        Span<byte> output8 = default; Span<ushort> output16 = default;
+        if (maximum == 255) output8 = result.GetRow8(y); else output16 = result.GetRow16(y);
+        var x = 0;
+        for (; x <= result.Width - 2; x += 2)
+        {
+            if ((x & 1023) == 0) context.Cancellation.ThrowIfCancellationRequested();
+            var at = x * 4;
+            var certified = NormalizePair(Vector512.Create(sums.Slice(at, 8)), numeratorError, alphaError, maximum, out var pixels);
+            if ((certified & 1) == 0) pixels = Vector256.Create(ExactPixel(source, x, y, horizontal, vertical, context), pixels.GetUpper());
+            if ((certified & 2) == 0) pixels = Vector256.Create(pixels.GetLower(), ExactPixel(source, x + 1, y, horizontal, vertical, context));
+            var words = Vector128.Narrow(pixels.GetLower().AsUInt32(), pixels.GetUpper().AsUInt32());
+            if (maximum == 255) Vector128.Narrow(words, Vector128<ushort>.Zero).GetLower().CopyTo(output8.Slice(at, 8));
+            else words.CopyTo(output16.Slice(at, 8));
+        }
+        if (x < result.Width)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); var at = x * 4;
+            if (!TryNormalize(Vector256.Create(sums.Slice(at, 4)), numeratorError, alphaError, maximum, out var pixel))
+                pixel = ExactPixel(source, x, y, horizontal, vertical, context);
+            // Both certification and exact repair return samples in [0,maximum].
+            // Narrow and publish the complete RGBA tail in one store.
+            var words = Vector128.Narrow(pixel.AsUInt32(), Vector128<uint>.Zero);
+            if (maximum == 255)
+            {
+                var bytes = Vector128.Narrow(words, Vector128<ushort>.Zero);
+                MemoryMarshal.Write(output8.Slice(at, 4), bytes.AsUInt32().GetElement(0));
+            }
+            else words.GetLower().CopyTo(output16.Slice(at, 4));
+        }
     }
 
     // B=sum(abs(Q30 weights))<=2^31 and M<=65535. The original horizontal
@@ -106,6 +123,32 @@ internal static class LanczosFmaResize
         var margins = Vector256.Create(.5 - radius, .5 - radius, .5 - radius, .5 - alphaError / Q60 - Guard);
         if (Avx.MoveMask(Avx.CompareLessThan(distance, margins)) != 15) return false;
         pixel = Avx.ConvertToVector128Int32WithTruncation(rounded); return true;
+    }
+
+    // The same certificate in two independent RGBA lane groups. The mask records
+    // each pixel separately: one uncertain half never forces repair of the other.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static int NormalizePair(Vector512<double> value, double numeratorError, double alphaError,
+        int maximum, out Vector256<int> pixels)
+    {
+        var a0 = value.GetElement(3); var a1 = value.GetElement(7);
+        if (a0 < Q60 / 2 + alphaError || a1 < Q60 / 2 + alphaError)
+        {
+            var first = TryNormalize(value.GetLower(), numeratorError, alphaError, maximum, out var p0);
+            var second = TryNormalize(value.GetUpper(), numeratorError, alphaError, maximum, out var p1);
+            pixels = Vector256.Create(p0, p1); return (first ? 1 : 0) | (second ? 2 : 0);
+        }
+        var divisors = Vector512.Create(a0, a0, a0, Q60, a1, a1, a1, Q60);
+        var estimate = Avx512F.Min(Avx512F.Max(Avx512F.Divide(value, divisors), Vector512<double>.Zero), Vector512.Create((double)maximum));
+        var rounded = Avx512F.RoundScale(estimate, 0);
+        var distance = Avx512F.AndNot(Vector512.Create(long.MinValue), Avx512F.Subtract(estimate, rounded).AsInt64()).AsDouble();
+        var m0 = .5 - (numeratorError / (a0 - alphaError) + Guard);
+        var m1 = .5 - (numeratorError / (a1 - alphaError) + Guard);
+        var ma = .5 - alphaError / Q60 - Guard;
+        var margins = Vector512.Create(m0, m0, m0, ma, m1, m1, m1, ma);
+        var mask = Vector512.ExtractMostSignificantBits(Avx512F.CompareLessThan(distance, margins));
+        pixels = Avx512F.ConvertToVector256Int32WithTruncation(rounded);
+        return ((mask & 15) == 15 ? 1 : 0) | ((mask & 240) == 240 ? 2 : 0);
     }
 
     internal static void Horizontal(ImageBuffer source, int y, LanczosPlan plan, Span<double> output,

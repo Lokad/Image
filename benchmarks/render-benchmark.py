@@ -1505,26 +1505,26 @@ def render():
         rows.append(('editing', f'| {case["label"]} ({status}) | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    prepared_resize = json.loads((ROOT / 'benchmarks/lanczos-word-row-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert prepared_resize['productionAccepted'] and prepared_resize['qualification']['fullChecksEachOs'] == 5529
-    assert prepared_resize['qualification']['actualPackage']['sha256'] == prepared_resize['qualification']['samePackageLinux']['sameActualPackageSha256']
-    enlarged_resize = json.loads((ROOT / 'benchmarks/lanczos-current-enlargement-evidence.json').read_text(encoding='utf-8'))
-    assert not enlarged_resize['productionChanged'] and enlarged_resize['allBuilds'] == 0
-    assert enlarged_resize['independentQuietConfirmation'] and enlarged_resize['qualificationReuse']['relevantResizeSourcesUnchanged']
+    lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-row-output-evidence.json').read_text(encoding='utf-8'))
+    assert lanczos_current['productionAccepted'] and lanczos_current['independentQuietConfirmation']
+    assert lanczos_current['qualification']['fullChecksEachOs'] == 5545
+    assert lanczos_current['qualification']['actualPackage']['sha256'] == lanczos_current['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert len(lanczos_current['cases']) == 8
+    assert sum(c['status'] == 'Confirmed pass' for c in lanczos_current['cases'].values()) == 5
     position = next(i for i, (kind, _) in enumerate(rows) if kind == 'editing')
     current_resize_rows = []
-    for case, label, size, owner in [
-            ('OneShot8', 'Lanczos3 one-shot RGBA8 / zimg one-shot', '256×129', prepared_resize),
-            ('Repeated8', 'Lanczos3 prepared RGBA8 / zimg prepared', '256×129', prepared_resize),
-            ('OneShot16', 'Lanczos3 one-shot RGBA16 / zimg one-shot', '256×129', prepared_resize),
-            ('Repeated16', 'Lanczos3 prepared RGBA16 / zimg prepared', '256×129', prepared_resize),
-            ('OneShotEnlarge8', 'Lanczos3 one-shot RGBA8 / zimg one-shot', '1027×519', enlarged_resize),
-            ('RepeatedEnlarge8', 'Lanczos3 prepared RGBA8 / zimg prepared', '1027×519', enlarged_resize),
-            ('OneShotEnlarge16', 'Lanczos3 one-shot RGBA16 / zimg one-shot (confidence open)', '1027×519', enlarged_resize),
-            ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519', enlarged_resize)]:
-        observation = owner['cases'][case]
+    for case, label, size in [
+            ('OneShot8', 'Lanczos3 one-shot RGBA8 / zimg one-shot', '256×129'),
+            ('Repeated8', 'Lanczos3 prepared RGBA8 / zimg prepared', '256×129'),
+            ('OneShot16', 'Lanczos3 one-shot RGBA16 / zimg one-shot', '256×129'),
+            ('Repeated16', 'Lanczos3 prepared RGBA16 / zimg prepared', '256×129'),
+            ('OneShotEnlarge8', 'Lanczos3 one-shot RGBA8 / zimg one-shot', '1027×519'),
+            ('RepeatedEnlarge8', 'Lanczos3 prepared RGBA8 / zimg prepared', '1027×519'),
+            ('OneShotEnlarge16', 'Lanczos3 one-shot RGBA16 / zimg one-shot', '1027×519'),
+            ('RepeatedEnlarge16', 'Lanczos3 prepared RGBA16 / zimg prepared', '1027×519')]:
+        observation = lanczos_current['cases'][case]
         assert observation['managedExact'] and observation['nativeQualityPassed'] and observation['quietGuardsPassed']
-        assert observation['librarySha256'] == owner['producers']['linuxSha256']
+        assert observation['librarySha256'] == lanczos_current['producers']['linuxSha256']
         assert len(observation['managed']['actual']) == 12
         stats = observation['managed']['statistics']
         native = min(b['mean'] for b in observation['nativeBrackets'])
@@ -1833,18 +1833,18 @@ scratch. These measurements include preparation and cleanup, with borrowed
 font/layout setup and per-operation canvas reset excluded equally.
 
 **Boundaries matter.** Bicubic rows include managed preparation but reuse native
-graphs/scratch. Current Lanczos reduction and
-[enlargement rows](../benchmarks/LANCZOS-CURRENT-ENLARGEMENT.md) compare equivalent
-one-shot or prepared operations on both sides. Byte enlargement passes both and
-stops. Prepared word enlargement retains a gap (upper **1.239**); word one-shot
-is confidence-open (upper **1.014**). No speedup is inferred from correcting
-comparison boundaries. Enlargement plans retain **325,156 / 333,396 B** for
-byte/word; native graph/input-plane retention and physical peaks are unmeasured.
-[Word-row preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) saves 25.61 µs
-on prepared word reduction (4.00% elapsed / 4.26% normalized). Plans retain
-139,800 B for RGBA8 / 148,040 B for RGBA16 and allocate 139 B/call. Word one-shot
-allocation rises by 8,256 B; prepared CPU parity remains open. The earlier
-enlargement generalization screen is retained as history without a gain claim.
+graphs/scratch. All eight current Lanczos rows compare equivalent one-shot or
+prepared operations. [Paired row output](../benchmarks/LANCZOS-PAIRED-ROW-OUTPUT.md)
+saves **598 µs / 12.50% raw / 12.43% normalized** on prepared word enlargement,
+and **51 µs / 8.35% / 8.41%** on prepared word reduction, with separated independent
+confidence and unchanged word allocations/retention. Five boundaries pass and
+stop, including word one-shot enlargement. Prepared byte reduction and word
+reduction/enlargement retain gaps (uppers **1.240 / 1.115 / 1.080**).
+Plans retain **139,800 / 148,040 B** for byte/word reduction and **325,156 /
+333,396 B** for enlargement. Admission capacity is unchanged; complete admitted/
+physical peaks and native allocation/graph/input-plane retention are not newly
+measured. [Earlier preparation](../benchmarks/LANCZOS-WORD-ROW-PREPARATION.md) and
+[boundary reconciliation](../benchmarks/LANCZOS-CURRENT-ENLARGEMENT.md) retain history.
 Rows marked **H** retain historical affected costs pending refresh.
 [PNG RGBA8 Optimal/Fastest](../benchmarks/PNG-ONE-SHOT-BOUNDARY.md) now compare
 fresh one-shot encoder state on both sides, including native codec/zlib setup
@@ -1899,7 +1899,7 @@ retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,543 full/live checks
+**H** costs remain historical. The current build passes **5,545 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release

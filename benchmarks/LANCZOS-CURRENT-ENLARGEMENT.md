@@ -1,5 +1,9 @@
 # Current Lanczos enlargement boundaries
 
+These measurements precede [paired row output](LANCZOS-PAIRED-ROW-OUTPUT.md),
+which now owns current costs for all eight Lanczos boundaries. The equivalent
+reference definitions and raw evidence below remain valid history.
+
 The four already named 513×259 → 1027×519 byte/word boundaries now compare
 equivalent complete one-shot or prepared execution on both sides. The selected
 qualified production DLL, existing worker, harness, selector, inputs and exact

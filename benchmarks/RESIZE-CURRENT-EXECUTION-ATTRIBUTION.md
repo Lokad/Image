@@ -1,4 +1,9 @@
-# Current resize execution attribution
+# Resize execution attribution before word preparation and paired output
+
+This capture predates word-row preparation and
+[paired row output](LANCZOS-PAIRED-ROW-OUTPUT.md). Retain it as the reproducible
+basis for that work; its affected hot offsets/shares are historical attribution,
+not current component costs or remaining savings.
 
 One two-second quiet-VM capture reuses the frozen public prepared-Lanczos worker
 with the current qualified DLL. The existing 513×259 → 256×129 RGBA8 control
