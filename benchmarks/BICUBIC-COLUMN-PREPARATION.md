@@ -1,5 +1,8 @@
 # Bicubic column geometry preparation
 
+The [subsequent word stage](BICUBIC-WORD-COLUMN-PREPARATION.md) reuses this helper
+and qualifies its separate RGBA16 control; the byte-stage evidence below is retained.
+
 The byte small-support column path now prepares vertical geometry once in already
 owned, unpublished output-row tails. Aligned prefix strips finish before those
 tails retire; the final strips rebuild geometry directly. Pixel kernels, tap

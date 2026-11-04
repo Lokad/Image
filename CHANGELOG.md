@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share word bicubic geometry preparation and widen eligible row strips within
+  the same 4 KiB admission, preserving exact pixels and output ownership.
+
 - Keep certified VP8 inverse reconstruction in packed SIMD arithmetic, preserving
   exact encoder packets, full-range/scalar fallbacks and output ownership.
 

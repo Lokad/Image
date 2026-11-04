@@ -1,0 +1,345 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WCP281",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 282,
+  "producers": {
+    "windowsSha256": "0ce4f86d6778ca057eb49267525c7e2fee94dcf93d9e5f34dc794657662537e6",
+    "linuxSha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/WordColumnBicubicResize.cs": "b149b1d0d12839fad89ab6d50f06c5edcbeb567c4f2b24272cf6280cbb12e5cf",
+    "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+    "tests/Lokad.Image.Tests/WordColumnBicubicGeometryTests.cs": "527c9e7e7505c50dc7ed474718d716a42ebb7a90e842e163a529e41df89a697d"
+  },
+  "packageConsumerSha256": "8c2f1c3780507e19e8391423d711dbe97d55324f2ef6c461d334693296965765",
+  "baseline": {
+    "managedUs": 877.9377714015151,
+    "nativeUs": 618.1714947916666,
+    "ratio": 1.4202171707988474,
+    "lower": 1.4108734548185717,
+    "upper": 1.4279563771272437,
+    "allocatedBytes": 114,
+    "rawGc": "// GC:  0 0 0 27128 240",
+    "operationsPerActual": [
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240
+    ],
+    "actualIterations": 12,
+    "filteredIterations": 11,
+    "librarySha256": "b81f8665a4dbea02af431a319391998aa7b2762233f94c6a0779971565893fa5",
+    "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+    "nativeWorkerSha256": "d7f9edea4a86e458045791399e6265fca68d1bc4088e9ece20b79bec45618a5f",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+    "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+    "nativeRgbMaximum": 1,
+    "nativeRgbRmse": 0.049116055937996415,
+    "nativeAlphaMaximum": 1,
+    "nativeAlphaRmse": 0.04006112093854481,
+    "managedExact": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "gap",
+    "rawPrefix": "twc280-current-TightDown16-confirm"
+  },
+  "short": {
+    "managedUs": 750.9810465686274,
+    "nativeUs": 630.1265651041666,
+    "ratio": 1.1917939794277397,
+    "lower": 1.0563069737125317,
+    "upper": 1.3462517736701918,
+    "allocatedBytes": 113,
+    "rawGc": "// GC:  0 0 0 30712 272",
+    "operationsPerActual": [
+      272,
+      272,
+      272
+    ],
+    "actualIterations": 3,
+    "filteredIterations": 3,
+    "librarySha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+    "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+    "nativeWorkerSha256": "d7f9edea4a86e458045791399e6265fca68d1bc4088e9ece20b79bec45618a5f",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+    "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+    "nativeRgbMaximum": 1,
+    "nativeRgbRmse": 0.049116055937996415,
+    "nativeAlphaMaximum": 1,
+    "nativeAlphaRmse": 0.04006112093854481,
+    "managedExact": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "gap",
+    "rawPrefix": "wcp281-candidate-TightDown16-short"
+  },
+  "cases": {
+    "TightDown16": {
+      "managedUs": 751.0174672181372,
+      "nativeUs": 619.0978528645834,
+      "ratio": 1.2130836244111622,
+      "lower": 1.1937235214091997,
+      "upper": 1.2227924355113076,
+      "allocatedBytes": 113,
+      "rawGc": "// GC:  0 0 0 30712 272",
+      "operationsPerActual": [
+        272,
+        272,
+        272,
+        272,
+        272,
+        272,
+        272,
+        272,
+        272,
+        272,
+        272,
+        272
+      ],
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "librarySha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+      "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+      "nativeWorkerSha256": "d7f9edea4a86e458045791399e6265fca68d1bc4088e9ece20b79bec45618a5f",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.049116055937996415,
+      "nativeAlphaMaximum": 1,
+      "nativeAlphaRmse": 0.04006112093854481,
+      "managedExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "status": "gap",
+      "rawPrefix": "wcp281-candidate-TightDown16-confirm"
+    }
+  },
+  "independentComparison": {
+    "project": "Lokad.Image",
+    "mode": "confirm",
+    "rawSavedUs": 126.92030418337788,
+    "rawReduction": 0.14456640130742515,
+    "normalizedReduction": 0.1458463893033881,
+    "nativeClockChange": 0.0014985454371831963,
+    "views": [
+      {
+        "view": "statistics",
+        "rawBeforeLower": 876171.7740788881,
+        "rawCandidateUpper": 753198.2937984174,
+        "rawSeparated": true,
+        "normalizedBeforeLower": 1.4108734548185717,
+        "normalizedCandidateUpper": 1.2227898033520261,
+        "normalizedSeparated": true
+      },
+      {
+        "view": "unfilteredActualStatistics",
+        "rawBeforeLower": 876281.8874862024,
+        "rawCandidateUpper": 753199.9151219468,
+        "rawSeparated": true,
+        "normalizedBeforeLower": 1.411227668619178,
+        "normalizedCandidateUpper": 1.2227924355113076,
+        "normalizedSeparated": true
+      }
+    ]
+  },
+  "shortComparison": {
+    "project": "Lokad.Image",
+    "mode": "short",
+    "rawSavedUs": 126.95672483288764,
+    "rawReduction": 0.14460788562521631,
+    "normalizedReduction": 0.1608368044463394,
+    "nativeClockChange": 0.019339407289443278,
+    "views": [
+      {
+        "view": "statistics",
+        "rawBeforeLower": 876171.7740788881,
+        "rawCandidateUpper": 792810.9312959224,
+        "rawSeparated": true,
+        "normalizedBeforeLower": 1.4108734548185717,
+        "normalizedCandidateUpper": 1.3462490205481945,
+        "normalizedSeparated": true
+      },
+      {
+        "view": "unfilteredActualStatistics",
+        "rawBeforeLower": 876281.8874862024,
+        "rawCandidateUpper": 792812.5526194527,
+        "rawSeparated": true,
+        "normalizedBeforeLower": 1.411227668619178,
+        "normalizedCandidateUpper": 1.3462517736701918,
+        "normalizedSeparated": true
+      }
+    ]
+  },
+  "design": {
+    "sharedByteWordGeometry": true,
+    "horizontalStripsBefore": 43,
+    "horizontalStripsAfter": 32,
+    "verticalGeometryPassesBefore": 43,
+    "verticalGeometryPassesAfter": 3,
+    "smallScaleRows": 9,
+    "smallScaleColumns": 8,
+    "boundaryRows": 10,
+    "boundaryColumns": 6,
+    "smallScaleCondition": "Both scales<2.25; public estimated taps<=10. Preserve six columns/ten slots at the2.25 boundary.",
+    "relativeOffsetProof": "Eight-column source support span is(8-1+4)*scaleX<24.75, at most25integer samples. Guard each relative index<25 before storing a byte. Nine consecutive active rows have distinct modulo9cache slots; clamped duplicates preserve original tap contributions.",
+    "newOwnedCapacityBytes": 0,
+    "resultOwnedCapacityBytes": 264192,
+    "borrowedMetadataBytesPerRow": 96,
+    "borrowedMetadataBytes": 12384,
+    "workspaceAdmissionBytes": 4096,
+    "fixedArrayPayloadBytesBefore": 3640,
+    "fixedArrayPayloadBytesAfter": 4080,
+    "retainedOperationScratchBytes": 0,
+    "physicalOrCompleteAdmittedPeakRemeasured": false,
+    "pixelKernelPolicy": "Preserve typed SIMD products/sums, tap order, certified rounding, original-order repair and portable fallbacks. Only OriginalWord offset element type changes from int to bounded relative byte; arithmetic unchanged."
+  },
+  "allocation": {
+    "claim": "No allocation-saving claim. Established table ceiling changes114\u2192113 because batches differ; both raw totals fit112B/op+248B fixed batch overhead.",
+    "baselineTotalBytes": 27128,
+    "baselineOperations": 240,
+    "candidateTotalBytes": 30712,
+    "candidateOperations": 272,
+    "derivedPerOperationBytes": 112,
+    "derivedFixedBatchBytes": 248
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "0ce4f86d6778ca057eb49267525c7e2fee94dcf93d9e5f34dc794657662537e6",
+      "full": [
+        2393,
+        2287,
+        948
+      ],
+      "total": 5628,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 34,
+        "internal-scalar": 34,
+        "public-normal": 521,
+        "public-scalar": 521
+      },
+      "immutableCandidateReused": true,
+      "boundary": {},
+      "additionalInternalTestBuilds": 0,
+      "additionalCoreHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+      "full": [
+        2393,
+        2287,
+        948
+      ],
+      "total": 5628,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 33,
+        "internal-scalar": 33,
+        "public-normal": 521,
+        "public-scalar": 521
+      },
+      "immutableCandidateReused": true,
+      "boundary": {
+        "normal": 3,
+        "scalar": 3
+      },
+      "additionalInternalTestBuilds": 1,
+      "additionalCoreHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 5628,
+    "newCases": 3,
+    "initialLinuxInternalNormalScalar": 33,
+    "windowsInternalNormalScalar": 34,
+    "publicNormalScalarEachOs": 521,
+    "finalLinuxBoundaryNormalScalar": 3,
+    "functionalGeneralization": "Frozen513x259\u2192256x129 word column hash, opaque odd151x83\u219275x41 eight-column partial strip, and exact2.25 boundary225x99\u2192100x44 six-column path. Direct public oracle, unchanged source and released4KiB admission. No new performance controls or broader speed claim.",
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "b9e43cf9386e81ab9c96e4adb800d3ddc9eca54f1eac99ffa8ddcfe2b28743f3",
+      "symbolsSha256": "ee4c1ce297c02a0beb8f105eccd8b4a791ff6cf501810c3110e77c84db34eac3",
+      "bytes": 406092,
+      "librarySha256": "0ce4f86d6778ca057eb49267525c7e2fee94dcf93d9e5f34dc794657662537e6",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "b9e43cf9386e81ab9c96e4adb800d3ddc9eca54f1eac99ffa8ddcfe2b28743f3",
+      "librarySha256": "0ce4f86d6778ca057eb49267525c7e2fee94dcf93d9e5f34dc794657662537e6",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    }
+  },
+  "workflow": {
+    "coreVersionsEachOs": 1,
+    "internalTestVersionsWindows": 1,
+    "internalTestVersionsLinux": 2,
+    "publicHarnessNativeSelectorBuilds": 0,
+    "independentBaselineRuns": 1,
+    "candidateShortRuns": 1,
+    "candidateIndependentRuns": 1,
+    "broadPackageMilestones": 1,
+    "acceptedPackageBuilds": 1,
+    "testOnlyBoundaryBuilds": 1,
+    "timingRepeatedForTestOnlyChange": false,
+    "baselineRecovery": "The reused common selector pathname had a later identity; preflight stopped before actuals and recovered the original verified own selector from retained raw. A later postcheck compared the word worker with a different byte worker; all12completed actuals recovered against the unchanged original word identity, without retiming. Failure records retained."
+  },
+  "evidenceScope": "Existing resident513x259 RGBA16\u2192256x129 complete public bicubic Resize, local limit1331224B=input+output+4096. Managed preparation/admission/allocation/materialization/disposal timed. zimg3.0.6 FFmpeg zscale backend retains graph/input workspace/scratch; halo/deinterleave/filter/independent planar+packed output/repacking/release timed. Native RGB/alpha maximum1/RMSE<=0.25, exact managed rational/frozen pixels unchanged; quiet singleCPU.",
+  "invalidation": "Only eligible word small-support column execution changes; existing TightDown16 cost reconciled. Default heap-cached dispatch is still first. Byte columns, other word wider/streaming/mixed kernels, Lanczos, codecs and text/drawing unchanged; reuse valid source-path evidence. One summary row surfaces this already-required measured boundary; full282-path matrix unchanged.",
+  "limitations": "126.9203us/14.4566%raw independent gain;14.5846%normalized with nativeclock0.14985%slower. Both filtered/allactual raw/normalized confidence separate; remaining upper1.22279 is a gap. Gain is not assigned between geometry sharing and larger strips. Fixed-array payload rises440B within the unchanged admitted4KiB; borrowed metadata is not an extra owner or physical-peak saving. Full parity/publication remain open.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "bicubic-word-column-preparation-qualified.tar.xz",
+    "bytes": 3620812,
+    "members": 182,
+    "sha256": "eec4f826efca86a9ec4ab8ab06dbb0183f4985a05987250c07be42e2bef21384",
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-packed-reconstruction-qualified.tar.xz",
+        "sha256": "52792940e0c22b1ce0b114e5a0624fdc79e6a8b17c86f1d6c04251e183e4495d"
+      }
+    ],
+    "dependencyScope": "Qualified baseline and unchanged-path proof, source fixtures, framework runtime and shared geometry. Both production modules, original and final test sources, complete current baseline/candidate actuals and reference worker, quiet/failure/recovery records, final full/scalar checks, actual package and reproduction scripts are retained here.",
+    "localMembersVerified": true
+  }
+}

@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-04. These **124 selected comparisons** combine qualified
+Updated 2026-11-04. These **125 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [282 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -55,7 +55,10 @@ Current priorities and scope:
   retained. [Column geometry preparation](../benchmarks/BICUBIC-COLUMN-PREPARATION.md)
   saves 8.84 µs / 1.41% raw on byte 256×129 with the same 4 KiB allowance and
   113 B/op; its remaining upper is 1.363. Native clock movement is +9.05%, disclosed
-  separately from the raw gain. Other affected bicubic/bilinear H costs still need reconciliation.
+  separately from the raw gain. [Shared word preparation](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md)
+  saves 126.92 µs / 14.46% raw on the existing word 256×129 control, with unchanged
+  4 KiB admission (upper 1.223, 113 B/op; no allocation-saving claim). Its new row
+  surfaces an already-required boundary. Other affected H costs still need reconciliation.
 - **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
   grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
@@ -72,7 +75,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,625 full/live checks per OS**, affected normal/scalar
+The current build passes **5,628 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
@@ -187,6 +190,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † H → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † H → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † H → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |

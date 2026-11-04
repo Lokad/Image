@@ -1726,6 +1726,16 @@ def render():
     rows[positions[0]] = ('editing', f'| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | '
                          f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                          f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
+    word_column = json.loads((ROOT / 'benchmarks/bicubic-word-column-preparation-evidence.json').read_text(encoding='utf-8'))
+    current = word_column['cases']['TightDown16']
+    assert word_column['productionAccepted'] and current['actualIterations'] == 12
+    assert current['managedExact'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
+    assert current['librarySha256'] == word_column['producers']['linuxSha256']
+    assert word_column['qualification']['actualPackage']['sha256'] == word_column['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in word_column['independentComparison']['views'])
+    rows.insert(positions[0] + 1, ('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | '
+                                f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                                f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1866,7 +1876,10 @@ Current priorities and scope:
   retained. [Column geometry preparation](../benchmarks/BICUBIC-COLUMN-PREPARATION.md)
   saves 8.84 µs / 1.41% raw on byte 256×129 with the same 4 KiB allowance and
   113 B/op; its remaining upper is 1.363. Native clock movement is +9.05%, disclosed
-  separately from the raw gain. Other affected bicubic/bilinear H costs still need reconciliation.
+  separately from the raw gain. [Shared word preparation](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md)
+  saves 126.92 µs / 14.46% raw on the existing word 256×129 control, with unchanged
+  4 KiB admission (upper 1.223, 113 B/op; no allocation-saving claim). Its new row
+  surfaces an already-required boundary. Other affected H costs still need reconciliation.
 - **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
   grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
@@ -1883,7 +1896,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,625 full/live checks per OS**, affected normal/scalar
+The current build passes **5,628 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
