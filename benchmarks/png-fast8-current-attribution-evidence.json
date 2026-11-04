@@ -1,0 +1,132 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PFA282",
+  "profilingOnly": true,
+  "productionChanged": false,
+  "allBuilds": 0,
+  "seconds": 2,
+  "profiledElapsedDiscarded": true,
+  "totalSamples": 1958,
+  "methods": [
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+      998
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+      439
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+      159
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+      109
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+      77
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+      73
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+      41
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+      13
+    ],
+    [
+      "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+      11
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+      4
+    ],
+    [
+      "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ComputeChunk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+      3
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+      3
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      2
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.PngCodec::Paeth(int32,int32,int32)[Optimized]",
+      1
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      1
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.PngRowPrediction::Useful(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      1
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+      1
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.PngCodec::Encode(class Lokad.Image.ImageBuffer,class [System.Runtime]System.IO.Stream,class Lokad.Image.PngEncodeOptions,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      1
+    ]
+  ],
+  "targetCode": [
+    {
+      "address": "0x7b4bbe0a4e80",
+      "size": 1246,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]"
+    },
+    {
+      "address": "0x7b4bbe0a6da0",
+      "size": 135,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x7b4bbe0a6fe0",
+      "size": 2215,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]"
+    }
+  ],
+  "sources": {
+    "src/Lokad.Image/Internal/PngDeflater.cs": "2450d84344c8c6d02f1ab264bf01bb443fed660b69788674ac6c537d6119696a",
+    "src/Lokad.Image/Internal/PngDeflater.Block.cs": "742910df31720b2276cc192bf4d058b4875ed1c678bde3537f8eef8b19edf501",
+    "src/Lokad.Image/Internal/DeflateHuffman.cs": "d880531eb1ca9d2cf314ef9985e78986fdfbba8726cfa8daa09af8f305641c27"
+  },
+  "producerSha256": "10638d6b8c70333ae234d5f891d9564246ce25c25fb1e5eb7f56d63c851df1ec",
+  "benchmarkSha256": "9756c6e7a998e32e09584f61049f7a55b7d153293358385670ea3dba72a045d4",
+  "packetBytes": 236828,
+  "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+  "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+  "quietGuardsPassed": true,
+  "allOriginalGatesPassed": true,
+  "equivalentOneShotNativeBoundary": true,
+  "qualificationReuse": "WCP2815628full/live perOS and same actual0.2.1packageb9e43cf9/all3examples; PNG paths also reuse their valid unchanged-path scalar evidence. No repeated qualification.",
+  "attributionLimit": "Exclusive samples, inlining and instruction skid identify leads, not method times, predicted savings or causal proof. Existing timing/allocation comparisons unchanged.",
+  "finding": "WriteTokens and Block both classify copy lengths/distances. Frequency collection precedes independent token emission; raw copy fields are no longer needed after expanded length/frequencies are recorded.",
+  "nextHypothesis": "Prepare RFC1951symbols/residuals once in the same uint token slots during the existing frequency scan, then emit prepared fields through the unchanged cursor. No extra array/pool/cache/reservation; preserve exact packets, token order, block selection, flush/cancellation/failure boundaries and ownership. This is unmeasured, not acceptance authorization.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-fast8-current-attribution.tar.xz",
+    "bytes": 1120124,
+    "members": 42,
+    "sha256": "c564f226981f2a32d861b9c19c8a94c703dac71528578a1718a0ed1e3d10d2ef",
+    "vmMembersVerified": true,
+    "dependency": {
+      "file": "bicubic-word-column-preparation-qualified.tar.xz",
+      "sha256": "eec4f826efca86a9ec4ab8ab06dbb0183f4985a05987250c07be42e2bef21384"
+    },
+    "dependencyScope": "Qualified producer/package and frozen control/reference/framework dependencies; unchanged PNG block preparation/raw is retained transitively. Current trace/map/JIT/full samples, source/modules/selectors, guards, receipt and reproduction retained here.",
+    "localMembersVerified": true
+  }
+}

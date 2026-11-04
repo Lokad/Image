@@ -26,6 +26,11 @@ The earlier [token-tail reuse](WEBP-TOKEN-TAIL-HISTORY.md) establishes its scope
 allocation/admitted-peak savings. [Current index reuse](WEBP-ALPHA-MATCH-INDEX-REUSE.md)
 adds an allocation saving with unchanged peak, without a CPU gain claim.
 
+The [current PNG byteFastest capture](PNG-FAST8-CURRENT-ATTRIBUTION.md) identifies
+parser and token-output work. Repeated copy classification motivates an unmeasured
+in-place token-preparation design. No production, timing/allocation or qualification
+change follows from samples alone; current costs and exact packets remain.
+
 The [text row/composition investigation](TEXT-ROW-COMPOSITION-INCONCLUSIVE.md)
 restores both exact implementations after inconclusive/adverse short screens.
 Six useful actual-renderer arithmetic/row/failure tests remain; current costs and
