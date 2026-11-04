@@ -48,7 +48,11 @@ Current priorities and scope:
   controls have current costs: six pass and stop; RGBA8 8×17/4×9 retain gaps
   (uppers 1.127/1.269). Managed preparation stays timed; native graphs/scratch are
   retained. Other affected bicubic/bilinear H costs still need reconciliation.
-- **JPEG and reading:** current table statuses and
+- **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
+  save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
+  grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
+  labeled SIMD libjpeg-turbo gap remains (upper 1.103); its native clock is 2.19%
+  slower in confirmation. Caller-GRAY/RGB paths keep unchanged evidence. Other table statuses and
   [coverage](../benchmarks/WARM-COVERAGE.md) retain their named color/sampling/
   delivery scope. Sub-microsecond probe/copy gaps remain visible, with expensive
   codec/resize paths prioritized. Inspection, complete Identify and coding
@@ -60,7 +64,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,607 full/live checks per OS**, affected normal/scalar
+The current build passes **5,615 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
@@ -93,7 +97,7 @@ settings do not establish matched quality.
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
-| JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,684.29 | 1,496.43 | 1.126 / 1.137 | 155,436 | 58,910 / 58,910 |
+| JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,668.86 | 2,782.13 | 1.319 / 1.330 | 741,375 | 7,330 / 7,330 |
 | VP8 RGBA16 + alpha, including normalization † | 69,162.74 | 54,409.27 | 1.271 / 1.367 | 7,165,472 | 98,590 / 98,590 |

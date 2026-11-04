@@ -1190,17 +1190,31 @@ def render():
     assert grayscale_costs['producers'] == factored_jpeg16['producers']
     assert grayscale_costs['independentQuietConfirmations'] == 2
     assert grayscale_costs['correctness']['rawCompletePacketExact']
+    grayscale_batch = json.loads((ROOT / 'benchmarks/jpeg-grayscale-row-batch-evidence.json').read_text(encoding='utf-8'))
+    assert grayscale_batch['productionAccepted'] and grayscale_batch['qualification']['fullChecksEachOs'] == 5615
+    assert grayscale_batch['qualification']['actualPackage']['sha256'] == grayscale_batch['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in grayscale_batch['independentComparison']['views'])
     updated_gray = 0
     for case, label in [('RgbaGray', 'JPEG grayscale, standalone SIMD libjpeg-turbo'),
                         ('CallerGray', 'JPEG from caller GRAY8, standalone SIMD libjpeg-turbo')]:
-        observation = grayscale_costs['cases'][case][-1]
-        receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert len(observation['managed']['actual']) == 12 and grayscale_costs['comparisonLowerBounds'][case] > 1
+        if case == 'RgbaGray':
+            c = grayscale_batch['cases'][case]
+            assert c['actualIterations'] == len(c['managedActualNanoseconds']) == 12 and c['lower'] > 1
+            assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['completePacketExact']
+            assert c['packetSha256'] == c['nativePacketSha256'] and c['librarySha256'] == grayscale_batch['producers']['linuxSha256']
+            costs = c['managedUs'], c['nativeUs'], c['ratio'], c['upper'], c['allocatedBytes'], c['packetBytes'], c['nativePacketBytes']
+        else:
+            observation = grayscale_costs['cases'][case][-1]
+            receipt, stats = observation['receipt'], observation['managed']['statistics']
+            assert len(observation['managed']['actual']) == 12 and grayscale_costs['comparisonLowerBounds'][case] > 1
+            costs = (stats['Mean'] / 1000, min(b['mean'] for b in observation['nativeBrackets']) / 1000,
+                     observation['worstBracketRatio'], observation['conservativeRatioUpper'],
+                     observation['managedMemory']['BytesAllocatedPerOperation'], receipt['managedOutputBytes'], receipt['nativeOutputBytes'])
+        managed_us, native_us, ratio, upper, allocated, packet_bytes, native_bytes = costs
         for index, (kind, row) in enumerate(rows):
             if row.startswith(f'| {label} |'):
-                rows[index] = (kind, f'| {label} † | {stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                              f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                              f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {receipt["managedOutputBytes"]:,} / {receipt["nativeOutputBytes"]:,} |')
+                rows[index] = (kind, f'| {label} † | {managed_us:,.2f} | {native_us:,.2f} | '
+                              f'{ratio:.3f} / {upper:.3f} | {allocated:,} | {packet_bytes:,} / {native_bytes:,} |')
                 updated_gray += 1
     assert updated_gray == 2
     baseline_gray_cost = json.loads((ROOT / 'benchmarks/current-baseline-grayscale-jpeg-decode-cost-evidence.json').read_text(encoding='utf-8'))
@@ -1890,7 +1904,11 @@ Current priorities and scope:
   controls have current costs: six pass and stop; RGBA8 8×17/4×9 retain gaps
   (uppers 1.127/1.269). Managed preparation stays timed; native graphs/scratch are
   retained. Other affected bicubic/bilinear H costs still need reconciliation.
-- **JPEG and reading:** current table statuses and
+- **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
+  save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
+  grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
+  labeled SIMD libjpeg-turbo gap remains (upper 1.103); its native clock is 2.19%
+  slower in confirmation. Caller-GRAY/RGB paths keep unchanged evidence. Other table statuses and
   [coverage](../benchmarks/WARM-COVERAGE.md) retain their named color/sampling/
   delivery scope. Sub-microsecond probe/copy gaps remain visible, with expensive
   codec/resize paths prioritized. Inspection, complete Identify and coding
@@ -1902,7 +1920,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,607 full/live checks per OS**, affected normal/scalar
+The current build passes **5,615 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

@@ -1,0 +1,743 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JGB269",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "producers": {
+    "windowsSha256": "5fb834b4cad9dd6598a1a7e7a0dd445ca73bf63bb767161839c2a6eade39ae96",
+    "linuxSha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/JpegGrayPreparation.cs": "6b79cca96b4725788d54d3692bc9eb8d84a5fc44142a4ed96330b0c390b39439",
+    "tests/Lokad.Image.Tests/JpegGrayRowTests.cs": "e2b1f26245fccd7aacc6effcc0e2f0e5c5a9820eaac11c724b503fb1b69a42d4"
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "JGB269",
+    "repeatedWork": "Scalar conversion/rounding and per-sample edge selection after each already normalized packed RGB row. Batch eight independent pixels with exact binary64 AVX operations; replicate the final edge sample once.",
+    "endState": "One bounded row helper, safe AVX2 path with original scalar fallback. No FMA, new buffers, owners, cache, session, numerical policy or admission.",
+    "scope": "Existing complete RGBA8 to grayscale JPEG Q69/0x204060 control, frozen58910B packet; labeled SIMDlibjpeg-turbo. CallerGRAY bypasses this path and reuses unchanged proof. CallerRGB branch unchanged. Generalization is existing8/16edge/flatten block corpus plus exhaustive24bit RGB conversion, not a performance settings grid.",
+    "correctness": "Preserve separate .299*r + .587*g, then .114*b, then +.5/floor operations in binary64. Every24bitRGB input must match. Frozen actual block/packet, scalar, ownership/cancel/admission checks before short. Confirm only if useful complete lead.",
+    "temporaryState": "Original scalar helper retained only as portable fallback. No temporary alternate public API or dual encoder.",
+    "priorWork": "WARM-JPEG-GRAY-ROWS batches normalization but leaves gray conversion scalar. Earlier AVX2transform/quantization/entropy work is distinct and retained. Current confirmedRGBAgray gap1.126/upper1.137; differences between callerGRAY/RGBA costs are not method cost attribution.",
+    "newProfiles": 0,
+    "newPerformanceControls": 0
+  },
+  "cases": {
+    "RgbaGray": {
+      "caseId": "RgbaGray",
+      "runId": "jgb269-confirm-candidate-RgbaGray",
+      "mode": "confirm",
+      "subject": "candidate",
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "operationsPerActual": 128,
+      "managedUs": 1660.5232515624998,
+      "nativeUs": 1522.2380559895832,
+      "ratio": 1.090843344133201,
+      "lower": 1.0712581909155587,
+      "upper": 1.1030754561819403,
+      "status": "gap",
+      "allocatedBytes": 155436,
+      "packetBytes": 58910,
+      "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "librarySha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6",
+      "nativePacketBytes": 58910,
+      "nativePacketSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "benchmarkAssemblySha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+      "nativeWorkerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "quality": 69,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "normalizationTimed": true,
+      "independentOutputAndDisposalTimed": true,
+      "managedActualNanoseconds": [
+        1679611.390625,
+        1661647.1640625,
+        1662551.109375,
+        1659214.8046875,
+        1659210.734375,
+        1659437.40625,
+        1664485.0546875,
+        1657102.703125,
+        1672628.7890625,
+        1664053.7734375,
+        1659013.71875,
+        1658538.3125
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 10,
+          "Mean": 1660523.2515625,
+          "StandardError": 789.2924003510695,
+          "ConfidenceInterval": {
+            "N": 10,
+            "Mean": 1660523.2515625,
+            "StandardError": 789.2924003510695,
+            "Level": 12,
+            "Margin": 3773.537969781286,
+            "Lower": 1656749.7135927186,
+            "Upper": 1664296.7895322812
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 1663124.580078125,
+          "StandardError": 1918.3457291952943,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 1663124.580078125,
+            "StandardError": 1918.3457291952943,
+            "Level": 12,
+            "Margin": 8511.6603619434,
+            "Lower": 1654612.9197161817,
+            "Upper": 1671636.2404400683
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1522238.0559895833,
+          "standardError": 1533.8582227501158,
+          "confidenceLower": 1514904.8139094184,
+          "confidenceUpper": 1529571.298069748
+        },
+        {
+          "mean": 1537228.19921875,
+          "standardError": 1650.4043089525107,
+          "confidenceLower": 1529337.7604883723,
+          "confidenceUpper": 1545118.6379491277
+        }
+      ],
+      "nativeSamplesNanoseconds": [
+        [
+          1531975.3125,
+          1522185.1875,
+          1519334.140625,
+          1516051.984375,
+          1528044.515625,
+          1515951.828125,
+          1515579.078125,
+          1520387.765625,
+          1521385.375,
+          1521966.5625,
+          1526012.53125,
+          1527982.390625
+        ],
+        [
+          1545979.640625,
+          1545404.078125,
+          1538797.515625,
+          1540485.390625,
+          1542036.171875,
+          1539172.765625,
+          1528234.1875,
+          1533262.265625,
+          1534334.1875,
+          1531460.9375,
+          1536448.640625,
+          1531122.609375
+        ]
+      ],
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Approved standalone SIMD libjpeg-turbo grayscale JPEG benchmark-tooling exception",
+        "revision": "9217719d3a58633923b096af4c1d50d304768a64",
+        "simdEnabled": true,
+        "workerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+        "sourceSha256": "193a22466e5ad6931eec65b0b5edd3cf42d8eb26ab071e608671301375bab576",
+        "buildScriptSha256": "7b70d802f66d0ca7e2a265c77a930e8ce5cd534c1180f9c6f79a1d0d781de012",
+        "staticLibrarySha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+        "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-ffp-contract=off",
+          "-fno-math-errno",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "reusedImmutablePreparedWorker": true,
+        "preparedBuildDriverSha256": "944f71881666a62ca18282727ca84ebd4b4199bdcafb7b8e2206b950ed9993d4",
+        "buildScriptRole": "Reproduction recipe; immutable prepared build driver retained separately",
+        "approvalScope": "Single-component grayscale JPEG benchmark tooling only"
+      }
+    }
+  },
+  "baseline": {
+    "caseId": "RgbaGray",
+    "runId": "jgb269-confirm-baseline-RgbaGray",
+    "mode": "confirm",
+    "subject": "baseline",
+    "actualIterations": 12,
+    "filteredIterations": 10,
+    "operationsPerActual": 128,
+    "managedUs": 1693.237546875,
+    "nativeUs": 1489.5858151041668,
+    "ratio": 1.1367170187214706,
+    "lower": 1.1128659977505464,
+    "upper": 1.1498193589442267,
+    "status": "gap",
+    "allocatedBytes": 155436,
+    "packetBytes": 58910,
+    "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+    "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+    "nativePacketBytes": 58910,
+    "nativePacketSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+    "benchmarkAssemblySha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+    "nativeWorkerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "depth": 8,
+    "quality": 69,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "completePacketExact": true,
+    "normalizationTimed": true,
+    "independentOutputAndDisposalTimed": true,
+    "managedActualNanoseconds": [
+      1695668.515625,
+      1714061.3515625,
+      1688021.2265625,
+      1689446.203125,
+      1691628.1015625,
+      1700369.3046875,
+      1717223.484375,
+      1694706.8203125,
+      1692194.265625,
+      1693326.375,
+      1694695.6328125,
+      1692341.7578125
+    ],
+    "managedStatistics": {
+      "statistics": {
+        "N": 10,
+        "Mean": 1693237.546875,
+        "StandardError": 1091.0223004330926,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 1693237.546875,
+          "StandardError": 1091.0223004330926,
+          "Level": 12,
+          "Margin": 5216.082246238773,
+          "Lower": 1688021.4646287612,
+          "Upper": 1698453.6291212388
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 12,
+        "Mean": 1696973.5865885417,
+        "StandardError": 2680.7250370625884,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 1696973.5865885417,
+          "StandardError": 2680.7250370625884,
+          "Level": 12,
+          "Margin": 11894.32159801889,
+          "Lower": 1685079.2649905228,
+          "Upper": 1708867.9081865607
+        }
+      }
+    },
+    "nativeBrackets": [
+      {
+        "mean": 1489585.8151041667,
+        "standardError": 761.8401676342139,
+        "confidenceLower": 1485943.5238592573,
+        "confidenceUpper": 1493228.1063490761
+      },
+      {
+        "mean": 1501543.203125,
+        "standardError": 2848.028314560105,
+        "confidenceLower": 1487927.028714573,
+        "confidenceUpper": 1515159.377535427
+      }
+    ],
+    "nativeSamplesNanoseconds": [
+      [
+        1490011.953125,
+        1489965.640625,
+        1488748.953125,
+        1483991.28125,
+        1490524.765625,
+        1488259.46875,
+        1487114.75,
+        1487537.421875,
+        1491455.390625,
+        1491327.0625,
+        1493703.953125,
+        1492389.140625
+      ],
+      [
+        1493678.59375,
+        1489863.140625,
+        1493428.0625,
+        1495321.40625,
+        1499760.46875,
+        1500571.0625,
+        1503282.828125,
+        1501319.859375,
+        1503050.296875,
+        1498355.375,
+        1513983.078125,
+        1525904.265625
+      ]
+    ],
+    "nativeBuild": {
+      "schemaVersion": 1,
+      "project": "Lokad.Image",
+      "purpose": "Approved standalone SIMD libjpeg-turbo grayscale JPEG benchmark-tooling exception",
+      "revision": "9217719d3a58633923b096af4c1d50d304768a64",
+      "simdEnabled": true,
+      "workerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+      "sourceSha256": "193a22466e5ad6931eec65b0b5edd3cf42d8eb26ab071e608671301375bab576",
+      "buildScriptSha256": "7b70d802f66d0ca7e2a265c77a930e8ce5cd534c1180f9c6f79a1d0d781de012",
+      "staticLibrarySha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+      "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "flags": [
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-Wall",
+        "-Wextra",
+        "-Werror"
+      ],
+      "reusedImmutablePreparedWorker": true,
+      "preparedBuildDriverSha256": "944f71881666a62ca18282727ca84ebd4b4199bdcafb7b8e2206b950ed9993d4",
+      "buildScriptRole": "Reproduction recipe; immutable prepared build driver retained separately",
+      "approvalScope": "Single-component grayscale JPEG benchmark tooling only"
+    }
+  },
+  "shortScreens": {
+    "baseline": {
+      "caseId": "RgbaGray",
+      "runId": "jgb269-measure-baseline-RgbaGray",
+      "mode": "measure",
+      "subject": "baseline",
+      "actualIterations": 3,
+      "filteredIterations": 3,
+      "operationsPerActual": 112,
+      "managedUs": 1730.3812708333332,
+      "nativeUs": 1523.246546875,
+      "ratio": 1.1359824017873392,
+      "lower": 0.9657735125688192,
+      "upper": 1.3116425483353875,
+      "status": "uncertain",
+      "allocatedBytes": 155437,
+      "packetBytes": 58910,
+      "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "librarySha256": "2e558aee2d84237faf2480fd2a841399b56a42982db17c5088062ad4d9039fc7",
+      "nativePacketBytes": 58910,
+      "nativePacketSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "benchmarkAssemblySha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+      "nativeWorkerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "quality": 69,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "normalizationTimed": true,
+      "independentOutputAndDisposalTimed": true,
+      "managedActualNanoseconds": [
+        1743778.7232142857,
+        1724675.4285714286,
+        1722696.892857143
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 3,
+          "Mean": 1730381.2708333333,
+          "StandardError": 6721.830277337126,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 1730381.2708333333,
+            "StandardError": 6721.830277337126,
+            "Level": 12,
+            "Margin": 212403.48092763373,
+            "Lower": 1517977.7899056994,
+            "Upper": 1942784.751760967
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 3,
+          "Mean": 1730383.6815476192,
+          "StandardError": 6721.830277337082,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 1730383.6815476192,
+            "StandardError": 6721.830277337082,
+            "Level": 12,
+            "Margin": 212403.48092763234,
+            "Lower": 1517980.2006199867,
+            "Upper": 1942787.1624752516
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1523246.546875,
+          "standardError": 1331.0557300604257,
+          "confidenceLower": 1481186.4443867372,
+          "confidenceUpper": 1565306.6493632628
+        },
+        {
+          "mean": 1534348.6041666667,
+          "standardError": 1184.3864553004362,
+          "confidenceLower": 1496923.1120774774,
+          "confidenceUpper": 1571774.096255856
+        }
+      ],
+      "nativeSamplesNanoseconds": [
+        [
+          1521642.1875,
+          1522208.984375,
+          1525888.46875
+        ],
+        [
+          1533660.84375,
+          1532729.4375,
+          1536655.53125
+        ]
+      ],
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Approved standalone SIMD libjpeg-turbo grayscale JPEG benchmark-tooling exception",
+        "revision": "9217719d3a58633923b096af4c1d50d304768a64",
+        "simdEnabled": true,
+        "workerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+        "sourceSha256": "193a22466e5ad6931eec65b0b5edd3cf42d8eb26ab071e608671301375bab576",
+        "buildScriptSha256": "7b70d802f66d0ca7e2a265c77a930e8ce5cd534c1180f9c6f79a1d0d781de012",
+        "staticLibrarySha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+        "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-ffp-contract=off",
+          "-fno-math-errno",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "reusedImmutablePreparedWorker": true,
+        "preparedBuildDriverSha256": "944f71881666a62ca18282727ca84ebd4b4199bdcafb7b8e2206b950ed9993d4",
+        "buildScriptRole": "Reproduction recipe; immutable prepared build driver retained separately",
+        "approvalScope": "Single-component grayscale JPEG benchmark tooling only"
+      }
+    },
+    "candidate": {
+      "caseId": "RgbaGray",
+      "runId": "jgb269-measure-candidate-RgbaGray",
+      "mode": "measure",
+      "subject": "candidate",
+      "actualIterations": 3,
+      "filteredIterations": 3,
+      "operationsPerActual": 128,
+      "managedUs": 1649.2510286458332,
+      "nativeUs": 1420.9683385416668,
+      "ratio": 1.16065290401787,
+      "lower": 0.85827933588182,
+      "upper": 1.5924780743730418,
+      "status": "uncertain",
+      "allocatedBytes": 155436,
+      "packetBytes": 58910,
+      "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "librarySha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6",
+      "nativePacketBytes": 58910,
+      "nativePacketSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+      "benchmarkAssemblySha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+      "nativeWorkerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "quality": 69,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "normalizationTimed": true,
+      "independentOutputAndDisposalTimed": true,
+      "managedActualNanoseconds": [
+        1662406.4609375,
+        1645618.078125,
+        1639735.109375
+      ],
+      "managedStatistics": {
+        "statistics": {
+          "N": 3,
+          "Mean": 1649251.0286458333,
+          "StandardError": 6792.353954766561,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 1649251.0286458333,
+            "StandardError": 6792.353954766561,
+            "Level": 12,
+            "Margin": 214631.96245063996,
+            "Lower": 1434619.0661951932,
+            "Upper": 1863882.9910964733
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 3,
+          "Mean": 1649253.2161458333,
+          "StandardError": 6792.353954766561,
+          "ConfidenceInterval": {
+            "N": 3,
+            "Mean": 1649253.2161458333,
+            "StandardError": 6792.353954766561,
+            "Level": 12,
+            "Margin": 214631.96245063996,
+            "Lower": 1434621.2536951932,
+            "Upper": 1863885.1785964733
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1420968.3385416667,
+          "standardError": 7928.644496227156,
+          "confidenceLower": 1170430.6694020163,
+          "confidenceUpper": 1671506.0076813172
+        },
+        {
+          "mean": 1531262.0208333333,
+          "standardError": 1672.3235683611013,
+          "confidenceLower": 1478418.1773410612,
+          "confidenceUpper": 1584105.8643256053
+        }
+      ],
+      "nativeSamplesNanoseconds": [
+        [
+          1412163.03125,
+          1413949.953125,
+          1436792.03125
+        ],
+        [
+          1527934.53125,
+          1532632.75,
+          1533218.78125
+        ]
+      ],
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Approved standalone SIMD libjpeg-turbo grayscale JPEG benchmark-tooling exception",
+        "revision": "9217719d3a58633923b096af4c1d50d304768a64",
+        "simdEnabled": true,
+        "workerSha256": "11215fae72156842476b4e437d5c75829281d03e9159ad39ae5d27d3d25a6c1d",
+        "sourceSha256": "193a22466e5ad6931eec65b0b5edd3cf42d8eb26ab071e608671301375bab576",
+        "buildScriptSha256": "7b70d802f66d0ca7e2a265c77a930e8ce5cd534c1180f9c6f79a1d0d781de012",
+        "staticLibrarySha256": "faeac65984bc945a3acf12abffadf9814ba64b91d49a0b10bc6d2fe191b55d24",
+        "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-ffp-contract=off",
+          "-fno-math-errno",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "reusedImmutablePreparedWorker": true,
+        "preparedBuildDriverSha256": "944f71881666a62ca18282727ca84ebd4b4199bdcafb7b8e2206b950ed9993d4",
+        "buildScriptRole": "Reproduction recipe; immutable prepared build driver retained separately",
+        "approvalScope": "Single-component grayscale JPEG benchmark tooling only"
+      }
+    }
+  },
+  "independentComparison": {
+    "project": "Lokad.Image",
+    "rawSavedUs": 32.7142953125001,
+    "rawReduction": 0.019320558638022622,
+    "normalizedReduction": 0.040356283782806535,
+    "nativeClockChange": 0.021920348968369474,
+    "views": [
+      {
+        "view": "statistics",
+        "rawBeforeLower": 1688021.4646287612,
+        "rawCandidateUpper": 1664296.7895322812,
+        "rawSeparated": true,
+        "normalizedBeforeLower": 1.1140883854571875,
+        "normalizedCandidateUpper": 1.0986147606444898,
+        "normalizedSeparated": true
+      },
+      {
+        "view": "unfilteredActualStatistics",
+        "rawBeforeLower": 1685079.2649905228,
+        "rawCandidateUpper": 1671636.2404400683,
+        "rawSeparated": true,
+        "normalizedBeforeLower": 1.1128659977505464,
+        "normalizedCandidateUpper": 1.1030754561819403,
+        "normalizedSeparated": true
+      }
+    ]
+  },
+  "reference": "Explicitly labeled SIMD-enabled standalone libjpeg-turbo3.1.4.1, approved single-component grayscale benchmark-tooling exception. Production stays safe managed and dependency-free.",
+  "storage": {
+    "allocatedBytes": 155436,
+    "allocationChanged": false,
+    "newHeapArrays": 0,
+    "newReservations": 0,
+    "additionalRetainedState": 0,
+    "stack": "Same eight packedRGB ints inside the existing8KiB fixed workspace; vector registers are not retained storage.",
+    "admittedPeak": "Not newly measured; existing refusal/cancellation/root tests verify unchanged accounting. No physical/native peak claim."
+  },
+  "correctness": {
+    "all16777216RgbTriplesExact": true,
+    "frozen10766BlocksExact": true,
+    "frozen689024GraySamplesExact": true,
+    "unalignedTailsAndGuardsExact": true,
+    "gray8PacketBytes": 58910,
+    "gray8PacketSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+    "gray16PacketSha256": "2a99dee8551c14e8acceb8df6adec6a2a263a9f037ec00cabe2791c96b178bfc",
+    "newInternalCases": 2,
+    "noFmaOrIntermediateRounding": true,
+    "borrowedInputsAndIndependentOutputs": true,
+    "terminalRefusalCleanupAndRecovery": true
+  },
+  "qualification": {
+    "fullChecksEachOs": 5615,
+    "platforms": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSha256": "5fb834b4cad9dd6598a1a7e7a0dd445ca73bf63bb767161839c2a6eade39ae96",
+        "full": [
+          2380,
+          2287,
+          948
+        ],
+        "total": 5615,
+        "fullLivePassed": true,
+        "focused": {
+          "internal-normal": 371,
+          "internal-scalar": 371,
+          "public-normal": 331,
+          "public-scalar": 331
+        },
+        "immutableCandidateReused": true,
+        "additionalCoreHarnessNativeSelectorBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "productionSha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6",
+        "full": [
+          2380,
+          2287,
+          948
+        ],
+        "total": 5615,
+        "fullLivePassed": true,
+        "focused": {
+          "internal-normal": 371,
+          "internal-scalar": 371,
+          "public-normal": 331,
+          "public-scalar": 331
+        },
+        "immutableCandidateReused": true,
+        "additionalCoreHarnessNativeSelectorBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "27b78865aa309eafc41b197872c8a06dc0fd8a57e1f898492b37b72a81ad47c7",
+      "symbolsSha256": "7b0b3395eddedda3d5a195bbca887b005f8b759ec62c03f5315a17a4fac2bf62",
+      "bytes": 404858,
+      "librarySha256": "5fb834b4cad9dd6598a1a7e7a0dd445ca73bf63bb767161839c2a6eade39ae96",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "27b78865aa309eafc41b197872c8a06dc0fd8a57e1f898492b37b72a81ad47c7",
+      "librarySha256": "5fb834b4cad9dd6598a1a7e7a0dd445ca73bf63bb767161839c2a6eade39ae96",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "affectedScalar": true,
+    "actualPackageBothDepthFrozenPackets": true,
+    "usageExamplesEachOs": 3
+  },
+  "workflow": {
+    "coreVersionsPerOs": 1,
+    "internalVersionsPerOs": 1,
+    "publicHarnessNativeSelectorAuditBuilds": 0,
+    "newProfiles": 0,
+    "newPerformanceControls": 0,
+    "shortJobs": 2,
+    "independentConfirmationJobs": 2,
+    "packagePacks": 1,
+    "fullPackageMilestones": 1,
+    "noUnchangedRetiming": true,
+    "allActualsRetained": true
+  },
+  "invalidation": "Only ImageBuffer-to-single-component JPEG preparation executes the changed row helper, at8/16bit depths and synchronous/asynchronous delivery. The one displayed RGBA8 grayscale cost is refreshed; other affected unrefreshed image-grayscale timing is historical. CallerGRAY8 bypasses preparation and callerRGB keeps its existing branch; both reuse valid evidence. ColorJPEG, all decoders/inspection, PNG/WebP, editing/text/resizing remain unchanged. No broader grayscale content/settings speed claim.",
+  "scope": "One existing513x259RGBA8/grayQ69 control, background0x204060, no restart. Complete per-call normalization, encoding, fresh output acquisition/growth and disposal on both sides. Native wrapper/options may be retained. Same frozen input/quantizers/complete58910B packet; equal numeric quality is not the matching proof. Generalization covers arithmetic and original block/edge/depth fixtures, not an expanded performance grid.",
+  "rawArchive": {
+    "project": "Lokad.Image",
+    "file": "jpeg-grayscale-row-batch-qualified.tar.xz",
+    "bytes": 4711412,
+    "members": 199,
+    "sha256": "6468a48369bf6b1037e31547d99e0e78353cb760918ed41b44e0694acacfb204",
+    "vmMembersVerified": true,
+    "productionAccepted": true,
+    "dependencies": [
+      {
+        "file": "png-block-preparation-qualified.tar.xz",
+        "sha256": "85f6f2f28169e5bb79a3f7cfc9a28e17389a03a3b7bd5535731449e2f7f521db"
+      },
+      {
+        "file": "text-row-composition-inconclusive.tar.xz",
+        "sha256": "379e76f2f5e63cba891848f748a9f045eab4ca837801d46ea099cbc09289723e"
+      }
+    ],
+    "frozenReferenceDependencies": {
+      "file": "current-grayscale-jpeg-costs.tar.xz",
+      "sha256": "e283503207fa1ec95c554161de6738ec3d9b65fee9a4a2683c5ee8c810e6e4e8",
+      "bytes": 1329668,
+      "members": 58,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "jpeg-factored-word-normalization-qualified.tar.xz",
+          "sha256": "86c732f367a36ca05b9d92f1676cedb4a0fbef6af78a5c86a33454fcf366acbc"
+        },
+        {
+          "file": "vp8l-opaque-alpha-analysis-rejected.tar.xz",
+          "sha256": "b0604236bd608fce7cefddc5d221dd86e786a5fa153a44948af6a42909180dad"
+        }
+      ]
+    },
+    "dependencyScope": "GCC1 original input/settings, approvedSIMDlibjpeg-turbo workers, immutable benchmark/frameworks/selectors, priorqualification. Reused, not rebuilt.",
+    "localMembersVerified": true
+  },
+  "next": "Stop this confirmed implementation; retain remaining1.091/upper1.103gap. Return to larger codec/resizing attribution and simplify accumulated summary overlay coupling. Do not retune passing or uncertain cases without new cause."
+}

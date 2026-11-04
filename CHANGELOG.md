@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Batch JPEG grayscale conversion with exact binary64 SIMD arithmetic, preserving
+  encoder packets, scalar execution and memory ownership.
+
 - Share bicubic streaming schedulers and avoid repeated row filtering within the
   existing 4 KiB workspace, preserving exact pixels and independent output ownership.
 

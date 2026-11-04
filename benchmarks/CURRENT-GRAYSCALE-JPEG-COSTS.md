@@ -1,5 +1,8 @@
 # Current single-component JPEG encoding costs
 
+The RGBA8 row below is superseded by [exact row batches](JPEG-GRAYSCALE-ROW-BATCH.md).
+Caller-GRAY8 bypasses that preparation and retains its unchanged valid evidence.
+
 Both existing controls are independently confirmed gaps on the current qualified
 build. These costs replace short screens, without a causal gain/regression claim
 against unmatched older observations. No production change or workload is added.
