@@ -128,6 +128,17 @@ internal sealed partial class PngDeflater : Stream
         return prior;
     }
 
+    // Consecutive input triples share their first two bytes. Shifting the
+    // previous15-bit key drops its oldest byte and inserts only the new byte.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int InsertSequential(int at, ref int key, ref int next)
+    {
+        if (at != next) key = (Byte(at) << 5) ^ Byte(at + 1);
+        key = ((key << 5) ^ Byte(at + 2)) & (Window - 1); next = at + 1;
+        var prior = heads[key]; older[at & (Window - 1)] = prior;
+        heads[key] = checked((ushort)at); return prior;
+    }
+
     private void Process(bool final)
     {
         if (level == 1) ProcessFast(final); else ProcessLazy(final);
@@ -201,6 +212,7 @@ internal sealed partial class PngDeflater : Stream
         // Keep execution state local while consuming this immutable input extent.
         // Sliding and block publication use the same persistent state as Write
         // and Complete; callbacks and exceptional exits see a committed cursor.
+        var key = 0; var nextInsertion = -1;
         var cursorPosition = position; var inputEnd = filled; var origin = windowOrigin;
         var pendingLength = deferredLength; var pendingStart = deferredStart;
         var deferredByte = hasDeferredByte; var usedTokens = tokenCount;
@@ -212,10 +224,10 @@ internal sealed partial class PngDeflater : Stream
                 if (cursorPosition >= origin + 2 * Window - Lookahead + 1)
                 {
                     PublishLazy(cursorPosition, pendingLength, pendingStart, deferredByte, usedTokens);
-                    AdvanceOrigin(); origin = windowOrigin;
+                    AdvanceOrigin(); origin = windowOrigin; nextInsertion = -1;
                 }
                 var current = (int)(cursorPosition - origin);
-                var prior = cursorPosition + Minimum <= inputEnd ? Insert(current) : 0;
+                var prior = cursorPosition + Minimum <= inputEnd ? InsertSequential(current, ref key, ref nextInsertion) : 0;
                 var length = Minimum - 1; var start = 0;
                 if (prior > 0 && current - prior <= Window - Lookahead && pendingLength < (level == 9 ? 258 : 16))
                 {
@@ -255,7 +267,7 @@ internal sealed partial class PngDeflater : Stream
                     }
                     var after = current + pendingLength - 1;
                     var lastInsert = (int)(inputEnd - origin) - Minimum;
-                    for (var at = current + 1; at < after && at <= lastInsert; at++) Insert(at);
+                    for (var at = current + 1; at < after && at <= lastInsert; at++) InsertSequential(at, ref key, ref nextInsertion);
                     cursorPosition = origin + after; pendingLength = Minimum - 1; deferredByte = false;
                 }
                 else

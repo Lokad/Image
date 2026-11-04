@@ -33,16 +33,17 @@ Rows marked **H** retain historical affected costs pending refresh.
 All four current PNG Optimal/Fastest rows compare fresh encoder state, complete
 encoding and independent output/disposal on both sides. Word native endian-frame
 allocation/conversion/disposal stays timed.
-[Local lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md) saves **1.23 ms /
-4.52% raw / 4.31% normalized** on word Optimal. The subsequent
-[local greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md) saves
-**1.35 ms raw / 6.05% raw / 3.14% normalized** on word Fastest, with separated
-independent confidence. Its native clock is **3.095% faster**, disclosed alongside
-the normalized gain. Neither byte companion establishes an incremental gain.
-All four retain gaps: Optimal uppers **1.144 word / 1.078 byte**, Fastest
+[Sequential dictionary hashing](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md)
+saves **0.56 ms / 2.40% raw / 2.55% normalized** on word Optimal, with separated
+filtered/all-actual raw and normalized confidence. Its native clock is 0.155% slower.
+[Local greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md) retains the
+**1.35 ms / 6.05% raw / 3.14% normalized** word Fastest gain, with its 3.095% faster
+native clock disclosed. Neither byte companion establishes an incremental gain.
+All four retain gaps: Optimal uppers **1.113 word / 1.057 byte**, Fastest
 **1.144 word / 1.350 byte**. Word allocation stays **3,420,516 B/op** each;
 byte Optimal/Fastest **932,516 / 951,212 B/op**. Workspace admission is **384 KiB**,
 retained operation scratch zero, no newly measured complete/physical peak.
+[Earlier lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md),
 [Compact dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md),
 [contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) and
 [one-shot boundary reconciliation](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md)
@@ -77,7 +78,7 @@ retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,547 full/live checks
+**H** costs remain historical. The current build passes **5,549 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release
@@ -162,8 +163,8 @@ individual experiments remain in
 | PNG grayscale8, Optimal6 / native6 † H | 2,570.87 | 1,940.17 | 1.325 / 1.354 | 1,001,812 | 72,586 / 72,586 |
 | PNG RGB8, Optimal6 / native6 † H | 12,457.28 | 9,513.16 | 1.309 / 1.324 | 1,325,068 | 168,729 / 168,729 |
 | PNG gray-alpha8, Optimal6 / native6 † H | 5,626.99 | 4,312.43 | 1.305 / 1.350 | 1,021,036 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 20,178.17 | 19,010.96 | 1.061 / 1.078 | 932,516 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 25,943.81 | 22,945.50 | 1.131 / 1.144 | 3,420,516 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 18,064.02 | 17,190.81 | 1.051 / 1.057 | 932,516 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 22,845.90 | 20,758.37 | 1.101 / 1.113 | 3,420,516 | 963,202 / 963,202 |
 | PNG RGB16, Optimal6 / native6 † H | 20,239.97 | 15,329.96 | 1.320 / 1.338 | 3,571,252 | 739,472 / 739,472 |
 | PNG grayscale16, Optimal6 / native6, red-plane reference † H | 6,812.24 | 5,434.49 | 1.254 / 1.285 | 1,506,972 | 265,433 / 265,433 |
 | PNG gray-alpha16, Optimal6 / native6 † H | 13,361.83 | 10,171.22 | 1.314 / 1.333 | 2,264,564 | 506,887 / 506,887 |

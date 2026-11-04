@@ -1569,9 +1569,9 @@ def render():
     assert png_fast['qualification']['actualPackage']['sha256'] == png_fast['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert png_fast['comparisons']['EncodeFast16']['normalizedConfidenceSeparates']
     assert not png_fast['comparisons']['EncodeFast8']['normalizedConfidenceSeparates']
-    png_local = json.loads((ROOT / 'benchmarks/png-local-execution-state-evidence.json').read_text(encoding='utf-8'))
+    png_local = json.loads((ROOT / 'benchmarks/png-sequential-dictionary-hash-evidence.json').read_text(encoding='utf-8'))
     assert png_local['productionAccepted'] and png_local['independentQuietConfirmation']
-    assert png_local['qualification']['fullChecksEachOs'] == 5543
+    assert png_local['qualification']['fullChecksEachOs'] == 5549
     assert png_local['qualification']['actualPackage']['sha256'] == png_local['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert png_local['comparisons']['Encode16']['normalizedConfidenceSeparates']
     assert not png_local['comparisons']['Encode8']['normalizedConfidenceSeparates']
@@ -1847,16 +1847,17 @@ Rows marked **H** retain historical affected costs pending refresh.
 All four current PNG Optimal/Fastest rows compare fresh encoder state, complete
 encoding and independent output/disposal on both sides. Word native endian-frame
 allocation/conversion/disposal stays timed.
-[Local lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md) saves **1.23 ms /
-4.52% raw / 4.31% normalized** on word Optimal. The subsequent
-[local greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md) saves
-**1.35 ms raw / 6.05% raw / 3.14% normalized** on word Fastest, with separated
-independent confidence. Its native clock is **3.095% faster**, disclosed alongside
-the normalized gain. Neither byte companion establishes an incremental gain.
-All four retain gaps: Optimal uppers **1.144 word / 1.078 byte**, Fastest
+[Sequential dictionary hashing](../benchmarks/PNG-SEQUENTIAL-DICTIONARY-HASH.md)
+saves **0.56 ms / 2.40% raw / 2.55% normalized** on word Optimal, with separated
+filtered/all-actual raw and normalized confidence. Its native clock is 0.155% slower.
+[Local greedy state](../benchmarks/PNG-FAST-LOCAL-EXECUTION-STATE.md) retains the
+**1.35 ms / 6.05% raw / 3.14% normalized** word Fastest gain, with its 3.095% faster
+native clock disclosed. Neither byte companion establishes an incremental gain.
+All four retain gaps: Optimal uppers **1.113 word / 1.057 byte**, Fastest
 **1.144 word / 1.350 byte**. Word allocation stays **3,420,516 B/op** each;
 byte Optimal/Fastest **932,516 / 951,212 B/op**. Workspace admission is **384 KiB**,
 retained operation scratch zero, no newly measured complete/physical peak.
+[Earlier lazy state](../benchmarks/PNG-LOCAL-EXECUTION-STATE.md),
 [Compact dictionaries](../benchmarks/DEFLATE-RELATIVE-LINKS.md),
 [contiguous history](../benchmarks/PNG-CONTIGUOUS-HISTORY.md) and
 [one-shot boundary reconciliation](../benchmarks/PNG-WORD-ONE-SHOT-BOUNDARY.md)
@@ -1891,7 +1892,7 @@ retains a gap. The two transparent controls reuse unchanged CTS197 evidence.
 remains **3,656,309 B**, retained operation scratch zero. The histogram redesign
 adds **32 B** to the admitted search workspace; measured complete peaks/allocations
 are unchanged. Native allocation and physical peaks are unmeasured. Other affected
-**H** costs remain historical. The current build passes **5,547 full/live checks
+**H** costs remain historical. The current build passes **5,549 full/live checks
 per OS** and affected normal/scalar checks. The same actual Release package and
 all three examples pass both OSes, including retained resize admission and async
 surviving outputs. Unchanged paths reuse valid proof; this is not a full release
