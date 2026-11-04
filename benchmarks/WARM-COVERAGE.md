@@ -41,6 +41,12 @@ normalized confidence overlaps and photograph has an adverse point. Both caller
 guards restore exactly; a useful dequantized-zero assertion remains in existing
 trellis tests. Current costs and package proof are unchanged; all raw data remains.
 
+The [fused filter/analysis stage](WEBP-ALPHA-FILTER-ANALYSIS-INCONCLUSIVE.md)
+removes a complete ALPH preparation scan but has no useful short lead and saves
+only 4,144 B/op. It restores exactly without confirmation or rebuilds. Frozen
+packets, shared ownership, all adverse actuals and the corrected test-hook failure
+remain documented. No current comparison or package changes.
+
 Recent [shared-event stream](VP8-SHARED-EVENT-STREAM-INCONCLUSIVE.md),
 [alpha preparation](VP8L-INVARIANT-ALPHA-PREPARATION-INCONCLUSIVE.md) and
 [shared magnitude grammar](VP8-MAGNITUDE-GRAMMAR-INCONCLUSIVE.md) investigations
