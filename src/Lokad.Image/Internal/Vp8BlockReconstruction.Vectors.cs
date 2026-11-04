@@ -64,6 +64,7 @@ internal static partial class Vp8BlockReconstruction
     // callers additionally snapshot both blocks before reconstructing either.
     private static void AddVector(ReadOnlySpan<short> coefficients, Span<byte> pixels, int stride)
     {
+        if (TryAddPacked16(coefficients, pixels, stride)) return;
         Line(Row(coefficients[..4]), Row(coefficients.Slice(4, 4)), Row(coefficients.Slice(8, 4)), Row(coefficients.Slice(12, 4)),
             out var a, out var b, out var c, out var d);
         a = Wrap16(a); b = Wrap16(b); c = Wrap16(c); d = Wrap16(d);

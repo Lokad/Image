@@ -1,5 +1,9 @@
 # Packed VP8 inverse reconstruction: rejected
 
+This historical screen stopped under a now-retired threshold. The bounded
+[current reconsideration](VP8-PACKED-RECONSTRUCTION.md) independently confirms
+the exact kernel's scoped photograph gain; the original evidence below is retained.
+
 The fresh photograph screen misses the predeclared 5% continuation gate:
 **3.47%** less elapsed and **3.62%** native-normalized point reduction. Raw short
 intervals separate; conservative normalized envelopes overlap. The candidate

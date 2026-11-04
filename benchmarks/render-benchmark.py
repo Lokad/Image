@@ -1673,12 +1673,12 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/webp-alpha-coefficient-storage-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_owned['productionAccepted'] and not vp8_owned['cpuGainClaim']
-    assert vp8_owned['qualification']['fullChecksEachOs'] == 5603
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-packed-reconstruction-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_owned['productionAccepted']
+    assert vp8_owned['qualification']['fullChecksEachOs'] == 5625
     assert vp8_owned['qualification']['actualPackage']['sha256'] == vp8_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert vp8_owned['design']['continuousSameOperationChargeTransfer'] and vp8_owned['design']['selectedPayloadIndependent']
-    assert vp8_owned['storage']['measured']['alpha']['admittedPeakBytes'] == 3656309
+    assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in vp8_owned['independentComparisons']['photograph']['views'])
+    assert vp8_owned['design']['newOwnedCapacityBytes'] == 0
     assert len(vp8_owned['cases']) == 8
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
@@ -1828,12 +1828,14 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
-  saves about 449 KB/op (5.9%) for both input depths, now 7,165,880/7,165,472 B/op.
-  Admitted alpha8 peak stays 3,656,309 B; retained scratch is zero. The coefficient
-  phase carries 82,668 B extra capacity; physical peak is unmeasured. Eight VP8
-  costs are current and retain CPU gaps, without an incremental CPU claim.
-  Word-alpha clocks move within its run; its adverse point and wide bound remain.
+- **WebP:** [exact packed reconstruction](../benchmarks/VP8-PACKED-RECONSTRUCTION.md)
+  saves 337.10 µs / 2.27% raw on the photograph (2.05% normalized, native clock
+  0.23% faster). Alpha's normalized confidence overlaps; its adverse short remains.
+  All eight affected VP8 costs are current and retain gaps, with unchanged allocations.
+  [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
+  retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
+  Its measured alpha8 admission peak is 3,656,309 B, retained scratch zero;
+  the coefficient phase carries 82,668 B extra. Physical peak is unmeasured.
   [Unchanged VP8L paths](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
   Photograph remains uncertain, including its adjacent-sample interval
@@ -1881,7 +1883,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,623 full/live checks per OS**, affected normal/scalar
+The current build passes **5,625 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Keep certified VP8 inverse reconstruction in packed SIMD arithmetic, preserving
+  exact encoder packets, full-range/scalar fallbacks and output ownership.
+
 - Prepare tight-memory bicubic column geometry in owned output storage, preserving
   exact pixels, the 4 KiB workspace and independent output lifetimes.
 

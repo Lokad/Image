@@ -17,12 +17,14 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
-  saves about 449 KB/op (5.9%) for both input depths, now 7,165,880/7,165,472 B/op.
-  Admitted alpha8 peak stays 3,656,309 B; retained scratch is zero. The coefficient
-  phase carries 82,668 B extra capacity; physical peak is unmeasured. Eight VP8
-  costs are current and retain CPU gaps, without an incremental CPU claim.
-  Word-alpha clocks move within its run; its adverse point and wide bound remain.
+- **WebP:** [exact packed reconstruction](../benchmarks/VP8-PACKED-RECONSTRUCTION.md)
+  saves 337.10 µs / 2.27% raw on the photograph (2.05% normalized, native clock
+  0.23% faster). Alpha's normalized confidence overlaps; its adverse short remains.
+  All eight affected VP8 costs are current and retain gaps, with unchanged allocations.
+  [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
+  retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
+  Its measured alpha8 admission peak is 3,656,309 B, retained scratch zero;
+  the coefficient phase carries 82,668 B extra. Physical peak is unmeasured.
   [Unchanged VP8L paths](../benchmarks/WEBP-ALPHA-MATCH-INDEX-REUSE.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
   Photograph remains uncertain, including its adjacent-sample interval
@@ -70,7 +72,7 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current build passes **5,623 full/live checks per OS**, affected normal/scalar
+The current build passes **5,625 full/live checks per OS**, affected normal/scalar
 checks, and the **same actual Release package/all three examples on Windows/Linux**.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
@@ -105,14 +107,14 @@ settings do not establish matched quality.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search † | 3,668.86 | 2,782.13 | 1.319 / 1.330 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 69,162.74 | 54,409.27 | 1.271 / 1.367 | 7,165,472 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 21,216.18 | 17,040.99 | 1.245 / 1.254 | 1,201,552 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 14,823.50 | 10,540.55 | 1.406 / 1.415 | 809,072 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 8,383.74 | 6,338.83 | 1.323 / 1.334 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 14,711.12 | 10,635.25 | 1.383 / 1.391 | 754,344 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 22,291.75 | 16,939.47 | 1.316 / 1.331 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 64,709.57 | 53,431.55 | 1.211 / 1.219 | 7,165,880 | 98,590 / 98,590 |
+| VP8 diagram, effort2 / distortion-only search † | 3,522.60 | 2,709.10 | 1.300 / 1.311 | 741,375 | 7,330 / 7,330 |
+| VP8 RGBA16 + alpha, including normalization † | 70,165.60 | 57,652.08 | 1.217 / 1.229 | 7,165,472 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 20,366.51 | 16,737.93 | 1.217 / 1.225 | 1,201,552 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 14,482.28 | 10,521.42 | 1.376 / 1.391 | 809,072 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 8,123.43 | 6,270.92 | 1.295 / 1.304 | 741,137 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 14,550.71 | 10,511.03 | 1.384 / 1.402 | 754,344 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 21,738.20 | 16,813.65 | 1.293 / 1.304 | 1,201,552 | 72,380 / 72,380 |
+| VP8 RGBA8 + lossless alpha † | 69,657.13 | 57,733.16 | 1.207 / 1.217 | 7,165,880 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 86,323.75 | 83,862.10 | 1.029 / 1.090 | 6,517,254 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 8,159.66 | 9,566.19 | 0.853 / 0.871 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,815.96 | 130,140.89 | 0.890 / 0.906 | 7,476,640 | 183,812 / 183,812 |
