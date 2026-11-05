@@ -18,11 +18,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 Current scope and remaining work:
 
 - **WebP:** [current alpha-cache costs](../benchmarks/WEBP-ALPHA-CACHE-HISTORY.md)
-  retain four passing lossless controls, an opaque gap (upper1.035) and uncertain
-  photograph (upper1.020). Transparent VP8 uppers1.100/1.103 remain gaps;
+  retain four passing lossless controls and an opaque gap (upper1.035).
+  The [current adjacent photograph comparison](../benchmarks/WEBP-CURRENT-PHOTOGRAPH-COMPARISON.md)
+  resolves its uncertainty as a gap (lower1.001/upper1.038); no speed change.
+  Transparent VP8 uppers1.100/1.103 remain gaps;
   six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
-  [Prepared sign/category pricing](../benchmarks/VP8-FIXED-SIGN-CATEGORY-INCONCLUSIVE.md)
-  restores exactly after no useful screen lead; it changes no current cost.
+  [Ordinary-index initialization](../benchmarks/WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md)
+  restores after inconclusive paired checks; two useful reuse regressions remain.
 - **PNG:** [block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md),
   [color](../benchmarks/PNG-COLOR-ONE-SHOT.md) and
   [delivery](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md) supply fifteen equivalent
@@ -54,8 +56,11 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
-not a full release refresh or whole-library performance pass. Complete physical/
-admitted peaks are not inferred from allocation reductions.
+not a full release refresh or whole-library performance pass. Two additional
+long-run reuse cases and47frozen actual-main packet cases pass separately per
+normal/scalar mode on bothOS after exact production restoration. No fresh full
+5,706or package repeat is claimed. Complete physical/admitted peaks are not
+inferred from allocation reductions.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
@@ -94,7 +99,7 @@ settings do not establish matched quality.
 | VP8 diagram, effort6 / trellis † | 12,874.57 | 9,789.92 | 1.315 / 1.329 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 16,886.67 | 15,603.30 | 1.082 / 1.085 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 63,127.00 | 58,046.30 | 1.088 / 1.100 | 7,034,392 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 89,812.49 | 88,799.65 | 1.011 / 1.020 | 6,517,158 | 160,032 / 160,032 |
+| VP8L photograph / libwebp exact=1 † | 84,191.94 | 82,331.43 | 1.023 / 1.038 | 6,516,648 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 8,081.16 | 10,172.38 | 0.794 / 0.813 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 117,390.73 | 130,709.46 | 0.898 / 0.910 | 7,476,544 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 76,619.02 | 75,233.20 | 1.018 / 1.035 | 5,983,328 | 121,896 / 121,896 |

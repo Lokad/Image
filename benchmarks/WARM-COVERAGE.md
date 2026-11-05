@@ -10,7 +10,7 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Alpha-cache stage](WEBP-ALPHA-CACHE-HISTORY.md) refreshes current costs: four lossless controls pass/stop; opaque is a measured gap, lower1.004/upper1.035. Photograph stays uncertain, lower.994/upper1.020; resolve before assuming optimization. Exact complete packets persist. Superseded costs/uncertainties remain linked history. |
+| Resident lossless WebP | [Alpha-cache stage](WEBP-ALPHA-CACHE-HISTORY.md) refreshes current costs: four lossless controls pass/stop; opaque is a measured gap, lower1.004/upper1.035. The [current adjacent photograph comparison](WEBP-CURRENT-PHOTOGRAPH-COMPARISON.md) resolves its uncertainty as a gap, lower1.000841/upper1.038225. One current-DLL job, zero builds or weaker confidence gate; other costs retain their valid proof. Exact complete packets persist. Superseded costs/uncertainties remain linked history. |
 | Resident VP8 encoding | [Alpha cache history](WEBP-ALPHA-CACHE-HISTORY.md) confirms665.60µs/1.05% on complete byte-alpha Q75/effort4, same7033576B/op at equal batching, no new owned capacity or retained scratch. Byte/word ALPH uppers1.100/1.103 remain gaps. Predictor/workspace gains remain linked history. Six opaque costs reuse unchanged [shared input](VP8-SHARED-ALPHA-PREPARATION.md) proof with4KiB vector/1KiB scalar admission. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-ALPHA-CACHE-HISTORY.md) preserves full depth normalization and fresh awaited nonseekable async output. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/ownership gates stay unchanged. |
 | PNG encoding | [Block preparation](PNG-BLOCK-PREPARATION.md) shares frequency/code storage and uses linear canonical assignment. Same-batch allocation saves148,320B (5.7%) on wordSmallest9 and19,936B (2.4%) on byteFastest1; no CPU gain/equivalence/regression claim. Fifteen complete one-shot costs current: thirteen gaps; byteOptimal6 uncertain (upper1.045), gray16 passes/stops (upper0.987). [Four color boundaries](PNG-COLOR-ONE-SHOT.md) now include identical conversion/packing setup and disposal. [Delivery/cancellation boundaries](PNG-BOUNDARY-ONE-SHOT.md) retain word token/forward uppers1.116/1.140, asyncbyte1.029. Exact packets and complete delivery/ownership remain; no speedup claim follows the baseline change. Existing384KiB admission,2620B extra operation-array capacity, zero scratch afterdisposal; physical/complete admitted peaks unmeasured. Earlier tree/token preparation is linked history; other affectedH boundaries remain historical. |
@@ -28,25 +28,22 @@ populations/choices and dirty borrowed-tail ownership. Original live-token
 checkpoints, terminal refusal and async lifetimes persist. Unchanged54AVX512-off
 and wide-column45/521normal/scalar proofs are reused; packaged wide4KiB survivors
 also pass. Correctness/package qualification does not close all282 CPU gates.
-Eight WebP costs refresh; other117 comparisons reuse unchanged-path proof,
+The alpha-cache stage owns eight refreshed WebP costs; the new photograph row
+now supersedes that one uncertain estimate. Other117 comparisons reuse unchanged-path proof,
 including latest wide resizing gains. Other affected boundaries marked H remain
 historical until their named reconciliation.
 
-Current costs above own their scope and qualification. Latest
-[VP8 sign/category pricing](VP8-FIXED-SIGN-CATEGORY-INCONCLUSIVE.md) preserves
-exact rates/packets but has no useful three-pair photograph/alpha lead. It restores
-source/main/embedded tests/manifest exactly, without current-row replacement or
-broad/package repetition. The current-DLL attribution and private count projection
-remain explicitly distinct from phase timing or CPU proof.
-
-The [buffered JPEG correction stage](JPEG-BUFFERED-CORRECTION-EXECUTION-INCONCLUSIVE.md)
-also restores exactly: 0.23% raw/0.14% normalized short lead with wide uncertainty
-is not useful acceptance evidence. Exact frozen pixels, cancellation/error prefixes,
-focused normal/scalar checks and original ownership gates pass. No independent
-candidate confirmation, current-row replacement or full/package repeat follows.
+Current costs above own their scope and qualification. The latest
+[ordinary-index initialization trial](WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md)
+restores exact production after two inconclusive confirmation designs. Every
+pair/adverse interval remains. Two retained poisoned-long-run normal/live-token
+cases qualify against restored code on bothOS/normal/scalar, together with47
+actual-main frozen packet cases per mode. Main/package stay unchanged; old5,704
+full/live proof is reused with these separate additions, not a fresh full5,706.
+No allocation/CPU gain, causal regression or equivalence is claimed.
 
 Earlier adverse stages and attribution are retained in the
-[preceding coverage record](https://github.com/lokad/image/blob/23ce5aa86684610b6302d74c395c190d4138621a/benchmarks/WARM-COVERAGE.md)
+[preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
 and linked family reports, including all cited raw evidence and reproducibility.
 They are leads/history, not permanent family exclusions or current timing proof.
 [Fused prepared counting](VP8L-FUSED-PREPARED-COUNTING.md) records the completed

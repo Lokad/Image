@@ -1,0 +1,151 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WPC329",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newMaterialCases": 0,
+  "currentCostOnly": true,
+  "incrementalCpuAllocationClaim": false,
+  "requiredMaterialPaths": 282,
+  "current": {
+    "caseId": "PhotographLossless8",
+    "status": "gap",
+    "managedUs": 84191.9399375,
+    "nativeUs": 82331.43377083333,
+    "ratio": 1.0225977622574305,
+    "lower": 1.0008408696886448,
+    "upper": 1.0382252974068915,
+    "allocatedBytes": 6516648,
+    "actualIterations": 12,
+    "librarySha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "completePacketExact": true,
+    "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+    "nativePacketSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+    "managedPacketBytes": 160032,
+    "nativePacketBytes": 160032
+  },
+  "method": "Twelve fixed adjacent managed/native pairs with alternating order and four complete operations per subject. All pairs retained. Twelve native batches before and after. The conservative bound includes paired log-ratio confidence and every all-actual/upper-outlier-diagnostic managed-mean confidence against the faster before/paired/after native bracket. Native worker excludes IPC; managed includes complete original public benchmark method, output creation/growth/ownership/disposal and delegate dispatch. Setup, fixture decode, JIT and validation excluded equally; native documented wrappers/BGRA scratch retained. No timing or baseline-setting changes in production.",
+  "toolSha256": "0042410e340d9649074f4ac215803b11601b0318abae6da44d2f14e34015f2f4",
+  "benchmarkAssemblySha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+  "pairedRatioConfidence": [
+    1.0080889241765674,
+    1.0307590619152713
+  ],
+  "nativeBrackets": [
+    {
+      "meanUs": 82331.43377083333,
+      "confidenceInterval": {
+        "N": 12,
+        "Mean": 82331433.77083333,
+        "StandardError": 84498.00337698757,
+        "Level": 12,
+        "Margin": 374915.8950138574,
+        "Lower": 81956517.87581947,
+        "Upper": 82706349.66584718
+      },
+      "samples": 12
+    },
+    {
+      "meanUs": 82592.887,
+      "confidenceInterval": {
+        "N": 12,
+        "Mean": 82592887,
+        "StandardError": 171706.60196700887,
+        "Level": 12,
+        "Margin": 761858.6449793146,
+        "Lower": 81831028.35502069,
+        "Upper": 83354745.64497931
+      },
+      "samples": 12
+    },
+    {
+      "meanUs": 82433.08777083333,
+      "confidenceInterval": {
+        "N": 12,
+        "Mean": 82433087.77083333,
+        "StandardError": 81530.96588241296,
+        "Level": 12,
+        "Margin": 361751.2109578899,
+        "Lower": 82071336.55987544,
+        "Upper": 82794838.98179121
+      },
+      "samples": 12
+    }
+  ],
+  "confidenceViews": [
+    {
+      "view": "allActual",
+      "samples": 12,
+      "ratioLower": 1.0008408696886448,
+      "ratioUpper": 1.0382252974068915
+    },
+    {
+      "view": "upperOutlierDiagnostic",
+      "samples": 12,
+      "ratioLower": 1.0008408696886448,
+      "ratioUpper": 1.0382252974068915
+    }
+  ],
+  "correctness": {
+    "caseId": "PhotographLossless8",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "managedQuality": 85,
+    "nativeQuality": 75,
+    "effort": 4,
+    "lossless": true,
+    "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+    "rasterSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+    "packetBytes": 160032,
+    "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+    "allOriginalGatesPassed": true,
+    "sourcePacketAndIndependentOwnerChecksPassed": true,
+    "exactManagedSamplesAndAlpha": true
+  },
+  "decision": "Current conservative interval1.000841..1.038225 establishes a scoped lossless-photograph gap. Both all-actual and upper-outlier-diagnostic views retain12samples; every pair/bracket remains. No production/setting change or CPU/allocation saving. Current photo row replaces the CWH323 uncertain global-bracket row; other124rows reuse unchanged evidence. Attribute current work before optimizing; do not repeat unchanged measurement.",
+  "prior": "WPC299 reused counterbalanced design on producer5206ac4d predates common parsing/history changes qualified on CWH323. Current EE producer had its own uncertain standalone confirmation. Reusing old driver/harness/native worker for this one current-DLL measurement does not reuse old timing as current proof.",
+  "allocationBoundary": "Direct public-benchmark delegate,4complete operations per subject; total6516648B/op. Difference from the prior BDN row reflects measurement boundary/batching, not a library saving; same actual EE production module.",
+  "storage": {
+    "productionCapacityAndLifetimesUnchanged": true,
+    "nativeAllocationsMeasured": false,
+    "physicalAndCompleteAdmittedPeaksRemeasured": false
+  },
+  "qualificationReused": "CWH3235704full/live perOS/scalar/SAME actual package/all3examples, plus WMA328two retained reuse tests and47restored actual-main packet checks pernormal/scalar perOS. Main/package unchanged; no new production/test/harness/native/selector/driver/package builds for this measurement.",
+  "workflow": {
+    "measurementJobs": 1,
+    "pairedOperationsPerSubject": 4,
+    "pairedActuals": 12,
+    "nativeBrackets": 3,
+    "allPairsRetained": true,
+    "newBuilds": 0,
+    "completedJobRestarts": 0
+  },
+  "publication": "postponed",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-current-photograph-counterbalanced.tar.xz",
+    "bytes": 1027504,
+    "members": 41,
+    "sha256": "1bc198bd5409a1bb2c6e4d618c74dc807b0dcbfda10654182a1d3e72e4fbe848",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-alpha-cache-history-qualified.tar.xz",
+        "sha256": "0d06142905908d33f8d56fef64e797e3c8016520196ed640ebde14201fbaf88e"
+      },
+      {
+        "file": "webp-photograph-counterbalanced.tar.xz",
+        "sha256": "7f1031ae298c2119ebc112adda0e1472a492cd91a200dee6f93c5a00c5716520"
+      },
+      {
+        "file": "webp-index-initialization-inconclusive.tar.xz",
+        "sha256": "3569a9e1b9ea7d562775294c2e79e5f750a335e09960e9fdaf56e643af048f7a"
+      }
+    ],
+    "dependencyScope": "Unchanged qualified source/core/package, frozen controls/workers/harness/framework retained by dependencies. Reused original counterbalanced driver source/DLL, current immutable EE runtime, every raw pair/bracket/statistic/guard and full original/current correctness receipts retained. Current source/main/package unchanged; retained behavioral tests separately qualified."
+  }
+}

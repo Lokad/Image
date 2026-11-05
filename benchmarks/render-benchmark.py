@@ -1715,10 +1715,16 @@ def render():
         'distortion': 'VP8 diagram, effort2 / distortion-only search',
         'trellis': 'VP8 diagram, effort6 / trellis',
     })
+    photo_current = json.loads((ROOT / 'benchmarks/webp-current-photograph-comparison-evidence.json').read_text(encoding='utf-8'))
+    assert not photo_current['productionChanged'] and photo_current['allBuilds'] == 0
+    assert not photo_current['incrementalCpuAllocationClaim']
+    assert photo_current['raw']['localMembersVerified'] and photo_current['raw']['vmMembersVerified']
+    assert photo_current['current']['librarySha256'] == webp_owned['producers']['linuxSha256']
+    assert photo_current['current']['lower'] > 1 and photo_current['current']['status'] == 'gap'
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
         owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
-        current = owner['cases'][current_case]
+        current = photo_current['current'] if case == 'photograph' else owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
@@ -1898,11 +1904,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 Current scope and remaining work:
 
 - **WebP:** [current alpha-cache costs](../benchmarks/WEBP-ALPHA-CACHE-HISTORY.md)
-  retain four passing lossless controls, an opaque gap (upper1.035) and uncertain
-  photograph (upper1.020). Transparent VP8 uppers1.100/1.103 remain gaps;
+  retain four passing lossless controls and an opaque gap (upper1.035).
+  The [current adjacent photograph comparison](../benchmarks/WEBP-CURRENT-PHOTOGRAPH-COMPARISON.md)
+  resolves its uncertainty as a gap (lower1.001/upper1.038); no speed change.
+  Transparent VP8 uppers1.100/1.103 remain gaps;
   six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
-  [Prepared sign/category pricing](../benchmarks/VP8-FIXED-SIGN-CATEGORY-INCONCLUSIVE.md)
-  restores exactly after no useful screen lead; it changes no current cost.
+  [Ordinary-index initialization](../benchmarks/WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md)
+  restores after inconclusive paired checks; two useful reuse regressions remain.
 - **PNG:** [block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md),
   [color](../benchmarks/PNG-COLOR-ONE-SHOT.md) and
   [delivery](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md) supply fifteen equivalent
@@ -1934,8 +1942,11 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
-not a full release refresh or whole-library performance pass. Complete physical/
-admitted peaks are not inferred from allocation reductions.
+not a full release refresh or whole-library performance pass. Two additional
+long-run reuse cases and47frozen actual-main packet cases pass separately per
+normal/scalar mode on bothOS after exact production restoration. No fresh full
+5,706or package repeat is claimed. Complete physical/admitted peaks are not
+inferred from allocation reductions.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled

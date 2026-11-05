@@ -1,0 +1,272 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WMA328",
+  "productionChanged": false,
+  "acceptedProduction": false,
+  "retainedRegressionTests": true,
+  "currentComparisonRowsChanged": false,
+  "requiredMaterialPaths": 282,
+  "hypothesis": {
+    "repeatedWork": "Fresh ordinary matching clears new int storage to zero, fills the entire predecessor array with minus-one, then overwrites every active predecessor. Reused ALPH storage still gets a complete minus-one pass before forward writes. Only skipped prefixes of very long uniform runs require minus-one without a forward hash write.",
+    "intendedDesign": "Build the ordinary owner initially empty and let its existing Fill-specific ResetStorage acquire overwrite capacity before allocation. Initialize each forward-read predecessor exactly once: actual link or bounded minus-one skipped-run span. Remove global sentinel fill. Keep the ordinary owner lifetime/root/capacity unchanged, and preserve BuildBox zero-initialization semantics without a new general zeroing policy/cache/pool.",
+    "ownershipAudit": [
+      "Ordinary Build creates the owner then calls Fill before any successful return; cancellation/refusal dispose it.",
+      "ALPH creates an empty owner and Fill resets it between non-overlapping filters. Surviving prepared candidates do not retain this match index.",
+      "ResetStorage is called only by Fill, so overwrite allocation is local to the complete ordinary initializer.",
+      "BuildBox writes only accepted matches and relies on untouched zeros. Its constructor stays zero-initialized; applying uninitialized allocation globally would be incorrect."
+    ],
+    "readBeforeWriteProof": [
+      "For count<=2 Fill clears all returned words before successful return.",
+      "Forward hashing processes a prefix monotonically; each ordinary/repeated position writes its predecessor before that entry can become a head.",
+      "A long-run skipped prefix is the only forward hole. Initialize that precise interval to minus-one before advancing, with bounded cancellation checks.",
+      "The penultimate entry is explicitly assigned. Final entry is never a predecessor/query and is cleared at completion.",
+      "Reverse queries/chain entries point strictly backward. Right-to-left outputs overwrite only entries after their last predecessor read; terminal endpoints are explicitly zeroed.",
+      "No partially initialized index may escape a failed Build. Reused internal scratch stays borrowed and cannot overlap a surviving prepared candidate."
+    ],
+    "scope": "Existing complete transparent RGBA8 Q75/effort4 and opaque VP8L Q75/effort4 first, preserving exact packets. Source-derived write removal is not timing, allocation reduction, physical-peak measurement or a predicted CPU gain.",
+    "costs": "No new owner/buffer or retained storage. Same charged int capacity. Runtime overwrite allocation is permitted to return zeroed storage; do not infer skipped physical zeroing or CPU gains. Removing the full sentinel pass should be assessed on complete operations before broader qualification."
+  },
+  "nativeStrategyInsight": {
+    "repository": "libwebp",
+    "commit": "4fa21912338357f89e4fd51cf2368325b59e9bd9",
+    "files": [
+      "src/enc/backward_references_enc.c",
+      "src/dsp/lossless_enc_avx2.c"
+    ],
+    "scope": "Read strategies only; no upstream implementation/table/source copied into tracked or diagnostic code."
+  },
+  "priorTrialsReconciled": "Current forward/reverse selection, repeated-run hashing, thresholds/ties and storage reuse broadly align. Existing common-prefix, four-sample preparation, compact-width, paired-window and threshold-viability trials already cover those local approaches; do not replay them.",
+  "pairs": {
+    "alphaShort": {
+      "baselineUs": 62985.76391666666,
+      "candidateUs": 62870.701375,
+      "pairRatioMean": 0.9981733758210249,
+      "logConfidence": {
+        "N": 3,
+        "Mean": -0.0018288087979902816,
+        "StandardError": 0.0007170742970188909,
+        "Level": 12,
+        "Margin": 0.022658869755171215,
+        "Lower": -0.024487678553161498,
+        "Upper": 0.020830060957180933
+      },
+      "ratioConfidence": [
+        0.9758097122318287,
+        1.0210485208848104
+      ],
+      "pairs": 3,
+      "operationsPerSubject": 8,
+      "allocatedValues": [
+        7033576
+      ],
+      "allPairsRetained": true,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "favorablePairs": 3
+    },
+    "opaqueShort": {
+      "baselineUs": 71172.17341666667,
+      "candidateUs": 70776.68295833333,
+      "pairRatioMean": 0.9944133166761606,
+      "logConfidence": {
+        "N": 3,
+        "Mean": -0.0056103938975268835,
+        "StandardError": 0.0028355303278424903,
+        "Level": 12,
+        "Margin": 0.08960007722007124,
+        "Lower": -0.09521047111759812,
+        "Upper": 0.08398968332254436
+      },
+      "ratioConfidence": [
+        0.9091815578707301,
+        1.0876176731502174
+      ],
+      "pairs": 3,
+      "operationsPerSubject": 8,
+      "allocatedValues": [
+        5982512
+      ],
+      "allPairsRetained": true,
+      "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "favorablePairs": 3
+    },
+    "opaqueConfirm": {
+      "baselineUs": 74981.13731770833,
+      "candidateUs": 73813.62256770833,
+      "pairRatioMean": 0.9845575144550631,
+      "logConfidence": {
+        "N": 12,
+        "Mean": -0.015813114205180067,
+        "StandardError": 0.006816510573306801,
+        "Level": 12,
+        "Margin": 0.030244716565205207,
+        "Lower": -0.04605783077038528,
+        "Upper": 0.01443160236002514
+      },
+      "ratioConfidence": [
+        0.9549867329752804,
+        1.0145362406936915
+      ],
+      "pairs": 12,
+      "operationsPerSubject": 16,
+      "allocatedValues": [
+        5982512
+      ],
+      "allPairsRetained": true,
+      "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "favorablePairs": 12
+    },
+    "opaqueTemporal": {
+      "baselineUs": 78078.48841666667,
+      "candidateUs": 77871.74916666668,
+      "pairRatioMean": 0.9973669977261586,
+      "logConfidence": {
+        "N": 12,
+        "Mean": -0.002652869949340281,
+        "StandardError": 0.001725530901772353,
+        "Level": 12,
+        "Margin": 0.007656144956772277,
+        "Lower": -0.010309014906112558,
+        "Upper": 0.005003275007431996
+      },
+      "ratioConfidence": [
+        0.989743940857911,
+        1.0050158122882658
+      ],
+      "pairs": 12,
+      "operationsPerSubject": 2,
+      "allocatedValues": [
+        5982512
+      ],
+      "allPairsRetained": true,
+      "packetSha256": "465b70013a8a598ec5e95e2e4d8fff3042317fa21dc31f2350fe9edb46ce465f",
+      "favorablePairs": 8
+    }
+  },
+  "targetedMeasurementDesign": {
+    "project": "Lokad.Image",
+    "stage": "WMA328",
+    "beforeNewMeasurement": true,
+    "productionUnchangedSinceFirstCandidate": true,
+    "reason": "Original12pairs all favor candidate, but both subject times step from about71/70ms to76/75ms around pair3. That pair straddles the change, giving a ratio0.914 and large variance; conservative log-ratio interval crosses zero. This is an inconclusive measurement, not confirmed mean gain or failed implementation. No cause such as CPU frequency or external interference is asserted.",
+    "originalPairsRetained": true,
+    "noFiltering": true,
+    "noPoolingOfDifferentDesigns": true,
+    "design": "One targeted12pair check with2complete operations per subject rather than16. Alternate order unchanged. Shorter adjacent subjects reduce temporal separation, while source/complete encode/normalization/fresh output/disposal remain timed. Reuse the SAME immutable modules, fixture and prepared pairing tool. No builds, new controls/settings or native performance claim.",
+    "totalOperationsPerSubject": 24,
+    "previousConfirmationOperationsPerSubject": 192,
+    "decisionRule": "Use every pair and the existing conservative log-ratio confidence. Report this temporal-granularity scope explicitly alongside the original overlapping result. No third timing design or favorable repeats. Acceptance still requires useful evidence plus standalone complete reference costs and coherent W/L/scalar/live/SAME-package qualification."
+  },
+  "standaloneAlpha": {
+    "managedUs": 62925.418333333335,
+    "nativeUs": 58282.90633333333,
+    "ratio": 1.0796547785974915,
+    "upper": 1.221890905356618,
+    "actuals": 3,
+    "allocatedBytes": 7034392,
+    "packetBytes": 98590,
+    "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "candidate": {
+    "productionSha256": "5ca2e466869e2752f429291e37e427463722a353c2fb2db92e7a1afd39554842",
+    "embeddedTestsSha256": "939b1ba193aa6195ea4495dd2df1c9e015738a8564a8a3d4d105994061cd5659",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "108df3f95d112a2a88d31639be2f8de8a69111114bea0336783802ccf557e66f",
+      "tests/Lokad.Image.Tests/Vp8lBorrowedMatchIndexTests.cs": "2198bfa6d73c070c139a744b8fb4c1718b0cae79dfada15c4a162e5157955f20"
+    },
+    "focused": {
+      "internal-normal": 903,
+      "internal-scalar": 903,
+      "public-normal": 357,
+      "public-scalar": 357
+    },
+    "uncancelableJitBytes": 2359,
+    "priorUncancelableJitBytes": 2362,
+    "cancelableJitBytes": 3382
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionChanged": false,
+      "productionSourceAndModuleRestoredExactly": true,
+      "productionSha256": "a326ca3b9d52b856d4f82d4bc7d2a424d0c6358f671fe98e59256377746dcebc",
+      "embeddedTestsSha256": "c40eee128435f21305d8dc40fac7fa4638f69505ab19525dbfcacc10a1cb0ed9",
+      "newTestsRetained": true,
+      "testSourceSha256": "2198bfa6d73c070c139a744b8fb4c1718b0cae79dfada15c4a162e5157955f20",
+      "restoredChecks": {
+        "internal-normal": 2,
+        "internal-scalar": 2,
+        "public-normal": 47,
+        "public-scalar": 47
+      },
+      "productionBuilds": 0,
+      "internalBuilds": 1,
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "qualificationReused": "CWH3235704full/live perOS/scalar/SAME actual package/all3examples, supplemented by two retained behavioral theory cases normal/scalar on restored production source. No fresh full5706claim.",
+      "sourceSha256": null
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionChanged": false,
+      "productionSourceAndModuleRestoredExactly": true,
+      "productionSha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+      "embeddedTestsSha256": "ffd37fecf9d4af05f05d16cbc8c1d43c05f6d06cc1f454f7b34773fd5ab19073",
+      "newTestsRetained": true,
+      "testSourceSha256": "2198bfa6d73c070c139a744b8fb4c1718b0cae79dfada15c4a162e5157955f20",
+      "restoredChecks": {
+        "internal-normal": 2,
+        "internal-scalar": 2,
+        "public-normal": 47,
+        "public-scalar": 47
+      },
+      "productionBuilds": 0,
+      "internalBuilds": 1,
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "qualificationReused": "CWH3235704full/live perOS/scalar/SAME actual package/all3examples, supplemented by two retained behavioral theory cases normal/scalar on restored production source. No fresh full5706claim.",
+      "sourceSha256": "f73e6b0f26403c9f7d527dbf3f4506a2c71759556cd97e196b899215cdab0855"
+    }
+  },
+  "decision": "Initial alpha/opaque points favor candidate. The12x16opaque comparison is inconclusive: all12favor candidate but one pair straddles a common elapsed step. One pre-recorded12x2temporal design also has an interval crossingzero. No dependable mean-gain proof; restore exact qualified production, no third design/favorable repeats. Keep two useful poisoned-long-run ownership regressions against actual restored code; no family closure or confirmed regression/equivalence claim.",
+  "qualificationReused": "CWH3235704full/live checks perOS, affected scalar/AVX512-off and SAME actual private Release-package/all3examples. Supplement with2new theory cases and47actual-main frozen complete packet cases pernormal/scalar perOS. Internal assemblies rebuilt on restored source solely for retained tests; not falsely claimed byte-restored or fresh full5706.",
+  "storage": {
+    "additionalOwnedCapacityBytes": 0,
+    "retainedScratchBytes": 0,
+    "measuredAllocationSaving": false,
+    "physicalAndCompleteAdmittedPeaksRemeasured": false,
+    "nativeAllocationsMeasured": false
+  },
+  "workflow": {
+    "productionVersionsLinux": 1,
+    "productionVersionsWindows": 0,
+    "candidateInternalVersionsLinux": 1,
+    "restoredInternalTestVersionsEachOs": 1,
+    "publicHarnessNativeSelectorDiagnosticPackageBuilds": 0,
+    "shortPairedJobs": 2,
+    "standaloneShortJobs": 1,
+    "originalIndependentPairedJobs": 1,
+    "targetedTemporalJobs": 1,
+    "completedJobRestarts": 0,
+    "fullPackageRepeats": 0
+  },
+  "raw": {
+    "file": "webp-index-initialization-inconclusive.tar.xz",
+    "sha256": "3569a9e1b9ea7d562775294c2e79e5f750a335e09960e9fdaf56e643af048f7a",
+    "bytes": 1998336,
+    "members": 160,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-alpha-cache-history-qualified.tar.xz",
+        "sha256": "0d06142905908d33f8d56fef64e797e3c8016520196ed640ebde14201fbaf88e"
+      },
+      {
+        "file": "webp-chain-link-preparation-qualified.tar.xz",
+        "sha256": "b1d2f5b52faa33109b9bdc2643c69ec756d9cc35a31b98c1ab6f6ff4360c7f7a"
+      }
+    ]
+  }
+}

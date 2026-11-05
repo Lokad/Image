@@ -5,6 +5,31 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8lBorrowedMatchIndexTests
 {
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void LongUniformLowEffortMatchesKeepExactIndicesWithPoisonedReusedStorage(bool cancelable)
+    {
+        const int count = 8194, width = 4097;
+        using var root = new TestMemoryBudget(4_000_000);
+        using var cancellation = new CancellationTokenSource();
+        using var context = new OperationContext(new() { MemoryBudget = root }, cancelable ? cancellation.Token : default);
+        var pixels = Enumerable.Repeat(0xff204060u, count).ToArray(); pixels[^1] ^= 0x100;
+        var original = pixels.ToArray();
+        using var expected = Vp8lReferenceMatcher.Build(pixels, width, 75, true, context);
+        using var reused = new Vp8lMatchIndex(context, count);
+        reused.Writable.Fill(int.MaxValue);
+        var storage = reused.Storage;
+        Vp8lReferenceMatcher.Fill(pixels, width, 75, true, context, reused);
+        Assert.Same(storage, reused.Storage);
+        Assert.True(expected.Values.SequenceEqual(reused.Values));
+        Assert.Equal(0u, reused.Values[0]); Assert.Equal(0u, reused.Values[^1]);
+        Assert.Equal(original, pixels); Assert.Equal(count * 8L, root.Bytes);
+        reused.Dispose(); Assert.Equal(count * 4L, root.Bytes);
+        Assert.Equal(0u, expected.Values[0]);
+        expected.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     [Fact]
     public void PoisonedReusableStorageMatchesFreshIndicesAcrossShapesAndSmallInputs()
     {
