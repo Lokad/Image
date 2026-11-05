@@ -17,18 +17,18 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [operation-owned prediction workspace](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
-  saves 131,488 B (1.84%) per complete transparent encode at equal batching.
-  Predictor analysis, residual rows and matching reuse the token seed; selected
-  maps/payloads stay independent. Twelve paired comparisons establish no CPU
-  gain, regression or equivalence. Four admitted peaks stay unchanged; retained
-  scratch is zero. Physical peaks and native allocations are unmeasured.
-  Eight affected costs refresh once: 5/6 lossless controls pass/stop;
-  opaque is uncertain (upper 1.028), photograph pass (upper 0.996).
-  Transparent byte/word retain gaps (uppers 1.150/1.151). Original settings,
+- **WebP:** [shared predictor rows](../benchmarks/WEBP-PREDICTOR-RUNS.md)
+  confirm 1,341.17 µs / 2.11% on the complete transparent byte control,
+  preserving exact packets and 7,033,576 B/op at equal batching. Green-only runs
+  share copy/average/clamp kernels and row-storage preparation; the full-color
+  pixel kernel retains separate execution. Broader incremental gains are unproven.
+  Four admitted peaks stay unchanged; retained scratch is zero. Physical peaks
+  and native allocations are unmeasured. [Earlier workspace reuse](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
+  retains its 131,488 B/op saving and superseded costs.
+  Eight affected costs refresh once: 4/6 lossless controls pass/stop;
+  opaque is uncertain (upper 1.023), photograph uncertain (upper 1.081).
+  Transparent byte/word retain gaps (uppers 1.129/1.127). Original settings,
   complete packets, quality and independent output boundaries remain.
-  [Earlier chain links](../benchmarks/WEBP-CHAIN-LINK-PREPARATION.md) retain their
-  scoped incremental gains and superseded costs.
   [Shared input preparation](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md) retains
   its scoped earlier gains. Eligible alpha/opaque vector scratch is 4 KiB, scalar
   scratch 1 KiB; selected-output capacity is unchanged. The six opaque VP8 rows
@@ -88,7 +88,7 @@ Current priorities and scope:
   pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,668 full/live checks per OS**, affected
+The current production build passes **5,685 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
@@ -126,17 +126,17 @@ settings do not establish matched quality.
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,065.30 | 2,511.15 | 1.221 / 1.226 | 741,386 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 61,227.04 | 53,549.88 | 1.143 / 1.151 | 7,033,984 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 59,910.73 | 53,505.69 | 1.120 / 1.127 | 7,033,984 | 98,590 / 98,590 |
 | VP8 opaque RGBA8 † | 16,808.81 | 15,548.79 | 1.081 / 1.086 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 12,178.18 | 9,706.71 | 1.255 / 1.261 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 6,884.38 | 5,814.93 | 1.184 / 1.192 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 12,874.57 | 9,789.92 | 1.315 / 1.329 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 16,886.67 | 15,603.30 | 1.082 / 1.085 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 61,021.42 | 53,495.95 | 1.141 / 1.150 | 7,034,392 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 81,444.99 | 82,603.80 | 0.986 / 0.996 | 6,517,158 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 7,840.69 | 9,655.09 | 0.812 / 0.861 | 4,363,930 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 106,564.54 | 120,990.53 | 0.881 / 0.891 | 7,476,544 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 70,583.24 | 70,048.90 | 1.008 / 1.028 | 5,983,328 | 121,896 / 121,896 |
+| VP8 RGBA8 + lossless alpha † | 59,835.53 | 53,430.27 | 1.120 / 1.129 | 7,034,392 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 84,049.81 | 81,783.68 | 1.028 / 1.081 | 6,517,158 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 7,808.12 | 9,791.77 | 0.797 / 0.808 | 4,363,930 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 114,479.23 | 130,367.90 | 0.878 / 0.891 | 7,476,544 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 70,720.26 | 70,022.85 | 1.010 / 1.023 | 5,983,328 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 19,417.24 | 18,696.87 | 1.039 / 1.049 | 820,444 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 23,814.57 | 22,718.51 | 1.048 / 1.065 | 2,437,652 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,940.17 | 4,734.88 | 1.255 / 1.276 | 820,908 | 236,828 / 236,828 |
@@ -166,8 +166,8 @@ settings do not establish matched quality.
 | JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
 | JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
 | JPEG 4:1:0, resident decode (confirmed pass) † | 372.23 | 509.10 | 0.731 / 0.756 | 720,838 | — |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 108,219.74 | 120,638.13 | 0.897 / 0.902 | 7,476,544 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 106,645.98 | 120,749.59 | 0.883 / 0.906 | 7,476,928 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 113,812.00 | 126,761.49 | 0.898 / 0.905 | 7,476,544 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 113,549.72 | 127,120.66 | 0.893 / 0.909 | 7,476,928 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |

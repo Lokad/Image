@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
@@ -244,22 +245,36 @@ internal static class Vp8lReferencePredictor
                 result = analysis.Select(working);
             }
             // Candidate maps and analysis counts are released before row scratch.
-            Apply(working, width, result, context, scratch);
+            if (greenOnly) ApplyGreen(working, width, result, context, scratch);
+            else Apply(working, width, result, context, scratch);
             return result;
         }
         catch { result?.Dispose(); throw; }
     }
 
-    private static void Apply(Span<uint> working, int width, Vp8lPredictionPlan plan, OperationContext context, Span<int> scratch)
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static Span<uint> PrepareRows(int width, OperationContext context, Span<int> scratch, out long reserved)
     {
         var borrowed = scratch.Length >= width * 2;
-        var reserved = borrowed ? 0 : width * 8L;
+        reserved = borrowed ? 0 : width * 8L;
         context.Cancellation.ThrowIfCancellationRequested();
         if (reserved != 0) context.Reserve(reserved);
         try
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            Span<uint> rows = borrowed ? MemoryMarshal.Cast<int, uint>(scratch[..(width * 2)]) : new uint[width * 2];
+            return borrowed ? MemoryMarshal.Cast<int, uint>(scratch[..(width * 2)]) : new uint[width * 2];
+        }
+        catch { if (reserved != 0) context.Release(reserved); throw; }
+    }
+
+    // Keep the measured full-color pixel kernel separate from green execution.
+    // Storage preparation/admission is shared; the short copy/swap schedule stays
+    // local so its live state cannot expand the other pixel kernel's frame.
+    private static void Apply(Span<uint> working, int width, Vp8lPredictionPlan plan, OperationContext context, Span<int> scratch)
+    {
+        var rows = PrepareRows(width, context, scratch, out var reserved);
+        try
+        {
             var previous = rows[..width]; var current = rows[width..];
             var modes = plan.Modes; var columns = Ceil(width, plan.StoredBits);
             for (var y = 0; y < working.Length / width; y++)
@@ -277,6 +292,24 @@ internal static class Vp8lReferencePredictor
                         residual |= (unchecked((current[x] >> shift) - (prediction >> shift)) & 255) << shift;
                     working[y * width + x] = residual;
                 }
+                var temporary = previous; previous = current; current = temporary;
+            }
+        }
+        finally { if (reserved != 0) context.Release(reserved); }
+    }
+
+    private static void ApplyGreen(Span<uint> working, int width, Vp8lPredictionPlan plan, OperationContext context, Span<int> scratch)
+    {
+        var rows = PrepareRows(width, context, scratch, out var reserved);
+        try
+        {
+            var previous = rows[..width]; var current = rows[width..];
+            var modes = plan.Modes; var columns = Ceil(width, plan.StoredBits);
+            for (var y = 0; y < working.Length / width; y++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested(); working.Slice(y * width, width).CopyTo(current);
+                Vp8lGreenResiduals.Row(current, previous, modes.Slice((y >> plan.StoredBits) * columns, columns),
+                    plan.StoredBits, y == 0, working.Slice(y * width, width), context.Cancellation);
                 var temporary = previous; previous = current; current = temporary;
             }
         }

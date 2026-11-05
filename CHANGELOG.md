@@ -20,6 +20,9 @@
 - Prepare WebP matching for uncancelable tokens and read owned chain links ahead
   of comparisons, preserving live cancellation checks, exact packets and ownership.
 
+- Batch alpha predictor residuals by tile-row runs with shared row storage,
+  preserving exact packets, scalar fallbacks, cancellation and workspace ownership.
+
 - Share Lanczos RGB and certificate preparation in SIMD lanes, preserving exact
   pixels, portable fallbacks, cancellation and memory ownership.
 

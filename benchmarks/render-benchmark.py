@@ -1650,13 +1650,15 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-prediction-workspace-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-predictor-runs-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted'] and webp_owned['pairedComparison']['allPairsRetained']
     assert webp_owned['pairedComparison']['pairs'] == 12
-    assert webp_owned['qualification']['fullChecksEachOs'] == 5668
+    assert webp_owned['pairedComparison']['ratioConfidence'][1] < 1
+    assert webp_owned['pairedComparison']['quality'] == 75 and webp_owned['pairedComparison']['depth'] == 8
+    assert webp_owned['qualification']['fullChecksEachOs'] == 5685
     assert webp_owned['qualification']['actualPackage']['sha256'] == webp_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert webp_owned['storage']['newOwnedCapacityBytes'] == 0
-    assert webp_owned['storage']['completeAlphaAllocationSaved'] == 131488
+    assert webp_owned['storage']['allocatedBytesBoth'] == 7033576
     assert webp_owned['storage']['fourControlAdmissionPeaksUnchanged']
     streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
@@ -1876,18 +1878,18 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [operation-owned prediction workspace](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
-  saves 131,488 B (1.84%) per complete transparent encode at equal batching.
-  Predictor analysis, residual rows and matching reuse the token seed; selected
-  maps/payloads stay independent. Twelve paired comparisons establish no CPU
-  gain, regression or equivalence. Four admitted peaks stay unchanged; retained
-  scratch is zero. Physical peaks and native allocations are unmeasured.
+- **WebP:** [shared predictor rows](../benchmarks/WEBP-PREDICTOR-RUNS.md)
+  confirm {webp_owned['pairedComparison']['rawUsSaved']:,.2f} µs / {webp_owned['pairedComparison']['rawReduction']*100:.2f}% on the complete transparent byte control,
+  preserving exact packets and 7,033,576 B/op at equal batching. Green-only runs
+  share copy/average/clamp kernels and row-storage preparation; the full-color
+  pixel kernel retains separate execution. Broader incremental gains are unproven.
+  Four admitted peaks stay unchanged; retained scratch is zero. Physical peaks
+  and native allocations are unmeasured. [Earlier workspace reuse](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
+  retains its 131,488 B/op saving and superseded costs.
   Eight affected costs refresh once: {sum(c['status'] == 'pass' for n, c in webp_owned['cases'].items() if not n.startswith('alpha'))}/6 lossless controls pass/stop;
   opaque is {webp_owned['cases']['opaque']['status']} (upper {webp_owned['cases']['opaque']['upper']:.3f}), photograph {webp_owned['cases']['photograph']['status']} (upper {webp_owned['cases']['photograph']['upper']:.3f}).
   Transparent byte/word retain gaps (uppers {webp_owned['cases']['alpha']['upper']:.3f}/{webp_owned['cases']['alpha16']['upper']:.3f}). Original settings,
   complete packets, quality and independent output boundaries remain.
-  [Earlier chain links](../benchmarks/WEBP-CHAIN-LINK-PREPARATION.md) retain their
-  scoped incremental gains and superseded costs.
   [Shared input preparation](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md) retains
   its scoped earlier gains. Eligible alpha/opaque vector scratch is 4 KiB, scalar
   scratch 1 KiB; selected-output capacity is unchanged. The six opaque VP8 rows

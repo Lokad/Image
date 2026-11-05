@@ -62,6 +62,9 @@ bounds and visual text tolerances distinct from exact managed pixel contracts.
 Distinguish one-shot operations from repeated operations with prepared state.
 Include necessary setup, working storage and independent output ownership on
 equivalent sides; label existing comparisons that retain native contexts/plans.
+Paired DLL comparisons prove scoped incremental effects; qualify the actual
+standalone reference boundary before treating them as passing current costs.
+Resolve material contradictions before accepting a production stage.
 Report total allocations, peak live capacity and retained state separately.
 Prefer operation-owned workspace reuse before cross-operation pools. Architectural
 experiments may span coherent changes and temporary regressions; use evidence
