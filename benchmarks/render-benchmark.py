@@ -1558,7 +1558,7 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-fresh-histogram-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-isolated-green-prediction-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted']
     qualification = webp_owned['qualification']
     assert qualification['fullChecksEachOs'] == qualification['windows']['total'] == qualification['linux']['total']
@@ -1780,13 +1780,12 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [fresh color histograms](../benchmarks/WEBP-FRESH-HISTOGRAM.md)
-  remove unused accumulation support, confirming0.69ms/0.84% on the complete
-  photograph managed-build comparison with unchanged allocation/exact packets.
-  Eight refreshed costs retain four passing lossless controls. Opaque/photo
-  remain uncertain (uppers1.008/1.101); transparent VP8 remains a gap
-  (uppers1.111/1.124). The photo's original timing step and one unchanged-driver
-  reconciliation remain evidence; no passing native-parity claim follows.
+- **WebP:** [isolated green prediction](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md)
+  confirms2.73ms/4.4% on the complete transparent RGBA8 encode, with unchanged
+  allocation/exact packets. Final photograph comparison is inconclusive around1;
+  the first stage's confirmed slowdown and ineffective inlining trial remain.
+  Eight refreshed costs retain four passing lossless controls; opaque/photo are
+  uncertain (uppers1.008/1.022), transparent8/16remain gaps (1.063/1.073).
   Six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
   saves408µs/7.4% raw on Fastest8; normalized confidence narrowly overlaps, so
@@ -1821,10 +1820,8 @@ opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
-uncertain timing points remain evidence; no third photo measurement follows.
-The [compact ALPH investigation](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md)
-restores production after confirmed cross-content tradeoffs; its useful borrowed-
-storage and cost-oracle coverage is included in the current full qualification.
+uncertain points remain in the [green-prediction report](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md),
+including the [earlier compact layouts](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md).
 Complete physical/admitted peaks are not inferred from allocations.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly

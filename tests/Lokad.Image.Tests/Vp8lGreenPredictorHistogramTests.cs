@@ -29,6 +29,7 @@ public sealed class Vp8lGreenPredictorHistogramTests
         var original = OriginalPixels.Generate(513, 259, 8); original[3] = original[513 * 4 - 1] = 0;
         Assert.Equal("70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80", Convert.ToHexStringLower(SHA256.HashData(original)));
         var expected = new int[14 * 1024]; var actual = new int[14 * 1024]; var tiles = 0;
+        var compact = new int[14 * 256];
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         using var context = new OperationContext(ImageLimits.Default, default);
         foreach (var shape in new[] { (513, 259), (1, 1), (1, 17), (17, 1), (9, 7), (33, 19) })
@@ -59,6 +60,13 @@ public sealed class Vp8lGreenPredictorHistogramTests
                 }
                 Vp8lGreenPredictorHistogram.Build(pixels, width, height, x0, y0, bits, actual, context);
                 Assert.True(expected.AsSpan().SequenceEqual(actual));
+                if (Vp8lCompactGreenHistogram.IsSupported)
+                {
+                    Array.Clear(compact);
+                    Vp8lCompactGreenHistogram.Build(pixels, width, height, x0, y0, bits, compact, context);
+                    for (var mode = 0; mode < 14; mode++)
+                        Assert.True(expected.AsSpan(mode * 1024 + 512, 256).SequenceEqual(compact.AsSpan(mode * 256, 256)));
+                }
                 hash.AppendData(MemoryMarshal.AsBytes(actual.AsSpan())); tiles++;
             }
             Assert.Equal(before, pixels);

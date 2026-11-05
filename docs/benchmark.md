@@ -17,13 +17,12 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [fresh color histograms](../benchmarks/WEBP-FRESH-HISTOGRAM.md)
-  remove unused accumulation support, confirming0.69ms/0.84% on the complete
-  photograph managed-build comparison with unchanged allocation/exact packets.
-  Eight refreshed costs retain four passing lossless controls. Opaque/photo
-  remain uncertain (uppers1.008/1.101); transparent VP8 remains a gap
-  (uppers1.111/1.124). The photo's original timing step and one unchanged-driver
-  reconciliation remain evidence; no passing native-parity claim follows.
+- **WebP:** [isolated green prediction](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md)
+  confirms2.73ms/4.4% on the complete transparent RGBA8 encode, with unchanged
+  allocation/exact packets. Final photograph comparison is inconclusive around1;
+  the first stage's confirmed slowdown and ineffective inlining trial remain.
+  Eight refreshed costs retain four passing lossless controls; opaque/photo are
+  uncertain (uppers1.008/1.022), transparent8/16remain gaps (1.063/1.073).
   Six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
   saves408µs/7.4% raw on Fastest8; normalized confidence narrowly overlaps, so
@@ -58,10 +57,8 @@ opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
-uncertain timing points remain evidence; no third photo measurement follows.
-The [compact ALPH investigation](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md)
-restores production after confirmed cross-content tradeoffs; its useful borrowed-
-storage and cost-oracle coverage is included in the current full qualification.
+uncertain points remain in the [green-prediction report](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md),
+including the [earlier compact layouts](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md).
 Complete physical/admitted peaks are not inferred from allocations.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly
@@ -94,17 +91,17 @@ settings do not establish matched quality.
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 3,065.30 | 2,511.15 | 1.221 / 1.226 | 741,386 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 63,222.23 | 57,608.97 | 1.097 / 1.124 | 7,033,984 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 61,467.08 | 57,931.10 | 1.061 / 1.073 | 7,033,984 | 98,590 / 98,590 |
 | VP8 opaque RGBA8 † | 16,808.81 | 15,548.79 | 1.081 / 1.086 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 12,178.18 | 9,706.71 | 1.255 / 1.261 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 6,884.38 | 5,814.93 | 1.184 / 1.192 | 741,137 | 7,100 / 7,100 |
 | VP8 diagram, effort6 / trellis † | 12,874.57 | 9,789.92 | 1.315 / 1.329 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 16,886.67 | 15,603.30 | 1.082 / 1.085 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 63,546.01 | 58,011.18 | 1.095 / 1.111 | 7,034,392 | 98,590 / 98,590 |
-| VP8L photograph / libwebp exact=1 † | 89,490.08 | 84,092.15 | 1.064 / 1.101 | 6,516,648 | 160,032 / 160,032 |
-| VP8L text/diagram / libwebp exact=1 † | 7,439.03 | 9,510.65 | 0.782 / 0.792 | 4,363,930 | 7,234 / 7,234 |
-| VP8L RGBA8 / libwebp exact=1 † | 115,463.57 | 131,118.94 | 0.881 / 0.893 | 7,476,544 | 183,812 / 183,812 |
-| VP8L opaque RGBA8 / libwebp exact=1 † | 69,586.27 | 70,212.92 | 0.991 / 1.008 | 5,983,328 | 121,896 / 121,896 |
+| VP8 RGBA8 + lossless alpha † | 60,891.24 | 57,859.54 | 1.052 / 1.063 | 7,034,392 | 98,590 / 98,590 |
+| VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |
+| VP8L text/diagram / libwebp exact=1 † | 7,550.15 | 9,576.69 | 0.788 / 0.823 | 4,363,930 | 7,234 / 7,234 |
+| VP8L RGBA8 / libwebp exact=1 † | 109,807.33 | 127,005.55 | 0.865 / 0.940 | 7,476,544 | 183,812 / 183,812 |
+| VP8L opaque RGBA8 / libwebp exact=1 † | 75,840.35 | 76,643.85 | 0.990 / 1.008 | 5,983,328 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 18,963.03 | 18,490.36 | 1.026 / 1.038 | 820,452 | 210,973 / 210,973 |
 | PNG RGBA16, one-shot SmallestSize9 / native9 † | 21,515.51 | 20,853.86 | 1.032 / 1.048 | 2,437,660 | 963,202 / 963,202 |
 | PNG RGBA8, one-shot Fastest1 / native1 † | 5,130.63 | 4,373.97 | 1.173 / 1.211 | 820,916 | 236,828 / 236,828 |
@@ -134,8 +131,8 @@ settings do not establish matched quality.
 | JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
 | JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
 | JPEG 4:1:0, resident decode (confirmed pass) † | 372.23 | 509.10 | 0.731 / 0.756 | 720,838 | — |
-| VP8L RGBA16, including normalization / libwebp exact=1 † | 117,092.25 | 130,879.91 | 0.895 / 0.902 | 7,476,544 | 183,812 / 183,812 |
-| VP8L async, fresh nonseekable output / libwebp exact=1 † | 105,138.80 | 120,851.65 | 0.870 / 0.880 | 7,476,928 | 183,812 / 183,812 |
+| VP8L RGBA16, including normalization / libwebp exact=1 † | 116,271.20 | 123,756.44 | 0.940 / 0.977 | 7,476,544 | 183,812 / 183,812 |
+| VP8L async, fresh nonseekable output / libwebp exact=1 † | 108,317.01 | 123,053.03 | 0.880 / 0.953 | 7,476,928 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |

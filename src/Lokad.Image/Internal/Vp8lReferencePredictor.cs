@@ -33,7 +33,7 @@ internal sealed class Vp8lPredictionPlan : IDisposable
 
 // Independently implemented selection for the reference encoder being integrated.
 // Prediction and modulo channel arithmetic follow RFC 9649 section 3.5.1.
-internal static class Vp8lReferencePredictor
+internal static partial class Vp8lReferencePredictor
 {
     private const int HistogramSize = 14 * 1024;
     private const int LevelSize = HistogramSize + 1024 + 14;
@@ -49,7 +49,7 @@ internal static class Vp8lReferencePredictor
         return true;
     }
 
-    private ref struct Analysis
+    private ref partial struct Analysis
     {
         private readonly OperationContext context;
         private readonly int width, height, minBits, maxBits, levels;
@@ -177,8 +177,37 @@ internal static class Vp8lReferencePredictor
                     cost += Vp8lReferenceCost.Shannon(History(level).Slice(plane * 256, 256), context);
                 if (cost < best) { best = cost; winner = level; }
             }
-            var selected = minBits + winner; var stored = selected;
-            var original = Map(winner); var oldColumns = columns[winner]; var oldRows = Ceil(height, selected);
+            var selected = minBits + winner; var stored = FindStoredBits(winner, selected);
+            var original = Map(winner); var oldColumns = columns[winner];
+            var stride = 1 << (stored - selected); var newColumns = Ceil(width, stored); var newRows = Ceil(height, stored);
+            var result = new Vp8lPredictionPlan(context, newColumns * newRows, selected, stored, best);
+            try
+            {
+                CopySelectedMap(original, oldColumns, stride, newColumns, newRows, result.Writable);
+                return result;
+            }
+            catch { result.Dispose(); throw; }
+        }
+
+        private Vp8lPredictionPlan FinishSelection(int winner, long best)
+        {
+            var selected = minBits + winner; var stored = FindStoredBits(winner, selected);
+            var original = Map(winner); var oldColumns = columns[winner];
+            var stride = 1 << (stored - selected); var newColumns = Ceil(width, stored); var newRows = Ceil(height, stored);
+            var result = new Vp8lPredictionPlan(context, newColumns * newRows, selected, stored, best);
+            try
+            {
+                CopySelectedMap(original, oldColumns, stride, newColumns, newRows, result.Writable);
+                return result;
+            }
+            catch { result.Dispose(); throw; }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int FindStoredBits(int winner, int selected)
+        {
+            var stored = selected; var original = Map(winner);
+            var oldColumns = columns[winner]; var oldRows = Ceil(height, selected);
             for (var bits = selected + 1; bits <= 9; bits++)
             {
                 var step = 1 << (bits - selected); var same = true;
@@ -192,20 +221,19 @@ internal static class Vp8lReferencePredictor
                 if (!same) break;
                 stored = bits;
             }
-            var stride = 1 << (stored - selected); var newColumns = Ceil(width, stored); var newRows = Ceil(height, stored);
-            var result = new Vp8lPredictionPlan(context, newColumns * newRows, selected, stored, best);
-            try
-            {
-                var destination = result.Writable;
+            return stored;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void CopySelectedMap(ReadOnlySpan<byte> original, int oldColumns, int stride,
+            int newColumns, int newRows, Span<byte> destination)
+        {
                 for (var y = 0; y < newRows; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
                     for (var x = 0; x < newColumns; x++)
                         destination[y * newColumns + x] = original[y * stride * oldColumns + x * stride];
                 }
-                return result;
-            }
-            catch { result.Dispose(); throw; }
         }
 
         public void Dispose()
@@ -242,7 +270,8 @@ internal static class Vp8lReferencePredictor
             else
             {
                 using var analysis = new Analysis(width, height, minBits, maxBits, context, greenOnly, scratch);
-                result = analysis.Select(working);
+                result = greenOnly && Vp8lCompactGreenHistogram.IsSupported
+                    ? analysis.SelectGreen(working) : analysis.Select(working);
             }
             // Candidate maps and analysis counts are released before row scratch.
             if (greenOnly) ApplyGreen(working, width, result, context, scratch);

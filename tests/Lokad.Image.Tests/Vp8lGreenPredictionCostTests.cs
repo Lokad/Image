@@ -29,6 +29,7 @@ public sealed class Vp8lGreenPredictionCostTests
     public void FrozenFourPlaneScoresAndRemainExact()
     {
         var current = new int[1024]; var previous = new int[1024];
+        var compactHistory = new int[258]; var products = new long[256];
         int[] populations = [0, 1, 4, 16, 1024, 262144];
         int[] histories = [0, 1, 255, 256, 4095, 4096, 65535, 65536, 16777216, 268435456];
         int[] active = [1, 4, 16, 64, 256];
@@ -42,10 +43,19 @@ public sealed class Vp8lGreenPredictionCostTests
             var wanted = Vp8lPredictionCostTests.PreparedCost(current, previous, generic);
             var actual = Vp8lReferenceCost.PredictionGreen(current, previous, specialized);
             Assert.Equal(wanted, actual);
+            previous.AsSpan(512, 256).CopyTo(compactHistory);
+            compactHistory[256] = previous[0]; compactHistory[257] = previous[1];
+            var prepared = Vp8lReferenceCost.PrepareGreen(compactHistory, current[0] + current[1],
+                current[1], current[0], products, specialized);
+            Assert.Equal(wanted, Vp8lReferenceCost.PredictionGreen(current.AsSpan(512, 256),
+                compactHistory.AsSpan(0, 256), products, prepared.Black, specialized));
             // A second alpha mass shares these same green/history samples.
             (current[0], current[1]) = (current[1], current[0]);
             Assert.Equal(Vp8lPredictionCostTests.PreparedCost(current, previous, generic),
                 Vp8lReferenceCost.PredictionGreen(current, previous, specialized));
+            Assert.Equal(Vp8lPredictionCostTests.PreparedCost(current, previous, generic),
+                Vp8lReferenceCost.PredictionGreen(current.AsSpan(512, 256), compactHistory.AsSpan(0, 256),
+                    products, prepared.Other, specialized));
             (current[0], current[1]) = (current[1], current[0]);
             hash.AppendData(MemoryMarshal.AsBytes(current.AsSpan()));
             hash.AppendData(MemoryMarshal.AsBytes(previous.AsSpan()));
