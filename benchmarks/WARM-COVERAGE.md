@@ -49,6 +49,9 @@ recurrences at every visited position. Its prepared four-pixel query follow-up
 has no favorable complete-operation screen point; all source/modules restore
 exactly, with current qualification/costs reused. Counts and short screens imply
 no CPU gain or statistical regression. The linked report retains raw evidence.
+The [prepared trace-price stage](WEBP-PREPARED-LITERAL-COST-INCONCLUSIVE.md)
+also restores after no useful material short lead. Existing qualification and
+current costs remain valid; no independent confirmation or package repeat.
 The [scalar-window stage](WEBP-SCALAR-WINDOW-PREPARATION.md) is a measured1.11%
 photographic regression, restored exactly. Fewer checks or allocations alone do
 not establish elapsed gains; a revised design needs distinct supporting evidence.
