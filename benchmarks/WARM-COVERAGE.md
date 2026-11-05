@@ -48,6 +48,12 @@ material photo/alpha work needs current attribution, specific repeated-work
 evidence and existing controls; no new grid or favorable resampling. Passing cases stop; pending work
 does not block independent codec, resize or drawing work.
 
+The [compact vector-scoring trial](VP8-COMPACT-VECTOR-SCORING-INCONCLUSIVE.md)
+has no useful complete-photo lead across two coherent implementations. Exact
+qualified source/modules are restored; no current cost owner or negative-trial
+renderer dependency is added. Next inspect repeated operand preparation across
+ordered candidates. Broader or materially revised designs remain eligible.
+
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
 and linked family reports, including all cited raw evidence and reproducibility.
