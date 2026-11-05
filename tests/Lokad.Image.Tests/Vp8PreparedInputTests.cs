@@ -62,7 +62,7 @@ public sealed class Vp8PreparedInputTests
         Assert.Equal(sourceBytes + input.CapacityBytes, root.Bytes);
         var scratch = root.Peak - sourceBytes - input.CapacityBytes;
         Assert.True(scratch is 1024 or 4096);
-        if (depth != 8 || input.HasAlpha || source.Width < 16) Assert.Equal(1024, scratch);
+        if (input.HasAlpha || source.Width < 16) Assert.Equal(1024, scratch);
         Padding(input.Y, input.Stride, input.Width, input.Height);
         Padding(input.U, input.Stride / 2, (input.Width + 1) / 2, (input.Height + 1) / 2);
         Padding(input.V, input.Stride / 2, (input.Width + 1) / 2, (input.Height + 1) / 2);
@@ -104,12 +104,14 @@ public sealed class Vp8PreparedInputTests
         }
     }
 
-    [Fact]
-    public void OpaqueVectorScratchRefusalIsTerminalWithoutSelectingSmallerScalarWorkspace()
+    [Theory]
+    [InlineData(8)]
+    [InlineData(16)]
+    public void OpaqueVectorScratchRefusalIsTerminalWithoutSelectingSmallerScalarWorkspace(int depth)
     {
-        if (!System.Runtime.Intrinsics.X86.Avx512F.IsSupported || !System.Runtime.Intrinsics.X86.Avx512BW.IsSupported
+        if (!System.Runtime.Intrinsics.X86.Avx2.IsSupported || !System.Runtime.Intrinsics.X86.Avx512F.IsSupported || !System.Runtime.Intrinsics.X86.Avx512BW.IsSupported
             || !System.Runtime.Intrinsics.X86.Avx512Vbmi.IsSupported) return;
-        using var source = OriginalVp8lControls.Buffer("opaque", 8);
+        using var source = OriginalVp8lControls.Buffer("opaque", depth);
         long capacity;
         using (var sizing = new OperationContext(ImageLimits.Default, default))
         using (var input = Vp8PreparedInput.Create(source, sizing)) capacity = input.CapacityBytes;
@@ -146,11 +148,13 @@ public sealed class Vp8PreparedInputTests
     }
 
     [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    public void CancellationAfterAdmissionReleasesStorageAndPermitsAnotherOperation(int growth)
+    [InlineData(1, 8)]
+    [InlineData(2, 8)]
+    [InlineData(1, 16)]
+    [InlineData(2, 16)]
+    public void CancellationAfterAdmissionReleasesStorageAndPermitsAnotherOperation(int growth, int depth)
     {
-        using var source = OriginalVp8lControls.Buffer("asymmetric", 8);
+        using var source = OriginalVp8lControls.Buffer(depth == 16 ? "opaque" : "asymmetric", depth);
         using var root = new TestMemoryBudget(16_000_000); using var cancel = new CancellationTokenSource();
         root.Admitted = _ => { if (root.GrowthAttempts == growth) cancel.Cancel(); };
         using var context = new OperationContext(new() { MemoryBudget = root }, cancel.Token);

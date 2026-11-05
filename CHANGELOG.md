@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share opaque WebP byte/word input preparation through bounded tiles, preserving
+  exact packets, portable fallbacks and explicit workspace admission.
+
 - Prepare fixed VP8 trellis importance without repeated exponential evaluation,
   preserving checked custom models, exact packets and memory ownership.
 

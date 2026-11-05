@@ -1666,19 +1666,13 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-luma4-preparation-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-shared-input-preparation-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
-    assert vp8_owned['qualification']['fullChecksEachOs'] == 5639
+    assert vp8_owned['qualification']['fullChecksEachOs'] == 5651
     assert vp8_owned['qualification']['actualPackage']['sha256'] == vp8_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert vp8_owned['pairedComparison']['pairs'] == 12 and vp8_owned['pairedComparison']['ratioConfidence'][1] < 1
-    assert vp8_owned['design']['newOwnedCapacityBytes'] == 0
+    assert vp8_owned['design']['newOwnedHeapCapacityBytes'] == 0
     assert len(vp8_owned['cases']) == 8
-    trellis_model = json.loads((ROOT / 'benchmarks/vp8-trellis-importance-evidence.json').read_text(encoding='utf-8'))
-    assert trellis_model['productionAccepted'] and set(trellis_model['cases']) == {'trellis'}
-    assert trellis_model['qualification']['fullChecksEachOs'] == 5642
-    assert trellis_model['qualification']['actualPackage']['sha256'] == trellis_model['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert trellis_model['pairedComparison']['pairs'] == 12 and trellis_model['pairedComparison']['ratioConfidence'][1] < 1
-    assert trellis_model['design']['newOwnedCapacityBytes'] == 0
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1701,8 +1695,6 @@ def render():
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
         owner = vp8_owned if case in {'alpha', 'alpha16', 'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
-        if case == 'trellis':
-            owner = trellis_model
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']
@@ -1896,20 +1888,17 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [luma4 preparation](../benchmarks/VP8-LUMA4-PREPARATION.md)
-  saves 286.80 µs / 2.32% on the frozen photographic control in one counterbalanced
-  comparison. All eight displayed VP8 costs retain gaps. Adverse standalone
-  alpha points and native clock movement remain recorded, without a causal alpha
-  CPU claim. Paired allocation stays 809,072 B/op; the current standalone photo
-  records 809,225 B/op at different diagnostic batching/GC, without a causal
-  allocation claim. No owned capacity is added.
-  [fixed trellis preparation](../benchmarks/VP8-TRELLIS-IMPORTANCE.md) finds
-  119.90 µs / 0.86% on the effort6 diagram, with unchanged 754,344 B/op.
-  Its paired interval only narrowly excludes no change (upper 0.99997432);
-  the current FFmpeg gap remains (upper 1.329). No broader gain is claimed.
-  Earlier
-  [shared residual preparation](../benchmarks/VP8-RESIDUAL-PREPARATION.md) retains
-  its scoped gain and superseded costs.
+- **WebP:** [shared opaque input preparation](../benchmarks/VP8-SHARED-INPUT-PREPARATION.md)
+  confirms 826.26 µs / 4.44% on the frozen opaque RGBA16 control, with unchanged
+  1,201,552 B/op. One shared byte/word row-pair pass uses 128 B of normalized
+  tiles and exact existing kernels. Word vector scratch admission rises from
+  1 KiB to 4 KiB; retained output capacity is unchanged. All eight current VP8
+  comparisons retain gaps (word upper 1.110). Byte photograph/opaque pairs remain
+  uncertain; adverse standalone points and native clock movement are retained,
+  without byte gain/regression or broad CPU claims. Earlier
+  [luma4](../benchmarks/VP8-LUMA4-PREPARATION.md),
+  [residual](../benchmarks/VP8-RESIDUAL-PREPARATION.md) and
+  [fixed trellis](../benchmarks/VP8-TRELLIS-IMPORTANCE.md) gains remain scoped history.
   [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
   retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
   Its measured alpha8 admission peak is 3,656,309 B, retained scratch zero;
@@ -1970,9 +1959,10 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,642 full/live checks per OS**, affected
+The current production build passes **5,651 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
-on Windows/Linux**. Unchanged AVX512-off kernels reuse their existing checks.
+on Windows/Linux**, including the new opaque-word sync/async consumer. The 23
+input checks also pass with AVX512 disabled; unrelated fallback proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.

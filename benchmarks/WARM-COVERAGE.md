@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Matcher preparation](WEBP-MATCHER-CANCELLATION-PREPARATION.md) retains four passing original/diagram/depth/async lossless boundaries; stop them. Opaque remains a gap (upper 1.063). [Photograph's counterbalanced check](WEBP-PHOTOGRAPH-COUNTERBALANCED.md) remains uncertain (interval 0.990–1.020), with unchanged 6,516,744 B/op and exact160,032 B packet. No CPU gain or parity claim; no unchanged repeat. Preserve earlier [index ownership](WEBP-ALPHA-MATCH-INDEX-REUSE.md) evidence. |
-| Resident VP8 encoding | [Luma4 preparation](VP8-LUMA4-PREPARATION.md) confirms286.80µs/2.32% scoped photo gain in twelve counterbalanced pairs. All eight displayed costs remain gaps; seven method2/4 costs reuse this table, while effort6 uses the fixed-model evidence below. No owned capacity; paired809072B/op unchanged. Standalone photo809225B/op uses different diagnostic batching/GC; no causal allocation claim. Adverse raw alpha points/native clock movement retained without an alpha CPU claim. Earlier [residual preparation](VP8-RESIDUAL-PREPARATION.md), [full-block quantization](VP8-FULL-BLOCK-QUANTIZATION.md), [matcher](WEBP-MATCHER-CANCELLATION-PREPARATION.md) and [ALPH storage](WEBP-ALPHA-COEFFICIENT-STORAGE.md) retain scoped history. |
+| Resident VP8 encoding | [Shared opaque input preparation](VP8-SHARED-INPUT-PREPARATION.md) confirms826.26µs/4.44% on the frozen word control, unchanged1201552B/op. One row-pair driver and128B tiles share exact kernels at both depths. Word vector scratch grows1→4KiB; retained output capacity stays unchanged. All eight costs remain gaps (wordupper1.110). Byte photograph/opaque pair intervals span no change; adverse current points/native movement are retained without byte CPU claims. Earlier [luma4](VP8-LUMA4-PREPARATION.md), [residual](VP8-RESIDUAL-PREPARATION.md) and [fixed trellis](VP8-TRELLIS-IMPORTANCE.md) gains retain scoped history. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-MATCHER-CANCELLATION-PREPARATION.md) includes full depth normalization and fresh async nonseekable output; the async producer proof is refreshed without builds. Passing cases stop. Other affected H costs remain historical; source/settings/packet/ownership gates stay unchanged. |
 | PNG encoding | [Block preparation](PNG-BLOCK-PREPARATION.md) shares frequency/code storage and uses linear canonical assignment. Same-batch allocation saves148,320B (5.7%) on wordSmallest9 and19,936B (2.4%) on byteFastest1; no CPU gain/equivalence/regression claim. Fifteen complete one-shot costs current: thirteen gaps; byteOptimal6 uncertain (upper1.045), gray16 passes/stops (upper0.987). [Four color boundaries](PNG-COLOR-ONE-SHOT.md) now include identical conversion/packing setup and disposal. [Delivery/cancellation boundaries](PNG-BOUNDARY-ONE-SHOT.md) retain word token/forward uppers1.116/1.140, asyncbyte1.029. Exact packets and complete delivery/ownership remain; no speedup claim follows the baseline change. Existing384KiB admission,2620B extra operation-array capacity, zero scratch afterdisposal; physical/complete admitted peaks unmeasured. Earlier tree/token preparation is linked history; other affectedH boundaries remain historical. |
 | JPEG and image reading | [Exact grayscale row batches](JPEG-GRAYSCALE-ROW-BATCH.md) save32.71µs/1.93%raw/4.04%normalized on the existing RGBA8→gray control, unchanged155,436B/op and exact packets. The gap remains (upper1.103); native clock change+2.19% is disclosed. Other image-grayscale timing affected by preparation is historical until refreshed. Caller-GRAY/RGB and other color/sampling/reading paths reuse valid proof; keep their named resident/stream/async/inspection/validation scope. |
@@ -20,16 +20,13 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
-The current production build passes **5,642 full/live checks per OS**, affected
-normal/scalar checks, and the same actual Release package/all three examples on
-Windows/Linux. Unchanged AVX512-off kernels reuse their existing checks. That
-qualifies correctness and packaging, not all282 CPU gates.
-The [fixed trellis model](VP8-TRELLIS-IMPORTANCE.md) removes repeated exponential
-evaluation with32B of immutable policy data. One paired effort6 diagram comparison
-finds119.90µs/0.86%; its interval only narrowly excludes no change
-(upper0.99997432). Allocations remain754344B/op; current FFmpeg upper1.329 is a gap.
-Only the displayed effort6 cost changes; the other seven VP8 rows retain valid
-QDP300 evidence. No broad gain or further helper tuning follows.
+The current production build passes **5,651 full/live checks per OS**, affected
+normal/scalar checks and23 input cases with AVX512 disabled, plus the same actual
+Release package/all three examples on Windows/Linux. Its new opaque-word consumer
+checks exact sync/async packets, terminal refusal, cancellation cleanup and
+independent output ownership. Unrelated fallback proof is reused. This qualifies
+correctness/packaging, not all282 CPU gates. All eight VP8 costs refresh once;
+other117 displayed comparisons reuse unchanged-path evidence.
 Fourteen displayed WebP and eight streaming-resize costs are current. Other
 affected boundaries marked H remain historical until their named reconciliation.
 

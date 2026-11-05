@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -62,6 +63,7 @@ internal sealed partial class Vp8PreparedInput : IDisposable
     // Eight RGBA pixels share the original Q16 matrix and half-up rounding.
     // At most235 fits both narrowing steps; write only the eight owned Y slots.
     // The scalar loop below handles short rows, tails and other representations.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int PrepareLuma8(ReadOnlySpan<byte> row, Span<byte> luma)
     {
         if (!Avx2.IsSupported) return 0;
@@ -133,7 +135,7 @@ internal sealed partial class Vp8PreparedInput : IDisposable
             var capacity = checked(result.lumaLength + 2 * result.chromaLength + (hasAlpha ? width * height : 0));
             context.Reserve(capacity + (long)MetadataBytes); result.retainedBytes = capacity + (long)MetadataBytes;
             context.Cancellation.ThrowIfCancellationRequested(); result.storage = new byte[capacity];
-            var vectorChroma = eightBit && !hasAlpha && width >= 16 && Chroma8Supported;
+            var vectorChroma = !hasAlpha && width >= 16 && Chroma8Supported;
             var scratchBytes = vectorChroma ? 4096 : ScratchBytes;
             context.Reserve(scratchBytes);
             try
@@ -146,11 +148,17 @@ internal sealed partial class Vp8PreparedInput : IDisposable
                 var uPlane = result.storage.AsSpan(result.lumaLength, result.chromaLength);
                 var vPlane = result.storage.AsSpan(result.lumaLength + result.chromaLength, result.chromaLength);
                 var alphaPlane = result.storage.AsSpan(result.lumaLength + 2 * result.chromaLength);
+                // One row-pair pass shares opaque byte/word preparation. Only
+                // two sixteen-pixel word tiles are normalized at any time.
+                var preparedColumns = vectorChroma ? PrepareOpaqueTiles(bytes, words, eightBit,
+                    width, height, yPlane, uPlane, vPlane, result.Stride, linear, knots, context) : 0;
                 for (var y = 0; y < height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
                     var preparedLuma = eightBit && !hasAlpha
-                        ? PrepareLuma8(bytes.Slice(y * width * 4, width * 4), yPlane.Slice(y * result.Stride, width)) : 0;
+                        ? preparedColumns + PrepareLuma8(bytes.Slice((y * width + preparedColumns) * 4,
+                            (width - preparedColumns) * 4), yPlane.Slice(y * result.Stride + preparedColumns, width - preparedColumns))
+                        : preparedColumns;
                     for (var x = preparedLuma; x < width; x++)
                     {
                         var p = (y * width + x) * 4;
@@ -160,7 +168,7 @@ internal sealed partial class Vp8PreparedInput : IDisposable
                     }
                 }
                 var chromaWidth = (width + 1) / 2; var chromaHeight = (height + 1) / 2; var stride = result.Stride / 2;
-                var prepared = vectorChroma ? PrepareChroma8(bytes, width, height, uPlane, vPlane, stride, linear, knots, context) : 0;
+                var prepared = preparedColumns / 2;
                 for (var y = 0; y < chromaHeight; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();

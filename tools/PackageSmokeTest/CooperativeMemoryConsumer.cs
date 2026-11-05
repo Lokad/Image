@@ -2,6 +2,44 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyOpaqueWordTiles()
+    {
+        using var root = new TestMemoryBudget(8 * 1024 * 1024);
+        using var source = OriginalPixels.Buffer(513, 259, 16, opaque: true);
+        var original = OriginalPixels.Bytes(source);
+        var options = new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4,
+            Limits = new() { MemoryBudget = root } };
+        using var first = new MemoryStream(); ImageCodec.EncodeWebp(source, first, options);
+        var packet = first.ToArray();
+        if (packet.Length != 72380 || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet))
+            != "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f" || root.Bytes != 0)
+            throw new Exception("Packaged opaque word preparation changed its complete packet or retained admission.");
+        foreach (var offset in new long[] { 1, 2 })
+        {
+            using var refused = new MemoryStream(); var refusals = root.Refusals;
+            root.RefuseAtGrowth = root.GrowthAttempts + offset;
+            try { ImageCodec.EncodeWebp(source, refused, options); throw new Exception("Packaged word tiles ignored refusal."); }
+            catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget) { }
+            if (root.Bytes != 0 || root.Refusals != refusals + 1 || refused.Length != 0 || !refused.CanWrite)
+                throw new Exception("Packaged word tiles leaked admission, retried or took output ownership.");
+            root.RefuseAtGrowth = 0;
+        }
+        using var cancel = new CancellationTokenSource(); var stop = root.GrowthAttempts + 2;
+        root.Admitted = _ => { if (root.GrowthAttempts == stop) cancel.Cancel(); };
+        using var canceled = new MemoryStream();
+        try { ImageCodec.EncodeWebp(source, canceled, options, cancel.Token); throw new Exception("Packaged word tiles ignored cancellation."); }
+        catch (OperationCanceledException) { }
+        root.Admitted = null;
+        using var second = new MemoryStream(); await ImageCodec.EncodeWebpAsync(source, second, options);
+        if (root.Bytes != 0 || root.IsDisposed || canceled.Length != 0 || !canceled.CanWrite
+            || !packet.AsSpan().SequenceEqual(second.ToArray()) || !original.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
+            throw new Exception("Packaged word tiles changed async output, source or cleanup.");
+        source.Dispose(); first.GetBuffer()[10] ^= 1; first.Dispose();
+        if (!packet.AsSpan().SequenceEqual(second.ToArray()) || !second.CanWrite)
+            throw new Exception("Packaged word output did not survive source and peer disposal.");
+        Console.WriteLine("Packaged opaque word tiles preserve exact sync/async VP8 packets, refusal and ownership.");
+    }
+
     private static async Task VerifyWebpAlphaCoefficientStorage()
     {
         using var root = new TestMemoryBudget(8 * 1024 * 1024);
@@ -454,6 +492,7 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
+        await VerifyOpaqueWordTiles();
         VerifyStreamingBicubic();
         using var budget = new TestMemoryBudget(4 * 1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = budget };
