@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-05. These **125 selected comparisons** combine qualified
+Updated 2026-11-06. These **125 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [282 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -36,6 +36,8 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
+  [Complete byte enlargement](../benchmarks/CURRENT-BICUBIC-BYTE-ENLARGEMENT.md)
+  is reconciled after output-storage changes: current upper1.332,116B/op.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [signed prepared instructions](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
   remove repeated sign interpretation in the existing2KiB scan plan. Independent
@@ -166,7 +168,7 @@ settings do not establish matched quality.
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † H → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † H → 1027×519 | 4,473.00 | 3,036.63 | 1.473 / 1.481 | 2,132,668 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,018.79 | 3,042.66 | 1.321 / 1.332 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † H → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † H → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |

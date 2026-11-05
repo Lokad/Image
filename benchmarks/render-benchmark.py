@@ -753,12 +753,19 @@ def render():
     assert tight_byte_up['qualification']['fullChecksEachOs'] == 5245
     assert tight_byte_up['qualification']['sameActualPackageBothOs']
     assert tight_byte_up['decisions']['confirm']['passed'] and tight_byte_up['decisions']['confirm']['normalizedSeparated']
-    observation = tight_byte_up['cases']['TightUp8'][-1]
+    # This public boundary has one current owner after shared output changes.
+    enlargement = json.loads((ROOT / 'benchmarks/current-bicubic-byte-enlargement-evidence.json').read_text(encoding='utf-8'))
+    assert not enlargement['productionChanged'] and enlargement['allBuilds'] == 0
+    assert enlargement['raw']['mirrored'] and enlargement['raw']['allMembersVerified']
+    assert enlargement['qualificationReuse']['fullChecksEachOs'] == 5716
+    assert enlargement['qualificationReuse']['sameActualPackageBothOs']
+    observation = enlargement['cases']['TightUp8']
     receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == tight_byte_up['producers']['linuxSha256']
+    assert receipt['librarySha256'] == enlargement['producers']['linuxSha256']
     assert receipt['managedRationalReferenceExact'] and receipt['managedMaxWorkingBytes'] == 2667616
     assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
     assert all(q['passed'] for q in observation['quietness'].values())
+    assert enlargement['status'] == ('pass' if enlargement['upper'] <= 1 else 'gap' if enlargement['lower'] > 1 else 'uncertain')
     rows.append(('editing', f'| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | {stats["Mean"] / 1000:,.2f} | '
                  f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                  f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
@@ -843,6 +850,9 @@ def render():
             assert alpha_callers['noCallProof']['cases'][key]['reusePriorPerformance']
             reused.add(key)
             continue
+        if key == 'bicubic-TightUp8':
+            refreshed.add(key)
+            continue  # Current owner above supersedes the earlier alpha cost.
         observation = (alpha_callers if key == 'bicubic-Up16' else exact_alpha)['cases'][key][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         assert receipt['librarySha256'] == exact_alpha['producers']['linuxSha256']
@@ -1491,7 +1501,9 @@ def render():
     assert refreshed_cached == set(current_cached.values())
     # One historical-cost marker covers all affected families. Their reports
     # retain the distinct source changes and older observations.
-    rows = [(kind, row.replace(' ‡', ' H').replace(' §', ' H').replace(' ¶', ' H'))
+    rows = [(kind, row.replace(' ‡', '').replace(' §', '').replace(' ¶', '')
+             if kind == 'editing' and row.startswith('| Bicubic RGBA8 enlargement,')
+             else row.replace(' ‡', ' H').replace(' §', ' H').replace(' ¶', ' H'))
             for kind, row in rows]
     # Current VP8 family costs use one canonical receipt shape, independently of
     # the experiment reports retained above for unaffected paths and history.
@@ -1535,6 +1547,7 @@ def render():
     assert overwrite['qualification']['actualPackage']['sha256'] == overwrite['qualification']['samePackageLinux']['sameActualPackageSha256']
     rows = [(kind, row.replace(' →', ' H →', 1)
              if kind == 'editing' and row.startswith(('| Bicubic', '| Bilinear')) and ' H ' not in row
+             and not row.startswith('| Bicubic RGBA8 enlargement,')
              else row) for kind, row in rows]
     labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
               'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
@@ -1772,7 +1785,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-05. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-06. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [282 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -1808,6 +1821,8 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
+  [Complete byte enlargement](../benchmarks/CURRENT-BICUBIC-BYTE-ENLARGEMENT.md)
+  is reconciled after output-storage changes: current upper1.332,116B/op.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [signed prepared instructions](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
   remove repeated sign interpretation in the existing2KiB scan plan. Independent
