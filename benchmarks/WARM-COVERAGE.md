@@ -34,13 +34,13 @@ including latest wide resizing gains. Other affected boundaries marked H remain
 historical until their named reconciliation.
 
 Current costs above own their scope and qualification. The latest
-[ordinary-index initialization trial](WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md)
-restores exact production after two inconclusive confirmation designs. Every
-pair/adverse interval remains. Two retained poisoned-long-run normal/live-token
-cases qualify against restored code on bothOS/normal/scalar, together with47
-actual-main frozen packet cases per mode. Main/package stay unchanged; old5,704
-full/live proof is reused with these separate additions, not a fresh full5,706.
-No allocation/CPU gain, causal regression or equivalence is claimed.
+[exact affine entropy trial](WEBP-AFFINE-ENTROPY-INCONCLUSIVE.md) replaces repeated
+arithmetic with16KiB compiled coefficients but establishes no dependable complete-
+encode gain. Original source/main/embedded/consumers restore exactly; current
+costs/package stay unchanged. Every adverse/uncertain pair and current profile
+remains evidence. The preceding [index trial](WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md)
+retains two separately qualified poisoned-storage cases; prior5,704full/live proof
+is reused, not described as a fresh full5,706suite.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)

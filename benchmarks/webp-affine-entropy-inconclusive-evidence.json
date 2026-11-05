@@ -1,0 +1,218 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WPA331",
+  "productionChanged": false,
+  "acceptedProduction": false,
+  "currentComparisonsChanged": false,
+  "requiredMaterialPaths": 282,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "WPA331",
+    "productionPrototype": true,
+    "accepted": false,
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "3e6ea605eb0c04c3c6a88e28a99850f3d5be10f3bbc19aced6bbfa33c5c53183",
+      "src/Lokad.Image/Internal/Vp8lReferenceCost.Medium.cs": "4d11637182b5f8db146f418d9c34d394d5ba50b0d4f2394c80ad8aa8f881a06b",
+      "tests/Lokad.Image.Tests/Vp8lEntropyCostTests.cs": "ef3deefd4c074d7421ad8a85f3b66de1620a26816a15de3625ba6f4ab7c6a71d"
+    },
+    "baselineWindows": "a326ca3b9d52b856d4f82d4bc7d2a424d0c6358f671fe98e59256377746dcebc",
+    "baselineLinux": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+    "trigger": "Current actual-producer WPA330 147/1982 samples in209B LargeSLog; medium arithmetic is the principal sampled range. Counts/sample skid are not gain predictions.",
+    "repeatedWork": "For each medium count, recompute rounded-log shift, a shifted head, correction multiplication and addition. Affine factorization prepares coefficients once as mathematical program constants.",
+    "endState": "1024 affine coefficient pairs cover the entire256..65535 domain, with one per-count multiplication and subtraction after indexing. Counts<256 and>=65536 retain independent rounding paths. No settings/input/fixture-specific memoization.",
+    "differenceFromDenseTrial": "Old512KiB runtime table computed65536 complete costs per operation and showed no useful lead. New16KiB immutable coefficient representation is32times smaller, removes per-operation preparation/ownership, and stores only formula segments, not full input results. Do not replay the old trial.",
+    "storage": "Adds16384B immutable program-image data (report separately; not zero added storage). No dynamic cache, pool, managed array, runtime preparation, operation allocation or retained result charge. Existing minor runtime/type overhead remains approximate. Coarse caller admission guards substantial owned operation storage, not static executable constants; this introduces no host-root-owned storage.",
+    "oracle": "Actual qualifiedWindowsA326 reflection SLog0..65535 Int64LE SHA08d694616d742ebc57124b013627c70487e5564c3f5385f346e8627736d849d1. Every medium output algebraically verified against that frozen file before prototype builds; existing full-domain independent formula and large-range tests retained.",
+    "boundaries": "Frozen completePhotographLossless8 managedQ85/nativeQ75effort4 first; transparentQ75effort4 alpha8 is a distinct shared-lossless path/generalization. Exact packets/order/ties, full inputs/normalization/owned output/cancellation/admission/lifetimes unchanged. No pixel quality relaxation.",
+    "transition": "One replacement of existing representation; no optional mode/wrapper or temporary dual production implementation. Potential cache/code-size/lookup regressions judged on complete operations; revert if unhelpful rather than tuning a table grid.",
+    "checks": "One Linux main/embedded build, focused WebP normal/scalar including frozen65536-count digest plus existing formulas/packet/shared refusal/cancellation. Reuse prepared paired tool and native workers; short screen then independent confirmation if useful. Broad W/L/live/scalar/SAMEactualpackage only at accepted production milestone.",
+    "measurement": "One immutable candidate. Existing photograph/alpha complete controls; no additional settings or images. Baseline CWH323 unchanged, retainedWMA2tests. Preserve adverse/inconclusive evidence.",
+    "attributionRaw": {
+      "file": "webp-lossless-photo-current-preparation-attribution.tar.xz",
+      "sha256": "b524cede72f217ab56f5430664d63dcb05ef88fe75c27ea921cdf9c694921e9b",
+      "bytes": 228092,
+      "members": 102,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "webp-alpha-cache-history-qualified.tar.xz",
+          "sha256": "0d06142905908d33f8d56fef64e797e3c8016520196ed640ebde14201fbaf88e"
+        },
+        {
+          "file": "webp-current-photograph-counterbalanced.tar.xz",
+          "sha256": "1bc198bd5409a1bb2c6e4d618c74dc807b0dcbfda10654182a1d3e72e4fbe848"
+        },
+        {
+          "file": "webp-index-initialization-inconclusive.tar.xz",
+          "sha256": "3569a9e1b9ea7d562775294c2e79e5f750a335e09960e9fdaf56e643af048f7a"
+        }
+      ]
+    },
+    "preflightFailure": "First core compile failed:MethodImpl was applied to an expression-bodied property instead of its accessor. Remove the unnecessary annotation/import. No candidate artifact/test/timing produced; retain failed build log."
+  },
+  "attribution": {
+    "profile": "WPA330",
+    "instrumentedElapsedDiscarded": true,
+    "totalSamples": 1982,
+    "managedSamples": 1905,
+    "largeSLogSamples": 147,
+    "baselineCodeBytes": 209,
+    "candidateCodeBytes": 198,
+    "raw": {
+      "file": "webp-lossless-photo-current-preparation-attribution.tar.xz",
+      "sha256": "b524cede72f217ab56f5430664d63dcb05ef88fe75c27ea921cdf9c694921e9b",
+      "bytes": 228092,
+      "members": 102,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "webp-alpha-cache-history-qualified.tar.xz",
+          "sha256": "0d06142905908d33f8d56fef64e797e3c8016520196ed640ebde14201fbaf88e"
+        },
+        {
+          "file": "webp-current-photograph-counterbalanced.tar.xz",
+          "sha256": "1bc198bd5409a1bb2c6e4d618c74dc807b0dcbfda10654182a1d3e72e4fbe848"
+        },
+        {
+          "file": "webp-index-initialization-inconclusive.tar.xz",
+          "sha256": "3569a9e1b9ea7d562775294c2e79e5f750a335e09960e9fdaf56e643af048f7a"
+        }
+      ]
+    }
+  },
+  "preparation": {
+    "project": "Lokad.Image",
+    "system": "linux",
+    "baselineSha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+    "candidateSha256": "1cc4e4c3165e7827305385d658a19ca8aee5b5b9c6d82a7e4e41535da0f74ffd",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "3e6ea605eb0c04c3c6a88e28a99850f3d5be10f3bbc19aced6bbfa33c5c53183",
+      "src/Lokad.Image/Internal/Vp8lReferenceCost.Medium.cs": "4d11637182b5f8db146f418d9c34d394d5ba50b0d4f2394c80ad8aa8f881a06b",
+      "tests/Lokad.Image.Tests/Vp8lEntropyCostTests.cs": "ef3deefd4c074d7421ad8a85f3b66de1620a26816a15de3625ba6f4ab7c6a71d"
+    },
+    "focused": {
+      "internal-normal": 904,
+      "internal-scalar": 904,
+      "public-normal": 357,
+      "public-scalar": 357
+    },
+    "productionAccepted": false,
+    "coreVersions": 1,
+    "internalVersions": 1,
+    "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+    "internalTestAssemblySha256": "28408027b6cfe2c0b1670c2bd732a3aa4bc47d2301bfa5aee7df0663b6fd1ac7"
+  },
+  "measurements": {
+    "photographShort": {
+      "pairs": 3,
+      "operationsPerSubject": 8,
+      "baselineUs": 90281.74083333333,
+      "candidateUs": 90387.45666666667,
+      "meanPairedRatio": 1.0011864644689386,
+      "ratioConfidence": [
+        0.909459007731349,
+        1.1021450992335062
+      ],
+      "allocatedValues": [
+        6516648
+      ],
+      "allPairsRetained": true,
+      "favorablePairs": 2,
+      "exactPacketSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8"
+    },
+    "alphaShort": {
+      "pairs": 3,
+      "operationsPerSubject": 8,
+      "baselineUs": 61483.64495833334,
+      "candidateUs": 61027.79541666667,
+      "meanPairedRatio": 0.9925951891028713,
+      "ratioConfidence": [
+        0.896707920319666,
+        1.098713198881702
+      ],
+      "allocatedValues": [
+        7033576
+      ],
+      "allPairsRetained": true,
+      "favorablePairs": 3,
+      "exactPacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10"
+    },
+    "alphaConfirm": {
+      "pairs": 12,
+      "operationsPerSubject": 16,
+      "baselineUs": 61079.93351041667,
+      "candidateUs": 60371.52747395833,
+      "meanPairedRatio": 0.9884844919801062,
+      "ratioConfidence": [
+        0.9720868320720678,
+        1.0050041968218073
+      ],
+      "allocatedValues": [
+        7033576
+      ],
+      "allPairsRetained": true,
+      "favorablePairs": 12,
+      "exactPacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10"
+    }
+  },
+  "verdict": "No useful photograph lead; transparent short point favored3/3, independent12pair confirmation still crosses1. Restore candidate, no third timing design, favorable resampling, CPU gain/regression/equivalence or current cost replacement. This stops this representation, not all pricing designs.",
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionSourceMainEmbeddedRestoredExactly": true,
+      "productionSha256": "a326ca3b9d52b856d4f82d4bc7d2a424d0c6358f671fe98e59256377746dcebc",
+      "embeddedSha256": "c40eee128435f21305d8dc40fac7fa4638f69505ab19525dbfcacc10a1cb0ed9",
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "productionBuilds": 0,
+      "internalBuilds": 0,
+      "checks": {},
+      "newTestsRetained": false,
+      "priorQualificationReused": true,
+      "sourceSha256": null
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionSourceMainEmbeddedRestoredExactly": true,
+      "productionSha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+      "embeddedSha256": "ffd37fecf9d4af05f05d16cbc8c1d43c05f6d06cc1f454f7b34773fd5ab19073",
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "productionBuilds": 0,
+      "internalBuilds": 0,
+      "checks": {
+        "internal-normal": 9,
+        "internal-scalar": 9,
+        "public-normal": 47,
+        "public-scalar": 47
+      },
+      "newTestsRetained": false,
+      "priorQualificationReused": true,
+      "sourceSha256": "f73e6b0f26403c9f7d527dbf3f4506a2c71759556cd97e196b899215cdab0855"
+    }
+  },
+  "raw": {
+    "file": "webp-affine-entropy-inconclusive.tar.xz",
+    "sha256": "d06f38dcb3e7ad09e8ede67b74ceabded1db21ccafd4acf0032a22622b1b82ee",
+    "bytes": 1771948,
+    "members": 103,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-lossless-photo-current-preparation-attribution.tar.xz",
+        "sha256": "b524cede72f217ab56f5430664d63dcb05ef88fe75c27ea921cdf9c694921e9b"
+      },
+      {
+        "file": "webp-alpha-cache-history-qualified.tar.xz",
+        "sha256": "0d06142905908d33f8d56fef64e797e3c8016520196ed640ebde14201fbaf88e"
+      },
+      {
+        "file": "webp-index-initialization-inconclusive.tar.xz",
+        "sha256": "3569a9e1b9ea7d562775294c2e79e5f750a335e09960e9fdaf56e643af048f7a"
+      }
+    ]
+  }
+}
