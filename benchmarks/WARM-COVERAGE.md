@@ -32,64 +32,20 @@ Eight WebP costs refresh; other117 comparisons reuse unchanged-path proof,
 including latest wide resizing gains. Other affected boundaries marked H remain
 historical until their named reconciliation.
 
-The [current PNG word capture](PNG-FAST-WORD-CURRENT-ATTRIBUTION.md) reuses the
-immutable qualified producer and one-shot control:590of884samples fall in greedy
-parsing. Exact968216Bpacket, both guards and all original boundaries pass, with
-zero builds or current-cost replacement. Samples/skid establish no phase-time or
-speedup claim; a prepared session would leave this observed parsing work in place.
+Current costs above own their scope and qualification. Latest
+[VP8 sign/category pricing](VP8-FIXED-SIGN-CATEGORY-INCONCLUSIVE.md) preserves
+exact rates/packets but has no useful three-pair photograph/alpha lead. It restores
+source/main/embedded tests/manifest exactly, without current-row replacement or
+broad/package repetition. The current-DLL attribution and private count projection
+remain explicitly distinct from phase timing or CPU proof.
 
-The [prepared cancellation stage](PNG-PREPARED-CANCELLATION-INCONCLUSIVE.md)
-passes focused checks but has no useful normalized short lead on either depth.
-It restores exactly, with no current-row replacement, longer confirmation or
-package repeat. This implementation is inconclusive, not a permanent family ban.
-
-The [shared triple-preparation stages](PNG-SHARED-TRIPLE-PREPARATION-INCONCLUSIVE.md)
-also restore exactly after no useful screen lead on byte/word Fastest1. Real
-duplicate loads/range checks disappear, but generated code stays larger and
-complete timings do not improve. Both stages preserve frozen packets and focused
-normal/scalar checks; source/main/embedded tests/manifest/package identities are
-restored without builds, broad/package repeats or current-cost replacements.
-
-The [transparent capture before full-block quantization](WEBP-ALPHA-CURRENT-ATTRIBUTION.md)
-retains source-specific matching, coefficient, predictor and cache-history leads.
-The [current capture and fixed-distance audit](WEBP-FIXED-DISTANCE-ATTRIBUTION.md)
-retain the matcher lead, but counts do not justify updating two fixed-distance
-recurrences at every visited position. Its prepared four-pixel query follow-up
-has no favorable complete-operation screen point; all source/modules restore
-exactly, with current qualification/costs reused. Counts and short screens imply
-no CPU gain or statistical regression. The linked report retains raw evidence.
-The [prepared trace-price stage](WEBP-PREPARED-LITERAL-COST-INCONCLUSIVE.md)
-also restores after no useful material short lead. Existing qualification and
-current costs remain valid; no independent confirmation or package repeat.
-The [checked green-histogram preparations](WEBP-GREEN-HISTOGRAM-BOUNDS.md)
-retain their hot bounds checks and restore before timing. Both focused/scalar
-and exact-packet checks pass; generated code establishes no CPU gain. Reuse the
-qualified source/modules, package and all current costs without broad repeats.
-The [scalar-window stage](WEBP-SCALAR-WINDOW-PREPARATION.md) is a measured1.11%
-photographic regression, restored exactly. Fewer checks or allocations alone do
-not establish elapsed gains; a revised design needs distinct supporting evidence.
-The [expanded Lanczos coefficient stages](LANCZOS-COEFFICIENT-PREPARATION.md) have
-adverse short points and add97,952B retained capacity; both restore exactly.
-No independent timing, package reproof or current-row replacement follows.
-The [row-publication stages](LANCZOS-ROW-PUBLICATION.md) also restore exactly:
-one counterbalanced comparison confirms5.07% slower word enlargement; revised
-pair-width screens show no useful lead. Independent conversion tests are retained.
-
-The [ALPH representation/lifetime audit](WEBP-ALPHA-REPRESENTATION-AUDIT.md) finds
-that narrowing the working frame would lose its larger coefficient-storage
-handoff, adding183,066 B net payload allocation across those phases. No CPU gain
-is demonstrated and no production change follows. This source-derived result
-does not close compact representations or variable token storage as families.
-
-The [RGB16](PNG-RGB16-ONE-SHOT.md) and
-[gray-alpha16](PNG-GRAY-ALPHA16-ONE-SHOT.md) PNG controls now include fresh native
-codec/packet/frame preparation and disposal. Their uppers1.048/1.052 remain gaps;
-boundary corrections are not incremental speedup claims.
-
-Superseded experiments, attribution captures, useful retained tests and raw
-manifests remain in the [preceding coverage record](https://github.com/lokad/image/blob/14155d1596330af7b97dcfd8707e160ca3e39b10/benchmarks/WARM-COVERAGE.md)
-and linked family reports. Those records preserve adverse/inconclusive findings
-without turning this current checklist into accumulated experiment chronology.
+Earlier adverse stages and attribution are retained in the
+[preceding coverage record](https://github.com/lokad/image/blob/23ce5aa86684610b6302d74c395c190d4138621a/benchmarks/WARM-COVERAGE.md)
+and linked family reports, including all cited raw evidence and reproducibility.
+They are leads/history, not permanent family exclusions or current timing proof.
+[Fused prepared counting](VP8L-FUSED-PREPARED-COUNTING.md) records the completed
+revision of the former body-count/histogram-addition leads. The finite inventory
+below is unchanged; publication remains separate and postponed.
 
 ## Finite required inventory
 

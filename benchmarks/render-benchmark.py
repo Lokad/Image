@@ -1895,89 +1895,37 @@ allocation, separate from peak live capacity and retained storage. Native
 allocations are unmeasured. Normalization, output ownership and disposal stay
 timed; setup, delivery and retained state follow the stated case boundaries.
 
-Current priorities and scope:
+Current scope and remaining work:
 
-- **WebP:** [alpha cache-history traversal](../benchmarks/WEBP-ALPHA-CACHE-HISTORY.md)
-  confirms {webp_owned['pairedComparison']['rawUsSaved']:,.2f} µs / {webp_owned['pairedComparison']['rawReduction']*100:.2f}% on the complete transparent byte control,
-  preserving exact packets and 7,033,576 B/op at equal batching. Eligible normalized
-  alpha discovers cache hits and updates missed prefixes in one traversal;
-  full-color callers retain binary search. Broader incremental gains are unproven.
-  Owned capacities stay unchanged; retained scratch is zero. Complete admitted/
-  physical peaks and native allocations are not remeasured.
-  [Predictor runs](../benchmarks/WEBP-PREDICTOR-RUNS.md) retain their earlier scoped
-  gain and superseded costs. [Earlier workspace reuse](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
-  retains its 131,488 B/op saving and superseded costs.
-  Eight affected costs refresh once: {sum(c['status'] == 'pass' for n, c in webp_owned['cases'].items() if not n.startswith('alpha'))}/6 lossless controls pass/stop;
-  opaque is {webp_owned['cases']['opaque']['status']} (upper {webp_owned['cases']['opaque']['upper']:.3f}), photograph {webp_owned['cases']['photograph']['status']} (upper {webp_owned['cases']['photograph']['upper']:.3f}).
-  Transparent byte/word retain gaps (uppers {webp_owned['cases']['alpha']['upper']:.3f}/{webp_owned['cases']['alpha16']['upper']:.3f}). Original settings,
-  complete packets, quality and independent output boundaries remain.
-  [Shared input preparation](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md) retains
-  its scoped earlier gains. Eligible alpha/opaque vector scratch is 4 KiB, scalar
-  scratch 1 KiB; selected-output capacity is unchanged. The six opaque VP8 rows
-  reuse those unchanged costs. [ALPH-to-frame storage](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
-  retains its 449 KB/op saving; byte/word alpha now allocates {webp_owned['cases']['alpha']['allocatedBytes']:,}/{webp_owned['cases']['alpha16']['allocatedBytes']:,}
-  B/op in the current benchmark boundary. Superseded uncertainty and experiments
-  remain linked from the current report, without replacing current costs.
-- **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
-  saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
-  at equal batching, without a CPU gain/equivalence/regression claim. Fifteen current
-  one-shot costs retain thirteen gaps; byte Optimal6 remains uncertain (upper 1.045).
-  [Color setup reconciliation](../benchmarks/PNG-COLOR-ONE-SHOT.md) adds one scoped
-  gray16 pass (upper 0.987), preserving the original red-plane/endian graph.
-  [Delivery/cancellation comparisons](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md)
-  include native codec preparation: word token/forward uppers 1.116/1.140;
-  byte async upper 1.029. Word-workspace and complete async delivery stay timed.
-  Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
-  zero retained scratch after disposal. Complete physical/admitted peaks are
-  unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
-  Two [shared-target preparation stages](../benchmarks/PNG-SHARED-TRIPLE-PREPARATION-INCONCLUSIVE.md)
-  preserve exact packets but show no useful complete-operation screen lead.
-  Qualified production and these current costs remain unchanged after restoration.
-- **Resizing:** [paired Lanczos preparation](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
-  confirms 175.99 µs / 4.20% elapsed improvement on prepared word enlargement,
-  with unchanged allocations/retention and exact pixels. Standalone raw/native
-  clock movement is disclosed separately. Current coverage
-  has five passing boundaries; prepared byte reduction and word reduction/
-  enlargement retain gaps (uppers 1.158/1.097/1.052). One-shot and prepared calls
-  compare equivalent setup/ownership. Plans retain 139,800/148,040 B for byte/word
-  reduction and 325,156/333,396 B for enlargement. Managed Q30/rational/certified
-  pixels stay exact; zimg uses float. [Shared bicubic streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
-  saves 66.62/51.17 µs (11.24%/9.95%) on byte/word 8×17, with unchanged allocations.
-  Two schedulers serve four exact kernels within 4 KiB. Eight existing tight
-  controls have current costs: six pass and stop; RGBA8 8×17/4×9 retain gaps
-  (uppers 1.127/1.269). Managed preparation stays timed; native graphs/scratch are
-  retained. [Column geometry preparation](../benchmarks/BICUBIC-COLUMN-PREPARATION.md)
-  saves 8.84 µs / 1.41% raw on byte 256×129 with the same 4 KiB allowance and
-  113 B/op; its remaining upper is 1.363. Native clock movement is +9.05%, disclosed
-  separately from the raw gain. [Shared word preparation](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md)
-  saves 126.92 µs / 14.46% raw on the existing word 256×129 control, with unchanged
-  4 KiB admission (upper 1.223, 113 B/op; no allocation-saving claim). Its new row
-  surfaces an already-required boundary. Other affected H costs still need reconciliation.
-  [Wide preparation reuse](../benchmarks/BICUBIC-WIDE-PREPARATION.md) extends the
-  same result-tail helper to the two wider-support kernels, saving
-  {wide_preparation['independentComparisons']['TightWide8']['rawSavedUs']:.2f}/{wide_preparation['independentComparisons']['TightWide16']['rawSavedUs']:.2f} µs
-  ({wide_preparation['independentComparisons']['TightWide8']['rawReduction']*100:.2f}%/{wide_preparation['independentComparisons']['TightWide16']['rawReduction']*100:.2f}%) on the existing byte/word 128×64 controls.
-  Admission stays 4 KiB and allocation 113 B/op; no owned capacity or retained
-  scratch is added. Both remain gaps (uppers {wide_preparation['cases']['TightWide8']['upper']:.3f}/{wide_preparation['cases']['TightWide16']['upper']:.3f}).
-- **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
-  save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
-  grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
-  labeled SIMD libjpeg-turbo gap remains (upper 1.103); its native clock is 2.19%
-  slower in confirmation. Caller-GRAY/RGB paths keep unchanged evidence. Other table statuses and
-  [coverage](../benchmarks/WARM-COVERAGE.md) retain their named color/sampling/
-  delivery scope. Sub-microsecond probe/copy gaps remain visible, with expensive
-  codec/resize paths prioritized. Inspection, complete Identify and coding
-  validation are distinct: PNG header inspection skips CRCs; Identify validates
-  the container and nine source facts without pixel decoding; validation checks
-  coding syntax without retaining an RGBA result.
-- **Text/drawing:** [active-edge scheduling](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
-  saves 179.16/170.49 µs (48.55%/47.38%) on the two frozen prepared-drawing
-  controls, preserving exact frames. Allocation rises 8,672 B/draw to 92,384;
-  admitted Latin workspace stays 48,544 B, with zero retained scratch. Physical
-  peaks and native allocations are unmeasured. Both costs retain gaps (uppers
-  5.230/5.226). [Layout/fitting and RGBA16 compositing](../benchmarks/TEXT-DRAWING-CURRENT.md)
-  pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
-  These independent cases do not block codecs or resizing.
+- **WebP:** [current alpha-cache costs](../benchmarks/WEBP-ALPHA-CACHE-HISTORY.md)
+  retain four passing lossless controls, an opaque gap (upper1.035) and uncertain
+  photograph (upper1.020). Transparent VP8 uppers1.100/1.103 remain gaps;
+  six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
+  [Prepared sign/category pricing](../benchmarks/VP8-FIXED-SIGN-CATEGORY-INCONCLUSIVE.md)
+  restores exactly after no useful screen lead; it changes no current cost.
+- **PNG:** [block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md),
+  [color](../benchmarks/PNG-COLOR-ONE-SHOT.md) and
+  [delivery](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md) supply fifteen equivalent
+  one-shot costs:13gaps, byteOptimal6uncertain (upper1.045), gray16pass (upper0.987).
+  Existing384KiB admission and zero retained scratch remain; allocation savings
+  do not establish CPU gains. Adverse experiments remain linked history.
+- **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
+  has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
+  Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
+  [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
+  [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
+  [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
+  Exact Q30/rational/certified pixels remain required versus native float.
+- **JPEG and reading:** table rows retain their named sampling/delivery scope.
+  Progressive444 ordinary/live gaps offer material absolute savings; retained
+  [refinement attribution](../benchmarks/JPEG-REFINEMENT-STATE-ATTRIBUTION.md) is
+  a source-pinned lead, not new phase timing. [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
+  retains upper1.103 against labeled SIMD libjpeg-turbo. Header inspection,
+  container Identify and pixel-coding validation have distinct boundaries.
+- **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
+  preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
+  drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
+  pass/stop. These independent cases do not block codec or resize work.
 
 The current production build passes **{webp_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
