@@ -1673,6 +1673,12 @@ def render():
     assert vp8_owned['pairedComparison']['pairs'] == 12 and vp8_owned['pairedComparison']['ratioConfidence'][1] < 1
     assert vp8_owned['design']['newOwnedCapacityBytes'] == 0
     assert len(vp8_owned['cases']) == 8
+    trellis_model = json.loads((ROOT / 'benchmarks/vp8-trellis-importance-evidence.json').read_text(encoding='utf-8'))
+    assert trellis_model['productionAccepted'] and set(trellis_model['cases']) == {'trellis'}
+    assert trellis_model['qualification']['fullChecksEachOs'] == 5642
+    assert trellis_model['qualification']['actualPackage']['sha256'] == trellis_model['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert trellis_model['pairedComparison']['pairs'] == 12 and trellis_model['pairedComparison']['ratioConfidence'][1] < 1
+    assert trellis_model['design']['newOwnedCapacityBytes'] == 0
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1695,6 +1701,8 @@ def render():
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
         owner = vp8_owned if case in {'alpha', 'alpha16', 'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
+        if case == 'trellis':
+            owner = trellis_model
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']
@@ -1890,11 +1898,16 @@ Current priorities and scope:
 
 - **WebP:** [luma4 preparation](../benchmarks/VP8-LUMA4-PREPARATION.md)
   saves 286.80 µs / 2.32% on the frozen photographic control in one counterbalanced
-  comparison. All eight VP8 costs are current and retain gaps. Adverse standalone
+  comparison. All eight displayed VP8 costs retain gaps. Adverse standalone
   alpha points and native clock movement remain recorded, without a causal alpha
   CPU claim. Paired allocation stays 809,072 B/op; the current standalone photo
   records 809,225 B/op at different diagnostic batching/GC, without a causal
-  allocation claim. No owned capacity is added. Earlier
+  allocation claim. No owned capacity is added.
+  [fixed trellis preparation](../benchmarks/VP8-TRELLIS-IMPORTANCE.md) finds
+  119.90 µs / 0.86% on the effort6 diagram, with unchanged 754,344 B/op.
+  Its paired interval only narrowly excludes no change (upper 0.99997432);
+  the current FFmpeg gap remains (upper 1.329). No broader gain is claimed.
+  Earlier
   [shared residual preparation](../benchmarks/VP8-RESIDUAL-PREPARATION.md) retains
   its scoped gain and superseded costs.
   [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
@@ -1957,12 +1970,9 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,639 full/live checks per OS**, affected
-normal/scalar and AVX512-off checks, and the **same actual Release package/all
-three examples on Windows/Linux**. Three strengthened test cases rerun in both
-modes after correcting their generator; other checks reuse unchanged proof.
-Two additional independent row-conversion checks pass normal/scalar on both OSes
-against unchanged production; the earlier full-suite/package proof is reused.
+The current production build passes **5,642 full/live checks per OS**, affected
+normal/scalar checks, and the **same actual Release package/all three examples
+on Windows/Linux**. Unchanged AVX512-off kernels reuse their existing checks.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.

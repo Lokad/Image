@@ -14,14 +14,16 @@ internal static class Vp8TrellisQuantization
     // Independent equivalent importance model: a quarter-plane Gaussian of
     // variance3.5, amplitude26 and baseline4, rounded to nearest integer.
     // It reproduces the pinned profile; it does not assert its original origin.
+    // Evaluate floor(4 + 26*exp(-(x*x+y*y)/7) + .5), x/y0..3, once as immutable
+    // policy data. The checked copy and caller-supplied Apply weights remain.
+    // This is 32 bytes of module data, not an input-dependent cache or owner.
+    private static ReadOnlySpan<ushort> Importance =>
+        [30, 27, 19, 11, 27, 24, 17, 10, 19, 17, 12, 8, 11, 10, 8, 6];
+
     internal static void Weights(Span<ushort> destination)
     {
         if (destination.Length < 16) throw new ArgumentException("Trellis requires16weights.");
-        for (var p = 0; p < 16; p++)
-        {
-            var x = p & 3; var y = p >> 2;
-            destination[p] = (ushort)Math.Floor(4 + 26 * Math.Exp(-(x * x + y * y) / 7d) + .5);
-        }
+        Importance.CopyTo(destination);
     }
 
     private static int Band(int position) => position switch

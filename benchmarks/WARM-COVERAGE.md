@@ -20,13 +20,16 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
 
-The current production build passes **5,639 full/live checks per OS**, affected
-normal/scalar and AVX512-off checks, and the same actual Release package/all three
-examples on Windows/Linux. Three strengthened test cases rerun normal/scalar after
-correcting their generator; all other checks reuse unchanged proof. That qualifies
-correctness and packaging, not all282 CPU gates.
-Two independent production-row conversion checks additionally pass normal/scalar
-on both OSes; 5,641 applicable checks reuse the unchanged full/live/package proof.
+The current production build passes **5,642 full/live checks per OS**, affected
+normal/scalar checks, and the same actual Release package/all three examples on
+Windows/Linux. Unchanged AVX512-off kernels reuse their existing checks. That
+qualifies correctness and packaging, not all282 CPU gates.
+The [fixed trellis model](VP8-TRELLIS-IMPORTANCE.md) removes repeated exponential
+evaluation with32B of immutable policy data. One paired effort6 diagram comparison
+finds119.90µs/0.86%; its interval only narrowly excludes no change
+(upper0.99997432). Allocations remain754344B/op; current FFmpeg upper1.329 is a gap.
+Only the displayed effort6 cost changes; the other seven VP8 rows retain valid
+QDP300 evidence. No broad gain or further helper tuning follows.
 Fourteen displayed WebP and eight streaming-resize costs are current. Other
 affected boundaries marked H remain historical until their named reconciliation.
 

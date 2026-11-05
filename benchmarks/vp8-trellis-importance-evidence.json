@@ -1,0 +1,289 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VTP306",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 282,
+  "producers": {
+    "windowsSha256": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+    "linuxSha256": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9e7dd5d0dd2a3de1904f86e450ff3b70db5faa022bf14e35f0cdf7fa10506007",
+    "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "8c548adaec278e0b7188ddf3464547440c4f2c4b59acd0d239533de6ae761f75",
+    "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "ae230079015f1e51c77a94afc97bf36ad2895fd87afd7d630b9d218e4dc30fb4",
+    "tests/Lokad.Image.Tests/Vp8MacroblockDecisionTests.cs": "7fcce686647bba976ad90fd131ff3fef5b496e93bfd254ac764c600bf7eb1cda",
+    "tests/Lokad.Image.Tests/Vp8ImportanceModelTests.cs": "29b7bbf6e22ffdfdb6a78b7d290060be4281dafa92a5b7c8287a7358ea9e3822"
+  },
+  "design": {
+    "description": "Materialize the sixteen fixed Gaussian importance values as immutable module data and copy through the existing checked Weights boundary. Caller-supplied Apply weights and all validation/cancellation remain. No frame/search calling-convention changes, input-dependent cache, new owner or pool.",
+    "staticPolicyDataBytes": 32,
+    "newOwnedCapacityBytes": 0,
+    "newPerOperationAllocations": false,
+    "formula": "floor(4 + 26 * exp(-(x*x+y*y)/7) + .5), x/y=0..3; independently derived from the existing Gaussian model, no upstream table"
+  },
+  "pairedComparison": {
+    "pairs": 12,
+    "operationsPerSubjectPerPair": 16,
+    "allPairsRetained": true,
+    "counterbalancedOrder": true,
+    "baselineUs": 13826.111317708333,
+    "candidateUs": 13706.213026041665,
+    "rawUsSaved": 119.8982916666679,
+    "ratio": 0.9913525627226075,
+    "rawReduction": 0.008647437277392478,
+    "logConfidence": {
+      "N": 12,
+      "Mean": -0.008706080481638985,
+      "StandardError": 0.001956375934837498,
+      "Level": 12,
+      "Margin": 0.008680399598565303,
+      "Lower": -0.01738648008020429,
+      "Upper": -2.5680883073682034e-05
+    },
+    "ratioConfidence": [
+      0.9827637925999003,
+      0.9999743194466774
+    ],
+    "quietGuardsPassed": true,
+    "exactPackets": true,
+    "independentOutputs": true,
+    "loadedProducerIdentitiesChecked": true,
+    "allocatedBytesBoth": 754344,
+    "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+    "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+    "packetBytes": 6818,
+    "scope": "Frozen complete 513x259 opaque diagram RGBA8 encode, Q75/effort6 only; scoped incremental managed-build comparison, not FFmpeg parity or every VP8 setting.",
+    "boundary": "Twelve fixed adjacent original/candidate pairs, alternating order, complete public RGBA8 WebP encodes per subject, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+    "limitation": "The interval upper is 0.99997432: it only narrowly excludes no change. No further tuning or confirmation; no robust or broad speedup claim."
+  },
+  "stages": {
+    "frameBorrowed": {
+      "accepted": false,
+      "reason": "Both complete-operation shorts show no useful lead; restore frame/search/test calling conventions byte-exactly. The extra span plumbing is absent from the selected design.",
+      "coreSha256": "c8e793a345945dcb8ad84422ba9db7b3920a9f2c732ed8218750a6427c94df71",
+      "focusedInternal": 852,
+      "focusedPublic": 357,
+      "modes": [
+        "normal",
+        "scalar"
+      ]
+    },
+    "fixedModuleData": {
+      "accepted": true,
+      "checkedCopyAndCustomApplyWeightsPreserved": true
+    }
+  },
+  "shorts": [
+    {
+      "label": "frame-borrowed trellis",
+      "managedUs": 13605.555577777779,
+      "nativeUs": 10426.473708333335,
+      "ratio": 1.3049047989162021,
+      "librarySha256": "c8e793a345945dcb8ad84422ba9db7b3920a9f2c732ed8218750a6427c94df71",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actuals": 3
+    },
+    {
+      "label": "frame-borrowed photograph",
+      "managedUs": 12552.427697916666,
+      "nativeUs": 10239.961,
+      "ratio": 1.2258276860543382,
+      "librarySha256": "c8e793a345945dcb8ad84422ba9db7b3920a9f2c732ed8218750a6427c94df71",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actuals": 3
+    },
+    {
+      "label": "fixed-data trellis",
+      "managedUs": 13899.414309523809,
+      "nativeUs": 10421.603541666665,
+      "ratio": 1.333711674403319,
+      "librarySha256": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actuals": 3
+    }
+  ],
+  "cases": {
+    "trellis": {
+      "managedUs": 13502.332466666663,
+      "nativeUs": 10337.046177083334,
+      "ratio": 1.3062080052037104,
+      "lower": 1.2841760505556896,
+      "upper": 1.3286215312233969,
+      "allocatedBytes": 754344,
+      "status": "gap",
+      "librarySha256": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+      "nativePacketSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+      "managedPacketBytes": 6818,
+      "nativePacketBytes": 6818,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort6, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "nativeReference": "FFmpeg/libwebp VP8"
+    }
+  },
+  "qualification": {
+    "fullChecksEachOs": 5642,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+      "full": [
+        2407,
+        2287,
+        948
+      ],
+      "total": 5642,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 853,
+        "internal-scalar": 853,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "avx512DisabledChecksReused": 26,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "65bedd0bfa124fbe60467dde74f17dd325ef8c997fa36c904b36e4b51317a3c8",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+      "full": [
+        2407,
+        2287,
+        948
+      ],
+      "total": 5642,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 853,
+        "internal-scalar": 853,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "avx512DisabledChecksReused": 26,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "c53aec9602c4f9c81c5df99c0f66bed438fc693b97875861261c399d71083cdd",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "bbd5ef51cb35cfece135ea5361b60603daa2b59e1521000dc6cab9d123dec9b5",
+      "symbolsSha256": "81caf9ceb24585c81ac00b9215baf73b7bfceb15c43d6c29b24e38e4c1d2b6f3",
+      "bytes": 407242,
+      "librarySha256": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "bbd5ef51cb35cfece135ea5361b60603daa2b59e1521000dc6cab9d123dec9b5",
+      "librarySha256": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+      "actualConsumerPassed": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "focusedEachOsEachMode": {
+      "internal": 853,
+      "public": 357
+    },
+    "modes": [
+      "normal",
+      "scalar"
+    ],
+    "newFact": "Independent Gaussian formula, every sample, offset/tail canaries, detached copies, all short lengths rejected before mutation, zero warmed allocations.",
+    "reusedFallback": "The QDP300 26 AVX512-off quantizer/residual/decision checks on each OS remain applicable: those production sources and kernels are unchanged. The new model is covered normal/scalar on both OSes and by complete native packet checks.",
+    "testCorrection": "The initial borrowed-frame test did not compile because MemoryMarshal.Cast selected a read-only overload. Explicit AsSpan fixed the test; only its internal assembly was rebuilt. The corrected test and all focused suites passed. An SCP request for a log absent after that compile failure was corrected by collecting already completed logs; tests were not repeated."
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "staticPolicyDataBytes": 32,
+    "retainedOperationStateChanged": false,
+    "allocationSavingClaim": false,
+    "admittedPeakRemeasured": false,
+    "physicalPeakRemeasured": false,
+    "nativeAllocationsMeasured": false
+  },
+  "workflow": {
+    "linuxCoreVersions": 2,
+    "windowsCoreVersions": 1,
+    "linuxInternalSuccessfulVersions": 2,
+    "linuxInternalBuildAttempts": 3,
+    "windowsInternalVersions": 1,
+    "pairedToolBuilds": 1,
+    "publicTestHarnessNativeSelectorBuilds": 0,
+    "packages": 1,
+    "affectedCurrentCosts": 1,
+    "unrelatedCurrentCostsRefreshed": 0,
+    "completedMeasurementsRepeated": 0
+  },
+  "uncertainty": "The frame-borrowed design has no useful short lead and is rejected. The selected fixed-data short is adverse versus an older independent capture while the native clock also moved. One justified paired comparison, with all twelve pairs retained, narrowly separates 119.90us/0.86% on the frozen effort6 diagram. The once-refreshed current reference cost remains a gap. No repeat for favorable numbers.",
+  "invalidation": "Only methods5/6 invoke the changed model. Refresh the existing displayed effort6 diagram once. Other affected method5/6 H costs remain historical. The seven displayed method2/4 VP8 paths restore their relevant source paths exactly and reuse QDP300 evidence. All VP8L, PNG/JPEG, decoding, resizing and text/drawing evidence is unaffected. Current costs are development-source qualification, not a complete actual-package release refresh.",
+  "publication": "postponed",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "vp8-trellis-importance-qualified.tar.xz",
+    "bytes": 5920896,
+    "members": 265,
+    "sha256": "084e99e66737c97304f39ecc0e3d4e56124852e41dc1594ad4f44bef58d5302d",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-luma4-preparation-qualified.tar.xz",
+        "sha256": "64155fe69673aa19b0e6ed909e5bb82218c5d07b16db77450ca51d8cfb861d4b"
+      },
+      {
+        "file": "vp8-trellis-preparation-audit.tar.xz",
+        "sha256": "ad27bf589e6a51ada533bb46ca6ddb60a2b0adf267eff4156adfd4b51a6c4664"
+      },
+      {
+        "file": "lanczos-row-publication-investigation.tar.xz",
+        "sha256": "0517bac13b2037f9efbb9318fd44ac2a8bd6906706961b1e15d69241b8f4f8e3"
+      }
+    ],
+    "dependencyScope": "Qualified original sources/modules/package, frozen controls/workers/framework and the count audit are dependencies. This archive retains both experimental stages, adverse shorts, initial failed test compile and corrected successful test epochs, twelve paired subjects, one current-cost refresh, sources/modules/tools, Windows/Linux full/live/scalar proofs and the SAME actual new package/all examples. Unchanged AVX512-off production paths reuse QDP300 proof."
+  }
+}

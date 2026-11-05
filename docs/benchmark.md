@@ -19,11 +19,16 @@ Current priorities and scope:
 
 - **WebP:** [luma4 preparation](../benchmarks/VP8-LUMA4-PREPARATION.md)
   saves 286.80 µs / 2.32% on the frozen photographic control in one counterbalanced
-  comparison. All eight VP8 costs are current and retain gaps. Adverse standalone
+  comparison. All eight displayed VP8 costs retain gaps. Adverse standalone
   alpha points and native clock movement remain recorded, without a causal alpha
   CPU claim. Paired allocation stays 809,072 B/op; the current standalone photo
   records 809,225 B/op at different diagnostic batching/GC, without a causal
-  allocation claim. No owned capacity is added. Earlier
+  allocation claim. No owned capacity is added.
+  [fixed trellis preparation](../benchmarks/VP8-TRELLIS-IMPORTANCE.md) finds
+  119.90 µs / 0.86% on the effort6 diagram, with unchanged 754,344 B/op.
+  Its paired interval only narrowly excludes no change (upper 0.99997432);
+  the current FFmpeg gap remains (upper 1.329). No broader gain is claimed.
+  Earlier
   [shared residual preparation](../benchmarks/VP8-RESIDUAL-PREPARATION.md) retains
   its scoped gain and superseded costs.
   [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
@@ -86,12 +91,9 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,639 full/live checks per OS**, affected
-normal/scalar and AVX512-off checks, and the **same actual Release package/all
-three examples on Windows/Linux**. Three strengthened test cases rerun in both
-modes after correcting their generator; other checks reuse unchanged proof.
-Two additional independent row-conversion checks pass normal/scalar on both OSes
-against unchanged production; the earlier full-suite/package proof is reused.
+The current production build passes **5,642 full/live checks per OS**, affected
+normal/scalar checks, and the **same actual Release package/all three examples
+on Windows/Linux**. Unchanged AVX512-off kernels reuse their existing checks.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.
@@ -130,7 +132,7 @@ settings do not establish matched quality.
 | VP8 opaque RGBA8 † | 16,831.51 | 15,535.80 | 1.083 / 1.087 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 11,783.72 | 9,695.15 | 1.215 / 1.221 | 809,225 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 6,730.70 | 5,824.45 | 1.156 / 1.161 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 12,878.10 | 9,921.23 | 1.298 / 1.307 | 754,344 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 13,502.33 | 10,337.05 | 1.306 / 1.329 | 754,344 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 17,971.95 | 15,613.53 | 1.151 / 1.157 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 63,660.45 | 56,632.53 | 1.124 / 1.220 | 7,165,880 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 83,428.22 | 82,763.93 | 1.008 / 1.020 | 6,516,744 | 160,032 / 160,032 |

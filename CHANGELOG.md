@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare fixed VP8 trellis importance without repeated exponential evaluation,
+  preserving checked custom models, exact packets and memory ownership.
+
 - Share luma4 quantization/rate preparation and defer scratch writes until needed,
   preserving exact WebP packets and portable fallbacks.
 
