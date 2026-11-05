@@ -14,13 +14,14 @@ internal sealed class TextRasterizer : IDisposable
     private readonly double[] row;
     private readonly IComparer<Crossing> crossingComparer;
     private readonly IComparer<double> eventComparer;
+    private readonly IComparer<Edge> edgeComparer;
     private long bytes;
 
     private readonly record struct Point(double X, double Y)
     {
         internal static Point Mid(Point a, Point b) => new(a.X * .5 + b.X * .5, a.Y * .5 + b.Y * .5);
     }
-    private readonly record struct Edge(Point A, Point B)
+    private readonly record struct Edge(Point A, Point B, int Order)
     {
         internal double MinY => Math.Min(A.Y, B.Y);
         internal double MaxY => Math.Max(A.Y, B.Y);
@@ -28,17 +29,19 @@ internal sealed class TextRasterizer : IDisposable
         internal int Winding => B.Y > A.Y ? 1 : -1;
     }
     private readonly record struct Curve(Point A, Point C, Point B, int Depth);
-    private readonly record struct Crossing(double X, int Index);
+    private readonly record struct Crossing(double X, int Index, int Order);
 
     internal TextRasterizer(TextLayout layout, OperationContext context, int width)
     {
         this.context = context;
         Admit(4096); // Owner/comparers plus bounded sort/integration frame allowance.
-        crossingComparer = Comparer<Crossing>.Create((a, b) =>
-        { context.Cancellation.ThrowIfCancellationRequested(); var order = a.X.CompareTo(b.X); return order != 0 ? order : a.Index.CompareTo(b.Index); });
-        eventComparer = Comparer<double>.Create((a, b) => { context.Cancellation.ThrowIfCancellationRequested(); return a.CompareTo(b); });
         try
         {
+            crossingComparer = Comparer<Crossing>.Create((a, b) =>
+            { context.Cancellation.ThrowIfCancellationRequested(); var order = a.X.CompareTo(b.X); return order != 0 ? order : a.Order.CompareTo(b.Order); });
+            eventComparer = Comparer<double>.Create((a, b) => { context.Cancellation.ThrowIfCancellationRequested(); return a.CompareTo(b); });
+            edgeComparer = Comparer<Edge>.Create((a, b) =>
+            { context.Cancellation.ThrowIfCancellationRequested(); var order = a.MinY.CompareTo(b.MinY); return order != 0 ? order : a.Order.CompareTo(b.Order); });
             var maximum = 0;
             foreach (var p in layout.Placements)
             {
@@ -73,7 +76,7 @@ internal sealed class TextRasterizer : IDisposable
             var dx = x + glyph.X; var dy = y + glyph.Y;
             var first = Math.Max(top, Math.Floor(shape.MinY + dy)); var last = Math.Min(bottom, Math.Ceiling(shape.MaxY + dy));
             if (first >= last) continue;
-            var eventIndex = 0;
+            var eventIndex = 0; var activeCount = 0; var nextEdge = 0;
             for (var py = (int)first; py < last; py++)
             {
                 for (var offset = 0; offset < row.Length;)
@@ -86,10 +89,10 @@ internal sealed class TextRasterizer : IDisposable
                 while (eventIndex < shape.EventCount && shape.Events[eventIndex] < rowEnd)
                 {
                     var end = shape.Events[eventIndex++];
-                    if (end > band) Band(shape, band, end, dx, dy - py, left, right);
+                    if (end > band) Band(shape, band, end, dx, dy - py, left, right, ref activeCount, ref nextEdge);
                     band = end;
                 }
-                if (rowEnd > band) Band(shape, band, rowEnd, dx, dy - py, left, right);
+                if (rowEnd > band) Band(shape, band, rowEnd, dx, dy - py, left, right, ref activeCount, ref nextEdge);
                 for (var i = 0; i < row.Length;)
                 {
                     var count = Math.Min(128, row.Length - i); context.Cancellation.ThrowIfCancellationRequested();
@@ -104,14 +107,23 @@ internal sealed class TextRasterizer : IDisposable
         }
     }
 
-    private void Band(RasterShape shape, double top, double bottom, double dx, double dy, int left, int right)
+    private void Band(RasterShape shape, double top, double bottom, double dx, double dy, int left, int right,
+        ref int activeCount, ref int nextEdge)
     {
         var middle = top * .5 + bottom * .5; var count = 0;
-        for (var i = 0; i < shape.Count; i++)
+        // Bands advance monotonically within one glyph. Keep the same active
+        // set and exact X values as a full scan, without revisiting dead edges.
+        for (var i = 0; i < activeCount; i++)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var edge = shape.Edges[i];
-            if (edge.MinY < middle && middle < edge.MaxY) crossings[count++] = new(edge.X(middle), i);
+            context.Cancellation.ThrowIfCancellationRequested(); var index = crossings[i].Index; var edge = shape.Edges[index];
+            if (middle < edge.MaxY) crossings[count++] = new(edge.X(middle), index, edge.Order);
         }
+        while (nextEdge < shape.Count && shape.Edges[nextEdge].MinY < middle)
+        {
+            context.Cancellation.ThrowIfCancellationRequested(); var index = nextEdge++; var edge = shape.Edges[index];
+            if (middle < edge.MaxY) crossings[count++] = new(edge.X(middle), index, edge.Order);
+        }
+        activeCount = count;
         Sort(crossings, count, crossingComparer);
         var winding = 0; Edge start = default;
         for (var i = 0; i < count; i++)
@@ -230,7 +242,7 @@ internal sealed class TextRasterizer : IDisposable
             {
                 owner.context.Cancellation.ThrowIfCancellationRequested();
                 Event(Edges[i].MinY); Event(Edges[i].MaxY);
-                order[i] = new(Edges[i].MinY, i);
+                order[i] = new(Edges[i].MinY, i, i);
             }
             Sort(order, Count, owner.crossingComparer);
             for (var i = 0; i < Count; i++)
@@ -259,11 +271,14 @@ internal sealed class TextRasterizer : IDisposable
             { owner.context.Cancellation.ThrowIfCancellationRequested(); if (unique == 0 || Events[i] != Events[unique - 1]) Events[unique++] = Events[i]; }
             EventCount = unique;
             if (unique != 0) { MinY = Events[0]; MaxY = Events[unique - 1]; }
+            // Event calculations above retain original edge-index arithmetic.
+            // Only execution order changes; crossing ties keep that identity.
+            Sort(Edges, Count, owner.edgeComparer);
         }
         private void Add(Point a, Point b)
         {
             if (a.Y == b.Y) return;
-            Grow(ref Edges, Count, 40, ref edgeBytes); Edges[Count++] = new(a, b);
+            Grow(ref Edges, Count, 40, ref edgeBytes); Edges[Count] = new(a, b, Count); Count++;
         }
         private void Event(double y) { Grow(ref Events, EventCount, 8, ref eventBytes); Events[EventCount++] = y; }
         private void Grow<T>(ref T[] array, int count, int itemBytes, ref long bytes)

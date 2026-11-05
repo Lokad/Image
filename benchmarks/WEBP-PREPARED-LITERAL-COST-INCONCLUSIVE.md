@@ -21,8 +21,11 @@ output ownership, cleanup and identical admitted peaks pass. No reference timing
 or physical peak is measured. Restore without independent confirmation, favorable
 sampling or a permanent exclusion of revised cost-model designs.
 
-Linux passes 394 internal/195 public checks per normal/scalar mode on one main
-build, reusing every test/harness/native/selector. Windows retains a source-only
+Linux passes 195 public checks per normal/scalar mode on one main build; these
+and the complete screens exercise the candidate. The 394 internal checks per mode
+exercise reused baseline code: that project embeds production source and was not
+rebuilt. They are not candidate correctness proof. All harness/native/selector
+builds are reused. Windows retains a source-only
 candidate. Originals restore exactly without rebuilding; 40 restored trace checks
 pass per Linux mode. Reuse unchanged WSP312's 5,656 full/live checks per OS and the
 SAME actual Release-package/all-three-example proof. No current row, broad-suite

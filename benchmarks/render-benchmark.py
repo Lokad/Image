@@ -1438,9 +1438,9 @@ def render():
     assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
     assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
-    raster = json.loads((ROOT / 'benchmarks/text-edge-interval-preparation-evidence.json').read_text(encoding='utf-8'))
+    raster = json.loads((ROOT / 'benchmarks/text-active-edge-scheduling-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
-    assert raster['qualification']['fullChecksEachOs'] == 5466
+    assert raster['qualification']['fullChecksEachOs'] == 5659
     assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert all(c['rawGainConfidenceSeparates'] and c['normalizedGainConfidenceSeparates'] for c in raster['comparison'])
     for case_id, previous in text_current['observations'].items():
@@ -1448,7 +1448,7 @@ def render():
         if case_id in raster['cases']:
             assert case['librarySha256'] == raster['producers']['linuxSha256']
             assert case['validation']['frozenManagedObservationsExact']
-            assert case['managedMemory']['BytesAllocatedPerOperation'] == 83712
+            assert case['managedMemory']['BytesAllocatedPerOperation'] == 92384
             assert case['admittedWorkspacePeak'] == 48544 and case['retainedDrawingWorkspace'] == 0
         if case_id in composites['cases']:
             assert case['librarySha256'] == composites['producers']['linuxSha256']
@@ -1955,15 +1955,19 @@ Current priorities and scope:
   validation are distinct: PNG header inspection skips CRCs; Identify validates
   the container and nine source facts without pixel decoding; validation checks
   coding syntax without retaining an RGBA result.
-- **Text/drawing:** [layout/fitting and RGBA16 compositing](../benchmarks/TEXT-DRAWING-CURRENT.md)
-  pass their scoped comparisons. Loading, RGBA8 compositing and
-  [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
+- **Text/drawing:** [active-edge scheduling](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
+  saves 179.16/170.49 µs (48.55%/47.38%) on the two frozen prepared-drawing
+  controls, preserving exact frames. Allocation rises 8,672 B/draw to 92,384;
+  admitted Latin workspace stays 48,544 B, with zero retained scratch. Physical
+  peaks and native allocations are unmeasured. Both costs retain gaps (uppers
+  5.230/5.226). [Layout/fitting and RGBA16 compositing](../benchmarks/TEXT-DRAWING-CURRENT.md)
+  pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,656 full/live checks per OS**, affected
+The current production build passes **5,659 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
-on Windows/Linux**, including both-depth alpha and opaque-word consumers. The 28
-input checks also pass with AVX512 disabled; unrelated fallback proof is reused.
+on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
+opaque-word consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.

@@ -2,7 +2,7 @@
 
 All nine controls have independent twelve-actual measurements with reference
 brackets and passing quiet-VM guards. Five unchanged font/layout/fitting controls
-reuse valid costs; shared compositing rows and interval-ordered raster preparation
+reuse valid costs; shared compositing rows and active-edge raster scheduling
 provide the other four current comparisons. Times are µs; upper bounds include
 filtered/all-sample confidence.
 
@@ -13,8 +13,8 @@ filtered/all-sample confidence.
 | Latin OpenType layout / SixLabors public API | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 | Confirmed pass |
 | Arabic OpenType layout / SixLabors public API | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 | Confirmed pass |
 | Complete fitting search / SixLabors public API | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 | Confirmed pass |
-| Prepared text RGBA8 / ImageSharp.Drawing | 360.59 | 45.27 | 7.966 / 9.721 | 83,712 | Confirmed gap |
-| Prepared text RGBA16 / ImageSharp.Drawing | 392.22 | 50.08 | 7.832 / 10.030 | 83,712 | Confirmed gap |
+| Prepared text RGBA8 / ImageSharp.Drawing | 189.86 | 45.43 | 4.179 / 5.230 | 92,384 | Confirmed gap |
+| Prepared text RGBA16 / ImageSharp.Drawing | 189.35 | 45.98 | 4.118 / 5.226 | 92,384 | Confirmed gap |
 | Composite RGBA8 / FFmpeg | 625.41 | 498.73 | 1.254 / 1.270 | 56 | Confirmed gap |
 | Composite RGBA16 / ImageSharp 3.1.12 | 627.24 | 696.25 | 0.901 / 0.922 | 56 | Confirmed pass |
 
@@ -27,11 +27,12 @@ frames and glyph/cluster/line/fitting checks remain. Approved RGBA16 visual gate
 use normalized 0..255 errors: mean≤8, RMSE≤16, coverage≤2%, edges≤1 pixel, preserving
 full sixteen-bit samples.
 
-[Interval-ordered preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) cuts drawing time
-58.24% / 50.35% raw, with separated raw/normalized confidence. Allocation rises
-256 B/draw; admitted Latin workspace rises 44,416→48,544 B, with no retained scratch.
-Eight existing frames remain exact; Windows/Linux full checks and the same actual
-Release package pass. Claims cover the two frozen drawing controls.
+[Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) cuts drawing time
+48.55% / 47.38% raw, with separated raw/normalized confidence. Allocation rises
+8,672 B/draw; admitted Latin workspace stays 48,544 B, with no retained scratch.
+Eight existing and two complex authored frames remain exact; Windows/Linux full
+checks and the same actual Release package pass. CPU claims cover the two frozen
+drawing controls. [Earlier preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) is history.
 
 Font loading compares copy/open/retain/dispose on the frozen DejaVu Sans face
 against FreeType 2.13.2. Eager/lazy validation differs; this is not general parser
@@ -43,7 +44,7 @@ Managed composition remains exact.
 Passing layout/fitting and RGBA16 compositing controls stop. Drawing, font loading
 and RGBA8 compositing gaps stay visible alongside larger codec/resizing costs.
 
-Current evidence: [raster preparation](text-edge-interval-preparation-evidence.json),
+Current evidence: [active-edge scheduling](text-active-edge-scheduling-evidence.json),
 [shared compositing rows](compositing-shared-rows-evidence.json). The
 [original confirmations](text-drawing-current-evidence.json) and
 [allocation controls](TEXT-DRAWING-ALLOCATION-CONTROLS.md) retain superseded drawing

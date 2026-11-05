@@ -84,15 +84,19 @@ Current priorities and scope:
   validation are distinct: PNG header inspection skips CRCs; Identify validates
   the container and nine source facts without pixel decoding; validation checks
   coding syntax without retaining an RGBA result.
-- **Text/drawing:** [layout/fitting and RGBA16 compositing](../benchmarks/TEXT-DRAWING-CURRENT.md)
-  pass their scoped comparisons. Loading, RGBA8 compositing and
-  [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
+- **Text/drawing:** [active-edge scheduling](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
+  saves 179.16/170.49 µs (48.55%/47.38%) on the two frozen prepared-drawing
+  controls, preserving exact frames. Allocation rises 8,672 B/draw to 92,384;
+  admitted Latin workspace stays 48,544 B, with zero retained scratch. Physical
+  peaks and native allocations are unmeasured. Both costs retain gaps (uppers
+  5.230/5.226). [Layout/fitting and RGBA16 compositing](../benchmarks/TEXT-DRAWING-CURRENT.md)
+  pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,656 full/live checks per OS**, affected
+The current production build passes **5,659 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
-on Windows/Linux**, including both-depth alpha and opaque-word consumers. The 28
-input checks also pass with AVX512 disabled; unrelated fallback proof is reused.
+on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
+opaque-word consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.
@@ -228,8 +232,8 @@ settings do not establish matched quality.
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Prepared text RGBA8 / ImageSharp.Drawing (gap) | 360.59 | 45.27 | 7.966 / 9.721 | 83,712 |
-| Prepared text RGBA16 / ImageSharp.Drawing (gap) | 392.22 | 50.08 | 7.832 / 10.030 | 83,712 |
+| Prepared text RGBA8 / ImageSharp.Drawing (gap) | 189.86 | 45.43 | 4.179 / 5.230 | 92,384 |
+| Prepared text RGBA16 / ImageSharp.Drawing (gap) | 189.35 | 45.98 | 4.118 / 5.226 | 92,384 |
 | Composite RGBA8 / FFmpeg (gap) | 625.41 | 498.73 | 1.254 / 1.270 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 

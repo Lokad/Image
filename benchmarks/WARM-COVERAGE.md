@@ -18,15 +18,16 @@ Completion needs current passing evidence for every named path, with scope state
 | Bicubic columns | [Shared word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) saves126.92µs/14.46%raw on the existing word256×1294KiB control, upper1.223; nativeclock+0.15% disclosed. [Byte preparation](BICUBIC-COLUMN-PREPARATION.md) retains its8.84µs/1.41%raw gain and upper1.363, nativeclock+9.05% disclosed. Both remain gaps with exact pixels and4KiB admission; no allocation-saving claim. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
-| Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Raster preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) improves both depths but retains gaps; other current fill/copy/composite/font costs remain in the summary. |
+| Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current production build passes **5,656 full/live checks per OS**, affected
-normal/scalar checks and28 input cases with AVX512 disabled, plus the same actual
+The current production build passes **5,659 full/live checks per OS**,120internal/148public
+affected checks per normal/scalar mode, with unchanged54 input/quantizer AVX512-off
+checks reused, plus the same actual
 Release package/all three examples on Windows/Linux. Its alpha8/16 and opaque-word consumers
 check exact sync/async packets, terminal refusal, cancellation cleanup and
-independent output ownership. Unrelated fallback proof is reused. This qualifies
-correctness/packaging, not all282 CPU gates. All eight VP8 costs refresh once;
-other117 displayed comparisons reuse unchanged-path evidence.
+independent output ownership; clipped mixed-alpha text remains exact at both depths. Unrelated fallback proof is reused. This qualifies
+correctness/packaging, not all282 CPU gates. Only the two displayed text drawing costs refresh in this stage;
+other123 comparisons reuse unchanged-path evidence.
 Fourteen displayed WebP and eight streaming-resize costs are current. Other
 affected boundaries marked H remain historical until their named reconciliation.
 
