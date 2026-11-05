@@ -1669,16 +1669,14 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-alpha-cache-history-evidence.json').read_text(encoding='utf-8'))
-    assert webp_owned['productionAccepted'] and webp_owned['pairedComparison']['allPairsRetained']
-    assert webp_owned['pairedComparison']['pairs'] == 12
-    assert webp_owned['pairedComparison']['ratioConfidence'][1] < 1
-    assert webp_owned['pairedComparison']['quality'] == 75 and webp_owned['pairedComparison']['depth'] == 8
-    assert webp_owned['qualification']['fullChecksEachOs'] == 5704
-    assert webp_owned['qualification']['actualPackage']['sha256'] == webp_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert webp_owned['storage']['newOwnedCapacityBytes'] == 0
-    assert webp_owned['storage']['allocatedBytesBoth'] == 7033576
-    assert webp_owned['storage']['admittedCapacitiesUnchanged']
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-fresh-histogram-evidence.json').read_text(encoding='utf-8'))
+    assert webp_owned['productionAccepted']
+    qualification = webp_owned['qualification']
+    assert qualification['fullChecksEachOs'] == qualification['windows']['total'] == qualification['linux']['total']
+    assert qualification['windows']['fullLivePassed'] and qualification['linux']['fullLivePassed']
+    assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
+    assert qualification['actualPackage']['actualConsumerPassed'] and qualification['samePackageLinux']['actualConsumerPassed']
+    assert webp_owned['raw']['mirrored'] and webp_owned['raw']['allMembersVerified']
     streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
     assert streaming['qualification']['fullChecksEachOs'] == 5587
@@ -1715,16 +1713,10 @@ def render():
         'distortion': 'VP8 diagram, effort2 / distortion-only search',
         'trellis': 'VP8 diagram, effort6 / trellis',
     })
-    photo_current = json.loads((ROOT / 'benchmarks/webp-current-photograph-comparison-evidence.json').read_text(encoding='utf-8'))
-    assert not photo_current['productionChanged'] and photo_current['allBuilds'] == 0
-    assert not photo_current['incrementalCpuAllocationClaim']
-    assert photo_current['raw']['localMembersVerified'] and photo_current['raw']['vmMembersVerified']
-    assert photo_current['current']['librarySha256'] == webp_owned['producers']['linuxSha256']
-    assert photo_current['current']['lower'] > 1 and photo_current['current']['status'] == 'gap'
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
         owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
-        current = photo_current['current'] if case == 'photograph' else owner['cases'][current_case]
+        current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
@@ -1903,14 +1895,14 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [current alpha-cache costs](../benchmarks/WEBP-ALPHA-CACHE-HISTORY.md)
-  retain four passing lossless controls and an opaque gap (upper1.035).
-  The [current adjacent photograph comparison](../benchmarks/WEBP-CURRENT-PHOTOGRAPH-COMPARISON.md)
-  resolves its uncertainty as a gap (lower1.001/upper1.038); no speed change.
-  Transparent VP8 uppers1.100/1.103 remain gaps;
-  six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
-  [Ordinary-index initialization](../benchmarks/WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md)
-  restores after inconclusive paired checks; two useful reuse regressions remain.
+- **WebP:** [fresh color histograms](../benchmarks/WEBP-FRESH-HISTOGRAM.md)
+  remove unused accumulation support, confirming0.69ms/0.84% on the complete
+  photograph managed-build comparison with unchanged allocation/exact packets.
+  Eight refreshed costs retain four passing lossless controls. Opaque/photo
+  remain uncertain (uppers1.008/1.101); transparent VP8 remains a gap
+  (uppers1.111/1.124). The photo's original timing step and one unchanged-driver
+  reconciliation remain evidence; no passing native-parity claim follows.
+  Six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
 - **PNG:** [block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md),
   [color](../benchmarks/PNG-COLOR-ONE-SHOT.md) and
   [delivery](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md) supply fifteen equivalent
@@ -1942,11 +1934,10 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
-not a full release refresh or whole-library performance pass. Two additional
-long-run reuse cases and47frozen actual-main packet cases pass separately per
-normal/scalar mode on bothOS after exact production restoration. No fresh full
-5,706or package repeat is claimed. Complete physical/admitted peaks are not
-inferred from allocation reductions.
+not a full release refresh or whole-library performance pass. The retained
+long-run cases are included in this full qualification. Original adverse and
+uncertain timing points remain evidence; no third photo measurement follows.
+Complete physical/admitted peaks are not inferred from allocations.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled

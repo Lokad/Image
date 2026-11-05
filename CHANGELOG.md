@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Build fresh WebP color histograms without redundant prior-support scans,
+  preserving exact packets and allocation/ownership contracts.
+
 - Share WebP input preparation through bounded byte/word tiles and prepared alpha
   weights, preserving exact packets, portable fallbacks and workspace admission.
 

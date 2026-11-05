@@ -97,13 +97,14 @@ internal static class Vp8lReferenceColorTransform
     // RFC 9649 color arithmetic, retaining only the plane being scored.
     // Vector lanes widen signed channel bytes before multiplication/shift.
     // Histogram increments remain scalar so repeated bins retain every count.
-    internal static int Histogram(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
+    internal static int BuildHistogram(ReadOnlySpan<uint> working, int width, int x0, int y0, int x1, int y1,
         bool red, int gr, int gb, int rb, Span<int> histogram, Span<int> active, OperationContext context)
     {
         context.Cancellation.ThrowIfCancellationRequested();
         histogram = histogram[..256]; active = active[..256];
-        Span<ulong> previous = stackalloc ulong[4];
-        for (var part = 0; part < 4; part++) previous[part] = Nonzero64(histogram.Slice(part * 64, 64));
+        // A complete search trial starts fresh. Own initialization here rather
+        // than retaining accumulation/support semantics unused by the encoder.
+        histogram.Clear();
         Span<int> values = stackalloc int[8];
         var redCoefficient = Vector256.Create((int)unchecked((sbyte)gr));
         var greenCoefficient = Vector256.Create((int)unchecked((sbyte)gb));
@@ -135,13 +136,13 @@ internal static class Vp8lReferenceColorTransform
                 histogram[transformed & 255]++;
             }
         }
-        // Integer color pricing depends only on counts and new-bin membership.
+        // Integer color pricing depends only on counts and occupied-bin membership.
         // Discover support once, outside the pixel update dependency chain.
         var activeCount = 0;
         for (var part = 0; part < 4; part++)
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            var added = Nonzero64(histogram.Slice(part * 64, 64)) & ~previous[part];
+            var added = Nonzero64(histogram.Slice(part * 64, 64));
             while (added != 0)
             {
                 active[activeCount++] = part * 64 + BitOperations.TrailingZeroCount(added);
@@ -151,8 +152,8 @@ internal static class Vp8lReferenceColorTransform
         return activeCount;
     }
 
-    // Counts are nonnegative populations. Search starts from zero; accumulating
-    // callers also retain every increment and only newly nonzero membership.
+    // Each fresh histogram contains nonnegative populations. Enumerate occupied
+    // bins in ascending order after retaining every repeated-symbol increment.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ulong Nonzero64(ReadOnlySpan<int> counts)
     {
@@ -215,13 +216,13 @@ internal static class Vp8lReferenceColorTransform
             var key = red ? gr : ((long)gb << 32) | (uint)rb;
             for (var i = 0; i < cachedTrials; i++)
                 if (trials[i] == key) return trials[TrialCapacity + i];
-            var histogram = Histogram; histogram.Clear();
+            var histogram = Histogram;
             // Trial keys/costs occupy the first 128 longs. The unused half can
             // hold all 256 bin indices until this score is consumed.
             var active = MemoryMarshal.Cast<long, int>(trials[(TrialCapacity * 2)..]);
             // This tile remains unchanged during the complete coefficient search.
             // Strided borrowing needs neither a tile copy nor a second image.
-            var activeCount = Vp8lReferenceColorTransform.Histogram(working, width, x0, y0, x1, y1, red, gr, gb, rb, histogram, active, context);
+            var activeCount = Vp8lReferenceColorTransform.BuildHistogram(working, width, x0, y0, x1, y1, red, gr, gb, rb, histogram, active, context);
             var cost = Cost(red, active[..activeCount]);
             const long preference = 3 * Vp8lReferenceCost.Scale;
             if (red)

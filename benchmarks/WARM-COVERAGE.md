@@ -10,9 +10,9 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Alpha-cache stage](WEBP-ALPHA-CACHE-HISTORY.md) refreshes current costs: four lossless controls pass/stop; opaque is a measured gap, lower1.004/upper1.035. The [current adjacent photograph comparison](WEBP-CURRENT-PHOTOGRAPH-COMPARISON.md) resolves its uncertainty as a gap, lower1.000841/upper1.038225. One current-DLL job, zero builds or weaker confidence gate; other costs retain their valid proof. Exact complete packets persist. Superseded costs/uncertainties remain linked history. |
-| Resident VP8 encoding | [Alpha cache history](WEBP-ALPHA-CACHE-HISTORY.md) confirms665.60µs/1.05% on complete byte-alpha Q75/effort4, same7033576B/op at equal batching, no new owned capacity or retained scratch. Byte/word ALPH uppers1.100/1.103 remain gaps. Predictor/workspace gains remain linked history. Six opaque costs reuse unchanged [shared input](VP8-SHARED-ALPHA-PREPARATION.md) proof with4KiB vector/1KiB scalar admission. |
-| Other WebP encoding boundaries | [Current eight-control qualification](WEBP-ALPHA-CACHE-HISTORY.md) preserves full depth normalization and fresh awaited nonseekable async output. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/ownership gates stay unchanged. |
+| Resident lossless WebP | [Fresh histograms](WEBP-FRESH-HISTOGRAM.md) confirm694.87µs/0.84% on the complete photograph managed-build comparison, unchanged6516648B/op and exact packets. Eight current costs retain four passing lossless controls. Opaque/photo are uncertain, uppers1.008/1.101; resolve before tuning them. The original photo timing step and one unchanged-driver adjacent reconciliation remain raw evidence, with no weaker gate or third run. Superseded alpha-cache/photo costs remain history. |
+| Resident VP8 encoding | [Current fresh-histogram qualification](WEBP-FRESH-HISTOGRAM.md) refreshes byte/word ALPH: uppers1.111/1.124 remain demonstrated gaps (~5.5ms). Transparent short is adverse/uncertain; no alpha gain claim. Six opaque costs reuse unchanged [shared input](VP8-SHARED-ALPHA-PREPARATION.md) proof. Existing predictor/workspace/cache gains remain linked history; next audit retained/current complete-alpha attribution before another redesign. |
+| Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Block preparation](PNG-BLOCK-PREPARATION.md) shares frequency/code storage and uses linear canonical assignment. Same-batch allocation saves148,320B (5.7%) on wordSmallest9 and19,936B (2.4%) on byteFastest1; no CPU gain/equivalence/regression claim. Fifteen complete one-shot costs current: thirteen gaps; byteOptimal6 uncertain (upper1.045), gray16 passes/stops (upper0.987). [Four color boundaries](PNG-COLOR-ONE-SHOT.md) now include identical conversion/packing setup and disposal. [Delivery/cancellation boundaries](PNG-BOUNDARY-ONE-SHOT.md) retain word token/forward uppers1.116/1.140, asyncbyte1.029. Exact packets and complete delivery/ownership remain; no speedup claim follows the baseline change. Existing384KiB admission,2620B extra operation-array capacity, zero scratch afterdisposal; physical/complete admitted peaks unmeasured. Earlier tree/token preparation is linked history; other affectedH boundaries remain historical. |
 | JPEG and image reading | [Exact grayscale row batches](JPEG-GRAYSCALE-ROW-BATCH.md) save32.71µs/1.93%raw/4.04%normalized on the existing RGBA8→gray control, unchanged155,436B/op and exact packets. The gap remains (upper1.103); native clock change+2.19% is disclosed. Other image-grayscale timing affected by preparation is historical until refreshed. Caller-GRAY/RGB and other color/sampling/reading paths reuse valid proof; keep their named resident/stream/async/inspection/validation scope. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
@@ -20,27 +20,24 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current production build passes **5,704 full/live checks per OS**,
-901internal/357public affected checks per normal/scalar mode, plus the SAME actual
-Release package/all three examples on Windows/Linux. Eight additional cases
-exercise both cache traversals against independent cache simulations, frozen
-populations/choices and dirty borrowed-tail ownership. Original live-token
-checkpoints, terminal refusal and async lifetimes persist. Unchanged54AVX512-off
-and wide-column45/521normal/scalar proofs are reused; packaged wide4KiB survivors
-also pass. Correctness/package qualification does not close all282 CPU gates.
-The alpha-cache stage owns eight refreshed WebP costs; the new photograph row
-now supersedes that one uncertain estimate. Other117 comparisons reuse unchanged-path proof,
-including latest wide resizing gains. Other affected boundaries marked H remain
-historical until their named reconciliation.
+The current production build passes **5,706 full/live checks per OS** and
+903internal/357public affected scalar checks on bothOS (also normal on Linux).
+The SAME actual Release package/all three examples pass Windows/Linux. These
+include retained index regressions and exact word/alpha/text/resize/async survivors;
+shared refusal, cancellation and ownership persist. Unchanged54AVX512-off and
+wide45/521proofs remain reusable. Qualification does not close all282 CPU gates.
 
-Current costs above own their scope and qualification. The latest
-[exact affine entropy trial](WEBP-AFFINE-ENTROPY-INCONCLUSIVE.md) replaces repeated
-arithmetic with16KiB compiled coefficients but establishes no dependable complete-
-encode gain. Original source/main/embedded/consumers restore exactly; current
-costs/package stay unchanged. Every adverse/uncertain pair and current profile
-remains evidence. The preceding [index trial](WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md)
-retains two separately qualified poisoned-storage cases; prior5,704full/live proof
-is reused, not described as a fresh full5,706suite.
+The fresh-histogram stage owns eight refreshed WebP comparisons, with the current
+photo supplied by its one existing-driver adjacent reconciliation. Other117
+comparisons reuse unchanged-path evidence. Historical H boundaries await their
+named reconciliation. Current renderer uses one owner for these eight rows;
+previous alpha-cache/photo owners remain history instead of rendering layers.
+
+The preceding [affine entropy trial](WEBP-AFFINE-ENTROPY-INCONCLUSIVE.md) has no
+dependable gain and restores all source/main/embedded exactly. Its current profile
+and every adverse/uncertain observation stay. The earlier
+[index trial](WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md) retains two useful cases,
+now included in the full5,706suite. Earlier rejected stages are not current costs.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)

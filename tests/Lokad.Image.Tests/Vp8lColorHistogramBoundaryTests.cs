@@ -7,7 +7,7 @@ public sealed class Vp8lColorHistogramBoundaryTests
 {
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void BinsAndNewNonzeroMembershipMatchSignedFloorOracleAcrossPartialTiles(bool redPlane)
+    public void FreshBinsAndSupportMatchSignedFloorOracleAcrossPartialTiles(bool redPlane)
     {
         const int width = 40, height = 19;
         using var root = new TestMemoryBudget(1);
@@ -26,7 +26,8 @@ public sealed class Vp8lColorHistogramBoundaryTests
                 {
                     var gr = coefficient - 384; var gb = coefficient * 73 - 257; var rb = 257 - coefficient * 11;
                     Array.Fill(histogram, -719); Array.Fill(active, -719);
-                    for (var i = 0; i < 256; i++) histogram[i + 4] = expected[i] = i % 3;
+                    for (var i = 0; i < 256; i++) histogram[i + 4] = i % 3;
+                    Array.Clear(expected);
                     var order = new List<int>();
                     for (var y = 1; y <= shape.Item2; y++)
                     for (var x = 1; x <= shape.Item1; x++)
@@ -38,9 +39,9 @@ public sealed class Vp8lColorHistogramBoundaryTests
                         var bin = (transformed % 256 + 256) % 256;
                         if (expected[bin]++ == 0) order.Add(bin);
                     }
-                    var activeCount = Vp8lReferenceColorTransform.Histogram(pixels, width, 1, 1, 1 + shape.Item1, 1 + shape.Item2,
+                    var activeCount = Vp8lReferenceColorTransform.BuildHistogram(pixels, width, 1, 1, 1 + shape.Item1, 1 + shape.Item2,
                         redPlane, gr, gb, rb, histogram.AsSpan(4, 256), active.AsSpan(4, 256), context);
-                    Assert.Equal(expected, histogram.AsSpan(4, 256).ToArray()); // Integer pricing is independent of discovery order; retain exact new membership.
+                    Assert.Equal(expected, histogram.AsSpan(4, 256).ToArray()); // Integer pricing is independent of discovery order; retain exact support.
                     Assert.Equal(order.OrderBy(v => v), active.AsSpan(4, activeCount).ToArray());
                     Assert.All(histogram.Take(4).Concat(histogram.TakeLast(4)), value => Assert.Equal(-719, value));
                     Assert.All(active.Take(4).Concat(active.Skip(4 + activeCount)), value => Assert.Equal(-719, value));

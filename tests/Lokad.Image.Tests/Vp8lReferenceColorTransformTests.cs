@@ -28,7 +28,8 @@ public sealed class Vp8lReferenceColorTransformTests
         {
             var gr = coefficient - 384; var gb = coefficient * 73 - 257; var rb = 257 - coefficient * 11;
             Array.Fill(guarded, -719);
-            for (var bin = 0; bin < 256; bin++) guarded[bin + 4] = expected[bin] = bin % 3;
+            for (var bin = 0; bin < 256; bin++) guarded[bin + 4] = bin % 3;
+            Array.Clear(expected);
             for (var y = 1; y < height - 1; y++)
             for (var x = offset; x < offset + length; x++)
             {
@@ -39,14 +40,14 @@ public sealed class Vp8lReferenceColorTransformTests
                 expected[(value % 256 + 256) % 256]++;
             }
             Array.Fill(active, -719); Array.Clear(seen);
-            var activeCount = Vp8lReferenceColorTransform.Histogram(pixels, width, offset, 1, offset + length, height - 1,
+            var activeCount = Vp8lReferenceColorTransform.BuildHistogram(pixels, width, offset, 1, offset + length, height - 1,
                 red, gr, gb, rb, guarded.AsSpan(4, 256), active.AsSpan(4, 256), context);
             for (var i = 0; i < activeCount; i++)
             {
                 var bin = active[i + 4]; Assert.InRange(bin, 0, 255);
                 Assert.False(seen[bin]); seen[bin] = true;
             }
-            for (var bin = 0; bin < 256; bin++) Assert.Equal(bin % 3 == 0 && expected[bin] != 0, seen[bin]);
+            for (var bin = 0; bin < 256; bin++) Assert.Equal(expected[bin] != 0, seen[bin]);
             Assert.All(active.AsSpan(0, 4).ToArray(), value => Assert.Equal(-719, value));
             Assert.All(active.AsSpan(activeCount + 4).ToArray(), value => Assert.Equal(-719, value));
             Assert.True(expected.AsSpan().SequenceEqual(guarded.AsSpan(4, 256)));
@@ -63,14 +64,14 @@ public sealed class Vp8lReferenceColorTransformTests
         var histogram = new int[256]; var active = new int[256];
         using var root = new TestMemoryBudget(1);
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
-        for (var i = 0; i < 32; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, active, context);
+        for (var i = 0; i < 32; i++) Vp8lReferenceColorTransform.BuildHistogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, active, context);
         var allocated = GC.GetAllocatedBytesForCurrentThread();
-        for (var i = 0; i < 64; i++) Vp8lReferenceColorTransform.Histogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, active, context);
+        for (var i = 0; i < 64; i++) Vp8lReferenceColorTransform.BuildHistogram(pixels, 32, 1, 1, 32, 7, false, -129, 257, 129, histogram, active, context);
         Assert.Equal(allocated, GC.GetAllocatedBytesForCurrentThread());
         using var cancellation = new CancellationTokenSource();
         using var canceledContext = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
         cancellation.Cancel(); var original = histogram.ToArray();
-        var error = Assert.Throws<OperationCanceledException>(() => Vp8lReferenceColorTransform.Histogram([], 32, 1, 1, 32, 7,
+        var error = Assert.Throws<OperationCanceledException>(() => Vp8lReferenceColorTransform.BuildHistogram([], 32, 1, 1, 32, 7,
             false, 0, 0, 0, histogram, active, canceledContext));
         Assert.Equal(cancellation.Token, error.CancellationToken); Assert.Equal(original, histogram);
         Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
