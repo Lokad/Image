@@ -1666,9 +1666,9 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-shared-input-preparation-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-shared-alpha-preparation-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
-    assert vp8_owned['qualification']['fullChecksEachOs'] == 5651
+    assert vp8_owned['qualification']['fullChecksEachOs'] == 5656
     assert vp8_owned['qualification']['actualPackage']['sha256'] == vp8_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert vp8_owned['pairedComparison']['pairs'] == 12 and vp8_owned['pairedComparison']['ratioConfidence'][1] < 1
     assert vp8_owned['design']['newOwnedHeapCapacityBytes'] == 0
@@ -1888,21 +1888,22 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [shared opaque input preparation](../benchmarks/VP8-SHARED-INPUT-PREPARATION.md)
-  confirms 826.26 µs / 4.44% on the frozen opaque RGBA16 control, with unchanged
-  1,201,552 B/op. One shared byte/word row-pair pass uses 128 B of normalized
-  tiles and exact existing kernels. Word vector scratch admission rises from
-  1 KiB to 4 KiB; retained output capacity is unchanged. All eight current VP8
-  comparisons retain gaps (word upper 1.110). Byte photograph/opaque pairs remain
-  uncertain; adverse standalone points and native clock movement are retained,
-  without byte gain/regression or broad CPU claims. Earlier
-  [luma4](../benchmarks/VP8-LUMA4-PREPARATION.md),
-  [residual](../benchmarks/VP8-RESIDUAL-PREPARATION.md) and
-  [fixed trellis](../benchmarks/VP8-TRELLIS-IMPORTANCE.md) gains remain scoped history.
+- **WebP:** [shared alpha preparation](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md)
+  confirms 834.78 µs / 1.35% on the frozen transparent RGBA16 control; paired
+  allocations stay 7,165,064 B/op. One reader shares byte/word tiles and exact
+  kernels; an 8 B value shares alpha weights/reciprocal across color channels.
+  Eligible alpha scratch admission rises from 1 KiB to 4 KiB; opaque vector
+  4 KiB/scalar 1 KiB and retained output capacity stay unchanged. All eight
+  current VP8 costs retain gaps (alpha16 upper 1.164). Alpha8/photograph paired
+  intervals span no change; adverse standalone points/native clock movement
+  remain visible without broader gain/regression claims. The earlier
+  [opaque stage](../benchmarks/VP8-SHARED-INPUT-PREPARATION.md) retains its scoped
+  4.44% word gain; its displayed costs are superseded here.
   [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
   retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
-  Its measured alpha8 admission peak is 3,656,309 B, retained scratch zero;
-  the coefficient phase carries 82,668 B extra. Physical peak is unmeasured.
+  Its earlier alpha8 admission-peak measurement is 3,656,309 B, retained scratch zero;
+  the coefficient phase carries 82,668 B extra. Current complete admitted/physical
+  peaks were not remeasured.
   [Unchanged VP8L paths](../benchmarks/WEBP-MATCHER-CANCELLATION-PREPARATION.md) reuse valid
   proof: original/diagram/depth/async pass and stop; opaque retains a gap.
   [Photograph's counterbalanced check](../benchmarks/WEBP-PHOTOGRAPH-COUNTERBALANCED.md)
@@ -1959,9 +1960,9 @@ Current priorities and scope:
   [rasterization](../benchmarks/TEXT-EDGE-INTERVAL-PREPARATION.md) retain gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,651 full/live checks per OS**, affected
+The current production build passes **5,656 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
-on Windows/Linux**, including the new opaque-word sync/async consumer. The 23
+on Windows/Linux**, including both-depth alpha and opaque-word consumers. The 28
 input checks also pass with AVX512 disabled; unrelated fallback proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/

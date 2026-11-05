@@ -41,24 +41,50 @@ public sealed class Vp8PreparedWordTileTests
     [InlineData(17, 3)] // Both horizontal and vertical tails.
     [InlineData(33, 5)] // Multiple tiles, odd rows and a final column.
     public void WordTilesMatchIndependentScalarColorAndGammaOracle(int width, int height)
+        => VerifyColorOracle(width, height, 16, false);
+
+    [Theory]
+    [InlineData(8)]
+    [InlineData(16)]
+    public void WeightedTilesMatchIndependentScalarOracleIncludingHiddenColorsAndAlphaThresholds(int depth)
+        => VerifyColorOracle(33, 5, depth, true);
+
+    private static void VerifyColorOracle(int width, int height, int depth, bool weighted)
     {
         using var root = new TestMemoryBudget(1_000_000);
-        using var source = ImageBuffer.Create(width, height, 16, new() { MemoryBudget = root });
+        using var source = ImageBuffer.Create(width, height, depth, new() { MemoryBudget = root });
         uint state = 0xa372bf1d;
         for (var y = 0; y < height; y++)
+        for (var x = 0; x < width; x++)
+        for (var channel = 0; channel < 4; channel++)
         {
-            var row = source.GetRow16(y);
-            for (var x = 0; x < row.Length; x++)
+            state = unchecked(state * 1664525 + 1013904223); var sample = (ushort)(state >> 16);
+            if (channel == 3)
             {
-                state = unchecked(state * 1664525 + 1013904223); row[x] = (ushort)(state >> 16);
-                if (x % 4 == 3) row[x] = (ushort)(65407 + ((x + y) % 129));
+                var lane = (y % 2) * 2 + x % 2;
+                sample = !weighted ? (ushort)(65407 + ((x * 4 + channel + y) % 129))
+                    : ((x / 2 + y / 2) % 4) switch
+                    {
+                        0 => (ushort)(lane % 2 == 0 ? 0 : 128),
+                        1 => (ushort)(lane % 2 == 0 ? 65407 : 65535),
+                        2 => (ushort)(lane is 0 or 3 ? 65535 : 0),
+                        _ => lane switch { 0 => (ushort)129, 1 => (ushort)65406, 2 => (ushort)(127 * 257), _ => (ushort)(128 * 257) }
+                    };
             }
+            if (depth == 8) source.GetRow8(y)[x * 4 + channel] = (byte)((sample + 128) / 257);
+            else source.GetRow16(y)[x * 4 + channel] = sample;
         }
         var original = OriginalPixels.Bytes(source); var sourceBytes = root.Bytes;
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         context.ReserveBorrowed(sourceBytes);
         using var actual = Vp8PreparedInput.Create(source, context);
-        Assert.False(actual.HasAlpha); Assert.Empty(actual.Alpha.ToArray());
+        Assert.Equal(weighted, actual.HasAlpha);
+        if (weighted)
+        {
+            for (var y = 0; y < height; y++)
+            for (var x = 0; x < width; x++) Assert.Equal((byte)Sample(x, y, 3), actual.Alpha[y * width + x]);
+        }
+        else Assert.Empty(actual.Alpha.ToArray());
         for (var y = 0; y < height; y++)
         for (var x = 0; x < width; x++)
         {
@@ -90,12 +116,19 @@ public sealed class Vp8PreparedWordTileTests
         actual.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
 
         int Sample(int x, int y, int channel)
-            => (source.GetRow16(Math.Min(y, height - 1))[Math.Min(x, width - 1) * 4 + channel] + 128) / 257;
+            => depth == 8 ? source.GetRow8(Math.Min(y, height - 1))[Math.Min(x, width - 1) * 4 + channel]
+                : (source.GetRow16(Math.Min(y, height - 1))[Math.Min(x, width - 1) * 4 + channel] + 128) / 257;
         int LinearSum(int x, int y, int channel)
         {
-            var sum = 0;
+            var sum = 0; var opacity = 0; long weightedSum = 0;
             for (var dy = 0; dy < 2; dy++)
-            for (var dx = 0; dx < 2; dx++) sum += (int)Math.Floor(Math.Pow(Sample(2 * x + dx, 2 * y + dy, channel) / 255d, .8) * 4095 + .5);
+            for (var dx = 0; dx < 2; dx++)
+            {
+                var value = (int)Math.Floor(Math.Pow(Sample(2 * x + dx, 2 * y + dy, channel) / 255d, .8) * 4095 + .5);
+                var alpha = Sample(2 * x + dx, 2 * y + dy, 3);
+                sum += value; opacity += alpha; weightedSum += (long)value * alpha;
+            }
+            if (opacity is not (0 or 1020)) sum = (int)(weightedSum * ((1 << 19) / opacity) / (1 << 17));
             var index = sum / 512; var fraction = sum % 512;
             int Knot(int i) => (int)Math.Floor(255 * Math.Pow(i * 128d / 4095, 1 / .8) + .5);
             return (Knot(index) * (512 - fraction) + Knot(index + 1) * fraction + 64) >> 7;

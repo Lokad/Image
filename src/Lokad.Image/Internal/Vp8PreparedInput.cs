@@ -94,21 +94,14 @@ internal sealed partial class Vp8PreparedInput : IDisposable
     }
 
     private static int Reduce(ReadOnlySpan<byte> bytes, ReadOnlySpan<ushort> words, bool eightBit,
-        int p0, int p1, int p2, int p3, int channel, int alpha,
+        int p0, int p1, int p2, int p3, int channel, AlphaWeights alpha,
         ReadOnlySpan<ushort> linear, ReadOnlySpan<int> knots)
     {
         var v0 = linear[Sample(bytes, words, eightBit, p0 + channel)];
         var v1 = linear[Sample(bytes, words, eightBit, p1 + channel)];
         var v2 = linear[Sample(bytes, words, eightBit, p2 + channel)];
         var v3 = linear[Sample(bytes, words, eightBit, p3 + channel)];
-        if (alpha is 0 or 1020) return Compress(v0 + v1 + v2 + v3, knots);
-        var weighted = (long)v0 * Sample(bytes, words, eightBit, p0 + 3)
-            + (long)v1 * Sample(bytes, words, eightBit, p1 + 3)
-            + (long)v2 * Sample(bytes, words, eightBit, p2 + 3)
-            + (long)v3 * Sample(bytes, words, eightBit, p3 + 3);
-        // Generate the bounded reciprocal directly. Truncation is significant;
-        // exact division would change some of the pinned encoder's samples.
-        return Compress((int)((weighted * ((1 << 19) / alpha)) >> 17), knots);
+        return Compress(alpha.Combine(v0, v1, v2, v3), knots);
     }
 
     // The outer encoder accounts for its borrowed source. This method owns only
@@ -135,8 +128,8 @@ internal sealed partial class Vp8PreparedInput : IDisposable
             var capacity = checked(result.lumaLength + 2 * result.chromaLength + (hasAlpha ? width * height : 0));
             context.Reserve(capacity + (long)MetadataBytes); result.retainedBytes = capacity + (long)MetadataBytes;
             context.Cancellation.ThrowIfCancellationRequested(); result.storage = new byte[capacity];
-            var vectorChroma = !hasAlpha && width >= 16 && Chroma8Supported;
-            var scratchBytes = vectorChroma ? 4096 : ScratchBytes;
+            var useTiles = width >= 16 && Avx2.IsSupported && (hasAlpha || Chroma8Supported);
+            var scratchBytes = useTiles ? 4096 : ScratchBytes;
             context.Reserve(scratchBytes);
             try
             {
@@ -148,10 +141,14 @@ internal sealed partial class Vp8PreparedInput : IDisposable
                 var uPlane = result.storage.AsSpan(result.lumaLength, result.chromaLength);
                 var vPlane = result.storage.AsSpan(result.lumaLength + result.chromaLength, result.chromaLength);
                 var alphaPlane = result.storage.AsSpan(result.lumaLength + 2 * result.chromaLength);
-                // One row-pair pass shares opaque byte/word preparation. Only
-                // two sixteen-pixel word tiles are normalized at any time.
-                var preparedColumns = vectorChroma ? PrepareOpaqueTiles(bytes, words, eightBit,
-                    width, height, yPlane, uPlane, vPlane, result.Stride, linear, knots, context) : 0;
+                // Opaque and weighted execution share the same row-pair reader.
+                // Only two sixteen-pixel word tiles are normalized at any time.
+                var preparedColumns = 0;
+                if (useTiles) preparedColumns = hasAlpha
+                    ? PrepareAlphaTiles(bytes, words, eightBit, width, height, yPlane, uPlane, vPlane, alphaPlane,
+                        result.Stride, linear, knots, context)
+                    : PrepareOpaqueTiles(bytes, words, eightBit, width, height, yPlane, uPlane, vPlane,
+                        result.Stride, linear, knots, context);
                 for (var y = 0; y < height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
@@ -177,8 +174,9 @@ internal sealed partial class Vp8PreparedInput : IDisposable
                     {
                         var x0 = 2 * x * 4; var x1 = Math.Min(2 * x + 1, width - 1) * 4;
                         var p0 = row0 + x0; var p1 = row0 + x1; var p2 = row1 + x0; var p3 = row1 + x1;
-                        var a = Sample(bytes, words, eightBit, p0 + 3) + Sample(bytes, words, eightBit, p1 + 3)
-                            + Sample(bytes, words, eightBit, p2 + 3) + Sample(bytes, words, eightBit, p3 + 3);
+                        var a = new AlphaWeights((byte)Sample(bytes, words, eightBit, p0 + 3),
+                            (byte)Sample(bytes, words, eightBit, p1 + 3), (byte)Sample(bytes, words, eightBit, p2 + 3),
+                            (byte)Sample(bytes, words, eightBit, p3 + 3));
                         var r = Reduce(bytes, words, eightBit, p0, p1, p2, p3, 0, a, linear, knots);
                         var g = Reduce(bytes, words, eightBit, p0, p1, p2, p3, 1, a, linear, knots);
                         var b = Reduce(bytes, words, eightBit, p0, p1, p2, p3, 2, a, linear, knots);

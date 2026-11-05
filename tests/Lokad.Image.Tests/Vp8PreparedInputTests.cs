@@ -61,8 +61,10 @@ public sealed class Vp8PreparedInputTests
         Assert.Equal(expected, Hash(input)); Assert.Equal(original, OriginalPixels.Bytes(source));
         Assert.Equal(sourceBytes + input.CapacityBytes, root.Bytes);
         var scratch = root.Peak - sourceBytes - input.CapacityBytes;
-        Assert.True(scratch is 1024 or 4096);
-        if (input.HasAlpha || source.Width < 16) Assert.Equal(1024, scratch);
+        var tiled = source.Width >= 16 && System.Runtime.Intrinsics.X86.Avx2.IsSupported
+            && (input.HasAlpha || System.Runtime.Intrinsics.X86.Avx512F.IsSupported
+                && System.Runtime.Intrinsics.X86.Avx512BW.IsSupported && System.Runtime.Intrinsics.X86.Avx512Vbmi.IsSupported);
+        Assert.Equal(tiled ? 4096 : 1024, scratch);
         Padding(input.Y, input.Stride, input.Width, input.Height);
         Padding(input.U, input.Stride / 2, (input.Width + 1) / 2, (input.Height + 1) / 2);
         Padding(input.V, input.Stride / 2, (input.Width + 1) / 2, (input.Height + 1) / 2);
@@ -105,13 +107,15 @@ public sealed class Vp8PreparedInputTests
     }
 
     [Theory]
-    [InlineData(8)]
-    [InlineData(16)]
-    public void OpaqueVectorScratchRefusalIsTerminalWithoutSelectingSmallerScalarWorkspace(int depth)
+    [InlineData(8, false)]
+    [InlineData(16, false)]
+    [InlineData(8, true)]
+    [InlineData(16, true)]
+    public void VectorScratchRefusalIsTerminalWithoutSelectingSmallerScalarWorkspace(int depth, bool alpha)
     {
-        if (!System.Runtime.Intrinsics.X86.Avx2.IsSupported || !System.Runtime.Intrinsics.X86.Avx512F.IsSupported || !System.Runtime.Intrinsics.X86.Avx512BW.IsSupported
-            || !System.Runtime.Intrinsics.X86.Avx512Vbmi.IsSupported) return;
-        using var source = OriginalVp8lControls.Buffer("opaque", depth);
+        if (!System.Runtime.Intrinsics.X86.Avx2.IsSupported || !alpha && (!System.Runtime.Intrinsics.X86.Avx512F.IsSupported
+            || !System.Runtime.Intrinsics.X86.Avx512BW.IsSupported || !System.Runtime.Intrinsics.X86.Avx512Vbmi.IsSupported)) return;
+        using var source = OriginalVp8lControls.Buffer(alpha ? "asymmetric" : "opaque", depth);
         long capacity;
         using (var sizing = new OperationContext(ImageLimits.Default, default))
         using (var input = Vp8PreparedInput.Create(source, sizing)) capacity = input.CapacityBytes;
@@ -136,8 +140,9 @@ public sealed class Vp8PreparedInputTests
         long capacity;
         using (var sizing = new OperationContext(ImageLimits.Default, default))
         using (var input = Vp8PreparedInput.Create(source, sizing)) capacity = input.CapacityBytes;
-        using var root = new TestMemoryBudget(capacity + 1024); using var caller = root.CreateScope();
-        var callerBytes = scratch ? 1 : 1025;
+        var scratchBytes = System.Runtime.Intrinsics.X86.Avx2.IsSupported ? 4096 : 1024;
+        using var root = new TestMemoryBudget(capacity + scratchBytes); using var caller = root.CreateScope();
+        var callerBytes = scratch ? 1 : scratchBytes + 1;
         Assert.True(caller.TryReserve(callerBytes, out var held));
         using var context = new OperationContext(new() { MemoryBudget = root }, default);
         var error = Assert.Throws<ImageLimitException>(() => Vp8PreparedInput.Create(source, context));

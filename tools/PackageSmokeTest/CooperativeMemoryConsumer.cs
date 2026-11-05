@@ -42,41 +42,55 @@ internal static class CooperativeMemoryConsumer
 
     private static async Task VerifyWebpAlphaCoefficientStorage()
     {
-        using var root = new TestMemoryBudget(8 * 1024 * 1024);
-        using var source = OriginalPixels.Buffer(513, 259, 8);
-        source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
-        var unchanged = OriginalPixels.Bytes(source);
-        var options = new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4,
-            Limits = new() { MemoryBudget = root } };
-        using var first = new MemoryStream();
-        var start = root.GrowthAttempts;
-        ImageCodec.EncodeWebp(source, first, options);
-        var growth = root.GrowthAttempts - start;
-        var packet = first.ToArray();
-        if (packet.Length != 98590 || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet))
-            != "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10" || root.Bytes != 0)
-            throw new Exception("Packaged ALPH/frame storage changed the complete packet or retained admission.");
-        foreach (var offset in new long[] { 1, growth })
+        foreach (var depth in new[] { 8, 16 })
         {
-            using var refused = new MemoryStream();
-            var refusals = root.Refusals; root.RefuseAtGrowth = root.GrowthAttempts + offset;
-            try { ImageCodec.EncodeWebp(source, refused, options); throw new Exception("Packaged ALPH/frame storage ignored refusal."); }
-            catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget) { }
-            if (root.Bytes != 0 || root.Refusals != refusals + 1 || refused.Length != 0 || !refused.CanWrite)
-                throw new Exception("Packaged ALPH/frame refusal leaked ownership or retried.");
-            root.RefuseAtGrowth = 0;
+            using var root = new TestMemoryBudget(8 * 1024 * 1024);
+            using var source = OriginalPixels.Buffer(513, 259, depth);
+            if (depth == 8) source.GetRow8(0)[3] = source.GetRow8(0)[513 * 4 - 1] = 0;
+            else source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
+            var unchanged = OriginalPixels.Bytes(source);
+            var options = new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 4,
+                Limits = new() { MemoryBudget = root } };
+            using var first = new MemoryStream();
+            var start = root.GrowthAttempts;
+            ImageCodec.EncodeWebp(source, first, options);
+            var growth = root.GrowthAttempts - start;
+            var packet = first.ToArray();
+            if (packet.Length != 98590 || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet))
+                != "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10" || root.Bytes != 0)
+                throw new Exception("Packaged ALPH/frame storage changed the complete packet or retained admission.");
+            foreach (var offset in new long[] { 1, 2, growth })
+            {
+                using var refused = new MemoryStream();
+                var refusals = root.Refusals; root.RefuseAtGrowth = root.GrowthAttempts + offset;
+                try { ImageCodec.EncodeWebp(source, refused, options); throw new Exception("Packaged ALPH/frame storage ignored refusal."); }
+                catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget) { }
+                if (root.Bytes != 0 || root.Refusals != refusals + 1 || refused.Length != 0 || !refused.CanWrite)
+                    throw new Exception("Packaged ALPH/frame refusal leaked ownership or retried.");
+                root.RefuseAtGrowth = 0;
+            }
+            using var admittedCancel = new CancellationTokenSource(); var stop = root.GrowthAttempts + 2;
+            root.Admitted = _ => { if (root.GrowthAttempts == stop) admittedCancel.Cancel(); };
+            using var interrupted = new MemoryStream();
+            try { ImageCodec.EncodeWebp(source, interrupted, options, admittedCancel.Token); throw new Exception("Packaged alpha tiles ignored cancellation after admission."); }
+            catch (OperationCanceledException) { }
+            root.Admitted = null;
+            if (root.Bytes != 0 || interrupted.Length != 0 || !interrupted.CanWrite)
+                throw new Exception("Packaged alpha tile cancellation leaked storage or took output ownership.");
+            using var second = new MemoryStream(); await ImageCodec.EncodeWebpAsync(source, second, options);
+            using var canceled = new MemoryStream();
+            try { await ImageCodec.EncodeWebpAsync(source, canceled, options, new CancellationToken(true)); throw new Exception("Packaged ALPH/frame ignored cancellation."); }
+            catch (OperationCanceledException) { }
+            if (!packet.AsSpan().SequenceEqual(second.ToArray()) || !unchanged.AsSpan().SequenceEqual(OriginalPixels.Bytes(source))
+                || root.Bytes != 0 || root.IsDisposed || canceled.Length != 0 || !canceled.CanWrite)
+                throw new Exception("Packaged ALPH/frame storage changed async output, source, cleanup or caller ownership.");
+            source.Dispose(); first.Dispose();
+            if (!packet.AsSpan().SequenceEqual(second.ToArray()) || !second.CanWrite)
+                throw new Exception("Packaged ALPH/frame output did not survive source and peer disposal.");
+            Console.WriteLine(depth == 8
+                ? "Packaged ALPH/frame storage preserves exact sync/async packets, terminal refusal and independent ownership."
+                : "Packaged shared alpha preparation preserves exact word packets, cancellation and surviving output.");
         }
-        using var second = new MemoryStream(); await ImageCodec.EncodeWebpAsync(source, second, options);
-        using var canceled = new MemoryStream();
-        try { await ImageCodec.EncodeWebpAsync(source, canceled, options, new CancellationToken(true)); throw new Exception("Packaged ALPH/frame ignored cancellation."); }
-        catch (OperationCanceledException) { }
-        if (!packet.AsSpan().SequenceEqual(second.ToArray()) || !unchanged.AsSpan().SequenceEqual(OriginalPixels.Bytes(source))
-            || root.Bytes != 0 || root.IsDisposed || canceled.Length != 0 || !canceled.CanWrite)
-            throw new Exception("Packaged ALPH/frame storage changed async output, source, cleanup or caller ownership.");
-        source.Dispose(); first.Dispose();
-        if (!packet.AsSpan().SequenceEqual(second.ToArray()) || !second.CanWrite)
-            throw new Exception("Packaged ALPH/frame output did not survive source and peer disposal.");
-        Console.WriteLine("Packaged ALPH/frame storage preserves exact sync/async packets, terminal refusal and independent ownership.");
     }
 
     private static void VerifyStreamingBicubic()

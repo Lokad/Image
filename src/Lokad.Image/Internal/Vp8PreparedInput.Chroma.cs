@@ -123,29 +123,16 @@ internal sealed partial class Vp8PreparedInput
     {
         var tables = new Chroma8Tables(linear, knots);
         Span<byte> normalized = stackalloc byte[128];
-        var prepared = width / 16 * 16;
-        for (var y = 0; y < height; y += 2)
+        var tiles = new InputTiles(bytes, words, eightBit, width, height, normalized);
+        while (tiles.MoveNext(context))
         {
-            context.Cancellation.ThrowIfCancellationRequested();
-            var bottomY = Math.Min(y + 1, height - 1);
-            for (var x = 0; x < prepared; x += 16)
-            {
-                var topAt = (y * width + x) * 4; var bottomAt = (bottomY * width + x) * 4;
-                scoped ReadOnlySpan<byte> top, bottom;
-                if (eightBit) { top = bytes.Slice(topAt, 64); bottom = bytes.Slice(bottomAt, 64); }
-                else
-                {
-                    Normalize16(words.Slice(topAt, 64), normalized[..64]);
-                    if (bottomY != y) Normalize16(words.Slice(bottomAt, 64), normalized[64..]);
-                    top = normalized[..64]; bottom = bottomY == y ? top : normalized[64..];
-                }
-                PrepareLuma8(top, yPlane.Slice(y * stride + x, 16));
-                if (bottomY != y) PrepareLuma8(bottom, yPlane.Slice(bottomY * stride + x, 16));
-                PrepareChroma8Tile(top, bottom, uPlane.Slice(y / 2 * (stride / 2) + x / 2, 8),
-                    vPlane.Slice(y / 2 * (stride / 2) + x / 2, 8), in tables);
-            }
+            var top = tiles.Top; var bottom = tiles.Bottom; var x = tiles.X; var y = tiles.Y;
+            PrepareLuma8(top, yPlane.Slice(y * stride + x, 16));
+            if (tiles.BottomY != y) PrepareLuma8(bottom, yPlane.Slice(tiles.BottomY * stride + x, 16));
+            PrepareChroma8Tile(top, bottom, uPlane.Slice(y / 2 * (stride / 2) + x / 2, 8),
+                vPlane.Slice(y / 2 * (stride / 2) + x / 2, 8), in tables);
         }
-        return prepared;
+        return tiles.PreparedColumns;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

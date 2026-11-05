@@ -71,7 +71,8 @@ public sealed class Vp8TransparentCleanupTests
         using var source = Bands(); long capacity;
         using (var sizing = new OperationContext(ImageLimits.Default, default))
         using (var sized = Vp8PreparedInput.Create(source, sizing)) capacity = sized.CapacityBytes;
-        using var root = new TestMemoryBudget(capacity + 1024);
+        var scratchBytes = System.Runtime.Intrinsics.X86.Avx2.IsSupported ? 4096 : 1024;
+        using var root = new TestMemoryBudget(capacity + scratchBytes);
         using var first = new OperationContext(new() { MemoryBudget = root }, default);
         using var retained = Vp8PreparedInput.Create(source, first); retained.CleanupTransparentArea();
         using var other = new OperationContext(new() { MemoryBudget = root }, default);
