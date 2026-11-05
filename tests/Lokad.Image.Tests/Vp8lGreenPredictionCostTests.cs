@@ -42,6 +42,11 @@ public sealed class Vp8lGreenPredictionCostTests
             var wanted = Vp8lPredictionCostTests.PreparedCost(current, previous, generic);
             var actual = Vp8lReferenceCost.PredictionGreen(current, previous, specialized);
             Assert.Equal(wanted, actual);
+            // A second alpha mass shares these same green/history samples.
+            (current[0], current[1]) = (current[1], current[0]);
+            Assert.Equal(Vp8lPredictionCostTests.PreparedCost(current, previous, generic),
+                Vp8lReferenceCost.PredictionGreen(current, previous, specialized));
+            (current[0], current[1]) = (current[1], current[0]);
             hash.AppendData(MemoryMarshal.AsBytes(current.AsSpan()));
             hash.AppendData(MemoryMarshal.AsBytes(previous.AsSpan()));
             result[0] = actual; hash.AppendData(MemoryMarshal.AsBytes(result));

@@ -1,0 +1,879 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "currentComparisonRowsChanged": false,
+  "requiredMaterialPaths": 282,
+  "stages": {
+    "A": {
+      "linuxProducer": "a514f5251e60eac9b2a5cdf830733df8b0ca1bcd8b1c62b33d7c5b69095afb57",
+      "embedded": "537241e93244569eec90c30c95d4d2a866d7ef765bd553a309e5a6da424e7042",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "ccd7a8dfc46b0280ff0bafb51dbc4e9503150becd47796d07ab231bb60dc01c7",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "74a543d01cfe9efa851115d2bd588247c4d8c8c74e7d5c5bc76c1086e517f3e2",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "7f1c90be4c2d71edb0be51facd3b5e5742026b18314d79c9b2d77910d32376ef",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "8029b34ec11b931b0892afa2cc39625a1d138f481f5fab416bbebc1a31fde0bb",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "792211c9749bdb153c06d419bc149453a2c941ca8ceb7c8542f3e6f1a86d833f"
+      },
+      "focused": {
+        "internal-normal": 904,
+        "internal-scalar": 904,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "comparisons": {
+        "alpha-short": {
+          "caseId": "Encode8",
+          "quality": 75,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "a514f5251e60eac9b2a5cdf830733df8b0ca1bcd8b1c62b33d7c5b69095afb57"
+          ],
+          "baselineUs": 57933.051166666664,
+          "candidateUs": 57532.64925,
+          "rawUsSaved": 400.4019166666642,
+          "ratio": 0.9930945813085753,
+          "rawReduction": 0.006905418691424692,
+          "ratioConfidence": [
+            0.9391315376029105,
+            1.0501518108196133
+          ],
+          "logConfidence": {
+            "N": 3,
+            "Mean": -0.006932495744429365,
+            "StandardError": 0.0017680032574019084,
+            "Level": 12,
+            "Margin": 0.05586723119589505,
+            "Lower": -0.06279972694032442,
+            "Upper": 0.048934735451465684
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            7033576
+          ],
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        },
+        "photograph-short": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "a514f5251e60eac9b2a5cdf830733df8b0ca1bcd8b1c62b33d7c5b69095afb57"
+          ],
+          "baselineUs": 85812.1955,
+          "candidateUs": 86810.78754166666,
+          "rawUsSaved": -998.5920416666717,
+          "ratio": 1.0121619489026636,
+          "rawReduction": -0.012161948902663644,
+          "ratioConfidence": [
+            0.6389099053401804,
+            1.6027888616715849
+          ],
+          "logConfidence": {
+            "N": 3,
+            "Mean": 0.01187666135438834,
+            "StandardError": 0.014553235757600617,
+            "Level": 12,
+            "Margin": 0.45986848910732264,
+            "Lower": -0.4479918277529343,
+            "Upper": 0.471745150461711
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            6516648
+          ],
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        }
+      },
+      "accepted": false
+    },
+    "B": {
+      "linuxProducer": "5f04c621f997b07fcda0271dbd97ced662b9b1061731387dd5dc529cb5ce7c45",
+      "embedded": "265076399c2787d75a672a7c80253008d723c7890d2b503c47ef60cbf61e5922",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "4ccc638f70c9bf6a9ca3067a1f94bb780a85be5e2df836de9049303eea947c69",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "0cdac74d0d00bc96145b501735ef6edb0129f096416349d6b0724807e815e92a",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "9210aa645e72c7be7e19c6ed5bacb0e1ae8908acc78ffaa1fad7c1c929c68a81",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "e2395f0e567676044f27ea068bf3cb407dd591295f9e535a29b68142e6fe80f7",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "cca48f83ade831a292789ede02a80e765a0698d0eb70d5a2662cc54036c17780",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "0e54ac8d93b235f215a287d8d66032cfd7d3fa6cbf97db184fc660b3cd4c740c"
+      },
+      "focused": {
+        "internal-normal": 904,
+        "internal-scalar": 904,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "comparisons": {
+        "alpha-short": {
+          "caseId": "Encode8",
+          "quality": 75,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "5f04c621f997b07fcda0271dbd97ced662b9b1061731387dd5dc529cb5ce7c45"
+          ],
+          "baselineUs": 62705.42125,
+          "candidateUs": 61220.552083333336,
+          "rawUsSaved": 1484.8691666666641,
+          "ratio": 0.9763217447769866,
+          "rawReduction": 0.023678255223013367,
+          "ratioConfidence": [
+            0.952667779214849,
+            1.0005618133992407
+          ],
+          "logConfidence": {
+            "N": 3,
+            "Mean": -0.02396369284734741,
+            "StandardError": 0.0007761418471695189,
+            "Level": 12,
+            "Margin": 0.02452534848852465,
+            "Lower": -0.04848904133587206,
+            "Upper": 0.000561655641177241
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            7033576
+          ],
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        }
+      },
+      "accepted": false
+    },
+    "C": {
+      "linuxProducer": "f49417d7adbcc404d65144ffeed8ce5e94b3737859b90662097afa88670bdd9e",
+      "embedded": "a0d2a239885682fc97361d7bd2d9da0abcec256c8490487542c6dd590e87f1b7",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "4ccc638f70c9bf6a9ca3067a1f94bb780a85be5e2df836de9049303eea947c69",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "329a3e17647b062aa9c92e0d8afcf08df5bf26308fc7780bc6e3aa4fa16cac8d",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "9210aa645e72c7be7e19c6ed5bacb0e1ae8908acc78ffaa1fad7c1c929c68a81",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "e2395f0e567676044f27ea068bf3cb407dd591295f9e535a29b68142e6fe80f7",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "cca48f83ade831a292789ede02a80e765a0698d0eb70d5a2662cc54036c17780",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "0e54ac8d93b235f215a287d8d66032cfd7d3fa6cbf97db184fc660b3cd4c740c"
+      },
+      "focused": {
+        "internal-normal": 25,
+        "internal-scalar": 25,
+        "public-normal": 47,
+        "public-scalar": 47
+      },
+      "comparisons": {
+        "alpha-short": {
+          "caseId": "Encode8",
+          "quality": 75,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "f49417d7adbcc404d65144ffeed8ce5e94b3737859b90662097afa88670bdd9e"
+          ],
+          "baselineUs": 57866.292875,
+          "candidateUs": 56601.28908333334,
+          "rawUsSaved": 1265.0037916666643,
+          "ratio": 0.9781397684667299,
+          "rawReduction": 0.021860231533270102,
+          "ratioConfidence": [
+            0.9276731922574007,
+            1.031345995038735
+          ],
+          "logConfidence": {
+            "N": 3,
+            "Mean": -0.022105515651561342,
+            "StandardError": 0.00167632408654666,
+            "Level": 12,
+            "Margin": 0.05297025608424014,
+            "Lower": -0.07507577173580149,
+            "Upper": 0.0308647404326788
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            7033576
+          ],
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        },
+        "photograph-short": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "f49417d7adbcc404d65144ffeed8ce5e94b3737859b90662097afa88670bdd9e"
+          ],
+          "baselineUs": 81600.67404166667,
+          "candidateUs": 82543.82458333333,
+          "rawUsSaved": -943.1505416666567,
+          "ratio": 1.0115585202473603,
+          "rawReduction": -0.01155852024736026,
+          "ratioConfidence": [
+            1.0025959897076482,
+            1.0206010078528798
+          ],
+          "logConfidence": {
+            "N": 3,
+            "Mean": 0.011492151552026065,
+            "StandardError": 0.0002816389844789437,
+            "Level": 12,
+            "Margin": 0.008899525605390585,
+            "Lower": 0.0025926259466354795,
+            "Upper": 0.02039167715741665
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            6516648
+          ],
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        },
+        "alpha-confirm": {
+          "caseId": "Encode8",
+          "quality": 75,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 12,
+          "operationsPerSubjectPerPair": 16,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "f49417d7adbcc404d65144ffeed8ce5e94b3737859b90662097afa88670bdd9e"
+          ],
+          "baselineUs": 61752.046734375,
+          "candidateUs": 59901.749875,
+          "rawUsSaved": 1850.296859375,
+          "ratio": 0.970102194315547,
+          "rawReduction": 0.029897805684452994,
+          "ratioConfidence": [
+            0.9609310073906991,
+            0.9793119811828407
+          ],
+          "logConfidence": {
+            "N": 12,
+            "Mean": -0.030378839500551456,
+            "StandardError": 0.002135197143395765,
+            "Level": 12,
+            "Margin": 0.009473825605981959,
+            "Lower": -0.039852665106533416,
+            "Upper": -0.020905013894569495
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            7033576
+          ],
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        },
+        "photograph-confirm": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 12,
+          "operationsPerSubjectPerPair": 16,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "f49417d7adbcc404d65144ffeed8ce5e94b3737859b90662097afa88670bdd9e"
+          ],
+          "baselineUs": 81668.19691666667,
+          "candidateUs": 83370.6523125,
+          "rawUsSaved": -1702.4553958333283,
+          "ratio": 1.0208523849072177,
+          "rawReduction": -0.020852384907217747,
+          "ratioConfidence": [
+            1.0166493601547266,
+            1.0250630650391441
+          ],
+          "logConfidence": {
+            "N": 12,
+            "Mean": 0.02063320828641028,
+            "StandardError": 0.0009287690939234094,
+            "Level": 12,
+            "Margin": 0.004120929278718756,
+            "Lower": 0.016512279007691526,
+            "Upper": 0.024754137565129036
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            6516648
+          ],
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        }
+      },
+      "accepted": false
+    },
+    "D": {
+      "linuxProducer": "e62e8febfb4cf8207cabae9fb05b1a96f1f2d17a52174546342f356b27935d3d",
+      "embedded": "bada98885c96f4f7b97dc5bf7649fd8596bc9a4393d94015897763731bacdd5a",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "4ccc638f70c9bf6a9ca3067a1f94bb780a85be5e2df836de9049303eea947c69",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "cabd85d6daa7e78c7eb2b9433aa287da478ba20065d32b000c26f293625bc324",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "9210aa645e72c7be7e19c6ed5bacb0e1ae8908acc78ffaa1fad7c1c929c68a81",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "e2395f0e567676044f27ea068bf3cb407dd591295f9e535a29b68142e6fe80f7",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "cca48f83ade831a292789ede02a80e765a0698d0eb70d5a2662cc54036c17780",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "0e54ac8d93b235f215a287d8d66032cfd7d3fa6cbf97db184fc660b3cd4c740c"
+      },
+      "focused": {
+        "internal-normal": 25,
+        "internal-scalar": 25,
+        "public-normal": 47,
+        "public-scalar": 47
+      },
+      "comparisons": {
+        "alpha-short": {
+          "caseId": "Encode8",
+          "quality": 75,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "e62e8febfb4cf8207cabae9fb05b1a96f1f2d17a52174546342f356b27935d3d"
+          ],
+          "baselineUs": 62979.67829166666,
+          "candidateUs": 61085.62383333334,
+          "rawUsSaved": 1894.0544583333283,
+          "ratio": 0.9699267705940207,
+          "rawReduction": 0.03007322940597934,
+          "ratioConfidence": [
+            0.8413226788909883,
+            1.1181439000759485
+          ],
+          "logConfidence": {
+            "N": 3,
+            "Mean": -0.03055496466210812,
+            "StandardError": 0.004500927184306295,
+            "Level": 12,
+            "Margin": 0.14222504316595116,
+            "Lower": -0.17278000782805927,
+            "Upper": 0.11167007850384304
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            7033576
+          ],
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        },
+        "photograph-short": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "e62e8febfb4cf8207cabae9fb05b1a96f1f2d17a52174546342f356b27935d3d"
+          ],
+          "baselineUs": 87438.807875,
+          "candidateUs": 87686.00820833333,
+          "rawUsSaved": -247.20033333332836,
+          "ratio": 1.0026963647041753,
+          "rawReduction": -0.002696364704175336,
+          "ratioConfidence": [
+            0.7556094722470554,
+            1.3303689342101817
+          ],
+          "logConfidence": {
+            "N": 3,
+            "Mean": 0.0026128452684070335,
+            "StandardError": 0.008951010008921071,
+            "Level": 12,
+            "Margin": 0.28284345264160726,
+            "Lower": -0.2802306073732002,
+            "Upper": 0.2854562979100143
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            6516648
+          ],
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        },
+        "alpha-confirm": {
+          "caseId": "Encode8",
+          "quality": 75,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 12,
+          "operationsPerSubjectPerPair": 16,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "e62e8febfb4cf8207cabae9fb05b1a96f1f2d17a52174546342f356b27935d3d"
+          ],
+          "baselineUs": 62900.36321354166,
+          "candidateUs": 61534.08830729166,
+          "rawUsSaved": 1366.27490625,
+          "ratio": 0.9783492723638725,
+          "rawReduction": 0.02165072763612752,
+          "ratioConfidence": [
+            0.9656130085970678,
+            0.9911592177586727
+          ],
+          "logConfidence": {
+            "N": 12,
+            "Mean": -0.021936115539704606,
+            "StandardError": 0.002942547332929207,
+            "Level": 12,
+            "Margin": 0.013056021714783423,
+            "Lower": -0.03499213725448803,
+            "Upper": -0.008880093824921184
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            7033576
+          ],
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        },
+        "photograph-confirm": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 12,
+          "operationsPerSubjectPerPair": 16,
+          "allPairsRetained": true,
+          "counterbalancedOrder": true,
+          "producerIdentities": [
+            "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+            "e62e8febfb4cf8207cabae9fb05b1a96f1f2d17a52174546342f356b27935d3d"
+          ],
+          "baselineUs": 88598.3364375,
+          "candidateUs": 89688.593671875,
+          "rawUsSaved": -1090.257234375,
+          "ratio": 1.0123150228570494,
+          "rawReduction": -0.01231502285704944,
+          "ratioConfidence": [
+            1.007372761186858,
+            1.0172679668191074
+          ],
+          "logConfidence": {
+            "N": 12,
+            "Mean": 0.012233142564026621,
+            "StandardError": 0.0011015213178510975,
+            "Level": 12,
+            "Margin": 0.004887427326732072,
+            "Lower": 0.0073457152372945495,
+            "Upper": 0.01712056989075869
+          },
+          "quietGuardsPassed": true,
+          "exactPackets": true,
+          "independentOutputs": true,
+          "allocatedValues": [
+            6516648
+          ],
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+          "nativePerformanceMeasured": false
+        }
+      },
+      "accepted": false
+    }
+  },
+  "designs": {
+    "A": {
+      "project": "Lokad.Image",
+      "stage": "GHR334",
+      "beforePrototype": false,
+      "productionChanged": false,
+      "accepted": false,
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "749af233a169b9b8f37690aa23e8813c96f9239f85a73a088f091c70e98099b8",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "1daa1ba1d5924d124656a62ef34b8996a0df113008ed36e5887acae1259b8f49"
+      },
+      "trigger": "WAA333actual207DLL transparent profile:1954samples,1907managed;Matcher299,coefficient113,GreenHistogram97,Luma4 92. Matcher/local prefix/window/query/index trial evidence remains; GreenHistogram1498B andCoefficient3914B remain substantive source-specific leads. Samples/skid not method costs.",
+      "repeatedWork": "Green-only prediction still materializes14complete1024-bin ARGB populations, clears57344B per visit, merges14336counts per parent and updates1024history counts although only256green bins and two alpha bins are nontrivial. Red/blue are known singleton populations; PredictionGreen already computes their entropy analytically. Four-byte sample/token/coefficient lifetimes need not change.",
+      "endState": "One coherent compact ALPH analysis layout:16padded256-bin green banks (14real modes),258history counts (green256+alpha0/1),14mode frequencies per level. Build onlygreen populations, derive per-mode alpha0/1 mass from rectangle/global-origin geometry, preserve selected history and exact costs. Full-color layout/scoring stays. Padding16KiB versus56KiB histogram can support checked power-of-two indexed access without unsafe APIs, but assess actual JIT rather than assume removed checks.",
+      "sourceCapacity": "Oldlevel15374ints=61496B; proposed4368ints=17472B,44024B less logical workspace per level. Actual borrowed token owner may retain identical larger capacity; preserve full owner charge and handoff. Report working footprint, allocation, peak and retention separately; do not forecast savings from prefix use alone.",
+      "invariants": [
+        "NormalizedinputA/R/Bzero; mode0 interior and globalorigin introduce alpha1, so do not discard alpha residual metadata.",
+        "For each rectangle mode0ones=interior+origin; othermodesones=origin. Validate independently across recursive parent quadrant merges/borders/rightwrap/clipping and all min/maxbits.",
+        "Singleton red/blue Shannon entropy cancels exactly but residual bias remains. Preserve integer rounding locations, alpha/green histories, levelchoice, mode order/ties, selected maps and complete packets.",
+        "Four-byte working frame, matcher/cache key representation and later448800Bcoefficient handoff remain unchanged; prior whole-frame narrowing rejection does not apply.",
+        "One borrowed root, deterministic pre-admission layout choice, full retained capacity/overlap, terminal refusal and exception/async cleanup remain. Direct cancellation checkpoints bound actual work."
+      ],
+      "transition": "Change builder, analysis storage/recursive merge/history, green scoring and focused oracles coherently; no isolated smaller buffer fed to old consumers, no accumulating compatibility wrapper or test-only production builder. Keep full-color executor and exact public results. This crosses preparation/execution/ownership boundaries intentionally.",
+      "checks": "Existing fullRGBA scalar histogram/cost oracle, native/frozen maps/packets and original input contracts remain. Revise internal compact-layout tests against independent expanded formulas; retain dirty/guarded/partial/recursive/cancellation/refusal/survivor coverage. No new performance shape/depth/quality grid; original transparent8 target, existing16 normalizer and photograph to detect shared-analysis changes.",
+      "experiment": "One immutable Linux core/embedded stage with focused/scalar checks, then complete short alpha/photo boundaries using existing tools. Validate actual standalone public boundary early if shared call paths change. Temporary duplication only while migrating producer/consumer, removed before accepted stage. Judge CPU/footprint/maintenance together; preserve adverse results, no fixed continuation percentage or favorable resampling.",
+      "hypothesisLimits": "More compact footprint/locality may help; no hardware cache-associativity, conflict-miss, CPU-gain or allocation claim without evidence. Existing green-support clustering experiments concern sparse populations, not this predictor representation; checked-view histogram trials did not change layout. Shared RGBA accumulation is already production and must not be reintroduced as a new gain.",
+      "next": "Audit caller borrowed scratch and independent frozen cost/map tests, then prototype coherent compact representation. If geometry or measured costs refute it, revise/stop and advance independent PNG/JPEG work; no global block.",
+      "profileRaw": {
+        "file": "webp-alpha-current-preparation-attribution.tar.xz",
+        "sha256": "88526a47275e7c4a4f70e6dfc946f330ea734e52f064c76255864128135544aa",
+        "bytes": 263320,
+        "members": 106,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "webp-fresh-histogram-qualified.tar.xz",
+            "sha256": "06a46bcf7eb3133ee47c515fb6480d6b5088e7dbc9cee987d50c8fe03045131d"
+          }
+        ]
+      },
+      "productionPrototype": true,
+      "candidateSources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "ccd7a8dfc46b0280ff0bafb51dbc4e9503150becd47796d07ab231bb60dc01c7",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "74a543d01cfe9efa851115d2bd588247c4d8c8c74e7d5c5bc76c1086e517f3e2",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "7f1c90be4c2d71edb0be51facd3b5e5742026b18314d79c9b2d77910d32376ef",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "8029b34ec11b931b0892afa2cc39625a1d138f481f5fab416bbebc1a31fde0bb",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "792211c9749bdb153c06d419bc149453a2c941ca8ceb7c8542f3e6f1a86d833f"
+      },
+      "newTests": 1,
+      "helper": "One compact production histogram builder and one green scorer; no full-layout green compatibility wrapper. Full four-plane scalar/digest oracles preserved via test expansion, plus tight borrowed-root/dirty-guard/retained-plan case."
+    },
+    "B": {
+      "project": "Lokad.Image",
+      "stage": "GHR334B",
+      "beforeMeasurement": true,
+      "productionPrototype": true,
+      "accepted": false,
+      "candidateSources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "4ccc638f70c9bf6a9ca3067a1f94bb780a85be5e2df836de9049303eea947c69",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "0cdac74d0d00bc96145b501735ef6edb0129f096416349d6b0724807e815e92a",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "9210aa645e72c7be7e19c6ed5bacb0e1ae8908acc78ffaa1fad7c1c929c68a81",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "e2395f0e567676044f27ea068bf3cb407dd591295f9e535a29b68142e6fe80f7",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "cca48f83ade831a292789ede02a80e765a0698d0eb70d5a2662cc54036c17780",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "0e54ac8d93b235f215a287d8d66032cfd7d3fa6cbf97db184fc660b3cd4c740c"
+      },
+      "buildParentSha256": "a514f5251e60eac9b2a5cdf830733df8b0ca1bcd8b1c62b33d7c5b69095afb57",
+      "comparisonBaselineSha256": "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+      "stageA": {
+        "producer": "a514f5251e60eac9b2a5cdf830733df8b0ca1bcd8b1c62b33d7c5b69095afb57",
+        "focusedInternal": 904,
+        "focusedPublic": 357,
+        "modes": [
+          "normal",
+          "scalar"
+        ],
+        "alphaShortRatio": 0.9930945813085753,
+        "photographShortRatio": 1.0121619489026636,
+        "decisiveCpuGain": false,
+        "retained": "All original measurements/source/embedded/main/JIT retained; no independent stageAconfirmation or causal-regression claim."
+      },
+      "repeatedWork": "Compact layout alone leaves the same prior-green entropy terms and alpha masses recomputed across14modes. Its unused512int pad is exactly256long products; use it after children finish, before all mode scoring ends. Prepare common history once and only two alpha baselines. Parent merging/clearing touches real3584banks only, never old prepared products.",
+      "endState": "One source-generic recursive analysis specialized for two private value-type layouts, so full-color constants and execution are not burdened with dynamic shape/policy fields. ALPH compact banks plus exact prepared products/baselines in already admitted tail; no new owner/buffer/cache/session or capacity. Remove obsolete unprepared entropy helper after caller search confirms no remaining use.",
+      "transition": "StageA remains a legitimate compact producer/consumer step, with modest/uncertain alpha and adverse/uncertain photo screen. StageB completes preparation reuse and static layout; not same-code resampling. Both validated variants and every adverse point remain. Entire transition judged at completed stage.",
+      "lifetime": "Every child finishes pricing before return. Parent merges only first14green banks and never prepared tails; each level/history lives in disjoint level storage. Prepare overwrites full2KiB tail before use, read-only through14scorers. Analysis disposes/returns borrowed scope before same capacity becomes row storage. Actual caller owner retains full charge; selected maps independent.",
+      "correctness": "Old frozen16384full-plane cost digest and8613full-plane histogram digest unchanged; independently compare swapped alpha masses against generic scoring too. Dirty histogram tail explicitly survives counting; recursive generic/native maps/packets, tight shared-root borrowed capacity, guards, refusal/cancellation/recovery and retained plan remain. Four-byte sample/coefficient handoff unchanged.",
+      "scope": "Original complete transparent8/photo controls against immutable WCH332, all original packets/order/ties/input/ownership gates. Same private pair/standalone workers/selectors, no new images/settings. One new Linux main/embedded stage; broad W/L/package only if completed stage justified.",
+      "continuation": "Assess actual source/JIT and complete workloads, not static code-size or work estimates as gain. Keep source-specific uncertainty/adverse results. No automatic merge, fixed percentage gate, third same-design favorable sampling or global block."
+    },
+    "C": {
+      "project": "Lokad.Image",
+      "stage": "GHR334C",
+      "beforeMeasurement": true,
+      "productionPrototype": true,
+      "accepted": false,
+      "candidateSources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "4ccc638f70c9bf6a9ca3067a1f94bb780a85be5e2df836de9049303eea947c69",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "329a3e17647b062aa9c92e0d8afcf08df5bf26308fc7780bc6e3aa4fa16cac8d",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "9210aa645e72c7be7e19c6ed5bacb0e1ae8908acc78ffaa1fad7c1c929c68a81",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "e2395f0e567676044f27ea068bf3cb407dd591295f9e535a29b68142e6fe80f7",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "cca48f83ade831a292789ede02a80e765a0698d0eb70d5a2662cc54036c17780",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "0e54ac8d93b235f215a287d8d66032cfd7d3fa6cbf97db184fc660b3cd4c740c"
+      },
+      "buildParentSha256": "5f04c621f997b07fcda0271dbd97ced662b9b1061731387dd5dc529cb5ce7c45",
+      "comparisonBaselineSha256": "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+      "change": "AggressiveInlining on the five existing layout getters completes intended compile-time layout. No arithmetic/storage/ownership/execution-policy change from testedB. Do not treatB policy-call code as complete intended design.",
+      "stageB": {
+        "focusedInternal": 904,
+        "focusedPublic": 357,
+        "modes": [
+          "normal",
+          "scalar"
+        ],
+        "alphaShortRatio": 0.9763217447769866,
+        "alphaUsSaved": 1484.8691666666648,
+        "cpuGainConfirmed": false,
+        "fullColorVisitBytes": 2708,
+        "greenVisitBytes": 2075,
+        "observedSizeGetterCallsPerVisit": 11,
+        "retained": "Complete immutableBsource/main/embedded/JIT and all short observations; no independentBconfirmation or strong CPU claim."
+      },
+      "qualification": "Because only inlining metadata changes, run focused compact/full predictor and frozen actual-main packet cases normal/scalar for development; reuseBfull904/357 functional evidence without falsely labeling it Cproof. Full CWindows/Linux/live/scalar and SAME package at accepted coherent milestone.",
+      "scope": "Same complete alpha/photo controls and immutable WCH332baseline. No extra knob/shape grid, new ownership, pool/cache, native/harness/selector build or numerical-policy change.",
+      "next": "OneCmain/embedded build; verify actual getter calls disappear, focused/scalar and complete screens. Do not blindly add variants or confirm unfinished implementations."
+    },
+    "D": {
+      "project": "Lokad.Image",
+      "stage": "GHR334D",
+      "beforeMeasurement": true,
+      "accepted": false,
+      "productionPrototype": true,
+      "candidateSources": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "4ccc638f70c9bf6a9ca3067a1f94bb780a85be5e2df836de9049303eea947c69",
+        "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "cabd85d6daa7e78c7eb2b9433aa287da478ba20065d32b000c26f293625bc324",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "9210aa645e72c7be7e19c6ed5bacb0e1ae8908acc78ffaa1fad7c1c929c68a81",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "e2395f0e567676044f27ea068bf3cb407dd591295f9e535a29b68142e6fe80f7",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "cca48f83ade831a292789ede02a80e765a0698d0eb70d5a2662cc54036c17780",
+        "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "0e54ac8d93b235f215a287d8d66032cfd7d3fa6cbf97db184fc660b3cd4c740c"
+      },
+      "buildParentSha256": "f49417d7adbcc404d65144ffeed8ce5e94b3737859b90662097afa88670bdd9e",
+      "comparisonBaselineSha256": "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+      "stageC": {
+        "alphaIndependentRatio": 0.970102194315547,
+        "alphaRatioConfidence": [
+          0.9609310073906991,
+          0.9793119811828407
+        ],
+        "alphaUsSaved": 1850.2968593749974,
+        "photographIndependentRatio": 1.0208523849072177,
+        "photographRatioConfidence": [
+          1.0166493601547266,
+          1.0250630650391441
+        ],
+        "photographUsLost": 1702.4553958333274,
+        "accepted": false,
+        "tradeoff": "Confirmed scoped alpha gain is nearly offset by confirmed scoped full-color loss; native photo12comparison remains uncertain. Do not accept as completed architectural improvement."
+      },
+      "diagnostic": "One old qualified207DLL untimed public async probe retains exact source/owned-output/resource checks and originalAnalysisVisit2514B; current genericColorVisit2420B has no remaining getter/accessor call issue. Size alone does not explain slowdown. No causal generic-ABI/frequency/GC assertion or timing from instrumented execution.",
+      "endState": "One nongeneric admission/storage/recursive owner with original boolean representation choice. Separate bounded NoInlining color/green pricing kernels keep ALPH history products/geometry locals out of common/full-color pricing frames. Common checked equal-length merge windows consolidate parent scheduling and exclude product tails. No whole-visitor generic clones, extra owner/buffer/cache/capacity or compatibility implementation.",
+      "rationale": "Materially revise execution boundary in response to independently confirmed cross-content regression, preserving useful compact/prepared ALPH work. Isolate pricing-specific state and remove unnecessary generic owner coupling; do not tune more getters or blindly replay losing code.",
+      "unchanged": "All formula roundings, mode/order/ties, compact14banks/258history/2KiBproducttail, four-byte sample/coefficient handoff, shared admission/refusal/cleanup/cancellation and independently retained maps remain. Single merge source handles both layouts; no pixel-loop abstraction.",
+      "gates": "Reuse B/C frozen numeric/histogram and larger focused evidence where bodies unchanged; new owner/merge gets focused25internal/47actual-main normal/scalar then existing complete alpha/photo screens. OneDmain/embedded stage; full W/L/live/scalar/SAMEpackage only if the combined result warrants acceptance. Keep every adverse/confirmed observation, no favorable repeats.",
+      "next": "Verify exact results and actual new source/JIT, then complete paired alpha/photo. A larger revision must justify continuation by actual elapsed/storage/simplicity; no automatic merge or permanent family ban.",
+      "focusedInternal": 25,
+      "focusedPublic": 47,
+      "modes": [
+        "normal",
+        "scalar"
+      ],
+      "candidateProducer": "e62e8febfb4cf8207cabae9fb05b1a96f1f2d17a52174546342f356b27935d3d",
+      "screens": {
+        "alphaRatio": 0.9699267705940207,
+        "photographRatio": 1.0026963647041753,
+        "allExact": true,
+        "allAllocationsUnchanged": true
+      },
+      "jit": {
+        "visitBytes": 1771,
+        "chooseGreenBytes": 1237,
+        "chooseColorBytes": 1565,
+        "mergeBytes": 203,
+        "mergeBoundsBranches": 0,
+        "scope": "Static attribution only, not gain forecast."
+      },
+      "preparationFailure": "StageB Python preparation initially had a syntax error before any VM execution; original failed script retained. Corrected preparation subsequently runs; no production compile/test/performance attempt hidden."
+    }
+  },
+  "verdict": "Restore qualified encoder: exact compact/prepared ALPH shows independently confirmed2.2to3percent complete-alpha gains, but independently confirmed1.2to2.1percent photograph losses of comparable absolute size. Allocation unchanged. Four materially staged designs do not justify added code/footprint complexity as a completed shared improvement. Preserve all implementations/observations, no automatic merge, favorable resampling or permanent family ban.",
+  "methodology": "All complete public encodes use original inputs/settings/full packet hashes and independent owners, one quiet CPU, immutable per-stage modules. Alpha/photo are equivalent operations on each side. Code/JIT/workspace sizes are attribution, not CPU proof. Independent adverse photo confirmations are retained. Standalone photo12native comparison remains uncertain and neither refutes scoped regression nor establishes native parity.",
+  "sourceJit": {
+    "baselineVisitBytes": 2514,
+    "compactLeafBuildBytes": 1227,
+    "baselineLeafBuildBytes": 1498,
+    "constantGenericColorVisitBytes": 2420,
+    "constantGenericGreenVisitBytes": 1923,
+    "finalVisitBytes": 1771,
+    "finalColorPricingBytes": 1565,
+    "finalGreenPricingBytes": 1237,
+    "finalMergeBytes": 203,
+    "finalMergeBoundsBranches": 0,
+    "causality": "No code-size, CPU-frequency, GC, alignment or generic-ABI explanation of elapsed changes is asserted."
+  },
+  "storage": {
+    "oldHistogramBytes": 57344,
+    "compactHistogramBytes": 16384,
+    "realCompactCountBytes": 14336,
+    "oldLevelBytes": 61496,
+    "compactLevelBytes": 17472,
+    "logicalBytesRemovedPerLevel": 44024,
+    "extraProductsAllocationBytes": 0,
+    "productsReusedInTailBytes": 2048,
+    "alphaAllocatedBytesBoth": 7033576,
+    "photoAllocatedBytesBoth": 6516648,
+    "borrowedOwnerCapacityMayRemainUnchanged": true,
+    "retainedScratchAfterOperation": 0,
+    "physicalAndCompleteAdmittedPeaksRemeasured": false,
+    "nativeAllocationMeasured": false
+  },
+  "candidateQualification": {
+    "windowsStageC": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "0760b1e9d6b5554c41029bb31caa79d2e34974733bd2908433491068d1489e69",
+      "full": [
+        2472,
+        2287,
+        948
+      ],
+      "total": 5707,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-scalar": 904,
+        "public-scalar": 357
+      },
+      "additionalScalarAndVectorQualification": {
+        "internal-avx512off": 25,
+        "public-avx512off": 47
+      },
+      "unchangedAvx512ChecksReused": 54,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "0760b1e9d6b5554c41029bb31caa79d2e34974733bd2908433491068d1489e69",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "86e5ffa6b488850388086feebf1e4a924ecc89b6fd2e6a50a741c66a51f4b288",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "0760b1e9d6b5554c41029bb31caa79d2e34974733bd2908433491068d1489e69",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "0760b1e9d6b5554c41029bb31caa79d2e34974733bd2908433491068d1489e69",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "0760b1e9d6b5554c41029bb31caa79d2e34974733bd2908433491068d1489e69"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linuxDevelopmentOnly": true,
+    "noCandidatePackageBuild": true
+  },
+  "restored": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionSourceAndMainRestoredExactly": true,
+      "productionSha256": "dbfadc66cbc0394b432061942f319e6077c3faf6a568eee00d17b76e5ffef966",
+      "embeddedSha256": "afa8859ce83bad34951f146c77c797dc69e01e96745bf1c3f5fef935e00bc887",
+      "retainedTests": {
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "2e7bedeb250493a01bf91ccce30ba310747e981e1131388de1a9fd75a7d10ea0",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "caffcb6d9592bec21e966aa633b176e903d8312c03df70cd9cb289ed79e2e5ee"
+      },
+      "checks": {
+        "internal-normal": 2,
+        "internal-scalar": 2,
+        "public-normal": 47,
+        "public-scalar": 47
+      },
+      "productionBuilds": 0,
+      "internalBuilds": 1,
+      "newBorrowedRootTestRetained": true,
+      "existingCostOracleStrengthened": true,
+      "sourceSha256": null,
+      "packageSha256": "a1fa54270a67cdfddd43301f3e5837dc3c6aade62d16f1ad7354268c2aadcd14",
+      "qualificationReused": "WCH3325706full/live perOS/scalar/actualSAMEpackage/all3examples; one additional borrowed-root fact and strengthened16384cost test separately qualified. No new full5707 or package repeat on restored production."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionSourceAndMainRestoredExactly": true,
+      "productionSha256": "207dfc3269da90d6720e6f1469e7ce13b1a467d9b9817da4bf12d0f7115eb545",
+      "embeddedSha256": "77e6e0426e3381553c28aade3938145967729b7620b0c5c3ab089afccac0e894",
+      "retainedTests": {
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictorHistogramTests.cs": "2e7bedeb250493a01bf91ccce30ba310747e981e1131388de1a9fd75a7d10ea0",
+        "tests/Lokad.Image.Tests/Vp8lGreenPredictionCostTests.cs": "caffcb6d9592bec21e966aa633b176e903d8312c03df70cd9cb289ed79e2e5ee"
+      },
+      "checks": {
+        "internal-normal": 2,
+        "internal-scalar": 2,
+        "public-normal": 47,
+        "public-scalar": 47
+      },
+      "productionBuilds": 0,
+      "internalBuilds": 1,
+      "newBorrowedRootTestRetained": true,
+      "existingCostOracleStrengthened": true,
+      "sourceSha256": "13eb1d6d18c14c8d678d6815110d04e5dfa62e3243f782d1946c681dd0bf700a",
+      "packageSha256": "a1fa54270a67cdfddd43301f3e5837dc3c6aade62d16f1ad7354268c2aadcd14",
+      "qualificationReused": "WCH3325706full/live perOS/scalar/actualSAMEpackage/all3examples; one additional borrowed-root fact and strengthened16384cost test separately qualified. No new full5707 or package repeat on restored production."
+    }
+  },
+  "retainedCoverage": "One new actual-production borrowed recursive-workspace fact with tight shared root, dirty guards, independent retained maps and caller-owned lifetime. Existing16384frozen cost test additionally checks alternate alpha populations against the independent generic scorer. Both retained tests plus47actual-main complete packets pass normal/scalar perOS; priorWCH3325706full/live/scalar/SAMEactualpackage proof reused, not fresh restored5707.",
+  "next": "Independent current PNGFastest8greedy/dictionary/token attribution and preparation reuse. Reuse target-identical old sampling; do not repeat rolling/triple/token/insertion variants without a different removed-work design.",
+  "publication": "postponed",
+  "raw": {
+    "file": "webp-compact-predictor-tradeoff.tar.xz",
+    "sha256": "36f46b4863c34deeebcd5c5c667ff65544acfca35b15603ab0584570f1bf47a7",
+    "bytes": 4036736,
+    "members": 458,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "allMeasuredProducerModulesRetained": true,
+    "dependencies": [
+      {
+        "file": "webp-fresh-histogram-qualified.tar.xz",
+        "sha256": "06a46bcf7eb3133ee47c515fb6480d6b5088e7dbc9cee987d50c8fe03045131d"
+      },
+      {
+        "file": "webp-alpha-current-preparation-attribution.tar.xz",
+        "sha256": "88526a47275e7c4a4f70e6dfc946f330ea734e52f064c76255864128135544aa"
+      }
+    ]
+  }
+}

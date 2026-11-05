@@ -1937,7 +1937,11 @@ Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
 uncertain timing points remain evidence; no third photo measurement follows.
-Complete physical/admitted peaks are not inferred from allocations.
+A subsequent [compact ALPH investigation](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md)
+restores production after confirmed cross-content tradeoffs. One new borrowed-
+storage case and a strengthened frozen cost oracle pass separately on restored
+code, with no repeated full suite/package proof. Complete physical/admitted peaks
+are not inferred from allocations.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled

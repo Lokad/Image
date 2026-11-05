@@ -96,6 +96,35 @@ public sealed class Vp8lGreenPredictorHistogramTests
         a.Dispose(); b.Dispose(); Assert.Equal(2 * width * height * 4, root.Bytes); Assert.False(root.IsDisposed);
     }
 
+    [Fact]
+    public void BorrowedPredictorScratchKeepsCallerChargeGuardsAndIndependentPlan()
+    {
+        const int width = 33, height = 19, guard = 8;
+        // The caller provides all four recursive levels. Its root has no
+        // allowance for the library to allocate or charge this capacity again.
+        const int scratchWords = 4 * (14 * 1024 + 1024 + 14);
+        const int callerBytes = (scratchWords + 2 * guard + width * height) * 4;
+        using var root = new TestMemoryBudget(callerBytes + 1024);
+        Assert.True(root.TryReserve(callerBytes, out var caller));
+        using var callerReservation = caller!;
+        var scratch = Enumerable.Repeat(-913, scratchWords + 2 * guard).ToArray();
+        var rgba = OriginalPixels.Generate(width, height, 8);
+        var pixels = Enumerable.Range(0, width * height).Select(i => (uint)rgba[i * 4 + 3] << 8).ToArray();
+        var reference = pixels.ToArray();
+        using var generic = new OperationContext(ImageLimits.Default, default);
+        using var expected = Vp8lReferencePredictor.SelectAndApply(reference, width, 2, 5, false, generic);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default);
+        using var actual = Vp8lReferencePredictor.SelectAndApply(pixels, width, 2, 5, false,
+            context, greenOnly: true, scratch: scratch.AsSpan(guard, scratchWords));
+        Assert.Equal((expected.SelectedBits, expected.StoredBits, expected.EntropyCost),
+            (actual.SelectedBits, actual.StoredBits, actual.EntropyCost));
+        Assert.True(expected.Modes.SequenceEqual(actual.Modes)); Assert.Equal(reference, pixels);
+        Assert.All(scratch[..guard].Concat(scratch[(guard + scratchWords)..]), value => Assert.Equal(-913, value));
+        Assert.Equal(callerBytes + actual.Modes.Length, root.Bytes); Assert.Equal(0, root.Refusals);
+        actual.Dispose(); context.Dispose(); Assert.Equal(callerBytes, root.Bytes);
+        callerReservation.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]

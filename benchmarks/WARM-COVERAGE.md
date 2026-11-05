@@ -37,7 +37,13 @@ The preceding [affine entropy trial](WEBP-AFFINE-ENTROPY-INCONCLUSIVE.md) has no
 dependable gain and restores all source/main/embedded exactly. Its current profile
 and every adverse/uncertain observation stay. The earlier
 [index trial](WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md) retains two useful cases,
-now included in the full5,706suite. Earlier rejected stages are not current costs.
+now included in the full5,706suite. The subsequent [compact ALPH transition](WEBP-COMPACT-PREDICTOR-TRADEOFF.md)
+restores production after four exact stages: confirmed alpha gains are nearly
+balanced by confirmed photograph losses, with unchanged allocation. One general
+borrowed-capacity test and strengthened cost oracle pass separately perOS/normal/
+scalar, plus47actual-main packets. Production/package and all current rows remain
+unchanged; no fresh restored full5,707or package repeat. Earlier rejected stages
+are not current costs.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
