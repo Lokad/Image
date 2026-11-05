@@ -1961,6 +1961,8 @@ The current production build passes **5,639 full/live checks per OS**, affected
 normal/scalar and AVX512-off checks, and the **same actual Release package/all
 three examples on Windows/Linux**. Three strengthened test cases rerun in both
 modes after correcting their generator; other checks reuse unchanged proof.
+Two additional independent row-conversion checks pass normal/scalar on both OSes
+against unchanged production; the earlier full-suite/package proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.

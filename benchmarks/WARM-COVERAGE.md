@@ -25,6 +25,8 @@ normal/scalar and AVX512-off checks, and the same actual Release package/all thr
 examples on Windows/Linux. Three strengthened test cases rerun normal/scalar after
 correcting their generator; all other checks reuse unchanged proof. That qualifies
 correctness and packaging, not all282 CPU gates.
+Two independent production-row conversion checks additionally pass normal/scalar
+on both OSes; 5,641 applicable checks reuse the unchanged full/live/package proof.
 Fourteen displayed WebP and eight streaming-resize costs are current. Other
 affected boundaries marked H remain historical until their named reconciliation.
 
@@ -39,6 +41,9 @@ not establish elapsed gains; a revised design needs distinct supporting evidence
 The [expanded Lanczos coefficient stages](LANCZOS-COEFFICIENT-PREPARATION.md) have
 adverse short points and add97,952B retained capacity; both restore exactly.
 No independent timing, package reproof or current-row replacement follows.
+The [row-publication stages](LANCZOS-ROW-PUBLICATION.md) also restore exactly:
+one counterbalanced comparison confirms5.07% slower word enlargement; revised
+pair-width screens show no useful lead. Independent conversion tests are retained.
 
 The [ALPH representation/lifetime audit](WEBP-ALPHA-REPRESENTATION-AUDIT.md) finds
 that narrowing the working frame would lose its larger coefficient-storage

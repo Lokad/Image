@@ -1,0 +1,348 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LRP304",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 282,
+  "hypothesis": "Remove exact-Int64 row stores followed by reread/conversion/rewrite into the same admitted floating row. Preserve every exact product/sum, conversion rounding, certificate/repair, source and result ownership.",
+  "intendedEndState": "Shared byte/word typed horizontal arithmetic; only final storage specializes. No runtime per-tap abstraction, expanded geometry or additional heap/retained capacity.",
+  "stages": {
+    "lrp304": {
+      "description": "One shared typed horizontal kernel converts each exact four-sample sum at its first store, removing the later whole-row conversion.",
+      "preparation": {
+        "project": "Lokad.Image",
+        "system": "linux",
+        "baselineSha256": "f97719d767daed99589c0614a00ccff965bc56cea464b34dd3b94a65bd457a2c",
+        "candidateSha256": "f95627c1756b477228019d2632e31feb2ddc33106059d21f429d8065c05fb953",
+        "sources": {
+          "src/Lokad.Image/Internal/LanczosResize.cs": "adef8feb84cb9552e7ed6b33347df0cff3d3a20babf0dc6f7eac0f29f9fab696",
+          "src/Lokad.Image/Internal/LanczosFmaResize.cs": "5d551efb293c6cc042491629f3e8ce333880a9832c33c98c942c17d733f9542b",
+          "tests/Lokad.Image.Tests/LanczosRowPublicationTests.cs": "3e40bf43890c2415482102e5e6bd6fceb1e5d336d056692303921d06ede712c4"
+        },
+        "focused": {
+          "internal-normal": 78,
+          "internal-scalar": 78,
+          "public-normal": 15,
+          "public-scalar": 15
+        },
+        "productionAccepted": false,
+        "coreVersions": 1,
+        "internalVersions": 2,
+        "initialTestSetupFailed": true,
+        "productionUnchangedDuringCorrection": true,
+        "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+        "internalTestAssemblySha256": "f02055b6dc95889f1b1af42edf56170a9bc8c5f26edf9d2e7281c4a9ecfcd4f7"
+      },
+      "cases": {
+        "RepeatedEnlarge16": {
+          "managedUs": 3993.130375,
+          "nativeUs": 3894.3990256410257,
+          "ratio": 1.0253521400115704,
+          "lower": 0.919332869237141,
+          "upper": 1.1451812028897461,
+          "allocatedBytes": 4265332,
+          "retainedOwnedBytes": 333396,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputSha256": "dd1fd2dddedb6a3a0b1d19a5458308837da6fef5be2bfc1821601cf176521b2e",
+          "nativeOutputSha256": "fa778ce77ac2972f07bbcd075369adb58d85ff62fe23b03d842b6e8b709afd66",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+        },
+        "Repeated8": {
+          "managedUs": 553.7720208333334,
+          "nativeUs": 493.0618986928104,
+          "ratio": 1.123128804520235,
+          "lower": 0.7908025584229695,
+          "upper": 1.7541573221961786,
+          "allocatedBytes": 139,
+          "retainedOwnedBytes": 139800,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+        }
+      },
+      "actualProductionJit": {
+        "project": "Lokad.Image",
+        "productionChanged": false,
+        "allBuilds": 0,
+        "profilingOnly": true,
+        "statisticalTiming": false,
+        "publicCasesPassed": 4,
+        "librarySha256": "f95627c1756b477228019d2632e31feb2ddc33106059d21f429d8065c05fb953",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "test",
+          "tests/Lokad.Image.PublicApi.Tests",
+          "-c",
+          "Release",
+          "--no-build",
+          "--no-restore",
+          "--tl:off",
+          "-v",
+          "minimal",
+          "--filter",
+          "FullyQualifiedName~Lanczos3ResizePlanTests.ReuseReadsNewSourcePixelsAndReturnsIndependentResults"
+        ],
+        "disassemblySha256": "46a8f9e57d64f9602606e061a5535b66a794d38d1487a988334adce288790f1f",
+        "methodListings": [
+          "Lokad.Image.Internal.LanczosResize:Horizontal[double](Lokad.Image.ImageBuffer,int,Lokad.Image.Internal.LanczosPlan,System.Span`1[double],System.Span`1[uint],Lokad.Image.Internal.OperationContext) (FullOpts)",
+          "Lokad.Image.Internal.LanczosResize:Horizontal8[double](System.ReadOnlySpan`1[byte],Lokad.Image.Internal.LanczosPlan,System.Span`1[double],Lokad.Image.Internal.OperationContext) (FullOpts)",
+          "Lokad.Image.Internal.LanczosResize:FilterWordProducts[double](System.ReadOnlySpan`1[uint],Lokad.Image.Internal.LanczosPlan,System.Span`1[double],Lokad.Image.Internal.OperationContext) (FullOpts)"
+        ]
+      },
+      "storage": "No new owned capacity, pool, cache, owner or retained state. Second stage retains one32-byte register/stack value within existing coarse frame allowance; physical stack/peak not measured."
+    },
+    "lrp304s2": {
+      "description": "Retain one private32-byte pending exact pixel; publish two together with the original512-bit conversion width. No row traversal, heap owner or capacity increase.",
+      "preparation": {
+        "project": "Lokad.Image",
+        "system": "linux",
+        "baselineSha256": "f95627c1756b477228019d2632e31feb2ddc33106059d21f429d8065c05fb953",
+        "candidateSha256": "a1dc885ac047e6623da2d1580a1c86c08d8b104a0d23c04a5377430314f4e765",
+        "sources": {
+          "src/Lokad.Image/Internal/LanczosResize.cs": "84aa1923149bbeb8a4b018cb4ce93d123bfb601702f7ffd41a75256f6b1a623d",
+          "src/Lokad.Image/Internal/LanczosFmaResize.cs": "5d551efb293c6cc042491629f3e8ce333880a9832c33c98c942c17d733f9542b",
+          "tests/Lokad.Image.Tests/LanczosRowPublicationTests.cs": "3e40bf43890c2415482102e5e6bd6fceb1e5d336d056692303921d06ede712c4"
+        },
+        "focused": {
+          "internal-normal": 78,
+          "internal-scalar": 78,
+          "public-normal": 15,
+          "public-scalar": 15
+        },
+        "productionAccepted": false,
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+        "internalTestAssemblySha256": "35a0b32b7f818b3cc2016402c0ce90c6474e92d1ba9c7e00c6a2226f58e1a820"
+      },
+      "cases": {
+        "RepeatedEnlarge16": {
+          "managedUs": 4069.6573046875,
+          "nativeUs": 3904.8840256410253,
+          "ratio": 1.042196715181426,
+          "lower": 0.9323314748268786,
+          "upper": 1.1684364277478407,
+          "allocatedBytes": 4265332,
+          "retainedOwnedBytes": 333396,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputSha256": "dd1fd2dddedb6a3a0b1d19a5458308837da6fef5be2bfc1821601cf176521b2e",
+          "nativeOutputSha256": "fa778ce77ac2972f07bbcd075369adb58d85ff62fe23b03d842b6e8b709afd66",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+        },
+        "Repeated8": {
+          "managedUs": 569.5430851449275,
+          "nativeUs": 491.5501274509804,
+          "ratio": 1.158667353212567,
+          "lower": 0.8440237836105297,
+          "upper": 1.5334049954491429,
+          "allocatedBytes": 139,
+          "retainedOwnedBytes": 139800,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured"
+        }
+      },
+      "actualProductionJit": {
+        "project": "Lokad.Image",
+        "productionChanged": false,
+        "allBuilds": 0,
+        "profilingOnly": true,
+        "statisticalTiming": false,
+        "publicCasesPassed": 4,
+        "librarySha256": "a1dc885ac047e6623da2d1580a1c86c08d8b104a0d23c04a5377430314f4e765",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "test",
+          "tests/Lokad.Image.PublicApi.Tests",
+          "-c",
+          "Release",
+          "--no-build",
+          "--no-restore",
+          "--tl:off",
+          "-v",
+          "minimal",
+          "--filter",
+          "FullyQualifiedName~Lanczos3ResizePlanTests.ReuseReadsNewSourcePixelsAndReturnsIndependentResults"
+        ],
+        "disassemblySha256": "3b9cdb7da2659d322d66f574171954a9c501c020efec461fcd646d72785984c2",
+        "methodListings": [
+          "Lokad.Image.Internal.LanczosResize:Horizontal[double](Lokad.Image.ImageBuffer,int,Lokad.Image.Internal.LanczosPlan,System.Span`1[double],System.Span`1[uint],Lokad.Image.Internal.OperationContext) (FullOpts)",
+          "Lokad.Image.Internal.LanczosResize:Horizontal8[double](System.ReadOnlySpan`1[byte],Lokad.Image.Internal.LanczosPlan,System.Span`1[double],Lokad.Image.Internal.OperationContext) (FullOpts)",
+          "Lokad.Image.Internal.LanczosResize:FilterWordProducts[double](System.ReadOnlySpan`1[uint],Lokad.Image.Internal.LanczosPlan,System.Span`1[double],Lokad.Image.Internal.OperationContext) (FullOpts)"
+        ]
+      },
+      "storage": "No new owned capacity, pool, cache, owner or retained state. Second stage retains one32-byte register/stack value within existing coarse frame allowance; physical stack/peak not measured."
+    }
+  },
+  "firstStageCounterbalancedComparison": {
+    "caseId": "RepeatedEnlarge16",
+    "pairs": 12,
+    "operationsPerSubjectPerPair": 16,
+    "allPairsRetained": true,
+    "counterbalancedOrder": true,
+    "baselineUs": 3864.8077395833334,
+    "candidateUs": 4060.6946354166666,
+    "addedUs": 195.88689583333303,
+    "ratio": 1.050700030099874,
+    "ratioConfidence": [
+      1.0449115142565062,
+      1.0565026823883985
+    ],
+    "allocatedBytesBoth": 4264240,
+    "exactPixels": true,
+    "independentOwners": true,
+    "quietGuardsPassed": true,
+    "identities": [
+      "f97719d767daed99589c0614a00ccff965bc56cea464b34dd3b94a65bd457a2c",
+      "f95627c1756b477228019d2632e31feb2ddc33106059d21f429d8065c05fb953"
+    ],
+    "boundary": "Twelve fixed adjacent original/candidate pairs in one process, order alternated, sixteen complete prepared public Resize operations per subject; all pairs retained without filtering. Each isolated assembly owns an identical borrowed resident source and prepared plan. Setup/JIT/validation excluded; source reads, row reset, independent result allocation and disposal included. Diagnostic comparison of managed builds, not new FFmpeg cost or parity proof.",
+    "toolSha256": "df64a3de94a2f8abe90b12e0432cbb71f45bb061f081af2ab169829c3fa669b8"
+  },
+  "codegenFinding": "Actual production FullOpts listings confirm closed double kernels and no runtime type dispatch. First stage uses256-bit conversions per pixel; second restores512-bit pair conversions and uses256 only for tails. Code size and instruction differences are not measured phase costs or a causal attribution of slowdown.",
+  "decision": "Reject both implementations. First stage has confirmed5.07%/195.89us paired word-enlargement regression. Revised stage passes exactness and typed pair codegen, but its two short complete workloads show no useful lead; no second-stage independent confirmation or favorable resampling. Keep the original row conversion. This does not permanently close future streaming designs.",
+  "qualification": {
+    "windowsRestoration": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionRestoredByteExact": true,
+      "sourceAndModuleHashesVerified": true,
+      "productionSha256": "286e6b31b7111753d8e39dc20d9482df7c9c50f1b2c145fda45662ddd060f8b2",
+      "internalTestSha256": "321943dbbf7c24dfe301751dc4a903d4424a0615a44c10a4671f840ad7ae408d",
+      "candidateOnlyTestRemoved": true,
+      "additionalBuilds": 0,
+      "packageSha256": "7c68ee218f0de27694494b17c4dd0e9d887d26b01472cc51f1dc9549f0b98d4d"
+    },
+    "linuxRestoration": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionRestoredByteExact": true,
+      "sourceAndModuleHashesVerified": true,
+      "productionSha256": "f97719d767daed99589c0614a00ccff965bc56cea464b34dd3b94a65bd457a2c",
+      "internalTestSha256": "a0dc8a1b889843df66524f4e102397c091105eafc42b655869d483a2b3b2d3be",
+      "candidateOnlyTestRemoved": true,
+      "additionalBuilds": 0,
+      "packageSha256": "7c68ee218f0de27694494b17c4dd0e9d887d26b01472cc51f1dc9549f0b98d4d"
+    },
+    "retainedWindows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionChanged": false,
+      "librarySha256": "286e6b31b7111753d8e39dc20d9482df7c9c50f1b2c145fda45662ddd060f8b2",
+      "testSourceSha256": "baaf483d3aa26f3626d5cc2c21862c1c0a9be6c3c5d7abb151f53c16349986b3",
+      "internalTestSha256": "444dd83ef450eb5cdd569d3fd02563464ec034fc8094c24d6df620fc4565f6d8",
+      "newChecks": {
+        "normal": 2,
+        "scalar": 2
+      },
+      "unchangedFullLiveChecksReused": 5639,
+      "applicableChecks": 5641,
+      "internalOnlyBuilds": 1,
+      "coreHarnessNativeSelectorPackageBuilds": 0,
+      "scope": "Two independent production-row checks on the restored implementation. Integer rows execute normally/scalar; floating-row conversion additionally executes only where the actual fast-path hardware guard permits. Existing full-image scalar/fallback and package proof remains valid."
+    },
+    "retainedLinux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionChanged": false,
+      "librarySha256": "f97719d767daed99589c0614a00ccff965bc56cea464b34dd3b94a65bd457a2c",
+      "testSourceSha256": "baaf483d3aa26f3626d5cc2c21862c1c0a9be6c3c5d7abb151f53c16349986b3",
+      "internalTestSha256": "ac5e98529163c1e91469d404cfe3625bcb63a6bfba91d59ea178e09c127749d2",
+      "newChecks": {
+        "normal": 2,
+        "scalar": 2
+      },
+      "unchangedFullLiveChecksReused": 5639,
+      "applicableChecks": 5641,
+      "internalOnlyBuilds": 1,
+      "coreHarnessNativeSelectorPackageBuilds": 0,
+      "scope": "Two independent production-row checks on the restored implementation. Integer rows execute normally/scalar; floating-row conversion additionally executes only where the actual fast-path hardware guard permits. Existing full-image scalar/fallback and package proof remains valid."
+    },
+    "unchangedFullLiveChecksEachOsReused": 5639,
+    "newActualProductionChecksEachOs": 2,
+    "applicableChecksEachOs": 5641,
+    "sameActualPackageAndThreeExamplesReused": true,
+    "retainedCoverage": "Two independent BigInteger row tests remain against the actual restored implementation: clamped/long/odd/even geometry, alpha0/1/full, signed/exact sums, non-exact Int64 conversion, canaries, borrowed pixels, zero warm allocation/admission change and early cancellation. Integer fallback runs normally/scalar; floating conversion runs only where actual fast hardware guard permits. No removed API/kernel kept for tests."
+  },
+  "workflow": {
+    "linuxCoreBuilds": 2,
+    "linuxInternalBuilds": 4,
+    "windowsCoreBuilds": 0,
+    "windowsInternalOnlyBuilds": 1,
+    "privatePairedToolBuilds": 1,
+    "harnessNativeSelectorPublicTestPackageBuilds": 0,
+    "broadQualificationRepeats": 0,
+    "currentComparisonRowsChanged": 0,
+    "shortWorkloads": 4,
+    "actualsEach": 3,
+    "pairedComparisons": 1,
+    "completedTimingsRepeated": 0
+  },
+  "corrections": "Initial new test canceled before OperationContext construction; move cancellation after construction and rebuild only internal tests, without production changes. Initial JIT capture used a relative output path under testhost working directory; absolute output path fixes capture. No completed timing is repeated. Candidate test epochs and failed logs remain in raw history.",
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedState": false,
+    "allocationSavingClaim": false,
+    "physicalOrAdmittedPeakRemeasured": false,
+    "nativeAllocationsMeasured": false,
+    "allocationBoundary": "Standalone enlargement4265332B/op and paired4264240B/op use different harness batching. Paired subjects are identical; no causal allocation claim from standalone differences."
+  },
+  "invalidation": "Production source/core/PDB/XML, public/differential/probe consumers and actual package restore byte-exactly. Internal test modules then rebuild only for two retained additions. All125 displayed costs and relevant source-specific proof remain valid; no candidate row replaces qualified evidence.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "lanczos-row-publication-investigation.tar.xz",
+    "bytes": 12009872,
+    "members": 274,
+    "sha256": "0517bac13b2037f9efbb9318fd44ac2a8bd6906706961b1e15d69241b8f4f8e3",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-luma4-preparation-qualified.tar.xz",
+        "sha256": "64155fe69673aa19b0e6ed909e5bb82218c5d07b16db77450ca51d8cfb861d4b"
+      },
+      {
+        "file": "lanczos-paired-certificate-preparation-qualified.tar.xz",
+        "sha256": "8578848f8faf976e6be95054c6c7a01ae12c3d43e2de7f517815128ddda732b0"
+      }
+    ],
+    "dependencyScope": "Qualified current original sources/modules/package and frozen resize controls/workers/framework. Both experimental source/module epochs, all short/paired actuals, JIT and corrected test epochs are retained. Production/consumers/package restore byte-exactly; two useful row tests are retained and separately qualified normally/scalar both OSes, reusing unchanged full/live/package proof."
+  },
+  "publication": "postponed"
+}
