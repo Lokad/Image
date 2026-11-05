@@ -69,7 +69,7 @@ internal static class Vp8BlockQuantization
 
     private static bool ApplyFullBlock(Span<short> coefficients, Span<short> levels, Vp8QuantizationMatrix matrix)
     {
-        var prepared = PrepareFullBlock(coefficients, matrix);
+        var prepared = new FullBlockQuantizer(matrix).Prepare(coefficients);
         prepared.PublishRaster(coefficients); prepared.PublishLevels(levels);
         return prepared.Mask != 0;
     }
@@ -91,25 +91,38 @@ internal static class Vp8BlockQuantization
         internal void PublishLevels(Span<short> output) => Levels.CopyTo(output);
     }
 
-    // Caller guards AVX512F. The same widened Q17 kernel supplies immediate
-    // quantization and delayed luma4 publication; no second numerical model.
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static PreparedBlock PrepareFullBlock(ReadOnlySpan<short> coefficients, Vp8QuantizationMatrix matrix)
+    // Caller guards AVX512F. Snapshot fixed operands once for ordered candidate
+    // searches; the one-shot entry uses the same widened Q17 kernel. These
+    // values contain no borrowed views and fit the enclosing admitted scratch.
+    internal readonly struct FullBlockQuantizer
     {
-        // Keep the same widened Q17 products and signed comparisons. One block
-        // loads each matrix vector once and needs no two-half lane reassembly.
-        var input = Avx512F.ConvertToVector512Int32(Vector256.Create(coefficients));
-        var magnitude = Avx512F.Add(Avx512F.Abs(input).AsInt32(), Vector512.Create(matrix.Sharpening));
-        var scaled = Avx512F.Add(Avx512F.MultiplyLow(magnitude, Vector512.Create(matrix.Reciprocals)),
-            Vector512.Create(matrix.Biases));
-        var level = Avx512F.Min(Vector512.Create(2047), Avx512F.ShiftRightArithmetic(scaled, 17));
-        var negative = Avx512F.CompareGreaterThan(Vector512<int>.Zero, input);
-        var signed = Avx512F.Subtract(Avx512F.Xor(level, negative), negative);
-        var quantized = Avx512F.And(signed, Avx512F.CompareGreaterThan(magnitude, Vector512.Create(matrix.ZeroThresholds)));
-        var raster = Avx512F.MultiplyLow(quantized, Vector512.Create(matrix.Steps));
-        var diagonal = Avx512F.PermuteVar16x32(quantized, ZigzagOrder);
-        return new(Avx512F.ConvertToVector256Int16WithSaturation(raster),
-            Avx512F.ConvertToVector256Int16WithSaturation(diagonal));
+        private readonly Vector512<int> sharpening, reciprocals, biases, thresholds, steps;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal FullBlockQuantizer(Vp8QuantizationMatrix matrix)
+        {
+            sharpening = Vector512.Create(matrix.Sharpening);
+            reciprocals = Vector512.Create(matrix.Reciprocals);
+            biases = Vector512.Create(matrix.Biases);
+            thresholds = Vector512.Create(matrix.ZeroThresholds);
+            steps = Vector512.Create(matrix.Steps);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal PreparedBlock Prepare(ReadOnlySpan<short> coefficients)
+        {
+            var input = Avx512F.ConvertToVector512Int32(Vector256.Create(coefficients));
+            var magnitude = Avx512F.Add(Avx512F.Abs(input).AsInt32(), sharpening);
+            var scaled = Avx512F.Add(Avx512F.MultiplyLow(magnitude, reciprocals), biases);
+            var level = Avx512F.Min(Vector512.Create(2047), Avx512F.ShiftRightArithmetic(scaled, 17));
+            var negative = Avx512F.CompareGreaterThan(Vector512<int>.Zero, input);
+            var signed = Avx512F.Subtract(Avx512F.Xor(level, negative), negative);
+            var quantized = Avx512F.And(signed, Avx512F.CompareGreaterThan(magnitude, thresholds));
+            var raster = Avx512F.MultiplyLow(quantized, steps);
+            var diagonal = Avx512F.PermuteVar16x32(quantized, ZigzagOrder);
+            return new(Avx512F.ConvertToVector256Int16WithSaturation(raster),
+                Avx512F.ConvertToVector256Int16WithSaturation(diagonal));
+        }
     }
 
     private static Vector256<int> QuantizedLevels(ReadOnlySpan<short> coefficients, Vp8QuantizationMatrix matrix, int offset)

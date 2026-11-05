@@ -1579,7 +1579,7 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-combined-rate-preparation-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-quantizer-operand-preparation-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
     vq = vp8_owned['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5716
@@ -1587,8 +1587,8 @@ def render():
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     assert vp8_owned['raw']['mirrored'] and vp8_owned['raw']['allMembersVerified']
-    assert vp8_owned['sourceProof']['combinedPricesInExistingWords']
-    assert vp8_owned['sourceProof']['conservativeMaximum'] < 65536
+    assert vp8_owned['sourceProof']['preparedVectorOperands'] == 5
+    assert vp8_owned['sourceProof']['oneExactArithmeticCore']
     assert vp8_owned['storage']['ratePlanOwnedCapacityBytes'] == 20192
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
@@ -1789,13 +1789,12 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [combined coefficient prices](../benchmarks/VP8-COMBINED-RATE-PREPARATION.md)
-  remove repeated fixed-cost loads without extra storage. Independent complete
-  photograph/trellis saves are198/184µs
-  (1.7%/1.6%), with exact packets and unchanged paired allocations.
-  Eight current VP8 controls:5 gap, 3 uncertain; native boundaries remain explicit.
-  Previous shared-geometry/zero-router gains remain linked history. Six lossless
-  controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
+- **WebP:** [quantizer operand preparation](../benchmarks/VP8-QUANTIZER-OPERAND-PREPARATION.md)
+  shares exact one-shot/prepared quantization. Independent effort6diagram saves
+  153µs/1.2%, with unchanged paired allocation; photograph confirmation is
+  inconclusive. Eight current VP8 controls:6 gaps, 2 uncertain, exact packets retained.
+  This is a scoped stage gain, not proof that prepared-search hoisting alone wins.
+  Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
   saves408µs/7.4% raw on Fastest8; normalized confidence narrowly overlaps, so
@@ -1823,10 +1822,10 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{jpeg_prepared['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{vp8_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
+opaque-word and wide-column consumers. Affected AVX512-disabled quantizer/packet checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

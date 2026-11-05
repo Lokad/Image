@@ -40,7 +40,8 @@ public sealed class Vp8PreparedQuantizationTests
             maximumLevel = Math.Max(maximumLevel, expectedLevels.Max(v => Math.Abs((int)v)));
             input[16] = 30000; input[17] = -30000;
             var before = input.ToArray();
-            var prepared = Vp8BlockQuantization.PrepareFullBlock(input, new(values));
+            var quantizer = new Vp8BlockQuantization.FullBlockQuantizer(new(values));
+            var prepared = quantizer.Prepare(input);
             Assert.Equal(before, input);
             Assert.Equal(expectedLevels.Any(v => v != 0), prepared.Mask != 0);
             Assert.Equal(expectedLevels.Skip(1).Count(v => v != 0) <= 3, prepared.FlatNonDc);
@@ -50,6 +51,11 @@ public sealed class Vp8PreparedQuantizationTests
             Array.Fill(raster, (short)28000); Array.Fill(levels, (short)-28000);
             prepared.PublishRaster(raster); prepared.PublishLevels(levels);
             Assert.Equal(expectedRaster, raster[..16]); Assert.Equal(expectedLevels, levels[..16]);
+            // The search reuses fixed operands without retaining its matrix.
+            // Mutating that source must leave later prepared results independent.
+            var repeated = quantizer.Prepare(before);
+            repeated.PublishRaster(raster); repeated.PublishLevels(levels);
+            Assert.Equal(expectedRaster, raster[..16]); Assert.Equal(expectedLevels, levels[..16]);
             Assert.Equal((28000, 28000, -28000, -28000), ((int)raster[16], (int)raster[17], (int)levels[16], (int)levels[17]));
         }
         Assert.Equal(96, zeroBlocks); Assert.Equal(2047, maximumLevel);
@@ -57,15 +63,16 @@ public sealed class Vp8PreparedQuantizationTests
         // it must still be rejected before indexing the bounded residual tables.
         for (var p = 0; p < 16; p++) { values[p] = 1; values[16 + p] = 131072; }
         Array.Clear(input); input[0] = 16384;
-        var invalid = Vp8BlockQuantization.PrepareFullBlock(input, new(values));
+        var invalid = new Vp8BlockQuantization.FullBlockQuantizer(new(values)).Prepare(input);
         Assert.Throws<ArgumentException>(() => rate.Luma4Prepared(invalid, initialContext));
         var empty = default(Vp8BlockQuantization.PreparedBlock);
         Assert.Throws<ArgumentException>(() => rate.Luma4Prepared(empty, 3));
         for (var p = 0; p < 16; p++) { values[p] = 4; values[16 + p] = 32768; }
         input.AsSpan(0, 16).Fill(37);
-        for (var i = 0; i < 1000; i++) rate.Luma4Prepared(Vp8BlockQuantization.PrepareFullBlock(input, new(values)), initialContext);
+        var reused = new Vp8BlockQuantization.FullBlockQuantizer(new(values));
+        for (var i = 0; i < 1000; i++) rate.Luma4Prepared(reused.Prepare(input), initialContext);
         var start = GC.GetAllocatedBytesForCurrentThread(); var checksum = 0;
-        for (var i = 0; i < 10000; i++) checksum ^= rate.Luma4Prepared(Vp8BlockQuantization.PrepareFullBlock(input, new(values)), initialContext);
+        for (var i = 0; i < 10000; i++) checksum ^= rate.Luma4Prepared(reused.Prepare(input), initialContext);
         Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - start); Assert.Equal(0, checksum); Assert.Equal(retained, root.Bytes);
     }
 }

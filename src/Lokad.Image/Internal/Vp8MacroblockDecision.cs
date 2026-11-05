@@ -134,6 +134,7 @@ internal static class Vp8MacroblockDecision
         Span<byte> predictions = stackalloc byte[192]; Span<short> transforms = stackalloc short[192];
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
         var fused = !trellis && Avx512F.IsSupported && Avx2.IsSupported;
+        var fullQuantizer = fused ? new Vp8BlockQuantization.FullBlockQuantizer(matrix) : default;
         for (var b = 0; b < 16; b++)
         {
             var bx = b % 4; var by = b / 4; var x = bx * 4; var y = by * 4; var offset = Block(b);
@@ -183,7 +184,7 @@ internal static class Vp8MacroblockDecision
                 bool any, flat; long rateCost;
                 if (fused)
                 {
-                    prepared = Vp8BlockQuantization.PrepareFullBlock(candidate, matrix);
+                    prepared = fullQuantizer.Prepare(candidate);
                     any = prepared.Mask != 0; flat = prepared.FlatNonDc;
                     rateCost = rate.Luma4Prepared(prepared, topNz[bx] + leftNz[by]);
                 }

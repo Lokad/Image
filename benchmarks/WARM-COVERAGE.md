@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Prepared combined prices](VP8-COMBINED-RATE-PREPARATION.md) remove repeated fixed-cost loads within the same20,192B rate plan. Independent effort4photograph/effort6diagram save197.93/183.99µs (1.70%/1.61%), exact17,688/6,818B and unchanged paired allocations. Eight current VP8 controls:5 gap, 3 uncertain; current standalone allocation/boundary scope explicit. Previous geometry/zero-router gains remain history. |
+| Resident VP8 encoding | [Prepared quantizer operands](VP8-QUANTIZER-OPERAND-PREPARATION.md) share one exact one-shot/prepared core; independent complete effort6diagram gain153.24µs/1.23%, unchanged paired754344B. Photograph confirmation remains inconclusive; no prepared-hoist-only gain or equivalence claim. Current eight controls:6 gaps, 2 uncertain.320logical stackB within existing16KiB admission; no new heap/capacity/retention. Other current costs/ownership boundaries explicit; next count sparse residual work before another scoring kernel. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Complete-token output](PNG-COMPLETE-TOKEN-OUTPUT.md) saves408µs/7.36% raw on Fastest8; raw confidence separates, normalized confidence narrowly overlaps. Exact packets and384KiB admission remain;8B/op extra scalar state, no new arrays/owners/retention. Fifteen current complete fresh-one-shot comparisons:3pass/7gap/5uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier block/color/delivery costs remain history; three affected H rows await their named reconciliation. |
 | JPEG and image reading | [Signed prepared instructions](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md) compile insertion interpretation once within the same2KiB scan plan. Independent ordinary/live progressive444 savings are461.82/491.58µs (11.16%/11.06%), with separated raw/normalized confidence and exact frames. Current six affected controls:1 pass, 3 gap, 2 uncertain; other JPEG paths reuse unchanged evidence. Measured allocation984,238versus984,212B/op is explicit; no new owned capacity. Prior scan preparation/adverse trials remain history. |
@@ -20,19 +20,14 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [signed-instruction milestone](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
+The current [quantizer-preparation milestone](VP8-QUANTIZER-OPERAND-PREPARATION.md)
 qualifies **5,716 full/live checks per OS** (2,479internal/2,289public/948differential),
-56internal/333public affected normal/scalar checks eachOS and SAMEactualRelease
-package/all3examples Windows/Linux. Existing independent bitwise traversal,
-all512prefixes/phases/tails, failure/overflow and concurrent-cancellation-prefix
-oracles preserve exact state. Unchanged AVX512-off and other-path proofs reuse
-valid evidence. This is a development milestone, not a125-row release refresh
-or282-path pass. Six JPEG costs refresh once; other119reuse unchanged paths.
-
-The preceding eight VP8 rows reuse valid combined-price evidence; its other117costs reused unchanged paths,
-including six VP8L, fifteen PNG and six JPEG comparisons. Current VP8 rows have one
-qualified owner, retiring older alpha/trellis overrides; superseded overrides/unused negative renderer checks
-remain retired. Historical H boundaries await their named reconciliation.
+86internal/137public affected normal/scalar/AVX512-disabled checks eachOS and SAME
+actualRelease package/all3examples. Independent native/scalar math, matrix mutation/
+snapshot, exact packet/cancellation/refusal/async/ownership gates pass. This is a
+development milestone, not a125-row release refresh or282-path pass. Eight VP8
+costs refresh once;117other displayed paths reuse unchanged evidence. One current
+owner per affected family; negative histories remain reports, not renderer layers.
 
 The [JPEG scan stage](JPEG-PREPARED-SCAN-HEADERS.md) retains independent230µs
 ordinary/live gains, five decoder gaps, passing coding validation and all adverse
@@ -51,8 +46,9 @@ does not block independent codec, resize or drawing work.
 The [compact vector-scoring trial](VP8-COMPACT-VECTOR-SCORING-INCONCLUSIVE.md)
 has no useful complete-photo lead across two coherent implementations. Exact
 qualified source/modules are restored; no current cost owner or negative-trial
-renderer dependency is added. Next inspect repeated operand preparation across
-ordered candidates. Broader or materially revised designs remain eligible.
+renderer dependency is added. The subsequent operand stage establishes only a scoped trellis gain; its photo
+confirmation is inconclusive. Next count sparse residual visits before another
+scoring kernel. Broader or materially revised designs remain eligible.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
