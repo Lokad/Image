@@ -1,0 +1,92 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VTP305",
+  "productionChanged": false,
+  "statisticalTiming": false,
+  "currentCostsChanged": false,
+  "requiredMaterialPaths": 282,
+  "scope": "Existing complete513x259 opaque DiagramLossyTrellis8, Q75/effort6. One warmup and one observed full public encode; frozen input/complete6818B packet, source/borrowed-root cleanup unchanged. Counts only, not production times, allocations or peaks.",
+  "operation": {
+    "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+    "packetBytes": 6818,
+    "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+    "allPacketsExact": true,
+    "sourceUnchanged": true,
+    "retainedRootBytes": 0,
+    "borrowedRootSurvives": true
+  },
+  "counts": {
+    "luma16Models": 561,
+    "luma4Models": 561,
+    "reconstructionModels": 0,
+    "frames": 1,
+    "passes": 1,
+    "macroblocks": 561,
+    "method": 6,
+    "headerRetries": 0,
+    "initialHeaderLimit": 65536,
+    "exponentials": 17952
+  },
+  "proposedPreparation": {
+    "modelsBefore": 1122,
+    "modelsAfter": 1,
+    "exponentialsBefore": 17952,
+    "exponentialsAfter": 16,
+    "basis": "Both model generators use only fixed coefficient coordinates. Reuse once per frame would preserve values independently of segment, quantizer, probability epoch and mode; complete timing is still required."
+  },
+  "nextDesign": "Borrow frame-prepared importance through nested luma/reconstruction, preserving arbitrary checked/oracle inputs, ties/EOB/cancellation and safe admission. Prefer existing frame stack/model storage, no global cache/new owner/quota. Reconcile span/stack liveness and signature changes; screen complete effort6 plus an existing non-trellis guard if shared calling conventions change.",
+  "oldEvidence": "VP8-FIXED-IMPORTANCE-DEFERRED.md retains an old2.2% short lead rejected under superseded thresholds. It neither proves a current gain nor closes the family. This audit verifies current repeated work; do not blindly replay its fixed-literal/validation-removal implementation.",
+  "qualificationReuse": {
+    "evidence": "vp8-luma4-preparation-evidence.json",
+    "unchangedFullChecksEachOs": 5639,
+    "additionalActualProductionRowChecksEachOs": 2,
+    "applicableChecksEachOs": 5641,
+    "sameActualPackageAndThreeExamples": true
+  },
+  "identities": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "diagnosticBuilds": 1,
+    "otherBuilds": 0,
+    "librarySha256": "f97719d767daed99589c0614a00ccff965bc56cea464b34dd3b94a65bd457a2c",
+    "diagnosticAssemblySha256": "f76edf57c7174f4294a64532bc4ca1b65b8702b2c5523f5d68ab4d41d11e2e3a",
+    "quietGuardsPassed": true,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/Vtp305Audit.dll"
+    ],
+    "statisticalTiming": false
+  },
+  "diagnosticSources": {
+    "tmp/vtp305/Program.cs": "808b0ee9ccfdf59602bb44209429dc7f002bdd7bb01f8ca355006506a171027c",
+    "tmp/vtp305/Vp8FramePlan.cs": "081c303d0e50102ad9c13c95a4a27374f53f536a6ea026b929d9b1330edc1dc9",
+    "tmp/vtp305/Vp8MacroblockDecision.cs": "b76ab7dd8728c4f348e5a519a47102f9f65cf47362951179b3a98b8bcabe61b4"
+  },
+  "workflow": {
+    "diagnosticBuilds": 1,
+    "productionHarnessNativeSelectorPackageBuilds": 0,
+    "broadQualificationRepeats": 0,
+    "warmupEncodes": 1,
+    "observedEncodes": 1,
+    "completedObservationsRepeated": 0
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "vp8-trellis-preparation-audit.tar.xz",
+    "bytes": 635740,
+    "members": 264,
+    "sha256": "ad27bf589e6a51ada533bb46ca6ddb60a2b0adf267eff4156adfd4b51a6c4664",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "productionChanged": false,
+    "diagnosticBuilds": 1,
+    "allOtherBuilds": 0,
+    "qualifiedDependency": "vp8-luma4-preparation-qualified.tar.xz",
+    "qualifiedDependencySha256": "64155fe69673aa19b0e6ed909e5bb82218c5d07b16db77450ca51d8cfb861d4b",
+    "sourceReconstruction": "All current owned production sources, instrumented replacements/driver, compiler response, actual diagnostic assembly, original frozen diagram/manifest, qualified receipt/packet identity and frame/model counts retained. Qualified framework/package proof is the pinned dependency; no upstream implementation."
+  },
+  "publication": "postponed"
+}
