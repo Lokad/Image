@@ -42,9 +42,9 @@
   and batches literal output with compact dictionary history, preserving exact
   packets, cancellation and memory ownership.
 
-- Transparent WebP encoding reuses match storage across sequential alpha filters
-  and hands completed alpha workspace to frame coefficients, preserving exact
-  packets, admission, cancellation and independent outputs.
+- Transparent WebP encoding reuses match/token storage across predictor analysis,
+  residual rows and sequential alpha filters, then hands completed alpha workspace
+  to frame coefficients, preserving exact packets, admission and independent outputs.
 
 - Text raster preparation skips disjoint edge pairs and carries active crossings
   between bands, preserving exact pixels, cancellation and shared admission.

@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Only the selected map escapes analysis. Its operation charge remains live
@@ -46,19 +48,19 @@ internal static class Vp8lReferencePredictor
         return true;
     }
 
-    private sealed class Analysis : IDisposable
+    private ref struct Analysis
     {
         private readonly OperationContext context;
         private readonly int width, height, minBits, maxBits, levels;
-        private readonly long reserved;
+        private long reserved;
         private readonly bool greenOnly;
-        private int[]? data;
+        private Span<int> data;
         private byte[]? maps;
         private long[]? products;
         private readonly int[] offsets;
         private readonly int[] columns;
 
-        internal Analysis(int width, int height, int minBits, int maxBits, OperationContext context, bool greenOnly)
+        internal Analysis(int width, int height, int minBits, int maxBits, OperationContext context, bool greenOnly, Span<int> scratch)
         {
             this.context = context; this.width = width; this.height = height; this.greenOnly = greenOnly;
             this.minBits = minBits; this.maxBits = maxBits; levels = maxBits - minBits + 1;
@@ -66,12 +68,20 @@ internal static class Vp8lReferencePredictor
             for (var bits = minBits; bits <= maxBits; bits++) mapLength += Ceil(width, bits) * Ceil(height, bits);
             // Flat reusable level histograms, accumulated counts, mode counts and
             // candidate maps; the coarse allowance covers the small owner arrays.
-            reserved = levels * LevelSize * 4L + mapLength + (greenOnly ? 0 : 1024 * sizeof(long)) + 512;
+            var dataLength = levels * LevelSize;
+            var borrowed = scratch.Length >= dataLength;
+            reserved = (borrowed ? 0 : dataLength * 4L) + mapLength + (greenOnly ? 0 : 1024 * sizeof(long)) + 512;
             context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
             try
             {
                 context.Cancellation.ThrowIfCancellationRequested();
-                data = new int[levels * LevelSize]; maps = new byte[mapLength];
+                data = borrowed ? scratch[..dataLength] : new int[dataLength];
+                if (borrowed) for (var at = 0; at < data.Length; at += 4096)
+                {
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    data.Slice(at, Math.Min(4096, data.Length - at)).Clear();
+                }
+                maps = new byte[mapLength];
                 if (!greenOnly) products = new long[1024];
                 offsets = new int[levels]; columns = new int[levels];
                 var offset = 0;
@@ -85,9 +95,9 @@ internal static class Vp8lReferencePredictor
             catch { context.Release(reserved); throw; }
         }
 
-        private Span<int> Histogram(int level) => data.AsSpan(level * LevelSize, HistogramSize);
-        private Span<int> History(int level) => data.AsSpan(level * LevelSize + HistogramSize, 1024);
-        private Span<int> Frequency(int level) => data.AsSpan(level * LevelSize + HistogramSize + 1024, 14);
+        private Span<int> Histogram(int level) => data.Slice(level * LevelSize, HistogramSize);
+        private Span<int> History(int level) => data.Slice(level * LevelSize + HistogramSize, 1024);
+        private Span<int> Frequency(int level) => data.Slice(level * LevelSize + HistogramSize + 1024, 14);
         private Span<byte> Map(int level) => maps.AsSpan(offsets[level], columns[level] * Ceil(height, minBits + level));
 
         private void Visit(ReadOnlySpan<uint> pixels, int level, int x0, int y0)
@@ -199,17 +209,20 @@ internal static class Vp8lReferencePredictor
 
         public void Dispose()
         {
-            if (Interlocked.Exchange(ref data, null) is null) return;
-            maps = null; products = null; context.Release(reserved);
+            var owned = reserved; reserved = 0;
+            data = default; maps = null; products = null;
+            if (owned != 0) context.Release(owned);
         }
     }
 
     internal static Vp8lPredictionPlan SelectAndApply(Span<uint> working, int width,
-        int minBits, int maxBits, bool lowEffort, OperationContext context, bool greenOnly = false)
+        int minBits, int maxBits, bool lowEffort, OperationContext context, bool greenOnly = false, Span<int> scratch = default)
     {
         if (width is < 1 or > 16384 || working.Length == 0 || working.Length % width != 0
             || working.Length / width > 16384) throw new ArgumentException("Expected complete VP8L image rows.");
         if (minBits < 2 || minBits > maxBits || maxBits > 9) throw new ArgumentOutOfRangeException(nameof(minBits));
+        if (MemoryMarshal.AsBytes(working).Overlaps(MemoryMarshal.AsBytes(scratch)))
+            throw new ArgumentException("Prediction scratch must not overlap source samples.", nameof(scratch));
         var height = working.Length / width;
         Vp8lPredictionPlan? result = null;
         try
@@ -227,25 +240,27 @@ internal static class Vp8lReferencePredictor
             }
             else
             {
-                using var analysis = new Analysis(width, height, minBits, maxBits, context, greenOnly);
+                using var analysis = new Analysis(width, height, minBits, maxBits, context, greenOnly, scratch);
                 result = analysis.Select(working);
             }
             // Candidate maps and analysis counts are released before row scratch.
-            Apply(working, width, result, context);
+            Apply(working, width, result, context, scratch);
             return result;
         }
         catch { result?.Dispose(); throw; }
     }
 
-    private static void Apply(Span<uint> working, int width, Vp8lPredictionPlan plan, OperationContext context)
+    private static void Apply(Span<uint> working, int width, Vp8lPredictionPlan plan, OperationContext context, Span<int> scratch)
     {
-        var scratch = width * 8L;
-        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(scratch);
+        var borrowed = scratch.Length >= width * 2;
+        var reserved = borrowed ? 0 : width * 8L;
+        context.Cancellation.ThrowIfCancellationRequested();
+        if (reserved != 0) context.Reserve(reserved);
         try
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            var rows = new uint[width * 2];
-            var previous = rows.AsSpan(0, width); var current = rows.AsSpan(width);
+            Span<uint> rows = borrowed ? MemoryMarshal.Cast<int, uint>(scratch[..(width * 2)]) : new uint[width * 2];
+            var previous = rows[..width]; var current = rows[width..];
             var modes = plan.Modes; var columns = Ceil(width, plan.StoredBits);
             for (var y = 0; y < working.Length / width; y++)
             {
@@ -265,6 +280,6 @@ internal static class Vp8lReferencePredictor
                 var temporary = previous; previous = current; current = temporary;
             }
         }
-        finally { context.Release(scratch); }
+        finally { if (reserved != 0) context.Release(reserved); }
     }
 }

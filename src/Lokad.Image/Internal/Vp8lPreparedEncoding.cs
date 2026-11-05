@@ -35,15 +35,6 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
         var seed = matchingSeed; matchingSeed = null;
         try
         {
-            if (seed is not null)
-            {
-                if (pixels.Length * 8L < Vp8lReferenceMatcher.HeadCount * 4L || seed.CapacityBytes != pixels.Length * 8L)
-                { seed.Dispose(); seed = null; }
-                else
-                {
-                    seed.ResetForReuse(context, pixels.Length);
-                }
-            }
             // The table and first parsing candidate have disjoint uses. Select
             // by physical capacity before admission, never by available budget.
             if (seed is null && pixels.Length * 8L >= Vp8lReferenceMatcher.HeadCount * 4L)
@@ -94,11 +85,15 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
     }
 
     private Vp8lFramePrefix Predict(Span<uint> pixels, int width, int height, int effort, int transformBits,
-        Vp8lFramePrefix candidatePrefix, int quality, bool greenOnly = false)
+        Vp8lFramePrefix candidatePrefix, int quality, bool greenOnly = false, Vp8lTokenBuffer? scratch = null)
     {
         var maximum = ClampPredictionBits(width, height, transformBits);
         var minimum = ClampPredictionBits(width, height, maximum - 2 * Math.Max(0, effort - 4));
-        using var plan = Vp8lReferencePredictor.SelectAndApply(pixels, width, minimum, maximum, effort == 0, context, greenOnly);
+        // A retired filter's tokens are idle until matching. Both analysis and
+        // row preparation finish before this synchronous borrow returns.
+        var words = scratch is null ? Span<int>.Empty
+            : scratch.BorrowScratchWords(context, checked((int)(scratch.CapacityBytes / sizeof(int))));
+        using var plan = Vp8lReferencePredictor.SelectAndApply(pixels, width, minimum, maximum, effort == 0, context, greenOnly, words);
         var reserved = plan.Modes.Length * 4L; context.Reserve(reserved);
         try
         {
@@ -131,6 +126,12 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
             {
                 matchingSeed?.Dispose(); matchingSeed = null;
                 return PrepareAllFamilies(working, width, analysis, context);
+            }
+            if (matchingSeed is not null)
+            {
+                if (working.Length * 8L < Vp8lReferenceMatcher.HeadCount * 4L || matchingSeed.CapacityBytes != working.Length * 8L)
+                { matchingSeed.Dispose(); matchingSeed = null; }
+                else matchingSeed.ResetForReuse(context, working.Length);
             }
             return PrepareCore(working, width, effort, context, quality, analysis,
                 comparePalettePrediction: effort == 5 && quality >= 75, greenOnly: greenOnly, matchingSeed: matchingSeed, matchStorage: matchStorage);
@@ -222,7 +223,13 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                 { Vp8lReferenceColorTransform.SubtractGreen(working, context); candidatePrefix = candidatePrefix with { SubtractGreen = true }; }
                 if (predict)
                 {
-                    candidatePrefix = result.Predict(working, width, height, effort, analysis.TransformBits, candidatePrefix, quality, greenOnly && !subtractGreen);
+                    // This seed is needed by the later matching phase anyway.
+                    // Let green-only analysis and residual rows borrow it first;
+                    // selected transform maps retain independent ownership.
+                    if (greenOnly && matchingSeed is null && working.Length * 8L >= Vp8lReferenceMatcher.HeadCount * 4L)
+                        matchingSeed = new Vp8lTokenBuffer(context, working.Length);
+                    candidatePrefix = result.Predict(working, width, height, effort, analysis.TransformBits, candidatePrefix, quality,
+                        greenOnly && !subtractGreen, greenOnly ? matchingSeed : null);
                     if (effort != 0 && !analysis.RedBlueZero)
                     {
                         using var plan = Vp8lReferenceColorTransform.SelectAndApply(working, width, analysis.TransformBits, quality, context);

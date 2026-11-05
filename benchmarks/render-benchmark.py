@@ -1650,14 +1650,14 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-chain-link-preparation-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-prediction-workspace-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted'] and webp_owned['pairedComparison']['allPairsRetained']
-    assert webp_owned['pairedComparison']['pairs'] == 12 and webp_owned['pairedComparison']['ratioConfidence'][1] < 1
-    assert webp_owned['qualification']['fullChecksEachOs'] == 5659
+    assert webp_owned['pairedComparison']['pairs'] == 12
+    assert webp_owned['qualification']['fullChecksEachOs'] == 5668
     assert webp_owned['qualification']['actualPackage']['sha256'] == webp_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert webp_owned['storage']['newOwnedCapacityBytes'] == 0
-    assert all(c['pairs'] == 12 and c['ratioConfidence'][1] < 1 for c in webp_owned['pairedComparisons'].values())
-    assert webp_owned['pairedComparisons']['photograph']['quality'] == 85 and webp_owned['pairedComparisons']['alpha']['quality'] == 75
+    assert webp_owned['storage']['completeAlphaAllocationSaved'] == 131488
+    assert webp_owned['storage']['fourControlAdmissionPeaksUnchanged']
     streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
     assert streaming['qualification']['fullChecksEachOs'] == 5587
@@ -1876,20 +1876,23 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [chain-link preparation](../benchmarks/WEBP-CHAIN-LINK-PREPARATION.md)
-  confirms 787.72 µs / 0.95% on the Q85 lossless photograph and 201.41 µs / 0.33%
-  on Q75 transparent VP8/ALPH. Complete-operation allocations stay unchanged.
-  All eight affected costs refresh once: five lossless boundaries pass and stop,
-  including photograph (upper 0.991); opaque lossless is uncertain (upper 1.026).
-  Transparent byte/word retain gaps (uppers 1.147/1.152). All original settings,
+- **WebP:** [operation-owned prediction workspace](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
+  saves 131,488 B (1.84%) per complete transparent encode at equal batching.
+  Predictor analysis, residual rows and matching reuse the token seed; selected
+  maps/payloads stay independent. Twelve paired comparisons establish no CPU
+  gain, regression or equivalence. Four admitted peaks stay unchanged; retained
+  scratch is zero. Physical peaks and native allocations are unmeasured.
+  Eight affected costs refresh once: {sum(c['status'] == 'pass' for n, c in webp_owned['cases'].items() if not n.startswith('alpha'))}/6 lossless controls pass/stop;
+  opaque is {webp_owned['cases']['opaque']['status']} (upper {webp_owned['cases']['opaque']['upper']:.3f}), photograph {webp_owned['cases']['photograph']['status']} (upper {webp_owned['cases']['photograph']['upper']:.3f}).
+  Transparent byte/word retain gaps (uppers {webp_owned['cases']['alpha']['upper']:.3f}/{webp_owned['cases']['alpha16']['upper']:.3f}). Original settings,
   complete packets, quality and independent output boundaries remain.
-  Direct four-control admission peaks stay unchanged; retained scratch is zero.
-  Physical peaks and native allocations are unmeasured.
+  [Earlier chain links](../benchmarks/WEBP-CHAIN-LINK-PREPARATION.md) retain their
+  scoped incremental gains and superseded costs.
   [Shared input preparation](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md) retains
   its scoped earlier gains. Eligible alpha/opaque vector scratch is 4 KiB, scalar
   scratch 1 KiB; selected-output capacity is unchanged. The six opaque VP8 rows
   reuse those unchanged costs. [ALPH-to-frame storage](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
-  retains its 449 KB/op saving; byte/word alpha now allocates 7,165,880/7,165,472
+  retains its 449 KB/op saving; byte/word alpha now allocates {webp_owned['cases']['alpha']['allocatedBytes']:,}/{webp_owned['cases']['alpha16']['allocatedBytes']:,}
   B/op in the current benchmark boundary. Superseded uncertainty and experiments
   remain linked from the current report, without replacing current costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
@@ -1944,7 +1947,7 @@ Current priorities and scope:
   pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,659 full/live checks per OS**, affected
+The current production build passes **{webp_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
