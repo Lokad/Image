@@ -1,0 +1,277 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PPT324",
+  "productionChanged": false,
+  "accepted": false,
+  "requiredMaterialPaths": 282,
+  "currentComparisonRowsChanged": false,
+  "hypothesis": {
+    "removedWork": "Three byte loads for greedy hash, followed by a word and byte load of the same target for search. Prepare one explicit-LE ushort prefix and third byte, reuse for both ordered dictionary insertion and candidate probes.",
+    "endState": "Existing Pair/Byte acquisition once per insertion position with >=3 acquired bytes. Small typed insertion helper consumes prepared prefix/third; existing insertion callers share the helper. Search retains prefix and initial tail. No rolling hash or session/pool/owner/cache.",
+    "correctness": {
+      "all65536LittleEndianPrefixContributionsExact": true,
+      "allThirdBytesCoveredByIdenticalXorAndMask": true,
+      "noFourByteReadNeeded": true,
+      "prepareOnlyWhenThreeAcquiredBytesRemain": true,
+      "wordReadPortableThroughBinaryPrimitives": true,
+      "chainInsertionAndTieOrderUnchanged": true,
+      "cancellationPublicationBlockAndSlideBoundariesRequired": true
+    },
+    "prior": "Rolling-hash field/local, generic cancellation and long-match caller-transfer adverse/inconclusive trials are distinct and remain. Existing prepared probe stage already reuses prefix inside candidate loop; this design shares preparation between hash and search.",
+    "risks": "Additional live prefix/third locals or helper inlining may increase spills/code size. Validate generated code and complete workloads; fewer source/JIT loads alone is not speed proof.",
+    "ownership": "No new storage/capacity/reservation. Preserve exact packets, source/output independent lifetimes, local384KiB and borrowed shared admission/terminal refusal/cancellation cleanup.",
+    "productionPrototype": "Single explicit-LE prefix/third acquisition feeds greedy hash, search and literal token. Short-match backfill shares typed insertion helper. Final <3 bytes acquire only literal. No rolling state, 4byte read, storage or owner."
+  },
+  "cases": {
+    "EncodeFast16": {
+      "baseline": {
+        "managedUs": 19969.032613636362,
+        "nativeUs": 18597.248354166666,
+        "ratio": 1.0737627542174728,
+        "upper": 1.0786295767400038,
+        "allocatedBytes": 2437652,
+        "actuals": 12,
+        "filtered": 11,
+        "librarySha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+        "packetBytes": 968216,
+        "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+        "runId": "ppt324-baseline-EncodeFast16-confirm"
+      },
+      "stages": {
+        "ppt324": {
+          "observation": {
+            "managedUs": 22208.643814814815,
+            "nativeUs": 19853.51683333333,
+            "ratio": 1.1186251786649362,
+            "upper": 1.3210853392248163,
+            "allocatedBytes": 2437584,
+            "actuals": 3,
+            "filtered": 3,
+            "librarySha256": "03f76937e5a5cfb9592df6b834fd6eb981272e5b370b8ebc9976deef188d85ea",
+            "packetBytes": 968216,
+            "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+            "runId": "ppt324-candidate-EncodeFast16-short"
+          },
+          "rawPointChange": 0.11215421620620103,
+          "normalizedPointChange": 0.04178057422019421,
+          "nativeClockChange": 0.06755130948634136
+        },
+        "ppt324s2": {
+          "observation": {
+            "managedUs": 21154.66251851852,
+            "nativeUs": 19281.5595,
+            "ratio": 1.0971447884450694,
+            "upper": 2.2087531412711416,
+            "allocatedBytes": 2437584,
+            "actuals": 3,
+            "filtered": 3,
+            "librarySha256": "c3b964ccb2256efe566fed69dceb44eaf005fa6eb3851c011b587f617b9d72be",
+            "packetBytes": 968216,
+            "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+            "runId": "ppt324s2-candidate-EncodeFast16-short"
+          },
+          "rawPointChange": 0.059373427237157106,
+          "normalizedPointChange": 0.021775791845785042,
+          "nativeClockChange": 0.0367963653977883
+        }
+      }
+    },
+    "EncodeFast8": {
+      "baseline": {
+        "managedUs": 5450.186681818182,
+        "nativeUs": 4348.463177083333,
+        "ratio": 1.2533592811688044,
+        "upper": 1.2698714920378011,
+        "allocatedBytes": 820908,
+        "actuals": 12,
+        "filtered": 11,
+        "librarySha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+        "packetBytes": 236828,
+        "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+        "runId": "ppt324-baseline-EncodeFast8-confirm"
+      },
+      "stages": {
+        "ppt324": {
+          "observation": {
+            "managedUs": 5667.391114583333,
+            "nativeUs": 4344.276395833333,
+            "ratio": 1.3045650410316942,
+            "upper": 1.8317794552368525,
+            "allocatedBytes": 820849,
+            "actuals": 3,
+            "filtered": 3,
+            "librarySha256": "03f76937e5a5cfb9592df6b834fd6eb981272e5b370b8ebc9976deef188d85ea",
+            "packetBytes": 236828,
+            "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+            "runId": "ppt324-candidate-EncodeFast8-short"
+          },
+          "rawPointChange": 0.03985265926573578,
+          "normalizedPointChange": 0.040854813645404775,
+          "nativeClockChange": -0.000962818604987703
+        },
+        "ppt324s2": {
+          "observation": {
+            "managedUs": 6110.5890625,
+            "nativeUs": 4704.664833333333,
+            "ratio": 1.2988362144749312,
+            "upper": 1.4953354461659512,
+            "allocatedBytes": 820849,
+            "actuals": 3,
+            "filtered": 3,
+            "librarySha256": "c3b964ccb2256efe566fed69dceb44eaf005fa6eb3851c011b587f617b9d72be",
+            "packetBytes": 236828,
+            "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+            "runId": "ppt324s2-candidate-EncodeFast8-short"
+          },
+          "rawPointChange": 0.12117059822646437,
+          "normalizedPointChange": 0.036284036021752675,
+          "nativeClockChange": 0.08191437796396772
+        }
+      }
+    }
+  },
+  "stages": {
+    "ppt324": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+      "candidateSha256": "03f76937e5a5cfb9592df6b834fd6eb981272e5b370b8ebc9976deef188d85ea",
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "a5ffb45d8635996e8cb9819f5f100dba0129a285ec0630aef9823fc2ae8e89be"
+      },
+      "focused": {
+        "internal-normal": 581,
+        "internal-scalar": 581,
+        "public-normal": 211,
+        "public-scalar": 211
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "afa01f72e43be43c5bc2a456387c4aef32fa2eb7b088ddd5aed7768398a84673"
+    },
+    "ppt324s2": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "03f76937e5a5cfb9592df6b834fd6eb981272e5b370b8ebc9976deef188d85ea",
+      "candidateSha256": "c3b964ccb2256efe566fed69dceb44eaf005fa6eb3851c011b587f617b9d72be",
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "352cecb4a1dde072177d66e9799c31968207233019851974c977297480dcea1a"
+      },
+      "focused": {
+        "internal-normal": 581,
+        "internal-scalar": 581,
+        "public-normal": 211,
+        "public-scalar": 211
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "827f028897e0a9d06a618ba9c41897a22d082b6cbe25fc530907ab52946410ec"
+    }
+  },
+  "jit": {
+    "originalBytes": 1246,
+    "stage1Bytes": 1389,
+    "stage2Bytes": 1345,
+    "currentActualProducer": true,
+    "sha256": {
+      "tmp/ppt324-candidate-jit.txt": "74c4e3f70e23085e54edf3afddd3de02f14bb6d5a72ec40d9ebf6130eae937d1",
+      "tmp/ppt324s2-candidate-jit.txt": "0acbbac30e3f288779de0d4580a5e55fc3ef878ef84d909dc28c988cecc84ee2"
+    },
+    "conclusion": "Two target loads replace repeated hash/search/literal reads; one checked3byte view also merges range checks. Larger live values/inlined body remain. Fewer loads/checks do not establish elapsed gain."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "sourceRestoredExactly": true,
+      "windowsProductionNeverRebuilt": true,
+      "productionSha256": "a326ca3b9d52b856d4f82d4bc7d2a424d0c6358f671fe98e59256377746dcebc",
+      "embeddedSha256": "6de5d2847e8b41007b7841665a7c044118a650a6ac48a39e651c09ab8151c4e6",
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "allBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "sourceMainEmbeddedAndManifestRestoredExactly": true,
+      "productionSha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+      "embeddedSha256": "23a31346cc90290ee6363debbbaf50002dc4469b62426f60a1d14f65cc1564f4",
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "sourceSha256": "00a56557ee8366262083478c44cbec45edec446604f2240c81742717e9bccebb",
+      "restoredPacketChecks": {
+        "normal": 14,
+        "scalar": 14
+      },
+      "allBuilds": 0
+    }
+  },
+  "workflow": {
+    "productionVersionsLinux": 2,
+    "embeddedTestVersionsLinux": 2,
+    "productionVersionsWindows": 0,
+    "publicHarnessNativeSelectorToolBuilds": 0,
+    "newProfiles": 0,
+    "originalConfirmationJobs": 2,
+    "candidateShortJobs": 4,
+    "independentCandidateConfirmationJobs": 0,
+    "completedJobRestarts": 0,
+    "fullPackageRepeats": 0,
+    "diagnosticRecovery": "Initial relative JIT path under test host produces no file; retain failure and recover actual current DLL through14frozen packet cases with absolute output, no builds or timing. Stage2 corrects output path before first focused run."
+  },
+  "decision": "Both coherent stages have no useful complete-operation screen lead on either depth; restore exact qualified source/modules/manifest, no third variant or independent candidate confirmation. All actuals/adverse points remain. No CPU gain, causal regression, allocation saving or parity claim. Reuse CWH323 5704full/live checks perOS and actual package/all3examples without broad repeats. No permanent family prohibition.",
+  "scope": "Only existing equivalent513x259 one-shot Fastest1 byte/word controls, native1, None filter. Fresh native codec/zlib/packet and word endian workspace included. Complete managed normalization, owned output and disposal included. All full frozen packets/exact decoded samples/source/independent owners/quiet guards unchanged. Native allocation and physical/admitted peaks unmeasured.",
+  "raw": {
+    "file": "png-shared-triple-preparation-inconclusive.tar.xz",
+    "sha256": "42b735c31db4301ee1eb4a6087ef516732bda6f27aeaeb68e22cfd04148d0925",
+    "bytes": 2037184,
+    "members": 203,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-alpha-cache-history-qualified.tar.xz",
+        "sha256": "0d06142905908d33f8d56fef64e797e3c8016520196ed640ebde14201fbaf88e"
+      },
+      {
+        "file": "png-fast-word-current-attribution.tar.xz",
+        "sha256": "8dccc1386e6295bdeb09837c65323ee2408319ccb1ecbe0df97fe5aeefad242b"
+      },
+      {
+        "file": "png-block-preparation-qualified.tar.xz",
+        "sha256": "85f6f2f28169e5bb79a3f7cfc9a28e17389a03a3b7bd5535731449e2f7f521db"
+      }
+    ]
+  },
+  "sourceAndIlAudit": {
+    "currentPngSourcesMatchRetainedProfile": true,
+    "fourTargetMethodsRawIlIdentical": true,
+    "fieldLayoutIdentical": true,
+    "oldMethodIl": {
+      "ProcessFast": {
+        "sha256": "5f58406610b9a38bb28c27e8b25ad92ccc72f9f049f4a1edc302c5bbf8d33970",
+        "bytes": 575
+      },
+      "Insert": {
+        "sha256": "c60cff72fa46f9f2d154f31cb633918bbccdfb1e397cb829e1dabb7c85cedc63",
+        "bytes": 75
+      },
+      "Pair": {
+        "sha256": "f45b354d21ac863aaa425e356eb6ba4ddf75e4fd131c14d9e243e88ac89c2f7a",
+        "bytes": 24
+      },
+      "Byte": {
+        "sha256": "f1cf36b3b0a196ffb2d0dd19e635588b1509e360d01e7a823325e54e7b477797",
+        "bytes": 9
+      }
+    },
+    "sourceHashes": {
+      "PngDeflater.cs": "2450d84344c8c6d02f1ab264bf01bb443fed660b69788674ac6c537d6119696a",
+      "PngDeflater.Block.cs": "742910df31720b2276cc192bf4d058b4875ed1c678bde3537f8eef8b19edf501"
+    },
+    "newProfilingOrTiming": false
+  }
+}

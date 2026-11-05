@@ -43,6 +43,13 @@ passes focused checks but has no useful normalized short lead on either depth.
 It restores exactly, with no current-row replacement, longer confirmation or
 package repeat. This implementation is inconclusive, not a permanent family ban.
 
+The [shared triple-preparation stages](PNG-SHARED-TRIPLE-PREPARATION-INCONCLUSIVE.md)
+also restore exactly after no useful screen lead on byte/word Fastest1. Real
+duplicate loads/range checks disappear, but generated code stays larger and
+complete timings do not improve. Both stages preserve frozen packets and focused
+normal/scalar checks; source/main/embedded tests/manifest/package identities are
+restored without builds, broad/package repeats or current-cost replacements.
+
 The [transparent capture before full-block quantization](WEBP-ALPHA-CURRENT-ATTRIBUTION.md)
 retains source-specific matching, coefficient, predictor and cache-history leads.
 The [current capture and fixed-distance audit](WEBP-FIXED-DISTANCE-ATTRIBUTION.md)

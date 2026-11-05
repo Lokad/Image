@@ -50,6 +50,9 @@ Current priorities and scope:
   Existing 384 KiB admission is unchanged; two reused arrays add 2,620 B capacity,
   zero retained scratch after disposal. Complete physical/admitted peaks are
   unmeasured. [Earlier tree reuse](../benchmarks/PNG-TREE-WORKSPACE.md) is history.
+  Two [shared-target preparation stages](../benchmarks/PNG-SHARED-TRIPLE-PREPARATION-INCONCLUSIVE.md)
+  preserve exact packets but show no useful complete-operation screen lead.
+  Qualified production and these current costs remain unchanged after restoration.
 - **Resizing:** [paired Lanczos preparation](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   confirms 175.99 µs / 4.20% elapsed improvement on prepared word enlargement,
   with unchanged allocations/retention and exact pixels. Standalone raw/native
