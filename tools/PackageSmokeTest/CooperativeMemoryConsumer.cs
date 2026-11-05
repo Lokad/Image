@@ -101,7 +101,9 @@ internal static class CooperativeMemoryConsumer
             (16, 8, 17, "9f1aaa6ef72a650982022d0a36563789f9ae50d79a094f97141af8ed50051b6c"),
             (8, 4, 9, "df49ddc41185b3feaa2a0fc283fb3cd2432e463aa4aa7294a041cd76036effd1"),
             (16, 4, 9, "367e7576a57e596e44740e0f6b4e66c72772689e2d784011e29e39608bcdff76"),
-            (16, 256, 129, "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f")
+            (16, 256, 129, "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f"),
+            (8, 128, 64, "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71"),
+            (16, 128, 64, "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9")
         })
         {
             var sourceBytes = 513L * 259 * (depth / 2);
@@ -150,6 +152,7 @@ internal static class CooperativeMemoryConsumer
         }
         Console.WriteLine("Packaged streaming bicubic preserves exact blocks, shared admission and independent survivors.");
         Console.WriteLine("Packaged word column bicubic preserves frozen pixels, 4KiB admission and independent survivors.");
+        Console.WriteLine("Packaged wide column bicubic preserves frozen byte/word pixels, 4KiB admission and independent survivors.");
     }
 
     private static void VerifyCompositingRows()

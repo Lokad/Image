@@ -1,0 +1,497 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RSG321",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 282,
+  "producers": {
+    "windowsSha256": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205",
+    "linuxSha256": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+    "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "9f4f6193cf592389d3060f08423fccbdc8535d568b8557233e57554a7dd8fc4e",
+    "src/Lokad.Image/Internal/WideWordColumnBicubicResize.cs": "00fad1cdac846d3c28952d1536da216ff3983590bd56e4c2bf0e51f1e32c8386",
+    "tests/Lokad.Image.Tests/ColumnBicubicGeometryTests.cs": "4cf42f89da721d0141a2a35c1edede528f9ad6bfbde10591565fbfbda66b0937",
+    "tests/Lokad.Image.Tests/WideColumnBicubicGeometryTests.cs": "63eb7bac77c4f290bbc8e8ac9c86012113939cf88944967ff166c995059a6e87"
+  },
+  "unchangedSharedGeometrySha256": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+  "baseline": {
+    "TightWide8": {
+      "managedUs": 504.8280022727273,
+      "nativeUs": 349.3946871744792,
+      "ratio": 1.4448645637837891,
+      "lower": 1.4071182047122233,
+      "upper": 1.4629515816583083,
+      "allocatedBytes": 113,
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        400,
+        400,
+        400,
+        400,
+        400,
+        400,
+        400,
+        400,
+        400,
+        400,
+        400,
+        400
+      ],
+      "librarySha256": "c9a26528b85acac6f538e0a2ba0a1757ce49bb7d6b794b37627f6467a7446b91",
+      "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.00637887953849786,
+      "nativeAlphaMaximum": 0,
+      "nativeAlphaRmse": 0,
+      "managedExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "status": "gap",
+      "rawPrefix": "rsg321-baseline-TightWide8-confirm"
+    },
+    "TightWide16": {
+      "managedUs": 627.2193447420635,
+      "nativeUs": 420.2285169270833,
+      "ratio": 1.4925673044004688,
+      "lower": 1.4092625355542074,
+      "upper": 1.5590339250676426,
+      "allocatedBytes": 113,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        336,
+        336,
+        336,
+        336,
+        336,
+        336,
+        336,
+        336,
+        336,
+        336,
+        336,
+        336
+      ],
+      "librarySha256": "c9a26528b85acac6f538e0a2ba0a1757ce49bb7d6b794b37627f6467a7446b91",
+      "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.04373139485350694,
+      "nativeAlphaMaximum": 1,
+      "nativeAlphaRmse": 0.04419417382415922,
+      "managedExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "status": "gap",
+      "rawPrefix": "rsg321-baseline-TightWide16-confirm"
+    }
+  },
+  "short": {
+    "TightWide8": {
+      "managedUs": 474.4837554012346,
+      "nativeUs": 347.6124895833333,
+      "ratio": 1.3649790200863492,
+      "lower": 1.3005637151019145,
+      "upper": 1.4255974387670185,
+      "allocatedBytes": 113,
+      "actualIterations": 3,
+      "filteredIterations": 3,
+      "operationsPerActual": [
+        432,
+        432,
+        432
+      ],
+      "librarySha256": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+      "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.00637887953849786,
+      "nativeAlphaMaximum": 0,
+      "nativeAlphaRmse": 0,
+      "managedExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "status": "gap",
+      "rawPrefix": "rsg321-candidate-TightWide8-short"
+    },
+    "TightWide16": {
+      "managedUs": 529.5513428819445,
+      "nativeUs": 415.79895572916666,
+      "ratio": 1.2735754517547926,
+      "lower": 1.118338892198479,
+      "upper": 1.4593492938235813,
+      "allocatedBytes": 113,
+      "actualIterations": 3,
+      "filteredIterations": 3,
+      "operationsPerActual": [
+        384,
+        384,
+        384
+      ],
+      "librarySha256": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+      "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.04373139485350694,
+      "nativeAlphaMaximum": 1,
+      "nativeAlphaRmse": 0.04419417382415922,
+      "managedExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "status": "gap",
+      "rawPrefix": "rsg321-candidate-TightWide16-short"
+    }
+  },
+  "cases": {
+    "TightWide8": {
+      "managedUs": 480.54639907407403,
+      "nativeUs": 347.1152574869792,
+      "ratio": 1.3844001054666981,
+      "lower": 1.364930975100124,
+      "upper": 1.3940194070993932,
+      "allocatedBytes": 113,
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "operationsPerActual": [
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432,
+        432
+      ],
+      "librarySha256": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+      "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "5067190b92fe644a75b0001848c4a555feb638c72592239dbf0ea0d63c518e71",
+      "nativeOutputSha256": "3330a4b2a59e25d0b5e561fe454f6325487162a3accbdd3306c8a54d0b3510d6",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.00637887953849786,
+      "nativeAlphaMaximum": 0,
+      "nativeAlphaRmse": 0,
+      "managedExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "status": "gap",
+      "rawPrefix": "rsg321-candidate-TightWide8-confirm"
+    },
+    "TightWide16": {
+      "managedUs": 532.7284496527778,
+      "nativeUs": 404.0699635416667,
+      "ratio": 1.3184064585831168,
+      "lower": 1.273991818934839,
+      "upper": 1.3290206366948534,
+      "allocatedBytes": 113,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        384,
+        384,
+        384,
+        384,
+        384,
+        384,
+        384,
+        384,
+        384,
+        384,
+        384,
+        384
+      ],
+      "librarySha256": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+      "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "3763385e1f45803392214ccf0b87ef6e4f1ec22f2f37701108cc52e9a20209d9",
+      "nativeOutputSha256": "ab2e004b36778f26ae90919136edb1c5fbd2d822e81d55781f6035206f9f6a5d",
+      "nativeRgbMaximum": 1,
+      "nativeRgbRmse": 0.04373139485350694,
+      "nativeAlphaMaximum": 1,
+      "nativeAlphaRmse": 0.04419417382415922,
+      "managedExact": true,
+      "quietGuardsPassed": true,
+      "allOriginalGatesPassed": true,
+      "status": "gap",
+      "rawPrefix": "rsg321-candidate-TightWide16-confirm"
+    }
+  },
+  "independentComparisons": {
+    "TightWide8": {
+      "project": "Lokad.Image",
+      "caseId": "TightWide8",
+      "rawSavedUs": 24.28160319865326,
+      "rawReduction": 0.04809876450858086,
+      "normalizedReduction": 0.04184783808300174,
+      "nativeClockChange": -0.00652393917587446,
+      "views": [
+        {
+          "view": "statistics",
+          "rawBeforeLower": 503210.6392259399,
+          "rawCandidateUpper": 482092.9600737852,
+          "rawSeparated": true,
+          "normalizedBeforeLower": 1.4079248711167958,
+          "normalizedCandidateUpper": 1.390773271461433,
+          "normalizedSeparated": true
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "rawBeforeLower": 502684.2632964121,
+          "rawCandidateUpper": 483266.188318043,
+          "rawSeparated": true,
+          "normalizedBeforeLower": 1.4071182047122233,
+          "normalizedCandidateUpper": 1.3940194070993932,
+          "normalizedSeparated": true
+        }
+      ]
+    },
+    "TightWide16": {
+      "project": "Lokad.Image",
+      "caseId": "TightWide16",
+      "rawSavedUs": 94.49089508928569,
+      "rawReduction": 0.15065047958325317,
+      "normalizedReduction": 0.11668542202678667,
+      "nativeClockChange": -0.038451824982216554,
+      "views": [
+        {
+          "view": "statistics",
+          "rawBeforeLower": 615059.9563430725,
+          "rawCandidateUpper": 535580.1619363949,
+          "rawSeparated": true,
+          "normalizedBeforeLower": 1.4092625355542074,
+          "normalizedCandidateUpper": 1.3290171762306395,
+          "normalizedSeparated": true
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "rawBeforeLower": 615061.5054502154,
+          "rawCandidateUpper": 535581.5564676449,
+          "rawSeparated": true,
+          "normalizedBeforeLower": 1.4092660849620946,
+          "normalizedCandidateUpper": 1.3290206366948534,
+          "normalizedSeparated": true
+        }
+      ]
+    }
+  },
+  "design": {
+    "geometryCounts": {
+      "TightWide8": {
+        "width": 128,
+        "height": 64,
+        "columns": 4,
+        "maximumTaps": 17,
+        "footerColumns": 38,
+        "prefixColumns": 88,
+        "oldGeometryBuilds": 2048,
+        "newGeometryBuilds": 704,
+        "oldStripPasses": 32,
+        "newPreparationPlusTailPasses": 11,
+        "ownedCapacityDelta": 0,
+        "retainedScratchDelta": 0,
+        "logicalCountsNotTiming": true
+      },
+      "TightWide16": {
+        "width": 128,
+        "height": 64,
+        "columns": 3,
+        "maximumTaps": 20,
+        "footerColumns": 22,
+        "prefixColumns": 105,
+        "oldGeometryBuilds": 2752,
+        "newGeometryBuilds": 576,
+        "oldStripPasses": 43,
+        "newPreparationPlusTailPasses": 9,
+        "ownedCapacityDelta": 0,
+        "retainedScratchDelta": 0,
+        "logicalCountsNotTiming": true
+      }
+    },
+    "removedWork": "Share existing vertical geometry preparation in wide byte/word drivers; remove repeated tap construction before the same specialized row kernels.",
+    "endState": "One existing result-tail geometry helper borrowed by four small/wide drivers. No new cache/owner/API. Leave horizontal strips and all filtering kernels unchanged.",
+    "horizontalAssessment": "Horizontal preparation common source is real but occurs once per strip, not each source row. Do not introduce generic offset kernels for source deduplication alone.",
+    "packedDeepAssessment": "Only existing TightWide8/16 513x259 to128x64 controls plus bounded odd/tail/refusal/cancel functional checks. No shape grid. Packed/deep controls too narrow to hold useful tail preparation; no changes justified there.",
+    "pixelKernelsUnchanged": true,
+    "geometryHelperUnchanged": true,
+    "addedOwnedCapacityBytes": 0,
+    "workspaceAdmissionBytes": 4096,
+    "fixedArrayPayloadBytes": {
+      "byte": 4068,
+      "word": 4056
+    },
+    "borrowedMetadataBytes": {
+      "byte": 9728,
+      "word": 11264
+    },
+    "resultOwnedCapacityBytes": {
+      "byte": 32768,
+      "word": 65536
+    },
+    "operationScratchRetainedAfterDisposalBytes": 0,
+    "crossOperationCacheOrPoolAdded": false,
+    "physicalPeakMeasured": false,
+    "completeAdmittedPeakMeasured": false
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205",
+      "full": [
+        2461,
+        2287,
+        948
+      ],
+      "total": 5696,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 45,
+        "internal-scalar": 45,
+        "public-normal": 521,
+        "public-scalar": 521
+      },
+      "unchangedAvx512ChecksReused": 54,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "c25765c503baeec58eeecb0d2089cdd58553cbb646fcbb7a7f832acc07ec288c",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+      "full": [
+        2461,
+        2287,
+        948
+      ],
+      "total": 5696,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 45,
+        "internal-scalar": 45,
+        "public-normal": 521,
+        "public-scalar": 521
+      },
+      "unchangedAvx512ChecksReused": 54,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "8195fd14a6da5db2e8bbb67b1ccdfefd604470ee50059585a857055febd64c6f",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "8a14bb8e434c8a2127065e148f9c2b564e6a10b0223e9e86b04ff0ab3bae93e7"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 5696,
+    "newCases": 11,
+    "generalization": "Six opaque complete-driver cases: frozen513x259 to128x64, odd307x197 to75x47, narrow49x41 to11x9, both depths; compare independent public direct pixels with 4KiB admission. Three storage-lifetime cases cover wide17/20-tap records. Two refusal/admission-triggered-cancellation recovery controls. Functional evidence, not broader CPU claim.",
+    "specializedCoverage": "Linux normal AVX512 exercises these kernels; Windows normal and scalar checks preserve portable public behavior. Tests explicitly bypass SIMD-only drivers without required hardware.",
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "dd2082886cbb05f5d640b303eff51622c7e54b721ee1b1ffcaf98e3bf9bd59ab",
+      "symbolsSha256": "867320291ba08845e15839659dbb279c6ae66ab53c5e7d27c11742fcb2ad62e6",
+      "bytes": 410908,
+      "librarySha256": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205",
+      "actualConsumerPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "dd2082886cbb05f5d640b303eff51622c7e54b721ee1b1ffcaf98e3bf9bd59ab",
+      "librarySha256": "73822ecd3704036fa52ec226ac9defa2c909f1459983c6be7dd0eff295a41205",
+      "actualConsumerPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    }
+  },
+  "workflow": {
+    "coreVersionsEachOs": 1,
+    "internalTestVersionsEachOs": 2,
+    "publicHarnessNativeSelectorBuilds": 0,
+    "independentBaselineRuns": 2,
+    "shortCandidateRuns": 2,
+    "independentCandidateRuns": 2,
+    "acceptedPackageBuilds": 1,
+    "coherentBroadPackageMilestones": 1,
+    "completedTimingJobRestarts": 0,
+    "archivePostcheckRecovery": "Resolved hard-link member SHA256 verifies unchanged archive after comparing link header zero sizes with resolved bytes. No rebuild or retiming.",
+    "testOnlyCorrection": "Original Linux four failures retained: narrow fixture exceeded wide support guard and cancellation occurred during context construction. Correct fixture within<=20 and cancel at workspace admission. Production modules unchanged; only embedded tests rebuilt."
+  },
+  "evidenceScope": "Only existing resident513x259 byte/word to independently owned128x64 bicubic outputs at input+output+4KiB. Complete public Resize includes geometry, admission, output ownership/disposal. Explicit zimg3.0.6 FFmpeg zscale backend retains graph/input/scratch; halo/deinterleave/filter/output allocation/repacking/release timed. Managed rational pixels exact; native RGB/alpha maximum1/RMSE<=0.25 unchanged. Quiet VM, CPU0, tiering off, no concurrency.",
+  "invalidation": "Two wide drivers only. Shared helper source remains unchanged. Small/packed/deep/streaming/cached/Lanczos/codecs/text paths reuse unchanged evidence.",
+  "limitations": "Incremental raw elapsed and native-clock movement separate. Both controls still gaps.113B/op unchanged; borrowed metadata adds no owned capacity. Physical/complete admitted/native allocations not measured. Other123 displayed comparisons reuse unchanged-path evidence. Full282-path performance objective remains open.",
+  "raw": {
+    "file": "bicubic-wide-preparation-qualified.tar.xz",
+    "sha256": "98dd9c3b03a41e09459c548311257a77f921479d412630a4a7c6182b7e921d25",
+    "bytes": 3104088,
+    "members": 196,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-predictor-runs-qualified.tar.xz",
+        "sha256": "6bcc0827a453e4e1024307c37d9391f102e57f8aa0cbe9ae40f6b91cb444cdb0"
+      },
+      {
+        "file": "current-tight-wide-byte-bicubic-costs.tar.xz",
+        "sha256": "f9c5d960a6963be585265fc758a76007e8182a143758495e1ebf1fc9c2fc389a"
+      },
+      {
+        "file": "current-tight-wide-word-bicubic-costs.tar.xz",
+        "sha256": "bd805c5d2a55cae9c862d9f39e8fe0b33f52c8e643e215c3651def548aa7dc52"
+      }
+    ]
+  }
+}

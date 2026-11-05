@@ -1091,6 +1091,8 @@ def render():
         assert tight_wide['qualificationReused']['fullChecksEachOs'] == 5314
         assert set(tight_wide['cases']) == {f'TightWide{depth}', f'Tight64x32_{depth}'}
         for case, observations in tight_wide['cases'].items():
+            if case == f'TightWide{depth}':
+                continue  # Current wide costs come directly from shared preparation.
             observation = observations[-1]
             receipt, stats = observation['receipt'], observation['managed']['statistics']
             assert receipt['librarySha256'] == tight_wide['producers']['linuxSha256']
@@ -1105,6 +1107,23 @@ def render():
                          f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                          f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                          f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    wide_preparation = json.loads((ROOT / 'benchmarks/bicubic-wide-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert wide_preparation['productionAccepted'] and wide_preparation['requiredMaterialPaths'] == 282
+    assert set(wide_preparation['cases']) == {'TightWide8', 'TightWide16'}
+    assert wide_preparation['design']['workspaceAdmissionBytes'] == 4096
+    assert wide_preparation['design']['addedOwnedCapacityBytes'] == 0
+    assert wide_preparation['qualification']['fullChecksEachOs'] == 5696
+    assert wide_preparation['qualification']['actualPackage']['sha256'] == wide_preparation['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert wide_preparation['qualification']['actualPackage']['wideColumnBothDepthsSharedSurvivorPassed']
+    for case, cost in wide_preparation['cases'].items():
+        assert cost['actualIterations'] == 12 and cost['managedExact'] and cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['librarySha256'] == wide_preparation['producers']['linuxSha256']
+        assert cost['status'] == 'gap' and cost['lower'] > 1 and cost['allocatedBytes'] == 113
+        assert all(v['rawSeparated'] and v['normalizedSeparated'] for v in wide_preparation['independentComparisons'][case]['views'])
+        depth = 8 if case == 'TightWide8' else 16
+        rows.append(('editing', f'| Bicubic RGBA{depth} reduction, input+output+4 KiB † → 128×64 | '
+                     f'{cost["managedUs"]:,.2f} | {cost["nativeUs"]:,.2f} | '
+                     f'{cost["ratio"]:.3f} / {cost["upper"]:.3f} | {cost["allocatedBytes"]:,} |'))
     governed_jpeg16 = json.loads((ROOT / 'benchmarks/current-governed-jpeg-rgba16-cost-evidence.json').read_text(encoding='utf-8'))
     assert not governed_jpeg16['productionChanged'] and governed_jpeg16['independentQuietConfirmation']
     assert governed_jpeg16['allBuilds'] == governed_jpeg16['newProfiles'] == governed_jpeg16['newInputs'] == 0
@@ -1929,6 +1948,12 @@ Current priorities and scope:
   saves 126.92 µs / 14.46% raw on the existing word 256×129 control, with unchanged
   4 KiB admission (upper 1.223, 113 B/op; no allocation-saving claim). Its new row
   surfaces an already-required boundary. Other affected H costs still need reconciliation.
+  [Wide preparation reuse](../benchmarks/BICUBIC-WIDE-PREPARATION.md) extends the
+  same result-tail helper to the two wider-support kernels, saving
+  {wide_preparation['independentComparisons']['TightWide8']['rawSavedUs']:.2f}/{wide_preparation['independentComparisons']['TightWide16']['rawSavedUs']:.2f} µs
+  ({wide_preparation['independentComparisons']['TightWide8']['rawReduction']*100:.2f}%/{wide_preparation['independentComparisons']['TightWide16']['rawReduction']*100:.2f}%) on the existing byte/word 128×64 controls.
+  Admission stays 4 KiB and allocation 113 B/op; no owned capacity or retained
+  scratch is added. Both remain gaps (uppers {wide_preparation['cases']['TightWide8']['upper']:.3f}/{wide_preparation['cases']['TightWide16']['upper']:.3f}).
 - **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
   grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
@@ -1949,10 +1974,10 @@ Current priorities and scope:
   pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **{webp_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{wide_preparation['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
+opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.

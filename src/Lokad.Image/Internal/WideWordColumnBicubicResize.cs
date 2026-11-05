@@ -34,6 +34,8 @@ internal static class WideWordColumnBicubicResize
             Span<int> rows = stackalloc int[20];
             var input = source.Pixels;
             var stride = source.Stride;
+            var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, 20,
+                3, context.Cancellation);
             for (var tile = 0; tile < result.Width; tile += 3)
             {
                 var length = Math.Min(3, result.Width - tile);
@@ -63,14 +65,10 @@ internal static class WideWordColumnBicubicResize
                 for (var y = 0; y < result.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (y + .5) * source.Height / result.Height - .5;
-                    var first = (int)Math.Ceiling(center - 2 * scaleY);
-                    var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
-                    double normalizerY = 0;
+                    geometry.Read(y, tile < geometry.PrefixColumns, vertical,
+                        out var first, out var count, out var normalizerY);
                     for (var t = 0; t < count; t++)
                     {
-                        var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
-                        vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
                         var slot = sy % 20; rows[t] = slot * 3;
                         if (rowIds[slot] == sy) continue;

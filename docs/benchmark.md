@@ -68,6 +68,12 @@ Current priorities and scope:
   saves 126.92 µs / 14.46% raw on the existing word 256×129 control, with unchanged
   4 KiB admission (upper 1.223, 113 B/op; no allocation-saving claim). Its new row
   surfaces an already-required boundary. Other affected H costs still need reconciliation.
+  [Wide preparation reuse](../benchmarks/BICUBIC-WIDE-PREPARATION.md) extends the
+  same result-tail helper to the two wider-support kernels, saving
+  24.28/94.49 µs
+  (4.81%/15.07%) on the existing byte/word 128×64 controls.
+  Admission stays 4 KiB and allocation 113 B/op; no owned capacity or retained
+  scratch is added. Both remain gaps (uppers 1.394/1.329).
 - **JPEG and reading:** [exact grayscale row batches](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   save 32.71 µs / 1.93% raw (4.04% reference-normalized) on the existing RGBA8
   grayscale encode, with unchanged 155,436 B/op and exact complete packets. The
@@ -88,10 +94,10 @@ Current priorities and scope:
   pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **5,685 full/live checks per OS**, affected
+The current production build passes **5,696 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
+opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. Complete physical/
 admitted peaks are not inferred from allocation reductions.
@@ -209,10 +215,10 @@ settings do not establish matched quality.
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † H → 1027×129 | 1,112.92 | 850.82 | 1.308 / 1.369 | 1,060,371 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
-| Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 505.70 | 347.78 | 1.454 / 1.475 | 32,905 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 611.34 | 417.61 | 1.464 / 1.524 | 65,674 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 480.55 | 347.12 | 1.384 / 1.394 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 532.73 | 404.07 | 1.318 / 1.329 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † H → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
 | Bicubic RGBA16, width down / height up, default workspace † H → 256×519 | 974.30 | 826.85 | 1.178 / 1.196 | 1,263,193 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |

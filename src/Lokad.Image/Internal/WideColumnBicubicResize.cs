@@ -39,6 +39,8 @@ internal static class WideColumnBicubicResize
             Span<int> rows = stackalloc int[taps];
             var input = source.Pixels;
             var stride = source.Stride;
+            var geometry = ColumnBicubicGeometry.Prepare(result, source.Height, scaleY, taps,
+                columns, context.Cancellation);
             for (var tile = 0; tile < result.Width; tile += columns)
             {
                 var length = Math.Min(columns, result.Width - tile);
@@ -68,15 +70,11 @@ internal static class WideColumnBicubicResize
                 for (var y = 0; y < result.Height; y++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    var center = (y + .5) * source.Height / result.Height - .5;
-                    var first = (int)Math.Ceiling(center - 2 * scaleY);
-                    var count = (int)Math.Floor(center + 2 * scaleY) - first + 1;
+                    geometry.Read(y, tile < geometry.PrefixColumns, vertical,
+                        out var first, out var count, out var normalizerY);
                     if ((uint)(count - 1) >= (uint)taps) return false;
-                    double normalizerY = 0;
                     for (var t = 0; t < count; t++)
                     {
-                        var wy = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
-                        vertical[t] = wy; normalizerY += wy;
                         var sy = Math.Clamp(first + t, 0, source.Height - 1);
                         var slot = sy % taps; rows[t] = slot * columns;
                         if (rowIds[slot] == sy) continue;

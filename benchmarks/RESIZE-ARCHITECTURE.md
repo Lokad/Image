@@ -6,6 +6,11 @@ build, timing run or new qualification. Current costs and confidence remain in
 files (5,010 lines), including three files that supply kernels rather than drivers.
 Helpers such as `BicubicMath` and geometry views are separate.
 
+[Wide preparation reuse](BICUBIC-WIDE-PREPARATION.md) subsequently extends the
+existing vertical-geometry helper to the two wide drivers, retaining their typed
+kernels and 4 KiB admission. Horizontal source duplication alone removes no
+per-row work; packed/deep controls are too narrow for useful tail preparation.
+
 | Existing family / files | Distinct execution or storage boundary |
 | --- | --- |
 | Cached, 2 | Shared byte/word plans, admitted row products/cache; support through 2,048. |

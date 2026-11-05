@@ -33,16 +33,20 @@ public sealed class ColumnBicubicGeometryTests
     [InlineData(8, 8, 256)]
     [InlineData(8, 8, 257)]
     [InlineData(16, 6, 256)]
-    public void UnwrittenTailsSurvivePrefixPublicationAndRetireBeforeTailWrites(int depth, int strip, int width)
+    [InlineData(8, 4, 128, 17)]
+    [InlineData(8, 3, 75, 20)]
+    [InlineData(16, 3, 128, 20)]
+    public void UnwrittenTailsSurvivePrefixPublicationAndRetireBeforeTailWrites(int depth, int strip, int width, int maximumTaps = 10)
     {
         using var root = new TestMemoryBudget(300_000);
         using var result = ImageBuffer.Create(width, 129, depth, new() { MemoryBudget = root });
         result.Pixels.Fill(0xa5); var charged = root.Bytes; var admissions = root.GrowthAttempts;
-        var geometry = ColumnBicubicGeometry.Prepare(result, 259, 259d / 129, 10, strip, default);
+        var scale = maximumTaps == 10 ? 259d / 129 : 259d / 64;
+        var geometry = ColumnBicubicGeometry.Prepare(result, 259, scale, maximumTaps, strip, default);
         Assert.True(geometry.PrefixColumns >= 2 * strip);
         Assert.Equal(0, geometry.PrefixColumns % strip);
         var prefixBytes = geometry.PrefixColumns * 4 * (depth / 8);
-        Span<double> expected = stackalloc double[10]; Span<double> actual = stackalloc double[10];
+        Span<double> expected = stackalloc double[maximumTaps]; Span<double> actual = stackalloc double[maximumTaps];
         for (var y = 0; y < result.Height; y++)
         {
             var row = result.Pixels.Slice(y * result.Stride, result.Stride);
