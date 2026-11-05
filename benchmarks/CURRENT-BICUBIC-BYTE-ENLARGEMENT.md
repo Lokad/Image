@@ -34,6 +34,21 @@ The unchanged RQP349 build reuses5,716full/live checks eachOS, affected normal/s
 AVX512-off and SAME actual Release package/all3examples. No new package proof or
 actual-package125-row release refresh; published releases stay immutable.
 
+A subsequent [current attribution](bicubic-current-row-attribution-evidence.json)
+reuses the cached driver/build:1,601of1,996two-second CPU samples map to the actual
+4,980B strip kernel,134to tiny-alpha replay,103to Kernel and53to original-order
+repair.587complete diagnostic resizes preserve all gates. Shares are not elapsed
+phase costs. Static geometry counts38,406vertical preparations over74strips;
+198,912source-pixel decodes exceed132,867unique samples. These counts are leads,
+not predicted savings. A proposed254,688B layout fits unmaterialized output capacity
+for457prefix rows, retiring before62tail rows; it needs no additional owner/heap
+or extra4KiB allowance. Only static disjointness is established; exact production
+behavior, added L2 traffic, tail recomputation and simplification need a bounded
+prototype. No prepared results or cross-operation output cache may evade timing.
+Profile/maps/JIT/source/guards are retained in mirrored/member-verified raw
+`bicubic-current-strip-attribution.tar.xz`,13,134,172B/255members,
+SHA256`e9d90b11956583f344e85cbea48db26ae034a99dcbef18adedf386551e686da9`.
+
 Only this current row replaces historical cost. Other affected H paths remain
 historical. Next attribute repeated strip geometry, filtering and certified repair
 before a coherent preparation/workspace redesign; exact pixels and4KiB remain.
