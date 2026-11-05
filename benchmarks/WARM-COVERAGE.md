@@ -39,6 +39,12 @@ source/main/embedded tests/manifest exactly, without current-row replacement or
 broad/package repetition. The current-DLL attribution and private count projection
 remain explicitly distinct from phase timing or CPU proof.
 
+The [buffered JPEG correction stage](JPEG-BUFFERED-CORRECTION-EXECUTION-INCONCLUSIVE.md)
+also restores exactly: 0.23% raw/0.14% normalized short lead with wide uncertainty
+is not useful acceptance evidence. Exact frozen pixels, cancellation/error prefixes,
+focused normal/scalar checks and original ownership gates pass. No independent
+candidate confirmation, current-row replacement or full/package repeat follows.
+
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/23ce5aa86684610b6302d74c395c190d4138621a/benchmarks/WARM-COVERAGE.md)
 and linked family reports, including all cited raw evidence and reproducibility.

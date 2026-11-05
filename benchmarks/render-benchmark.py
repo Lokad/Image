@@ -1920,7 +1920,9 @@ Current scope and remaining work:
   Progressive444 ordinary/live gaps offer material absolute savings; retained
   [refinement attribution](../benchmarks/JPEG-REFINEMENT-STATE-ATTRIBUTION.md) is
   a source-pinned lead, not new phase timing. [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
-  retains upper1.103 against labeled SIMD libjpeg-turbo. Header inspection,
+  retains upper1.103 against labeled SIMD libjpeg-turbo. The
+  [buffered correction trial](../benchmarks/JPEG-BUFFERED-CORRECTION-EXECUTION-INCONCLUSIVE.md)
+  restores after a flat short result; current costs are unchanged. Header inspection,
   container Identify and pixel-coding validation have distinct boundaries.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;

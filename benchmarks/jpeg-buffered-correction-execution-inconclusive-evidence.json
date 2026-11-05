@@ -1,0 +1,178 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JRF327",
+  "accepted": false,
+  "productionChanged": false,
+  "currentComparisonRowsChanged": false,
+  "requiredMaterialPaths": 282,
+  "hypothesis": {
+    "intendedDesign": "Current block-owned buffered executor, no scan state/new owner. Group only already cached ordinary correction bits to remove per-bit refill/pending eligibility tests. Preserve every logical cancellation checkpoint and consumed-prefix publication on cancellation/marker/overflow. Load coefficient address/value only for a set correction bit. Simplify zero-run failure test by the rank selection result after corrections; keep marker/short/scalar fallbacks.",
+    "removedWork": [
+      "Repeated input-length/ordinary-refill/pending eligibility per correction bit within an already cached run.",
+      "Coefficient lane lookup/bounds/address for zero correction bits.",
+      "Zero-prefix population calculation on successful zero-run selections."
+    ],
+    "distinctFrom173": [
+      "No scan cursor/scan orchestration or cross-block lookahead lifetime.",
+      "No whole-field consumption, reversal, PDEP correction spread or atomic group application.",
+      "Every logical per-bit cancellation check and exact committed prefix remain."
+    ],
+    "finiteRunProof": {
+      "comparisons": 191488,
+      "invalidSelections": 160795,
+      "allRankFailuresEquivalent": true,
+      "insufficientZeroErrorsRemainAfterCorrections": true,
+      "noProductionExecutionOrTiming": true
+    },
+    "scope": "Only existing ordinary/live-token progressive444 complete resident decodes initially. Exact frozen managed frames, source and independent output ownership; structured malformed/refusal/cancellation/marker/restart/EOB/overflow behavior and scalar fallback. Other JPEG paths assessed explicitly at acceptance; no fixture/settings grid.",
+    "temporaryDuplication": "Retain a slow one-bit marker/short refill path and a bounded ordinary cached loop. They differ at actual required byte acquisition; no general caching framework. Reuse existing normal path, do not retune confirmed passing decode cases."
+  },
+  "sourceReuse": {
+    "referenceArchive": "jpeg-current-instruction-attribution.tar.xz",
+    "archiveSha256": "d4b241db0a86d651283453a69f34a712a934990af2edd973c4122112f12c9840",
+    "sourcesMatchExactly": {
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "d4c115743325f6ce62a7ed02e89c18794a52625d1d2ae198f487cb1dc3850938",
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "5ed9d6a8016f5d8c6c2b2806053c02406f63558ab44ad7d50d8b43a8cfcfc7e8",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "3206b10ee0cfdf1193095a2969066e97dc4ea02fcee530bd9d0492f5dd07d1ce"
+    },
+    "scope": "Source-level refinement attribution is reusable as a lead. No claim of newly measured current phase costs or unchanged whole-method machine code."
+  },
+  "prior": {
+    "referenceArchive": "jpeg-scan-refinement-inconclusive.tar.xz",
+    "archiveSha256": "f5940984229f2e0a74c5c8e6462c82011dec9729e42868e982503b9f588609e2",
+    "selected173SourceSha256": "32aa4e6573841b602db656a7bc19be0020e6991e35bf22d59bc5bd40dc0528d1",
+    "design": "Scan-owned cursor with retained lookahead and atomic correction fields. Reverse fields then PDEP to skip zero corrections; cancellation before groups. Four prior scan stages show no useful complete-operation lead.",
+    "doNotReplayUnchanged": true
+  },
+  "baseline": {
+    "managedUs": 4689.418256944445,
+    "nativeUs": 3363.4060677083335,
+    "ratio": 1.3942468326875541,
+    "upper": 1.4178700711207357,
+    "actuals": 12,
+    "allocatedBytes": 984212,
+    "librarySha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+    "inputBytes": 132961,
+    "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+    "pixelsSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "candidate": {
+    "managedUs": 4678.711236111112,
+    "nativeUs": 3360.2675416666666,
+    "ratio": 1.3923627146041198,
+    "upper": 1.4896935810240917,
+    "actuals": 3,
+    "allocatedBytes": 984212,
+    "librarySha256": "0b20be7914896b90dbe8fae0546985a3b8a9c1c7e9860404795dd50100bf8e81",
+    "inputBytes": 132961,
+    "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+    "pixelsSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "pointChanges": {
+    "raw": -0.0022832300824259244,
+    "normalized": -0.0013513518835129856,
+    "nativeClock": -0.0009331391983262716
+  },
+  "focused": {
+    "internal-normal": 371,
+    "internal-scalar": 371,
+    "public-normal": 331,
+    "public-scalar": 331
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/JpegEntropyReader.cs": "83497372466614c9be56b6f0772272f68f72a1cb996198d81c0bb5ab8e1fd56d"
+  },
+  "candidateEmbeddedTestsSha256": "93cf100a0eadeb43d0ce28b2f85c061f198c8df7a9707dae46e767781f7bc43c",
+  "jit": {
+    "originalBytes": 2662,
+    "candidateBytes": 2693,
+    "actualMainModule": true,
+    "capturedDuringRequiredChecks": true
+  },
+  "storage": {
+    "additionalOwnedCapacityBytes": 0,
+    "retainedScratchBytes": 0,
+    "allocationSavingClaim": false,
+    "physicalAndCompleteAdmittedPeaksRemeasured": false,
+    "nativeAllocationsMeasured": false
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "sourceRestoredExactly": true,
+      "windowsProductionNeverRebuilt": true,
+      "productionSha256": "a326ca3b9d52b856d4f82d4bc7d2a424d0c6358f671fe98e59256377746dcebc",
+      "embeddedSha256": "6de5d2847e8b41007b7841665a7c044118a650a6ac48a39e651c09ab8151c4e6",
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "allBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "sourceMainEmbeddedAndManifestRestoredExactly": true,
+      "productionSha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+      "embeddedSha256": "23a31346cc90290ee6363debbbaf50002dc4469b62426f60a1d14f65cc1564f4",
+      "packageSha256": "f52cafe6ca2ec6aab913b10bfcf6b9e16ddd341a0dee085e45ee750bb6ccccb0",
+      "sourceSha256": "00a56557ee8366262083478c44cbec45edec446604f2240c81742717e9bccebb",
+      "restoredPacketChecks": {
+        "normal": 8,
+        "scalar": 8
+      },
+      "allBuilds": 0
+    }
+  },
+  "expectationRestoration": {
+    "baseline": {
+      "byteExactRestored": true,
+      "sha256": "652fe5ac4af646bc56fdfe1cdb672ee8a27d2c02cda5acde89ac128f4847a55e"
+    },
+    "candidate": {
+      "byteExactRestored": true,
+      "sha256": "652fe5ac4af646bc56fdfe1cdb672ee8a27d2c02cda5acde89ac128f4847a55e"
+    }
+  },
+  "decision": "Raw0.23percent/normalized0.14percent short lead is not useful evidence for retaining additional execution. Restore exact qualified source/main/embedded/manifest/consumer bindings. No independent candidate confirmation, variant, ordinary-path retiming, favorable sampling or current-cost replacement. No claim of causal regression or equivalence; materially revised designs remain eligible.",
+  "workflow": {
+    "productionVersionsLinux": 1,
+    "embeddedTestVersionsLinux": 1,
+    "productionVersionsWindows": 0,
+    "publicHarnessNativeSelectorDiagnosticPackageBuilds": 0,
+    "baselineActuals": 12,
+    "candidateActuals": 3,
+    "independentCandidateConfirmationJobs": 0,
+    "fullPackageRepeats": 0,
+    "completedJobRestarts": 0
+  },
+  "qualificationReused": "CWH3235704full/live perOS, affected scalar/AVX512-off and SAME actual private Release-package/all3examples. Windows source only; no candidate Windows module. Unchanged normal JPEG paths reuse proof; actual public focused checks qualify candidate and restored pixels.",
+  "raw": {
+    "file": "jpeg-buffered-correction-execution-inconclusive.tar.xz",
+    "sha256": "0c5b389c46bb7ebe376a14b4f7b2c2da79d0f864c78ed886b118a4eae9456c3c",
+    "bytes": 2868724,
+    "members": 158,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-alpha-cache-history-qualified.tar.xz",
+        "sha256": "0d06142905908d33f8d56fef64e797e3c8016520196ed640ebde14201fbaf88e"
+      },
+      {
+        "file": "jpeg-current-instruction-attribution.tar.xz",
+        "sha256": "d4b241db0a86d651283453a69f34a712a934990af2edd973c4122112f12c9840"
+      },
+      {
+        "file": "jpeg-scan-refinement-inconclusive.tar.xz",
+        "sha256": "f5940984229f2e0a74c5c8e6462c82011dec9729e42868e982503b9f588609e2"
+      },
+      {
+        "file": "jpeg-container-scan-qualified.tar.xz",
+        "sha256": "1fac10336e4dad0a9a22bc4bc4c4494cea37cf35ad311107417ce0b02c220006"
+      }
+    ]
+  }
+}
