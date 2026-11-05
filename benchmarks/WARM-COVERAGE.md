@@ -45,7 +45,10 @@ The [transparent capture before full-block quantization](WEBP-ALPHA-CURRENT-ATTR
 retains source-specific matching, coefficient, predictor and cache-history leads.
 The [current capture and fixed-distance audit](WEBP-FIXED-DISTANCE-ATTRIBUTION.md)
 retain the matcher lead, but counts do not justify updating two fixed-distance
-recurrences at every visited position. No production or current-cost change.
+recurrences at every visited position. Its prepared four-pixel query follow-up
+has no favorable complete-operation screen point; all source/modules restore
+exactly, with current qualification/costs reused. Counts and short screens imply
+no CPU gain or statistical regression. The linked report retains raw evidence.
 The [scalar-window stage](WEBP-SCALAR-WINDOW-PREPARATION.md) is a measured1.11%
 photographic regression, restored exactly. Fewer checks or allocations alone do
 not establish elapsed gains; a revised design needs distinct supporting evidence.

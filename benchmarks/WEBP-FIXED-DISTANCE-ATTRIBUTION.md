@@ -61,3 +61,37 @@ guards are retained. The qualified dependency supplies unchanged runtime tools.
 
 Raw `webp-fixed-distance-attribution.tar.xz`: 1,210,380 B / 276 members,
 SHA256 `d5d6b5a1e978d3e726cd8c529796ae517ad5e58d23287ab86dbf525db24b3796`, mirrored/member-verified locally and on the VM.
+
+## Prepared-query follow-up
+
+A count-only projection on the unchanged matching path confirms 132,678 full-size
+outer queries and 1,717,035 chain-prefix comparisons. About 65.5% of chain scans
+match two or three pixels. Query reuse motivates one bounded implementation:
+prepare four full uint target pixels once, borrow that value across candidates,
+compare the first vector safely, then retain the scalar long/tail loop. Search
+order, pruning, ties, complete indexes/packets and all ownership remain exact.
+
+The unchanged complete four-control screen has no favorable point: photograph
+88,068.03→89,679.02 µs, diagram 7,800.28→7,950.46 µs, transparent VP8/ALPH
+65,599.59→67,925.57 µs and authored bars 834.81→842.56 µs. Each subject has three
+direct batches with quiet guards, exact packets/source/root cleanup and identical
+allocations/admitted peaks. These points establish no statistical regression;
+they justify no independent confirmation. Counts imply no CPU savings.
+
+Both OSes pass 394 internal/195 public checks per normal/scalar mode, including
+actual primitive overlap/tail/full-bit/probe/cancellation checks and frozen
+complete indexes/packets. Original source/main/internal modules restore exactly
+without rebuilding; 15 restored primitive checks pass per mode/OS. Reuse WSP312's
+5,656 full/live checks per OS and SAME actual package/all-three-example proof.
+Current costs stay unchanged. One vector-overload compile mistake per OS and an
+observation filename error before execution are retained; no completed timing
+repeats, broader suite or package rebuild follows. This implementation is
+inconclusive, not a permanent exclusion of prepared matching.
+
+The existing [evidence](webp-fixed-distance-attribution-evidence.json) now includes
+this follow-up. Raw `webp-prepared-query-inconclusive.tar.xz`: 3,022,544 B /
+358 members, SHA256
+`eded950b6ef422da86cd1dbc4643ee9c5c3181ae65340392f3a5b94dc012342b`,
+mirrored/member-verified. Reproduce with retained `wmp313-*.py`; the pinned WSP312
+dependency supplies unchanged tooling and qualification. Publication stays
+postponed and the full 282-path objective remains open.
