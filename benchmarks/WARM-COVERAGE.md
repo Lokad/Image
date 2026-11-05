@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Prepared quantizer operands](VP8-QUANTIZER-OPERAND-PREPARATION.md) share one exact one-shot/prepared core; independent complete effort6diagram gain153.24µs/1.23%, unchanged paired754344B. Photograph confirmation remains inconclusive; no prepared-hoist-only gain or equivalence claim. Current eight controls:6 gaps, 2 uncertain.320logical stackB within existing16KiB admission; no new heap/capacity/retention. Other current costs/ownership boundaries explicit; next count sparse residual work before another scoring kernel. |
+| Resident VP8 encoding | [Prepared quantizer operands](VP8-QUANTIZER-OPERAND-PREPARATION.md) share one exact one-shot/prepared core; independent complete effort6diagram gain153.24µs/1.23%, unchanged paired754344B. Photograph confirmation remains inconclusive; no prepared-hoist-only gain or equivalence claim. Current eight controls:6 gaps, 2 uncertain.320logical stackB within existing16KiB admission; no new heap/capacity/retention. Other current costs/ownership boundaries explicit; sparse residual screen gives no useful lead; reconcile the largest affected historical resize cost next. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Complete-token output](PNG-COMPLETE-TOKEN-OUTPUT.md) saves408µs/7.36% raw on Fastest8; raw confidence separates, normalized confidence narrowly overlaps. Exact packets and384KiB admission remain;8B/op extra scalar state, no new arrays/owners/retention. Fifteen current complete fresh-one-shot comparisons:3pass/7gap/5uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier block/color/delivery costs remain history; three affected H rows await their named reconciliation. |
 | JPEG and image reading | [Signed prepared instructions](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md) compile insertion interpretation once within the same2KiB scan plan. Independent ordinary/live progressive444 savings are461.82/491.58µs (11.16%/11.06%), with separated raw/normalized confidence and exact frames. Current six affected controls:1 pass, 3 gap, 2 uncertain; other JPEG paths reuse unchanged evidence. Measured allocation984,238versus984,212B/op is explicit; no new owned capacity. Prior scan preparation/adverse trials remain history. |
@@ -47,8 +47,10 @@ The [compact vector-scoring trial](VP8-COMPACT-VECTOR-SCORING-INCONCLUSIVE.md)
 has no useful complete-photo lead across two coherent implementations. Exact
 qualified source/modules are restored; no current cost owner or negative-trial
 renderer dependency is added. The subsequent operand stage establishes only a scoped trellis gain; its photo
-confirmation is inconclusive. Next count sparse residual visits before another
-scoring kernel. Broader or materially revised designs remain eligible.
+confirmation is inconclusive. The [sparse residual screen](VP8-SPARSE-RESIDUAL-SCORING-INCONCLUSIVE.md)
+reduces logical visits but gives no useful complete-operation lead; all qualified
+source/modules are restored without another package proof. Next reconcile the
+named historical RGBA8 bicubic enlargement cost. Materially revised designs remain eligible.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
