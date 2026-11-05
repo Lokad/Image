@@ -30,9 +30,15 @@ affected boundaries marked H remain historical until their named reconciliation.
 
 The [transparent capture before full-block quantization](WEBP-ALPHA-CURRENT-ATTRIBUTION.md)
 retains source-specific matching, coefficient, predictor and cache-history leads.
+The [current capture and fixed-distance audit](WEBP-FIXED-DISTANCE-ATTRIBUTION.md)
+retain the matcher lead, but counts do not justify updating two fixed-distance
+recurrences at every visited position. No production or current-cost change.
 The [scalar-window stage](WEBP-SCALAR-WINDOW-PREPARATION.md) is a measured1.11%
 photographic regression, restored exactly. Fewer checks or allocations alone do
 not establish elapsed gains; a revised design needs distinct supporting evidence.
+The [expanded Lanczos coefficient stages](LANCZOS-COEFFICIENT-PREPARATION.md) have
+adverse short points and add97,952B retained capacity; both restore exactly.
+No independent timing, package reproof or current-row replacement follows.
 
 The [ALPH representation/lifetime audit](WEBP-ALPHA-REPRESENTATION-AUDIT.md) finds
 that narrowing the working frame would lose its larger coefficient-storage

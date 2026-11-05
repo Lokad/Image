@@ -1,0 +1,253 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LCP301",
+  "productionAccepted": false,
+  "productionRestored": true,
+  "requiredMaterialPaths": 282,
+  "hypothesis": "Remove repeated widening/permutation of identical Q30 coefficient groups across source rows by preparing immutable lanes once. Keep specialized exact byte/word horizontal filtering, conversion, certified vertical normalization and repair.",
+  "intendedEndState": "Explicitly admitted prepared geometry owned by the existing one-shot/retained axis or workspace, no general cache, pool, fixed-fixture data or numerical-policy change.",
+  "temporaryCosts": "Expanded data adds97952B retained capacity on both reduction controls; original Q30 weights must survive for scalar tails and exact repair. First stage adds span arguments to row calls. Second stage moves state to the existing axis to remove those extra arguments; measured benefit is not assumed.",
+  "stages": {
+    "lcp301": {
+      "description": "Workspace-owned expanded coefficient lanes, forwarded as ReadOnlySpan through existing row calls.",
+      "preparation": {
+        "project": "Lokad.Image",
+        "system": "linux",
+        "baselineSha256": "f97719d767daed99589c0614a00ccff965bc56cea464b34dd3b94a65bd457a2c",
+        "candidateSha256": "f5899c123b1e30f12a866ad85ffdb3953846bcdaf72c12296ed2e46ea93f6531",
+        "sources": {
+          "src/Lokad.Image/Internal/LanczosWorkspace.cs": "a6ffcf82e0815bbd2b91f1811ad14d003feb0fbaa3f00bbd811906998140b6c4",
+          "src/Lokad.Image/Internal/LanczosResize.cs": "9b329ea626e35a511bb975280b7285b1081927e4ca43788c7939660289194d3e",
+          "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6fae8d931df0d22aac23648f8e3cf294e26cc34c18e2f192c95fae0b6587efbe",
+          "tests/Lokad.Image.Tests/LanczosCoefficientWorkspaceTests.cs": "e4aff5106be6c583fc827265644cfaf26ad61cd6fc47b7ae82f88de189643e47"
+        },
+        "focused": {
+          "internal-normal": 80,
+          "internal-scalar": 80,
+          "public-normal": 15,
+          "public-scalar": 15
+        },
+        "productionAccepted": false,
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+        "internalTestAssemblySha256": "49cd71dbe786437d0ef231c6ac5314022492cd6e85679cd0c78967ef19eb2ed1"
+      },
+      "cases": {
+        "Repeated8": {
+          "managedUs": 602.6670997023809,
+          "nativeUs": 490.1632244224423,
+          "ratio": 1.2295232887218368,
+          "upper": 1.3869649026309698,
+          "lower": 1.0809065575916403,
+          "allocatedBytes": 139,
+          "retainedOwnedBytes": 237752,
+          "additionalRetainedBytes": 97952,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+          "reference": "zimg, the FFmpeg zscale backend",
+          "baselineManagedUs": 563.8373833786231,
+          "baselineNativeUs": 489.9316094771242,
+          "rawPointChange": 0.06886687096035127,
+          "normalizedPointChange": 0.06836180340420928
+        },
+        "Repeated16": {
+          "managedUs": 669.0045038377192,
+          "nativeUs": 536.2664057971015,
+          "ratio": 1.2475226801561756,
+          "upper": 1.3989050183765261,
+          "lower": 1.101810128620737,
+          "allocatedBytes": 139,
+          "retainedOwnedBytes": 245992,
+          "additionalRetainedBytes": 97952,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputSha256": "fb06d08c2270497070fdf646e548a37e8f86e6f6aa305ac5456cc47aff5d7dac",
+          "nativeOutputSha256": "0a791a404fde304cd73d7595048103a531de0817077f04c6841f7e07d4cc6e6a",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+          "reference": "zimg, the FFmpeg zscale backend",
+          "baselineManagedUs": 558.3388451086956,
+          "baselineNativeUs": 512.9376506734006,
+          "rawPointChange": 0.19820519331317432,
+          "normalizedPointChange": 0.14608066110198537
+        }
+      }
+    },
+    "lcp301s2": {
+      "description": "Axis-owned expanded lanes restore existing row-call signatures and use nonnegative group indexing.",
+      "preparation": {
+        "project": "Lokad.Image",
+        "system": "linux",
+        "baselineSha256": "f5899c123b1e30f12a866ad85ffdb3953846bcdaf72c12296ed2e46ea93f6531",
+        "candidateSha256": "02c5650c9c07e739f188dfba94bdeeeb9c104167d21d4fdeec75491d26e7c156",
+        "sources": {
+          "src/Lokad.Image/Internal/LanczosWorkspace.cs": "cb34ab31a0172a6dbd5159f2e0560f8784f4825b78b5ecf35dd7f04c6c8c930b",
+          "src/Lokad.Image/Internal/LanczosResize.cs": "879157bdd0a4485a98025acbfe7ef16857c9e5f331c1bda97457e0f1d48798e0",
+          "src/Lokad.Image/Internal/LanczosFmaResize.cs": "3f20bfa64cfd6df8427823b1e756fd0d9532856ef7a14d1989dcd984f6261f38",
+          "src/Lokad.Image/Internal/LanczosPlan.cs": "f688d5a4ae9acee1ba37877f343b8207e8eb6880c672096f79153ed3c28b6c14",
+          "src/Lokad.Image/Lanczos3ResizePlan.cs": "643bac909f12c0ca8796dd0e6b40fcbfba9e0a4f1da27cbd05d705f47bcece61",
+          "tests/Lokad.Image.Tests/LanczosCoefficientWorkspaceTests.cs": "dea8b941051114ad4053ecc730432b622c7cfc3a036094271d7113a206e0fb8c"
+        },
+        "focused": {
+          "internal-normal": 80,
+          "internal-scalar": 80,
+          "public-normal": 15,
+          "public-scalar": 15
+        },
+        "productionAccepted": false,
+        "coreVersions": 1,
+        "internalVersions": 1,
+        "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+        "internalTestAssemblySha256": "13d8de874e0517ec1f8472d9039d52bb737908aa23ed2fd0dd26156aa48f6339"
+      },
+      "cases": {
+        "Repeated8": {
+          "managedUs": 605.3298172348485,
+          "nativeUs": 488.65219666666667,
+          "ratio": 1.2387743703273952,
+          "upper": 1.3467994446133476,
+          "lower": 1.1313677215072844,
+          "allocatedBytes": 139,
+          "retainedOwnedBytes": 237752,
+          "additionalRetainedBytes": 97952,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+          "outputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "nativeOutputSha256": "4e744822f4c1caa3abb907a0f3cd0c58092a255b0ab3e98554b0f2bfe706abbb",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+          "reference": "zimg, the FFmpeg zscale backend",
+          "baselineManagedUs": 563.8373833786231,
+          "baselineNativeUs": 489.9316094771242,
+          "rawPointChange": 0.073589362960637,
+          "normalizedPointChange": 0.07640028654496245
+        },
+        "Repeated16": {
+          "managedUs": 635.6606906249999,
+          "nativeUs": 511.3735353535354,
+          "ratio": 1.2430457320900254,
+          "upper": 1.3926552963361443,
+          "lower": 1.1196617320094029,
+          "allocatedBytes": 139,
+          "retainedOwnedBytes": 245992,
+          "additionalRetainedBytes": 97952,
+          "actualIterations": 3,
+          "allActualsRetained": true,
+          "managedExact": true,
+          "nativeQualityPassed": true,
+          "quietGuardsPassed": true,
+          "allOriginalGatesPassed": true,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "outputSha256": "fb06d08c2270497070fdf646e548a37e8f86e6f6aa305ac5456cc47aff5d7dac",
+          "nativeOutputSha256": "0a791a404fde304cd73d7595048103a531de0817077f04c6841f7e07d4cc6e6a",
+          "managedBoundary": "Caller-owned plan prepared before timing; fresh source reads/row-ID reset/exact execution/independent output/disposal; retained capacity reported",
+          "nativeBoundary": "Prepared zimg graph/input planes/scratch; packing/filtering/normalization/independent output/disposal; graph/input retention unmeasured",
+          "reference": "zimg, the FFmpeg zscale backend",
+          "baselineManagedUs": 558.3388451086956,
+          "baselineNativeUs": 512.9376506734006,
+          "rawPointChange": 0.13848552038547757,
+          "normalizedPointChange": 0.14196775503543568
+        }
+      }
+    }
+  },
+  "decision": "Neither three-actual screen supports a useful elapsed gain; both incur material retained storage. Abandon these two implementations and restore production byte-exactly. Shorts are not independent confirmation or proof of a causal regression. No favorable resampling, further lane variant or permanent family ban.",
+  "qualification": {
+    "candidateFocusedEachStage": {
+      "internalNormal": 80,
+      "internalScalar": 80,
+      "publicNormal": 15,
+      "publicScalar": 15
+    },
+    "newCandidateTheoryCases": 4,
+    "coverage": "Independent BigInteger horizontal sums on edge/tail/long-support inputs, zero/one/full alpha, canaries, source immutability, retained charges, refusal/cancellation cleanup, subsequent reuse and zero warm allocation. Real existing scalar/portable full-image coverage retained. Candidate-only tests are removed with their obsolete implementation; both sources/modules remain archived.",
+    "windowsRestored": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionRestoredByteExact": true,
+      "sourceAndModuleHashesVerified": true,
+      "productionSha256": "286e6b31b7111753d8e39dc20d9482df7c9c50f1b2c145fda45662ddd060f8b2",
+      "internalTestSha256": "321943dbbf7c24dfe301751dc4a903d4424a0615a44c10a4671f840ad7ae408d",
+      "candidateOnlyTestRemoved": true,
+      "additionalBuilds": 0,
+      "packageSha256": "7c68ee218f0de27694494b17c4dd0e9d887d26b01472cc51f1dc9549f0b98d4d"
+    },
+    "linuxRestored": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionRestoredByteExact": true,
+      "sourceAndModuleHashesVerified": true,
+      "productionSha256": "f97719d767daed99589c0614a00ccff965bc56cea464b34dd3b94a65bd457a2c",
+      "internalTestSha256": "a0dc8a1b889843df66524f4e102397c091105eafc42b655869d483a2b3b2d3be",
+      "candidateOnlyTestRemoved": true,
+      "additionalBuilds": 0,
+      "packageSha256": "7c68ee218f0de27694494b17c4dd0e9d887d26b01472cc51f1dc9549f0b98d4d"
+    },
+    "currentFullChecksEachOsReused": 5639,
+    "currentEvidence": "vp8-luma4-preparation-evidence.json",
+    "unchangedActualPackageAndThreeExamplesReused": true,
+    "acceptedProductionChanges": 0
+  },
+  "storage": {
+    "perOperationAllocatedBytes": 139,
+    "additionalRetainedBytesBoth": 97952,
+    "physicalPeakMeasured": false,
+    "admittedPeakRemeasured": false,
+    "nativeAllocationsMeasured": false,
+    "interpretation": "Unchanged per-execution allocation does not offset the retained capacity increase; no peak or CPU saving inferred."
+  },
+  "workflow": {
+    "linuxCoreBuilds": 2,
+    "linuxInternalBuilds": 2,
+    "windowsBuilds": 0,
+    "publicHarnessNativeSelectorPairedBuilds": 0,
+    "packages": 0,
+    "broadQualificationRepeats": 0,
+    "shortCompleteWorkloads": 4,
+    "actualsEach": 3,
+    "completedMeasurementsRepeated": 0
+  },
+  "corrections": "First postprocessing referenced a missing local historical filename. Original completed jobs/logs/actuals were retained; summary generation switched to the existing public current evidence without any measurement or build repeat.",
+  "currentEvidence": "All125 displayed rows and282-path objective are unchanged; no candidate number substitutes current qualified costs. Compression correctness/exact packets and all unchanged-path resource/package evidence remain valid.",
+  "publication": "postponed",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "lanczos-coefficient-preparation-investigation.tar.xz",
+    "bytes": 3575796,
+    "members": 225,
+    "sha256": "d27597f51571d1299bb0e3257388c5f695c9c27ef00a711450918e83add5ad7f",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-luma4-preparation-qualified.tar.xz",
+        "sha256": "64155fe69673aa19b0e6ed909e5bb82218c5d07b16db77450ca51d8cfb861d4b"
+      },
+      {
+        "file": "lanczos-paired-certificate-preparation-qualified.tar.xz",
+        "sha256": "8578848f8faf976e6be95054c6c7a01ae12c3d43e2de7f517815128ddda732b0"
+      }
+    ],
+    "dependencyScope": "Qualified current original sources/modules/package and frozen resize controls/workers/framework. Both experimental sources/modules/tests and every short actual/guard are retained. All production sources, binaries, consumers and package restore byte-exactly; no full/package requalification is repeated for unchanged production."
+  }
+}
