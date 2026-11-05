@@ -39,6 +39,11 @@ parsing. Exact968216Bpacket, both guards and all original boundaries pass, with
 zero builds or current-cost replacement. Samples/skid establish no phase-time or
 speedup claim; a prepared session would leave this observed parsing work in place.
 
+The [prepared cancellation stage](PNG-PREPARED-CANCELLATION-INCONCLUSIVE.md)
+passes focused checks but has no useful normalized short lead on either depth.
+It restores exactly, with no current-row replacement, longer confirmation or
+package repeat. This implementation is inconclusive, not a permanent family ban.
+
 The [transparent capture before full-block quantization](WEBP-ALPHA-CURRENT-ATTRIBUTION.md)
 retains source-specific matching, coefficient, predictor and cache-history leads.
 The [current capture and fixed-distance audit](WEBP-FIXED-DISTANCE-ATTRIBUTION.md)

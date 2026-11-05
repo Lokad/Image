@@ -1,0 +1,131 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PGE308",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "newMaterialCases": 0,
+  "hypothesis": "Dispatch one shared generic greedy body per pass for immutable uncancelable versus live tokens. Preserve all three original checkpoint sites for live tokens; remove impossible token-source reads for the uncancelable specialization. No new array, owner, pool or quota.",
+  "preparation": {
+    "project": "Lokad.Image",
+    "system": "linux",
+    "candidateSha256": "764ecc1f21c668e949c7e5ad7ace4b98ccfc1bf65139cf462b1c5d240cd0ee9a",
+    "sources": {
+      "src/Lokad.Image/Internal/PngDeflater.cs": "2d569bf921e3cddf6438167279daca5c35695b4574a4be660303c2518565e2de"
+    },
+    "focused": {
+      "internal-normal": 581,
+      "internal-scalar": 581,
+      "public-normal": 211,
+      "public-scalar": 211
+    },
+    "productionAccepted": false,
+    "coreVersions": 1,
+    "internalPublicHarnessNativeSelectorPackageBuilds": 0,
+    "internalTestAssemblySha256": "c53aec9602c4f9c81c5df99c0f66bed438fc693b97875861261c399d71083cdd"
+  },
+  "cases": [
+    {
+      "caseId": "EncodeFast16",
+      "originalUs": 21689.756083333334,
+      "originalNativeUs": 20151.547333333332,
+      "originalRatio": 1.076332041632138,
+      "originalAllocatedBytes": 2437652,
+      "candidateUs": 21559.684370370374,
+      "nativeUs": 19704.73833333333,
+      "ratio": 1.0941370550401648,
+      "allocatedBytes": 2437584,
+      "packetBytes": 968216,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "rawPointReduction": 0.005996919119939159,
+      "normalizedPointChange": 0.016542305459036122,
+      "nativeClockChange": -0.022172441282507394,
+      "actuals": 3,
+      "filteredResults": 3,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "librarySha256": "764ecc1f21c668e949c7e5ad7ace4b98ccfc1bf65139cf462b1c5d240cd0ee9a",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+    },
+    {
+      "caseId": "EncodeFast8",
+      "originalUs": 5940.174083333333,
+      "originalNativeUs": 4734.882104166667,
+      "originalRatio": 1.2545558585515817,
+      "originalAllocatedBytes": 820908,
+      "candidateUs": 5908.4121875,
+      "nativeUs": 4610.797770833333,
+      "ratio": 1.2814294794872652,
+      "allocatedBytes": 820849,
+      "packetBytes": 236828,
+      "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "rawPointReduction": 0.00534696380741595,
+      "normalizedPointChange": 0.021420824551176,
+      "nativeClockChange": -0.026206425123899257,
+      "actuals": 3,
+      "filteredResults": 3,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "librarySha256": "764ecc1f21c668e949c7e5ad7ace4b98ccfc1bf65139cf462b1c5d240cd0ee9a",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80"
+    }
+  ],
+  "decision": "Both shorts have slightly lower raw means but adverse normalized point ratios as native clocks move. Neither provides a useful lead; no causal gain/regression or parity claim. Retain adverse/inconclusive evidence and restore exactly. No independent confirmation, variants or favorable sampling. This implementation is inconclusive, not a permanent family ban or fixed percentage gate.",
+  "storage": "No new per-operation buffer/capacity or retained state. Short allocation diagnostics use different batching/GC amortization from prior confirmations; no saving claim. Physical/admitted peaks and native allocations not measured.",
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "sourceAndMainRestoredExactly": true,
+      "productionSha256": "ed5124065c6d2879019dc631530df20b8d296b173d106a8d78731088b464e28f",
+      "packageSha256": "bbd5ef51cb35cfece135ea5361b60603daa2b59e1521000dc6cab9d123dec9b5",
+      "candidateSourceOnly": true,
+      "allBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionChanged": false,
+      "sourceAndMainRestoredExactly": true,
+      "productionSha256": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+      "packageSha256": "bbd5ef51cb35cfece135ea5361b60603daa2b59e1521000dc6cab9d123dec9b5",
+      "sourceSha256": "bbf987f1b30f390ab90900f4963285706e9db5a526293b6de88e0c10750c67fc",
+      "restoredPacketChecks": {
+        "normal": 6,
+        "scalar": 6
+      },
+      "allBuilds": 0
+    }
+  },
+  "qualificationReused": "VTP306 sources, main modules, all consumer/probe copies, actual package and source manifest restore byte-exactly. Retain applicable 5642 full/live checks per OS, affected normal/scalar and same actual package/all three examples. Six restored Linux packet controls pass normal/scalar; Windows never builds the candidate. No broad/package repeat.",
+  "workflow": {
+    "linuxCoreVersions": 1,
+    "windowsCoreVersions": 0,
+    "internalPublicHarnessNativeSelectorPackageBuilds": 0,
+    "newTests": 0,
+    "shortJobs": 2,
+    "actualsEach": 3,
+    "confirmations": 0,
+    "restorationBuilds": 0,
+    "currentComparisonRowsChanged": 0
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-prepared-cancellation-inconclusive.tar.xz",
+    "bytes": 11385236,
+    "members": 218,
+    "sha256": "c94150bab93c4908c1da27041ed4ffffad7feed94fd9537a820c8d65e3cf4a44",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-trellis-importance-qualified.tar.xz",
+        "sha256": "084e99e66737c97304f39ecc0e3d4e56124852e41dc1594ad4f44bef58d5302d"
+      },
+      {
+        "file": "png-fast-word-current-attribution.tar.xz",
+        "sha256": "8dccc1386e6295bdeb09837c65323ee2408319ccb1ecbe0df97fe5aeefad242b"
+      }
+    ],
+    "scope": "Selected original source/modules/package and one-shot runtime/reference controls are pinned dependencies. This archive retains Linux candidate source/modules, Windows source-only snapshot, every short/guard/receipt, unchanged test-module identities, focused and restoration logs, exact restored originals and scripts. No production change remains, no broad/package repeat or current-row replacement."
+  },
+  "publication": "postponed"
+}
