@@ -1,0 +1,115 @@
+{
+  "project": "Lokad.Image",
+  "acceptedProductionChange": false,
+  "performanceMeasurement": false,
+  "baseline": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "newBuilds": 0,
+    "newCaptures": 0,
+    "statisticalTiming": false,
+    "sourceSha256": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500",
+    "caller": "Vp8lReferencePredictor.Analysis.Histogram(level): exact14*1024-length view from the admitted level owner; nested work borrows it.",
+    "jit": {
+      "reference": "waa302-alpha-profile-jit.txt",
+      "codeBytes": 1498,
+      "boundsBranches": 21,
+      "example": "Masked/truncated residual plus constant512/1536/2560 is compared against dynamic edi length before each inc. Counts are code structure, not CPU time."
+    },
+    "proposedStage": "At Build entry take the exact14336-element borrowed span once, retaining checked access and all values. Inspect generated code to confirm useful bounds elimination before a complete ALPH screen. No new allocation/reservation/owner, counter compaction, scorer change, unchecked access or numeric relaxation.",
+    "reusedCorrectness": "Existing65536neighbor and8613full-histogram controls plus generic/green residual/cost/map equality, admission/cancellation/owner and exact complete packets.",
+    "priorTrials": "Prepared-green-history/scorer and compact-counter implementations are different restored designs; do not replay them unchanged."
+  },
+  "stages": [
+    {
+      "design": "Take the exact14336-count borrowed extent once.",
+      "producer": "2797bac5c45978f6790fc9f40bea2e6073080ca793adb2b65d47aaa2ef62bda7",
+      "source": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "de331a67bbe98298569783237be3f8ee7667a66246f0f01599d8489d3e72b3c7"
+      },
+      "embeddedInternalProducer": "d280597fe032e27210009ae8b250e62c7d82cac07ec53297465575577e153f12",
+      "focused": {
+        "internal-normal": 867,
+        "internal-scalar": 867,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "publicFrozenPacketChecks": 22,
+      "publicCoreJit": {
+        "sha256": "1cee1aa9cfe01c9fc01e5ab6c1609ad221176e979eba003542e5afffa96282a6",
+        "codeBytes": 1427,
+        "boundsBranches": 19,
+        "quietGuardsPassed": true
+      }
+    },
+    {
+      "design": "Also address each green mode through a checked256-entry view.",
+      "producer": "432785d655be1b53222d317a4d3b0cb9d50ba7058a3f67efc1347ac36f5104e9",
+      "source": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "ce0022a4279a985ba8eaf4e0c224e95d910fef906b430e52c07f57e23fb4ffb5"
+      },
+      "embeddedInternalProducer": "dfe456d98bc2b509fdb74d5596b65b35ee032f86847a9acd6fa37002b862a9f0",
+      "focused": {
+        "internal-normal": 867,
+        "internal-scalar": 867,
+        "public-normal": 357,
+        "public-scalar": 357
+      },
+      "publicFrozenPacketChecks": 22,
+      "publicCoreJit": {
+        "sha256": "2f0ad2346991ee7a40c8cb0ab29233270caaf2a23dc7382a43e9bba51714d120",
+        "codeBytes": 1461,
+        "boundsBranches": 19,
+        "quietGuardsPassed": true
+      }
+    }
+  ],
+  "decision": "Restore: both checked preparations retain the intended hot masked-index checks. Code-size/branch counts establish neither elapsed improvement nor regression. No complete-operation timing, longer confirmation, Windows candidate build or package repeat.",
+  "restoration": {
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "restored": {
+        "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "094a7b1dd35ccae18aa8c020d2fe94284e7a9f78ac06dee006af88a9967f5040",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "812b5df9c90d88636b0517e0ecd9cab58298c40acf489ed7b1bea04e2341ff06",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "9432e0099f19ee96cc45fbdb8678143ec149302542d2d25f9218b9509e62c79b",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "34ce6d188f4471c25c20dd38da99bfa9211a643381527b3f9a3b80a59aa91ff1"
+      },
+      "qualifiedBuildRestored": true,
+      "newBuilds": 0,
+      "newTimingRuns": 0,
+      "qualificationReused": true,
+      "archiveSha256": "3a1a546144ce5a594ac6af46f7d040f035b17e1c7b012e5beeebf84dfa6580f0"
+    },
+    "windows": {
+      "project": "Lokad.Image",
+      "sourceSha256": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500",
+      "windowsBuilds": 0,
+      "originalModulesUnchanged": true,
+      "qualificationReused": true
+    }
+  },
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "webp-green-histogram-bounds.tar.xz",
+    "bytes": 1155252,
+    "members": 101,
+    "sha256": "6f7052b5739153d00d63f34f88d850cd14701ed918da99af5d31fdb1f4df713a",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-chain-link-preparation-qualified.tar.xz",
+        "sha256": "b1d2f5b52faa33109b9bdc2643c69ec756d9cc35a31b98c1ab6f6ff4360c7f7a"
+      },
+      {
+        "file": "webp-fixed-distance-attribution.tar.xz",
+        "sha256": "d5d6b5a1e978d3e726cd8c529796ae517ad5e58d23287ab86dbf525db24b3796"
+      }
+    ],
+    "scope": "Two safe extent/indexing stages with original/candidate source and Linux main/embedded-internal modules, focused normal/scalar logs, current public-core codegen and22packet checks per stage, retained original JIT identity, restoration proofs and reproduction scripts. No complete-operation timing or accepted production change; reuse current qualification/package and all displayed costs."
+  },
+  "qualification": "Qualified WLP317 main/embedded-internal modules and source restored exactly; reuse5659full/live checks perOS, affected scalar and same actual Release-package/all-example proof. All125displayed costs remain unchanged."
+}
