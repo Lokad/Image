@@ -28,7 +28,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
 
     private void MainCandidates(ReadOnlySpan<uint> pixels, int width, int height, Vp8lFramePrefix candidatePrefix,
         Vp8lEncodingAnalysis analysis, int effort, int paletteColors, int quality, ref Vp8lTokenBuffer? matchingSeed,
-        Vp8lMatchIndex? matchStorage)
+        Vp8lMatchIndex? matchStorage, bool greenOnly = false)
     {
         var tryNoCache = effort == 5 && quality >= 75 || effort == 6 && quality == 100;
         var low = effort == 0; var maximumCacheBits = quality <= 25 ? 0 : paletteColors == 0 ? 10 : BitOperations.Log2((uint)paletteColors) + 1;
@@ -50,7 +50,7 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                 return;
             }
             var ordinarySeed = seed; seed = null;
-            var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context, quality >= 25, ordinarySeed);
+            var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context, quality >= 25, ordinarySeed, greenOnly);
             var compareOrdinary = tryNoCache && ordinary.CacheBits != 0;
             Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context, quality));
             // Native already considers this profile complete when caching chose0.
@@ -237,7 +237,8 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
                         candidatePrefix = candidatePrefix with { Color = result.color, ColorBits = plan.StoredBits };
                     }
                 }
-                result.MainCandidates(working, width, height, candidatePrefix, analysis, effort, 0, quality, ref matchingSeed, matchStorage);
+                result.MainCandidates(working, width, height, candidatePrefix, analysis, effort, 0, quality, ref matchingSeed, matchStorage,
+                    greenOnly && !subtractGreen);
             }
             if (!ReferenceEquals(result.prefix.Prediction, result.prediction))
             { result.prediction?.Dispose(); result.prediction = null; }

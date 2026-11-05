@@ -1,5 +1,9 @@
 # Green predictor runs and shared row storage
 
+The subsequent [alpha cache-history stage](WEBP-ALPHA-CACHE-HISTORY.md) owns the
+current eight WebP comparisons. This report retains the predictor milestone,
+its scoped incremental gain and superseded standalone costs.
+
 Normalized ALPH prediction now prepares tile-row runs, with three shared exact
 scalar/AVX2 kernels for copies, averages and clamped addition. Other predictors
 keep the exact scalar fallback. One shared storage-preparation factory reserves

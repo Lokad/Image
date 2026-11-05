@@ -21,7 +21,7 @@ internal static partial class Vp8lReferenceCache
 
     internal static bool TryBestBitsWithHistory(ReadOnlySpan<uint> pixels, ReadOnlySpan<Vp8lToken> first,
         ReadOnlySpan<Vp8lToken> second, int maximumBits, OperationContext context, out int firstBits, out int secondBits,
-        Vp8lTokenBuffer? scratch = null)
+        Vp8lTokenBuffer? scratch = null, bool greenOnly = false)
     {
         firstBits = secondBits = 0;
         // These cases need the original individual cancellation checks.
@@ -62,7 +62,8 @@ internal static partial class Vp8lReferenceCache
                 minimum = new byte[pixels.Length]; cache = new uint[cacheWords];
                 counts = new int[countWords]; mass = massWords == 0 ? Array.Empty<int>() : new int[massWords];
             }
-            BuildHistory(pixels, maximumBits, cache, minimum);
+            if (greenOnly) BuildForwardHistory(pixels, maximumBits, cache, minimum);
+            else BuildHistory(pixels, maximumBits, cache, minimum);
             firstBits = ScoreHistory(pixels, first, maximumBits, minimum, counts, mass, context);
             secondBits = ScoreHistory(pixels, second, maximumBits, minimum, counts, mass, context);
             return true;
@@ -96,6 +97,27 @@ internal static partial class Vp8lReferenceCache
             // Larger entries already contain this pixel; rewriting is a no-op.
             for (var bits = 1; bits < threshold; bits++)
                 cache[(1 << bits) - 2 + (int)(hash >> (32 - bits))] = pixel;
+        }
+    }
+
+    // Normalized ALPH commonly hits small prefix widths. Discover the first hit
+    // while updating missed cells, instead of searching then traversing again.
+    // Full-color callers retain the maximum-width probe for cheap complete misses.
+    internal static void BuildForwardHistory(ReadOnlySpan<uint> pixels, int maximumBits, Span<uint> cache, Span<byte> minimum)
+    {
+        if (maximumBits == 0) { minimum.Fill(1); return; }
+        for (var position = 0; position < pixels.Length; position++)
+        {
+            var pixel = pixels[position]; var hash = unchecked(pixel * 0x1e35a7bdu);
+            var index = (int)(hash >> 31); var bits = 1;
+            for (; bits <= maximumBits; bits++)
+            {
+                if (cache[index] == pixel) break;
+                cache[index] = pixel;
+                hash <<= 1; index = 2 * index + 2 + (int)(hash >> 31);
+            }
+            // Higher prefix cells already contain pixel at the first hit.
+            minimum[position] = (byte)bits;
         }
     }
 

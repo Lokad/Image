@@ -4,8 +4,9 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8lHistoryTreeTests
 {
-    [Fact]
-    public void PreparedLeafKeepsEveryHitMinimumAndFinalPrefixCacheWithGuardedSpans()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void HistoryTraversalKeepsEveryHitMinimumAndFinalPrefixCacheWithGuardedSpans(bool forward)
     {
         uint random = 0x31415926;
         foreach (var bits in Enumerable.Range(0, 11))
@@ -39,7 +40,10 @@ public sealed class Vp8lHistoryTreeTests
                 }
                 cache.CopyTo(expected, (1 << width) - 2);
             }
-            Vp8lReferenceCache.BuildHistory(pixels.AsSpan(3, size), bits, actualStore.AsSpan(2, length), minimumStore.AsSpan(2, size));
+            if (forward)
+                Vp8lReferenceCache.BuildForwardHistory(pixels.AsSpan(3, size), bits, actualStore.AsSpan(2, length), minimumStore.AsSpan(2, size));
+            else
+                Vp8lReferenceCache.BuildHistory(pixels.AsSpan(3, size), bits, actualStore.AsSpan(2, length), minimumStore.AsSpan(2, size));
             Assert.Equal(expectedMinimum, minimumStore.AsSpan(2, size).ToArray());
             Assert.Equal(expected, actualStore.AsSpan(2, length).ToArray()); Assert.Equal(original, pixels);
             Assert.All(actualStore.Take(2).Concat(actualStore.TakeLast(5)), value => Assert.Equal(0xdeadbeefu, value));

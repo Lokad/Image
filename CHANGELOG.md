@@ -23,6 +23,9 @@
 - Batch alpha predictor residuals by tile-row runs with shared row storage,
   preserving exact packets, scalar fallbacks, cancellation and workspace ownership.
 
+- Share cache-hit discovery and missed-prefix updates for normalized WebP alpha,
+  preserving exact packets, existing workspace and cancellation behavior.
+
 - Share Lanczos RGB and certificate preparation in SIMD lanes, preserving exact
   pixels, portable fallbacks, cancellation and memory ownership.
 

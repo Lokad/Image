@@ -7,8 +7,9 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8lHistoryTailTests
 {
     [Theory]
-    [InlineData(257)] [InlineData(258)] [InlineData(259)] [InlineData(260)] [InlineData(8192)]
-    public void BorrowedHistoryMatchesIndependentChoicesAndPreservesLivePrefixesAndTailGuards(int length)
+    [InlineData(257, false)] [InlineData(258, false)] [InlineData(259, false)] [InlineData(260, false)] [InlineData(8192, false)]
+    [InlineData(257, true)] [InlineData(258, true)] [InlineData(259, true)] [InlineData(260, true)] [InlineData(8192, true)]
+    public void BorrowedHistoryMatchesIndependentChoicesAndPreservesLivePrefixesAndTailGuards(int length, bool forward)
     {
         foreach (var pixel in new[] { 0u, 0xff718293u })
         for (var bits = 1; bits <= 10; bits++)
@@ -34,7 +35,7 @@ public sealed class Vp8lHistoryTailTests
             var expected = (Vp8lReferenceCache.BestBits(pixels, prefix, bits, oracle),
                 Vp8lReferenceCache.BestBits(pixels, second, bits, oracle));
             Assert.True(Vp8lReferenceCache.TryBestBitsWithHistory(pixels, candidate.Tokens, second, bits,
-                context, out var firstBits, out var secondBits, candidate));
+                context, out var firstBits, out var secondBits, candidate, greenOnly: forward));
             Assert.Equal(expected, (firstBits, secondBits)); Assert.Equal(prefix, candidate.Tokens.ToArray());
             Assert.All(candidate.BorrowTailBytes(context, tailBytes)[payload..].ToArray(), b => Assert.Equal((byte)0xa7, b));
             Assert.Equal(before, root.Bytes); Assert.Equal(attempts, root.Attempts); Assert.Equal(0, root.Refusals);
@@ -46,8 +47,9 @@ public sealed class Vp8lHistoryTailTests
         }
     }
 
-    [Fact]
-    public void DirtyBorrowedHistoryCanBeRepeatedWithoutHeapAllocationOrNewAdmission()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void DirtyBorrowedHistoryCanBeRepeatedWithoutHeapAllocationOrNewAdmission(bool forward)
     {
         uint[] pixels = new uint[513]; Vp8lToken[] seed = [Vp8lToken.Literal(0), Vp8lToken.Copy(512, 1)];
         using var root = new TestMemoryBudget(1_000_000);
@@ -55,11 +57,11 @@ public sealed class Vp8lHistoryTailTests
         using var candidate = new Vp8lTokenBuffer(context, 20_000);
         foreach (var token in seed) candidate.Add(token);
         candidate.BorrowTailBytes(context, 150_000).Fill(0xff);
-        Assert.True(Vp8lReferenceCache.TryBestBitsWithHistory(pixels, candidate.Tokens, seed, 10, context, out _, out _, candidate));
+        Assert.True(Vp8lReferenceCache.TryBestBitsWithHistory(pixels, candidate.Tokens, seed, 10, context, out _, out _, candidate, greenOnly: forward));
         var attempts = root.Attempts; var retained = root.Bytes;
         var before = GC.GetAllocatedBytesForCurrentThread(); var success = true;
         for (var i = 0; i < 8; i++)
-            success &= Vp8lReferenceCache.TryBestBitsWithHistory(pixels, candidate.Tokens, seed, 10, context, out _, out _, candidate);
+            success &= Vp8lReferenceCache.TryBestBitsWithHistory(pixels, candidate.Tokens, seed, 10, context, out _, out _, candidate, greenOnly: forward);
         var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
         Assert.True(success); Assert.Equal(0, allocated); Assert.Equal(attempts, root.Attempts); Assert.Equal(retained, root.Bytes);
     }

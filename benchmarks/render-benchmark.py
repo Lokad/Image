@@ -1669,16 +1669,16 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-predictor-runs-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-alpha-cache-history-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted'] and webp_owned['pairedComparison']['allPairsRetained']
     assert webp_owned['pairedComparison']['pairs'] == 12
     assert webp_owned['pairedComparison']['ratioConfidence'][1] < 1
     assert webp_owned['pairedComparison']['quality'] == 75 and webp_owned['pairedComparison']['depth'] == 8
-    assert webp_owned['qualification']['fullChecksEachOs'] == 5685
+    assert webp_owned['qualification']['fullChecksEachOs'] == 5704
     assert webp_owned['qualification']['actualPackage']['sha256'] == webp_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert webp_owned['storage']['newOwnedCapacityBytes'] == 0
     assert webp_owned['storage']['allocatedBytesBoth'] == 7033576
-    assert webp_owned['storage']['fourControlAdmissionPeaksUnchanged']
+    assert webp_owned['storage']['admittedCapacitiesUnchanged']
     streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
     assert streaming['qualification']['fullChecksEachOs'] == 5587
@@ -1897,13 +1897,15 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [shared predictor rows](../benchmarks/WEBP-PREDICTOR-RUNS.md)
-  confirm {webp_owned['pairedComparison']['rawUsSaved']:,.2f} µs / {webp_owned['pairedComparison']['rawReduction']*100:.2f}% on the complete transparent byte control,
-  preserving exact packets and 7,033,576 B/op at equal batching. Green-only runs
-  share copy/average/clamp kernels and row-storage preparation; the full-color
-  pixel kernel retains separate execution. Broader incremental gains are unproven.
-  Four admitted peaks stay unchanged; retained scratch is zero. Physical peaks
-  and native allocations are unmeasured. [Earlier workspace reuse](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
+- **WebP:** [alpha cache-history traversal](../benchmarks/WEBP-ALPHA-CACHE-HISTORY.md)
+  confirms {webp_owned['pairedComparison']['rawUsSaved']:,.2f} µs / {webp_owned['pairedComparison']['rawReduction']*100:.2f}% on the complete transparent byte control,
+  preserving exact packets and 7,033,576 B/op at equal batching. Eligible normalized
+  alpha discovers cache hits and updates missed prefixes in one traversal;
+  full-color callers retain binary search. Broader incremental gains are unproven.
+  Owned capacities stay unchanged; retained scratch is zero. Complete admitted/
+  physical peaks and native allocations are not remeasured.
+  [Predictor runs](../benchmarks/WEBP-PREDICTOR-RUNS.md) retain their earlier scoped
+  gain and superseded costs. [Earlier workspace reuse](../benchmarks/WEBP-PREDICTION-WORKSPACE.md)
   retains its 131,488 B/op saving and superseded costs.
   Eight affected costs refresh once: {sum(c['status'] == 'pass' for n, c in webp_owned['cases'].items() if not n.startswith('alpha'))}/6 lossless controls pass/stop;
   opaque is {webp_owned['cases']['opaque']['status']} (upper {webp_owned['cases']['opaque']['upper']:.3f}), photograph {webp_owned['cases']['photograph']['status']} (upper {webp_owned['cases']['photograph']['upper']:.3f}).
@@ -1974,7 +1976,7 @@ Current priorities and scope:
   pass and stop; font loading and RGBA8 compositing retain their scoped gaps.
   These independent cases do not block codecs or resizing.
 
-The current production build passes **{wide_preparation['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{webp_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.

@@ -4,7 +4,7 @@ internal static class Vp8lReferenceMainParsing
 {
     internal static Vp8lTokenBuffer Encode(ReadOnlySpan<uint> pixels, ReadOnlySpan<uint> matches, int width,
         bool disableCache, int maximumCacheBits, OperationContext context, bool traceBackwards = true,
-        Vp8lTokenBuffer? scratch = null)
+        Vp8lTokenBuffer? scratch = null, bool greenOnly = false)
     {
         Vp8lTokenBuffer? standard = scratch, repeated = null, trace = null;
         try
@@ -15,7 +15,7 @@ internal static class Vp8lReferenceMainParsing
             var standardBits = 0; var repeatedBits = 0;
             if (!disableCache && !Vp8lReferenceCache.TryBestBitsWithHistory(pixels, standard.Tokens,
                 repeated.Tokens, maximumCacheBits, context, out standardBits, out repeatedBits,
-                scratch: standard.Count <= repeated.Count ? standard : repeated))
+                scratch: standard.Count <= repeated.Count ? standard : repeated, greenOnly: greenOnly))
             {
                 standardBits = Vp8lReferenceCache.BestBits(pixels, standard.Tokens, maximumCacheBits, context);
                 repeatedBits = Vp8lReferenceCache.BestBits(pixels, repeated.Tokens, maximumCacheBits, context);

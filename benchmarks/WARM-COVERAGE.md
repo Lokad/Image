@@ -10,9 +10,9 @@ Completion needs current passing evidence for every named path, with scope state
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Current predictor runs](WEBP-PREDICTOR-RUNS.md): four lossless controls pass/stop; opaque/photo remain uncertain, uppers1.023/1.081. Photo has within-job81.45–88.89ms steps; keep all actuals and resolve uncertainty before assuming optimization. Exact packets persist. Earlier workspace/chain-link gains and superseded costs remain linked history. |
-| Resident VP8 encoding | [Predictor runs](WEBP-PREDICTOR-RUNS.md) confirm1341.17µs/2.11% on the complete byte-alpha control; allocation7033576B/op and four admitted peaks are unchanged, scratch retention zero. Byte/word ALPH uppers1.129/1.127 remain gaps. [Earlier workspace reuse](WEBP-PREDICTION-WORKSPACE.md) retains131488B/op saving. Six opaque VP8 costs reuse unchanged [input preparation](VP8-SHARED-ALPHA-PREPARATION.md) proof and4KiB vector/1KiB scalar admission. |
-| Other WebP encoding boundaries | [Current eight-control qualification](WEBP-PREDICTOR-RUNS.md) includes full depth normalization and fresh async nonseekable output; current async producer proof refreshes without builds. Passing cases stop. Other affected H costs remain historical; source/settings/packet/ownership gates stay unchanged. |
+| Resident lossless WebP | [Alpha-cache stage](WEBP-ALPHA-CACHE-HISTORY.md) refreshes current costs: four lossless controls pass/stop; opaque is a measured gap, lower1.004/upper1.035. Photograph stays uncertain, lower.994/upper1.020; resolve before assuming optimization. Exact complete packets persist. Superseded costs/uncertainties remain linked history. |
+| Resident VP8 encoding | [Alpha cache history](WEBP-ALPHA-CACHE-HISTORY.md) confirms665.60µs/1.05% on complete byte-alpha Q75/effort4, same7033576B/op at equal batching, no new owned capacity or retained scratch. Byte/word ALPH uppers1.100/1.103 remain gaps. Predictor/workspace gains remain linked history. Six opaque costs reuse unchanged [shared input](VP8-SHARED-ALPHA-PREPARATION.md) proof with4KiB vector/1KiB scalar admission. |
+| Other WebP encoding boundaries | [Current eight-control qualification](WEBP-ALPHA-CACHE-HISTORY.md) preserves full depth normalization and fresh awaited nonseekable async output. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/ownership gates stay unchanged. |
 | PNG encoding | [Block preparation](PNG-BLOCK-PREPARATION.md) shares frequency/code storage and uses linear canonical assignment. Same-batch allocation saves148,320B (5.7%) on wordSmallest9 and19,936B (2.4%) on byteFastest1; no CPU gain/equivalence/regression claim. Fifteen complete one-shot costs current: thirteen gaps; byteOptimal6 uncertain (upper1.045), gray16 passes/stops (upper0.987). [Four color boundaries](PNG-COLOR-ONE-SHOT.md) now include identical conversion/packing setup and disposal. [Delivery/cancellation boundaries](PNG-BOUNDARY-ONE-SHOT.md) retain word token/forward uppers1.116/1.140, asyncbyte1.029. Exact packets and complete delivery/ownership remain; no speedup claim follows the baseline change. Existing384KiB admission,2620B extra operation-array capacity, zero scratch afterdisposal; physical/complete admitted peaks unmeasured. Earlier tree/token preparation is linked history; other affectedH boundaries remain historical. |
 | JPEG and image reading | [Exact grayscale row batches](JPEG-GRAYSCALE-ROW-BATCH.md) save32.71µs/1.93%raw/4.04%normalized on the existing RGBA8→gray control, unchanged155,436B/op and exact packets. The gap remains (upper1.103); native clock change+2.19% is disclosed. Other image-grayscale timing affected by preparation is historical until refreshed. Caller-GRAY/RGB and other color/sampling/reading paths reuse valid proof; keep their named resident/stream/async/inspection/validation scope. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
@@ -20,18 +20,17 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current production build passes **5,696 full/live checks per OS**,
-45internal/521public affected checks per normal/scalar mode, plus the SAME actual
-Release package/all three examples on Windows/Linux. Linux normal exercises wide
-AVX512 kernels; Windows without AVX512 and scalar checks preserve portable public
-behavior. Packaged wide byte/word controls check exact pixels,4KiB admission,
-refusal, cancellation and independent survivors. Unchanged WebP893/357normal/
-scalar and54AVX512-off input/quantizer proofs remain valid; all codec, text and
-async ownership contracts persist. Correctness/package qualification does not
-close all282 CPU gates. Two wide costs refresh; other123 comparisons reuse
-unchanged-path proof. Fourteen displayed WebP and eight streaming-resize costs
-remain current. Other affected boundaries marked H remain historical until their
-named reconciliation.
+The current production build passes **5,704 full/live checks per OS**,
+901internal/357public affected checks per normal/scalar mode, plus the SAME actual
+Release package/all three examples on Windows/Linux. Eight additional cases
+exercise both cache traversals against independent cache simulations, frozen
+populations/choices and dirty borrowed-tail ownership. Original live-token
+checkpoints, terminal refusal and async lifetimes persist. Unchanged54AVX512-off
+and wide-column45/521normal/scalar proofs are reused; packaged wide4KiB survivors
+also pass. Correctness/package qualification does not close all282 CPU gates.
+Eight WebP costs refresh; other117 comparisons reuse unchanged-path proof,
+including latest wide resizing gains. Other affected boundaries marked H remain
+historical until their named reconciliation.
 
 The [current PNG word capture](PNG-FAST-WORD-CURRENT-ATTRIBUTION.md) reuses the
 immutable qualified producer and one-shot control:590of884samples fall in greedy

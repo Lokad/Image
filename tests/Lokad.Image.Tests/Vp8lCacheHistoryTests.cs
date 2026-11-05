@@ -21,8 +21,9 @@ public sealed class Vp8lCacheHistoryTests
         }
         return result.ToArray();
     }
-    [Fact]
-    public void FrozenHistogramsChoicesAndEveryPrefixCacheRemainExact()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void FrozenHistogramsChoicesAndEveryPrefixCacheRemainExact(bool forward)
     {
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         long compared = 0; for (var test = 0; test < 2048; test++)
@@ -35,7 +36,7 @@ public sealed class Vp8lCacheHistoryTests
             var a = Seed(pixels); var b = Seed(pixels);
             using var original = new OperationContext(ImageLimits.Default, default); using var candidate = new OperationContext(ImageLimits.Default, default);
             var before = (Vp8lReferenceCache.BestBits(pixels,a,maximumBits,original),Vp8lReferenceCache.BestBits(pixels,b,maximumBits,original));
-            if (!Vp8lReferenceCache.TryBestBitsWithHistory(pixels, a, b, maximumBits, candidate, out var ca, out var cb))
+            if (!Vp8lReferenceCache.TryBestBitsWithHistory(pixels, a, b, maximumBits, candidate, out var ca, out var cb, greenOnly: forward))
             { ca = Vp8lReferenceCache.BestBits(pixels, a, maximumBits, candidate); cb = Vp8lReferenceCache.BestBits(pixels, b, maximumBits, candidate); }
             var after = (ca, cb);
             if (before != after)
