@@ -57,9 +57,6 @@ internal sealed class Vp8FrameEncoding : IDisposable
         else { Bit(ref writer, mode != 6, p[6]); if (mode != 6) { Bit(ref writer, mode != 7, p[7]); if (mode != 7) Bit(ref writer, mode == 9, p[8]); } }
     }
 
-    private static int Band(int position) => position switch
-    { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
-
     private static ReadOnlySpan<byte> Category(int category) => category switch
     {
         0 => [159], 1 => [165, 145], 2 => [173, 148, 140], 3 => [176, 155, 140, 135],
@@ -69,12 +66,12 @@ internal sealed class Vp8FrameEncoding : IDisposable
     private static bool Coefficients(ref Vp8PartitionWriter.Cursor writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities)
     {
         var last = Vp8ResidualSummary.Last(levels, first, validate: false);
-        var at = ((type * 8 + Band(first)) * 3 + initialContext) * 11;
+        var at = ((type * 8 + Vp8Tables.CoefficientBand(first)) * 3 + initialContext) * 11;
         Bit(ref writer, last >= 0, probabilities[at]); if (last < 0) return false;
         for (var n = first; n <= last; n++)
         {
             var level = Math.Abs((int)levels[n]); Bit(ref writer, level != 0, probabilities[at + 1]);
-            if (level == 0) { at = ((type * 8 + Band(n + 1)) * 3) * 11; continue; }
+            if (level == 0) { at = ((type * 8 + Vp8Tables.CoefficientBand(n + 1)) * 3) * 11; continue; }
             Bit(ref writer, level > 1, probabilities[at + 2]);
             if (level > 1)
             {
@@ -92,7 +89,7 @@ internal sealed class Vp8FrameEncoding : IDisposable
                 }
             }
             Bit(ref writer, levels[n] < 0);
-            if (n < 15) { at = ((type * 8 + Band(n + 1)) * 3 + Math.Min(level, 2)) * 11; Bit(ref writer, n < last, probabilities[at]); }
+            if (n < 15) { at = ((type * 8 + Vp8Tables.CoefficientBand(n + 1)) * 3 + Math.Min(level, 2)) * 11; Bit(ref writer, n < last, probabilities[at]); }
         }
         return true;
     }

@@ -27,10 +27,7 @@ internal static class Vp8TrellisQuantization
         Importance.CopyTo(destination);
     }
 
-    private static int Band(int position) => position switch
-    { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
-
-    private static int Index(int type, int position, int context) => (type * 8 + Band(position)) * 3 + context;
+    private static int Index(int type, int position, int context) => (type * 8 + Vp8Tables.CoefficientBand(position)) * 3 + context;
     // Product in [0,65535] proves both existing level candidates zero:
     // product>>17 == (product+65536)>>17 == 0. No terminal can then be nonzero.
     // The caller has already checked DCT bounds, layout and cancellation.
@@ -101,7 +98,7 @@ internal static class Vp8TrellisQuantization
             var ceiling = Math.Min(2047, (magnitude * reciprocals[p] + (128 << 9)) >> 17);
             // Both candidate levels use the same two predecessor rows. Borrow
             // each row offset once; keep the strict alternate/tie comparison.
-            var band = (type * 8 + Band(n)) * 3;
+            var band = (type * 8 + Vp8Tables.CoefficientBand(n)) * 3;
             var row0 = (band + context0) * 68; var row1 = (band + context1) * 68;
             var nextScore0 = dead; var nextScore1 = dead;
             for (var choice = 0; choice < 2; choice++)

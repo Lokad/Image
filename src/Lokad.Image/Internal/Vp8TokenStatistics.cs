@@ -7,9 +7,6 @@ namespace Lokad.Image.Internal;
 // RFC6386 section13 supplies coefficient branches and update probabilities.
 internal static class Vp8TokenStatistics
 {
-    private static int Band(int position) => position switch
-    { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
-
     internal static void Event(Span<uint> statistics, int index, bool bit)
     {
         var packed = statistics[index];
@@ -25,12 +22,12 @@ internal static class Vp8TokenStatistics
         if (MemoryMarshal.AsBytes(levels[..16]).Overlaps(MemoryMarshal.AsBytes(statistics[..1056])))
             throw new ArgumentException("Coefficient inputs must not overlap writable statistics.");
         var last = Vp8ResidualSummary.Last(levels, first, validate: true);
-        var n = first; var at = ((type * 8 + Band(n)) * 3 + initialContext) * 11;
+        var n = first; var at = ((type * 8 + Vp8Tables.CoefficientBand(n)) * 3 + initialContext) * 11;
         Event(statistics, at, last >= 0); if (last < 0) return false;
         while (n < 16)
         {
             var level = Math.Abs((int)levels[n++]); Event(statistics, at + 1, level != 0);
-            if (level == 0) { at = ((type * 8 + Band(n)) * 3) * 11; continue; }
+            if (level == 0) { at = ((type * 8 + Vp8Tables.CoefficientBand(n)) * 3) * 11; continue; }
             Event(statistics, at + 2, level > 1);
             if (level > 1)
             {
@@ -55,7 +52,7 @@ internal static class Vp8TokenStatistics
                 }
             }
             if (n == 16) return true;
-            at = ((type * 8 + Band(n)) * 3 + Math.Min(level, 2)) * 11;
+            at = ((type * 8 + Vp8Tables.CoefficientBand(n)) * 3 + Math.Min(level, 2)) * 11;
             Event(statistics, at, n <= last); if (n > last) return true;
         }
         return true;

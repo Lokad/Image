@@ -182,10 +182,6 @@ internal sealed partial class Vp8RatePlan : IDisposable
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int Band(int position) => position switch
-    { 0 => 0, 1 => 1, 2 => 2, 3 => 3, 5 => 4, 6 => 5, 15 => 7, _ => 6 };
-
     // Borrowed zigzag levels and integer result only. The enclosing encoder
     // admits block cancellation in batches, without per-block scopes.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -202,14 +198,14 @@ internal sealed partial class Vp8RatePlan : IDisposable
             if (levels[p] is < -2047 or > 2047) throw new ArgumentException("VP8 residual level exceeds 2,047.");
             if (levels[p] != 0) last = p;
         }
-        nonzero = last >= 0; var index = (type * 8 + Band(first)) * 3 + initialContext;
+        nonzero = last >= 0; var index = (type * 8 + Vp8Tables.CoefficientBand(first)) * 3 + initialContext;
         if (!nonzero) return values[EobAt + index * 2];
         var cost = initialContext == 0 ? values[EobAt + index * 2 + 1] : 0;
         for (var p = first; p <= last; p++)
         {
             var level = Math.Abs((int)levels[p]);
             cost += values[FixedAt + level] + values[LevelsAt + index * 68 + Math.Min(level, 67)];
-            if (p < 15) index = (type * 8 + Band(p + 1)) * 3 + Math.Min(level, 2);
+            if (p < 15) index = (type * 8 + Vp8Tables.CoefficientBand(p + 1)) * 3 + Math.Min(level, 2);
         }
         if (last < 15) cost += values[EobAt + index * 2];
         return cost;

@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Lokad.Image.Internal;
 
 // Numeric format constants from RFC 6386 narrative sections (not its reference-code attachment).
@@ -5,6 +7,15 @@ namespace Lokad.Image.Internal;
 // Layout: block modes [above][left][branch]; coefficients [plane][band][context][branch].
 internal static class Vp8Tables
 {
+    // RFC6386 section13 coefficient bands in scan order, independently derived
+    // from the format geometry. Readonly module data, not an input cache.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static int CoefficientBand(int position)
+    {
+        ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
+        return (uint)position < (uint)bands.Length ? bands[position] : 6;
+    }
+
     // RFC 6386 section 11.5.
     public static ReadOnlySpan<byte> BlockModeProbabilities =>
     [

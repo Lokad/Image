@@ -9,7 +9,7 @@ internal sealed partial class Vp8RatePlan
     private static Vector256<ushort> CreateResidualBandOffsets()
     {
         Span<ushort> values=stackalloc ushort[16];
-        for(var p=0;p<16;p++)values[p]=(ushort)(Band(p)*3*68);
+        for(var p=0;p<16;p++)values[p]=(ushort)(Vp8Tables.CoefficientBand(p)*3*68);
         return Vector256.Create(values);
     }
     private static readonly Vector256<ushort> ResidualBandOffsets=CreateResidualBandOffsets();
@@ -43,7 +43,7 @@ internal sealed partial class Vp8RatePlan
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int PreparedResidualCost(ReadOnlySpan<ushort> values,Vector256<ushort> absolute,int type,int first,int initialContext,int last)
     {
-        var index=(type*8+Band(first))*3+initialContext;
+        var index=(type*8+Vp8Tables.CoefficientBand(first))*3+initialContext;
         if(last<0)return values[EobAt+index*2];
         var clamped=Avx2.Min(absolute,Vector256.Create((ushort)67));
         var contexts=Avx2.Min(absolute,Vector256.Create((ushort)2));
@@ -60,7 +60,7 @@ internal sealed partial class Vp8RatePlan
         for(var p=first;p<=last;p++)cost+=values[FixedAt+magnitudes[p]]+values[addresses[p]];
         if(last<15)
         {
-            var next=(type*8+Band(last+1))*3+Math.Min((int)magnitudes[last],2);
+            var next=(type*8+Vp8Tables.CoefficientBand(last+1))*3+Math.Min((int)magnitudes[last],2);
             cost+=values[EobAt+next*2];
         }
         return cost;
