@@ -1576,7 +1576,7 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-shared-coefficient-geometry-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-combined-rate-preparation-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
     vq = vp8_owned['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5716
@@ -1584,8 +1584,9 @@ def render():
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     assert vp8_owned['raw']['mirrored'] and vp8_owned['raw']['allMembersVerified']
-    assert vp8_owned['sourceProof']['identicalPrivateSwitchesBefore'] == 4
-    assert vp8_owned['sourceProof']['privateSwitchesAfter'] == 0
+    assert vp8_owned['sourceProof']['combinedPricesInExistingWords']
+    assert vp8_owned['sourceProof']['conservativeMaximum'] < 65536
+    assert vp8_owned['storage']['ratePlanOwnedCapacityBytes'] == 20192
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
     current_labels = {
@@ -1785,13 +1786,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [shared coefficient geometry](../benchmarks/VP8-SHARED-COEFFICIENT-GEOMETRY.md)
-  removes four duplicate switches, independently saving0.91ms/7.4% on effort6
-  diagram and0.32ms/2.7% on effort4photo, with exact packets/unchanged paired
-  allocations. Eight refreshed VP8 controls remain gaps (uppers1.043–1.211).
-  The preceding [zero-router stage](../benchmarks/VP8-ZERO-ROUTE-SEARCH.md)
-  retains its0.84ms/6.5% effort6gain. Six lossless controls reuse
-  [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
+- **WebP:** [combined coefficient prices](../benchmarks/VP8-COMBINED-RATE-PREPARATION.md)
+  remove repeated fixed-cost loads without extra storage. Independent complete
+  photograph/trellis saves are198/184µs
+  (1.7%/1.6%), with exact packets and unchanged paired allocations.
+  Eight current VP8 controls:5 gap, 3 uncertain; native boundaries remain explicit.
+  Previous shared-geometry/zero-router gains remain linked history. Six lossless
+  controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
   saves408µs/7.4% raw on Fastest8; normalized confidence narrowly overlaps, so

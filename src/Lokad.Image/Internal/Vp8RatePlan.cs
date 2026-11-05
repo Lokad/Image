@@ -20,7 +20,7 @@ internal sealed partial class Vp8RatePlan : IDisposable
     internal ReadOnlySpan<ushort> FixedLevels => Values.Slice(FixedAt, 2048);
     internal ReadOnlySpan<ushort> Modes => Values.Slice(ModesAt, 1008);
     internal ReadOnlySpan<ushort> EndOfBlock => Values.Slice(EobAt, 192);
-    internal ReadOnlySpan<ushort> VariableLevels => Values[LevelsAt..];
+    internal ReadOnlySpan<ushort> CombinedLevels => Values[LevelsAt..];
 
     // Cost is ceil(256 * mean renormalization shifts) over the repeated-zero
     // orbit of the inclusive boolean range. Each normalized range is128..255;
@@ -177,8 +177,11 @@ internal sealed partial class Vp8RatePlan : IDisposable
             context.Cancellation.ThrowIfCancellationRequested(); var p = probabilities.Slice(index * 11, 11); var extra = index % 3 == 0 ? 0 : Bit(entropy, true, p[0]);
             values[EobAt + index * 2] = (ushort)Bit(entropy, false, p[0]);
             values[EobAt + index * 2 + 1] = (ushort)Bit(entropy, true, p[0]);
+            // Include the invariant sign/category price in the existing words.
+            // Variable tree: at most7binary costs; fixed: sign256+11costs.
+            // Even a conservative2048per bit gives37120, within UInt16.
             for (var level = 0; level < 68; level++)
-                values[LevelsAt + index * 68 + level] = (ushort)(extra + VariableCost(level, p, entropy));
+                values[LevelsAt + index * 68 + level] = (ushort)(values[FixedAt + level] + extra + VariableCost(level, p, entropy));
         }
     }
 
@@ -204,7 +207,8 @@ internal sealed partial class Vp8RatePlan : IDisposable
         for (var p = first; p <= last; p++)
         {
             var level = Math.Abs((int)levels[p]);
-            cost += values[FixedAt + level] + values[LevelsAt + index * 68 + Math.Min(level, 67)];
+            cost += values[LevelsAt + index * 68 + Math.Min(level, 67)];
+            if (level > 67) cost += values[FixedAt + level] - values[FixedAt + 67];
             if (p < 15) index = (type * 8 + Vp8Tables.CoefficientBand(p + 1)) * 3 + Math.Min(level, 2);
         }
         if (last < 15) cost += values[EobAt + index * 2];

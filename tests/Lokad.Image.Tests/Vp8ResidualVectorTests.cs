@@ -10,11 +10,34 @@ public sealed class Vp8ResidualVectorTests
 {
     private uint state=0x91e10da5;
     private uint Next(){state^=state<<13;state^=state>>17;state^=state<<5;return state;}
+    // Independent scalar pricing with the original variable/fixed semantics.
+    // Literal format bands keep this oracle separate from SIMD address setup.
+    private static int ReferenceCost(ReadOnlySpan<ushort> tables,ReadOnlySpan<short> levels,int type,int first,int context)
+    {
+        ReadOnlySpan<byte> bands=[0,1,2,3,6,4,5,6,6,6,6,6,6,6,6,7];
+        var last=-1;for(var p=first;p<16;p++)if(levels[p]!=0)last=p;
+        var index=(type*8+bands[first])*3+context;
+        if(last<0)return tables[3312+index*2];
+        var cost=context==0?tables[3312+index*2+1]:0;
+        for(var p=first;p<=last;p++)
+        {
+            var level=Math.Abs((int)levels[p]);
+            cost+=tables[256+level]+tables[3504+index*68+Math.Min(level,67)];
+            if(p<15)index=(type*8+bands[p+1])*3+Math.Min(level,2);
+        }
+        if(last<15)cost+=tables[3312+index*2];
+        return cost;
+    }
     [Fact]
     public void FrozenCostsDomainRejectionAndZeroAllocationRemainExact()
     {
         if(!Avx2.IsSupported)return;
-        var tables=new ushort[10032];for(var i=0;i<tables.Length;i++)tables[i]=(ushort)Next();
+        // Synthetic prices must fit after fixed+variable preparation. Fourteen
+        // bits per component cover well beyond actual generated variable costs.
+        var original=new ushort[10032];for(var i=0;i<original.Length;i++)original[i]=(ushort)(Next()&16383);
+        var tables=original.ToArray();
+        for(var index=0;index<96;index++)for(var level=0;level<68;level++)
+            tables[3504+index*68+level]=checked((ushort)(original[3504+index*68+level]+original[256+level]));
         using var hash=IncrementalHash.CreateHash(HashAlgorithmName.SHA256);Span<byte> bytes=stackalloc byte[4];
         Span<short> levels=stackalloc short[18];var comparisons=0;
         for(var test=0;test<32768;test++)
@@ -31,6 +54,7 @@ public sealed class Vp8ResidualVectorTests
                 for(var type=0;type<4;type++)for(var ctx=0;ctx<3;ctx++)
                 {
                     var before=Vp8RatePlan.ResidualVectors(tables,levels,type,first,ctx,out var nz0);
+                    Assert.Equal(ReferenceCost(original,levels,type,first,ctx),before);
                     Assert.Equal(levels[first..16].ContainsAnyExcept((short)0),nz0);
                     BinaryPrimitives.WriteInt32LittleEndian(bytes,before);hash.AppendData(bytes);comparisons++;
                 }
@@ -62,6 +86,7 @@ public sealed class Vp8ResidualVectorTests
         var allocated=GC.GetAllocatedBytesForCurrentThread()-allocationStart;
         if(allocated!=0||checksum!=0)throw new Exception("Unexpected warm allocation or unstable score");
         Assert.Equal(786432,comparisons);Assert.Equal(65536,domainSamples);Assert.Equal(64,invalidCases);Assert.Equal(0,allocated);
-        Assert.Equal("2b61fd9aff020d7d4104cfedf4c2e4421fd766e29253c6be5e0ea349e508e26d",Convert.ToHexStringLower(hash.GetHashAndReset()));
+        // Frozen independently with the scalar Python oracle on these inputs.
+        Assert.Equal("d26addb814c0185fd191e2626866501aaeb87d2d089926a2cd89287763363c50",Convert.ToHexStringLower(hash.GetHashAndReset()));
     }
 }

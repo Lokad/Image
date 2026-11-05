@@ -57,7 +57,12 @@ internal sealed partial class Vp8RatePlan
         ReadOnlySpan<ushort> magnitudes=MemoryMarshal.Cast<Vector256<ushort>,ushort>(MemoryMarshal.CreateReadOnlySpan(ref absolute,1));
         ReadOnlySpan<ushort> addresses=MemoryMarshal.Cast<Vector256<ushort>,ushort>(MemoryMarshal.CreateReadOnlySpan(ref indices,1));
         var cost=initialContext==0?values[EobAt+index*2+1]:0;
-        for(var p=first;p<=last;p++)cost+=values[FixedAt+magnitudes[p]]+values[addresses[p]];
+        for(var p=first;p<=last;p++)cost+=values[addresses[p]];
+        // Most blocks need only the combined lookup. Larger magnitudes share
+        // level67's variable price, but need their own signed category delta.
+        if(!Vector256.EqualsAll(absolute,clamped))
+            for(var p=first;p<=last;p++)
+                if(magnitudes[p]>67)cost+=values[FixedAt+magnitudes[p]]-values[FixedAt+67];
         if(last<15)
         {
             var next=(type*8+Vp8Tables.CoefficientBand(last+1))*3+Math.Min((int)magnitudes[last],2);

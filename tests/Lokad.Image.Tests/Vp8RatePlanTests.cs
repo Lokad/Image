@@ -21,7 +21,7 @@ public sealed class Vp8RatePlanTests
         };
         using var root = new TestMemoryBudget(21_216); using var context = new OperationContext(new() { MemoryBudget = root }, default);
         using var plan = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, context);
-        var before = plan.Values.ToArray(); var prefix = before.Length - plan.EndOfBlock.Length - plan.VariableLevels.Length;
+        var before = plan.Values.ToArray(); var prefix = before.Length - plan.EndOfBlock.Length - plan.CombinedLevels.Length;
         Assert.True(root.TryReserve(1024, out var caller));
         using (caller)
         {
@@ -65,6 +65,19 @@ public sealed class Vp8RatePlanTests
         foreach (var value in values) { BinaryPrimitives.WriteUInt16LittleEndian(word, value); hash.AppendData(word); }
     }
 
+    // Serialize native variable-only semantics, independently of the owned
+    // combined-price representation. Preserve the frozen reference digest.
+    private static void AppendVariableCosts(IncrementalHash hash, Vp8RatePlan plan)
+    {
+        Span<ushort> row = stackalloc ushort[68];
+        for (var index = 0; index < 96; index++)
+        {
+            for (var level = 0; level < row.Length; level++)
+                row[level] = checked((ushort)(plan.CombinedLevels[index * row.Length + level] - plan.FixedLevels[level]));
+            AppendWords(hash, row);
+        }
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(255)]
@@ -74,7 +87,11 @@ public sealed class Vp8RatePlanTests
         using var plan = Vp8RatePlan.Create(Enumerable.Repeat((byte)probability, 1056).ToArray(), context);
         Assert.Equal(20_192, plan.CapacityBytes); Assert.Equal(plan.CapacityBytes, root.Bytes);
         Assert.Equal(21_216, root.Peak);
-        foreach (var cost in plan.VariableLevels) Assert.InRange((int)cost, 0, 14336);
+        for (var index = 0; index < plan.CombinedLevels.Length; index++)
+        {
+            var cost = plan.CombinedLevels[index]; Assert.InRange((int)cost, 0, 37120);
+            Assert.InRange(cost - plan.FixedLevels[index % 68], 0, 14336);
+        }
         foreach (var cost in plan.FixedLevels) Assert.InRange((int)cost, 0, 22784);
         plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
@@ -86,7 +103,8 @@ public sealed class Vp8RatePlanTests
         var probabilities = Vp8Tables.CoefficientProbabilities.ToArray();
         using var first = Vp8RatePlan.Create(probabilities, context); using var second = Vp8RatePlan.Create(ArithmeticProbabilities(), context);
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
-        AppendWords(hash, first.Values); AppendWords(hash, second.EndOfBlock); AppendWords(hash, second.VariableLevels);
+        AppendWords(hash, first.Values[..(first.Values.Length - first.CombinedLevels.Length)]);
+        AppendVariableCosts(hash, first); AppendWords(hash, second.EndOfBlock); AppendVariableCosts(hash, second);
         Assert.Equal("58dfedadf26f4d9e6d3c6e7c088d6c149df3108e42d9a9c5814a7a4d0ace17bf", Convert.ToHexStringLower(hash.GetHashAndReset()));
         Assert.Equal(20_192, first.CapacityBytes); Assert.Equal(2 * first.CapacityBytes, root.Bytes);
         Assert.Equal(root.Bytes + 1024, root.Peak); var original = first.Values.ToArray(); probabilities.AsSpan().Clear();

@@ -75,7 +75,7 @@ internal static class Vp8TrellisQuantization
         Vp8QuantizationMatrix matrix, Vp8RatePlan rate, ReadOnlySpan<ushort> weights,
         int type, int initialContext, int lambda)
     {
-        var fixedLevels = rate.FixedLevels; var variableLevels = rate.VariableLevels; var endOfBlock = rate.EndOfBlock;
+        var fixedLevels = rate.FixedLevels; var combinedLevels = rate.CombinedLevels; var endOfBlock = rate.EndOfBlock;
         var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
         var first = type == 0 ? 1 : 0;
         // RFC6386 section13 diagonal coefficient order; read-only format data.
@@ -108,9 +108,10 @@ internal static class Vp8TrellisQuantization
                 var error = magnitude - level * steps[p];
                 var delta = (long)weights[p] * (error * error - magnitude * magnitude) * 256;
                 var winner = 0;
-                var fixedCost = fixedLevels[level]; var variable = Math.Min(level, 67);
-                var score = score0 + (long)lambda * (fixedCost + variableLevels[row0 + variable]);
-                var alternate = score1 + (long)lambda * (fixedCost + variableLevels[row1 + variable]);
+                var stored = Math.Min(level, 67);
+                var correction = level > 67 ? fixedLevels[level] - fixedLevels[67] : 0;
+                var score = score0 + (long)lambda * (combinedLevels[row0 + stored] + correction);
+                var alternate = score1 + (long)lambda * (combinedLevels[row1 + stored] + correction);
                 if (alternate < score) { score = alternate; winner = 1; }
                 score += delta;
                 if (choice == 0) nextScore0 = score; else nextScore1 = score;
