@@ -201,13 +201,16 @@ internal static class Vp8lReferenceMatcher
                 while (candidate >= minimum && --remaining != 0)
                 {
                     Check<TCancellation>(context);
+                    // This query publishes no index entries until its search
+                    // finishes. Read the owned successor before comparing pixels.
+                    var nextCandidate = previous[candidate];
                     if (pixels[candidate + length] == pixels[position + length])
                     {
                         var found = Length<TCancellation>(pixels, candidate, position, 0, limit, context);
                         if (found > length)
                         { length = found; distance = position - candidate; if (length >= enough) break; }
                     }
-                    candidate = previous[candidate];
+                    candidate = nextCandidate;
                 }
                 var extensionOrigin = position;
                 while (true)

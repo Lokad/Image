@@ -17,8 +17,8 @@
 - Quantize complete VP8 coefficient blocks with AVX512F, preserving exact packets,
   zero per-block allocation and the AVX2/scalar fallbacks.
 
-- Specialize WebP matching for uncancelable tokens while retaining every live
-  cancellation checkpoint, exact packets and unchanged memory ownership.
+- Prepare WebP matching for uncancelable tokens and read owned chain links ahead
+  of comparisons, preserving live cancellation checks, exact packets and ownership.
 
 - Share Lanczos RGB and certificate preparation in SIMD lanes, preserving exact
   pixels, portable fallbacks, cancellation and memory ownership.

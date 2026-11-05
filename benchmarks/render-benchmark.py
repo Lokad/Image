@@ -1650,12 +1650,14 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-matcher-cancellation-preparation-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-chain-link-preparation-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted'] and webp_owned['pairedComparison']['allPairsRetained']
     assert webp_owned['pairedComparison']['pairs'] == 12 and webp_owned['pairedComparison']['ratioConfidence'][1] < 1
-    assert webp_owned['qualification']['fullChecksEachOs'] == 5634
+    assert webp_owned['qualification']['fullChecksEachOs'] == 5659
     assert webp_owned['qualification']['actualPackage']['sha256'] == webp_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert webp_owned['storage']['newOwnedCapacityBytes'] == 0
+    assert all(c['pairs'] == 12 and c['ratioConfidence'][1] < 1 for c in webp_owned['pairedComparisons'].values())
+    assert webp_owned['pairedComparisons']['photograph']['quality'] == 85 and webp_owned['pairedComparisons']['alpha']['quality'] == 75
     streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
     assert streaming['qualification']['fullChecksEachOs'] == 5587
@@ -1694,7 +1696,7 @@ def render():
     })
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
-        owner = vp8_owned if case in {'alpha', 'alpha16', 'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
+        owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']
@@ -1705,20 +1707,6 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    photo_check = json.loads((ROOT / 'benchmarks/webp-photograph-counterbalanced-evidence.json').read_text(encoding='utf-8'))
-    current = photo_check['current']
-    assert not photo_check['productionChanged'] and photo_check['newMaterialCases'] == 0 and photo_check['currentCostOnly']
-    assert current['actualIterations'] == 12 and current['allActualsRetained'] and current['operationsPerSubjectPerPair'] == 4
-    assert current['completePacketExact'] and current['managedPacketBytes'] == current['nativePacketBytes'] == 160032
-    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-    assert current['status'] == 'uncertain' and current['lower'] <= 1 < current['upper']
-    assert photo_check['qualificationReused']['productionSourcesAndDllsUnchanged']
-    assert photo_check['qualificationReused']['sameActualPackageAllThreeExamplesBothOs']
-    label = 'VP8L photograph / libwebp exact=1'
-    position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| ' + label + ' †'))
-    rows[position] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
-                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
-                      f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
     column = json.loads((ROOT / 'benchmarks/bicubic-column-preparation-evidence.json').read_text(encoding='utf-8'))
     current = column['cases']['TightDown8']
     assert column['productionAccepted'] and current['actualIterations'] == 12
@@ -1888,30 +1876,22 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current priorities and scope:
 
-- **WebP:** [shared alpha preparation](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md)
-  confirms 834.78 µs / 1.35% on the frozen transparent RGBA16 control; paired
-  allocations stay 7,165,064 B/op. One reader shares byte/word tiles and exact
-  kernels; an 8 B value shares alpha weights/reciprocal across color channels.
-  Eligible alpha scratch admission rises from 1 KiB to 4 KiB; opaque vector
-  4 KiB/scalar 1 KiB and retained output capacity stay unchanged. All eight
-  current VP8 costs retain gaps (alpha16 upper 1.164). Alpha8/photograph paired
-  intervals span no change; adverse standalone points/native clock movement
-  remain visible without broader gain/regression claims. The earlier
-  [opaque stage](../benchmarks/VP8-SHARED-INPUT-PREPARATION.md) retains its scoped
-  4.44% word gain; its displayed costs are superseded here.
-  [ALPH-to-frame storage reuse](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
-  retains its 449 KB/op saving and 7,165,880/7,165,472 B/op at byte/word depths.
-  Its earlier alpha8 admission-peak measurement is 3,656,309 B, retained scratch zero;
-  the coefficient phase carries 82,668 B extra. Current complete admitted/physical
-  peaks were not remeasured.
-  [Unchanged VP8L paths](../benchmarks/WEBP-MATCHER-CANCELLATION-PREPARATION.md) reuse valid
-  proof: original/diagram/depth/async pass and stop; opaque retains a gap.
-  [Photograph's counterbalanced check](../benchmarks/WEBP-PHOTOGRAPH-COUNTERBALANCED.md)
-  remains uncertain (interval 0.990–1.020); twelve alternating pairs retain all
-  actuals and native brackets, with unchanged frozen settings/packets. No repeated
-  unchanged sampling follows. Earlier
-  [full-block quantization](../benchmarks/VP8-FULL-BLOCK-QUANTIZATION.md) and matcher
-  gains retain their scoped evidence, without substituting older VP8 costs.
+- **WebP:** [chain-link preparation](../benchmarks/WEBP-CHAIN-LINK-PREPARATION.md)
+  confirms 787.72 µs / 0.95% on the Q85 lossless photograph and 201.41 µs / 0.33%
+  on Q75 transparent VP8/ALPH. Complete-operation allocations stay unchanged.
+  All eight affected costs refresh once: five lossless boundaries pass and stop,
+  including photograph (upper 0.991); opaque lossless is uncertain (upper 1.026).
+  Transparent byte/word retain gaps (uppers 1.147/1.152). All original settings,
+  complete packets, quality and independent output boundaries remain.
+  Direct four-control admission peaks stay unchanged; retained scratch is zero.
+  Physical peaks and native allocations are unmeasured.
+  [Shared input preparation](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md) retains
+  its scoped earlier gains. Eligible alpha/opaque vector scratch is 4 KiB, scalar
+  scratch 1 KiB; selected-output capacity is unchanged. The six opaque VP8 rows
+  reuse those unchanged costs. [ALPH-to-frame storage](../benchmarks/WEBP-ALPHA-COEFFICIENT-STORAGE.md)
+  retains its 449 KB/op saving; byte/word alpha now allocates 7,165,880/7,165,472
+  B/op in the current benchmark boundary. Superseded uncertainty and experiments
+  remain linked from the current report, without replacing current costs.
 - **PNG:** [operation-owned block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md)
   saves 148,320 B on word Smallest9 (5.7%) and 19,936 B on byte Fastest1 (2.4%)
   at equal batching, without a CPU gain/equivalence/regression claim. Fifteen current
