@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -115,23 +116,23 @@ internal sealed partial class PngDeflater
                         var second = (int)input[index + 1]; var third = (int)input[index + 2];
                         var firstBits = literalLengths[(int)token]; var secondBits = literalLengths[second];
                         var width = firstBits + secondBits + literalLengths[third];
-                        if (cursor.CanAppend(width))
-                        {
-                            var value = literals[(int)token] | literals[second] << firstBits
-                                | literals[third] << (firstBits + secondBits);
-                            cursor.Put(value, width); index += 2; continue;
-                        }
+                        var value = (ulong)(uint)literals[(int)token] | (ulong)(uint)literals[second] << firstBits
+                            | (ulong)(uint)literals[third] << (firstBits + secondBits);
+                        cursor.Put(value, width); index += 2; continue;
                     }
-                    cursor.Put(literals[(int)token], literalLengths[(int)token]); continue;
+                    cursor.Put((ulong)(uint)literals[(int)token], literalLengths[(int)token]); continue;
                 }
                 var length = (int)(token & 511); var ls = LengthSymbol(length); var ds = DistanceSymbol(back);
                 var le = LengthExtra(ls); var de = DistanceExtra(ds);
                 var lb = ls < 265 ? ls - 254 : ls == 285 ? 258 : 3 + ((4 + (ls - 265) % 4) << le);
                 var db = ds < 4 ? ds + 1 : 1 + ((2 + ds % 2) << de);
-                cursor.Put(literals[ls], literalLengths[ls]); cursor.Put(length - lb, le);
-                cursor.Put(distances[ds], distanceLengths[ds]); cursor.Put(back - db, de);
+                var firstWidth = literalLengths[ls]; var secondWidth = firstWidth + le;
+                var thirdWidth = secondWidth + distanceLengths[ds];
+                var match = (ulong)(uint)literals[ls] | (ulong)(uint)(length - lb) << firstWidth
+                    | (ulong)(uint)distances[ds] << secondWidth | (ulong)(uint)(back - db) << thirdWidth;
+                cursor.Put(match, thirdWidth + de);
             }
-            cursor.Put(literals[256], literalLengths[256]);
+            cursor.Put((ulong)(uint)literals[256], literalLengths[256]); cursor.Finish();
         }
         finally { cursor.Commit(); }
     }
@@ -142,7 +143,7 @@ internal sealed partial class PngDeflater
     {
         private readonly PngDeflater owner;
         private readonly byte[] buffer;
-        private uint pending;
+        private ulong pending;
         private int pendingBits, position;
 
         internal TokenCursor(PngDeflater owner)
@@ -151,19 +152,37 @@ internal sealed partial class PngDeflater
             pending = owner.pending; pendingBits = owner.pendingBits; position = owner.encodedCount;
         }
 
+        // A complete match occupies at most48bits. Retaining up to31bits
+        // amortizes output over words; drain the rare overflow before appending.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal bool CanAppend(int width) => width <= 32 - pendingBits;
+        internal void Put(ulong value, int width)
+        {
+            if (pendingBits + width > 64) Finish();
+            pending |= value << pendingBits; pendingBits += width;
+            while (pendingBits >= 32)
+            {
+                if (position <= buffer.Length - 4)
+                {
+                    BinaryPrimitives.WriteUInt32LittleEndian(buffer.AsSpan(position), (uint)pending);
+                    position += 4; pending >>= 32; pendingBits -= 32;
+                    if (position == buffer.Length) Flush();
+                }
+                else
+                    for (var i = 0; i < 4; i++) Byte();
+            }
+        }
+
+        internal void Finish()
+        {
+            while (pendingBits >= 8) Byte();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void Put(int value, int width)
+        private void Byte()
         {
-            pending |= (uint)value << pendingBits; pendingBits += width;
-            while (pendingBits >= 8)
-            {
-                buffer[position++] = (byte)pending;
-                if (position == buffer.Length) Flush();
-                pending >>= 8; pendingBits -= 8;
-            }
+            buffer[position++] = (byte)pending;
+            pending >>= 8; pendingBits -= 8;
+            if (position == buffer.Length) Flush();
         }
 
         private void Flush()

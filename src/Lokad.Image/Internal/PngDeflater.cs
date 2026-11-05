@@ -23,7 +23,8 @@ internal sealed partial class PngDeflater : Stream
     private long position, filled, windowOrigin, deferredStart, blockStart;
     private int storedCount;
     private int deferredLength = Minimum - 1, tokenCount, encodedCount, pendingBits;
-    private uint pending, adlerA = 1, adlerB;
+    private ulong pending;
+    private uint adlerA = 1, adlerB;
     private bool hasDeferredByte, started, completed, disposed;
 
     internal PngDeflater(Stream output, OperationContext context, int level = 6)

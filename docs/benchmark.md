@@ -25,12 +25,12 @@ Current scope and remaining work:
   (uppers1.111/1.124). The photo's original timing step and one unchanged-driver
   reconciliation remain evidence; no passing native-parity claim follows.
   Six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
-- **PNG:** [block preparation](../benchmarks/PNG-BLOCK-PREPARATION.md),
-  [color](../benchmarks/PNG-COLOR-ONE-SHOT.md) and
-  [delivery](../benchmarks/PNG-BOUNDARY-ONE-SHOT.md) supply fifteen equivalent
-  one-shot costs:13gaps, byteOptimal6uncertain (upper1.045), gray16pass (upper0.987).
-  Existing384KiB admission and zero retained scratch remain; allocation savings
-  do not establish CPU gains. Adverse experiments remain linked history.
+- **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
+  saves408µs/7.4% raw on Fastest8; normalized confidence narrowly overlaps, so
+  no independently separated normalized gain is claimed. Fifteen fresh one-shot
+  costs have3passes,7gaps and5uncertain cases. Exact packets and384KiB admission
+  remain; allocation rises8B/op from wider scalar state, with zero retained scratch.
+  Historical output/preparation experiments remain linked separately.
 - **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
   Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
@@ -51,7 +51,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,706 full/live checks per OS**, affected
+The current production build passes **5,707 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
@@ -59,11 +59,10 @@ Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
 uncertain timing points remain evidence; no third photo measurement follows.
-A subsequent [compact ALPH investigation](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md)
-restores production after confirmed cross-content tradeoffs. One new borrowed-
-storage case and a strengthened frozen cost oracle pass separately on restored
-code, with no repeated full suite/package proof. Complete physical/admitted peaks
-are not inferred from allocations.
+The [compact ALPH investigation](../benchmarks/WEBP-COMPACT-PREDICTOR-TRADEOFF.md)
+restores production after confirmed cross-content tradeoffs; its useful borrowed-
+storage and cost-oracle coverage is included in the current full qualification.
+Complete physical/admitted peaks are not inferred from allocations.
 
 **References and boundaries.** FFmpeg is the reference except for explicitly
 labeled **libwebp exact=1** lossless WebP (hidden RGB preserved), SIMD-enabled
@@ -106,27 +105,27 @@ settings do not establish matched quality.
 | VP8L text/diagram / libwebp exact=1 † | 7,439.03 | 9,510.65 | 0.782 / 0.792 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 115,463.57 | 131,118.94 | 0.881 / 0.893 | 7,476,544 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 69,586.27 | 70,212.92 | 0.991 / 1.008 | 5,983,328 | 121,896 / 121,896 |
-| PNG RGBA8, one-shot SmallestSize9 / native9 † | 19,417.24 | 18,696.87 | 1.039 / 1.049 | 820,444 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot SmallestSize9 / native9 † | 23,814.57 | 22,718.51 | 1.048 / 1.065 | 2,437,652 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 5,940.17 | 4,734.88 | 1.255 / 1.276 | 820,908 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 18,963.03 | 18,490.36 | 1.026 / 1.038 | 820,452 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 21,515.51 | 20,853.86 | 1.032 / 1.048 | 2,437,660 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 5,130.63 | 4,373.97 | 1.173 / 1.211 | 820,916 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 21,689.76 | 20,151.55 | 1.076 / 1.085 | 2,437,652 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, live cancelable token † | 22,117.18 | 20,058.57 | 1.103 / 1.116 | 2,437,652 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, forward-only output † | 21,681.81 | 19,863.09 | 1.092 / 1.140 | 2,437,684 | 968,216 / 968,216 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 2,255.69 | 1,964.05 | 1.148 / 1.185 | 551,356 | 72,586 / 72,586 |
-| PNG RGB8, one-shot Optimal6 / native6 † | 10,026.74 | 9,878.14 | 1.015 / 1.023 | 819,876 | 168,729 / 168,729 |
-| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,578.16 | 4,428.73 | 1.034 / 1.050 | 552,324 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 17,723.94 | 17,294.12 | 1.025 / 1.045 | 820,444 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 23,400.62 | 22,554.07 | 1.038 / 1.047 | 2,437,652 | 963,202 / 963,202 |
-| PNG RGB16, one-shot Optimal6 / native6 † | 18,413.80 | 17,724.93 | 1.039 / 1.048 | 2,431,484 | 739,472 / 739,472 |
-| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 5,215.54 | 5,407.47 | 0.965 / 0.987 | 822,732 | 265,433 / 265,433 |
-| PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,935.23 | 10,483.28 | 1.043 / 1.052 | 1,360,892 | 506,887 / 506,887 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 2,305.00 | 2,176.07 | 1.059 / 1.093 | 551,364 | 72,586 / 72,586 |
+| PNG RGB8, one-shot Optimal6 / native6 † | 10,502.27 | 10,731.21 | 0.979 / 0.989 | 819,884 | 168,729 / 168,729 |
+| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,857.38 | 4,921.85 | 0.987 / 1.003 | 552,332 | 120,366 / 120,366 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 18,683.62 | 18,255.02 | 1.023 / 1.071 | 820,452 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 23,271.35 | 22,611.27 | 1.029 / 1.035 | 2,437,660 | 963,202 / 963,202 |
+| PNG RGB16, one-shot Optimal6 / native6 † | 17,609.30 | 17,695.33 | 0.995 / 1.002 | 2,431,492 | 739,472 / 739,472 |
+| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 5,387.62 | 5,891.43 | 0.914 / 0.935 | 822,740 | 265,433 / 265,433 |
+| PNG gray-alpha16, one-shot Optimal6 / native6 † | 11,288.46 | 11,366.92 | 0.993 / 1.006 | 1,360,900 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
-| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 19,366.24 | 18,983.03 | 1.020 / 1.029 | 882,204 | 210,973 / 210,973 |
 | PNG RGBA8 decode, live token † | 1,607.11 | 1,397.16 | 1.150 / 1.182 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,642.61 | 1,498.48 | 1.096 / 1.119 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit (confidence open) † | 3,120.34 | 3,128.99 | 0.997 / 1.016 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 21,083.34 | 20,370.66 | 1.035 / 1.045 | 2,437,660 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, live cancelable token † | 21,501.93 | 20,279.36 | 1.060 / 1.075 | 2,437,660 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, forward-only output † | 21,117.46 | 20,341.13 | 1.038 / 1.046 | 2,437,692 | 968,216 / 968,216 |
+| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 18,520.84 | 18,913.40 | 0.979 / 0.995 | 882,212 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode † | 1,062.27 | 1,017.29 | 1.044 / 1.078 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode (confidence open) † | 335.68 | 336.82 | 0.997 / 1.032 | 1,085,963 | — |
 | VP8L RGBA8, resident decode † | 3,224.25 | 3,019.22 | 1.068 / 1.079 | 152,728 | — |

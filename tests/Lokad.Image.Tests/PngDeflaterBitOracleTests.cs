@@ -23,19 +23,24 @@ public sealed class PngDeflaterBitOracleTests
         uint[] alphabet = [0, 1, 2, 255, 3, 4, 5, 128, 7];
         using var root = new TestMemoryBudget(PngDeflater.WorkspaceBytes);
         foreach (var lengths in trees)
+        foreach (var distances in new[] { distanceLengths,
+            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
+                15, 15, 15, 15, 15, 15, 15, 15 } })
         foreach (var run in new[] { 0, 1, 2, 3, 4, 5, 7, 8, 17 })
         foreach (var initialBits in Enumerable.Range(0, 8))
         foreach (var position in new[] { 0, 4093, 4094, 4095 })
         {
             List<uint> input = [];
             for (var i = 0; i < run; i++) input.Add(alphabet[i % alphabet.Length]);
-            input.Add(3u | 1u << 9);
+            input.AddRange([253u, 254u, 255u]);
+            input.Add(257u | 32768u << 9); input.Add(3u | 1u << 9);
             for (var i = 0; i < run; i++) input.Add(alphabet[(alphabet.Length - 1 - i % alphabet.Length)]);
             input.Add(258u | 32768u << 9); input.Add(27); input.Add(10u | 17u << 9); input.Add(11u | 5u << 9);
             var tokens = input.ToArray(); var unchanged = tokens.ToArray();
             var prefix = Enumerable.Range(0, position).Select(i => unchecked((byte)(i * 29 + 7))).ToArray();
             var pending = (1u << initialBits) - 1;
-            var expected = Reference(tokens, lengths, distanceLengths, prefix, pending, initialBits);
+            var expected = Reference(tokens, lengths, distances, prefix, pending, initialBits);
             using var context = new OperationContext(new() { MemoryBudget = root }, default);
             using var output = new MemoryStream();
             using (var encoder = new PngDeflater(output, context, 9))
@@ -43,11 +48,11 @@ public sealed class PngDeflaterBitOracleTests
                 var type = typeof(PngDeflater);
                 prefix.CopyTo((byte[])type.GetField("encoded", Private)!.GetValue(encoder)!);
                 type.GetField("encodedCount", Private)!.SetValue(encoder, position);
-                type.GetField("pending", Private)!.SetValue(encoder, pending);
+                type.GetField("pending", Private)!.SetValue(encoder, Convert.ChangeType(pending, type.GetField("pending", Private)!.FieldType));
                 type.GetField("pendingBits", Private)!.SetValue(encoder, initialBits);
                 tokens.CopyTo((uint[])type.GetField("tokens", Private)!.GetValue(encoder)!, 0);
                 type.GetField("tokenCount", Private)!.SetValue(encoder, tokens.Length);
-                type.GetMethod("WriteTokens", Private)!.Invoke(encoder, [lengths, distanceLengths]);
+                type.GetMethod("WriteTokens", Private)!.Invoke(encoder, [lengths, distances]);
                 type.GetMethod("Align", Private)!.Invoke(encoder, null); encoder.Flush();
             }
             Assert.Equal(expected, output.ToArray()); Assert.Equal(unchanged, tokens);

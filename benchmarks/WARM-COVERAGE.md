@@ -13,37 +13,35 @@ Completion needs current passing evidence for every named path, with scope state
 | Resident lossless WebP | [Fresh histograms](WEBP-FRESH-HISTOGRAM.md) confirm694.87µs/0.84% on the complete photograph managed-build comparison, unchanged6516648B/op and exact packets. Eight current costs retain four passing lossless controls. Opaque/photo are uncertain, uppers1.008/1.101; resolve before tuning them. The original photo timing step and one unchanged-driver adjacent reconciliation remain raw evidence, with no weaker gate or third run. Superseded alpha-cache/photo costs remain history. |
 | Resident VP8 encoding | [Current fresh-histogram qualification](WEBP-FRESH-HISTOGRAM.md) refreshes byte/word ALPH: uppers1.111/1.124 remain demonstrated gaps (~5.5ms). Transparent short is adverse/uncertain; no alpha gain claim. Six opaque costs reuse unchanged [shared input](VP8-SHARED-ALPHA-PREPARATION.md) proof. Existing predictor/workspace/cache gains remain linked history; next audit retained/current complete-alpha attribution before another redesign. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
-| PNG encoding | [Block preparation](PNG-BLOCK-PREPARATION.md) shares frequency/code storage and uses linear canonical assignment. Same-batch allocation saves148,320B (5.7%) on wordSmallest9 and19,936B (2.4%) on byteFastest1; no CPU gain/equivalence/regression claim. Fifteen complete one-shot costs current: thirteen gaps; byteOptimal6 uncertain (upper1.045), gray16 passes/stops (upper0.987). [Four color boundaries](PNG-COLOR-ONE-SHOT.md) now include identical conversion/packing setup and disposal. [Delivery/cancellation boundaries](PNG-BOUNDARY-ONE-SHOT.md) retain word token/forward uppers1.116/1.140, asyncbyte1.029. Exact packets and complete delivery/ownership remain; no speedup claim follows the baseline change. Existing384KiB admission,2620B extra operation-array capacity, zero scratch afterdisposal; physical/complete admitted peaks unmeasured. Earlier tree/token preparation is linked history; other affectedH boundaries remain historical. |
+| PNG encoding | [Complete-token output](PNG-COMPLETE-TOKEN-OUTPUT.md) saves408µs/7.36% raw on Fastest8; raw confidence separates, normalized confidence narrowly overlaps. Exact packets and384KiB admission remain;8B/op extra scalar state, no new arrays/owners/retention. Fifteen current complete fresh-one-shot comparisons:3pass/7gap/5uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier block/color/delivery costs remain history; three affected H rows await their named reconciliation. |
 | JPEG and image reading | [Exact grayscale row batches](JPEG-GRAYSCALE-ROW-BATCH.md) save32.71µs/1.93%raw/4.04%normalized on the existing RGBA8→gray control, unchanged155,436B/op and exact packets. The gap remains (upper1.103); native clock change+2.19% is disclosed. Other image-grayscale timing affected by preparation is historical until refreshed. Caller-GRAY/RGB and other color/sampling/reading paths reuse valid proof; keep their named resident/stream/async/inspection/validation scope. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current production build passes **5,706 full/live checks per OS** and
-903internal/357public affected scalar checks on bothOS (also normal on Linux).
-The SAME actual Release package/all three examples pass Windows/Linux. These
-include retained index regressions and exact word/alpha/text/resize/async survivors;
-shared refusal, cancellation and ownership persist. Unchanged54AVX512-off and
-wide45/521proofs remain reusable. Qualification does not close all282 CPU gates.
+The current [complete-token milestone](PNG-COMPLETE-TOKEN-OUTPUT.md) passes
+**5,707 full/live checks per OS** (2,472internal/2,287public/948differential),
+plus581internal/211public affected PNG checks per normal/scalar mode/OS.
+The SAME actual Release package/all three examples pass Windows/Linux. Exact
+packets/pixels, shared refusal, cancellation and independent survivors remain.
+Unchanged54AVX512-off and wide45/521proofs remain reusable. This does not close
+all282 CPU gates, nor constitute a full release refresh.
 
-The fresh-histogram stage owns eight refreshed WebP comparisons, with the current
-photo supplied by its one existing-driver adjacent reconciliation. Other117
-comparisons reuse unchanged-path evidence. Historical H boundaries await their
-named reconciliation. Current renderer uses one owner for these eight rows;
-previous alpha-cache/photo owners remain history instead of rendering layers.
+The PNG stage owns fifteen refreshed comparisons. Other110 reuse unchanged-path
+evidence, including the fresh-histogram owner's eight WebP comparisons and its
+one existing-driver adjacent photo reconciliation. Historical H boundaries await
+their named reconciliation. Current PNG rendering has one owner rather than five
+superseded qualification/experiment layers; their reports/raw remain retained.
 
-The preceding [affine entropy trial](WEBP-AFFINE-ENTROPY-INCONCLUSIVE.md) has no
-dependable gain and restores all source/main/embedded exactly. Its current profile
-and every adverse/uncertain observation stay. The earlier
-[index trial](WEBP-INDEX-INITIALIZATION-INCONCLUSIVE.md) retains two useful cases,
-now included in the full5,706suite. The subsequent [compact ALPH transition](WEBP-COMPACT-PREDICTOR-TRADEOFF.md)
-restores production after four exact stages: confirmed alpha gains are nearly
-balanced by confirmed photograph losses, with unchanged allocation. One general
-borrowed-capacity test and strengthened cost oracle pass separately perOS/normal/
-scalar, plus47actual-main packets. Production/package and all current rows remain
-unchanged; no fresh restored full5,707or package repeat. Earlier rejected stages
-are not current costs.
+The [compact ALPH transition](WEBP-COMPACT-PREDICTOR-TRADEOFF.md) restores
+production after four exact stages with balanced confirmed alpha/photo tradeoffs.
+Its useful borrowed-capacity and cost-oracle tests are now included in the current
+full qualification. Earlier affine/index trials remain linked adverse/uncertain
+history. PNG's raw Fastest8 gain has narrowly overlapping normalized intervals;
+no extra favorable repeat or broader normalized gain is claimed. Next inspect
+unchanged JPEG refinement source/attribution for substantial removed work; do not
+replay its restored correction-loop/scan-cursor designs unchanged.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
