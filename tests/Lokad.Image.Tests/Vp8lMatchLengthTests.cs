@@ -58,6 +58,25 @@ public sealed class Vp8lMatchLengthTests
     }
 
     [Theory] [InlineData(false)] [InlineData(true)]
+    public void TightAndUnalignedSpanTailsKeepTheExactSampleLimit(bool cancelable)
+    {
+        var compare = Comparison(cancelable); using var cancellation = new CancellationTokenSource();
+        using var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
+        foreach (var length in new[] { 0, 1, 2, 3, 4, 7 })
+        foreach (var skip in new[] { 0, 1 })
+        {
+            var data = Enumerable.Repeat(0x89abcdefu, skip + 2 + Math.Max(1, length)).ToArray();
+            var samples = data.AsSpan(skip); // second slice ends exactly at the array end.
+            Assert.Equal(length, compare(samples, 0, 2, 0, length, context));
+            if (length != 0)
+            {
+                data[^1] ^= 0x80000000;
+                Assert.Equal(length - 1, compare(samples, 0, 2, 0, length, context));
+            }
+        }
+    }
+
+    [Theory] [InlineData(false)] [InlineData(true)]
     public void ComparisonAllocatesNothingAndCancellationPrecedesInputReads(bool cancelable)
     {
         var Compare = Comparison(cancelable);
