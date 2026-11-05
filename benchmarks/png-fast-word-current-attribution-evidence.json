@@ -1,0 +1,176 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PFA307",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newMaterialCases": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "currentComparisonRowsChanged": 0,
+  "librarySha256": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+  "sourceSha256": "bbf987f1b30f390ab90900f4963285706e9db5a526293b6de88e0c10750c67fc",
+  "caseId": "EncodeFast16",
+  "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+  "packetBytes": 968216,
+  "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+  "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Startup/IPC/file IO/hashes/validation excluded.",
+  "quietGuardsPassed": true,
+  "allOriginalGatesPassed": true,
+  "allActualsCompleted": 12,
+  "totalSamples": 884,
+  "managedSamples": 813,
+  "methods": [
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+      590
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+      84
+    ],
+    [
+      "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+      43
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+      42
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+      20
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::Insert(int32)[Optimized]",
+      6
+    ],
+    [
+      "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ComputeChunk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+      4
+    ],
+    [
+      "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+      4
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+      4
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      3
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+      3
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      3
+    ],
+    [
+      "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+      2
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngCodec+IdatWriter::Flush()[Optimized]",
+      1
+    ],
+    [
+      "uint32 [Lokad.Image] Lokad.Image.Internal.Crc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+      1
+    ],
+    [
+      "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Reduce(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint64>)[Optimized]",
+      1
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+      1
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+      1
+    ]
+  ],
+  "targetCode": [
+    {
+      "address": "0x715e41cb4cc0",
+      "size": 185,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::AdvanceOrigin()[Optimized]"
+    },
+    {
+      "address": "0x715e41cb4da0",
+      "size": 484,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+    },
+    {
+      "address": "0x715e41cb5000",
+      "size": 1246,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]"
+    },
+    {
+      "address": "0x715e41cb55e0",
+      "size": 2908,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]"
+    }
+  ],
+  "hotLocations": [
+    {
+      "offset": "0x369",
+      "samples": 73,
+      "observation": "Branch result after candidate search and before token emission; instruction skid applies."
+    },
+    {
+      "offset": "0x13b",
+      "samples": 53,
+      "observation": "Dictionary/head-to-link preparation, including array-field loads and range checks."
+    },
+    {
+      "offset": "0x261",
+      "samples": 43,
+      "observation": "Candidate prefix comparison; not proof that long matches dominate."
+    }
+  ],
+  "interpretation": "Greedy parsing including inlined matching dominates this bounded capture. It does not attribute elapsed time to setup or predict available gains. A prepared session would not remove this work. Existing long-match-helper and inner-poll-removal trials are not replayed unchanged.",
+  "nextHypothesis": "Prepare a compile-time cancellation policy per greedy pass. The uncancelable worker can omit impossible token-source reads while a shared generic body retains every actual live-token checkpoint, publication and failure boundary. No arrays, pools, owners or pixel policy change. Compare the complete existing byte/word Fastest controls; abandon or revise from evidence, without a fixed percentage gate.",
+  "qualificationReused": "VTP306 immutable source/module retains 5642 full/live checks per OS, affected normal/scalar and same actual Release package/all three examples. Attribution-only work changes no production/test/package input; no broad repetition.",
+  "raw": {
+    "project": "Lokad.Image",
+    "file": "png-fast-word-current-attribution.tar.xz",
+    "bytes": 5611960,
+    "members": 113,
+    "sha256": "8dccc1386e6295bdeb09837c65323ee2408319ccb1ecbe0df97fe5aeefad242b",
+    "localMembersVerified": true,
+    "vmMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-trellis-importance-qualified.tar.xz",
+        "sha256": "084e99e66737c97304f39ecc0e3d4e56124852e41dc1594ad4f44bef58d5302d"
+      },
+      {
+        "project": "Lokad.Image",
+        "file": "png-block-preparation-qualified.tar.xz",
+        "bytes": 8242468,
+        "members": 363,
+        "sha256": "85f6f2f28169e5bb79a3f7cfc9a28e17389a03a3b7bd5535731449e2f7f521db",
+        "vmMembersVerified": true,
+        "productionAccepted": true,
+        "dependencies": [
+          {
+            "file": "webp-alpha-coefficient-storage-qualified.tar.xz",
+            "sha256": "2099f230bee1b3e162eb4e735b3f01ba67d75fdd172391247ec8458b9f2d9192"
+          },
+          {
+            "file": "png-tree-workspace-qualified.tar.xz",
+            "sha256": "ac86ee3d5fd76da7608e47f5d256812aeb748f20e5938e0557bba72900b27321"
+          }
+        ],
+        "frozenReferenceDependencies": "The unchanged one-shot1/6/9 byte/word worker, harness, selectors/frameworks and reference preparation are pinned in HFW251-254 raw and its dependency chain. Stage runtimes/selectors and exact source/output receipts remain here; no native/harness rebuild.",
+        "localMembersVerified": true
+      }
+    ],
+    "scope": "Current immutable selected library, unchanged one-shot PNG runtime/harness/selector/worker controls through qualified dependencies, trace/map/samples/JIT, loaded identities, guards, exact output receipt, current PNG/Deflate/Adler owned source and scripts. Attribution only; no production change or current cost replacement."
+  },
+  "publication": "postponed"
+}
