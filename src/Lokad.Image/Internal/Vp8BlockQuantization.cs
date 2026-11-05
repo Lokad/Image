@@ -1,3 +1,5 @@
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -67,6 +69,33 @@ internal static class Vp8BlockQuantization
 
     private static bool ApplyFullBlock(Span<short> coefficients, Span<short> levels, Vp8QuantizationMatrix matrix)
     {
+        var prepared = PrepareFullBlock(coefficients, matrix);
+        prepared.PublishRaster(coefficients); prepared.PublishLevels(levels);
+        return prepared.Mask != 0;
+    }
+
+    // A value snapshot: no source/matrix span escapes preparation. Luma4 may
+    // price/reject it before publishing reconstruction or selected levels.
+    internal readonly struct PreparedBlock
+    {
+        private readonly Vector256<short> raster;
+        internal Vector256<short> Levels { get; }
+        internal uint Mask { get; }
+        internal bool FlatNonDc => BitOperations.PopCount(Mask & 0xfffeu) <= 3;
+        internal PreparedBlock(Vector256<short> raster, Vector256<short> levels)
+        {
+            this.raster = raster; Levels = levels;
+            Mask = ~Vector256.ExtractMostSignificantBits(Vector256.Equals(levels, Vector256<short>.Zero)) & 0xffffu;
+        }
+        internal void PublishRaster(Span<short> output) => raster.CopyTo(output);
+        internal void PublishLevels(Span<short> output) => Levels.CopyTo(output);
+    }
+
+    // Caller guards AVX512F. The same widened Q17 kernel supplies immediate
+    // quantization and delayed luma4 publication; no second numerical model.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static PreparedBlock PrepareFullBlock(ReadOnlySpan<short> coefficients, Vp8QuantizationMatrix matrix)
+    {
         // Keep the same widened Q17 products and signed comparisons. One block
         // loads each matrix vector once and needs no two-half lane reassembly.
         var input = Avx512F.ConvertToVector512Int32(Vector256.Create(coefficients));
@@ -79,9 +108,8 @@ internal static class Vp8BlockQuantization
         var quantized = Avx512F.And(signed, Avx512F.CompareGreaterThan(magnitude, Vector512.Create(matrix.ZeroThresholds)));
         var raster = Avx512F.MultiplyLow(quantized, Vector512.Create(matrix.Steps));
         var diagonal = Avx512F.PermuteVar16x32(quantized, ZigzagOrder);
-        Avx512F.ConvertToVector256Int16WithSaturation(raster).CopyTo(coefficients);
-        Avx512F.ConvertToVector256Int16WithSaturation(diagonal).CopyTo(levels);
-        return !Vector512.EqualsAll(quantized, Vector512<int>.Zero);
+        return new(Avx512F.ConvertToVector256Int16WithSaturation(raster),
+            Avx512F.ConvertToVector256Int16WithSaturation(diagonal));
     }
 
     private static Vector256<int> QuantizedLevels(ReadOnlySpan<short> coefficients, Vp8QuantizationMatrix matrix, int offset)

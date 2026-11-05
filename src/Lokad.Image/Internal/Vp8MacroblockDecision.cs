@@ -133,6 +133,7 @@ internal static class Vp8MacroblockDecision
         Span<ushort> trellisWeights = stackalloc ushort[16]; if (trellis) Vp8TrellisQuantization.Weights(trellisWeights);
         Span<byte> predictions = stackalloc byte[192]; Span<short> transforms = stackalloc short[192];
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
+        var fused = !trellis && Avx512F.IsSupported && Avx2.IsSupported;
         for (var b = 0; b < 16; b++)
         {
             var bx = b % 4; var by = b / 4; var x = bx * 4; var y = by * 4; var offset = Block(b);
@@ -178,15 +179,28 @@ internal static class Vp8MacroblockDecision
                     for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++) residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - trial[yy * 4 + xx]);
                     Vp8ForwardTransform.Dct(residual, candidate);
                 }
-                var any = trellis
-                    ? Vp8TrellisQuantization.Apply(candidate, trialLevels, matrix, rate, trellisWeights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context)
-                    : Vp8BlockQuantization.Apply(candidate, trialLevels, matrix);
+                var prepared = default(Vp8BlockQuantization.PreparedBlock);
+                bool any, flat; long rateCost;
+                if (fused)
+                {
+                    prepared = Vp8BlockQuantization.PrepareFullBlock(candidate, matrix);
+                    any = prepared.Mask != 0; flat = prepared.FlatNonDc;
+                    rateCost = rate.Luma4Prepared(prepared, topNz[bx] + leftNz[by]);
+                }
+                else
+                {
+                    any = trellis
+                        ? Vp8TrellisQuantization.Apply(candidate, trialLevels, matrix, rate, trellisWeights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context)
+                        : Vp8BlockQuantization.Apply(candidate, trialLevels, matrix);
+                    flat = mode > 0 && Flat(trialLevels, 1, 3);
+                    rateCost = rate.Residual(trialLevels, 3, 0, topNz[bx] + leftNz[by], out _);
+                }
                 var header = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];
-                long rateCost = mode > 0 && Flat(trialLevels, 1, 3) ? 140 : 0;
-                rateCost += rate.Residual(trialLevels, 3, 0, topNz[bx] + leftNz[by], out _);
+                if (mode > 0 && flat) rateCost += 140;
                 // Reconstruction and texture add nonnegative distortion. This
                 // rate/header bound cannot discard a strictly better candidate.
                 if (bestMode >= 0 && (rateCost + header) * costs.Luma4 >= best.Total) continue;
+                if (fused) prepared.PublishRaster(candidate);
                 Vp8BlockReconstruction.Add(candidate, trial, 4);
                 var distortion = Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
                 // Texture is nonnegative. Once rate plus reconstructed SSD
@@ -194,9 +208,11 @@ internal static class Vp8MacroblockDecision
                 if (bestMode >= 0 && (rateCost + header) * costs.Luma4 + 256L * distortion >= best.Total) continue;
                 var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, textureSource.Compare4(b, trial, 4));
                 var score = new Metric(distortion, texture, header, rateCost).Price(costs.Luma4);
-                if (uniform) { uniformScore = score; uniformFlat = Flat(trialLevels, 1, 3); }
+                if (uniform) { uniformScore = score; uniformFlat = fused ? flat : Flat(trialLevels, 1, 3); }
                 if (bestMode >= 0 && score.Total >= best.Total) continue;
-                bestMode = mode; best = score; bestNonzero = any; trial.CopyTo(bestPixels); trialLevels.CopyTo(levels.Slice(b * 16, 16));
+                bestMode = mode; best = score; bestNonzero = any; trial.CopyTo(bestPixels);
+                if (fused) prepared.PublishLevels(levels.Slice(b * 16, 16));
+                else trialLevels.CopyTo(levels.Slice(b * 16, 16));
             }
             result = result.Add(best.Price(costs.Mode)); headers += best.H;
             if (result.Total >= previousScore || headers > headerLimit) return false;

@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share luma4 quantization/rate preparation and defer scratch writes until needed,
+  preserving exact WebP packets and portable fallbacks.
+
 - Share exact VP8 residual preparation between statistics and partition encoding,
   with vectorized validation/termination and a portable scalar path.
 

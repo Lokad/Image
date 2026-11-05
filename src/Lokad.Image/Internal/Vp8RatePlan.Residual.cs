@@ -25,9 +25,26 @@ internal sealed partial class Vp8RatePlan
         var mask=~(uint)Avx2.MoveMask(Avx2.CompareEqual(absolute,Vector256<ushort>.Zero).AsByte());
         if(first!=0)mask&=~3U;
         nonzero=mask!=0;
+        return PreparedResidualCost(values,absolute,type,first,initialContext,nonzero?(31-BitOperations.LeadingZeroCount(mask))/2:-1);
+    }
+
+    // Prepared quantization already supplies exact diagonal levels/nonzero bits.
+    // Retain range/context rejection even for independently constructed matrices.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal int Luma4Prepared(Vp8BlockQuantization.PreparedBlock block,int initialContext)
+    {
+        var values=Values;
+        if((uint)initialContext>2)throw new ArgumentException("Invalid VP8 residual layout or context.");
+        var absolute=Avx2.Abs(block.Levels).AsUInt16();
+        if(!Vector256.EqualsAll(Avx2.Min(absolute,Vector256.Create((ushort)2047)),absolute))throw new ArgumentException("VP8 residual level exceeds 2,047.");
+        return PreparedResidualCost(values,absolute,3,0,initialContext,31-BitOperations.LeadingZeroCount(block.Mask));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int PreparedResidualCost(ReadOnlySpan<ushort> values,Vector256<ushort> absolute,int type,int first,int initialContext,int last)
+    {
         var index=(type*8+Band(first))*3+initialContext;
-        if(!nonzero)return values[EobAt+index*2];
-        var last=(31-BitOperations.LeadingZeroCount(mask))/2;
+        if(last<0)return values[EobAt+index*2];
         var clamped=Avx2.Min(absolute,Vector256.Create((ushort)67));
         var contexts=Avx2.Min(absolute,Vector256.Create((ushort)2));
         // Context at coefficient p is determined only by coefficient p-1.
