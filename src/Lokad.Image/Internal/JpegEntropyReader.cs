@@ -73,7 +73,7 @@ internal ref partial struct JpegEntropyReader
     }
 
     internal bool TryReadBufferedCancelableRefinementBlock(ReadOnlySpan<ushort> shortCodes, JpegHuffman ac,
-        Span<int> block, int start, int end, int low, ref int eobRun)
+        Span<int> block, int start, int end, int low, ref int eobRun, scoped ReadOnlySpan<uint> headers = default)
     {
         // T.81 G.1.2 has the same <2048-unit bound as the original fused
         // traversal. Keep speculative ordinary bytes separate from the logical
@@ -112,56 +112,82 @@ var index = start; var increment = 1 << low;
                     if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
                     { cache = cache << 32 | word; pending += 32; cursor += 4; }
                 }
-                var prefix = pending >= 8 ? (int)((cache >> (pending - 8)) & 255)
-                    : (int)((cache & ((1UL << pending) - 1)) << (8 - pending));
-                var packed = shortCodes[prefix]; var length = packed & 15; int symbol;
-                if (length is > 0 and <= 8 && length <= pending)
+                var instruction = headers.Length == 512 && pending >= 9
+                    ? headers[(int)((cache >> (pending - 9)) & 511)] : 0;
+                if (instruction != 0)
                 {
                     if (cancellation.IsCancellationRequested)
                     {
                         PublishRefinementLookahead(cache, pending, cursor);
                         cancellation.ThrowIfCancellationRequested();
                     }
-pending -= length; symbol = packed >> 4;
-                }
-                else
-                {
-                    PublishRefinementLookahead(cache, pending, cursor);                     symbol = ac.Read(ref this);
-                    cache = bits; pending = available; cursor = position;
-                }
-                run = symbol >> 4; var size = symbol & 15;
-                if (size != 0 && size != 1)
-                {
-                    PublishRefinementLookahead(cache, pending, cursor);
-                    throw new ImageDataException("Invalid JPEG refinement symbol.");
-                }
-                if (size != 0 || run != 15)
-                {
-                    var count = size != 0 ? 1 : run; int field;
-                    if (pending < count && input.Length - cursor >= 4)
-                    {
-                        var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
-                        if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
-                        { cache = cache << 32 | word; pending += 32; cursor += 4; }
-                    }
-                    if (pending >= count)
+                    var codeLength = (int)(instruction & 15); pending -= codeLength;
+                    if ((instruction & 1536) != 0)
                     {
                         if (cancellation.IsCancellationRequested)
                         {
                             PublishRefinementLookahead(cache, pending, cursor);
                             cancellation.ThrowIfCancellationRequested();
                         }
-pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1));
+                        pending -= (int)((instruction >> 4) & 31) - codeLength;
+                    }
+                    run = (int)((instruction >> 11) & 31);
+                    if ((instruction & 512) != 0) inserted = (instruction >> 16) == 0 ? -increment : increment;
+                    else if ((instruction & 1024) != 0) { eobRun = (int)(instruction >> 16); finish = true; }
+                }
+                else
+                {
+                    var prefix = pending >= 8 ? (int)((cache >> (pending - 8)) & 255)
+                        : (int)((cache & ((1UL << pending) - 1)) << (8 - pending));
+                    var packed = shortCodes[prefix]; var length = packed & 15; int symbol;
+                    if (length is > 0 and <= 8 && length <= pending)
+                    {
+                        if (cancellation.IsCancellationRequested)
+                        {
+                            PublishRefinementLookahead(cache, pending, cursor);
+                            cancellation.ThrowIfCancellationRequested();
+                        }
+    pending -= length; symbol = packed >> 4;
                     }
                     else
                     {
-                        PublishRefinementLookahead(cache, pending, cursor);                         field = ReadBits(count);
+                        PublishRefinementLookahead(cache, pending, cursor);                     symbol = ac.Read(ref this);
                         cache = bits; pending = available; cursor = position;
                     }
-                    if (size != 0) inserted = field == 0 ? -increment : increment;
-                    else { eobRun = (1 << run) + field; finish = true; }
+                    run = symbol >> 4; var size = symbol & 15;
+                    if (size != 0 && size != 1)
+                    {
+                        PublishRefinementLookahead(cache, pending, cursor);
+                        throw new ImageDataException("Invalid JPEG refinement symbol.");
+                    }
+                    if (size != 0 || run != 15)
+                    {
+                        var count = size != 0 ? 1 : run; int field;
+                        if (pending < count && input.Length - cursor >= 4)
+                        {
+                            var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
+                            if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
+                            { cache = cache << 32 | word; pending += 32; cursor += 4; }
+                        }
+                        if (pending >= count)
+                        {
+                            if (cancellation.IsCancellationRequested)
+                            {
+                                PublishRefinementLookahead(cache, pending, cursor);
+                                cancellation.ThrowIfCancellationRequested();
+                            }
+    pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1));
+                        }
+                        else
+                        {
+                            PublishRefinementLookahead(cache, pending, cursor);                         field = ReadBits(count);
+                            cache = bits; pending = available; cursor = position;
+                        }
+                        if (size != 0) inserted = field == 0 ? -increment : increment;
+                        else { eobRun = (1 << run) + field; finish = true; }
+                    }
+                    else run = 16;
                 }
-                else run = 16;
             }
             var remaining = bandEnd & (ulong.MaxValue << index);
             if (finish) correctionPositions = nonzero & remaining;
@@ -355,7 +381,7 @@ cache = candidateCache; pending = candidatePending - length;
     }
 
     internal bool TryReadRefinementBlock(ReadOnlySpan<ushort> shortCodes, JpegHuffman ac,
-        Span<int> block, int start, int end, int low, ref int eobRun)
+        Span<int> block, int start, int end, int low, ref int eobRun, scoped ReadOnlySpan<uint> headers = default)
     {
         // Live cancellation retains its original logical-read checkpoints.
         if (context.Cancellation.CanBeCanceled
@@ -388,40 +414,52 @@ cache = candidateCache; pending = candidatePending - length;
                     if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) == 0)
                     { cache = cache << 32 | word; pending += 32; cursor += 4; }
                 }
-                var prefix = pending >= 8 ? (int)((cache >> (pending - 8)) & 255)
-                    : (int)((cache & ((1UL << pending) - 1)) << (8 - pending));
-                var packed = shortCodes[prefix]; var length = packed & 15; int symbol;
-                if (length is > 0 and <= 8 && length <= pending)
-                { pending -= length; symbol = packed >> 4; }
+                var instruction = headers.Length == 512 && pending >= 9
+                    ? headers[(int)((cache >> (pending - 9)) & 511)] : 0;
+                if (instruction != 0)
+                {
+                    pending -= (int)((instruction >> 4) & 31);
+                    run = (int)((instruction >> 11) & 31);
+                    if ((instruction & 512) != 0) inserted = (instruction >> 16) == 0 ? -increment : increment;
+                    else if ((instruction & 1024) != 0) { eobRun = (int)(instruction >> 16); finish = true; }
+                }
                 else
                 {
-                    PublishRefinementLookahead(cache, pending, cursor);
-                    symbol = ac.Read(ref this);
-                    cache = bits; pending = available; cursor = position;
-                }
-                run = symbol >> 4; var size = symbol & 15;
-                if (size != 0 && size != 1)
-                {
-                    PublishRefinementLookahead(cache, pending, cursor);
-                    throw new ImageDataException("Invalid JPEG refinement symbol.");
-                }
-                if (size != 0 || run != 15)
-                {
-                    var count = size != 0 ? 1 : run; int field;
-                    if (pending >= count)
-                    { pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1)); }
+                    var prefix = pending >= 8 ? (int)((cache >> (pending - 8)) & 255)
+                        : (int)((cache & ((1UL << pending) - 1)) << (8 - pending));
+                    var packed = shortCodes[prefix]; var length = packed & 15; int symbol;
+                    if (length is > 0 and <= 8 && length <= pending)
+                    { pending -= length; symbol = packed >> 4; }
                     else
                     {
-                        // The slow reader owns any partially consumed required
-                        // bytes on failure, including an EOB field's whole byte.
                         PublishRefinementLookahead(cache, pending, cursor);
-                        field = ReadRefinementBits(input, ref position, ref bits, ref available, count);
+                        symbol = ac.Read(ref this);
                         cache = bits; pending = available; cursor = position;
                     }
-                    if (size != 0) inserted = field == 0 ? -increment : increment;
-                    else { eobRun = (1 << run) + field; finish = true; }
+                    run = symbol >> 4; var size = symbol & 15;
+                    if (size != 0 && size != 1)
+                    {
+                        PublishRefinementLookahead(cache, pending, cursor);
+                        throw new ImageDataException("Invalid JPEG refinement symbol.");
+                    }
+                    if (size != 0 || run != 15)
+                    {
+                        var count = size != 0 ? 1 : run; int field;
+                        if (pending >= count)
+                        { pending -= count; field = (int)((cache >> pending) & ((1u << count) - 1)); }
+                        else
+                        {
+                            // The slow reader owns any partially consumed required
+                            // bytes on failure, including an EOB field's whole byte.
+                            PublishRefinementLookahead(cache, pending, cursor);
+                            field = ReadRefinementBits(input, ref position, ref bits, ref available, count);
+                            cache = bits; pending = available; cursor = position;
+                        }
+                        if (size != 0) inserted = field == 0 ? -increment : increment;
+                        else { eobRun = (1 << run) + field; finish = true; }
+                    }
+                    else run = 16;
                 }
-                else run = 16;
             }
             var remaining = bandEnd & (ulong.MaxValue << index);
             if (finish) correctionPositions = nonzero & remaining;

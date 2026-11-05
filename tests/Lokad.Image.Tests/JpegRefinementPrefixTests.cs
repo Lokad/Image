@@ -12,8 +12,10 @@ public sealed class JpegRefinementPrefixTests
         if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
         using var tables = new OperationContext(new(), default);
         var table = new JpegHuffman([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0], tables);
+        var headers = new uint[512]; table.BuildRefinementHeaders(headers, default);
         const int blocks = 1024;
         var data = Enumerable.Repeat((byte)0x55, blocks * 8).ToArray();
+        foreach (var prepared in new[] { false, true })
         foreach (var delay in new[] { 0, 64, 1024, 16384 })
         {
             using var cancellation = new CancellationTokenSource(); using var ready = new ManualResetEventSlim();
@@ -24,7 +26,7 @@ public sealed class JpegRefinementPrefixTests
             OperationCanceledException? error = null;
             var thread = new Thread(() => { ready.Wait(); Thread.SpinWait(delay); cancellation.Cancel(); });
             thread.Start(); ready.Set();
-            try { for (var block = 0; block < blocks; block++) Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values.AsSpan(block * 64, 64), 1, 63, 0, ref eob)); }
+            try { for (var block = 0; block < blocks; block++) Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values.AsSpan(block * 64, 64), 1, 63, 0, ref eob, prepared ? headers : default)); }
             catch (OperationCanceledException canceled) { error = canceled; }
             finally { thread.Join(); }
             if (error is not null) Assert.Equal(cancellation.Token, error.CancellationToken);

@@ -16,6 +16,9 @@ without full-frame coefficients. Unambiguous equal-grid baseline RGB decoding
 writes directly into the retained image, avoiding those temporary planes.
 Owned JPEG 4:1:1/4:1:0 rendering also admits 1,536/1,792 bytes of fixed stack workspace
 alongside its live component planes and output.
+Progressive AC scans with enough blocks to reuse preparation also admit a 2 KiB
+scan header plan, releasing it after the scan. Small scans use direct parsing;
+geometry selects the path before admission, independently of remaining capacity.
 Stream acquisition stays charged through validation; successful metadata results
 contain only scalar facts. Its memory bounds can therefore differ from Decode's.
 Non-indexed VP8L decoding on little-endian systems uses the returned image's

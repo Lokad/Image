@@ -66,13 +66,38 @@ internal sealed class JpegHuffman
     }
 
     internal bool TryReadRefinementBlock(ref JpegEntropyReader reader, Span<int> block,
-        int start, int end, int low, ref int eobRun)
-        => reader.TryReadRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun);
+        int start, int end, int low, ref int eobRun, scoped ReadOnlySpan<uint> headers = default)
+        => reader.TryReadRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun, headers);
 
     internal bool TryReadCancelableRefinementBlock(ref JpegEntropyReader reader, Span<int> block,
-        int start, int end, int low, ref int eobRun)
-        => reader.TryReadBufferedCancelableRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun)
+        int start, int end, int low, ref int eobRun, scoped ReadOnlySpan<uint> headers = default)
+        => reader.TryReadBufferedCancelableRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun, headers)
             || reader.TryReadCancelableRefinementBlock(shortCodes, this, block, start, end, low, ref eobRun);
+
+    // T.81 C.2/G.1.2: compile short code plus sign/EOB interpretation from
+    // this encoded canonical table. Packed bits:0..3 code length,4..8 total
+    // width,9 insert,10 EOB,11..15 zero run,16..30 sign/EOB value.
+    // Zero leaves long/invalid/short tails to the
+    // existing reader. The caller owns and admits the scan-local destination.
+    internal void BuildRefinementHeaders(Span<uint> headers, CancellationToken cancellation)
+    {
+        if (headers.Length != 512) throw new ArgumentException("JPEG refinement headers have 512 entries.", nameof(headers));
+        for (var prefix = 0; prefix < headers.Length; prefix++)
+        {
+            if ((prefix & 63) == 0) cancellation.ThrowIfCancellationRequested();
+            headers[prefix] = 0;
+            var packed = shortCodes[prefix >> 1]; var length = packed & 15;
+            var symbol = packed >> 4; var size = symbol & 15; var run = symbol >> 4;
+            if (length == 0 || size > 1) continue;
+            var count = size == 1 ? 1 : run == 15 ? 0 : run;
+            if (length + count > 9) continue;
+            var field = (prefix >> (9 - length - count)) & ((1 << count) - 1);
+            var kind = size == 1 ? 512 : run == 15 ? 0 : 1024;
+            var value = size == 1 ? field : kind == 1024 ? (1 << run) + field : 0;
+            var skip = kind == 0 ? 16 : run;
+            headers[prefix] = (uint)(length | (length + count) << 4 | kind | skip << 11 | value << 16);
+        }
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal bool TryReadBaselineAc(ref JpegEntropyReader reader, int remainingCoefficients, out int symbol, out int value)

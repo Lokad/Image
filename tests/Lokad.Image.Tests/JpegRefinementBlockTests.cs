@@ -16,14 +16,16 @@ public sealed class JpegRefinementBlockTests
         using var cancellation = new CancellationTokenSource();
         byte[] counts = new byte[16]; counts[longCodes ? 8 : 2] = 5;
         var table = new JpegHuffman(counts, [0x00, 0x01, 0xF0, 0x10, 0x02], new OperationContext(ImageLimits.Default, default));
+        var headers = new uint[512]; table.BuildRefinementHeaders(headers, default);
         for (var seed = 0; seed < 256; seed++)
         foreach (var length in new[] { 0, 1, 2, 3, 8, 16, 40 })
         foreach (var end in new[] { 5, 63 })
         {
             var data = Enumerable.Range(0, 40).Select(i => (byte)(seed * 73 + i * 41)).Take(length).ToArray();
-            Assert.Equal(Run(false), Run(true));
+            Assert.Equal(Run(0), Run(1));
+            Assert.Equal(Run(0), Run(2));
 
-            (Type? Error, string? Message, int Position, int Eob, int Tail, string Values) Run(bool fused)
+            (Type? Error, string? Message, int Position, int Eob, int Tail, string Values) Run(int mode)
             {
                 var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
                 var reader = new JpegEntropyReader(data, 0, context);
@@ -34,14 +36,63 @@ public sealed class JpegRefinementBlockTests
                 try
                 {
                     if ((seed & 7) != 0) reader.ReadBits(seed & 7);
-                    if (fused) Assert.True(cancelable
-                        ? table.TryReadCancelableRefinementBlock(ref reader, values, 1, end, low, ref eob)
-                        : table.TryReadRefinementBlock(ref reader, values, 1, end, low, ref eob));
+                    if (mode != 0) Assert.True(cancelable
+                        ? table.TryReadCancelableRefinementBlock(ref reader, values, 1, end, low, ref eob, mode == 2 ? headers : default)
+                        : table.TryReadRefinementBlock(ref reader, values, 1, end, low, ref eob, mode == 2 ? headers : default));
                     else Reference(ref reader, values, table, 1, end, low, ref eob);
                     tail = reader.ReadBits(3);
                 }
                 catch (Exception error) when (error is ImageDataException or ImageLimitException) { failure = error; }
                 return (failure?.GetType(), failure?.Message, reader.Position, eob, tail, string.Join(',', values));
+            }
+        }
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void PreparedHeadersPreserveAllNineBitPrefixesAndErrorTails(bool cancelable)
+    {
+        if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
+        using var tables = new OperationContext(ImageLimits.Default, default);
+        byte[] counts = new byte[16]; counts[5] = 33;
+        var symbols = Enumerable.Range(0, 16).SelectMany(run => new[] { (byte)(run << 4), (byte)(run << 4 | 1) }).Append((byte)2).ToArray();
+        var table = new JpegHuffman(counts, symbols, tables);
+        var headers = new uint[512]; Array.Fill(headers, uint.MaxValue); table.BuildRefinementHeaders(headers, default);
+        using var token = new CancellationTokenSource();
+        for (var prefix = 0; prefix < 512; prefix++)
+        foreach (var phase in new[] { 0, 3, 7 })
+        foreach (var length in new[] { 1, 4, 16 })
+        {
+            var bits = new List<int>();
+            for (var i = 0; i < phase; i++) bits.Add(1);
+            for (var i = 8; i >= 0; i--) bits.Add(prefix >> i & 1);
+            for (var i = 0; i < 128; i++) bits.Add((prefix + i * 3) >> (i & 7) & 1);
+            var packet = new List<byte>();
+            for (var i = 0; i + 8 <= bits.Count; i += 8)
+            {
+                var value = 0; for (var j = 0; j < 8; j++) value = value * 2 + bits[i + j];
+                packet.Add((byte)value); if (value == 255) packet.Add(0);
+            }
+            packet.AddRange([255, 217]); var data = packet.Take(length).ToArray();
+            Assert.Equal(Run(false), Run(true));
+            string Run(bool prepared)
+            {
+                using var context = new OperationContext(ImageLimits.Default, cancelable ? token.Token : default);
+                var reader = new JpegEntropyReader(data, 0, context);
+                var low = (prefix & 1) == 0 ? 0 : 13; var increment = 1 << low;
+                var values = Enumerable.Range(0, 64).Select(i => (i + prefix) % 3 == 0 ? 0 : (i % 2 == 0 ? 2 : -3) * increment).ToArray();
+                var eob = 0; var tail = -1; Exception? failure = null;
+                try
+                {
+                    if (phase != 0) reader.ReadBits(phase);
+                    if (prepared) Assert.True(cancelable
+                        ? table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, low, ref eob, headers)
+                        : table.TryReadRefinementBlock(ref reader, values, 1, 63, low, ref eob, headers));
+                    else Reference(ref reader, values, table, 1, 63, low, ref eob);
+                    tail = reader.ReadBits(3);
+                }
+                catch (Exception error) when (error is ImageDataException or OverflowException) { failure = error; }
+                return $"{failure?.GetType()}:{failure?.Message}:{reader.Position}:{eob}:{tail}:{string.Join(',', values)}";
             }
         }
     }

@@ -38,20 +38,20 @@ Current scope and remaining work:
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** table rows retain their named sampling/delivery scope.
-  Progressive444 ordinary/live gaps offer material absolute savings; retained
-  [refinement attribution](../benchmarks/JPEG-REFINEMENT-STATE-ATTRIBUTION.md) is
-  a source-pinned lead, not new phase timing. [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
-  retains upper1.103 against labeled SIMD libjpeg-turbo. The
-  [buffered correction trial](../benchmarks/JPEG-BUFFERED-CORRECTION-EXECUTION-INCONCLUSIVE.md)
-  restores after a flat short result; current costs are unchanged. Header inspection,
-  container Identify and pixel-coding validation have distinct boundaries.
+- **JPEG and reading:** [scan header preparation](../benchmarks/JPEG-PREPARED-SCAN-HEADERS.md)
+  confirms ordinary/live progressive444 savings of 230µs each (4.84%/4.57% raw),
+  unchanged 984,212B/op and exact frozen frames. Five refreshed progressive decode
+  costs retain gaps (uppers1.022–1.340); coded progressive420 validation passes
+  (upper0.992). A 2KiB plan is admitted and reused within eligible scans, then
+  released; small/direct and portable paths remain. Other JPEG paths, including
+  [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against labeled
+  SIMD libjpeg-turbo, reuse unchanged evidence.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,707 full/live checks per OS**, affected
+The current production build passes **5,711 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
@@ -139,11 +139,11 @@ settings do not establish matched quality.
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
-| JPEG progressive grayscale, resident decode † | 2,210.71 | 1,714.85 | 1.289 / 1.319 | 683,126 | — |
-| JPEG progressive420, resident decode † | 2,152.83 | 1,979.17 | 1.088 / 1.137 | 775,318 | — |
-| JPEG progressive422, resident decode † | 2,706.44 | 2,246.52 | 1.205 / 1.214 | 847,116 | — |
-| JPEG ordinary progressive444, resident decode † | 4,404.74 | 3,370.40 | 1.307 / 1.335 | 984,212 | — |
-| JPEG progressive444, live-token resident decode † | 4,925.83 | 3,408.60 | 1.445 / 1.515 | 984,212 | — |
+| JPEG progressive grayscale, resident decode † | 2,289.86 | 1,851.17 | 1.237 / 1.245 | 683,126 | — |
+| JPEG progressive420, resident decode † | 2,142.28 | 2,115.00 | 1.013 / 1.022 | 775,318 | — |
+| JPEG progressive422, resident decode † | 2,743.54 | 2,424.01 | 1.132 / 1.148 | 847,116 | — |
+| JPEG ordinary progressive444, resident decode † | 4,515.91 | 3,660.11 | 1.234 / 1.243 | 984,212 | — |
+| JPEG progressive444, live-token resident decode † | 4,805.39 | 3,616.72 | 1.329 / 1.340 | 984,212 | — |
 | JPEG dense CMYK, resident decode (confirmed pass) † | 2,575.62 | 3,161.31 | 0.815 / 0.860 | 1,085,661 | — |
 | JPEG horizontal-only CMYK, resident decode † | 518.51 | 396.74 | 1.307 / 1.353 | 1,085,763 | — |
 | JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 441.76 | 624.43 | 0.707 / 0.742 | 762,700 | — |
@@ -212,7 +212,7 @@ settings do not establish matched quality.
 | Validate PNG16, span | 2,805.515 | 2,974.590 | 0.943 / 0.972 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span | 1.776 | 3.965 | 0.448 / 0.460 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span | 543.780 | 689.481 | 0.789 / 0.815 | 9,984 | Confirmed pass |
-| Validate JPEG progressive420, span | 283.293 | 268.802 | 1.054 / 1.080 | 4,072 | Confirmed gap |
+| Validate JPEG progressive420, span | 287.379 | 291.593 | 0.986 / 0.992 | 4,072 | Confirmed pass |
 | Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
 | Validate VP8+alpha, span | 6,696.676 | 5,469.412 | 1.224 / 1.250 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,836.823 | 3,623.647 | 0.783 / 0.790 | 8,544 | Confirmed pass |

@@ -301,6 +301,15 @@ internal ref partial struct JpegDecoder
             reader.Align(); position = reader.Position;
             return;
         }
+        // A512entry plan needs reuse; tiny scans retain direct parsing and
+        // their existing tight admission. Decide before reserving any storage.
+        if (progressive && ss != 0 && ah != 0 && (long)columns * rows >= 32
+            && Avx2.IsSupported && Bmi2.X64.IsSupported)
+        {
+            ReadPreparedRefinementScan(ref reader, first, acTables[ac[0]]!, columns, rows, ss, se, ah, al);
+            reader.Align(); position = reader.Position;
+            return;
+        }
         int eobRun = 0, expectedRestart = 0;
         for (var mcu = 0; mcu < columns * rows; mcu++)
         {

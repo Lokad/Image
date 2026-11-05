@@ -760,28 +760,35 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged exact alpha leaked storage or disposed the borrowed root.");
         }
         Console.WriteLine("Packaged exact alpha halves, depths, filters and ownership passed.");
-        // Reuse the existing original progressive sample control. A live token
-        // retains the original logical-read traversal and supplies the pixel
-        // oracle for the ordinary grouped-refinement window in this actual package.
-        var progressivePacket = AuthoredJpeg.ProgressiveFrame(31, 23, JpegSampling.Grayscale, 1);
-        var progressiveInput = progressivePacket.ToArray();
-        using var progressiveCancellation = new CancellationTokenSource();
-        var progressive = ImageCodec.Decode(progressivePacket, new() { Limits = limits });
-        using var progressiveOriginal = ImageCodec.Decode(progressivePacket, new() { Limits = limits }, progressiveCancellation.Token);
-        using var progressiveStream = new MemoryStream(progressivePacket, writable: false);
-        using var progressiveAsync = await ImageCodec.DecodeAsync(progressiveStream, new() { Limits = limits });
-        var progressivePixels = OriginalPixels.Bytes(progressiveOriginal);
-        if (!progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressive))
-            || !progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressiveAsync))
-            || !progressivePacket.AsSpan().SequenceEqual(progressiveInput) || budget.Bytes != 3 * 31 * 23 * 4)
-            throw new Exception("Packaged progressive refinement pixels or retained admission differ.");
-        progressivePacket.AsSpan().Clear(); progressive.GetRow8(0)[0] ^= 255; progressive.Dispose();
-        if (budget.Bytes != 2 * 31 * 23 * 4 || !progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressiveOriginal))
-            || !progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressiveAsync)) || !progressiveStream.CanRead)
-            throw new Exception("Packaged progressive independent output or borrowed input lifetime differs.");
-        progressiveOriginal.Dispose(); progressiveAsync.Dispose();
-        if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged progressive storage leaked.");
+        // Ordinary/live kernels and awaited async input agree on direct and
+        // prepared scans. The32block control also retains every frozen original
+        // PGA335 sample; outputs outlive input mutation and one another.
+        foreach (var (refinementWidth, refinementHeight) in new[] { (31, 23), (64, 32) })
+        {
+            var progressivePacket = AuthoredJpeg.ProgressiveFrame(refinementWidth, refinementHeight, JpegSampling.Grayscale, 1);
+            var progressiveInput = progressivePacket.ToArray();
+            using var progressiveCancellation = new CancellationTokenSource();
+            var progressive = ImageCodec.Decode(progressivePacket, new() { Limits = limits });
+            using var progressiveOriginal = ImageCodec.Decode(progressivePacket, new() { Limits = limits }, progressiveCancellation.Token);
+            using var progressiveStream = new MemoryStream(progressivePacket, writable: false);
+            using var progressiveAsync = await ImageCodec.DecodeAsync(progressiveStream, new() { Limits = limits });
+            var progressivePixels = OriginalPixels.Bytes(progressiveOriginal);
+            if (!progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressive))
+                || !progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressiveAsync))
+                || !progressivePacket.AsSpan().SequenceEqual(progressiveInput) || budget.Bytes != 3 * refinementWidth * refinementHeight * 4)
+                throw new Exception("Packaged progressive refinement pixels or retained admission differ.");
+            if (refinementWidth == 64 && (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(progressivePacket)) != "837a99763d9a8a56e261d609f063fbecbc5217ce420156bbc0a05d8bd21764bb"
+                || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(progressivePixels)) != "1566284931f254f7eb40383a708f3da729a329a2feef9604056042407922aae1"))
+                throw new Exception("Packaged prepared refinement changed the frozen original packet or samples.");
+            progressivePacket.AsSpan().Clear(); progressive.GetRow8(0)[0] ^= 255; progressive.Dispose();
+            if (budget.Bytes != 2 * refinementWidth * refinementHeight * 4 || !progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressiveOriginal))
+                || !progressivePixels.AsSpan().SequenceEqual(OriginalPixels.Bytes(progressiveAsync)) || !progressiveStream.CanRead)
+                throw new Exception("Packaged progressive independent output or borrowed input lifetime differs.");
+            progressiveOriginal.Dispose(); progressiveAsync.Dispose();
+            if (budget.Bytes != 0 || budget.IsDisposed) throw new Exception("Packaged progressive storage leaked.");
+        }
         Console.WriteLine("Packaged progressive refinement exact pixels, async and retained ownership passed.");
+        Console.WriteLine("Packaged prepared refinement preserves frozen samples, async and retained ownership.");
         var rgb = new byte[17 * 11 * 3];
         for (var i = 0; i < rgb.Length; i++) rgb[i] = (byte)(i * 37 + i / 11);
         var jpegOptions = new JpegEncodeOptions { Quality = 69, Limits = limits };

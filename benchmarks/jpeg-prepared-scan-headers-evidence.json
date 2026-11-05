@@ -1,0 +1,1221 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JAP336A/B/C",
+  "date": "2026-11-05",
+  "productionAccepted": true,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "producers": {
+    "windowsSha256": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+    "linuxSha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/JpegDecoder.cs": "9855bc64a8410e02a9d95884493173fa4e49889d83f0074c81b39cc5376dee0a",
+    "src/Lokad.Image/Internal/JpegEntropyReader.cs": "408136136998f8072a9dfa6686f6d2673c96e9dd938ede1c7ba0f1860f9e2c37",
+    "src/Lokad.Image/Internal/JpegHuffman.cs": "d2fb0926fd2424db0417c674f6f7945ef69809e2299b3ac92fcb4de91b709d24",
+    "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+    "tests/Lokad.Image.Tests/JpegRefinementBlockTests.cs": "73ae491e88a46b5f7d29cfb291d9538918da86e274ceaf48df45fffb9cf75789",
+    "tests/Lokad.Image.PublicApi.Tests/JpegPreparedRefinementMemoryTests.cs": "ccb3abdf6c9b2f4939e162361ec22a9440e67f9e7b514f0f4ed7d9fe4e8628dc",
+    "tests/Lokad.Image.Tests/JpegRefinementPrefixTests.cs": "aafe23150c0b9678ed91b94acd357c5b50388fec4b1f9c26d5d13ab27a0ed02a",
+    "tools/PackageSmokeTest/CooperativeMemoryConsumer.cs": "1b915e1a5c60ed4eb8415693ad00325a7a44f206fe989b86be4536d13784529b"
+  },
+  "cases": {
+    "ProgressiveGray": {
+      "caseId": "ProgressiveGray",
+      "label": "JPEG progressive grayscale, resident decode",
+      "runId": "jap336c-candidate-ProgressiveGray-confirm",
+      "managedUs": 2289.8561666666665,
+      "nativeUs": 1851.1717447916667,
+      "ratio": 1.2369766193273277,
+      "lower": 1.229289786978377,
+      "upper": 1.2447298824608604,
+      "status": "gap",
+      "allocatedBytes": 683126,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96
+      ],
+      "actualNanoseconds": [
+        2292756.2916666665,
+        2287248.5729166665,
+        2295351.2604166665,
+        2289099.09375,
+        2292390.4270833335,
+        2294060.5520833335,
+        2288045.5104166665,
+        2284920.5833333335,
+        2290221.625,
+        2292079.2291666665,
+        2283541.40625,
+        2288589.5729166665
+      ],
+      "statistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 2289856.1666666665,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 2289856.1666666665,
+            "StandardError": 1045.456353464302,
+            "Level": 12,
+            "Margin": 4638.668238209987,
+            "Lower": 2285217.4984284565,
+            "Upper": 2294494.8349048765
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 2289858.6770833335,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 2289858.6770833335,
+            "StandardError": 1045.456353464308,
+            "Level": 12,
+            "Margin": 4638.668238210013,
+            "Lower": 2285220.0088451235,
+            "Upper": 2294497.3453215435
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 1851171.7447916667,
+          "confidenceLower": 1843369.6962310153,
+          "confidenceUpper": 1858973.7933523182
+        },
+        {
+          "mean": 1853410.3072916667,
+          "confidenceLower": 1849458.5082179753,
+          "confidenceUpper": 1857362.1063653582
+        }
+      ],
+      "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+      "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "inputSha256": "0f435ff53a28cca61a05c553ee11bd56fac658f432966aef2f5dc2fe96a6dab0",
+      "inputBytes": 75112,
+      "outputBytes": 531468,
+      "outputSha256": "b1069feb5a3ed55bce9a2d647686dbe6a1527865d4d22e86b9e14ebe241950ff",
+      "exactFrozenPixels": true,
+      "exactDescriptor": false,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "nativeBoundary": "Retained decoder/conversion/input/packet/frame wrappers; complete packet decode, required conversion or coding validation, independent output and release per operation. Native state resets per operation.",
+      "receipt": "tmp/jap336c-candidate-ProgressiveGray-confirm-receipt.json",
+      "observation": "tmp/jap336c-candidate-ProgressiveGray-confirm-observation.json"
+    },
+    "Progressive420": {
+      "caseId": "Progressive420",
+      "label": "JPEG progressive420, resident decode",
+      "runId": "jap336c-candidate-Progressive420-confirm",
+      "managedUs": 2142.284199810606,
+      "nativeUs": 2114.9989869791666,
+      "ratio": 1.0129008160284798,
+      "lower": 1.0029602784257778,
+      "upper": 1.0222959867394665,
+      "status": "gap",
+      "allocatedBytes": 775318,
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96
+      ],
+      "actualNanoseconds": [
+        2141651.8333333335,
+        2136813.9791666665,
+        2154763.9895833335,
+        2142302.40625,
+        2141206.46875,
+        2142422.7916666665,
+        2144058.6041666665,
+        2148584.40625,
+        2144286.4479166665,
+        2146710.0104166665,
+        2138944.09375,
+        2138169.7916666665
+      ],
+      "statistics": {
+        "statistics": {
+          "N": 11,
+          "Mean": 2142284.199810606,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 2142284.199810606,
+            "StandardError": 1070.3727531082889,
+            "Level": 12,
+            "Margin": 4909.6862062942955,
+            "Lower": 2137374.5136043117,
+            "Upper": 2147193.8860169
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 2143326.2352430555,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 2143326.2352430555,
+            "StandardError": 1426.8579466797303,
+            "Level": 12,
+            "Margin": 6330.9392264617245,
+            "Lower": 2136995.296016594,
+            "Upper": 2149657.174469517
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 2114998.9869791665,
+          "confidenceLower": 2106366.1166091617,
+          "confidenceUpper": 2123631.8573491713
+        },
+        {
+          "mean": 2116498.9427083335,
+          "confidenceLower": 2102310.01872391,
+          "confidenceUpper": 2130687.866692757
+        }
+      ],
+      "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+      "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "inputSha256": "6fc3055824b2c7ff879c59448e8f769a507aae5279b374245e8d94d9fac10d49",
+      "inputBytes": 52364,
+      "outputBytes": 531468,
+      "outputSha256": "77a081d5a545919ed10e7304c1c25aeff4c6cf21ea0de62b782bc76323628b5e",
+      "exactFrozenPixels": true,
+      "exactDescriptor": false,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "nativeBoundary": "Retained decoder/conversion/input/packet/frame wrappers; complete packet decode, required conversion or coding validation, independent output and release per operation. Native state resets per operation.",
+      "receipt": "tmp/jap336c-candidate-Progressive420-confirm-receipt.json",
+      "observation": "tmp/jap336c-candidate-Progressive420-confirm-observation.json"
+    },
+    "Progressive422": {
+      "caseId": "Progressive422",
+      "label": "JPEG progressive422, resident decode",
+      "runId": "jap336c-candidate-Progressive422-confirm",
+      "managedUs": 2743.536833522727,
+      "nativeUs": 2424.0060442708336,
+      "ratio": 1.1318193038367659,
+      "lower": 1.114718136703768,
+      "upper": 1.1477794304097733,
+      "status": "gap",
+      "allocatedBytes": 847116,
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "actualNanoseconds": [
+        2775835.85,
+        2750009.5125,
+        2753299.7375,
+        2744027.4375,
+        2746692.4875,
+        2743810.2375,
+        2743175.5375,
+        2752794.0875,
+        2737821.675,
+        2737161.3,
+        2743308.1,
+        2726837.4375
+      ],
+      "statistics": {
+        "statistics": {
+          "N": 11,
+          "Mean": 2743536.8335227272,
+          "ConfidenceInterval": {
+            "N": 11,
+            "Mean": 2743536.8335227272,
+            "StandardError": 2307.18888992042,
+            "Level": 12,
+            "Margin": 10582.830546894285,
+            "Lower": 2732954.002975833,
+            "Upper": 2754119.6640696214
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 2746231.116666667,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 2746231.116666667,
+            "StandardError": 3417.4905332490653,
+            "Level": 12,
+            "Margin": 15163.334880921024,
+            "Lower": 2731067.781785746,
+            "Upper": 2761394.451547588
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 2446415.8723958335,
+          "confidenceLower": 2442824.25692434,
+          "confidenceUpper": 2450007.487867327
+        },
+        {
+          "mean": 2424006.0442708335,
+          "confidenceLower": 2405244.9367050137,
+          "confidenceUpper": 2442767.1518366532
+        }
+      ],
+      "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+      "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "inputSha256": "2567a430e42ca8285cb5e0243495d94c5235724673aca89823b293b99e9f7f2a",
+      "inputBytes": 71251,
+      "outputBytes": 531468,
+      "outputSha256": "a33b3465047aeabdd2c188b4c14be85918396a0af37c11dd257f01af73341f39",
+      "exactFrozenPixels": true,
+      "exactDescriptor": false,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "nativeBoundary": "Retained decoder/conversion/input/packet/frame wrappers; complete packet decode, required conversion or coding validation, independent output and release per operation. Native state resets per operation.",
+      "receipt": "tmp/jap336c-candidate-Progressive422-confirm-receipt.json",
+      "observation": "tmp/jap336c-candidate-Progressive422-confirm-observation.json"
+    },
+    "Progressive444": {
+      "caseId": "Progressive444",
+      "label": "JPEG ordinary progressive444, resident decode",
+      "runId": "jap336c-candidate-Progressive444-confirm",
+      "managedUs": 4515.911338541667,
+      "nativeUs": 3660.1095416666667,
+      "ratio": 1.2338186295061822,
+      "lower": 1.2189784334840459,
+      "upper": 1.2431171279584428,
+      "status": "gap",
+      "allocatedBytes": 984212,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48
+      ],
+      "actualNanoseconds": [
+        4510013.041666667,
+        4495085.020833333,
+        4489963.75,
+        4493191.958333333,
+        4526428.104166667,
+        4534218.645833333,
+        4524688.8125,
+        4532474.541666667,
+        4514717.041666667,
+        4528252.520833333,
+        4522351.3125,
+        4519598.8125
+      ],
+      "statistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 4515911.338541667,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 4515911.338541667,
+            "StandardError": 4492.348946856642,
+            "Level": 12,
+            "Margin": 19932.45945245627,
+            "Lower": 4495978.879089211,
+            "Upper": 4535843.797994123
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 4515915.296875,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 4515915.296875,
+            "StandardError": 4492.348946856673,
+            "Level": 12,
+            "Margin": 19932.45945245641,
+            "Lower": 4495982.837422543,
+            "Upper": 4535847.756327457
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3672910.5104166665,
+          "confidenceLower": 3657504.020639207,
+          "confidenceUpper": 3688317.000194126
+        },
+        {
+          "mean": 3660109.5416666665,
+          "confidenceLower": 3648769.4154585646,
+          "confidenceUpper": 3671449.6678747684
+        }
+      ],
+      "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+      "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+      "inputBytes": 132961,
+      "outputBytes": 531468,
+      "outputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "exactFrozenPixels": true,
+      "exactDescriptor": false,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "nativeBoundary": "Retained decoder/conversion/input/packet/frame wrappers; complete packet decode, required conversion or coding validation, independent output and release per operation. Native state resets per operation.",
+      "receipt": "tmp/jap336c-candidate-Progressive444-confirm-receipt.json",
+      "observation": "tmp/jap336c-candidate-Progressive444-confirm-observation.json"
+    },
+    "ProgressiveCancelable444": {
+      "caseId": "ProgressiveCancelable444",
+      "label": "JPEG progressive444, live-token resident decode",
+      "runId": "jap336c-candidate-ProgressiveCancelable444-confirm",
+      "managedUs": 4805.3902065972225,
+      "nativeUs": 3616.7160104166664,
+      "ratio": 1.3286611922962714,
+      "lower": 1.3088393117781612,
+      "upper": 1.3400696316855945,
+      "status": "gap",
+      "allocatedBytes": 984212,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48
+      ],
+      "actualNanoseconds": [
+        4795625.041666667,
+        4776225.041666667,
+        4810003.479166667,
+        4812147.75,
+        4798695.3125,
+        4844025.583333333,
+        4778130.229166667,
+        4785238.0625,
+        4796899.875,
+        4823192.8125,
+        4813261.520833333,
+        4831289.020833333
+      ],
+      "statistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 4805390.206597222,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 4805390.206597222,
+            "StandardError": 6043.632792258967,
+            "Level": 12,
+            "Margin": 26815.47382055607,
+            "Lower": 4778574.732776666,
+            "Upper": 4832205.680417778
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 4805394.477430556,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 4805394.477430556,
+            "StandardError": 6043.632792258895,
+            "Level": 12,
+            "Margin": 26815.473820555755,
+            "Lower": 4778579.00361,
+            "Upper": 4832209.951251112
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 3616716.0104166665,
+          "confidenceLower": 3605939.4504544963,
+          "confidenceUpper": 3627492.5703788367
+        },
+        {
+          "mean": 3631923.921875,
+          "confidenceLower": 3612846.0058814567,
+          "confidenceUpper": 3651001.8378685433
+        }
+      ],
+      "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+      "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeWorkerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+      "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+      "inputBytes": 132961,
+      "outputBytes": 531468,
+      "outputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+      "exactFrozenPixels": true,
+      "exactDescriptor": false,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "nativeBoundary": "Retained decoder/conversion/input/packet/frame wrappers; complete packet decode, required conversion or coding validation, independent output and release per operation. Native state resets per operation.",
+      "receipt": "tmp/jap336c-candidate-ProgressiveCancelable444-confirm-receipt.json",
+      "observation": "tmp/jap336c-candidate-ProgressiveCancelable444-confirm-observation.json"
+    },
+    "ValidateJpegProgressive420": {
+      "caseId": "ValidateJpegProgressive420",
+      "label": "Validate JPEG progressive420, span",
+      "runId": "jap336c-current-ValidateJpegProgressive420-confirm",
+      "managedUs": 287.37851621685604,
+      "nativeUs": 291.5933479817708,
+      "ratio": 0.9855455146899363,
+      "lower": 0.9780666364730645,
+      "upper": 0.9920162628672918,
+      "status": "pass",
+      "allocatedBytes": 4072,
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        704,
+        704,
+        704,
+        704,
+        704,
+        704,
+        704,
+        704,
+        704,
+        704,
+        704,
+        704
+      ],
+      "actualNanoseconds": [
+        288705.86363636365,
+        286470.5596590909,
+        287106.20738636365,
+        287150.5085227273,
+        286414.89204545453,
+        287823.7286931818,
+        287150.09517045453,
+        287357.953125,
+        286254.3508522727,
+        288047.06392045453,
+        287773.66761363635,
+        288318.45454545453
+      ],
+      "statistics": {
+        "statistics": {
+          "N": 12,
+          "Mean": 287378.516216856,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 287378.516216856,
+            "StandardError": 224.31735200655632,
+            "Level": 12,
+            "Margin": 995.2914558165837,
+            "Lower": 286383.2247610394,
+            "Upper": 288373.8076726726
+          }
+        },
+        "unfilteredActualStatistics": {
+          "N": 12,
+          "Mean": 287381.1120975379,
+          "ConfidenceInterval": {
+            "N": 12,
+            "Mean": 287381.1120975379,
+            "StandardError": 224.31735200655814,
+            "Level": 12,
+            "Margin": 995.2914558165918,
+            "Lower": 286385.8206417213,
+            "Upper": 288376.4035533545
+          }
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 291827.6559244792,
+          "confidenceLower": 290849.87908852263,
+          "confidenceUpper": 292805.43276043574
+        },
+        {
+          "mean": 291593.3479817708,
+          "confidenceLower": 290697.2540146072,
+          "confidenceUpper": 292489.4419489344
+        }
+      ],
+      "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+      "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeWorkerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5",
+      "inputSha256": "1783bc6c4ab705fbd5b3e4db2d94707df0f438f6118563fbc688ab4f1d475af5",
+      "inputBytes": 30593,
+      "outputBytes": 36,
+      "outputSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+      "exactFrozenPixels": false,
+      "exactDescriptor": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "nativeBoundary": "Retained decoder/conversion/input/packet/frame wrappers; complete packet decode, required conversion or coding validation, independent output and release per operation. Native state resets per operation.",
+      "receipt": "tmp/jap336c-current-ValidateJpegProgressive420-confirm-receipt.json",
+      "observation": "tmp/jap336c-current-ValidateJpegProgressive420-confirm-observation.json"
+    }
+  },
+  "independentComparison": {
+    "Progressive444": {
+      "before": {
+        "caseId": "Progressive444",
+        "runId": "jap336c-baseline-Progressive444-confirm",
+        "managedUs": 4745.492108901514,
+        "nativeUs": 3652.1725,
+        "ratio": 1.299361437309304,
+        "lower": 1.2694826416429237,
+        "upper": 1.3170032187148883,
+        "allocatedBytes": 984212,
+        "actualIterations": 12,
+        "filteredIterations": 11,
+        "librarySha256": "aadde52f525ec6909f78d48906a5964a6ad807b253c8bef21492cf0131049832",
+        "receipt": "tmp/jap336c-baseline-Progressive444-confirm-receipt.json",
+        "observation": "tmp/jap336c-baseline-Progressive444-confirm-observation.json"
+      },
+      "after": {
+        "caseId": "Progressive444",
+        "runId": "jap336c-candidate-Progressive444-confirm",
+        "managedUs": 4515.911338541667,
+        "nativeUs": 3660.1095416666667,
+        "ratio": 1.2338186295061822,
+        "lower": 1.2189784334840459,
+        "upper": 1.2431171279584428,
+        "allocatedBytes": 984212,
+        "actualIterations": 12,
+        "filteredIterations": 12,
+        "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+        "receipt": "tmp/jap336c-candidate-Progressive444-confirm-receipt.json",
+        "observation": "tmp/jap336c-candidate-Progressive444-confirm-observation.json"
+      },
+      "rawSavedUs": 229.58077035984752,
+      "rawReduction": 0.04837870658960819,
+      "normalizedPointReduction": 0.05044232183683006,
+      "fasterNativeBracketChange": 0.0021732384400425797,
+      "allocationDifference": 0,
+      "views": [
+        {
+          "name": "statistics",
+          "rawSeparated": true,
+          "normalizedSeparated": true,
+          "beforeRawLower": 4730707.48056012,
+          "afterRawUpper": 4535843.797994123,
+          "beforeNormalizedLower": 1.2715292281546273,
+          "afterNormalizedUpper": 1.2431160431178065
+        },
+        {
+          "name": "unfilteredActualStatistics",
+          "rawSeparated": true,
+          "normalizedSeparated": true,
+          "beforeRawLower": 4723093.182826217,
+          "afterRawUpper": 4535847.756327457,
+          "beforeNormalizedLower": 1.2694826416429237,
+          "afterNormalizedUpper": 1.2431171279584428
+        }
+      ]
+    },
+    "ProgressiveCancelable444": {
+      "before": {
+        "caseId": "ProgressiveCancelable444",
+        "runId": "jap336-baseline-Live444-confirm",
+        "managedUs": 5035.767355902779,
+        "nativeUs": 3650.6440416666665,
+        "ratio": 1.3794188911400267,
+        "lower": 1.3661847088633545,
+        "upper": 1.3900890542165545,
+        "allocatedBytes": 984212,
+        "actualIterations": 12,
+        "filteredIterations": 12,
+        "librarySha256": "aadde52f525ec6909f78d48906a5964a6ad807b253c8bef21492cf0131049832",
+        "receipt": "tmp/jap336-baseline-Live444-confirm-receipt.json",
+        "observation": "tmp/jap336-baseline-Live444-confirm-observation.json"
+      },
+      "after": {
+        "caseId": "ProgressiveCancelable444",
+        "runId": "jap336c-candidate-ProgressiveCancelable444-confirm",
+        "managedUs": 4805.3902065972225,
+        "nativeUs": 3616.7160104166664,
+        "ratio": 1.3286611922962714,
+        "lower": 1.3088393117781612,
+        "upper": 1.3400696316855945,
+        "allocatedBytes": 984212,
+        "actualIterations": 12,
+        "filteredIterations": 12,
+        "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+        "receipt": "tmp/jap336c-candidate-ProgressiveCancelable444-confirm-receipt.json",
+        "observation": "tmp/jap336c-candidate-ProgressiveCancelable444-confirm-observation.json"
+      },
+      "rawSavedUs": 230.3771493055565,
+      "rawReduction": 0.04574817163376599,
+      "normalizedPointReduction": 0.036796435926585214,
+      "fasterNativeBracketChange": -0.00929371115418598,
+      "allocationDifference": 0,
+      "views": [
+        {
+          "name": "statistics",
+          "rawSeparated": true,
+          "normalizedSeparated": true,
+          "beforeRawLower": 5008072.1523091355,
+          "afterRawUpper": 4832205.680417778,
+          "beforeNormalizedLower": 1.3661847088633545,
+          "afterNormalizedUpper": 1.340068447297062
+        },
+        {
+          "name": "unfilteredActualStatistics",
+          "rawSeparated": true,
+          "normalizedSeparated": true,
+          "beforeRawLower": 5008076.8398091355,
+          "afterRawUpper": 4832209.951251112,
+          "beforeNormalizedLower": 1.3661859875970923,
+          "afterNormalizedUpper": 1.3400696316855945
+        }
+      ]
+    }
+  },
+  "statusCounts": {
+    "pass": 1,
+    "gap": 5,
+    "uncertain": 0
+  },
+  "stages": {
+    "A": {
+      "producerLinux": "c729044ea9cf7f8924e5846563c595db843c5a7592c166bfbbc7a510e738e237",
+      "windowsBuilt": false,
+      "focused": {
+        "internal-normal": 372,
+        "internal-scalar": 372,
+        "public-normal": 332,
+        "public-scalar": 332
+      },
+      "short": {
+        "caseId": "ProgressiveCancelable444",
+        "runId": "jap336-candidate-Live444-short",
+        "managedUs": 4428.238506944444,
+        "nativeUs": 3356.040125,
+        "ratio": 1.3194831831590346,
+        "lower": 1.267812378616518,
+        "upper": 1.3727867944047083,
+        "allocatedBytes": 984212,
+        "actualIterations": 3,
+        "filteredIterations": 3,
+        "librarySha256": "c729044ea9cf7f8924e5846563c595db843c5a7592c166bfbbc7a510e738e237",
+        "receipt": "tmp/jap336-candidate-Live444-short-receipt.json",
+        "observation": "tmp/jap336-candidate-Live444-short-observation.json"
+      },
+      "confirmation": {
+        "caseId": "ProgressiveCancelable444",
+        "runId": "jap336-candidate-Live444-confirm",
+        "managedUs": 4828.614258680556,
+        "nativeUs": 3646.819984375,
+        "ratio": 1.3240615877309596,
+        "lower": 1.311794429278284,
+        "upper": 1.3360778456911684,
+        "allocatedBytes": 984212,
+        "actualIterations": 12,
+        "filteredIterations": 12,
+        "librarySha256": "c729044ea9cf7f8924e5846563c595db843c5a7592c166bfbbc7a510e738e237",
+        "receipt": "tmp/jap336-candidate-Live444-confirm-receipt.json",
+        "observation": "tmp/jap336-candidate-Live444-confirm-observation.json"
+      },
+      "comparison": {
+        "before": {
+          "caseId": "ProgressiveCancelable444",
+          "runId": "jap336-baseline-Live444-confirm",
+          "managedUs": 5035.767355902779,
+          "nativeUs": 3650.6440416666665,
+          "ratio": 1.3794188911400267,
+          "lower": 1.3661847088633545,
+          "upper": 1.3900890542165545,
+          "allocatedBytes": 984212,
+          "actualIterations": 12,
+          "filteredIterations": 12,
+          "librarySha256": "aadde52f525ec6909f78d48906a5964a6ad807b253c8bef21492cf0131049832",
+          "receipt": "tmp/jap336-baseline-Live444-confirm-receipt.json",
+          "observation": "tmp/jap336-baseline-Live444-confirm-observation.json"
+        },
+        "after": {
+          "caseId": "ProgressiveCancelable444",
+          "runId": "jap336-candidate-Live444-confirm",
+          "managedUs": 4828.614258680556,
+          "nativeUs": 3646.819984375,
+          "ratio": 1.3240615877309596,
+          "lower": 1.311794429278284,
+          "upper": 1.3360778456911684,
+          "allocatedBytes": 984212,
+          "actualIterations": 12,
+          "filteredIterations": 12,
+          "librarySha256": "c729044ea9cf7f8924e5846563c595db843c5a7592c166bfbbc7a510e738e237",
+          "receipt": "tmp/jap336-candidate-Live444-confirm-receipt.json",
+          "observation": "tmp/jap336-candidate-Live444-confirm-observation.json"
+        },
+        "rawSavedUs": 207.15309722222264,
+        "rawReduction": 0.041136351737814825,
+        "normalizedPointReduction": 0.04013088682823296,
+        "fasterNativeBracketChange": -0.0010475020977177563,
+        "allocationDifference": 0,
+        "views": [
+          {
+            "name": "statistics",
+            "rawSeparated": true,
+            "normalizedSeparated": true,
+            "beforeRawLower": 5008072.1523091355,
+            "afterRawUpper": 4852238.831632391,
+            "beforeNormalizedLower": 1.3661847088633545,
+            "afterNormalizedUpper": 1.336076838933028
+          },
+          {
+            "name": "unfilteredActualStatistics",
+            "rawSeparated": true,
+            "normalizedSeparated": true,
+            "beforeRawLower": 5008076.8398091355,
+            "afterRawUpper": 4852242.487882391,
+            "beforeNormalizedLower": 1.3661859875970923,
+            "afterNormalizedUpper": 1.3360778456911684
+          }
+        ]
+      },
+      "oldOriginal": {
+        "caseId": "ProgressiveCancelable444",
+        "runId": "jrf327-baseline-Live444-confirm",
+        "managedUs": 4689.418256944445,
+        "nativeUs": 3363.4060677083335,
+        "ratio": 1.3942468326875541,
+        "lower": 1.36040913293332,
+        "upper": 1.4178700711207357,
+        "allocatedBytes": 984212,
+        "actualIterations": 12,
+        "filteredIterations": 12,
+        "librarySha256": "ee2366d8b15c0e30cdf453b76c7b8a0018910918b0cef6a937dde7976f6949d2",
+        "receipt": "tmp/jrf327-baseline-Live444-confirm-receipt.json",
+        "observation": "tmp/jrf327-baseline-Live444-confirm-observation.json"
+      },
+      "oldComparisonDisposition": "Adverse raw view against older4689us original retained; native timing moves~8.7% from short to confirmation. One fresh immutable PGA335 original resolves missing contemporary comparison. No candidate resampling."
+    },
+    "B": {
+      "project": "Lokad.Image",
+      "stage": "JAP336B",
+      "productionAccepted": false,
+      "measured": false,
+      "productionSha256": "6e4f1438523f753b1a1e1ec0796918bf2a5d62b3150b1bfd3102ca5fcc898617",
+      "sources": {
+        "src/Lokad.Image/Internal/JpegDecoder.cs": "a62364b4da94a980061bbd0a87e2955ebce696fcf84d5874a2c78d2a1ec72312",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "408136136998f8072a9dfa6686f6d2673c96e9dd938ede1c7ba0f1860f9e2c37",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "d2fb0926fd2424db0417c674f6f7945ef69809e2299b3ac92fcb4de91b709d24",
+        "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+        "tests/Lokad.Image.Tests/JpegRefinementBlockTests.cs": "73ae491e88a46b5f7d29cfb291d9538918da86e274ceaf48df45fffb9cf75789",
+        "tests/Lokad.Image.PublicApi.Tests/JpegPreparedRefinementMemoryTests.cs": "e6faf2bbbc9127d0e3f393d9dc18186468067a1dc7ffd0df948ec0f6a1043c73"
+      },
+      "internalNormalScalar": 373,
+      "publicNormalPassed": 318,
+      "publicNormalFailed": 15,
+      "reason": "Extra2048B preparation violates existing tiny-image exact admission. No benchmarks or scalar public run after failure."
+    },
+    "C": {
+      "selected": true,
+      "shorts": {
+        "Progressive444": {
+          "caseId": "Progressive444",
+          "runId": "jap336c-candidate-Progressive444-short",
+          "managedUs": 4508.431020833333,
+          "nativeUs": 3649.8172083333334,
+          "ratio": 1.2352484421794045,
+          "lower": 1.1042584660635821,
+          "upper": 1.3868785709857805,
+          "allocatedBytes": 984212,
+          "actualIterations": 3,
+          "filteredIterations": 3,
+          "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+          "receipt": "tmp/jap336c-candidate-Progressive444-short-receipt.json",
+          "observation": "tmp/jap336c-candidate-Progressive444-short-observation.json"
+        },
+        "ProgressiveCancelable444": {
+          "caseId": "ProgressiveCancelable444",
+          "runId": "jap336c-candidate-ProgressiveCancelable444-short",
+          "managedUs": 4853.507114583333,
+          "nativeUs": 3665.7236458333336,
+          "ratio": 1.3240242810175014,
+          "lower": 1.1809628553921305,
+          "upper": 1.4800796782380652,
+          "allocatedBytes": 984212,
+          "actualIterations": 3,
+          "filteredIterations": 3,
+          "librarySha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+          "receipt": "tmp/jap336c-candidate-ProgressiveCancelable444-short-receipt.json",
+          "observation": "tmp/jap336c-candidate-ProgressiveCancelable444-short-observation.json"
+        }
+      },
+      "revision": "Geometry-based preparation only for at least32blocks, before any reservation. Small scans retain direct parsing and their exact existing admission; refusal after selection is terminal. One shared scan/header preparation and row geometry; ordinary/live typed correction kernels and scalar/marker/long-code tails retained."
+    }
+  },
+  "storage": {
+    "scanPlanBytes": 2048,
+    "minimumReuseBlocks": 32,
+    "heapArrayOrCrossOperationCacheAdded": false,
+    "reportedAllocationChangeBytes": 0,
+    "planRetainedAfterScanBytes": 0,
+    "wholeOperationPhysicalOrAdmittedPeakNewlyMeasured": false,
+    "nativeAllocationMeasured": false,
+    "admission": "One borrowed root; reserve actual plan capacity before stack allocation, release in finally after last synchronous scan/block user. No retry/wait/lower-memory fallback after refusal."
+  },
+  "qualification": {
+    "fullChecksEachOs": 5711,
+    "countsEachOs": [
+      2474,
+      2289,
+      948
+    ],
+    "focusedEachOs": {
+      "internal-normal": 373,
+      "internal-scalar": 373,
+      "public-normal": 333,
+      "public-scalar": 333
+    },
+    "full": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSha256": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+        "full": [
+          2474,
+          2289,
+          948
+        ],
+        "total": 5711,
+        "fullLivePassed": true,
+        "focused": {
+          "internal-normal": 373,
+          "internal-scalar": 373,
+          "public-normal": 333,
+          "public-scalar": 333
+        },
+        "unchangedAvx512ChecksReused": 54,
+        "affectedJpegScalarEachOs": 706,
+        "identities": {
+          "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+          "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "6958583d430976c049795cc0574298367b5816877e6315abd1c5efdb0700e1ed",
+          "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+          "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+          "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746"
+        },
+        "immutableCandidateReused": true,
+        "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "productionSha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+        "full": [
+          2474,
+          2289,
+          948
+        ],
+        "total": 5711,
+        "fullLivePassed": true,
+        "focused": {
+          "internal-normal": 373,
+          "internal-scalar": 373,
+          "public-normal": 333,
+          "public-scalar": 333
+        },
+        "unchangedAvx512ChecksReused": 54,
+        "affectedJpegScalarEachOs": 706,
+        "identities": {
+          "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+          "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "415fbe006ae8bc5d1df4767d2b7b347a5c608dabe625577fe3beee3817c7cbc0",
+          "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+          "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+          "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34"
+        },
+        "immutableCandidateReused": true,
+        "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+      }
+    },
+    "concurrency": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSha256": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+        "productionUnchanged": true,
+        "sourceSha256": "aafe23150c0b9678ed91b94acd357c5b50388fec4b1f9c26d5d13ab27a0ed02a",
+        "internalTestAssemblySha256": "87295af55908aba4b62e74e25511d3ca1e6ce29e7d49eff220c76be246a752a0",
+        "focused": {
+          "normal": 2,
+          "scalar": 2
+        },
+        "internalOnlyBuilds": 1,
+        "productionOrPublicOrHarnessNativePackageBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "productionSha256": "a688446f672700845c536464e3b8fc54393e03f8e8cd75732c3489a581efcb34",
+        "productionUnchanged": true,
+        "sourceSha256": "aafe23150c0b9678ed91b94acd357c5b50388fec4b1f9c26d5d13ab27a0ed02a",
+        "internalTestAssemblySha256": "415fbe006ae8bc5d1df4767d2b7b347a5c608dabe625577fe3beee3817c7cbc0",
+        "focused": {
+          "normal": 2,
+          "scalar": 2
+        },
+        "internalOnlyBuilds": 1,
+        "productionOrPublicOrHarnessNativePackageBuilds": 0
+      }
+    },
+    "windowsFullInternalAssemblyBeforeTestOnlySupplement": "6958583d430976c049795cc0574298367b5816877e6315abd1c5efdb0700e1ed",
+    "currentEmbeddedTestAssemblies": {
+      "windows": "87295af55908aba4b62e74e25511d3ca1e6ce29e7d49eff220c76be246a752a0",
+      "linux": "415fbe006ae8bc5d1df4767d2b7b347a5c608dabe625577fe3beee3817c7cbc0"
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "3874820ab5c095e8b9a7b5571d9a012ae8d551b407017054a5248648dce31a0d",
+      "symbolsSha256": "621b67f897806bea43989b1cb7c5ed74319f17a8357364efd497ac33f3a36837",
+      "bytes": 411981,
+      "librarySha256": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+      "actualConsumerPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "3874820ab5c095e8b9a7b5571d9a012ae8d551b407017054a5248648dce31a0d",
+      "librarySha256": "79d2365857916e7e25b4d10e69b1c3bd63817e09ad583b7a5d77c7f8aef82746",
+      "actualConsumerPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "preparedPackageFixture": {
+      "project": "Lokad.Image",
+      "width": 64,
+      "height": 32,
+      "sampling": "Grayscale",
+      "restartInterval": 1,
+      "producerSha256": "d94850983d5ba2f8705dd061ea03bd610b56776665d9b6c0eeea211cc73d2f82",
+      "fixtureAssemblySha256": "ecb2e4b6376d2d2d5f8c41f49fd1080f7c72cec1d829ab620a2a766ff25d4594",
+      "inputBytes": 974,
+      "inputSha256": "837a99763d9a8a56e261d609f063fbecbc5217ce420156bbc0a05d8bd21764bb",
+      "outputBytes": 8192,
+      "outputSha256": "1566284931f254f7eb40383a708f3da729a329a2feef9604056042407922aae1",
+      "allBuilds": 0,
+      "timing": false,
+      "scope": "Frozen original PGA335 output for an authored32block AC refinement scan. Reused original public API/test fixture assemblies; complete RGBA8 samples retained for actual-package verification."
+    },
+    "unchangedAvx512OffChecksReused": 54
+  },
+  "workflow": {
+    "successfulMainVersions": {
+      "linux": 3,
+      "windows": 1
+    },
+    "internalVersions": {
+      "linux": 4,
+      "windows": 2
+    },
+    "publicTestVersions": {
+      "linux": 3,
+      "windows": 1
+    },
+    "testOnlyConcurrencySupplementEachOs": 1,
+    "sourceProductionUnchangedForSupplement": true,
+    "harnessNativeSelectorBuilds": 0,
+    "newFixtureToolBuilds": 0,
+    "successfulTimingJobs": 12,
+    "failedFunctionalStages": 1,
+    "failedMeasurementPreparations": 1,
+    "failedLinuxPackageDocSynchronizationChecks": 1,
+    "packageBuilds": 1,
+    "allActualsNativeBracketsAndFailuresRetained": true,
+    "metadataProjection": "Frozen expected descriptor facts reused with explicit original qualifier and current selector identity. Existing ValidateManaged checks actual current operation before timing; payload/settings/native gates unchanged, original metadata restores byte for byte.",
+    "broaderParserEquivalenceClaim": false
+  },
+  "invalidation": {
+    "refreshedDisplayedComparisons": 6,
+    "otherDisplayedComparisonsReuseUnchangedEvidence": 119,
+    "affected": "AVX2/BMI2 progressive AC refinement scans with32or more blocks, ordinary/live decode and coding validation. Subthreshold/direct/scalar fallback algorithms, inspection, baseline JPEG, JPEG encoding, PNG/WebP, editing/text unchanged."
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "JAP336C",
+    "status": "functional-revision-not-built",
+    "productionChanged": false,
+    "baseline": {
+      "windows": "d94850983d5ba2f8705dd061ea03bd610b56776665d9b6c0eeea211cc73d2f82",
+      "linux": "aadde52f525ec6909f78d48906a5964a6ad807b253c8bef21492cf0131049832",
+      "package": "4f24c8f820285693795229815bc087770226f315fbc500926f7f333d2b98e9ce"
+    },
+    "sourceReuse": {
+      "project": "Lokad.Image",
+      "stage": "JAP336",
+      "sourceHashes": {
+        "src/Lokad.Image/Internal/JpegDecoder.cs": "d4c115743325f6ce62a7ed02e89c18794a52625d1d2ae198f487cb1dc3850938",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "5ed9d6a8016f5d8c6c2b2806053c02406f63558ab44ad7d50d8b43a8cfcfc7e8",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "3206b10ee0cfdf1193095a2969066e97dc4ea02fcee530bd9d0492f5dd07d1ce"
+      },
+      "referenceArchive": "jpeg-current-instruction-attribution.tar.xz",
+      "referenceArchiveSha256": "d4b241db0a86d651283453a69f34a712a934990af2edd973c4122112f12c9840",
+      "sourceBytesUnchanged": true,
+      "productionChanged": false,
+      "newProfilesOrBuilds": 0,
+      "scope": "Reused instruction/source attribution is a lead, not current whole-method machine-code identity or phase timing. Ordinary/live progressive444 complete decodes retain frozen132961B packet and exact531468B frame.",
+      "next": "Inspect symbol/position/correction ownership and repeated setup; compare restored scan-state and grouped-correction stages before selecting a materially revised architecture. No unchanged replay or permanent family ban."
+    },
+    "removedWork": [
+      "Repeated short Huffman header classification and separate sign/EOB field interpretation in each AC-refinement block.",
+      "Repeated generic component/MCU metadata traversal for a necessarily single-component AC refinement scan."
+    ],
+    "endState": "Prepare a bounded format-derived refinement header program once per scan, then execute through one scan-owned geometry/storage boundary. Keep ordinary/live optimized kernels and scalar/marker/long-code fallbacks; converge shared preparation rather than duplicating full decoder loops. No cross-operation cache, session, new public API or fixed-input special case.",
+    "proposedPreparation": {
+      "entries": 512,
+      "entryBytes": 4,
+      "storage": "2048B synchronous stack workspace; reserve before allocation, release in finally after last scan/block user, no heap array or retained object",
+      "scope": "Only supported AVX2/BMI2 single-component progressive AC refinement with a live token in stage1. Compile generic canonical short-code prefix + valid following sign/EOB fields that fit9bits; missing/invalid/long/short-tail entries execute existing decoder behavior.",
+      "format": "T.81 C.2 and G.1.2; construct from encoded canonical tables, no copied upstream tables or implementation.",
+      "admissionRefusal": "Terminal. No fallback, retry or waiting when the2048B reservation fails.",
+      "cancellation": "Check during bounded preparation. Preserve separate logical Huffman/field/correction cancellation checkpoints and original partial state/failure prefixes."
+    },
+    "stages": [
+      "First prototype prepares the scan instruction table and removes generic per-block component scheduling for the eligible live AC scan. Existing buffered block storage/reader publication remains; no lookahead carried across blocks.",
+      "If a useful complete-operation lead survives a short screen, confirm independently and check unchanged ordinary progressive444 plus a small existing progressive420 control. Resolve material clock contradictions without favorable resampling.",
+      "Before accepting a completed stage, remove temporary duplicate preparation/dispatch where justified and preserve useful typed kernels/fallbacks. Whole normal/live consolidation is not mandatory if it adds hot-loop dispatch or loses a measured gain."
+    ],
+    "boundaries": [
+      "Complete public live-token progressive444 decode of frozen132961B packet into exact531468B owned frame; admission, normalization, independent output and disposal timed.",
+      "Ordinary progressive444 stays an independent complete-operation check; native wrappers/reset semantics and absence of a native token stay explicit.",
+      "Stuffing, markers, restart intervals, EOB/invalid symbols, overflow/truncation, all bit alignments, logical cancellation/error state, source/surviving output ownership.",
+      "Focused actual prepared-vs-scalar reader proof and refusal/cancellation cleanup/root reuse before benchmark; normal/scalar checks."
+    ],
+    "priorDistinction": "Earlier scan-state trials retain speculative lookahead across blocks; JRF327 groups correction traversal. Neither compiles generic encoded Huffman/header interpretation into a bounded scan plan. Their adverse/inconclusive observations remain leads, not justification to replay those implementations.",
+    "decision": "No gain, merge or qualification claim at design stage. Compare meaningful elapsed cost, complete allocation, added2048B live capacity and source simplification together. Retain all stages. Full Windows/Linux/scalar/SAMEactualpackage qualification only for an accepted coherent production milestone; otherwise restore immutable PGA335 exactly.",
+    "candidateSources": {
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "9855bc64a8410e02a9d95884493173fa4e49889d83f0074c81b39cc5376dee0a",
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "408136136998f8072a9dfa6686f6d2673c96e9dd938ede1c7ba0f1860f9e2c37",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "d2fb0926fd2424db0417c674f6f7945ef69809e2299b3ac92fcb4de91b709d24",
+      "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+      "tests/Lokad.Image.Tests/JpegRefinementBlockTests.cs": "73ae491e88a46b5f7d29cfb291d9538918da86e274ceaf48df45fffb9cf75789",
+      "tests/Lokad.Image.PublicApi.Tests/JpegPreparedRefinementMemoryTests.cs": "ccb3abdf6c9b2f4939e162361ec22a9440e67f9e7b514f0f4ed7d9fe4e8628dc"
+    },
+    "revisionReason": "StageB exact traversal/internal tests pass, but15existing small-image public admission cases fail before timing. Preserve all failed sources/module/logs. Require32or more blocks before preparing512entries: small scans use direct parsing, avoiding over-preparation and retaining their exact admission. This geometry decision precedes reservation and is independent of available memory; refusal after selection remains terminal. Resource proof uses one authored32block scan at the new preparation boundary, not a new performance matrix.",
+    "storage": "Same2048B admitted stack plan per eligible scan, no heap array/retention. Ordinary/live dispatch occurs once per block; specialized correction bodies retain their existing arithmetic, field publication and cancellation semantics. Long/invalid/marker/scalar fallbacks remain required.",
+    "newInputsOrSettings": 0,
+    "windowsStageAMeasured": false,
+    "stageBFunctionalFailure": {
+      "project": "Lokad.Image",
+      "stage": "JAP336B",
+      "productionAccepted": false,
+      "measured": false,
+      "productionSha256": "6e4f1438523f753b1a1e1ec0796918bf2a5d62b3150b1bfd3102ca5fcc898617",
+      "sources": {
+        "src/Lokad.Image/Internal/JpegDecoder.cs": "a62364b4da94a980061bbd0a87e2955ebce696fcf84d5874a2c78d2a1ec72312",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "408136136998f8072a9dfa6686f6d2673c96e9dd938ede1c7ba0f1860f9e2c37",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "d2fb0926fd2424db0417c674f6f7945ef69809e2299b3ac92fcb4de91b709d24",
+        "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+        "tests/Lokad.Image.Tests/JpegRefinementBlockTests.cs": "73ae491e88a46b5f7d29cfb291d9538918da86e274ceaf48df45fffb9cf75789",
+        "tests/Lokad.Image.PublicApi.Tests/JpegPreparedRefinementMemoryTests.cs": "e6faf2bbbc9127d0e3f393d9dc18186468067a1dc7ffd0df948ec0f6a1043c73"
+      },
+      "internalNormalScalar": 373,
+      "publicNormalPassed": 318,
+      "publicNormalFailed": 15,
+      "reason": "Extra2048B preparation violates existing tiny-image exact admission. No benchmarks or scalar public run after failure."
+    }
+  },
+  "decision": "Accept coherent shared preparation/geometry with independent raw and normalized ordinary/live gains, unchanged allocations and exact samples. Preserve failed tiny-scan implementation and all clock-shift views. Five decoder gaps remain; coding validation passes and stops. No further micro-tuning or publication in this milestone.",
+  "raw": {
+    "file": "jpeg-prepared-scan-headers-qualified.tar.xz",
+    "sha256": "b3641e93dba174a591b71fd001f3d936aca4e8d79281655d35fc5885cc5983ab",
+    "bytes": 13746996,
+    "members": 901,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "png-complete-token-output-qualified.tar.xz",
+        "sha256": "46179805a4bfcc6a28d3e63322537807c1881fbec0ef85766658006c116bd6a1"
+      },
+      {
+        "file": "jpeg-buffered-correction-execution-inconclusive.tar.xz",
+        "sha256": "0c5b389c46bb7ebe376a14b4f7b2c2da79d0f864c78ed886b118a4eae9456c3c"
+      },
+      {
+        "file": "jpeg-current-instruction-attribution.tar.xz",
+        "sha256": "d4b241db0a86d651283453a69f34a712a934990af2edd973c4122112f12c9840"
+      },
+      {
+        "file": "jpeg-container-scan-qualified.tar.xz",
+        "sha256": "1fac10336e4dad0a9a22bc4bc4c4494cea37cf35ad311107417ce0b02c220006"
+      },
+      {
+        "file": "current-jpeg-confidence-resolution.tar.xz",
+        "sha256": "1c70d2b00d7cf60d904bcfb9b655872a738d73ff3dd11a0f136048b4089eac43"
+      }
+    ]
+  }
+}
