@@ -76,7 +76,8 @@ internal sealed class JpegHuffman
 
     // T.81 C.2/G.1.2: compile short code plus sign/EOB interpretation from
     // this encoded canonical table. Packed bits:0..3 code length,4..8 total
-    // width,9 insert,10 EOB,11..15 zero run,16..30 sign/EOB value.
+    // width,9 insert,10 EOB,11..15 zero run,16..31 signed insertion factor
+    // or positive EOB count. Compile sign interpretation once per scan.
     // Zero leaves long/invalid/short tails to the
     // existing reader. The caller owns and admits the scan-local destination.
     internal void BuildRefinementHeaders(Span<uint> headers, CancellationToken cancellation)
@@ -93,7 +94,7 @@ internal sealed class JpegHuffman
             if (length + count > 9) continue;
             var field = (prefix >> (9 - length - count)) & ((1 << count) - 1);
             var kind = size == 1 ? 512 : run == 15 ? 0 : 1024;
-            var value = size == 1 ? field : kind == 1024 ? (1 << run) + field : 0;
+            var value = size == 1 ? 2 * field - 1 : kind == 1024 ? (1 << run) + field : 0;
             var skip = kind == 0 ? 16 : run;
             headers[prefix] = (uint)(length | (length + count) << 4 | kind | skip << 11 | value << 16);
         }

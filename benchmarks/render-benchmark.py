@@ -900,8 +900,11 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    jpeg_prepared = json.loads((ROOT / 'benchmarks/jpeg-prepared-scan-headers-evidence.json').read_text(encoding='utf-8'))
+    jpeg_prepared = json.loads((ROOT / 'benchmarks/jpeg-signed-prepared-instructions-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_prepared['productionAccepted']
+    assert jpeg_prepared['raw']['mirrored'] and jpeg_prepared['raw']['allMembersVerified']
+    assert all(q['fullLivePassed'] and q['total'] == 5716
+               for q in jpeg_prepared['qualification']['full'].values())
     assert set(jpeg_prepared['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422',
         'Progressive444', 'ProgressiveCancelable444', 'ValidateJpegProgressive420'}
     assert jpeg_prepared['qualification']['actualPackage']['sha256'] == jpeg_prepared['qualification']['samePackageLinux']['sameActualPackageSha256']
@@ -1807,20 +1810,20 @@ Current scope and remaining work:
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [scan header preparation](../benchmarks/JPEG-PREPARED-SCAN-HEADERS.md)
-  confirms ordinary/live progressive444 savings of 230µs each (4.84%/4.57% raw),
-  unchanged 984,212B/op and exact frozen frames. Five refreshed progressive decode
-  costs retain gaps (uppers1.022–1.340); coded progressive420 validation passes
-  (upper0.992). A 2KiB plan is admitted and reused within eligible scans, then
-  released; small/direct and portable paths remain. Other JPEG paths, including
-  [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against labeled
-  SIMD libjpeg-turbo, reuse unchanged evidence.
+- **JPEG and reading:** [signed prepared instructions](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
+  remove repeated sign interpretation in the existing2KiB scan plan. Independent
+  ordinary/live progressive444 savings are462/492µs
+  (11.2%/11.1%), with exact frozen frames. Six current affected costs:1 pass, 3 gaps, 2 uncertain.
+  Report984,238B/op versus984,212original; no new owned capacity/retention.
+  Earlier [scan preparation](../benchmarks/JPEG-PREPARED-SCAN-HEADERS.md) stays
+  history. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
+  against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{vp8_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{jpeg_prepared['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.

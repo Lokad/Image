@@ -132,7 +132,7 @@ var index = start; var increment = 1 << low;
                         pending -= (int)((instruction >> 4) & 31) - codeLength;
                     }
                     run = (int)((instruction >> 11) & 31);
-                    if ((instruction & 512) != 0) inserted = (instruction >> 16) == 0 ? -increment : increment;
+                    if ((instruction & 512) != 0) inserted = ((int)instruction >> 16) * increment;
                     else if ((instruction & 1024) != 0) { eobRun = (int)(instruction >> 16); finish = true; }
                 }
                 else
@@ -420,7 +420,7 @@ cache = candidateCache; pending = candidatePending - length;
                 {
                     pending -= (int)((instruction >> 4) & 31);
                     run = (int)((instruction >> 11) & 31);
-                    if ((instruction & 512) != 0) inserted = (instruction >> 16) == 0 ? -increment : increment;
+                    if ((instruction & 512) != 0) inserted = ((int)instruction >> 16) * increment;
                     else if ((instruction & 1024) != 0) { eobRun = (int)(instruction >> 16); finish = true; }
                 }
                 else

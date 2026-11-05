@@ -14,22 +14,22 @@ Completion needs current passing evidence for every named path, with scope state
 | Resident VP8 encoding | [Prepared combined prices](VP8-COMBINED-RATE-PREPARATION.md) remove repeated fixed-cost loads within the same20,192B rate plan. Independent effort4photograph/effort6diagram save197.93/183.99µs (1.70%/1.61%), exact17,688/6,818B and unchanged paired allocations. Eight current VP8 controls:5 gap, 3 uncertain; current standalone allocation/boundary scope explicit. Previous geometry/zero-router gains remain history. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Complete-token output](PNG-COMPLETE-TOKEN-OUTPUT.md) saves408µs/7.36% raw on Fastest8; raw confidence separates, normalized confidence narrowly overlaps. Exact packets and384KiB admission remain;8B/op extra scalar state, no new arrays/owners/retention. Fifteen current complete fresh-one-shot comparisons:3pass/7gap/5uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier block/color/delivery costs remain history; three affected H rows await their named reconciliation. |
-| JPEG and image reading | [Scan header preparation](JPEG-PREPARED-SCAN-HEADERS.md) confirms229.58/230.38µs (4.84%/4.57%raw) on ordinary/live progressive444, with separated raw/normalized confidence, exact frozen frames and unchanged984,212B/op. A2KiB admitted scan plan reuses canonical header interpretation/geometry; small/direct and scalar paths remain. Five current progressive decode gaps persist (uppers1.022–1.340); progressive420 coded validation passes (upper0.992). Other JPEG paths, including [grayscale encoding](JPEG-GRAYSCALE-ROW-BATCH.md) against labeled SIMD libjpeg-turbo, reuse unchanged evidence. |
+| JPEG and image reading | [Signed prepared instructions](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md) compile insertion interpretation once within the same2KiB scan plan. Independent ordinary/live progressive444 savings are461.82/491.58µs (11.16%/11.06%), with separated raw/normalized confidence and exact frames. Current six affected controls:1 pass, 3 gap, 2 uncertain; other JPEG paths reuse unchanged evidence. Measured allocation984,238versus984,212B/op is explicit; no new owned capacity. Prior scan preparation/adverse trials remain history. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [combined-price milestone](VP8-COMBINED-RATE-PREPARATION.md) qualifies
-**5,716 full/live checks per OS** (2,479internal/2,289public/948differential),
-65internal/137public affected normal/scalar checks eachOS and SAMEactualRelease
-package/all3examples Windows/Linux. The exact native rate semantics/zero criterion/DP arithmetic remain;
-independent rate/token/packet oracles include existing failure-before-mutation tests. Existing
-indices/pixels/packets/shared refusal and async survivors stay exact. Unchanged
-AVX512-off, JPEG concurrent-prefix and wide-column proofs are reused. This is
-a development milestone, not a full125comparison release refresh or282-path pass.
+The current [signed-instruction milestone](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
+qualifies **5,716 full/live checks per OS** (2,479internal/2,289public/948differential),
+56internal/333public affected normal/scalar checks eachOS and SAMEactualRelease
+package/all3examples Windows/Linux. Existing independent bitwise traversal,
+all512prefixes/phases/tails, failure/overflow and concurrent-cancellation-prefix
+oracles preserve exact state. Unchanged AVX512-off and other-path proofs reuse
+valid evidence. This is a development milestone, not a125-row release refresh
+or282-path pass. Six JPEG costs refresh once; other119reuse unchanged paths.
 
-Eight VP8 rows are refreshed once; other117reuse unchanged production paths,
+The preceding eight VP8 rows reuse valid combined-price evidence; its other117costs reused unchanged paths,
 including six VP8L, fifteen PNG and six JPEG comparisons. Current VP8 rows have one
 qualified owner, retiring older alpha/trellis overrides; superseded overrides/unused negative renderer checks
 remain retired. Historical H boundaries await their named reconciliation.
