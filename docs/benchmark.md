@@ -23,7 +23,10 @@ Current scope and remaining work:
   the first stage's confirmed slowdown and ineffective inlining trial remain.
   Eight refreshed costs retain four passing lossless controls; opaque/photo are
   uncertain (uppers1.008/1.022), transparent8/16remain gaps (1.063/1.073).
-  Six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
+  [Zero-result routing](../benchmarks/VP8-ZERO-ROUTE-SEARCH.md) confirms0.84ms/6.5%
+  on effort6diagram, preserving exact6818B/paired754344B allocation. Its refreshed
+  native upper1.226remains a gap; standalone allocation754497B/op has a different
+  batch/GC scope. Other five opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
   saves408µs/7.4% raw on Fastest8; normalized confidence narrowly overlaps, so
   no independently separated normalized gain is claimed. Fifteen fresh one-shot
@@ -50,7 +53,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,711 full/live checks per OS**, affected
+The current production build passes **5,716 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.
@@ -95,7 +98,7 @@ settings do not establish matched quality.
 | VP8 opaque RGBA8 † | 16,808.81 | 15,548.79 | 1.081 / 1.086 | 1,201,552 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 12,178.18 | 9,706.71 | 1.255 / 1.261 | 809,072 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 6,884.38 | 5,814.93 | 1.184 / 1.192 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 12,874.57 | 9,789.92 | 1.315 / 1.329 | 754,344 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 12,131.81 | 9,958.31 | 1.218 / 1.226 | 754,497 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 16,886.67 | 15,603.30 | 1.082 / 1.085 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 60,891.24 | 57,859.54 | 1.052 / 1.063 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |

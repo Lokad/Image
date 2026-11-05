@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -49,6 +50,7 @@ internal static class Vp8TrellisQuantization
     // Raster coefficients become dequantized raster coefficients; levels use
     // zigzag order. I16 AC preserves both DC slots. The transform domain here
     // is DCT only (not the larger Y2 Walsh domain). Tails remain untouched.
+    [MethodImpl(MethodImplOptions.NoInlining)]
     internal static bool Apply(Span<short> coefficients, Span<short> levels,
         Vp8QuantizationMatrix matrix, Vp8RatePlan rate, ReadOnlySpan<ushort> weights,
         int type, int initialContext, int lambda, OperationContext operation)
@@ -57,14 +59,28 @@ internal static class Vp8TrellisQuantization
         // generated importance weights and bounded luma policy/context. Their
         // byte residuals establish the DCT domain before this per-block search.
         operation.Cancellation.ThrowIfCancellationRequested();
-        var fixedLevels = rate.FixedLevels; var variableLevels = rate.VariableLevels; var endOfBlock = rate.EndOfBlock;
-        var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
+        // A disposed borrowed plan must fail even when no DP search is needed.
+        _ = rate.Values;
+        var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
         var first = type == 0 ? 1 : 0;
         if (Avx2.IsSupported && ZeroCandidates(coefficients, reciprocals, sharpening, first))
         {
             coefficients.Slice(first, 16 - first).Clear(); levels.Slice(first, 16 - first).Clear();
             return false;
         }
+        return Search(coefficients, levels, matrix, rate, weights, type, initialContext, lambda);
+    }
+
+    // Keep DP stack initialization and rate views out of the common zero route.
+    // All spans remain borrowed inside the same synchronous operation/owner.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool Search(Span<short> coefficients, Span<short> levels,
+        Vp8QuantizationMatrix matrix, Vp8RatePlan rate, ReadOnlySpan<ushort> weights,
+        int type, int initialContext, int lambda)
+    {
+        var fixedLevels = rate.FixedLevels; var variableLevels = rate.VariableLevels; var endOfBlock = rate.EndOfBlock;
+        var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
+        var first = type == 0 ? 1 : 0;
         // RFC6386 section13 diagonal coefficient order; read-only format data.
         ReadOnlySpan<byte> scan = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
         Span<short> original = stackalloc short[16]; coefficients[..16].CopyTo(original);

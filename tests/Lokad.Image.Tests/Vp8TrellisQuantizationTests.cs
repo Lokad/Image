@@ -59,6 +59,26 @@ public sealed class Vp8TrellisQuantizationTests
         Assert.Equal(oldCoefficients, coefficients); Assert.Equal(oldLevels, levels); Assert.Equal(retained, input.Root.Bytes);
     }
 
+    [Theory] [InlineData(0, false)] [InlineData(2047, false)] [InlineData(0, true)]
+    public void DisposedRateAndCancellationPrecedeZeroOrNonzeroMutation(int coefficient, bool canceled)
+    {
+        using var input = new Inputs(0); using var cancellation = new CancellationTokenSource();
+        using var operation = new OperationContext(new() { MemoryBudget = input.Root }, cancellation.Token);
+        var coefficients = Enumerable.Repeat((short)coefficient, 18).ToArray();
+        var levels = Enumerable.Repeat((short)77, 18).ToArray();
+        var original = coefficients.ToArray(); var oldLevels = levels.ToArray();
+        var weights = new ushort[16]; Vp8TrellisQuantization.Weights(weights);
+        input.Rate.Dispose(); var retained = input.Root.Bytes; var reservations = input.Root.GrowthAttempts;
+        if (canceled) cancellation.Cancel();
+        void Apply() => Vp8TrellisQuantization.Apply(coefficients, levels,
+            input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma), input.Rate, weights, 3, 0, 1, operation);
+        if (canceled) Assert.Equal(cancellation.Token, Assert.Throws<OperationCanceledException>(Apply).CancellationToken);
+        else Assert.Throws<ObjectDisposedException>(Apply);
+        Assert.Equal(original, coefficients); Assert.Equal(oldLevels, levels);
+        Assert.Equal(retained, input.Root.Bytes); Assert.Equal(reservations, input.Root.GrowthAttempts);
+        Assert.False(input.Root.IsDisposed);
+    }
+
     private sealed class Inputs : IDisposable
     {
         internal readonly TestMemoryBudget Root = new(16_000_000);

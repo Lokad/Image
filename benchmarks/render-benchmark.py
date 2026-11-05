@@ -1580,9 +1580,17 @@ def render():
     assert vp8_owned['productionAccepted']
     assert vp8_owned['qualification']['fullChecksEachOs'] == 5656
     assert vp8_owned['qualification']['actualPackage']['sha256'] == vp8_owned['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert vp8_owned['pairedComparison']['pairs'] == 12 and vp8_owned['pairedComparison']['ratioConfidence'][1] < 1
     assert vp8_owned['design']['newOwnedHeapCapacityBytes'] == 0
     assert len(vp8_owned['cases']) == 8
+    trellis_owned = json.loads((ROOT / 'benchmarks/vp8-zero-route-search-evidence.json').read_text(encoding='utf-8'))
+    assert trellis_owned['productionAccepted']
+    tq = trellis_owned['qualification']
+    assert tq['fullChecksEachOs'] == tq['windows']['total'] == tq['linux']['total'] == 5716
+    assert tq['windows']['fullLivePassed'] and tq['linux']['fullLivePassed']
+    assert tq['actualPackage']['sha256'] == tq['samePackageLinux']['sameActualPackageSha256']
+    assert tq['actualPackage']['actualConsumerPassed'] and tq['samePackageLinux']['actualConsumerPassed']
+    assert trellis_owned['raw']['mirrored'] and trellis_owned['raw']['allMembersVerified']
+    assert trellis_owned['dpSource']['exactSourceBody'] and set(trellis_owned['cases']) == {'trellis'}
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1604,7 +1612,7 @@ def render():
     })
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
-        owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis'} else webp_owned
+        owner = trellis_owned if case == 'trellis' else vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion'} else webp_owned
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['librarySha256'] == owner['producers']['linuxSha256']
@@ -1786,7 +1794,10 @@ Current scope and remaining work:
   the first stage's confirmed slowdown and ineffective inlining trial remain.
   Eight refreshed costs retain four passing lossless controls; opaque/photo are
   uncertain (uppers1.008/1.022), transparent8/16remain gaps (1.063/1.073).
-  Six opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
+  [Zero-result routing](../benchmarks/VP8-ZERO-ROUTE-SEARCH.md) confirms0.84ms/6.5%
+  on effort6diagram, preserving exact6818B/paired754344B allocation. Its refreshed
+  native upper1.226remains a gap; standalone allocation754497B/op has a different
+  batch/GC scope. Other five opaque VP8 costs reuse [unchanged input paths](../benchmarks/VP8-SHARED-ALPHA-PREPARATION.md).
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
   saves408µs/7.4% raw on Fastest8; normalized confidence narrowly overlaps, so
   no independently separated normalized gain is claimed. Fifteen fresh one-shot
@@ -1813,7 +1824,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{jpeg_prepared['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{trellis_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Unchanged AVX512-disabled input/quantizer proof is reused.

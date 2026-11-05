@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Compact SIMD green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) confirms2.73ms/4.39% complete RGBA8 alpha gain with exact98590B packets and unchanged allocations. Current byte/word ALPH uppers1.063/1.073remain gaps. The first stage photograph slowdown and ineffective annotation remain evidence. Six opaque costs reuse [unchanged shared input](VP8-SHARED-ALPHA-PREPARATION.md) proof. [Paired match-entry screen](WEBP-PAIRED-MATCH-ENTRY-INCONCLUSIVE.md) establishes no useful gain; exact production is restored with useful tail tests retained. Move to current opaque effort6trellis attribution; no retiming of passing lossless controls. |
+| Resident VP8 encoding | [Compact SIMD green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) confirms2.73ms/4.39% complete RGBA8 alpha gain with exact98590B packets and unchanged allocations. Current byte/word ALPH uppers1.063/1.073remain gaps. The first stage photograph slowdown and ineffective annotation remain evidence. Five opaque costs reuse [unchanged shared input](VP8-SHARED-ALPHA-PREPARATION.md) proof; [zero-result/search split](VP8-ZERO-ROUTE-SEARCH.md) confirms843µs/6.49% on effort6diagram, whose refreshed native upper1.226remains a gap. Paired754344B allocation is unchanged; current standalone754497B/op has a different batch/GC scope. [Paired match-entry screen](WEBP-PAIRED-MATCH-ENTRY-INCONCLUSIVE.md) establishes no useful gain; exact production is restored with useful tail tests retained. Move to current opaque effort6trellis attribution; no retiming of passing lossless controls. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Complete-token output](PNG-COMPLETE-TOKEN-OUTPUT.md) saves408µs/7.36% raw on Fastest8; raw confidence separates, normalized confidence narrowly overlaps. Exact packets and384KiB admission remain;8B/op extra scalar state, no new arrays/owners/retention. Fifteen current complete fresh-one-shot comparisons:3pass/7gap/5uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier block/color/delivery costs remain history; three affected H rows await their named reconciliation. |
 | JPEG and image reading | [Scan header preparation](JPEG-PREPARED-SCAN-HEADERS.md) confirms229.58/230.38µs (4.84%/4.57%raw) on ordinary/live progressive444, with separated raw/normalized confidence, exact frozen frames and unchanged984,212B/op. A2KiB admitted scan plan reuses canonical header interpretation/geometry; small/direct and scalar paths remain. Five current progressive decode gaps persist (uppers1.022–1.340); progressive420 coded validation passes (upper0.992). Other JPEG paths, including [grayscale encoding](JPEG-GRAYSCALE-ROW-BATCH.md) against labeled SIMD libjpeg-turbo, reuse unchanged evidence. |
@@ -20,17 +20,17 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [green-prediction milestone](WEBP-ISOLATED-GREEN-PREDICTION.md)
-qualifies **5,711 full/live checks per OS** (2,474internal/2,289public/948differential),
-42internal/137public affected normal/scalar checks eachOS and the SAME actual
-Release package/all three examples Windows/Linux. Independent histograms/scores,
-dirty borrowed storage/guards, terminal refusal, cancellation/root recovery and
-independent survivors remain exact. Unchanged broad green/scalar, JPEG concurrent
-prefix,54AVX512-off and wide45/521proofs are reused. This is a development milestone,
-not a full release refresh or closure of all282 CPU gates.
+The current [zero-result/search milestone](VP8-ZERO-ROUTE-SEARCH.md) qualifies
+**5,716 full/live checks per OS** (2,479internal/2,289public/948differential),
+44internal/137public affected normal/scalar checks eachOS and SAMEactualRelease
+package/all3examples Windows/Linux. The original DP body/zero criterion remain;
+new failure-before-mutation tests cover rate disposal/cancellation. Existing
+indices/pixels/packets/shared refusal and async survivors stay exact. Unchanged
+AVX512-off, JPEG concurrent-prefix and wide-column proofs are reused. This is
+a development milestone, not a full125comparison release refresh or282-path pass.
 
-Eight WebP displayed costs are refreshed; other117 reuse unchanged production
-paths, including fifteen PNG and six JPEG comparisons. Current rows have one
+The effort6diagram row is refreshed once; other124reuse unchanged production
+paths, including eight green-predictor, fifteen PNG and six JPEG comparisons. Current rows have one
 owner per affected family; superseded overrides/unused negative renderer checks
 remain retired. Historical H boundaries await their named reconciliation.
 
@@ -42,8 +42,9 @@ and the portable fallback; source-level attribution does not prove phase cost.
 The [current matcher audit and paired entry](WEBP-PAIRED-MATCH-ENTRY-INCONCLUSIVE.md)
 retain exact indices/packets and reject unsupported collision metadata before an
 implementation. Two short screens demonstrate no useful paired-entry gain; exact
-production is restored without confirmation. Next attribute the independent
-opaque effort6trellis gap before choosing a change, with no new fixture/settings grid. Passing cases stop; pending work
+production is restored without confirmation. The subsequent [current trellis audit/split](VP8-ZERO-ROUTE-SEARCH.md) removes
+unneeded DP entry work before69percent exact zero exits. The remaining gap stays
+visible; further changes need specific repeated-work evidence and no new grid. Passing cases stop; pending work
 does not block independent codec, resize or drawing work.
 
 Earlier adverse stages and attribution are retained in the
