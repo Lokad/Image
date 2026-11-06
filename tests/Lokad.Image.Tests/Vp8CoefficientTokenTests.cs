@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
 
@@ -22,6 +23,7 @@ public sealed partial class Vp8CoefficientBlockTests
             Assert.True(initial.CanReadCoefficientWindow(data, reference, 1));
             Assert.True(initial.CanReadCancellableCoefficientBlock(data, live));
             var probabilities = new byte[11];
+            ref readonly var row = ref MemoryMarshal.Cast<byte, Vp8BooleanReader.CoefficientModelRow>(probabilities)[0];
             for (var tokenIndex = 0; tokenIndex < 32; tokenIndex++)
             {
                 random.NextBytes(probabilities);
@@ -31,7 +33,7 @@ public sealed partial class Vp8CoefficientBlockTests
                 var token = expected.CoefficientToken(data, probabilities, reference, previousZero);
                 seen[token] = true;
                 Assert.Equal(token, window.Token(probabilities, previousZero));
-                Assert.Equal(token, checkedReader.Token(probabilities, previousZero));
+                Assert.Equal(token, checkedReader.Token(in row, previousZero));
                 var actual = initial; window.Publish(ref actual);
                 var checkedActual = initial; checkedReader.Publish(ref checkedActual);
                 Assert.Equal(State(expected), State(actual));
@@ -47,7 +49,7 @@ public sealed partial class Vp8CoefficientBlockTests
             if (trial == 127)
             {
                 var before = initial; checkedReader.Publish(ref before); cancellation.Cancel();
-                try { checkedReader.Token(probabilities, false); Assert.Fail("A canceled bit was read."); }
+                try { checkedReader.Token(in row, false); Assert.Fail("A canceled bit was read."); }
                 catch (OperationCanceledException error) { Assert.Equal(cancellation.Token, error.CancellationToken); }
                 var after = initial; checkedReader.Publish(ref after);
                 Assert.Equal(State(before), State(after));

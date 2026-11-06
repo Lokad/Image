@@ -61,6 +61,26 @@ internal static class CooperativeMemoryConsumer
         if (packet.Length != 72380 || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet))
             != "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f" || root.Bytes != 0)
             throw new Exception("Packaged opaque word preparation changed its complete packet or retained admission.");
+        // The frozen packet also exercises the live coefficient model with
+        // owned sync/async results, compared with the unchanged ordinary reader.
+        using (var ordinary = ImageCodec.Decode(packet))
+        using (var live = new CancellationTokenSource())
+        {
+            var expected = OriginalPixels.Bytes(ordinary);
+            var decodeInput = packet.ToArray();
+            var decodeOptions = new DecodeOptions { Limits = new() { MemoryBudget = root } };
+            using var decoded = ImageCodec.Decode(decodeInput, decodeOptions, live.Token);
+            using var input = new MemoryStream(decodeInput, writable: false);
+            using var awaited = await ImageCodec.DecodeAsync(input, decodeOptions, live.Token);
+            decodeInput.AsSpan().Clear();
+            if (root.Bytes != 2L * 513 * 259 * 4 || !input.CanRead || root.IsDisposed
+                || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(decoded))
+                || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(awaited)))
+                throw new Exception("Packaged live VP8 model changed pixels, input ownership or retained results.");
+        }
+        if (root.Bytes != 0 || root.IsDisposed)
+            throw new Exception("Packaged live VP8 model leaked admission or disposed the borrowed root.");
+        Console.WriteLine("Packaged live VP8 model preserves exact sync/async frames and independent admitted ownership.");
         foreach (var offset in new long[] { 1, 2 })
         {
             using var refused = new MemoryStream(); var refusals = root.Refusals;

@@ -1,9 +1,18 @@
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
 internal partial struct Vp8BooleanReader
 {
+    // RFC6386 section13.2 stores eleven probabilities per coefficient tree.
+    // Borrow rows from the complete private model; no copy or separate owner.
+    [InlineArray(11)]
+    internal struct CoefficientModelRow
+    {
+        private byte first;
+    }
+
     internal bool CanReadCancellableCoefficientBlock(ReadOnlySpan<byte> data, OperationContext context)
         => context.Cancellation.CanBeCanceled
         && range is >= 128 and <= 255 && (uint)value < (uint)range && (uint)shift <= 7
@@ -20,12 +29,13 @@ internal partial struct Vp8BooleanReader
         var reader = new CancellableBlockReader(data, this, context.Cancellation);
         try
         {
+            var model = MemoryMarshal.Cast<byte, CoefficientModelRow>(probabilities);
             ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
             ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
             var previousZero = false; var predictor = initialContext;
             for (var c = plane == 0 ? 1 : 0; c < 16; c++)
             {
-                var p = probabilities.Slice(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
+                ref readonly var p = ref model[(plane * 8 + bands[c]) * 3 + predictor];
                 var token = reader.Token(p, previousZero);
                 if (token == 11) break;
                 var sample = token < 5 ? token : reader.Category(token - 5);
@@ -68,7 +78,7 @@ internal partial struct Vp8BooleanReader
         internal void Publish(ref Vp8BooleanReader target) => reader.Publish(ref target);
 
         // RFC6386 section13.2, preserving the original probability/read order.
-        internal int Token(ReadOnlySpan<byte> p, bool previousZero)
+        internal int Token(in CoefficientModelRow p, bool previousZero)
         {
             if (!previousZero && TokenRead(p[0]) == 0) return 11;
             if (TokenRead(p[1]) == 0) return 0;

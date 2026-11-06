@@ -1631,20 +1631,24 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-prepared-token-state-evidence.json').read_text(encoding='utf-8'))
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-live-model-preparation-evidence.json').read_text(encoding='utf-8'))
     dq = decoder_owned['qualification']
-    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['localTokenAndFieldKernelsMathematicallyExact']
-    assert decoder_owned['sourceProof']['allOriginalFieldKernelBodiesByteExact']
-    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5722
+    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['onlyModelDeliveryChanged']
+    assert decoder_owned['sourceProof']['arithmeticRefillNormalizationPerBitCancellationAndFailedPrefixBodiesExact']
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5735
     assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
     assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
     assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
     assert set(decoder_owned['cases']) == {'ValidateVp8Alpha', 'Native8', 'StreamNative8', 'Opaque8', 'OpaqueCancelable8', 'SimpleOpaque8'}
     for current in decoder_owned['cases'].values():
         assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['librarySha256'] == decoder_owned['producers']['linuxSha256']
+        assert current['reusedUnchangedPath'] or current['librarySha256'] == decoder_owned['producers']['linuxSha256']
         assert current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
+               for v in decoder_owned['independentLive']['views'].values())
+    assert dq['actualPackage']['liveVp8ModelSyncAsyncOwnedPassed'] and dq['samePackageLinux']['liveVp8ModelSyncAsyncOwnedPassed']
+    vq = dq
     stream = decoder_owned['cases']['StreamNative8']
     positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| WebP VP8 + alpha, fresh seekable Stream')]
     assert len(positions) == 1
@@ -1844,9 +1848,12 @@ Current scope and remaining work:
   retains prior independent gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
-  paired allocation. The original live/field kernel is retained after a confirmed
-  shared-form regression. Live comparison is uncertain; all six current reader
-  controls remain gaps. Earlier window preparation remains linked history.
+  paired allocation. [Live model preparation](../benchmarks/VP8-LIVE-MODEL-PREPARATION.md)
+  borrows fixed rows and saves49µs/0.83%raw on complete live opaque decoding;
+  reference-normalized confidence overlaps,760,564B/op unchanged. All six reader
+  controls remain gaps; five unchanged paths reuse evidence. Arithmetic/field
+  kernels and every per-bit cancellation check remain exact. Earlier/adverse stages
+  stay linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [lazy view preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
@@ -1884,8 +1891,8 @@ Current scope and remaining work:
 The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word, progressive-strip and wide-column consumers. Affected normal/scalar/AVX2-disabled/
-AVX512-disabled checks pass; unchanged other-path proof is reused.
+opaque-word, progressive-strip, wide-column and live VP8 sync/async consumers.
+Normal/scalar checks pass; unchanged vector-path AVX2/AVX512-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

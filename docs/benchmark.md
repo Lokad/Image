@@ -28,9 +28,12 @@ Current scope and remaining work:
   retains prior independent gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
-  paired allocation. The original live/field kernel is retained after a confirmed
-  shared-form regression. Live comparison is uncertain; all six current reader
-  controls remain gaps. Earlier window preparation remains linked history.
+  paired allocation. [Live model preparation](../benchmarks/VP8-LIVE-MODEL-PREPARATION.md)
+  borrows fixed rows and saves49µs/0.83%raw on complete live opaque decoding;
+  reference-normalized confidence overlaps,760,564B/op unchanged. All six reader
+  controls remain gaps; five unchanged paths reuse evidence. Arithmetic/field
+  kernels and every per-bit cancellation check remain exact. Earlier/adverse stages
+  stay linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [lazy view preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
@@ -68,8 +71,8 @@ Current scope and remaining work:
 The current production build passes **5,735 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word, progressive-strip and wide-column consumers. Affected normal/scalar/AVX2-disabled/
-AVX512-disabled checks pass; unchanged other-path proof is reused.
+opaque-word, progressive-strip, wide-column and live VP8 sync/async consumers.
+Normal/scalar checks pass; unchanged vector-path AVX2/AVX512-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

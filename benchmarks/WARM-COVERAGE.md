@@ -21,13 +21,15 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Owned-output preparation](BICUBIC-OUTPUT-WORKSPACE.md) shares geometry/numeric/publication kernels, retires full-row workspace before bounded strip tail, and saves731.33µs/17.82% on complete TightUp8.112Bpaired allocation unchanged; exact frames/qualified half/repair and4KiB remain. Current full/width-only/height-only uppers1.031/1.059/1.052are gaps,116/114/115B/op. Larger absolute codec gaps take precedence. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [complete-prediction milestone](VP8-COMPLETE-PREDICTION-PREPARATION.md)
-qualifies5,735full/live checks perOS (2488internal/2299public/948differential),
-142internal/137public per normal/scalar/AVX2-disabled/AVX512-disabled mode and the
-SAMEactualReleasepackage/all3examples. Seven displayed rows refresh;118reuse
-relevant unchanged paths. Photograph's6.23%gain is independent actual-caller proof;
-transparent uncertainties and adverse points remain explicit. This is not a125-row
-actual-package release refresh or282-path pass. Publication is postponed.
+The current [live-model milestone](VP8-LIVE-MODEL-PREPARATION.md) qualifies5,735
+full/live checks perOS (2488internal/2299public/948differential),39internal/61public
+per normal/scalar mode and the SAMEactualReleasepackage/all3examples. The added
+package consumer checks exact live sync/async frames and independently admitted
+survivors. One named live control refreshes; all125displayed numerical comparisons
+reuse unchanged paths. Independent raw gain48.60µs/.83%has overlapping reference-
+normalized confidence; allocation760564B/op is unchanged. No parity claim. Unchanged
+vector-path ISA proof is reused. This is not a125-row actual-package release refresh
+or282-path pass. Publication is postponed.
 [Progressive JPEG scheduling](JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retains its
 984KB→701KBcomplete-allocation reduction and narrow timing interpretation.
 
@@ -35,8 +37,9 @@ Two [shared large-prediction prototypes](VP8-SHARED-STRIDED-PREDICTION.md) are
 inconclusive and restored byte for byte. Independent complete live decode is flat
 for compact staging and saves only a26.52µs point with overlapping confidence for
 direct stride; allocation is unchanged. No unchanged favorable repeat or broad/
-package repetition. Current qualified costs remain valid. Next use current complete
-live-token reader attribution before selecting a larger execution redesign.
+package repetition. Current qualified costs remain valid. Its following current
+live-reader attribution leads to the fixed-model delivery above, preserving arithmetic
+and every cancellation checkpoint. Stop small reader tuning for larger codec work.
 
 A [broader rate-core prototype](VP8-CANONICAL-RATE-BOUNDARY.md) is rejected:
 its paired gain conflicts with a confirmed326µs/2.96% actual standalone photograph
@@ -45,8 +48,9 @@ above remain valid. Retain raw history outside renderer dependencies; no family 
 
 [PNG preparation](PNG-LAZY-VIEW-PREPARATION.md) retains9passes/2gaps/4uncertain
 controls and its independent gains. The [reader milestone](VP8-PREPARED-TOKEN-STATE.md)
-retains440/304µs validation/stream gains and allsix reader gaps. Those production
-paths are unchanged. Earlier accepted/adverse stages and source attribution stay
+retains440/304µs validation/stream gains and allsix reader gaps. Five unchanged
+paths reuse that proof; the live control is owned by the current model milestone.
+Earlier accepted/adverse stages and source attribution stay
 linked from family reports and the
 [preceding coverage record](https://github.com/lokad/image/blob/97b1ad81/benchmarks/WARM-COVERAGE.md).
 Retain cited raw evidence; history is neither current timing proof nor a permanent
