@@ -50,14 +50,12 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Owned-output preparation](../benchmarks/BICUBIC-OUTPUT-WORKSPACE.md) saves731µs/17.8%
-  on complete byte enlargement, with unchanged paired allocation. Three current
-  uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
-  [Default byte enlargement](../benchmarks/BICUBIC-DEFAULT-OUTPUT-WORKSPACE.md)
-  now shares that execution, saving214µs/5.94% independently on the complete default
-  operation and reducing allocation751,975→116B/op. Full/width/height default costs
-  refresh; uppers1.032/1.036/1.026 remain gaps. These use prepared native graph/scratch;
-  managed preparation and independent output remain timed. No additional retained cache.
+  [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/
+  filter source and two schedules across depths, preserving typed publication/repair.
+  Complete default word enlargement independently saves179µs/4.97% and752,064B/op;
+  its4,264,538B/op includes the mandatory4,264,104Boutput. Twelve existing full/axial/
+  default/tight costs refresh:8gaps/4uncertain. Byte incremental timing is inconclusive;
+  adverse points/native clock movement stay explicit. No new retained cache or pool.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
   removes two full byte planes using operation-owned output-tail strips. Complete
@@ -73,10 +71,10 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,737 full/live checks per OS**, affected
+The current production build passes **5,741 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word, progressive-strip, wide-column, default byte enlargement and live VP8
+opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers. Normal/scalar and affected AVX512-disabled checks pass;
 unchanged vector-path AVX2-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
@@ -186,14 +184,14 @@ settings do not establish matched quality.
 | Bilinear upscale RGBA8 † H → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 549.84 | 418.61 | 1.313 / 1.321 | 199,981 |
-| Bicubic upscale RGBA16 † → 1027×519 | 3,336.56 | 2,872.72 | 1.161 / 1.167 | 5,016,602 |
-| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,383.47 | 3,316.54 | 1.020 / 1.032 | 116 |
+| Bicubic upscale RGBA16 † → 1027×519 | 3,429.17 | 3,125.34 | 1.097 / 1.113 | 4,264,538 |
+| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,315.52 | 3,040.01 | 1.091 / 1.120 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † H → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,128.72 | 3,053.65 | 1.025 / 1.031 | 116 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,595.33 | 1,511.62 | 1.055 / 1.059 | 114 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,813.47 | 1,739.74 | 1.042 / 1.052 | 115 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,212.58 | 3,052.03 | 1.053 / 1.072 | 116 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |

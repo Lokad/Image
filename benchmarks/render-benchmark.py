@@ -753,19 +753,27 @@ def render():
     assert tight_byte_up['qualification']['fullChecksEachOs'] == 5245
     assert tight_byte_up['qualification']['sameActualPackageBothOs']
     assert tight_byte_up['decisions']['confirm']['passed'] and tight_byte_up['decisions']['confirm']['normalizedSeparated']
-    # One current owner for all affected byte enlargement boundaries.
-    enlargement = json.loads((ROOT / 'benchmarks/bicubic-output-workspace-evidence.json').read_text(encoding='utf-8'))
+    # One current owner for shared byte/word enlargement boundaries.
+    enlargement = json.loads((ROOT / 'benchmarks/bicubic-shared-enlargement-evidence.json').read_text(encoding='utf-8'))
     assert enlargement['productionAccepted'] and enlargement['raw']['mirrored'] and enlargement['raw']['allMembersVerified']
     eq = enlargement['qualification']
-    assert eq['fullChecksEachOs'] == eq['windows']['total'] == eq['linux']['total'] == 5718
+    assert eq['fullChecksEachOs'] == eq['windows']['total'] == eq['linux']['total'] == 5741
     assert eq['actualPackage']['sha256'] == eq['samePackageLinux']['sameActualPackageSha256']
     assert eq['actualPackage']['outputWorkspaceBicubicPassed'] and eq['samePackageLinux']['outputWorkspaceBicubicPassed']
-    assert enlargement['sourceProof']['unchangedTryWritePairOriginalByteReplayTinySource']
+    assert enlargement['sourceProof']['originalBytePublicationRepairAndGeometryBodiesExact']
+    assert enlargement['sourceProof']['wordRepairBodiesExact'] and enlargement['sourceProof']['wordSmallSupportCertificateUnchanged']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for v in enlargement['independentComparison']['views'].values())
+    assert len(enlargement['cases']) == 12
+    for current in enlargement['cases'].values():
+        assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['librarySha256'] == enlargement['producers']['linuxSha256']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert enlargement['storage']['newOwnedHeapCapacityBytes'] == 0
     labels = {'TightUp8': 'Bicubic RGBA8 enlargement,',
               'TightHorizontalUp8': 'Bicubic RGBA8 width enlargement,',
               'TightVerticalUp8': 'Bicubic RGBA8 height enlargement,'}
-    assert set(labels) == set(enlargement['cases'])
+    assert set(labels) <= set(enlargement['cases'])
     for case, label in labels.items():
         current = enlargement['cases'][case]
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['actualIterations'] == 12
@@ -1539,27 +1547,15 @@ def render():
     labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
               'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
               'Up8': 'Bicubic upscale RGBA8, default workspace'}
-    default_byte = json.loads((ROOT / 'benchmarks/bicubic-default-output-workspace-evidence.json').read_text(encoding='utf-8'))
-    assert default_byte['productionAccepted'] and default_byte['independentQuietConfirmation']
-    assert default_byte['sourceProof']['existingTypedGeometryFilteringPublicationRepairAndLanczosFilesUnchanged']
-    assert default_byte['sourceProof']['defaultAndTightByteEnlargementShareExistingOutputBackedExecution']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in default_byte['independentComparison']['views'].values())
-    assert default_byte['raw']['mirrored'] and default_byte['raw']['allMembersVerified']
-    assert set(default_byte['cases']) == {'Up8', 'HorizontalUp8', 'VerticalUp8'}
-    for current in default_byte['cases'].values():
-        assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['librarySha256'] == default_byte['producers']['linuxSha256']
-        assert current['status'] == ('pass' if current['conservativeRatioUpper'] <= 1 else 'gap'
-                                     if current['conservativeRatioLower'] > 1 else 'uncertain')
+    # Default and tight rows share the current enlargement owner above.
     assert set(overwrite['cases']) == set(labels)
     for case, label in labels.items():
-        owner = default_byte if case == 'Up8' else overwrite
+        owner = enlargement if case in {'Up8', 'Up16'} else overwrite
         observation = owner['cases'][case]; receipt = observation['receipt']
         assert receipt['librarySha256'] == owner['producers']['linuxSha256']
         assert receipt['managedRationalReferenceExact'] and observation['quietGuardsPassed']
         assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        if case != 'Up8':
+        if case not in {'Up8', 'Up16'}:
             assert (observation['conservativeRatioUpper'] <= 1) == (case == 'Down32x16_8')
         stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
         row = ('editing', f'| {label} † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
@@ -1663,11 +1659,11 @@ def render():
     assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
                for v in decoder_owned['independentLive']['views'].values())
     assert dq['actualPackage']['liveVp8ModelSyncAsyncOwnedPassed'] and dq['samePackageLinux']['liveVp8ModelSyncAsyncOwnedPassed']
-    vq = default_byte['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5737
+    vq = enlargement['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5741
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
-    assert vq['actualPackage']['defaultByteEnlargementExactOwnershipPassed']
-    assert vq['samePackageLinux']['defaultByteEnlargementExactOwnershipPassed']
+    assert vq['actualPackage']['sharedByteWordEnlargementExactOwnedPassed']
+    assert vq['samePackageLinux']['sharedByteWordEnlargementExactOwnedPassed']
     stream = decoder_owned['cases']['StreamNative8']
     positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| WebP VP8 + alpha, fresh seekable Stream')]
     assert len(positions) == 1
@@ -1889,14 +1885,12 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Owned-output preparation](../benchmarks/BICUBIC-OUTPUT-WORKSPACE.md) saves731µs/17.8%
-  on complete byte enlargement, with unchanged paired allocation. Three current
-  uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
-  [Default byte enlargement](../benchmarks/BICUBIC-DEFAULT-OUTPUT-WORKSPACE.md)
-  now shares that execution, saving214µs/5.94% independently on the complete default
-  operation and reducing allocation751,975→116B/op. Full/width/height default costs
-  refresh; uppers1.032/1.036/1.026 remain gaps. These use prepared native graph/scratch;
-  managed preparation and independent output remain timed. No additional retained cache.
+  [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/
+  filter source and two schedules across depths, preserving typed publication/repair.
+  Complete default word enlargement independently saves179µs/4.97% and752,064B/op;
+  its4,264,538B/op includes the mandatory4,264,104Boutput. Twelve existing full/axial/
+  default/tight costs refresh:8gaps/4uncertain. Byte incremental timing is inconclusive;
+  adverse points/native clock movement stay explicit. No new retained cache or pool.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
   removes two full byte planes using operation-owned output-tail strips. Complete
@@ -1915,7 +1909,7 @@ Current scope and remaining work:
 The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word, progressive-strip, wide-column, default byte enlargement and live VP8
+opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers. Normal/scalar and affected AVX512-disabled checks pass;
 unchanged vector-path AVX2-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,

@@ -576,17 +576,31 @@ internal static class CooperativeMemoryConsumer
 
     private static void VerifyOutputWorkspaceBicubic()
     {
-        const long capacity = 8 * 1024 * 1024;
+        VerifyOutputWorkspaceBicubicDepth(8);
+        VerifyOutputWorkspaceBicubicDepth(16);
+        Console.WriteLine("Packaged shared byte/word enlargement preserves exact default/bounded frames and owned lifetimes.");
+    }
+
+    private static void VerifyOutputWorkspaceBicubicDepth(int depth)
+    {
+        const long capacity = 16 * 1024 * 1024;
         using var root = new TestMemoryBudget(capacity);
-        var input = OriginalPixels.Generate(513, 259, 8);
-        input[3] = input[513 * 4 - 1] = 0;
-        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = input.Length + 1027L * 519 * 4 + 4096 };
-        using var source = ImageBuffer.Create(513, 259, 8, limits);
-        for (var y = 0; y < 259; y++) input.AsSpan(y * source.Stride, source.Stride).CopyTo(source.GetRow8(y));
+        var input = OriginalPixels.Generate(513, 259, depth);
+        if (depth == 8) input[3] = input[513 * 4 - 1] = 0;
+        else
+        {
+            input[6] = input[7] = 0;
+            input[513 * 8 - 2] = input[513 * 8 - 1] = 0;
+        }
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = input.Length + 1027L * 519 * (depth / 2) + 4096 };
+        using var source = ImageBuffer.Create(513, 259, depth, limits);
+        for (var y = 0; y < 259; y++) input.AsSpan(y * source.Stride, source.Stride).CopyTo(
+            depth == 8 ? source.GetRow8(y) : System.Runtime.InteropServices.MemoryMarshal.AsBytes(source.GetRow16(y)));
         using var first = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits);
         using var second = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits);
         var expected = OriginalPixels.Bytes(first);
-        const string frozen = "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94";
+        var frozen = depth == 8 ? "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94"
+            : "c17909e129d3a6775ebd3c863c5fce3e8c3fedfd0f9cb5aefd6eda4a68e993c0";
         if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected)) != frozen
             || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second))
             || !input.AsSpan().SequenceEqual(OriginalPixels.Bytes(source))

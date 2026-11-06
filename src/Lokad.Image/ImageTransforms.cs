@@ -133,12 +133,12 @@ public static class ImageTransforms
                 result.Orientation = source.Orientation;
                 return result;
             }
-            // Reuse the already admitted result for byte enlargement before
+            // Reuse the already admitted result for enlargement before
             // considering a separate full-row heap cache. Both working limits
             // use the same exact prefix/tail execution and private repair path.
-            if (filter == ResizeFilter.Bicubic && source.BitDepth == 8
+            if (filter == ResizeFilter.Bicubic
                 && width >= source.Width && height >= source.Height
-                && EnlargingColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context))
+                && EnlargingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context))
             {
                 result.Orientation = source.Orientation;
                 return result;
@@ -165,7 +165,6 @@ public static class ImageTransforms
                     || StreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || PackedStreamingBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || GeneratedWordBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
-                    || EnlargingWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)
                     || CrossWordColumnBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context)))
             {
                 result.Orientation = source.Orientation;

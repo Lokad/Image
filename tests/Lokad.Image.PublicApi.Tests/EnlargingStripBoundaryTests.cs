@@ -34,28 +34,39 @@ public sealed class EnlargingStripBoundaryTests
         }
     }
     [Theory]
-    [InlineData(false, false)] [InlineData(true, false)]
-    [InlineData(false, true)] [InlineData(true, true)]
-    public void TallOutputKeepsExactPixelsAcrossWorkspaceRetirementAndIndependentOwners(bool tiny, bool bounded)
+    [InlineData(8, false, false)] [InlineData(8, true, false)]
+    [InlineData(8, false, true)] [InlineData(8, true, true)]
+    [InlineData(16, false, false)] [InlineData(16, true, false)]
+    [InlineData(16, false, true)] [InlineData(16, true, true)]
+    public void TallOutputKeepsExactPixelsAcrossWorkspaceRetirementAndIndependentOwners(int depth, bool tiny, bool bounded)
     {
-        using var source = OriginalPixels.Buffer(17, 83, 8, opaque: true);
+        using var source = OriginalPixels.Buffer(17, 83, depth, opaque: true);
         if (tiny)
             for (var y = 0; y < source.Height; y++)
             for (var x = 0; x < source.Width; x++)
             {
-                var pixel = source.GetRow8(y).Slice(x * 4, 4);
-                pixel[..3].Fill(255);
-                pixel[3] = (byte)((x + y) % 7 == 0 ? 255 : (x + y) % 3 == 0 ? 1 : 0);
+                if (depth == 8)
+                {
+                    var pixel = source.GetRow8(y).Slice(x * 4, 4);
+                    pixel[..3].Fill(255);
+                    pixel[3] = (byte)((x + y) % 7 == 0 ? 255 : (x + y) % 3 == 0 ? 1 : 0);
+                }
+                else
+                {
+                    var pixel = source.GetRow16(y).Slice(x * 4, 4);
+                    pixel[..3].Fill(65535);
+                    pixel[3] = (ushort)((x + y) % 7 == 0 ? 65535 : (x + y) % 3 == 0 ? 1 : 0);
+                }
             }
         var input = OriginalPixels.Bytes(source);
-        var expected = ExactResizeReference.Resize(input, 17, 83, 8, 35, 167, ResizeFilter.Bicubic);
+        var expected = ExactResizeReference.Resize(input, 17, 83, depth, 35, 167, ResizeFilter.Bicubic);
         const long capacity = 1_048_576;
         using var root = new TestMemoryBudget(capacity);
-        var limits = new ImageLimits { MaxWorkingBytes = bounded ? input.Length + 35L * 167 * 4 + 4096 : ImageLimits.Default.MaxWorkingBytes, MemoryBudget = root };
+        var limits = new ImageLimits { MaxWorkingBytes = bounded ? input.Length + 35L * 167 * (depth / 2) + 4096 : ImageLimits.Default.MaxWorkingBytes, MemoryBudget = root };
         using var first = ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits);
         using var second = ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits);
         Assert.Equal(expected, OriginalPixels.Bytes(first)); Assert.Equal(expected, OriginalPixels.Bytes(second));
-        second.GetRow8(166)[0] ^= 255;
+        if (depth == 8) second.GetRow8(166)[0] ^= 255; else second.GetRow16(166)[0] ^= 65535;
         Assert.Equal(expected, OriginalPixels.Bytes(first)); Assert.Equal(input, OriginalPixels.Bytes(source));
         var retained = root.Bytes;
         Assert.True(retained >= 2L * expected.Length);

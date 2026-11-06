@@ -2,8 +2,8 @@
 
 ## 0.2.1 — Unreleased
 
-- Reuse owned output workspace for default byte bicubic enlargement, reducing
-  temporary allocations while preserving exact pixels and shared memory ownership.
+- Share byte/word bicubic enlargement preparation and output-backed scheduling,
+  reducing temporary storage while preserving exact pixels and memory ownership.
 
 - Prepare complete VP8 prediction candidates from shared borders and interpolation,
   preserving exact packets, cancellation and output ownership.
