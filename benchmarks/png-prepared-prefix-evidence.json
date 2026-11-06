@@ -1,0 +1,488 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LPP437",
+  "date": "2026-11-06",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+    "linuxSha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/ZlibFraming.cs": "be0d9ed8987f9fdd2309558747006bb591c90db0a2b084156874f7b74c8cdf12",
+    "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "a9ebf065c5b90dca05a15b35e86d07439806c01b534c848d1b62d2f1893bbbe5",
+    "tests/Lokad.Image.Tests/ZlibPreparedPrefixTests.cs": "f01770c44fb0e24cc938f8169c56254f73d59a08ec6d110c7af264bccafddc70"
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "LPP437",
+    "baselineCommit": "3d14aed6ea495d0fa9f900c18744992d96b73227",
+    "baselineSha256": "d75951bbc1f12776b044d878bedd770acd8adb3b76ab11f191c96edbc4e29a28",
+    "paths": [
+      "src/Lokad.Image/Internal/ZlibFraming.cs",
+      "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs"
+    ],
+    "sources": {
+      "src/Lokad.Image/Internal/ZlibFraming.cs": "5cfbe23efd5301073e926866d1d70844617d596934ed7c5f98ee22120f5bc273",
+      "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "3503235f13833a4a9592dfe38ccc3d94e260832af5dca5bbf42fd1510def7bb7"
+    },
+    "hypothesis": "Replace repeated long-literal canonical reversal/depth search and state publication with prepared10bit table. Packing validated0..15code lengths as bytes offsets increased lookup capacity within same4KiB admitted scratch. All preparation timed; no cross-operationstate or pools.",
+    "endState": "One shared prepared canonical literal table for streaming/materialized/count/live callers; cursor resolves10bitcodes locally. Existing nine-bit literal-run wrappers stop on wider/unassigned prefixes. Original canonical deeper/incomplete/short fallback remains. No duplicate old implementation retained for tests.",
+    "attribution": "PRA436current1885samples,1208InflateCursor/263DecodeLongLiteral/96Decode; independentexact token audit24024of28816root9misses use10bits. Counts/samples are leads, not gains.",
+    "semantics": "Preserve initialPeek9; on any originalroot9miss force exact originalPeekMaximum before accepting a10bit entry, including short unknown tenthbit. Cursor fullrefill/state/error semantics match original; livePeek9/PeekMaximum/Consume polls retained. All partial cursors/error types/messages and rootedfailurecleanup exact.",
+    "storage": "Original3992Barrays+64Bnestedoffsets=4056B. Tenbit table adds1024B; lengths320+19 fromInt32toByte save1017B =>4063B within unchanged4096B. Check actual nested/JIT layout; no heap/retainedstate or allowance increase.",
+    "workloads": "Primary existing two-retained-output governed PNG8 control, frozen218775Bpacket/exact1062936Bpair; tableconstruction/admission/normalizedRGBA/independentoutputs/disposal timed. If promising confirm once then affected materialized/rolling/live/coding validators and existing distinct PNG16 control; reuse unchanged source references. No new image/settings grid.",
+    "transition": "Coherent two-file preparation/representation/cursor transition may temporarily hurt tablebuild/code pressure. Focus correctness then actualcomplete screen; revise/abandon on evidence, no fixedthreshold or automaticmerge.",
+    "qualification": "Focused independent existing long depths10/11/15/incomplete/errors, everytruncation/blockphase/history, materializedvsoriginal+zlib, cancellation/admission. Add targeted actual-wide-prefix boundary oracle if needed. Acceptedstage W/L/live/scalar/affectedISA/SAMEactualpackage; reuse unchangedchecks onlywherevalid."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "LPP437",
+    "workspaceBytes": 4063,
+    "unchangedAdmittedWorkspaceBytes": 4096,
+    "newOwnedHeapBytes": 0,
+    "newRetainedBytes": 0,
+    "codeLengthDomain": "Read3/code-length symbols0..15/repeats and fixed7..9; byte casts represent same validated domain. Counts/canonical symbol storage remain Int32.",
+    "unchangedBitsPeekFillConsumeAlignSkipText": true,
+    "unchangedGeneralCanonicalDecodeAndDistanceLookupText": true,
+    "rootMiss": "Preserve Peek9 then original fullPeekMaximum, even when10bits resolves. Cursor locally performs same four-byte/tail refill and publishes same partialstate in finally; live wrapper retains Peek/Consume polls. Four nine-bit literal run loops stop on prepared ten-bit entries, avoiding zero-padded unknown bits.",
+    "oracles": "New actual production prepared/cursor vs actual general canonical decoder: Max15 with actual10/15bits, incomplete/unassigned paths, every byte cut,8phases,0/1byte output, cancellation-capable/default and following3bits. Exact partialoutput+position/available/cache and errors. Private snapshot exists only in embedded test partial struct, no productionAPI.",
+    "referenceSource": "Frozen retained FFmpeg source/worker/identity in isolated prepared root, no modification or compiler build. Same two-complete-decoder, borrowedroot/input, independentoverlap/release operation, input/settings/output. Native source/context differences explicit.",
+    "originalCostValidity": "Retained confirmation relevant PNG Decode/Scan/helpers/row/cursor/checksum/admission and public ImageCodec/ImageBuffer/ImageLimits texts exact before LPP437. Native source/settings exact, clocks stable. Prior fixed4operations peractual vs current adaptive80operations peractual disclosed; normalization once. No claim totalGCallocation unchanged.",
+    "allocation": "Current1638214B/op vs retained1637520(+694/.0424%); no production heap payload added. CurrentMemoryDiagnoser34Gen2/80ops vs old0/4; observed extra55488B=1632*34 is a diagnostic lead, not proven attribution. Peak1766641B/retained1062936B pair unchanged; native/physical peak not newly measured.",
+    "invalidatedCosts": "All PNG framing/inflation/counting/materialization/row-output callers, including stored paths because shared workspace/method preparation changes. New currentroot confirmation only; unrefreshed displayed live8/tight8/tight16 and fourPNGcoding validations must be H until currentconfirmation. Existing finite inventory covers remaining full paths; no newmatrix.",
+    "unchangedCosts": "PNG encoders/CRC/header-only Identify/Inspect/Probe do not call ZlibFraming; othercodecs/resize/text untouched. Existing disabled-ISA vector/CRC proof reused: no newISA operation/guard. Current704internal/246public normal/scalar covers changed scalar/BCL preparation."
+  },
+  "current": {
+    "managedUs": 2870.80105625,
+    "nativeUs": 2845.3959036458336,
+    "ratio": 1.008928512398438,
+    "lower": 1.0029144115828548,
+    "upper": 1.0138104234825975,
+    "allocatedBytes": 1638214,
+    "status": "gap",
+    "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "actualIterations": 12,
+    "filteredResults": 12,
+    "managedActualNanoseconds": [
+      2864902.6375,
+      2863967.0875,
+      2871621.4375,
+      2886703.6375,
+      2879008.9875,
+      2866629.125,
+      2887235.325,
+      2862584.75,
+      2864227.4875,
+      2863873.5625,
+      2872596.5375,
+      2866297.5
+    ],
+    "inputBytes": 218775,
+    "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+    "eachOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputBytes": 1062936,
+    "managedExact": true,
+    "independentOwnedOutputs": true,
+    "sourceUnchanged": true,
+    "boundary": "Two sequential complete resident PNG8 decodes per operation; first independently owned output remains alive throughout the second, then both are disposed. Same original packet and exact RGBA samples including hidden RGB. One finite borrowed caller IMemoryBudget root and its resident-input reservation prepared outside timing. All managed admission, uncached output/scratch allocation, codec work, retained reservations and refunds are timed. Native public FFmpeg PNG decode, fresh independently owned frames and both releases timed; reusable codec/packet/frame wrappers and padded resident input prepared outside. Native has no shared admission API; managed root accounting is included additional work. No cached decoded pixels, output clones or redundant full-frame copies. One CPU/thread. Startup, I/O, IPC, fixture generation and checks excluded.",
+    "nativeReference": "FFmpeg software PNG: two complete independently owned outputs, retained codec/packet/frame wrappers; no native shared-budget API.",
+    "nativeWorkerSha256": "16fb3910f0b01480c3dc89f61290fb3388122516a90806757c35181c1849b057",
+    "rawGc": "// GC:  34 34 34 131057088 80",
+    "receipt": "tmp/lpp437-candidate-Png8Retained2-confirm-receipt.json",
+    "observation": "tmp/lpp437-candidate-Png8Retained2-confirm-observation.json"
+  },
+  "comparison": {
+    "project": "Lokad.Image",
+    "case": "Png8Retained2",
+    "mode": "confirm",
+    "reusedOriginalPrefix": "lpp437",
+    "originalUs": 3292.44765,
+    "candidateUs": 2870.80105625,
+    "savedUs": 421.6465937500002,
+    "rawReduction": 0.12806478297384627,
+    "normalizedPointReduction": 0.127651786197574,
+    "nativePointChange": -0.000473431102096189,
+    "originalAllocatedBytes": 1637520,
+    "candidateAllocatedBytes": 1638214,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false,
+        "candidateOriginalRawInterval": [
+          0.8662052719681772,
+          0.8776952196168539
+        ],
+        "candidateOriginalNormalizedInterval": [
+          0.8638724115912689,
+          0.8801806057585353
+        ]
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false,
+        "candidateOriginalRawInterval": [
+          0.8608426303377804,
+          0.8796358372744788
+        ],
+        "candidateOriginalNormalizedInterval": [
+          0.8585242126046424,
+          0.8821267186998586
+        ]
+      }
+    }
+  },
+  "screen": {
+    "managedUs": 2852.1048020833337,
+    "nativeUs": 2844.6595520833334,
+    "ratio": 1.0026172727750664,
+    "lower": 0.953738583248278,
+    "upper": 1.0494094568229981,
+    "allocatedBytes": 1638214,
+    "status": "uncertain"
+  },
+  "storage": {
+    "nominalNestedArraysBefore": 4056,
+    "nominalNestedArraysAfter": 4063,
+    "admittedScratchBytes": 4096,
+    "newHeapPayloadBytes": 0,
+    "newRetainedBytes": 0,
+    "rootPeakBytes": 1766641,
+    "retainedOutputPairBytes": 1062936,
+    "callerInputBytes": 218775,
+    "allocationOriginal": 1637520,
+    "allocationCurrent": 1638214,
+    "allocationDelta": 694,
+    "allocationDeltaPercent": 0.04238116175680297,
+    "physicalPeakAndNativeAllocation": "Not newly measured. Nominal nested arrays, coarse admission, GC totals and retained output are distinct.",
+    "gcDiagnosticLead": "New rawGC34Gen2/80ops vs old0/4. Extra55488B equals1632*34; exact proportionality is not a proven cause. No unchanged-allocation claim."
+  },
+  "qualification": {
+    "fullChecksEachOs": 5751,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+      "full": [
+        2495,
+        2308,
+        948
+      ],
+      "total": 5751,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 703,
+        "public-normal": 246,
+        "internal-scalar": 703,
+        "public-scalar": 246
+      },
+      "affectedPngScalarEachOs": 949,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "0368f65344b5d2f21488cd5d08be586844dc7a3b9bb6d90b5d51418edd919019",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "full": [
+        2495,
+        2308,
+        948
+      ],
+      "total": 5751,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 703,
+        "public-normal": 246,
+        "internal-scalar": 703,
+        "public-scalar": 246
+      },
+      "affectedPngScalarEachOs": 949,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "861969e797d8542547b04d990a9731e8812a282efaaddbe6f1f261b0489f09e2",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "98c5409fb690ca9febc9ded679267ca45ca84202669b0141f8ec0a0be707f08e",
+      "symbolsSha256": "f6946e3d33beb755dfb2ad9e1580e405be99e09465834a2265977f03db8323d1",
+      "bytes": 419349,
+      "librarySha256": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+      "actualConsumerPassed": true,
+      "boundedPriceViewPassed": true,
+      "sharedOrdinaryBlockQuantizationPassed": true,
+      "liveJpegCorrectionBitOwnershipPassed": true,
+      "unshiftedLiveReservoirPassed": true,
+      "sharedByteWordEnlargementExactOwnedPassed": true,
+      "defaultByteEnlargementExactOwnershipPassed": true,
+      "liveVp8ModelSyncAsyncOwnedPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "98c5409fb690ca9febc9ded679267ca45ca84202669b0141f8ec0a0be707f08e",
+      "librarySha256": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+      "actualConsumerPassed": true,
+      "boundedPriceViewPassed": true,
+      "sharedOrdinaryBlockQuantizationPassed": true,
+      "liveJpegCorrectionBitOwnershipPassed": true,
+      "unshiftedLiveReservoirPassed": true,
+      "sharedByteWordEnlargementExactOwnedPassed": true,
+      "defaultByteEnlargementExactOwnershipPassed": true,
+      "liveVp8ModelSyncAsyncOwnedPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "focusedInternalEachMode": 704,
+    "focusedPublicEachMode": 246,
+    "focusedReuse": "703existinginternal/246public normal/scalar perOS before one test-only oracle addition; neworacle normal/scalar perOS; final full5751 embeds actual current production/tests.",
+    "coreVersionsEachOs": 1,
+    "successfulEmbeddedVersionsEachOs": 2,
+    "failedTestBuildWindows": 1,
+    "failedBuildScope": "New test initially accessed nested private fields and stackallocinside loop (CS0122/CA2014); fixed by test-only partial Bits snapshot and single outer stack storage. No production/timing rebuild or invalid passing claim.",
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "disabledIsaReused": "No new ISA operation/guard. Existing PNG vector/filter/CRC source exact; prior AVX2/AVX512-disabled proof retained. Current all-HW-disabled focuses cover changed scalar/BCL preparation."
+  },
+  "display": {
+    "total": 125,
+    "refreshed": 1,
+    "historicalized": 7,
+    "reusedUnchanged": 117
+  },
+  "invalidatedCodecLabels": [
+    "PNG RGBA8 decode, live token",
+    "PNG RGBA8 decode, tight working limit",
+    "PNG RGBA16 decode, tight working limit (confidence open)"
+  ],
+  "invalidatedReadLabels": [
+    "Validate PNG8, span",
+    "Validate PNG16, span",
+    "Validate indexed Adam7 19\u00d717, span",
+    "Validate PNG16, async nonseekable"
+  ],
+  "next": "Resolve these seven already-declared displayed costs on immutable current module before assuming further optimization, then remaining existing non-displayed PNG framing inventory. No new matrix; exact named source/settings boundaries reused. Independent codec/resize/text work remains available.",
+  "decision": "Accept coherent packed-preparation/direct-prefix stage for meaningful complete two-result elapsed gain and constant admitted capacity, exact cursors/pixels/packets/ownership. Record+694BobservedGC cost. Rootremainsgap1.009/upper1.014; other affected costs historical until refreshed. No broader speed/passclaim. Reuse valid original evidence, no unchanged favorable repeat.",
+  "priorEvidence": [
+    "png-retained-root-current-attribution-evidence.json",
+    "current-retained-png-decode-cost-evidence.json",
+    "vp8-block-state-reservoir-evidence.json"
+  ],
+  "raw": {
+    "file": "png-prepared-prefix-qualified.tar.xz",
+    "sha256": "3a57e9ffd77680fe3dda7a121bbd4fc41ed7ca83756828eccdc129543ed3a699",
+    "bytes": 3621012,
+    "members": 118,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "reusedInputsMaterializedByHashWithoutDuplicatePayloads": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      },
+      {
+        "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+        "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+      },
+      {
+        "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+        "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+      },
+      {
+        "file": "jpeg-buffered-correction-restoration.tar.xz",
+        "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+      },
+      {
+        "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+        "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+      },
+      {
+        "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+        "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+      },
+      {
+        "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+        "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+      },
+      {
+        "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+        "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+      },
+      {
+        "file": "vp8-current-live-model-attribution.tar.xz",
+        "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+      },
+      {
+        "file": "vp8-live-model-preparation-qualified.tar.xz",
+        "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+      },
+      {
+        "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+        "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+      },
+      {
+        "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+        "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4"
+      },
+      {
+        "file": "bicubic-output-workspace-qualified.tar.xz",
+        "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+      },
+      {
+        "file": "bicubic-default-output-workspace-qualified.tar.xz",
+        "sha256": "a4ff4eb24fc61dce4599aae3328bffa0b07a56e991d6b636b6cbc39c53e0317b"
+      },
+      {
+        "file": "parity-p40-qualified-evidence.tar.gz",
+        "sha256": "21114dd252c7f82cfcac745418a34eee442c4c3d3bf33ce6b71765b88250939d"
+      },
+      {
+        "file": "bicubic-shared-enlargement-qualified.tar.xz",
+        "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+      },
+      {
+        "file": "vp8-unshifted-live-reservoir-qualified.tar.xz",
+        "sha256": "5a773cc39f02710dc5dc27e744d60f7a77babdce2365b9b8bcb0f4614189fe03"
+      },
+      {
+        "file": "bilinear-current-boundary-audit.tar.xz",
+        "sha256": "3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018"
+      },
+      {
+        "file": "jpeg-correction-bit-qualified.tar.xz",
+        "sha256": "624f0b847f29b7465f96a7c2dbaecf2ed5f64f85359cecb5c9d1364bd893a1d1"
+      },
+      {
+        "file": "vp8-selected-trellis-boundary.tar.xz",
+        "sha256": "923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79"
+      },
+      {
+        "file": "vp8-trellis-architecture-audit.tar.xz",
+        "sha256": "73f1d0fd787fd732f1aa8146f78ee58be6dd4c856fcd6547fead6e0189869fd4"
+      },
+      {
+        "file": "vp8-ordinary-block-preparation-qualified.tar.xz",
+        "sha256": "0d3dfc7b21f6f3b7fb3b546b367ae3fb270615ad4d3264f4de1b077a807c987f"
+      },
+      {
+        "file": "vp8-current-photograph-attribution.tar.xz",
+        "sha256": "1c35f956ef35e6ab08cc1f80066e23aa26e90bb46d08459a64beed7657125421"
+      },
+      {
+        "file": "vp8-bounded-price-view-qualified.tar.xz",
+        "sha256": "830067c12147668abe8ed024ad63c7bfd17026d1c3b3aea0efa817843f0ec3e3"
+      },
+      {
+        "file": "vp8-alpha-output-handoff-qualified.tar.xz",
+        "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
+      },
+      {
+        "file": "vp8-trellis-candidate-preparation-qualified.tar.xz",
+        "sha256": "0cb9428ef776647daea6a809c66e86d07f4e3e2997c1cd1d5109ccba85641430"
+      },
+      {
+        "file": "vp8-current-validation-state-attribution.tar.xz",
+        "sha256": "89398293287135112cfdc17075d56cec7ca2f62660449faf7eb4ff689dbd4794"
+      },
+      {
+        "file": "vp8-block-state-reservoir-qualified.tar.xz",
+        "sha256": "f4ee950171f4e6ea02d101022aeb49140cac243ab1d8b8eb0d29adfdff5b5186"
+      },
+      {
+        "file": "current-retained-png-decode-cost.tar.xz",
+        "sha256": "4cad0b918916e1d1a0bb661ca2a6e4fb81ea9db5c529e593a2ca7224f1dd836f"
+      },
+      {
+        "file": "png-retained-root-current-attribution.tar.xz",
+        "sha256": "5f30795b21030f904942a4f0b2679283a241ebfb8f4e7dda34fe70dfb1be7ced"
+      }
+    ]
+  }
+}

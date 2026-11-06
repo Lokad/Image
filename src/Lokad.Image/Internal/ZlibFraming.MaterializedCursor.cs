@@ -22,8 +22,15 @@ internal static partial class ZlibFraming
                 while (output < stop)
                 {
                     FillCursor(bytes, ref cached, ref bits, ref offset, 9);
-                    var entry = literalLookup[(int)(cached & 511)];
+                    var entry = literalLookup[(int)(cached & 1023)];
                     var codeBits = entry & 15;
+                    if (codeBits is 0 or > 9)
+                    {
+                        // Match the original canonical fallback's full lookahead
+                        // before trusting any tenth bit, including short tails.
+                        FillCursor(bytes, ref cached, ref bits, ref offset, literals.Maximum);
+                        entry = literalLookup[(int)(cached & 1023)]; codeBits = entry & 15;
+                    }
                     int symbol;
                     if (codeBits != 0)
                     {
@@ -33,7 +40,7 @@ internal static partial class ZlibFraming
                     {
                         // Keep the original canonical decoder and exact error/cursor
                         // behavior for long prefixes, publishing only at this boundary.
-                        buffer = cached; available = bits; position = offset;                         try { symbol = DecodeLongLiteral(ref this, literals); }
+                        buffer = cached; available = bits; position = offset;                         try { symbol = DecodeLongLiteral(ref this, literals, literalLookup); }
                         finally { cached = buffer; bits = available; offset = position; }
                     }
                     if (symbol == 256) { ended = true; return output; }

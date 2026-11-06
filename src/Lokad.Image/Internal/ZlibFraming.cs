@@ -30,14 +30,14 @@ internal static partial class ZlibFraming
             || ((data[0] << 8) + data[1]) % 31 != 0 || (data[1] & 32) != 0)
             throw new ImageDataException("Invalid PNG zlib header.");
         var window = 1 << ((data[0] >> 4) + 8);
-        // Arrays, prefix lookup and nested constructor scratch total 4056 bytes,
+        // Arrays, prefix lookup and nested constructor scratch total 4063 bytes,
         // independent of declared dimensions or input.
         context.Reserve(4096);
         try
         {
-            Span<int> lengths = stackalloc int[320]; Span<int> codeLengths = stackalloc int[19];
+            Span<byte> lengths = stackalloc byte[320]; Span<byte> codeLengths = stackalloc byte[19];
             Span<int> counts = stackalloc int[48]; Span<int> symbols = stackalloc int[339];
-            Span<ushort> literalLookup = stackalloc ushort[512]; Span<ushort> distanceLookup = stackalloc ushort[32];
+            Span<ushort> literalLookup = stackalloc ushort[1024]; Span<ushort> distanceLookup = stackalloc ushort[32];
             var reader = new Bits(data, context); reader.SkipBytes(2); long output = 0;
             bool final;
             do
@@ -58,7 +58,7 @@ internal static partial class ZlibFraming
                 if (type == 1)
                 {
                     literalCount = 288; distanceCount = 32;
-                    for (var i = 0; i < 288; i++) lengths[i] = i < 144 ? 8 : i < 256 ? 9 : i < 280 ? 7 : 8;
+                    for (var i = 0; i < 288; i++) lengths[i] = (byte)(i < 144 ? 8 : i < 256 ? 9 : i < 280 ? 7 : 8);
                     lengths[288..].Fill(5);
                 }
                 else
@@ -67,20 +67,20 @@ internal static partial class ZlibFraming
                     if (literalCount > 286) throw new ImageDataException("Invalid PNG Deflate literal alphabet.");
                     codeLengths.Clear();
                     ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
-                    for (var i = 0; i < codeCount; i++) codeLengths[order[i]] = reader.Read(3);
+                    for (var i = 0; i < codeCount; i++) codeLengths[order[i]] = (byte)reader.Read(3);
                     var codes = new Huffman(codeLengths, counts[..16], symbols[..19], context);
                     completeTrees &= codes.Complete;
                     var position = 0; var total = literalCount + distanceCount;
                     while (position < total)
                     {
                         var symbol = Decode(ref reader, codes.Counts, codes.Symbols, codes.Maximum);
-                        if (symbol < 16) lengths[position++] = symbol;
+                        if (symbol < 16) lengths[position++] = (byte)symbol;
                         else
                         {
                             if (symbol == 16 && position == 0) throw new ImageDataException("Invalid PNG Deflate first code repeat.");
                             var repeat = symbol == 16 ? reader.Read(2) + 3 : symbol == 17 ? reader.Read(3) + 3 : reader.Read(7) + 11;
                             if (repeat > total - position) throw new ImageDataException("PNG Deflate code repeat exceeds alphabet.");
-                            var value = symbol == 16 ? lengths[position - 1] : 0;
+                            var value = symbol == 16 ? lengths[position - 1] : (byte)0;
                             lengths.Slice(position, repeat).Fill(value); position += repeat; context.Cancellation.ThrowIfCancellationRequested();
                         }
                     }
@@ -181,14 +181,14 @@ internal static partial class ZlibFraming
             || ((data[0] << 8) + data[1]) % 31 != 0 || (data[1] & 32) != 0)
             throw new ImageDataException("Invalid PNG zlib header.");
         var window = 1 << ((data[0] >> 4) + 8);
-        // Arrays, prefix lookup and nested constructor scratch total 4056 bytes,
+        // Arrays, prefix lookup and nested constructor scratch total 4063 bytes,
         // independent of declared dimensions or input.
         context.Reserve(4096);
         try
         {
-            Span<int> lengths = stackalloc int[320]; Span<int> codeLengths = stackalloc int[19];
+            Span<byte> lengths = stackalloc byte[320]; Span<byte> codeLengths = stackalloc byte[19];
             Span<int> counts = stackalloc int[48]; Span<int> symbols = stackalloc int[339];
-            Span<ushort> literalLookup = stackalloc ushort[512]; Span<ushort> distanceLookup = stackalloc ushort[32];
+            Span<ushort> literalLookup = stackalloc ushort[1024]; Span<ushort> distanceLookup = stackalloc ushort[32];
             var reader = new Bits(data, context); reader.SkipBytes(2); long output = 0;
             bool final;
             do
@@ -209,7 +209,7 @@ internal static partial class ZlibFraming
                 if (type == 1)
                 {
                     literalCount = 288; distanceCount = 32;
-                    for (var i = 0; i < 288; i++) lengths[i] = i < 144 ? 8 : i < 256 ? 9 : i < 280 ? 7 : 8;
+                    for (var i = 0; i < 288; i++) lengths[i] = (byte)(i < 144 ? 8 : i < 256 ? 9 : i < 280 ? 7 : 8);
                     lengths[288..].Fill(5);
                 }
                 else
@@ -218,20 +218,20 @@ internal static partial class ZlibFraming
                     if (literalCount > 286) throw new ImageDataException("Invalid PNG Deflate literal alphabet.");
                     codeLengths.Clear();
                     ReadOnlySpan<int> order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
-                    for (var i = 0; i < codeCount; i++) codeLengths[order[i]] = reader.Read(3);
+                    for (var i = 0; i < codeCount; i++) codeLengths[order[i]] = (byte)reader.Read(3);
                     var codes = new Huffman(codeLengths, counts[..16], symbols[..19], context);
                     completeTrees &= codes.Complete;
                     var position = 0; var total = literalCount + distanceCount;
                     while (position < total)
                     {
                         var symbol = Decode(ref reader, codes.Counts, codes.Symbols, codes.Maximum);
-                        if (symbol < 16) lengths[position++] = symbol;
+                        if (symbol < 16) lengths[position++] = (byte)symbol;
                         else
                         {
                             if (symbol == 16 && position == 0) throw new ImageDataException("Invalid PNG Deflate first code repeat.");
                             var repeat = symbol == 16 ? reader.Read(2) + 3 : symbol == 17 ? reader.Read(3) + 3 : reader.Read(7) + 11;
                             if (repeat > total - position) throw new ImageDataException("PNG Deflate code repeat exceeds alphabet.");
-                            var value = symbol == 16 ? lengths[position - 1] : 0;
+                            var value = symbol == 16 ? lengths[position - 1] : (byte)0;
                             lengths.Slice(position, repeat).Fill(value); position += repeat; context.Cancellation.ThrowIfCancellationRequested();
                         }
                     }
@@ -425,7 +425,7 @@ long count = 0;
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
                 // Leave long/unassigned prefixes, EOB, matches and output overflow to the original dispatcher.
-                if (length == 0 || entry >> 4 >= 256) break;
+                if (length is 0 or > 9 || entry >> 4 >= 256) break;
                 cached >>= length; bits -= length; count++;
             }
             buffer = cached; available = bits; position = offset;             return count;
@@ -450,7 +450,7 @@ long count = 0;
                     offset += 4; bits += 32;
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
-                if (length == 0 || entry >> 4 >= 256) break;
+                if (length is 0 or > 9 || entry >> 4 >= 256) break;
                 if (cancellation.IsCancellationRequested) break;
 cached >>= length; bits -= length; count++;
             }
@@ -479,7 +479,7 @@ var count = 0;
                     offset += 4; bits += 32;
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
-                if (length == 0 || entry >> 4 >= 256) break;
+                if (length is 0 or > 9 || entry >> 4 >= 256) break;
                 if (cancellation.IsCancellationRequested) break;
                 destination[count++] = (byte)(entry >> 4);
 cached >>= length; bits -= length;
@@ -501,7 +501,7 @@ var count = 0;
                     offset += 4; bits += 32;
                 }
                 var entry = lookup[(int)(cached & 511)]; var length = entry & 15;
-                if (length == 0 || entry >> 4 >= 256) break;
+                if (length is 0 or > 9 || entry >> 4 >= 256) break;
                 destination[count++] = (byte)(entry >> 4);
                 cached >>= length; bits -= length;             }
             buffer = cached; available = bits; position = offset;             return count;
@@ -566,7 +566,7 @@ var count = 0;
         public readonly int FirstLongSymbol;
         public readonly bool Complete;
 
-        public Huffman(ReadOnlySpan<int> lengths, Span<int> counts, Span<int> symbols, OperationContext context)
+        public Huffman(ReadOnlySpan<byte> lengths, Span<int> counts, Span<int> symbols, OperationContext context)
         {
             Counts = counts; Symbols = symbols; counts.Clear(); Maximum = 0; FirstLongCode = 0; context.Cancellation.ThrowIfCancellationRequested();
             foreach (var length in lengths) if (length > 0) { counts[length]++; Maximum = Math.Max(Maximum, length); }
@@ -593,11 +593,11 @@ var count = 0;
 
     private static void BuildLiteralLookup(scoped Huffman tree, scoped Span<ushort> lookup, OperationContext context)
     {
-        // Conservative bounded construction charge: 512 clears/table writes, at most
-        // 288 nine-bit reversals and canonical-symbol visits (RFC 1951 3.2.2).
+        // RFC1951 section3.2.2: prepare assigned prefixes through ten bits.
+        // Byte code lengths offset the wider table inside the same4KiB scratch.
         context.Cancellation.ThrowIfCancellationRequested(); lookup.Clear();
         int code = 0, index = 0;
-        for (var length = 1; length <= 9; length++)
+        for (var length = 1; length <= 10; length++)
         {
             var count = tree.Counts[length];
             for (var i = 0; i < count; i++, code++)
@@ -615,19 +615,24 @@ var count = 0;
 
     private static int DecodeLiteral(scoped ref Bits reader, scoped Huffman tree, scoped ReadOnlySpan<ushort> lookup)
     {
-        var entry = lookup[(int)(reader.Peek(9) & 511)];
+        var entry = lookup[(int)(reader.Peek(9) & 1023)];
         var length = entry & 15;
-        if (length == 0) return DecodeLongLiteral(ref reader, tree);
+        if (length is 0 or > 9) return DecodeLongLiteral(ref reader, tree, lookup);
         reader.Consume(length); return entry >> 4;
     }
 
-    private static int DecodeLongLiteral(scoped ref Bits reader, scoped Huffman tree)
+    private static int DecodeLongLiteral(scoped ref Bits reader, scoped Huffman tree, scoped ReadOnlySpan<ushort> lookup)
     {
         if (tree.Maximum <= 9) return Decode(ref reader, tree.Counts, tree.Symbols, tree.Maximum);
         // A root miss has already excluded every assigned code through depth
         // nine. Keep the original full lookahead and exact matched-bit consumption,
         // but begin the canonical search at depth ten (RFC 1951 section 3.2.2).
         var bits = reader.Peek(tree.Maximum);
+        // A nine-bit miss still requires the original full lookahead, even
+        // when the prepared tenth bit resolves it. Preserve short-tail errors
+        // and the Peek/Consume cancellation checkpoints before using that bit.
+        var entry = lookup[(int)(bits & 1023)];
+        if ((entry & 15) == 10) { reader.Consume(10); return entry >> 4; }
         var reversed = (uint)bits;
         reversed = (reversed & 0x55555555) << 1 | (reversed >> 1 & 0x55555555);
         reversed = (reversed & 0x33333333) << 2 | (reversed >> 2 & 0x33333333);

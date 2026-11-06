@@ -1722,8 +1722,21 @@ def render():
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     # One current PNG owner; superseded experiments stay linked history.
     # The latest coherent production stage owns current global qualification.
-    vq = decoder_owned['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5750
+    png_decode = json.loads((ROOT / 'benchmarks/png-prepared-prefix-evidence.json').read_text(encoding='utf-8'))
+    assert png_decode['productionAccepted'] and png_decode['requiredMaterialPaths'] == 283
+    assert png_decode['sourceProof']['unchangedBitsPeekFillConsumeAlignSkipText']
+    assert png_decode['storage']['admittedScratchBytes'] == 4096
+    assert png_decode['storage']['newHeapPayloadBytes'] == png_decode['storage']['newRetainedBytes'] == 0
+    assert png_decode['raw']['mirrored'] and png_decode['raw']['allMembersVerified']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in png_decode['comparison']['views'].values())
+    current = png_decode['current']
+    assert current['actualIterations'] == len(current['managedActualNanoseconds']) == 12
+    assert current['managedExact'] and current['independentOwnedOutputs'] and current['sourceUnchanged']
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['librarySha256'] == png_decode['producers']['linuxSha256']
+    assert current['lower'] > 1 and current['status'] == 'gap'
+    vq = png_decode['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5751
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1769,6 +1782,15 @@ def render():
         else:
             position = max(i for i, (_, old) in enumerate(rows) if old.startswith('| PNG ')) + 1
             rows.insert(position, row)
+    for index, (kind, row) in enumerate(rows):
+        label = row.split('|')[1].strip().removesuffix(' †')
+        if label in png_decode['invalidatedCodecLabels']:
+            assert kind == 'codec'
+            rows[index] = (kind, row.replace(' † |', ' † H |', 1))
+        elif label == 'PNG8 decode, two retained images / shared caller root':
+            current = png_decode['current']
+            rows[index] = (kind, f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                           f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | — |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1863,6 +1885,15 @@ def render():
                          f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
                          f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
                          f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
+    historical_reads = 0
+    for index, row in enumerate(read_rows):
+        fields = row.split('|')
+        if fields[1].strip() in png_decode['invalidatedReadLabels']:
+            fields[1] = fields[1].rstrip() + ' † H '
+            fields[-2] = ' Historical; refresh pending '
+            read_rows[index] = '|'.join(fields)
+            historical_reads += 1
+    assert historical_reads == 4
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1916,7 +1947,14 @@ Current scope and remaining work:
   [live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md) work stays linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
-- **PNG:** [lazy view preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
+- **PNG:** [prepared literal prefixes](../benchmarks/PNG-PREPARED-PREFIX.md) save
+  422µs/12.8% on two complete retained-output decodes under one shared root.
+  Current ratio {png_decode['current']['ratio']:.3f}/upper {png_decode['current']['upper']:.3f} remains a gap. Nominal arrays fit the same4KiB
+  scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
+  Total GC measures1,638,214B/op, +694B; no allocation-reduction claim. Seven other
+  displayed framing-dependent decode/validation costs are **H**, pending current
+  confirmation. Header-only inspection/identification and encoding stay unaffected.
+  [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse
   unchanged bodies. Fifteen controls:9pass/stop,2gaps,4uncertain. Exact packets and
@@ -1958,8 +1996,8 @@ The current production build passes **{vq['fullChecksEachOs']:,} full/live check
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
-sync/async consumers. Normal/scalar and affected AVX512-disabled checks pass;
-unchanged vector-path AVX2-disabled proof is reused.
+sync/async consumers. Normal/scalar checks pass; unchanged vector-path
+AVX2/AVX512-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
