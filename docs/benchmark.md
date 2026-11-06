@@ -55,12 +55,12 @@ Current scope and remaining work:
   scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
   Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
   [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
-  18 independently confirmed controls, 14 pass/stop,
+  24 independently confirmed controls, 20 pass/stop,
   4 gaps and 0 uncertain. Gaps are live RGBA8 (upper1.113),
   tight/default RGBA16 (uppers1.052/1.031) and RGB16 (upper1.062). All other
-  confirmed color/Paeth/Adam7/coding-validation controls pass. The report retains
+  confirmed color/filter/Adam7/coding-validation controls pass. The report retains
   allocations, boundaries and historical contradictions; no paired historical gain
-  is inferred. 33 already-named decode cases need current evidence. Seven displayed
+  is inferred. 27 already-named decode cases need current evidence. Seven displayed
   rows are refreshed; additional cases stay in the family report. Header-only
   inspection/identification and encoding are unaffected.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)

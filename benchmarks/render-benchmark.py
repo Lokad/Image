@@ -1925,7 +1925,7 @@ Current scope and remaining work:
   {len(png_framing['cases'])} independently confirmed controls, {png_framing['statusCounts']['pass']} pass/stop,
   {png_framing['statusCounts']['gap']} gaps and {png_framing['statusCounts']['uncertain']} uncertain. Gaps are live RGBA8 (upper1.113),
   tight/default RGBA16 (uppers1.052/1.031) and RGB16 (upper1.062). All other
-  confirmed color/Paeth/Adam7/coding-validation controls pass. The report retains
+  confirmed color/filter/Adam7/coding-validation controls pass. The report retains
   allocations, boundaries and historical contradictions; no paired historical gain
   is inferred. {len(png_framing['remainingNamedDecodeCases'])} already-named decode cases need current evidence. Seven displayed
   rows are refreshed; additional cases stay in the family report. Header-only
