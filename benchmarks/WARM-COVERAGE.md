@@ -13,7 +13,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
 | Resident VP8 encoding | [Candidate values](VP8-FIXED-VALUE-CANDIDATE-PIPELINE.md) share exact inverse/SSD/texture cores, remove candidate copies/repacking and save257.06µs/2.26% independently on complete photograph encoding.809072B/op paired unchanged; exact packets/order/owners preserved. First revision regresses and is rejected, revised wide-value layout qualifies. Current eight controls:7 gaps, 1 uncertain. No broader incremental gain or full parity claim. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
-| PNG encoding | [Complete-token output](PNG-COMPLETE-TOKEN-OUTPUT.md) saves408µs/7.36% raw on Fastest8; raw confidence separates, normalized confidence narrowly overlaps. Exact packets and384KiB admission remain;8B/op extra scalar state, no new arrays/owners/retention. Fifteen current complete fresh-one-shot comparisons:3pass/7gap/5uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier block/color/delivery costs remain history; three affected H rows await their named reconciliation. |
+| PNG encoding | [Greedy view preparation](PNG-GREEDY-VIEW-PREPARATION.md) independently saves269.24/835.64µs (5.57%/4.28%) on complete Fastest8/16. Exact packets,384KiB admission and standalone allocations remain. Four affected fresh one-shot costs refresh; eleven reuse exact unchanged production bodies. Fifteen controls:3pass/4gap/8uncertain. Byte remains a gap, upper1.059; ordinary/live/forward word uppers1.019/1.016/1.004 are uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier output/preparation and affected H rows remain linked history. |
 | JPEG and image reading | [Signed prepared instructions](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md) compile insertion interpretation once within the same2KiB scan plan. Independent ordinary/live progressive444 savings are461.82/491.58µs (11.16%/11.06%), with separated raw/normalized confidence and exact frames. Current six affected controls:1 pass, 3 gap, 2 uncertain; other JPEG paths reuse unchanged evidence. Measured allocation984,238versus984,212B/op is explicit; no new owned capacity. Prior scan preparation/adverse trials remain history. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
@@ -21,18 +21,17 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Owned-output preparation](BICUBIC-OUTPUT-WORKSPACE.md) shares geometry/numeric/publication kernels, retires full-row workspace before bounded strip tail, and saves731.33µs/17.82% on complete TightUp8.112Bpaired allocation unchanged; exact frames/qualified half/repair and4KiB remain. Current full/width-only/height-only uppers1.031/1.059/1.052are gaps,116/114/115B/op. Larger absolute codec gaps take precedence. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [shared-reader milestone](VP8-SHARED-COEFFICIENT-WINDOW.md)
-qualifies5,721full/live checks perOS (2482internal/2291public/948differential),
-independent24/25block cursor/following-read tests, all164frozen decoder frames,
-normal/scalar/affectedAVX512-disabled controls and SAMEactualReleasepackage/all3
-examples. Complete coding validation independently saves114.56µs/1.73%; stream
-screen is inconclusive. Six current validation/decoder controls remain gaps.
-This reconciles all five real full-decoder callers omitted from the preceding
-shared-inverse timing invalidation; coding-only validation was unaffected then.
-Two displayed costs refresh and123reuse unchanged paths. Native/harness/selectors/
-fixtures are reused; one private paired tool build. Initial transcription failure
-and adverse/uncertain points remain in raw. This is a development milestone, not
-a125-row actual-package release refresh or282-path pass. No publication.
+The current [greedy PNG milestone](PNG-GREEDY-VIEW-PREPARATION.md) qualifies
+5,721full/live checks perOS (2482internal/2291public/948differential), focused
+normal/scalar and affectedAVX512-disabled cases, and SAMEactualReleasepackage/
+all3examples. Only four displayed costs refresh;121reuse unchanged production
+paths, including11other PNG cases. This is not a125-row package release refresh
+or282-path pass. Publication remains postponed.
+
+The preceding [shared-reader milestone](VP8-SHARED-COEFFICIENT-WINDOW.md) retains
+its independently confirmed114.56µs/1.73% coding-validation gain and current six
+decoder/validation gaps. Its five real full-decoder callers are reconciled after
+the shared-inverse change; these unchanged paths reuse that evidence.
 
 The [JPEG scan stage](JPEG-PREPARED-SCAN-HEADERS.md) retains independent230µs
 ordinary/live gains, five decoder gaps, passing coding validation and all adverse
@@ -64,8 +63,9 @@ binding/manifest restoration reuses valid qualification; all points and code sta
 in its report/raw, without a current-row or renderer dependency. The following
 [writer-policy screen](VP8-WRITER-POLICY-SCREEN.md) removes redundant immutable-token
 checks but supplies no useful complete-operation lead. Exact restoration reuses
-qualification. Current PNG complete-operation attribution is the next independent
-lead; no frozen settings, packets or managed contracts change.
+qualification. The subsequent [PNG view stage](PNG-GREEDY-VIEW-PREPARATION.md)
+qualifies useful complete-operation gains without changing frozen settings, packets
+or managed contracts. Further codec work is selected from current attribution.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)

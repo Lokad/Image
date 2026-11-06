@@ -122,12 +122,13 @@ internal sealed partial class PngDeflater : Stream
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private ushort Pair(int at) => BinaryPrimitives.ReadUInt16LittleEndian(history.AsSpan(at, 2));
 
-    private int Insert(int at)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int Insert(ReadOnlySpan<byte> bytes, Span<ushort> chainHeads, Span<ushort> links, int at)
     {
-        var key = ((Byte(at) << 10) ^ (Byte(at + 1) << 5) ^ Byte(at + 2)) & (Window - 1);
-        var prior = heads[key]; older[at & (Window - 1)] = prior;
+        var key = ((bytes[at] << 10) ^ (bytes[at + 1] << 5) ^ bytes[at + 2]) & (Window - 1);
+        var prior = chainHeads[key]; links[at & (Window - 1)] = prior;
         // Even insertion through a deferred 258-byte match remains below 65536.
-        heads[key] = checked((ushort)at);
+        chainHeads[key] = checked((ushort)at);
         return prior;
     }
 
@@ -149,60 +150,69 @@ internal sealed partial class PngDeflater : Stream
 
     private void ProcessFast(bool final)
     {
-        // This input extent stays fixed until the greedy sweep returns. Keep
-        // its cursor and token count local, publishing before shared-state work.
-        var cursorPosition = position; var inputEnd = filled; var origin = windowOrigin;
+        // The acquired history extent and owned arrays survive this sweep.
+        // Slides change their contents, not their identity. Keep bounded window
+        // coordinates here and publish logical coordinates before callbacks.
+        var origin = windowOrigin;
+        var current = checked((int)(position - origin));
+        var inputEnd = checked((int)(filled - origin));
+        ReadOnlySpan<byte> bytes = history;
+        Span<ushort> chainHeads = heads, links = older;
+        Span<uint> outputTokens = tokens;
+        var cancellation = context.Cancellation;
         var usedTokens = tokenCount;
         try
         {
-            while (cursorPosition < inputEnd && (final || inputEnd - cursorPosition >= Lookahead))
+            while (current < inputEnd && (final || inputEnd - current >= Lookahead))
             {
-                context.Cancellation.ThrowIfCancellationRequested();
-                if (cursorPosition >= origin + 2 * Window - Lookahead + 1)
+                cancellation.ThrowIfCancellationRequested();
+                if (current >= 2 * Window - Lookahead + 1)
                 {
-                    PublishFast(cursorPosition, usedTokens); AdvanceOrigin(); origin = windowOrigin;
+                    PublishFast(origin + current, usedTokens); AdvanceOrigin();
+                    origin = windowOrigin; current -= Window; inputEnd -= Window;
                 }
-                var current = (int)(cursorPosition - origin);
-                var prior = cursorPosition + Minimum <= inputEnd ? Insert(current) : 0;
+                var prior = current + Minimum <= inputEnd ? Insert(bytes, chainHeads, links, current) : 0;
                 var length = Minimum - 1; var start = 0;
-                var available = (int)Math.Min(Maximum, inputEnd - cursorPosition);
+                var available = Math.Min(Maximum, inputEnd - current);
                 if (prior > 0 && current - prior <= Window - Lookahead)
                 {
                     var searches = 4; var limit = Math.Max(0, current - (Window - Lookahead));
-                    var prefixPair = Pair(current); var tail = Byte(current + length);
+                    var prefixPair = BinaryPrimitives.ReadUInt16LittleEndian(bytes.Slice(current, 2));
+                    var tail = bytes[current + length];
                     do
                     {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        if (length < available && Byte(prior + length) == tail && Pair(prior) == prefixPair)
+                        cancellation.ThrowIfCancellationRequested();
+                        if (length < available && bytes[prior + length] == tail
+                            && BinaryPrimitives.ReadUInt16LittleEndian(bytes.Slice(prior, 2)) == prefixPair)
                         {
                             var found = 2;
-                            while (found < available && Byte(prior + found) == Byte(current + found)) found++;
-                            context.Cancellation.ThrowIfCancellationRequested();
+                            while (found < available && bytes[prior + found] == bytes[current + found]) found++;
+                            cancellation.ThrowIfCancellationRequested();
                             if (found > length)
                             {
                                 length = found; start = prior; if (found >= Math.Min(8, available)) break;
-                                tail = Byte(current + length);
+                                tail = bytes[current + length];
                             }
                         }
-                        prior = older[prior & (Window - 1)];
+                        prior = links[prior & (Window - 1)];
                     } while (prior > limit && --searches != 0);
                 }
                 var copied = length >= Minimum;
-                tokens[usedTokens++] = copied ? (uint)length | (uint)(current - start) << 9 : Byte(current);
+                outputTokens[usedTokens++] = copied ? (uint)length | (uint)(current - start) << 9 : bytes[current];
                 if (usedTokens == TokenCapacity)
                 {
-                    PublishFast(cursorPosition, usedTokens); Block(false); usedTokens = tokenCount;
+                    PublishFast(origin + current, usedTokens); Block(false); usedTokens = tokenCount;
                 }
                 if (copied)
                 {
-                    if (length <= 4 && inputEnd - cursorPosition - length >= Minimum)
-                        for (var at = current + 1; at < current + length; at++) Insert(at);
-                    cursorPosition += length;
+                    if (length <= 4 && inputEnd - current - length >= Minimum)
+                        for (var at = current + 1; at < current + length; at++) Insert(bytes, chainHeads, links, at);
+                    current += length;
                 }
-                else cursorPosition++;
+                else current++;
             }
         }
-        finally { PublishFast(cursorPosition, usedTokens); }
+        finally { PublishFast(origin + current, usedTokens); }
     }
 
     private void PublishFast(long cursorPosition, int usedTokens)
