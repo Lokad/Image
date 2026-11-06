@@ -1599,13 +1599,21 @@ def render():
                for v in vp8_owned['independentPhotograph']['views'].values())
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
-    block_preparation = json.loads((ROOT / 'benchmarks/vp8-bounded-price-view-evidence.json').read_text(encoding='utf-8'))
-    assert block_preparation['productionAccepted'] and block_preparation['requiredMaterialPaths'] == 283
-    assert block_preparation['sourceProof']['windowUsesOnlyExistingStorage']
-    assert block_preparation['sourceProof']['cancellationCheckPlacementUnchanged']
-    assert block_preparation['raw']['mirrored'] and block_preparation['raw']['allMembersVerified']
-    assert block_preparation['statusCounts'] == {'pass': 3, 'gap': 2, 'uncertain': 4}
-    assert block_preparation['cases']['diagram']['upper'] <= 1
+    vp8_current = json.loads((ROOT / 'benchmarks/vp8-trellis-candidate-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_current['productionAccepted'] and vp8_current['requiredMaterialPaths'] == 283
+    assert vp8_current['sourceProof']['unchangedText']['rateRecurrenceTerminalTiesContextUpdateAndTraceback']
+    assert vp8_current['storage']['newOwnedHeapBytes'] == vp8_current['storage']['newRetainedBytes'] == 0
+    assert vp8_current['raw']['mirrored'] and vp8_current['raw']['allMembersVerified']
+    assert vp8_current['statusCounts'] == {'pass': 3, 'gap': 3, 'uncertain': 3}
+    assert vp8_current['cases']['diagram']['upper'] <= 1
+    pair = vp8_current['pairedTrellis']['result']
+    assert len(pair['pairs']) == 12 and pair['outputExact'] and pair['independentOwners']
+    assert math.exp(pair['logRatioStatistics']['ConfidenceInterval']['Upper']) < 1
+    assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
+               for v in vp8_current['independentTrellis']['views'].values())
+    assert all(not v['rawGainSeparated'] and not v['normalizedGainSeparated']
+               and not v['rawLossSeparated'] and not v['normalizedLossSeparated']
+               for v in vp8_current['selectedComparison']['views'].values())
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1629,11 +1637,11 @@ def render():
         current_case = case.removesuffix('-vp8')
         owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis', 'alpha', 'alpha16'} else webp_owned
         if owner is vp8_owned:
-            owner = block_preparation
+            owner = vp8_current
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        if owner is block_preparation and current_case in block_preparation['unchangedCases']:
-            reuse = block_preparation['unchangedCases'][current_case]
+        if owner is vp8_current and current_case in vp8_current['unchangedCases']:
+            reuse = vp8_current['unchangedCases'][current_case]
             assert current['reusedUnchangedPath'] and reuse['sourceApplies']
             assert current['librarySha256'] == reuse['librarySha256']
         else:
@@ -1646,8 +1654,8 @@ def render():
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
     decoder_owned = json.loads((ROOT / 'benchmarks/vp8-alpha-output-handoff-evidence.json').read_text(encoding='utf-8'))
-    selected_cost = block_preparation['cases']['selected']
-    assert selected_cost['status'] == 'uncertain' and selected_cost['managedPacketBytes'] == 7026
+    selected_cost = vp8_current['cases']['selected']
+    assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
     dq = decoder_owned['qualification']
     assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['sourceProof']
     assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5747
@@ -1714,8 +1722,8 @@ def render():
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     # One current PNG owner; superseded experiments stay linked history.
     # The latest coherent production stage owns current global qualification.
-    vq = block_preparation['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5744
+    vq = vp8_current['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5750
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1876,21 +1884,20 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md)
-  independently save 514µs (4.70% raw) on complete photograph encoding; raw
-  confidence separates, while reference-normalized confidence overlaps.
-  Exact packets, allocations and the 20,192B plan remain unchanged. Eight
-  affected controls refresh; distortion reuses unchanged evidence:
-  **3 pass, 2 gaps, 4 uncertain**. Photograph and effort5 remain uncertain;
-  effort5 measures {selected_cost['managedUs']:,.0f}µs, ratio {selected_cost['ratio']:.3f}/upper {selected_cost['upper']:.3f}.
-  Diagram's +71µs raw and opaque16's +3.67% normalized losses remain explicit;
-  both still pass parity. The scoped opaque16 pair is inconclusive and does
-  not replace its standalone loss. Trellis/alpha raw gains track the reference;
-  no normalized incremental gains are claimed. Earlier
-  [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
+- **WebP:** [trellis candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
+  moves independent coefficient arithmetic before serial DP. Alternating isolated
+  complete encodes improve 4.0% within that paired harness. Actual standalone effort6
+  saves 196µs/1.68% raw; normalized gain is unconfirmed. These magnitudes remain
+  separate. Current effort 6 ratio {vp8_current['cases']['trellis']['ratio']:.3f}/upper {vp8_current['cases']['trellis']['upper']:.3f} and effort 5 ratio {vp8_current['cases']['selected']['ratio']:.3f}/upper {vp8_current['cases']['selected']['upper']:.3f}
+  are gaps. Allocation stays 754,497/741,065B; added 320B local stack, no new heap/
+  retained state or larger admission. Both affected controls refresh; seven reuse
+  unchanged paths: **3 pass, 3 gaps, 3 uncertain**. Effort 5's +50µs raw adverse point
+  and normalized point improvement are uncertain; no extra favorable sampling.
+  [Prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md) retain their
+  photograph gain and diagram/opaque16 tradeoffs; both passing cases remain stopped.
+  Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
-  [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  retain their scoped gains and superseded costs as history.
+  [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
   [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) reuses final
   RGBA storage through compressed alpha and rendering. Complete span/stream decode
   independently saves215/228µs (3.25%/3.46% raw); both raw and normalized confidence

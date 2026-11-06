@@ -17,21 +17,20 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md)
-  independently save 514µs (4.70% raw) on complete photograph encoding; raw
-  confidence separates, while reference-normalized confidence overlaps.
-  Exact packets, allocations and the 20,192B plan remain unchanged. Eight
-  affected controls refresh; distortion reuses unchanged evidence:
-  **3 pass, 2 gaps, 4 uncertain**. Photograph and effort5 remain uncertain;
-  effort5 measures 7,058µs, ratio 1.099/upper 1.137.
-  Diagram's +71µs raw and opaque16's +3.67% normalized losses remain explicit;
-  both still pass parity. The scoped opaque16 pair is inconclusive and does
-  not replace its standalone loss. Trellis/alpha raw gains track the reference;
-  no normalized incremental gains are claimed. Earlier
-  [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
+- **WebP:** [trellis candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
+  moves independent coefficient arithmetic before serial DP. Alternating isolated
+  complete encodes improve 4.0% within that paired harness. Actual standalone effort6
+  saves 196µs/1.68% raw; normalized gain is unconfirmed. These magnitudes remain
+  separate. Current effort 6 ratio 1.082/upper 1.093 and effort 5 ratio 1.017/upper 1.028
+  are gaps. Allocation stays 754,497/741,065B; added 320B local stack, no new heap/
+  retained state or larger admission. Both affected controls refresh; seven reuse
+  unchanged paths: **3 pass, 3 gaps, 3 uncertain**. Effort 5's +50µs raw adverse point
+  and normalized point improvement are uncertain; no extra favorable sampling.
+  [Prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md) retain their
+  photograph gain and diagram/opaque16 tradeoffs; both passing cases remain stopped.
+  Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
-  [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  retain their scoped gains and superseded costs as history.
+  [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
   [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) reuses final
   RGBA storage through compressed alpha and rendering. Complete span/stream decode
   independently saves215/228µs (3.25%/3.46% raw); both raw and normalized confidence
@@ -85,7 +84,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,744 full/live checks per OS**, affected
+The current production build passes **5,750 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -132,7 +131,7 @@ settings do not establish matched quality.
 | VP8 opaque RGBA8 † | 14,109.85 | 15,494.13 | 0.911 / 0.922 | 1,201,669 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 10,421.63 | 9,778.81 | 1.066 / 1.113 | 809,225 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,701.25 | 5,823.43 | 0.979 / 0.985 | 741,222 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 10,663.51 | 9,803.71 | 1.088 / 1.094 | 754,497 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 11,437.34 | 10,573.45 | 1.082 / 1.093 | 754,497 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 15,614.22 | 16,700.17 | 0.935 / 0.939 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 56,041.55 | 56,143.03 | 0.998 / 1.005 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |

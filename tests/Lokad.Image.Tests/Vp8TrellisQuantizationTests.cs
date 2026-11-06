@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
@@ -8,6 +9,54 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8TrellisQuantizationTests
 {
+    [Theory]
+    [InlineData(0)] [InlineData(63)] [InlineData(127)]
+    public void CandidatePreparationKeepsSignedSamplesWideWeightsAndBorrowedGuards(int quantizer)
+    {
+        using var input = new Inputs(0);
+        Span<int> matrix = stackalloc int[80]; Span<ushort> weights = stackalloc ushort[16];
+        ReadOnlySpan<short> values = [short.MinValue, -32767, -5000, -2048, -1, 0, 1, 2,
+            127, 128, 2047, 2048, 5000, 16320, 32766, short.MaxValue];
+        Span<short> coefficients = stackalloc short[20]; coefficients.Fill(12345); values.CopyTo(coefficients[2..]);
+        Span<short> scratch = stackalloc short[64];
+        Span<int> floors = stackalloc int[20]; floors.Fill(-123456);
+        Span<long> delta0 = stackalloc long[20]; delta0.Fill(123456789012345);
+        Span<long> delta1 = stackalloc long[20]; delta1.Fill(-123456789012345);
+        for (var p = 0; p < 16; p++)
+        {
+            var step = p == 0 ? Vp8Tables.DcQuantizers[quantizer] : Vp8Tables.AcQuantizers[quantizer];
+            matrix[p] = step; matrix[16 + p] = (1 << 17) / step;
+            matrix[64 + p] = (30 * Math.Min(3, (p & 3) + (p >> 2)) * step) >> 11;
+            weights[p] = (p & 3) switch { 0 => 0, 1 => 1, 2 => 30, _ => ushort.MaxValue };
+        }
+        var execution = new Vp8TrellisQuantization.Execution(new(matrix), input.Rate, weights, input.Context, scratch);
+        var mask = Vp8TrellisQuantization.PrepareCandidates(coefficients.Slice(2, 16), in execution,
+            floors.Slice(2, 16), delta0.Slice(2, 16), delta1.Slice(2, 16));
+        uint expectedMask = 0;
+        for (var p = 0; p < 16; p++)
+        {
+            var magnitude = BigInteger.Abs(values[p]) + matrix[64 + p];
+            var product = magnitude * matrix[16 + p];
+            var floor = (int)BigInteger.Min(2047, product >> 17);
+            var ceiling = (int)BigInteger.Min(2047, (product + 65536) >> 17);
+            Assert.Equal(floor, floors[p + 2]);
+            if (ceiling > floor) expectedMask |= 1u << p;
+            for (var choice = 0; choice < 2; choice++)
+            {
+                var error = magnitude - (floor + choice) * matrix[p];
+                var expected = (long)((error * error - magnitude * magnitude) * weights[p] * 256);
+                Assert.Equal(expected, choice == 0 ? delta0[p + 2] : delta1[p + 2]);
+            }
+        }
+        Assert.Equal(expectedMask, mask);
+        Assert.True(values.SequenceEqual(coefficients.Slice(2, 16)));
+        foreach (var p in new[] { 0, 1, 18, 19 })
+        {
+            Assert.Equal(12345, coefficients[p]); Assert.Equal(-123456, floors[p]);
+            Assert.Equal(123456789012345, delta0[p]); Assert.Equal(-123456789012345, delta1[p]);
+        }
+    }
+
     [Theory]
     [InlineData(0)] [InlineData(1)]
     public void ZeroCandidateCertificateMatchesWrappedIntegerProductsAndKeepsBorrowedTails(int first)

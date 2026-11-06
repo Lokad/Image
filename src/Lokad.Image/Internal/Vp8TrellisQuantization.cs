@@ -28,6 +28,67 @@ internal static class Vp8TrellisQuantization
         Importance.CopyTo(destination);
     }
 
+    // Independent coefficient geometry is prepared before the serial predecessor
+    // walk. The 320-byte caller scratch is local to one synchronous Search.
+    // Full-width signed samples and UInt16 weights require signed64 deltas.
+    internal static uint PrepareCandidates(ReadOnlySpan<short> original, in Execution execution,
+        Span<int> floors, Span<long> delta0, Span<long> delta1)
+    {
+        var steps = execution.Steps; var reciprocals = execution.Reciprocals;
+        var sharpening = execution.Sharpening; var weights = execution.Weights;
+        uint upper = 0;
+        if (Avx2.IsSupported)
+        {
+            var samples = Vector256.Create(original);
+            for (var p = 0; p < 16; p += 8)
+            {
+                // Widen before Abs, including Int16.MinValue.
+                var values = Avx2.ConvertToVector256Int32(p == 0 ? samples.GetLower() : samples.GetUpper());
+                var magnitude = Avx2.Abs(values).AsInt32() + Vector256.Create(sharpening[p..]);
+                var product = magnitude * Vector256.Create(reciprocals[p..]);
+                var floor = Vector256.Min(product >> 17, Vector256.Create(2047));
+                var ceiling = Vector256.Min((product + Vector256.Create(1 << 16)) >> 17, Vector256.Create(2047));
+                floor.CopyTo(floors[p..]);
+                upper |= Vector256.ExtractMostSignificantBits(Avx2.CompareGreaterThan(ceiling, floor)) << p;
+                var step = Vector256.Create(steps[p..]);
+                var error = magnitude - floor * step;
+                var weight = Avx2.ConvertToVector256Int32(Vector128.Create(weights[p..]));
+                var square = magnitude * magnitude;
+                WriteDeltas(error * error - square, weight, delta0[p..]);
+                error -= step;
+                WriteDeltas(error * error - square, weight, delta1[p..]);
+            }
+        }
+        else
+        {
+            for (var p = 0; p < 16; p++)
+            {
+                var magnitude = Math.Abs((int)original[p]) + sharpening[p];
+                var product = magnitude * reciprocals[p];
+                var floor = Math.Min(2047, product >> 17);
+                var ceiling = Math.Min(2047, (product + (1 << 16)) >> 17);
+                floors[p] = floor;
+                if (ceiling > floor) upper |= 1u << p;
+                var error = magnitude - floor * steps[p];
+                delta0[p] = (long)weights[p] * (error * error - magnitude * magnitude) * 256;
+                error -= steps[p];
+                delta1[p] = (long)weights[p] * (error * error - magnitude * magnitude) * 256;
+            }
+        }
+        return upper;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void WriteDeltas(Vector256<int> differences, Vector256<int> weights, Span<long> destination)
+    {
+        var even = Avx2.Multiply(differences, weights) << 8;
+        var odd = Avx2.Multiply(Avx2.ShiftRightLogical128BitLane(differences.AsByte(), 4).AsInt32(),
+            Avx2.ShiftRightLogical128BitLane(weights.AsByte(), 4).AsInt32()) << 8;
+        var low = Avx2.UnpackLow(even, odd); var high = Avx2.UnpackHigh(even, odd);
+        Vector256.Create(low.GetLower(), high.GetLower()).CopyTo(destination);
+        Vector256.Create(low.GetUpper(), high.GetUpper()).CopyTo(destination[4..]);
+    }
+
     private static int Index(int type, int position, int context) => (type * 8 + Vp8Tables.CoefficientBand(position)) * 3 + context;
     // Prepared once for a borrowed matrix, then reused by the exact zero route.
     // Product in [0,65535] proves both existing candidate levels zero.
@@ -102,7 +163,7 @@ internal static class Vp8TrellisQuantization
         in Execution execution, int type, int initialContext, int lambda)
     {
         var fixedLevels = execution.FixedLevels; var combinedLevels = execution.CombinedLevels; var endOfBlock = execution.EndOfBlock;
-        var steps = execution.Steps; var reciprocals = execution.Reciprocals; var sharpening = execution.Sharpening; var weights = execution.Weights;
+        var steps = execution.Steps;
         var first = type == 0 ? 1 : 0;
         // RFC6386 section13 diagonal coefficient order; read-only format data.
         ReadOnlySpan<byte> scan = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
@@ -113,6 +174,9 @@ internal static class Vp8TrellisQuantization
         var threshold = execution.Threshold;
         for (var n = 15; n >= first; n--) if (original[scan[n]] * original[scan[n]] > threshold) { last = n; break; }
         if (last < 15) last++;
+        Span<int> floors = stackalloc int[16];
+        Span<long> delta0 = stackalloc long[16]; Span<long> delta1 = stackalloc long[16];
+        var upper = PrepareCandidates(original, in execution, floors, delta0, delta1);
         var start = Index(type, first, initialContext);
         var best = (long)lambda * endOfBlock[start * 2]; var bestEnd = -1; var bestNode = 0;
         var score0 = initialContext == 0 ? (long)lambda * endOfBlock[start * 2 + 1] : 0; var score1 = score0;
@@ -120,20 +184,17 @@ internal static class Vp8TrellisQuantization
         const long dead = 0x7fffffffffffffL;
         for (var n = first; n <= last; n++)
         {
-            var p = scan[n]; var magnitude = Math.Abs((int)original[p]) + sharpening[p];
-            var floor = Math.Min(2047, magnitude * reciprocals[p] >> 17);
-            var ceiling = Math.Min(2047, (magnitude * reciprocals[p] + (128 << 9)) >> 17);
+            var p = scan[n]; var floor = floors[p];
             // Both candidate levels use the same two predecessor rows. Borrow
             // each row offset once; keep the strict alternate/tie comparison.
             var band = (type * 8 + Vp8Tables.CoefficientBand(n)) * 3;
             var row0 = (band + context0) * 68; var row1 = (band + context1) * 68;
             var nextScore0 = dead; var nextScore1 = dead;
-            for (var choice = 0; choice < 2; choice++)
+            var choices = 1 + (int)((upper >> p) & 1);
+            for (var choice = 0; choice < choices; choice++)
             {
                 var level = floor + choice;
-                if (level > ceiling) continue;
-                var error = magnitude - level * steps[p];
-                var delta = (long)weights[p] * (error * error - magnitude * magnitude) * 256;
+                var delta = choice == 0 ? delta0[p] : delta1[p];
                 var winner = 0;
                 var stored = Math.Min(level, 67);
                 var correction = level > 67 ? fixedLevels[level] - fixedLevels[67] : 0;
