@@ -1,0 +1,701 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TSP443",
+  "date": "2026-11-06",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "candidateProductionChanged": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "TSP443",
+    "paths": [
+      "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs"
+    ],
+    "hypothesis": "Move only fixed block candidate row/terminal addressing and lambda scaling out of serial score recurrence;72-byte local steps and unchanged strict ties/traceback. Distinct from frame-epoch caches/equal-row collapse.",
+    "temporaryStorage": "1152B step program plus320B helper preparation and nested vector delta scratch. Actual generated nested frames must fit unchanged2048B standalone/16384B macroblock allowances before timing. No heap/state/owner; original128B borrowed scratch still used in this first coherent prototype.",
+    "completeControls": "Frozen diagram effort6/selected effort5, complete source processing/admission/fresh independent output/disposal, exact6818/7026Bpackets. Test actual native signed fragments/guards, all22packet tuples/cancellation/refusal/disposal normal/scalar eachOS. No newimage/settings grid.",
+    "continuation": "First complete short screen after correctness/frame audit. Continue/revise/abandon on elapsed/allocation/retention/simplicity. Preserve failures/adverse/inconclusive; no fixed threshold or automaticmerge. Broad/package only for acceptedstage. Remove temporary code duplication before production acceptance.",
+    "frameAudit": "Windows Search1384Bsubtractions plus saved registers; Program520Bsubtractions; Candidates192Bsubtractions; Apply88Bsubtractions. Linux Search1320,Program440,Candidates112,Apply24. Owned step1152B plus nested320B candidate data/128B borrowed DP, no heap. Full nested frames exceed private standalone2048B coarse figure; no claim that they fit it. Actual public macroblock16384B admission has ample capacity for existing <=2KiB macroblock arrays plus this bounded chain. Public complete-operation screen stays within that existing admission. A retained design must adjust private standalone estimate (about3KiB) or shrink/fuse storage and verify before acceptance; no public ceiling relaxed."
+  },
+  "preparation": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+      "candidateSha256": "ec52ef78d5b82a6068150e4e243b3b9f31e63f80f79baad38faa0a50fde180ff",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "ccc29e6ab5663676da7a3df1522deeb762730364bee92bb4425791c70da1698e"
+      },
+      "focused": {
+        "internal-normal": 69,
+        "internal-scalar": 69,
+        "public-normal": 140,
+        "public-scalar": 140
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "ff8bec18acab433eb972f06116f00eb7f4e7fa87b06f3a3f423b78e17fd3764f"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "candidateSha256": "d1b382cf574bf8771cdeab3cfd0bada3caa3d1c9a65a6dd24ca4f03e3c00e49f",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "ccc29e6ab5663676da7a3df1522deeb762730364bee92bb4425791c70da1698e"
+      },
+      "focused": {
+        "internal-normal": 69,
+        "internal-scalar": 69,
+        "public-normal": 140,
+        "public-scalar": 140
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "4d89bb125dfd5077e4ce4c9f4b9f9cb8d770f7637e97c065d674bc43eec8f08c"
+    }
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "caseId": "trellis",
+    "subject": "candidate",
+    "mode": "short",
+    "runId": "tsp443-candidate-trellis-short",
+    "managed": {
+      "statistics": {
+        "OriginalValues": [
+          12004084.015625,
+          11955163.390625,
+          11969452.515625
+        ],
+        "N": 3,
+        "Min": 11955163.390625,
+        "LowerFence": 11925617.484375,
+        "Q1": 11962307.953125,
+        "Median": 11969452.515625,
+        "Mean": 11976233.307291666,
+        "Q3": 11986768.265625,
+        "UpperFence": 12023458.734375,
+        "Max": 12004084.015625,
+        "InterquartileRange": 24460.3125,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 14523.44356913686,
+        "Variance": 632791239.3177083,
+        "StandardDeviation": 25155.342162604513,
+        "Skewness": 0.2499705107009132,
+        "Kurtosis": 0.6666666666666914,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 11976233.307291666,
+          "StandardError": 14523.44356913686,
+          "Level": 12,
+          "Margin": 458927.0841219143,
+          "Lower": 11517306.223169751,
+          "Upper": 12435160.39141358
+        },
+        "Percentiles": {
+          "P0": 11955163.390625,
+          "P25": 11962307.953125,
+          "P50": 11969452.515625,
+          "P67": 11981227.225625,
+          "P80": 11990231.415624999,
+          "P85": 11993694.565624999,
+          "P90": 11997157.715625001,
+          "P95": 12000620.865625,
+          "P100": 12004084.015625
+        }
+      },
+      "unfilteredActualStatistics": {
+        "OriginalValues": [
+          12004089.5,
+          11955168.875,
+          11969458
+        ],
+        "N": 3,
+        "Min": 11955168.875,
+        "LowerFence": 11925622.96875,
+        "Q1": 11962313.4375,
+        "Median": 11969458,
+        "Mean": 11976238.791666666,
+        "Q3": 11986773.75,
+        "UpperFence": 12023464.21875,
+        "Max": 12004089.5,
+        "InterquartileRange": 24460.3125,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 14523.44356913686,
+        "Variance": 632791239.3177083,
+        "StandardDeviation": 25155.342162604513,
+        "Skewness": 0.2499705107009132,
+        "Kurtosis": 0.6666666666666914,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 11976238.791666666,
+          "StandardError": 14523.44356913686,
+          "Level": 12,
+          "Margin": 458927.0841219143,
+          "Lower": 11517311.707544751,
+          "Upper": 12435165.87578858
+        },
+        "Percentiles": {
+          "P0": 11955168.875,
+          "P25": 11962313.4375,
+          "P50": 11969458,
+          "P67": 11981232.71,
+          "P80": 11990236.9,
+          "P85": 11993700.05,
+          "P90": 11997163.2,
+          "P95": 12000626.35,
+          "P100": 12004089.5
+        }
+      },
+      "actual": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 32,
+          "Nanoseconds": 384130864
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 32,
+          "Nanoseconds": 382565404
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 32,
+          "Nanoseconds": 383022656
+        }
+      ],
+      "results": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 32,
+          "Nanoseconds": 384130688.5
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 32,
+          "Nanoseconds": 382565228.5
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 32,
+          "Nanoseconds": 383022480.5
+        }
+      ],
+      "rawGc": "// GC:  3 3 3 24143904 32",
+      "rawThreading": "// Threading:  0 0 32",
+      "extraStatsRecorded": true
+    },
+    "nativeBrackets": [
+      {
+        "mean": 9778131.125,
+        "standardError": 3271.9804814260942,
+        "confidenceLower": 9674739.635612752,
+        "confidenceUpper": 9881522.614387248,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 8,
+            "ElapsedNanoseconds": 78257247,
+            "CompletedOperations": 50,
+            "Observed": 8300,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 6818,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 9782155.875
+          },
+          {
+            "State": "sample",
+            "Operations": 8,
+            "ElapsedNanoseconds": 78244699,
+            "CompletedOperations": 58,
+            "Observed": 9628,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 6818,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 9780587.375
+          },
+          {
+            "State": "sample",
+            "Operations": 8,
+            "ElapsedNanoseconds": 78173201,
+            "CompletedOperations": 66,
+            "Observed": 10956,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 6818,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 9771650.125
+          }
+        ]
+      },
+      {
+        "mean": 9784186.541666666,
+        "standardError": 6842.921908170475,
+        "confidenceLower": 9567956.679703062,
+        "confidenceUpper": 10000416.40363027,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 8,
+            "ElapsedNanoseconds": 78369538,
+            "CompletedOperations": 98,
+            "Observed": 16268,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 6818,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 9796192.25
+          },
+          {
+            "State": "sample",
+            "Operations": 8,
+            "ElapsedNanoseconds": 78179951,
+            "CompletedOperations": 106,
+            "Observed": 17596,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 6818,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 9772493.875
+          },
+          {
+            "State": "sample",
+            "Operations": 8,
+            "ElapsedNanoseconds": 78270988,
+            "CompletedOperations": 114,
+            "Observed": 18924,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 6818,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 9783873.5
+          }
+        ]
+      }
+    ],
+    "managedUs": 11976.233307291666,
+    "nativeUs": 9778.131125,
+    "ratio": 1.224797781313417,
+    "lower": 1.151682665832678,
+    "upper": 1.299667869751946,
+    "allocatedBytes": 754497,
+    "packetBytes": 6818,
+    "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+    "librarySha256": "d1b382cf574bf8771cdeab3cfd0bada3caa3d1c9a65a6dd24ca4f03e3c00e49f",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "gap"
+  },
+  "historicalProduction": {
+    "managedUs": 11437.335723958335,
+    "nativeUs": 10573.451,
+    "allocatedBytes": 754497,
+    "currentRelevantTrellisSourceUnchanged": true,
+    "evidence": "vp8-trellis-candidate-preparation-evidence.json",
+    "paired": false
+  },
+  "historicalPointChange": {
+    "rawUs": 538.8975833333316,
+    "rawPercent": 4.7117405341567276,
+    "nativePercent": -7.521857102283813,
+    "interpretation": "Historical points, not a paired causal regression proof. Three-actual adverse screen establishes no gain; larger local program/extra preparation do not justify independent confirmation or retaining this implementation."
+  },
+  "jitWindows": [
+    {
+      "method": "Lokad.Image.Internal.Vp8TrellisQuantization+Execution:Apply(System.Span`1[short],System.Span`1[short],int,int,int):bool:this (FullOpts)",
+      "code": [
+        "Total bytes of code 396"
+      ],
+      "stack": [
+        "88"
+      ],
+      "pushes": 6
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8TrellisQuantization:Search(System.Span`1[short],System.Span`1[short],byref,int,int,int):bool (FullOpts)",
+      "code": [
+        "Total bytes of code 1446"
+      ],
+      "stack": [
+        "232",
+        "0x480"
+      ],
+      "pushes": 8
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8TrellisQuantization:PrepareProgram(System.ReadOnlySpan`1[short],byref,int,int,int,System.Span`1[Lokad.Image.Internal.Vp8TrellisQuantization+PreparedStep]):int (FullOpts)",
+      "code": [
+        "Total bytes of code 1156"
+      ],
+      "stack": [
+        "200",
+        "64",
+        "128",
+        "128"
+      ],
+      "pushes": 8
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8TrellisQuantization:PrepareCandidates(System.ReadOnlySpan`1[short],byref,System.Span`1[int],System.Span`1[long],System.Span`1[long]):uint (FullOpts)",
+      "code": [
+        "Total bytes of code 954"
+      ],
+      "stack": [
+        "192"
+      ],
+      "pushes": 3
+    }
+  ],
+  "jitLinux": {
+    "project": "Lokad.Image",
+    "productionSha256": "d1b382cf574bf8771cdeab3cfd0bada3caa3d1c9a65a6dd24ca4f03e3c00e49f",
+    "completeFrozenTuples": 22,
+    "optimizedActualPublicModule": true,
+    "allBuilds": 0,
+    "timing": false,
+    "methods": [
+      {
+        "method": "Lokad.Image.Internal.Vp8TrellisQuantization+Execution:Apply(System.Span`1[short],System.Span`1[short],int,int,int):bool:this (FullOpts)",
+        "code": [
+          "Total bytes of code 359"
+        ],
+        "stack": [
+          "24"
+        ]
+      },
+      {
+        "method": "Lokad.Image.Internal.Vp8TrellisQuantization:Search(System.Span`1[short],System.Span`1[short],byref,int,int,int):bool (FullOpts)",
+        "code": [
+          "Total bytes of code 1386"
+        ],
+        "stack": [
+          "168",
+          "0x480"
+        ]
+      },
+      {
+        "method": "Lokad.Image.Internal.Vp8TrellisQuantization:PrepareProgram(System.ReadOnlySpan`1[short],byref,int,int,int,System.Span`1[Lokad.Image.Internal.Vp8TrellisQuantization+PreparedStep]):int (FullOpts)",
+        "code": [
+          "Total bytes of code 1001"
+        ],
+        "stack": [
+          "120",
+          "64",
+          "128",
+          "128"
+        ]
+      },
+      {
+        "method": "Lokad.Image.Internal.Vp8TrellisQuantization:PrepareCandidates(System.ReadOnlySpan`1[short],byref,System.Span`1[int],System.Span`1[long],System.Span`1[long]):uint (FullOpts)",
+        "code": [
+          "Total bytes of code 825"
+        ],
+        "stack": [
+          "112"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "stepBytes": 72,
+    "steps": 16,
+    "programBytes": 1152,
+    "nestedCandidateBytes": 320,
+    "borrowedDpBytes": 128,
+    "additionalHeapBytes": 0,
+    "additionalRetainedBytes": 0,
+    "publicMacroblockAdmissionBytes": 16384,
+    "publicAdmissionUnchanged": true,
+    "standaloneNominalBytes": 2048,
+    "standaloneActualFrameEstimateTooSmall": true,
+    "provisionalOnly": true,
+    "completePhysicalAndNativePeakNotMeasured": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "allOriginalIdentitiesExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "9167788a0e4319b3222634b5d6f3aa4dd0d8f27fc3cb5730c24963d1526f5d02",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "d103606bcf740e124e46f7d22d8a3f4221155cd307a7f9a0b5de47325dceafa6",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "0368f65344b5d2f21488cd5d08be586844dc7a3b9bb6d90b5d51418edd919019",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "62343f153315cbe507d81f3addb59b1a813ca6c74d96be68354d69c92ab62f5e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "d103606bcf740e124e46f7d22d8a3f4221155cd307a7f9a0b5de47325dceafa6",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tmp/benchmark-source.json": "57b45e742aa41c8ff3f100fb8104e316912695726524243fc22989410a81a421",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "d103606bcf740e124e46f7d22d8a3f4221155cd307a7f9a0b5de47325dceafa6",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "d103606bcf740e124e46f7d22d8a3f4221155cd307a7f9a0b5de47325dceafa6",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "allBuilds": 0,
+      "qualificationReused": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "allOriginalIdentitiesExact": true,
+      "identities": {
+        "tmp/benchmark-source.json": "da21751b48733522b9bc8c282d8c11d43d2bc21ae1700d0fb5dfcc7b8f2f1ff2",
+        "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "9167788a0e4319b3222634b5d6f3aa4dd0d8f27fc3cb5730c24963d1526f5d02",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "49eadee7be9338a89a9dd9b29dd57b25db2fb9ab0e0cfabf15be071eba82ed88",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "49eadee7be9338a89a9dd9b29dd57b25db2fb9ab0e0cfabf15be071eba82ed88",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "49eadee7be9338a89a9dd9b29dd57b25db2fb9ab0e0cfabf15be071eba82ed88",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "861969e797d8542547b04d990a9731e8812a282efaaddbe6f1f261b0489f09e2",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "efbb5ed087975103bb545e4daf94207864bbf1afc14eb1838ee950d116a142d6",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "49eadee7be9338a89a9dd9b29dd57b25db2fb9ab0e0cfabf15be071eba82ed88",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb"
+      },
+      "allBuilds": 0,
+      "qualificationReused": true,
+      "allManifestSourcesExact": true
+    }
+  },
+  "builds": {
+    "mainVersionsEachOs": 1,
+    "embeddedVersionsEachOs": 1,
+    "harnessNativeSelectorFixture": 0,
+    "fullSuites": 0,
+    "packages": 0
+  },
+  "decision": "Restore the qualified source/main/embedded/bindings/manifests byte-exactly on both OSes, without rebuilding or favorable repeats. Reuse LPP4375751/scalar/SAMEpackage/all3examples. Reject this full-block program implementation; no family closure. A materially different coefficient-local two-choice recurrence may remove loop/selection costs without the1152B program; first inspect source/history and retain all correctness/arithmetic/storage boundaries. No CPU gain accepted.",
+  "priorEvidence": [
+    "vp8-trellis-candidate-preparation-evidence.json",
+    "vp8-rate-epoch-pricing-evidence.json",
+    "png-prepared-prefix-evidence.json"
+  ],
+  "raw": {
+    "file": "vp8-block-price-program-experiment.tar.xz",
+    "sha256": "d8e7937a41fb997752724f8ce7ecbe1474e74b8a270078be4392bed6b54aa192",
+    "bytes": 1539848,
+    "members": 80,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      },
+      {
+        "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+        "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+      },
+      {
+        "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+        "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+      },
+      {
+        "file": "jpeg-buffered-correction-restoration.tar.xz",
+        "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+      },
+      {
+        "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+        "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+      },
+      {
+        "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+        "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+      },
+      {
+        "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+        "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+      },
+      {
+        "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+        "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+      },
+      {
+        "file": "vp8-current-live-model-attribution.tar.xz",
+        "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+      },
+      {
+        "file": "vp8-live-model-preparation-qualified.tar.xz",
+        "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+      },
+      {
+        "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+        "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+      },
+      {
+        "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+        "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4"
+      },
+      {
+        "file": "bicubic-output-workspace-qualified.tar.xz",
+        "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+      },
+      {
+        "file": "bicubic-default-output-workspace-qualified.tar.xz",
+        "sha256": "a4ff4eb24fc61dce4599aae3328bffa0b07a56e991d6b636b6cbc39c53e0317b"
+      },
+      {
+        "file": "parity-p40-qualified-evidence.tar.gz",
+        "sha256": "21114dd252c7f82cfcac745418a34eee442c4c3d3bf33ce6b71765b88250939d"
+      },
+      {
+        "file": "bicubic-shared-enlargement-qualified.tar.xz",
+        "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+      },
+      {
+        "file": "vp8-unshifted-live-reservoir-qualified.tar.xz",
+        "sha256": "5a773cc39f02710dc5dc27e744d60f7a77babdce2365b9b8bcb0f4614189fe03"
+      },
+      {
+        "file": "bilinear-current-boundary-audit.tar.xz",
+        "sha256": "3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018"
+      },
+      {
+        "file": "jpeg-correction-bit-qualified.tar.xz",
+        "sha256": "624f0b847f29b7465f96a7c2dbaecf2ed5f64f85359cecb5c9d1364bd893a1d1"
+      },
+      {
+        "file": "vp8-selected-trellis-boundary.tar.xz",
+        "sha256": "923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79"
+      },
+      {
+        "file": "vp8-trellis-architecture-audit.tar.xz",
+        "sha256": "73f1d0fd787fd732f1aa8146f78ee58be6dd4c856fcd6547fead6e0189869fd4"
+      },
+      {
+        "file": "vp8-ordinary-block-preparation-qualified.tar.xz",
+        "sha256": "0d3dfc7b21f6f3b7fb3b546b367ae3fb270615ad4d3264f4de1b077a807c987f"
+      },
+      {
+        "file": "vp8-current-photograph-attribution.tar.xz",
+        "sha256": "1c35f956ef35e6ab08cc1f80066e23aa26e90bb46d08459a64beed7657125421"
+      },
+      {
+        "file": "vp8-bounded-price-view-qualified.tar.xz",
+        "sha256": "830067c12147668abe8ed024ad63c7bfd17026d1c3b3aea0efa817843f0ec3e3"
+      },
+      {
+        "file": "vp8-alpha-output-handoff-qualified.tar.xz",
+        "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
+      },
+      {
+        "file": "vp8-trellis-candidate-preparation-qualified.tar.xz",
+        "sha256": "0cb9428ef776647daea6a809c66e86d07f4e3e2997c1cd1d5109ccba85641430"
+      },
+      {
+        "file": "vp8-current-validation-state-attribution.tar.xz",
+        "sha256": "89398293287135112cfdc17075d56cec7ca2f62660449faf7eb4ff689dbd4794"
+      },
+      {
+        "file": "vp8-block-state-reservoir-qualified.tar.xz",
+        "sha256": "f4ee950171f4e6ea02d101022aeb49140cac243ab1d8b8eb0d29adfdff5b5186"
+      },
+      {
+        "file": "current-retained-png-decode-cost.tar.xz",
+        "sha256": "4cad0b918916e1d1a0bb661ca2a6e4fb81ea9db5c529e593a2ca7224f1dd836f"
+      },
+      {
+        "file": "png-retained-root-current-attribution.tar.xz",
+        "sha256": "5f30795b21030f904942a4f0b2679283a241ebfb8f4e7dda34fe70dfb1be7ced"
+      },
+      {
+        "file": "png-prepared-prefix-qualified.tar.xz",
+        "sha256": "3a57e9ffd77680fe3dda7a121bbd4fc41ed7ca83756828eccdc129543ed3a699"
+      },
+      {
+        "file": "current-tight-png-decode-costs.tar.xz",
+        "sha256": "e5319918f7ce7bbaaafd940384bf191d76cebb5931199b01381d9e377d869824"
+      },
+      {
+        "file": "png-current-framing-costs.tar.xz",
+        "sha256": "def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe"
+      },
+      {
+        "file": "png-core-word-current-costs.tar.xz",
+        "sha256": "e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555"
+      },
+      {
+        "file": "png-color-current-costs.tar.xz",
+        "sha256": "725e794723ec992403ceb1fc77efc898889fe242dd3f73e20ca38d968efc4e4f"
+      },
+      {
+        "file": "png-filter-current-costs.tar.xz",
+        "sha256": "f1fc8bd0cbeeaa76c216014da77a6eb4c2871271f1cb10eab0c41b4660e337ec"
+      },
+      {
+        "file": "vp8-current-trellis-preparation-attribution.tar.xz",
+        "sha256": "02bafe8eefd87f0f7541932ca20b6e7bced1495d3c8b9e50f4c2cf8cb2e613eb"
+      }
+    ]
+  },
+  "historicalPointSource": "Authoritative unchanged-path current owner cases.trellis. Raw preparatory JSON transcribed this native point with <0.001us difference; reconciled here without resampling or changing any conclusion."
+}

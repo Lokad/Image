@@ -106,3 +106,8 @@ preflight failure before profiling; its invocation is retained, then accepted
 source hashes are pinned directly. No sample replay. Reuse current Windows/Linux,
 scalar and actual-package qualification. The evidence records this as attribution,
 separate from accepted performance results.
+
+The subsequent [full-block price program](VP8-BLOCK-PRICE-PROGRAM-EXPERIMENT.md)
+establishes no gain and restores this qualified source byte-exactly. Its larger
+local storage and adverse three-actual point remain historical evidence outside
+renderer checks; current production costs and qualification are unchanged.
