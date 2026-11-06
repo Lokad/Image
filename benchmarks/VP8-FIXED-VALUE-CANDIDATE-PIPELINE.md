@@ -47,7 +47,9 @@ clock differences are not causal incremental gains. The opaque16 discrepancy
 prompted one direct12pair×16reconciliation:225.19µs/1.44% improvement,
 ratio.985642, interval[.982009,.989282],1201552B/op unchanged and exact72380B
 packet. Its current standalone gap remains; no favorable standalone repeat.
-Other117displayed comparisons reuse
+One displayed full VP8 decoder cost and four other covered decoder controls
+also call this changed reconstruction core; their prior costs are historical
+until reconciled. Coding-only validation skips reconstruction. Other116displayed comparisons reuse
 unchanged relevant paths; lossless passing cases are not retuned.
 
 Fixed values add no heap capacity, owner, pool, session or public API. Existing

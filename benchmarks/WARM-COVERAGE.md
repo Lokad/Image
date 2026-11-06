@@ -21,20 +21,18 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Owned-output preparation](BICUBIC-OUTPUT-WORKSPACE.md) shares geometry/numeric/publication kernels, retires full-row workspace before bounded strip tail, and saves731.33µs/17.82% on complete TightUp8.112Bpaired allocation unchanged; exact frames/qualified half/repair and4KiB remain. Current full/width-only/height-only uppers1.031/1.059/1.052are gaps,116/114/115B/op. Larger absolute codec gaps take precedence. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [candidate-pipeline milestone](VP8-FIXED-VALUE-CANDIDATE-PIPELINE.md)
-qualifies5,718full/live checks perOS (2479internal/2291public/948differential),
-108internal/137public affected normal/scalar/AVX2-disabled/AVX512-disabled and SAME
-actualReleasepackage/all3examples. Existing native/scalar datasets extend through
-actual value entries; cancellation, terminal refusal, shared admission, async and
-independent owners remain. Reuse immutable final main/embedded builds and cached
-measurement tools/native workers/selectors/fixtures. Eight affected current costs
-refresh once;117other displays reuse unchanged source paths. This is a development
-milestone, not a125-row package refresh or282-path pass. The rejected first layout
-and its adverse independent confirmation remain in the same report/raw.
-
-The [current VP8 validation attribution](VP8-VALIDATION-READER-ATTRIBUTION.md)
-identifies coefficient entropy parsing for the next bounded reader-reuse audit.
-It changes no production or displayed cost and adds no renderer dependency.
+The current [shared-reader milestone](VP8-SHARED-COEFFICIENT-WINDOW.md)
+qualifies5,721full/live checks perOS (2482internal/2291public/948differential),
+independent24/25block cursor/following-read tests, all164frozen decoder frames,
+normal/scalar/affectedAVX512-disabled controls and SAMEactualReleasepackage/all3
+examples. Complete coding validation independently saves114.56µs/1.73%; stream
+screen is inconclusive. Six current validation/decoder controls remain gaps.
+This reconciles all five real full-decoder callers omitted from the preceding
+shared-inverse timing invalidation; coding-only validation was unaffected then.
+Two displayed costs refresh and123reuse unchanged paths. Native/harness/selectors/
+fixtures are reused; one private paired tool build. Initial transcription failure
+and adverse/uncertain points remain in raw. This is a development milestone, not
+a125-row actual-package release refresh or282-path pass. No publication.
 
 The [JPEG scan stage](JPEG-PREPARED-SCAN-HEADERS.md) retains independent230µs
 ordinary/live gains, five decoder gaps, passing coding validation and all adverse

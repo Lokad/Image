@@ -12,9 +12,19 @@ internal partial struct Vp8BooleanReader
     // Short inputs retain the bit-at-a-time reader. Cancelable blocks use the
     // separate polling wrapper and preserve its exact canceled prefix.
     internal bool CanReadCoefficientBlock(ReadOnlySpan<byte> data, OperationContext context)
+        => CanReadCoefficientWindow(data, context, 1);
+
+    // Consecutive blocks share their arithmetic state. Each block has the same
+    // worst-case decision bound; this conservative window never borrows bytes
+    // from a following partition. Live cancellation keeps its polling reader.
+    internal bool CanReadCoefficientWindow(ReadOnlySpan<byte> data, OperationContext context, int blocks)
         => !context.Cancellation.CanBeCanceled
+        && (uint)(blocks - 1) < 25
         && range is >= 128 and <= 255 && (uint)value < (uint)range && (uint)shift <= 7
-        && end <= data.Length && end - position >= 272;
+        && end <= data.Length && end - position >= 272 * blocks;
+
+    internal readonly BlockReader BeginCoefficientWindow(ReadOnlySpan<byte> data)
+        => new(data, position, shift, range, value);
 
     // The decoder supplies its complete private model,16sample block and valid
     // plane/context. The selected input bounds exclude mid-block failures.
@@ -22,27 +32,13 @@ internal partial struct Vp8BooleanReader
     internal bool ReadCoefficientBlock(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
     {
-        var reader = new BlockReader(data, position, shift, range, value);
-        ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
-        ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
-        var previousZero = false; var predictor = initialContext; nonzero = 0;
-        for (var c = plane == 0 ? 1 : 0; c < 16; c++)
-        {
-            var p = probabilities.Slice(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
-            var token = reader.Token(p, previousZero);
-            if (token == 11) break;
-            var sample = token < 5 ? token : reader.Category(token - 5);
-            previousZero = sample == 0; predictor = Math.Min(sample, 2);
-            if (sample == 0) continue;
-            nonzero = 1;
-            if (reader.Read(128) != 0) sample = -sample;
-            values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
-        }
+        var reader = BeginCoefficientWindow(data);
+        var result = reader.ReadCoefficients(probabilities, values, plane, initialContext, dc, ac, out nonzero);
         reader.Publish(ref this);
-        return nonzero != 0;
+        return result;
     }
 
-    private ref struct BlockReader
+    internal ref struct BlockReader
     {
         private readonly ReadOnlySpan<byte> data;
         internal int Position, Bits, Range;
@@ -53,6 +49,27 @@ internal partial struct Vp8BooleanReader
             this.data = data; Position = position + 1; Bits = shift + 1; Range = range;
             Value = ((uint)value << 24) | (((uint)data[position] & ((1u << Bits) - 1)) << (24 - Bits));
             Fill();
+        }
+
+        internal bool ReadCoefficients(ReadOnlySpan<byte> probabilities, scoped Span<short> values,
+            int plane, int initialContext, int dc, int ac, out byte nonzero)
+        {
+            ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
+            ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
+            var previousZero = false; var predictor = initialContext; nonzero = 0;
+            for (var c = plane == 0 ? 1 : 0; c < 16; c++)
+            {
+                var p = probabilities.Slice(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
+                var token = Token(p, previousZero);
+                if (token == 11) break;
+                var sample = token < 5 ? token : Category(token - 5);
+                previousZero = sample == 0; predictor = Math.Min(sample, 2);
+                if (sample == 0) continue;
+                nonzero = 1;
+                if (Read(128) != 0) sample = -sample;
+                values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
+            }
+            return nonzero != 0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

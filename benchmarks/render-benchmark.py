@@ -1624,6 +1624,24 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-shared-coefficient-window-evidence.json').read_text(encoding='utf-8'))
+    dq = decoder_owned['qualification']
+    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['movedArithmeticTextMatchesOriginal']
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5721
+    assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
+    assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
+    assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
+    assert set(decoder_owned['cases']) == {'ValidateVp8Alpha', 'Native8', 'StreamNative8', 'Opaque8', 'OpaqueCancelable8', 'SimpleOpaque8'}
+    for current in decoder_owned['cases'].values():
+        assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['librarySha256'] == decoder_owned['producers']['linuxSha256']
+        assert current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    stream = decoder_owned['cases']['StreamNative8']
+    positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| WebP VP8 + alpha, fresh seekable Stream')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
+        f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | {stream["allocatedBytes"]:,} | — |')
     column = json.loads((ROOT / 'benchmarks/bicubic-column-preparation-evidence.json').read_text(encoding='utf-8'))
     current = column['cases']['TightDown8']
     assert column['productionAccepted'] and current['actualIterations'] == 12
@@ -1695,6 +1713,12 @@ def render():
                    'Validate PNG16, async nonseekable']
     read_rows = []
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
+        if case == 'ValidateVp8Alpha':
+            current = decoder_owned['cases'][case]
+            status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
+            read_rows.append(f'| {label} | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
+            continue
         if case == 'ValidateJpegProgressive420':
             current = jpeg_prepared['cases'][case]
             status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
@@ -1793,6 +1817,10 @@ Current scope and remaining work:
   shares exact inverse/SSD/texture cores and removes candidate copies/repacking.
   Independent complete photograph saves257µs/2.26%, unchanged paired allocation.
   Eight current VP8 controls:7gaps, 1uncertain; exact packets retained.
+  [Shared coefficient windows](../benchmarks/VP8-SHARED-COEFFICIENT-WINDOW.md)
+  save115µs/1.73% on complete coding validation, unchanged allocation. Six current
+  validation/decoder controls remain gaps; all five actual full-decoder callers
+  are reconciled after shared-inverse changes. No broader incremental gain claim.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
@@ -1824,10 +1852,10 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{enlargement['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{decoder_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Affected AVX2/AVX512-disabled codec checks pass; unchanged other-path proof is reused.
+opaque-word and wide-column consumers. Affected scalar/AVX512-disabled parser checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

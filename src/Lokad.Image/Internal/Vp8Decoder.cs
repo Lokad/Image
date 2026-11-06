@@ -163,9 +163,11 @@ internal ref struct Vp8Decoder
                 var hasY2 = block.Mode != 4;
                 if ((block.Flags & 1) == 0)
                 {
+                    var reuseWindow = tokens.CanReadCoefficientWindow(data, context, hasY2 ? 25 : 24);
+                    var window = reuseWindow ? tokens.BeginCoefficientWindow(data) : default;
                     if (hasY2)
                     {
-                        any |= Coefficients(ref tokens, coefficients[..16], 1, above[8] + leftCoefficients[8],
+                        any |= Coefficients(ref tokens, ref window, reuseWindow, coefficients[..16], 1, above[8] + leftCoefficients[8],
                             2 * Dc(q + quantizerDeltas[1]), Math.Max(8, Ac(q + quantizerDeltas[2]) * 155 / 100), out var nonzero);
                         above[8] = leftCoefficients[8] = nonzero;
                         Vp8Transforms.InverseWalsh(coefficients[..16]);
@@ -176,11 +178,12 @@ internal ref struct Vp8Decoder
                         var offset = luma ? 0 : b < 20 ? 4 : 6;
                         var a = offset + local % side; var l = offset + local / side;
                         var subblock = coefficients.Slice((b + 1) * 16, 16);
-                        any |= Coefficients(ref tokens, subblock, luma ? hasY2 ? 0 : 3 : 2, above[a] + leftCoefficients[l],
+                        any |= Coefficients(ref tokens, ref window, reuseWindow, subblock, luma ? hasY2 ? 0 : 3 : 2, above[a] + leftCoefficients[l],
                             luma ? Dc(q + quantizerDeltas[0]) : Math.Min(132, Dc(q + quantizerDeltas[3])),
                             luma ? Ac(q) : Ac(q + quantizerDeltas[4]), out var nonzero);
                         above[a] = leftCoefficients[l] = nonzero;
                     }
+                    if (reuseWindow) window.Publish(ref tokens);
                 }
                 else
                 {
@@ -246,9 +249,12 @@ internal ref struct Vp8Decoder
         return Bit(p[8]) == 0 ? 8 : 9;
     }
 
-    private bool Coefficients(ref Vp8BooleanReader tokens, scoped Span<short> values, int plane, int initialContext,
+    private bool Coefficients(ref Vp8BooleanReader tokens, scoped ref Vp8BooleanReader.BlockReader window,
+        bool reuseWindow, scoped Span<short> values, int plane, int initialContext,
         int dc, int ac, out byte nonzero)
     {
+        if (reuseWindow)
+            return window.ReadCoefficients(probabilities, values, plane, initialContext, dc, ac, out nonzero);
         if (tokens.CanReadCoefficientBlock(data, context))
             return tokens.ReadCoefficientBlock(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
         if (tokens.CanReadCancellableCoefficientBlock(data, context))
