@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Apply live progressive JPEG correction bits through exact integer selection,
+  preserving pixels, cancellation prefixes and overflow behavior.
+
 - Buffer live VP8 coefficient decoding without repeated code-value shifts,
   preserving exact pixels, cancellation prefixes and output ownership.
 

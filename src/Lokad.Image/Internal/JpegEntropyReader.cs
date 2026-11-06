@@ -223,13 +223,19 @@ bit = (int)((cache >> --pending) & 1);
                     PublishRefinementLookahead(cache, pending, cursor);                     bit = ReadBits(1);
                     cache = bits; pending = available; cursor = position;
                 }
-                if (bit != 0)
+                if (value == int.MinValue && bit != 0)
                 {
-                    // ApplyCorrection can throw only for Int32.MinValue. Its
-                    // already-consumed correction bit must survive that error.
-                    if (value == int.MinValue) PublishRefinementLookahead(cache, pending, cursor);
-                    JpegDecoder.ApplyCorrection(ref value, increment);
+                    PublishRefinementLookahead(cache, pending, cursor);
+                    _ = Math.Abs(value); // Preserve the already-consumed bit.
                 }
+                // T.81 G.1.2: only a set bit whose magnitude bit is missing
+                // changes the coefficient. Keep that selection in integer
+                // masks; a zero correction remains a no-op even for MinValue.
+                var sign = value >> 31;
+                var magnitude = unchecked((value ^ sign) - sign);
+                var active = -bit & (((magnitude & increment) - 1) >> 31);
+                var nonPositive = unchecked(value - 1) >> 31;
+                value = unchecked(value + (((increment ^ nonPositive) - nonPositive) & active));
                 correctionPositions &= correctionPositions - 1;
             }
             if (finish)

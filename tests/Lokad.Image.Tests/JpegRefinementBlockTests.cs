@@ -128,20 +128,22 @@ cancellation.Cancel();
         Assert.True(table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, 0, ref eob));
         Assert.Equal(0, eob); Assert.Equal(0, reader.Position);     }
 
-    [Fact]
-    public void CancelableOverflowRetainsTheAlreadyConsumedCorrectionBit()
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void CancelableOverflowDependsOnTheAlreadyConsumedCorrectionBit(bool set)
     {
         if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
         using var cancellation = new CancellationTokenSource();
         var context = new OperationContext(ImageLimits.Default, cancellation.Token);
         var counts = new byte[16]; counts[0] = 1;
         var table = new JpegHuffman(counts, [0], new OperationContext(ImageLimits.Default, default));
-        var reader = new JpegEntropyReader([255, 0], 0, context); var values = new int[64]; values[1] = int.MinValue;
+        var reader = new JpegEntropyReader(set ? [255, 0] : [0], 0, context); var values = new int[64]; values[1] = int.MinValue;
 var eob = 1; OverflowException? failure = null;
         try { table.TryReadCancelableRefinementBlock(ref reader, values, 1, 63, 0, ref eob); }
         catch (OverflowException error) { failure = error; }
-        Assert.NotNull(failure); Assert.Equal(int.MinValue, values[1]); Assert.Equal(1, eob);
-        Assert.Equal(2, reader.Position);         Assert.Equal(127, reader.ReadBits(7));
+        if (set) Assert.NotNull(failure); else Assert.Null(failure);
+        Assert.Equal(int.MinValue, values[1]); Assert.Equal(set ? 1 : 0, eob);
+        Assert.Equal(set ? 2 : 1, reader.Position); Assert.Equal(set ? 127 : 0, reader.ReadBits(7));
     }
 
     [Fact]

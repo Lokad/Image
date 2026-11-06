@@ -906,10 +906,13 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-progressive-plane-scheduling-evidence.json').read_text(encoding='utf-8'))
+    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-correction-bit-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_current['productionAccepted']
     assert jpeg_current['raw']['mirrored'] and jpeg_current['raw']['allMembersVerified']
-    assert all(q['fullLivePassed'] and q['total'] == 5732
+    assert jpeg_current['sourceProof']['onlyBufferedLiveCorrectionBitDataflowChanged']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for v in jpeg_current['independentComparison']['views'].values())
+    assert all(q['fullLivePassed'] and q['total'] == 5742
                for q in jpeg_current['qualification']['full'].values())
     assert set(jpeg_current['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422',
         'Progressive444', 'ProgressiveCancelable444'}
@@ -917,7 +920,8 @@ def render():
     assert jpeg_current['qualification']['actualPackage']['sha256'] == jpeg_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert jpeg_current['qualification']['actualPackage']['progressiveStripsOwnershipPassed'] and jpeg_current['qualification']['samePackageLinux']['progressiveStripsOwnershipPassed']
     for case, current in jpeg_current['cases'].items():
-        assert current['caseId'] == case and current['librarySha256'] == jpeg_current['producers']['linuxSha256']
+        assert current['caseId'] == case
+        assert current['reusedUnchangedPath'] or current['librarySha256'] == jpeg_current['producers']['linuxSha256']
         assert current['actualIterations'] == len(current['actualNanoseconds']) == 12
         assert current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         assert current['exactFrozenPixels']
@@ -1660,11 +1664,12 @@ def render():
     assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
                for v in decoder_owned['independentLive']['views'].values())
     assert dq['actualPackage']['unshiftedLiveReservoirPassed'] and dq['samePackageLinux']['unshiftedLiveReservoirPassed']
-    vq = dq
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5741
+    vq = jpeg_current['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5742
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['sharedByteWordEnlargementExactOwnedPassed']
     assert vq['samePackageLinux']['sharedByteWordEnlargementExactOwnedPassed']
+    assert vq['actualPackage']['liveJpegCorrectionBitOwnershipPassed'] and vq['samePackageLinux']['liveJpegCorrectionBitOwnershipPassed']
     stream = decoder_owned['cases']['StreamNative8']
     positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| WebP VP8 + alpha, fresh seekable Stream')]
     assert len(positions) == 1
@@ -1908,13 +1913,13 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
-  removes two full byte planes using operation-owned output-tail strips. Complete
-  ordinary/live444 allocation falls from984KB to701KB/op, exact pixels preserved.
-  Live raw elapsed saves69µs/1.61%; normalized and ordinary timing are inconclusive.
-  Five decoder costs refresh; unchanged coding validation is reused. Six controls:
-  1pass,3gaps,2uncertain. Algebraic governed core peak does not increase; no new
-  retained cache. [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
+- **JPEG and reading:** [correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md)
+  independently saves108µs/2.53%raw and2.07%normalized on complete live progressive444,
+  with exact pixels and701,182B/op unchanged. Ratio1.140/upper1.151 remains a gap.
+  Five unchanged controls reuse evidence: six total,1pass/3gaps/2uncertain.
+  [Plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retains
+  ordinary/live444 allocation984KB→701KB/op and its stated peak/retention boundaries.
+  [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
   retains prior gains. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
