@@ -420,10 +420,11 @@ def render():
     assert set(word_color_png['cases']) == {'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16'}
     png_framing = json.loads((ROOT / 'benchmarks/png-current-framing-costs-evidence.json').read_text(encoding='utf-8'))
     assert not png_framing['productionChanged'] and png_framing['allBuilds'] == 0
-    assert png_framing['statusCounts'] == {'pass': 5, 'gap': 2, 'uncertain': 0}
+    assert png_framing['displayedStatusCounts'] == {'pass': 5, 'gap': 2, 'uncertain': 0}
+    assert png_framing['statusCounts'] == {'pass': 9, 'gap': 3, 'uncertain': 0}
     assert png_framing['raw']['mirrored'] and png_framing['raw']['allMembersVerified']
     assert png_framing['qualificationReused']['sameActualPackageBothOs']
-    assert set(png_framing['cases']) == {'DecodeCancelable8', 'DecodeTight8', 'DecodeTight16',
+    assert set(png_framing['displayedCases']) == {'DecodeCancelable8', 'DecodeTight8', 'DecodeTight16',
         'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
     for case, framing_case in png_framing['cases'].items():
         assert framing_case['actualIterations'] == len(framing_case['managedActualNanoseconds']) == 12
@@ -1925,7 +1926,11 @@ Current scope and remaining work:
   Tight RGBA8, both-depth coding validation, indexed Adam7 and async word validation
   pass. Historical point movements are not paired effects; the report records the
   adverse word-validation point and faster native tight-word clock. Header-only
-  inspection/identification and encoding stay unaffected.
+  inspection/identification and encoding stay unaffected. Five additional existing
+  core/word/Paeth confirmations give four passes and one small default-RGBA16 gap
+  (upper1.031). Adam7 word now passes, upper0.785; its historical gap is superseded,
+  not a paired gain. The family report holds all12controls:9pass/3gaps;39other
+  already-named decode cases still need current evidence.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse

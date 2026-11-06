@@ -60,7 +60,11 @@ Current scope and remaining work:
   Tight RGBA8, both-depth coding validation, indexed Adam7 and async word validation
   pass. Historical point movements are not paired effects; the report records the
   adverse word-validation point and faster native tight-word clock. Header-only
-  inspection/identification and encoding stay unaffected.
+  inspection/identification and encoding stay unaffected. Five additional existing
+  core/word/Paeth confirmations give four passes and one small default-RGBA16 gap
+  (upper1.031). Adam7 word now passes, upper0.785; its historical gap is superseded,
+  not a paired gain. The family report holds all12controls:9pass/3gaps;39other
+  already-named decode cases still need current evidence.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse

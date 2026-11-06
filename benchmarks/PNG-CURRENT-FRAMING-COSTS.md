@@ -1,8 +1,10 @@
 # Current PNG framing costs
 
-Seven existing comparisons now have independent evidence on the immutable
-qualified LPP437 build. Five pass and stop; live RGBA8 and tight RGBA16 retain
-demonstrated gaps. No production, fixture, setting or workload boundary changes.
+Twelve existing comparisons now have independent evidence on the immutable
+qualified LPP437 build. Nine pass and stop; live RGBA8, default RGBA16 and tight
+RGBA16 retain demonstrated gaps. Seven comparisons refresh the public summary;
+five core/word/Paeth controls stay in this family report. No production, fixture,
+setting or workload boundary changes.
 
 | Complete operation, existing input | Managed µs | Reference µs | Ratio / upper | Managed B/op | Current status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -13,6 +15,11 @@ demonstrated gaps. No production, fixture, setting or workload boundary changes.
 | Validate PNG16, span | 2,906.21 | 2,961.99 | 0.981 / 0.983 | 240 | Pass; stop |
 | Validate indexed Adam7, 19×17 | 1.76 | 3.94 | 0.447 / 0.463 | 792 | Pass; stop |
 | Validate PNG16, async nonseekable | 2,956.81 | 3,613.24 | 0.818 / 0.826 | 8,544 | Pass; stop |
+| RGBA8, resident None | 1,307.81 | 1,393.64 | 0.938 / 0.944 | 4,472 | Pass; stop |
+| RGBA16, resident None | 2,952.03 | 2,898.14 | 1.019 / 1.031 | 8,568 | Gap |
+| RGBA16, Adam7 | 3,062.16 | 3,927.59 | 0.780 / 0.785 | 23,240 | Pass; stop |
+| RGBA8, Paeth | 2,803.38 | 2,843.39 | 0.986 / 0.989 | 4,472 | Pass; stop |
+| RGBA16, Paeth | 4,826.89 | 5,512.13 | 0.876 / 0.885 | 8,568 | Pass; stop |
 
 Every job retains twelve actuals, both native brackets, filtered/all-actual
 confidence views and idle-v2 guards, sequentially on one CPU. Validation returns
@@ -23,11 +30,12 @@ independent output and disposal. Live polling and original tight limits remain.
 Native codec/conversion contexts retain their declared preparation. FFmpeg has no
 equivalent cooperative-admission API. Startup and checks remain outside timing.
 
-The three decoder comparisons use the original worker
+All eight decoder comparisons use the original worker
 `cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f`, recovered
 byte-exactly with its source/build identity into the prepared isolated root. The
 current ordinary worker differs after encoder-tool changes; it is not substituted.
-Frozen inputs remain 218,775/960,565 bytes. Four validation controls retain the
+The None inputs remain 218,775/960,565 bytes; Adam7 and Paeth retain their own
+frozen packets. Four validation controls retain the
 original natural-frame worker/metadata adapter and their distinct frozen inputs.
 Original proof metadata is borrowed only for the current module identity and
 restored byte-exactly after each job; every descriptor/native/source gate runs.
@@ -50,6 +58,11 @@ not newly measured. The shared-root peak/pair in the
 operation. Do not transfer those figures to these controls or infer CPU effects
 from allocations alone. Existing output ownership/admission qualification remains.
 
+The five additional controls preserve their own frozen None/Adam7/Paeth packets,
+including all seven passes and full word samples. The old Adam7 ratio 1.377 is
+superseded by current 0.780; this establishes current passing evidence, not a
+paired causal speed gain. The default word lower 1.0031 confirms a small gap.
+
 The immutable Linux DLL is
 `05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb`.
 Reuse Windows/Linux **5,751 full/live checks**, affected normal/scalar and the SAME
@@ -64,5 +77,9 @@ guards, reference recovery and qualified-source reuse. Raw
 mirrored and member-verified with pinned dependencies. Seven displayed numerical
 rows refresh; 118 reuse unchanged paths. Historical cursor/indexed/tight studies
 remain linked history and no longer supply renderer assertions. Full 283-path
-parity remains open; other already-named PNG framing callers still need current
-evidence. No full actual-package release refresh or broad PNG pass is claimed.
+parity remains open. The five additional records are retained in
+`png-core-word-current-costs.tar.xz`: 2,279,384 bytes / 73 members, SHA256
+`e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555`, mirrored/member-verified
+with pinned dependencies. The current evidence file lists the 39 remaining
+already-required WarmPng decode cases. No new grid, full actual-package release
+refresh or broad PNG pass is claimed.
