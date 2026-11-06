@@ -21,11 +21,11 @@ Current scope and remaining work:
   shares immutable borders/DC/interpolation across ten ordered candidates.
   Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
   exact packets and809,225B/op unchanged. Seven affected costs refresh;
-  distortion-only reuses unchanged code. The preceding eight controls retain
-  2pass/stop,4gaps,2uncertain. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
+  distortion-only reuses unchanged code. A read-only [effort6 refresh](../benchmarks/VP8-TRELLIS-ARCHITECTURE-AUDIT.md)
+  is uncertain: 10,830µs,754,497B/op,ratio1.090/upper1.130. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
   covers selected-mode trellis reconstruction: 7,384µs,
   741,065B/op, ratio1.144/upper1.185, a gap.
-  Nine current controls total2passes/5gaps/2uncertain; no extra image/settings grid.
+  Nine current controls total2passes/4gaps/3uncertain; no extra image/settings grid.
   Transparent word's adverse994µs point stays inconclusive against a contemporary
   original control; no favorable repeat. Standalone opaque8/diagram allocations
   differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
@@ -125,7 +125,7 @@ settings do not establish matched quality.
 | VP8 opaque RGBA8 † | 14,427.73 | 15,489.57 | 0.931 / 0.938 | 1,201,669 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 10,269.81 | 9,692.49 | 1.060 / 1.068 | 809,225 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 6,118.83 | 5,820.81 | 1.051 / 1.066 | 741,222 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 10,708.53 | 9,838.60 | 1.088 / 1.120 | 754,497 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 10,830.23 | 9,936.97 | 1.090 / 1.130 | 754,497 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 14,502.89 | 15,678.51 | 0.925 / 0.945 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 56,148.06 | 54,903.24 | 1.023 / 1.053 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |

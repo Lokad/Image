@@ -1609,6 +1609,11 @@ def render():
                for v in vp8_owned['independentPhotograph']['views'].values())
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
+    trellis_refresh = json.loads((ROOT / 'benchmarks/vp8-trellis-boundary-refresh-evidence.json').read_text(encoding='utf-8'))
+    assert not trellis_refresh['productionChanged'] and trellis_refresh['allBuilds'] == 0
+    assert trellis_refresh['sourceProof']['restoredQualifiedSourcesAndModulesExact']
+    assert trellis_refresh['raw']['mirrored'] and trellis_refresh['raw']['allMembersVerified']
+    assert trellis_refresh['current']['status'] == 'uncertain'
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1632,6 +1637,8 @@ def render():
         current_case = case.removesuffix('-vp8')
         owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis', 'alpha', 'alpha16'} else webp_owned
         current = owner['cases'][current_case]
+        if case == 'trellis':
+            owner, current = trellis_refresh, trellis_refresh['current']
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         if owner is vp8_owned and current_case in vp8_owned['unchangedCases']:
             reuse = vp8_owned['unchangedCases'][current_case]
@@ -1883,11 +1890,11 @@ Current scope and remaining work:
   shares immutable borders/DC/interpolation across ten ordered candidates.
   Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
   exact packets and809,225B/op unchanged. Seven affected costs refresh;
-  distortion-only reuses unchanged code. The preceding eight controls retain
-  2pass/stop,4gaps,2uncertain. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
+  distortion-only reuses unchanged code. A read-only [effort6 refresh](../benchmarks/VP8-TRELLIS-ARCHITECTURE-AUDIT.md)
+  is uncertain: 10,830µs,754,497B/op,ratio1.090/upper1.130. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
   covers selected-mode trellis reconstruction: {selected_cost['managedUs']:,.0f}µs,
   {selected_cost['allocatedBytes']:,}B/op, ratio{selected_cost['ratio']:.3f}/upper{selected_cost['upper']:.3f}, a gap.
-  Nine current controls total2passes/5gaps/2uncertain; no extra image/settings grid.
+  Nine current controls total2passes/4gaps/3uncertain; no extra image/settings grid.
   Transparent word's adverse994µs point stays inconclusive against a contemporary
   original control; no favorable repeat. Standalone opaque8/diagram allocations
   differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
