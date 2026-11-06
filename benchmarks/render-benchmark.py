@@ -1653,12 +1653,12 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-alpha-output-handoff-evidence.json').read_text(encoding='utf-8'))
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-block-state-reservoir-evidence.json').read_text(encoding='utf-8'))
     selected_cost = vp8_current['cases']['selected']
     assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
     dq = decoder_owned['qualification']
-    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['sourceProof']
-    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5747
+    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['selectionTextExact']
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5750
     assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
     assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
     assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
@@ -1668,9 +1668,9 @@ def render():
         assert current['reusedUnchangedPath'] or current['librarySha256'] == decoder_owned['producers']['linuxSha256']
         assert current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    for comparison in ['independentAlpha', 'streamGeneralization']:
+    for comparison in decoder_owned['comparisons'].values():
         assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-                   for v in decoder_owned[comparison]['views'].values())
+                   for v in comparison['views'].values())
     storage = decoder_owned['storage']
     assert storage['rows']['baseline']['firstPeakAdmittedBytes'] == 884699
     assert storage['rows']['candidate']['firstPeakAdmittedBytes'] == 751768
@@ -1722,7 +1722,7 @@ def render():
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     # One current PNG owner; superseded experiments stay linked history.
     # The latest coherent production stage owns current global qualification.
-    vq = vp8_current['qualification']
+    vq = decoder_owned['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5750
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
@@ -1898,15 +1898,18 @@ Current scope and remaining work:
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
   [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
-  [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) reuses final
-  RGBA storage through compressed alpha and rendering. Complete span/stream decode
-  independently saves215/228µs (3.25%/3.46% raw); both raw and normalized confidence
-  views separate. Warm allocation falls1,434,731→238,384B/span operation;
-  stream238,480B. Coarse admitted peak884,699→751,768B, retained output531,468B.
+  [Block-local arithmetic state](../benchmarks/VP8-BLOCK-STATE-RESERVOIR.md) removes
+  repeated state publication and code-value shifts. Complete alpha validation
+  independently saves207µs/3.35%raw; span/stream decode saves158/106µs. All five
+  affected complete controls have separated raw/normalized confidence views.
+  Five costs refresh; unchanged per-bit cancellable decoding reuses valid evidence.
+  No added heap/retained storage; at most8Bextra window stack layout fits the existing
+  allowance. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
+  its allocation reduction:238,384B/span and238,480B/stream. Coarse admitted peak
+  751,768B, retained output531,468B remain unchanged.
   Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays
   idle after this sequential case. Governed calls bypass it. GC totals, admitted
   capacity and physical peak differ; native allocation/physical peak are unmeasured.
-  All five affected decoder costs refresh; validation reuses unchanged bodies.
   All six reader cases remain gaps. Original/native contexts and boundaries remain
   explicit; no fresh-context setup parity is claimed. Earlier
   [token](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) and

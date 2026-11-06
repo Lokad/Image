@@ -8,7 +8,8 @@ internal partial struct Vp8BooleanReader
 {
     // RFC6386 sections7.2/13.2: at most7token,11category and1sign decisions
     // for each of16coefficients. Each decision consumes at most7input bits.
-    // 272partition bytes cover266consumed bytes,3lookahead bytes and slack.
+    // The initial normalized range and32bit refills need at most269bytes,
+    // within the unchanged272byte partition guard, including all lookahead.
     // Short inputs retain the bit-at-a-time reader. Cancelable blocks use the
     // separate polling wrapper and preserve its exact canceled prefix.
     internal bool CanReadCoefficientBlock(ReadOnlySpan<byte> data, OperationContext context)
@@ -42,13 +43,13 @@ internal partial struct Vp8BooleanReader
     {
         private readonly ReadOnlySpan<byte> data;
         internal int Position, Bits, Range;
-        internal uint Value;
+        internal ulong Value;
 
         internal BlockReader(ReadOnlySpan<byte> data, int position, int shift, int range, int value)
         {
             this.data = data; Position = position + 1; Bits = shift + 1; Range = range;
-            Value = ((uint)value << 24) | (((uint)data[position] & ((1u << Bits) - 1)) << (24 - Bits));
-            Fill();
+            Value = ((ulong)value << Bits) | ((uint)data[position] & ((1u << Bits) - 1));
+            Fill(in data, ref Position, ref Bits, ref Value);
         }
 
         internal bool ReadCoefficients(ReadOnlySpan<byte> probabilities, scoped Span<short> values,
@@ -56,110 +57,83 @@ internal partial struct Vp8BooleanReader
         {
             ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
             ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
+            // The admitted window/full private model exclude mid-block failure.
+            // Only the completed block publishes arithmetic state to its window.
+            var position = Position; var bits = Bits; var range = Range; var value = Value;
             var previousZero = false; var predictor = initialContext; nonzero = 0;
             for (var c = plane == 0 ? 1 : 0; c < 16; c++)
             {
                 var p = probabilities.Slice(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
-                var token = Token(p, previousZero);
+                var token = Token(in data, p, previousZero, ref position, ref bits, ref range, ref value);
                 if (token == 11) break;
-                var sample = token < 5 ? token : Category(token - 5);
+                var sample = token < 5 ? token : Category(in data, token - 5, ref position, ref bits, ref range, ref value);
                 previousZero = sample == 0; predictor = Math.Min(sample, 2);
                 if (sample == 0) continue;
                 nonzero = 1;
-                if (Read(128) != 0) sample = -sample;
+                if (Read(in data, 128, ref position, ref bits, ref range, ref value) != 0) sample = -sample;
                 values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
             }
+            Position = position; Bits = bits; Range = range; Value = value;
             return nonzero != 0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal int Read(int probability)
+        internal static int Read(in ReadOnlySpan<byte> data, int probability,
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
-            Normalize();
-            var boundary = 1 + ((Range - 1) * probability >> 8);
-            var bit = Value >= ((uint)boundary << 24) ? 1 : 0; var mask = -bit;
-            Value -= (uint)(boundary & mask) << 24;
-            Range = boundary + ((Range - 2 * boundary) & mask);
+            Normalize(in data, ref position, ref bits, ref range, ref value);
+            var boundary = 1 + ((range - 1) * probability >> 8);
+            var bit = value >= ((ulong)boundary << bits) ? 1 : 0; var mask = -bit;
+            value -= (ulong)(boundary & mask) << bits;
+            range = boundary + ((range - 2 * boundary) & mask);
             return bit;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal int TokenRead(int probability)
-        {
-            Normalize();
-            var boundary = 1 + ((Range - 1) * probability >> 8);
-            var split = (uint)boundary << 24;
-            if (Value < split) { Range = boundary; return 0; }
-            Range -= boundary; Value -= split; return 1;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int TokenRead(in ReadOnlySpan<byte> data, int probability,
-            ref int position, ref int bits, ref int range, ref uint value)
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
             Normalize(in data, ref position, ref bits, ref range, ref value);
             var boundary = 1 + ((range - 1) * probability >> 8);
-            var split = (uint)boundary << 24;
+            var split = (ulong)boundary << bits;
             if (value < split) { range = boundary; return 0; }
             range -= boundary; value -= split; return 1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Normalize()
-        {
-            var count = BitOperations.LeadingZeroCount((uint)Range) - 24;
-            Range <<= count; Value <<= count; Bits -= count; Fill();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void Normalize(in ReadOnlySpan<byte> data,
-            ref int position, ref int bits, ref int range, ref uint value)
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
             var count = BitOperations.LeadingZeroCount((uint)range) - 24;
-            range <<= count; value <<= count; bits -= count;
+            range <<= count; bits -= count;
             Fill(in data, ref position, ref bits, ref value);
         }
 
         internal void Publish(ref Vp8BooleanReader target)
         {
             // The previous decision began with >=8 known future bits and needs
-            // at most7 to normalize. Publish without reading canceled input.
+            // at most7 to normalize. Publish without reading following input.
             var count = BitOperations.LeadingZeroCount((uint)Range) - 24;
             var bits = Bits - count;
             target.position = Position - (bits + 7) / 8; target.shift = (bits - 1) & 7;
-            target.range = Range << count; target.value = (int)((Value << count) >> 24);
+            target.range = Range << count; target.value = (int)((Value >> bits) & 255);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Fill()
+        private static void Fill(in ReadOnlySpan<byte> data, ref int position, ref int bits, ref ulong value)
         {
-            // After normalization, Value<Range*2^24<2^32 and the low24-Bits
-            // bits are zero. A16bit refill fits that zero region and returns
-            // 17..23known future bits, before the next decision.
-            if (Bits >= 8) return;
-            Value |= (uint)BinaryPrimitives.ReadUInt16BigEndian(data.Slice(Position, 2)) << (8 - Bits);
-            Position += 2; Bits += 16;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void Fill(in ReadOnlySpan<byte> data, ref int position, ref int bits, ref uint value)
-        {
-            // After normalization, Value<Range*2^24<2^32 and the low24-Bits
-            // bits are zero. A16bit refill fits that zero region and returns
-            // 17..23known future bits, before the next decision.
+            // With bits<8, the code contains at most15bits. Appending32
+            // fits UInt64 and leaves32..39future bits before a decision.
+            // The original272B/block admission covers all lookahead.
             if (bits >= 8) return;
-            value |= (uint)BinaryPrimitives.ReadUInt16BigEndian(data.Slice(position, 2)) << (8 - bits);
-            position += 2; bits += 16;
+            value = value << 32 | BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4));
+            position += 4; bits += 32;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal int Token(ReadOnlySpan<byte> p, bool previousZero)
+        internal static int Token(in ReadOnlySpan<byte> data, ReadOnlySpan<byte> p, bool previousZero,
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
-            // Keep one decision's arithmetic state local. The same bit core
-            // also serves the cancellable caller, which publishes every bit.
-            var position = Position; var bits = Bits; var range = Range; var value = Value;
-            // The selected window and complete private model exclude a failed
-            // input read here. Live tokens use the per-bit polling wrapper.
             int token;
             if (!previousZero && TokenRead(in data, p[0], ref position, ref bits, ref range, ref value) == 0)
             { token = 11; goto Complete; }
@@ -178,11 +152,12 @@ internal partial struct Vp8BooleanReader
             var upper = TokenRead(in data, p[8], ref position, ref bits, ref range, ref value);
             token = 7 + 2 * upper + TokenRead(in data, p[9 + upper], ref position, ref bits, ref range, ref value);
         Complete:
-            Position = position; Bits = bits; Range = range; Value = value;
             return token;
         }
 
-        internal int Category(int category)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Category(in ReadOnlySpan<byte> data, int category,
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
             ReadOnlySpan<byte> p = category switch
             {
@@ -190,9 +165,10 @@ internal partial struct Vp8BooleanReader
                 3 => [176, 155, 140, 135], 4 => [180, 157, 141, 134, 130],
                 _ => [254, 254, 243, 230, 196, 177, 153, 140, 133, 130, 129]
             };
-            ReadOnlySpan<int> bases = [5, 7, 11, 19, 35, 67]; var value = 0;
-            foreach (var probability in p) value = value * 2 + Read(probability);
-            return bases[category] + value;
+            ReadOnlySpan<int> bases = [5, 7, 11, 19, 35, 67]; var sample = 0;
+            foreach (var probability in p)
+                sample = sample * 2 + Read(in data, probability, ref position, ref bits, ref range, ref value);
+            return bases[category] + sample;
         }
     }
 }

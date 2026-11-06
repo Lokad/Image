@@ -31,15 +31,18 @@ Current scope and remaining work:
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
   [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
-  [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) reuses final
-  RGBA storage through compressed alpha and rendering. Complete span/stream decode
-  independently saves215/228µs (3.25%/3.46% raw); both raw and normalized confidence
-  views separate. Warm allocation falls1,434,731→238,384B/span operation;
-  stream238,480B. Coarse admitted peak884,699→751,768B, retained output531,468B.
+  [Block-local arithmetic state](../benchmarks/VP8-BLOCK-STATE-RESERVOIR.md) removes
+  repeated state publication and code-value shifts. Complete alpha validation
+  independently saves207µs/3.35%raw; span/stream decode saves158/106µs. All five
+  affected complete controls have separated raw/normalized confidence views.
+  Five costs refresh; unchanged per-bit cancellable decoding reuses valid evidence.
+  No added heap/retained storage; at most8Bextra window stack layout fits the existing
+  allowance. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
+  its allocation reduction:238,384B/span and238,480B/stream. Coarse admitted peak
+  751,768B, retained output531,468B remain unchanged.
   Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays
   idle after this sequential case. Governed calls bypass it. GC totals, admitted
   capacity and physical peak differ; native allocation/physical peak are unmeasured.
-  All five affected decoder costs refresh; validation reuses unchanged bodies.
   All six reader cases remain gaps. Original/native contexts and boundaries remain
   explicit; no fresh-context setup parity is claimed. Earlier
   [token](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) and
@@ -120,7 +123,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 6,372.36 | 6,002.93 | 1.062 / 1.066 | 238,480 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 6,266.42 | 5,985.24 | 1.047 / 1.051 | 238,480 | — |
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
@@ -247,7 +250,7 @@ settings do not establish matched quality.
 | Validate JPEG baseline420, span | 543.780 | 689.481 | 0.789 / 0.815 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 286.239 | 289.052 | 0.990 / 1.001 | 4,072 | Confidence open |
 | Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
-| Validate VP8+alpha, span | 6,174.289 | 5,443.414 | 1.134 / 1.139 | 554,478 | Confirmed gap |
+| Validate VP8+alpha, span | 5,967.449 | 5,442.741 | 1.096 / 1.106 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,836.823 | 3,623.647 | 0.783 / 0.790 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

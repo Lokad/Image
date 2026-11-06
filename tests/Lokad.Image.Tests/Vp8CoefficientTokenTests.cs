@@ -10,6 +10,9 @@ public sealed partial class Vp8CoefficientBlockTests
     public void TokenPreparationKeepsEverySymbolAndPublishedCursorExact()
     {
         var random = new Random(6386369); var seen = new bool[12];
+        byte[][] categories = [[159], [165, 145], [173, 148, 140], [176, 155, 140, 135],
+            [180, 157, 141, 134, 130], [254, 254, 243, 230, 196, 177, 153, 140, 133, 130, 129]];
+        int[] bases = [5, 7, 11, 19, 35, 67];
         using var root = new TestMemoryBudget(0);
         using var reference = new OperationContext(new() { MemoryBudget = root }, default);
         using var cancellation = new CancellationTokenSource();
@@ -32,15 +35,28 @@ public sealed partial class Vp8CoefficientBlockTests
                 var previousZero = (tokenIndex & 1) == 0;
                 var token = expected.CoefficientToken(data, probabilities, reference, previousZero);
                 seen[token] = true;
-                Assert.Equal(token, window.Token(probabilities, previousZero));
+                Assert.Equal(token, Vp8BooleanReader.BlockReader.Token(data, probabilities, previousZero,
+                    ref window.Position, ref window.Bits, ref window.Range, ref window.Value));
                 Assert.Equal(token, checkedReader.Token(in row, previousZero));
                 var actual = initial; window.Publish(ref actual);
                 var checkedActual = initial; checkedReader.Publish(ref checkedActual);
                 Assert.Equal(State(expected), State(actual));
                 Assert.Equal(State(expected), State(checkedActual));
+                if (token is >= 5 and <= 10)
+                {
+                    var category = token - 5; var sample = 0;
+                    foreach (var p in categories[category]) sample = sample * 2 + expected.Read(data, p, reference);
+                    sample += bases[category];
+                    Assert.Equal(sample, Vp8BooleanReader.BlockReader.Category(data, category,
+                        ref window.Position, ref window.Bits, ref window.Range, ref window.Value));
+                    Assert.Equal(sample, checkedReader.Category(category));
+                    window.Publish(ref actual); checkedReader.Publish(ref checkedActual);
+                    Assert.Equal(State(expected), State(actual)); Assert.Equal(State(expected), State(checkedActual));
+                }
                 var probability = (tokenIndex % 4) switch { 0 => 0, 1 => 127, 2 => 128, _ => 255 };
                 var bit = expected.Read(data, probability, reference);
-                Assert.Equal(bit, window.Read(probability));
+                Assert.Equal(bit, Vp8BooleanReader.BlockReader.Read(data, probability,
+                    ref window.Position, ref window.Bits, ref window.Range, ref window.Value));
                 Assert.Equal(bit, checkedReader.Read(probability));
                 window.Publish(ref actual); checkedReader.Publish(ref checkedActual);
                 Assert.Equal(State(expected), State(actual));
