@@ -86,7 +86,7 @@ public sealed class Vp8PreparedQuantizationTests
             Assert.Equal(expectedLevels.Any(v => v != 0), prepared.Mask != 0);
             Assert.Equal(expectedLevels.Skip(1).Count(v => v != 0) <= 3, prepared.FlatNonDc);
             var expected = rate.Residual(expectedLevels, 3, 0, initialContext, out _);
-            Assert.Equal(expected, Vp8RatePlan.Luma4Prepared(rate.Values, prepared, initialContext));
+            Assert.Equal(expected, Vp8RatePlan.Luma4Prepared(rate.Values, rate.Luma4Prices, prepared, initialContext));
             input.AsSpan(0, 16).Fill(short.MinValue); Array.Fill(values, 0);
             Array.Fill(raster, (short)28000); Array.Fill(levels, (short)-28000);
             prepared.PublishRaster(raster); prepared.PublishLevels(levels);
@@ -104,15 +104,15 @@ public sealed class Vp8PreparedQuantizationTests
         for (var p = 0; p < 16; p++) { values[p] = 1; values[16 + p] = 131072; }
         Array.Clear(input); input[0] = 16384;
         var invalid = new Vp8BlockQuantization.FullBlockQuantizer(new(values)).Prepare(input);
-        Assert.Throws<ArgumentException>(() => Vp8RatePlan.Luma4Prepared(rate.Values, invalid, initialContext));
+        Assert.Throws<ArgumentException>(() => Vp8RatePlan.Luma4Prepared(rate.Values, rate.Luma4Prices, invalid, initialContext));
         var empty = default(Vp8BlockQuantization.PreparedBlock);
-        Assert.Throws<ArgumentException>(() => Vp8RatePlan.Luma4Prepared(rate.Values, empty, 3));
+        Assert.Throws<ArgumentException>(() => Vp8RatePlan.Luma4Prepared(rate.Values, rate.Luma4Prices, empty, 3));
         for (var p = 0; p < 16; p++) { values[p] = 4; values[16 + p] = 32768; }
         input.AsSpan(0, 16).Fill(37);
         var reused = new Vp8BlockQuantization.FullBlockQuantizer(new(values));
-        for (var i = 0; i < 1000; i++) Vp8RatePlan.Luma4Prepared(rate.Values, reused.Prepare(input), initialContext);
+        for (var i = 0; i < 1000; i++) Vp8RatePlan.Luma4Prepared(rate.Values, rate.Luma4Prices, reused.Prepare(input), initialContext);
         var start = GC.GetAllocatedBytesForCurrentThread(); var checksum = 0;
-        for (var i = 0; i < 10000; i++) checksum ^= Vp8RatePlan.Luma4Prepared(rate.Values, reused.Prepare(input), initialContext);
+        for (var i = 0; i < 10000; i++) checksum ^= Vp8RatePlan.Luma4Prepared(rate.Values, rate.Luma4Prices, reused.Prepare(input), initialContext);
         Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - start); Assert.Equal(0, checksum); Assert.Equal(retained, root.Bytes);
     }
 }

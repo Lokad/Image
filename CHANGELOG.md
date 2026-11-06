@@ -2,8 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
-- Share VP8 quantizer preparation across ordinary luma/chroma block sequences,
-  preserving exact packets, portable fallbacks and memory ownership.
+- Share VP8 quantizer/rate preparation across luma/chroma searches, using bounded
+  price views and deferred scratch writes with exact packets, unchanged admitted
+  capacity and portable fallbacks.
 
 - Apply live progressive JPEG correction bits through exact integer selection,
   preserving pixels, cancellation prefixes and overflow behavior.
@@ -28,9 +29,6 @@
 
 - Prepare fixed VP8 trellis importance without repeated exponential evaluation,
   preserving checked custom models, exact packets and memory ownership.
-
-- Share luma4 quantization/rate preparation and defer scratch writes until needed,
-  preserving exact WebP packets and portable fallbacks.
 
 - Share exact VP8 residual preparation between statistics and partition encoding,
   with vectorized validation/termination and a portable scalar path.

@@ -159,6 +159,7 @@ internal static class Vp8MacroblockDecision
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
         var fused = !trellis && Avx512F.IsSupported && Avx2.IsSupported;
         var fullQuantizer = fused ? new Vp8BlockQuantization.FullBlockQuantizer(matrix) : default;
+        var preparedPrices = fused ? rate.Luma4Prices : default;
         var packedPixels = Avx2.IsSupported && Sse41.IsSupported;
         for (var b = 0; b < 16; b++)
         {
@@ -223,7 +224,7 @@ internal static class Vp8MacroblockDecision
                 {
                     prepared = fullQuantizer.Prepare(candidate);
                     any = prepared.Mask != 0; flat = prepared.FlatNonDc;
-                    rateCost = Vp8RatePlan.Luma4Prepared(rateValues, prepared, initialContext);
+                    rateCost = Vp8RatePlan.Luma4Prepared(rateValues, preparedPrices, prepared, initialContext);
                 }
                 else
                 {

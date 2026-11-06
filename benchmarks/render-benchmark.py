@@ -1609,12 +1609,12 @@ def render():
                for v in vp8_owned['independentPhotograph']['views'].values())
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
-    block_preparation = json.loads((ROOT / 'benchmarks/vp8-ordinary-block-preparation-evidence.json').read_text(encoding='utf-8'))
+    block_preparation = json.loads((ROOT / 'benchmarks/vp8-bounded-price-view-evidence.json').read_text(encoding='utf-8'))
     assert block_preparation['productionAccepted'] and block_preparation['requiredMaterialPaths'] == 283
-    assert block_preparation['sourceProof']['allOriginalSingleBlockQuantizationTextExact']
-    assert block_preparation['sourceProof']['cancellationCheckCountsAndModePositionsUnchanged']
+    assert block_preparation['sourceProof']['windowUsesOnlyExistingStorage']
+    assert block_preparation['sourceProof']['cancellationCheckPlacementUnchanged']
     assert block_preparation['raw']['mirrored'] and block_preparation['raw']['allMembersVerified']
-    assert block_preparation['statusCounts'] == {'pass': 3, 'gap': 3, 'uncertain': 3}
+    assert block_preparation['statusCounts'] == {'pass': 3, 'gap': 2, 'uncertain': 4}
     assert block_preparation['cases']['diagram']['upper'] <= 1
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
@@ -1642,8 +1642,8 @@ def render():
             owner = block_preparation
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        if owner is vp8_owned and current_case in vp8_owned['unchangedCases']:
-            reuse = vp8_owned['unchangedCases'][current_case]
+        if owner is block_preparation and current_case in block_preparation['unchangedCases']:
+            reuse = block_preparation['unchangedCases'][current_case]
             assert current['reusedUnchangedPath'] and reuse['sourceApplies']
             assert current['librarySha256'] == reuse['librarySha256']
         else:
@@ -1886,20 +1886,20 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [shared block preparation](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md)
-  reuses fixed quantizer operands across independent luma/chroma sequences.
-  Complete effort5 encoding independently saves601µs/8.14%raw with separated
-  confidence; normalized9.59%point gain remains uncertain. Exact packets and
-  741,065B/op are unchanged. Default diagram now passes, upper0.975.
-  Nine refreshed controls:3pass/3gaps/3uncertain. Effort5 is uncertain at
-  {selected_cost['managedUs']:,.0f}µs, ratio{selected_cost['ratio']:.3f}/upper{selected_cost['upper']:.3f}.
-  Photograph's adverse standalone295µs point is inconclusive; its scoped paired
-  gain is not a standalone claim. Effort6raw slowdown coincides with native
-  clock movement; its paired interval overlaps. All adverse/uncertain points
-  remain linked. Eight allocation totals are unchanged; distortion differs−11B/op
-  as a GC/batch total. No new heap site; peaks/native allocations are not newly measured.
-  Earlier [prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
-  and [rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+- **WebP:** [prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md)
+  independently save 514µs (4.70% raw) on complete photograph encoding; raw
+  confidence separates, while reference-normalized confidence overlaps.
+  Exact packets, allocations and the 20,192B plan remain unchanged. Eight
+  affected controls refresh; distortion reuses unchanged evidence:
+  **3 pass, 2 gaps, 4 uncertain**. Photograph and effort5 remain uncertain;
+  effort5 measures {selected_cost['managedUs']:,.0f}µs, ratio {selected_cost['ratio']:.3f}/upper {selected_cost['upper']:.3f}.
+  Diagram's +71µs raw and opaque16's +3.67% normalized losses remain explicit;
+  both still pass parity. The scoped opaque16 pair is inconclusive and does
+  not replace its standalone loss. Trellis/alpha raw gains track the reference;
+  no normalized incremental gains are claimed. Earlier
+  [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
+  [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
+  [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
   retain their scoped gains and superseded costs as history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged

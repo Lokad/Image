@@ -25,22 +25,26 @@ internal sealed partial class Vp8RatePlan
         var mask=~(uint)Avx2.MoveMask(Avx2.CompareEqual(absolute,Vector256<ushort>.Zero).AsByte());
         if(first!=0)mask&=~3U;
         nonzero=mask!=0;
-        return PreparedResidualCost(values,absolute,type,first,initialContext,nonzero?(31-BitOperations.LeadingZeroCount(mask))/2:-1);
+        return PreparedResidualCost(values,values,absolute,type,first,initialContext,
+            nonzero?(31-BitOperations.LeadingZeroCount(mask))/2:-1,LevelsAt+type*8*3*68,ushort.MaxValue);
     }
 
     // Prepared quantization already supplies exact diagonal levels/nonzero bits.
     // Retain range/context rejection even for independently constructed matrices.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static int Luma4Prepared(ReadOnlySpan<ushort> values,Vp8BlockQuantization.PreparedBlock block,int initialContext)
+    internal static int Luma4Prepared(ReadOnlySpan<ushort> values,ReadOnlySpan<ushort> prices,
+        Vp8BlockQuantization.PreparedBlock block,int initialContext)
     {
         if((uint)initialContext>2)throw new ArgumentException("Invalid VP8 residual layout or context.");
         var absolute=Avx2.Abs(block.Levels).AsUInt16();
         if(!Vector256.EqualsAll(Avx2.Min(absolute,Vector256.Create((ushort)2047)),absolute))throw new ArgumentException("VP8 residual level exceeds 2,047.");
-        return PreparedResidualCost(values,absolute,3,0,initialContext,31-BitOperations.LeadingZeroCount(block.Mask));
+        return PreparedResidualCost(values,prices[..Luma4PriceWords],absolute,3,0,initialContext,
+            31-BitOperations.LeadingZeroCount(block.Mask),Luma4PriceOffset,Luma4PriceWords-1);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int PreparedResidualCost(ReadOnlySpan<ushort> values,Vector256<ushort> absolute,int type,int first,int initialContext,int last)
+    private static int PreparedResidualCost(ReadOnlySpan<ushort> values,ReadOnlySpan<ushort> prices,
+        Vector256<ushort> absolute,int type,int first,int initialContext,int last,int priceOffset,int addressMask)
     {
         var index=(type*8+Vp8Tables.CoefficientBand(first))*3+initialContext;
         if(last<0)return values[EobAt+index*2];
@@ -50,17 +54,20 @@ internal sealed partial class Vp8RatePlan
         var previous=Vector256.Shuffle(contexts,Vector256.Create((ushort)0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14));
         previous=previous.WithElement(first,(ushort)initialContext);
         var indices=Avx2.Add(clamped,Avx2.Add(Avx2.MultiplyLow(previous,Vector256.Create((ushort)68)),
-            Avx2.Add(ResidualBandOffsets,Vector256.Create((ushort)(LevelsAt+type*8*3*68)))));
+            Avx2.Add(ResidualBandOffsets,Vector256.Create((ushort)priceOffset))));
         // These initialized local vectors each contain exactly sixteen words.
         // Views remain within this call; avoid two separate localloc arrays.
         ReadOnlySpan<ushort> magnitudes=MemoryMarshal.Cast<Vector256<ushort>,ushort>(MemoryMarshal.CreateReadOnlySpan(ref absolute,1));
         ReadOnlySpan<ushort> addresses=MemoryMarshal.Cast<Vector256<ushort>,ushort>(MemoryMarshal.CreateReadOnlySpan(ref indices,1));
         var cost=initialContext==0?values[EobAt+index*2+1]:0;
-        for(var p=first;p<=last;p++)cost+=values[addresses[p]];
+        // Valid type3 addresses occupy416..2047 within the borrowed2048-word
+        // window; masking is exact. General addresses retain all sixteen bits.
+        var end=Math.Min(last+1,16);
+        for(var p=first;p<end;p++)cost+=prices[addresses[p]&addressMask];
         // Most blocks need only the combined lookup. Larger magnitudes share
         // level67's variable price, but need their own signed category delta.
         if(!Vector256.EqualsAll(absolute,clamped))
-            for(var p=first;p<=last;p++)
+            for(var p=first;p<end;p++)
                 if(magnitudes[p]>67)cost+=values[FixedAt+magnitudes[p]]-values[FixedAt+67];
         if(last<15)
         {

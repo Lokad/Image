@@ -10,6 +10,7 @@ internal sealed partial class Vp8RatePlan : IDisposable
 {
     private const int FixedAt = 256, ModesAt = FixedAt + 2048, EobAt = ModesAt + 1008;
     private const int LevelsAt = EobAt + 192, Length = LevelsAt + 4 * 8 * 3 * 68;
+    private const int Luma4PriceWords = 2048, Luma4PriceOffset = Luma4PriceWords - 8 * 3 * 68;
     private readonly OperationContext context;
     private ushort[]? storage;
     private long capacity;
@@ -21,6 +22,9 @@ internal sealed partial class Vp8RatePlan : IDisposable
     internal ReadOnlySpan<ushort> Modes => Values.Slice(ModesAt, 1008);
     internal ReadOnlySpan<ushort> EndOfBlock => Values.Slice(EobAt, 192);
     internal ReadOnlySpan<ushort> CombinedLevels => Values[LevelsAt..];
+    // A bounded view into the existing owner, not another table. Its last1632
+    // words are type3 prices; the preceding416 words need never be indexed.
+    internal ReadOnlySpan<ushort> Luma4Prices => Values.Slice(Length - Luma4PriceWords, Luma4PriceWords);
 
     // Cost is ceil(256 * mean renormalization shifts) over the repeated-zero
     // orbit of the inclusive boolean range. Each normalized range is128..255;

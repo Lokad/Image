@@ -22,18 +22,22 @@ public sealed class Vp8RatePlanTests
         using var root = new TestMemoryBudget(21_216); using var context = new OperationContext(new() { MemoryBudget = root }, default);
         using var plan = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, context);
         var before = plan.Values.ToArray(); var prefix = before.Length - plan.EndOfBlock.Length - plan.CombinedLevels.Length;
+        var prices = plan.Luma4Prices; Assert.Equal(2048, prices.Length);
+        Assert.True(prices[^1632..].SequenceEqual(plan.CombinedLevels[^1632..]));
         Assert.True(root.TryReserve(1024, out var caller));
         using (caller)
         {
             using var expectedContext = new OperationContext(new(), default);
             using var expected = Vp8RatePlan.Create(probabilities, expectedContext);
             var attempts = root.Attempts; var allocated = GC.GetAllocatedBytesForCurrentThread();
-            plan.Refresh(probabilities);
+            plan.Refresh(probabilities); var repeatedPrices = plan.Luma4Prices;
             allocated = GC.GetAllocatedBytesForCurrentThread() - allocated;
             Assert.Equal(0, allocated); Assert.Equal(attempts, root.Attempts);
             Assert.Equal(21_216, root.Bytes); Assert.Equal(21_216, root.Peak); Assert.Equal(20_192, plan.CapacityBytes);
             Assert.True(plan.Values[..prefix].SequenceEqual(before.AsSpan(0, prefix)));
             Assert.True(plan.Values.SequenceEqual(expected.Values));
+            Assert.True(prices.SequenceEqual(repeatedPrices));
+            Assert.True(prices[^1632..].SequenceEqual(expected.CombinedLevels[^1632..]));
             probabilities.AsSpan().Fill(99); Assert.True(plan.Values.SequenceEqual(expected.Values));
         }
         plan.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
@@ -51,6 +55,7 @@ public sealed class Vp8RatePlanTests
         Assert.True(plan.Values.SequenceEqual(before)); Assert.Equal(attempts, root.Attempts);
         Assert.Equal(plan.CapacityBytes, root.Bytes); plan.Dispose(); Assert.Equal(0, root.Bytes);
         Assert.Throws<ObjectDisposedException>(() => plan.Refresh(Vp8Tables.CoefficientProbabilities));
+        Assert.Throws<ObjectDisposedException>(() => plan.Luma4Prices.Length);
         using var laterContext = new OperationContext(new() { MemoryBudget = root }, default);
         using var later = Vp8RatePlan.Create(Vp8Tables.CoefficientProbabilities, laterContext);
         Assert.True(later.Values.SequenceEqual(before)); later.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
