@@ -31,9 +31,8 @@ internal sealed partial class Vp8RatePlan
     // Prepared quantization already supplies exact diagonal levels/nonzero bits.
     // Retain range/context rejection even for independently constructed matrices.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal int Luma4Prepared(Vp8BlockQuantization.PreparedBlock block,int initialContext)
+    internal static int Luma4Prepared(ReadOnlySpan<ushort> values,Vp8BlockQuantization.PreparedBlock block,int initialContext)
     {
-        var values=Values;
         if((uint)initialContext>2)throw new ArgumentException("Invalid VP8 residual layout or context.");
         var absolute=Avx2.Abs(block.Levels).AsUInt16();
         if(!Vector256.EqualsAll(Avx2.Min(absolute,Vector256.Create((ushort)2047)),absolute))throw new ArgumentException("VP8 residual level exceeds 2,047.");

@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "stage": "PVP381",
+  "stage": "RVP383",
   "date": "2026-11-06",
   "productionAccepted": true,
   "productionChanged": true,
@@ -8,46 +8,66 @@
   "warmParityComplete": false,
   "publicationPostponed": true,
   "producers": {
-    "windowsSha256": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
-    "linuxSha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
+    "windowsSha256": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+    "linuxSha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585"
   },
   "sources": {
-    "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "ec8aeae94e9431ed5dc5d43ea9f10effb9b7e52423b5cd76b922d2e82823a48d"
+    "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "dadf532a09b85a498dd7884ff0738eb1ae5c49ac6062aabf435c1acde26880de",
+    "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "541cb8a73158e66c6db04267fdc896ab28c03d941a6268e682fd979447c782b1",
+    "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "766ef18c22a68080b2846c3edc38f60b1750669bcef2ac6829e40cbd6cae7944"
   },
   "design": {
     "project": "Lokad.Image",
-    "stage": "PVP381",
+    "stage": "RVP383",
     "productionChanged": true,
     "productionAccepted": true,
     "baseline": {
-      "windows": "376725b0ba0458f1be1c2265b7a20dd50b1d88065f84f678519a2ac55a97320c",
-      "linux": "cddbdf58abebf24d50e947f53066998c78cb1050cb56613f733a258e09e9bcfc"
+      "windows": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
+      "linux": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
     },
     "sources": {
-      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "ec8aeae94e9431ed5dc5d43ea9f10effb9b7e52423b5cd76b922d2e82823a48d"
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "dadf532a09b85a498dd7884ff0738eb1ae5c49ac6062aabf435c1acde26880de",
+      "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "541cb8a73158e66c6db04267fdc896ab28c03d941a6268e682fd979447c782b1",
+      "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "766ef18c22a68080b2846c3edc38f60b1750669bcef2ac6829e40cbd6cae7944"
     },
-    "hypothesis": "Avoid full40Bscore construction/price copies for rejected RDO candidates.",
-    "endState": "One exact scalar price expression, strict winner test, then publication of a complete record only for a winner/uniform snapshot; keep final repricing and aggregation.",
-    "boundaries": "Existing photograph effort4/Q75 exact17688B primary; existing trellis and ordinarydiagram guard shared luma/chroma. Complete normalization/preparation/admission/output ownership/disposal, one CPU. No new workload grid or reference changes.",
-    "temporaryTransition": "Metric.Price/Add remain legitimate for returned/aggregated data. No new heap, owner, cache, quota, compatibility entry or numerical policy.",
-    "acceptance": "Existing packet/mode/tie/uniform/alias/cancel/admission oracles first, W/L normal/scalar focused checks; short complete-operation screen then independent confirmation if useful. Resolve affected caller contradictions before broad/package. Exact bytes and existing quality/resource contracts outrank CPU.",
-    "evidence": "Current qualified photo capture shows a fullMetric ctor/copy at0x1542 and exposes repeated publication before rejection. Samples/static code are leads, not phase costs or predicted gains."
+    "hypothesis": "Borrow stable rate-table views per synchronous luma4search; prepare ten mode prices and external nonzero context once per block, rather than reacquiring/recomputing for each ordered candidate.",
+    "endState": "Same exact combined scalar rate math and winner sequence; old instance Luma4Prepared entry removed, actual borrowed-span core used by production and existing independent oracles. No new table, owner, object, pool, cache, quota, session or numerical policy.",
+    "boundaries": "Frozen complete photograph Q75/effort4 primary; ordinarydiagram and trellis shared-call guards. Full normalization, preparation, admission, independent output and disposal stay timed. Existing22packet/quality settings and failure/cancellation ownership checks.",
+    "lifetime": "Views confined to Luma4local stack. Frame retains charged rate owner across synchronous Select; probability refresh occurs before a macroblock, never inside Luma4. No plan disposal/callback is possible during this internal search. Scalar/general residual stays the actual fallback; no forwarding wrapper.",
+    "transition": "No temporary heap/owner/duplication. Prepared core signature changes; existing tests bind actual core with current plan.Values, retaining invalid context/level and native residual comparison. Trellis preserves its existing cancellation/disposed-owner guard.",
+    "evidence": "One targeted current immutable JIT inspection, no profile or performance points: plainLuma4has repeated Values/Modes calls and mode/context arithmetic inside candidate loops. Static code and older low-magnitude coverage counts are leads, not phase times, current frequency proof or predicted gains.",
+    "acceptance": "Focused normal/scalar W/L first; short complete-operation primary/caller screens; independent confirmation only for useful lead or material contradiction. Preserve all points; exact packets and ownership before CPU. Reuse one immutable version; broad/off/package only for a coherent accepted stage."
   },
   "sourceProof": {
     "project": "Lokad.Image",
-    "originalSourceSha256": "4b8891358e0560aa4632583d9c5219c4af26cd822e205be65384914b85cfe443",
-    "candidateSourceSha256": "ec8aeae94e9431ed5dc5d43ea9f10effb9b7e52423b5cd76b922d2e82823a48d",
-    "allTextExactOutsideFourPublicationBlocksAndSharedPrice": true,
-    "sourceProjectionSha256": "74b8d1ec9c0bd49b7bade4e43d7796c858e89fadfbdedd29c55eaf6b5fad99a2",
-    "sameExactIntegerPriceExpression": true,
-    "firstCandidateAndStrictTiesPreserved": true,
-    "uniformCacheMovedOnlyForGuaranteedFirstWinner": true,
-    "uniformFlat140AndChroma1120SurchargesPreserved": true,
-    "finalModeLambdaRepricingAndAggregationPreserved": true,
-    "quantizationPruningPixelsLevelsStatisticsCancellationAdmissionAndOwnershipUntouched": true,
-    "borrowedTrellisAndDpLifetimesUnchanged": true,
-    "newOwnedHeapBytes": 0,
-    "newOwnersPoolsCachesQuotas": 0,
+    "allOtherSourceTextExact": true,
+    "sameRateMathValidationPruneTiePublication": true,
+    "modeHeaderRowTenIndicesExact": true,
+    "contextInvariantWithinTenCandidates": true,
+    "viewsLocalToSearchBeforeRefreshOrDisposal": true,
+    "ownedTableUnchanged": true,
+    "newHeapOrOwnerBytes": 0,
+    "actualProductionCoreAndTestsUseBorrowedSpan": true,
+    "oldInstanceEntryRemoved": true,
+    "newSources": {
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "dadf532a09b85a498dd7884ff0738eb1ae5c49ac6062aabf435c1acde26880de",
+      "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "541cb8a73158e66c6db04267fdc896ab28c03d941a6268e682fd979447c782b1",
+      "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "766ef18c22a68080b2846c3edc38f60b1750669bcef2ac6829e40cbd6cae7944"
+    },
+    "originalSources": {
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "ec8aeae94e9431ed5dc5d43ea9f10effb9b7e52423b5cd76b922d2e82823a48d",
+      "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "6c5276dfcb8831c625914751c05a1872564475a1d3a0ad4e1dc0693c88caa7e5",
+      "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "645bd5315928223f7e1434c48ce333ee341ac32765a9ef8d03035b53f48de786"
+    },
+    "sourceProjection": "Exact reversal of search-view/context/header preparation and sole fused-core signature; test edits only actual entry binding, all independent expected results unchanged.",
+    "lifetime": "Frame rate owner using scope encloses synchronous Select. Refresh executes before Select between macroblocks; no callback/disposal/refresh inside Luma4. All table/span views end before returning.",
+    "oldLowMagnitudeAudit": "Rate math remains applicable as unchanged algorithm evidence, but older candidate counts/generated caller code are historical after macroblock revisions. No current-frequency or performance claim.",
+    "diagnostic": {
+      "source": "tmp/rpe382-inspection.json",
+      "instrumentedElapsedDiscarded": true,
+      "exactOriginalPacketCases": 22,
+      "productionBuilds": 0
+    },
     "affectedDisplayedCases": [
       "opaque8",
       "opaque16",
@@ -57,110 +77,109 @@
       "alpha",
       "alpha16"
     ],
-    "reusedDisplayedCases": [
+    "unchangedDisplayedCases": [
       "distortion"
     ],
-    "otherDisplayedCostsReused": 118,
-    "scope": "All four scalar/publication replacements reverse exactly to the qualified source; helper expression canonically equals the old long price. Pure40Brecords have no side effects. Uniform mode0 reaches publication before any other mode and necessarily wins; repeating modes preserve the old strict less-than and surcharge. Shared inverse/decoder/other codecs/edit/text and distortion-only Transform/CorrectDc remain identical."
+    "otherDisplayedCostsReused": 118
   },
   "cases": {
     "opaque8": {
-      "managedUs": 16092.232935897438,
-      "nativeUs": 15493.467895833333,
-      "ratio": 1.0386462891387362,
-      "lower": 0.9097704271846657,
-      "upper": 1.0878903269242086,
+      "managedUs": 15072.629713286715,
+      "nativeUs": 15493.005,
+      "ratio": 0.9728667687957704,
+      "lower": 0.9666058638428058,
+      "upper": 0.9816220718432196,
       "allocatedBytes": 1201552,
-      "status": "uncertain",
-      "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "status": "pass",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
       "caseId": "EncodeOpaque8",
       "actualIterations": 12,
-      "filteredResults": 12,
+      "filteredResults": 11,
       "managedActualNanoseconds": [
-        15413710.153846154,
-        15325434.153846154,
-        15749357.461538462,
-        16071607.692307692,
-        15901932.307692308,
-        15347046.153846154,
-        15807359.923076924,
-        16813450.769230768,
-        16660595.538461538,
-        16611164.538461538,
-        16671693.846153846,
-        16733442.692307692
+        15087242.538461538,
+        15066860.153846154,
+        15044730.461538462,
+        15076374.538461538,
+        15068227.615384616,
+        15080072.461538462,
+        15062249.307692308,
+        15068712.153846154,
+        15078877.538461538,
+        15092072.923076924,
+        15073507.153846154,
+        15337351.153846154
       ],
       "managedStatistics": {
         "statistics": {
-          "N": 12,
-          "Mean": 16092232.935897438,
-          "StandardError": 167387.2064746413,
+          "N": 11,
+          "Mean": 15072629.713286715,
+          "StandardError": 3878.766354350248,
           "ConfidenceInterval": {
-            "N": 12,
-            "Mean": 16092232.935897438,
-            "StandardError": 167387.2064746413,
+            "N": 11,
+            "Mean": 15072629.713286715,
+            "StandardError": 3878.766354350248,
             "Level": 12,
-            "Margin": 742693.5764307146,
-            "Lower": 15349539.359466724,
-            "Upper": 16834926.51232815
+            "Margin": 17791.489564818177,
+            "Lower": 15054838.223721897,
+            "Upper": 15090421.202851532
           }
         },
         "unfilteredActualStatistics": {
           "N": 12,
-          "Mean": 16092232.935897438,
-          "StandardError": 167387.2064746413,
+          "Mean": 15094689.833333334,
+          "StandardError": 22342.476440575112,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 16092232.935897438,
-            "StandardError": 167387.2064746413,
+            "Mean": 15094689.833333334,
+            "StandardError": 22342.476440575112,
             "Level": 12,
-            "Margin": 742693.5764307146,
-            "Lower": 15349539.359466724,
-            "Upper": 16834926.51232815
+            "Margin": 99133.10630752175,
+            "Lower": 14995556.727025812,
+            "Upper": 15193822.939640855
           }
         }
       },
       "nativeBrackets": [
         {
-          "mean": 15493467.895833334,
-          "standardError": 4198.791176426504,
-          "confidenceLower": 15474837.946142536,
-          "confidenceUpper": 15512097.845524132,
+          "mean": 15501124.5625,
+          "standardError": 2816.358865386494,
+          "confidenceLower": 15488206.2233203,
+          "confidenceUpper": 15514042.9016797,
           "sampleNanoseconds": [
-            15525790.25,
-            15492745.0,
-            15504871.0,
-            15505041.25,
-            15489715.5,
-            15486345.5,
-            15496616.0,
-            15494565.5,
-            15476751.0,
-            15484087.0,
-            15469585.0,
-            15495501.75
+            15490048.5,
+            15498764.25,
+            15498937.0,
+            15506298.0,
+            15510349.25,
+            15514700.75,
+            15503538.75,
+            15516528.5,
+            15500046.0,
+            15489640.25,
+            15485739.25,
+            15498904.25
           ]
         },
         {
-          "mean": 16788153.1875,
-          "standardError": 18870.695014257984,
-          "confidenceLower": 16704424.303644137,
-          "confidenceUpper": 16871882.07135586,
+          "mean": 15493005.0,
+          "standardError": 3318.318698077021,
+          "confidenceLower": 15477784.224347102,
+          "confidenceUpper": 15508225.775652898,
           "sampleNanoseconds": [
-            16701384.75,
-            16780607.5,
-            16861835.5,
-            16801949.75,
-            16765129.0,
-            16806491.5,
-            16918366.0,
-            16808942.75,
-            16838525.0,
-            16714344.5,
-            16750481.75,
-            16709780.25
+            15498629.0,
+            15484324.75,
+            15480503.75,
+            15478841.5,
+            15485674.25,
+            15488528.75,
+            15517324.75,
+            15495659.5,
+            15500156.25,
+            15493008.0,
+            15507632.5,
+            15485777.0
           ]
         }
       ],
@@ -174,107 +193,107 @@
       "nativeReference": "FFmpeg/libwebp VP8",
       "rawGc": "// GC:  0 0 0 15620176 13",
       "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
-      "receipt": "tmp/pvp381-current-opaque8-confirm-receipt.json",
-      "observation": "tmp/pvp381-current-opaque8-confirm-observation.json",
+      "receipt": "tmp/rvp383-current-opaque8-confirm-receipt.json",
+      "observation": "tmp/rvp383-current-opaque8-confirm-observation.json",
       "reusedUnchangedPath": false
     },
     "opaque16": {
-      "managedUs": 16613.630770833333,
-      "nativeUs": 16959.265666666666,
-      "ratio": 0.979619701546826,
-      "lower": 0.9669309713223979,
-      "upper": 0.9867078217202127,
+      "managedUs": 15215.368979020977,
+      "nativeUs": 15556.9278125,
+      "ratio": 0.9780445832496195,
+      "lower": 0.9738101669038457,
+      "upper": 0.9813208599409298,
       "allocatedBytes": 1201552,
       "status": "pass",
-      "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
       "caseId": "EncodeOpaque16",
       "actualIterations": 12,
-      "filteredResults": 12,
+      "filteredResults": 11,
       "managedActualNanoseconds": [
-        16674355.166666666,
-        16602805.166666666,
-        16557579.166666666,
-        16568873.833333334,
-        16587668.166666666,
-        16637900.0,
-        16662559.083333334,
-        16640529.833333334,
-        16601106.833333334,
-        16621067.0,
-        16608358.583333334,
-        16600766.416666666
+        15204276.384615384,
+        15288748.076923076,
+        15228158.692307692,
+        15216916.23076923,
+        15226751.923076924,
+        15214166.692307692,
+        15208317.846153846,
+        15227889.076923076,
+        15217283.076923076,
+        15214112.846153846,
+        15193416.076923076,
+        15217769.923076924
       ],
       "managedStatistics": {
         "statistics": {
-          "N": 12,
-          "Mean": 16613630.770833334,
-          "StandardError": 10200.875426541426,
+          "N": 11,
+          "Mean": 15215368.979020977,
+          "StandardError": 3190.0993471623133,
           "ConfidenceInterval": {
-            "N": 12,
-            "Mean": 16613630.770833334,
-            "StandardError": 10200.875426541426,
+            "N": 11,
+            "Mean": 15215368.979020977,
+            "StandardError": 3190.0993471623133,
             "Level": 12,
-            "Margin": 45261.07348837322,
-            "Lower": 16568369.69734496,
-            "Upper": 16658891.844321707
+            "Margin": 14632.647099796544,
+            "Lower": 15200736.33192118,
+            "Upper": 15230001.626120774
           }
         },
         "unfilteredActualStatistics": {
           "N": 12,
-          "Mean": 16613630.770833334,
-          "StandardError": 10200.875426541426,
+          "Mean": 15221483.903846154,
+          "StandardError": 6772.954831891563,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 16613630.770833334,
-            "StandardError": 10200.875426541426,
+            "Mean": 15221483.903846154,
+            "StandardError": 6772.954831891563,
             "Level": 12,
-            "Margin": 45261.07348837322,
-            "Lower": 16568369.69734496,
-            "Upper": 16658891.844321707
+            "Margin": 30051.460640531688,
+            "Lower": 15191432.443205623,
+            "Upper": 15251535.364486685
           }
         }
       },
       "nativeBrackets": [
         {
-          "mean": 16959265.666666668,
-          "standardError": 7644.853138969652,
-          "confidenceLower": 16925345.611253537,
-          "confidenceUpper": 16993185.7220798,
+          "mean": 15580349.3125,
+          "standardError": 4427.417806451467,
+          "confidenceLower": 15560041.216959719,
+          "confidenceUpper": 15600657.408040281,
           "sampleNanoseconds": [
-            16963000.5,
-            16922376.25,
-            16943025.25,
-            16942812.5,
-            16976353.25,
-            16965026.0,
-            16972655.25,
-            16999503.25,
-            16961908.75,
-            16905743.75,
-            16979658.25,
-            16979125.0
+            15601016.25,
+            15567365.25,
+            15601727.25,
+            15578559.75,
+            15572851.25,
+            15598485.0,
+            15582060.0,
+            15585099.5,
+            15577433.0,
+            15584676.5,
+            15552675.5,
+            15562242.5
           ]
         },
         {
-          "mean": 17009157.770833332,
-          "standardError": 28363.889026119818,
-          "confidenceLower": 16883307.781303313,
-          "confidenceUpper": 17135007.76036335,
+          "mean": 15556927.8125,
+          "standardError": 3399.6493483014174,
+          "confidenceLower": 15541333.981787173,
+          "confidenceUpper": 15572521.643212827,
           "sampleNanoseconds": [
-            17072679.5,
-            17091435.5,
-            17097447.0,
-            17089385.0,
-            17092790.0,
-            17079742.75,
-            17085746.75,
-            16877899.75,
-            16860854.0,
-            16928626.5,
-            16932312.0,
-            16900974.5
+            15563346.75,
+            15561383.75,
+            15573286.75,
+            15552748.0,
+            15565740.5,
+            15545574.75,
+            15567265.25,
+            15568637.25,
+            15537445.0,
+            15542830.5,
+            15545011.5,
+            15559863.75
           ]
         }
       ],
@@ -286,109 +305,109 @@
       "inputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
       "boundary": "Resident original RGBA16 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
       "nativeReference": "FFmpeg/libwebp VP8",
-      "rawGc": "// GC:  0 0 0 14418624 12",
+      "rawGc": "// GC:  0 0 0 15620176 13",
       "benchmarkSha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
-      "receipt": "tmp/pvp381-current-opaque16-confirm-receipt.json",
-      "observation": "tmp/pvp381-current-opaque16-confirm-observation.json",
+      "receipt": "tmp/rvp383-current-opaque16-confirm-receipt.json",
+      "observation": "tmp/rvp383-current-opaque16-confirm-observation.json",
       "reusedUnchangedPath": false
     },
     "photograph": {
-      "managedUs": 11617.334786458334,
-      "nativeUs": 9791.154552083333,
-      "ratio": 1.1865132681402144,
-      "lower": 1.0469455089178765,
-      "upper": 1.2711746147920633,
+      "managedUs": 11130.404960227273,
+      "nativeUs": 9701.701,
+      "ratio": 1.1472632438607697,
+      "lower": 1.139749000811828,
+      "upper": 1.154927638466111,
       "allocatedBytes": 809225,
       "status": "gap",
-      "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
       "caseId": "PhotographLossy8",
       "actualIterations": 12,
-      "filteredResults": 12,
+      "filteredResults": 11,
       "managedActualNanoseconds": [
-        12161141.0625,
-        12023005.6875,
-        11407013.125,
-        11520320.90625,
-        11358306.875,
-        11215913.84375,
-        11216363.5625,
-        11223097.5,
-        11234887.5625,
-        11627007.75,
-        12199690.6875,
-        12221334.6875
+        11163133.625,
+        11144273.8125,
+        11113245.90625,
+        11104627.84375,
+        11138867.96875,
+        11133432.46875,
+        11243139.1875,
+        11126343.0,
+        11115911.90625,
+        11112252.3125,
+        11121313.84375,
+        11161100.0
       ],
       "managedStatistics": {
         "statistics": {
-          "N": 12,
-          "Mean": 11617334.786458334,
-          "StandardError": 120248.79365596907,
+          "N": 11,
+          "Mean": 11130404.960227273,
+          "StandardError": 5942.215808364446,
           "ConfidenceInterval": {
-            "N": 12,
-            "Mean": 11617334.786458334,
-            "StandardError": 120248.79365596907,
+            "N": 11,
+            "Mean": 11130404.960227273,
+            "StandardError": 5942.215808364446,
             "Level": 12,
-            "Margin": 533541.4127683683,
-            "Lower": 11083793.373689966,
-            "Upper": 12150876.199226702
+            "Margin": 27256.313190363202,
+            "Lower": 11103148.64703691,
+            "Upper": 11157661.273417637
           }
         },
         "unfilteredActualStatistics": {
           "N": 12,
-          "Mean": 11617340.270833334,
-          "StandardError": 120248.79365596907,
+          "Mean": 11139803.489583334,
+          "StandardError": 10847.814372481034,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 11617340.270833334,
-            "StandardError": 120248.79365596907,
+            "Mean": 11139803.489583334,
+            "StandardError": 10847.814372481034,
             "Level": 12,
-            "Margin": 533541.4127683683,
-            "Lower": 11083798.858064966,
-            "Upper": 12150881.683601702
+            "Margin": 48131.52822390282,
+            "Lower": 11091671.961359432,
+            "Upper": 11187935.017807236
           }
         }
       },
       "nativeBrackets": [
         {
-          "mean": 9791154.552083334,
-          "standardError": 52371.67398888744,
-          "confidenceLower": 9558782.51674285,
-          "confidenceUpper": 10023526.587423818,
+          "mean": 9701701.0,
+          "standardError": 1729.979194252737,
+          "confidenceLower": 9693765.76906056,
+          "confidenceUpper": 9709636.23093944,
           "sampleNanoseconds": [
-            9709400.0,
-            9708388.625,
-            9702667.375,
-            9693107.875,
-            9694973.25,
-            9726479.625,
-            9695743.125,
-            9788126.75,
-            9717894.125,
-            9708863.0,
-            10134840.375,
-            10213370.5
+            9712666.625,
+            9700468.25,
+            9693796.875,
+            9702160.75,
+            9712306.125,
+            9700383.125,
+            9693790.5,
+            9698239.875,
+            9698996.0,
+            9700473.125,
+            9705306.75,
+            9701824.0
           ]
         },
         {
-          "mean": 10407982.416666666,
-          "standardError": 40299.63820876876,
-          "confidenceLower": 10229173.754639866,
-          "confidenceUpper": 10586791.078693466,
+          "mean": 9709405.104166666,
+          "standardError": 5020.1662477950185,
+          "confidenceLower": 9686378.13444184,
+          "confidenceUpper": 9732432.073891493,
           "sampleNanoseconds": [
-            10529283.125,
-            10568938.0,
-            10534265.5,
-            10553597.375,
-            10519420.625,
-            10494260.125,
-            10400275.25,
-            10288673.75,
-            10287330.5,
-            10265366.0,
-            10260200.625,
-            10194178.125
+            9704785.75,
+            9728280.125,
+            9758147.875,
+            9699500.375,
+            9701408.25,
+            9701132.75,
+            9697189.375,
+            9703433.75,
+            9698790.5,
+            9708100.875,
+            9702812.875,
+            9709278.75
           ]
         }
       ],
@@ -402,107 +421,107 @@
       "nativeReference": "FFmpeg/libwebp VP8",
       "rawGc": "// GC:  3 3 3 25895200 32",
       "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
-      "receipt": "tmp/pvp381-current-photograph-confirm-receipt.json",
-      "observation": "tmp/pvp381-current-photograph-confirm-observation.json",
+      "receipt": "tmp/rvp383-current-photograph-confirm-receipt.json",
+      "observation": "tmp/rvp383-current-photograph-confirm-observation.json",
       "reusedUnchangedPath": false
     },
     "diagram": {
-      "managedUs": 6535.058675,
-      "nativeUs": 5833.460104166667,
-      "ratio": 1.1202714269584533,
-      "lower": 1.1149367337686462,
-      "upper": 1.1279252258676298,
+      "managedUs": 6409.523157670455,
+      "nativeUs": 5823.060526041667,
+      "ratio": 1.1007138134673393,
+      "lower": 1.0873281952328084,
+      "upper": 1.10906070677443,
       "allocatedBytes": 741137,
       "status": "gap",
-      "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
       "caseId": "DiagramLossy8",
       "actualIterations": 12,
-      "filteredResults": 10,
+      "filteredResults": 11,
       "managedActualNanoseconds": [
-        6569034.65625,
-        6542518.90625,
-        6524736.03125,
-        6515541.1875,
-        6547412.25,
-        6587287.28125,
-        6532362.90625,
-        6538638.625,
-        6536800.84375,
-        6530295.71875,
-        6535966.5,
-        6546365.34375
+        6426821.21875,
+        6407498.8125,
+        6420870.0,
+        6395976.40625,
+        6397396.65625,
+        6386455.125,
+        6405426.65625,
+        6398011.65625,
+        6433209.9375,
+        6408720.0625,
+        6478172.375,
+        6424435.40625
       ],
       "managedStatistics": {
         "statistics": {
-          "N": 10,
-          "Mean": 6535058.675,
-          "StandardError": 3109.5264230689354,
+          "N": 11,
+          "Mean": 6409523.157670454,
+          "StandardError": 4500.658133571911,
           "ConfidenceInterval": {
-            "N": 10,
-            "Mean": 6535058.675,
-            "StandardError": 3109.5264230689354,
+            "N": 11,
+            "Mean": 6409523.157670454,
+            "StandardError": 4500.658133571911,
             "Level": 12,
-            "Margin": 14866.374008250532,
-            "Lower": 6520192.300991749,
-            "Upper": 6549925.04900825
+            "Margin": 20644.041146858977,
+            "Lower": 6388879.1165235955,
+            "Upper": 6430167.198817313
           }
         },
         "unfilteredActualStatistics": {
           "N": 12,
-          "Mean": 6542246.6875,
-          "StandardError": 5595.187668477631,
+          "Mean": 6415249.526041667,
+          "StandardError": 7042.81899146108,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 6542246.6875,
-            "StandardError": 5595.187668477631,
+            "Mean": 6415249.526041667,
+            "StandardError": 7042.81899146108,
             "Level": 12,
-            "Margin": 24825.73207249403,
-            "Lower": 6517420.955427506,
-            "Upper": 6567072.419572494
+            "Margin": 31248.84234037813,
+            "Lower": 6384000.683701289,
+            "Upper": 6446498.368382045
           }
         }
       },
       "nativeBrackets": [
         {
-          "mean": 5833460.104166667,
-          "standardError": 2524.5642360245533,
-          "confidenceLower": 5821390.383239983,
-          "confidenceUpper": 5845529.825093351,
+          "mean": 5823060.526041667,
+          "standardError": 2363.2471314837235,
+          "confidenceLower": 5812220.562290893,
+          "confidenceUpper": 5833900.489792441,
           "sampleNanoseconds": [
-            5843755.625,
-            5821168.3125,
-            5848139.125,
-            5826922.0625,
-            5825016.6875,
-            5833245.9375,
-            5833844.375,
-            5831444.5,
-            5845510.125,
-            5832958.6875,
-            5835985.75,
-            5823530.0625
+            5824362.3125,
+            5829804.375,
+            5832542.1875,
+            5839038.9375,
+            5819620.75,
+            5808698.625,
+            5814972.5,
+            5823546.125,
+            5823623.0625,
+            5824554.5,
+            5816119.25,
+            5819843.6875
           ]
         },
         {
-          "mean": 5836177.213541667,
-          "standardError": 2112.936784337878,
-          "confidenceLower": 5826075.447478925,
-          "confidenceUpper": 5846278.979604409,
+          "mean": 5853466.296875,
+          "standardError": 4013.250896600261,
+          "confidenceLower": 5835057.940989428,
+          "confidenceUpper": 5871874.652760572,
           "sampleNanoseconds": [
-            5836221.0625,
-            5836168.75,
-            5827039.9375,
-            5843208.125,
-            5845077.25,
-            5837748.0,
-            5836621.3125,
-            5846551.3125,
-            5829805.9375,
-            5838354.5625,
-            5821293.0625,
-            5836037.25
+            5841816.25,
+            5849220.625,
+            5845068.0625,
+            5845789.8125,
+            5847673.875,
+            5849228.6875,
+            5895715.375,
+            5854689.5,
+            5853379.4375,
+            5851338.1875,
+            5853888.875,
+            5853786.875
           ]
         }
       ],
@@ -516,8 +535,8 @@
       "nativeReference": "FFmpeg/libwebp VP8",
       "rawGc": "// GC:  3 3 3 23716384 32",
       "benchmarkSha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
-      "receipt": "tmp/pvp381-current-diagram-confirm-receipt.json",
-      "observation": "tmp/pvp381-current-diagram-confirm-observation.json",
+      "receipt": "tmp/rvp383-current-diagram-confirm-receipt.json",
+      "observation": "tmp/rvp383-current-diagram-confirm-observation.json",
       "reusedUnchangedPath": false
     },
     "distortion": {
@@ -547,102 +566,102 @@
       "reusedUnchangedPath": true
     },
     "trellis": {
-      "managedUs": 11046.613129261363,
-      "nativeUs": 9909.966072916666,
-      "ratio": 1.1146973711091792,
-      "lower": 1.0315686038009386,
-      "upper": 1.1215561845580875,
+      "managedUs": 11037.247921875,
+      "nativeUs": 9799.20725,
+      "ratio": 1.1263409008800176,
+      "lower": 1.1200627098585108,
+      "upper": 1.129962821896524,
       "allocatedBytes": 754497,
       "status": "gap",
-      "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
       "caseId": "DiagramLossyTrellis8",
       "actualIterations": 12,
-      "filteredResults": 11,
+      "filteredResults": 12,
       "managedActualNanoseconds": [
-        11053051.03125,
-        11021435.6875,
-        11044492.4375,
-        11057522.15625,
-        11071039.5,
-        11122206.9375,
-        11080793.96875,
-        11074952.90625,
-        10993753.4375,
-        11049877.78125,
-        11013930.53125,
-        11051962.1875
+        11076904.1875,
+        11027293.78125,
+        11018657.25,
+        11046853.40625,
+        11017072.0625,
+        11036467.96875,
+        11032103.875,
+        11015576.375,
+        11030794.09375,
+        11066679.96875,
+        11049744.03125,
+        11028891.8125
       ],
       "managedStatistics": {
         "statistics": {
-          "N": 11,
-          "Mean": 11046613.129261363,
-          "StandardError": 8128.817361360663,
+          "N": 12,
+          "Mean": 11037247.921875,
+          "StandardError": 5605.224683813267,
           "ConfidenceInterval": {
-            "N": 11,
-            "Mean": 11046613.129261363,
-            "StandardError": 8128.817361360663,
+            "N": 12,
+            "Mean": 11037247.921875,
+            "StandardError": 5605.224683813267,
             "Level": 12,
-            "Margin": 37286.02242224712,
-            "Lower": 11009327.106839117,
-            "Upper": 11083899.15168361
+            "Margin": 24870.26610214487,
+            "Lower": 11012377.655772856,
+            "Upper": 11062118.187977144
           }
         },
         "unfilteredActualStatistics": {
           "N": 12,
-          "Mean": 11052918.213541666,
-          "StandardError": 9733.540531050496,
+          "Mean": 11037253.234375,
+          "StandardError": 5605.224683813267,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 11052918.213541666,
-            "StandardError": 9733.540531050496,
+            "Mean": 11037253.234375,
+            "StandardError": 5605.224683813267,
             "Level": 12,
-            "Margin": 43187.51821355229,
-            "Lower": 11009730.695328115,
-            "Upper": 11096105.731755218
+            "Margin": 24870.26610214487,
+            "Lower": 11012382.968272856,
+            "Upper": 11062123.500477144
           }
         }
       },
       "nativeBrackets": [
         {
-          "mean": 10638090.71875,
-          "standardError": 7482.881253087224,
-          "confidenceLower": 10603767.536695026,
-          "confidenceUpper": 10672413.900804974,
+          "mean": 9821144.916666666,
+          "standardError": 2430.625270787703,
+          "confidenceLower": 9810360.282563834,
+          "confidenceUpper": 9831929.550769499,
           "sampleNanoseconds": [
-            10688695.875,
-            10605193.25,
-            10603458.125,
-            10606302.375,
-            10636142.625,
-            10651567.125,
-            10664621.875,
-            10644077.0,
-            10632965.25,
-            10623606.125,
-            10643819.25,
-            10656639.75
+            9818367.875,
+            9824419.375,
+            9830389.75,
+            9812801.875,
+            9825290.875,
+            9824539.625,
+            9839398.375,
+            9820619.875,
+            9809225.25,
+            9819408.125,
+            9817323.625,
+            9811954.375
           ]
         },
         {
-          "mean": 9909966.072916666,
-          "standardError": 3713.1856640141154,
-          "confidenceLower": 9892934.084403245,
-          "confidenceUpper": 9926998.061430087,
+          "mean": 9799207.25,
+          "standardError": 2117.5064121043483,
+          "confidenceLower": 9789811.917803217,
+          "confidenceUpper": 9808602.582196783,
           "sampleNanoseconds": [
-            9914112.5,
-            9885690.625,
-            9890798.375,
-            9916468.5,
-            9911118.0,
-            9907986.875,
-            9910081.375,
-            9896944.0,
-            9916596.25,
-            9926275.875,
-            9926277.125,
-            9917243.375
+            9798601.625,
+            9799009.75,
+            9810508.375,
+            9809187.75,
+            9797075.5,
+            9793621.625,
+            9798531.5,
+            9797908.125,
+            9790957.625,
+            9790008.625,
+            9793838.125,
+            9811238.375
           ]
         }
       ],
@@ -656,107 +675,107 @@
       "nativeReference": "FFmpeg/libwebp VP8",
       "rawGc": "// GC:  3 3 3 24143904 32",
       "benchmarkSha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
-      "receipt": "tmp/pvp381-current-trellis-confirm-receipt.json",
-      "observation": "tmp/pvp381-current-trellis-confirm-observation.json",
+      "receipt": "tmp/rvp383-current-trellis-confirm-receipt.json",
+      "observation": "tmp/rvp383-current-trellis-confirm-observation.json",
       "reusedUnchangedPath": false
     },
     "alpha": {
-      "managedUs": 54336.927625,
-      "nativeUs": 53344.77875,
-      "ratio": 1.0185988000746933,
-      "lower": 1.0072406857065772,
-      "upper": 1.0266953422287701,
+      "managedUs": 54289.27214583333,
+      "nativeUs": 53296.41658333334,
+      "ratio": 1.0186289365429961,
+      "lower": 1.0077191191818908,
+      "upper": 1.0268174098678238,
       "allocatedBytes": 7034392,
       "status": "gap",
-      "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
       "caseId": "Encode8",
       "actualIterations": 12,
       "filteredResults": 12,
       "managedActualNanoseconds": [
-        54617917.0,
-        54065541.0,
-        54105476.5,
-        54123789.25,
-        54004676.5,
-        54442722.0,
-        54607699.0,
-        54481653.25,
-        54034096.0,
-        54473406.0,
-        54491906.5,
-        54594248.5
+        54368551.25,
+        54149749.75,
+        54121334.5,
+        53998498.5,
+        53932676.25,
+        54520954.25,
+        54518440.5,
+        54460938.5,
+        53960032.75,
+        54457896.5,
+        54525563.75,
+        54456629.25
       ],
       "managedStatistics": {
         "statistics": {
           "N": 12,
-          "Mean": 54336927.625,
-          "StandardError": 71138.73808842775,
+          "Mean": 54289272.145833336,
+          "StandardError": 68645.09177194153,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 54336927.625,
-            "StandardError": 71138.73808842775,
+            "Mean": 54289272.145833336,
+            "StandardError": 68645.09177194153,
             "Level": 12,
-            "Margin": 315641.1109690545,
-            "Lower": 54021286.51403095,
-            "Upper": 54652568.73596905
+            "Margin": 304576.85378865286,
+            "Lower": 53984695.292044684,
+            "Upper": 54593848.99962199
           }
         },
         "unfilteredActualStatistics": {
           "N": 12,
-          "Mean": 54336927.625,
-          "StandardError": 71138.73808842775,
+          "Mean": 54289272.145833336,
+          "StandardError": 68645.09177194153,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 54336927.625,
-            "StandardError": 71138.73808842775,
+            "Mean": 54289272.145833336,
+            "StandardError": 68645.09177194153,
             "Level": 12,
-            "Margin": 315641.1109690545,
-            "Lower": 54021286.51403095,
-            "Upper": 54652568.73596905
+            "Margin": 304576.85378865286,
+            "Lower": 53984695.292044684,
+            "Upper": 54593848.99962199
           }
         }
       },
       "nativeBrackets": [
         {
-          "mean": 53448308.0,
-          "standardError": 41613.71640693691,
-          "confidenceLower": 53263668.800160535,
-          "confidenceUpper": 53632947.199839465,
+          "mean": 53408368.583333336,
+          "standardError": 36692.6296167059,
+          "confidenceLower": 53245564.14389843,
+          "confidenceUpper": 53571173.022768244,
           "sampleNanoseconds": [
-            53723874.0,
-            53618975.0,
-            53572005.0,
-            53614960.0,
-            53343939.0,
-            53433956.0,
-            53311590.0,
-            53392903.0,
-            53375597.0,
-            53308385.0,
-            53344450.0,
-            53339062.0
+            53547670.0,
+            53341298.0,
+            53421779.0,
+            53285733.0,
+            53336060.0,
+            53311883.0,
+            53536734.0,
+            53312343.0,
+            53510022.0,
+            53423481.0,
+            53229116.0,
+            53644304.0
           ]
         },
         {
-          "mean": 53344778.75,
-          "standardError": 25522.780612599083,
-          "confidenceLower": 53231534.699795365,
-          "confidenceUpper": 53458022.800204635,
+          "mean": 53296416.583333336,
+          "standardError": 28937.745480720238,
+          "confidenceLower": 53168020.404571764,
+          "confidenceUpper": 53424812.76209491,
           "sampleNanoseconds": [
-            53351701.0,
-            53408087.0,
-            53386663.0,
-            53485323.0,
-            53447286.0,
-            53296247.0,
-            53305561.0,
-            53444140.0,
-            53278560.0,
-            53211479.0,
-            53259121.0,
-            53263177.0
+            53242507.0,
+            53185480.0,
+            53305602.0,
+            53452124.0,
+            53483171.0,
+            53232752.0,
+            53286994.0,
+            53188565.0,
+            53271310.0,
+            53188816.0,
+            53353154.0,
+            53366524.0
           ]
         }
       ],
@@ -770,107 +789,107 @@
       "nativeReference": "FFmpeg/libwebp VP8 + lossless ALPH",
       "rawGc": "// GC:  2 2 2 28137568 4",
       "benchmarkSha256": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
-      "receipt": "tmp/pvp381-current-alpha-confirm-receipt.json",
-      "observation": "tmp/pvp381-current-alpha-confirm-observation.json",
+      "receipt": "tmp/rvp383-current-alpha-confirm-receipt.json",
+      "observation": "tmp/rvp383-current-alpha-confirm-observation.json",
       "reusedUnchangedPath": false
     },
     "alpha16": {
-      "managedUs": 55062.16429166666,
-      "nativeUs": 53494.14791666666,
-      "ratio": 1.0293119235667172,
-      "lower": 1.017171813933672,
-      "upper": 1.040799747559002,
+      "managedUs": 54702.78472916666,
+      "nativeUs": 53231.43033333334,
+      "ratio": 1.0276407075034384,
+      "lower": 1.0156239135988463,
+      "upper": 1.0360122919174923,
       "allocatedBytes": 7033984,
       "status": "gap",
-      "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "allOriginalGatesPassed": true,
       "quietGuardsPassed": true,
       "caseId": "Encode16",
       "actualIterations": 12,
       "filteredResults": 12,
       "managedActualNanoseconds": [
-        55616136.0,
-        54750025.0,
-        54585285.5,
-        54587248.5,
-        54811558.0,
-        55300468.0,
-        55081551.75,
-        55002572.25,
-        55150210.75,
-        55129607.0,
-        55704985.5,
-        55026323.25
+        54766112.75,
+        54258153.75,
+        54365053.0,
+        54410489.5,
+        54428328.75,
+        54871166.75,
+        54844541.25,
+        54989773.75,
+        54931756.0,
+        54907091.0,
+        54786876.5,
+        54874073.75
       ],
       "managedStatistics": {
         "statistics": {
           "N": 12,
-          "Mean": 55062164.291666664,
-          "StandardError": 103264.79723132717,
+          "Mean": 54702784.729166664,
+          "StandardError": 74768.47173226469,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 55062164.291666664,
-            "StandardError": 103264.79723132717,
+            "Mean": 54702784.729166664,
+            "StandardError": 74768.47173226469,
             "Level": 12,
-            "Margin": 458183.77157005644,
-            "Lower": 54603980.52009661,
-            "Upper": 55520348.06323672
+            "Margin": 331746.1641461057,
+            "Lower": 54371038.56502056,
+            "Upper": 55034530.89331277
           }
         },
         "unfilteredActualStatistics": {
           "N": 12,
-          "Mean": 55062164.291666664,
-          "StandardError": 103264.79723132717,
+          "Mean": 54702784.729166664,
+          "StandardError": 74768.47173226469,
           "ConfidenceInterval": {
             "N": 12,
-            "Mean": 55062164.291666664,
-            "StandardError": 103264.79723132717,
+            "Mean": 54702784.729166664,
+            "StandardError": 74768.47173226469,
             "Level": 12,
-            "Margin": 458183.77157005644,
-            "Lower": 54603980.52009661,
-            "Upper": 55520348.06323672
+            "Margin": 331746.1641461057,
+            "Lower": 54371038.56502056,
+            "Upper": 55034530.89331277
           }
         }
       },
       "nativeBrackets": [
         {
-          "mean": 53513044.833333336,
-          "standardError": 38115.03347659185,
-          "confidenceLower": 53343929.21736304,
-          "confidenceUpper": 53682160.449303634,
+          "mean": 53363911.666666664,
+          "standardError": 38473.61781484328,
+          "confidenceLower": 53193205.01939692,
+          "confidenceUpper": 53534618.313936405,
           "sampleNanoseconds": [
-            53670573.0,
-            53713528.0,
-            53719868.0,
-            53588950.0,
-            53365541.0,
-            53448057.0,
-            53402347.0,
-            53480035.0,
-            53548578.0,
-            53453866.0,
-            53389508.0,
-            53375687.0
+            53625549.0,
+            53483163.0,
+            53452416.0,
+            53560580.0,
+            53329110.0,
+            53301709.0,
+            53249960.0,
+            53272063.0,
+            53333326.0,
+            53270801.0,
+            53217661.0,
+            53270602.0
           ]
         },
         {
-          "mean": 53494147.916666664,
-          "standardError": 25541.589210557828,
-          "confidenceLower": 53380820.413101524,
-          "confidenceUpper": 53607475.420231804,
+          "mean": 53231430.333333336,
+          "standardError": 24775.085324848744,
+          "confidenceLower": 53121503.79167093,
+          "confidenceUpper": 53341356.87499574,
           "sampleNanoseconds": [
-            53602024.0,
-            53558648.0,
-            53571327.0,
-            53583295.0,
-            53506259.0,
-            53513771.0,
-            53539369.0,
-            53499689.0,
-            53398025.0,
-            53431976.0,
-            53418105.0,
-            53307287.0
+            53444634.0,
+            53347057.0,
+            53166594.0,
+            53154356.0,
+            53201547.0,
+            53230871.0,
+            53208918.0,
+            53198813.0,
+            53217732.0,
+            53269740.0,
+            53167895.0,
+            53169007.0
           ]
         }
       ],
@@ -884,15 +903,15 @@
       "nativeReference": "FFmpeg/libwebp VP8 + lossless ALPH",
       "rawGc": "// GC:  1 1 1 28135936 4",
       "benchmarkSha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
-      "receipt": "tmp/pvp381-current-alpha16-confirm-receipt.json",
-      "observation": "tmp/pvp381-current-alpha16-confirm-observation.json",
+      "receipt": "tmp/rvp383-current-alpha16-confirm-receipt.json",
+      "observation": "tmp/rvp383-current-alpha16-confirm-observation.json",
       "reusedUnchangedPath": false
     }
   },
   "statusCounts": {
-    "pass": 1,
+    "pass": 2,
     "gap": 6,
-    "uncertain": 1
+    "uncertain": 0
   },
   "unchangedCases": {
     "distortion": {
@@ -912,21 +931,21 @@
         "mode": "short",
         "pairs": 3,
         "operationsPerSubjectPerPair": 8,
-        "baselineUs": 11390.630916666665,
-        "candidateUs": 11172.141791666667,
-        "savedUs": 218.489125,
-        "ratio": 0.9808189364076009,
-        "reduction": 0.019181063592399128,
+        "baselineUs": 11175.111666666666,
+        "candidateUs": 10885.746541666666,
+        "savedUs": 289.365125,
+        "ratio": 0.9741117748702203,
+        "reduction": 0.02588822512977973,
         "interval": [
-          0.9598307747657495,
-          1.002265097032457
+          0.9238614448762147,
+          1.027089528673429
         ],
         "allocatedValues": [
           809072
         ],
         "producerIdentities": [
-          "cddbdf58abebf24d50e947f53066998c78cb1050cb56613f733a258e09e9bcfc",
-          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
+          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+          "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585"
         ],
         "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
         "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
@@ -938,8 +957,8 @@
         "allPointsRetained": true,
         "quietGuardsPassed": true,
         "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
-        "receipt": "tmp/pvp381-photograph-short-receipt.json",
-        "points": "tmp/pvp381-photograph-short.json"
+        "receipt": "tmp/rvp383-photograph-short-receipt.json",
+        "points": "tmp/rvp383-photograph-short.json"
       },
       "confirm": {
         "case": "photograph",
@@ -949,21 +968,21 @@
         "mode": "confirm",
         "pairs": 12,
         "operationsPerSubjectPerPair": 16,
-        "baselineUs": 11353.819057291666,
-        "candidateUs": 11124.038682291666,
-        "savedUs": 229.780375,
-        "ratio": 0.9797679298902846,
-        "reduction": 0.020232070109715394,
+        "baselineUs": 11240.620963541665,
+        "candidateUs": 11036.250453125,
+        "savedUs": 204.37051041666604,
+        "ratio": 0.9818276726260987,
+        "reduction": 0.018172327373901287,
         "interval": [
-          0.9764339050810282,
-          0.9831069690158688
+          0.9775107340598996,
+          0.9861530101445237
         ],
         "allocatedValues": [
           809072
         ],
         "producerIdentities": [
-          "cddbdf58abebf24d50e947f53066998c78cb1050cb56613f733a258e09e9bcfc",
-          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
+          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+          "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585"
         ],
         "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
         "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
@@ -975,8 +994,8 @@
         "allPointsRetained": true,
         "quietGuardsPassed": true,
         "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
-        "receipt": "tmp/pvp381-photograph-confirm-receipt.json",
-        "points": "tmp/pvp381-photograph-confirm.json"
+        "receipt": "tmp/rvp383-photograph-confirm-receipt.json",
+        "points": "tmp/rvp383-photograph-confirm.json"
       }
     },
     "diagram": {
@@ -988,21 +1007,21 @@
         "mode": "short",
         "pairs": 3,
         "operationsPerSubjectPerPair": 8,
-        "baselineUs": 6756.218375,
-        "candidateUs": 6571.036166666667,
-        "savedUs": 185.18220833333302,
-        "ratio": 0.9731574545185225,
-        "reduction": 0.026842545481477464,
+        "baselineUs": 6461.889,
+        "candidateUs": 6368.487625,
+        "savedUs": 93.401375,
+        "ratio": 0.9855490193108133,
+        "reduction": 0.01445098068918671,
         "interval": [
-          0.6562333930951731,
-          1.4426916122775466
+          0.9466357808348914,
+          1.0260585244257823
         ],
         "allocatedValues": [
           740984
         ],
         "producerIdentities": [
-          "cddbdf58abebf24d50e947f53066998c78cb1050cb56613f733a258e09e9bcfc",
-          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
+          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+          "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585"
         ],
         "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
         "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
@@ -1014,45 +1033,8 @@
         "allPointsRetained": true,
         "quietGuardsPassed": true,
         "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
-        "receipt": "tmp/pvp381-diagram-short-receipt.json",
-        "points": "tmp/pvp381-diagram-short.json"
-      },
-      "confirm": {
-        "case": "diagram",
-        "declaredCaseId": "DiagramLossy8",
-        "toolCaseId": "EncodeOpaque8",
-        "genericToolCaseNameDisclosed": true,
-        "mode": "confirm",
-        "pairs": 12,
-        "operationsPerSubjectPerPair": 16,
-        "baselineUs": 6682.86525,
-        "candidateUs": 6548.289333333333,
-        "savedUs": 134.57591666666698,
-        "ratio": 0.9798644446384216,
-        "reduction": 0.020135555361578406,
-        "interval": [
-          0.9757591471654251,
-          0.9839773367033556
-        ],
-        "allocatedValues": [
-          740984
-        ],
-        "producerIdentities": [
-          "cddbdf58abebf24d50e947f53066998c78cb1050cb56613f733a258e09e9bcfc",
-          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
-        ],
-        "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
-        "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
-        "effort": 4,
-        "quality": 75,
-        "depth": 8,
-        "outputExact": true,
-        "independentOwners": true,
-        "allPointsRetained": true,
-        "quietGuardsPassed": true,
-        "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
-        "receipt": "tmp/pvp381-diagram-confirm-receipt.json",
-        "points": "tmp/pvp381-diagram-confirm.json"
+        "receipt": "tmp/rvp383-diagram-short-receipt.json",
+        "points": "tmp/rvp383-diagram-short.json"
       }
     },
     "trellis": {
@@ -1064,21 +1046,21 @@
         "mode": "short",
         "pairs": 3,
         "operationsPerSubjectPerPair": 8,
-        "baselineUs": 11116.829333333333,
-        "candidateUs": 11005.990625,
-        "savedUs": 110.83870833333395,
-        "ratio": 0.9900340596003333,
-        "reduction": 0.009965940399666695,
+        "baselineUs": 11121.530083333333,
+        "candidateUs": 10951.110458333334,
+        "savedUs": 170.419625,
+        "ratio": 0.9846778284114824,
+        "reduction": 0.015322171588517564,
         "interval": [
-          0.9381058657440525,
-          1.0448306282819204
+          0.9592420393828988,
+          1.0107866998632855
         ],
         "allocatedValues": [
           754344
         ],
         "producerIdentities": [
-          "cddbdf58abebf24d50e947f53066998c78cb1050cb56613f733a258e09e9bcfc",
-          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
+          "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+          "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585"
         ],
         "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
         "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
@@ -1090,8 +1072,8 @@
         "allPointsRetained": true,
         "quietGuardsPassed": true,
         "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
-        "receipt": "tmp/pvp381-trellis-short-receipt.json",
-        "points": "tmp/pvp381-trellis-short.json"
+        "receipt": "tmp/rvp383-trellis-short-receipt.json",
+        "points": "tmp/rvp383-trellis-short.json"
       }
     }
   },
@@ -1103,7 +1085,7 @@
     "operationScratchRetainedAfterReturnBytes": 0,
     "wholeOperationPhysicalOrAdmittedPeakNewlyMeasured": false,
     "nativeAllocationMeasured": false,
-    "scope": "Pure scalar score followed by winner-only full record publication. Same existing stack/coarse admission and synchronous users. No new buffer, owner, heap, pool, session or numerical policy. Total allocations, physical/admitted peak and retained storage are distinct."
+    "scope": "Borrowed rate views per synchronous search and header/context preparation once per block. Same existing stack/coarse admission and synchronous users; all views end before refresh/disposal. No new buffer, owner, heap, pool, session or numerical policy. Total allocations, physical/admitted peak and retained storage are distinct."
   },
   "allocationEvidence": {
     "paired": {
@@ -1126,7 +1108,7 @@
       "opaque16": {
         "bytesPerOperation": 1201552,
         "previous": 1201552,
-        "rawGc": "// GC:  0 0 0 14418624 12"
+        "rawGc": "// GC:  0 0 0 15620176 13"
       },
       "photograph": {
         "bytesPerOperation": 809225,
@@ -1171,7 +1153,7 @@
     "windows": {
       "project": "Lokad.Image",
       "platform": "windows",
-      "productionSha256": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
+      "productionSha256": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
       "full": [
         2485,
         2291,
@@ -1187,11 +1169,11 @@
       },
       "affectedVp8ScalarEachOs": 247,
       "identities": {
-        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
-        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "aedeb6b4869daf20820453834d11ce0a2ec74ca6242423f6b7174e5996237e12",
-        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
-        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
-        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212"
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "c9da2be74cdeb4a33d8c691c5645a40ff99b75f6cb2d92abfd636faf7bd9a2a7",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7"
       },
       "immutableCandidateReused": true,
       "additionalCoreInternalHarnessNativeSelectorBuilds": 0
@@ -1199,7 +1181,7 @@
     "linux": {
       "project": "Lokad.Image",
       "platform": "linux",
-      "productionSha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+      "productionSha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
       "full": [
         2485,
         2291,
@@ -1215,11 +1197,11 @@
       },
       "affectedVp8ScalarEachOs": 247,
       "identities": {
-        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
-        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "fc9979ba2fe8cfe1aa6198d77f901d66436d2fae4f4203754aa3707672c07657",
-        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
-        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
-        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1"
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "27e3e83015b026628ffe34ad6a7d46c7b3d0537e54f4bed1c9322f0ed68cf4b1",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585"
       },
       "immutableCandidateReused": true,
       "additionalCoreInternalHarnessNativeSelectorBuilds": 0
@@ -1235,7 +1217,7 @@
         "avx2": {
           "project": "Lokad.Image",
           "system": "windows",
-          "librarySha256": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
+          "librarySha256": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
           "checks": {
             "internal": 110,
             "public": 137
@@ -1244,12 +1226,12 @@
             "DOTNET_EnableAVX2": "0"
           },
           "noAdditionalBuilds": true,
-          "scope": "Scalar candidate pricing/publication and actual encoder callers with AVX2 disabled; exact packets/admission/ownership, same immutable module."
+          "scope": "Borrowed rate-view and per-block candidate preparation and actual encoder callers with AVX2 disabled; exact packets/admission/ownership, same immutable module."
         },
         "avx512": {
           "project": "Lokad.Image",
           "system": "windows",
-          "librarySha256": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
+          "librarySha256": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
           "checks": {
             "internal": 110,
             "public": 137
@@ -1258,14 +1240,14 @@
             "DOTNET_EnableAVX512F": "0"
           },
           "noAdditionalBuilds": true,
-          "scope": "Scalar candidate pricing/publication and actual encoder callers with AVX512 disabled, retaining AVX2/SSE4.1; exact packets/admission/ownership, same immutable module."
+          "scope": "Borrowed rate-view and per-block candidate preparation and actual encoder callers with AVX512 disabled, retaining AVX2/SSE4.1; exact packets/admission/ownership, same immutable module."
         }
       },
       "linux": {
         "avx2": {
           "project": "Lokad.Image",
           "system": "linux",
-          "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+          "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
           "checks": {
             "internal": 110,
             "public": 137
@@ -1274,12 +1256,12 @@
             "DOTNET_EnableAVX2": "0"
           },
           "noAdditionalBuilds": true,
-          "scope": "Scalar candidate pricing/publication and actual encoder callers with AVX2 disabled; exact packets/admission/ownership, same immutable module."
+          "scope": "Borrowed rate-view and per-block candidate preparation and actual encoder callers with AVX2 disabled; exact packets/admission/ownership, same immutable module."
         },
         "avx512": {
           "project": "Lokad.Image",
           "system": "linux",
-          "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+          "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
           "checks": {
             "internal": 110,
             "public": 137
@@ -1288,17 +1270,17 @@
             "DOTNET_EnableAVX512F": "0"
           },
           "noAdditionalBuilds": true,
-          "scope": "Scalar candidate pricing/publication and actual encoder callers with AVX512 disabled, retaining AVX2/SSE4.1; exact packets/admission/ownership, same immutable module."
+          "scope": "Borrowed rate-view and per-block candidate preparation and actual encoder callers with AVX512 disabled, retaining AVX2/SSE4.1; exact packets/admission/ownership, same immutable module."
         }
       }
     },
     "actualPackage": {
       "project": "Lokad.Image",
       "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
-      "sha256": "c34f3992c7a0ce7d7b9c4c4e573667fc61641be868a6ca0836c6517c662ef386",
-      "symbolsSha256": "69790a5c0103d70ca004211cb886084078b5b0e1258fd143d92859b9c509b631",
-      "bytes": 417384,
-      "librarySha256": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
+      "sha256": "7d64d8313cb9c2e50cc448e14bc6afd9d8ea38718d49102b03bdd75a092faa55",
+      "symbolsSha256": "769ef90fe502a3314072f58d1e730f68374201fe163def6d1da844983e0bdc8d",
+      "bytes": 417422,
+      "librarySha256": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
       "actualConsumerPassed": true,
       "outputWorkspaceBicubicPassed": true,
       "opaqueWordTilesPassed": true,
@@ -1321,8 +1303,8 @@
     },
     "samePackageLinux": {
       "project": "Lokad.Image",
-      "sameActualPackageSha256": "c34f3992c7a0ce7d7b9c4c4e573667fc61641be868a6ca0836c6517c662ef386",
-      "librarySha256": "24e8191f10aa6b2929cc40c7dd4514af8915247659c8d2aa75917065d4171212",
+      "sameActualPackageSha256": "7d64d8313cb9c2e50cc448e14bc6afd9d8ea38718d49102b03bdd75a092faa55",
+      "librarySha256": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
       "actualConsumerPassed": true,
       "outputWorkspaceBicubicPassed": true,
       "opaqueWordTilesPassed": true,
@@ -1340,64 +1322,35 @@
       "usageExamples": 3,
       "publicationPostponed": true
     },
-    "meaningfulCoverage": "Reuse exact native mode/level/pixel/packet, strict tie/uniform, dirty scratch, disposed rate, alias, cancellation, refusal, aggregate admission, sync/async and surviving-output tests. Existing actual-package OriginalVp8Controls covers22large tuples including methods5/6 and both depths. No new tests that mirror scalar implementation."
+    "meaningfulCoverage": "Existing prepared-quantization tests bind actual static borrowed-span core; independent general residual/native expected costs, every context/invalid-level/no-allocation oracle remain. Full native mode/level/pixel/packet, strict tie/uniform, dirty scratch, disposed trellis, alias, cancellation, refusal, aggregate admission, sync/async and surviving-output tests remain. Existing actual-package OriginalVp8Controls covers22large tuples including methods5/6 and both depths. No implementation-mirroring tests added."
   },
   "workflow": {
     "coreVersionsEachOs": 1,
     "internalVersionsEachOs": 1,
     "newHarnessNativeSelectorFixtureToolBuilds": 0,
     "shortScreens": 3,
-    "independentConfirmations": 2,
+    "independentConfirmations": 1,
     "currentStandaloneRefreshes": 7,
     "unchangedDisplayedCostsReused": 118,
-    "note": "One immutable producer pair throughout bounded experiment. Photograph screen promising but uncertain; independent confirmation establishes gain. Wide ordinary-diagram screen requires independent confirmation of material caller/generalization. Trellis screen remains inconclusive, with no unchanged favorable repeat. All actuals and adverse points retained."
+    "note": "One immutable producer pair throughout bounded experiment. Photograph screen promising but uncertain; independent confirmation establishes gain. Ordinary-diagram and trellis short guards remain inconclusive, with no gain/loss/equivalence or current-frequency claim. Trellis screen remains inconclusive, with no unchanged favorable repeat. All actuals and adverse points retained."
   },
   "attribution": {
-    "report": "tmp/psr380-audit.json",
-    "raw": {
-      "file": "vp8-photograph-price-attribution.tar.xz",
-      "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a",
-      "bytes": 127800,
-      "members": 22,
-      "mirrored": true,
-      "allMembersVerified": true,
-      "dependencies": [
-        {
-          "file": "vp8-trellis-execution-qualified.tar.xz",
-          "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
-        },
-        {
-          "file": "png-greedy-view-preparation-qualified.tar.xz",
-          "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
-        },
-        {
-          "file": "vp8-current-token-state-attribution.tar.xz",
-          "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
-        },
-        {
-          "file": "vp8-prepared-token-state-qualified.tar.xz",
-          "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
-        },
-        {
-          "file": "png-lazy-view-preparation-qualified.tar.xz",
-          "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
-        },
-        {
-          "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
-          "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
-        }
-      ]
-    },
-    "scope": "One completed current photograph capture. Score constructor/copy is a hypothesis lead, not phase time or predicted gain. Wrong family-name postprocessor recovered existing trace/maps/actuals/guards without another capture. Instrumented times discarded."
+    "report": "tmp/rpe382-audit.json",
+    "diagnosticInputsRetainedInStageRaw": true,
+    "librarySha256": "3d0a4a490ff1e9b1f54969553319a9b5593a1328a1022091e19f7a7dff0b3ae1",
+    "actualOriginalPacketCases": 22,
+    "productionBuilds": 0,
+    "instrumentedElapsedDiscarded": true,
+    "scope": "One targeted current immutable public producer code inspection, no profile or performance points. Values/Modes callsites and repeated mode/context arithmetic motivate search-local borrowed views. Static code/callsites and historical compact-scoring counts are not phase costs, current frequencies or predicted gains."
   },
-  "decision": "Accept scoped independent photograph229.78us/2.02percent and diagram134.58us/2.01percent gains with unchanged paired allocations and exact packets. Trellis short remains uncertain, not equivalence. Current native costs independently own statuses; opaque8now uncertain and alpha16now gap. Keep adverse/filtered/all-actual confidence; do not repeat unchanged runs for favorable numbers. No entire-family or282path parity claim.",
-  "priorEvidence": "VP8-TRELLIS-EXECUTION.md",
+  "decision": "Accept independent photograph204.37us/1.82percent gain, unchanged809072B/op and exact packets. Ordinarydiagram and trellis short effects remain uncertain; no no-regression/equivalence claim or unchanged favorable repeat. Current native costs independently own statuses. No entire-family or282path parity claim.",
+  "priorEvidence": "https://github.com/lokad/image/blob/4ce6c091/benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md",
   "next": "Stop this bounded round and confirmed passing controls. Select remaining larger codec/resize work from current attribution; resolve uncertain paths before tuning them. Publication postponed.",
   "raw": {
-    "file": "vp8-candidate-score-publication-qualified.tar.xz",
-    "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8",
-    "bytes": 2602044,
-    "members": 230,
+    "file": "vp8-rate-view-preparation-qualified.tar.xz",
+    "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b",
+    "bytes": 2663520,
+    "members": 244,
     "mirrored": true,
     "allMembersVerified": true,
     "reusedInputsMaterializedByHashWithoutDuplicatePayloads": true,
@@ -1429,6 +1382,10 @@
       {
         "file": "vp8-photograph-price-attribution.tar.xz",
         "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
       }
     ]
   }

@@ -142,8 +142,13 @@ internal static class Vp8MacroblockDecision
         Span<byte> modes, OperationContext context, out Metric result, out uint nonzero) where TMode : struct
     {
         var trellis = typeof(TMode) == typeof(TrellisMode);
-        result = new Metric(0, 0, rate.Entropy[145], 0).Price(costs.Mode); nonzero = 0;
+        // Borrow stable views for this synchronous search. The frame owns the
+        // charged rate plan through every candidate and refreshes only between
+        // macroblocks; no view escapes this method or survives a refresh.
+        var rateValues = rate.Values;
+        result = new Metric(0, 0, rateValues[145], 0).Price(costs.Mode); nonzero = 0;
         if (headerLimit == 0) return false;
+        var modeRates = rate.Modes;
         Span<byte> top = stackalloc byte[8]; Span<byte> left = stackalloc byte[4];
         Span<byte> trial = stackalloc byte[16]; Span<byte> bestPixels = stackalloc byte[16];
         Span<short> coefficients = stackalloc short[16]; Span<short> trialLevels = stackalloc short[16]; Span<short> residual = stackalloc short[16];
@@ -165,6 +170,10 @@ internal static class Vp8MacroblockDecision
             var corner = bx == 0 ? neighbors[y] : by == 0 ? Top(neighbors, x - 1) : pixels[(y - 1) * 16 + x - 1];
             var aboveMode = by == 0 ? modeContexts[bx] : modes[b - 4];
             var leftMode = bx == 0 ? modeContexts[4 + by] : modes[b - 1];
+            // All ordered modes in this block use the same external nonzero
+            // context and ten header prices. Advance context after the winner.
+            var initialContext = topNz[bx] + leftNz[by];
+            var modeHeaders = modeRates.Slice(8 + (aboveMode * 10 + leftMode) * 10, 10);
             var bestMode = -1; Metric best = default; var bestNonzero = false;
             // Equal boundary samples make all ten predictions the same constant.
             // Only header prices and the non-DC flat-level surcharge differ.
@@ -189,7 +198,7 @@ internal static class Vp8MacroblockDecision
                 context.Cancellation.ThrowIfCancellationRequested();
                 if (uniform && mode != 0)
                 {
-                    var modeHeader = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];
+                    var modeHeader = modeHeaders[mode];
                     var repeatedRate = uniformScore.R + (uniformFlat ? 140 : 0);
                     var repeatedTotal = TotalPrice(uniformScore.D, uniformScore.S, modeHeader, repeatedRate, costs.Luma4);
                     if (repeatedTotal < best.Total)
@@ -216,17 +225,17 @@ internal static class Vp8MacroblockDecision
                 {
                     prepared = fullQuantizer.Prepare(candidate);
                     any = prepared.Mask != 0; flat = prepared.FlatNonDc;
-                    rateCost = rate.Luma4Prepared(prepared, topNz[bx] + leftNz[by]);
+                    rateCost = Vp8RatePlan.Luma4Prepared(rateValues, prepared, initialContext);
                 }
                 else
                 {
                     any = trellis
-                        ? execution.Apply(candidate, trialLevels, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis)
+                        ? execution.Apply(candidate, trialLevels, 3, initialContext, costs.Luma4Trellis)
                         : Vp8BlockQuantization.Apply(candidate, trialLevels, matrix);
                     flat = mode > 0 && Flat(trialLevels, 1, 3);
-                    rateCost = rate.Residual(trialLevels, 3, 0, topNz[bx] + leftNz[by], out _);
+                    rateCost = rate.Residual(trialLevels, 3, 0, initialContext, out _);
                 }
-                var header = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];
+                var header = modeHeaders[mode];
                 if (mode > 0 && flat) rateCost += 140;
                 // Reconstruction and texture add nonnegative distortion. This
                 // rate/header bound cannot discard a strictly better candidate.

@@ -1588,10 +1588,11 @@ def render():
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     assert vp8_owned['raw']['mirrored'] and vp8_owned['raw']['allMembersVerified']
-    assert vp8_owned['sourceProof']['allTextExactOutsideFourPublicationBlocksAndSharedPrice']
-    assert vp8_owned['sourceProof']['sameExactIntegerPriceExpression']
-    assert vp8_owned['sourceProof']['firstCandidateAndStrictTiesPreserved']
-    assert vp8_owned['sourceProof']['uniformCacheMovedOnlyForGuaranteedFirstWinner']
+    assert vp8_owned['sourceProof']['allOtherSourceTextExact']
+    assert vp8_owned['sourceProof']['sameRateMathValidationPruneTiePublication']
+    assert vp8_owned['sourceProof']['modeHeaderRowTenIndicesExact']
+    assert vp8_owned['sourceProof']['contextInvariantWithinTenCandidates']
+    assert vp8_owned['sourceProof']['viewsLocalToSearchBeforeRefreshOrDisposal']
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
     current_labels = {
@@ -1831,14 +1832,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [candidate score publication](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  defers full records until a winner. Independent photograph/diagram savings
-  are230/135µs (2.02%/2.01%); paired allocations and exact packets are unchanged.
-  Seven affected native costs refresh; distortion-only reuses unchanged code.
-  Eight controls:1pass/stop,6gaps,1uncertain. Opaque8 now has a widened uncertain
-  interval; alpha16 now has a gap. Trellis short effect remains uncertain.
-  [Prior trellis preparation](../benchmarks/VP8-TRELLIS-EXECUTION.md) retains its
-  separately scoped311µs gain and31µs photograph loss as history.
+- **WebP:** [candidate execution](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  borrows search-local rate views and prepares block contexts/header rows once.
+  Photograph independently saves204µs/1.82%, exact packets and809,072B/op unchanged.
+  Diagram/trellis short effects remain uncertain. Seven native costs refresh;
+  distortion-only reuses unchanged code. Eight controls:2pass/stop,6gaps,0uncertain.
+  [Prior score publication](https://github.com/lokad/image/blob/4ce6c091/benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  retains its separately scoped230/135µs gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. The original live/field kernel is retained after a confirmed

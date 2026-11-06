@@ -17,14 +17,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [candidate score publication](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  defers full records until a winner. Independent photograph/diagram savings
-  are230/135µs (2.02%/2.01%); paired allocations and exact packets are unchanged.
-  Seven affected native costs refresh; distortion-only reuses unchanged code.
-  Eight controls:1pass/stop,6gaps,1uncertain. Opaque8 now has a widened uncertain
-  interval; alpha16 now has a gap. Trellis short effect remains uncertain.
-  [Prior trellis preparation](../benchmarks/VP8-TRELLIS-EXECUTION.md) retains its
-  separately scoped311µs gain and31µs photograph loss as history.
+- **WebP:** [candidate execution](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  borrows search-local rate views and prepares block contexts/header rows once.
+  Photograph independently saves204µs/1.82%, exact packets and809,072B/op unchanged.
+  Diagram/trellis short effects remain uncertain. Seven native costs refresh;
+  distortion-only reuses unchanged code. Eight controls:2pass/stop,6gaps,0uncertain.
+  [Prior score publication](https://github.com/lokad/image/blob/4ce6c091/benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  retains its separately scoped230/135µs gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. The original live/field kernel is retained after a confirmed
@@ -105,13 +104,13 @@ settings do not establish matched quality.
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 2,987.26 | 2,503.72 | 1.193 / 1.197 | 741,386 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 55,062.16 | 53,494.15 | 1.029 / 1.041 | 7,033,984 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 16,092.23 | 15,493.47 | 1.039 / 1.088 | 1,201,552 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 11,617.33 | 9,791.15 | 1.187 / 1.271 | 809,225 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 6,535.06 | 5,833.46 | 1.120 / 1.128 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 11,046.61 | 9,909.97 | 1.115 / 1.122 | 754,497 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 16,613.63 | 16,959.27 | 0.980 / 0.987 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 54,336.93 | 53,344.78 | 1.019 / 1.027 | 7,034,392 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 54,702.78 | 53,231.43 | 1.028 / 1.036 | 7,033,984 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 15,072.63 | 15,493.00 | 0.973 / 0.982 | 1,201,552 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 11,130.40 | 9,701.70 | 1.147 / 1.155 | 809,225 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 6,409.52 | 5,823.06 | 1.101 / 1.109 | 741,137 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 11,037.25 | 9,799.21 | 1.126 / 1.130 | 754,497 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 15,215.37 | 15,556.93 | 0.978 / 0.981 | 1,201,552 | 72,380 / 72,380 |
+| VP8 RGBA8 + lossless alpha † | 54,289.27 | 53,296.42 | 1.019 / 1.027 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,550.15 | 9,576.69 | 0.788 / 0.823 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 109,807.33 | 127,005.55 | 0.865 / 0.940 | 7,476,544 | 183,812 / 183,812 |
