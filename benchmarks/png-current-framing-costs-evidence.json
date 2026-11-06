@@ -1,0 +1,674 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PCR438",
+  "date": "2026-11-06",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+    "linuxSha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb"
+  },
+  "qualifiedSourcePaths": {
+    "src/Lokad.Image/Internal/ZlibFraming.cs": "be0d9ed8987f9fdd2309558747006bb591c90db0a2b084156874f7b74c8cdf12",
+    "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "a9ebf065c5b90dca05a15b35e86d07439806c01b534c848d1b62d2f1893bbbe5",
+    "tests/Lokad.Image.Tests/ZlibPreparedPrefixTests.cs": "f01770c44fb0e24cc938f8169c56254f73d59a08ec6d110c7af264bccafddc70"
+  },
+  "cases": {
+    "DecodeCancelable8": {
+      "managedUs": 1539.1044322916669,
+      "nativeUs": 1394.18297265625,
+      "ratio": 1.1039472310863954,
+      "lower": 1.0925401631782121,
+      "upper": 1.1132594741255797,
+      "allocatedBytes": 4472,
+      "status": "gap",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "PNG RGBA8 decode, live token",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        1548962.0546875,
+        1553396.109375,
+        1538100.0625,
+        1536341.390625,
+        1544932.125,
+        1542400.171875,
+        1547161.359375,
+        1529297.984375,
+        1530453.3359375,
+        1532446.3515625,
+        1532793.984375,
+        1532994.1328125
+      ],
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "rawGc": "// GC:  0 0 0 572416 128",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "receipt": "tmp/pcr438-candidate-DecodeCancelable8-confirm-receipt.json",
+      "observation": "tmp/pcr438-candidate-DecodeCancelable8-confirm-observation.json",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "inputBytes": 218775,
+      "cancellationCanBeCanceled": true,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": false
+    },
+    "DecodeTight8": {
+      "managedUs": 1297.382824431818,
+      "nativeUs": 1395.0852734375,
+      "ratio": 0.929966683136908,
+      "lower": 0.9218999372365012,
+      "upper": 0.9349340631759173,
+      "allocatedBytes": 68224,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "PNG RGBA8 decode, tight working limit",
+      "actualIterations": 12,
+      "filteredResults": 11,
+      "managedActualNanoseconds": [
+        1308028.33125,
+        1299685.95,
+        1297161.56875,
+        1295917.11875,
+        1296289.68125,
+        1296251.5625,
+        1294363.39375,
+        1294309.6875,
+        1296696.425,
+        1299434.56875,
+        1298841.3,
+        1302279.75
+      ],
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "outputBytes": 531468,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical frozen RGBA8 PNG bytes to independent owned RGBA8 pixels under exact managed working limit: encoded span + IDAT bytes + output + 256 KiB original inflater allowance + two rows. The optional whole-filter and 8 KiB read buffers cannot fit. Public Decode admission/framing/BCL inflation/output acquisition/disposal timed; preconstructed immutable options excluded. Native equivalent complete decode without conversion/output acquisition/release, context/packet/frame wrappers reused. Native has no matching caller admission setting. Exact pixels/alpha/hidden RGB/source/two owners and one-byte-below rejection checked outside timing. Startup/IPC/file IO/hashes/validation excluded.",
+      "rawGc": "// GC:  0 0 0 10915840 160",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "receipt": "tmp/pcr438-candidate-DecodeTight8-confirm-receipt.json",
+      "observation": "tmp/pcr438-candidate-DecodeTight8-confirm-observation.json",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "inputBytes": 218775,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": 1235173,
+      "nativeDecodeEndianConversionTimed": false
+    },
+    "DecodeTight16": {
+      "managedUs": 3019.2200212499997,
+      "nativeUs": 2895.06075,
+      "ratio": 1.0428865857996243,
+      "lower": 1.0333560065564797,
+      "upper": 1.052371003752268,
+      "allocatedBytes": 70272,
+      "status": "gap",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "PNG RGBA16 decode, tight working limit",
+      "actualIterations": 12,
+      "filteredResults": 10,
+      "managedActualNanoseconds": [
+        3041860.0375,
+        3019474.6375,
+        3019685.4625,
+        3020545.8875,
+        3049054.925,
+        3014363.6625,
+        3017005.2875,
+        3016227.225,
+        3019404.675,
+        3018981.775,
+        3017509.8,
+        3029026.2375
+      ],
+      "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+      "outputBytes": 1062936,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical frozen RGBA16 PNG bytes to independent owned RGBA16 pixels under exact managed working limit: encoded span + IDAT bytes + output + 256 KiB original inflater allowance + two rows. The optional whole-filter and 8 KiB read buffers cannot fit. Public Decode admission/framing/BCL inflation/word conversion/output acquisition/disposal timed; preconstructed immutable options excluded. Native equivalent complete decode plus owned BE-to-LE conversion/output acquisition/release, context/packet/frame wrappers reused. Native has no matching caller admission setting. Exact pixels/alpha/hidden RGB/source/two owners and one-byte-below rejection checked outside timing. Startup/IPC/file IO/hashes/validation excluded.",
+      "rawGc": "// GC:  0 0 0 5621760 80",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "receipt": "tmp/pcr438-candidate-DecodeTight16-confirm-receipt.json",
+      "observation": "tmp/pcr438-candidate-DecodeTight16-confirm-observation.json",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "inputBytes": 960565,
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": 3254193,
+      "nativeDecodeEndianConversionTimed": true
+    },
+    "ValidatePng8": {
+      "managedUs": 1287.3688609375001,
+      "nativeUs": 1377.0472552083334,
+      "ratio": 0.934876313117326,
+      "lower": 0.9303621302872838,
+      "upper": 0.9381390289337355,
+      "allocatedBytes": 240,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Validate PNG8, span",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        1285807.41875,
+        1286688.63125,
+        1286932.1875,
+        1287241.15625,
+        1288106.84375,
+        1288677.08125,
+        1287699.4125,
+        1286198.76875,
+        1286758.55,
+        1287595.44375,
+        1289199.05625,
+        1287557.81875
+      ],
+      "inputSha256": "f222f46cd50138623a14862e7a54c795d35ff6acef5daea1b5cef9331e99bd7e",
+      "outputBytes": 36,
+      "sourceUnchanged": true,
+      "boundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded.",
+      "rawGc": "// GC:  0 0 0 38400 160",
+      "nativeWorkerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5",
+      "receipt": "tmp/pcr438-candidate-ValidatePng8-confirm-receipt.json",
+      "observation": "tmp/pcr438-candidate-ValidatePng8-confirm-observation.json",
+      "descriptorExact": true,
+      "prefixAndCodingScopesVerified": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "e96cfcba81194472b5f76f6a4b36998ecda4c0348f4c0d0ccd346ccc8a51eb65",
+      "inputBytes": 210972
+    },
+    "ValidatePng16": {
+      "managedUs": 2906.21046125,
+      "nativeUs": 2961.9854609375,
+      "ratio": 0.981169725367306,
+      "lower": 0.9790352944998748,
+      "upper": 0.9834264221991115,
+      "allocatedBytes": 240,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Validate PNG16, span",
+      "actualIterations": 12,
+      "filteredResults": 10,
+      "managedActualNanoseconds": [
+        2911432.3875,
+        2902920.125,
+        2913344.0375,
+        2908179.2125,
+        2904651.9,
+        2907171.4625,
+        2907852,
+        2907002.4625,
+        2905055.0125,
+        2906958.65,
+        2906520.6,
+        2905835.0625
+      ],
+      "inputSha256": "0215cd8aa83ba2c5bd723a5a5807e3168b22407b3a6d46bac954e2c2b4c47ea8",
+      "outputBytes": 36,
+      "sourceUnchanged": true,
+      "boundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded.",
+      "rawGc": "// GC:  0 0 0 19200 80",
+      "nativeWorkerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5",
+      "receipt": "tmp/pcr438-candidate-ValidatePng16-confirm-receipt.json",
+      "observation": "tmp/pcr438-candidate-ValidatePng16-confirm-observation.json",
+      "descriptorExact": true,
+      "prefixAndCodingScopesVerified": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "51b41557da643d4c5fd7276589ff09bb3272ba705e0daf176daacc2acf2dcece",
+      "inputBytes": 963200
+    },
+    "ValidateIndexedAdam7": {
+      "managedUs": 1.7599431303673572,
+      "nativeUs": 3.9385506896972657,
+      "ratio": 0.44685044551315245,
+      "lower": 0.4336172559786787,
+      "upper": 0.46327035134830885,
+      "allocatedBytes": 792,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Validate indexed Adam7 19\u00d717, span",
+      "actualIterations": 12,
+      "filteredResults": 9,
+      "managedActualNanoseconds": [
+        1780.0092404264274,
+        1762.9618459812036,
+        1763.3862042362182,
+        1765.1944873053724,
+        1780.5357869266377,
+        1759.0373036190208,
+        1796.9808528545377,
+        1760.2543396689578,
+        1762.5014027212792,
+        1762.9130137466686,
+        1763.2721366951887,
+        1761.011993266938
+      ],
+      "inputSha256": "bce719540c91f90470f49dca60aa33071266cdf918d6bce215d6fa3b4bd0c2f3",
+      "outputBytes": 36,
+      "sourceUnchanged": true,
+      "boundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded.",
+      "rawGc": "// GC:  5 0 0 90338688 114064",
+      "nativeWorkerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5",
+      "receipt": "tmp/pcr438-candidate-ValidateIndexedAdam7-confirm-receipt.json",
+      "observation": "tmp/pcr438-candidate-ValidateIndexedAdam7-confirm-observation.json",
+      "descriptorExact": true,
+      "prefixAndCodingScopesVerified": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "43e3398c2faf53e2caa3cde77e26461bf7e1e28ab3acc171d765285841d168dd",
+      "inputBytes": 417
+    },
+    "ValidatePng16Async": {
+      "managedUs": 2956.807461458333,
+      "nativeUs": 3613.242234375,
+      "ratio": 0.8183252795310543,
+      "lower": 0.8079397981979306,
+      "upper": 0.8261693077363745,
+      "allocatedBytes": 8544,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Validate PNG16, async nonseekable",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        2959044.475,
+        2952549.4125,
+        2951205.4875,
+        2958762.8125,
+        2960125.625,
+        2954746.975,
+        2955786.8,
+        2951184.575,
+        2959323.9125,
+        2959897.975,
+        2958917.7875,
+        2960191.85
+      ],
+      "inputSha256": "0215cd8aa83ba2c5bd723a5a5807e3168b22407b3a6d46bac954e2c2b4c47ea8",
+      "outputBytes": 36,
+      "sourceUnchanged": true,
+      "boundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded.",
+      "rawGc": "// GC:  0 0 0 683520 80",
+      "nativeWorkerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5",
+      "receipt": "tmp/pcr438-candidate-ValidatePng16Async-confirm-receipt.json",
+      "observation": "tmp/pcr438-candidate-ValidatePng16Async-confirm-observation.json",
+      "descriptorExact": true,
+      "prefixAndCodingScopesVerified": true,
+      "independentOwnedOutput": true,
+      "outputSha256": "51b41557da643d4c5fd7276589ff09bb3272ba705e0daf176daacc2acf2dcece",
+      "inputBytes": 963200
+    }
+  },
+  "statusCounts": {
+    "pass": 5,
+    "gap": 2,
+    "uncertain": 0
+  },
+  "previousDisplayedPoints": {
+    "DecodeCancelable8": {
+      "managedUs": 1607.11,
+      "nativeUs": 1397.16,
+      "ratio": 1.15,
+      "upper": 1.182,
+      "allocatedBytes": 4472,
+      "scope": "Historical point only; not a paired causal effect. Original raw evidence remains linked."
+    },
+    "DecodeTight8": {
+      "managedUs": 1642.61,
+      "nativeUs": 1498.48,
+      "ratio": 1.096,
+      "upper": 1.119,
+      "allocatedBytes": 68224,
+      "scope": "Historical point only; not a paired causal effect. Original raw evidence remains linked."
+    },
+    "DecodeTight16": {
+      "managedUs": 3120.34,
+      "nativeUs": 3128.99,
+      "ratio": 0.997,
+      "upper": 1.016,
+      "allocatedBytes": 70272,
+      "scope": "Historical point only; not a paired causal effect. Original raw evidence remains linked."
+    },
+    "ValidatePng8": {
+      "managedUs": 1417.189,
+      "nativeUs": 1384.73,
+      "ratio": 1.023,
+      "upper": 1.056,
+      "allocatedBytes": 240,
+      "scope": "Historical point only; not a paired causal effect. Original raw evidence remains linked."
+    },
+    "ValidatePng16": {
+      "managedUs": 2805.515,
+      "nativeUs": 2974.59,
+      "ratio": 0.943,
+      "upper": 0.972,
+      "allocatedBytes": 240,
+      "scope": "Historical point only; not a paired causal effect. Original raw evidence remains linked."
+    },
+    "ValidateIndexedAdam7": {
+      "managedUs": 1.776,
+      "nativeUs": 3.965,
+      "ratio": 0.448,
+      "upper": 0.46,
+      "allocatedBytes": 792,
+      "scope": "Historical point only; not a paired causal effect. Original raw evidence remains linked."
+    },
+    "ValidatePng16Async": {
+      "managedUs": 2836.823,
+      "nativeUs": 3623.647,
+      "ratio": 0.783,
+      "upper": 0.79,
+      "allocatedBytes": 8544,
+      "scope": "Historical point only; not a paired causal effect. Original raw evidence remains linked."
+    }
+  },
+  "qualificationReused": {
+    "evidence": "png-prepared-prefix-evidence.json",
+    "fullChecksEachOs": 5751,
+    "focusedInternalEachMode": 704,
+    "focusedPublicEachMode": 246,
+    "sameActualPackageBothOs": true,
+    "packageSha256": "98c5409fb690ca9febc9ded679267ca45ca84202669b0141f8ec0a0be707f08e",
+    "usageExamples": 3,
+    "coreAndPackageUnchanged": true,
+    "gitCommit": "3cfa1115f8a17b0d52085851eefc8df4be03f266",
+    "ci": 42293117428,
+    "ciGreenAllThree": true
+  },
+  "boundaries": "Seven already required complete operations on immutable qualifiedLPP437module; exact inputs/settings/output/ownership/limits and original native contexts preserved. Four coding cases produce36Bdescriptor, notRGBA. Three PNG decodes retain exact frozen workerCFB/sourceA75/buildscript/identity recovered from verified archive, not currentordinaryworkerC672. All12actuals/bothbrackets/filtered+allactual/idle-v2/source/normal-scalar/native gates retained. No production,test,harness,selector,native rebuild/profile/newfixture or repeated package/fullsuite proof.",
+  "recovery": {
+    "reason": "Old pcb2reference schema omitted four readiness fields. Current retained reference carries exact same frozen worker/build and normalSIMD fields; strict full comparison retained.",
+    "addedFields": [
+      "packedTransparencyFilterTimed",
+      "filterThreads",
+      "scalarMode",
+      "cpuFlags"
+    ],
+    "noReplay": true,
+    "completedActuals": 12
+  },
+  "sourceAudit": {
+    "png": {
+      "worker": "external/warm-reference/ffmpeg-png-warm",
+      "identity": "external/warm-reference/png-identity.json",
+      "workerSha256": "c672cf54c5f25aff5e19e3df9324e27ee6476d283b5c35f54ae89888aa53d790",
+      "expectedWorkerSha256": "c672cf54c5f25aff5e19e3df9324e27ee6476d283b5c35f54ae89888aa53d790",
+      "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+      "currentSharedSourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+      "frozenSharedSourceSha256": "a75eaefa6dc3de3728c7c3959b772108b5b97cb97e672f6543433a2a3307f529"
+    },
+    "read": {
+      "identityMissing": "external/warm-reference/read-identity.json"
+    },
+    "artifacts/warm-reference/png-cancel8/input.png": {
+      "bytes": 218775,
+      "sha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f"
+    },
+    "artifacts/warm-reference/png-cancel16/input.png": {
+      "bytes": 960565,
+      "sha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8"
+    },
+    "artifacts/warm-reference/read-boundaries/proof.json": {
+      "bytes": 18068,
+      "sha256": "a7357dffeca335828c4017f670e0a16dd253b14aaa044b64bcb6ea98e4e80e66"
+    },
+    "mainSha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb"
+  },
+  "storage": "GC totals shown per complete operation; unchanged ownership/admission qualified. Physical/native peak and retained pool capacity not newly measured. Shared-rootLPP437peak belongs to its distinct two-result control, not transferred here.",
+  "observations": "Five pass/stop, two demonstrated gaps: liveRGBA8upper1.1133/tightRGBA16upper1.0524. Tight16raw3019vs3120historical improves while native2895vs3129improves more; ratio movement alone is not evidence of a managed regression. PNG16coding raw2906vs2806historical is adverse but remains passingupper.9834. No causal historicalgain/losseffect asserted. No unchanged favorable repeat.",
+  "remaining": "Current displayed PNGframing controls reconciled. Remaining required non-displayed PNGdecode cases in existing finite WarmPng inventory still require current evidence; no newgrid. Other codec/resize/text current unchanged-source evidence remains valid. Choose demonstrated materialgaps from currentattribution, not the closed passingcases.",
+  "decision": "Accept current costs and stop five passes. Missing confirmations resolved without production changes; reuse all valid qualification. Historical rejected cursor experiments cease renderer dependencies because they no longer supply displayed results.",
+  "priorEvidence": [
+    "png-prepared-prefix-evidence.json",
+    "current-tight-png-decode-costs-evidence.json",
+    "png-cancelable-cursor-reassessment-evidence.json"
+  ],
+  "raw": {
+    "file": "png-current-framing-costs.tar.xz",
+    "sha256": "def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe",
+    "bytes": 1970652,
+    "members": 110,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      },
+      {
+        "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+        "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+      },
+      {
+        "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+        "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+      },
+      {
+        "file": "jpeg-buffered-correction-restoration.tar.xz",
+        "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+      },
+      {
+        "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+        "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+      },
+      {
+        "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+        "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+      },
+      {
+        "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+        "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+      },
+      {
+        "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+        "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+      },
+      {
+        "file": "vp8-current-live-model-attribution.tar.xz",
+        "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+      },
+      {
+        "file": "vp8-live-model-preparation-qualified.tar.xz",
+        "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+      },
+      {
+        "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+        "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+      },
+      {
+        "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+        "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4"
+      },
+      {
+        "file": "bicubic-output-workspace-qualified.tar.xz",
+        "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+      },
+      {
+        "file": "bicubic-default-output-workspace-qualified.tar.xz",
+        "sha256": "a4ff4eb24fc61dce4599aae3328bffa0b07a56e991d6b636b6cbc39c53e0317b"
+      },
+      {
+        "file": "parity-p40-qualified-evidence.tar.gz",
+        "sha256": "21114dd252c7f82cfcac745418a34eee442c4c3d3bf33ce6b71765b88250939d"
+      },
+      {
+        "file": "bicubic-shared-enlargement-qualified.tar.xz",
+        "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+      },
+      {
+        "file": "vp8-unshifted-live-reservoir-qualified.tar.xz",
+        "sha256": "5a773cc39f02710dc5dc27e744d60f7a77babdce2365b9b8bcb0f4614189fe03"
+      },
+      {
+        "file": "bilinear-current-boundary-audit.tar.xz",
+        "sha256": "3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018"
+      },
+      {
+        "file": "jpeg-correction-bit-qualified.tar.xz",
+        "sha256": "624f0b847f29b7465f96a7c2dbaecf2ed5f64f85359cecb5c9d1364bd893a1d1"
+      },
+      {
+        "file": "vp8-selected-trellis-boundary.tar.xz",
+        "sha256": "923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79"
+      },
+      {
+        "file": "vp8-trellis-architecture-audit.tar.xz",
+        "sha256": "73f1d0fd787fd732f1aa8146f78ee58be6dd4c856fcd6547fead6e0189869fd4"
+      },
+      {
+        "file": "vp8-ordinary-block-preparation-qualified.tar.xz",
+        "sha256": "0d3dfc7b21f6f3b7fb3b546b367ae3fb270615ad4d3264f4de1b077a807c987f"
+      },
+      {
+        "file": "vp8-current-photograph-attribution.tar.xz",
+        "sha256": "1c35f956ef35e6ab08cc1f80066e23aa26e90bb46d08459a64beed7657125421"
+      },
+      {
+        "file": "vp8-bounded-price-view-qualified.tar.xz",
+        "sha256": "830067c12147668abe8ed024ad63c7bfd17026d1c3b3aea0efa817843f0ec3e3"
+      },
+      {
+        "file": "vp8-alpha-output-handoff-qualified.tar.xz",
+        "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
+      },
+      {
+        "file": "vp8-trellis-candidate-preparation-qualified.tar.xz",
+        "sha256": "0cb9428ef776647daea6a809c66e86d07f4e3e2997c1cd1d5109ccba85641430"
+      },
+      {
+        "file": "vp8-current-validation-state-attribution.tar.xz",
+        "sha256": "89398293287135112cfdc17075d56cec7ca2f62660449faf7eb4ff689dbd4794"
+      },
+      {
+        "file": "vp8-block-state-reservoir-qualified.tar.xz",
+        "sha256": "f4ee950171f4e6ea02d101022aeb49140cac243ab1d8b8eb0d29adfdff5b5186"
+      },
+      {
+        "file": "current-retained-png-decode-cost.tar.xz",
+        "sha256": "4cad0b918916e1d1a0bb661ca2a6e4fb81ea9db5c529e593a2ca7224f1dd836f"
+      },
+      {
+        "file": "png-retained-root-current-attribution.tar.xz",
+        "sha256": "5f30795b21030f904942a4f0b2679283a241ebfb8f4e7dda34fe70dfb1be7ced"
+      },
+      {
+        "file": "png-prepared-prefix-qualified.tar.xz",
+        "sha256": "3a57e9ffd77680fe3dda7a121bbd4fc41ed7ca83756828eccdc129543ed3a699"
+      },
+      {
+        "file": "current-tight-png-decode-costs.tar.xz",
+        "sha256": "e5319918f7ce7bbaaafd940384bf191d76cebb5931199b01381d9e377d869824"
+      }
+    ]
+  },
+  "remainingNamedDecodeCases": [
+    "Decode8",
+    "Decode16",
+    "DecodeAdam7_16",
+    "DecodePaeth16",
+    "DecodePaeth8",
+    "DecodeRgb16",
+    "DecodeGray8",
+    "DecodeGrayAlpha8",
+    "DecodeRgb8",
+    "DecodeGray16",
+    "DecodeGrayAlpha16",
+    "DecodePalette8",
+    "DecodeGray1",
+    "DecodeGray4",
+    "DecodePalette4",
+    "DecodePalette2",
+    "DecodePalette1",
+    "DecodeGray2",
+    "DecodeUp8",
+    "DecodeSub8",
+    "DecodeAverage8",
+    "DecodeNoCompression8",
+    "DecodePalette8PartialAlpha",
+    "DecodeGray8Transparency",
+    "DecodeGray16Transparency",
+    "DecodeRgb8Transparency",
+    "DecodeRgb16Transparency",
+    "DecodeNoCompression16",
+    "DecodeCancelable16",
+    "DecodeTightCancelable16",
+    "DecodeSub16",
+    "DecodeAverage16",
+    "DecodeUp16",
+    "DecodeRgbPaeth8",
+    "DecodeGray1Adam7",
+    "DecodeTightCancelable8",
+    "DecodeGray2Transparency",
+    "DecodeGray1Transparency",
+    "DecodePalette8Adam7",
+    "DecodePalette8Short",
+    "DecodeGrayPaeth8",
+    "DecodeGrayAlphaPaeth8",
+    "DecodeRgbPaeth16",
+    "DecodePalette4Adam7"
+  ],
+  "inventorySource": "Existing WarmPngCase decode inventory within the283materialpaths, no additions. Three displayed decode cases current here;44otherexisting cases affected by sharedframing remain unconfirmed."
+}

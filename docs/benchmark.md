@@ -53,9 +53,14 @@ Current scope and remaining work:
   422µs/12.8% on two complete retained-output decodes under one shared root.
   Current ratio 1.009/upper 1.014 remains a gap. Nominal arrays fit the same4KiB
   scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
-  Total GC measures1,638,214B/op, +694B; no allocation-reduction claim. Seven other
-  displayed framing-dependent decode/validation costs are **H**, pending current
-  confirmation. Header-only inspection/identification and encoding stay unaffected.
+  Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
+  [Seven refreshed controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) now have current
+  independent evidence: **five pass/stop, two gaps**. Live RGBA8 ratio1.104/upper1.113
+  and tight RGBA16 ratio1.043/upper1.052 remain gaps; allocations4,472/70,272B.
+  Tight RGBA8, both-depth coding validation, indexed Adam7 and async word validation
+  pass. Historical point movements are not paired effects; the report records the
+  adverse word-validation point and faster native tight-word clock. Header-only
+  inspection/identification and encoding stay unaffected.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse
@@ -161,9 +166,9 @@ settings do not establish matched quality.
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,773.10 | 5,394.24 | 0.885 / 0.902 | 822,740 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,050.55 | 10,479.84 | 0.959 / 0.967 | 1,360,900 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
-| PNG RGBA8 decode, live token † H | 1,607.11 | 1,397.16 | 1.150 / 1.182 | 4,472 | — |
-| PNG RGBA8 decode, tight working limit † H | 1,642.61 | 1,498.48 | 1.096 / 1.119 | 68,224 | — |
-| PNG RGBA16 decode, tight working limit (confidence open) † H | 3,120.34 | 3,128.99 | 0.997 / 1.016 | 70,272 | — |
+| PNG RGBA8 decode, live token † | 1,539.10 | 1,394.18 | 1.104 / 1.113 | 4,472 | — |
+| PNG RGBA8 decode, tight working limit † | 1,297.38 | 1,395.09 | 0.930 / 0.935 | 68,224 | — |
+| PNG RGBA16 decode, tight working limit † | 3,019.22 | 2,895.06 | 1.043 / 1.052 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 18,449.19 | 18,610.40 | 0.991 / 1.019 | 2,437,660 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,727.28 | 18,564.11 | 1.009 / 1.016 | 2,437,660 | 968,216 / 968,216 |
@@ -251,14 +256,14 @@ settings do not establish matched quality.
 | Probe JPEG dimensions, seekable | 0.326 | 0.194 | 1.681 / 1.736 | 744 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.165 | 0.125 | 1.323 / 1.425 | 744 | Confirmed gap |
 | Probe JPEG dimensions, async nonseekable | 0.404 | 0.201 | 2.007 / 2.052 | 744 | Confirmed gap |
-| Validate PNG8, span † H | 1,417.189 | 1,384.730 | 1.023 / 1.056 | 240 | Historical; refresh pending |
-| Validate PNG16, span † H | 2,805.515 | 2,974.590 | 0.943 / 0.972 | 240 | Historical; refresh pending |
-| Validate indexed Adam7 19×17, span † H | 1.776 | 3.965 | 0.448 / 0.460 | 792 | Historical; refresh pending |
+| Validate PNG8, span † | 1,287.369 | 1,377.047 | 0.935 / 0.938 | 240 | Confirmed pass |
+| Validate PNG16, span † | 2,906.210 | 2,961.985 | 0.981 / 0.983 | 240 | Confirmed pass |
+| Validate indexed Adam7 19×17, span † | 1.760 | 3.939 | 0.447 / 0.463 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span | 543.780 | 689.481 | 0.789 / 0.815 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 286.239 | 289.052 | 0.990 / 1.001 | 4,072 | Confidence open |
 | Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
 | Validate VP8+alpha, span | 5,967.449 | 5,442.741 | 1.096 / 1.106 | 554,478 | Confirmed gap |
-| Validate PNG16, async nonseekable † H | 2,836.823 | 3,623.647 | 0.783 / 0.790 | 8,544 | Historical; refresh pending |
+| Validate PNG16, async nonseekable † | 2,956.807 | 3,613.242 | 0.818 / 0.826 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |

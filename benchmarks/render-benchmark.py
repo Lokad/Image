@@ -301,20 +301,6 @@ def render():
         assert len(observation['managed']['actual']) == len(observation['receipt']['nativeBefore']) == len(observation['receipt']['nativeAfter']) == 12
         assert all(q['passed'] for q in observation['quietness'].values())
         assert (observation['conservativeRatioUpper'] <= 1) == (png_gfni['status'][case] == 'confirmed-pass')
-    png_indexed = json.loads((ROOT / 'benchmarks/warm-png-indexed-validation-evidence.json').read_text(encoding='utf-8'))
-    assert png_indexed['productionChanged'] and png_indexed['independentQuietConfirmation'] and png_indexed['decision']['passed']
-    assert png_indexed['decision']['defaultFivePercentPassed'] and png_indexed['decision']['normalizedSeparated']
-    assert set(png_indexed['cases']) == {'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
-    assert png_indexed['qualification']['fullChecksEachOs'] == 5310
-    assert png_indexed['qualification']['package']['sha256'] == png_indexed['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert png_indexed['memory']['measuredWarmReductionBytes'] == 376
-    assert png_indexed['memory']['governedActualPackagePeakEachOs'] == 4581
-    for case, observations in png_indexed['cases'].items():
-        observation = observations[-1]
-        assert observation['receipt']['librarySha256'] == png_indexed['producers']['linuxSha256']
-        assert len(observation['managed']['actual']) == len(observation['receipt']['nativeBefore']) == len(observation['receipt']['nativeAfter']) == 12
-        assert all(q['passed'] for q in observation['quietness'].values())
-        assert (observation['conservativeRatioUpper'] <= 1) == (png_indexed['status'][case] == 'confirmed-pass')
     probes = json.loads((ROOT / 'benchmarks/warm-probe-completed-reads-evidence.json').read_text(encoding='utf-8'))
     webp_current = json.loads((ROOT / 'benchmarks/webp-scoring-preparation-evidence.json').read_text(encoding='utf-8'))
     assert webp_current['productionAccepted'] and webp_current['decision']['exactPacketsPreserved']
@@ -432,16 +418,20 @@ def render():
     assert word_color_png['qualification']['sameActualPackageBothOs']
     assert word_color_png['qualification']['package']['sha256'] == word_color_png['qualification']['linuxPackage']['sameActualPackageSha256']
     assert set(word_color_png['cases']) == {'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16'}
-    cursor_reassessment = json.loads((ROOT / 'benchmarks/png-cancelable-cursor-reassessment-evidence.json').read_text(encoding='utf-8'))
-    assert cursor_reassessment['candidateRejected'] and not cursor_reassessment['productionChanged']
-    assert cursor_reassessment['independentQuietConfirmation'] and not cursor_reassessment['independentCandidateConfirmation']
-    assert not cursor_reassessment['decision']['passed'] and cursor_reassessment['sourceScope']['sourceRestoredByteExact']
-    assert cursor_reassessment['producers'] == word_color_png['producers']
-    assert cursor_reassessment['qualification']['packageSha256'] == word_color_png['qualification']['package']['sha256']
-    tight_png_costs = json.loads((ROOT / 'benchmarks/current-tight-png-decode-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not tight_png_costs['productionChanged'] and tight_png_costs['allBuilds'] == 0
-    assert tight_png_costs['independentQuietConfirmations'] == 2 and tight_png_costs['producers'] == word_color_png['producers']
-    assert tight_png_costs['qualificationReused']['packageSha256'] == word_color_png['qualification']['package']['sha256']
+    png_framing = json.loads((ROOT / 'benchmarks/png-current-framing-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_framing['productionChanged'] and png_framing['allBuilds'] == 0
+    assert png_framing['statusCounts'] == {'pass': 5, 'gap': 2, 'uncertain': 0}
+    assert png_framing['raw']['mirrored'] and png_framing['raw']['allMembersVerified']
+    assert png_framing['qualificationReused']['sameActualPackageBothOs']
+    assert set(png_framing['cases']) == {'DecodeCancelable8', 'DecodeTight8', 'DecodeTight16',
+        'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
+    for case, framing_case in png_framing['cases'].items():
+        assert framing_case['actualIterations'] == len(framing_case['managedActualNanoseconds']) == 12
+        assert framing_case['librarySha256'] == png_framing['producers']['linuxSha256']
+        assert framing_case['allOriginalGatesPassed'] and framing_case['quietGuardsPassed']
+        assert framing_case['sourceUnchanged'] and framing_case['independentOwnedOutput']
+        assert framing_case['status'] == ('pass' if framing_case['upper'] <= 1 else 'gap' if framing_case['lower'] > 1 else 'uncertain')
+        assert framing_case.get('descriptorExact', framing_case.get('managedExact', False))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -591,38 +581,15 @@ def render():
         rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
                      f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                      f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {packet_bytes:,} / {packet_bytes:,} |'))
-    observation = cursor_reassessment['cases']['DecodeCancelable8'][-1]
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert cursor_reassessment['status']['DecodeCancelable8'] == 'confirmed-gap'
-    assert receipt['librarySha256'] == cursor_reassessment['producers']['linuxSha256']
-    assert receipt['inputSha256'] == '4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f'
-    assert receipt['cancellationCanBeCanceled'] and not receipt['cancellationRequested']
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    assert all(q['passed'] for q in observation['quietness'].values())
-    assert all(receipt[k] for k in ('allRgbaSamplesExact', 'alphaExact', 'hiddenRgbExact', 'sourceUnchanged', 'independentOwnedOutput'))
-    native = min(b['mean'] for b in observation['nativeBrackets'])
-    rows.append(('codec', f'| PNG RGBA8 decode, live token † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
-    for case, label, limit in [('DecodeTight8', 'PNG RGBA8 decode, tight working limit', 1235173),
-                               ('DecodeTight16', 'PNG RGBA16 decode, tight working limit (confidence open)', 3254193)]:
-        observation = tight_png_costs['cases'][case][-1]
-        receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert receipt['librarySha256'] == tight_png_costs['producers']['linuxSha256']
-        assert receipt['tightWorkingBytes'] == limit and not receipt['cancellationCanBeCanceled']
-        assert receipt['nativeDecodeEndianConversionTimed'] == (case == 'DecodeTight16')
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert all(q['passed'] for q in observation['quietness'].values())
-        assert all(receipt[k] for k in ('allRgbaSamplesExact', 'alphaExact', 'hiddenRgbExact', 'sourceUnchanged', 'independentOwnedOutput'))
-        if case == 'DecodeTight8':
-            assert tight_png_costs['status'][case] == 'confirmed-gap' and tight_png_costs['comparisonLowerBounds'][case] > 1
-        else:
-            assert tight_png_costs['status'][case] == 'confirmed-confidence-open'
-            assert tight_png_costs['comparisonLowerBounds'][case] <= 1 < observation['conservativeRatioUpper']
-        native = min(b['mean'] for b in observation['nativeBrackets'])
-        rows.append(('codec', f'| {label} † | {stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    for case, limit in [('DecodeCancelable8', None), ('DecodeTight8', 1235173), ('DecodeTight16', 3254193)]:
+        framing_case = png_framing['cases'][case]
+        assert framing_case['tightWorkingBytes'] == limit
+        assert framing_case['cancellationCanBeCanceled'] == (case == 'DecodeCancelable8')
+        assert not framing_case['cancellationRequested']
+        assert framing_case['normalScalarCliExact'] and framing_case['alphaExact'] and framing_case['hiddenRgbExact']
+        assert framing_case['nativeDecodeEndianConversionTimed'] == (case == 'DecodeTight16')
+        rows.append(('codec', f'| {framing_case["label"]} † | {framing_case["managedUs"]:,.2f} | {framing_case["nativeUs"]:,.2f} | '
+                     f'{framing_case["ratio"]:.3f} / {framing_case["upper"]:.3f} | {framing_case["allocatedBytes"]:,} | — |'))
     predicted = png_gfni['cases']['EncodePredictable16'][-1]
     receipt, stats = predicted['receipt'], predicted['managed']['statistics']
     assert receipt['librarySha256'] == png_gfni['producers']['linuxSha256']
@@ -1724,6 +1691,8 @@ def render():
     # The latest coherent production stage owns current global qualification.
     png_decode = json.loads((ROOT / 'benchmarks/png-prepared-prefix-evidence.json').read_text(encoding='utf-8'))
     assert png_decode['productionAccepted'] and png_decode['requiredMaterialPaths'] == 283
+    assert png_framing['producers'] == png_decode['producers']
+    assert png_framing['qualificationReused']['packageSha256'] == png_decode['qualification']['actualPackage']['sha256']
     assert png_decode['sourceProof']['unchangedBitsPeekFillConsumeAlignSkipText']
     assert png_decode['storage']['admittedScratchBytes'] == 4096
     assert png_decode['storage']['newHeapPayloadBytes'] == png_decode['storage']['newRetainedBytes'] == 0
@@ -1784,10 +1753,7 @@ def render():
             rows.insert(position, row)
     for index, (kind, row) in enumerate(rows):
         label = row.split('|')[1].strip().removesuffix(' †')
-        if label in png_decode['invalidatedCodecLabels']:
-            assert kind == 'codec'
-            rows[index] = (kind, row.replace(' † |', ' † H |', 1))
-        elif label == 'PNG8 decode, two retained images / shared caller root':
+        if label == 'PNG8 decode, two retained images / shared caller root':
             current = png_decode['current']
             rows[index] = (kind, f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                            f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | — |')
@@ -1803,7 +1769,16 @@ def render():
                    'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
                    'Validate PNG16, async nonseekable']
     read_rows = []
+    refreshed_png_reads = set()
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
+        if case in png_framing['cases']:
+            current = png_framing['cases'][case]
+            assert current['descriptorExact'] and current['prefixAndCodingScopesVerified'] and current['outputBytes'] == 36
+            status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
+            read_rows.append(f'| {label} † | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
+            refreshed_png_reads.add(case)
+            continue
         if case == 'ValidateVp8Alpha':
             current = decoder_owned['cases'][case]
             status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
@@ -1818,7 +1793,7 @@ def render():
             read_rows.append(f'| {label} | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             continue
-        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else png_indexed if case in png_indexed['cases'] else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -1885,15 +1860,7 @@ def render():
                          f'{min(b["mean"] for b in identified["nativeBrackets"]) / 1000:,.3f} | '
                          f'{identified["worstBracketRatio"]:.3f} / {identified["conservativeRatioUpper"]:.3f} | '
                          f'{identified["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
-    historical_reads = 0
-    for index, row in enumerate(read_rows):
-        fields = row.split('|')
-        if fields[1].strip() in png_decode['invalidatedReadLabels']:
-            fields[1] = fields[1].rstrip() + ' † H '
-            fields[-2] = ' Historical; refresh pending '
-            read_rows[index] = '|'.join(fields)
-            historical_reads += 1
-    assert historical_reads == 4
+    assert refreshed_png_reads == {'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
@@ -1951,9 +1918,14 @@ Current scope and remaining work:
   422µs/12.8% on two complete retained-output decodes under one shared root.
   Current ratio {png_decode['current']['ratio']:.3f}/upper {png_decode['current']['upper']:.3f} remains a gap. Nominal arrays fit the same4KiB
   scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
-  Total GC measures1,638,214B/op, +694B; no allocation-reduction claim. Seven other
-  displayed framing-dependent decode/validation costs are **H**, pending current
-  confirmation. Header-only inspection/identification and encoding stay unaffected.
+  Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
+  [Seven refreshed controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) now have current
+  independent evidence: **five pass/stop, two gaps**. Live RGBA8 ratio1.104/upper1.113
+  and tight RGBA16 ratio1.043/upper1.052 remain gaps; allocations4,472/70,272B.
+  Tight RGBA8, both-depth coding validation, indexed Adam7 and async word validation
+  pass. Historical point movements are not paired effects; the report records the
+  adverse word-validation point and faster native tight-word clock. Header-only
+  inspection/identification and encoding stay unaffected.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse
