@@ -19,6 +19,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
+| Complete bilinear enlargement | [Current boundary audit](bilinear-current-boundary-evidence.json) reuses the qualified immutable build without production changes or rebuilds. Existing RGBA8 Up8 measures2357.04µs/native2155.92µs, ratio1.093/upper1.134/lower.971: uncertain.102891B/op includes fresh~103KBhorizontal preparation and independent output ownership; the unchanged4MiBdefault pool reuses output backing. Older2914.62µs/2235512Bcost is superseded, not paired causal gain evidence. Native graph/context preparation remains retained and labeled. Stop tuning this uncertain case while larger demonstrated gaps remain. |
 | Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
@@ -28,7 +29,7 @@ The current [live-reservoir milestone](VP8-UNSHIFTED-LIVE-RESERVOIR.md) qualifie
 examples on Windows/Linux. No ISA kernel changed; unchanged vector-path disabled-
 ISA proof is reused. The existing consumer reaches exact live sync/async full-frame
 VP8 decoding and independent shared ownership. One named live control refreshes;
-all125displayed numerical comparisons reuse unchanged paths. No125-row actual-package
+the subsequent bilinear audit refreshes one displayed row,124reuse unchanged paths. No125-row actual-package
 release refresh or282-path pass. Working capacity, GC totals and retention stay distinct.
 
 The preceding [shared resize milestone](BICUBIC-SHARED-ENLARGEMENT.md) retains179µs/
@@ -36,6 +37,14 @@ The preceding [shared resize milestone](BICUBIC-SHARED-ENLARGEMENT.md) retains17
 [Fixed model delivery](VP8-LIVE-MODEL-PREPARATION.md) and
 [progressive JPEG scheduling](JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retain their
 narrow raw gains/normalized uncertainty and JPEG984KB→701KBallocation reduction.
+
+The bounded bilinear refresh reuses the same qualification and actual package:
+no production change, builds, new fixtures or repeated timings. Its original
+frozen selector/harness/native/pixel gates and12actuals pass. Raw
+`bilinear-current-boundary-audit.tar.xz`,179,892B/33members,
+SHA256`3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018`,
+is mirrored/member-verified. A harness-identity preflight failure is retained;
+zero timing starts before that correction. No causal claim from historical clocks.
 
 Two [shared large-prediction prototypes](VP8-SHARED-STRIDED-PREDICTION.md) are
 inconclusive and restored byte for byte. Independent complete live decode is flat

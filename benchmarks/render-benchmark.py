@@ -1670,6 +1670,18 @@ def render():
     assert len(positions) == 1
     rows[positions[0]] = ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
         f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | {stream["allocatedBytes"]:,} | — |')
+    bilinear = json.loads((ROOT / 'benchmarks/bilinear-current-boundary-evidence.json').read_text(encoding='utf-8'))
+    current = bilinear['current']
+    assert not bilinear['productionChanged'] and bilinear['allBuilds'] == 0
+    assert bilinear['raw']['mirrored'] and bilinear['raw']['allMembersVerified']
+    assert current['librarySha256'] == current['receipt']['librarySha256']
+    assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['receipt']['managedRationalReferenceExact'] and current['receipt']['independentOwnedOutput']
+    assert current['lower'] < 1 < current['upper'] and current['status'] == 'uncertain'
+    positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| Bilinear upscale RGBA8 ')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| Bilinear upscale RGBA8 † → 1027×519 | {current["managedUs"]:,.2f} | '
+        f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |')
     column = json.loads((ROOT / 'benchmarks/bicubic-column-preparation-evidence.json').read_text(encoding='utf-8'))
     current = column['cases']['TightDown8']
     assert column['productionAccepted'] and current['actualIterations'] == 12
@@ -1892,6 +1904,9 @@ Current scope and remaining work:
   its4,264,538B/op includes the mandatory4,264,104Boutput. Twelve existing full/axial/
   default/tight costs refresh:8gaps/4uncertain. Byte incremental timing is inconclusive;
   adverse points/native clock movement stay explicit. No new retained cache or pool.
+  [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
+  enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
+  Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
   removes two full byte planes using operation-owned output-tail strips. Complete

@@ -56,6 +56,9 @@ Current scope and remaining work:
   its4,264,538B/op includes the mandatory4,264,104Boutput. Twelve existing full/axial/
   default/tight costs refresh:8gaps/4uncertain. Byte incremental timing is inconclusive;
   adverse points/native clock movement stay explicit. No new retained cache or pool.
+  [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
+  enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
+  Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
   removes two full byte planes using operation-owned output-tail strips. Complete
@@ -181,7 +184,7 @@ settings do not establish matched quality.
 | Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,337.24 | 5,079.02 | 0.854 / 0.860 | 4,592,777 |
 | Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,375.20 | 4,239.10 | 1.032 / 1.052 | 4,265,302 |
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
-| Bilinear upscale RGBA8 † H → 1027×519 | 2,914.62 | 2,163.33 | 1.347 / 1.358 | 2,235,512 |
+| Bilinear upscale RGBA8 † → 1027×519 | 2,357.04 | 2,155.92 | 1.093 / 1.134 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 549.84 | 418.61 | 1.313 / 1.321 | 199,981 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,429.17 | 3,125.34 | 1.097 / 1.113 | 4,264,538 |
