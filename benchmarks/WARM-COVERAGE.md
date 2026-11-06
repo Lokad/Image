@@ -58,6 +58,13 @@ source/modules are restored without another package proof. The
 subsequent byte-enlargement workspace stage is accepted; its smaller remaining gaps
 are deferred in favor of the larger current codec gaps. Materially revised designs remain eligible.
 
+The [matcher phase study](WEBP-MATCHER-PHASE-STUDY.md) completes three coherent
+private implementations without a useful alpha lead. Exact source/main/embedded/
+binding/manifest restoration reuses valid qualification; all points and code stay
+in its report/raw, without a current-row or renderer dependency. Coefficient-output
+preparation is the next independent audit target, subject to actual pass/lifetime
+evidence and preserved statistics-versus-emission semantics.
+
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
 and linked family reports, including all cited raw evidence and reproducibility.

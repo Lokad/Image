@@ -1,0 +1,669 @@
+{
+  "project": "Lokad.Image",
+  "stage": "MCH361-363",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "stages": {
+    "A": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "MCH361",
+        "productionAccepted": false,
+        "originalSources": {
+          "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3"
+        },
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "b7462df15ead40a5e53ac7fab6fc0a4370e2becd4813093d43deda37088fcb08"
+        },
+        "baseline": {
+          "windows": "6a8f56fb47a6067254ffc529d91ab20477f5a8193badc75df2a9c2ed8a8d59a4",
+          "linux": "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44"
+        },
+        "hypothesis": "End the actual head-view/preparation lifetime before a separate hot reverse-query driver; existing index capacity serves links/results, same chain/search algorithm, no new storage owner/cache/API. NoInlining guarantees preparation views unwind before queries. Owned head scratch releases then; borrowed token capacity remains charged.",
+        "proof": "Both algorithm bodies mechanically extracted; only helper boundary, preparation scratch lifetime and explicit reverse position declaration change. Preserve links/checks/order/ties/extensions/cancellation/input/output and exact packets.",
+        "completeControls": [
+          "ExistingRGBA16VP8+ALPHQ75effort4 full98590B declared gap",
+          "Existing photographVP8LQ85effort4 full160032B guard"
+        ],
+        "transition": "A neutral or adverse split may be retained privately while a credible distinct query-scheduling stage is evaluated; no automatic merge or favorable unchanged repeat. Completed architectural stage judged by elapsed/alloc/retention/simplification together.",
+        "invalidation": "All six currentVP8L encodes and twoVP8losslessALPH encodes use matcher. No change to opaqueVP8/JPEG/PNG/decoders/edit/text. Accept at coherentW/L/full/scalar/SAMEpackage/current-cost milestone, or restore exact original source/modules without redundant qualification."
+      },
+      "producers": {
+        "windowsSha256": "dfe6720c220ceb4a4b3845d901a3a4e33dfc6d28170c9d78c1839691d96811c0",
+        "linuxSha256": "01ac211f8126db76972f2c24db4cae6d0b42659ffc1d4a685e791437adaaf558"
+      },
+      "focused": {
+        "windows": {
+          "internal-normal": 56,
+          "internal-scalar": 56,
+          "public-normal": 137,
+          "public-scalar": 137
+        },
+        "linux": {
+          "internal-normal": 56,
+          "internal-scalar": 56,
+          "public-normal": 137,
+          "public-scalar": 137
+        }
+      },
+      "comparisons": {
+        "alpha16": {
+          "caseId": "Encode16",
+          "quality": 75,
+          "effort": 4,
+          "depth": 16,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "producerIdentities": [
+            "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+            "01ac211f8126db76972f2c24db4cae6d0b42659ffc1d4a685e791437adaaf558"
+          ],
+          "baselineUs": 54353.954,
+          "candidateUs": 54386.23616666666,
+          "ratio": 1.000598658084104,
+          "ratioConfidence": [
+            0.9445101091980607,
+            1.060010894364432
+          ],
+          "allocatedValues": [
+            7033576
+          ],
+          "packetBytes": 98590,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "exactPackets": true,
+          "independentOwners": true,
+          "quietGuardsPassed": true,
+          "allPairsRetained": true,
+          "nativePerformanceMeasured": false,
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+        },
+        "photograph": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "producerIdentities": [
+            "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+            "01ac211f8126db76972f2c24db4cae6d0b42659ffc1d4a685e791437adaaf558"
+          ],
+          "baselineUs": 82827.619375,
+          "candidateUs": 81837.61220833333,
+          "ratio": 0.988133978103237,
+          "ratioConfidence": [
+            0.8024466618878662,
+            1.216683826719894
+          ],
+          "allocatedValues": [
+            6516648
+          ],
+          "packetBytes": 160032,
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "exactPackets": true,
+          "independentOwners": true,
+          "quietGuardsPassed": true,
+          "allPairsRetained": true,
+          "nativePerformanceMeasured": false,
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+        }
+      },
+      "generatedCode": [
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:FillCore[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],int,int,bool,Lokad.Image.Internal.OperationContext,Lokad.Image.Internal.Vp8lMatchIndex,Lokad.Image.Internal.Vp8lTokenBuffer) (FullOpts)",
+          "bytes": 2363
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:PrepareChains[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],Lokad.Image.Internal.OperationContext,int[],Lokad.Image.Internal.Vp8lTokenBuffer) (FullOpts)",
+          "bytes": 1079
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:FindMatches[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],int,int,bool,Lokad.Image.Internal.OperationContext,int[],System.Span`1[uint]) (FullOpts)",
+          "bytes": 990
+        }
+      ]
+    },
+    "B": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "MCH362",
+        "productionAccepted": false,
+        "baselineQualified": {
+          "windows": "6a8f56fb47a6067254ffc529d91ab20477f5a8193badc75df2a9c2ed8a8d59a4",
+          "linux": "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44"
+        },
+        "phaseA": {
+          "windows": "dfe6720c220ceb4a4b3845d901a3a4e33dfc6d28170c9d78c1839691d96811c0",
+          "linux": "01ac211f8126db76972f2c24db4cae6d0b42659ffc1d4a685e791437adaaf558"
+        },
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "899e2a7a2fdf2f224c64f9d838981173c2a8e6a0e30ab6c68ae2ce42866c688d"
+        },
+        "hypothesis": "Preserve preparation/query ownership split, prepare bounded query views once and cache best-length pruning sample. One exact scalar prefix core for actual up/left and chain candidates, no BCLprefix/paired-pixel replay. Equal bounded span lengths allow JIT to prove bounds rather than bypass safety.",
+        "evidence": "Actual MCH361query code990B already hoists the next link, so no lookahead replay. It retains per-word source bounds and target pruning address/check per candidate. PhaseA alpha shortneutral1.000599, photo .988134wide uncertainty; private transition only. Counts are not timing.",
+        "contracts": "Same excluded last sample, bestProbe sample can equal limit, per-word cancellation polls and initial probe, candidate/check/tie/extension order, exact indices/packets and source/ownership. Refresh cached pruning sample whenever best grows. No new buffers/owners/cache/session/API or numerical policy.",
+        "next": "Focused/scalar then same two complete short controls against qualified VPC359 original. Inspect actual bounds/code only if useful. Confirmation if credible lead; no unchanged favorable repeat; overall stage not automatically accepted."
+      },
+      "producers": {
+        "windowsSha256": "5c143376e9a7c474adf64b48030ad91852fafbcaee8d1d3d90f86a7fa4771822",
+        "linuxSha256": "487634cdbd6eef1e73e7c30e32b822c1df06011e20e9d3b4625bd4ebc9c0deb8"
+      },
+      "focused": {
+        "windows": {
+          "internal-normal": 56,
+          "internal-scalar": 56,
+          "public-normal": 137,
+          "public-scalar": 137
+        },
+        "linux": {
+          "internal-normal": 56,
+          "internal-scalar": 56,
+          "public-normal": 137,
+          "public-scalar": 137
+        }
+      },
+      "comparisons": {
+        "alpha16": {
+          "caseId": "Encode16",
+          "quality": 75,
+          "effort": 4,
+          "depth": 16,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "producerIdentities": [
+            "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+            "487634cdbd6eef1e73e7c30e32b822c1df06011e20e9d3b4625bd4ebc9c0deb8"
+          ],
+          "baselineUs": 54723.197,
+          "candidateUs": 55536.846375,
+          "ratio": 1.0148831111906345,
+          "ratioConfidence": [
+            0.9440685230935939,
+            1.0909980673291393
+          ],
+          "allocatedValues": [
+            7033576
+          ],
+          "packetBytes": 98590,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "exactPackets": true,
+          "independentOwners": true,
+          "quietGuardsPassed": true,
+          "allPairsRetained": true,
+          "nativePerformanceMeasured": false,
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+        },
+        "photograph": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "producerIdentities": [
+            "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+            "487634cdbd6eef1e73e7c30e32b822c1df06011e20e9d3b4625bd4ebc9c0deb8"
+          ],
+          "baselineUs": 81433.82320833333,
+          "candidateUs": 81608.80829166668,
+          "ratio": 1.0021503771920528,
+          "ratioConfidence": [
+            0.9554238136521341,
+            1.0511573780152237
+          ],
+          "allocatedValues": [
+            6516648
+          ],
+          "packetBytes": 160032,
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "exactPackets": true,
+          "independentOwners": true,
+          "quietGuardsPassed": true,
+          "allPairsRetained": true,
+          "nativePerformanceMeasured": false,
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+        }
+      },
+      "generatedCode": [
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:FillCore[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],int,int,bool,Lokad.Image.Internal.OperationContext,Lokad.Image.Internal.Vp8lMatchIndex,Lokad.Image.Internal.Vp8lTokenBuffer) (FullOpts)",
+          "bytes": 2363
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:PrepareChains[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],Lokad.Image.Internal.OperationContext,int[],Lokad.Image.Internal.Vp8lTokenBuffer) (FullOpts)",
+          "bytes": 1079
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:FindMatches[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],int,int,bool,Lokad.Image.Internal.OperationContext,int[],System.Span`1[uint]) (FullOpts)",
+          "bytes": 1750
+        }
+      ]
+    },
+    "C": {
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "MCH363",
+        "productionAccepted": false,
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "37127158207cd03e89d78fa16cae3d3528869fa4e1032ad76379bc14e0b7de6b"
+        },
+        "phaseB": {
+          "windows": "5c143376e9a7c474adf64b48030ad91852fafbcaee8d1d3d90f86a7fa4771822",
+          "linux": "487634cdbd6eef1e73e7c30e32b822c1df06011e20e9d3b4625bd4ebc9c0deb8"
+        },
+        "hypothesis": "One actual bounded prefix execution body for all three real query callers; remove redundant positional wrapper and separate execution from query-view/pruning preparation. PhaseB exact but no useful lead; actualquery grew990to1750B with multiple inlined/cloned prefix loops. Keep exact one core and observe complete call-overhead tradeoff, not automatic approval.",
+        "contracts": "Same arithmetic/cancellation/order/indices/packets/source/owners/admission, no new storage/cache/API. No replay of unchanged candidate or BCLprefix/paired-load implementations.",
+        "decision": "One materially distinct centralized execution stage, same two frozen complete screens against qualified VPC359. If no useful lead, retain coherent evidence and restore rather than keep sampling for a favorable point."
+      },
+      "producers": {
+        "windowsSha256": "cb4020948e9ae105bd897f3b34df66ffc9883a88784e56f4a40465157d58dd51",
+        "linuxSha256": "3646b539b53dc3b004d4908a1a71aede36332a3fa9c559d685e946593ff5322e"
+      },
+      "focused": {
+        "windows": {
+          "internal-normal": 56,
+          "internal-scalar": 56,
+          "public-normal": 137,
+          "public-scalar": 137
+        },
+        "linux": {
+          "internal-normal": 56,
+          "internal-scalar": 56,
+          "public-normal": 137,
+          "public-scalar": 137
+        }
+      },
+      "comparisons": {
+        "alpha16": {
+          "caseId": "Encode16",
+          "quality": 75,
+          "effort": 4,
+          "depth": 16,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "producerIdentities": [
+            "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+            "3646b539b53dc3b004d4908a1a71aede36332a3fa9c559d685e946593ff5322e"
+          ],
+          "baselineUs": 58224.70720833333,
+          "candidateUs": 61134.96429166666,
+          "ratio": 1.0502262007612295,
+          "ratioConfidence": [
+            0.7486577746580922,
+            1.4729310392397348
+          ],
+          "allocatedValues": [
+            7033576
+          ],
+          "packetBytes": 98590,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+          "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "exactPackets": true,
+          "independentOwners": true,
+          "quietGuardsPassed": true,
+          "allPairsRetained": true,
+          "nativePerformanceMeasured": false,
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+        },
+        "photograph": {
+          "caseId": "PhotographLossless8",
+          "quality": 85,
+          "effort": 4,
+          "depth": 8,
+          "pairs": 3,
+          "operationsPerSubjectPerPair": 8,
+          "producerIdentities": [
+            "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+            "3646b539b53dc3b004d4908a1a71aede36332a3fa9c559d685e946593ff5322e"
+          ],
+          "baselineUs": 88560.42054166667,
+          "candidateUs": 89570.63508333333,
+          "ratio": 1.0114040821209322,
+          "ratioConfidence": [
+            0.9402899716397254,
+            1.0878849636905756
+          ],
+          "allocatedValues": [
+            6516648
+          ],
+          "packetBytes": 160032,
+          "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+          "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+          "exactPackets": true,
+          "independentOwners": true,
+          "quietGuardsPassed": true,
+          "allPairsRetained": true,
+          "nativePerformanceMeasured": false,
+          "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+        }
+      },
+      "generatedCode": [
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:FillCore[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],int,int,bool,Lokad.Image.Internal.OperationContext,Lokad.Image.Internal.Vp8lMatchIndex,Lokad.Image.Internal.Vp8lTokenBuffer) (FullOpts)",
+          "bytes": 2363
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:PrepareChains[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],Lokad.Image.Internal.OperationContext,int[],Lokad.Image.Internal.Vp8lTokenBuffer) (FullOpts)",
+          "bytes": 1079
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:FindMatches[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],int,int,bool,Lokad.Image.Internal.OperationContext,int[],System.Span`1[uint]) (FullOpts)",
+          "bytes": 1386
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8lReferenceMatcher:Length[Lokad.Image.Internal.Vp8lReferenceMatcher+Uncancelable](System.ReadOnlySpan`1[uint],System.ReadOnlySpan`1[uint],int,Lokad.Image.Internal.OperationContext):int (FullOpts)",
+          "bytes": 198
+        }
+      ]
+    }
+  },
+  "attribution": {
+    "project": "Lokad.Image",
+    "stage": "ALP360",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "librarySha256": "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8AlphaEncoding.cs": "9699e9c3c57e7e539a7f718eff2d67ee8f2a8f98f371d443fa3188e07ae31956",
+      "src/Lokad.Image/Internal/Vp8PreparedInput.cs": "cc588d400bd1793cbff2c74872804ba510eb36af880c97b1df0668f5346c06f8",
+      "src/Lokad.Image/Internal/Vp8PreparedInput.Chroma.cs": "6da83b9e8445d20a1ce5c4b5b3e95ffbed24347d42b2f97ac1a09173c7628161",
+      "src/Lokad.Image/Internal/Vp8PreparedInput.Tiles.cs": "1ca42b07cc9e771b7d731daa38579f8d2145c0f9aa64cce824f45c18f42352ad",
+      "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3",
+      "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500"
+    },
+    "summary": {
+      "totalSamples": 1947,
+      "managedSamples": 1899,
+      "methods": [
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceMatcher::FillCore(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,bool,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lMatchIndex,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+          319
+        ],
+        [
+          "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+          118
+        ],
+        [
+          "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,bool,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+          93
+        ],
+        [
+          "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PreparedPopulationSum(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype Lokad.Image.Internal.Vp8lReferenceEntropy/RunCost,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          74
+        ],
+        [
+          "valuetype Lokad.Image.Internal.Vp8lEncodingAnalysis [Lokad.Image] Lokad.Image.Internal.Vp8lEncodingAnalysis::Select(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          58
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::BuildForwardHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.Span`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+          58
+        ],
+        [
+          "bool [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]",
+          57
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::FillAllFromHistory(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+          55
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz+TraceState::Push(int32,int32,int64)[Optimized]",
+          55
+        ],
+        [
+          "class Lokad.Image.Internal.Vp8lTokenBuffer [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz::Repeats(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          55
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz+TraceState::Literal(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,int64)[Optimized]",
+          54
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8lCompactGreenHistogram::InteriorFour(valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<int32>)[Optimized]",
+          50
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceCache::Apply(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,class Lokad.Image.Internal.Vp8lTokenBuffer,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          44
+        ],
+        [
+          "class Lokad.Image.Internal.Vp8lTokenBuffer [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz::Trace(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+          44
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lHistogramLayout::Fill(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,int32,bool,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          36
+        ],
+        [
+          "class Lokad.Image.Internal.Vp8lTokenBuffer [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz::Greedy(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.Vp8lTokenBuffer)[Optimized]",
+          32
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lPopulationWorkspace::Replay(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32&)[Optimized]",
+          32
+        ],
+        [
+          "int32 [Lokad.Image] Lokad.Image.Internal.Vp8lSymbols::Plane(int32,int32)[Optimized]",
+          31
+        ],
+        [
+          "bool [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ApplyFullBlock(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+          29
+        ],
+        [
+          "int64 [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PopulationSum(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          27
+        ],
+        [
+          "valuetype [System.Runtime]System.ValueTuple`2<int32,int32> [Lokad.Image] Lokad.Image.Internal.Vp8lSymbols::Prefix(int32)[Optimized]",
+          22
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.WebpBitWriter::Write(int32,int32)[Optimized]",
+          22
+        ],
+        [
+          "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PrepareAlphaTiles(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,bool,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          21
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+          21
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceLz+TraceState::Resolve(int32)[Optimized]",
+          21
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallBlock(valuetype Lokad.Image.Internal.Vp8SmallIntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+          21
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy+RunCost::Subtract(int32,int32)[Optimized]",
+          21
+        ],
+        [
+          "valuetype Lokad.Image.Internal.Vp8lReferenceEntropy/RunCost [Lokad.Image] Lokad.Image.Internal.Vp8lReferenceEntropy::PrepareRuns(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<uint32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+          20
+        ],
+        [
+          "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Transform(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
+          18
+        ],
+        [
+          "instance void [Lokad.Image] Lokad.Image.Internal.Vp8lPopulationWorkspace::Prepare(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype Lokad.Image.Internal.Vp8lToken>,int32,int32,int32,int32)[Optimized]",
+          17
+        ]
+      ]
+    },
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+    "packetBytes": 98590,
+    "allOriginalSourcePacketOwnerGatesPassed": true,
+    "quietGuardsPassed": true,
+    "priorAudit": {
+      "latestRealAlphaCapture": "tmp/msa338-alpha-profile-receipt.json",
+      "caseId": "Encode8",
+      "depth": 8,
+      "wholeAttributionInvalidatedBy": "Later shared word/color input and quantizer/value pipeline changes. No prior16bit complete alpha capture found; OPA340alpha filename actually records diagram trellis, not alpha.",
+      "sourceFactsReused": "Operation-owned matcher/reference/token reuse, isolated green histogram visitor and shared alpha preparation remain; no obsolete20to30MB claim, current complete allocations about7MB/op."
+    },
+    "oldExactMatcherCount": {
+      "productionSourceSha256": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3",
+      "sourceStillExact": true,
+      "largeCalls": [
+        {
+          "samples": 132867,
+          "width": 513,
+          "quality": 32,
+          "lowEffort": false,
+          "visits": 712821,
+          "probePasses": 153294,
+          "differentPairs": 647,
+          "eligibleDifferentPairs": 320,
+          "eligibleAfterProbe": 10,
+          "allIndexWordsExact": true
+        },
+        {
+          "samples": 132867,
+          "width": 513,
+          "quality": 32,
+          "lowEffort": false,
+          "visits": 627401,
+          "probePasses": 233056,
+          "differentPairs": 0,
+          "eligibleDifferentPairs": 0,
+          "eligibleAfterProbe": 0,
+          "allIndexWordsExact": true
+        }
+      ],
+      "scope": "Historical8bit complete-alpha caller counts are unchanged-matcher leads, not a new16bit count or phase time. Exact same final packet/losslessALPH alpha and preserved preparation give applicability; do not claim all16bit/color work unchanged."
+    },
+    "sourceFindings": [
+      "Largest leaf is reverse matcher FillCore319/1947samples, followed by VP8coefficient output118 and color search93. These are samples/skid, not milliseconds.",
+      "FillCore still mixes coarse head admission/setup, forward chain creation, reverse queries/extensions and cleanup. Heads are no longer read after forward chain construction.",
+      "Reverse queries write the same backing index only after all chain reads for that query; candidates point strictly backward. Existing operation-owned index/token handoffs already remove separate history storage.",
+      "Earlier paired-first-two-pixel/collision-tag experiments are retained. Their measured outcome and only10eligible differing first-pairs after pruning do not support replaying that approach."
+    ],
+    "next": {
+      "stage": "MCH361",
+      "hypothesis": "Separate forward chain preparation and its head-view lifetime from the hot reverse-query driver. Keep one actual chain/query algorithm, same shared index/output capacity and existing memory root.",
+      "endState": "One orchestration/owner boundary, one forward preparation helper whose views end before reverse queries, one reverse driver with exact order/check budget/extension and real cancellation specialization. No new buffer/cache/pool/session/API.",
+      "stages": "First inspect actual generated hot/cold state and extract coherent ownership phases. A later materially distinct query-scheduling stage may prefetch a bounded sequence of backward links before pixel probes, only if current attribution/counts support it. Preserve order, remaining-check decrement, earliest ties, early exit and source bounds; no automatic merge from source counts.",
+      "completeControls": [
+        "Existing RGBA16VP8+losslessALPHQ75effort4 declared gap",
+        "Existing lossless photographic control as regression/generalization guard, not assumed demonstrated gap"
+      ],
+      "acceptance": "Complete bytes/pixels/indices/mode order/root/retained ownership and cancellation exact; existing independent matcher/index oracles and frozen packets first. Bounded complete screen, independent confirmation for useful lead. Code/alloc/retention/time together; preserve adverse points, no unchanged favorable repeat. If accepted, all affected6lossless+2alpha costs and coherentW/L/full/package qualification; current passing cases are guards, not retuning targets."
+    },
+    "decision": "Current16bit attribution complete. Reuse prior exact matcher-source counts and rejected-trial evidence. Select ownership/preparation versus reverse-query phase separation as next architectural hypothesis; no production CPU gain claimed.",
+    "publication": "postponed"
+  },
+  "attributionRaw": {
+    "file": "vp8-current-alpha16-attribution.tar.xz",
+    "sha256": "52c3a097aa9c5a034d8d287415c360ce19be54cb60cad2d5e77597046e4b53bc",
+    "bytes": 5844656,
+    "members": 158,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-shared-coefficient-window-qualified.tar.xz",
+        "sha256": "9d2daa4dd124156d34c90e4d48a3ea08bfdfc1f3fee44f6551dfd5c8c6cdead3"
+      },
+      {
+        "file": "webp-current-chain-attribution.tar.xz",
+        "sha256": "c5f9aa5334401934b185d7f4a16ff659b48c7474f5e2f63f2601d4f3d7ea5a02"
+      }
+    ]
+  },
+  "bodyProof": {
+    "project": "Lokad.Image",
+    "reverseQueryTextUnchangedApartFromLocalDeclaration": true,
+    "preparationMechanicallyExtracted": true,
+    "headViewsUnwindBeforeReverse": true,
+    "borrowedTokenOwnerRetained": true
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "sourceMainEmbeddedAndBindingsByteExact": true,
+      "librarySha256": "6a8f56fb47a6067254ffc529d91ab20477f5a8193badc75df2a9c2ed8a8d59a4",
+      "embeddedSha256": "81480fa55cb8d017fae590ee4ad6e19f353001762db2d1b683cf667d96cf57cf",
+      "linuxManifestRestored": false,
+      "additionalBuildTestsPackageProofs": 0,
+      "reusedFullChecksEachOs": 5721,
+      "sameActualPackageSha256": "08daf3f2b2d1f8e6cf07f1555fd3d05903ca861cb9ae8435ebfb17df7d8fff7a",
+      "scope": "All three private matcher stages retained; exact qualified source/main/embedded/bindings and VM manifest restored. No production change, no stale embedded-source tests. Reuse original full/live/scalar/package qualification."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "sourceMainEmbeddedAndBindingsByteExact": true,
+      "librarySha256": "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+      "embeddedSha256": "7c2ad9b63396519018aac40de53705662f86816a99d6299e4b611d975d00d9e5",
+      "linuxManifestRestored": true,
+      "additionalBuildTestsPackageProofs": 0,
+      "reusedFullChecksEachOs": 5721,
+      "sameActualPackageSha256": "08daf3f2b2d1f8e6cf07f1555fd3d05903ca861cb9ae8435ebfb17df7d8fff7a",
+      "scope": "All three private matcher stages retained; exact qualified source/main/embedded/bindings and VM manifest restored. No production change, no stale embedded-source tests. Reuse original full/live/scalar/package qualification."
+    }
+  },
+  "workflow": {
+    "coreInternalCandidateVersionsEachOs": 3,
+    "publicHarnessNativeSelectorFixtureToolBuilds": 0,
+    "completeShortJobs": 6,
+    "independentConfirmations": 0,
+    "completedMeasurementRestarts": 0,
+    "allPointsRetained": true,
+    "additionalFullTestsPackagesAfterExactRestore": 0,
+    "actualPackageProofReused": "VPC359sameactualprivate0.2.1package08daf3f2...and5721full/livechecks eachOS"
+  },
+  "storage": {
+    "newHeapCapacityOwnersPoolsCachesApis": 0,
+    "phaseASmallOwnedHeadScratchEndsBeforeQueries": true,
+    "borrowedTokenStorageRetainsOriginalOwnerAndCharge": true,
+    "fullPeakOrNativeAllocationNewlyMeasured": false,
+    "pairedAlpha16BytesAllStages": 7033576,
+    "pairedLosslessPhotoBytesAllStages": 6516648,
+    "scope": "No allocation gain or CPU inference. Temporary phases preserve all selected token ownership. All candidate implementations are restored out of production."
+  },
+  "decision": "None of the three coherent private stages establishes a useful complete-alpha lead. A neutral, B/C adverse points with wide uncertainty; do not claim confirmed loss/equivalence or repeat unchanged candidates for favor. Prefix window bounds are functionally exact but inlining/code-growth and call tradeoffs do not produce a useful screen. Restore complete qualified source/main/embedded/bindings/Linuxmanifest and reuse existingqualification. This is a failed performance lead for these implementations, not a permanent matcher-family ban.",
+  "sourceFindings": [
+    "Currentalpha16profile319/1947samples in matcher; prior exact-source1340222chain visits remain leads, not phase time.",
+    "Original actual query already hoists next link; no speculative lookahead experiment was run.",
+    "PhaseA forward/head-view lifetime split produces990B query plus1079Bpreparation; complete alpha ratio1.000599, photo.988134uncertain.",
+    "PhaseB bounded equal-prefix/query views and refreshed pruning sample grow query1750B; alpha1.014883, photo1.002150, bothuncertain.",
+    "PhaseC one real non-inlined prefix loop removes positional wrapper; query1386B+prefix198B. Alpha1.050226, photo1.011404, bothuncertain. Preserve adverse baseline/current clock movement without causal claims."
+  ],
+  "next": "Current unmodified VP8 coefficient output is an independent attribution target:118/1947alpha process samples, with repeated final-symbol classification across actual statistics and bitstream emission. Audit real pass counts/lifetimes and exact event ordering before a coherent preparation design; no new fixture/settings grid or speculative encoder change.",
+  "publication": "postponed",
+  "raw": {
+    "file": "webp-matcher-phase-study-inconclusive.tar.xz",
+    "sha256": "685a701a09eca494ca78cab81b8ce59fa7eb5c3d780bbfb85052fe1fa882a5dc",
+    "bytes": 23422992,
+    "members": 568,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-shared-coefficient-window-qualified.tar.xz",
+        "sha256": "9d2daa4dd124156d34c90e4d48a3ea08bfdfc1f3fee44f6551dfd5c8c6cdead3"
+      },
+      {
+        "file": "vp8-current-alpha16-attribution.tar.xz",
+        "sha256": "52c3a097aa9c5a034d8d287415c360ce19be54cb60cad2d5e77597046e4b53bc"
+      }
+    ]
+  }
+}
