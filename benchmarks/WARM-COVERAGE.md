@@ -46,7 +46,12 @@ exact preparation stages and restores2e277bba. Its final Int32design has an
 inconclusive.996332[.990248,1.002433]counterbalanced trellis ratio and+53,896B/op;
 earlier partial preparation has a confirmed scoped loss. No broad/package repeat
 or current-cost replacement. Retain the count/range/ownership evidence and every
-adverse point; next audit invariant preparation independently.
+adverse point. The following [invariant preparation/compact-storage round](VP8-INVARIANT-PRICE-STORAGE-EXPERIMENT.md)
+verifies−6,624B/op but independently slows complete trellis encoding165.49µs/1.42%raw
+and1.84%normalized, both confidence views separated. Its paired gain conflicts with
+that actual boundary; photograph remains inconclusive. Restore the same qualified
+checkpoint and retain every stage without broad/package repetition. Current costs
+remain unchanged; shared resize preparation/execution is the next independent audit.
 
 A [broader rate-core prototype](VP8-CANONICAL-RATE-BOUNDARY.md) is rejected:
 its paired gain conflicts with a confirmed326µs/2.96% actual standalone photograph
