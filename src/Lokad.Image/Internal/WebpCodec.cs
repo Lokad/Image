@@ -45,9 +45,17 @@ internal static class WebpCodec
             if (data.Slice(position, 4).SequenceEqual("VP8 "u8))
             {
                 var planes = new Vp8Decoder(data.Slice(position + 8, length), context).DecodePlanes();
-                var alpha = alphaPayload.IsEmpty ? null : WebpAlpha.Decode(alphaPayload, info.Width, info.Height, context);
-                var result = Vp8Color.Render(planes, alpha, context);
-                result.Orientation = info.Orientation; return result;
+                ImageBuffer? prepared = null;
+                try
+                {
+                    var alpha = alphaPayload.IsEmpty ? null : WebpAlpha.Decode(alphaPayload, info.Width, info.Height, context, ref prepared);
+                    // Rendering takes ownership, including failure cleanup. Until
+                    // this handoff, a failed alpha decode must dispose its result.
+                    var output = prepared; prepared = null;
+                    var result = Vp8Color.Render(planes, alpha, output, context);
+                    result.Orientation = info.Orientation; return result;
+                }
+                finally { prepared?.Dispose(); }
             }
             position += 8 + length + (length & 1);
         }

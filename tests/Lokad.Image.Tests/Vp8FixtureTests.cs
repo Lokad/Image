@@ -29,7 +29,7 @@ public sealed class Vp8FixtureTests
                 if (encoded.AsSpan(offset, 4).SequenceEqual("ALPH"u8)) alphaPayload = encoded.AsSpan(offset + 8, length);
                 offset += 8 + length + (length & 1);
             }
-            var context = new OperationContext(ImageLimits.Default, default);
+            using var context = new OperationContext(ImageLimits.Default, default);
             var actual = new Vp8Decoder(pixels, context).DecodePlanes(); var position = 0;
             foreach (var (plane, width, height, stride) in new[] { (actual.Y,actual.Width,actual.Height,actual.Stride),
                 (actual.U,(actual.Width+1)/2,(actual.Height+1)/2,actual.Stride/2), (actual.V,(actual.Width+1)/2,(actual.Height+1)/2,actual.Stride/2) })
@@ -39,8 +39,14 @@ public sealed class Vp8FixtureTests
                 }
             if (!alphaPayload.IsEmpty)
             {
-                var alpha = WebpAlpha.Decode(alphaPayload, actual.Width, actual.Height, context);
-                Assert.Equal(expected.AsSpan(position).ToArray(), alpha); position += alpha.Length;
+                ImageBuffer? prepared = null;
+                try
+                {
+                    var alpha = WebpAlpha.Decode(alphaPayload, actual.Width, actual.Height, context, ref prepared);
+                    for (var i = 0; i < actual.Width * actual.Height; i++)
+                        Assert.Equal(expected[position++], alpha is null ? prepared!.Pixels[i * 4 + 3] : alpha[i]);
+                }
+                finally { prepared?.Dispose(); }
             }
             Assert.Equal(expected.Length, position);
         }

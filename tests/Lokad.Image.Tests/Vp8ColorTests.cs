@@ -43,11 +43,19 @@ public sealed class Vp8ColorTests
         foreach (var width in new[] { 1, 2, 8, 9, 10, 16, 17, 18, 31, 32, 33, 34, 63, 64, 65, 66 })
         foreach (var height in new[] { 1, 2, 3, 5 })
         foreach (var pattern in new[] { 0, 1 })
-        foreach (var opaque in new[] { false, true })
+        foreach (var storage in new[] { 0, 1, 2 })
         {
             var planes = Planes(width, height, pattern); var originalY = planes.Y.ToArray(); var originalU = planes.U.ToArray(); var originalV = planes.V.ToArray();
-            var alpha = opaque ? null : Enumerable.Range(0, width * height).Select(i => (byte)(i * 43)).ToArray(); var originalAlpha = alpha?.ToArray();
-            using var context = Context(planes, alpha); using var actual = Vp8Color.Render(planes, alpha, context);
+            var alpha = storage == 0 ? null : Enumerable.Range(0, width * height).Select(i => (byte)(i * 43)).ToArray(); var originalAlpha = alpha?.ToArray();
+            using var context = Context(planes, storage == 2 ? null : alpha);
+            var prepared = storage == 2 ? ImageBuffer.AllocateForOverwrite(width, height, 8, context) : null;
+            if (prepared is not null)
+            {
+                prepared.Pixels.Fill(0xA7);
+                for (var i = 0; i < alpha!.Length; i++) prepared.Pixels[i * 4 + 3] = alpha[i];
+            }
+            using var actual = Vp8Color.Render(planes, storage == 2 ? null : alpha, prepared, context);
+            if (prepared is not null) Assert.Same(prepared, actual);
             for (var y = 0; y < height; y++)
             {
                 var row = actual.GetRow8(y);
@@ -69,10 +77,10 @@ public sealed class Vp8ColorTests
         var planes = Planes(33, 3, 1); var alpha = new byte[99];
         var input = planes.MemoryBytes + alpha.Length + 32L; var output = 33 * 3 * 4L;
         var below = Context(planes, alpha, ImageLimits.Default with { MaxWorkingBytes = input + output - 1 });
-        Assert.Throws<ImageLimitException>(() => Vp8Color.Render(planes, alpha, below));
+        Assert.Throws<ImageLimitException>(() => Vp8Color.Render(planes, alpha, null, below));
         Assert.Equal(input, LiveBytes(below));
         var exact = Context(planes, alpha, ImageLimits.Default with { MaxWorkingBytes = input + output });
-        using var result = Vp8Color.Render(planes, alpha, exact);
+        using var result = Vp8Color.Render(planes, alpha, null, exact);
         Assert.Equal(output, LiveBytes(exact));
     }
 
@@ -83,7 +91,7 @@ public sealed class Vp8ColorTests
         using var cancellation = new CancellationTokenSource();
         var context = Context(planes, null, cancellation: cancellation.Token);
         cancellation.Cancel();
-        Assert.Throws<OperationCanceledException>(() => Vp8Color.Render(planes, null, context));
+        Assert.Throws<OperationCanceledException>(() => Vp8Color.Render(planes, null, null, context));
         Assert.Equal(planes.MemoryBytes + 33 * 3 * 4L, LiveBytes(context));
     }
 

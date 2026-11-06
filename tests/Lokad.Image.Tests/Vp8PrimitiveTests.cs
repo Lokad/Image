@@ -150,9 +150,23 @@ public sealed class Vp8PrimitiveTests
         {
             // Reserved flags are ignored; the level-reduction preprocessing flag is informative.
             var payload = new byte[10]; payload[0] = (byte)(0xD0 | filter << 2); residuals[filter].CopyTo(payload, 1);
-            Assert.Equal(expected, WebpAlpha.Decode(payload, 3, 3, new OperationContext(ImageLimits.Default, default)));
+            using var context = new OperationContext(ImageLimits.Default, default);
+            ImageBuffer? result = null;
+            Assert.Equal(expected, WebpAlpha.Decode(payload, 3, 3, context, ref result));
+            Assert.Null(result);
+            var interleaved = Enumerable.Repeat((byte)0xA7, 36).ToArray();
+            for (var i = 0; i < 9; i++) interleaved[i * 4 + 3] = residuals[filter][i];
+            WebpAlpha.Unfilter(interleaved.AsSpan(3), 3, 3, filter, context, 4);
+            for (var i = 0; i < 9; i++)
+            {
+                Assert.Equal(expected[i], interleaved[i * 4 + 3]);
+                Assert.True(interleaved.AsSpan(i * 4, 3).IndexOfAnyExcept((byte)0xA7) < 0);
+            }
         }
-        Assert.Throws<ImageDataException>(() => WebpAlpha.Decode(new byte[1], 3, 3, new OperationContext(ImageLimits.Default, default)));
-        Assert.Throws<UnsupportedImageException>(() => WebpAlpha.Decode(new byte[] { 2 }, 3, 3, new OperationContext(ImageLimits.Default, default)));
+        using var invalidContext = new OperationContext(ImageLimits.Default, default);
+        ImageBuffer? invalidResult = null;
+        Assert.Throws<ImageDataException>(() => WebpAlpha.Decode(new byte[1], 3, 3, invalidContext, ref invalidResult));
+        Assert.Throws<UnsupportedImageException>(() => WebpAlpha.Decode(new byte[] { 2 }, 3, 3, invalidContext, ref invalidResult));
+        Assert.Null(invalidResult);
     }
 }

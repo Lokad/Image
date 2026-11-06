@@ -65,14 +65,6 @@ def render():
     vp8_validation = json.loads((ROOT / 'benchmarks/warm-vp8-direct-token-decisions-evidence.json').read_text(encoding='utf-8'))
     assert vp8_validation['productionChanged'] and vp8_validation['independentCounterbalancedBlock']
     assert vp8_validation['decision']['allGatesPassed'] and vp8_validation['qualification']['sameActualPackageBothOs']
-    vp8_decoder_costs = json.loads((ROOT / 'benchmarks/current-vp8-decoder-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not vp8_decoder_costs['productionChanged'] and vp8_decoder_costs['allBuilds'] == 0
-    assert vp8_decoder_costs['independentQuietConfirmation'] and len(vp8_decoder_costs['cases']) == 4
-    vp8_stream = json.loads((ROOT / 'benchmarks/warm-vp8l-group-dispatch-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_stream['productionChanged'] and vp8_stream['independentQuietConfirmation']
-    assert vp8_stream['decision']['passed'] and vp8_stream['qualification']['sameActualPackageBothOs']
-    assert vp8_stream['qualification']['compressedAlphaTwoFramesActualPackagePassed']
-    assert vp8_stream['status']['Vp8Stream'] == 'confirmed-gap'
     png_crc_scan = json.loads((ROOT / 'benchmarks/warm-png-scan-crc-reuse-evidence.json').read_text(encoding='utf-8'))
     assert png_crc_scan['productionChanged'] and png_crc_scan['decision']['passed']
     assert png_crc_scan['qualification']['sameActualPackageBothOs'] and len(png_crc_scan['cases']) == 5
@@ -507,13 +499,13 @@ def render():
                  'case10': 'DiagramLossyTrellis8', 'case11': 'Opaque16'}
     rows = []
     for case in evidence['cases']:
-        if case['id'] in {'case07', 'case13', 'case14', 'case15', 'case16', 'case27', 'case28', 'case29', 'case30'}:
+        if case['id'] in {'case00', 'case07', 'case13', 'case14', 'case15', 'case16', 'case27', 'case28', 'case29', 'case30'}:
             continue  # Replaced by current self-contained family evidence below.
         observation = case['observation']
         vp8l_case = case['id'] in {'case12', 'case13', 'case14'}
         vp8_case = case['id'] in vp8_cases
         updated = vp8_case or vp8l_case or case['id'] in editing_costs or case['id'] in {'case00', 'case02', 'case03', 'case16', 'case17', 'case18', 'case19', 'case20'}
-        producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8_stream if case['id'] == 'case00' else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
+        producer = vp8_quantization if vp8_case else jpeg if case['id'] in {'case02', 'case03'} else vp8l if vp8l_case else stored if case['id'] == 'case20' else current
         if case['id'] == 'case10':
             producer = trellis_cost
         elif case['id'] in {'case06', 'case09', 'case11'}:
@@ -526,8 +518,6 @@ def render():
             observation = editing_costs[case['id']]
         elif vp8_case:
             observation = producer['cases'][vp8_cases[case['id']]][-1]
-        elif case['id'] == 'case00':
-            observation = producer['cases']['Vp8Stream'][-1]
         elif case['id'] in {'case02', 'case03'}:
             observation = jpeg['cases']['Rgb420' if case['id'] == 'case02' else 'Rgba16'][-1]
         elif updated:
@@ -1655,14 +1645,12 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-unshifted-live-reservoir-evidence.json').read_text(encoding='utf-8'))
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-alpha-output-handoff-evidence.json').read_text(encoding='utf-8'))
     selected_cost = block_preparation['cases']['selected']
     assert selected_cost['status'] == 'uncertain' and selected_cost['managedPacketBytes'] == 7026
     dq = decoder_owned['qualification']
-    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['selectionGuardUnchanged']
-    assert decoder_owned['sourceProof']['originalCoefficientModelSelectionTokenCategoryAndReadOrderExact']
-    assert decoder_owned['sourceProof']['noncancelledAndTailReaderSourcesUnchanged']
-    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5741
+    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['sourceProof']
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5747
     assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
     assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
     assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
@@ -1672,9 +1660,13 @@ def render():
         assert current['reusedUnchangedPath'] or current['librarySha256'] == decoder_owned['producers']['linuxSha256']
         assert current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
-               for v in decoder_owned['independentLive']['views'].values())
-    assert dq['actualPackage']['unshiftedLiveReservoirPassed'] and dq['samePackageLinux']['unshiftedLiveReservoirPassed']
+    for comparison in ['independentAlpha', 'streamGeneralization']:
+        assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+                   for v in decoder_owned[comparison]['views'].values())
+    storage = decoder_owned['storage']
+    assert storage['rows']['baseline']['firstPeakAdmittedBytes'] == 884699
+    assert storage['rows']['candidate']['firstPeakAdmittedBytes'] == 751768
+    assert storage['governedRetainedOutputBytes'] == 531468
     vq = jpeg_current['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5742
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
@@ -1682,10 +1674,8 @@ def render():
     assert vq['samePackageLinux']['sharedByteWordEnlargementExactOwnedPassed']
     assert vq['actualPackage']['liveJpegCorrectionBitOwnershipPassed'] and vq['samePackageLinux']['liveJpegCorrectionBitOwnershipPassed']
     stream = decoder_owned['cases']['StreamNative8']
-    positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| WebP VP8 + alpha, fresh seekable Stream')]
-    assert len(positions) == 1
-    rows[positions[0]] = ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
-        f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | {stream["allocatedBytes"]:,} | — |')
+    rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
+        f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | {stream["allocatedBytes"]:,} | — |'))
     bilinear = json.loads((ROOT / 'benchmarks/bilinear-current-boundary-evidence.json').read_text(encoding='utf-8'))
     current = bilinear['current']
     assert not bilinear['productionChanged'] and bilinear['allBuilds'] == 0
@@ -1798,7 +1788,7 @@ def render():
             read_rows.append(f'| {label} | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             continue
-        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else png_indexed if case in png_indexed['cases'] else vp8_stream if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else png_indexed if case in png_indexed['cases'] else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -1901,14 +1891,19 @@ Current scope and remaining work:
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
   [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
   retain their scoped gains and superseded costs as history.
-  [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
-  saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
-  paired allocation. [Unshifted live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md)
-  avoids repeated code-value shifts and independently saves136µs/2.25%raw on complete
-  live opaque decoding; normalized confidence overlaps,760,564B/op unchanged. All six
-  reader controls remain gaps; five unchanged paths reuse evidence. Token order,
-  every per-bit cancellation check and the published cursor remain exact. Earlier/adverse stages
-  stay linked history.
+  [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) reuses final
+  RGBA storage through compressed alpha and rendering. Complete span/stream decode
+  independently saves215/228µs (3.25%/3.46% raw); both raw and normalized confidence
+  views separate. Warm allocation falls1,434,731→238,384B/span operation;
+  stream238,480B. Coarse admitted peak884,699→751,768B, retained output531,468B.
+  Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays
+  idle after this sequential case. Governed calls bypass it. GC totals, admitted
+  capacity and physical peak differ; native allocation/physical peak are unmeasured.
+  All five affected decoder costs refresh; validation reuses unchanged bodies.
+  All six reader cases remain gaps. Original/native contexts and boundaries remain
+  explicit; no fresh-context setup parity is claimed. Earlier
+  [token](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) and
+  [live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md) work stays linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [lazy view preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)

@@ -74,24 +74,37 @@ internal ref struct WebpLosslessDecoder
     }
 
     // RFC 9649 section 2.7.1.2: ALPH uses the green samples of a complete
-    // headerless VP8L image. Keep full syntax/transform validation, but avoid
-    // materializing an RGBA result whose other channels would be discarded.
-    internal void DecodeGreen(Span<byte> destination)
+    // headerless VP8L image. Reuse an independently owned final image when the
+    // format permits output-backed decoding. Its alpha lanes survive YUV rendering;
+    // palette/byte-order paths keep compact alpha storage, chosen before admission.
+    // The caller owns result, including when decoding or extraction throws.
+    internal byte[]? DecodeGreen(scoped ref ImageBuffer? result)
     {
-        if (destination.Length != (long)width * height) throw new ArgumentException("Alpha destination size differs from the raster.", nameof(destination));
-        ImageBuffer? unused = null;
-        var pixels = DecodePixels(false, ref unused);
+        var pixels = DecodePixels(true, ref result);
+        var temporary = result is null;
         try
         {
+            byte[]? alpha = null;
+            if (temporary)
+            {
+                context.Reserve((long)width * height + 32);
+                alpha = new byte[width * height];
+            }
             for (var y = 0; y < height; y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 var row = pixels.Slice(y * width, width);
-                var alpha = destination.Slice(y * width, width);
-                for (var x = 0; x < width; x++) alpha[x] = (byte)(row[x] >> 8);
+                if (temporary)
+                {
+                    var destination = alpha.AsSpan(y * width, width);
+                    for (var x = 0; x < width; x++) destination[x] = (byte)(row[x] >> 8);
+                }
+                else
+                    for (var x = 0; x < width; x++) row[x] = (row[x] & 0xFF00) << 16;
             }
+            return alpha;
         }
-        finally { context.Release(pixels.Length * 4L + 32 + 512); }
+        finally { context.Release(512 + (temporary ? pixels.Length * 4L + 32 : 0)); }
     }
 
     internal void ValidatePixels()

@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -27,9 +28,10 @@ internal static class Vp8Color
     private static int Forward(int weight, int range)
         => (int)((weight * (long)range * 32768 + 127500) / 255000);
 
-    public static ImageBuffer Render(Vp8Planes planes, byte[]? alpha, OperationContext context)
+    public static ImageBuffer Render(Vp8Planes planes, byte[]? alpha, ImageBuffer? prepared, OperationContext context)
     {
-        var result = ImageBuffer.Allocate(planes.Width, planes.Height, 8, context);
+        var result = prepared ?? ImageBuffer.Allocate(planes.Width, planes.Height, 8, context);
+        var keepAlpha = prepared is not null;
         try
         {
             for (var y = 0; y < planes.Height; y++)
@@ -37,13 +39,13 @@ internal static class Vp8Color
                 context.Cancellation.ThrowIfCancellationRequested();
                 var row = result.GetRow8(y);
                 var first = Avx2.IsSupported && Sse41.IsSupported && planes.Width >= 9
-                    ? WriteVectorRow(planes, alpha, y, row) : 0;
+                    ? WriteVectorRow(planes, alpha, keepAlpha, y, row) : 0;
                 for (var x = first; x < planes.Width; x++)
                 {
                     var u = Chroma(planes.U, planes.Stride / 2, (planes.Width + 1) / 2, (planes.Height + 1) / 2, x, y) - 128;
                     var v = Chroma(planes.V, planes.Stride / 2, (planes.Width + 1) / 2, (planes.Height + 1) / 2, x, y) - 128;
                     WritePixel(planes.Y[y * planes.Stride + x], u, v, row.Slice(x * 4, 3));
-                    row[x * 4 + 3] = alpha is null ? (byte)255 : alpha[y * planes.Width + x];
+                    if (!keepAlpha) row[x * 4 + 3] = alpha is null ? (byte)255 : alpha[y * planes.Width + x];
                 }
             }
             context.Release(planes.MemoryBytes + (alpha is null ? 0 : alpha.Length + 32L));
@@ -52,7 +54,7 @@ internal static class Vp8Color
         catch { result.Dispose(); throw; }
     }
 
-    private static int WriteVectorRow(Vp8Planes planes, byte[]? alpha, int y, Span<byte> output)
+    private static int WriteVectorRow(Vp8Planes planes, byte[]? alpha, bool keepAlpha, int y, Span<byte> output)
     {
         // Each group starts on an odd pixel. Its four adjacent odd/even pairs
         // share five chroma columns and the same two source rows.
@@ -66,12 +68,13 @@ internal static class Vp8Color
         var alphaRow = alpha is null ? ReadOnlySpan<byte>.Empty : alpha.AsSpan(y * width, width);
         WritePixel(luma[0], Chroma(planes.U, stride, chromaWidth, (planes.Height + 1) / 2, 0, y) - 128,
             Chroma(planes.V, stride, chromaWidth, (planes.Height + 1) / 2, 0, y) - 128, output[..3]);
-        output[3] = alpha is null ? (byte)255 : alphaRow[0];
+        if (!keepAlpha) output[3] = alpha is null ? (byte)255 : alphaRow[0];
         var x = 1;
         for (; x <= width - 8; x += 8)
         {
             var u = Chroma8(ut, ub, (x - 1) / 2, dy); var v = Chroma8(vt, vb, (x - 1) / 2, dy);
-            var a = alpha is null ? Vector256.Create(255)
+            var a = keepAlpha ? (Vector256.Create(MemoryMarshal.Cast<byte, uint>(output.Slice(x * 4, 32))) >> 24).AsInt32()
+                : alpha is null ? Vector256.Create(255)
                 : Avx2.ConvertToVector256Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(alphaRow.Slice(x, 8))).AsByte());
             WritePixels8(luma.Slice(x, 8), u, v, a, output.Slice(x * 4, 32));
         }
