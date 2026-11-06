@@ -32,6 +32,10 @@ refresh once;117other displays reuse unchanged source paths. This is a developme
 milestone, not a125-row package refresh or282-path pass. The rejected first layout
 and its adverse independent confirmation remain in the same report/raw.
 
+The [current VP8 validation attribution](VP8-VALIDATION-READER-ATTRIBUTION.md)
+identifies coefficient entropy parsing for the next bounded reader-reuse audit.
+It changes no production or displayed cost and adds no renderer dependency.
+
 The [JPEG scan stage](JPEG-PREPARED-SCAN-HEADERS.md) retains independent230µs
 ordinary/live gains, five decoder gaps, passing coding validation and all adverse
 clock/tiny-admission stages. The [earlier compact ALPH tradeoff](WEBP-COMPACT-PREDICTOR-TRADEOFF.md)

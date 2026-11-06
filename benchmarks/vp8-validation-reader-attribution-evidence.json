@@ -1,0 +1,2397 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VPA357",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "profilingOnly": true,
+  "statisticalTiming": false,
+  "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8Decoder.cs": "f0710022aa09562c723132edd56a0005d7f2e3f0b5e2c39aaaffdfaeb101badb",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.cs": "7f50bbc9618ee650f115f69f46ec6f88f26cb296e5ffc42fdb001293478992f7",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "2a788c75db597ba2480dcd6b60340def43ac93f4c02abfa5db6b116e93f3c4a6",
+    "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "d527cb9d3c113813dbb9eb88a4a1a4152d533ce7c54fa349b4197ab8413f6134",
+    "src/Lokad.Image/Internal/WebpCodec.cs": "02f0f1ef342e736a8863c9709685fb4b40bebeb89e38a4b7d083d16cf10eeb3d",
+    "src/Lokad.Image/Internal/WebpAlpha.cs": "a581a1fde5e8fbf90a8a7516eedc004303d1b9a7393fecaa3d23683fa30c9013",
+    "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "cfa285efac71378a21d8dd946b8403b2a348d9f4cac30585ea360e9daa4c5b86"
+  },
+  "summary": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1959,
+    "managedSamples": 1941,
+    "methods": [
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        944
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        517
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        83
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        75
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        67
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        62
+      ],
+      [
+        "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        49
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        41
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        41
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        19
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpBitReader::Read(int32)[Optimized]",
+        13
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.WebpDistances::Resolve(int32,int32)[Optimized]",
+        6
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        5
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CanReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        5
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadHeader(int32)[Optimized]",
+        4
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Category(valuetype Lokad.Image.Internal.Vp8BooleanReader&,int32)[Optimized]",
+        3
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Ac(int32)[Optimized]",
+        2
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Dc(int32)[Optimized]",
+        2
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::Literal(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1
+      ],
+      [
+        "stub ReportStubBlock<MethodCallThunk>",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.WebpHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1
+      ]
+    ],
+    "targetCode": [
+      {
+        "address": "0x784d00ccd480",
+        "size": 1239,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x784d00ccdac0",
+        "size": 42,
+        "name": "void [System.Private.CoreLib] System.Array+EmptyArray`1[Lokad.Image.Internal.Vp8BooleanReader]::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x784d00ccdb00",
+        "size": 11612,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadHeader(int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd0880",
+        "size": 494,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::Literal(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd0a90",
+        "size": 137,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd0b40",
+        "size": 8768,
+        "name": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd2dc0",
+        "size": 4082,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd3dd0",
+        "size": 34,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Dc(int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd3e10",
+        "size": 34,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Ac(int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd3e60",
+        "size": 1080,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd42c0",
+        "size": 67,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CanReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd4320",
+        "size": 826,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd4680",
+        "size": 1740,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd4d60",
+        "size": 420,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd4f50",
+        "size": 67,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CanReadCancellableCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd4fc0",
+        "size": 4328,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd60c0",
+        "size": 618,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Category(valuetype Lokad.Image.Internal.Vp8BooleanReader&,int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd6620",
+        "size": 106,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ValidatePixels()[Optimized]"
+      },
+      {
+        "address": "0x784d00cd66c0",
+        "size": 1657,
+        "name": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::DecodePixels(bool,class Lokad.Image.ImageBuffer&)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd6f20",
+        "size": 5037,
+        "name": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd8300",
+        "size": 1363,
+        "name": "instance class Lokad.Image.Internal.WebpHuffman [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadHuffman(int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd8880",
+        "size": 1599,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.WebpHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd8ee0",
+        "size": 1278,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]"
+      },
+      {
+        "address": "0x784d00cd94d0",
+        "size": 143,
+        "name": "instance uint32[] [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::Allocate(int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cda840",
+        "size": 230,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ValidatePredictorModes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint32>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x784d00cda940",
+        "size": 837,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cdacc0",
+        "size": 73,
+        "name": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::Add(uint32,uint32)[Optimized]"
+      },
+      {
+        "address": "0x784d00cdad20",
+        "size": 504,
+        "name": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]"
+      }
+    ],
+    "offsets": [
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x268",
+        "samples": 50
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x6b0",
+        "samples": 50
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x6a5",
+        "samples": 47
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x264",
+        "samples": 41
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x216",
+        "samples": 34
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5f1",
+        "samples": 33
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2be",
+        "samples": 30
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1c4",
+        "samples": 29
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x69a",
+        "samples": 27
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1d4",
+        "samples": 26
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x128",
+        "samples": 26
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x131",
+        "samples": 26
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x294",
+        "samples": 25
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1ed",
+        "samples": 22
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x15b",
+        "samples": 21
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1cc",
+        "samples": 19
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x13b",
+        "samples": 19
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x284",
+        "samples": 17
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x245",
+        "samples": 17
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x177",
+        "samples": 17
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x18",
+        "samples": 17
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xdd7",
+        "samples": 17
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x177",
+        "samples": 16
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x14a",
+        "samples": 15
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x179",
+        "samples": 15
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x271",
+        "samples": 14
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x533",
+        "samples": 14
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x608",
+        "samples": 14
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x135",
+        "samples": 14
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x8e",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5d9",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xbb",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x138",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x0",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x167",
+        "samples": 13
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x24b",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x234",
+        "samples": 12
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x134",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x141",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1de",
+        "samples": 12
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x231",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x2ab",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xea",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x27c",
+        "samples": 11
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2b2",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5e1",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x680",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1e4",
+        "samples": 11
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1ad",
+        "samples": 10
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x16d",
+        "samples": 10
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x235",
+        "samples": 10
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2af",
+        "samples": 10
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5de",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xc4",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x203",
+        "samples": 9
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x1d",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x281",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x92",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x9e",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xd3",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1d8",
+        "samples": 9
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1b0",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x20b",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x8a",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xd6",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1db",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x6a0",
+        "samples": 8
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x176",
+        "samples": 8
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x153",
+        "samples": 8
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x550",
+        "samples": 8
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x1ba",
+        "samples": 8
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xa7",
+        "samples": 8
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x31c",
+        "samples": 8
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x198",
+        "samples": 8
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xdcf",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x162",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1af",
+        "samples": 7
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x161",
+        "samples": 7
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x38d",
+        "samples": 7
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xca",
+        "samples": 7
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x21e",
+        "samples": 7
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x1",
+        "samples": 6
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x17a",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x195",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x42",
+        "samples": 6
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xdc4",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x134",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x212",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x690",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x98",
+        "samples": 6
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x12f",
+        "samples": 6
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x0",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1d2",
+        "samples": 6
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x195",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x28c",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x21b",
+        "samples": 5
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x11d",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x158",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x1d",
+        "samples": 5
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x17d",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x2c6",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x560",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x95",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5dc",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x2d3",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x0",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x536",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x138",
+        "samples": 5
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x226",
+        "samples": 5
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2d2",
+        "samples": 5
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd7b",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1dd",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x128",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x36",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x189",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1ba",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x185",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1a4",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x180",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x543",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x9a",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x61b",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0xc9",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x1",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x578",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x274",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CanReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x0",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0xba",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5d1",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x6b8",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x21b",
+        "samples": 4
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xc94",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x6a",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x97",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x36",
+        "samples": 4
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd9b",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x224",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5b2",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x313",
+        "samples": 3
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x16e7",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0xcf",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x324",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5e9",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x196",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2c7",
+        "samples": 3
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0x738",
+        "samples": 3
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x92a",
+        "samples": 3
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xda8",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2d7",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0xdc",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x164",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1d6",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x2d5",
+        "samples": 3
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0x73c",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x27f",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0xbc",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x66f",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2c1",
+        "samples": 3
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x1594",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x297",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x631",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x116",
+        "samples": 3
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14dc",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xd9",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0xeb",
+        "samples": 3
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xc27",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x676",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0xa4",
+        "samples": 3
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x1a9",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x57b",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1b9",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x2d9",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x149",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xc2e",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xc77",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x30e",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1b6",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x201",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x56c",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x123",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2ef",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x15a",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x967",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Ac(int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x19e",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x76",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x623",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x14d",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xdad",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1bc",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x674",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x14e",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x429",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14f2",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x548",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x11b",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x2dc",
+        "samples": 2
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x12a",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x87e",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd8f",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x80",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x112",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0xc6",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x56f",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x364",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xda2",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x529",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14ce",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x22b",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x6d",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Dc(int32)[Optimized]",
+        "offset": "0x1c",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x532",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x11b",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x220",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x18d",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xc02",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x150",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x28e",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x340",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x8a5",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14f4",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x191",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xf9",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x23e",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x175",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xad",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x4cd",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x1563",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1fc",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x206",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x140",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14e1",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x28b",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0xae",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x8f5",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x52f",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0xea",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14c7",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x1d3",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x14c",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0xe8",
+        "samples": 2
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0x74b",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1db",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x191",
+        "samples": 2
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x1498",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x6d7",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x51",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x20f",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x19",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x16",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Category(valuetype Lokad.Image.Internal.Vp8BooleanReader&,int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::Literal(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x5f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x311",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x6a",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x8ee",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd79",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x613",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xc72",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x318",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x42a",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x29e",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x463",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1da",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xde5",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x681",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x3f9",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x7f",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x4aa",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x52d",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x30",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x527",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x16e9",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x150",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x297",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        "offset": "0x4fb",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x525",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x45f",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x52",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x3ad",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x33c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x142",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0xff",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x11f",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1fe",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x139",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x19c",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0x755",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x16d0",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd0d",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x243",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0xbd",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1f0",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x23b",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14e3",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x381",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0x135",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x122",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Category(valuetype Lokad.Image.Internal.Vp8BooleanReader&,int32)[Optimized]",
+        "offset": "0xe0",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x633",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0xa5c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x61c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        "offset": "0x207",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd30",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x24",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x6b8",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xe2",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x16b",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2ec",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1fc",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x5cf",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x692",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2e4",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0xc1",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1b2",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x7b",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0x9df",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x846",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x143",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x13f",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x382",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x7f9",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x159e",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x27e",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadHeader(int32)[Optimized]",
+        "offset": "0x1ae2",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadHeader(int32)[Optimized]",
+        "offset": "0x1adc",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x8d",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::PredictAndAdd(int32,uint32,uint32,uint32,uint32,uint32)[Optimized]",
+        "offset": "0xdf",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x17d",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd92",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x4fa",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x11ce",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x259",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x8a9",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xcb9",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x1e",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x1a",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2e2",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x131",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x63f",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x1c1",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CanReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x2a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadHeader(int32)[Optimized]",
+        "offset": "0x1b02",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x65e",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x1ae",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xdb4",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x669",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        "offset": "0x807",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x16d7",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x86",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x238",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x10f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x69f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x404",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x328",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x4d8",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x154",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x47",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x47f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x72d",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5f4",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x15f",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x131",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::CoefficientToken(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,bool)[Optimized]",
+        "offset": "0x1ae",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x3c0",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x629",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x121",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x90c",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x9c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0xe5",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x466",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x2b3",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x68",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd28",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x360",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x14a8",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x1b6",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd9f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Category(int32)[Optimized]",
+        "offset": "0x114",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x897",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xcd9",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x51c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x115",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x2f7",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x890",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x13",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadHeader(int32)[Optimized]",
+        "offset": "0x1ab9",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x15e",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x588",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x2c4",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x99f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x60e",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x229",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x8c9",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x605",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.WebpHuffman::Read(valuetype Lokad.Image.Internal.WebpBitReader&)[Optimized]",
+        "offset": "0x443",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Category(valuetype Lokad.Image.Internal.Vp8BooleanReader&,int32)[Optimized]",
+        "offset": "0x188",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x12c",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        "offset": "0x19a",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0xde",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x63c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x5b8",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x16b1",
+        "samples": 1
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint32> [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ReadImageCore(int32,int32,bool,bool,class Lokad.Image.ImageBuffer&,uint32[]&)[Optimized]",
+        "offset": "0xd8a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.WebpLosslessDecoder::ApplyPredictor(class Lokad.Image.Internal.WebpLosslessDecoder/Transform,valuetype [System.Runtime]System.Span`1<uint32>,int32)[Optimized]",
+        "offset": "0x293",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x3b6",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        "offset": "0x1675",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Token(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]",
+        "offset": "0x581",
+        "samples": 1
+      }
+    ]
+  },
+  "boundary": {
+    "caseId": "ValidateVp8Alpha",
+    "inputBytes": 115542,
+    "inputSha256": "183b90c4faff3b575ae98cb770d5d3fb3a9066fbf815dba04cdb4b392ea1af71",
+    "descriptorBytes": 36,
+    "descriptorSha256": "eec73486a786152f1f3d0067a8023bfc632fbf38aaa7fbb9d608e75aaebaf9c6",
+    "nativeWorkerSha256": "193d6a28fa90ded8f4d8c19abd9a3ae958e89d87495d243722e6ab285207f4f5",
+    "allOriginalDescriptorScopeSourceOwnerGatesPassed": true,
+    "quietGuardsPassed": true,
+    "fullBoundary": "Same resident encoded bytes to independent coded source metadata and complete pixel-coding validation. Managed required decoder storage, native libavcodec natural frame and original source-metadata adapter, all cleanup included. No RGBA normalization, caller pixel output/copy, reorientation, cached descriptor, IPC or real I/O. Async includes fresh nonseekable source, actual acquisition/growth/EOF and release. Single-CPU codec state reused only as private scratch; every packet is parsed/decoded.",
+    "scope": "Current complete borrowed-span coding validation, approved natural-frame FFmpeg decode plus nine-field metadata adapter. No RGBA conversion/caller raster copies. Original harness/selector/fixtures/native worker reused, CPU0operation/CPU1sampler, one bounded2second capture. Discard all instrumented elapsed data."
+  },
+  "proofReuse": {
+    "originalProofBorrowed": true,
+    "moduleIdentityUpdatedForUnchangedReadPaths": true,
+    "exactRestoration": {
+      "restored": true,
+      "sha256": "a7357dffeca335828c4017f670e0a16dd253b14aaa044b64bcb6ea98e4e80e66"
+    },
+    "scope": "Production changes since the qualified base are encoder-only. Cached proof contains frozen descriptors and scope checks, not cached operation results. Current harness recomputes and verifies source/coding/descriptor/independent owners against reference before/after; no broader general parser claim."
+  },
+  "audit": {
+    "alreadyPresent": [
+      "Validation omits discarded pixel planes/prediction/reconstruction/filtering.",
+      "ALPH syntax validation avoids separate RGBA output.",
+      "Buffered 272-byte coefficient-window proof, direct token branches and exact-prefix cancellable wrapper already exist."
+    ],
+    "observedRepeatedWork": "Each eligible16-coefficient block constructs/fills a local BlockReader from the partition state, then normalizes/publishes it back. Up to24or25coefficient blocks occur per non-skipped macroblock. Token/category calls take the mutable reader by reference; actual JIT has an address-exposed stack state. This proves repetition, not its elapsed cost.",
+    "notSelected": "Unused dequantized writes/Walsh are insufficiently isolated in the profile; no separate micro-optimization selected from them.",
+    "externalInsightOnly": {
+      "ffmpegCommit": "9047fa1b084f76b1b4d065af2d743df1b40dfb56",
+      "paths": [
+        "external/ffmpeg/libavcodec/vp8.c",
+        "external/libwebp/src/dec/vp8_dec.c"
+      ],
+      "observation": "References traverse coefficient sequences with local arithmetic state and probability context carried through successive coefficients. Insight only, no copied code/tables or new production dependency. Independent algorithm contract remains RFC6386sections7.2and13.2."
+    }
+  },
+  "next": {
+    "stage": "VPC358",
+    "hypothesis": "Retain the existing bounded coefficient-window reader across a macroblock instead of reconstructing and publishing it once per block.",
+    "firstTask": "Count actual eligible blocks, macroblocks and bounded full-macroblock window coverage on the existing frozen complete validation input. One private diagnostic build if needed; counters are not CPU/performance evidence.",
+    "endState": "One existing borrowed BlockReader, one coefficient traversal core, one final publication for eligible contiguous blocks. Preserve actual bounded/tail and cancellable readers; no new owner/pool/session/cache/admission model. Avoid permanent duplicated coefficient engines.",
+    "boundaries": [
+      "Complete existing span coding validation and fresh-seekable stream decode.",
+      "Existing full decoding pixels, live-token and short-tail/multi-partition controls.",
+      "Identical entropy decisions, probabilities/context/quantization/overflow semantics, cancellation prefix, strict declared partition bounds and following reads."
+    ],
+    "temporaryTransition": "A private operation-level prototype may initially leave existing cancelable/tail entry unchanged. Accept only a coherent shared core with real fallback callers; no stale wrapper kept for tests.",
+    "continuation": "Applicability plus complete-operation screen must support useful elapsed/allocation/simplification. Preserve adverse/inconclusive results, revise materially or abandon without favorable unchanged repeats. Qualify accepted stage at coherent milestone; reuse unchanged current build/package evidence during attribution."
+  },
+  "raw": {
+    "file": "vp8-validation-reader-attribution.tar.xz",
+    "sha256": "09ff06faa46a9b9b7ddf8235c037ac18c9292b464d9760b4eff1df91d0646315",
+    "bytes": 5723764,
+    "members": 79,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-fixed-value-candidate-pipeline-qualified.tar.xz",
+        "sha256": "200b93fa32bddea6d3a49c0bf0f5fb233fd2f40343138e833ea44fdd955fe8bb"
+      }
+    ]
+  },
+  "decision": "No production change selected or CPU gain claimed yet. Profile identifies coefficient parsing as the next architectural attribution target; proceed with bounded window-reuse applicability. Encoder stage remains accepted; unchanged correctness/package proof reused.",
+  "publication": "postponed"
+}
