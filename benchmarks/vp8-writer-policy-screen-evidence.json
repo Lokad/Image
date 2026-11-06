@@ -1,0 +1,268 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WCP365",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "WCP365",
+    "productionAccepted": false,
+    "baseline": {
+      "windows": "6a8f56fb47a6067254ffc529d91ab20477f5a8193badc75df2a9c2ed8a8d59a4",
+      "linux": "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44"
+    },
+    "originalSources": {
+      "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "1d78346de587a7d7173bb3b5f75a871beef1d3727d991f884bd435a75ed54beb",
+      "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "715fbc4b7f34a25ac5a9056f90e1cf9d879edd534532189c7bce41c497f1c044",
+      "tests/Lokad.Image.Tests/Vp8PartitionWriterTests.cs": "1bccb3558f3b62f422bd9bd38c23f7c85f6ecbc00d09e6fd14b578b61c720d1a"
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "074ba772d03fe40138feb37fb2e9614b3a5232f14accdfc9a4f1b89cc9711c03",
+      "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "98798d4169399f28394074c72dcea781bad8aaef4f6f4b159b2ff1f0f8f8dbf3",
+      "tests/Lokad.Image.Tests/Vp8PartitionWriterTests.cs": "dca9e8ad15ffd8d0e08ede8444c97448742d972bd19f47bd055538c82b063e6f"
+    },
+    "hypothesis": "Prepare immutable CanBeCanceled policy once per frame operation; one exact generic arithmetic bit core. Uncancelable coefficient writer removes provably redundant checks; live coefficients and ordinary header/literal write retain each original checkpoint. Growth/carry/finish/output remain checked. No packing/quality/order/packet/precision change.",
+    "attribution": "Current actual coefficient routine10200B with32cursor-token address/check/throw sites,118/1947alpha process samples. Source/call counts are not phase times or predicted gain.",
+    "storage": "No new heap capacity/owner/cache/buffer/session/API; cursor fields/admission/actual async users unchanged.",
+    "completeControls": [
+      "PhotographLossy8Q75effort4full17688B",
+      "RGBA16VP8+ALPHQ75effort4full98590B"
+    ],
+    "acceptance": "Independent arithmetic/cursor/carry/limit/cancellation/packet oracles plus normal/scalar, complete short and independent useful confirmation, coherentW/L/full/live/actualpackage/current8VP8costs. No automatic merge from code size. Header and live paths preserve exact semantics; unrelated paths reused."
+  },
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "CSP364",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "sourceHashes": {
+      "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9e7dd5d0dd2a3de1904f86e450ff3b70db5faa022bf14e35f0cdf7fa10506007",
+      "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "715fbc4b7f34a25ac5a9056f90e1cf9d879edd534532189c7bce41c497f1c044",
+      "src/Lokad.Image/Internal/Vp8TokenStatistics.cs": "011dc1d77e5193f501c4f9b24aee6287f319a7ec2b43498297daf3ca79dd40b9",
+      "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "1d78346de587a7d7173bb3b5f75a871beef1d3727d991f884bd435a75ed54beb"
+    },
+    "profile": {
+      "source": "tmp/alp360-alpha16-profile-summary.json",
+      "coefficientOutputSamples": 118,
+      "totalProcessSamples": 1947,
+      "scope": "Existing current alpha16capture; samples/skid are attribution, not phase time or predicted gain."
+    },
+    "actualCode": {
+      "coefficientBytes": 10200,
+      "observedCursorTokenAddressSites": 32,
+      "cancellationThrowSites": 32,
+      "jitSha256": "8d8f08b542ca75e83a35c8f74b3c7d36d4322bc2ce4cf01b7bbf2882bc613050",
+      "scope": "Existing actual VPC359generated coefficient code. Cursor layout shows token checks before arithmetic decisions; sourceWrite always calls ThrowIfCancellationRequested. Static sites are not dynamic counts or phase costs."
+    },
+    "sourceFindings": [
+      "Method3to6preparation records selected levels and periodically refreshes probabilities; final update precedes bitstream emission. Header-policy retries may reselect all coefficients.",
+      "Distortion methods0to2have different statistics/final-pass lifetimes, so do not assume all statistics can be reused as final symbols.",
+      "Pinned token-buffer statistics records a category5/6 event into counter9 while emitted syntax uses probability10; any shared representation must preserve this explicit distinction.",
+      "An in-place16bit coefficient descriptor could retain capacity, but is not selected before quantifying useful classification cost. No full-frame/event cache or global table is added.",
+      "Cursor cancellation token is immutable for its lifetime. CanBeCanceled=false cannot acquire a cancellation source. Preparing this policy at operation boundary can remove provably redundant bit checks without relaxing any live-token checkpoint."
+    ],
+    "next": {
+      "stage": "WCP365",
+      "design": "One exact generic arithmetic writer core, once-per-operation selection of cancellable/uncancelable coefficient execution. Existing ordinary header/literal write stays checked, actual live path polls everybit, growth/carry/finish/output boundaries unchanged.",
+      "completeControls": [
+        "Existing opaque photographVP8Q75effort4 exact17688B",
+        "Existing RGBA16VP8+ALPHQ75effort4 exact98590B as shared-caller guard"
+      ],
+      "acceptance": "Exact independent arithmetic cursor/partition and native complete packets, live cancellation cleanup, shared refusal and output owners. Focused normal/scalar, complete screen, independent confirmation for useful lead. No numeric/packet change, no new owner/buffer/cache/dependency or public API. Accepted milestone W/L/full/live/affectedoff/SAMEactualpackage/current8VP8costs; unrelated paths reused."
+    },
+    "decision": "Select immutable cancellation-policy preparation as concrete next hypothesis; no production gain or automatic merge claimed."
+  },
+  "producers": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "6a8f56fb47a6067254ffc529d91ab20477f5a8193badc75df2a9c2ed8a8d59a4",
+      "candidateSha256": "9e9ee514260a10c3cf9979152bb3429adce42d8ac27e9289adce7b98e4741685",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "074ba772d03fe40138feb37fb2e9614b3a5232f14accdfc9a4f1b89cc9711c03",
+        "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "98798d4169399f28394074c72dcea781bad8aaef4f6f4b159b2ff1f0f8f8dbf3",
+        "tests/Lokad.Image.Tests/Vp8PartitionWriterTests.cs": "dca9e8ad15ffd8d0e08ede8444c97448742d972bd19f47bd055538c82b063e6f"
+      },
+      "focused": {
+        "internal-normal": 61,
+        "internal-scalar": 61,
+        "public-normal": 137,
+        "public-scalar": 137
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "e903ed7a08ac4b72eb1eb34bba7e271cb9bbdd6a2ccccb750d612b4a64717e09"
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+      "candidateSha256": "ad8bcd5d6b619e32c844fa2c1b648c164be4e66e610269dfd4e48a5970c6ffbb",
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "074ba772d03fe40138feb37fb2e9614b3a5232f14accdfc9a4f1b89cc9711c03",
+        "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "98798d4169399f28394074c72dcea781bad8aaef4f6f4b159b2ff1f0f8f8dbf3",
+        "tests/Lokad.Image.Tests/Vp8PartitionWriterTests.cs": "dca9e8ad15ffd8d0e08ede8444c97448742d972bd19f47bd055538c82b063e6f"
+      },
+      "focused": {
+        "internal-normal": 61,
+        "internal-scalar": 61,
+        "public-normal": 137,
+        "public-scalar": 137
+      },
+      "productionAccepted": false,
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+      "internalTestAssemblySha256": "6e7433edae4b77b8e70ec10f961804fe72b1d7897ecad8c4ff17d30059e20e76"
+    }
+  },
+  "comparisons": {
+    "photograph": {
+      "caseId": "PhotographLossy8",
+      "pairs": 3,
+      "operationsPerSubjectPerPair": 8,
+      "baselineUs": 11316.084375,
+      "candidateUs": 11264.7575,
+      "ratio": 0.9954662818582632,
+      "interval": [
+        0.9134728948554747,
+        1.0848033369194858
+      ],
+      "allocations": [
+        809072
+      ],
+      "bytes": 17688,
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "packetExact": true,
+      "independentOwners": true,
+      "quietGuardsPassed": true,
+      "allPointsRetained": true,
+      "nativePerformanceMeasured": false,
+      "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+    },
+    "alpha16": {
+      "caseId": "Encode16",
+      "pairs": 3,
+      "operationsPerSubjectPerPair": 8,
+      "baselineUs": 54395.464375,
+      "candidateUs": 54669.8055,
+      "ratio": 1.0050422484339616,
+      "interval": [
+        0.942249278419257,
+        1.0720108990896513
+      ],
+      "allocations": [
+        7033576
+      ],
+      "bytes": 98590,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "packetExact": true,
+      "independentOwners": true,
+      "quietGuardsPassed": true,
+      "allPointsRetained": true,
+      "nativePerformanceMeasured": false,
+      "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof."
+    }
+  },
+  "generatedCode": [
+    {
+      "method": "Lokad.Image.Internal.Vp8FrameEncoding:Encode(Lokad.Image.Internal.Vp8FramePlan):this (FullOpts)",
+      "bytes": 281,
+      "cancellationThrows": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8FrameEncoding:Encode(Lokad.Image.Internal.Vp8FramePlan,byref,byref):this (FullOpts)",
+      "bytes": 10200,
+      "cancellationThrows": 32
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8FrameEncoding:Coefficients(byref,System.ReadOnlySpan`1[short],int,int,int,System.ReadOnlySpan`1[byte]):bool (FullOpts)",
+      "bytes": 3967,
+      "cancellationThrows": 13
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8FrameEncoding:Encode(Lokad.Image.Internal.Vp8FramePlan):this (FullOpts)",
+      "bytes": 316,
+      "cancellationThrows": 0
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8FrameEncoding:Encode[Lokad.Image.Internal.Vp8PartitionWriter+Uncancelable](Lokad.Image.Internal.Vp8FramePlan,byref,byref):this (FullOpts)",
+      "bytes": 10110,
+      "cancellationThrows": 32
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8FrameEncoding:Coefficients[Lokad.Image.Internal.Vp8PartitionWriter+Uncancelable](byref,System.ReadOnlySpan`1[short],int,int,int,System.ReadOnlySpan`1[byte]):bool (FullOpts)",
+      "bytes": 3515,
+      "cancellationThrows": 0
+    }
+  ],
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "sourceMainEmbeddedAndBindingsByteExact": true,
+      "librarySha256": "6a8f56fb47a6067254ffc529d91ab20477f5a8193badc75df2a9c2ed8a8d59a4",
+      "embeddedSha256": "81480fa55cb8d017fae590ee4ad6e19f353001762db2d1b683cf667d96cf57cf",
+      "linuxManifestRestored": false,
+      "additionalBuildTestsPackageProofs": 0,
+      "reusedFullChecksEachOs": 5721,
+      "sameActualPackageSha256": "08daf3f2b2d1f8e6cf07f1555fd3d05903ca861cb9ae8435ebfb17df7d8fff7a",
+      "scope": "Private writer-policy stage retained; exact qualified source/main/embedded/bindings and VM manifest restored. No production change, no stale embedded-source tests. Reuse original full/live/scalar/package qualification."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "sourceMainEmbeddedAndBindingsByteExact": true,
+      "librarySha256": "534268e67e61d648b1f533587282b9fc61e015f0ec30c26fb807f8527e87ef44",
+      "embeddedSha256": "7c2ad9b63396519018aac40de53705662f86816a99d6299e4b611d975d00d9e5",
+      "linuxManifestRestored": true,
+      "additionalBuildTestsPackageProofs": 0,
+      "reusedFullChecksEachOs": 5721,
+      "sameActualPackageSha256": "08daf3f2b2d1f8e6cf07f1555fd3d05903ca861cb9ae8435ebfb17df7d8fff7a",
+      "scope": "Private writer-policy stage retained; exact qualified source/main/embedded/bindings and VM manifest restored. No production change, no stale embedded-source tests. Reuse original full/live/scalar/package qualification."
+    }
+  },
+  "raw": {
+    "file": "vp8-writer-policy-screen-inconclusive.tar.xz",
+    "sha256": "66d11811d13e5ef329515177d4449744d232b5b99cd7c2c235be892e5de5acf4",
+    "bytes": 8695400,
+    "members": 229,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-shared-coefficient-window-qualified.tar.xz",
+        "sha256": "9d2daa4dd124156d34c90e4d48a3ea08bfdfc1f3fee44f6551dfd5c8c6cdead3"
+      },
+      {
+        "file": "vp8-current-alpha16-attribution.tar.xz",
+        "sha256": "52c3a097aa9c5a034d8d287415c360ce19be54cb60cad2d5e77597046e4b53bc"
+      }
+    ]
+  },
+  "workflow": {
+    "coreInternalVersionsEachOs": 1,
+    "focusedEachModeEachOs": {
+      "internal": 61,
+      "public": 137
+    },
+    "completeScreens": 2,
+    "pairsEach": 3,
+    "independentConfirmations": 0,
+    "newNativeHarnessSelectorFixtureOrPackageBuilds": 0,
+    "productionFullOrPackageRepeatsAfterExactRestore": 0
+  },
+  "storage": {
+    "newOwnedCapacityOwnersPoolsCachesApis": 0,
+    "totalAllocationsUnchanged": true,
+    "peakLiveOrNativeAllocationNewlyMeasured": false
+  },
+  "decision": "Generated coefficient code loses all13 redundant immutable-token throw sites and shrinks3967to3515B, but neither complete-control screen supplies a useful time lead. Photograph point-.45%, alpha+.50%, both uncertain. No confirmed loss/gain/equivalence, no unchanged favorable repeat. Retain implementation/evidence; restore all original qualified source/main/embedded/bindings/VMmanifest and reuse5721full/live plus sameactual08da package. No current-cost or renderer dependency. Specific implementation outcome, not a cancellation-policy family ban.",
+  "next": "Attribute current complete PNG Fastest8and16 on unchanged qualified code and review dictionary/history/token-phase boundaries before choosing a coherent matcher/preparation design. Existing PNG source-specific attribution remains a lead where hashes match, not current whole-operation phase time.",
+  "fullWarmObjectiveOpen": true,
+  "publication": "postponed"
+}

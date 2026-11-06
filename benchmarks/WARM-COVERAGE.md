@@ -61,9 +61,11 @@ are deferred in favor of the larger current codec gaps. Materially revised desig
 The [matcher phase study](WEBP-MATCHER-PHASE-STUDY.md) completes three coherent
 private implementations without a useful alpha lead. Exact source/main/embedded/
 binding/manifest restoration reuses valid qualification; all points and code stay
-in its report/raw, without a current-row or renderer dependency. Coefficient-output
-preparation is the next independent audit target, subject to actual pass/lifetime
-evidence and preserved statistics-versus-emission semantics.
+in its report/raw, without a current-row or renderer dependency. The following
+[writer-policy screen](VP8-WRITER-POLICY-SCREEN.md) removes redundant immutable-token
+checks but supplies no useful complete-operation lead. Exact restoration reuses
+qualification. Current PNG complete-operation attribution is the next independent
+lead; no frozen settings, packets or managed contracts change.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)
