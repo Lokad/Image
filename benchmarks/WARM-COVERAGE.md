@@ -23,6 +23,12 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
+The [current shared-root PNG attribution](PNG-RETAINED-ROOT-CURRENT-ATTRIBUTION.md)
+reuses its valid1.157/upper1.168 two-output gap without retiming. One boundedcapture
+locates the hot work in Deflate cursor/long-code decoding; an independent token
+audit motivates bounded prepared-prefix work. No production/numerical change,
+build or new fixture; adverse preflights and frozen reference sources are retained.
+
 The current [block-state milestone](VP8-BLOCK-STATE-RESERVOIR.md) qualifies5,750
 full/live checks perOS(2494internal/2308public/948differential),55internal/131public
 normal/scalar,55internal/42public with AVX2/AVX512 separatelydisabled and the SAME

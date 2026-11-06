@@ -1,0 +1,2799 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PRA436",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "profilingOnly": true,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "sourceAudit": {
+    "project": "Lokad.Image",
+    "stage": "PRA436",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "sourceRevision": "e69516f74aa72d951884dde0d1f678404449df1b",
+    "sources": {
+      "src/Lokad.Image/Internal/PngRowInflation.cs": {
+        "normalizedSha256": "534dd0e30bbe7aa5da75100d802f455c87347099f4acc21fc83a8b949bd1e510",
+        "sameAsRetainedConfirmation": true
+      },
+      "src/Lokad.Image/Internal/ZlibFraming.cs": {
+        "normalizedSha256": "5cfbe23efd5301073e926866d1d70844617d596934ed7c5f98ee22120f5bc273",
+        "sameAsRetainedConfirmation": true
+      },
+      "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": {
+        "normalizedSha256": "3503235f13833a4a9592dfe38ccc3d94e260832af5dca5bbf42fd1510def7bb7",
+        "sameAsRetainedConfirmation": true
+      },
+      "src/Lokad.Image/Internal/Adler32.cs": {
+        "normalizedSha256": "301801bf6417cde32d9e732c26f9d7f2ce36a6be6c0e4df17f985380b9ef8a21",
+        "sameAsRetainedConfirmation": true
+      },
+      "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": {
+        "normalizedSha256": "2c94b20002cb303e3c22bd5ed5adae273566672337a8c2b159d856c8c615dc90",
+        "sameAsRetainedConfirmation": true
+      },
+      "src/Lokad.Image/Internal/OperationContext.cs": {
+        "normalizedSha256": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+        "sameAsRetainedConfirmation": true
+      },
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": {
+        "normalizedSha256": "06b27bdfa26dd9285dbb985a7c6936140ed661ea89b8235c63d285d9275a65cc",
+        "sameAsRetainedConfirmation": true
+      },
+      "src/Lokad.Image/Internal/PngCodec.cs": {
+        "selectedDecodeProjectionSha256": "c5cc800351c3bfe83a3ddc1220054eac7fde1d0710a1b4a72410e815d3da639e",
+        "sameAsRetainedConfirmation": true,
+        "scope": "Scan/Decode prefix,CopyCompressed/FilteredLength and all row-copy/filter helpers. Changed ValidatePixels and ReadRastervalidation-only guard are not executed by frozen eligible governed RGBA8 row-output path; Encode is separate."
+      }
+    },
+    "baselineSourceRevision": "302d87f6c2d33549ac917d69bfb8113461f77cb8",
+    "caseId": "Png8Retained2",
+    "currentControl": {
+      "inputBytes": 218775,
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "eachOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputBytes": 1062936,
+      "rootPeakBytes": 1766641,
+      "boundary": "Two sequential complete resident PNG8 decodes per operation; first independently owned output remains alive throughout the second, then both are disposed. Same original packet and exact RGBA samples including hidden RGB. One finite borrowed caller IMemoryBudget root and its resident-input reservation prepared outside timing. All managed admission, uncached output/scratch allocation, codec work, retained reservations and refunds are timed. Native public FFmpeg PNG decode, fresh independently owned frames and both releases timed; reusable codec/packet/frame wrappers and padded resident input prepared outside. Native has no shared admission API; managed root accounting is included additional work. No cached decoded pixels, output clones or redundant full-frame copies. One CPU/thread. Startup, I/O, IPC, fixture generation and checks excluded."
+    },
+    "evidence": "current-retained-png-decode-cost-evidence.json",
+    "reason": "Existing confirmed446usgap per two complete governed PNG decodes. Source-valid costs reused; no retained capture targets this ownership/rolling-history path. Existing PNG encoding profiles concern unrelated compression. One bounded2scurrentcontrol capture justified; instrumentedelapsed discarded.",
+    "preparation": "Borrowed32MiBroot/inputreservation outside operation. Each of two decodes freshlyadmits/copiescompressedinput, ownsfinalRGBA,64KiBrollingDeflatehistory,filterbytes/rowworkspace/canonicaltables; first result survives second. No output/scratchpool for governedcalls. Inspect actual hot regions before redesign.",
+    "constraints": "Exact packet input/RGBA includinghiddenRGB,sharedrefusal/cancellationcleanup/independentowners. Native twofreshcompleteFFmpegdecodes withretainedwrappers; source/contextboundary disclosed. No newimage/settings/matrix/productiondependency."
+  },
+  "currentModuleSha256": "270f2904a1b1f9630f21d8ed31d8c07ee07ae4674a8757035537efb91ee814b3",
+  "currentQualification": "vp8-block-state-reservoir-evidence.json",
+  "currentCommit": "e69516f74aa72d951884dde0d1f678404449df1b",
+  "currentCi": {
+    "id": 42287140890,
+    "conclusion": "success",
+    "jobs": 3
+  },
+  "capture": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1885,
+    "managedSamples": 1644,
+    "methods": [
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        1208
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        263
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        96
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        26
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        21
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        13
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::WalkRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int64,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.PngRowInflation,bool&)[Optimized]",
+        6
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildLiteralLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        6
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngRowInflation::Consume()[Optimized]",
+        2
+      ],
+      [
+        "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        1
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.OperationContext::Dispose()[Optimized]",
+        1
+      ]
+    ],
+    "targetCode": [
+      {
+        "address": "0x7a33dcab2770",
+        "size": 2220,
+        "name": "class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.PngCodec::Decode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab3080",
+        "size": 4015,
+        "name": "class Lokad.Image.Internal.PngCodec/Header [Lokad.Image] Lokad.Image.Internal.PngCodec::Scan(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab4080",
+        "size": 1045,
+        "name": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab44e0",
+        "size": 377,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab4680",
+        "size": 43,
+        "name": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Power(int32)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab46c0",
+        "size": 232,
+        "name": "uint64 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::DividePower64()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab47c0",
+        "size": 120,
+        "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint8> [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::NibbleReversals()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab4860",
+        "size": 87,
+        "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint8> [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ReverseByteOrder()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab48e0",
+        "size": 73,
+        "name": "uint32[] [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::BuildTailTable()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab4940",
+        "size": 293,
+        "name": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Reduce(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint64>)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab5a80",
+        "size": 145,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.PngCodec::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab5b60",
+        "size": 469,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.PngCodec::CopyCompressed(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8[],class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab5d60",
+        "size": 279,
+        "name": "int64 [Lokad.Image] Lokad.Image.Internal.PngCodec::FilteredLength(class Lokad.Image.Internal.PngCodec/Header)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab5e90",
+        "size": 174,
+        "name": "int64 [Lokad.Image] Lokad.Image.Internal.PngCodec::<FilteredLength>g__Pass|10_0(int32,int32,int32,int32,valuetype Lokad.Image.Internal.PngCodec/<>c__DisplayClass10_0&)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab5f60",
+        "size": 65,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.PngCodec::Channels(int32)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab6470",
+        "size": 171,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngRowInflation::.ctor(class Lokad.Image.ImageBuffer)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab6580",
+        "size": 7210,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::WalkRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int64,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.PngRowInflation,bool&)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab8600",
+        "size": 576,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab8860",
+        "size": 586,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab8b80",
+        "size": 273,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildLiteralLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab8cc0",
+        "size": 273,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildDistanceLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab8df0",
+        "size": 141,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngRowInflation::EnsureSpace()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab8ea0",
+        "size": 2642,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab9940",
+        "size": 611,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab9bc0",
+        "size": 469,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngRowInflation::Consume()[Optimized]"
+      },
+      {
+        "address": "0x7a33dcab9dc0",
+        "size": 484,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcaba140",
+        "size": 74,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.PngRowInflation::Finish(uint32)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcaba1c0",
+        "size": 563,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngRowInflation::DecodeRows(class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcaba420",
+        "size": 891,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.PngCodec::Unfilter(valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x7a33dcaba7e0",
+        "size": 220,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.PngCodec::CopyRgbaRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,bool,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      }
+    ],
+    "offsets": [
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x149",
+        "samples": 95
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x161",
+        "samples": 66
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x16e",
+        "samples": 64
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x19b",
+        "samples": 48
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x43e",
+        "samples": 47
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1ea",
+        "samples": 37
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x21a",
+        "samples": 35
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x373",
+        "samples": 28
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x44b",
+        "samples": 27
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x128",
+        "samples": 27
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x74b",
+        "samples": 27
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1ee",
+        "samples": 25
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1e4",
+        "samples": 22
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5c1",
+        "samples": 22
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x8e",
+        "samples": 21
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4b0",
+        "samples": 21
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x19e",
+        "samples": 21
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4d8",
+        "samples": 20
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x427",
+        "samples": 19
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4a2",
+        "samples": 19
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x593",
+        "samples": 19
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x92",
+        "samples": 17
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xaf",
+        "samples": 17
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x6e0",
+        "samples": 16
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0xf0",
+        "samples": 16
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x36b",
+        "samples": 16
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x139",
+        "samples": 16
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1b1",
+        "samples": 15
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x10b",
+        "samples": 15
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x196",
+        "samples": 15
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x59f",
+        "samples": 14
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x186",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4db",
+        "samples": 13
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x10",
+        "samples": 13
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x227",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5f0",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x618",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1f2",
+        "samples": 12
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x127",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4e4",
+        "samples": 12
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x59b",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x9b",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1af",
+        "samples": 11
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x9f",
+        "samples": 11
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x0",
+        "samples": 10
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xcd",
+        "samples": 10
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x18d",
+        "samples": 10
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x110",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x636",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x61b",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5f9",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4ac",
+        "samples": 9
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x15a",
+        "samples": 9
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1c4",
+        "samples": 8
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1bc",
+        "samples": 8
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x63f",
+        "samples": 8
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x7",
+        "samples": 7
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x20d",
+        "samples": 7
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x150",
+        "samples": 7
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1e0",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x8c",
+        "samples": 7
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1b5",
+        "samples": 7
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xb6",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x42f",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xc1",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4a6",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1f9",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x10b",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x38",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4e8",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0xf9",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x761",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x656",
+        "samples": 6
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x152",
+        "samples": 6
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x587",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4cb",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5c6",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x97",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x6e4",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x118",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x189",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x193",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5b0",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0xa6",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0xf6",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4d4",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x36f",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x234",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x88",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5a9",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x754",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x144",
+        "samples": 5
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x1",
+        "samples": 5
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1ad",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x16f",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x12c",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x156",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x554",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x200",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x653",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x463",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x53a",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x10c",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x609",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1d7",
+        "samples": 4
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x149",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x13f",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x73",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x380",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x569",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x146",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x244",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xc3",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::WalkRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int64,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.PngRowInflation,bool&)[Optimized]",
+        "offset": "0xb46",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildLiteralLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xca",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x13b",
+        "samples": 3
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1f8",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x84",
+        "samples": 3
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1cc",
+        "samples": 3
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x15a",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x482",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x62a",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x3b",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x12e",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x113",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x168",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x544",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xa3",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x8b",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x37c",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xdd",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xb6",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xff",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x336",
+        "samples": 2
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x19e",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x17d",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xa1",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xf5",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5c8",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x9",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5b8",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x164",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xdb",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1bb",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0xd3",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x6d6",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x473",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x11c",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x85",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x5ad",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4c7",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x19d",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x1e",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x174",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x152",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x1e",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xd7",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x441",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x9f",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x584",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x189",
+        "samples": 2
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1d8",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x19f",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x615",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4b9",
+        "samples": 2
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x165",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x3cf",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x13c",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x17e",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x114",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x13a",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x105",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x33",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x153",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x7a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngRowInflation::Consume()[Optimized]",
+        "offset": "0x177",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x47e",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x18a",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::WalkRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int64,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.PngRowInflation,bool&)[Optimized]",
+        "offset": "0x9d3",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x48f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x195",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xa7",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x6f3",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x168",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x107",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1c8",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x36f",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xed",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4b3",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4a0",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0xf1",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x120",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x94",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xef",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x11b",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xf2",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x630",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildLiteralLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x9d",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x34a",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildLiteralLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x89",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x102",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0xfb",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x324",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x87",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x118",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.ZlibFraming::BuildLiteralLookup(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.Span`1<uint16>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xb5",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1cb",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x9c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x35e",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x627",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x606",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0x179",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0xf5",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x3fa",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::WalkRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int64,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.PngRowInflation,bool&)[Optimized]",
+        "offset": "0xb43",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x256",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xba",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x356",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xe7",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0xb2",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xd3",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x65f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x633",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x124",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x1e9",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngRowInflation::Consume()[Optimized]",
+        "offset": "0x118",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x662",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x154",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x14e",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x3a",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x649",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xe6",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x86",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::Decode(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        "offset": "0x134",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x16a",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x99",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x565",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1c0",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x49c",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x56d",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x1ce",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::WalkRows(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int64,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.PngRowInflation,bool&)[Optimized]",
+        "offset": "0xee9",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xa8",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x561",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xad",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x154",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming::DecodeLongLiteral(valuetype Lokad.Image.Internal.ZlibFraming/Bits&,valuetype Lokad.Image.Internal.ZlibFraming/Huffman)[Optimized]",
+        "offset": "0xcb",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x25a",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x53e",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x4b6",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xcb",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x6da",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Huffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x161",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x646",
+        "samples": 1
+      },
+      {
+        "method": "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Compute(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0x136",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.ZlibFraming+Bits::InflateCursor(valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype Lokad.Image.Internal.ZlibFraming/Huffman,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,bool&)[Optimized]",
+        "offset": "0x603",
+        "samples": 1
+      }
+    ]
+  },
+  "receipt": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "productionChanged": false,
+    "allBuilds": 0,
+    "librarySha256": "270f2904a1b1f9630f21d8ed31d8c07ee07ae4674a8757035537efb91ee814b3",
+    "sourceSha256": "d302151e2dad61356ebf8fe8fc5fd67186bc0fd28899504fcc626b9def93cf6c",
+    "validation": {
+      "schemaVersion": 1,
+      "name": "WarmMemoryBudget",
+      "caseId": "Png8Retained2",
+      "publicBoundary": "MemoryBudget/Png8Retained2",
+      "runId": "pra436-retained-png-profile-c",
+      "smoke": false,
+      "cpu": 0,
+      "sourceIdentity": {
+        "sourceSha256": "d302151e2dad61356ebf8fe8fc5fd67186bc0fd28899504fcc626b9def93cf6c",
+        "sourceRevision": "fee5380bd9eaf9c1a91acd321e665046a4bd1358"
+      },
+      "inputBytes": 218775,
+      "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "managedOutputBytes": 1062936,
+      "nativeOutputBytes": 1062936,
+      "eachOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "allRgbaSamplesExact": true,
+      "sourceUnchanged": true,
+      "twoCompleteDecodesTimed": true,
+      "firstRetainedThroughSecond": true,
+      "independentOwnedOutputs": true,
+      "survivorAfterMutationAndRelease": true,
+      "sharedRootBorrowed": true,
+      "retainedChargesExact": true,
+      "temporaryChargesReturned": true,
+      "terminalRefusalCleanupAndSubsequentSuccess": true,
+      "cancellationCleanup": true,
+      "callerInputChargedBytes": 218775,
+      "rootLimitBytes": 33554432,
+      "rootPeakBytes": 1766641,
+      "librarySha256": "270f2904a1b1f9630f21d8ed31d8c07ee07ae4674a8757035537efb91ee814b3",
+      "benchmarkAssemblySha256": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "purpose": "Original complete two-retained-output public FFmpeg PNG adapter",
+        "workerSha256": "16fb3910f0b01480c3dc89f61290fb3388122516a90806757c35181c1849b057",
+        "sourceSha256": "0d65ee8590b9e7623ccc4d9a165741e7e3a3b7f4354176275618b79073668dda",
+        "includedSourceSha256": "a75eaefa6dc3de3728c7c3959b772108b5b97cb97e672f6543433a2a3307f529",
+        "buildScriptSha256": "f63341b10a996b3452dc297e94b5ba0f84a3341efdabfb7b14ca60ebec44178a",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-ffunction-sections",
+          "-fdata-sections",
+          "-Wl,--gc-sections",
+          "-s"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "png-retained2-decode",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "codecThreads": 1,
+        "activeThreadType": 0,
+        "outputBytes": 1062936,
+        "initialCompletedOperations": 1,
+        "twoCompleteDecodesTimed": true,
+        "firstRetainedThroughSecond": true,
+        "independentLiveOutputs": true,
+        "survivorAfterMutationAndRelease": true,
+        "outputAcquisitionAndReleaseTimed": true,
+        "residentInputPreparedOutsideTiming": true,
+        "scalarMode": false,
+        "ffmpegVersion": "n8.1"
+      },
+      "nativeBefore": [
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91321409,
+          "completedOperations": 192,
+          "observed": 92544,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 91136909,
+          "nanosecondsPerOperation": 2853794.03125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91005943,
+          "completedOperations": 224,
+          "observed": 107968,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90852451,
+          "nanosecondsPerOperation": 2843935.71875
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91068628,
+          "completedOperations": 256,
+          "observed": 123392,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90915861,
+          "nanosecondsPerOperation": 2845894.625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91107707,
+          "completedOperations": 288,
+          "observed": 138816,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90935181,
+          "nanosecondsPerOperation": 2847115.84375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91140607,
+          "completedOperations": 320,
+          "observed": 154240,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90987503,
+          "nanosecondsPerOperation": 2848143.96875
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90915797,
+          "completedOperations": 352,
+          "observed": 169664,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90743926,
+          "nanosecondsPerOperation": 2841118.65625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90971552,
+          "completedOperations": 384,
+          "observed": 185088,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90820106,
+          "nanosecondsPerOperation": 2842861
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90992754,
+          "completedOperations": 416,
+          "observed": 200512,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90843703,
+          "nanosecondsPerOperation": 2843523.5625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91061747,
+          "completedOperations": 448,
+          "observed": 215936,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90899935,
+          "nanosecondsPerOperation": 2845679.59375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91083810,
+          "completedOperations": 480,
+          "observed": 231360,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90924490,
+          "nanosecondsPerOperation": 2846369.0625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91011451,
+          "completedOperations": 512,
+          "observed": 246784,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90790574,
+          "nanosecondsPerOperation": 2844107.84375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90883128,
+          "completedOperations": 544,
+          "observed": 262208,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90714374,
+          "nanosecondsPerOperation": 2840097.75
+        }
+      ],
+      "nativeAfter": [
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90828877,
+          "completedOperations": 672,
+          "observed": 323904,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90639781,
+          "nanosecondsPerOperation": 2838402.40625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90847395,
+          "completedOperations": 704,
+          "observed": 339328,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90682869,
+          "nanosecondsPerOperation": 2838981.09375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90953415,
+          "completedOperations": 736,
+          "observed": 354752,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90788892,
+          "nanosecondsPerOperation": 2842294.21875
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90848346,
+          "completedOperations": 768,
+          "observed": 370176,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90656991,
+          "nanosecondsPerOperation": 2839010.8125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90877019,
+          "completedOperations": 800,
+          "observed": 385600,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90647977,
+          "nanosecondsPerOperation": 2839906.84375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90836328,
+          "completedOperations": 832,
+          "observed": 401024,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90680169,
+          "nanosecondsPerOperation": 2838635.25
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90775566,
+          "completedOperations": 864,
+          "observed": 416448,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90625924,
+          "nanosecondsPerOperation": 2836736.4375
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 91035309,
+          "completedOperations": 896,
+          "observed": 431872,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90860524,
+          "nanosecondsPerOperation": 2844853.40625
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90858442,
+          "completedOperations": 928,
+          "observed": 447296,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90663271,
+          "nanosecondsPerOperation": 2839326.3125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90937000,
+          "completedOperations": 960,
+          "observed": 462720,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90785958,
+          "nanosecondsPerOperation": 2841781.25
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90930570,
+          "completedOperations": 992,
+          "observed": 478144,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90771898,
+          "nanosecondsPerOperation": 2841580.3125
+        },
+        {
+          "state": "sample",
+          "operations": 32,
+          "elapsedNanoseconds": 90907586,
+          "completedOperations": 1024,
+          "observed": 493568,
+          "outputStride": 2112,
+          "cpu": 0,
+          "outputBytes": 1062936,
+          "cpuElapsedNanoseconds": 90732623,
+          "nanosecondsPerOperation": 2840862.0625
+        }
+      ],
+      "nativeExitCode": 0,
+      "boundary": "Two sequential complete resident PNG8 decodes per operation; first independently owned output remains alive throughout the second, then both are disposed. Same original packet and exact RGBA samples including hidden RGB. One finite borrowed caller IMemoryBudget root and its resident-input reservation prepared outside timing. All managed admission, uncached output/scratch allocation, codec work, retained reservations and refunds are timed. Native public FFmpeg PNG decode, fresh independently owned frames and both releases timed; reusable codec/packet/frame wrappers and padded resident input prepared outside. Native has no shared admission API; managed root accounting is included additional work. No cached decoded pixels, output clones or redundant full-frame copies. One CPU/thread. Startup, I/O, IPC, fixture generation and checks excluded."
+    },
+    "identities": {
+      "tmp/pra436-reference-root/runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.pdb": "0a1419d4adaeaea60379588af082f30b5e397d526ba698e48871a4268b8e5a47",
+      "tmp/pra436-reference-root/runtime/Bcax1HorizontalConfirm.dll": "87ad328d2a703949211524fb341824e03d0fda6264bfadd5507fb85f67690ddf",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks-WarmShort-1.dll": "759446ba1b94c4cabdb331638ad76d48cd202f82f23aab21298d92212ef6f24a",
+      "tmp/pra436-reference-root/runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/pra436-reference-root/runtime/DR1WebpStreamConfirm.dll": "8cb5b885cb2922e6fa04bdf1d19c561b91bec60838aaf92f93e3a5c00dfdc6ed",
+      "tmp/pra436-reference-root/runtime/DR1WebpResidentShort.dll": "c6a2d2b56d0e0b80678c227f9737704b11ba9058555bcdc8c8a8c8d4f8aee593",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Vcm1Confirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks.deps.json": "14676a16346e78fca39fe33f096b7c8db3e85097f3099e9d0a8bce425c4a2803",
+      "tmp/pra436-reference-root/runtime/Bcp1IdentityProfile.dll": "c8528eb49ac75b55f3efef30342ac83781909ae0c581004bf9da5a870fbe24a9",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks.pdb": "34978365046fbe6bc6389cf67bed4a50b6ffa137cb192babb178439f834ca1a8",
+      "tmp/pra436-reference-root/runtime/Alr1VerticalUp16Confirm.dll": "aa6d4ae33e2fe212b4dfc052314e67169feec6889f565daa67df1d0b60666ed3",
+      "tmp/pra436-reference-root/runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/pra436-reference-root/runtime/Vp8lEncodeConfirmHost.dll": "cace0f379f560b3e0440fa3a20bcab5fbe4793a9493743617095a55832ebfd7a",
+      "tmp/pra436-reference-root/runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/pra436-reference-root/runtime/VpsEffort2Short.dll": "6e7aa436eaa983f3f8be6a09db9bb4cf9679aa6e3d83f7d81638698b4a93385e",
+      "tmp/pra436-reference-root/runtime/PhotographConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/TrellisCurrentConfirm.dll": "9ce87d1f33c69eb9061f7c2583b611a9e8e266dfe21a80db45ea3121e1d31691",
+      "tmp/pra436-reference-root/runtime/Alr1BicubicUp8Confirm.dll": "47ce1e7659df5da6f934dcb9d93a095d50e1a24b43656edbadb5377b84aa06ce",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/pra436-reference-root/runtime/Bcur1Alpha8ShortHost.dll": "391e89d3b6ba09cfccce58222102d0089d23f3e081801a38274931e50be8adac",
+      "tmp/pra436-reference-root/runtime/Alr1BicubicUp16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Bcax1HorizontalConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Bcut1TightUp8Confirm.dll": "d5813d0a138a4b2de7498d674578307d4bdf13fb9ea31605baf9a3b7168a0c95",
+      "tmp/pra436-reference-root/runtime/PredictablePngConfirm.dll": "5c23f5476c268764ff3cfd7a5e9f48558afab2e0e121a1de242880e807c1e3aa",
+      "tmp/pra436-reference-root/runtime/DR1Jpeg420Short.dll": "a5d78210a450bf8183ac08fc5af80fb1a52cbf32c179f9f0276bf7e71f9f9c67",
+      "tmp/pra436-reference-root/runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/pra436-reference-root/runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/pra436-reference-root/runtime/Bcp1TightUp8Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/JIV1Jpeg420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Vp8Opaque16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/BicubicGeneralHost.dll": "7d02fdd4583e40f943b430b17b38faabec87a2f0658dbf7621deae3ec618d178",
+      "tmp/pra436-reference-root/runtime/PhotographConfirmHost.dll": "4891d4446201896d2723d528e5865ebb2672e840ad6608f106c30f46c2d9040b",
+      "tmp/pra436-reference-root/runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/pra436-reference-root/runtime/Dhc2HorizontalUp8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/pra436-reference-root/runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/pra436-reference-root/runtime/BatchedPredictablePngConfirm.dll": "2db276b4bf30872487f6c37787a22d9227cf1cd76c0c204380e818c909d68443",
+      "tmp/pra436-reference-root/runtime/Bcur1DiagramLossy8ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Bcax1VerticalConfirm.dll": "8ed624d29097d9b15a374f9dc53e34baf5a05969f99ffea5dc66e9fee14617a8",
+      "tmp/pra436-reference-root/runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/pra436-reference-root/runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/pra436-reference-root/runtime/Profile.pdb": "3146d7589cbd824b27c4cbc92135e76307494c0841a7ea1a597cd38ddf63ed5e",
+      "tmp/pra436-reference-root/runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/pra436-reference-root/runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/pra436-reference-root/runtime/Vp8lCurrent16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/BatchedPredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/DR1Jpeg420Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Bcur1DiagramLossy8ShortHost.dll": "759446ba1b94c4cabdb331638ad76d48cd202f82f23aab21298d92212ef6f24a",
+      "tmp/pra436-reference-root/runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/pra436-reference-root/runtime/Alr1VerticalUp16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/BicubicGeneralHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Alr1BilinearUp16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/pra436-reference-root/runtime/BicubicCrossShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/pra436-reference-root/runtime/Bcp1IdentityProfile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/Alr1BicubicUp8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/PngStreamShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/DR1WebpResidentConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks.dll": "12db6ddcf7b0189a13655ca870faea7fb1282c39e9a8d7a60a7edeb46c39ef96",
+      "tmp/pra436-reference-root/runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+      "tmp/pra436-reference-root/runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+      "tmp/pra436-reference-root/runtime/Bcax1VerticalConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/JIV1Jpeg420Confirm.dll": "6bbe042780b58539c40fc62f9407425ead99016f2f562565d1efefe3e0ddb3c2",
+      "tmp/pra436-reference-root/runtime/PredictablePngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/BicubicCrossConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.dll": "270f2904a1b1f9630f21d8ed31d8c07ee07ae4674a8757035537efb91ee814b3",
+      "tmp/pra436-reference-root/runtime/PngStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Dhc2Horizontal8Confirm.dll": "3bfef76ddf3e19e50f09956c3d4f3efee8a128c0b46063e2ec807812a1b3c7cf",
+      "tmp/pra436-reference-root/runtime/ReadDriverShort.dll": "df531eb4653937bf4f1ea6af223908db74931e502d9cd9f5720ca65a2955cbe9",
+      "tmp/pra436-reference-root/runtime/Profile.dll": "373505f8d07bd4ec9e3f50bf69be4f0fc307bd35a5e1df26e6d55238c84fca3f",
+      "tmp/pra436-reference-root/runtime/BicubicCrossShortHost.dll": "7df5beed9e6d17ed66d41515c08309af9c261b292f0951b1ebc9dc7ced4e01c2",
+      "tmp/pra436-reference-root/runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/pra436-reference-root/runtime/ReadDriver.dll": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+      "tmp/pra436-reference-root/runtime/Alr1BicubicUp16Confirm.dll": "3bfef76ddf3e19e50f09956c3d4f3efee8a128c0b46063e2ec807812a1b3c7cf",
+      "tmp/pra436-reference-root/runtime/VpsEffort2Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/ReadDriverShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/PngStreamConfirmHost.dll": "ddae2cd023c6d6487e28f408d6c5b90b239fe3bcbc2998e2c314cff53b3614b6",
+      "tmp/pra436-reference-root/runtime/PredictablePngShort.dll": "441c80445443335123284c911bb8362fd53ee4bd27b22ad652c3bf229f6d74c5",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+      "tmp/pra436-reference-root/runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/pra436-reference-root/runtime/Alr1BilinearUp16Confirm.dll": "10acb9542c19d7d3237aa4b8f763bc701c80b229125034054a28b5fca44af5c7",
+      "tmp/pra436-reference-root/runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/BicubicCrossConfirmHost.dll": "4577d24e42f33b99eddece3e142b430d351b6add285178e9f83d040fd4d6f845",
+      "tmp/pra436-reference-root/runtime/DR1WebpStreamShort.dll": "8fa8a00a1de342996490d26300116f375f2998b9f1c6a29d798bd0be9a76a76e",
+      "tmp/pra436-reference-root/runtime/Dhc2Horizontal8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/pra436-reference-root/runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+      "tmp/pra436-reference-root/runtime/Vpc1Profile.dll": "ecf2cb114d3222b7eb553ba138d5e39c43e1b949fa7cca800c1d750793a095a6",
+      "tmp/pra436-reference-root/runtime/Dhc2HorizontalUp8Confirm.dll": "a115b4d74040a22accde5820dbc77d96078a321abfcf50d3a9cb34df7cc7b55f",
+      "tmp/pra436-reference-root/runtime/Bcur1DiagramLossyTrellis8ShortHost.dll": "a0867d332b56009a9e35bf5b51e7e0b3d4754fbea8011fd20db98d81dc0d3dbf",
+      "tmp/pra436-reference-root/runtime/PredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/DR1WebpStreamConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Bcut1TightUp8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/ReadDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/DR1WebpStreamShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+      "tmp/pra436-reference-root/runtime/Vp8Opaque16ShortHost.dll": "c6a5f7003b5f5edd8ab165fbf386011f58579fbe817dc9a17b2cc72685d58fc2",
+      "tmp/pra436-reference-root/runtime/Vp8lCurrent16Confirm.dll": "309f5457d888d5d3b714b20ffb9ee34f5d625a30a019d0a2fb4020ae26f6620c",
+      "tmp/pra436-reference-root/runtime/DR1WebpResidentShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/pra436-reference-root/runtime/Bcur1Alpha8ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks-WarmConfirm-1.dll": "fabe6cabd3e496abf876163e0f04515d31c4c48638abaa4617ec7c2fb4350fcd",
+      "tmp/pra436-reference-root/runtime/Vp8lEncodeConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Vpc1Profile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/PngStreamShortHost.dll": "0075d31dbce00be8712baf02cfa8b40b1767007078e0048d7e98b4d7649c755b",
+      "tmp/pra436-reference-root/runtime/Vcm1Confirm.dll": "67278c15197938848fd424a4d8eb689c052ec2f146c5e3849c67842850c91b3b",
+      "tmp/pra436-reference-root/runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/pra436-reference-root/runtime/Bcur1DiagramLossyTrellis8ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Profile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/pra436-reference-root/runtime/DR1WebpResidentConfirm.dll": "315cebc4bb2ed72d8bb1de3e2181e7ecfc8a1595651a501e402d46e5713bd3b3",
+      "tmp/pra436-reference-root/runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+      "tmp/pra436-reference-root/runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/pra436-reference-root/runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+      "tmp/pra436-reference-root/runtime/TrellisCurrentConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/pra436-reference-root/runtime/Bcp1TightUp8Short.dll": "e62bbb3f7e6b91469102d6136aa39c061cfcf7a5246a5f94277157dd73f1f945",
+      "tmp/pra436-reference-root/tools/WarmReference/ffmpeg-png-warm.c": "a75eaefa6dc3de3728c7c3959b772108b5b97cb97e672f6543433a2a3307f529",
+      "tmp/pra436-reference-root/tools/WarmReference/ffmpeg-png-retained2-warm.c": "0d65ee8590b9e7623ccc4d9a165741e7e3a3b7f4354176275618b79073668dda",
+      "tmp/pra436-reference-root/tools/WarmReference/build-png-retained2-linux.sh": "f63341b10a996b3452dc297e94b5ba0f84a3341efdabfb7b14ca60ebec44178a",
+      "tmp/pra436-reference-root/external/warm-reference/ffmpeg-png-retained2-warm": "16fb3910f0b01480c3dc89f61290fb3388122516a90806757c35181c1849b057",
+      "tmp/pra436-reference-root/external/warm-reference/png-retained2-identity.json": "ee139d28ccb3505043d578decbf8b840ac4c659f892b879ffcb69206baebc419",
+      "tmp/pra436-reference-root/artifacts/warm-reference/png-cancel8/input.png": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+      "tmp/pra436-reference-root/tmp/benchmark-source.json": "fb1b5a7ebc965ba324c6c0ed947d0fee1bbb847f935a95ce9fb75995f0b0c7e7",
+      "external/warm-reference/ffmpeg-png-retained2-warm": "16fb3910f0b01480c3dc89f61290fb3388122516a90806757c35181c1849b057",
+      "external/warm-reference/png-retained2-identity.json": "ee139d28ccb3505043d578decbf8b840ac4c659f892b879ffcb69206baebc419",
+      "artifacts/warm-reference/png-cancel8/input.png": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f"
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+      "tmp/pra436-reference-root/runtime/Lokad.Image.Benchmarks-WarmConfirm-1.dll",
+      "--benchmarkName",
+      "WarmPng.Managed(Case: Decode8)",
+      "--job",
+      "WarmConfirm",
+      "--benchmarkId",
+      "0"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "647595",
+      "-o",
+      "tmp/pra436-retained-png-profile-c.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "quietGuardsPassed": true,
+    "traceSha256": "41c714fc501d224574d215b1b74bcc0a205165693870aab5064dd89cd0a8a20c",
+    "traceBytes": 664320,
+    "scope": "One bounded2s current existing Png8Retained2 complete public operation, same original input/native settings/exact pixels/shared admission/independent ownership. Cached adaptive WarmPng driver with same public integration, no builds/newmatrix. Instrumented elapsed discarded. CPU0operation/CPU1sampler. No altered proof or expectation metadata."
+  },
+  "prefixAudit": {
+    "project": "Lokad.Image",
+    "stage": "PRA436",
+    "diagnosticOnly": true,
+    "timing": false,
+    "productionChanged": false,
+    "inputBytes": 218775,
+    "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+    "filteredBytes": 531727,
+    "filteredSha256": "8bd1106ca96eb736e92f0e71e6fbe486d0beebe70cf7e3fdf311946ea0a25e10",
+    "fullIndependentTokenOutputEqualsZlib": true,
+    "compressedDeflateBytes": 218676,
+    "consumedDeflateBytes": 218676,
+    "blocks": [
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 7,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "7": 3,
+          "8": 4,
+          "9": 212,
+          "10": 46,
+          "11": 1,
+          "12": 4,
+          "13": 4
+        },
+        "distanceCodeCounts": {
+          "0": 10,
+          "2": 1,
+          "3": 3,
+          "4": 4,
+          "5": 1,
+          "6": 5,
+          "7": 1,
+          "8": 1,
+          "9": 1,
+          "10": 1,
+          "11": 2
+        },
+        "literalTokensByCodeBits": {
+          "2": 5397,
+          "3": 1851,
+          "4": 1240,
+          "5": 1153,
+          "7": 394,
+          "8": 210,
+          "9": 5275,
+          "10": 837,
+          "11": 5,
+          "12": 17,
+          "13": 5
+        },
+        "distanceTokensByCodeBits": {
+          "2": 2064,
+          "3": 3977,
+          "4": 2800,
+          "5": 440,
+          "6": 837,
+          "7": 91,
+          "8": 43,
+          "9": 26,
+          "10": 18,
+          "11": 6
+        }
+      },
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 4,
+          "1": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "7": 2,
+          "8": 1,
+          "9": 2,
+          "10": 197,
+          "11": 68,
+          "12": 2,
+          "13": 3,
+          "14": 2
+        },
+        "distanceCodeCounts": {
+          "0": 8,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 4,
+          "6": 2,
+          "7": 3,
+          "9": 3,
+          "10": 1,
+          "11": 2
+        },
+        "literalTokensByCodeBits": {
+          "1": 6661,
+          "3": 1984,
+          "4": 1199,
+          "5": 1219,
+          "7": 344,
+          "8": 101,
+          "9": 88,
+          "10": 3848,
+          "11": 921,
+          "12": 9,
+          "13": 7,
+          "14": 3
+        },
+        "distanceTokensByCodeBits": {
+          "2": 2216,
+          "3": 4414,
+          "4": 3027,
+          "5": 1452,
+          "6": 334,
+          "7": 222,
+          "9": 73,
+          "10": 9,
+          "11": 6
+        }
+      },
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 6,
+          "1": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 7,
+          "9": 1,
+          "10": 207,
+          "11": 52,
+          "12": 3,
+          "14": 4
+        },
+        "distanceCodeCounts": {
+          "0": 8,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 4,
+          "6": 2,
+          "7": 2,
+          "8": 3,
+          "9": 1,
+          "10": 1,
+          "11": 2
+        },
+        "literalTokensByCodeBits": {
+          "1": 6686,
+          "3": 2012,
+          "4": 1335,
+          "5": 776,
+          "6": 367,
+          "7": 203,
+          "8": 539,
+          "9": 46,
+          "10": 3782,
+          "11": 617,
+          "12": 16,
+          "14": 5
+        },
+        "distanceTokensByCodeBits": {
+          "2": 2256,
+          "3": 4650,
+          "4": 2768,
+          "5": 1546,
+          "6": 396,
+          "7": 228,
+          "8": 140,
+          "9": 25,
+          "10": 2,
+          "11": 2
+        }
+      },
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 5,
+          "1": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "7": 1,
+          "8": 3,
+          "9": 5,
+          "10": 190,
+          "11": 71,
+          "12": 1,
+          "14": 3,
+          "15": 2
+        },
+        "distanceCodeCounts": {
+          "0": 9,
+          "2": 1,
+          "3": 4,
+          "4": 2,
+          "5": 2,
+          "6": 2,
+          "7": 2,
+          "8": 3,
+          "9": 1,
+          "10": 1,
+          "11": 1,
+          "12": 2
+        },
+        "literalTokensByCodeBits": {
+          "1": 6409,
+          "3": 2051,
+          "4": 1334,
+          "5": 1246,
+          "7": 192,
+          "8": 287,
+          "9": 189,
+          "10": 3728,
+          "11": 935,
+          "12": 6,
+          "14": 5,
+          "15": 2
+        },
+        "distanceTokensByCodeBits": {
+          "2": 2281,
+          "3": 5675,
+          "4": 1704,
+          "5": 1016,
+          "6": 542,
+          "7": 310,
+          "8": 183,
+          "9": 24,
+          "10": 22,
+          "11": 5,
+          "12": 4
+        }
+      },
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 1,
+          "2": 1,
+          "3": 2,
+          "4": 2,
+          "6": 1,
+          "7": 2,
+          "8": 3,
+          "9": 79,
+          "10": 180,
+          "11": 2,
+          "12": 3,
+          "13": 2
+        },
+        "distanceCodeCounts": {
+          "0": 8,
+          "2": 1,
+          "3": 4,
+          "4": 1,
+          "5": 4,
+          "6": 2,
+          "7": 3,
+          "8": 1,
+          "9": 1,
+          "10": 1,
+          "11": 1,
+          "12": 1,
+          "13": 2
+        },
+        "literalTokensByCodeBits": {
+          "2": 5804,
+          "3": 3687,
+          "4": 1662,
+          "6": 163,
+          "7": 270,
+          "8": 177,
+          "9": 1745,
+          "10": 2841,
+          "11": 18,
+          "12": 13,
+          "13": 4
+        },
+        "distanceTokensByCodeBits": {
+          "2": 2491,
+          "3": 5868,
+          "4": 733,
+          "5": 2005,
+          "6": 417,
+          "7": 245,
+          "8": 39,
+          "9": 23,
+          "10": 21,
+          "11": 11,
+          "12": 4,
+          "13": 2
+        }
+      },
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 3,
+          "1": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "7": 1,
+          "8": 2,
+          "9": 5,
+          "10": 197,
+          "11": 63,
+          "12": 3,
+          "13": 5,
+          "14": 2
+        },
+        "distanceCodeCounts": {
+          "0": 9,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 5,
+          "8": 3,
+          "9": 1,
+          "10": 2
+        },
+        "literalTokensByCodeBits": {
+          "1": 6620,
+          "3": 2288,
+          "4": 1184,
+          "5": 1266,
+          "7": 165,
+          "8": 175,
+          "9": 178,
+          "10": 3718,
+          "11": 759,
+          "12": 17,
+          "13": 12,
+          "14": 2
+        },
+        "distanceTokensByCodeBits": {
+          "2": 2295,
+          "3": 4627,
+          "4": 2823,
+          "5": 1257,
+          "6": 823,
+          "8": 71,
+          "9": 6,
+          "10": 5
+        }
+      },
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 5,
+          "1": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "7": 1,
+          "8": 3,
+          "9": 5,
+          "10": 191,
+          "11": 68,
+          "12": 1,
+          "13": 5,
+          "14": 2
+        },
+        "distanceCodeCounts": {
+          "0": 10,
+          "2": 1,
+          "3": 3,
+          "4": 4,
+          "5": 2,
+          "6": 2,
+          "7": 3,
+          "8": 1,
+          "9": 1,
+          "10": 1,
+          "11": 2
+        },
+        "literalTokensByCodeBits": {
+          "1": 6365,
+          "3": 1948,
+          "4": 1477,
+          "5": 1282,
+          "7": 194,
+          "8": 282,
+          "9": 234,
+          "10": 3674,
+          "11": 907,
+          "12": 7,
+          "13": 12,
+          "14": 2
+        },
+        "distanceTokensByCodeBits": {
+          "2": 2335,
+          "3": 4233,
+          "4": 3423,
+          "5": 868,
+          "6": 488,
+          "7": 354,
+          "8": 48,
+          "9": 12,
+          "10": 7,
+          "11": 3
+        }
+      },
+      {
+        "kind": "dynamic",
+        "literalCodeCounts": {
+          "0": 9,
+          "1": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "7": 3,
+          "8": 2,
+          "9": 4,
+          "10": 174,
+          "11": 82,
+          "12": 1,
+          "13": 6
+        },
+        "distanceCodeCounts": {
+          "0": 12,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 5,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1,
+          "10": 2
+        },
+        "literalTokensByCodeBits": {
+          "1": 3038,
+          "3": 958,
+          "4": 549,
+          "5": 512,
+          "7": 227,
+          "8": 69,
+          "9": 69,
+          "10": 1596,
+          "11": 476,
+          "12": 3,
+          "13": 7
+        },
+        "distanceTokensByCodeBits": {
+          "2": 962,
+          "3": 2055,
+          "4": 1292,
+          "5": 908,
+          "6": 86,
+          "7": 71,
+          "8": 17,
+          "9": 14,
+          "10": 5
+        }
+      }
+    ],
+    "literalTokensByCodeBits": {
+      "1": 35779,
+      "2": 11201,
+      "3": 16779,
+      "4": 9980,
+      "5": 7454,
+      "6": 530,
+      "7": 1989,
+      "8": 1840,
+      "9": 7824,
+      "10": 24024,
+      "11": 4638,
+      "12": 88,
+      "13": 47,
+      "14": 17,
+      "15": 2
+    },
+    "tokensLongerThan9": 28816,
+    "tokensExactly10": 24024,
+    "scope": "One untimed independent RFC1951 syntax/token audit of existing frozen packet. Code lengths/tokens inform bounded preparation, not timing, a new fixture, codec proof or fixed-input specialization."
+  },
+  "preflight": "Two failures before WorkloadActual/perf start: frozen retained reference includes older shared source; then isolated root required existing ImageProbe dependency. Logs retained; no worker rebuild or source/identity replacement. Successful isolated frozen-source workspace reuses adaptive complete-operation driver/current immutable module. No repeated statistical timing.",
+  "decision": "Existing confirmed shared-root PNG gap remains valid and unchanged. Preparation/admission/row storage is not the dominant sampled location; next bounded hypothesis prepares longer literal prefixes. 24024of28816root9misses use10bits. Source counts/samples inform design, not projected savings.",
+  "nextHypothesis": "Prepare10bitliteral lookup with byte-sized validated code-length workspace, fitting unchanged4KiB bound if actual nested/stack layout permits. Preserve original fullmaxlookahead/rootmiss/cursor/error/cancellation and canonical incomplete/short fallback. Screen complete two-result operation including tablebuild/admission/owned outputs, then independent confirmation/generalization/affectedcallers if promising. No fixed-input specialization or production authorization from counts alone.",
+  "raw": {
+    "file": "png-retained-root-current-attribution.tar.xz",
+    "sha256": "5f30795b21030f904942a4f0b2679283a241ebfb8f4e7dda34fe70dfb1be7ced",
+    "bytes": 331936,
+    "members": 49,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      },
+      {
+        "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+        "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+      },
+      {
+        "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+        "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+      },
+      {
+        "file": "jpeg-buffered-correction-restoration.tar.xz",
+        "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+      },
+      {
+        "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+        "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+      },
+      {
+        "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+        "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+      },
+      {
+        "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+        "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+      },
+      {
+        "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+        "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+      },
+      {
+        "file": "vp8-current-live-model-attribution.tar.xz",
+        "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+      },
+      {
+        "file": "vp8-live-model-preparation-qualified.tar.xz",
+        "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+      },
+      {
+        "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+        "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+      },
+      {
+        "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+        "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4"
+      },
+      {
+        "file": "bicubic-output-workspace-qualified.tar.xz",
+        "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+      },
+      {
+        "file": "bicubic-default-output-workspace-qualified.tar.xz",
+        "sha256": "a4ff4eb24fc61dce4599aae3328bffa0b07a56e991d6b636b6cbc39c53e0317b"
+      },
+      {
+        "file": "parity-p40-qualified-evidence.tar.gz",
+        "sha256": "21114dd252c7f82cfcac745418a34eee442c4c3d3bf33ce6b71765b88250939d"
+      },
+      {
+        "file": "bicubic-shared-enlargement-qualified.tar.xz",
+        "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+      },
+      {
+        "file": "vp8-unshifted-live-reservoir-qualified.tar.xz",
+        "sha256": "5a773cc39f02710dc5dc27e744d60f7a77babdce2365b9b8bcb0f4614189fe03"
+      },
+      {
+        "file": "bilinear-current-boundary-audit.tar.xz",
+        "sha256": "3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018"
+      },
+      {
+        "file": "jpeg-correction-bit-qualified.tar.xz",
+        "sha256": "624f0b847f29b7465f96a7c2dbaecf2ed5f64f85359cecb5c9d1364bd893a1d1"
+      },
+      {
+        "file": "vp8-selected-trellis-boundary.tar.xz",
+        "sha256": "923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79"
+      },
+      {
+        "file": "vp8-trellis-architecture-audit.tar.xz",
+        "sha256": "73f1d0fd787fd732f1aa8146f78ee58be6dd4c856fcd6547fead6e0189869fd4"
+      },
+      {
+        "file": "vp8-ordinary-block-preparation-qualified.tar.xz",
+        "sha256": "0d3dfc7b21f6f3b7fb3b546b367ae3fb270615ad4d3264f4de1b077a807c987f"
+      },
+      {
+        "file": "vp8-current-photograph-attribution.tar.xz",
+        "sha256": "1c35f956ef35e6ab08cc1f80066e23aa26e90bb46d08459a64beed7657125421"
+      },
+      {
+        "file": "vp8-bounded-price-view-qualified.tar.xz",
+        "sha256": "830067c12147668abe8ed024ad63c7bfd17026d1c3b3aea0efa817843f0ec3e3"
+      },
+      {
+        "file": "vp8-alpha-output-handoff-qualified.tar.xz",
+        "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
+      },
+      {
+        "file": "vp8-trellis-candidate-preparation-qualified.tar.xz",
+        "sha256": "0cb9428ef776647daea6a809c66e86d07f4e3e2997c1cd1d5109ccba85641430"
+      },
+      {
+        "file": "vp8-current-validation-state-attribution.tar.xz",
+        "sha256": "89398293287135112cfdc17075d56cec7ca2f62660449faf7eb4ff689dbd4794"
+      },
+      {
+        "file": "vp8-block-state-reservoir-qualified.tar.xz",
+        "sha256": "f4ee950171f4e6ea02d101022aeb49140cac243ab1d8b8eb0d29adfdff5b5186"
+      },
+      {
+        "file": "current-retained-png-decode-cost.tar.xz",
+        "sha256": "4cad0b918916e1d1a0bb661ca2a6e4fb81ea9db5c529e593a2ca7224f1dd836f"
+      }
+    ]
+  }
+}
