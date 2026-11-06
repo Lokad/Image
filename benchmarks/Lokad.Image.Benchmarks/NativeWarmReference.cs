@@ -109,8 +109,8 @@ internal sealed partial class NativeWarmReference : IDisposable
                 || (resizeWidth < 256 || resizeHeight < 129) && !(operation == "bicubic-resize" && depth == 8 && resizeWidth == 1 && resizeHeight == 1) && !(operation == "bicubic-resize" && depth is (8 or 16) && resizeWidth == 128 && resizeHeight == 64) && !(operation == "bicubic-resize" && depth is (8 or 16) && resizeWidth == 64 && resizeHeight == 32) && !(operation == "bicubic-resize" && depth is (8 or 16) && resizeWidth == 32 && resizeHeight == 16) && !(operation == "bicubic-resize" && depth is (8 or 16) && resizeWidth == 16 && resizeHeight == 8) && !(operation == "bicubic-resize" && depth is (8 or 16) && resizeWidth == 8 && resizeHeight is (4 or 17)) && !(operation == "bicubic-resize" && depth is (8 or 16) && resizeWidth == 4 && resizeHeight is (2 or 9)) && !(operation == "bicubic-resize" && depth is (8 or 16) && resizeWidth == 2 && resizeHeight is (2 or 9))
                 || resizeWidth > 32768 || resizeHeight > 32768))
             throw new ArgumentException("Explicit resize dimensions require a supported bounded resize geometry.");
-        if (vp8Effort is not (2 or 4 or 6)) throw new ArgumentOutOfRangeException(nameof(vp8Effort));
-        var derivedVp8 = vp8Effort != 4; var vp8Variant = vp8Effort == 2 ? "distortion" : "trellis";
+        if (vp8Effort is not (2 or 4 or 5 or 6)) throw new ArgumentOutOfRangeException(nameof(vp8Effort));
+        var derivedVp8 = vp8Effort != 4; var vp8Variant = vp8Effort == 2 ? "distortion" : vp8Effort == 5 ? "selected-trellis" : "trellis";
         if (derivedVp8 && (operation != "webp-opaque-encode" || depth != 8))
             throw new ArgumentException("Derived WebP effort requires a fixed opaque RGBA8 control.", nameof(vp8Effort));
         if (vp8Opaque && operation != "vp8-decode") throw new ArgumentException("Opaque VP8 applies only to VP8 decoding.", nameof(vp8Opaque));

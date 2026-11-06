@@ -2,7 +2,7 @@
 
 Updated 2026-11-06. These **125 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [282 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
 performance proof. Publication is postponed.
 
@@ -21,7 +21,11 @@ Current scope and remaining work:
   shares immutable borders/DC/interpolation across ten ordered candidates.
   Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
   exact packets and809,225B/op unchanged. Seven affected costs refresh;
-  distortion-only reuses unchanged code. Eight controls:2pass/stop,4gaps,2uncertain.
+  distortion-only reuses unchanged code. The preceding eight controls retain
+  2pass/stop,4gaps,2uncertain. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
+  covers selected-mode trellis reconstruction: 7,384µs,
+  741,065B/op, ratio1.144/upper1.185, a gap.
+  Nine current controls total2passes/5gaps/2uncertain; no extra image/settings grid.
   Transparent word's adverse994µs point stays inconclusive against a contemporary
   original control; no favorable repeat. Standalone opaque8/diagram allocations
   differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)

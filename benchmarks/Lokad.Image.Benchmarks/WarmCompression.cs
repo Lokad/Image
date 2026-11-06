@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using Lokad.Image;
 using Lokad.Image.Tooling;
 
-public enum WarmCompressionCase { PhotographLossless8, DiagramLossless8, PhotographLossy8, DiagramLossy8, DiagramLossyTrellis8, DiagramLossyDistortion8 }
+public enum WarmCompressionCase { PhotographLossless8, DiagramLossless8, PhotographLossy8, DiagramLossy8, DiagramLossyTrellis8, DiagramLossyDistortion8, DiagramLossySelectedTrellis8 }
 
 /// <summary>Fixed controls covering lossless, RDO, trellis and distortion-only search.</summary>
 [MemoryDiagnoser]
@@ -15,14 +15,14 @@ public class WarmCompression
     [ParamsSource(nameof(Cases))] public WarmCompressionCase Case { get; set; }
     public static IEnumerable<WarmCompressionCase> Cases => SelectedCases();
     private bool Lossless => Case is WarmCompressionCase.PhotographLossless8 or WarmCompressionCase.DiagramLossless8;
-    private int Effort => Case switch { WarmCompressionCase.DiagramLossyTrellis8 => 6, WarmCompressionCase.DiagramLossyDistortion8 => 2, _ => 4 };
+    private int Effort => Case switch { WarmCompressionCase.DiagramLossyTrellis8 => 6, WarmCompressionCase.DiagramLossySelectedTrellis8 => 5, WarmCompressionCase.DiagramLossyDistortion8 => 2, _ => 4 };
     private string InputName => Case is WarmCompressionCase.PhotographLossless8 or WarmCompressionCase.PhotographLossy8 ? "Photograph8" : "Diagram8";
     public static WarmCompressionCase[] SelectedCases()
     {
         var selected = Environment.GetEnvironmentVariable("LOKAD_IMAGE_WARM_CASES");
         if (selected == "All") return Enum.GetValues<WarmCompressionCase>();
         if (Enum.TryParse<WarmCompressionCase>(selected, out var value) && Enum.IsDefined(value)) return [value];
-        throw new ArgumentException("Choose one named compression control or All for the six named controls.");
+        throw new ArgumentException("Choose one named compression control or All for the seven named controls.");
     }
 
     private JpegBenchmarkCase state = null!;

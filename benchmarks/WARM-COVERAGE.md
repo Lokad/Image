@@ -1,6 +1,6 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-06. **282 material required paths** remain
+Current architectural phase, 2026-11-06. **283 material required paths** remain
 in scope; the 125 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Complete prediction preparation](VP8-COMPLETE-PREDICTION-PREPARATION.md) shares borders/DC/interpolation across ten ordered modes. Actual standalone photograph independently saves682.12µs/6.23%, raw/normalized confidence separated, exact17688Bpacket and809225B/op unchanged. Seven affected costs refresh; distortion-only reuses its separate path. Eight controls:2pass/4gaps/2uncertain. Alpha16's adverse994µs point remains inconclusive against a contemporary original; no causal gain/loss/equivalence claim or favorable repeat. Prior rate/score/trellis gains remain linked history. |
+| Resident VP8 encoding | [Complete prediction preparation](VP8-COMPLETE-PREDICTION-PREPARATION.md) shares borders/DC/interpolation across ten ordered modes. Actual standalone photograph independently saves682.12µs/6.23%, raw/normalized confidence separated, exact17688Bpacket and809225B/op unchanged. Seven affected costs refresh; distortion-only reuses its separate path. Eight preceding controls:2pass/4gaps/2uncertain. [Selected-mode effort5](vp8-selected-trellis-boundary-evidence.json) adds7384.12µs/native6452.54µs,ratio1.144/upper1.185,741065B/op, a demonstrated gap: nine total2pass/5gaps/2uncertain. Alpha16's adverse994µs point remains inconclusive against a contemporary original; no causal gain/loss/equivalence claim or favorable repeat. Prior rate/score/trellis gains remain linked history. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Lazy view preparation](PNG-LAZY-VIEW-PREPARATION.md) independently saves390.08/375.08µs (1.83%/2.16%) on complete Optimal16/Smallest8. Exact packets and384KiB admission remain; Grayscale8 measures+408B/op to551,772, ten other fresh allocations unchanged. All11level6/9 fresh one-shot costs refresh; fourFastest costs reuse unchanged source bodies. Fifteen controls:9pass/stop,2gap,4uncertain. ByteFastest and byteGray remain gaps; wordSmallest and ordinary/live/forward wordFastest are uncertain. Resolve uncertainty before tuning. [Greedy preparation](PNG-GREEDY-VIEW-PREPARATION.md) retains independent269/836µs gains; earlier evidence stays linked history. |
 | VP8 image reading | [Unshifted live reservoir](VP8-UNSHIFTED-LIVE-RESERVOIR.md) removes repeated code-value shifts and uses bounded32-bit refills. Independent complete live opaque decoding saves135.96µs/2.25%raw; normalized confidence overlaps,760564B/op unchanged. Currentratio1.161/upper1.173 remains a gap. Allsix reader controls remain gaps; five unchanged normal/tail/validation paths reuse prior proof. Every cancellation checkpoint and published cursor stay exact. |
@@ -85,6 +85,17 @@ family exclusion. Stop passing cases, resolve uncertainty before tuning and choo
 material independent work from current attribution. The finite inventory below
 is unchanged; publication remains separate and postponed.
 
+The selected-mode effort5control uses unchanged qualified production/package inputs.
+One benchmark harness build perOS, one generated selector and one derived native
+worker on Linux suffice; production/internal/public tests and package are reused.
+The native adapter changes only the three effort expressions from the existing
+opaque wrapper. Full source processing, admission and independent packet ownership
+remain timed; native wrappers/private scratch remain retained as labeled.
+Raw `vp8-selected-trellis-boundary.tar.xz`,4,501,756B/88members,
+SHA256`923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79`,
+is mirrored/member-verified. Source projections preserve previous control bodies
+and enum values. This adds one required algorithm, not a causal performance gain.
+
 ## Finite required inventory
 
 The [pinned original inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
@@ -101,17 +112,26 @@ Only these four boundaries are retired:
 - Optional JPEG CompactColor encoder.
 
 Their APIs/encoders were removed; retained caller-root cases still qualify shared
-admission. The remaining **253** base controls plus the **29** named additions
-below give **282**, without adding a shape/depth/filter/quality grid. A later case
+admission. The remaining **253** base controls plus the **30** named additions
+below give **283**, without adding a shape/depth/filter/quality grid. A later case
 requires evidence of a distinct required algorithm or public boundary omitted
 from this finite set. Differences in default option values are accepted.
 
-Three required algorithm additions retain their frozen recipes:
+Four required algorithm additions retain their frozen recipes:
 
 - `DiagramLossyTrellis8`: existing 513x259 diagram, Q75/effort6. Coefficient
   dynamic-programming trellis per luma candidate, absent from method4. Complete
   6,818-byte packet SHA256
   `3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee`.
+- `DiagramLossySelectedTrellis8`: same existing diagram, Q75/effort5. The
+  production `method == 5` branch reconstructs only the selected modes with
+  trellis; effort6 instead evaluates candidates with trellis. This distinct
+  required path was absent from the earlier timing checklist. Reuse the frozen
+  7,026-byte packet SHA256
+  `0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68`.
+  Current12actual baseline confirms7384.12µs/native6452.54µs,lower1.01489/upper1.18487,
+  741065B/op: a gap. Complete packets/reconstructed pixels/alpha/source/ownership
+  and quiet guards pass. No new photograph/settings grid.
 - `DiagramLossyDistortion8`: same original diagram, Q75/effort2. Original
   prediction-error mode selection before chosen reconstruction, distinct from
   RDO/trellis. Complete 7,330-byte packet SHA256

@@ -1647,6 +1647,15 @@ def render():
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
     decoder_owned = json.loads((ROOT / 'benchmarks/vp8-unshifted-live-reservoir-evidence.json').read_text(encoding='utf-8'))
+    selected_trellis = json.loads((ROOT / 'benchmarks/vp8-selected-trellis-boundary-evidence.json').read_text(encoding='utf-8'))
+    selected_cost = selected_trellis['current']
+    assert not selected_trellis['productionChanged'] and selected_trellis['newRequiredCases'] == 1
+    assert selected_trellis['requiredMaterialPaths'] == 283 and selected_trellis['newImages'] == 0
+    assert selected_trellis['raw']['mirrored'] and selected_trellis['raw']['allMembersVerified']
+    assert selected_trellis['validation']['effort'] == 5 and selected_trellis['validation']['completePacketExact']
+    assert selected_trellis['validation']['managedOutputBytes'] == selected_trellis['validation']['nativeOutputBytes'] == 7026
+    assert selected_cost['lower'] > 1 and selected_cost['status'] == 'gap'
+    assert selected_trellis['allOriginalGatesPassed'] and selected_trellis['quietGuardsPassed']
     dq = decoder_owned['qualification']
     assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['selectionGuardUnchanged']
     assert decoder_owned['sourceProof']['originalCoefficientModelSelectionTokenCategoryAndReadOrderExact']
@@ -1855,7 +1864,7 @@ def render():
 
 Updated 2026-11-06. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
-open across the [282 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
+open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
 performance proof. Publication is postponed.
 
@@ -1874,7 +1883,11 @@ Current scope and remaining work:
   shares immutable borders/DC/interpolation across ten ordered candidates.
   Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
   exact packets and809,225B/op unchanged. Seven affected costs refresh;
-  distortion-only reuses unchanged code. Eight controls:2pass/stop,4gaps,2uncertain.
+  distortion-only reuses unchanged code. The preceding eight controls retain
+  2pass/stop,4gaps,2uncertain. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
+  covers selected-mode trellis reconstruction: {selected_cost['managedUs']:,.0f}µs,
+  {selected_cost['allocatedBytes']:,}B/op, ratio{selected_cost['ratio']:.3f}/upper{selected_cost['upper']:.3f}, a gap.
+  Nine current controls total2passes/5gaps/2uncertain; no extra image/settings grid.
   Transparent word's adverse994µs point stays inconclusive against a contemporary
   original control; no favorable repeat. Standalone opaque8/diagram allocations
   differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
