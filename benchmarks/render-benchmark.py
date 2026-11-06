@@ -1539,13 +1539,28 @@ def render():
     labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
               'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
               'Up8': 'Bicubic upscale RGBA8, default workspace'}
+    default_byte = json.loads((ROOT / 'benchmarks/bicubic-default-output-workspace-evidence.json').read_text(encoding='utf-8'))
+    assert default_byte['productionAccepted'] and default_byte['independentQuietConfirmation']
+    assert default_byte['sourceProof']['existingTypedGeometryFilteringPublicationRepairAndLanczosFilesUnchanged']
+    assert default_byte['sourceProof']['defaultAndTightByteEnlargementShareExistingOutputBackedExecution']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for v in default_byte['independentComparison']['views'].values())
+    assert default_byte['raw']['mirrored'] and default_byte['raw']['allMembersVerified']
+    assert set(default_byte['cases']) == {'Up8', 'HorizontalUp8', 'VerticalUp8'}
+    for current in default_byte['cases'].values():
+        assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['librarySha256'] == default_byte['producers']['linuxSha256']
+        assert current['status'] == ('pass' if current['conservativeRatioUpper'] <= 1 else 'gap'
+                                     if current['conservativeRatioLower'] > 1 else 'uncertain')
     assert set(overwrite['cases']) == set(labels)
     for case, label in labels.items():
-        observation = overwrite['cases'][case]; receipt = observation['receipt']
-        assert receipt['librarySha256'] == overwrite['producers']['linuxSha256']
+        owner = default_byte if case == 'Up8' else overwrite
+        observation = owner['cases'][case]; receipt = observation['receipt']
+        assert receipt['librarySha256'] == owner['producers']['linuxSha256']
         assert receipt['managedRationalReferenceExact'] and observation['quietGuardsPassed']
         assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert (observation['conservativeRatioUpper'] <= 1) == (case == 'Down32x16_8')
+        if case != 'Up8':
+            assert (observation['conservativeRatioUpper'] <= 1) == (case == 'Down32x16_8')
         stats = observation['managed']['statistics']; native = min(b['mean'] for b in observation['nativeBrackets'])
         row = ('editing', f'| {label} † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
                f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
@@ -1648,7 +1663,11 @@ def render():
     assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
                for v in decoder_owned['independentLive']['views'].values())
     assert dq['actualPackage']['liveVp8ModelSyncAsyncOwnedPassed'] and dq['samePackageLinux']['liveVp8ModelSyncAsyncOwnedPassed']
-    vq = dq
+    vq = default_byte['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5737
+    assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
+    assert vq['actualPackage']['defaultByteEnlargementExactOwnershipPassed']
+    assert vq['samePackageLinux']['defaultByteEnlargementExactOwnershipPassed']
     stream = decoder_owned['cases']['StreamNative8']
     positions = [i for i, (_, row) in enumerate(rows) if row.startswith('| WebP VP8 + alpha, fresh seekable Stream')]
     assert len(positions) == 1
@@ -1873,6 +1892,11 @@ Current scope and remaining work:
   [Owned-output preparation](../benchmarks/BICUBIC-OUTPUT-WORKSPACE.md) saves731µs/17.8%
   on complete byte enlargement, with unchanged paired allocation. Three current
   uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
+  [Default byte enlargement](../benchmarks/BICUBIC-DEFAULT-OUTPUT-WORKSPACE.md)
+  now shares that execution, saving214µs/5.94% independently on the complete default
+  operation and reducing allocation751,975→116B/op. Full/width/height default costs
+  refresh; uppers1.032/1.036/1.026 remain gaps. These use prepared native graph/scratch;
+  managed preparation and independent output remain timed. No additional retained cache.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
   removes two full byte planes using operation-owned output-tail strips. Complete
@@ -1891,8 +1915,9 @@ Current scope and remaining work:
 The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word, progressive-strip, wide-column and live VP8 sync/async consumers.
-Normal/scalar checks pass; unchanged vector-path AVX2/AVX512-disabled proof is reused.
+opaque-word, progressive-strip, wide-column, default byte enlargement and live VP8
+sync/async consumers. Normal/scalar and affected AVX512-disabled checks pass;
+unchanged vector-path AVX2-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

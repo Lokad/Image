@@ -34,8 +34,9 @@ public sealed class EnlargingStripBoundaryTests
         }
     }
     [Theory]
-    [InlineData(false)] [InlineData(true)]
-    public void TallOutputKeepsExactPixelsAcrossWorkspaceRetirementAndIndependentOwners(bool tiny)
+    [InlineData(false, false)] [InlineData(true, false)]
+    [InlineData(false, true)] [InlineData(true, true)]
+    public void TallOutputKeepsExactPixelsAcrossWorkspaceRetirementAndIndependentOwners(bool tiny, bool bounded)
     {
         using var source = OriginalPixels.Buffer(17, 83, 8, opaque: true);
         if (tiny)
@@ -50,7 +51,7 @@ public sealed class EnlargingStripBoundaryTests
         var expected = ExactResizeReference.Resize(input, 17, 83, 8, 35, 167, ResizeFilter.Bicubic);
         const long capacity = 1_048_576;
         using var root = new TestMemoryBudget(capacity);
-        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 35L * 167 * 4 + 4096, MemoryBudget = root };
+        var limits = new ImageLimits { MaxWorkingBytes = bounded ? input.Length + 35L * 167 * 4 + 4096 : ImageLimits.Default.MaxWorkingBytes, MemoryBudget = root };
         using var first = ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits);
         using var second = ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits);
         Assert.Equal(expected, OriginalPixels.Bytes(first)); Assert.Equal(expected, OriginalPixels.Bytes(second));

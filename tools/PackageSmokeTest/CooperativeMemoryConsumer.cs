@@ -607,12 +607,19 @@ internal static class CooperativeMemoryConsumer
         if (root.Bytes != retained) throw new Exception("Packaged output workspace leaked canceled admission.");
         using (var later = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits))
             if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(later))) throw new Exception("Packaged output workspace did not recover.");
+        using (var defaultOutput = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic,
+            limits with { MaxWorkingBytes = ImageLimits.Default.MaxWorkingBytes }))
+            if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(defaultOutput))
+                || root.Bytes != retained + expected.Length)
+                throw new Exception("Packaged default byte enlargement changed pixels or shared output ownership.");
+        if (root.Bytes != retained) throw new Exception("Packaged default byte enlargement retained operation storage.");
         source.Dispose(); first.Dispose(); input.AsSpan().Clear();
         if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second)) || root.Bytes != expected.Length)
             throw new Exception("Packaged output workspace aliases a disposed source or sibling.");
         second.Dispose();
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged output workspace did not release owned capacity.");
         Console.WriteLine("Packaged output-backed bicubic preserves exact prefix/tail pixels, admission and surviving ownership.");
+        Console.WriteLine("Packaged default byte enlargement preserves exact frame and shared output lifetime.");
     }
 
     internal static async Task Verify()

@@ -53,6 +53,11 @@ Current scope and remaining work:
   [Owned-output preparation](../benchmarks/BICUBIC-OUTPUT-WORKSPACE.md) saves731µs/17.8%
   on complete byte enlargement, with unchanged paired allocation. Three current
   uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
+  [Default byte enlargement](../benchmarks/BICUBIC-DEFAULT-OUTPUT-WORKSPACE.md)
+  now shares that execution, saving214µs/5.94% independently on the complete default
+  operation and reducing allocation751,975→116B/op. Full/width/height default costs
+  refresh; uppers1.032/1.036/1.026 remain gaps. These use prepared native graph/scratch;
+  managed preparation and independent output remain timed. No additional retained cache.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
   removes two full byte planes using operation-owned output-tail strips. Complete
@@ -68,11 +73,12 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,735 full/live checks per OS**, affected
+The current production build passes **5,737 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word, progressive-strip, wide-column and live VP8 sync/async consumers.
-Normal/scalar checks pass; unchanged vector-path AVX2/AVX512-disabled proof is reused.
+opaque-word, progressive-strip, wide-column, default byte enlargement and live VP8
+sync/async consumers. Normal/scalar and affected AVX512-disabled checks pass;
+unchanged vector-path AVX2-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
@@ -181,7 +187,7 @@ settings do not establish matched quality.
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 549.84 | 418.61 | 1.313 / 1.321 | 199,981 |
 | Bicubic upscale RGBA16 † → 1027×519 | 3,336.56 | 2,872.72 | 1.161 / 1.167 | 5,016,602 |
-| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,434.17 | 3,198.46 | 1.074 / 1.082 | 751,975 |
+| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,383.47 | 3,316.54 | 1.020 / 1.032 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † H → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |
