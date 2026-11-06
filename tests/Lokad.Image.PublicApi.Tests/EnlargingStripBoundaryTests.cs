@@ -33,4 +33,46 @@ public sealed class EnlargingStripBoundaryTests
             Assert.Equal(frozen, OriginalPixels.Bytes(second)); Assert.Equal(input, OriginalPixels.Bytes(source));
         }
     }
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void TallOutputKeepsExactPixelsAcrossWorkspaceRetirementAndIndependentOwners(bool tiny)
+    {
+        using var source = OriginalPixels.Buffer(17, 83, 8, opaque: true);
+        if (tiny)
+            for (var y = 0; y < source.Height; y++)
+            for (var x = 0; x < source.Width; x++)
+            {
+                var pixel = source.GetRow8(y).Slice(x * 4, 4);
+                pixel[..3].Fill(255);
+                pixel[3] = (byte)((x + y) % 7 == 0 ? 255 : (x + y) % 3 == 0 ? 1 : 0);
+            }
+        var input = OriginalPixels.Bytes(source);
+        var expected = ExactResizeReference.Resize(input, 17, 83, 8, 35, 167, ResizeFilter.Bicubic);
+        const long capacity = 1_048_576;
+        using var root = new TestMemoryBudget(capacity);
+        var limits = new ImageLimits { MaxWorkingBytes = input.Length + 35L * 167 * 4 + 4096, MemoryBudget = root };
+        using var first = ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits);
+        using var second = ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits);
+        Assert.Equal(expected, OriginalPixels.Bytes(first)); Assert.Equal(expected, OriginalPixels.Bytes(second));
+        second.GetRow8(166)[0] ^= 255;
+        Assert.Equal(expected, OriginalPixels.Bytes(first)); Assert.Equal(input, OriginalPixels.Bytes(source));
+        var retained = root.Bytes;
+        Assert.True(retained >= 2L * expected.Length);
+        Assert.True(root.TryReserve(capacity - retained, out var caller));
+        using (caller)
+        {
+            var failure = Assert.Throws<ImageLimitException>(() => ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits));
+            Assert.Equal(ImageLimitScope.SharedBudget, failure.Scope); Assert.Equal(1, root.Refusals);
+            Assert.Equal(capacity, root.Bytes); Assert.Equal(expected, OriginalPixels.Bytes(first));
+        }
+        Assert.Equal(retained, root.Bytes);
+        Assert.Throws<OperationCanceledException>(() => ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic,
+            limits, new CancellationToken(true)));
+        Assert.Equal(retained, root.Bytes);
+        first.Dispose(); second.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        using var later = ImageTransforms.Resize(source, 35, 167, ResizeFilter.Bicubic, limits);
+        Assert.Equal(expected, OriginalPixels.Bytes(later)); Assert.Equal(input, OriginalPixels.Bytes(source));
+        later.Dispose(); Assert.Equal(0, root.Bytes);
+    }
+
 }

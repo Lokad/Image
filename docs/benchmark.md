@@ -36,8 +36,9 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Complete byte enlargement](../benchmarks/CURRENT-BICUBIC-BYTE-ENLARGEMENT.md)
-  is reconciled after output-storage changes: current upper1.332,116B/op.
+  [Owned-output preparation](../benchmarks/BICUBIC-OUTPUT-WORKSPACE.md) saves731µs/17.8%
+  on complete byte enlargement, with unchanged paired allocation. Three current
+  uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [signed prepared instructions](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
   remove repeated sign interpretation in the existing2KiB scan plan. Independent
@@ -52,10 +53,10 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,716 full/live checks per OS**, affected
+The current production build passes **5,718 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Affected AVX512-disabled quantizer/packet checks pass; unchanged other-path proof is reused.
+opaque-word and wide-column consumers. Affected AVX512-disabled resize checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
@@ -168,9 +169,9 @@ settings do not establish matched quality.
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † H → 256×519 | 1,040.15 | 844.30 | 1.232 / 1.396 | 1,063,419 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |
-| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 4,018.79 | 3,042.66 | 1.321 / 1.332 | 116 |
-| Bicubic RGBA8 width enlargement, input+output+4 KiB † H → 1027×259 | 1,644.06 | 1,524.52 | 1.078 / 1.094 | 1,064,526 |
-| Bicubic RGBA8 height enlargement, input+output+4 KiB † H → 513×519 | 2,165.54 | 1,748.88 | 1.238 / 1.256 | 1,065,523 |
+| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,128.72 | 3,053.65 | 1.025 / 1.031 | 116 |
+| Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,595.33 | 1,511.62 | 1.055 / 1.059 | 114 |
+| Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,813.47 | 1,739.74 | 1.042 / 1.052 | 115 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |

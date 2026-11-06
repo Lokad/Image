@@ -11,24 +11,25 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Prepared quantizer operands](VP8-QUANTIZER-OPERAND-PREPARATION.md) share one exact one-shot/prepared core; independent complete effort6diagram gain153.24µs/1.23%, unchanged paired754344B. Photograph confirmation remains inconclusive; no prepared-hoist-only gain or equivalence claim. Current eight controls:6 gaps, 2 uncertain.320logical stackB within existing16KiB admission; no new heap/capacity/retention. Other current costs/ownership boundaries explicit; sparse residual screen gives no useful lead; reconcile the largest affected historical resize cost next. |
+| Resident VP8 encoding | [Prepared quantizer operands](VP8-QUANTIZER-OPERAND-PREPARATION.md) share one exact one-shot/prepared core; independent complete effort6diagram gain153.24µs/1.23%, unchanged paired754344B. Photograph confirmation remains inconclusive; no prepared-hoist-only gain or equivalence claim. Current eight controls:6 gaps, 2 uncertain.320logical stackB within existing16KiB admission; no new heap/capacity/retention. Other current costs/ownership boundaries explicit; sparse residual screen gives no useful lead; renewed attribution of the larger photograph/alpha gaps takes precedence after the accepted resize stage. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Complete-token output](PNG-COMPLETE-TOKEN-OUTPUT.md) saves408µs/7.36% raw on Fastest8; raw confidence separates, normalized confidence narrowly overlaps. Exact packets and384KiB admission remain;8B/op extra scalar state, no new arrays/owners/retention. Fifteen current complete fresh-one-shot comparisons:3pass/7gap/5uncertain. Passing cases stop; resolve uncertainty before tuning. Earlier block/color/delivery costs remain history; three affected H rows await their named reconciliation. |
 | JPEG and image reading | [Signed prepared instructions](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md) compile insertion interpretation once within the same2KiB scan plan. Independent ordinary/live progressive444 savings are461.82/491.58µs (11.16%/11.06%), with separated raw/normalized confidence and exact frames. Current six affected controls:1 pass, 3 gap, 2 uncertain; other JPEG paths reuse unchanged evidence. Measured allocation984,238versus984,212B/op is explicit; no new owned capacity. Prior scan preparation/adverse trials remain history. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
-| Complete bicubic enlargement | [Current TightUp8](CURRENT-BICUBIC-BYTE-ENLARGEMENT.md) reconciles shared-output invalidation: complete513×259→1027×519 RGBA8, input+output+4KiB, current ratio1.321/upper1.332,116B/op. Exact rational and approved native bounds pass; no causal gain from historical costs. Native graph stays prepared, managed geometry/storage work timed. Next attribute repeated strip geometry/filtering/certified repair before redesign. |
+| Complete bicubic enlargement | [Owned-output preparation](BICUBIC-OUTPUT-WORKSPACE.md) shares geometry/numeric/publication kernels, retires full-row workspace before bounded strip tail, and saves731.33µs/17.82% on complete TightUp8.112Bpaired allocation unchanged; exact frames/qualified half/repair and4KiB remain. Current full/width-only/height-only uppers1.031/1.059/1.052are gaps,116/114/115B/op. Larger absolute codec gaps take precedence. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [quantizer-preparation milestone](VP8-QUANTIZER-OPERAND-PREPARATION.md)
-qualifies **5,716 full/live checks per OS** (2,479internal/2,289public/948differential),
-86internal/137public affected normal/scalar/AVX512-disabled checks eachOS and SAME
-actualRelease package/all3examples. Independent native/scalar math, matrix mutation/
-snapshot, exact packet/cancellation/refusal/async/ownership gates pass. This is a
-development milestone, not a125-row release refresh or282-path pass. Eight VP8
-costs refresh once;117other displayed paths reuse unchanged evidence. One current
-owner per affected family; negative histories remain reports, not renderer layers.
+The current [output-workspace milestone](BICUBIC-OUTPUT-WORKSPACE.md) qualifies
+**5,718full/live checks perOS** (2,479internal/2,291public/948differential),91internal/
+55public affected normal/scalar/AVX512-disabled eachOS and SAMEactualRelease
+package/all3examples. New rational prefix/tail and full frozen packaged checks
+preserve terminal refusal/cancellation cleanup/shared ownership/independent survivors.
+One immutable main/internal/public build eachOS; one necessary benchmark wording
+build, native workers/selectors/fixtures reused. This is a development milestone,
+not a125-row actual-package release refresh or282-path pass. Three affected costs
+refresh once;122other displayed paths reuse unchanged source-path evidence.
 
 The [JPEG scan stage](JPEG-PREPARED-SCAN-HEADERS.md) retains independent230µs
 ordinary/live gains, five decoder gaps, passing coding validation and all adverse
@@ -50,8 +51,9 @@ qualified source/modules are restored; no current cost owner or negative-trial
 renderer dependency is added. The subsequent operand stage establishes only a scoped trellis gain; its photo
 confirmation is inconclusive. The [sparse residual screen](VP8-SPARSE-RESIDUAL-SCORING-INCONCLUSIVE.md)
 reduces logical visits but gives no useful complete-operation lead; all qualified
-source/modules are restored without another package proof. Next reconcile the
-named RGBA8 bicubic enlargement now has a current confirmed gap; attribution comes next. Materially revised designs remain eligible.
+source/modules are restored without another package proof. The
+subsequent byte-enlargement workspace stage is accepted; its smaller remaining gaps
+are deferred in favor of the larger current codec gaps. Materially revised designs remain eligible.
 
 Earlier adverse stages and attribution are retained in the
 [preceding coverage record](https://github.com/lokad/image/blob/f4b07d036e794690e3f96017881514a3473e6202/benchmarks/WARM-COVERAGE.md)

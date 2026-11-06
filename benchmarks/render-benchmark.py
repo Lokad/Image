@@ -753,40 +753,28 @@ def render():
     assert tight_byte_up['qualification']['fullChecksEachOs'] == 5245
     assert tight_byte_up['qualification']['sameActualPackageBothOs']
     assert tight_byte_up['decisions']['confirm']['passed'] and tight_byte_up['decisions']['confirm']['normalizedSeparated']
-    # This public boundary has one current owner after shared output changes.
-    enlargement = json.loads((ROOT / 'benchmarks/current-bicubic-byte-enlargement-evidence.json').read_text(encoding='utf-8'))
-    assert not enlargement['productionChanged'] and enlargement['allBuilds'] == 0
-    assert enlargement['raw']['mirrored'] and enlargement['raw']['allMembersVerified']
-    assert enlargement['qualificationReuse']['fullChecksEachOs'] == 5716
-    assert enlargement['qualificationReuse']['sameActualPackageBothOs']
-    observation = enlargement['cases']['TightUp8']
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == enlargement['producers']['linuxSha256']
-    assert receipt['managedRationalReferenceExact'] and receipt['managedMaxWorkingBytes'] == 2667616
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    assert all(q['passed'] for q in observation['quietness'].values())
-    assert enlargement['status'] == ('pass' if enlargement['upper'] <= 1 else 'gap' if enlargement['lower'] > 1 else 'uncertain')
-    rows.append(('editing', f'| Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | {stats["Mean"] / 1000:,.2f} | '
-                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
-    axial_byte = json.loads((ROOT / 'benchmarks/current-byte-bicubic-axial-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not axial_byte['productionChanged'] and axial_byte['allBuilds'] == 0
-    assert axial_byte['producers'] == tight_byte_up['producers']
-    assert axial_byte['qualificationReuse']['sameActualPackageBothOs']
-    for case, axis in [('TightHorizontalUp8', 'width'), ('TightVerticalUp8', 'height')]:
-        observation = axial_byte['cases'][case][-1]
-        receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert receipt['librarySha256'] == axial_byte['producers']['linuxSha256']
-        assert receipt['managedQualifiedOriginalPixelsExact']
-        assert receipt['managedRationalReferenceExact'] == (axis == 'width')
-        assert receipt['certifiedExactRationalRgbHalves'] == (0 if axis == 'width' else 1)
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert all(q['passed'] for q in observation['quietness'].values())
-        rows.append(('editing', f'| Bicubic RGBA8 {axis} enlargement, input+output+4 KiB † → {receipt["outputWidth"]}×{receipt["outputHeight"]} | '
-                     f'{stats["Mean"] / 1000:,.2f} | {min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    # One current owner for all affected byte enlargement boundaries.
+    enlargement = json.loads((ROOT / 'benchmarks/bicubic-output-workspace-evidence.json').read_text(encoding='utf-8'))
+    assert enlargement['productionAccepted'] and enlargement['raw']['mirrored'] and enlargement['raw']['allMembersVerified']
+    eq = enlargement['qualification']
+    assert eq['fullChecksEachOs'] == eq['windows']['total'] == eq['linux']['total'] == 5718
+    assert eq['actualPackage']['sha256'] == eq['samePackageLinux']['sameActualPackageSha256']
+    assert eq['actualPackage']['outputWorkspaceBicubicPassed'] and eq['samePackageLinux']['outputWorkspaceBicubicPassed']
+    assert enlargement['sourceProof']['unchangedTryWritePairOriginalByteReplayTinySource']
+    assert enlargement['storage']['newOwnedHeapCapacityBytes'] == 0
+    labels = {'TightUp8': 'Bicubic RGBA8 enlargement,',
+              'TightHorizontalUp8': 'Bicubic RGBA8 width enlargement,',
+              'TightVerticalUp8': 'Bicubic RGBA8 height enlargement,'}
+    assert set(labels) == set(enlargement['cases'])
+    for case, label in labels.items():
+        current = enlargement['cases'][case]
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['actualIterations'] == 12
+        assert current['librarySha256'] == enlargement['producers']['linuxSha256']
+        assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['managedQualifiedOriginalPixelsExact']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        rows.append(('editing', f'| {label} input+output+4 KiB † → {current["outputWidth"]}×{current["outputHeight"]} | '
+                     f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+                     f'{current["allocatedBytes"]:,} |'))
     tight_byte_down = json.loads((ROOT / 'benchmarks/current-tight-byte-bicubic-reduction-cost-evidence.json').read_text(encoding='utf-8'))
     assert not tight_byte_down['productionChanged'] and tight_byte_down['allBuilds'] == 0
     assert tight_byte_down['producers'] == tight_byte_up['producers']
@@ -850,7 +838,7 @@ def render():
             assert alpha_callers['noCallProof']['cases'][key]['reusePriorPerformance']
             reused.add(key)
             continue
-        if key == 'bicubic-TightUp8':
+        if key in {'bicubic-TightUp8', 'bicubic-TightHorizontalUp8', 'bicubic-TightVerticalUp8'}:
             refreshed.add(key)
             continue  # Current owner above supersedes the earlier alpha cost.
         observation = (alpha_callers if key == 'bicubic-Up16' else exact_alpha)['cases'][key][-1]
@@ -1502,7 +1490,7 @@ def render():
     # One historical-cost marker covers all affected families. Their reports
     # retain the distinct source changes and older observations.
     rows = [(kind, row.replace(' ‡', '').replace(' §', '').replace(' ¶', '')
-             if kind == 'editing' and row.startswith('| Bicubic RGBA8 enlargement,')
+             if kind == 'editing' and row.startswith(('| Bicubic RGBA8 enlargement,', '| Bicubic RGBA8 width enlargement,', '| Bicubic RGBA8 height enlargement,'))
              else row.replace(' ‡', ' H').replace(' §', ' H').replace(' ¶', ' H'))
             for kind, row in rows]
     # Current VP8 family costs use one canonical receipt shape, independently of
@@ -1547,7 +1535,7 @@ def render():
     assert overwrite['qualification']['actualPackage']['sha256'] == overwrite['qualification']['samePackageLinux']['sameActualPackageSha256']
     rows = [(kind, row.replace(' →', ' H →', 1)
              if kind == 'editing' and row.startswith(('| Bicubic', '| Bilinear')) and ' H ' not in row
-             and not row.startswith('| Bicubic RGBA8 enlargement,')
+             and not row.startswith(('| Bicubic RGBA8 enlargement,', '| Bicubic RGBA8 width enlargement,', '| Bicubic RGBA8 height enlargement,'))
              else row) for kind, row in rows]
     labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
               'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
@@ -1821,8 +1809,9 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Complete byte enlargement](../benchmarks/CURRENT-BICUBIC-BYTE-ENLARGEMENT.md)
-  is reconciled after output-storage changes: current upper1.332,116B/op.
+  [Owned-output preparation](../benchmarks/BICUBIC-OUTPUT-WORKSPACE.md) saves731µs/17.8%
+  on complete byte enlargement, with unchanged paired allocation. Three current
+  uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
   Exact Q30/rational/certified pixels remain required versus native float.
 - **JPEG and reading:** [signed prepared instructions](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
   remove repeated sign interpretation in the existing2KiB scan plan. Independent
@@ -1837,10 +1826,10 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{vp8_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{enlargement['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Affected AVX512-disabled quantizer/packet checks pass; unchanged other-path proof is reused.
+opaque-word and wide-column consumers. Affected AVX512-disabled resize checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

@@ -507,10 +507,52 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine("Packaged wider bicubic preserves exact byte/word frames and shared ownership.");
     }
 
+    private static void VerifyOutputWorkspaceBicubic()
+    {
+        const long capacity = 8 * 1024 * 1024;
+        using var root = new TestMemoryBudget(capacity);
+        var input = OriginalPixels.Generate(513, 259, 8);
+        input[3] = input[513 * 4 - 1] = 0;
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = input.Length + 1027L * 519 * 4 + 4096 };
+        using var source = ImageBuffer.Create(513, 259, 8, limits);
+        for (var y = 0; y < 259; y++) input.AsSpan(y * source.Stride, source.Stride).CopyTo(source.GetRow8(y));
+        using var first = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits);
+        using var second = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits);
+        var expected = OriginalPixels.Bytes(first);
+        const string frozen = "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94";
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected)) != frozen
+            || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second))
+            || !input.AsSpan().SequenceEqual(OriginalPixels.Bytes(source))
+            || root.Bytes != input.Length + 2L * expected.Length)
+            throw new Exception("Packaged output workspace changed pixels, source or retained capacity.");
+        var retained = root.Bytes;
+        if (!root.TryReserve(capacity - retained, out var caller)) throw new Exception("Cannot fill caller budget.");
+        using (caller)
+        {
+            try { using var refused = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits); throw new Exception("Packaged output workspace ignored refusal."); }
+            catch (ImageLimitException e) when (e.Scope == ImageLimitScope.SharedBudget) { }
+            if (root.Refusals != 1 || root.Bytes != capacity) throw new Exception("Packaged output workspace retried or leaked refused admission.");
+        }
+        using var cancel = new CancellationTokenSource(); root.Admitted = _ => cancel.Cancel();
+        try { using var stopped = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits, cancel.Token); throw new Exception("Packaged output workspace ignored cancellation."); }
+        catch (OperationCanceledException) { }
+        root.Admitted = null;
+        if (root.Bytes != retained) throw new Exception("Packaged output workspace leaked canceled admission.");
+        using (var later = ImageTransforms.Resize(source, 1027, 519, ResizeFilter.Bicubic, limits))
+            if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(later))) throw new Exception("Packaged output workspace did not recover.");
+        source.Dispose(); first.Dispose(); input.AsSpan().Clear();
+        if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second)) || root.Bytes != expected.Length)
+            throw new Exception("Packaged output workspace aliases a disposed source or sibling.");
+        second.Dispose();
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged output workspace did not release owned capacity.");
+        Console.WriteLine("Packaged output-backed bicubic preserves exact prefix/tail pixels, admission and surviving ownership.");
+    }
+
     internal static async Task Verify()
     {
         await VerifyOpaqueWordTiles();
         VerifyStreamingBicubic();
+        VerifyOutputWorkspaceBicubic();
         using var budget = new TestMemoryBudget(4 * 1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = budget };
         using (var input = ImageBuffer.Create(19, 13, 8, limits))

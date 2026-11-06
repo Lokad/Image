@@ -1,5 +1,8 @@
 # Current complete byte bicubic enlargement
 
+Timing is superseded by [owned-output preparation](BICUBIC-OUTPUT-WORKSPACE.md).
+The pre-change cost and attribution remain reproducible history.
+
 The existing513×259 RGBA8→1027×519, input+output+4KiB boundary remains a confirmed
 **gap** on the current immutable production build. This reconciles its historical
 cost after shared overwrite/output-storage changes; it is not a causal gain claim.

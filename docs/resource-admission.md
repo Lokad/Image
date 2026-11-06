@@ -23,6 +23,9 @@ Stream acquisition stays charged through validation; successful metadata results
 contain only scalar facts. Its memory bounds can therefore differ from Decode's.
 Non-indexed VP8L decoding on little-endian systems uses the returned image's
 storage for its pixel history; validation still needs that history without a result.
+Eligible bicubic enlargement also uses unmaterialized owned output capacity for
+preparation and filtered rows. Temporary views retire before overlapping output
+writes; callers receive a complete, independently owned raster.
 
 `IMemoryScope` starts empty and shares its ancestor's allowance. Reserve capacity
 before allocating, including old/new overlap during replacement. `TryReserve` and
