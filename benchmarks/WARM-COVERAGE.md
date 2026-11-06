@@ -31,6 +31,13 @@ actual-package release refresh or282-path pass. Publication is postponed.
 [Progressive JPEG scheduling](JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retains its
 984KB→701KBcomplete-allocation reduction and narrow timing interpretation.
 
+Two [shared large-prediction prototypes](VP8-SHARED-STRIDED-PREDICTION.md) are
+inconclusive and restored byte for byte. Independent complete live decode is flat
+for compact staging and saves only a26.52µs point with overlapping confidence for
+direct stride; allocation is unchanged. No unchanged favorable repeat or broad/
+package repetition. Current qualified costs remain valid. Next use current complete
+live-token reader attribution before selecting a larger execution redesign.
+
 A [broader rate-core prototype](VP8-CANONICAL-RATE-BOUNDARY.md) is rejected:
 its paired gain conflicts with a confirmed326µs/2.96% actual standalone photograph
 loss. Qualified source/modules/package restore exactly; current costs and proofs
