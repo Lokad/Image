@@ -1624,10 +1624,11 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-shared-coefficient-window-evidence.json').read_text(encoding='utf-8'))
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-prepared-token-state-evidence.json').read_text(encoding='utf-8'))
     dq = decoder_owned['qualification']
-    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['movedArithmeticTextMatchesOriginal']
-    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5721
+    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['localTokenAndFieldKernelsMathematicallyExact']
+    assert decoder_owned['sourceProof']['allOriginalFieldKernelBodiesByteExact']
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5722
     assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
     assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
     assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
@@ -1827,10 +1828,11 @@ Current scope and remaining work:
   shares exact inverse/SSD/texture cores and removes candidate copies/repacking.
   Independent complete photograph saves257µs/2.26%, unchanged paired allocation.
   Eight current VP8 controls:7gaps, 1uncertain; exact packets retained.
-  [Shared coefficient windows](../benchmarks/VP8-SHARED-COEFFICIENT-WINDOW.md)
-  save115µs/1.73% on complete coding validation, unchanged allocation. Six current
-  validation/decoder controls remain gaps; all five actual full-decoder callers
-  are reconciled after shared-inverse changes. No broader incremental gain claim.
+  [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
+  saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
+  paired allocation. The original live/field kernel is retained after a confirmed
+  shared-form regression. Live comparison is uncertain; all six current reader
+  controls remain gaps. Earlier window preparation remains linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [greedy view preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md)

@@ -21,10 +21,11 @@ Current scope and remaining work:
   shares exact inverse/SSD/texture cores and removes candidate copies/repacking.
   Independent complete photograph saves257µs/2.26%, unchanged paired allocation.
   Eight current VP8 controls:7gaps, 1uncertain; exact packets retained.
-  [Shared coefficient windows](../benchmarks/VP8-SHARED-COEFFICIENT-WINDOW.md)
-  save115µs/1.73% on complete coding validation, unchanged allocation. Six current
-  validation/decoder controls remain gaps; all five actual full-decoder callers
-  are reconciled after shared-inverse changes. No broader incremental gain claim.
+  [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
+  saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
+  paired allocation. The original live/field kernel is retained after a confirmed
+  shared-form regression. Live comparison is uncertain; all six current reader
+  controls remain gaps. Earlier window preparation remains linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [greedy view preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md)
@@ -56,7 +57,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,721 full/live checks per OS**, affected
+The current production build passes **5,722 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word and wide-column consumers. Affected scalar/AVX512-disabled parser checks pass; unchanged other-path proof is reused.
@@ -90,7 +91,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 7,063.58 | 5,980.11 | 1.181 / 1.185 | 1,434,827 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 6,600.44 | 5,986.72 | 1.103 / 1.115 | 1,434,827 | — |
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
@@ -217,7 +218,7 @@ settings do not establish matched quality.
 | Validate JPEG baseline420, span | 543.780 | 689.481 | 0.789 / 0.815 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 286.239 | 289.052 | 0.990 / 1.001 | 4,072 | Confidence open |
 | Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
-| Validate VP8+alpha, span | 6,677.083 | 5,447.147 | 1.226 / 1.230 | 554,478 | Confirmed gap |
+| Validate VP8+alpha, span | 6,174.289 | 5,443.414 | 1.134 / 1.139 | 554,478 | Confirmed gap |
 | Validate PNG16, async nonseekable | 2,836.823 | 3,623.647 | 0.783 / 0.790 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

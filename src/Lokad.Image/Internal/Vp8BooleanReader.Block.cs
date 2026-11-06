@@ -94,10 +94,30 @@ internal partial struct Vp8BooleanReader
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int TokenRead(in ReadOnlySpan<byte> data, int probability,
+            ref int position, ref int bits, ref int range, ref uint value)
+        {
+            Normalize(in data, ref position, ref bits, ref range, ref value);
+            var boundary = 1 + ((range - 1) * probability >> 8);
+            var split = (uint)boundary << 24;
+            if (value < split) { range = boundary; return 0; }
+            range -= boundary; value -= split; return 1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Normalize()
         {
             var count = BitOperations.LeadingZeroCount((uint)Range) - 24;
             Range <<= count; Value <<= count; Bits -= count; Fill();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void Normalize(in ReadOnlySpan<byte> data,
+            ref int position, ref int bits, ref int range, ref uint value)
+        {
+            var count = BitOperations.LeadingZeroCount((uint)range) - 24;
+            range <<= count; value <<= count; bits -= count;
+            Fill(in data, ref position, ref bits, ref value);
         }
 
         internal void Publish(ref Vp8BooleanReader target)
@@ -121,14 +141,45 @@ internal partial struct Vp8BooleanReader
             Position += 2; Bits += 16;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void Fill(in ReadOnlySpan<byte> data, ref int position, ref int bits, ref uint value)
+        {
+            // After normalization, Value<Range*2^24<2^32 and the low24-Bits
+            // bits are zero. A16bit refill fits that zero region and returns
+            // 17..23known future bits, before the next decision.
+            if (bits >= 8) return;
+            value |= (uint)BinaryPrimitives.ReadUInt16BigEndian(data.Slice(position, 2)) << (8 - bits);
+            position += 2; bits += 16;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal int Token(ReadOnlySpan<byte> p, bool previousZero)
         {
-            if (!previousZero && TokenRead(p[0]) == 0) return 11;
-            if (TokenRead(p[1]) == 0) return 0;
-            if (TokenRead(p[2]) == 0) return 1;
-            if (TokenRead(p[3]) == 0) return TokenRead(p[4]) == 0 ? 2 : 3 + TokenRead(p[5]);
-            if (TokenRead(p[6]) == 0) return 5 + TokenRead(p[7]);
-            var upper = TokenRead(p[8]); return 7 + 2 * upper + TokenRead(p[9 + upper]);
+            // Keep one decision's arithmetic state local. The same bit core
+            // also serves the cancellable caller, which publishes every bit.
+            var position = Position; var bits = Bits; var range = Range; var value = Value;
+            // The selected window and complete private model exclude a failed
+            // input read here. Live tokens use the per-bit polling wrapper.
+            int token;
+            if (!previousZero && TokenRead(in data, p[0], ref position, ref bits, ref range, ref value) == 0)
+            { token = 11; goto Complete; }
+            if (TokenRead(in data, p[1], ref position, ref bits, ref range, ref value) == 0)
+            { token = 0; goto Complete; }
+            if (TokenRead(in data, p[2], ref position, ref bits, ref range, ref value) == 0)
+            { token = 1; goto Complete; }
+            if (TokenRead(in data, p[3], ref position, ref bits, ref range, ref value) == 0)
+            {
+                token = TokenRead(in data, p[4], ref position, ref bits, ref range, ref value) == 0
+                    ? 2 : 3 + TokenRead(in data, p[5], ref position, ref bits, ref range, ref value);
+                goto Complete;
+            }
+            if (TokenRead(in data, p[6], ref position, ref bits, ref range, ref value) == 0)
+            { token = 5 + TokenRead(in data, p[7], ref position, ref bits, ref range, ref value); goto Complete; }
+            var upper = TokenRead(in data, p[8], ref position, ref bits, ref range, ref value);
+            token = 7 + 2 * upper + TokenRead(in data, p[9 + upper], ref position, ref bits, ref range, ref value);
+        Complete:
+            Position = position; Bits = bits; Range = range; Value = value;
+            return token;
         }
 
         internal int Category(int category)
