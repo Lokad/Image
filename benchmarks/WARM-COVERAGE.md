@@ -14,40 +14,36 @@ Completion needs current passing evidence for every named path, with scope state
 | Resident VP8 encoding | [Complete prediction preparation](VP8-COMPLETE-PREDICTION-PREPARATION.md) shares borders/DC/interpolation across ten ordered modes. Actual standalone photograph independently saves682.12µs/6.23%, raw/normalized confidence separated, exact17688Bpacket and809225B/op unchanged. Seven affected costs refresh; distortion-only reuses its separate path. Eight controls:2pass/4gaps/2uncertain. Alpha16's adverse994µs point remains inconclusive against a contemporary original; no causal gain/loss/equivalence claim or favorable repeat. Prior rate/score/trellis gains remain linked history. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Lazy view preparation](PNG-LAZY-VIEW-PREPARATION.md) independently saves390.08/375.08µs (1.83%/2.16%) on complete Optimal16/Smallest8. Exact packets and384KiB admission remain; Grayscale8 measures+408B/op to551,772, ten other fresh allocations unchanged. All11level6/9 fresh one-shot costs refresh; fourFastest costs reuse unchanged source bodies. Fifteen controls:9pass/stop,2gap,4uncertain. ByteFastest and byteGray remain gaps; wordSmallest and ordinary/live/forward wordFastest are uncertain. Resolve uncertainty before tuning. [Greedy preparation](PNG-GREEDY-VIEW-PREPARATION.md) retains independent269/836µs gains; earlier evidence stays linked history. |
-| JPEG and image reading | [Progressive plane scheduling](JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) removes two full sample planes using operation-owned output-tail strips. Ordinary/live444 allocations fall from984KB to701KB/op with exact pixels. Live raw confirmation saves68.87µs/1.61%; normalized and ordinary timing remain inconclusive. Five decoder costs refresh; unchanged coding validation is reused. Existing six controls:1pass/3gaps/2uncertain. Governed core peak bound unchanged; no new retained cache. Signed-scan and earlier preparation gains stay linked history. |
+| VP8 image reading | [Unshifted live reservoir](VP8-UNSHIFTED-LIVE-RESERVOIR.md) removes repeated code-value shifts and uses bounded32-bit refills. Independent complete live opaque decoding saves135.96µs/2.25%raw; normalized confidence overlaps,760564B/op unchanged. Currentratio1.161/upper1.173 remains a gap. Allsix reader controls remain gaps; five unchanged normal/tail/validation paths reuse prior proof. Every cancellation checkpoint and published cursor stay exact. |
+| JPEG decoding | [Progressive plane scheduling](JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) removes two full sample planes using operation-owned output-tail strips. Ordinary/live444 allocations fall from984KB to701KB/op with exact pixels. Live raw confirmation saves68.87µs/1.61%; normalized and ordinary timing remain inconclusive. Five decoder costs refresh; unchanged coding validation is reused. Existing six controls:1pass/3gaps/2uncertain. Governed core peak bound unchanged; no new retained cache. Signed-scan and earlier preparation gains stay linked history. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [shared resize milestone](BICUBIC-SHARED-ENLARGEMENT.md) qualifies
-5,741 full/live checks per OS (2,488 internal/2,305 public/948 differential), affected
-normal/scalar/AVX512-disabled checks and the SAME actual Release package/all three
-examples. The package consumer reaches full-frame default/bounded enlargement at
-both depths with shared output ownership. Five displayed costs refresh; 120 reuse
-unchanged paths. Working capacity and GC totals remain distinct; no new retained pool.
-This is not a 125-row actual-package release refresh or 282-path pass.
+The current [live-reservoir milestone](VP8-UNSHIFTED-LIVE-RESERVOIR.md) qualifies
+5,741 full/live checks per OS (2,488 internal/2,305 public/948 differential),
+39internal/61public pernormal/scalar, and the SAME actual Release package/all three
+examples on Windows/Linux. No ISA kernel changed; unchanged vector-path disabled-
+ISA proof is reused. The existing consumer reaches exact live sync/async full-frame
+VP8 decoding and independent shared ownership. One named live control refreshes;
+all125displayed numerical comparisons reuse unchanged paths. No125-row actual-package
+release refresh or282-path pass. Working capacity, GC totals and retention stay distinct.
 
-The preceding [live-model milestone](VP8-LIVE-MODEL-PREPARATION.md) retains5,735
-full/live checks perOS (2488internal/2299public/948differential),39internal/61public
-per normal/scalar mode and the SAMEactualReleasepackage/all3examples. The added
-package consumer checks exact live sync/async frames and independently admitted
-survivors. One named live control refreshes; all125displayed numerical comparisons
-reuse unchanged paths. Independent raw gain48.60µs/.83%has overlapping reference-
-normalized confidence; allocation760564B/op is unchanged. No parity claim. Unchanged
-vector-path ISA proof is reused. This is not a125-row actual-package release refresh
-or282-path pass. Publication is postponed.
-[Progressive JPEG scheduling](JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retains its
-984KB→701KBcomplete-allocation reduction and narrow timing interpretation.
+The preceding [shared resize milestone](BICUBIC-SHARED-ENLARGEMENT.md) retains179µs/
+4.97%word gain,752064B/op saved, all12enlargement costs and both-depth package proof.
+[Fixed model delivery](VP8-LIVE-MODEL-PREPARATION.md) and
+[progressive JPEG scheduling](JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retain their
+narrow raw gains/normalized uncertainty and JPEG984KB→701KBallocation reduction.
 
 Two [shared large-prediction prototypes](VP8-SHARED-STRIDED-PREDICTION.md) are
 inconclusive and restored byte for byte. Independent complete live decode is flat
 for compact staging and saves only a26.52µs point with overlapping confidence for
 direct stride; allocation is unchanged. No unchanged favorable repeat or broad/
 package repetition. Current qualified costs remain valid. Its following current
-live-reader attribution leads to the fixed-model delivery above, preserving arithmetic
-and every cancellation checkpoint. Stop small reader tuning for larger codec work.
+live-reader attribution leads to fixed-model delivery, then the current unshifted
+reservoir above. Preserve all points; no repeated unchanged favorable samples.
 
 The [rate-epoch pricing round](VP8-RATE-EPOCH-PRICING-EXPERIMENT.md) completes three
 exact preparation stages and restores2e277bba. Its final Int32design has an
@@ -70,7 +66,7 @@ above remain valid. Retain raw history outside renderer dependencies; no family 
 [PNG preparation](PNG-LAZY-VIEW-PREPARATION.md) retains9passes/2gaps/4uncertain
 controls and its independent gains. The [reader milestone](VP8-PREPARED-TOKEN-STATE.md)
 retains440/304µs validation/stream gains and allsix reader gaps. Five unchanged
-paths reuse that proof; the live control is owned by the current model milestone.
+paths reuse that proof; the live control is owned by the current reservoir milestone.
 Earlier accepted/adverse stages and source attribution stay
 linked from family reports and the
 [preceding coverage record](https://github.com/lokad/image/blob/97b1ad81/benchmarks/WARM-COVERAGE.md).

@@ -1642,11 +1642,12 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-live-model-preparation-evidence.json').read_text(encoding='utf-8'))
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-unshifted-live-reservoir-evidence.json').read_text(encoding='utf-8'))
     dq = decoder_owned['qualification']
-    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['onlyModelDeliveryChanged']
-    assert decoder_owned['sourceProof']['arithmeticRefillNormalizationPerBitCancellationAndFailedPrefixBodiesExact']
-    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5735
+    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['selectionGuardUnchanged']
+    assert decoder_owned['sourceProof']['originalCoefficientModelSelectionTokenCategoryAndReadOrderExact']
+    assert decoder_owned['sourceProof']['noncancelledAndTailReaderSourcesUnchanged']
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5741
     assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
     assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
     assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
@@ -1658,8 +1659,8 @@ def render():
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
                for v in decoder_owned['independentLive']['views'].values())
-    assert dq['actualPackage']['liveVp8ModelSyncAsyncOwnedPassed'] and dq['samePackageLinux']['liveVp8ModelSyncAsyncOwnedPassed']
-    vq = enlargement['qualification']
+    assert dq['actualPackage']['unshiftedLiveReservoirPassed'] and dq['samePackageLinux']['unshiftedLiveReservoirPassed']
+    vq = dq
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5741
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['sharedByteWordEnlargementExactOwnedPassed']
@@ -1863,11 +1864,11 @@ Current scope and remaining work:
   retains prior independent gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
-  paired allocation. [Live model preparation](../benchmarks/VP8-LIVE-MODEL-PREPARATION.md)
-  borrows fixed rows and saves49µs/0.83%raw on complete live opaque decoding;
-  reference-normalized confidence overlaps,760,564B/op unchanged. All six reader
-  controls remain gaps; five unchanged paths reuse evidence. Arithmetic/field
-  kernels and every per-bit cancellation check remain exact. Earlier/adverse stages
+  paired allocation. [Unshifted live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md)
+  avoids repeated code-value shifts and independently saves136µs/2.25%raw on complete
+  live opaque decoding; normalized confidence overlaps,760,564B/op unchanged. All six
+  reader controls remain gaps; five unchanged paths reuse evidence. Token order,
+  every per-bit cancellation check and the published cursor remain exact. Earlier/adverse stages
   stay linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.

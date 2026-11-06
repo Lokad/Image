@@ -28,11 +28,11 @@ Current scope and remaining work:
   retains prior independent gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
-  paired allocation. [Live model preparation](../benchmarks/VP8-LIVE-MODEL-PREPARATION.md)
-  borrows fixed rows and saves49µs/0.83%raw on complete live opaque decoding;
-  reference-normalized confidence overlaps,760,564B/op unchanged. All six reader
-  controls remain gaps; five unchanged paths reuse evidence. Arithmetic/field
-  kernels and every per-bit cancellation check remain exact. Earlier/adverse stages
+  paired allocation. [Unshifted live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md)
+  avoids repeated code-value shifts and independently saves136µs/2.25%raw on complete
+  live opaque decoding; normalized confidence overlaps,760,564B/op unchanged. All six
+  reader controls remain gaps; five unchanged paths reuse evidence. Token order,
+  every per-bit cancellation check and the published cursor remain exact. Earlier/adverse stages
   stay linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.

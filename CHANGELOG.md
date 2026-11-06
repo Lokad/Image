@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Buffer live VP8 coefficient decoding without repeated code-value shifts,
+  preserving exact pixels, cancellation prefixes and output ownership.
+
 - Share byte/word bicubic enlargement preparation and output-backed scheduling,
   reducing temporary storage while preserving exact pixels and memory ownership.
 

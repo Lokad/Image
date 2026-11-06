@@ -1,3 +1,5 @@
+using System.Buffers.Binary;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -52,30 +54,74 @@ internal partial struct Vp8BooleanReader
 
     internal ref struct CancellableBlockReader
     {
-        private BlockReader reader;
+        private readonly ReadOnlySpan<byte> data;
+        private int position, bits, range;
+        private ulong value;
         private readonly CancellationToken cancellation;
 
         internal CancellableBlockReader(ReadOnlySpan<byte> data, Vp8BooleanReader initial, CancellationToken cancellation)
         {
-            reader = new BlockReader(data, initial.position, initial.shift, initial.range, initial.value);
+            this.data = data;
+            position = initial.position + 1; bits = initial.shift + 1; range = initial.range;
+            value = ((ulong)initial.value << bits) | ((uint)data[initial.position] & ((1u << bits) - 1));
             this.cancellation = cancellation;
+            Fill();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal int Read(int probability)
         {
             cancellation.ThrowIfCancellationRequested();
-            return reader.Read(probability);
+            Normalize();
+            var boundary = 1 + ((range - 1) * probability >> 8);
+            var result = value >= ((ulong)boundary << bits) ? 1 : 0; var mask = -result;
+            value -= (ulong)(boundary & mask) << bits;
+            range = boundary + ((range - 2 * boundary) & mask);
+            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int TokenRead(int probability)
         {
             cancellation.ThrowIfCancellationRequested();
-            return reader.TokenRead(probability);
+            Normalize();
+            var boundary = 1 + ((range - 1) * probability >> 8);
+            var split = (ulong)boundary << bits;
+            if (value < split) { range = boundary; return 0; }
+            range -= boundary; value -= split; return 1;
         }
 
-        internal void Publish(ref Vp8BooleanReader target) => reader.Publish(ref target);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Normalize()
+        {
+            // RFC6386 section7.2: the code's binary point moves with the
+            // interval. Keep the reservoir fixed instead of shifting it too.
+            var count = BitOperations.LeadingZeroCount((uint)range) - 24;
+            range <<= count; bits -= count; Fill();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Fill()
+        {
+            // At most7 low bits plus8 interval bits precede a32-bit append,
+            // so the complete reservoir fits in47bits. The admitted block's
+            // 272-byte bound includes this four-byte lookahead.
+            if (bits >= 8) return;
+            value = (value << 32) | BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4));
+            position += 4; bits += 32;
+        }
+
+        internal void Publish(ref Vp8BooleanReader target)
+        {
+            // A canceled poll does not normalize or consume input. Publish
+            // only the completed prefix, without another read or poll.
+            var count = BitOperations.LeadingZeroCount((uint)range) - 24;
+            var remaining = bits - count;
+            target.position = position - (remaining + 7) / 8;
+            target.shift = (remaining - 1) & 7;
+            target.range = range << count;
+            target.value = (int)(value >> remaining);
+        }
 
         // RFC6386 section13.2, preserving the original probability/read order.
         internal int Token(in CoefficientModelRow p, bool previousZero)
