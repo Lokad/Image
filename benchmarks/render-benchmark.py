@@ -1568,9 +1568,10 @@ def render():
                for v in vp8_owned['independentPhotograph']['views'].values())
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
-    vp8_current = json.loads((ROOT / 'benchmarks/vp8-trellis-candidate-preparation-evidence.json').read_text(encoding='utf-8'))
+    vp8_current = json.loads((ROOT / 'benchmarks/vp8-coefficient-local-trellis-evidence.json').read_text(encoding='utf-8'))
     assert vp8_current['productionAccepted'] and vp8_current['requiredMaterialPaths'] == 283
-    assert vp8_current['sourceProof']['unchangedText']['rateRecurrenceTerminalTiesContextUpdateAndTraceback']
+    assert vp8_current['sourceProof']['scoringArithmeticAndPublicationNormalizedExact']
+    assert vp8_current['sourceProof']['tracebackExact']
     assert vp8_current['storage']['newOwnedHeapBytes'] == vp8_current['storage']['newRetainedBytes'] == 0
     assert vp8_current['raw']['mirrored'] and vp8_current['raw']['allMembersVerified']
     assert vp8_current['statusCounts'] == {'pass': 3, 'gap': 3, 'uncertain': 3}
@@ -1706,7 +1707,7 @@ def render():
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
-    vq = png_decode['qualification']
+    vq = vp8_current['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5751
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
@@ -1884,15 +1885,16 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [trellis candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
-  moves independent coefficient arithmetic before serial DP. Alternating isolated
-  complete encodes improve 4.0% within that paired harness. Actual standalone effort6
-  saves 196µs/1.68% raw; normalized gain is unconfirmed. These magnitudes remain
-  separate. Current effort 6 ratio {vp8_current['cases']['trellis']['ratio']:.3f}/upper {vp8_current['cases']['trellis']['upper']:.3f} and effort 5 ratio {vp8_current['cases']['selected']['ratio']:.3f}/upper {vp8_current['cases']['selected']['upper']:.3f}
-  are gaps. Allocation stays 754,497/741,065B; added 320B local stack, no new heap/
-  retained state or larger admission. Both affected controls refresh; seven reuse
-  unchanged paths: **3 pass, 3 gaps, 3 uncertain**. Effort 5's +50µs raw adverse point
-  and normalized point improvement are uncertain; no extra favorable sampling.
+- **WebP:** [coefficient-local trellis](../benchmarks/VP8-COEFFICIENT-LOCAL-TRELLIS.md)
+  retains1.90% scoped counterbalanced gain and350µs/3.13% standalone raw saving;
+  different populations/magnitudes. Native brackets move; the normalized point is
+  adverse but neither normalized gain nor loss is established. Current effort6
+  ratio {vp8_current['cases']['trellis']['ratio']:.3f}/upper {vp8_current['cases']['trellis']['upper']:.3f} and effort5 ratio {vp8_current['cases']['selected']['ratio']:.3f}/upper {vp8_current['cases']['selected']['upper']:.3f} remain gaps.
+  Allocations754,497/741,065B and scratch/admission/retention stay unchanged.
+  Both affected controls refresh; seven reuse unchanged paths: **3pass,3gaps,3uncertain**.
+  Effort5's +36µs raw adverse point is inconclusive; no favorable standalone repeats.
+  [Earlier candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
+  retains its own scoped gains and actual costs as history.
   [Prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md) retain their
   photograph gain and diagram/opaque16 tradeoffs; both passing cases remain stopped.
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),

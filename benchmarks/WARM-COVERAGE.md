@@ -1,6 +1,6 @@
 # Material warm coverage
 
-Current architectural phase, 2026-11-06. **283 material required paths** remain
+Current architectural phase, 2026-11-07. **283 material required paths** remain
 in scope; the 125 displayed comparisons in [benchmark.md](../docs/benchmark.md)
 are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Trellis candidate preparation](VP8-TRELLIS-CANDIDATE-PREPARATION.md) prepares floor/ceiling and signed64distortion before serialDP. Scoped alternating complete encodes improve3.98%; actual effort6rawsaves196µs/1.68%, normalizedgainunconfirmed. Separate populations/magnitudes. Currenttrellis/selected ratios1.082/1.017 anduppers1.093/1.028 remain gaps. Allocations754497/741065B unchanged;320Btemporarylocal, no newheap/retainedstate/allowance. Two affected costs refreshed, seven unchanged reuse:3pass/3gaps/3uncertain. Earlier price/window/block stages and tradeoffs remain linked history. |
+| Resident VP8 encoding | [Coefficient-local trellis](VP8-COEFFICIENT-LOCAL-TRELLIS.md) removes the choice loop without new storage. Scoped paired gain1.90%; actual effort6 raw350µs/3.13%, normalized gain/loss unconfirmed with adverse point and moving native brackets. Current trellis/selected ratios1.104/1.020, uppers1.111/1.031 remain gaps;754497/741065B unchanged. Same320B local/128B borrowed/20192B rate plan; no new heap/retained capacity or larger admission. Two costs refresh, seven unchanged reuse:3pass/3gaps/3uncertain. Effort5+36µs raw adverse point inconclusive. Earlier stages and unaccepted programs remain linked history. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG decoding/coding validation | [Current framing controls](PNG-CURRENT-FRAMING-COSTS.md):24 independent confirmations,20pass/4gaps. Gaps:liveRGBA8 upper1.113, tight/defaultRGBA16 uppers1.052/1.031, RGB16 upper1.062; allotherconfirmed cases stop. [Shared-root control](PNG-PREPARED-PREFIX.md) separately retains422µs/12.8%gain,upper1.014gap,1638214B/op and1766641Bcoarsepeak. Eight displayed controls5pass/3gaps; remaining costs and allocations in family report. Twenty-seven existing named decode cases still need current proof. Historical contradictions/raw retained; header-only operations/encoding unaffected. |
 | PNG encoding | [Lazy view preparation](PNG-LAZY-VIEW-PREPARATION.md) independently saves390.08/375.08µs (1.83%/2.16%) on complete Optimal16/Smallest8. Exact packets and384KiB admission remain; Grayscale8 measures+408B/op to551,772, ten other fresh allocations unchanged. All11level6/9 fresh one-shot costs refresh; fourFastest costs reuse unchanged source bodies. Fifteen controls:9pass/stop,2gap,4uncertain. ByteFastest and byteGray remain gaps; wordSmallest and ordinary/live/forward wordFastest are uncertain. Resolve uncertainty before tuning. [Greedy preparation](PNG-GREEDY-VIEW-PREPARATION.md) retains independent269/836µs gains; earlier evidence stays linked history. |
@@ -24,11 +24,14 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [prepared-prefix milestone](PNG-PREPARED-PREFIX.md) qualifies5,751
-full/live checks perOS(2495internal/2308public/948differential),704internal/246public
-normal/scalar and the SAMEactualReleasepackage/allthreeexamples on Windows/Linux.
-No newISAguard; unchanged vector/filter/CRC disabled-ISA proof reused. One immutable
-main perOS; new test-only actual-prefix oracle requires a second embedded build.
+The current [coefficient-local trellis milestone](VP8-COEFFICIENT-LOCAL-TRELLIS.md)
+qualifies5,751full/live checks perOS(2495internal/2308public/948differential),69internal/
+140public normal/scalar and SAMEactualReleasepackage/allthreeexamples Windows/Linux.
+No newISAguard; unchanged vector/transform/filter/CRC disabled-ISA proof reused.
+One immutable main/embedded perOS; zero harness/native/selector/fixture builds.
+One displayed trellis row refreshes;124 numerical rows reuse unchanged paths. The
+[prepared-prefix milestone](PNG-PREPARED-PREFIX.md) retains valid PNG costs/source
+and704internal/246public scalar qualification on unchanged executed paths.
 The following [seven-control refresh](PNG-CURRENT-FRAMING-COSTS.md) changes no production:
 seven current independentconfirmations,5pass/2gap,7displayedrowsfresh/118numbersreused.
 Alloriginal gates andfrozenworkers pass. No rebuild/newfixture/profile or repeated

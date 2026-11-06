@@ -17,15 +17,16 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [trellis candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
-  moves independent coefficient arithmetic before serial DP. Alternating isolated
-  complete encodes improve 4.0% within that paired harness. Actual standalone effort6
-  saves 196µs/1.68% raw; normalized gain is unconfirmed. These magnitudes remain
-  separate. Current effort 6 ratio 1.082/upper 1.093 and effort 5 ratio 1.017/upper 1.028
-  are gaps. Allocation stays 754,497/741,065B; added 320B local stack, no new heap/
-  retained state or larger admission. Both affected controls refresh; seven reuse
-  unchanged paths: **3 pass, 3 gaps, 3 uncertain**. Effort 5's +50µs raw adverse point
-  and normalized point improvement are uncertain; no extra favorable sampling.
+- **WebP:** [coefficient-local trellis](../benchmarks/VP8-COEFFICIENT-LOCAL-TRELLIS.md)
+  retains1.90% scoped counterbalanced gain and350µs/3.13% standalone raw saving;
+  different populations/magnitudes. Native brackets move; the normalized point is
+  adverse but neither normalized gain nor loss is established. Current effort6
+  ratio 1.104/upper 1.111 and effort5 ratio 1.020/upper 1.031 remain gaps.
+  Allocations754,497/741,065B and scratch/admission/retention stay unchanged.
+  Both affected controls refresh; seven reuse unchanged paths: **3pass,3gaps,3uncertain**.
+  Effort5's +36µs raw adverse point is inconclusive; no favorable standalone repeats.
+  [Earlier candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
+  retains its own scoped gains and actual costs as history.
   [Prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md) retain their
   photograph gain and diagram/opaque16 tradeoffs; both passing cases remain stopped.
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
@@ -148,7 +149,7 @@ settings do not establish matched quality.
 | VP8 opaque RGBA8 † | 14,109.85 | 15,494.13 | 0.911 / 0.922 | 1,201,669 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 10,421.63 | 9,778.81 | 1.066 / 1.113 | 809,225 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,701.25 | 5,823.43 | 0.979 / 0.985 | 741,222 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 11,437.34 | 10,573.45 | 1.082 / 1.093 | 754,497 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 10,831.46 | 9,811.63 | 1.104 / 1.111 | 754,497 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 15,614.22 | 16,700.17 | 0.935 / 0.939 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 56,041.55 | 56,143.03 | 0.998 / 1.005 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |

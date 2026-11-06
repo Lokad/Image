@@ -189,29 +189,17 @@ internal static class Vp8TrellisQuantization
             // each row offset once; keep the strict alternate/tie comparison.
             var band = (type * 8 + Vp8Tables.CoefficientBand(n)) * 3;
             var row0 = (band + context0) * 68; var row1 = (band + context1) * 68;
-            var nextScore0 = dead; var nextScore1 = dead;
-            var choices = 1 + (int)((upper >> p) & 1);
-            for (var choice = 0; choice < choices; choice++)
-            {
-                var level = floor + choice;
-                var delta = choice == 0 ? delta0[p] : delta1[p];
-                var winner = 0;
-                var stored = Math.Min(level, 67);
-                var correction = level > 67 ? fixedLevels[level] - fixedLevels[67] : 0;
-                var score = score0 + (long)lambda * (combinedLevels[row0 + stored] + correction);
-                var alternate = score1 + (long)lambda * (combinedLevels[row1 + stored] + correction);
-                if (alternate < score) { score = alternate; winner = 1; }
-                score += delta;
-                if (choice == 0) nextScore0 = score; else nextScore1 = score;
-                nodes[n * 2 + choice] = (short)(original[p] < 0 ? -level : level);
-                predecessors[n * 2 + choice] = (byte)winner;
-                if (level != 0 && score < best)
-                {
-                    var end = n == 15 ? 0 : endOfBlock[Index(type, n + 1, Math.Min(level, 2)) * 2];
-                    var terminal = score + (long)lambda * end;
-                    if (terminal < best) { best = terminal; bestEnd = n; bestNode = choice; }
-                }
-            }
+            // Preparation proves exactly one mandatory floor and at most one
+            // following level. Constant choices share the scoring source without
+            // a per-choice loop or a block-wide prepared price representation.
+            var nextScore0 = ScoreCandidate(fixedLevels, combinedLevels, endOfBlock,
+                row0, row1, score0, score1, delta0[p], type, n, 0, floor, original[p], lambda,
+                nodes, predecessors, ref best, ref bestEnd, ref bestNode);
+            var nextScore1 = dead;
+            if (((upper >> p) & 1) != 0)
+                nextScore1 = ScoreCandidate(fixedLevels, combinedLevels, endOfBlock,
+                    row0, row1, score0, score1, delta1[p], type, n, 1, floor + 1, original[p], lambda,
+                    nodes, predecessors, ref best, ref bestEnd, ref bestNode);
             score0 = nextScore0; score1 = nextScore1;
             context0 = Math.Min(floor, 2); context1 = Math.Min(floor + 1, 2);
         }
@@ -223,5 +211,29 @@ internal static class Vp8TrellisQuantization
             coefficients[p] = checked((short)(level * steps[p])); bestNode = predecessors[n * 2 + bestNode];
         }
         return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static long ScoreCandidate(ReadOnlySpan<ushort> fixedLevels, ReadOnlySpan<ushort> combinedLevels,
+        ReadOnlySpan<ushort> endOfBlock, int row0, int row1, long score0, long score1, long delta,
+        int type, int position, int choice, int level, short original, int lambda,
+        Span<short> nodes, Span<byte> predecessors, ref long best, ref int bestEnd, ref int bestNode)
+    {
+        var winner = 0;
+        var stored = Math.Min(level, 67);
+        var correction = level > 67 ? fixedLevels[level] - fixedLevels[67] : 0;
+        var score = score0 + (long)lambda * (combinedLevels[row0 + stored] + correction);
+        var alternate = score1 + (long)lambda * (combinedLevels[row1 + stored] + correction);
+        if (alternate < score) { score = alternate; winner = 1; }
+        score += delta;
+        nodes[position * 2 + choice] = (short)(original < 0 ? -level : level);
+        predecessors[position * 2 + choice] = (byte)winner;
+        if (level != 0 && score < best)
+        {
+            var end = position == 15 ? 0 : endOfBlock[Index(type, position + 1, Math.Min(level, 2)) * 2];
+            var terminal = score + (long)lambda * end;
+            if (terminal < best) { best = terminal; bestEnd = position; bestNode = choice; }
+        }
+        return score;
     }
 }
