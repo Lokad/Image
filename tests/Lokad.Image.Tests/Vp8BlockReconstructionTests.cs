@@ -1,5 +1,7 @@
 using System.Buffers.Binary;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
@@ -19,11 +21,22 @@ public sealed class Vp8BlockReconstructionTests
         Span<byte> pixels = stackalloc byte[4 * 32 + 3]; pixels = pixels[..(4 * stride + 3)];
         Span<short> original = stackalloc short[32]; coefficients.CopyTo(original);
         var width = pair ? 8 : 4; Pixels(pixels, stride, width, block);
+        Span<byte> valuePixels = stackalloc byte[32];
+        if (Sse41.IsSupported)
+            for (var at = 0; at < (pair ? 2 : 1); at++)
+            {
+                var prediction = Vp8Distortion.PackFourRows(pixels[(at * 4)..], stride);
+                var value = Vp8BlockReconstruction.AddValue(Vector256.Create(coefficients.Slice(at * 16, 16)), prediction);
+                value.CopyTo(valuePixels[(at * 16)..]);
+            }
         Vp8BlockReconstruction.Add(coefficients, pixels, stride, pair);
         Assert.True(coefficients.SequenceEqual(original[..coefficients.Length]));
         var padding = true;
         for (var y = 0; y < 4; y++)
         {
+            if (Sse41.IsSupported)
+                for (var at = 0; at < (pair ? 2 : 1); at++)
+                    Assert.True(pixels.Slice(y * stride + at * 4, 4).SequenceEqual(valuePixels.Slice(at * 16 + y * 4, 4)));
             hash.AppendData(pixels.Slice(y * stride, width));
             for (var x = width; x < stride; x++) padding &= pixels[y * stride + x] == 0xa7;
         }

@@ -45,36 +45,22 @@ internal static partial class Vp8BlockReconstruction
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool TryAddPacked16(ReadOnlySpan<short> coefficients, Span<byte> pixels, int stride)
+    private static bool TryInversePacked16(Vector128<short> low, Vector128<short> high,
+        out Vector128<short> first, out Vector128<short> second)
     {
-        // Admit arithmetic only: no storage or resource admission is involved.
-        // With |input|<=2047, each first-pass value is <=7877 and each second-
-        // pass value <=30310. Every intermediate fits signed16, including the
-        // final +4. The required first-pass wrap is therefore an identity.
-        // All sixteen inputs are loaded before any potentially aliased output.
-        var low = Vector128.Create(coefficients[..8]); var high = Vector128.Create(coefficients.Slice(8, 8));
+        // Arithmetic selection only. With |input|<=2047, first-pass values are
+        // <=7877 and second-pass values <=30310, including final +4. Mandatory
+        // first-pass signed16 wrapping is an identity in this bounded domain.
         var outside = Sse2.Or(Sse2.CompareGreaterThan(Sse2.Max(low, high), Vector128.Create((short)2047)),
             Sse2.CompareGreaterThan(Vector128.Create((short)-2047), Sse2.Min(low, high)));
-        if (Sse2.MoveMask(outside.AsByte()) != 0) return false;
+        if (Sse2.MoveMask(outside.AsByte()) != 0) { first = second = default; return false; }
         PackedLine16(low, UpperPackedRow(low), high, UpperPackedRow(high), out var a, out var b, out var c, out var d);
-        PackedTranspose16(a, b, c, d, out var first, out var second);
+        PackedTranspose16(a, b, c, d, out first, out second);
         PackedLine16(first, UpperPackedRow(first), second, UpperPackedRow(second), out a, out b, out c, out d);
         PackedTranspose16(a, b, c, d, out first, out second);
         var rounding = Vector128.Create((short)4);
         first = Sse2.ShiftRightArithmetic(Sse2.Add(first, rounding), 3);
         second = Sse2.ShiftRightArithmetic(Sse2.Add(second, rounding), 3);
-        if (stride == 4)
-        {
-            var prediction = Vector128.Create(pixels[..16]);
-            first = Sse2.Add(first, Sse2.UnpackLow(prediction, Vector128<byte>.Zero).AsInt16());
-            second = Sse2.Add(second, Sse2.UnpackHigh(prediction, Vector128<byte>.Zero).AsInt16());
-            Sse2.PackUnsignedSaturate(first, second).CopyTo(pixels);
-        }
-        else
-        {
-            WritePackedRow(first, pixels[..4]); WritePackedRow(UpperPackedRow(first), pixels.Slice(stride, 4));
-            WritePackedRow(second, pixels.Slice(2 * stride, 4)); WritePackedRow(UpperPackedRow(second), pixels.Slice(3 * stride, 4));
-        }
         return true;
     }
 }

@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Security.Cryptography;
+using System.Runtime.Intrinsics.X86;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
 
@@ -12,7 +13,10 @@ public sealed class Vp8DistortionTests
     {
         Span<int> energy = stackalloc int[1];
         var texture = new Vp8Distortion.Texture(source, sourceStride, weights, energy, 4);
-        return texture.Compare4(0, candidate, candidateStride);
+        var result = texture.Compare4(0, candidate, candidateStride);
+        if (Avx2.IsSupported)
+            Assert.Equal(result, texture.Compare4(0, Vp8Distortion.PackFourRows(candidate, candidateStride)));
+        return result;
     }
 
     private static int Texture16(ReadOnlySpan<byte> source, int sourceStride, ReadOnlySpan<byte> candidate,
@@ -91,6 +95,8 @@ public sealed class Vp8DistortionTests
                 expected += difference * difference;
             }
             Assert.Equal(expected, Vp8Distortion.Squared(a, aStride, b, bStride, width, height));
+            if (Avx2.IsSupported && width == 4 && height == 4)
+                Assert.Equal(expected, Vp8Distortion.Squared(Vp8Distortion.PackFourRows(a, aStride), Vp8Distortion.PackFourRows(b, bStride)));
             Assert.Equal(expected, Vp8Distortion.Squared(b, bStride, a, aStride, width, height));
             Assert.Equal(0, Vp8Distortion.Squared(a, aStride, a, aStride, width, height));
         }

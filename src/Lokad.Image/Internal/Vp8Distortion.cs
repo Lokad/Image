@@ -81,6 +81,10 @@ internal static class Vp8Distortion
         return sum;
     }
 
+    // Fixed16-byte values share the same exact accumulation as strided input.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static int Squared(Vector128<byte> a, Vector128<byte> b) => Vector256.Sum(SquaredGroup(a, b));
+
     // Differences fit signed16; the full16x16 sum is at most16*16*255*255.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static Vector256<int> SquaredGroup(Vector128<byte> a, Vector128<byte> b)
@@ -90,7 +94,7 @@ internal static class Vp8Distortion
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static Vector128<byte> PackFourRows(ReadOnlySpan<byte> pixels, int stride)
+    internal static Vector128<byte> PackFourRows(ReadOnlySpan<byte> pixels, int stride)
         => Vector128.Create(
             BinaryPrimitives.ReadUInt32LittleEndian(pixels[..4]),
             BinaryPrimitives.ReadUInt32LittleEndian(pixels.Slice(stride, 4)),
@@ -101,7 +105,7 @@ internal static class Vp8Distortion
     // parity. Unlike forwardY2, this has no half-scale or rounding.
     private static int Energy(ReadOnlySpan<byte> pixels, int stride, ReadOnlySpan<ushort> weights)
     {
-        if (Avx2.IsSupported) return EnergyVectors(pixels, stride, weights);
+        if (Avx2.IsSupported) return EnergyVectors(PackFourRows(pixels, stride), weights);
         Span<int> rows = stackalloc int[16];
         for (var y = 0; y < 4; y++)
         {
@@ -125,9 +129,9 @@ internal static class Vp8Distortion
     // Sequency butterflies stay inside signed16: each coefficient is bounded
     // by16*255. Nonnegative weights sum256, so weighted energy fits signed32.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static Vector256<short> TextureSpectrum(ReadOnlySpan<byte> pixels, int stride)
+    private static Vector256<short> TextureSpectrum(Vector128<byte> pixels)
     {
-        var values = Avx2.ConvertToVector256Int16(PackFourRows(pixels, stride));
+        var values = Avx2.ConvertToVector256Int16(pixels);
         var swap = Avx2.ShuffleLow(Avx2.ShuffleHigh(values, 0xb1), 0xb1);
         values = Avx2.Blend(Avx2.Add(values, swap), Avx2.Subtract(swap, values), 0xaa);
         swap = Avx2.ShuffleLow(Avx2.ShuffleHigh(values, 0x4e), 0x4e);
@@ -140,9 +144,9 @@ internal static class Vp8Distortion
         return Avx2.Permute4x64(values.AsInt64(), 0x78).AsInt16();
     }
 
-    private static int EnergyVectors(ReadOnlySpan<byte> pixels, int stride, ReadOnlySpan<ushort> weights)
+    private static int EnergyVectors(Vector128<byte> pixels, ReadOnlySpan<ushort> weights)
     {
-        var magnitudes = Avx2.Abs(TextureSpectrum(pixels, stride)).AsInt16();
+        var magnitudes = Avx2.Abs(TextureSpectrum(pixels)).AsInt16();
         var importance = Vector256.LoadUnsafe(ref MemoryMarshal.GetReference(weights)).AsInt16();
         return Vector256.Sum(Avx2.MultiplyAddAdjacent(magnitudes, importance));
     }
@@ -176,6 +180,9 @@ internal static class Vp8Distortion
             Check(candidate, stride, 4, 4);
             return Math.Abs(energies[block] - Energy(candidate, stride, weights)) >> 5;
         }
+
+        internal int Compare4(int block, Vector128<byte> candidate)
+            => Math.Abs(energies[block] - EnergyVectors(candidate, weights)) >> 5;
 
         internal int Compare16(ReadOnlySpan<byte> candidate, int stride)
         {

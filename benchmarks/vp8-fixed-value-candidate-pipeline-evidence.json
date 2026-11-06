@@ -1,0 +1,1383 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RCP356B",
+  "date": "2026-11-06",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "producers": {
+    "windowsSha256": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+    "linuxSha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8BlockReconstruction.Packed.cs": "3d5a4741f4aec666317433244ed322f4e872bc97cfc688b763f16ade487d5ae7",
+    "src/Lokad.Image/Internal/Vp8BlockReconstruction.Vectors.cs": "5afe1106a5f45878e202b9b564876ebb6f5a8cc82b2f769e05c08c13cd25c406",
+    "src/Lokad.Image/Internal/Vp8Distortion.cs": "0673e1be76446d6bc41d4cf8d428fb828d173fcb2e303b7e53adf82f1eba24f0",
+    "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "58ee2d8cfb9a165b114781ca9306d0ddbb008c03f4887295d8761ad5d632736c",
+    "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "e57a1b867f6953ac34a6471de2d59153305e585fe44558567e874da9f61c7171",
+    "tests/Lokad.Image.Tests/Vp8BlockReconstructionTests.cs": "33d3a24f15a88ea4bbd5f04cfa9e02204298c22107e49eae1e08b45ba01684bf",
+    "tests/Lokad.Image.Tests/Vp8DistortionTests.cs": "fc9254d05348b42d10e11f44abb3fa402fca649b265c04c5e608defc3f9a46c8"
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "RCP356B",
+    "originalQualifiedMain": {
+      "windows": "75ab575bbb30b72e2ca0eaefc0e21df9433c8bbed32056757e416476d43b1910",
+      "linux": "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23"
+    },
+    "stageA": {
+      "windows": "965e53a027fb6ba3d22754d57de55c96b0dfa9b52c084b42635e7e5a3a22fcf7",
+      "linux": "947a12db03cad97ebf0fc16895b733e4b3b99c6dd24954ca8b0f2a0c2b42fd80"
+    },
+    "reason": "A short photo lead reversed in independent12pair confirmation: ratio1.015075, CI1.011585\u20131.018571. Do not accept or repeat unchanged candidate for favorable points. Actual Luma4code8437to8923B; AddVector1365to951B. Coherent B isolates widened inverse and returns rounded values, reducing inlined cold arithmetic/address-exposed outputs; same kernels/domain/packet/order/resources. New stage must pass focused/scalar and new complete short/independent confirmation if justified. No automatic merge or permanent family exclusion."
+  },
+  "attributionRaw": {
+    "file": "vp8-current-candidate-pipeline-attribution.tar.xz",
+    "sha256": "1dac8c0cf5a5b41dc188374ec990f7a93a54d07c539f80eda7b8f8405f6cb104",
+    "bytes": 6142076,
+    "members": 147,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-output-workspace-qualified.tar.xz",
+        "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+      }
+    ]
+  },
+  "pairedComparison": {
+    "caseId": "PhotographLossy8",
+    "quality": 75,
+    "effort": 4,
+    "depth": 8,
+    "pairs": 12,
+    "operationsPerSubjectPerPair": 16,
+    "allPairsRetained": true,
+    "counterbalancedOrder": true,
+    "producerIdentities": [
+      "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+      "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5"
+    ],
+    "baselineUs": 11381.2184375,
+    "candidateUs": 11124.155171875,
+    "rawUsSaved": 257.063265625,
+    "ratio": 0.9774169271901908,
+    "rawReduction": 0.0225830728098092,
+    "ratioConfidence": [
+      0.9744507493944975,
+      0.9803870801574337
+    ],
+    "logConfidence": {
+      "N": 12,
+      "Mean": -0.0228445531099218,
+      "StandardError": 0.000684417782948269,
+      "Level": 12,
+      "Margin": 0.0030367475609173176,
+      "Lower": -0.02588130067083912,
+      "Upper": -0.019807805549004482
+    },
+    "quietGuardsPassed": true,
+    "exactPackets": true,
+    "independentOutputs": true,
+    "allocatedValues": [
+      809072
+    ],
+    "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+    "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+    "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+    "nativePerformanceMeasured": false
+  },
+  "shortComparisons": {
+    "rcp356": {
+      "photograph": {
+        "caseId": "PhotographLossy8",
+        "quality": 75,
+        "effort": 4,
+        "depth": 8,
+        "pairs": 3,
+        "operationsPerSubjectPerPair": 8,
+        "allPairsRetained": true,
+        "counterbalancedOrder": true,
+        "producerIdentities": [
+          "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+          "947a12db03cad97ebf0fc16895b733e4b3b99c6dd24954ca8b0f2a0c2b42fd80"
+        ],
+        "baselineUs": 11538.195166666666,
+        "candidateUs": 11335.095208333334,
+        "rawUsSaved": 203.0999583333321,
+        "ratio": 0.9823980521726448,
+        "rawReduction": 0.017601947827355247,
+        "ratioConfidence": [
+          0.9678127917861131,
+          0.9972026703708362
+        ],
+        "logConfidence": {
+          "N": 3,
+          "Mean": -0.01775892839588904,
+          "StandardError": 0.0004733584339614449,
+          "Level": 12,
+          "Margin": 0.014957678928438333,
+          "Lower": -0.03271660732432737,
+          "Upper": -0.002801249467450707
+        },
+        "quietGuardsPassed": true,
+        "exactPackets": true,
+        "independentOutputs": true,
+        "allocatedValues": [
+          809072
+        ],
+        "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+        "nativePerformanceMeasured": false
+      },
+      "diagram": {
+        "caseId": "EncodeOpaque8",
+        "quality": 75,
+        "effort": 4,
+        "depth": 8,
+        "pairs": 3,
+        "operationsPerSubjectPerPair": 8,
+        "allPairsRetained": true,
+        "counterbalancedOrder": true,
+        "producerIdentities": [
+          "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+          "947a12db03cad97ebf0fc16895b733e4b3b99c6dd24954ca8b0f2a0c2b42fd80"
+        ],
+        "baselineUs": 6551.292166666667,
+        "candidateUs": 6496.570125,
+        "rawUsSaved": 54.722041666666975,
+        "ratio": 0.9916550751718095,
+        "rawReduction": 0.008344924828190492,
+        "ratioConfidence": [
+          0.9247961236047013,
+          1.0633372765296343
+        ],
+        "logConfidence": {
+          "N": 3,
+          "Mean": -0.008384818109937431,
+          "StandardError": 0.002208836808088074,
+          "Level": 12,
+          "Margin": 0.06979715456678438,
+          "Lower": -0.07818197267672182,
+          "Upper": 0.061412336456846954
+        },
+        "quietGuardsPassed": true,
+        "exactPackets": true,
+        "independentOutputs": true,
+        "allocatedValues": [
+          740984
+        ],
+        "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+        "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+        "nativePerformanceMeasured": false
+      },
+      "trellis": {
+        "caseId": "EncodeOpaque8",
+        "quality": 75,
+        "effort": 6,
+        "depth": 8,
+        "pairs": 3,
+        "operationsPerSubjectPerPair": 8,
+        "allPairsRetained": true,
+        "counterbalancedOrder": true,
+        "producerIdentities": [
+          "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+          "947a12db03cad97ebf0fc16895b733e4b3b99c6dd24954ca8b0f2a0c2b42fd80"
+        ],
+        "baselineUs": 11458.788333333334,
+        "candidateUs": 11484.335791666666,
+        "rawUsSaved": -25.54745833333209,
+        "ratio": 1.0022302131612515,
+        "rawReduction": -0.002230213161251493,
+        "ratioConfidence": [
+          0.9808199581388813,
+          1.0241068749713687
+        ],
+        "logConfidence": {
+          "N": 3,
+          "Mean": 0.0022272630448413144,
+          "StandardError": 0.0006833631129902128,
+          "Level": 12,
+          "Margin": 0.021593628215523193,
+          "Lower": -0.01936636517068188,
+          "Upper": 0.023820891260364508
+        },
+        "quietGuardsPassed": true,
+        "exactPackets": true,
+        "independentOutputs": true,
+        "allocatedValues": [
+          754344
+        ],
+        "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+        "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+        "nativePerformanceMeasured": false
+      }
+    },
+    "rcp356b": {
+      "photograph": {
+        "caseId": "PhotographLossy8",
+        "quality": 75,
+        "effort": 4,
+        "depth": 8,
+        "pairs": 3,
+        "operationsPerSubjectPerPair": 8,
+        "allPairsRetained": true,
+        "counterbalancedOrder": true,
+        "producerIdentities": [
+          "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+          "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5"
+        ],
+        "baselineUs": 11479.418375,
+        "candidateUs": 11171.233916666666,
+        "rawUsSaved": 308.18445833333396,
+        "ratio": 0.9731639209057251,
+        "rawReduction": 0.02683607909427488,
+        "ratioConfidence": [
+          0.8911179166489124,
+          1.0627474529411067
+        ],
+        "logConfidence": {
+          "N": 3,
+          "Mean": -0.027210513381931454,
+          "StandardError": 0.002787045577935793,
+          "Level": 12,
+          "Margin": 0.08806800496784414,
+          "Lower": -0.1152785183497756,
+          "Upper": 0.06085749158591269
+        },
+        "quietGuardsPassed": true,
+        "exactPackets": true,
+        "independentOutputs": true,
+        "allocatedValues": [
+          809072
+        ],
+        "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+        "nativePerformanceMeasured": false
+      },
+      "diagram": {
+        "caseId": "EncodeOpaque8",
+        "quality": 75,
+        "effort": 4,
+        "depth": 8,
+        "pairs": 3,
+        "operationsPerSubjectPerPair": 8,
+        "allPairsRetained": true,
+        "counterbalancedOrder": true,
+        "producerIdentities": [
+          "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+          "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5"
+        ],
+        "baselineUs": 6620.974083333333,
+        "candidateUs": 6511.71825,
+        "rawUsSaved": 109.25583333333303,
+        "ratio": 0.9835013134888461,
+        "rawReduction": 0.016498686511153937,
+        "ratioConfidence": [
+          0.9448633816195776,
+          1.023715957440603
+        ],
+        "logConfidence": {
+          "N": 3,
+          "Mean": -0.01663791441367596,
+          "StandardError": 0.0012682979899251718,
+          "Level": 12,
+          "Margin": 0.04007701724065956,
+          "Lower": -0.056714931654335526,
+          "Upper": 0.0234391028269836
+        },
+        "quietGuardsPassed": true,
+        "exactPackets": true,
+        "independentOutputs": true,
+        "allocatedValues": [
+          740984
+        ],
+        "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+        "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+        "nativePerformanceMeasured": false
+      },
+      "trellis": {
+        "caseId": "EncodeOpaque8",
+        "quality": 75,
+        "effort": 6,
+        "depth": 8,
+        "pairs": 3,
+        "operationsPerSubjectPerPair": 8,
+        "allPairsRetained": true,
+        "counterbalancedOrder": true,
+        "producerIdentities": [
+          "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+          "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5"
+        ],
+        "baselineUs": 11534.899416666665,
+        "candidateUs": 11316.561416666666,
+        "rawUsSaved": 218.338,
+        "ratio": 0.9810723088102744,
+        "rawReduction": 0.018927691189725593,
+        "ratioConfidence": [
+          0.9689222815341766,
+          0.9933743852428802
+        ],
+        "logConfidence": {
+          "N": 3,
+          "Mean": -0.019109268351036518,
+          "StandardError": 0.0003943664451189623,
+          "Level": 12,
+          "Margin": 0.012461606772003756,
+          "Lower": -0.03157087512304027,
+          "Upper": -0.006647661579032762
+        },
+        "quietGuardsPassed": true,
+        "exactPackets": true,
+        "independentOutputs": true,
+        "allocatedValues": [
+          754344
+        ],
+        "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+        "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+        "nativePerformanceMeasured": false
+      }
+    }
+  },
+  "rejectedStageA": {
+    "pairedComparison": {
+      "caseId": "PhotographLossy8",
+      "quality": 75,
+      "effort": 4,
+      "depth": 8,
+      "pairs": 12,
+      "operationsPerSubjectPerPair": 16,
+      "allPairsRetained": true,
+      "counterbalancedOrder": true,
+      "producerIdentities": [
+        "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+        "947a12db03cad97ebf0fc16895b733e4b3b99c6dd24954ca8b0f2a0c2b42fd80"
+      ],
+      "baselineUs": 11450.18209375,
+      "candidateUs": 11622.749822916667,
+      "rawUsSaved": -172.56772916666606,
+      "ratio": 1.0150751643318539,
+      "rawReduction": -0.015075164331853852,
+      "ratioConfidence": [
+        1.0115848048532639,
+        1.0185708278621535
+      ],
+      "logConfidence": {
+        "N": 12,
+        "Mean": 0.014959355205338505,
+        "StandardError": 0.0007755592594082299,
+        "Level": 12,
+        "Margin": 0.003441140408727219,
+        "Lower": 0.011518214796611286,
+        "Upper": 0.018400495614065725
+      },
+      "quietGuardsPassed": true,
+      "exactPackets": true,
+      "independentOutputs": true,
+      "allocatedValues": [
+        809072
+      ],
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+      "nativePerformanceMeasured": false
+    },
+    "decision": "Reject confirmed regression despite favorable initial short. No unchanged favorable resampling. B materially partitions wide inverse and returns fixed values to isolate cold arithmetic and address-exposed hot results.",
+    "generatedCode": {
+      "project": "Lokad.Image",
+      "instrumentedElapsedDiscarded": true,
+      "productionBuilds": 0,
+      "methods": [
+        {
+          "method": "Lokad.Image.Internal.Vp8BlockReconstruction:AddVector(System.ReadOnlySpan`1[short],System.Span`1[byte],int) (FullOpts)",
+          "bytes": 1365,
+          "wordPermutations": 0,
+          "callsPrepared": false
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8MacroblockDecision:Luma4(System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],Lokad.Image.Internal.Vp8QuantizationMatrix,Lokad.Image.Internal.Vp8QuantizationCosts,Lokad.Image.Internal.Vp8RatePlan,Lokad.Image.Internal.Vp8Distortion+Texture,int,long,System.Span`1[byte],System.Span`1[short],System.Span`1[byte],Lokad.Image.Internal.OperationContext,bool,byref,byref):bool (FullOpts)",
+          "bytes": 8437,
+          "wordPermutations": 0,
+          "callsPrepared": false
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8BlockReconstruction:AddVector(System.ReadOnlySpan`1[short],System.Span`1[byte],int) (FullOpts)",
+          "bytes": 951,
+          "wordPermutations": 0,
+          "callsPrepared": false
+        },
+        {
+          "method": "Lokad.Image.Internal.Vp8MacroblockDecision:Luma4(System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],Lokad.Image.Internal.Vp8QuantizationMatrix,Lokad.Image.Internal.Vp8QuantizationCosts,Lokad.Image.Internal.Vp8RatePlan,Lokad.Image.Internal.Vp8Distortion+Texture,int,long,System.Span`1[byte],System.Span`1[short],System.Span`1[byte],Lokad.Image.Internal.OperationContext,bool,byref,byref):bool (FullOpts)",
+          "bytes": 8923,
+          "wordPermutations": 0,
+          "callsPrepared": false
+        }
+      ],
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks.deps.json",
+        "--runtimeconfig",
+        "tmp/rcp356-paired-runtime/Vcc31Opaque16Confirm.runtimeconfig.json",
+        "tmp/rcp356-paired-runtime/Wlp317Paired.dll",
+        "tmp/rcp356-original-linux/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+        "947a12db03cad97ebf0fc16895b733e4b3b99c6dd24954ca8b0f2a0c2b42fd80",
+        "benchmarks/Fixtures/Compression/photograph.png",
+        "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "17688",
+        "false",
+        "1",
+        "4",
+        "8",
+        "3",
+        "75"
+      ],
+      "identities": {
+        "tmp/rcp356-paired-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+        "tmp/rcp356-paired-runtime/Lokad.Image.pdb": "4ec7110f2b9fb10a46883c8f7f5ab805023747544d40b49cf6766fe0224f102d",
+        "tmp/rcp356-paired-runtime/Dmc31Confirm.dll": "4891d4446201896d2723d528e5865ebb2672e840ad6608f106c30f46c2d9040b",
+        "tmp/rcp356-paired-runtime/E172Sampler.dll": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks-WarmShort-1.dll": "89d299c14c2574f1b8941d1d80e5de8088c93518e12851b76a92b13ee785173b",
+        "tmp/rcp356-paired-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+        "tmp/rcp356-paired-runtime/DR1WebpStreamConfirm.dll": "8cb5b885cb2922e6fa04bdf1d19c561b91bec60838aaf92f93e3a5c00dfdc6ed",
+        "tmp/rcp356-paired-runtime/DR1WebpResidentShort.dll": "c6a2d2b56d0e0b80678c227f9737704b11ba9058555bcdc8c8a8c8d4f8aee593",
+        "tmp/rcp356-paired-runtime/Vcc31Opaque16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks.deps.json": "14676a16346e78fca39fe33f096b7c8db3e85097f3099e9d0a8bce425c4a2803",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks.pdb": "b177d729eb5d32f974f938028b9dac351366fe71303e05df86fde66026c55db8",
+        "tmp/rcp356-paired-runtime/Fmp1PngShort.dll": "2cbaf0816efff60b9eec4c257fd915e9bff51abca6e106d7ebe80edf317eb9f1",
+        "tmp/rcp356-paired-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+        "tmp/rcp356-paired-runtime/Wlp317Paired.dll": "df1ae677ee626defbfb4ef1af8de3bc9b80ba8471af81e98a25c51906b5072d6",
+        "tmp/rcp356-paired-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+        "tmp/rcp356-paired-runtime/VpsEffort2Short.dll": "6e7aa436eaa983f3f8be6a09db9bb4cf9679aa6e3d83f7d81638698b4a93385e",
+        "tmp/rcp356-paired-runtime/PngDecodeConfirmDriver.dll": "2aa4da79d900818f0521df9e434a48759c9abc0902e1c35f4e3600831e225f9a",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+        "tmp/rcp356-paired-runtime/PredictablePngConfirm.dll": "5c23f5476c268764ff3cfd7a5e9f48558afab2e0e121a1de242880e807c1e3aa",
+        "tmp/rcp356-paired-runtime/DR1Jpeg420Short.dll": "a5d78210a450bf8183ac08fc5af80fb1a52cbf32c179f9f0276bf7e71f9f9c67",
+        "tmp/rcp356-paired-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+        "tmp/rcp356-paired-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+        "tmp/rcp356-paired-runtime/Wsp312Paired.dll": "1a2787e8eddd52972b9df0faa779a058298db435e5421939b05ac1a609ac43f8",
+        "tmp/rcp356-paired-runtime/JIV1Jpeg420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+        "tmp/rcp356-paired-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+        "tmp/rcp356-paired-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+        "tmp/rcp356-paired-runtime/BatchedPredictablePngConfirm.dll": "2db276b4bf30872487f6c37787a22d9227cf1cd76c0c204380e818c909d68443",
+        "tmp/rcp356-paired-runtime/Fmp1PngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+        "tmp/rcp356-paired-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+        "tmp/rcp356-paired-runtime/Profile.pdb": "3146d7589cbd824b27c4cbc92135e76307494c0841a7ea1a597cd38ddf63ed5e",
+        "tmp/rcp356-paired-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+        "tmp/rcp356-paired-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+        "tmp/rcp356-paired-runtime/BatchedPredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/DR1Jpeg420Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Dmc31Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Dmc31Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+        "tmp/rcp356-paired-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+        "tmp/rcp356-paired-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+        "tmp/rcp356-paired-runtime/PngStreamShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/DR1WebpResidentConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Vcc31Alpha8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks.dll": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+        "tmp/rcp356-paired-runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+        "tmp/rcp356-paired-runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+        "tmp/rcp356-paired-runtime/JIV1Jpeg420Confirm.dll": "6bbe042780b58539c40fc62f9407425ead99016f2f562565d1efefe3e0ddb3c2",
+        "tmp/rcp356-paired-runtime/PredictablePngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/Lokad.Image.dll": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+        "tmp/rcp356-paired-runtime/PngStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/ReadDriverShort.dll": "df531eb4653937bf4f1ea6af223908db74931e502d9cd9f5720ca65a2955cbe9",
+        "tmp/rcp356-paired-runtime/Profile.dll": "373505f8d07bd4ec9e3f50bf69be4f0fc307bd35a5e1df26e6d55238c84fca3f",
+        "tmp/rcp356-paired-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+        "tmp/rcp356-paired-runtime/Vcc31DiagramLossyDistortion8Confirm.dll": "032f996705fbddb0598b0016bb45f765b2feaa02ec64963f2ce122f16a821c99",
+        "tmp/rcp356-paired-runtime/ReadDriver.dll": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+        "tmp/rcp356-paired-runtime/VpsEffort2Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/ReadDriverShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/PngStreamConfirmHost.dll": "ddae2cd023c6d6487e28f408d6c5b90b239fe3bcbc2998e2c314cff53b3614b6",
+        "tmp/rcp356-paired-runtime/PredictablePngShort.dll": "441c80445443335123284c911bb8362fd53ee4bd27b22ad652c3bf229f6d74c5",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+        "tmp/rcp356-paired-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+        "tmp/rcp356-paired-runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/DR1WebpStreamShort.dll": "8fa8a00a1de342996490d26300116f375f2998b9f1c6a29d798bd0be9a76a76e",
+        "tmp/rcp356-paired-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+        "tmp/rcp356-paired-runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+        "tmp/rcp356-paired-runtime/PredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/DR1WebpStreamConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/PngDecodeConfirmDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/Vcc31DiagramLossy8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/ReadDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/Vcc31Alpha8Confirm.dll": "9a4487c3166e6b29ca42b97909079145a60d6435e27e27326b1f9f0ec9ef29b1",
+        "tmp/rcp356-paired-runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/DR1WebpStreamShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+        "tmp/rcp356-paired-runtime/DR1WebpResidentShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Vcc31DiagramLossyDistortion8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+        "tmp/rcp356-paired-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.dll": "1195d51f9a7d4bf32abf0e21c303bdc4bd809045080e21f248e7735e795d5473",
+        "tmp/rcp356-paired-runtime/Dmc31Short.dll": "759446ba1b94c4cabdb331638ad76d48cd202f82f23aab21298d92212ef6f24a",
+        "tmp/rcp356-paired-runtime/Vcc31DiagramLossy8Confirm.dll": "4891d4446201896d2723d528e5865ebb2672e840ad6608f106c30f46c2d9040b",
+        "tmp/rcp356-paired-runtime/PngStreamShortHost.dll": "0075d31dbce00be8712baf02cfa8b40b1767007078e0048d7e98b4d7649c755b",
+        "tmp/rcp356-paired-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+        "tmp/rcp356-paired-runtime/Vcc31Opaque16Confirm.dll": "404249d2ad1135e5b4fbc21635454b74fa8ae3bca7e149adf0401289550bde00",
+        "tmp/rcp356-paired-runtime/Profile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "tmp/rcp356-paired-runtime/DR1WebpResidentConfirm.dll": "315cebc4bb2ed72d8bb1de3e2181e7ecfc8a1595651a501e402d46e5713bd3b3",
+        "tmp/rcp356-paired-runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+        "tmp/rcp356-paired-runtime/Wit310Paired.dll": "b3c6420df5c248f737faaa7d4ffa91b7cbbdfa16321fe0be308e880ba48e6225",
+        "tmp/rcp356-paired-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+        "tmp/rcp356-paired-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+        "tmp/rcp356-original-linux/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "947a12db03cad97ebf0fc16895b733e4b3b99c6dd24954ca8b0f2a0c2b42fd80",
+        "benchmarks/Fixtures/Compression/photograph.png": "9bd97b1a6b8a08a9d012f06350458e95de46b8fef59dc1dc66e8f16b7a6d5055"
+      }
+    },
+    "focused": {
+      "windows": {
+        "internal-normal": 108,
+        "internal-scalar": 108,
+        "public-normal": 137,
+        "public-scalar": 137
+      },
+      "linux": {
+        "internal-normal": 108,
+        "internal-scalar": 108,
+        "public-normal": 137,
+        "public-scalar": 137
+      }
+    }
+  },
+  "generatedCode": {
+    "project": "Lokad.Image",
+    "instrumentedElapsedDiscarded": true,
+    "productionBuilds": 0,
+    "methods": [
+      {
+        "method": "Lokad.Image.Internal.Vp8BlockReconstruction:AddVector(System.ReadOnlySpan`1[short],System.Span`1[byte],int) (FullOpts)",
+        "bytes": 1365,
+        "wordPermutations": 0,
+        "callsPrepared": false
+      },
+      {
+        "method": "Lokad.Image.Internal.Vp8MacroblockDecision:Luma4(System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],Lokad.Image.Internal.Vp8QuantizationMatrix,Lokad.Image.Internal.Vp8QuantizationCosts,Lokad.Image.Internal.Vp8RatePlan,Lokad.Image.Internal.Vp8Distortion+Texture,int,long,System.Span`1[byte],System.Span`1[short],System.Span`1[byte],Lokad.Image.Internal.OperationContext,bool,byref,byref):bool (FullOpts)",
+        "bytes": 8437,
+        "wordPermutations": 0,
+        "callsPrepared": false
+      },
+      {
+        "method": "Lokad.Image.Internal.Vp8BlockReconstruction:AddVector(System.ReadOnlySpan`1[short],System.Span`1[byte],int) (FullOpts)",
+        "bytes": 646,
+        "wordPermutations": 0,
+        "callsPrepared": false
+      },
+      {
+        "method": "Lokad.Image.Internal.Vp8MacroblockDecision:Luma4(System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],System.ReadOnlySpan`1[byte],Lokad.Image.Internal.Vp8QuantizationMatrix,Lokad.Image.Internal.Vp8QuantizationCosts,Lokad.Image.Internal.Vp8RatePlan,Lokad.Image.Internal.Vp8Distortion+Texture,int,long,System.Span`1[byte],System.Span`1[short],System.Span`1[byte],Lokad.Image.Internal.OperationContext,bool,byref,byref):bool (FullOpts)",
+        "bytes": 8412,
+        "wordPermutations": 0,
+        "callsPrepared": false
+      }
+    ],
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/rcp356b-paired-runtime/Vcc31Opaque16Confirm.runtimeconfig.json",
+      "tmp/rcp356b-paired-runtime/Wlp317Paired.dll",
+      "tmp/rcp356-original-linux/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll",
+      "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "benchmarks/Fixtures/Compression/photograph.png",
+      "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "17688",
+      "false",
+      "1",
+      "4",
+      "8",
+      "3",
+      "75"
+    ],
+    "identities": {
+      "tmp/rcp356b-paired-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.pdb": "4ec7110f2b9fb10a46883c8f7f5ab805023747544d40b49cf6766fe0224f102d",
+      "tmp/rcp356b-paired-runtime/Dmc31Confirm.dll": "4891d4446201896d2723d528e5865ebb2672e840ad6608f106c30f46c2d9040b",
+      "tmp/rcp356b-paired-runtime/E172Sampler.dll": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks-WarmShort-1.dll": "89d299c14c2574f1b8941d1d80e5de8088c93518e12851b76a92b13ee785173b",
+      "tmp/rcp356b-paired-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/rcp356b-paired-runtime/DR1WebpStreamConfirm.dll": "8cb5b885cb2922e6fa04bdf1d19c561b91bec60838aaf92f93e3a5c00dfdc6ed",
+      "tmp/rcp356b-paired-runtime/DR1WebpResidentShort.dll": "c6a2d2b56d0e0b80678c227f9737704b11ba9058555bcdc8c8a8c8d4f8aee593",
+      "tmp/rcp356b-paired-runtime/Vcc31Opaque16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks.deps.json": "14676a16346e78fca39fe33f096b7c8db3e85097f3099e9d0a8bce425c4a2803",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks.pdb": "b177d729eb5d32f974f938028b9dac351366fe71303e05df86fde66026c55db8",
+      "tmp/rcp356b-paired-runtime/Fmp1PngShort.dll": "2cbaf0816efff60b9eec4c257fd915e9bff51abca6e106d7ebe80edf317eb9f1",
+      "tmp/rcp356b-paired-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/rcp356b-paired-runtime/Wlp317Paired.dll": "df1ae677ee626defbfb4ef1af8de3bc9b80ba8471af81e98a25c51906b5072d6",
+      "tmp/rcp356b-paired-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/rcp356b-paired-runtime/VpsEffort2Short.dll": "6e7aa436eaa983f3f8be6a09db9bb4cf9679aa6e3d83f7d81638698b4a93385e",
+      "tmp/rcp356b-paired-runtime/PngDecodeConfirmDriver.dll": "2aa4da79d900818f0521df9e434a48759c9abc0902e1c35f4e3600831e225f9a",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/rcp356b-paired-runtime/PredictablePngConfirm.dll": "5c23f5476c268764ff3cfd7a5e9f48558afab2e0e121a1de242880e807c1e3aa",
+      "tmp/rcp356b-paired-runtime/DR1Jpeg420Short.dll": "a5d78210a450bf8183ac08fc5af80fb1a52cbf32c179f9f0276bf7e71f9f9c67",
+      "tmp/rcp356b-paired-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/rcp356b-paired-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/rcp356b-paired-runtime/Wsp312Paired.dll": "1a2787e8eddd52972b9df0faa779a058298db435e5421939b05ac1a609ac43f8",
+      "tmp/rcp356b-paired-runtime/JIV1Jpeg420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/rcp356b-paired-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/rcp356b-paired-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/rcp356b-paired-runtime/BatchedPredictablePngConfirm.dll": "2db276b4bf30872487f6c37787a22d9227cf1cd76c0c204380e818c909d68443",
+      "tmp/rcp356b-paired-runtime/Fmp1PngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/rcp356b-paired-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/rcp356b-paired-runtime/Profile.pdb": "3146d7589cbd824b27c4cbc92135e76307494c0841a7ea1a597cd38ddf63ed5e",
+      "tmp/rcp356b-paired-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/rcp356b-paired-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/rcp356b-paired-runtime/BatchedPredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/DR1Jpeg420Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Dmc31Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Dmc31Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/rcp356b-paired-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/rcp356b-paired-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/rcp356b-paired-runtime/PngStreamShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/DR1WebpResidentConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Vcc31Alpha8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks.dll": "22d366853e4c232b8621b3b229fdf29c68ed099a638678358619a7c9305e9b5f",
+      "tmp/rcp356b-paired-runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+      "tmp/rcp356b-paired-runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+      "tmp/rcp356b-paired-runtime/JIV1Jpeg420Confirm.dll": "6bbe042780b58539c40fc62f9407425ead99016f2f562565d1efefe3e0ddb3c2",
+      "tmp/rcp356b-paired-runtime/PredictablePngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.dll": "13ba2528ae31f7ea6cf90ab98f8ef0f3b6c1c0f9c91e2265e92bc37bdff5bdea",
+      "tmp/rcp356b-paired-runtime/PngStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/ReadDriverShort.dll": "df531eb4653937bf4f1ea6af223908db74931e502d9cd9f5720ca65a2955cbe9",
+      "tmp/rcp356b-paired-runtime/Profile.dll": "373505f8d07bd4ec9e3f50bf69be4f0fc307bd35a5e1df26e6d55238c84fca3f",
+      "tmp/rcp356b-paired-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/rcp356b-paired-runtime/Vcc31DiagramLossyDistortion8Confirm.dll": "032f996705fbddb0598b0016bb45f765b2feaa02ec64963f2ce122f16a821c99",
+      "tmp/rcp356b-paired-runtime/ReadDriver.dll": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+      "tmp/rcp356b-paired-runtime/VpsEffort2Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/ReadDriverShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/PngStreamConfirmHost.dll": "ddae2cd023c6d6487e28f408d6c5b90b239fe3bcbc2998e2c314cff53b3614b6",
+      "tmp/rcp356b-paired-runtime/PredictablePngShort.dll": "441c80445443335123284c911bb8362fd53ee4bd27b22ad652c3bf229f6d74c5",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+      "tmp/rcp356b-paired-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/rcp356b-paired-runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/DR1WebpStreamShort.dll": "8fa8a00a1de342996490d26300116f375f2998b9f1c6a29d798bd0be9a76a76e",
+      "tmp/rcp356b-paired-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/rcp356b-paired-runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+      "tmp/rcp356b-paired-runtime/PredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/DR1WebpStreamConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/PngDecodeConfirmDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/Vcc31DiagramLossy8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/ReadDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/Vcc31Alpha8Confirm.dll": "9a4487c3166e6b29ca42b97909079145a60d6435e27e27326b1f9f0ec9ef29b1",
+      "tmp/rcp356b-paired-runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/DR1WebpStreamShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+      "tmp/rcp356b-paired-runtime/DR1WebpResidentShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Vcc31DiagramLossyDistortion8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/rcp356b-paired-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.dll": "1195d51f9a7d4bf32abf0e21c303bdc4bd809045080e21f248e7735e795d5473",
+      "tmp/rcp356b-paired-runtime/Dmc31Short.dll": "759446ba1b94c4cabdb331638ad76d48cd202f82f23aab21298d92212ef6f24a",
+      "tmp/rcp356b-paired-runtime/Vcc31DiagramLossy8Confirm.dll": "4891d4446201896d2723d528e5865ebb2672e840ad6608f106c30f46c2d9040b",
+      "tmp/rcp356b-paired-runtime/PngStreamShortHost.dll": "0075d31dbce00be8712baf02cfa8b40b1767007078e0048d7e98b4d7649c755b",
+      "tmp/rcp356b-paired-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/rcp356b-paired-runtime/Vcc31Opaque16Confirm.dll": "404249d2ad1135e5b4fbc21635454b74fa8ae3bca7e149adf0401289550bde00",
+      "tmp/rcp356b-paired-runtime/Profile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/rcp356b-paired-runtime/DR1WebpResidentConfirm.dll": "315cebc4bb2ed72d8bb1de3e2181e7ecfc8a1595651a501e402d46e5713bd3b3",
+      "tmp/rcp356b-paired-runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+      "tmp/rcp356b-paired-runtime/Wit310Paired.dll": "b3c6420df5c248f737faaa7d4ffa91b7cbbdfa16321fe0be308e880ba48e6225",
+      "tmp/rcp356b-paired-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/rcp356b-paired-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3",
+      "tmp/rcp356-original-linux/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+      "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "benchmarks/Fixtures/Compression/photograph.png": "9bd97b1a6b8a08a9d012f06350458e95de46b8fef59dc1dc66e8f16b7a6d5055"
+    }
+  },
+  "cases": {
+    "opaque8": {
+      "managedUs": 15467.573838461538,
+      "nativeUs": 15491.078229166666,
+      "ratio": 0.9984827143496782,
+      "lower": 0.996198426819395,
+      "upper": 1.001127090467338,
+      "allocatedBytes": 1201552,
+      "status": "uncertain",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 10,
+      "completePacketExact": true,
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "nativePacketSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "managedPacketBytes": 72380,
+      "nativePacketBytes": 72380,
+      "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "boundary": "Resident original RGBA8 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "nativeReference": "FFmpeg/libwebp VP8",
+      "rawGc": "// GC:  0 0 0 15620176 13",
+      "receipt": "tmp/rcp356b-current-opaque8-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-opaque8-confirm-observation.json"
+    },
+    "opaque16": {
+      "managedUs": 15881.939621794874,
+      "nativeUs": 15508.8629375,
+      "ratio": 1.024055708390638,
+      "lower": 1.0191448785940698,
+      "upper": 1.0289030403324562,
+      "allocatedBytes": 1201552,
+      "status": "gap",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "nativePacketSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "managedPacketBytes": 72380,
+      "nativePacketBytes": 72380,
+      "inputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "boundary": "Resident original RGBA16 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "nativeReference": "FFmpeg/libwebp VP8",
+      "rawGc": "// GC:  0 0 0 15620176 13",
+      "receipt": "tmp/rcp356b-current-opaque16-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-opaque16-confirm-observation.json"
+    },
+    "photograph": {
+      "managedUs": 11309.774784375,
+      "nativeUs": 9693.257135416667,
+      "ratio": 1.1667672307022574,
+      "lower": 1.1503075930564466,
+      "upper": 1.1795874372616428,
+      "allocatedBytes": 809225,
+      "status": "gap",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 10,
+      "completePacketExact": true,
+      "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "nativePacketSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "managedPacketBytes": 17688,
+      "nativePacketBytes": 17688,
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "nativeReference": "FFmpeg/libwebp VP8",
+      "rawGc": "// GC:  3 3 3 25895200 32",
+      "receipt": "tmp/rcp356b-current-photograph-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-photograph-confirm-observation.json"
+    },
+    "diagram": {
+      "managedUs": 6536.342528125,
+      "nativeUs": 5821.820072916667,
+      "ratio": 1.1227317997222757,
+      "lower": 1.1179108956807937,
+      "upper": 1.1294127412270378,
+      "allocatedBytes": 741137,
+      "status": "gap",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 10,
+      "completePacketExact": true,
+      "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+      "nativePacketSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+      "managedPacketBytes": 7100,
+      "nativePacketBytes": 7100,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "nativeReference": "FFmpeg/libwebp VP8",
+      "rawGc": "// GC:  3 3 3 23716384 32",
+      "receipt": "tmp/rcp356b-current-diagram-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-diagram-confirm-observation.json"
+    },
+    "distortion": {
+      "managedUs": 2987.264397916667,
+      "nativeUs": 2503.721984375,
+      "ratio": 1.1931294355201232,
+      "lower": 1.1854530170239272,
+      "upper": 1.19673441068509,
+      "allocatedBytes": 741386,
+      "status": "gap",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+      "nativePacketSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+      "managedPacketBytes": 7330,
+      "nativePacketBytes": 7330,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort2, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "nativeReference": "FFmpeg/libwebp VP8",
+      "rawGc": "// GC:  13 13 13 59310816 80",
+      "receipt": "tmp/rcp356b-current-distortion-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-distortion-confirm-observation.json"
+    },
+    "trellis": {
+      "managedUs": 11352.171325,
+      "nativeUs": 9784.905729166667,
+      "ratio": 1.1601717624280894,
+      "lower": 1.1515466724407253,
+      "upper": 1.1705517244787527,
+      "allocatedBytes": 754497,
+      "status": "gap",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 10,
+      "completePacketExact": true,
+      "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+      "nativePacketSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+      "managedPacketBytes": 6818,
+      "nativePacketBytes": 6818,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort6, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "nativeReference": "FFmpeg/libwebp VP8",
+      "rawGc": "// GC:  3 3 3 24143904 32",
+      "receipt": "tmp/rcp356b-current-trellis-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-trellis-confirm-observation.json"
+    },
+    "alpha": {
+      "managedUs": 54570.2520625,
+      "nativeUs": 53541.53191666667,
+      "ratio": 1.0192134985497698,
+      "lower": 1.001157014722108,
+      "upper": 1.0376889230918196,
+      "allocatedBytes": 7034392,
+      "status": "gap",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "boundary": "Resident original RGBA8 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Alpha-weighted RGB source-error matching before composite rounding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "nativeReference": "FFmpeg/libwebp VP8 + lossless ALPH",
+      "rawGc": "// GC:  2 2 2 28137568 4",
+      "receipt": "tmp/rcp356b-current-alpha-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-alpha-confirm-observation.json"
+    },
+    "alpha16": {
+      "managedUs": 55084.705875,
+      "nativeUs": 53449.61908333334,
+      "ratio": 1.0305911776306094,
+      "lower": 1.0194955739797895,
+      "upper": 1.0391724091066419,
+      "allocatedBytes": 7033984,
+      "status": "gap",
+      "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "completePacketExact": true,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "boundary": "Resident original RGBA16 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Alpha-weighted RGB source-error matching before composite rounding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded.",
+      "nativeReference": "FFmpeg/libwebp VP8 + lossless ALPH",
+      "rawGc": "// GC:  1 1 1 28135936 4",
+      "receipt": "tmp/rcp356b-current-alpha16-confirm-receipt.json",
+      "observation": "tmp/rcp356b-current-alpha16-confirm-observation.json"
+    }
+  },
+  "statusCounts": {
+    "pass": 0,
+    "gap": 7,
+    "uncertain": 1
+  },
+  "sourceProof": {
+    "source4x4SnapshotPerBlock": true,
+    "skipPredictionCopyUntilRateSurvives": true,
+    "candidateCoefficientsRemainValues": true,
+    "sharedPackedAndWideInverseCore": true,
+    "wideInverseNonInlinedValueReturn": true,
+    "sharedExactSsdTextureCores": true,
+    "winningPixelsOnlyPublished": true,
+    "knownZeroCoefficientsReusePrediction": true,
+    "packedCoefficientBound": 2047,
+    "mandatoryFullSigned16FirstPassWrapPreserved": true,
+    "scalarAlgorithmsUnchanged": true,
+    "rateSsdPruningModeTieUniformTrellisCancellationOrderPreserved": true,
+    "noPublicApiChange": true
+  },
+  "storage": {
+    "newOwnedHeapCapacityBytes": 0,
+    "additionalOwnersPoolsSessions": 0,
+    "existingAdmittedMacroblockScratchBytes": 16384,
+    "operationScratchRetainedAfterReturnBytes": 0,
+    "wholeOperationPhysicalOrAdmittedPeakNewlyMeasured": false,
+    "nativeAllocationMeasured": false,
+    "scope": "Fixed SIMD values replace existing stores/reloads within already admitted macroblock execution. No new heap storage, root reservations, pool or retained state; this is not a new physical-peak measurement."
+  },
+  "allocationEvidence": {
+    "pairedPhotographBytesBoth": [
+      809072
+    ],
+    "currentStandalone": {
+      "opaque8": {
+        "bytesPerOperation": 1201552,
+        "rawGc": "// GC:  0 0 0 15620176 13"
+      },
+      "opaque16": {
+        "bytesPerOperation": 1201552,
+        "rawGc": "// GC:  0 0 0 15620176 13"
+      },
+      "photograph": {
+        "bytesPerOperation": 809225,
+        "rawGc": "// GC:  3 3 3 25895200 32"
+      },
+      "diagram": {
+        "bytesPerOperation": 741137,
+        "rawGc": "// GC:  3 3 3 23716384 32"
+      },
+      "distortion": {
+        "bytesPerOperation": 741386,
+        "rawGc": "// GC:  13 13 13 59310816 80"
+      },
+      "trellis": {
+        "bytesPerOperation": 754497,
+        "rawGc": "// GC:  3 3 3 24143904 32"
+      },
+      "alpha": {
+        "bytesPerOperation": 7034392,
+        "rawGc": "// GC:  2 2 2 28137568 4"
+      },
+      "alpha16": {
+        "bytesPerOperation": 7033984,
+        "rawGc": "// GC:  1 1 1 28135936 4"
+      }
+    },
+    "scope": "Independent complete-photo paired809072B/op unchanged; standalone GC/batch readings reported separately. No CPU gain inferred from allocations."
+  },
+  "qualification": {
+    "fullChecksEachOs": 5718,
+    "countsEachOs": [
+      2479,
+      2291,
+      948
+    ],
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+      "full": [
+        2479,
+        2291,
+        948
+      ],
+      "total": 5718,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 108,
+        "internal-scalar": 108,
+        "public-normal": 137,
+        "public-scalar": 137
+      },
+      "affectedWebpScalarEachOs": 245,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "3f8d1ce3c7aa2323d7679267248452cf0bbfe337bf98a6887d155d86d21c6fe5",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+      "full": [
+        2479,
+        2291,
+        948
+      ],
+      "total": 5718,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 108,
+        "internal-scalar": 108,
+        "public-normal": 137,
+        "public-scalar": 137
+      },
+      "affectedWebpScalarEachOs": 245,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "f3f01a9e9ed09f37baf4473a562c67f6f21a03f42ac065d3c49cfd9620570ccd",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "focusedEachOs": {
+      "internal-normal": 108,
+      "internal-scalar": 108,
+      "public-normal": 137,
+      "public-scalar": 137
+    },
+    "affectedDisabledIntrinsics": {
+      "windows": {
+        "avx2": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "librarySha256": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+          "checks": {
+            "internal": 108,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX2": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "New fixed-value inverse under SSE4.1 with AVX2 disabled, plus affected native/scalar domains, packet/admission callers. Normal/scalar checks and full/live proof already use same immutable module."
+        },
+        "avx512": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "librarySha256": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+          "checks": {
+            "internal": 108,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX512F": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "Fixed-value candidate pipeline with AVX512 disabled, retaining AVX2 and SSE4.1, plus affected native/scalar domains, packet/admission callers. Normal/scalar checks and full/live proof already use same immutable module."
+        }
+      },
+      "linux": {
+        "avx2": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+          "checks": {
+            "internal": 108,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX2": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "New fixed-value inverse under SSE4.1 with AVX2 disabled, plus affected native/scalar domains, packet/admission callers. Normal/scalar checks and full/live proof already use same immutable module."
+        },
+        "avx512": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "librarySha256": "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5",
+          "checks": {
+            "internal": 108,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX512F": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "Fixed-value candidate pipeline with AVX512 disabled, retaining AVX2 and SSE4.1, plus affected native/scalar domains, packet/admission callers. Normal/scalar checks and full/live proof already use same immutable module."
+        }
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "c49131a28e56e2adc27bbc410df91fbc014c12892a8c698e3c957f118c43ecc0",
+      "symbolsSha256": "46f34903da5185978c9cdf44a4a2e6ade6fd81b867f0096a87c97d76b0877a1c",
+      "bytes": 416074,
+      "librarySha256": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+      "actualConsumerPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "c49131a28e56e2adc27bbc410df91fbc014c12892a8c698e3c957f118c43ecc0",
+      "librarySha256": "3ea5c3d7065f7169de7ff40af32fc10353964a7c615f6ef4125f427e145c5f75",
+      "actualConsumerPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "meaningfulCoverage": "Existing independent scalar and native frozen-digest datasets now also exercise actual fixed-value inverse/SSD/texture entries, full signed16 wrap/clamp, sparse/packed/outside-bound/alias/tails. Existing full-packet/default/trellis/alpha/word/public admission/cancel/async/output ownership checks plus SAMEactualReleasepackage/all3examples. No duplicate golden outputs or test-only implementation retained."
+  },
+  "workflow": {
+    "productionCandidateVersionsEachOs": 2,
+    "internalCandidateVersionsEachOs": 2,
+    "publicHarnessNativeSelectorFixtureToolBuilds": 0,
+    "independentPairedConfirmationJobs": 3,
+    "rejectedThenMateriallyRevised": true,
+    "currentDisplayedCostsRefreshed": 8,
+    "otherDisplayedCostsReuseUnchangedPaths": 117,
+    "completedJobRestarts": 0,
+    "packageBuilds": 1,
+    "allActualsShortsAndOriginalsRetained": true,
+    "initialPackagePreconsumerFailures": 1,
+    "packagePreflightRecovery": "Linux rejects stale docs/resource-admission.md before consumer creation. Synchronize that tracked file, retain failed log and verify SAMEpackage without production/package rebuild or performance repeat."
+  },
+  "invalidation": "Luma4 candidate inverse/SSD/texture and genuine shared inverse callers affect all eight displayed VP8 encodes, refreshed once. VP8L, PNG, JPEG, read/edit/text production paths unchanged; reuse their qualification/cost evidence. Affected intrinsic/scalar, full/live and actual package qualify final B only; preserve rejected A separately.",
+  "decision": "Accept independently confirmed complete photo gain with exact packets and unchanged allocations. Diagram/trellis leads remain scoped screens, not independent gains. Standalone complete native comparisons separately determine present statuses; no full125row actual-package refresh or282path parity claim. Preserve rejected A and attribution.",
+  "publication": "postponed",
+  "priorEvidence": {
+    "qualifiedOriginal": "BICUBIC-OUTPUT-WORKSPACE.md",
+    "previousVp8Costs": "VP8-QUANTIZER-OPERAND-PREPARATION.md"
+  },
+  "standaloneReconciliation": {
+    "opaque8": {
+      "previousManagedUs": 15403.27151282051,
+      "currentManagedUs": 15467.573838461538,
+      "previousNativeUs": 15445.786020833333,
+      "currentNativeUs": 15491.078229166666,
+      "previousConservative": [
+        0.9789948278478711,
+        1.0081797893916473
+      ],
+      "currentConservative": [
+        0.996198426819395,
+        1.001127090467338
+      ]
+    },
+    "opaque16": {
+      "previousManagedUs": 15557.202938461538,
+      "currentManagedUs": 15881.939621794874,
+      "previousNativeUs": 15599.4818125,
+      "currentNativeUs": 15508.8629375,
+      "previousConservative": [
+        0.9934366127270711,
+        1.0023240428148392
+      ],
+      "currentConservative": [
+        1.0191448785940698,
+        1.0289030403324562
+      ]
+    },
+    "photograph": {
+      "previousManagedUs": 11415.445565625001,
+      "currentManagedUs": 11309.774784375,
+      "previousNativeUs": 9641.51971875,
+      "currentNativeUs": 9693.257135416667,
+      "previousConservative": [
+        1.174553313652859,
+        1.1891179714167404
+      ],
+      "currentConservative": [
+        1.1503075930564466,
+        1.1795874372616428
+      ]
+    },
+    "diagram": {
+      "previousManagedUs": 6595.816640625,
+      "currentManagedUs": 6536.342528125,
+      "previousNativeUs": 5815.175515625,
+      "currentNativeUs": 5821.820072916667,
+      "previousConservative": [
+        1.1293840229875112,
+        1.1381351476816661
+      ],
+      "currentConservative": [
+        1.1179108956807937,
+        1.1294127412270378
+      ]
+    },
+    "distortion": {
+      "previousManagedUs": 2963.8268489583334,
+      "currentManagedUs": 2987.264397916667,
+      "previousNativeUs": 2514.6559401041663,
+      "currentNativeUs": 2503.721984375,
+      "previousConservative": [
+        1.1737934996206283,
+        1.181887473418924
+      ],
+      "currentConservative": [
+        1.1854530170239272,
+        1.19673441068509
+      ]
+    },
+    "trellis": {
+      "previousManagedUs": 11374.900840909091,
+      "currentManagedUs": 11352.171325,
+      "previousNativeUs": 9810.829322916667,
+      "currentNativeUs": 9784.905729166667,
+      "previousConservative": [
+        1.149572541287087,
+        1.1702528773798104
+      ],
+      "currentConservative": [
+        1.1515466724407253,
+        1.1705517244787527
+      ]
+    },
+    "alpha": {
+      "previousManagedUs": 54501.244666666666,
+      "currentManagedUs": 54570.2520625,
+      "previousNativeUs": 53396.8875,
+      "currentNativeUs": 53541.53191666667,
+      "previousConservative": [
+        1.0110201731067647,
+        1.0291552041271883
+      ],
+      "currentConservative": [
+        1.001157014722108,
+        1.0376889230918196
+      ]
+    },
+    "alpha16": {
+      "previousManagedUs": 55243.18365909091,
+      "currentManagedUs": 55084.705875,
+      "previousNativeUs": 53439.249416666666,
+      "currentNativeUs": 53449.61908333334,
+      "previousConservative": [
+        1.0239895730232316,
+        1.0445183879406588
+      ],
+      "currentConservative": [
+        1.0194955739797895,
+        1.0391724091066419
+      ]
+    }
+  },
+  "targetedOpaque16Reconciliation": {
+    "design": {
+      "project": "Lokad.Image",
+      "question": "Current complete opaque16 observation is2.4percent above reference and324.74us above historical managed cost; does final B introduce a material regression?",
+      "reason": "Independent photograph pair proves gain but does not establish other-content gain. Resolve apparent standalone contradiction directly before acceptance.",
+      "action": "One12alternating-pair x16complete encode comparison against actual ORR original, cached full RGBA16 raster and72380B packet, same prepared worker/roots/owners, unchanged candidate and quiet gates.",
+      "notFavorableRepeat": true,
+      "newBuilds": 0,
+      "newWorkloads": 0
+    },
+    "comparison": {
+      "caseId": "EncodeOpaque16",
+      "quality": 75,
+      "effort": 4,
+      "depth": 16,
+      "pairs": 12,
+      "operationsPerSubjectPerPair": 16,
+      "allPairsRetained": true,
+      "counterbalancedOrder": true,
+      "producerIdentities": [
+        "1a6fa98fa879a11f53a9c304f960333a075b113a14bd3a128ac72dc5b0ad4c23",
+        "9cc9455408f83a453249602f057781ca317bf533f9aa180708bddb35686f04c5"
+      ],
+      "baselineUs": 15677.427385416666,
+      "candidateUs": 15452.237744791666,
+      "rawUsSaved": 225.189640625,
+      "ratio": 0.9856424362716608,
+      "rawReduction": 0.014357563728339184,
+      "ratioConfidence": [
+        0.9820086765297983,
+        0.9892821184858852
+      ],
+      "logConfidence": {
+        "N": 12,
+        "Mean": -0.014465433414335796,
+        "StandardError": 0.0008315796405493379,
+        "Level": 12,
+        "Margin": 0.0036897016823094052,
+        "Lower": -0.0181551350966452,
+        "Upper": -0.010775731732026391
+      },
+      "quietGuardsPassed": true,
+      "exactPackets": true,
+      "independentOutputs": true,
+      "allocatedValues": [
+        1201552
+      ],
+      "inputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "scope": "Fixed bounded adjacent original/candidate pairs, alternating order, complete public RGBA8/RGBA16 WebP encodes per subject, including required per-operation depth normalization, fixed operation count recorded per pair, all pairs retained without filtering. Each isolated immutable assembly owns an identical resident source. Setup/JIT/validation excluded; fresh MemoryStream construction/growth, complete encode, independent output and disposal included. Scoped managed-build comparison resolves native-bracket clock uncertainty, not new FFmpeg costs or parity proof.",
+      "nativePerformanceMeasured": false
+    },
+    "decision": "Direct immutable-build comparison independently confirms225.19us/1.44percent improvement with unchanged1201552B/op and exact72380B packet. The apparent historical/current opaque16 regression is not attributed to this change. Retain the standalone gap and all adverse clock observations; no favorable standalone repeat. Separate clock/context observations are not causal incremental effects."
+  },
+  "raw": {
+    "file": "vp8-fixed-value-candidate-pipeline-qualified.tar.xz",
+    "sha256": "200b93fa32bddea6d3a49c0bf0f5fb233fd2f40343138e833ea44fdd955fe8bb",
+    "bytes": 60684580,
+    "members": 1441,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-output-workspace-qualified.tar.xz",
+        "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+      },
+      {
+        "file": "vp8-current-candidate-pipeline-attribution.tar.xz",
+        "sha256": "1dac8c0cf5a5b41dc188374ec990f7a93a54d07c539f80eda7b8f8405f6cb104"
+      }
+    ]
+  }
+}

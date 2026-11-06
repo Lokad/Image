@@ -135,9 +135,11 @@ internal static class Vp8MacroblockDecision
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
         var fused = !trellis && Avx512F.IsSupported && Avx2.IsSupported;
         var fullQuantizer = fused ? new Vp8BlockQuantization.FullBlockQuantizer(matrix) : default;
+        var packedPixels = Avx2.IsSupported && Sse41.IsSupported;
         for (var b = 0; b < 16; b++)
         {
             var bx = b % 4; var by = b / 4; var x = bx * 4; var y = by * 4; var offset = Block(b);
+            var sourcePixels = packedPixels ? Vp8Distortion.PackFourRows(source[offset..], 16) : default;
             for (var p = 0; p < 8; p++) top[p] = by == 0 || bx == 3 && p >= 4 ? Top(neighbors, x + p) : pixels[(y - 1) * 16 + x + p];
             for (var p = 0; p < 4; p++) left[p] = bx == 0 ? neighbors[1 + y + p] : pixels[(y + p) * 16 + x - 1];
             var corner = bx == 0 ? neighbors[y] : by == 0 ? Top(neighbors, x - 1) : pixels[(y - 1) * 16 + x - 1];
@@ -173,7 +175,10 @@ internal static class Vp8MacroblockDecision
                     continue;
                 }
                 var candidate = batch ? transforms.Slice(mode * 16, 16) : coefficients;
-                if (batch) predictions.Slice(mode * 16, 16).CopyTo(trial);
+                if (batch)
+                {
+                    if (!packedPixels) predictions.Slice(mode * 16, 16).CopyTo(trial);
+                }
                 else
                 {
                     Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
@@ -201,17 +206,31 @@ internal static class Vp8MacroblockDecision
                 // Reconstruction and texture add nonnegative distortion. This
                 // rate/header bound cannot discard a strictly better candidate.
                 if (bestMode >= 0 && (rateCost + header) * costs.Luma4 >= best.Total) continue;
-                if (fused) prepared.PublishRaster(candidate);
-                Vp8BlockReconstruction.Add(candidate, trial, 4);
-                var distortion = Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
+                var reconstructed = Vector128<byte>.Zero;
+                int distortion;
+                if (packedPixels)
+                {
+                    var prediction = Vector128.Create(batch ? predictions.Slice(mode * 16, 16) : trial);
+                    reconstructed = any ? Vp8BlockReconstruction.AddValue(
+                        fused ? prepared.Raster : Vector256.Create(candidate), prediction) : prediction;
+                    distortion = Vp8Distortion.Squared(sourcePixels, reconstructed);
+                }
+                else
+                {
+                    if (fused) prepared.PublishRaster(candidate);
+                    Vp8BlockReconstruction.Add(candidate, trial, 4);
+                    distortion = Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
+                }
                 // Texture is nonnegative. Once rate plus reconstructed SSD
-                // cannot win, its two spectral transforms cannot change that.
+                // cannot win, the candidate spectral transform cannot change that.
                 if (bestMode >= 0 && (rateCost + header) * costs.Luma4 + 256L * distortion >= best.Total) continue;
-                var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, textureSource.Compare4(b, trial, 4));
+                var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, packedPixels
+                    ? textureSource.Compare4(b, reconstructed) : textureSource.Compare4(b, trial, 4));
                 var score = new Metric(distortion, texture, header, rateCost).Price(costs.Luma4);
                 if (uniform) { uniformScore = score; uniformFlat = fused ? flat : Flat(trialLevels, 1, 3); }
                 if (bestMode >= 0 && score.Total >= best.Total) continue;
-                bestMode = mode; best = score; bestNonzero = any; trial.CopyTo(bestPixels);
+                bestMode = mode; best = score; bestNonzero = any;
+                if (packedPixels) reconstructed.CopyTo(bestPixels); else trial.CopyTo(bestPixels);
                 if (fused) prepared.PublishLevels(levels.Slice(b * 16, 16));
                 else trialLevels.CopyTo(levels.Slice(b * 16, 16));
             }

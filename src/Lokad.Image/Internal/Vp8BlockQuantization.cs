@@ -87,6 +87,7 @@ internal static class Vp8BlockQuantization
             this.raster = raster; Levels = levels;
             Mask = ~Vector256.ExtractMostSignificantBits(Vector256.Equals(levels, Vector256<short>.Zero)) & 0xffffu;
         }
+        internal Vector256<short> Raster => raster;
         internal void PublishRaster(Span<short> output) => raster.CopyTo(output);
         internal void PublishLevels(Span<short> output) => Levels.CopyTo(output);
     }

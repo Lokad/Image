@@ -17,11 +17,10 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [quantizer operand preparation](../benchmarks/VP8-QUANTIZER-OPERAND-PREPARATION.md)
-  shares exact one-shot/prepared quantization. Independent effort6diagram saves
-  153µs/1.2%, with unchanged paired allocation; photograph confirmation is
-  inconclusive. Eight current VP8 controls:6 gaps, 2 uncertain, exact packets retained.
-  This is a scoped stage gain, not proof that prepared-search hoisting alone wins.
+- **WebP:** [candidate value pipeline](../benchmarks/VP8-FIXED-VALUE-CANDIDATE-PIPELINE.md)
+  shares exact inverse/SSD/texture cores and removes candidate copies/repacking.
+  Independent complete photograph saves257µs/2.26%, unchanged paired allocation.
+  Eight current VP8 controls:7gaps, 1uncertain; exact packets retained.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
 - **PNG:** [complete-token output](../benchmarks/PNG-COMPLETE-TOKEN-OUTPUT.md)
@@ -56,7 +55,7 @@ Current scope and remaining work:
 The current production build passes **5,718 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Affected AVX512-disabled resize checks pass; unchanged other-path proof is reused.
+opaque-word and wide-column consumers. Affected AVX2/AVX512-disabled codec checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
@@ -93,14 +92,14 @@ settings do not establish matched quality.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search † | 2,963.83 | 2,514.66 | 1.179 / 1.182 | 741,386 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 55,243.18 | 53,439.25 | 1.034 / 1.045 | 7,033,984 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 15,403.27 | 15,445.79 | 0.997 / 1.008 | 1,201,552 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 11,415.45 | 9,641.52 | 1.184 / 1.189 | 809,225 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 6,595.82 | 5,815.18 | 1.134 / 1.138 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 11,374.90 | 9,810.83 | 1.159 / 1.170 | 754,497 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 15,557.20 | 15,599.48 | 0.997 / 1.002 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 54,501.24 | 53,396.89 | 1.021 / 1.029 | 7,034,392 | 98,590 / 98,590 |
+| VP8 diagram, effort2 / distortion-only search † | 2,987.26 | 2,503.72 | 1.193 / 1.197 | 741,386 | 7,330 / 7,330 |
+| VP8 RGBA16 + alpha, including normalization † | 55,084.71 | 53,449.62 | 1.031 / 1.039 | 7,033,984 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 15,467.57 | 15,491.08 | 0.998 / 1.001 | 1,201,552 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 11,309.77 | 9,693.26 | 1.167 / 1.180 | 809,225 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 6,536.34 | 5,821.82 | 1.123 / 1.129 | 741,137 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 11,352.17 | 9,784.91 | 1.160 / 1.171 | 754,497 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 15,881.94 | 15,508.86 | 1.024 / 1.029 | 1,201,552 | 72,380 / 72,380 |
+| VP8 RGBA8 + lossless alpha † | 54,570.25 | 53,541.53 | 1.019 / 1.038 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,550.15 | 9,576.69 | 0.788 / 0.823 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 109,807.33 | 127,005.55 | 0.865 / 0.940 | 7,476,544 | 183,812 / 183,812 |
