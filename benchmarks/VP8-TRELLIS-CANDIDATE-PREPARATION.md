@@ -75,3 +75,34 @@ dependencies. [Price preparation](VP8-BOUNDED-PRICE-VIEW.md),
 [earlier trellis experiments](VP8-TRELLIS-ARCHITECTURE-AUDIT.md) and
 [epoch attribution](VP8-RATE-EPOCH-PRICING-EXPERIMENT.md) retain their own evidence.
 All 283 material paths remain required; full warm parity is open.
+
+## Current instruction attribution
+
+A bounded two-second follow-up uses the current qualified prepared-prefix DLL
+(`05f30275…`), the unchanged accepted trellis source and the cached complete effort6
+pipeline. All original source/settings/quality/ownership gates, the exact 6,818-byte
+packet and idle-v2 checks pass. No builds, new fixtures or statistical timing.
+Instrumented elapsed values are discarded; the current table remains unchanged.
+
+Of 1,953 instruction samples, 1,886 map to managed code: Search663,
+PrepareCandidates72 and Apply53. Search remains the stronger lead. Hot offsets
+include rate-row bounds/addressing, predecessor scoring and terminal pricing;
+these observations are not phase times or predicted gains. Search is 2,103 bytes,
+preparation825 and Apply359. The older VTA398 capture predates accepted candidate
+preparation and does not establish current instruction attribution.
+
+The next bounded hypothesis prepares only the current block's fixed candidate,
+predecessor-row and terminal prices before the serial recurrence. It must retain
+arithmetic association, strict ties, terminals, traceback and exact packets, without
+new heap storage or state escaping the call. Account for additional local capacity,
+handoff and extra preparation. This differs from the rejected frame-epoch weighted
+caches and equal-row/dead-state collapse; no gain or merge authorization is implied.
+Use complete effort6/selected-effort5 callers to judge a prototype.
+
+Raw `vp8-current-trellis-preparation-attribution.tar.xz`: 327,076 bytes / 32 members,
+SHA256 `02bafe8eefd87f0f7541932ca20b6e7bced1495d3c8b9e50f4c2cf8cb2e613eb`, mirrored
+and member-verified with pinned dependencies. A missing remote report caused a
+preflight failure before profiling; its invocation is retained, then accepted
+source hashes are pinned directly. No sample replay. Reuse current Windows/Linux,
+scalar and actual-package qualification. The evidence records this as attribution,
+separate from accepted performance results.

@@ -5392,5 +5392,353 @@
         "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
       }
     ]
+  },
+  "followupAttribution": {
+    "project": "Lokad.Image",
+    "stage": "TQA442",
+    "date": "2026-11-06",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "producers": {
+      "windowsSha256": "84c68084fb76ed0e900456dfcbfffcb370c62eea8f5ef26d8f185bb0ba4638fe",
+      "linuxSha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb"
+    },
+    "sourceUnchanged": {
+      "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "9167788a0e4319b3222634b5d6f3aa4dd0d8f27fc3cb5730c24963d1526f5d02",
+      "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "0bf83517c50858619e37a805cad0b663d31cfd416299ab7d11cc912cc3d57489"
+    },
+    "requiredMaterialPaths": 283,
+    "warmParityComplete": false,
+    "publicationPostponed": true,
+    "totalSamples": 1953,
+    "managedSamples": 1886,
+    "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8TrellisQuantization::Search(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8TrellisQuantization/Execution&,int32,int32,int32)[Optimized]",
+        663
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,int32,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric&,uint32&)[Optimized]",
+        195
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.Vp8TrellisQuantization::PrepareCandidates(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype Lokad.Image.Internal.Vp8TrellisQuantization/Execution&,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int64>,valuetype [System.Runtime]System.Span`1<int64>)[Optimized]",
+        72
+      ],
+      [
+        "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Luma16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype Lokad.Image.Internal.Vp8Distortion/Texture,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,int32&)[Optimized]",
+        71
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        71
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Transform(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector512`1<int32>,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
+        58
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+        56
+      ],
+      [
+        "valuetype Lokad.Image.Internal.Vp8MacroblockDecision/Metric [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Chroma(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext,int32&,uint32&,bool)[Optimized]",
+        55
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        54
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8TrellisQuantization+Execution::Apply(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32)[Optimized]",
+        53
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallCandidates(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        49
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion::Energy(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        42
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockPrediction::Fill(int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        42
+      ],
+      [
+        "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint16> [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::get_Values()[Optimized]",
+        34
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::WalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        30
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8RatePlan::VariableCost(int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>)[Optimized]",
+        30
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8TokenStatistics::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>,bool)[Optimized]",
+        27
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourPredictions(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        23
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::DctFourBlocks(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,valuetype [System.Runtime]System.Span`1<int16>,int32)[Optimized]",
+        22
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Dct(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        19
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PrepareOpaqueTiles(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,bool,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        18
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::CollectPlane(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        16
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8MacroblockDecision::Diffuse(int16&,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix)[Optimized]",
+        15
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::Compare16(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32)[Optimized]",
+        12
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8FramePlan::Prepare(class Lokad.Image.Internal.Vp8PreparedInput,class Lokad.Image.Internal.Vp8SourceSegments,class Lokad.Image.Internal.Vp8QuantizationPlan,bool,int32)[Optimized]",
+        12
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::Compare4(int32,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint8>)[Optimized]",
+        10
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8Distortion+Texture::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int32>,int32)[Optimized]",
+        8
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::WriteWalshDc(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        8
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Transforms::InverseWalsh(valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        8
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.Vp8BlockQuantization::ApplyBlocks(valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,int32)[Optimized]",
+        8
+      ]
+    ],
+    "receipt": "tmp/tqa442-trellis-profile-receipt.json",
+    "summary": "tmp/tqa442-trellis-profile-summary.json",
+    "qualificationReused": {
+      "evidence": "png-prepared-prefix-evidence.json",
+      "fullChecksEachOs": 5751,
+      "focusedInternalEachMode": 704,
+      "focusedPublicEachMode": 246,
+      "sameActualPackageBothOs": true,
+      "packageSha256": "98c5409fb690ca9febc9ded679267ca45ca84202669b0141f8ec0a0be707f08e",
+      "usageExamples": 3,
+      "coreAndPackageUnchanged": true,
+      "gitCommit": "3cfa1115f8a17b0d52085851eefc8df4be03f266",
+      "ci": 42293117428,
+      "ciGreenAllThree": true
+    },
+    "interpretation": "Instruction samples, not phase times or gains. Search663 dominates; PrepareCandidates72 and Apply53. Old VTA398 predates accepted candidate preparation. Current packets/source/ownedoutput gates and quiet-v2 pass, no new builds/fixtures/settings or benchmark cost replacement.",
+    "decision": "Revise the magnitude-sharing-only lead toward a bounded block-local transition/terminal-price preparation experiment. Existing rate rows/contexts and candidate choices are fixed before recurrence; attempt to remove addressing, repeated price scaling and checks from serial DP. Preserve arithmetic association, strict ties/terminals/traceback and exact packets. Distinct from rejected frame-epoch weighted caches and dead/equal-row collapse; no new cross-operation state/heap. Stack/lifetime and complete-caller checks required before any acceptance.",
+    "preflight": "Missing remote public report failed before guard/benchmark/profile. Preserve failed invocation; pin the accepted two source hashes directly in the reproducible script. No sampling replay.",
+    "raw": {
+      "file": "vp8-current-trellis-preparation-attribution.tar.xz",
+      "sha256": "02bafe8eefd87f0f7541932ca20b6e7bced1495d3c8b9e50f4c2cf8cb2e613eb",
+      "bytes": 327076,
+      "members": 32,
+      "mirrored": true,
+      "allMembersVerified": true,
+      "dependencies": [
+        {
+          "file": "png-greedy-view-preparation-qualified.tar.xz",
+          "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+        },
+        {
+          "file": "vp8-current-token-state-attribution.tar.xz",
+          "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+        },
+        {
+          "file": "vp8-prepared-token-state-qualified.tar.xz",
+          "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+        },
+        {
+          "file": "png-lazy-view-preparation-qualified.tar.xz",
+          "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+        },
+        {
+          "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+          "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+        },
+        {
+          "file": "vp8-trellis-execution-qualified.tar.xz",
+          "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+        },
+        {
+          "file": "vp8-photograph-price-attribution.tar.xz",
+          "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+        },
+        {
+          "file": "vp8-candidate-score-publication-qualified.tar.xz",
+          "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+        },
+        {
+          "file": "vp8-rate-view-preparation-qualified.tar.xz",
+          "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+        },
+        {
+          "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+          "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+        },
+        {
+          "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+          "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+        },
+        {
+          "file": "jpeg-buffered-correction-restoration.tar.xz",
+          "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+        },
+        {
+          "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+          "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+        },
+        {
+          "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+          "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+        },
+        {
+          "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+          "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+        },
+        {
+          "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+          "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+        },
+        {
+          "file": "vp8-current-live-model-attribution.tar.xz",
+          "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+        },
+        {
+          "file": "vp8-live-model-preparation-qualified.tar.xz",
+          "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+        },
+        {
+          "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+          "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+        },
+        {
+          "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+          "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4"
+        },
+        {
+          "file": "bicubic-output-workspace-qualified.tar.xz",
+          "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+        },
+        {
+          "file": "bicubic-default-output-workspace-qualified.tar.xz",
+          "sha256": "a4ff4eb24fc61dce4599aae3328bffa0b07a56e991d6b636b6cbc39c53e0317b"
+        },
+        {
+          "file": "parity-p40-qualified-evidence.tar.gz",
+          "sha256": "21114dd252c7f82cfcac745418a34eee442c4c3d3bf33ce6b71765b88250939d"
+        },
+        {
+          "file": "bicubic-shared-enlargement-qualified.tar.xz",
+          "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+        },
+        {
+          "file": "vp8-unshifted-live-reservoir-qualified.tar.xz",
+          "sha256": "5a773cc39f02710dc5dc27e744d60f7a77babdce2365b9b8bcb0f4614189fe03"
+        },
+        {
+          "file": "bilinear-current-boundary-audit.tar.xz",
+          "sha256": "3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018"
+        },
+        {
+          "file": "jpeg-correction-bit-qualified.tar.xz",
+          "sha256": "624f0b847f29b7465f96a7c2dbaecf2ed5f64f85359cecb5c9d1364bd893a1d1"
+        },
+        {
+          "file": "vp8-selected-trellis-boundary.tar.xz",
+          "sha256": "923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79"
+        },
+        {
+          "file": "vp8-trellis-architecture-audit.tar.xz",
+          "sha256": "73f1d0fd787fd732f1aa8146f78ee58be6dd4c856fcd6547fead6e0189869fd4"
+        },
+        {
+          "file": "vp8-ordinary-block-preparation-qualified.tar.xz",
+          "sha256": "0d3dfc7b21f6f3b7fb3b546b367ae3fb270615ad4d3264f4de1b077a807c987f"
+        },
+        {
+          "file": "vp8-current-photograph-attribution.tar.xz",
+          "sha256": "1c35f956ef35e6ab08cc1f80066e23aa26e90bb46d08459a64beed7657125421"
+        },
+        {
+          "file": "vp8-bounded-price-view-qualified.tar.xz",
+          "sha256": "830067c12147668abe8ed024ad63c7bfd17026d1c3b3aea0efa817843f0ec3e3"
+        },
+        {
+          "file": "vp8-alpha-output-handoff-qualified.tar.xz",
+          "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
+        },
+        {
+          "file": "vp8-trellis-candidate-preparation-qualified.tar.xz",
+          "sha256": "0cb9428ef776647daea6a809c66e86d07f4e3e2997c1cd1d5109ccba85641430"
+        },
+        {
+          "file": "vp8-current-validation-state-attribution.tar.xz",
+          "sha256": "89398293287135112cfdc17075d56cec7ca2f62660449faf7eb4ff689dbd4794"
+        },
+        {
+          "file": "vp8-block-state-reservoir-qualified.tar.xz",
+          "sha256": "f4ee950171f4e6ea02d101022aeb49140cac243ab1d8b8eb0d29adfdff5b5186"
+        },
+        {
+          "file": "current-retained-png-decode-cost.tar.xz",
+          "sha256": "4cad0b918916e1d1a0bb661ca2a6e4fb81ea9db5c529e593a2ca7224f1dd836f"
+        },
+        {
+          "file": "png-retained-root-current-attribution.tar.xz",
+          "sha256": "5f30795b21030f904942a4f0b2679283a241ebfb8f4e7dda34fe70dfb1be7ced"
+        },
+        {
+          "file": "png-prepared-prefix-qualified.tar.xz",
+          "sha256": "3a57e9ffd77680fe3dda7a121bbd4fc41ed7ca83756828eccdc129543ed3a699"
+        },
+        {
+          "file": "current-tight-png-decode-costs.tar.xz",
+          "sha256": "e5319918f7ce7bbaaafd940384bf191d76cebb5931199b01381d9e377d869824"
+        },
+        {
+          "file": "png-current-framing-costs.tar.xz",
+          "sha256": "def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe"
+        },
+        {
+          "file": "png-core-word-current-costs.tar.xz",
+          "sha256": "e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555"
+        },
+        {
+          "file": "png-color-current-costs.tar.xz",
+          "sha256": "725e794723ec992403ceb1fc77efc898889fe242dd3f73e20ca38d968efc4e4f"
+        },
+        {
+          "file": "png-filter-current-costs.tar.xz",
+          "sha256": "f1fc8bd0cbeeaa76c216014da77a6eb4c2871271f1cb10eab0c41b4660e337ec"
+        }
+      ]
+    }
   }
 }
