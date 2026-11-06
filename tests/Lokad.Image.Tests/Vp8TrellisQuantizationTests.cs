@@ -29,13 +29,13 @@ public sealed class Vp8TrellisQuantizationTests
                 if (product > 65535) expected = false;
             }
             var original = coefficients.ToArray(); var oldReciprocals = reciprocals.ToArray(); var oldSharpening = sharpening.ToArray();
-            Assert.Equal(expected, Vp8TrellisQuantization.ZeroCandidates(coefficients.AsSpan(offset, 17),
-                reciprocals.AsSpan(offset, 17), sharpening.AsSpan(offset, 17), first));
+            Assert.Equal(expected, new Vp8TrellisQuantization.ZeroTest(reciprocals.AsSpan(offset, 17), sharpening.AsSpan(offset, 17)).AreZero(coefficients.AsSpan(offset, 17), first));
             Assert.Equal(original, coefficients); Assert.Equal(oldReciprocals, reciprocals); Assert.Equal(oldSharpening, sharpening);
         }
-        for (var i = 0; i < 32; i++) _ = Vp8TrellisQuantization.ZeroCandidates(coefficients, reciprocals, sharpening, first);
+        var zero = new Vp8TrellisQuantization.ZeroTest(reciprocals, sharpening);
+        for (var i = 0; i < 32; i++) _ = zero.AreZero(coefficients, first);
         var before = GC.GetAllocatedBytesForCurrentThread();
-        for (var i = 0; i < 64; i++) _ = Vp8TrellisQuantization.ZeroCandidates(coefficients, reciprocals, sharpening, first);
+        for (var i = 0; i < 64; i++) _ = zero.AreZero(coefficients, first);
         Assert.Equal(before, GC.GetAllocatedBytesForCurrentThread());
     }
 
@@ -51,8 +51,7 @@ public sealed class Vp8TrellisQuantizationTests
         cancellation.Cancel();
         void Apply(short[] destination)
         {
-            _ = Vp8TrellisQuantization.Apply(coefficients, destination, input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma),
-                input.Rate, weights, 3, 0, 1, operation);
+            _ = new Vp8TrellisQuantization.Execution(input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma), input.Rate, weights, operation, stackalloc short[64]).Apply(coefficients, destination, 3, 0, 1);
         }
         var error = Assert.Throws<OperationCanceledException>(() => Apply(levels));
         Assert.Equal(cancellation.Token, error.CancellationToken);
@@ -70,13 +69,31 @@ public sealed class Vp8TrellisQuantizationTests
         var weights = new ushort[16]; Vp8TrellisQuantization.Weights(weights);
         input.Rate.Dispose(); var retained = input.Root.Bytes; var reservations = input.Root.GrowthAttempts;
         if (canceled) cancellation.Cancel();
-        void Apply() => Vp8TrellisQuantization.Apply(coefficients, levels,
-            input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma), input.Rate, weights, 3, 0, 1, operation);
+        void Apply() => new Vp8TrellisQuantization.Execution(input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma), input.Rate, weights, operation, stackalloc short[64]).Apply(coefficients, levels, 3, 0, 1);
         if (canceled) Assert.Equal(cancellation.Token, Assert.Throws<OperationCanceledException>(Apply).CancellationToken);
         else Assert.Throws<ObjectDisposedException>(Apply);
         Assert.Equal(original, coefficients); Assert.Equal(oldLevels, levels);
         Assert.Equal(retained, input.Root.Bytes); Assert.Equal(reservations, input.Root.GrowthAttempts);
         Assert.False(input.Root.IsDisposed);
+    }
+
+    [Theory] [InlineData(0)] [InlineData(2047)]
+    public void PreparedExecutionRejectsOwnerDisposalBeforeAnyMutation(int coefficient)
+    {
+        using var input = new Inputs(0);
+        var coefficients = Enumerable.Repeat((short)coefficient, 18).ToArray();
+        var levels = Enumerable.Repeat((short)77, 18).ToArray();
+        var original = coefficients.ToArray(); var oldLevels = levels.ToArray();
+        var weights = new ushort[16]; Vp8TrellisQuantization.Weights(weights);
+        var retained = input.Root.Bytes - input.Rate.CapacityBytes; var reservations = input.Root.GrowthAttempts;
+        void Apply()
+        {
+            var execution = new Vp8TrellisQuantization.Execution(input.Quantization.Matrix(0, Vp8CoefficientPlane.Luma), input.Rate, weights, input.Context, stackalloc short[64]);
+            input.Rate.Dispose(); execution.Apply(coefficients, levels, 3, 0, 1);
+        }
+        Assert.Throws<ObjectDisposedException>(Apply);
+        Assert.Equal(original, coefficients); Assert.Equal(oldLevels, levels);
+        Assert.Equal(retained, input.Root.Bytes); Assert.Equal(reservations, input.Root.GrowthAttempts);
     }
 
     private sealed class Inputs : IDisposable
@@ -126,6 +143,8 @@ public sealed class Vp8TrellisQuantizationTests
         try
         {
             var retained = input.Root.Bytes;
+            Span<short> scratch = stackalloc short[68]; scratch.Fill(-23456);
+            var execution = new Vp8TrellisQuantization.Execution(matrix, input.Rate, weights, context, scratch.Slice(2, 64));
             for (var fragment = 0; fragment < 36; fragment++)
             for (var initial = 0; initial < 3; initial++)
             {
@@ -135,10 +154,11 @@ public sealed class Vp8TrellisQuantizationTests
                     >= 4 when p == (fragment - 4) / 2 => (fragment - 4) % 2 == 0 ? 255 : -255, _ => 0
                 });
                 Vp8ForwardTransform.Dct(residual, coefficients); levels[..16].Fill(77); var dc = coefficients[0];
-                var nonzero = Vp8TrellisQuantization.Apply(coefficients, levels, matrix, input.Rate, weights, type, initial, lambda, context);
+                var nonzero = execution.Apply(coefficients, levels, type, initial, lambda);
                 if (type == 0) { Assert.Equal(dc, coefficients[0]); Assert.Equal(77, levels[0]); }
                 Assert.Equal(nonzero, levels.Slice(type == 0 ? 1 : 0, type == 0 ? 15 : 16).ContainsAnyExcept((short)0));
                 Assert.Equal(nonzero, coefficients.Slice(type == 0 ? 1 : 0, type == 0 ? 15 : 16).ContainsAnyExcept((short)0));
+                Assert.Equal((-23456, -23456, -23456, -23456), ((int)scratch[0], (int)scratch[1], (int)scratch[66], (int)scratch[67]));
                 record[0] = nonzero ? (byte)1 : (byte)0;
                 for (var p = 0; p < 16; p++)
                 {

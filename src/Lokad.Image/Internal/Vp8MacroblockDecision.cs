@@ -17,6 +17,12 @@ internal readonly record struct Vp8MacroblockScore(long Distortion, long Texture
 internal static class Vp8MacroblockDecision
 {
     internal const int ScratchBytes = 16_384;
+    // Value-type modes specialize the two real execution paths at macroblock
+    // entry. The common source retains every score/prune/tie rule; plain mode
+    // carries no trellis execution state or DP workspace in its pixel loops.
+    private readonly struct PlainMode { }
+    private readonly struct TrellisMode { }
+
     private readonly record struct Metric(long D, long S, long H, long R, long Total = 0)
     {
         internal Metric Price(int lambda) => this with { Total = (R + H) * lambda + 256 * (D + S) };
@@ -57,15 +63,18 @@ internal static class Vp8MacroblockDecision
 
     private static long Spectral(int weight, int distortion) => ((long)weight * distortion + 128) >> 8;
 
-    private static Metric Luma16(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> contexts,
+    private static Metric Luma16<TMode>(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> contexts,
         bool hasTop, bool hasLeft, Vp8QuantizationMatrix y1, Vp8QuantizationMatrix y2, Vp8QuantizationCosts costs,
         Vp8RatePlan rate, Vp8Distortion.Texture textureSource, Span<byte> pixels, Span<short> levels,
-        OperationContext context, bool trellis, out int bestMode, out uint nonzero, out int maximumEdge)
+        OperationContext context, out int bestMode, out uint nonzero, out int maximumEdge) where TMode : struct
     {
+        var trellis = typeof(TMode) == typeof(TrellisMode);
         Span<byte> trial = stackalloc byte[256]; Span<short> coefficients = stackalloc short[256];
         Span<short> trialLevels = stackalloc short[272]; Span<short> dc = stackalloc short[16]; Span<short> walsh = stackalloc short[16];
         Span<byte> top = stackalloc byte[4]; Span<byte> left = stackalloc byte[4];
-        Span<ushort> trellisWeights = stackalloc ushort[16]; if (trellis) Vp8TrellisQuantization.Weights(trellisWeights);
+        Span<ushort> trellisWeights = trellis ? stackalloc ushort[16] : default; if (trellis) Vp8TrellisQuantization.Weights(trellisWeights);
+        Span<short> trellisScratch = trellis ? stackalloc short[64] : default;
+        var execution = trellis ? new Vp8TrellisQuantization.Execution(y1, rate, trellisWeights, context, trellisScratch) : default;
         var flat = true; foreach (var value in source[..256]) if (value != source[0]) { flat = false; break; }
         Metric best = default; bestMode = 0; nonzero = 0;
         for (var mode = 0; mode < 4; mode++)
@@ -85,8 +94,8 @@ internal static class Vp8MacroblockDecision
                 if (trellis)
                 {
                     var x = b & 3; var y = b >> 2;
-                    any = Vp8TrellisQuantization.Apply(coefficients.Slice(b * 16, 16), trialLevels.Slice(16 + b * 16, 16),
-                        y1, rate, trellisWeights, 0, top[x] + left[y], costs.Luma16Trellis, context);
+                    any = execution.Apply(coefficients.Slice(b * 16, 16), trialLevels.Slice(16 + b * 16, 16),
+                        0, top[x] + left[y], costs.Luma16Trellis);
                     top[x] = left[y] = any ? (byte)1 : (byte)0; trialLevels[16 + b * 16] = 0;
                 }
                 else
@@ -119,18 +128,21 @@ internal static class Vp8MacroblockDecision
 
     private static byte Top(ReadOnlySpan<byte> neighbors, int x) => x < 16 ? neighbors[35 + x] : neighbors[67 + x - 16];
 
-    private static bool Luma4(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> modeContexts,
+    private static bool Luma4<TMode>(ReadOnlySpan<byte> source, ReadOnlySpan<byte> neighbors, ReadOnlySpan<byte> modeContexts,
         ReadOnlySpan<byte> contexts, Vp8QuantizationMatrix matrix, Vp8QuantizationCosts costs, Vp8RatePlan rate,
         Vp8Distortion.Texture textureSource, int headerLimit, long previousScore, Span<byte> pixels, Span<short> levels,
-        Span<byte> modes, OperationContext context, bool trellis, out Metric result, out uint nonzero)
+        Span<byte> modes, OperationContext context, out Metric result, out uint nonzero) where TMode : struct
     {
+        var trellis = typeof(TMode) == typeof(TrellisMode);
         result = new Metric(0, 0, rate.Entropy[145], 0).Price(costs.Mode); nonzero = 0;
         if (headerLimit == 0) return false;
         Span<byte> top = stackalloc byte[8]; Span<byte> left = stackalloc byte[4];
         Span<byte> trial = stackalloc byte[16]; Span<byte> bestPixels = stackalloc byte[16];
         Span<short> coefficients = stackalloc short[16]; Span<short> trialLevels = stackalloc short[16]; Span<short> residual = stackalloc short[16];
         Span<byte> topNz = stackalloc byte[4]; Span<byte> leftNz = stackalloc byte[4];
-        Span<ushort> trellisWeights = stackalloc ushort[16]; if (trellis) Vp8TrellisQuantization.Weights(trellisWeights);
+        Span<ushort> trellisWeights = trellis ? stackalloc ushort[16] : default; if (trellis) Vp8TrellisQuantization.Weights(trellisWeights);
+        Span<short> trellisScratch = trellis ? stackalloc short[64] : default;
+        var execution = trellis ? new Vp8TrellisQuantization.Execution(matrix, rate, trellisWeights, context, trellisScratch) : default;
         Span<byte> predictions = stackalloc byte[192]; Span<short> transforms = stackalloc short[192];
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
         var fused = !trellis && Avx512F.IsSupported && Avx2.IsSupported;
@@ -196,7 +208,7 @@ internal static class Vp8MacroblockDecision
                 else
                 {
                     any = trellis
-                        ? Vp8TrellisQuantization.Apply(candidate, trialLevels, matrix, rate, trellisWeights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context)
+                        ? execution.Apply(candidate, trialLevels, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis)
                         : Vp8BlockQuantization.Apply(candidate, trialLevels, matrix);
                     flat = mode > 0 && Flat(trialLevels, 1, 3);
                     rateCost = rate.Residual(trialLevels, 3, 0, topNz[bx] + leftNz[by], out _);
@@ -329,6 +341,8 @@ internal static class Vp8MacroblockDecision
         context.Cancellation.ThrowIfCancellationRequested();
         Span<short> coefficients = stackalloc short[256]; Span<short> dc = stackalloc short[16]; Span<short> y2 = stackalloc short[16];
         Span<ushort> weights = stackalloc ushort[16]; Vp8TrellisQuantization.Weights(weights);
+        Span<short> trellisScratch = stackalloc short[64];
+        var execution = new Vp8TrellisQuantization.Execution(luma, rate, weights, context, trellisScratch);
         Span<byte> topNz = stackalloc byte[4]; Span<byte> leftNz = stackalloc byte[4];
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); uint nz = 0;
         if (intra16)
@@ -343,8 +357,8 @@ internal static class Vp8MacroblockDecision
             for (var b = 0; b < 16; b++)
             {
                 var x = b & 3; var y = b >> 2;
-                var any = Vp8TrellisQuantization.Apply(coefficients.Slice(b * 16, 16), levels.Slice(16 + b * 16, 16),
-                    luma, rate, weights, 0, topNz[x] + leftNz[y], costs.Luma16Trellis, context);
+                var any = execution.Apply(coefficients.Slice(b * 16, 16), levels.Slice(16 + b * 16, 16),
+                    0, topNz[x] + leftNz[y], costs.Luma16Trellis);
                 topNz[x] = leftNz[y] = any ? (byte)1 : (byte)0; levels[16 + b * 16] = 0;
                 if (any) nz |= 1u << b;
             }
@@ -364,8 +378,8 @@ internal static class Vp8MacroblockDecision
                 Vp8Prediction.SmallBlock((Vp8SmallIntraMode)modes[b], top, left, corner, trial);
                 for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++) residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - trial[yy * 4 + xx]);
                 Vp8ForwardTransform.Dct(residual, coefficients);
-                var any = Vp8TrellisQuantization.Apply(coefficients[..16], levels.Slice(16 + b * 16, 16),
-                    luma, rate, weights, 3, topNz[bx] + leftNz[by], costs.Luma4Trellis, context);
+                var any = execution.Apply(coefficients[..16], levels.Slice(16 + b * 16, 16),
+                    3, topNz[bx] + leftNz[by], costs.Luma4Trellis);
                 Vp8BlockReconstruction.Add(coefficients[..16], trial, 4);
                 for (var yy = 0; yy < 4; yy++) trial.Slice(yy * 4, 4).CopyTo(pixels.Slice(offset + yy * 16, 4));
                 // Selected-mode I4 refinement reads the original edge contexts
@@ -428,10 +442,18 @@ internal static class Vp8MacroblockDecision
         Span<int> sourceEnergy = stackalloc int[16];
         var textureSource = costs.Texture == 0 ? default : new Vp8Distortion.Texture(sourceCopy, 16, importance, sourceEnergy);
         Span<byte> smallPixels = stackalloc byte[256]; Span<short> smallLevels = stackalloc short[256]; Span<byte> smallModes = stackalloc byte[16];
-        var best = Luma16(sourceCopy, neighborsCopy, coefficientCopy, hasTop, hasLeft, luma, walsh, costs, rate, textureSource,
-            pixels[..256], levels[..272], context, method == 6, out var lumaMode, out var nz, out var maxEdge);
-        var intra16 = !Luma4(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
-            best.Total, smallPixels, smallLevels, smallModes, context, method == 6, out var smallScore, out var smallNz);
+        int lumaMode, maxEdge; uint nz;
+        var best = method == 6
+            ? Luma16<TrellisMode>(sourceCopy, neighborsCopy, coefficientCopy, hasTop, hasLeft, luma, walsh, costs, rate, textureSource,
+                pixels[..256], levels[..272], context, out lumaMode, out nz, out maxEdge)
+            : Luma16<PlainMode>(sourceCopy, neighborsCopy, coefficientCopy, hasTop, hasLeft, luma, walsh, costs, rate, textureSource,
+                pixels[..256], levels[..272], context, out lumaMode, out nz, out maxEdge);
+        Metric smallScore; uint smallNz;
+        var intra16 = !(method == 6
+            ? Luma4<TrellisMode>(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
+                best.Total, smallPixels, smallLevels, smallModes, context, out smallScore, out smallNz)
+            : Luma4<PlainMode>(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
+                best.Total, smallPixels, smallLevels, smallModes, context, out smallScore, out smallNz));
         if (intra16) modes[..16].Clear();
         else
         {

@@ -1580,16 +1580,16 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-fixed-value-candidate-pipeline-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-trellis-execution-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
     vq = vp8_owned['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5718
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5724
     assert vq['windows']['fullLivePassed'] and vq['linux']['fullLivePassed']
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     assert vp8_owned['raw']['mirrored'] and vp8_owned['raw']['allMembersVerified']
-    assert vp8_owned['sourceProof']['sharedPackedAndWideInverseCore']
-    assert vp8_owned['sourceProof']['sharedExactSsdTextureCores']
+    assert vp8_owned['sourceProof']['integerDpRecurrenceTerminationTieOrderAndPublicationExact']
+    assert vp8_owned['sourceProof']['valueTypeModesPreserveBooleanPolicyAndEveryCallArgument']
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
     current_labels = {
@@ -1616,7 +1616,12 @@ def render():
         owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis', 'alpha', 'alpha16'} else webp_owned
         current = owner['cases'][current_case]
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        assert current['librarySha256'] == owner['producers']['linuxSha256']
+        if owner is vp8_owned and current_case in vp8_owned['unchangedCases']:
+            reuse = vp8_owned['unchangedCases'][current_case]
+            assert current['reusedUnchangedPath'] and reuse['sourceApplies']
+            assert current['librarySha256'] == reuse['librarySha256']
+        else:
+            assert current['librarySha256'] == owner['producers']['linuxSha256']
         assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
@@ -1824,10 +1829,13 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [candidate value pipeline](../benchmarks/VP8-FIXED-VALUE-CANDIDATE-PIPELINE.md)
-  shares exact inverse/SSD/texture cores and removes candidate copies/repacking.
-  Independent complete photograph saves257µs/2.26%, unchanged paired allocation.
-  Eight current VP8 controls:7gaps, 1uncertain; exact packets retained.
+- **WebP:** [trellis execution](../benchmarks/VP8-TRELLIS-EXECUTION.md) shares
+  source across prepared/plain policies and reuses DP storage. Independent
+  effort6 diagram saves311µs/2.72%; effort4 photograph costs31µs/0.27% more.
+  Paired allocation and exact packets remain unchanged. Seven costs refresh;
+  distortion-only reuses unchanged code. Eight controls:2pass/stop,5gaps,1uncertain.
+  [Earlier candidate values](../benchmarks/VP8-FIXED-VALUE-CANDIDATE-PIPELINE.md)
+  retain their separately scoped257µs/2.26% photograph gain and adverse history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. The original live/field kernel is retained after a confirmed

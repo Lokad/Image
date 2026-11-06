@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Candidate values](VP8-FIXED-VALUE-CANDIDATE-PIPELINE.md) share exact inverse/SSD/texture cores, remove candidate copies/repacking and save257.06µs/2.26% independently on complete photograph encoding.809072B/op paired unchanged; exact packets/order/owners preserved. First revision regresses and is rejected, revised wide-value layout qualifies. Current eight controls:7 gaps, 1 uncertain. No broader incremental gain or full parity claim. |
+| Resident VP8 encoding | [Trellis execution](VP8-TRELLIS-EXECUTION.md) prepares borrowed state and reuses128B DP scratch with shared-source plain/trellis specialization. Independent effort6diagram gain311.23µs/2.72%; effort4photo loss30.94µs/0.27%, both explicit with unchanged paired allocations/exact packets. Intermediate confirmed8.58%ordinarydiagram loss is rejected; final diagram remains uncertain, not equivalent. Seven affected costs refresh; distortion-only source/evidence reused. Eight controls:2pass/stop,5gap,1uncertain. Photo remains largest current displayed codec gap; no broader incremental gain or full parity claim. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG encoding | [Lazy view preparation](PNG-LAZY-VIEW-PREPARATION.md) independently saves390.08/375.08µs (1.83%/2.16%) on complete Optimal16/Smallest8. Exact packets and384KiB admission remain; Grayscale8 measures+408B/op to551,772, ten other fresh allocations unchanged. All11level6/9 fresh one-shot costs refresh; fourFastest costs reuse unchanged source bodies. Fifteen controls:9pass/stop,2gap,4uncertain. ByteFastest and byteGray remain gaps; wordSmallest and ordinary/live/forward wordFastest are uncertain. Resolve uncertainty before tuning. [Greedy preparation](PNG-GREEDY-VIEW-PREPARATION.md) retains independent269/836µs gains; earlier evidence stays linked history. |
 | JPEG and image reading | [Signed prepared instructions](JPEG-SIGNED-PREPARED-INSTRUCTIONS.md) compile insertion interpretation once within the same2KiB scan plan. Independent ordinary/live progressive444 savings are461.82/491.58µs (11.16%/11.06%), with separated raw/normalized confidence and exact frames. Current six affected controls:1 pass, 3 gap, 2 uncertain; other JPEG paths reuse unchanged evidence. Measured allocation984,238versus984,212B/op is explicit; no new owned capacity. Prior scan preparation/adverse trials remain history. |
@@ -21,18 +21,20 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Owned-output preparation](BICUBIC-OUTPUT-WORKSPACE.md) shares geometry/numeric/publication kernels, retires full-row workspace before bounded strip tail, and saves731.33µs/17.82% on complete TightUp8.112Bpaired allocation unchanged; exact frames/qualified half/repair and4KiB remain. Current full/width-only/height-only uppers1.031/1.059/1.052are gaps,116/114/115B/op. Larger absolute codec gaps take precedence. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
 
-The current [lazy PNG milestone](PNG-LAZY-VIEW-PREPARATION.md) qualifies
-5,722full/live checks perOS (2483internal/2291public/948differential), focused
-normal/scalar and affectedAVX512-disabled cases, and SAMEactualReleasepackage/
-all3examples. Eleven displayed rows refresh;114reuse relevant unchanged paths.
-It is not a125-row actual-package release refresh or282-path pass.
+The current [trellis milestone](VP8-TRELLIS-EXECUTION.md) qualifies
+5,724full/live checks perOS (2485internal/2291public/948differential), affected
+normal/scalar/AVX2-disabled/AVX512-disabled checks, and SAMEactualReleasepackage/
+all3examples. Seven displayed rows refresh;118reuse relevant unchanged paths.
+The311µs trellis gain and31µs photograph loss are independently measured scoped
+effects; current native gaps and adverse clocks remain visible. It is not a125-row
+actual-package release refresh or282-path pass. Publication remains postponed.
 
-The [preceding reader milestone](VP8-PREPARED-TOKEN-STATE.md) retains independent
-440/304µs complete validation/stream gains and allsix current reader gaps. Its
-shared-form live regression is rejected; original field/live execution remains.
-Earlier source attribution, adverse trials and accepted preparation/workspace/
-kernel stages stay linked from their family reports and the
-[preceding coverage record](https://github.com/lokad/image/blob/92654124f5f9f30d2efe73de4032da21d695084e/benchmarks/WARM-COVERAGE.md).
+[PNG preparation](PNG-LAZY-VIEW-PREPARATION.md) retains9passes/2gaps/4uncertain
+controls and its independent gains. The [reader milestone](VP8-PREPARED-TOKEN-STATE.md)
+retains440/304µs validation/stream gains and allsix reader gaps. Those production
+paths are unchanged. Earlier accepted/adverse stages and source attribution stay
+linked from family reports and the
+[preceding coverage record](https://github.com/lokad/image/blob/97b1ad81/benchmarks/WARM-COVERAGE.md).
 Retain cited raw evidence; history is neither current timing proof nor a permanent
 family exclusion. Stop passing cases, resolve uncertainty before tuning and choose
 material independent work from current attribution. The finite inventory below

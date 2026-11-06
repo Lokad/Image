@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -28,62 +29,88 @@ internal static class Vp8TrellisQuantization
     }
 
     private static int Index(int type, int position, int context) => (type * 8 + Vp8Tables.CoefficientBand(position)) * 3 + context;
-    // Product in [0,65535] proves both existing level candidates zero:
-    // product>>17 == (product+65536)>>17 == 0. No terminal can then be nonzero.
-    // The caller has already checked DCT bounds, layout and cancellation.
-    internal static bool ZeroCandidates(ReadOnlySpan<short> coefficients, ReadOnlySpan<int> reciprocals,
-        ReadOnlySpan<int> sharpening, int first)
+    // Prepared once for a borrowed matrix, then reused by the exact zero route.
+    // Product in [0,65535] proves both existing candidate levels zero.
+    internal readonly struct ZeroTest
     {
-        var absolute = Avx2.Abs(Vector256.Create(coefficients)).AsInt16();
-        var low = (Avx2.ConvertToVector256Int32(absolute.GetLower()) + Vector256.Create(sharpening))
-            * Vector256.Create(reciprocals);
-        var high = (Avx2.ConvertToVector256Int32(absolute.GetUpper()) + Vector256.Create(sharpening[8..]))
-            * Vector256.Create(reciprocals[8..]);
-        var outside = low.AsUInt32() >>> 16;
-        if (first != 0) outside = outside.WithElement(0, 0u);
-        return Vector256.EqualsAll(outside | (high.AsUInt32() >>> 16), Vector256<uint>.Zero);
-    }
-
-    // Raster coefficients become dequantized raster coefficients; levels use
-    // zigzag order. I16 AC preserves both DC slots. The transform domain here
-    // is DCT only (not the larger Y2 Walsh domain). Tails remain untouched.
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    internal static bool Apply(Span<short> coefficients, Span<short> levels,
-        Vp8QuantizationMatrix matrix, Vp8RatePlan rate, ReadOnlySpan<ushort> weights,
-        int type, int initialContext, int lambda, OperationContext operation)
-    {
-        // Private callers supply disjoint 16-sample DCT blocks, a live plan,
-        // generated importance weights and bounded luma policy/context. Their
-        // byte residuals establish the DCT domain before this per-block search.
-        operation.Cancellation.ThrowIfCancellationRequested();
-        // A disposed borrowed plan must fail even when no DP search is needed.
-        _ = rate.Values;
-        var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
-        var first = type == 0 ? 1 : 0;
-        if (Avx2.IsSupported && ZeroCandidates(coefficients, reciprocals, sharpening, first))
+        private readonly Vector256<int> reciprocalsLow, reciprocalsHigh, sharpeningLow, sharpeningHigh;
+        internal ZeroTest(ReadOnlySpan<int> reciprocals, ReadOnlySpan<int> sharpening)
         {
-            coefficients.Slice(first, 16 - first).Clear(); levels.Slice(first, 16 - first).Clear();
-            return false;
+            reciprocalsLow = Vector256.Create(reciprocals); reciprocalsHigh = Vector256.Create(reciprocals[8..]);
+            sharpeningLow = Vector256.Create(sharpening); sharpeningHigh = Vector256.Create(sharpening[8..]);
         }
-        return Search(coefficients, levels, matrix, rate, weights, type, initialContext, lambda);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal bool AreZero(ReadOnlySpan<short> coefficients, int first)
+        {
+            var absolute = Avx2.Abs(Vector256.Create(coefficients)).AsInt16();
+            var low = (Avx2.ConvertToVector256Int32(absolute.GetLower()) + sharpeningLow) * reciprocalsLow;
+            var high = (Avx2.ConvertToVector256Int32(absolute.GetUpper()) + sharpeningHigh) * reciprocalsHigh;
+            var outside = low.AsUInt32() >>> 16;
+            if (first != 0) outside = outside.WithElement(0, 0u);
+            return Vector256.EqualsAll(outside | (high.AsUInt32() >>> 16), Vector256<uint>.Zero);
+        }
     }
 
-    // Keep DP stack initialization and rate views out of the common zero route.
+    // Synchronous borrowed execution state, confined to one matrix/rate epoch.
+    // The owning frame keeps all storage charged through its actual users.
+    // No state escapes a search sequence or survives a rate refresh/disposal.
+    internal readonly ref struct Execution
+    {
+        private readonly Vp8RatePlan rate;
+        private readonly CancellationToken cancellation;
+        private readonly ZeroTest zero;
+        internal readonly Span<short> Scratch;
+        internal readonly ReadOnlySpan<int> Steps, Reciprocals, Sharpening;
+        internal readonly ReadOnlySpan<ushort> FixedLevels, CombinedLevels, EndOfBlock, Weights;
+        internal readonly int Threshold;
+
+        internal Execution(Vp8QuantizationMatrix matrix, Vp8RatePlan rate, ReadOnlySpan<ushort> weights, OperationContext operation, Span<short> scratch)
+        {
+            cancellation = operation.Cancellation; cancellation.ThrowIfCancellationRequested();
+            this.rate = rate; Scratch = scratch[..64];
+            FixedLevels = rate.FixedLevels; CombinedLevels = rate.CombinedLevels; EndOfBlock = rate.EndOfBlock;
+            Steps = matrix.Steps; Reciprocals = matrix.Reciprocals; Sharpening = matrix.Sharpening; Weights = weights;
+            Threshold = Steps[1] * Steps[1] / 4;
+            zero = Avx2.IsSupported ? new ZeroTest(Reciprocals, Sharpening) : default;
+        }
+
+        // Raster coefficients become dequantized raster; levels are zigzag.
+        // I16 AC preserves both DC slots; borrowed tails remain untouched.
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        internal bool Apply(Span<short> coefficients, Span<short> levels, int type, int initialContext, int lambda)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            // Borrowed views never bypass a disposed owner's admission lifetime.
+            _ = rate.Values;
+            var first = type == 0 ? 1 : 0;
+            if (Avx2.IsSupported && zero.AreZero(coefficients, first))
+            {
+                coefficients.Slice(first, 16 - first).Clear(); levels.Slice(first, 16 - first).Clear();
+                return false;
+            }
+            return Search(coefficients, levels, in this, type, initialContext, lambda);
+        }
+    }
+
+    // DP working prefixes are reused only after the preceding synchronous search.
+    // Every reachable predecessor/node is written before it is read; stale tail
+    // slots are never part of a selected path. Zero blocks do not touch scratch.
     // All spans remain borrowed inside the same synchronous operation/owner.
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static bool Search(Span<short> coefficients, Span<short> levels,
-        Vp8QuantizationMatrix matrix, Vp8RatePlan rate, ReadOnlySpan<ushort> weights,
-        int type, int initialContext, int lambda)
+        in Execution execution, int type, int initialContext, int lambda)
     {
-        var fixedLevels = rate.FixedLevels; var combinedLevels = rate.CombinedLevels; var endOfBlock = rate.EndOfBlock;
-        var steps = matrix.Steps; var reciprocals = matrix.Reciprocals; var sharpening = matrix.Sharpening;
+        var fixedLevels = execution.FixedLevels; var combinedLevels = execution.CombinedLevels; var endOfBlock = execution.EndOfBlock;
+        var steps = execution.Steps; var reciprocals = execution.Reciprocals; var sharpening = execution.Sharpening; var weights = execution.Weights;
         var first = type == 0 ? 1 : 0;
         // RFC6386 section13 diagonal coefficient order; read-only format data.
         ReadOnlySpan<byte> scan = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
-        Span<short> original = stackalloc short[16]; coefficients[..16].CopyTo(original);
-        Span<short> nodes = stackalloc short[32]; Span<byte> predecessors = stackalloc byte[32];
+        var original = execution.Scratch[..16]; coefficients[..16].CopyTo(original);
+        var nodes = execution.Scratch.Slice(16, 32);
+        var predecessors = MemoryMarshal.AsBytes(execution.Scratch.Slice(48, 16));
         var last = first - 1;
-        var threshold = steps[1] * steps[1] / 4;
+        var threshold = execution.Threshold;
         for (var n = 15; n >= first; n--) if (original[scan[n]] * original[scan[n]] > threshold) { last = n; break; }
         if (last < 15) last++;
         var start = Index(type, first, initialContext);
