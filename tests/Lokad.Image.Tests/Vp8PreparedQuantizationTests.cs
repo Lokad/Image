@@ -7,6 +7,46 @@ namespace Lokad.Image.Tests;
 public sealed class Vp8PreparedQuantizationTests
 {
     [Theory]
+    [InlineData(8)]
+    [InlineData(16)]
+    public void PlaneSequencePreservesIndependentBlocksNonzeroBitsAndGuardedTails(int count)
+    {
+        // The single-block kernel has independent scalar/native golden coverage.
+        // Check the new sequence boundary, block order and publication against it.
+        var values = new int[80]; var coefficients = new short[count * 16 + 4];
+        var levels = new short[coefficients.Length];
+        Array.Fill(coefficients, (short)29999); Array.Fill(levels, (short)-29999);
+        for (var p = 0; p < 16; p++)
+        {
+            var step = 4 + (p % 4) * 4; var reciprocal = 131072 / step; var bias = 110 << 9;
+            values[p] = step; values[16 + p] = reciprocal; values[32 + p] = bias;
+            values[48 + p] = (131071 - bias) / reciprocal; values[64 + p] = p % 3;
+        }
+        for (var b = 0; b < count; b++) for (var p = 0; p < 16; p++)
+            coefficients[2 + b * 16 + p] = b % 3 == 0 ? (short)0
+                : (short)((b & 1) == 0 ? 16320 - p * 73 : -16320 + p * 131);
+        var original = coefficients.ToArray(); var expected = coefficients.ToArray(); var expectedLevels = levels.ToArray();
+        var matrix = new Vp8QuantizationMatrix(values); uint nonzero = 0;
+        for (var b = 0; b < count; b++)
+            if (Vp8BlockQuantization.Apply(expected.AsSpan(2 + b * 16, 16), expectedLevels.AsSpan(2 + b * 16, 16), matrix))
+                nonzero |= 1u << b;
+        Assert.Equal(nonzero, Vp8BlockQuantization.ApplyBlocks(coefficients.AsSpan(2), levels.AsSpan(2), matrix, count));
+        Assert.Equal(expected, coefficients); Assert.Equal(expectedLevels, levels);
+        for (var repeat = 0; repeat < 100; repeat++)
+        {
+            original.CopyTo(coefficients, 0);
+            Vp8BlockQuantization.ApplyBlocks(coefficients.AsSpan(2), levels.AsSpan(2), matrix, count);
+        }
+        var before = GC.GetAllocatedBytesForCurrentThread();
+        for (var repeat = 0; repeat < 1000; repeat++)
+        {
+            original.CopyTo(coefficients, 0);
+            Vp8BlockQuantization.ApplyBlocks(coefficients.AsSpan(2), levels.AsSpan(2), matrix, count);
+        }
+        Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before);
+    }
+
+    [Theory]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(2)]

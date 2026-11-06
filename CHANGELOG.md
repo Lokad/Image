@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Share VP8 quantizer preparation across ordinary luma/chroma block sequences,
+  preserving exact packets, portable fallbacks and memory ownership.
+
 - Apply live progressive JPEG correction bits through exact integer selection,
   preserving pixels, cancellation prefixes and overflow behavior.
 

@@ -94,23 +94,22 @@ internal static class Vp8MacroblockDecision
             for (var b = 0; b < 16; b++) dc[b] = coefficients[b * 16];
             Vp8ForwardTransform.WalshDc(dc, walsh);
             var nz = Vp8BlockQuantization.Apply(walsh, trialLevels[..16], y2) ? 1u << 24 : 0;
-            if (trellis) { contexts[..4].CopyTo(top); contexts.Slice(9, 4).CopyTo(left); }
-            for (var b = 0; b < 16; b++)
+            if (trellis)
             {
-                bool any;
-                if (trellis)
+                contexts[..4].CopyTo(top); contexts.Slice(9, 4).CopyTo(left);
+                for (var b = 0; b < 16; b++)
                 {
                     var x = b & 3; var y = b >> 2;
-                    any = execution.Apply(coefficients.Slice(b * 16, 16), trialLevels.Slice(16 + b * 16, 16),
+                    var any = execution.Apply(coefficients.Slice(b * 16, 16), trialLevels.Slice(16 + b * 16, 16),
                         0, top[x] + left[y], costs.Luma16Trellis);
                     top[x] = left[y] = any ? (byte)1 : (byte)0; trialLevels[16 + b * 16] = 0;
+                    if (any) nz |= 1u << b;
                 }
-                else
-                {
-                    coefficients[b * 16] = 0;
-                    any = Vp8BlockQuantization.Apply(coefficients.Slice(b * 16, 16), trialLevels.Slice(16 + b * 16, 16), y1);
-                }
-                if (any) nz |= 1u << b;
+            }
+            else
+            {
+                for (var b = 0; b < 16; b++) coefficients[b * 16] = 0;
+                nz |= Vp8BlockQuantization.ApplyBlocks(coefficients, trialLevels[16..], y1, 16);
             }
             Vp8BlockReconstruction.WriteWalshDc(walsh, coefficients);
             for (var b = 0; b < 16; b++) Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), trial[Block(b)..], 16);
@@ -325,12 +324,9 @@ internal static class Vp8MacroblockDecision
             Vp8ForwardTransform.DctFourBlocks(source[64..], trial[64..], 16, 16, coefficients[32..], 64);
             if (correctDc) CorrectDc(coefficients, diffusion, trialErrors, matrix);
             else trialErrors.Clear();
-            uint nz = 0;
+            var nz = Vp8BlockQuantization.ApplyBlocks(coefficients, trialLevels, matrix, 8) << 16;
             for (var b = 0; b < 8; b++)
-            {
-                if (Vp8BlockQuantization.Apply(coefficients.Slice(b * 16, 16), trialLevels.Slice(b * 16, 16), matrix)) nz |= 1u << (16 + b);
                 Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), trial[UvBlock(b)..], 16);
-            }
             contexts.Slice(4, 4).CopyTo(topNz); contexts.Slice(13, 4).CopyTo(leftNz); long bits = 0;
             for (var plane = 0; plane < 2; plane++) for (var y = 0; y < 2; y++) for (var x = 0; x < 2; x++)
             {
@@ -425,11 +421,9 @@ internal static class Vp8MacroblockDecision
         Vp8ForwardTransform.DctFourBlocks(source[320..], uvPixels[64..], 16, 16, coefficients[32..], 64);
         if (correctDc) CorrectDc(coefficients[..128], errors.Slice(6, 8), errors[..6], chroma);
         else errors[..6].Clear();
+        nz |= Vp8BlockQuantization.ApplyBlocks(coefficients, levels[272..], chroma, 8) << 16;
         for (var b = 0; b < 8; b++)
-        {
-            if (Vp8BlockQuantization.Apply(coefficients.Slice(b * 16, 16), levels.Slice(272 + b * 16, 16), chroma)) nz |= 1u << (16 + b);
             Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), uvPixels[UvBlock(b)..], 16);
-        }
         return nz;
     }
 

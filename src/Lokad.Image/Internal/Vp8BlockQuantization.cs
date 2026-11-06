@@ -74,6 +74,34 @@ internal static class Vp8BlockQuantization
         return prepared.Mask != 0;
     }
 
+    // Independent contiguous blocks share one matrix and no prediction feedback.
+    // The caller keeps per-mode cancellation/decisions outside this sequence.
+    // Prepare fixed operands and dispatch once; preserve the single-block math
+    // and each block's independent raster/diagonal publication.
+    internal static uint ApplyBlocks(Span<short> coefficients, Span<short> levels,
+        Vp8QuantizationMatrix matrix, int count)
+    {
+        uint nonzero = 0;
+        if (Avx512F.IsSupported)
+        {
+            var quantizer = new FullBlockQuantizer(matrix);
+            for (var block = 0; block < count; block++)
+            {
+                var prepared = quantizer.Prepare(coefficients.Slice(block * 16, 16));
+                prepared.PublishRaster(coefficients.Slice(block * 16, 16));
+                prepared.PublishLevels(levels.Slice(block * 16, 16));
+                if (prepared.Mask != 0) nonzero |= 1u << block;
+            }
+        }
+        else
+        {
+            for (var block = 0; block < count; block++)
+                if (Apply(coefficients.Slice(block * 16, 16), levels.Slice(block * 16, 16), matrix))
+                    nonzero |= 1u << block;
+        }
+        return nonzero;
+    }
+
     // A value snapshot: no source/matrix span escapes preparation. Luma4 may
     // price/reject it before publishing reconstruction or selected levels.
     internal readonly struct PreparedBlock

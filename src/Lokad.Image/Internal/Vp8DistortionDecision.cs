@@ -39,11 +39,8 @@ internal static class Vp8DistortionDecision
         for (var b = 0; b < 16; b++) dc[b] = coefficients[b * 16];
         Vp8ForwardTransform.WalshDc(dc, walsh);
         var nz = Vp8BlockQuantization.Apply(walsh, levels[..16], walshMatrix) ? 1u << 24 : 0;
-        for (var b = 0; b < 16; b++)
-        {
-            coefficients[b * 16] = 0;
-            if (Vp8BlockQuantization.Apply(coefficients.Slice(b * 16, 16), levels.Slice(16 + b * 16, 16), luma)) nz |= 1u << b;
-        }
+        for (var b = 0; b < 16; b++) coefficients[b * 16] = 0;
+        nz |= Vp8BlockQuantization.ApplyBlocks(coefficients, levels[16..], luma, 16);
         Vp8BlockReconstruction.WriteWalshDc(walsh, coefficients);
         for (var b = 0; b < 16; b++) Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), pixels[Block(b)..], 16);
         return nz;
@@ -101,12 +98,10 @@ internal static class Vp8DistortionDecision
         if (correctDc) Vp8MacroblockDecision.CorrectDc(coefficients, diffusion, errors, matrix);
         // Unlike the RDO UV selector, distortion-only reconstruction does not
         // publish diffusion to neighboring macroblocks. Preserve incoming edges.
-        diffusion[..8].CopyTo(errors[6..]); uint nz = 0;
+        diffusion[..8].CopyTo(errors[6..]);
+        var nz = Vp8BlockQuantization.ApplyBlocks(coefficients, levels, matrix, 8) << 16;
         for (var b = 0; b < 8; b++)
-        {
-            if (Vp8BlockQuantization.Apply(coefficients.Slice(b * 16, 16), levels.Slice(b * 16, 16), matrix)) nz |= 1u << (16 + b);
             Vp8BlockReconstruction.Add(coefficients.Slice(b * 16, 16), pixels[UvBlock(b)..], 16);
-        }
         return nz;
     }
 

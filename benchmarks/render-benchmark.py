@@ -1609,11 +1609,13 @@ def render():
                for v in vp8_owned['independentPhotograph']['views'].values())
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
-    trellis_refresh = json.loads((ROOT / 'benchmarks/vp8-trellis-boundary-refresh-evidence.json').read_text(encoding='utf-8'))
-    assert not trellis_refresh['productionChanged'] and trellis_refresh['allBuilds'] == 0
-    assert trellis_refresh['sourceProof']['restoredQualifiedSourcesAndModulesExact']
-    assert trellis_refresh['raw']['mirrored'] and trellis_refresh['raw']['allMembersVerified']
-    assert trellis_refresh['current']['status'] == 'uncertain'
+    block_preparation = json.loads((ROOT / 'benchmarks/vp8-ordinary-block-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert block_preparation['productionAccepted'] and block_preparation['requiredMaterialPaths'] == 283
+    assert block_preparation['sourceProof']['allOriginalSingleBlockQuantizationTextExact']
+    assert block_preparation['sourceProof']['cancellationCheckCountsAndModePositionsUnchanged']
+    assert block_preparation['raw']['mirrored'] and block_preparation['raw']['allMembersVerified']
+    assert block_preparation['statusCounts'] == {'pass': 3, 'gap': 3, 'uncertain': 3}
+    assert block_preparation['cases']['diagram']['upper'] <= 1
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1636,9 +1638,9 @@ def render():
     for case, label in current_labels.items():
         current_case = case.removesuffix('-vp8')
         owner = vp8_owned if case in {'opaque8', 'opaque16', 'photograph-vp8', 'diagram-vp8', 'distortion', 'trellis', 'alpha', 'alpha16'} else webp_owned
+        if owner is vp8_owned:
+            owner = block_preparation
         current = owner['cases'][current_case]
-        if case == 'trellis':
-            owner, current = trellis_refresh, trellis_refresh['current']
         assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
         if owner is vp8_owned and current_case in vp8_owned['unchangedCases']:
             reuse = vp8_owned['unchangedCases'][current_case]
@@ -1654,15 +1656,8 @@ def render():
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
     decoder_owned = json.loads((ROOT / 'benchmarks/vp8-unshifted-live-reservoir-evidence.json').read_text(encoding='utf-8'))
-    selected_trellis = json.loads((ROOT / 'benchmarks/vp8-selected-trellis-boundary-evidence.json').read_text(encoding='utf-8'))
-    selected_cost = selected_trellis['current']
-    assert not selected_trellis['productionChanged'] and selected_trellis['newRequiredCases'] == 1
-    assert selected_trellis['requiredMaterialPaths'] == 283 and selected_trellis['newImages'] == 0
-    assert selected_trellis['raw']['mirrored'] and selected_trellis['raw']['allMembersVerified']
-    assert selected_trellis['validation']['effort'] == 5 and selected_trellis['validation']['completePacketExact']
-    assert selected_trellis['validation']['managedOutputBytes'] == selected_trellis['validation']['nativeOutputBytes'] == 7026
-    assert selected_cost['lower'] > 1 and selected_cost['status'] == 'gap'
-    assert selected_trellis['allOriginalGatesPassed'] and selected_trellis['quietGuardsPassed']
+    selected_cost = block_preparation['cases']['selected']
+    assert selected_cost['status'] == 'uncertain' and selected_cost['managedPacketBytes'] == 7026
     dq = decoder_owned['qualification']
     assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['selectionGuardUnchanged']
     assert decoder_owned['sourceProof']['originalCoefficientModelSelectionTokenCategoryAndReadOrderExact']
@@ -1728,6 +1723,11 @@ def render():
                                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     # One current PNG owner; superseded experiments stay linked history.
+    # The latest coherent production stage owns current global qualification.
+    vq = block_preparation['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5744
+    assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
+    assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
     assert png['productionAccepted'] and png['qualification']['fullChecksEachOs'] > 0
     assert png['qualification']['actualPackage']['sha256'] == png['qualification']['samePackageLinux']['sameActualPackageSha256']
@@ -1886,19 +1886,21 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [complete prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
-  shares immutable borders/DC/interpolation across ten ordered candidates.
-  Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
-  exact packets and809,225B/op unchanged. Seven affected costs refresh;
-  distortion-only reuses unchanged code. A read-only [effort6 refresh](../benchmarks/VP8-TRELLIS-ARCHITECTURE-AUDIT.md)
-  is uncertain: 10,830µs,754,497B/op,ratio1.090/upper1.130. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
-  covers selected-mode trellis reconstruction: {selected_cost['managedUs']:,.0f}µs,
-  {selected_cost['allocatedBytes']:,}B/op, ratio{selected_cost['ratio']:.3f}/upper{selected_cost['upper']:.3f}, a gap.
-  Nine current controls total2passes/4gaps/3uncertain; no extra image/settings grid.
-  Transparent word's adverse994µs point stays inconclusive against a contemporary
-  original control; no favorable repeat. Standalone opaque8/diagram allocations
-  differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  retains prior independent gains and adverse/uncertain history.
+- **WebP:** [shared block preparation](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md)
+  reuses fixed quantizer operands across independent luma/chroma sequences.
+  Complete effort5 encoding independently saves601µs/8.14%raw with separated
+  confidence; normalized9.59%point gain remains uncertain. Exact packets and
+  741,065B/op are unchanged. Default diagram now passes, upper0.975.
+  Nine refreshed controls:3pass/3gaps/3uncertain. Effort5 is uncertain at
+  {selected_cost['managedUs']:,.0f}µs, ratio{selected_cost['ratio']:.3f}/upper{selected_cost['upper']:.3f}.
+  Photograph's adverse standalone295µs point is inconclusive; its scoped paired
+  gain is not a standalone claim. Effort6raw slowdown coincides with native
+  clock movement; its paired interval overlaps. All adverse/uncertain points
+  remain linked. Eight allocation totals are unchanged; distortion differs−11B/op
+  as a GC/batch total. No new heap site; peaks/native allocations are not newly measured.
+  Earlier [prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
+  and [rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  retain their scoped gains and superseded costs as history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. [Unshifted live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md)

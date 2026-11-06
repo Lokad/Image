@@ -17,19 +17,21 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [complete prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
-  shares immutable borders/DC/interpolation across ten ordered candidates.
-  Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
-  exact packets and809,225B/op unchanged. Seven affected costs refresh;
-  distortion-only reuses unchanged code. A read-only [effort6 refresh](../benchmarks/VP8-TRELLIS-ARCHITECTURE-AUDIT.md)
-  is uncertain: 10,830µs,754,497B/op,ratio1.090/upper1.130. The one added [effort5 control](../benchmarks/WARM-COVERAGE.md)
-  covers selected-mode trellis reconstruction: 7,384µs,
-  741,065B/op, ratio1.144/upper1.185, a gap.
-  Nine current controls total2passes/4gaps/3uncertain; no extra image/settings grid.
-  Transparent word's adverse994µs point stays inconclusive against a contemporary
-  original control; no favorable repeat. Standalone opaque8/diagram allocations
-  differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  retains prior independent gains and adverse/uncertain history.
+- **WebP:** [shared block preparation](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md)
+  reuses fixed quantizer operands across independent luma/chroma sequences.
+  Complete effort5 encoding independently saves601µs/8.14%raw with separated
+  confidence; normalized9.59%point gain remains uncertain. Exact packets and
+  741,065B/op are unchanged. Default diagram now passes, upper0.975.
+  Nine refreshed controls:3pass/3gaps/3uncertain. Effort5 is uncertain at
+  6,783µs, ratio1.035/upper1.083.
+  Photograph's adverse standalone295µs point is inconclusive; its scoped paired
+  gain is not a standalone claim. Effort6raw slowdown coincides with native
+  clock movement; its paired interval overlaps. All adverse/uncertain points
+  remain linked. Eight allocation totals are unchanged; distortion differs−11B/op
+  as a GC/batch total. No new heap site; peaks/native allocations are not newly measured.
+  Earlier [prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
+  and [rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  retain their scoped gains and superseded costs as history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. [Unshifted live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md)
@@ -78,7 +80,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,742 full/live checks per OS**, affected
+The current production build passes **5,744 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -120,14 +122,14 @@ settings do not establish matched quality.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search † | 2,987.26 | 2,503.72 | 1.193 / 1.197 | 741,386 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 57,673.00 | 53,478.66 | 1.078 / 1.103 | 7,033,984 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 14,427.73 | 15,489.57 | 0.931 / 0.938 | 1,201,669 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 10,269.81 | 9,692.49 | 1.060 / 1.068 | 809,225 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 6,118.83 | 5,820.81 | 1.051 / 1.066 | 741,222 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 10,830.23 | 9,936.97 | 1.090 / 1.130 | 754,497 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 14,502.89 | 15,678.51 | 0.925 / 0.945 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 56,148.06 | 54,903.24 | 1.023 / 1.053 | 7,034,392 | 98,590 / 98,590 |
+| VP8 diagram, effort2 / distortion-only search † | 3,139.96 | 2,702.54 | 1.162 / 1.169 | 741,375 | 7,330 / 7,330 |
+| VP8 RGBA16 + alpha, including normalization † | 53,575.70 | 54,318.21 | 0.986 / 1.021 | 7,033,984 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 14,204.14 | 15,474.54 | 0.918 / 0.924 | 1,201,669 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 10,936.02 | 9,728.01 | 1.124 / 1.152 | 809,225 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 5,630.07 | 5,831.58 | 0.965 / 0.975 | 741,222 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 11,433.47 | 10,498.01 | 1.089 / 1.135 | 754,497 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 14,073.31 | 15,604.57 | 0.902 / 0.922 | 1,201,552 | 72,380 / 72,380 |
+| VP8 RGBA8 + lossless alpha † | 57,478.19 | 57,847.55 | 0.994 / 1.003 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,550.15 | 9,576.69 | 0.788 / 0.823 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 109,807.33 | 127,005.55 | 0.865 / 0.940 | 7,476,544 | 183,812 / 183,812 |
