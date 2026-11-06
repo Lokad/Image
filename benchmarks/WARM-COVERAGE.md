@@ -41,6 +41,13 @@ package repetition. Current qualified costs remain valid. Its following current
 live-reader attribution leads to the fixed-model delivery above, preserving arithmetic
 and every cancellation checkpoint. Stop small reader tuning for larger codec work.
 
+The [rate-epoch pricing round](VP8-RATE-EPOCH-PRICING-EXPERIMENT.md) completes three
+exact preparation stages and restores2e277bba. Its final Int32design has an
+inconclusive.996332[.990248,1.002433]counterbalanced trellis ratio and+53,896B/op;
+earlier partial preparation has a confirmed scoped loss. No broad/package repeat
+or current-cost replacement. Retain the count/range/ownership evidence and every
+adverse point; next audit invariant preparation independently.
+
 A [broader rate-core prototype](VP8-CANONICAL-RATE-BOUNDARY.md) is rejected:
 its paired gain conflicts with a confirmed326µs/2.96% actual standalone photograph
 loss. Qualified source/modules/package restore exactly; current costs and proofs

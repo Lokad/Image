@@ -1,0 +1,1342 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RPA399\u2013RPR404",
+  "date": "2026-11-06",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "attribution": {
+    "project": "Lokad.Image",
+    "stage": "VTA398",
+    "productionChanged": false,
+    "statisticalTiming": false,
+    "allBuilds": 0,
+    "newImagesOrSettings": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "e57a1b867f6953ac34a6471de2d59153305e585fe44558567e874da9f61c7171",
+      "src/Lokad.Image/Internal/Vp8Distortion.cs": "0673e1be76446d6bc41d4cf8d428fb828d173fcb2e303b7e53adf82f1eba24f0",
+      "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "b8ca03a2489f3390d10c3e8b72b90659a70312eb4a0736b31758e32f1bd84196",
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "c20615a48e0f1b4eee03c7898437e16b118396d6afb991035e6889105496fbac",
+      "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921",
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs": "7f5c898ed307df1632738d4940a1802a0ba9ed2665652f225601dfa8280cc315",
+      "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "541cb8a73158e66c6db04267fdc896ab28c03d941a6268e682fd979447c782b1",
+      "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "93ad7206346ae860f781bb0dd97adc5e6217292880a5f1b14ce394f3bf236527",
+      "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9e7dd5d0dd2a3de1904f86e450ff3b70db5faa022bf14e35f0cdf7fa10506007"
+    },
+    "currentProductionCommit": "2e277bba",
+    "next": "One current complete effort6attribution. Examine repeated candidate/model preparation and storage lifetimes before a coherent implementation; preserve exact packet, cancellation/admission/owners. No phase times, projected gain or replay authorization from samples alone.",
+    "totalSamples": 1961,
+    "managedSamples": 1903,
+    "searchSamples": 756,
+    "luma4Samples": 166,
+    "completeSetPredictionSamples": 86,
+    "scope": "One current2second actual standalone effort6diagram capture, exact6818Bpacket, original native/source/quality/alpha/owner gates. Zero builds/newimages/settings. Samples/skid/code are instruction locations, not phase times or predicted gains; instrumented elapsed discarded. No current benchmark-cost invalidation.",
+    "earlierImplementation": {
+      "report": "VP8-TRELLIS-STATE-REDUCTION-REJECTED.md",
+      "raw": {
+        "file": "vp8-trellis-state-reduction-rejected.tar.xz",
+        "sha256": "95ef02c42fdeed5be3c8ed3493e1217ab3df5a4fe62b2ddcfc7239ee4ff2f8e8",
+        "bytes": 540392,
+        "members": 51
+      },
+      "historicalDiagnosticCounts": {
+        "diagnosticOnly": true,
+        "timing": false,
+        "packetBytes": 6818,
+        "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+        "calls": 87384,
+        "positions": 356651,
+        "sameRows": 171138,
+        "choices": 472051,
+        "sameRowChoices": 216255,
+        "singleChoicePositions": 241251,
+        "deadPredecessors": 157809,
+        "equalScores": 87384
+      },
+      "interpretation": "Equivalent-row/dead-state collapse already has an adverse/inconclusive implementation and mathematical applicability proof. Current756Search samples do not authorize replay. Counts are historical and not remeasured on current production."
+    },
+    "findings": [
+      "Current Search still multiplies lambda by the same context/level prices in each predecessor/candidate visit. Rate probabilities refresh only at explicit frame epochs; lambda/matrix values come from segment preparation. A once-per-epoch representation could remove repeated pricing across many searches instead of adding the old per-choice collapse branches.",
+      "For561macroblocks, the existing static schedule has5refresh points plus initial creation in a retry-free pass. This is source schedule arithmetic, not new measured telemetry or proof that preparation is worthwhile.",
+      "Prepricing all96rows/allsegments may cost more work/storage than it removes. Type/lambda-specific borrowed views, exact integer range, EOB/high-level correction and complete preparation costs need a bounded count/capacity audit first. No unadmitted table, silent higher memory bound, cache/pool/session or budget-availability fallback.",
+      "Prepared execution already shares matrix views/zero vectors/DPscratch. Retain that lifetime and its independently demonstrated tradeoffs. Do not replay uniform-boundary reuse, fixed importance or equal-row collapse blindly."
+    ],
+    "nextTask": "Bounded source/count/capacity audit of exact rate-epoch prepricing: identify actual lambda/type epochs and mandatory complete operation users, estimate all preparation work and overlapping admitted capacity. Only then choose a coherent prototype or another independent codec path. Preserve packets/ties/cancellation/owner disposal and exact scalar fallback.",
+    "currentCostInvalidations": [],
+    "publicationPostponed": true
+  },
+  "attributionRaw": {
+    "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+    "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955",
+    "bytes": 235192,
+    "members": 38,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "reusedInputsMaterializedByHashWithoutDuplicatePayloads": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      },
+      {
+        "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+        "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+      },
+      {
+        "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+        "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+      },
+      {
+        "file": "jpeg-buffered-correction-restoration.tar.xz",
+        "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+      },
+      {
+        "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+        "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+      },
+      {
+        "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+        "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+      },
+      {
+        "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+        "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+      },
+      {
+        "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+        "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+      },
+      {
+        "file": "vp8-current-live-model-attribution.tar.xz",
+        "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+      },
+      {
+        "file": "vp8-live-model-preparation-qualified.tar.xz",
+        "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+      }
+    ]
+  },
+  "countAudit": {
+    "project": "Lokad.Image",
+    "stage": "RPA399/400",
+    "productionChanged": false,
+    "statisticalTiming": false,
+    "productionBuilds": 0,
+    "diagnosticBuilds": 2,
+    "scope": "Existing frozen complete513x259diagram Q75effort6. Two count-only revisions each execute warmup/observation; all original6818Bpacket/source/borrowed-root checks pass, identical nonhistogram counts. Instrumented elapsed/allocation/peak discarded. Source/main/embedded/package remain qualified2e277bba.",
+    "observed": {
+      "epochs": 6,
+      "uniqueTypeLambdaKeys": [
+        [
+          0,
+          400
+        ],
+        [
+          0,
+          650
+        ],
+        [
+          0,
+          812
+        ],
+        [
+          0,
+          961
+        ],
+        [
+          3,
+          591
+        ],
+        [
+          3,
+          952
+        ],
+        [
+          3,
+          1197
+        ],
+        [
+          3,
+          1400
+        ]
+      ],
+      "usedEpochKeys": 37,
+      "totals": {
+        "Searches": 27100,
+        "Positions": 296367,
+        "Choices": 411767,
+        "InitialMultiplications": 37151,
+        "TerminalMultiplications": 227126,
+        "HighCorrections": 0
+      },
+      "candidateLevelHistogram": [
+        170007,
+        100283,
+        42067,
+        23885,
+        15092,
+        12520,
+        9749,
+        6991,
+        5144,
+        4124,
+        4804,
+        2368,
+        2189,
+        2520,
+        2315,
+        848,
+        458,
+        600,
+        334,
+        405,
+        537,
+        267,
+        244,
+        277,
+        434,
+        214,
+        96,
+        208,
+        241,
+        473,
+        238,
+        53,
+        83,
+        47,
+        152,
+        58,
+        125,
+        147,
+        59,
+        566,
+        526,
+        1,
+        2,
+        4,
+        8,
+        3,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lowCategoryChoices": 351334,
+      "lowCategoryFraction": 0.8532349605480769,
+      "rateMultiplications": 1087811,
+      "lowTierMultiplicationsRemoved": 966945,
+      "usedKeyTierPreparationMultiplications": 6216,
+      "eagerAllKeyEpochPreparationMultiplications": 8064,
+      "maximumObservedCombinedProduct": 10901800
+    },
+    "capacities": {
+      "fullRowsInt32Bytes": 53760,
+      "fullRowsInt64Bytes": 107520,
+      "selectedLowTierInt64PayloadBytes": 10752,
+      "keyIntsBytes": 64,
+      "additionalCoarseMetadataBytes": 64,
+      "selectedWorstAdditionalOwnedBytes": 10880,
+      "scope": "Static proposed retained arrays/metadata per rate owner for up tofour segments/two luma types. Not a measured complete physical/admitted peak. No new pool/session or retained state after operation."
+    },
+    "hypothesis": {
+      "removes": "Repeated lambda pricing across many searches during the same rate epoch; retain branch/predecessor recurrence rather than replaying rejected state collapse.",
+      "endState": "Existing rate owner prepares exact Int64prices for levels0..4 (the direct low-magnitude syntax category) and EOB for generated type/lambda keys. Larger levels use unchanged complete combined/fixed prices. Borrow once per synchronous luma execution; refill in place only between actual users on rate refresh. Method5 retains real unprepared specialization; no resource-refusal fallback.",
+      "transition": "Additional at most10880Bowned capacity, setup work and low-tier selection may cost time. Keep raw/typed arithmetic in one source specialized for prepared/unprepared actual callers. Complete actual trellis and ordinary photograph cross-check before broad/package. No CPU inference from these counts.",
+      "acceptance": "Exact packet/strict tie/DP and native-level oracles, low/high tier endpoints, rate refresh at full admitted root, terminal refusal/cancel cleanup, retained callers and all source ownership. One immutable focusedW/L normal/scalar candidate. Independent confirmation only for useful actual caller leads, broad/affectedISA/SAME-package at accepted coherent milestone."
+    },
+    "qualifiedProductionSources": {
+      "src/Lokad.Image/ImageBuffer.cs": "a46c48d8fb88cc8fb7abc508d7f0ed311477827b7f7431875bf555e93fb1c17f",
+      "src/Lokad.Image/ImageCodec.Async.cs": "af429aacd087ec8c3d0b3f3342d1f0fb6bc115cdef9945708b426d1c4c809953",
+      "src/Lokad.Image/ImageCodec.AsyncOutput.cs": "8e854c58ca04cd1036bb6751719dd44a2af0505e502047cc9b9d35b6882dfc33",
+      "src/Lokad.Image/ImageCodec.cs": "7714f76f418aeb54ef785bfe84f068a911b6037bd4ae945414ee0bbd3f60f6f6",
+      "src/Lokad.Image/ImageCodec.Inspection.cs": "d199c70d358f76b2d52404ea87594e5368d80485f18dcf86c40af0c05e0e6dda",
+      "src/Lokad.Image/ImageCodec.JpegSamples.cs": "c9f3072575d851d2309e47d68bc8b6a2aae68cd1e588383642b4e0bf52ca5770",
+      "src/Lokad.Image/ImageCodec.Probe.cs": "6dfea1ecaafe3594a3df5422c79c4ff521dda40f341f1e2f1b7264c41a2e6d8c",
+      "src/Lokad.Image/ImageCodec.Validation.cs": "00f59ffe3bd39a5fde894a46ca961e1e6090022fb6d534f1d8751feb0c27a332",
+      "src/Lokad.Image/ImageDrawing.cs": "81e31bc4b37e1483f0bd9832a4356fb27374678147f59025d660e077506af603",
+      "src/Lokad.Image/ImageDrawing.Text.cs": "c1f6927dccc8ad7534e6dbeafe452c376b16ccb7e5c3784b2aa3ba919b4653df",
+      "src/Lokad.Image/ImageFailure.cs": "3ffe8a7b009f6fb0f47d866ec5e68b8f1853b6c5d9b0b1ee8b4610f625b500ac",
+      "src/Lokad.Image/ImageInfo.cs": "d843659bfe7b445e956706f100d2bac72b19442c287d5e777598298c0b19a341",
+      "src/Lokad.Image/ImageLimits.cs": "07e5078b3952a7840561692bea094d1a63e62c95d9298e42564f8399a88db68a",
+      "src/Lokad.Image/ImageMetadataPolicy.cs": "29536b46ab8f49f2d57daaf9c4fb4b6e4982424ddac18fdc9d70fa0f4fe7d224",
+      "src/Lokad.Image/ImageProbe.cs": "38df0003f5614e8079c8717f485c93bed5f288eb28ced361709b7aa966cf232a",
+      "src/Lokad.Image/ImageTransforms.cs": "07266d6c45c257bc4a85c4e121c7a697d41ee1e041276d1216fe3eb74d2c0790",
+      "src/Lokad.Image/IMemoryBudget.cs": "0c95439492d1b66fd9f203bed251e53f7ec01f2de4c1bcbdfead02fcf81c6537",
+      "src/Lokad.Image/Internal/Adler32.cs": "301801bf6417cde32d9e732c26f9d7f2ce36a6be6c0e4df17f985380b9ef8a21",
+      "src/Lokad.Image/Internal/ArabicJoining.cs": "f212613168bff1d409ef0ef3ca23e07df26e698d8c9f946b353ecf804c255bf1",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "fb6362254752068dee22f63df7dacdd39ab9e1a79f64fdd12df93b2e9ec157b3",
+      "src/Lokad.Image/Internal/BidiParagraph.cs": "0ebb3e8c35cd7dcf39d014edf7437a314a807550b0cd00e08b063aeef67c3f9e",
+      "src/Lokad.Image/Internal/BilinearDownsample16.cs": "15f58ce5c284f46fb5dae8dd217262da54354c632e92d5a0d1cf91dff194f5bd",
+      "src/Lokad.Image/Internal/BilinearDownsample8.cs": "b0f66af7a2e7be376f3d7b1e024af7683ac705e899288cd84779e86fc193a3c5",
+      "src/Lokad.Image/Internal/BilinearUpsample.cs": "25da9d49fbaa5880fb0103439774c5a49e1407490b6b730c50c8be19ca48c092",
+      "src/Lokad.Image/Internal/BilinearUpsample16.cs": "944d9b55677bafca81b72fe519cbb234f271154c9966e7fc013326daf39dd2cb",
+      "src/Lokad.Image/Internal/CachedBicubicResize.cs": "a89e80361f1c9ec19a2d4c793586b81661df1ce4e859615b06bd489f100e5f97",
+      "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "b13dea1fca6a6ef6a0008990609692449d4b960988f336d53c6bd55ef096d60c",
+      "src/Lokad.Image/Internal/ClockwiseTurn.cs": "d1362f8bff2418b9c7a6355078d7696176446f2a038fb65a62222eda24ec0617",
+      "src/Lokad.Image/Internal/ColumnBicubicGeometry.cs": "6cefb0f2fb556ef545e7c4dac8aac36dc37cba853ecc0c877549ca327b862d70",
+      "src/Lokad.Image/Internal/ColumnBicubicResize.cs": "0a2c88654eb09be6a88d975ef23e3b4800dcf7c0702daa181903fdd16616fbb1",
+      "src/Lokad.Image/Internal/ContainerHeaders.cs": "2620bcfc0aa5b6727804afafb32cefce90655b948cd2762be7f71b0d59ce2966",
+      "src/Lokad.Image/Internal/CounterclockwiseTurn.cs": "3ce341a7f694468b9bd8bfe81b923b929188d4156f253dd53f5b54bb1b60e87b",
+      "src/Lokad.Image/Internal/Crc32.cs": "12fe3e223ec2bf550de02cdc9c8fdd244a80136df88f46cc438c184925f6630e",
+      "src/Lokad.Image/Internal/CropCopy.cs": "7c194a72eb3364cbf2e6621d1315c9764e13255787eb3a82c00ca24a1d9647db",
+      "src/Lokad.Image/Internal/CrossColumnBicubicResize.cs": "3aea6c01475b06ffa5cfc987851a4eeec8509ad45df9be431a4f959759fbc79b",
+      "src/Lokad.Image/Internal/CrossWordColumnBicubicResize.cs": "505547f9357c80ae29c99723a07e87a3efd298ca5819d54bbc8713e6e2a55076",
+      "src/Lokad.Image/Internal/DeepColumnBicubicResize.cs": "0ac48ea73b2ee884b51dfae83a73929300d24eb899f81c372a9f83d5444fee18",
+      "src/Lokad.Image/Internal/DeepWordColumnBicubicResize.cs": "e4b6e4203f072e704404a64e50cd5dc3b6ec9bbd68ce564de2e48056222ff315",
+      "src/Lokad.Image/Internal/DeflateHuffman.cs": "d880531eb1ca9d2cf314ef9985e78986fdfbba8726cfa8daa09af8f305641c27",
+      "src/Lokad.Image/Internal/EncodedOutput.cs": "d93ab79633e11a371691da56b8a367ba5ac46e9310b459da55e750e750c8b761",
+      "src/Lokad.Image/Internal/EnlargingColumnBicubicResize.cs": "dc86d54717984a15e07300d0e58266027d3afbf77a09a637e2032251aec69c7b",
+      "src/Lokad.Image/Internal/EnlargingWordColumnBicubicResize.cs": "734d71dc47cc50b6b0a83a2cd187102ef4d3cc0b477915df0516ec515b81300f",
+      "src/Lokad.Image/Internal/ExifOrientation.cs": "b1baf9364a062ed2d61676e179a84a7c746d1c8f9045497f7f3dae188b16bc77",
+      "src/Lokad.Image/Internal/FontOutline.cs": "30f9b345b2f3773362f2b6b5da6cb2e2921fcbb5c204f35165137422afc751f0",
+      "src/Lokad.Image/Internal/GeneratedBicubicResize.cs": "e230156deeadc7dd61bbdf88718f0fad183d969196557682954b35d0ca45e7b5",
+      "src/Lokad.Image/Internal/GeneratedWordBicubicResize.cs": "393a85e346f109d822d6dba131128f7462c07b1a778fc3291ffe5cfee3ad0025",
+      "src/Lokad.Image/Internal/HalfTurn.cs": "8e69a13efabcd4802d5f90f9aae5b6fbb59233673f04686ef34aa10598119dae",
+      "src/Lokad.Image/Internal/HorizontalFlip.cs": "4450d2419e8b71477c90ad61c6378b4bf557635c7f4fa109636360b9ba69e04a",
+      "src/Lokad.Image/Internal/IdentificationInput.Async.cs": "ece7f98e2135f642fee785c904825eef2f969ef2dccf3e3cb617994267545d8d",
+      "src/Lokad.Image/Internal/IdentificationInput.cs": "1392cf38a1cfe7ae6771c1e4ff16e27b1f7d9fc9be63fd87b4a9b6703e043f7c",
+      "src/Lokad.Image/Internal/IdentificationInput.Decode.cs": "9b670e0b169006d09b3a6b6a3da9ab44935fedad0342bbfd1ce81e8d1303da0b",
+      "src/Lokad.Image/Internal/ImageSourceMetadata.cs": "15b5bd2ee79cda08046dd3236711b8c148aae212d76bea65928d5cbb0cff1c00",
+      "src/Lokad.Image/Internal/InspectionReader.cs": "408f10126fc06ead1536eac20a391285e2ada0df9b43fa9b732dd14871eea551",
+      "src/Lokad.Image/Internal/JpegBlackColor.cs": "5aad7735ba98429274490c6ca7490bd7ce7798c6e7b9d4431b201047a0692af4",
+      "src/Lokad.Image/Internal/JpegCoefficientPool.cs": "1f6302b0cb591a4e06dc9d3b370c403dbacb700b2e09b30674004d2da2b29825",
+      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "76cc64f942d5c0cb60f48082bd631d1dc4c848060489453d70d87e71769e5ee1",
+      "src/Lokad.Image/Internal/JpegDecoder.Cmyk.cs": "343e52588f26c723b949b0ac845593f3d827f23a2bf0d97897dc874bdac77365",
+      "src/Lokad.Image/Internal/JpegDecoder.CmykPlanes.cs": "b96d26f126bfc8d6dea4cf650e67b0ed38f1d6a6c5928b2159ad5d8f0764631b",
+      "src/Lokad.Image/Internal/JpegDecoder.CmykRow.cs": "e32bdb3f15cdf27d325bf2d9c272bd4a2a5e6b7fc71d83e3b19263a3e4513568",
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "87de2f24e6d52cab4679d01dab3e154e16cc2a212f5bd29ab7f4a1fd3870f8fb",
+      "src/Lokad.Image/Internal/JpegDecoder.QuarterChroma.cs": "73c80f2ca3abd759dbae07ece35a3f418bf49f87123734e07866efd9cc638b49",
+      "src/Lokad.Image/Internal/JpegDecoder.QuarterSingleStrips.cs": "9bfdf9ee2d3002c368efe7ecb349ad663c321f2027770a900422518631df0206",
+      "src/Lokad.Image/Internal/JpegDecoder.QuarterStrips.cs": "9f1c5c0037f749bf5194c9d169c6f08074c4fb869b39b1ce0398abc9e29b38b5",
+      "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+      "src/Lokad.Image/Internal/JpegDecoder.RgbFrame.cs": "624800aa47e8a1d09a9993ba0eb9562d97e841b6d264cb13f56877407eb39115",
+      "src/Lokad.Image/Internal/JpegDecoder.SampleCmyk.cs": "c1359c1366f5bc420f20056fc7286292dd3c2b8ced9ade4c808d6c6ec6796e6a",
+      "src/Lokad.Image/Internal/JpegDecoder.Samples.cs": "d9c065adb6f96c1ea353165a46013d85fb7a966997957559600f3b0408119c92",
+      "src/Lokad.Image/Internal/JpegDecoder.Ycbcr.cs": "35085d2a19ac0a31bc3c9c4bb0ec522dbf0a9313c43227b4be956bd29965fd30",
+      "src/Lokad.Image/Internal/JpegDecoder.YcckRow.cs": "40d6af91f96a855d2ef524d6320941e47af70bef5e2b32aff3ed79699edf5230",
+      "src/Lokad.Image/Internal/JpegEncoder.AsyncOutput.cs": "48a05e454db4c0dc5205e66037870f8cb397ee4627cdbefefa6c2e906ed9553b",
+      "src/Lokad.Image/Internal/JpegEncoder.cs": "c27147301060b4e457bd7dcbe24ef90b70306163c0ac7558058f412616c4683f",
+      "src/Lokad.Image/Internal/JpegEncoder.Reference.cs": "730045d9a3c297a63b16c6e00791afaa634f372d38292ff51aebed1bfce5407e",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "e7f5cc94451a8b6fc4a9f99925bef4acf18b7b72660c644ce164af39acebedc8",
+      "src/Lokad.Image/Internal/JpegEncoder.ReferenceSubsampled.cs": "2c5e968b7e3c2a2d5d1c32643171f6d88142da8b1e9d485b653f3675d976fae5",
+      "src/Lokad.Image/Internal/JpegEncoder.Samples.cs": "62847b98dd18f66332f587b21ace7dbf1e115c0a6437dfd7696a86feee907869",
+      "src/Lokad.Image/Internal/JpegEncodingTable.cs": "d1b550ffe2a6b538bc514998ca1b9d718d87dd2248f6b571a8cf54facec25c3e",
+      "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "1e298637096538b2ef382f1ab28888477a51a2cfaa2c9a02c39fef0bacdfe8cf",
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "90686e27e89aad7454b0248513d0c3f75674d6f3cfccfe78dc16384798160fc0",
+      "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "1e9273aefb438c92da263dcf24e3f26474eabf22d2989203d7e25890c8723079",
+      "src/Lokad.Image/Internal/JpegEntropyRecords.Vectors.cs": "9f3943bb5f2a606c7dcbad4db0a98470de6222b14b77678a5c9558fefad788bb",
+      "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "b9987bf08e2b3675387d06415da0e48f9d3a36f847547ce5a83d8192e7a9e587",
+      "src/Lokad.Image/Internal/JpegFixedReferenceTables.cs": "f4b26cbb839f9f5fea5d280031da5eeebd6214938fd9384f126a309cc21a8394",
+      "src/Lokad.Image/Internal/JpegGrayPreparation.cs": "6b79cca96b4725788d54d3692bc9eb8d84a5fc44142a4ed96330b0c390b39439",
+      "src/Lokad.Image/Internal/JpegGrayQuantization.cs": "5314ca1a48e063f121c50e1277c47797eb1a22375e959b26815fd09cd199edd7",
+      "src/Lokad.Image/Internal/JpegGrayReferenceTables.cs": "42b03e03aa713f5772c458aad780fc3d38815368ff9eca58f6b840c387bceedf",
+      "src/Lokad.Image/Internal/JpegGrayReferenceTransform.Avx2.cs": "00a472b52a47ad26d8263efa0d69f809294a2c6ac5bb914d824b4dbb08c65ca5",
+      "src/Lokad.Image/Internal/JpegGrayReferenceTransform.cs": "5b9de955724082f08c59471f619a4a0163f95890c2828e04c4728b426597233f",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "0c8115e63d0b2c7e333a3c51da2b179ebf09bbfcb7c9ffc3f0b4eb3ee27a002e",
+      "src/Lokad.Image/Internal/JpegIdentifier.cs": "4d88c7538e516d3f2b5aef61b131d448bbc4f196d545aaaec09f45883d551e70",
+      "src/Lokad.Image/Internal/JpegInverseColor.cs": "f5deea758d8792114ddb0cef5b4a846a98a5105efa94de04419034f5972535f3",
+      "src/Lokad.Image/Internal/JpegInverseColor.QuarterRow.cs": "90562afdc5b825e94997c63f6aa87d2868e51c355ae937723733ec90ce56ed15",
+      "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379",
+      "src/Lokad.Image/Internal/JpegNonzeroMask.cs": "7f184b1ac2dc4c3dc9ad0dc190942be22648aaae0685a10f51c7dde2d4f73f4a",
+      "src/Lokad.Image/Internal/JpegReferenceArea.cs": "c27a14be8bb7fa34e25987628576d67ee971fa155009f600ab0ac2d580ae6f1f",
+      "src/Lokad.Image/Internal/JpegReferenceColor.cs": "0eebd38be2cd4a4c83a54f87ecee1e8f5a5f400677465af09264817092b10366",
+      "src/Lokad.Image/Internal/JpegReferenceColor.Normalize.cs": "2e981346578a2ebf29332f16bf6af4478cebf1448595ae8c8d1af6889fa92be7",
+      "src/Lokad.Image/Internal/JpegReferenceColor.Rows.cs": "69432c8e41c9aafcbbdbb2d3eef4990f9eeaaeade6a033da2db03dfa0612a4f4",
+      "src/Lokad.Image/Internal/JpegReferenceColumn.cs": "8539f013eddb45329be149c0384630e7fcd7a319ffb0e33f4c3fbf8a55edd545",
+      "src/Lokad.Image/Internal/JpegReferenceHorizontalFilter.cs": "041d5103366145fbe657f8bcfcf3a97061aff6be7e381b09c9408631653d54a4",
+      "src/Lokad.Image/Internal/JpegReferenceTables.cs": "588b26e477cb14545cb2efa068de90c2532844adc0d67cb7a01d2793f8e68c6b",
+      "src/Lokad.Image/Internal/JpegReferenceTransform.cs": "0aba77057cfb62e5b080fb8b952909f59546f4129dc23ac1e051b13fbee50cfa",
+      "src/Lokad.Image/Internal/JpegRgbLuma.cs": "1d30a131c7cb794b2582d9b43b8088ffefb7c77bff9e09cf91fa3fd9886e963d",
+      "src/Lokad.Image/Internal/JpegSampleInput.cs": "88d8e78140af569b2629c568983cb9e6e73d96e6ce5eb86f9871fa7f3495a788",
+      "src/Lokad.Image/Internal/JpegTransform.cs": "31c3c2e201b5b26a1fee64fa7ce272cdf2067717d9331a18fe9fbee7597ab812",
+      "src/Lokad.Image/Internal/LanczosFmaResize.cs": "6beca3d777cd902ca2f5dc907648943c3dec00101105aadf261624d4ab6e9de0",
+      "src/Lokad.Image/Internal/LanczosPlan.cs": "7f1ae5cfe7844f0cca49041e797ccfd2c9a77d09976e30987315eca86ad016b4",
+      "src/Lokad.Image/Internal/LanczosResize.cs": "218abc15d29f3be61e11442a46fdb8790cd33a65cd9deb122dd894095e0e406d",
+      "src/Lokad.Image/Internal/LanczosWorkspace.cs": "cb34ab31a0172a6dbd5159f2e0560f8784f4825b78b5ecf35dd7f04c6c8c930b",
+      "src/Lokad.Image/Internal/LimitedWriteStream.cs": "f2f889781f2e498af9b32c6d34517c5c75cb55cbe493e2de72560f1e50d52a07",
+      "src/Lokad.Image/Internal/MemoryAdmission.cs": "26bc12095b755da6d7893d3758550bb2bb19d7e67425fee8ab65fac29b80e0c0",
+      "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795",
+      "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": "f25d47659860777c8690dc42e283766a1425bc647889edcf45f3b40777dfd9d1",
+      "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "bcefc30a6aa644af6cb4db6269bb2419225268a284ee91c1dc16988fdd003eb1",
+      "src/Lokad.Image/Internal/NearestResize.cs": "878fccbc2dfb4b43af4ec736536471295e0a2a9f919f64ba6ad14c50f725526b",
+      "src/Lokad.Image/Internal/NormalOrientation.cs": "f80c4502a7b481ea4e14e5784a6e842af1015af8c821cf86107168fd604c67ba",
+      "src/Lokad.Image/Internal/OpenTypeGlyphClasses.cs": "e898852eb5c7c7186cb1a82d6bbac0b705688d98c81f3574912f0610ea291e6b",
+      "src/Lokad.Image/Internal/OpenTypeGlyphClasses.DefaultVariation.cs": "0d4f0ca453c55b5dd3fad5fa316d1f967a23825d5bdccbb605c6d4b7deb82a10",
+      "src/Lokad.Image/Internal/OpenTypePositioning.cs": "a08655ad327fbf38897ad9cd5e3282bbd4f27e6f2ded689f69b8ee42f354a3f5",
+      "src/Lokad.Image/Internal/OpenTypeSubstitution.cs": "8e3e54e3f11e6b01def7b401f62de1b8d2a0973abcdc96b03ddb1f8b08711ee8",
+      "src/Lokad.Image/Internal/OpenTypeTable.cs": "178b474f359af26eaa1261836bd0f52c12ea4fe2d0330020a0f29c8b1f729e88",
+      "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9",
+      "src/Lokad.Image/Internal/PackedColumnBicubicResize.cs": "ae1bd2776a372265dce8b110a7472270daf6dbe2463bc0187ec058add220b8d2",
+      "src/Lokad.Image/Internal/PackedStreamingBicubicResize.cs": "c2136155fd7b5c3120078ab461c15267b9790032e2067cbc3e25e3cc3d62ebb7",
+      "src/Lokad.Image/Internal/PackedStreamingWordBicubicResize.cs": "966281ddd199ba867771e7dd2770710e09c0a2bec3e1c072cd9e07a1933760d8",
+      "src/Lokad.Image/Internal/PackedWordColumnBicubicResize.cs": "6437ce8e49dcfccb6e7f3ae9f25282366965f911823e92a8e0756101860b48ec",
+      "src/Lokad.Image/Internal/PairedResize.cs": "caf3abc625ad525f5af789fd35662eba4572b18f5aa5a4e56de1b0f96d7bb2da",
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": "06b27bdfa26dd9285dbb985a7c6936140ed661ea89b8235c63d285d9275a65cc",
+      "src/Lokad.Image/Internal/PngCodec.cs": "1cc62503ee9b1f1bc21516d23b3d3cce2639b0ceb5caa415ac492c4c3a72f0ca",
+      "src/Lokad.Image/Internal/PngDeflater.Block.cs": "bcecb331a71516193b89800b8f994e0eebff0eab3afdb2208477f64309547473",
+      "src/Lokad.Image/Internal/PngDeflater.cs": "e84323728f44051e49e5544d518fe4f43ddabb6d5031c39c37aaea35190aef30",
+      "src/Lokad.Image/Internal/PngIdentificationCrc32.cs": "2c94b20002cb303e3c22bd5ed5adae273566672337a8c2b159d856c8c615dc90",
+      "src/Lokad.Image/Internal/PngIdentifier.cs": "144b885365b3b02f81ddea129aad18f74532de1be7f25767924120a2668fda27",
+      "src/Lokad.Image/Internal/PngInflatedReader.cs": "d2b21a0d540d86381e1b0c29b8ebe9d9aaab53e9a8ce819b57e6026d4398aba4",
+      "src/Lokad.Image/Internal/PngRowInflation.cs": "534dd0e30bbe7aa5da75100d802f455c87347099f4acc21fc83a8b949bd1e510",
+      "src/Lokad.Image/Internal/PngRowPrediction.cs": "4f2dc5562baf7f4db5a3426396706c5f50b2c2eb898c2e9bd37845e136d7122c",
+      "src/Lokad.Image/Internal/PreparedResize.cs": "5f930b1ae53d3f6cd1856eefd006f7cc090290db2fb59ec8eb05ea7ea5bb6da8",
+      "src/Lokad.Image/Internal/ProbeState.cs": "01b3dbdc0110fb1b1816f5bdddf369ba2047891b557a76f9214d8620f74a2491",
+      "src/Lokad.Image/Internal/ResizeAlpha.cs": "b7408c332670da0c5f332b85c751e7b4ffd67e12e3be21824c0469f2a1971718",
+      "src/Lokad.Image/Internal/ResizeSampling.cs": "972c5d512af0b0987ca31fc29385cf80b0688f125768eb1e700ff80d842ace6b",
+      "src/Lokad.Image/Internal/ShapingBuffer.cs": "62a9cebcf3e90bb5c7225a1c5f5421eae0de4d7d7b1e483f63941baba98e85a0",
+      "src/Lokad.Image/Internal/StreamingBicubicResize.cs": "a3f319f102a973e5699d53952d40560ff678492d80aefd4c43ebe5d9a0a3e355",
+      "src/Lokad.Image/Internal/StreamingWordBicubicResize.cs": "ec4ee9350e67b49e6beae392bebf11feb9c6671282fb0e16c054aff239a32055",
+      "src/Lokad.Image/Internal/StreamInspection.cs": "ae6b8953fb57e16d365b01d3b0ceafa55e905ef1a80d2b9cdc65741b8d9be6f5",
+      "src/Lokad.Image/Internal/TextRasterizer.cs": "9ec9af1f8bdab99d1e1ec213f59bc219b284f8ee1e589e6269b808869a520a93",
+      "src/Lokad.Image/Internal/TextShaper.cs": "b0b3a9bfb77d7d317f5442b269bc10bb9081fdd41141db5ce8972296d109401b",
+      "src/Lokad.Image/Internal/TransposeCopy.cs": "8af3b904a0134a4b0d5e0c0cfefdb773f5ef05d059bee266d7d2372c26bbf8af",
+      "src/Lokad.Image/Internal/TransverseCopy.cs": "b672eae23d0cad4e78db2e25cce1190c94229fbf4789193d838521bef778bd1d",
+      "src/Lokad.Image/Internal/UnicodeTextProperties.cs": "d29a7082c2af331b5fd4e2958e11930ccd977bf88be983f56801d9f03161f8ef",
+      "src/Lokad.Image/Internal/VerticalFlip.cs": "fcb68ff6fcf998940136efb2268d05ebafd0b255f2bb38e4d0888c18fd16f1b7",
+      "src/Lokad.Image/Internal/Vp8AlphaEncoding.cs": "9699e9c3c57e7e539a7f718eff2d67ee8f2a8f98f371d443fa3188e07ae31956",
+      "src/Lokad.Image/Internal/Vp8BlockPrediction.cs": "bc2b28ae78e9f6eaf6a2262200073b1587ebbd0b1fc3194237aa29cc6629677b",
+      "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "e57a1b867f6953ac34a6471de2d59153305e585fe44558567e874da9f61c7171",
+      "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913",
+      "src/Lokad.Image/Internal/Vp8BlockReconstruction.Packed.cs": "3d5a4741f4aec666317433244ed322f4e872bc97cfc688b763f16ade487d5ae7",
+      "src/Lokad.Image/Internal/Vp8BlockReconstruction.Vectors.cs": "5afe1106a5f45878e202b9b564876ebb6f5a8cc82b2f769e05c08c13cd25c406",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "714b3f02662aea24786e154b96ae0096b947c103b69879df281c368d532c0f90",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "d5a1cec0b69b4a1994ca1dcb39592fee7e583875a64bfd2407bcbf69870a6160",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.cs": "7f50bbc9618ee650f115f69f46ec6f88f26cb296e5ffc42fdb001293478992f7",
+      "src/Lokad.Image/Internal/Vp8Color.cs": "7d2dcfe99c4561c7c5c3c4ac5e3c11f4a0838ff17ba1a108f0c46f15b2fd3b71",
+      "src/Lokad.Image/Internal/Vp8Decoder.cs": "f2a609d1efdd5d9c11610e7a261d55e684f7e5354a15d93694912bbdb5742f67",
+      "src/Lokad.Image/Internal/Vp8Distortion.cs": "0673e1be76446d6bc41d4cf8d428fb828d173fcb2e303b7e53adf82f1eba24f0",
+      "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "b8ca03a2489f3390d10c3e8b72b90659a70312eb4a0736b31758e32f1bd84196",
+      "src/Lokad.Image/Internal/Vp8Encoder.cs": "e7cbb665e4a0e35117fa05be1b50b132f6c52aff7c5d6bedffa9fa0014ae0885",
+      "src/Lokad.Image/Internal/Vp8ForwardTransform.cs": "1fcd22f7ecc137cf450b671c36f645ece33ae764da0a3fd76ce5a147e8256c3b",
+      "src/Lokad.Image/Internal/Vp8ForwardTransform.Four.cs": "bf7d87e21ad88efe719c1e143a75cc830e9b8fd6d425c23ca4a2ed268c4f7c13",
+      "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "715fbc4b7f34a25ac5a9056f90e1cf9d879edd534532189c7bce41c497f1c044",
+      "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9e7dd5d0dd2a3de1904f86e450ff3b70db5faa022bf14e35f0cdf7fa10506007",
+      "src/Lokad.Image/Internal/Vp8lColorCost.cs": "6604b4c3412b9130bfa21ca995a253f64f840c6455d7cc032792a54d7c7d7011",
+      "src/Lokad.Image/Internal/Vp8lCompactGreenHistogram.cs": "df4b2256800b99379bbbdd0f2371075348d52c6c5155080f15201c95264bcbac",
+      "src/Lokad.Image/Internal/Vp8lEncodingAnalysis.cs": "dbd4613893268689bafacc875209d536d72299cb1cee5aa1ef6c34e8fed40bed",
+      "src/Lokad.Image/Internal/Vp8lGreenPredictorHistogram.cs": "755f9f7036c53ebabfd136f9dd66f723afcb05f21a3117d7fe4b7ffb8a76d500",
+      "src/Lokad.Image/Internal/Vp8lGreenResiduals.cs": "351c052bdbb3a6d42e69f9bf3363b5a64751e24003028591d5d2d8f3a13eed69",
+      "src/Lokad.Image/Internal/Vp8lHistogramLayout.cs": "7ba09ed00193bbb6c30c278337d35b41d78d0287cd758971818fe34e3a47f56f",
+      "src/Lokad.Image/Internal/Vp8lHistogramPlan.cs": "df7653a26bbfa20460a66080189c3110162420194d0c90e501f64018625b6d76",
+      "src/Lokad.Image/Internal/Vp8lHuffmanCode.cs": "2cb8a0e11d77010d7c8614e934308637f64aac8250f4381f8822f9c0f9c6223f",
+      "src/Lokad.Image/Internal/Vp8lHuffmanGroup.cs": "85630c64b29e5f4044a0899d8217525d16f9b5c73f3d26315cde62a9dd2eb4c6",
+      "src/Lokad.Image/Internal/Vp8lHuffmanLengths.cs": "9ad9614cfaf8370d6498f72b3686a676b3a836651bba6ba5b0b9cb0edbad8390",
+      "src/Lokad.Image/Internal/Vp8lImageCode.cs": "6da72b152c898766525cb3c6afe9e24b244949f763a1989857401dfd91c635e9",
+      "src/Lokad.Image/Internal/Vp8LoopFilter.cs": "b892f7b0397be3e5b5fc06df2cdf19162f2a4bdc3de94cecdb2de54775d992fb",
+      "src/Lokad.Image/Internal/Vp8lPaletteAdjacency.cs": "1972738c21929836e5b3f8acc7aa72a5e69976cb31863a4b2b14821e56e64a1d",
+      "src/Lokad.Image/Internal/Vp8lPopulationWorkspace.cs": "6908e75f2d7cf511e2488dd2286a2eaf1e362eaa74333b7f73038ca19b061657",
+      "src/Lokad.Image/Internal/Vp8lPredictorHistogram.cs": "b285f1d1d670fbae688906a57d030dd169f4dc905c63f445745167413d1929a3",
+      "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "6cf05f6988cd832124a6655456e46161cce661539246c6b7524f21406bd3a90b",
+      "src/Lokad.Image/Internal/Vp8lReferenceCache.cs": "a1518516289d97f23c088cbddf812cb5fc072f04e86884765fcff23959a03be4",
+      "src/Lokad.Image/Internal/Vp8lReferenceCache.History.cs": "25a3bb59ae9f76211eaf24edae87ca4aa69c8a1d50337fd015ec08b72597b804",
+      "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": "47e13d85070d399b3652b2dfae08601b4f270cc189ed1d3cf414749c4905b323",
+      "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "d790180240297c5fe9766918637d5e26bc3aeadc9e79943e464ca8d13a647306",
+      "src/Lokad.Image/Internal/Vp8lReferenceCost.cs": "148bc45e697392e89b95e1466cfaf9970f1025ee4b1dd8d2a9cd5f8b465dcbce",
+      "src/Lokad.Image/Internal/Vp8lReferenceCost.Green.cs": "8427aa60f7bf1a3962a34b70fce77ec4d2d245208703e1ea78d928eb689d9db4",
+      "src/Lokad.Image/Internal/Vp8lReferenceCost.Values.cs": "fa05e2bc776a57da0591f165867b11bdbe4c28a085002327c6d7aa6faad2f97a",
+      "src/Lokad.Image/Internal/Vp8lReferenceEntropy.cs": "bdbf98b8239661b194a3a6d1409bcd235520b56b8b42d08929be75735454a9d1",
+      "src/Lokad.Image/Internal/Vp8lReferenceEntropy.Prepared.cs": "a071992eb1b2d1ab4f46389395c648a47278434034c11b35bf5ea9f45f70b0db",
+      "src/Lokad.Image/Internal/Vp8lReferenceFrame.cs": "98daf5372857eb0fade6c69f580d551ab8ec4897172e2f6dd3b93e66986fb838",
+      "src/Lokad.Image/Internal/Vp8lReferenceHuffman.cs": "a05f778292342442b49ded070d3ffd1aeaef70937d1cb13dd817dae5e27fccf2",
+      "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "62f7dd05db8734789eb858998c36151b8129f3eef0c70ddc71f9b9989316a788",
+      "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "61bb8d6d7484f06b2d1476715f2e9d65d8140bdc55104f5f51288a37a4005185",
+      "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3",
+      "src/Lokad.Image/Internal/Vp8lReferencePalette.cs": "21f7d3f8f9bef81f022d02b501352d607809abb3ba53a3cfac2fe33c4e436c2f",
+      "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "8355e5cc3cb98629392284fd75192380325ce69aebf368f3162a05842b8446f4",
+      "src/Lokad.Image/Internal/Vp8lReferencePredictor.Green.cs": "81ef796351709bfed025a822b9f08a7fd58501d313a7393f72ea486ccc6917a0",
+      "src/Lokad.Image/Internal/Vp8lTokenBuffer.cs": "e336d7fe24be94072efa05d0c2e53095fb6eb904ec14c13fc11f10160f369a7b",
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "c20615a48e0f1b4eee03c7898437e16b118396d6afb991035e6889105496fbac",
+      "src/Lokad.Image/Internal/Vp8PartitionWriter.cs": "1d78346de587a7d7173bb3b5f75a871beef1d3727d991f884bd435a75ed54beb",
+      "src/Lokad.Image/Internal/Vp8Prediction.cs": "75320bf26977546b258605f5593e51bad6fe80ad8331b3edfc741e46bb855926",
+      "src/Lokad.Image/Internal/Vp8PreparedInput.Chroma.cs": "6da83b9e8445d20a1ce5c4b5b3e95ffbed24347d42b2f97ac1a09173c7628161",
+      "src/Lokad.Image/Internal/Vp8PreparedInput.cs": "cc588d400bd1793cbff2c74872804ba510eb36af880c97b1df0668f5346c06f8",
+      "src/Lokad.Image/Internal/Vp8PreparedInput.Tiles.cs": "1ca42b07cc9e771b7d731daa38579f8d2145c0f9aa64cce824f45c18f42352ad",
+      "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921",
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs": "7f5c898ed307df1632738d4940a1802a0ba9ed2665652f225601dfa8280cc315",
+      "src/Lokad.Image/Internal/Vp8RatePlan.Residual.cs": "541cb8a73158e66c6db04267fdc896ab28c03d941a6268e682fd979447c782b1",
+      "src/Lokad.Image/Internal/Vp8ResidualSummary.cs": "df2e23b2f10a127c3885326ad0749941bb4f983e5b08f23b82fcdd8616aac56a",
+      "src/Lokad.Image/Internal/Vp8SourceAnalysis.cs": "5ff344f75232c5e6aac63464b751b8b127f1289e976eb18ccf11d60a4253e01e",
+      "src/Lokad.Image/Internal/Vp8SourceHistogram.cs": "4b9213949ad58d508009dd3ba768c56c80ec56433aa298c136a75e047dc17d26",
+      "src/Lokad.Image/Internal/Vp8SourceSegments.cs": "2a97359fe2a3ffbe5f75de62cd5e83bf43002d44a7e2d51ebdf010fc0f257829",
+      "src/Lokad.Image/Internal/Vp8Tables.cs": "9060a5114e6c81c2077e7e10a6113d9a29e2a72edc36e2741fae7322da2f51ea",
+      "src/Lokad.Image/Internal/Vp8TokenStatistics.cs": "011dc1d77e5193f501c4f9b24aee6287f319a7ec2b43498297daf3ca79dd40b9",
+      "src/Lokad.Image/Internal/Vp8Transforms.cs": "111ec42afdff9882f7a6024428fdfdb0d447c6097ef007c64335b77e6441d06b",
+      "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "93ad7206346ae860f781bb0dd97adc5e6217292880a5f1b14ce394f3bf236527",
+      "src/Lokad.Image/Internal/WebpAlpha.cs": "a581a1fde5e8fbf90a8a7516eedc004303d1b9a7393fecaa3d23683fa30c9013",
+      "src/Lokad.Image/Internal/WebpBitReader.cs": "430f1df08de6d38b37aefb1a22b27abe3af5ac49346b80936eb577b0800f56d1",
+      "src/Lokad.Image/Internal/WebpBitWriter.cs": "002a220a19f0988e4d832fcd2cf6421aac22aa6d567bf15690889fd90b9f9750",
+      "src/Lokad.Image/Internal/WebpCodec.cs": "02f0f1ef342e736a8863c9709685fb4b40bebeb89e38a4b7d083d16cf10eeb3d",
+      "src/Lokad.Image/Internal/WebpDistances.cs": "fc970afd6d596242a53d14392e081991c82893e5272be5f82018d75802fdd82b",
+      "src/Lokad.Image/Internal/WebpHuffman.cs": "14086caa9759f0a2056fd380b681d2c91eac283e608c528ca5be34538d4cf33c",
+      "src/Lokad.Image/Internal/WebpLosslessDecoder.cs": "cfa285efac71378a21d8dd946b8403b2a348d9f4cac30585ea360e9daa4c5b86",
+      "src/Lokad.Image/Internal/WebpLosslessEncoder.cs": "84eec5fba3cd7ab9b1ae8d56071e041206cd52536d07689f2ec11ff20c0bf5c0",
+      "src/Lokad.Image/Internal/WideColumnBicubicResize.cs": "9f4f6193cf592389d3060f08423fccbdc8535d568b8557233e57554a7dd8fc4e",
+      "src/Lokad.Image/Internal/WideWordColumnBicubicResize.cs": "00fad1cdac846d3c28952d1536da216ff3983590bd56e4c2bf0e51f1e32c8386",
+      "src/Lokad.Image/Internal/WordColumnBicubicResize.cs": "b149b1d0d12839fad89ab6d50f06c5edcbeb567c4f2b24272cf6280cbb12e5cf",
+      "src/Lokad.Image/Internal/ZlibFraming.cs": "5cfbe23efd5301073e926866d1d70844617d596934ed7c5f98ee22120f5bc273",
+      "src/Lokad.Image/Internal/ZlibFraming.MaterializedCursor.cs": "3503235f13833a4a9592dfe38ccc3d94e260832af5dca5bbf42fd1510def7bb7",
+      "src/Lokad.Image/JpegOptions.cs": "659dc3bb34397591e0ba4e26fa687e0d8277c68202444b6c277a027c310c6161",
+      "src/Lokad.Image/Lanczos3ResizePlan.cs": "30b0008137a64a229a278141420e7e22491eaa72b26aa6c324ade971e7f8b62d",
+      "src/Lokad.Image/PngOptions.cs": "41102bce81a03ec837ea93f7fe65c25cecc1145ff396611113d3844074e765d9",
+      "src/Lokad.Image/TextLayout.cs": "8a97445d951b41a6c02ec06da164eb0eab74d8d1ab4dc5b3203b5836ca17e768",
+      "src/Lokad.Image/TextLayout.Fitting.cs": "50839e2ae19c94bc35f678a656412a9e2c432dc03b30b743be707a065a252a04",
+      "src/Lokad.Image/TextLayout.Shaping.cs": "5fefae6cb6487789821efac40da7baeba7ba66ac07bcd2654eac5004e567e964",
+      "src/Lokad.Image/TrueTypeFont.cs": "644bc57dacdf391aca140216ccb129bf67d7a794d291548a3154a0c45309fdaf",
+      "src/Lokad.Image/TrueTypeFont.Kerning.cs": "5dd677efe28b118685fb16e5897779085c41f2555df0ba147fb4029be3f6e37e",
+      "src/Lokad.Image/TrueTypeFont.Mapping.cs": "6cb204ddb4081d9bbd25ffb5872635318bcfc667c9101a0645e331bfd06cb671",
+      "src/Lokad.Image/TrueTypeFont.Outlines.cs": "e779da7d53abe81a5e6fec81485de3304d4b5baa70fd7559107bfa963217f0ad",
+      "src/Lokad.Image/WebpOptions.cs": "404ec5ed4635af244056cc3ad4abaf6a275cbb2c0d743d017d29c0393c763938"
+    },
+    "currentCostInvalidations": [],
+    "publicationPostponed": true
+  },
+  "fullInt32PriceBound": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "statisticalTiming": false,
+    "allBuilds": 0,
+    "entropyMaximum": 1792,
+    "fixedMaximumThrough67": 1905,
+    "conservativeCombinedPriceBound": 16241,
+    "generatedLambdaMaximum": 66654,
+    "scaledProductUpperBound": 1082527614,
+    "int32Maximum": 2147483647,
+    "method": "Independent integer evaluation of existing owned entropy-orbit/fixed-category policies and128RFCquantizer rows. At most seven variable decisions plus one EOB-extra decision; fixed levels0..67 are exact. Covers every UInt8model probability and generated luma lambda, not only the observed fixture. No production numeric-policy change.",
+    "largerLevels": "For magnitudes above67, add the original signed Fixed[level]-Fixed[67] correction multiplied in Int64. Distribution over the generated combined price is exact; each intermediate fits Int64. Distortion/DP/ties remain unchanged.",
+    "proposedFullInt32CapacityBytes": 53888,
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8Tables.cs": "9060a5114e6c81c2077e7e10a6113d9a29e2a72edc36e2741fae7322da2f51ea",
+      "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921"
+    }
+  },
+  "stages": {
+    "rpr401": {
+      "preparations": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+          "candidateSha256": "cf92e4e208754bbb7165fb23345f33a383b9418891e1cdde0aa277189be834e0",
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8RatePlan.cs": "37f1026e451e69899ead5081f0b7cc93f34cca45d45ac431f94e7cf14f0793dc",
+            "src/Lokad.Image/Internal/Vp8FramePlan.cs": "be849856fd9a1bbe8d73a43319fd509e37f524393418905c9625b139518ab89c",
+            "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "0222894eb36a1779a1af8cf92f2d297319beba385b27f2dbbef203f0e1d3863c",
+            "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "1713a3a3a3c2b664960d1463133918df0c2f53a20ddb1964c66b056ded66da49",
+            "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "cd1092d657fa32bb41d41370bf1ab4de44fdf5a83f212488e1e5b3bf84957f3b",
+            "tests/Lokad.Image.Tests/Vp8TrellisPricingTests.cs": "676428adfb6dfeb90b5eab14e4e0075b74d28296b67ff90bf1e5235108114c26"
+          },
+          "focused": {
+            "internal-normal": 69,
+            "internal-scalar": 69,
+            "public-normal": 145,
+            "public-scalar": 145
+          },
+          "productionAccepted": false,
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+          "internalTestAssemblySha256": "a720693e5acefd26729afaf11c77c4d909a751c9cb075bcfaee6f318c297291b"
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+          "candidateSha256": "8fab6565f23533133f330fa351b7c63304a5afe4860d13eff9b80efc6373f7f6",
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8RatePlan.cs": "37f1026e451e69899ead5081f0b7cc93f34cca45d45ac431f94e7cf14f0793dc",
+            "src/Lokad.Image/Internal/Vp8FramePlan.cs": "be849856fd9a1bbe8d73a43319fd509e37f524393418905c9625b139518ab89c",
+            "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "0222894eb36a1779a1af8cf92f2d297319beba385b27f2dbbef203f0e1d3863c",
+            "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "1713a3a3a3c2b664960d1463133918df0c2f53a20ddb1964c66b056ded66da49",
+            "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "cd1092d657fa32bb41d41370bf1ab4de44fdf5a83f212488e1e5b3bf84957f3b",
+            "tests/Lokad.Image.Tests/Vp8TrellisPricingTests.cs": "676428adfb6dfeb90b5eab14e4e0075b74d28296b67ff90bf1e5235108114c26"
+          },
+          "focused": {
+            "internal-normal": 69,
+            "internal-scalar": 69,
+            "public-normal": 145,
+            "public-scalar": 145
+          },
+          "productionAccepted": false,
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+          "internalTestAssemblySha256": "932cec93be4496b9a55ceb2d7dd2b2b286dd018b11c8a1e645aa956d0bd10933"
+        }
+      },
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "RPR401",
+        "productionAccepted": false,
+        "baseline": {
+          "windowsSha256": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+          "linuxSha256": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208"
+        },
+        "hypothesis": {
+          "removes": "Repeated lambda pricing across many searches during the same rate epoch; retain branch/predecessor recurrence rather than replaying rejected state collapse.",
+          "endState": "Existing rate owner prepares exact Int64prices for levels0..4 (the direct low-magnitude syntax category) and EOB for generated type/lambda keys. Larger levels use unchanged complete combined/fixed prices. Borrow once per synchronous luma execution; refill in place only between actual users on rate refresh. Method5 retains real unprepared specialization; no resource-refusal fallback.",
+          "transition": "Additional at most10880Bowned capacity, setup work and low-tier selection may cost time. Keep raw/typed arithmetic in one source specialized for prepared/unprepared actual callers. Complete actual trellis and ordinary photograph cross-check before broad/package. No CPU inference from these counts.",
+          "acceptance": "Exact packet/strict tie/DP and native-level oracles, low/high tier endpoints, rate refresh at full admitted root, terminal refusal/cancel cleanup, retained callers and all source ownership. One immutable focusedW/L normal/scalar candidate. Independent confirmation only for useful actual caller leads, broad/affectedISA/SAME-package at accepted coherent milestone."
+        },
+        "invalidation": "Shared rate-owner layout and calls affect all eight encoder costs. Prepared pricing itself is method6; method5 keeps actual unprepared specialization. Decoder/VP8L/PNG/JPEG/resize/text sources unchanged.",
+        "proposedAdditionalWorstOwnedCapacityBytes": 10880
+      },
+      "short": {
+        "trellis": {
+          "project": "Lokad.Image",
+          "case": "trellis",
+          "mode": "short",
+          "reusedOriginalPrefix": "rpr401",
+          "originalUs": 10967.66078125,
+          "candidateUs": 11813.141625,
+          "savedUs": -845.4808437499996,
+          "rawReduction": -0.07708852968861057,
+          "normalizedPointReduction": -0.010037861556126515,
+          "nativePointChange": 0.06638431160311309,
+          "originalAllocatedBytes": 754497,
+          "candidateAllocatedBytes": 765385,
+          "views": {
+            "statistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.8398864260388398,
+                1.4742440958641687
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.7243945873749115,
+                1.4897770444260707
+              ]
+            },
+            "unfilteredActualStatistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.839886416067931,
+                1.4742436924682794
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.7243945787750913,
+                1.4897766367799168
+              ]
+            }
+          }
+        },
+        "photograph": {
+          "project": "Lokad.Image",
+          "case": "photograph",
+          "mode": "short",
+          "reusedOriginalPrefix": "rpr401",
+          "originalUs": 10394.687307291666,
+          "candidateUs": 10632.928421875,
+          "savedUs": -238.2411145833339,
+          "rawReduction": -0.022919507585015264,
+          "normalizedPointReduction": -0.011251791832833646,
+          "nativePointChange": 0.011537893773255536,
+          "originalAllocatedBytes": 809225,
+          "candidateAllocatedBytes": 809249,
+          "views": {
+            "statistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.9035671784524525,
+                1.154776594251342
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.857515796273984,
+                1.2016123118835846
+              ]
+            },
+            "unfilteredActualStatistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.9035671941387581,
+                1.1547764840182415
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.8575158111608183,
+                1.2016121971796228
+              ]
+            }
+          }
+        }
+      },
+      "paired": {
+        "trellis": {
+          "originalUs": 11392.013427083333,
+          "candidateUs": 11676.958541666667,
+          "ratio": 1.0250183425713901,
+          "lower": 1.0216085957439625,
+          "upper": 1.028433108058434,
+          "pairs": 12,
+          "allPairsRetained": true,
+          "receipt": "tmp/rpr401-paired-trellis-confirm-receipt.json",
+          "scope": "Counterbalanced managed-build ALC comparison only, not actual standalone/native parity proof."
+        },
+        "photograph": {
+          "originalUs": 10301.826588541666,
+          "candidateUs": 10341.938416666666,
+          "ratio": 1.003976250515589,
+          "lower": 0.9883269513741437,
+          "upper": 1.0197332570878224,
+          "pairs": 12,
+          "allPairsRetained": true,
+          "receipt": "tmp/rpr401-paired-photograph-confirm-receipt.json",
+          "scope": "Counterbalanced managed-build ALC comparison only, not actual standalone/native parity proof."
+        }
+      },
+      "newBroadOrPackageChecks": 0,
+      "additionalWorstAdmittedCapacityBytes": 10880
+    },
+    "rpr402": {
+      "preparations": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+          "candidateSha256": "0c64a78bd06adc970b32304fa269ce7f5d8544e5ef4ec617633b92b55f58acad",
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8RatePlan.cs": "37f1026e451e69899ead5081f0b7cc93f34cca45d45ac431f94e7cf14f0793dc",
+            "src/Lokad.Image/Internal/Vp8FramePlan.cs": "be849856fd9a1bbe8d73a43319fd509e37f524393418905c9625b139518ab89c",
+            "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "0222894eb36a1779a1af8cf92f2d297319beba385b27f2dbbef203f0e1d3863c",
+            "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "97727d86b72229efb365de85a7364058b86e5e43e4cf10e5552d58a8422f541f",
+            "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "cd1092d657fa32bb41d41370bf1ab4de44fdf5a83f212488e1e5b3bf84957f3b",
+            "tests/Lokad.Image.Tests/Vp8TrellisPricingTests.cs": "676428adfb6dfeb90b5eab14e4e0075b74d28296b67ff90bf1e5235108114c26"
+          },
+          "focused": {
+            "internal-normal": 69,
+            "internal-scalar": 69,
+            "public-normal": 145,
+            "public-scalar": 145
+          },
+          "productionAccepted": false,
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+          "internalTestAssemblySha256": "9328d81341fa5c14620ee4dd98ee068276c39204d110ca05af7aa42890cfdf12"
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+          "candidateSha256": "c389770d784578f9c3861e48117d5758b16fcfb562d3ba812121256017458103",
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8RatePlan.cs": "37f1026e451e69899ead5081f0b7cc93f34cca45d45ac431f94e7cf14f0793dc",
+            "src/Lokad.Image/Internal/Vp8FramePlan.cs": "be849856fd9a1bbe8d73a43319fd509e37f524393418905c9625b139518ab89c",
+            "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "0222894eb36a1779a1af8cf92f2d297319beba385b27f2dbbef203f0e1d3863c",
+            "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "97727d86b72229efb365de85a7364058b86e5e43e4cf10e5552d58a8422f541f",
+            "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "cd1092d657fa32bb41d41370bf1ab4de44fdf5a83f212488e1e5b3bf84957f3b",
+            "tests/Lokad.Image.Tests/Vp8TrellisPricingTests.cs": "676428adfb6dfeb90b5eab14e4e0075b74d28296b67ff90bf1e5235108114c26"
+          },
+          "focused": {
+            "internal-normal": 69,
+            "internal-scalar": 69,
+            "public-normal": 145,
+            "public-scalar": 145
+          },
+          "productionAccepted": false,
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+          "internalTestAssemblySha256": "953e5da6e003020b6c43945e5adc847a37dcc76350ec336f2f913726c1d2be6b"
+        }
+      },
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "RPR402B",
+        "productionAccepted": false,
+        "baseline": {
+          "windowsSha256": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+          "linuxSha256": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208"
+        },
+        "previousStage": "RPR401A is functionally exact but actual short adverse/inconclusive and counterbalanced trellis+2.50percent separated; do not accept or repeat unchanged.",
+        "hypothesis": "Complete borrowed type/lambda preparation by slicing model views once per execution and hoisting low-row geometry before two choices; terminal pricing uses cached local spans rather than repeatedly rereading aliased execution fields.",
+        "endState": "Same admitted low-tier rate owner and one DP source, type-local raw/prepared views, no reverse type-base arithmetic in inner/EOB paths. Exact recurrence/ties and unchanged high-category prices; method5 remains real raw specialization.",
+        "scope": "Same original/candidate complete trellis and photograph. No new images/settings/native/harness/selector or package builds; previous core/prototype snapshots retained. FocusedW/L normal/scalar then actual screen; broad/package only for accepted coherent milestone.",
+        "additionalWorstOwnedCapacityBytes": 10880
+      },
+      "short": {
+        "trellis": {
+          "project": "Lokad.Image",
+          "case": "trellis",
+          "mode": "short",
+          "reusedOriginalPrefix": "rpr402",
+          "originalUs": 11491.540614583333,
+          "candidateUs": 11008.637458333335,
+          "savedUs": 482.9031562499986,
+          "rawReduction": 0.042022490495066456,
+          "normalizedPointReduction": -0.02722963616793339,
+          "nativePointChange": -0.06741640254981762,
+          "originalAllocatedBytes": 754497,
+          "candidateAllocatedBytes": 765385,
+          "views": {
+            "statistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.7964096713637625,
+                1.1304721393596442
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.8018082462492483,
+                1.2862674013850017
+              ]
+            },
+            "unfilteredActualStatistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.7964096179088959,
+                1.130471899152428
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.8018081924320305,
+                1.2862671280737887
+              ]
+            }
+          }
+        },
+        "photograph": {
+          "project": "Lokad.Image",
+          "case": "photograph",
+          "mode": "short",
+          "reusedOriginalPrefix": "rpr402",
+          "originalUs": 11147.219583333334,
+          "candidateUs": 10475.877416666666,
+          "savedUs": 671.3421666666673,
+          "rawReduction": 0.06022507780060404,
+          "normalizedPointReduction": -0.005751873610790215,
+          "nativePointChange": -0.06559963062711271,
+          "originalAllocatedBytes": 809225,
+          "candidateAllocatedBytes": 809249,
+          "views": {
+            "statistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.7929586397018418,
+                1.0936772177771592
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.7242803443253698,
+                1.2410899842129306
+              ]
+            },
+            "unfilteredActualStatistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.7929586432581093,
+                1.0936770868185366
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.7242803475736282,
+                1.2410898356028723
+              ]
+            }
+          }
+        }
+      },
+      "paired": {},
+      "newBroadOrPackageChecks": 0,
+      "additionalWorstAdmittedCapacityBytes": 10880
+    },
+    "rpr404": {
+      "preparations": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+          "candidateSha256": "e408e76484f563b163d2375649d573a22acad73edf10b34a1ef29a306abe1e18",
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8RatePlan.cs": "37ef52efdc413f01523562046ce2e87885d5d6ee09a2c57e53d0155202b90f49",
+            "src/Lokad.Image/Internal/Vp8FramePlan.cs": "be849856fd9a1bbe8d73a43319fd509e37f524393418905c9625b139518ab89c",
+            "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "0222894eb36a1779a1af8cf92f2d297319beba385b27f2dbbef203f0e1d3863c",
+            "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "f010139ab54ab8b08e38da859460a27d637b553d006d1cec4dfd5c9ecda0a513",
+            "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "cd1092d657fa32bb41d41370bf1ab4de44fdf5a83f212488e1e5b3bf84957f3b",
+            "tests/Lokad.Image.Tests/Vp8TrellisPricingTests.cs": "372cf3b8bc7f653dda3732af44a9a5f506d2ed7613a4b44389b5d5c9139f3e9e"
+          },
+          "focused": {
+            "internal-normal": 69,
+            "internal-scalar": 69,
+            "public-normal": 145,
+            "public-scalar": 145
+          },
+          "productionAccepted": false,
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+          "internalTestAssemblySha256": "3dd8e89e97f172b22da430aa1921b2300c0ba8f42fa21321ab4a90d69b6492d5"
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+          "candidateSha256": "939fa6f10cd885110f7f3eb2866dbfe9f3e2bba3c8bc52289157213bc1985e43",
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8RatePlan.cs": "37ef52efdc413f01523562046ce2e87885d5d6ee09a2c57e53d0155202b90f49",
+            "src/Lokad.Image/Internal/Vp8FramePlan.cs": "be849856fd9a1bbe8d73a43319fd509e37f524393418905c9625b139518ab89c",
+            "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "0222894eb36a1779a1af8cf92f2d297319beba385b27f2dbbef203f0e1d3863c",
+            "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "f010139ab54ab8b08e38da859460a27d637b553d006d1cec4dfd5c9ecda0a513",
+            "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "cd1092d657fa32bb41d41370bf1ab4de44fdf5a83f212488e1e5b3bf84957f3b",
+            "tests/Lokad.Image.Tests/Vp8TrellisPricingTests.cs": "372cf3b8bc7f653dda3732af44a9a5f506d2ed7613a4b44389b5d5c9139f3e9e"
+          },
+          "focused": {
+            "internal-normal": 69,
+            "internal-scalar": 69,
+            "public-normal": 145,
+            "public-scalar": 145
+          },
+          "productionAccepted": false,
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeAuditSelectorPackageBuilds": 0,
+          "internalTestAssemblySha256": "12555f8f6f4beca92c0189499d57c037bdeeecd9a7ae6f538938ccfd261ed3a3"
+        }
+      },
+      "design": {
+        "project": "Lokad.Image",
+        "stage": "RPR404C",
+        "productionAccepted": false,
+        "baseline": {
+          "windowsSha256": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+          "linuxSha256": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208"
+        },
+        "previousStages": "A exact but paired+2.50percent trellis loss; B actual short raw gains follow native-6.6percent, normalized trellis+2.72percent remains inconclusive. Both kept, no broad/package.",
+        "hypothesis": "Prepare all existing68price levels in safe Int32storage per epoch, removing the low-tier selection and duplicate row geometry from DP; retain exact Int64signed high-level correction. This completes model representation rather than replaying state-collapse branches.",
+        "numericalProof": {
+          "project": "Lokad.Image",
+          "productionChanged": false,
+          "statisticalTiming": false,
+          "allBuilds": 0,
+          "entropyMaximum": 1792,
+          "fixedMaximumThrough67": 1905,
+          "conservativeCombinedPriceBound": 16241,
+          "generatedLambdaMaximum": 66654,
+          "scaledProductUpperBound": 1082527614,
+          "int32Maximum": 2147483647,
+          "method": "Independent integer evaluation of existing owned entropy-orbit/fixed-category policies and128RFCquantizer rows. At most seven variable decisions plus one EOB-extra decision; fixed levels0..67 are exact. Covers every UInt8model probability and generated luma lambda, not only the observed fixture. No production numeric-policy change.",
+          "largerLevels": "For magnitudes above67, add the original signed Fixed[level]-Fixed[67] correction multiplied in Int64. Distribution over the generated combined price is exact; each intermediate fits Int64. Distortion/DP/ties remain unchanged.",
+          "proposedFullInt32CapacityBytes": 53888,
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8Tables.cs": "9060a5114e6c81c2077e7e10a6113d9a29e2a72edc36e2741fae7322da2f51ea",
+            "src/Lokad.Image/Internal/Vp8QuantizationPlan.cs": "4be5c365bc605d948029decc0a2e6d50758a1f9bbe26e7293614ccc4d2afd921"
+          }
+        },
+        "endState": "Existing rate owner, admitted Int32type/lambda views prepared once/epoch, one exact DP source with real raw method5 specialization. No loss of precision, owner/pool/cache/session or resource fallback.",
+        "additionalWorstOwnedCapacityBytes": 53888,
+        "boundedDecision": "Final revision in this bounded prepricing round. FocusedW/L scalar and complete actual trellis/photo screen; confirm useful leads before broad/package. If no useful result, restore qualified source/build/package and retain all stages without permanent family ban."
+      },
+      "short": {
+        "trellis": {
+          "project": "Lokad.Image",
+          "case": "trellis",
+          "mode": "short",
+          "reusedOriginalPrefix": "rpr404",
+          "originalUs": 11395.037921875,
+          "candidateUs": 10910.611020833334,
+          "savedUs": 484.4269010416665,
+          "rawReduction": 0.04251209204944495,
+          "normalizedPointReduction": -0.02340514459117582,
+          "nativePointChange": -0.0644097178805495,
+          "originalAllocatedBytes": 754497,
+          "candidateAllocatedBytes": 808393,
+          "views": {
+            "statistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.8993890897762018,
+                1.0199515282936296
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.9326514473388993,
+                1.1370462960056864
+              ]
+            },
+            "unfilteredActualStatistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.8993891404292568,
+                1.0199515328379405
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.9326514998652704,
+                1.1370463010717031
+              ]
+            }
+          }
+        },
+        "photograph": {
+          "project": "Lokad.Image",
+          "case": "photograph",
+          "mode": "short",
+          "reusedOriginalPrefix": "rpr404",
+          "originalUs": 10695.556583333335,
+          "candidateUs": 10519.378802083334,
+          "savedUs": 176.1777812500004,
+          "rawReduction": 0.01647205359322157,
+          "normalizedPointReduction": 0.017081819067032766,
+          "nativePointChange": 0.0006203623919462942,
+          "originalAllocatedBytes": 809225,
+          "candidateAllocatedBytes": 809249,
+          "views": {
+            "statistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.8713238001033891,
+                1.105989395714664
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.8330490353009369,
+                1.1548766307210638
+              ]
+            },
+            "unfilteredActualStatistics": {
+              "rawGainSeparated": false,
+              "normalizedGainSeparated": false,
+              "rawLossSeparated": false,
+              "normalizedLossSeparated": false,
+              "candidateOriginalRawInterval": [
+                0.8713238505338289,
+                1.1059893503782237
+              ],
+              "candidateOriginalNormalizedInterval": [
+                0.8330490835161116,
+                1.15487658338065
+              ]
+            }
+          }
+        }
+      },
+      "paired": {
+        "trellis": {
+          "originalUs": 11373.608645833334,
+          "candidateUs": 11331.922661458333,
+          "ratio": 0.9963319548049845,
+          "lower": 0.9902475248448332,
+          "upper": 1.0024328867809786,
+          "pairs": 12,
+          "allPairsRetained": true,
+          "receipt": "tmp/rpr404-paired-trellis-confirm-receipt.json",
+          "scope": "Counterbalanced managed-build ALC comparison only, not actual standalone/native parity proof."
+        },
+        "photograph": {
+          "originalUs": 10330.373510416666,
+          "candidateUs": 10328.350666666665,
+          "ratio": 0.9999133509598243,
+          "lower": 0.9844701051111389,
+          "upper": 1.0154631260502496,
+          "pairs": 12,
+          "allPairsRetained": true,
+          "receipt": "tmp/rpr404-paired-photograph-confirm-receipt.json",
+          "scope": "Counterbalanced managed-build ALC comparison only, not actual standalone/native parity proof."
+        }
+      },
+      "newBroadOrPackageChecks": 0,
+      "additionalWorstAdmittedCapacityBytes": 53888
+    }
+  },
+  "sourceProofA": {
+    "project": "Lokad.Image",
+    "baseRateGenerationAndResidualSourceExact": true,
+    "frameEditOnlyMethod6Preparation": true,
+    "recurrenceCandidateOrderStrictTiesTerminationAndPublicationExactAfterPriceSubstitution": true,
+    "priceArithmetic": "Each owned Int64entry equals the former (long)lambda*UInt16price. Larger categories retain the former (long)lambda*(combined+signed correction) expression. EOB uses identical wide product. No rounding/reassociation of distortion or scores.",
+    "additionalWorstOwnedCapacityBytes": 10880,
+    "refreshAllocationsAndGrowth": 0,
+    "ownerBoundary": "Existing rate owner reserves keys/scaled arrays before allocation, releases capacity on failure/disposal, updates in place between synchronous users; no new abstraction, fallback retry or retained session.",
+    "scope": "Narrow source projection plus actual tier-wide arithmetic/refresh/refusal/cancel/DP tests. Not a whole-library method audit or timing proof."
+  },
+  "optimizedCodeObservation": [
+    {
+      "method": "Lokad.Image.Internal.Vp8TrellisQuantization:Search[Lokad.Image.Internal.Vp8TrellisQuantization+PlainPrices](System.Span`1[short],System.Span`1[short],byref,int):bool (FullOpts)",
+      "bytes": 2302,
+      "stackReferences": 141,
+      "calls": [
+        "System.SpanHelpers:ClearWithoutReferences(byref,nuint)",
+        "System.SpanHelpers:ClearWithoutReferences(byref,nuint)",
+        "System.Math:ThrowNegateTwosCompOverflow()",
+        "System.ThrowHelper:ThrowArgumentOutOfRangeException()"
+      ]
+    },
+    {
+      "method": "Lokad.Image.Internal.Vp8TrellisQuantization:Search[Lokad.Image.Internal.Vp8TrellisQuantization+PreparedPrices](System.Span`1[short],System.Span`1[short],byref,int):bool (FullOpts)",
+      "bytes": 2457,
+      "stackReferences": 153,
+      "calls": [
+        "System.SpanHelpers:ClearWithoutReferences(byref,nuint)",
+        "System.SpanHelpers:ClearWithoutReferences(byref,nuint)",
+        "System.Math:ThrowNegateTwosCompOverflow()",
+        "System.ThrowHelper:ThrowArgumentOutOfRangeException()"
+      ]
+    }
+  ],
+  "designEvolution": "A prepares direct0..4andEOB prices in Int64 once/rate epoch. B completes type-local borrowed views and row geometry. C prepares all existing0..67prices in proven-exact Int32 to remove the low-tier branch; high-category correction remains Int64. Same recurrence/order/ties, no numerical relaxation. Only C changes storage density; every native packet/tier/refresh/cancellation/refusal/scalar gate passes.",
+  "interpretation": "A actual short adverse with clock movement; counterbalanced managed trellis ratio1.025018[1.021609,1.028433] confirms scoped loss. B raw short apparent gains follow native-6.6percent and normalized points stay adverse/inconclusive. C counterbalanced trellis ratio.996332[.990248,1.002433] is inconclusive; photograph.999913[.984470,1.015463] also inconclusive. Do not claim gain/loss/equivalence from those C intervals or repeat unchanged for favorable numbers.",
+  "storage": {
+    "additionalActualTrellisAllocatedBytesA": 10888,
+    "additionalActualTrellisAllocatedBytesB": 10888,
+    "additionalActualTrellisAllocatedBytesC": 53896,
+    "additionalActualPhotographAllocatedBytesAll": 24,
+    "maximumAddedAdmittedCapacityA": 10880,
+    "maximumAddedAdmittedCapacityC": 53888,
+    "peakPhysicalOrAdmittedWholeOperationNewlyMeasured": false,
+    "nativeAllocationMeasured": false,
+    "scope": "Owned key/price capacity was reserved before allocation, reused without growth on refresh and released on failure/disposal. Total allocation and whole-operation live peak are separate. The existing owner grows24B for unprepared calls; array payload/header/coarse allowances explain separate capacity versus GC totals. No cross-operation retention, pool/session or admission-refusal fallback."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "restoredQualifiedCommit": "2e277bba",
+      "productionSha256": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+      "embeddedTestAssemblySha256": "5c7e2ed71e35260dcf5ab5a6c4412fa4f83f06b2d8f29d951d10d65bc717203d",
+      "files": {
+        "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "9e920ed27c22a9beeb843119fe34a8d6c13b6af7b567b51958fa793cc7c20c28",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "5c7e2ed71e35260dcf5ab5a6c4412fa4f83f06b2d8f29d951d10d65bc717203d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "3b4aa6025028f1bff4c93073be169079cfdd668988c078820cb461cb0415ebf8",
+        "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9e7dd5d0dd2a3de1904f86e450ff3b70db5faa022bf14e35f0cdf7fa10506007",
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "c20615a48e0f1b4eee03c7898437e16b118396d6afb991035e6889105496fbac",
+        "src/Lokad.Image/Internal/Vp8RatePlan.cs": "7f5c898ed307df1632738d4940a1802a0ba9ed2665652f225601dfa8280cc315",
+        "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "93ad7206346ae860f781bb0dd97adc5e6217292880a5f1b14ce394f3bf236527",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "ea1d592599de1bc000feded528740976bebe90259cc5cac87b943e7323f69cd7",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "ea1d592599de1bc000feded528740976bebe90259cc5cac87b943e7323f69cd7",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "ea1d592599de1bc000feded528740976bebe90259cc5cac87b943e7323f69cd7",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "a3b18c72117ec79555137edd5ac8860fcf4541c54ce7e436f3684cc73ebad178",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "ea1d592599de1bc000feded528740976bebe90259cc5cac87b943e7323f69cd7",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c"
+      },
+      "prototypeSnapshot": "tmp/rpr404-candidate-windows",
+      "actualPackageUnchanged": true,
+      "rollbackBuilds": 0,
+      "repeatedBroadChecks": 0,
+      "repeatedPackageChecks": 0,
+      "decision": "Three coherent prepricing stages exact; A paired trellis loss2.50percent, B standalone inconclusive, C counterbalanced ratio.996332[.990248,1.002433] with+53896B/op. No useful confirmed end-state gain; reject these implementations. Restore the qualified production, retaining both prototype stages and every point. Neither arithmetic family is permanently closed."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "restoredQualifiedCommit": "2e277bba",
+      "productionSha256": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+      "embeddedTestAssemblySha256": "7726f7ce339baafda79b40cb50a710657549aef6b2e1a66e9b48bdd88a541b75",
+      "files": {
+        "tmp/benchmark-source.json": "48bfea28df0139940cb8b71e52e113f98a4af0ac1a4127c56decb98b67b0969a",
+        "src/Lokad.Image/Internal/Vp8RatePlan.cs": "7f5c898ed307df1632738d4940a1802a0ba9ed2665652f225601dfa8280cc315",
+        "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9e7dd5d0dd2a3de1904f86e450ff3b70db5faa022bf14e35f0cdf7fa10506007",
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "c20615a48e0f1b4eee03c7898437e16b118396d6afb991035e6889105496fbac",
+        "src/Lokad.Image/Internal/Vp8TrellisQuantization.cs": "93ad7206346ae860f781bb0dd97adc5e6217292880a5f1b14ce394f3bf236527",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "37c41cd4d224e115a9f49359852d8ea0a8f839b01109cb544fbb6c3b2ffa269c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+        "tests/Lokad.Image.Tests/Vp8TrellisQuantizationTests.cs": "9e920ed27c22a9beeb843119fe34a8d6c13b6af7b567b51958fa793cc7c20c28",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "7726f7ce339baafda79b40cb50a710657549aef6b2e1a66e9b48bdd88a541b75",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "bbb83c6a353ca342b5f0add7b0e71243a19328033c946a02807d8fa1ba491b2a",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "37c41cd4d224e115a9f49359852d8ea0a8f839b01109cb544fbb6c3b2ffa269c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "37c41cd4d224e115a9f49359852d8ea0a8f839b01109cb544fbb6c3b2ffa269c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "dc584cf80630b856bffdb7c3375d826cc972f72c0b6e75f7855309ddedcb5208",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "37c41cd4d224e115a9f49359852d8ea0a8f839b01109cb544fbb6c3b2ffa269c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0"
+      },
+      "prototypeSnapshot": "tmp/rpr404-candidate-linux",
+      "actualPackageUnchanged": true,
+      "rollbackBuilds": 0,
+      "repeatedBroadChecks": 0,
+      "repeatedPackageChecks": 0,
+      "decision": "Three coherent prepricing stages exact; A paired trellis loss2.50percent, B standalone inconclusive, C counterbalanced ratio.996332[.990248,1.002433] with+53896B/op. No useful confirmed end-state gain; reject these implementations. Restore the qualified production, retaining both prototype stages and every point. Neither arithmetic family is permanently closed."
+    }
+  },
+  "qualifiedProofReused": "2e277bba;5735full/live perOS, normal/scalar and actuale570package/all3examples, CIgreen42209771906. Source/main/embedded/public/live bindings and VMmanifest restored exactly.",
+  "workflow": {
+    "productionCoreVersionsEachOs": 3,
+    "successfulEmbeddedVersionsEachOs": 3,
+    "failedEmbeddedBuildAttemptsEachOs": 1,
+    "isolatedDiagnosticBuilds": 2,
+    "actualOptimizedCodeDiagnosticTests": 22,
+    "benchmarkNativeSelectorFixtureBuilds": 0,
+    "standaloneShortJobs": 12,
+    "pairedIndependentJobs": 4,
+    "standaloneIndependentConfirmations": 0,
+    "broadCandidateQualifications": 0,
+    "candidatePackageBuilds": 0,
+    "unchangedFavorableRepeats": 0,
+    "rollbackBuilds": 0
+  },
+  "decision": "Reject these three implementations: no useful confirmed completed-stage elapsed gain offsets higher allocation/capacity. Count reduction establishes applicability, not CPU savings; runtime cause is not isolated sufficiently for a blanket multiplication/cache claim. Retain exact mathematical/ownership evidence and every adverse point, restore qualified implementation, and proceed independently. No permanent prepricing-family ban.",
+  "next": "Audit invariant rate-plan preparation separately: entropy/fixed/mode prices are recomputed from unchanged module policy on every encode. Quantify repeated work and safe ownership/materialization options before a new implementation; do not replay this epoch prepricing trial unchanged.",
+  "raw": {
+    "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+    "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4",
+    "bytes": 2234576,
+    "members": 410,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "reusedInputsMaterializedByHashWithoutDuplicatePayloads": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      },
+      {
+        "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+        "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+      },
+      {
+        "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+        "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+      },
+      {
+        "file": "jpeg-buffered-correction-restoration.tar.xz",
+        "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+      },
+      {
+        "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+        "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+      },
+      {
+        "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+        "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+      },
+      {
+        "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+        "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+      },
+      {
+        "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+        "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+      },
+      {
+        "file": "vp8-current-live-model-attribution.tar.xz",
+        "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+      },
+      {
+        "file": "vp8-live-model-preparation-qualified.tar.xz",
+        "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+      },
+      {
+        "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+        "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+      }
+    ]
+  }
+}
