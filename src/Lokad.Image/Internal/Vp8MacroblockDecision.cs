@@ -25,9 +25,16 @@ internal static class Vp8MacroblockDecision
 
     private readonly record struct Metric(long D, long S, long H, long R, long Total = 0)
     {
-        internal Metric Price(int lambda) => this with { Total = (R + H) * lambda + 256 * (D + S) };
+        internal Metric Price(int lambda) => this with { Total = TotalPrice(D, S, H, R, lambda) };
         internal Metric Add(Metric other) => new(D + other.D, S + other.S, H + other.H, R + other.R, Total + other.Total);
     }
+
+    // Keep candidate pricing scalar until a score survives the strict winner
+    // test. Returned/aggregated scores still retain every field and are repriced
+    // with the caller's original lambda through Metric.Price.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static long TotalPrice(long distortion, long texture, long header, long rate, int lambda)
+        => (rate + header) * lambda + 256 * (distortion + texture);
 
     private static int Block(int number) => (number / 4 * 4) * 16 + number % 4 * 4;
     private static int UvBlock(int number) => (number / 4) * 8 + (number % 4 / 2 * 4) * 16 + number % 2 * 4;
@@ -117,9 +124,10 @@ internal static class Vp8MacroblockDecision
                 top[bx] = left[by] = any ? (byte)1 : (byte)0;
             }
             if (flat) { flat = Flat(trialLevels[16..], 16, 0); if (flat) { distortion *= 2; texture *= 2; } }
-            var score = new Metric(distortion, texture, rate.Modes[mode], bits).Price(costs.Luma16);
-            if (mode != 0 && score.Total >= best.Total) continue;
-            best = score; bestMode = mode; nonzero = nz; trial.CopyTo(pixels); trialLevels.CopyTo(levels);
+            var header = rate.Modes[mode];
+            var total = TotalPrice(distortion, texture, header, bits, costs.Luma16);
+            if (mode != 0 && total >= best.Total) continue;
+            best = new Metric(distortion, texture, header, bits, total); bestMode = mode; nonzero = nz; trial.CopyTo(pixels); trialLevels.CopyTo(levels);
         }
         maximumEdge = nonzero == 1u << 24 && best.D > costs.MinimumDistortion
             ? Math.Max(Math.Abs((int)levels[1]), Math.Max(Math.Abs((int)levels[2]), Math.Abs((int)levels[4]))) : 0;
@@ -182,8 +190,13 @@ internal static class Vp8MacroblockDecision
                 if (uniform && mode != 0)
                 {
                     var modeHeader = rate.Modes[8 + (aboveMode * 10 + leftMode) * 10 + mode];
-                    var repeatedScore = (uniformScore with { H = modeHeader, R = uniformScore.R + (uniformFlat ? 140 : 0) }).Price(costs.Luma4);
-                    if (repeatedScore.Total < best.Total) { bestMode = mode; best = repeatedScore; }
+                    var repeatedRate = uniformScore.R + (uniformFlat ? 140 : 0);
+                    var repeatedTotal = TotalPrice(uniformScore.D, uniformScore.S, modeHeader, repeatedRate, costs.Luma4);
+                    if (repeatedTotal < best.Total)
+                    {
+                        bestMode = mode;
+                        best = new Metric(uniformScore.D, uniformScore.S, modeHeader, repeatedRate, repeatedTotal);
+                    }
                     continue;
                 }
                 var candidate = batch ? transforms.Slice(mode * 16, 16) : coefficients;
@@ -238,9 +251,12 @@ internal static class Vp8MacroblockDecision
                 if (bestMode >= 0 && (rateCost + header) * costs.Luma4 + 256L * distortion >= best.Total) continue;
                 var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, packedPixels
                     ? textureSource.Compare4(b, reconstructed) : textureSource.Compare4(b, trial, 4));
-                var score = new Metric(distortion, texture, header, rateCost).Price(costs.Luma4);
+                var total = TotalPrice(distortion, texture, header, rateCost, costs.Luma4);
+                if (bestMode >= 0 && total >= best.Total) continue;
+                var score = new Metric(distortion, texture, header, rateCost, total);
+                // Uniform mode0 is the first candidate and always wins, so its
+                // reuse snapshot has the same fields at this publication point.
                 if (uniform) { uniformScore = score; uniformFlat = fused ? flat : Flat(trialLevels, 1, 3); }
-                if (bestMode >= 0 && score.Total >= best.Total) continue;
                 bestMode = mode; best = score; bestNonzero = any;
                 if (packedPixels) reconstructed.CopyTo(bestPixels); else trial.CopyTo(bestPixels);
                 if (fused) prepared.PublishLevels(levels.Slice(b * 16, 16));
@@ -315,9 +331,10 @@ internal static class Vp8MacroblockDecision
                 topNz[above] = leftNz[side] = any ? (byte)1 : (byte)0;
             }
             if (mode > 0 && Flat(trialLevels, 8, 2)) bits += 1120;
-            var score = new Metric(Vp8Distortion.Squared(source, 16, trial, 16, 16, 8), 0, rate.Modes[4 + mode], bits).Price(costs.Chroma);
-            if (mode != 0 && score.Total >= best.Total) continue;
-            best = score; bestMode = mode; nonzero = nz; trial.CopyTo(pixels); trialLevels.CopyTo(levels); trialErrors.CopyTo(errors);
+            var distortion = Vp8Distortion.Squared(source, 16, trial, 16, 16, 8); var header = rate.Modes[4 + mode];
+            var total = TotalPrice(distortion, 0, header, bits, costs.Chroma);
+            if (mode != 0 && total >= best.Total) continue;
+            best = new Metric(distortion, 0, header, bits, total); bestMode = mode; nonzero = nz; trial.CopyTo(pixels); trialLevels.CopyTo(levels); trialErrors.CopyTo(errors);
         }
         for (var channel = 0; channel < 2; channel++)
         {

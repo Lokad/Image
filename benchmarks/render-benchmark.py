@@ -1580,7 +1580,7 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-trellis-execution-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-candidate-score-publication-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
     vq = vp8_owned['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5724
@@ -1588,8 +1588,10 @@ def render():
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     assert vp8_owned['raw']['mirrored'] and vp8_owned['raw']['allMembersVerified']
-    assert vp8_owned['sourceProof']['integerDpRecurrenceTerminationTieOrderAndPublicationExact']
-    assert vp8_owned['sourceProof']['valueTypeModesPreserveBooleanPolicyAndEveryCallArgument']
+    assert vp8_owned['sourceProof']['allTextExactOutsideFourPublicationBlocksAndSharedPrice']
+    assert vp8_owned['sourceProof']['sameExactIntegerPriceExpression']
+    assert vp8_owned['sourceProof']['firstCandidateAndStrictTiesPreserved']
+    assert vp8_owned['sourceProof']['uniformCacheMovedOnlyForGuaranteedFirstWinner']
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
     current_labels = {
@@ -1829,13 +1831,14 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [trellis execution](../benchmarks/VP8-TRELLIS-EXECUTION.md) shares
-  source across prepared/plain policies and reuses DP storage. Independent
-  effort6 diagram saves311µs/2.72%; effort4 photograph costs31µs/0.27% more.
-  Paired allocation and exact packets remain unchanged. Seven costs refresh;
-  distortion-only reuses unchanged code. Eight controls:2pass/stop,5gaps,1uncertain.
-  [Earlier candidate values](../benchmarks/VP8-FIXED-VALUE-CANDIDATE-PIPELINE.md)
-  retain their separately scoped257µs/2.26% photograph gain and adverse history.
+- **WebP:** [candidate score publication](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  defers full records until a winner. Independent photograph/diagram savings
+  are230/135µs (2.02%/2.01%); paired allocations and exact packets are unchanged.
+  Seven affected native costs refresh; distortion-only reuses unchanged code.
+  Eight controls:1pass/stop,6gaps,1uncertain. Opaque8 now has a widened uncertain
+  interval; alpha16 now has a gap. Trellis short effect remains uncertain.
+  [Prior trellis preparation](../benchmarks/VP8-TRELLIS-EXECUTION.md) retains its
+  separately scoped311µs gain and31µs photograph loss as history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. The original live/field kernel is retained after a confirmed
@@ -1874,10 +1877,11 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{decoder_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{vp8_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Affected scalar/AVX512-disabled parser checks pass; unchanged other-path proof is reused.
+opaque-word and wide-column consumers. Affected normal/scalar/AVX2-disabled/
+AVX512-disabled checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
