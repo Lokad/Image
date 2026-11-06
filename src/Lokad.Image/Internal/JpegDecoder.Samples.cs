@@ -86,28 +86,117 @@ internal ref partial struct JpegDecoder
         // Four-component decoding shares the qualified inverse block walk.
         // Allocation, block charges and coefficient release retain their order.
         if (components.Length == 4) { MaterializeCmykPlanes(); return; }
+        foreach (var component in components) MaterializeSamplePlane(component);
+    }
+
+    private void MaterializeSamplePlane(Component component)
+    {
+        var length = component.Coefficients.Length;
+        context.Reserve(length); component.Plane = new byte[length];
         Span<byte> block = stackalloc byte[64];
-        foreach (var component in components)
+        for (var y = 0; y < component.BlockRows; y++)
+        for (var x = 0; x < component.BlockColumns; x++)
         {
-            var length = component.Coefficients.Length;
-            context.Reserve(length); component.Plane = new byte[length];
-            for (var y = 0; y < component.BlockRows; y++)
-            for (var x = 0; x < component.BlockColumns; x++)
-            {
-                ReadOnlySpan<int> coefficients = component.Coefficients.AsSpan((y * component.BlockColumns + x) * 64, 64);
-                if (progressive)
-                {
-                    var natural = component.Approximation.AsSpan();
-                    for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
-                    coefficients = natural;
-                }
-                JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
-                for (var by = 0; by < 8; by++)
-                    block.Slice(by * 8, 8).CopyTo(component.Plane.AsSpan((y * 8 + by) * component.BlockColumns * 8 + x * 8, 8));
-            }
-            var storage = component.Coefficients; component.Coefficients = [];
-            context.Release(length * 4L); context.ReturnCoefficients(storage);
+            InverseSampleBlock(component, y * component.BlockColumns + x, block);
+            StoreSampleBlock(block, component.Plane, component.BlockColumns * 8, x, y);
         }
+        ReleaseSampleCoefficients(component);
+    }
+
+    private void InverseSampleBlock(Component component, int index, scoped Span<byte> block)
+    {
+        ReadOnlySpan<int> coefficients = component.Coefficients.AsSpan(index * 64, 64);
+        if (progressive)
+        {
+            var natural = component.Approximation.AsSpan();
+            for (var k = 0; k < 64; k++) natural[JpegTransform.Zigzag[k]] = coefficients[k];
+            coefficients = natural;
+        }
+        JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
+    }
+
+    private static void StoreSampleBlock(ReadOnlySpan<byte> block, Span<byte> plane, int stride, int x, int y)
+    {
+        for (var by = 0; by < 8; by++)
+            block.Slice(by * 8, 8).CopyTo(plane.Slice((y * 8 + by) * stride + x * 8, 8));
+    }
+
+    private void ReleaseSampleCoefficients(Component component)
+    {
+        var storage = component.Coefficients; component.Coefficients = [];
+        context.Release(storage.Length * 4L); context.ReturnCoefficients(storage);
+    }
+
+    // Full-resolution progressive components share the output grid. Keep the first
+    // byte plane, retire its coefficient capacity, then create the ordinary owned
+    // image. Two strips borrow only output bytes beyond this strip's destinations.
+    // Near the physical end, bounded block storage replaces that disjoint tail.
+    private ImageBuffer RenderProgressiveFullResolution()
+    {
+        var first = components[0]; var second = components[1]; var third = components[2];
+        MaterializeSamplePlane(first);
+        var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context);
+        result.Orientation = info.Orientation;
+        try
+        {
+            var stride = first.BlockColumns * 8;
+            var stripBytes = stride * 8;
+            var tailStart = result.ByteLength - 2L * stripBytes;
+            Span<byte> secondBlock = stackalloc byte[64];
+            Span<byte> thirdBlock = stackalloc byte[64];
+            for (var by = 0; by < first.BlockRows; by++)
+            {
+                var y = by * 8;
+                var rows = Math.Max(0, Math.Min(8, info.Height - y));
+                if (tailStart >= (long)(y + rows) * info.Width * 4)
+                {
+                    var secondStrip = result.Pixels.Slice((int)tailStart, stripBytes);
+                    var thirdStrip = result.Pixels.Slice((int)tailStart + stripBytes, stripBytes);
+                    for (var bx = 0; bx < first.BlockColumns; bx++)
+                    {
+                        InverseSampleBlock(second, by * second.BlockColumns + bx, secondBlock);
+                        InverseSampleBlock(third, by * third.BlockColumns + bx, thirdBlock);
+                        StoreSampleBlock(secondBlock, secondStrip, stride, bx, 0);
+                        StoreSampleBlock(thirdBlock, thirdStrip, stride, bx, 0);
+                    }
+                    for (var row = 0; row < rows; row++)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        var firstRow = first.Plane.AsSpan((y + row) * stride, info.Width);
+                        var secondRow = secondStrip.Slice(row * stride, info.Width);
+                        var thirdRow = thirdStrip.Slice(row * stride, info.Width);
+                        if (rgb) RenderRgbRow(firstRow, secondRow, thirdRow, result.GetRow8(y + row));
+                        else JpegInverseColor.WriteRow(firstRow, secondRow, thirdRow, result.GetRow8(y + row), 4);
+                    }
+                }
+                else
+                {
+                    // Reconstruct even wholly padded blocks: they still require
+                    // the same numeric validation and cancellation checkpoints.
+                    for (var bx = 0; bx < first.BlockColumns; bx++)
+                    {
+                        InverseSampleBlock(second, by * second.BlockColumns + bx, secondBlock);
+                        InverseSampleBlock(third, by * third.BlockColumns + bx, thirdBlock);
+                        var x = bx * 8; var columns = Math.Max(0, Math.Min(8, info.Width - x));
+                        for (var row = 0; row < rows && columns != 0; row++)
+                        {
+                            context.Cancellation.ThrowIfCancellationRequested();
+                            var firstRow = first.Plane.AsSpan((y + row) * stride + x, columns);
+                            var secondRow = secondBlock.Slice(row * 8, columns);
+                            var thirdRow = thirdBlock.Slice(row * 8, columns);
+                            var target = result.GetRow8(y + row).Slice(x * 4, columns * 4);
+                            if (rgb) RenderRgbRow(firstRow, secondRow, thirdRow, target);
+                            else JpegInverseColor.WriteRow(firstRow, secondRow, thirdRow, target, 4);
+                        }
+                    }
+                }
+            }
+            ReleaseSampleCoefficients(second); ReleaseSampleCoefficients(third);
+            var plane = first.Plane; first.Plane = [];
+            context.Release(plane.Length);
+            return result;
+        }
+        catch { result.Dispose(); throw; }
     }
 
     private void WriteSamples(Span<byte> destination, JpegSampleFormat format, int stride,

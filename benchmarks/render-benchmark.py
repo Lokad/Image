@@ -898,23 +898,22 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    jpeg_prepared = json.loads((ROOT / 'benchmarks/jpeg-signed-prepared-instructions-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_prepared['productionAccepted']
-    assert jpeg_prepared['raw']['mirrored'] and jpeg_prepared['raw']['allMembersVerified']
-    assert all(q['fullLivePassed'] and q['total'] == 5716
-               for q in jpeg_prepared['qualification']['full'].values())
-    assert set(jpeg_prepared['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422',
-        'Progressive444', 'ProgressiveCancelable444', 'ValidateJpegProgressive420'}
-    assert jpeg_prepared['qualification']['actualPackage']['sha256'] == jpeg_prepared['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert jpeg_prepared['qualification']['actualPackage']['actualConsumerPassed'] and jpeg_prepared['qualification']['samePackageLinux']['actualConsumerPassed']
-    for case, current in jpeg_prepared['cases'].items():
-        assert current['caseId'] == case and current['librarySha256'] == jpeg_prepared['producers']['linuxSha256']
+    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-progressive-plane-scheduling-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_current['productionAccepted']
+    assert jpeg_current['raw']['mirrored'] and jpeg_current['raw']['allMembersVerified']
+    assert all(q['fullLivePassed'] and q['total'] == 5732
+               for q in jpeg_current['qualification']['full'].values())
+    assert set(jpeg_current['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422',
+        'Progressive444', 'ProgressiveCancelable444'}
+    assert set(jpeg_current['reusedCases']) == {'ValidateJpegProgressive420'}
+    assert jpeg_current['qualification']['actualPackage']['sha256'] == jpeg_current['qualification']['samePackageLinux']['sameActualPackageSha256']
+    assert jpeg_current['qualification']['actualPackage']['progressiveStripsOwnershipPassed'] and jpeg_current['qualification']['samePackageLinux']['progressiveStripsOwnershipPassed']
+    for case, current in jpeg_current['cases'].items():
+        assert current['caseId'] == case and current['librarySha256'] == jpeg_current['producers']['linuxSha256']
         assert current['actualIterations'] == len(current['actualNanoseconds']) == 12
         assert current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        assert current['exactDescriptor'] if case.startswith('Validate') else current['exactFrozenPixels']
+        assert current['exactFrozenPixels']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-        if case.startswith('Validate'):
-            continue
         rows.append(('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | '
                      f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | — |'))
@@ -1739,7 +1738,9 @@ def render():
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             continue
         if case == 'ValidateJpegProgressive420':
-            current = jpeg_prepared['cases'][case]
+            current = jpeg_current['reusedCases'][case]
+            assert current['exactDescriptor'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
+            assert current['actualIterations'] == len(current['actualNanoseconds']) == 12
             status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
             read_rows.append(f'| {label} | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
@@ -1864,23 +1865,24 @@ Current scope and remaining work:
   on complete byte enlargement, with unchanged paired allocation. Three current
   uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [signed prepared instructions](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
-  remove repeated sign interpretation in the existing2KiB scan plan. Independent
-  ordinary/live progressive444 savings are462/492µs
-  (11.2%/11.1%), with exact frozen frames. Six current affected costs:1 pass, 3 gaps, 2 uncertain.
-  Report984,238B/op versus984,212original; no new owned capacity/retention.
-  Earlier [scan preparation](../benchmarks/JPEG-PREPARED-SCAN-HEADERS.md) stays
-  history. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
+- **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
+  removes two full byte planes using operation-owned output-tail strips. Complete
+  ordinary/live444 allocation falls from984KB to701KB/op, exact pixels preserved.
+  Live raw elapsed saves69µs/1.61%; normalized and ordinary timing are inconclusive.
+  Five decoder costs refresh; unchanged coding validation is reused. Six controls:
+  1pass,3gaps,2uncertain. Algebraic governed core peak does not increase; no new
+  retained cache. [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
+  retains prior gains. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{vp8_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{jpeg_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Affected normal/scalar/AVX2-disabled/
+opaque-word, progressive-strip and wide-column consumers. Affected normal/scalar/AVX2-disabled/
 AVX512-disabled checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained

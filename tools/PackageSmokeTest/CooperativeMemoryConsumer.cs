@@ -2,6 +2,53 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyProgressivePlaneOwnership()
+    {
+        const int width = 31, height = 23, frameBytes = width * height * 4;
+        var data = AuthoredJpeg.ProgressiveFrame(width, height, JpegSampling.YCbCr444, 3);
+        var original = data.ToArray();
+        using var root = new TestMemoryBudget(128 * 1024);
+        var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
+        var caller = new byte[width * height * 3];
+        ImageCodec.DecodeJpeg(data, caller, JpegSampleFormat.Rgb, options: new() { Limits = options.Limits });
+        using var live = new CancellationTokenSource();
+        var start = root.GrowthAttempts;
+        using var first = ImageCodec.Decode(data, options, live.Token);
+        var outputGrowth = root.GrowthAttempts - start;
+        var expected = OriginalPixels.Bytes(first);
+        for (var i = 0; i < width * height; i++)
+            if (!caller.AsSpan(i * 3, 3).SequenceEqual(expected.AsSpan(i * 4, 3)) || expected[i * 4 + 3] != 255)
+                throw new Exception("Packaged progressive strip output differs from caller samples.");
+        using var input = new MemoryStream(data, writable: false);
+        using var second = await ImageCodec.DecodeAsync(input, options, live.Token);
+        if (root.Bytes != 2 * frameBytes || !input.CanRead || !original.AsSpan().SequenceEqual(data)
+            || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second)))
+            throw new Exception("Packaged progressive strip async ownership differs.");
+        first.Dispose();
+        foreach (var cancel in new[] { false, true })
+        {
+            using var token = new CancellationTokenSource();
+            var stop = root.GrowthAttempts + outputGrowth;
+            if (cancel) root.Admitted = _ => { if (root.GrowthAttempts == stop) token.Cancel(); };
+            else root.RefuseAtGrowth = stop;
+            var failed = false;
+            try { using var unwanted = ImageCodec.Decode(data, options, token.Token); }
+            catch (OperationCanceledException e) when (cancel && e.CancellationToken == token.Token) { failed = true; }
+            catch (ImageLimitException e) when (!cancel && e.Scope == ImageLimitScope.SharedBudget) { failed = true; }
+            root.Admitted = null; root.RefuseAtGrowth = 0;
+            if (!failed || root.Bytes != frameBytes || root.IsDisposed || !original.AsSpan().SequenceEqual(data))
+                throw new Exception("Packaged progressive strip refusal/cancellation leaked ownership.");
+        }
+        using var recovered = ImageCodec.Decode(data, options);
+        data.AsSpan().Clear();
+        if (root.Bytes != 2 * frameBytes || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second))
+            || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(recovered)))
+            throw new Exception("Packaged progressive strip survivor differs after input disposal.");
+        recovered.Dispose(); second.Dispose();
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged progressive strip storage leaked.");
+        Console.WriteLine("Packaged progressive strips preserve exact samples, async, terminal refusal and surviving ownership.");
+    }
+
     private static async Task VerifyOpaqueWordTiles()
     {
         using var root = new TestMemoryBudget(8 * 1024 * 1024);
@@ -550,6 +597,7 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
+        await VerifyProgressivePlaneOwnership();
         await VerifyOpaqueWordTiles();
         VerifyStreamingBicubic();
         VerifyOutputWorkspaceBicubic();

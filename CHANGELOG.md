@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Progressive full-resolution JPEG decoding avoids two complete sample planes,
+  preserving exact pixels, cancellation and shared memory ownership.
+
 - Build fresh WebP color histograms without redundant prior-support scans,
   preserving exact packets and allocation/ownership contracts.
 

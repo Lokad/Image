@@ -672,6 +672,11 @@ internal ref partial struct JpegDecoder
 
     private ImageBuffer Render()
     {
+        if (progressive && components.Length == 3
+            && components[0].H == maxH && components[0].V == maxV
+            && components[1].H == maxH && components[1].V == maxV
+            && components[2].H == maxH && components[2].V == maxV)
+            return RenderProgressiveFullResolution();
         MaterializeSamplePlanes();
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try

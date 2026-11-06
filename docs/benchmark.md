@@ -49,23 +49,24 @@ Current scope and remaining work:
   on complete byte enlargement, with unchanged paired allocation. Three current
   uppers1.031/1.059/1.052remain gaps,116/114/115B/op; geometry/repair remain timed.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [signed prepared instructions](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
-  remove repeated sign interpretation in the existing2KiB scan plan. Independent
-  ordinary/live progressive444 savings are462/492µs
-  (11.2%/11.1%), with exact frozen frames. Six current affected costs:1 pass, 3 gaps, 2 uncertain.
-  Report984,238B/op versus984,212original; no new owned capacity/retention.
-  Earlier [scan preparation](../benchmarks/JPEG-PREPARED-SCAN-HEADERS.md) stays
-  history. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
+- **JPEG and reading:** [progressive plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md)
+  removes two full byte planes using operation-owned output-tail strips. Complete
+  ordinary/live444 allocation falls from984KB to701KB/op, exact pixels preserved.
+  Live raw elapsed saves69µs/1.61%; normalized and ordinary timing are inconclusive.
+  Five decoder costs refresh; unchanged coding validation is reused. Six controls:
+  1pass,3gaps,2uncertain. Algebraic governed core peak does not increase; no new
+  retained cache. [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
+  retains prior gains. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,724 full/live checks per OS**, affected
+The current production build passes **5,732 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
-opaque-word and wide-column consumers. Affected normal/scalar/AVX2-disabled/
+opaque-word, progressive-strip and wide-column consumers. Affected normal/scalar/AVX2-disabled/
 AVX512-disabled checks pass; unchanged other-path proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
@@ -149,11 +150,11 @@ settings do not establish matched quality.
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 3,292.45 | 2,846.74 | 1.157 / 1.168 | 1,637,520 | — |
-| JPEG progressive grayscale, resident decode † | 2,042.18 | 1,844.71 | 1.107 / 1.120 | 683,136 | — |
-| JPEG progressive420, resident decode † | 1,710.92 | 1,953.57 | 0.876 / 0.886 | 775,314 | — |
-| JPEG progressive422, resident decode † | 2,385.30 | 2,264.20 | 1.053 / 1.079 | 847,116 | — |
-| JPEG ordinary progressive444, resident decode † | 3,675.39 | 3,361.81 | 1.093 / 1.112 | 984,238 | — |
-| JPEG progressive444, live-token resident decode † | 3,951.43 | 3,353.74 | 1.178 / 1.181 | 984,238 | — |
+| JPEG progressive grayscale, resident decode † | 2,023.81 | 1,829.96 | 1.106 / 1.111 | 683,136 | — |
+| JPEG progressive420, resident decode † | 1,831.21 | 2,088.88 | 0.877 / 0.882 | 775,314 | — |
+| JPEG progressive422, resident decode † | 2,292.77 | 2,245.05 | 1.021 / 1.074 | 847,116 | — |
+| JPEG ordinary progressive444, resident decode † | 3,657.90 | 3,353.21 | 1.091 / 1.102 | 701,233 | — |
+| JPEG progressive444, live-token resident decode † | 4,202.35 | 3,608.82 | 1.164 / 1.173 | 701,182 | — |
 | JPEG dense CMYK, resident decode (confirmed pass) † | 2,575.62 | 3,161.31 | 0.815 / 0.860 | 1,085,661 | — |
 | JPEG horizontal-only CMYK, resident decode † | 518.51 | 396.74 | 1.307 / 1.353 | 1,085,763 | — |
 | JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 441.76 | 624.43 | 0.707 / 0.742 | 762,700 | — |
