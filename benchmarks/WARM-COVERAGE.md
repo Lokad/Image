@@ -29,6 +29,11 @@ paths. The independent204µs photograph gain remains distinct from uncertain
 diagram/trellis effects, current native gaps and adverse confidence. It is not a
 125-row actual-package release refresh or282-path pass. Publication is postponed.
 
+A [broader rate-core prototype](VP8-CANONICAL-RATE-BOUNDARY.md) is rejected:
+its paired gain conflicts with a confirmed326µs/2.96% actual standalone photograph
+loss. Qualified source/modules/package restore exactly; current costs and proofs
+above remain valid. Retain raw history outside renderer dependencies; no family ban.
+
 [PNG preparation](PNG-LAZY-VIEW-PREPARATION.md) retains9passes/2gaps/4uncertain
 controls and its independent gains. The [reader milestone](VP8-PREPARED-TOKEN-STATE.md)
 retains440/304µs validation/stream gains and allsix reader gaps. Those production

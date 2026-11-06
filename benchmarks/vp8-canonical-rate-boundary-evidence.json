@@ -1,0 +1,768 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RVP385",
+  "date": "2026-11-06",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "productionRestoredExact": true,
+  "requiredMaterialPaths": 282,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "RVP385",
+    "productionChanged": true,
+    "productionAccepted": false,
+    "baseline": {
+      "windows": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+      "linux": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585"
+    },
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "1e26f19d7e95914cf482867e2a001c37d13982ab20b3bcf85809954b540e0001",
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs": "9448b74655f2fe9ee6cac61ccccd5e133fe5c0cbf95e6d4bc24ccfe834d4d653",
+      "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "3a62a4958e524141232477fbd6b99fa97fe30b5eb5791445180a2b78e82d5803",
+      "tests/Lokad.Image.Tests/Vp8RatePlanTests.cs": "ba91aa19a5098b0aa5ab16efd8b08fc2c10e12c9d221566586d755324adfabd1"
+    },
+    "hypothesis": "Complete search-local borrowed rate execution across luma16,chroma and ordinary/scalar/trellis luma4, removing repeated Values acquisition per residual block.",
+    "endState": "One exact canonical static borrowed-span residual core with existing scalar/vector math; old instance entry removed, tests use actual core. Search-local values/mode views under charged frame owner. No new table, heap, owner, pool, cache, session, quota or numerical policy.",
+    "boundaries": "Frozen complete photograph Q75/effort4 primary, existing transparentRGBA16 and ordinarydiagram/trellis shared callers as needed. Normalization/preparation/admission/independent output/disposal stay timed; no shape/depth/settings grid.",
+    "lifetime": "Borrowed views end at synchronous search return before frame refresh/disposal. Trellis retains its explicit cancellation/disposed-owner guard. Owned table creation/refusal/refresh/disposal unchanged.",
+    "transition": "Internal signature and test bindings change, without duplicate scalar algorithms or compatibility wrapper. Native residual/table/mode/packet/alias/invalid-input/cancel/admission/ownership oracles unchanged. Temporary code/stack differences judged by complete operations, not fixed threshold.",
+    "evidence": "RVA384bounded source audit reuses actual RPE382Luma16/chroma code attribution because those methods and Residualmath were unchanged by RVP383. Static loop bounds/callsites are not timings/current dynamic counts or predicted gains.",
+    "acceptance": "One immutable core/embedded build eachOS, focused normal/scalar first; short complete-operation primary screen and independent confirmation for useful lead, then affected caller guards. Resolve material contradictions before broad/off/actual-package milestone. No repeat unchanged sampling for favorable points."
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "allOtherSourceTextExact": true,
+    "sameRateMathValidationPruneTiePublication": true,
+    "modeHeaderRowTenIndicesExact": true,
+    "contextInvariantWithinTenCandidates": true,
+    "viewsLocalToSearchBeforeRefreshOrDisposal": true,
+    "ownedStorageCreationRefreshAndCleanupUntouched": true,
+    "newOwnedHeapBytes": 0,
+    "newOwnersTablesPoolsCachesQuotas": 0,
+    "oldInstanceEntryRemoved": true,
+    "existingIndependentTestsBindActualStaticCore": true,
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "1e26f19d7e95914cf482867e2a001c37d13982ab20b3bcf85809954b540e0001",
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs": "9448b74655f2fe9ee6cac61ccccd5e133fe5c0cbf95e6d4bc24ccfe834d4d653",
+      "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "3a62a4958e524141232477fbd6b99fa97fe30b5eb5791445180a2b78e82d5803",
+      "tests/Lokad.Image.Tests/Vp8RatePlanTests.cs": "ba91aa19a5098b0aa5ab16efd8b08fc2c10e12c9d221566586d755324adfabd1"
+    },
+    "originalSources": {
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "dadf532a09b85a498dd7884ff0738eb1ae5c49ac6062aabf435c1acde26880de",
+      "src/Lokad.Image/Internal/Vp8RatePlan.cs": "7f5c898ed307df1632738d4940a1802a0ba9ed2665652f225601dfa8280cc315",
+      "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "766ef18c22a68080b2846c3edc38f60b1750669bcef2ac6829e40cbd6cae7944",
+      "tests/Lokad.Image.Tests/Vp8RatePlanTests.cs": "3267e14ebbc6b2e58cee6473d57e36c770ac03d1bc55aa36e270049d9ccdcab4"
+    },
+    "scope": "Exact reversal of two search-local value/mode acquisitions, four residual bindings, two mode bindings and the canonical residual signature. Scalar/vector math, table generation, refresh, disposal, pruning, ties, cancellation and every expected oracle remain byte-for-byte source text.",
+    "affectedDisplayedCases": [
+      "opaque8",
+      "opaque16",
+      "photograph",
+      "diagram",
+      "trellis",
+      "alpha",
+      "alpha16"
+    ],
+    "unaffectedDisplayedCases": [
+      "distortion"
+    ],
+    "otherDisplayedCostsReused": 118,
+    "note": "Only actual macroblock RDO uses the changed residual entry; distortion-only/decoder/inverse/VP8L/PNG/JPEG/edit/text remain unchanged. No new code/profile timing inferred from static reuse."
+  },
+  "decision": {
+    "project": "Lokad.Image",
+    "stage": "RVP385",
+    "productionAccepted": false,
+    "productionChanged": false,
+    "restoreQualifiedProduction": true,
+    "pairedPhotograph": {
+      "originalUs": 10969.575421875,
+      "candidateUs": 10830.097458333334,
+      "savedUs": 139.47796354166604,
+      "ratio": 0.9872975686772582,
+      "interval": [
+        0.9825820179923677,
+        0.9920231026652024
+      ],
+      "allocationBoth": 809072,
+      "scope": "Complete operations in two isolated immutable assembly contexts; a scoped lead, not default-context standalone performance."
+    },
+    "actualStandalone": {
+      "photograph": {
+        "originalUs": 11016.203756249999,
+        "candidateUs": 11342.666149147726,
+        "extraUs": 326.4623928977271,
+        "ratio": 1.0296347453370687,
+        "rawInterval": [
+          1.0231430739707095,
+          1.0355177697376843
+        ],
+        "referenceNormalizedInterval": [
+          1.0164387852468777,
+          1.0396471712293738
+        ],
+        "allocationBoth": 809225,
+        "packetBytes": 17688,
+        "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "nativeMovement": 0.0008552435014104187,
+        "status": "loss",
+        "originalObservation": "tmp/rvp385-original-photograph-confirm-observation.json",
+        "candidateObservation": "tmp/rvp385-current-photograph-confirm-observation.json"
+      },
+      "opaque8": {
+        "originalUs": 15006.465365384616,
+        "candidateUs": 15911.614319444447,
+        "extraUs": 905.1489540598304,
+        "ratio": 1.0603172653933375,
+        "rawInterval": [
+          1.05069112284813,
+          1.0699668995772302
+        ],
+        "referenceNormalizedInterval": [
+          0.9741516420394484,
+          1.0784852876808046
+        ],
+        "allocationBoth": 1201552,
+        "packetBytes": 72380,
+        "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "nativeMovement": 0.0044557341532360795,
+        "status": "uncertain",
+        "originalObservation": "tmp/rvp385-original-opaque8-confirm-observation.json",
+        "candidateObservation": "tmp/rvp385-current-opaque8-confirm-observation.json"
+      }
+    },
+    "decision": "Reject this completed implementation despite scoped paired gain: contemporary original at the actual default-context caller confirms photograph loss in raw and reference-normalized conservative confidence. Keep opaque8uncertainty; no causal loss/gain/equivalence claim there. Restore exact qualified RVP383sources/main/embedded/bindings/manifest/package and reuse its valid proof; no rebuilding/full qualification of unchanged rollback.",
+    "confidence": "Each standalone has12actuals and12native samples in each bracket; intervals include filtered/all-actual confidence. Combine endpoint intervals conservatively for candidate/original raw and reference-normalized comparisons. These are standalone whole-operation effects, not identified JIT phase causes.",
+    "workflow": "Two contemporary original controls resolve material paired/default-boundary contradiction. No new candidate repeat, profile, harness/native build or workload grid. Original parser-path failure recovered completed logs with existing ParseBenchmarkLog; no measurement/capture rerun. Broad/off/package candidate proof completed before this contradiction was resolved; retain it but do not call it current production evidence.",
+    "next": "Stop this implementation and retain the qualified Luma4borrowed-view stage. Do not permanently exclude canonical-rate or materially revised designs. Move to independent substantial codec/resize attribution; no global block.",
+    "publicationPostponed": true
+  },
+  "pairedComparisons": {
+    "photograph": {
+      "short": {
+        "originalUs": 11024.723,
+        "candidateUs": 10926.993041666667,
+        "ratio": 0.9911387382610645,
+        "interval": [
+          0.9497334208851931,
+          1.0343454206854787
+        ],
+        "pairs": 3,
+        "operationsPerSubject": 8,
+        "allocatedValues": [
+          809072
+        ],
+        "effort": 4,
+        "depth": 8,
+        "quality": 75,
+        "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "exactPacket": true,
+        "independentOwners": true,
+        "quietGuardsPassed": true,
+        "allPointsRetained": true,
+        "rawPoints": "tmp/rvp385-photograph-short.json",
+        "receipt": "tmp/rvp385-photograph-short-receipt.json"
+      },
+      "confirm": {
+        "originalUs": 10969.575421875,
+        "candidateUs": 10830.097458333334,
+        "ratio": 0.9872975686772582,
+        "interval": [
+          0.9825820179923677,
+          0.9920231026652024
+        ],
+        "pairs": 12,
+        "operationsPerSubject": 16,
+        "allocatedValues": [
+          809072
+        ],
+        "effort": 4,
+        "depth": 8,
+        "quality": 75,
+        "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+        "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+        "exactPacket": true,
+        "independentOwners": true,
+        "quietGuardsPassed": true,
+        "allPointsRetained": true,
+        "rawPoints": "tmp/rvp385-photograph-confirm.json",
+        "receipt": "tmp/rvp385-photograph-confirm-receipt.json"
+      }
+    },
+    "alpha16": {
+      "short": {
+        "originalUs": 54111.095625,
+        "candidateUs": 54018.84716666667,
+        "ratio": 0.9982959304284353,
+        "interval": [
+          0.9847166926737438,
+          1.0120620455633955
+        ],
+        "pairs": 3,
+        "operationsPerSubject": 8,
+        "allocatedValues": [
+          7033576
+        ],
+        "effort": 4,
+        "depth": 16,
+        "quality": 75,
+        "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "exactPacket": true,
+        "independentOwners": true,
+        "quietGuardsPassed": true,
+        "allPointsRetained": true,
+        "rawPoints": "tmp/rvp385-alpha16-short.json",
+        "receipt": "tmp/rvp385-alpha16-short-receipt.json"
+      }
+    },
+    "diagram": {
+      "short": {
+        "originalUs": 6368.581958333333,
+        "candidateUs": 6276.006583333333,
+        "ratio": 0.9854668902226414,
+        "interval": [
+          0.946137466340593,
+          1.0264277648146398
+        ],
+        "pairs": 3,
+        "operationsPerSubject": 8,
+        "allocatedValues": [
+          740984
+        ],
+        "effort": 4,
+        "depth": 8,
+        "quality": 75,
+        "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+        "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "exactPacket": true,
+        "independentOwners": true,
+        "quietGuardsPassed": true,
+        "allPointsRetained": true,
+        "rawPoints": "tmp/rvp385-diagram-short.json",
+        "receipt": "tmp/rvp385-diagram-short-receipt.json"
+      }
+    },
+    "trellis": {
+      "short": {
+        "originalUs": 11048.574291666666,
+        "candidateUs": 10926.423958333335,
+        "ratio": 0.9889524506636361,
+        "interval": [
+          0.9156910653027514,
+          1.0680625648747026
+        ],
+        "pairs": 3,
+        "operationsPerSubject": 8,
+        "allocatedValues": [
+          754344
+        ],
+        "effort": 6,
+        "depth": 8,
+        "quality": 75,
+        "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+        "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+        "exactPacket": true,
+        "independentOwners": true,
+        "quietGuardsPassed": true,
+        "allPointsRetained": true,
+        "rawPoints": "tmp/rvp385-trellis-short.json",
+        "receipt": "tmp/rvp385-trellis-short-receipt.json"
+      }
+    }
+  },
+  "rejectedCandidateStandalone": {
+    "current-opaque8": {
+      "managedUs": 15911.614319444447,
+      "nativeUs": 15628.820604166665,
+      "ratio": 1.0180943733657284,
+      "lower": 0.9449426274368949,
+      "upper": 1.0309063764516178,
+      "status": "uncertain",
+      "allocatedBytes": 1201552,
+      "packetBytes": 72380,
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-current-opaque8-confirm-observation.json"
+    },
+    "current-opaque16": {
+      "managedUs": 15128.570335664337,
+      "nativeUs": 15618.01975,
+      "ratio": 0.968661237329037,
+      "lower": 0.96077248835177,
+      "upper": 0.9729464360032084,
+      "status": "pass",
+      "allocatedBytes": 1201552,
+      "packetBytes": 72380,
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-current-opaque16-confirm-observation.json"
+    },
+    "current-photograph": {
+      "managedUs": 11342.666149147726,
+      "nativeUs": 9704.22740625,
+      "ratio": 1.16883762862384,
+      "lower": 1.1610146182054086,
+      "upper": 1.175663349717776,
+      "status": "gap",
+      "allocatedBytes": 809225,
+      "packetBytes": 17688,
+      "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-current-photograph-confirm-observation.json"
+    },
+    "current-diagram": {
+      "managedUs": 6325.65940625,
+      "nativeUs": 5816.575244791667,
+      "ratio": 1.0875230079614602,
+      "lower": 1.0818667883217232,
+      "upper": 1.0914678124520192,
+      "status": "gap",
+      "allocatedBytes": 741137,
+      "packetBytes": 7100,
+      "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+      "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-current-diagram-confirm-observation.json"
+    },
+    "current-trellis": {
+      "managedUs": 10911.764838541667,
+      "nativeUs": 9944.923916666667,
+      "ratio": 1.0972195393324904,
+      "lower": 1.0909528272312334,
+      "upper": 1.1010765075556332,
+      "status": "gap",
+      "allocatedBytes": 754497,
+      "packetBytes": 6818,
+      "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+      "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-current-trellis-confirm-observation.json"
+    },
+    "current-alpha": {
+      "managedUs": 54144.52683333334,
+      "nativeUs": 53435.273916666665,
+      "ratio": 1.013273122128517,
+      "lower": 1.0016676858192142,
+      "upper": 1.0234614668134845,
+      "status": "gap",
+      "allocatedBytes": 7034392,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-current-alpha-confirm-observation.json"
+    },
+    "current-alpha16": {
+      "managedUs": 54661.68189583334,
+      "nativeUs": 53587.17258333333,
+      "ratio": 1.0200516142334068,
+      "lower": 1.010457584688437,
+      "upper": 1.0286679106577519,
+      "status": "gap",
+      "allocatedBytes": 7033984,
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-current-alpha16-confirm-observation.json"
+    },
+    "original-photograph": {
+      "managedUs": 11016.203756249999,
+      "nativeUs": 9695.935020833334,
+      "ratio": 1.1361672425175962,
+      "lower": 1.1308291719079697,
+      "upper": 1.1422376192811412,
+      "status": "gap",
+      "allocatedBytes": 809225,
+      "packetBytes": 17688,
+      "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-original-photograph-confirm-observation.json"
+    },
+    "original-opaque8": {
+      "managedUs": 15006.465365384616,
+      "nativeUs": 15559.491645833334,
+      "ratio": 0.9644573040664338,
+      "lower": 0.9558835787815877,
+      "upper": 0.9700159468587431,
+      "status": "pass",
+      "allocatedBytes": 1201552,
+      "packetBytes": 72380,
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "librarySha256": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "allActualsRetained": true,
+      "observation": "tmp/rvp385-original-opaque8-confirm-observation.json"
+    }
+  },
+  "candidateQualification": {
+    "fullChecksEachOs": 5724,
+    "countsEachOs": [
+      2485,
+      2291,
+      948
+    ],
+    "producers": {
+      "windows": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+      "linux": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9"
+    },
+    "internalProducers": {
+      "windows": "409efc53f33c4aafa9affae012ea0aaf275bb5e2c2a09d78dfa48d1f72a6f4fa",
+      "linux": "1973883a3ee183237a7f8fe3d0c4dcd3ffedb8526d74b5f93c72176c7795a5a0"
+    },
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+      "full": [
+        2485,
+        2291,
+        948
+      ],
+      "total": 5724,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 110,
+        "internal-scalar": 110,
+        "public-normal": 137,
+        "public-scalar": 137
+      },
+      "affectedVp8ScalarEachOs": 247,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "409efc53f33c4aafa9affae012ea0aaf275bb5e2c2a09d78dfa48d1f72a6f4fa",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+      "full": [
+        2485,
+        2291,
+        948
+      ],
+      "total": 5724,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 110,
+        "internal-scalar": 110,
+        "public-normal": 137,
+        "public-scalar": 137
+      },
+      "affectedVp8ScalarEachOs": 247,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "1973883a3ee183237a7f8fe3d0c4dcd3ffedb8526d74b5f93c72176c7795a5a0",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "disabledIntrinsics": {
+      "windows": {
+        "avx2": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "librarySha256": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+          "checks": {
+            "internal": 110,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX2": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "Canonical borrowed-span residual execution and actual encoder callers with AVX2 disabled; exact packets/admission/ownership, same immutable module."
+        },
+        "avx512": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "librarySha256": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+          "checks": {
+            "internal": 110,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX512F": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "Canonical borrowed-span residual execution and actual encoder callers with AVX512 disabled, retaining AVX2/SSE4.1; exact packets/admission/ownership, same immutable module."
+        }
+      },
+      "linux": {
+        "avx2": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+          "checks": {
+            "internal": 110,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX2": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "Canonical borrowed-span residual execution and actual encoder callers with AVX2 disabled; exact packets/admission/ownership, same immutable module."
+        },
+        "avx512": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "librarySha256": "5f95b4f573733aaee5a074d78a1fff3f714026b66e84cc717246d1fa957b6de9",
+          "checks": {
+            "internal": 110,
+            "public": 137
+          },
+          "environment": {
+            "DOTNET_EnableAVX512F": "0"
+          },
+          "noAdditionalBuilds": true,
+          "scope": "Canonical borrowed-span residual execution and actual encoder callers with AVX512 disabled, retaining AVX2/SSE4.1; exact packets/admission/ownership, same immutable module."
+        }
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "cdf04de91dae30e9725f009d9a96b925b8350931afc1e31cc2bab77fdd562e5d",
+      "symbolsSha256": "b3a9d734a9a14e3d0f223dad1806c8b46d8242d50e8aaf58af9a25a9f8c31a22",
+      "bytes": 417402,
+      "librarySha256": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+      "actualConsumerPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "cdf04de91dae30e9725f009d9a96b925b8350931afc1e31cc2bab77fdd562e5d",
+      "librarySha256": "d91fe411a45f6e47911b57ad08423f6e996d3a815650176f79c6af82858e0705",
+      "actualConsumerPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    },
+    "scope": "Candidate functional/packet/ownership qualification passed but performance boundary rejects it. This is historical candidate evidence, not current production proof."
+  },
+  "storage": {
+    "newOwnedHeapCapacityBytes": 0,
+    "newOwnersTablesPoolsCachesSessionsQuotas": 0,
+    "existingMacroblockScratchBytes": 16384,
+    "retainedOperationScratchAfterReturnBytes": 0,
+    "newCompletePhysicalOrAdmittedPeakMeasured": false,
+    "nativeAllocationMeasured": false,
+    "scope": "Paired and standalone totals are separate; all matched totals unchanged. No new heap capacity or owner. Existing coarse scratch stays; no peak or CPU inference from allocations."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "sourceMainEmbeddedBindingsAndPackageRestoredExact": true,
+      "identities": {
+        "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "766ef18c22a68080b2846c3edc38f60b1750669bcef2ac6829e40cbd6cae7944",
+        "tests/Lokad.Image.Tests/Vp8RatePlanTests.cs": "3267e14ebbc6b2e58cee6473d57e36c770ac03d1bc55aa36e270049d9ccdcab4",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "c9da2be74cdeb4a33d8c691c5645a40ff99b75f6cb2d92abfd636faf7bd9a2a7",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "f307a0824d44e7aca9f46595ca01f8e03fd3fda14c79c94fb9cb1d07bf5f7df5",
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "dadf532a09b85a498dd7884ff0738eb1ae5c49ac6062aabf435c1acde26880de",
+        "src/Lokad.Image/Internal/Vp8RatePlan.cs": "7f5c898ed307df1632738d4940a1802a0ba9ed2665652f225601dfa8280cc315",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "23276a42bd44d8fc6bae0c60b1d6315e306daee268e41cab8189cf9c2d486ac6",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "23276a42bd44d8fc6bae0c60b1d6315e306daee268e41cab8189cf9c2d486ac6",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "23276a42bd44d8fc6bae0c60b1d6315e306daee268e41cab8189cf9c2d486ac6",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "23276a42bd44d8fc6bae0c60b1d6315e306daee268e41cab8189cf9c2d486ac6",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "818bd16834c20306479b3330b655463b0724528025270d081631be0020f2813c",
+        "artifacts/nugets/Lokad.Image.0.2.1.nupkg": "7d64d8313cb9c2e50cc448e14bc6afd9d8ea38718d49102b03bdd75a092faa55",
+        "artifacts/nugets/Lokad.Image.0.2.1.snupkg": "769ef90fe502a3314072f58d1e730f68374201fe163def6d1da844983e0bdc8d"
+      },
+      "originalProducer": "703e694b7a764970d8947d62adf7937e1b5dda2b8ec73d68706cb5d26bca09b7",
+      "qualifiedMilestone": "RVP383",
+      "allNewBuildsTestsPackagesProfilesOrMeasurements": 0,
+      "qualificationReused": "RVP3835724W/L/live, normal/scalar/AVX2off/AVX512off and SAMEactualReleasepackage/all3examples; production/source/test identities match exact saved originals.",
+      "publicationPostponed": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "sourceMainEmbeddedBindingsAndPackageRestoredExact": true,
+      "identities": {
+        "tmp/benchmark-source.json": "92346ef79981f468327992ae03bfcd4672d844e69d1cd579c9de741c9b4d7f19",
+        "src/Lokad.Image/Internal/Vp8RatePlan.cs": "7f5c898ed307df1632738d4940a1802a0ba9ed2665652f225601dfa8280cc315",
+        "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "dadf532a09b85a498dd7884ff0738eb1ae5c49ac6062aabf435c1acde26880de",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "1b88975ed3c8659508733e5214c7f48e777485d7fcd3bfbffc86e39e6b5c2cf0",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+        "tests/Lokad.Image.Tests/Vp8RatePlanTests.cs": "3267e14ebbc6b2e58cee6473d57e36c770ac03d1bc55aa36e270049d9ccdcab4",
+        "tests/Lokad.Image.Tests/Vp8PreparedQuantizationTests.cs": "766ef18c22a68080b2846c3edc38f60b1750669bcef2ac6829e40cbd6cae7944",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "27e3e83015b026628ffe34ad6a7d46c7b3d0537e54f4bed1c9322f0ed68cf4b1",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "0fe99de21e09059ccd1fac8f5edfcc2174363405487fd53a1d6e00da07aed57e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "1b88975ed3c8659508733e5214c7f48e777485d7fcd3bfbffc86e39e6b5c2cf0",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "1b88975ed3c8659508733e5214c7f48e777485d7fcd3bfbffc86e39e6b5c2cf0",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "1b88975ed3c8659508733e5214c7f48e777485d7fcd3bfbffc86e39e6b5c2cf0",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffa4a131f8815171cb92ba22bdbbad0adbb5d7145eebebec4424e942967063b0",
+        "artifacts/nugets/Lokad.Image.0.2.1.nupkg": "7d64d8313cb9c2e50cc448e14bc6afd9d8ea38718d49102b03bdd75a092faa55",
+        "artifacts/nugets/Lokad.Image.0.2.1.snupkg": "769ef90fe502a3314072f58d1e730f68374201fe163def6d1da844983e0bdc8d"
+      },
+      "originalProducer": "8121464e6c3508099a987d73b271da7cab69f228467d33b6b7cee769017d1585",
+      "qualifiedMilestone": "RVP383",
+      "allNewBuildsTestsPackagesProfilesOrMeasurements": 0,
+      "qualificationReused": "RVP3835724W/L/live, normal/scalar/AVX2off/AVX512off and SAMEactualReleasepackage/all3examples; production/source/test identities match exact saved originals.",
+      "publicationPostponed": true
+    }
+  },
+  "qualifiedBase": {
+    "commit": "bf9d192f",
+    "ciGreen": 42181127509,
+    "currentEvidence": "vp8-candidate-score-publication-evidence.json",
+    "actualPackageSha256": "7d64d8313cb9c2e50cc448e14bc6afd9d8ea38718d49102b03bdd75a092faa55",
+    "checksReused5724EachOs": true,
+    "noAdditionalRollbackBuildsTestsPackagesOrMeasurements": true
+  },
+  "workflow": {
+    "coreVersionsEachOs": 1,
+    "internalVersionsEachOs": 1,
+    "newHarnessNativeSelectorFixtureToolBuilds": 0,
+    "shortScreens": 4,
+    "independentPairedConfirmations": 1,
+    "candidateStandaloneCases": 7,
+    "contemporaryOriginalControls": 2,
+    "candidateRepeatForFavorableNumbers": 0,
+    "newProfiles": 0,
+    "postprocessingRecoveryOnly": true,
+    "note": "Actual standalone contradiction was identified after candidate broad/package qualification had started. Preserve those checks without treating them as performance acceptance; future rounds resolve complete-caller contradictions before broad/package where possible."
+  },
+  "raw": {
+    "file": "vp8-canonical-rate-execution-rejected.tar.xz",
+    "sha256": "4f4ca7060e11e52a74ddf4e323270504cf87d2a02daa85e96e69538bbbc4ae1e",
+    "bytes": 2632584,
+    "members": 268,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "reusedInputsMaterializedByHashWithoutDuplicatePayloads": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      }
+    ]
+  },
+  "restorationRaw": {
+    "file": "vp8-canonical-rate-restoration.tar.xz",
+    "sha256": "fd73eedb3c7bf7ad2981b157f31320cb7482ffe1ec72f25205b3c5807cb801f7",
+    "bytes": 5244,
+    "members": 8,
+    "mirrored": true,
+    "allMembersVerified": true
+  },
+  "next": "Continue independent substantial codec/resize preparation attribution. This implementation fails the actual caller; a materially revised rate design remains possible with actual-boundary evidence. No blanket family ban or global block."
+}
