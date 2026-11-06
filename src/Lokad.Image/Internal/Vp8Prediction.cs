@@ -14,6 +14,85 @@ internal enum Vp8SmallIntraMode : byte
 /// <summary>Owned geometric formulation of RFC 6386 section 12 intra prediction.</summary>
 internal static class Vp8Prediction
 {
+    // RFC 6386 section 12, complete encoder candidate set in search order.
+    // The caller already expands every mode before its ordered decisions.
+    // Snapshot immutable borders and share adjacent interpolation once per set;
+    // single-mode decoder/live searches keep their own expansion below.
+    internal static void SmallCandidates(ReadOnlySpan<byte> top, ReadOnlySpan<byte> left,
+        byte corner, Span<byte> destination)
+    {
+        if (top.Length < 8 || left.Length < 4 || destination.Length < 160)
+            throw new ArgumentException("Small candidates require complete borders and ten prediction blocks.");
+        // Boundary order: bottom left through top left, then eight top samples.
+        // All source reads precede writes, including when borders alias output.
+        Span<int> border = stackalloc int[13];
+        for (var i = 0; i < 4; i++) border[i] = left[3 - i];
+        border[4] = corner;
+        for (var i = 0; i < 8; i++) border[5 + i] = top[i];
+        Span<int> half = stackalloc int[9];
+        for (var i = 0; i < half.Length; i++) half[i] = Average2(border[i], border[i + 1]);
+        Span<int> smooth = stackalloc int[13];
+        smooth[0] = Average3(border[0], border[0], border[1]);
+        for (var i = 1; i < 12; i++) smooth[i] = Average3(border[i - 1], border[i], border[i + 1]);
+        smooth[12] = Average3(border[11], border[12], border[12]);
+
+        var dc = (border[0] + border[1] + border[2] + border[3]
+            + border[5] + border[6] + border[7] + border[8] + 4) >> 3;
+        var dcRow = (uint)dc * 0x01010101u;
+        StoreCandidate(destination, 0, dcRow, dcRow, dcRow, dcRow);
+        for (var y = 0; y < 4; y++)
+        {
+            var delta = border[3 - y] - border[4];
+            BinaryPrimitives.WriteUInt32LittleEndian(destination.Slice(16 + y * 4, 4),
+                PackRow(Math.Clamp(border[5] + delta, 0, 255), Math.Clamp(border[6] + delta, 0, 255),
+                    Math.Clamp(border[7] + delta, 0, 255), Math.Clamp(border[8] + delta, 0, 255)));
+        }
+        var vertical = PackRow(smooth[5], smooth[6], smooth[7], smooth[8]);
+        StoreCandidate(destination, 2, vertical, vertical, vertical, vertical);
+        StoreCandidate(destination, 3, (uint)smooth[3] * 0x01010101u, (uint)smooth[2] * 0x01010101u,
+            (uint)smooth[1] * 0x01010101u, (uint)smooth[0] * 0x01010101u);
+        StoreCandidate(destination, 4,
+            PackRow(smooth[4], smooth[5], smooth[6], smooth[7]),
+            PackRow(smooth[3], smooth[4], smooth[5], smooth[6]),
+            PackRow(smooth[2], smooth[3], smooth[4], smooth[5]),
+            PackRow(smooth[1], smooth[2], smooth[3], smooth[4]));
+        StoreCandidate(destination, 5,
+            PackRow(half[4], half[5], half[6], half[7]),
+            PackRow(smooth[4], smooth[5], smooth[6], smooth[7]),
+            PackRow(smooth[3], half[4], half[5], half[6]),
+            PackRow(smooth[2], smooth[4], smooth[5], smooth[6]));
+        StoreCandidate(destination, 6,
+            PackRow(smooth[6], smooth[7], smooth[8], smooth[9]),
+            PackRow(smooth[7], smooth[8], smooth[9], smooth[10]),
+            PackRow(smooth[8], smooth[9], smooth[10], smooth[11]),
+            PackRow(smooth[9], smooth[10], smooth[11], smooth[12]));
+        StoreCandidate(destination, 7,
+            PackRow(half[5], half[6], half[7], half[8]),
+            PackRow(smooth[6], smooth[7], smooth[8], smooth[9]),
+            PackRow(half[6], half[7], half[8], smooth[10]),
+            PackRow(smooth[7], smooth[8], smooth[9], smooth[11]));
+        StoreCandidate(destination, 8,
+            PackRow(half[3], smooth[4], smooth[5], smooth[6]),
+            PackRow(half[2], smooth[3], half[3], smooth[4]),
+            PackRow(half[1], smooth[2], half[2], smooth[3]),
+            PackRow(half[0], smooth[1], half[1], smooth[2]));
+        StoreCandidate(destination, 9,
+            PackRow(half[2], smooth[2], half[1], smooth[1]),
+            PackRow(half[1], smooth[1], half[0], smooth[0]),
+            PackRow(half[0], smooth[0], border[0], border[0]),
+            (uint)border[0] * 0x01010101u);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void StoreCandidate(Span<byte> destination, int mode, uint row0, uint row1, uint row2, uint row3)
+    {
+        var block = destination.Slice(mode * 16, 16);
+        BinaryPrimitives.WriteUInt32LittleEndian(block, row0);
+        BinaryPrimitives.WriteUInt32LittleEndian(block[4..], row1);
+        BinaryPrimitives.WriteUInt32LittleEndian(block[8..], row2);
+        BinaryPrimitives.WriteUInt32LittleEndian(block[12..], row3);
+    }
+
     // Pure borrowed4x4 entry for the prepared encoder. Caller supplies eight top
     // and four left samples (including defaults/edge replication). Snapshot all
     // neighbors before writes so the output can alias either border. The outer

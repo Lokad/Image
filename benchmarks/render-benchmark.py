@@ -1579,19 +1579,19 @@ def render():
         assert current['librarySha256'] == streaming['producers']['linuxSha256']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawSeparated'] and v['normalizedSeparated'] for row in streaming['independentComparisons'] for v in row['views'].values())
-    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-candidate-score-publication-evidence.json').read_text(encoding='utf-8'))
+    vp8_owned = json.loads((ROOT / 'benchmarks/vp8-complete-prediction-preparation-evidence.json').read_text(encoding='utf-8'))
     assert vp8_owned['productionAccepted']
     vq = vp8_owned['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5724
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5735
     assert vq['windows']['fullLivePassed'] and vq['linux']['fullLivePassed']
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     assert vp8_owned['raw']['mirrored'] and vp8_owned['raw']['allMembersVerified']
-    assert vp8_owned['sourceProof']['allOtherSourceTextExact']
-    assert vp8_owned['sourceProof']['sameRateMathValidationPruneTiePublication']
-    assert vp8_owned['sourceProof']['modeHeaderRowTenIndicesExact']
-    assert vp8_owned['sourceProof']['contextInvariantWithinTenCandidates']
-    assert vp8_owned['sourceProof']['viewsLocalToSearchBeforeRefreshOrDisposal']
+    assert vp8_owned['sourceProof']['allOriginalPredictionMethodsExact']
+    assert vp8_owned['sourceProof']['allOtherMacroblockDecisionTextExact']
+    assert vp8_owned['sourceProof']['candidateOrderTiesPruningScoresRateForwardPaddingLiveCheckpointsUnchanged']
+    assert all(v['rawSeparated'] and v['normalizedSeparated']
+               for v in vp8_owned['independentPhotograph']['views'].values())
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
     current_labels = {
@@ -1833,13 +1833,15 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [candidate execution](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  borrows search-local rate views and prepares block contexts/header rows once.
-  Photograph independently saves204µs/1.82%, exact packets and809,072B/op unchanged.
-  Diagram/trellis short effects remain uncertain. Seven native costs refresh;
-  distortion-only reuses unchanged code. Eight controls:2pass/stop,6gaps,0uncertain.
-  [Prior score publication](https://github.com/lokad/image/blob/4ce6c091/benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  retains its separately scoped230/135µs gains and adverse/uncertain history.
+- **WebP:** [complete prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
+  shares immutable borders/DC/interpolation across ten ordered candidates.
+  Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
+  exact packets and809,225B/op unchanged. Seven affected costs refresh;
+  distortion-only reuses unchanged code. Eight controls:2pass/stop,4gaps,2uncertain.
+  Transparent word's adverse994µs point stays inconclusive against a contemporary
+  original control; no favorable repeat. Standalone opaque8/diagram allocations
+  differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  retains prior independent gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. The original live/field kernel is retained after a confirmed
@@ -1879,7 +1881,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **{jpeg_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip and wide-column consumers. Affected normal/scalar/AVX2-disabled/

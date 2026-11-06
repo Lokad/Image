@@ -186,8 +186,7 @@ internal static class Vp8MacroblockDecision
             var batch = Vp8ForwardTransform.SupportsFour && !context.Cancellation.CanBeCanceled && !uniform;
             if (batch)
             {
-                for (var mode = 0; mode < 10; mode++)
-                    Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, predictions.Slice(mode * 16, 16));
+                Vp8Prediction.SmallCandidates(top, left, corner, predictions);
                 predictions.Slice(128, 32).CopyTo(predictions[160..]);
                 for (var mode = 0; mode < 12; mode += 4)
                     Vp8ForwardTransform.DctFourPredictions(source[offset..], 16,

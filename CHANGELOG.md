@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare complete VP8 prediction candidates from shared borders and interpolation,
+  preserving exact packets, cancellation and output ownership.
+
 - Progressive full-resolution JPEG decoding avoids two complete sample planes,
   preserving exact pixels, cancellation and shared memory ownership.
 

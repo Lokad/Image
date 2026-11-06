@@ -17,13 +17,15 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [candidate execution](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  borrows search-local rate views and prepares block contexts/header rows once.
-  Photograph independently saves204µs/1.82%, exact packets and809,072B/op unchanged.
-  Diagram/trellis short effects remain uncertain. Seven native costs refresh;
-  distortion-only reuses unchanged code. Eight controls:2pass/stop,6gaps,0uncertain.
-  [Prior score publication](https://github.com/lokad/image/blob/4ce6c091/benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
-  retains its separately scoped230/135µs gains and adverse/uncertain history.
+- **WebP:** [complete prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
+  shares immutable borders/DC/interpolation across ten ordered candidates.
+  Photograph independently saves682µs/6.23%, raw/normalized confidence separated,
+  exact packets and809,225B/op unchanged. Seven affected costs refresh;
+  distortion-only reuses unchanged code. Eight controls:2pass/stop,4gaps,2uncertain.
+  Transparent word's adverse994µs point stays inconclusive against a contemporary
+  original control; no favorable repeat. Standalone opaque8/diagram allocations
+  differ+117/+85B/op; no new heap capacity. [Rate/score preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md)
+  retains prior independent gains and adverse/uncertain history.
   [Prepared token state](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) independently
   saves440/304µs (6.76%/4.43%) on complete validation/stream decoding, unchanged
   paired allocation. The original live/field kernel is retained after a confirmed
@@ -63,7 +65,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,732 full/live checks per OS**, affected
+The current production build passes **5,735 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip and wide-column consumers. Affected normal/scalar/AVX2-disabled/
@@ -105,13 +107,13 @@ settings do not establish matched quality.
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
 | VP8 diagram, effort2 / distortion-only search † | 2,987.26 | 2,503.72 | 1.193 / 1.197 | 741,386 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 54,702.78 | 53,231.43 | 1.028 / 1.036 | 7,033,984 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 15,072.63 | 15,493.00 | 0.973 / 0.982 | 1,201,552 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 11,130.40 | 9,701.70 | 1.147 / 1.155 | 809,225 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 6,409.52 | 5,823.06 | 1.101 / 1.109 | 741,137 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 11,037.25 | 9,799.21 | 1.126 / 1.130 | 754,497 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 15,215.37 | 15,556.93 | 0.978 / 0.981 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 54,289.27 | 53,296.42 | 1.019 / 1.027 | 7,034,392 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 57,673.00 | 53,478.66 | 1.078 / 1.103 | 7,033,984 | 98,590 / 98,590 |
+| VP8 opaque RGBA8 † | 14,427.73 | 15,489.57 | 0.931 / 0.938 | 1,201,669 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 10,269.81 | 9,692.49 | 1.060 / 1.068 | 809,225 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 6,118.83 | 5,820.81 | 1.051 / 1.066 | 741,222 | 7,100 / 7,100 |
+| VP8 diagram, effort6 / trellis † | 10,708.53 | 9,838.60 | 1.088 / 1.120 | 754,497 | 6,818 / 6,818 |
+| VP8 opaque RGBA16, including normalization † | 14,502.89 | 15,678.51 | 0.925 / 0.945 | 1,201,552 | 72,380 / 72,380 |
+| VP8 RGBA8 + lossless alpha † | 56,148.06 | 54,903.24 | 1.023 / 1.053 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,550.15 | 9,576.69 | 0.788 / 0.823 | 4,363,930 | 7,234 / 7,234 |
 | VP8L RGBA8 / libwebp exact=1 † | 109,807.33 | 127,005.55 | 0.865 / 0.940 | 7,476,544 | 183,812 / 183,812 |
