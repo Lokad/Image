@@ -120,7 +120,7 @@ internal sealed partial class PngDeflater : Stream
     private byte Byte(int at) => history[at];
     // Input history is contiguous in the current dictionary coordinate system.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private ushort Pair(int at) => BinaryPrimitives.ReadUInt16LittleEndian(history.AsSpan(at, 2));
+    private static ushort Pair(ReadOnlySpan<byte> bytes, int at) => BinaryPrimitives.ReadUInt16LittleEndian(bytes.Slice(at, 2));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int Insert(ReadOnlySpan<byte> bytes, Span<ushort> chainHeads, Span<ushort> links, int at)
@@ -135,12 +135,12 @@ internal sealed partial class PngDeflater : Stream
     // Consecutive input triples share their first two bytes. Shifting the
     // previous15-bit key drops its oldest byte and inserts only the new byte.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private int InsertSequential(int at, ref int key, ref int next)
+    private static int InsertSequential(ReadOnlySpan<byte> bytes, Span<ushort> chainHeads, Span<ushort> links, int at, ref int key, ref int next)
     {
-        if (at != next) key = (Byte(at) << 5) ^ Byte(at + 1);
-        key = ((key << 5) ^ Byte(at + 2)) & (Window - 1); next = at + 1;
-        var prior = heads[key]; older[at & (Window - 1)] = prior;
-        heads[key] = checked((ushort)at); return prior;
+        if (at != next) key = (bytes[at] << 5) ^ bytes[at + 1];
+        key = ((key << 5) ^ bytes[at + 2]) & (Window - 1); next = at + 1;
+        var prior = chainHeads[key]; links[at & (Window - 1)] = prior;
+        chainHeads[key] = checked((ushort)at); return prior;
     }
 
     private void Process(bool final)
@@ -222,83 +222,92 @@ internal sealed partial class PngDeflater : Stream
 
     private void ProcessLazy(bool final)
     {
-        // Keep execution state local while consuming this immutable input extent.
-        // Sliding and block publication use the same persistent state as Write
-        // and Complete; callbacks and exceptional exits see a committed cursor.
+        // Borrow stable storage and bounded coordinates for this input sweep.
+        // The deferred match retains its logical origin across slides; callbacks
+        // and exceptional exits still publish the complete persistent state.
         var key = 0; var nextInsertion = -1;
-        var cursorPosition = position; var inputEnd = filled; var origin = windowOrigin;
+        var origin = windowOrigin;
+        var current = checked((int)(position - origin));
+        var inputEnd = checked((int)(filled - origin));
+        ReadOnlySpan<byte> bytes = history;
+        Span<ushort> chainHeads = heads, links = older;
+        Span<uint> outputTokens = tokens;
+        var cancellation = context.Cancellation;
+        var lazyLimit = level == 9 ? Maximum : 16;
+        var goodLength = level == 9 ? 32 : 8;
+        var chainLimit = level == 9 ? 4096 : 128;
+        var niceLength = level == 9 ? Maximum : 128;
         var pendingLength = deferredLength; var pendingStart = deferredStart;
         var deferredByte = hasDeferredByte; var usedTokens = tokenCount;
         try
         {
-            while (cursorPosition < inputEnd && (final || inputEnd - cursorPosition >= Lookahead))
+            while (current < inputEnd && (final || inputEnd - current >= Lookahead))
             {
-                context.Cancellation.ThrowIfCancellationRequested();
-                if (cursorPosition >= origin + 2 * Window - Lookahead + 1)
+                cancellation.ThrowIfCancellationRequested();
+                if (current >= 2 * Window - Lookahead + 1)
                 {
-                    PublishLazy(cursorPosition, pendingLength, pendingStart, deferredByte, usedTokens);
-                    AdvanceOrigin(); origin = windowOrigin; nextInsertion = -1;
+                    PublishLazy(origin + current, pendingLength, pendingStart, deferredByte, usedTokens);
+                    AdvanceOrigin(); origin = windowOrigin; current -= Window; inputEnd -= Window; nextInsertion = -1;
                 }
-                var current = (int)(cursorPosition - origin);
-                var prior = cursorPosition + Minimum <= inputEnd ? InsertSequential(current, ref key, ref nextInsertion) : 0;
+                var prior = current + Minimum <= inputEnd ? InsertSequential(bytes, chainHeads, links, current, ref key, ref nextInsertion) : 0;
                 var length = Minimum - 1; var start = 0;
-                if (prior > 0 && current - prior <= Window - Lookahead && pendingLength < (level == 9 ? 258 : 16))
+                if (prior > 0 && current - prior <= Window - Lookahead && pendingLength < lazyLimit)
                 {
-                    var searches = level == 9 ? (pendingLength >= 32 ? 1024 : 4096) : pendingLength >= 8 ? 32 : 128;
+                    var searches = pendingLength >= goodLength ? chainLimit / 4 : chainLimit;
                     var best = pendingLength; var limit = Math.Max(0, current - (Window - Lookahead));
-                    var available = (int)Math.Min(Maximum, inputEnd - cursorPosition); var enough = Math.Min(level == 9 ? 258 : 128, available);
-                    var prefixPair = Pair(current);
-                    var tailPair = best < available ? Pair(current + best - 1) : (ushort)0;
+                    var available = Math.Min(Maximum, inputEnd - current); var enough = Math.Min(niceLength, available);
+                    var prefixPair = Pair(bytes, current);
+                    var tailPair = best < available ? Pair(bytes, current + best - 1) : (ushort)0;
                     do
                     {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        if (best < available && Pair(prior + best - 1) == tailPair && Pair(prior) == prefixPair)
+                        cancellation.ThrowIfCancellationRequested();
+                        if (best < available && Pair(bytes, prior + best - 1) == tailPair && Pair(bytes, prior) == prefixPair)
                         {
                             var found = 2;
                             var prefix = Math.Min(8, available);
-                            while (found < prefix && Byte(prior + found) == Byte(current + found)) found++;
-                            if (found == 8 && found < available) found = MatchLength(history, prior, current, found, available);
-                            context.Cancellation.ThrowIfCancellationRequested();
+                            while (found < prefix && bytes[prior + found] == bytes[current + found]) found++;
+                            if (found == 8 && found < available) found = MatchLength(bytes, prior, current, found, available);
+                            cancellation.ThrowIfCancellationRequested();
                             if (found > best)
                             {
                                 best = found; start = prior; if (found >= enough) break;
-                                tailPair = Pair(current + best - 1);
+                                tailPair = Pair(bytes, current + best - 1);
                             }
                         }
-                        prior = older[prior & (Window - 1)];
+                        prior = links[prior & (Window - 1)];
                     } while (prior > limit && --searches != 0);
                     length = Math.Min(best, available);
                     if (length == Minimum && current - start > Window / 8) length = Minimum - 1;
                 }
                 if (pendingLength >= Minimum && pendingLength >= length)
                 {
-                    tokens[usedTokens++] = (uint)pendingLength | (uint)(cursorPosition - 1 - pendingStart) << 9;
+                    outputTokens[usedTokens++] = (uint)pendingLength | (uint)(origin + current - 1 - pendingStart) << 9;
                     if (usedTokens == TokenCapacity)
                     {
-                        PublishLazy(cursorPosition, pendingLength, pendingStart, deferredByte, usedTokens);
+                        PublishLazy(origin + current, pendingLength, pendingStart, deferredByte, usedTokens);
                         Block(false); usedTokens = tokenCount;
                     }
                     var after = current + pendingLength - 1;
-                    var lastInsert = (int)(inputEnd - origin) - Minimum;
-                    for (var at = current + 1; at < after && at <= lastInsert; at++) InsertSequential(at, ref key, ref nextInsertion);
-                    cursorPosition = origin + after; pendingLength = Minimum - 1; deferredByte = false;
+                    var lastInsert = inputEnd - Minimum;
+                    for (var at = current + 1; at < after && at <= lastInsert; at++) InsertSequential(bytes, chainHeads, links, at, ref key, ref nextInsertion);
+                    current = after; pendingLength = Minimum - 1; deferredByte = false;
                 }
                 else
                 {
                     if (deferredByte)
                     {
-                        tokens[usedTokens++] = Byte(current - 1);
+                        outputTokens[usedTokens++] = bytes[current - 1];
                         if (usedTokens == TokenCapacity)
                         {
-                            PublishLazy(cursorPosition, pendingLength, pendingStart, deferredByte, usedTokens);
+                            PublishLazy(origin + current, pendingLength, pendingStart, deferredByte, usedTokens);
                             Block(false); usedTokens = tokenCount;
                         }
                     }
-                    deferredByte = true; pendingLength = length; pendingStart = origin + start; cursorPosition++;
+                    deferredByte = true; pendingLength = length; pendingStart = origin + start; current++;
                 }
             }
         }
-        finally { PublishLazy(cursorPosition, pendingLength, pendingStart, deferredByte, usedTokens); }
+        finally { PublishLazy(origin + current, pendingLength, pendingStart, deferredByte, usedTokens); }
     }
 
     private void PublishLazy(long cursorPosition, int pendingLength, long pendingStart, bool deferredByte, int usedTokens)

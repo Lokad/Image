@@ -1668,7 +1668,7 @@ def render():
                                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     # One current PNG owner; superseded experiments stay linked history.
-    png = json.loads((ROOT / 'benchmarks/png-greedy-view-preparation-evidence.json').read_text(encoding='utf-8'))
+    png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
     assert png['productionAccepted'] and png['qualification']['fullChecksEachOs'] > 0
     assert png['qualification']['actualPackage']['sha256'] == png['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert png['qualification']['actualPackage']['actualConsumerPassed'] and png['qualification']['samePackageLinux']['actualConsumerPassed']
@@ -1677,8 +1677,8 @@ def render():
         'EncodeGrayAlpha8', 'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16',
         'EncodeFastCancelable16', 'EncodeFastForward16', 'Png8AsyncNonSeekable'}
     assert png['storage']['workspaceAdmissionBytes'] == 393216 and png['storage']['retainedOperationScratchBytes'] == 0
-    assert png['sourceProof']['allOtherPngDeflaterTextByteEquivalentAfterLfNormalization']
-    assert set(png['unchangedCases']) == set(png['cases']) - set(png['sourceProof']['actualFourAffectedCases'])
+    assert png['sourceProof']['outsidePairSequentialInsertionAndProcessLazyUnchanged']
+    assert set(png['unchangedCases']) == set(png['cases']) - set(png['sourceProof']['invalidatedComparisons'])
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
              else row) for kind, row in rows]
@@ -1690,7 +1690,7 @@ def render():
             reuse = png['unchangedCases'][case]
             assert current['reusedUnchangedPath'] and reuse['sourceApplies']
             assert current['librarySha256'] == reuse['librarySha256']
-            assert reuse['unchangedProductionProjection'] == png['sourceProof']['projectionSha256']
+            assert reuse['unchangedProductionProjection'] == png['sourceProof']['unchangedProjectionSha256']
         else:
             assert not current['reusedUnchangedPath']
             assert current['librarySha256'] == png['producers']['linuxSha256']
@@ -1835,12 +1835,14 @@ Current scope and remaining work:
   controls remain gaps. Earlier window preparation remains linked history.
   Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
   four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
-- **PNG:** [greedy view preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md)
-  independently saves269/836µs (5.57%/4.28%) on complete Fastest8/16 encodes.
-  Four affected reference comparisons refresh; eleven reuse unchanged paths.
-  Fifteen fresh one-shot costs have3passes,4gaps and8uncertain cases. Exact packets,
-  384KiB admission and standalone allocations remain unchanged; retained scratch
-  is zero. Earlier output/preparation experiments remain linked separately.
+- **PNG:** [lazy view preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
+  independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
+  Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse
+  unchanged bodies. Fifteen controls:9pass/stop,2gaps,4uncertain. Exact packets and
+  384KiB admission remain unchanged; retained scratch is zero. Grayscale8 measures
+  +408B/op (551,772); ten other fresh allocations are unchanged. Earlier
+  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md)
+  retains independent269/836µs gains; output/preparation histories stay linked.
 - **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
   Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
