@@ -421,7 +421,8 @@ def render():
     png_framing = json.loads((ROOT / 'benchmarks/png-current-framing-costs-evidence.json').read_text(encoding='utf-8'))
     assert not png_framing['productionChanged'] and png_framing['allBuilds'] == 0
     assert png_framing['displayedStatusCounts'] == {'pass': 5, 'gap': 2, 'uncertain': 0}
-    assert png_framing['statusCounts'] == {'pass': 9, 'gap': 3, 'uncertain': 0}
+    assert png_framing['statusCounts'] == {status: sum(c['status'] == status for c in png_framing['cases'].values())
+        for status in ('pass', 'gap', 'uncertain')}
     assert png_framing['raw']['mirrored'] and png_framing['raw']['allMembersVerified']
     assert png_framing['qualificationReused']['sameActualPackageBothOs']
     assert set(png_framing['displayedCases']) == {'DecodeCancelable8', 'DecodeTight8', 'DecodeTight16',
@@ -1920,17 +1921,15 @@ Current scope and remaining work:
   Current ratio {png_decode['current']['ratio']:.3f}/upper {png_decode['current']['upper']:.3f} remains a gap. Nominal arrays fit the same4KiB
   scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
   Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
-  [Seven refreshed controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) now have current
-  independent evidence: **five pass/stop, two gaps**. Live RGBA8 ratio1.104/upper1.113
-  and tight RGBA16 ratio1.043/upper1.052 remain gaps; allocations4,472/70,272B.
-  Tight RGBA8, both-depth coding validation, indexed Adam7 and async word validation
-  pass. Historical point movements are not paired effects; the report records the
-  adverse word-validation point and faster native tight-word clock. Header-only
-  inspection/identification and encoding stay unaffected. Five additional existing
-  core/word/Paeth confirmations give four passes and one small default-RGBA16 gap
-  (upper1.031). Adam7 word now passes, upper0.785; its historical gap is superseded,
-  not a paired gain. The family report holds all12controls:9pass/3gaps;39other
-  already-named decode cases still need current evidence.
+  [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
+  {len(png_framing['cases'])} independently confirmed controls, {png_framing['statusCounts']['pass']} pass/stop,
+  {png_framing['statusCounts']['gap']} gaps and {png_framing['statusCounts']['uncertain']} uncertain. Gaps are live RGBA8 (upper1.113),
+  tight/default RGBA16 (uppers1.052/1.031) and RGB16 (upper1.062). All other
+  confirmed color/Paeth/Adam7/coding-validation controls pass. The report retains
+  allocations, boundaries and historical contradictions; no paired historical gain
+  is inferred. {len(png_framing['remainingNamedDecodeCases'])} already-named decode cases need current evidence. Seven displayed
+  rows are refreshed; additional cases stay in the family report. Header-only
+  inspection/identification and encoding are unaffected.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse

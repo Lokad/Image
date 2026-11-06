@@ -1,6 +1,6 @@
 {
   "project": "Lokad.Image",
-  "stage": "PCR438/PDC439",
+  "stage": "PCR438/PDC439/PCC440",
   "date": "2026-11-06",
   "productionChanged": false,
   "allBuilds": 0,
@@ -563,11 +563,293 @@
       "cancellationRequested": false,
       "tightWorkingBytes": null,
       "nativeDecodeEndianConversionTimed": true
+    },
+    "DecodeRgb8": {
+      "managedUs": 1129.1557111742425,
+      "nativeUs": 1526.2868880208332,
+      "ratio": 0.7398056813804128,
+      "lower": 0.7159613969752697,
+      "upper": 0.7521530881969078,
+      "allocatedBytes": 3448,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "RGB8 into RGBA8",
+      "actualIterations": 12,
+      "filteredResults": 11,
+      "managedActualNanoseconds": [
+        1127861.6510416667,
+        1126458.0208333333,
+        1125324.0104166667,
+        1128965.09375,
+        1129755.296875,
+        1129318.390625,
+        1131178.1822916667,
+        1130405.1354166667,
+        1131650.515625,
+        1134226.703125,
+        1129704.3385416667,
+        1130109.4322916667
+      ],
+      "inputSha256": "ad3af25e172e383b77969917599c4a66cea2581dd64b0cd13f0610ac54816855",
+      "outputBytes": 531468,
+      "outputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "rawGc": "// GC:  0 0 0 662016 192",
+      "receipt": "tmp/pcc440-candidate-DecodeRgb8-confirm-receipt.json",
+      "observation": "tmp/pcc440-candidate-DecodeRgb8-confirm-observation.json",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": false
+    },
+    "DecodeRgb16": {
+      "managedUs": 2336.3104105902776,
+      "nativeUs": 2221.3986458333334,
+      "ratio": 1.0517294655655272,
+      "lower": 1.0258991771356696,
+      "upper": 1.062052033781774,
+      "allocatedBytes": 6520,
+      "status": "gap",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "RGB16 into RGBA16",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        2340542.9166666665,
+        2337666.1666666665,
+        2335834.2291666665,
+        2330109.1145833335,
+        2330394.53125,
+        2331543.0520833335,
+        2347370.65625,
+        2348769.4375,
+        2333269.7291666665,
+        2330984.8125,
+        2334351.7708333335,
+        2334912.9479166665
+      ],
+      "inputSha256": "c70d40002f3ba6df122a2498d860e94acea34c2e0d657700d5fe2a2e6b2b4300",
+      "outputBytes": 1062936,
+      "outputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "rawGc": "// GC:  0 0 0 625920 96",
+      "receipt": "tmp/pcc440-candidate-DecodeRgb16-confirm-receipt.json",
+      "observation": "tmp/pcc440-candidate-DecodeRgb16-confirm-observation.json",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": true
+    },
+    "DecodeGray8": {
+      "managedUs": 344.42388865427927,
+      "nativeUs": 367.2912516276042,
+      "ratio": 0.937740518261758,
+      "lower": 0.9229197057552225,
+      "upper": 0.9494729715612242,
+      "allocatedBytes": 1400,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Gray8 into RGBA8",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        343526.1790540541,
+        342421.01013513515,
+        341663.0540540541,
+        342409.35135135136,
+        341824.7347972973,
+        346550.0304054054,
+        345548.5320945946,
+        346273.4121621622,
+        345902.05574324325,
+        345736.85641891893,
+        345809.7364864865,
+        345437.85641891893
+      ],
+      "inputSha256": "8990a1cb03abac292d32deb02a97003b17b7b8347afe02e8370194de01bbc235",
+      "outputBytes": 531468,
+      "outputSha256": "24609f53449ebce137f741b38af44e63fbcddeec6ac906219d13210230e9da39",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "rawGc": "// GC:  0 0 0 828800 592",
+      "receipt": "tmp/pcc440-candidate-DecodeGray8-confirm-receipt.json",
+      "observation": "tmp/pcc440-candidate-DecodeGray8-confirm-observation.json",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": false
+    },
+    "DecodeGray16": {
+      "managedUs": 725.861944760101,
+      "nativeUs": 958.7494934895834,
+      "ratio": 0.7570923892936454,
+      "lower": 0.7521187905449214,
+      "upper": 0.7605065072036361,
+      "allocatedBytes": 2424,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Gray16 into RGBA16",
+      "actualIterations": 12,
+      "filteredResults": 11,
+      "managedActualNanoseconds": [
+        727492.6944444445,
+        725107.3472222222,
+        725367.5347222222,
+        725025.8368055555,
+        725800.7916666666,
+        725955.7881944445,
+        725967.4375,
+        728014.7013888889,
+        726443.0868055555,
+        725588.1840277778,
+        725378.7986111111,
+        726370.9270833334
+      ],
+      "inputSha256": "66c9aab3f8d04cd2d4d924971dc6f8156eea19634466dcbcec8c9bf95314350b",
+      "outputBytes": 1062936,
+      "outputSha256": "346f1646546bce543afb6e800a81610727af1e5f0cb39eaa123f1f77b584ccd1",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "rawGc": "// GC:  0 0 0 698112 288",
+      "receipt": "tmp/pcc440-candidate-DecodeGray16-confirm-receipt.json",
+      "observation": "tmp/pcc440-candidate-DecodeGray16-confirm-observation.json",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": true
+    },
+    "DecodeGrayAlpha8": {
+      "managedUs": 764.3224558823528,
+      "nativeUs": 1158.31179296875,
+      "ratio": 0.6598589952394392,
+      "lower": 0.6572909584074645,
+      "upper": 0.6611432117066562,
+      "allocatedBytes": 2424,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Gray-alpha8 into RGBA8",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        764236.5220588235,
+        763282.2132352941,
+        762865.6985294118,
+        765170.8786764706,
+        764188.9117647059,
+        764418.5257352941,
+        763936.8419117647,
+        764748.3492647059,
+        765302.9705882353,
+        764430.2169117647,
+        764489.5698529412,
+        764818.2279411765
+      ],
+      "inputSha256": "0bfdcc9aa57f0b6009a3ca31b1ab200d2d1bb59c1395495afaad584c5f6e630d",
+      "outputBytes": 531468,
+      "outputSha256": "a2a2e4edd7a51693352b26525a6e8bf96bb9d74047c8ffc7b207f11881bc0e5e",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "rawGc": "// GC:  0 0 0 659328 272",
+      "receipt": "tmp/pcc440-candidate-DecodeGrayAlpha8-confirm-receipt.json",
+      "observation": "tmp/pcc440-candidate-DecodeGrayAlpha8-confirm-observation.json",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": false
+    },
+    "DecodeGrayAlpha16": {
+      "managedUs": 1563.9924850260418,
+      "nativeUs": 1798.7017942708333,
+      "ratio": 0.8695118279236836,
+      "lower": 0.8609289209000518,
+      "upper": 0.8765841639725783,
+      "allocatedBytes": 4472,
+      "status": "pass",
+      "librarySha256": "05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "label": "Gray-alpha16 into RGBA16",
+      "actualIterations": 12,
+      "filteredResults": 12,
+      "managedActualNanoseconds": [
+        1573839.0078125,
+        1558017.8203125,
+        1558057.796875,
+        1577146.5859375,
+        1572207.8671875,
+        1561653.9453125,
+        1574536.390625,
+        1559012.796875,
+        1555101.6640625,
+        1555921.3515625,
+        1564351.53125,
+        1558088.375
+      ],
+      "inputSha256": "4d3f55f244a05fd1d19044a807ed3885b4306f3b734c66d773c99259e9e97fe8",
+      "outputBytes": 1062936,
+      "outputSha256": "9d0ed2b90676c863eb54a8adfca3d0d9e975af34b1986bc26308ea980e883280",
+      "managedExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "normalScalarCliExact": true,
+      "independentOwnedOutput": true,
+      "sourceUnchanged": true,
+      "boundary": "Warm identical PNG bytes to independent owned RGBA pixels: public managed Decode/allocation/disposal; native codec/input packet/frame wrappers reused, complete decode/owned output/release. RGBA16 BE-to-LE, RGB48BE-to-RGBA64LE, GRAY16BE-to-RGBA64LE, YA16BE-to-RGBA64LE, RGB24-to-RGBA, GRAY8-to-RGBA, MONOBLACK-to-RGBA, YA8-to-RGBA or PAL8-to-RGBA FFmpeg conversion and second output allocation included natively; direct RGBA8 requires no conversion. For gray1/key1, the existing SPEC colorkey=white:similarity=0.01:blend=0 correction follows full MONOBLACK-to-RGBA conversion inside timing; the conversion buffer is transferred for in-place filtering and the owned filtered output is released. Native padded rows exposed directly; packing/file IO/IPC/hashes excluded.",
+      "nativeWorkerSha256": "cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f",
+      "rawGc": "// GC:  0 0 0 572416 128",
+      "receipt": "tmp/pcc440-candidate-DecodeGrayAlpha16-confirm-receipt.json",
+      "observation": "tmp/pcc440-candidate-DecodeGrayAlpha16-confirm-observation.json",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "tightWorkingBytes": null,
+      "nativeDecodeEndianConversionTimed": true
     }
   },
   "statusCounts": {
-    "pass": 9,
-    "gap": 3,
+    "pass": 14,
+    "gap": 4,
     "uncertain": 0
   },
   "previousDisplayedPoints": {
@@ -682,18 +964,18 @@
   },
   "storage": "GC totals shown per complete operation; unchanged ownership/admission qualified. Physical/native peak and retained pool capacity not newly measured. Shared-rootLPP437peak belongs to its distinct two-result control, not transferred here.",
   "observations": "Five pass/stop, two demonstrated gaps: liveRGBA8upper1.1133/tightRGBA16upper1.0524. Tight16raw3019vs3120historical improves while native2895vs3129improves more; ratio movement alone is not evidence of a managed regression. PNG16coding raw2906vs2806historical is adverse but remains passingupper.9834. No causal historicalgain/losseffect asserted. No unchanged favorable repeat.",
-  "remaining": "Twelve existing controls current:9pass/stop,3gap. Existing shared-root control separately remainsgap. Thirty-nine otheralready-required WarmPngdecodecases affected/unconfirmed, explicitlylisted; no newmatrix. Reuse5751/scalar/SAMEpackage and immutablemodule. Next bounded group selected from these remaining paths before newtuning.",
-  "decision": "Accept current confirmations, stop nine passes. No production/build/profile/package/suite changes or unchanged favorable repeats. Current defaultRGBA16smallgap1.019/upper1.031 joins liveRGBA8/tightRGBA16gaps. Adam7wordold1.377current.780 is superseded historicalcost, not a paired causalclaim. Keep seven displayed numericalrefreshes; five additional cases live in familyreport, no summary-table expansion.",
+  "remaining": "Eighteen existing controls current:14pass/stop,4gap. Shared-root control separately remainsgap. Thirty-three other already-required WarmPng decode cases affected/unconfirmed, explicitly listed. No new matrix. Reuse5751/scalar/SAMEpackage and immutablemodule.",
+  "decision": "Accept current confirmations and stop fourteen passes. RGB16 joins liveRGBA8/defaultRGBA16/tightRGBA16 demonstrated gaps; lower1.0259/upper1.0621. No production/build/profile/package/suite changes or unchanged favorable repeats. Preserve seven displayed refreshes and other eleven controls in this family report. No paired causal inference from historical points.",
   "priorEvidence": [
     "png-prepared-prefix-evidence.json",
     "current-tight-png-decode-costs-evidence.json",
     "png-cancelable-cursor-reassessment-evidence.json"
   ],
   "raw": {
-    "file": "png-core-word-current-costs.tar.xz",
-    "sha256": "e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555",
-    "bytes": 2279384,
-    "members": 73,
+    "file": "png-color-current-costs.tar.xz",
+    "sha256": "725e794723ec992403ceb1fc77efc898889fe242dd3f73e20ca38d968efc4e4f",
+    "bytes": 2734300,
+    "members": 90,
     "mirrored": true,
     "allMembersVerified": true,
     "dependencies": [
@@ -860,16 +1142,14 @@
       {
         "file": "png-current-framing-costs.tar.xz",
         "sha256": "def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe"
+      },
+      {
+        "file": "png-core-word-current-costs.tar.xz",
+        "sha256": "e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555"
       }
     ]
   },
   "remainingNamedDecodeCases": [
-    "DecodeRgb16",
-    "DecodeGray8",
-    "DecodeGrayAlpha8",
-    "DecodeRgb8",
-    "DecodeGray16",
-    "DecodeGrayAlpha16",
     "DecodePalette8",
     "DecodeGray1",
     "DecodeGray4",
@@ -1282,6 +1562,195 @@
           {
             "file": "png-current-framing-costs.tar.xz",
             "sha256": "def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe"
+          }
+        ]
+      }
+    },
+    {
+      "stage": "PCC440",
+      "cases": [
+        "DecodeRgb8",
+        "DecodeRgb16",
+        "DecodeGray8",
+        "DecodeGray16",
+        "DecodeGrayAlpha8",
+        "DecodeGrayAlpha16"
+      ],
+      "raw": {
+        "file": "png-color-current-costs.tar.xz",
+        "sha256": "725e794723ec992403ceb1fc77efc898889fe242dd3f73e20ca38d968efc4e4f",
+        "bytes": 2734300,
+        "members": 90,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "png-greedy-view-preparation-qualified.tar.xz",
+            "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+          },
+          {
+            "file": "vp8-current-token-state-attribution.tar.xz",
+            "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+          },
+          {
+            "file": "vp8-prepared-token-state-qualified.tar.xz",
+            "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+          },
+          {
+            "file": "png-lazy-view-preparation-qualified.tar.xz",
+            "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+          },
+          {
+            "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+            "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+          },
+          {
+            "file": "vp8-trellis-execution-qualified.tar.xz",
+            "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+          },
+          {
+            "file": "vp8-photograph-price-attribution.tar.xz",
+            "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+          },
+          {
+            "file": "vp8-candidate-score-publication-qualified.tar.xz",
+            "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+          },
+          {
+            "file": "vp8-rate-view-preparation-qualified.tar.xz",
+            "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+          },
+          {
+            "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+            "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+          },
+          {
+            "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+            "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+          },
+          {
+            "file": "jpeg-buffered-correction-restoration.tar.xz",
+            "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+          },
+          {
+            "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+            "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+          },
+          {
+            "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+            "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+          },
+          {
+            "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+            "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+          },
+          {
+            "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+            "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+          },
+          {
+            "file": "vp8-current-live-model-attribution.tar.xz",
+            "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+          },
+          {
+            "file": "vp8-live-model-preparation-qualified.tar.xz",
+            "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+          },
+          {
+            "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+            "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+          },
+          {
+            "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+            "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4"
+          },
+          {
+            "file": "bicubic-output-workspace-qualified.tar.xz",
+            "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+          },
+          {
+            "file": "bicubic-default-output-workspace-qualified.tar.xz",
+            "sha256": "a4ff4eb24fc61dce4599aae3328bffa0b07a56e991d6b636b6cbc39c53e0317b"
+          },
+          {
+            "file": "parity-p40-qualified-evidence.tar.gz",
+            "sha256": "21114dd252c7f82cfcac745418a34eee442c4c3d3bf33ce6b71765b88250939d"
+          },
+          {
+            "file": "bicubic-shared-enlargement-qualified.tar.xz",
+            "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+          },
+          {
+            "file": "vp8-unshifted-live-reservoir-qualified.tar.xz",
+            "sha256": "5a773cc39f02710dc5dc27e744d60f7a77babdce2365b9b8bcb0f4614189fe03"
+          },
+          {
+            "file": "bilinear-current-boundary-audit.tar.xz",
+            "sha256": "3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018"
+          },
+          {
+            "file": "jpeg-correction-bit-qualified.tar.xz",
+            "sha256": "624f0b847f29b7465f96a7c2dbaecf2ed5f64f85359cecb5c9d1364bd893a1d1"
+          },
+          {
+            "file": "vp8-selected-trellis-boundary.tar.xz",
+            "sha256": "923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79"
+          },
+          {
+            "file": "vp8-trellis-architecture-audit.tar.xz",
+            "sha256": "73f1d0fd787fd732f1aa8146f78ee58be6dd4c856fcd6547fead6e0189869fd4"
+          },
+          {
+            "file": "vp8-ordinary-block-preparation-qualified.tar.xz",
+            "sha256": "0d3dfc7b21f6f3b7fb3b546b367ae3fb270615ad4d3264f4de1b077a807c987f"
+          },
+          {
+            "file": "vp8-current-photograph-attribution.tar.xz",
+            "sha256": "1c35f956ef35e6ab08cc1f80066e23aa26e90bb46d08459a64beed7657125421"
+          },
+          {
+            "file": "vp8-bounded-price-view-qualified.tar.xz",
+            "sha256": "830067c12147668abe8ed024ad63c7bfd17026d1c3b3aea0efa817843f0ec3e3"
+          },
+          {
+            "file": "vp8-alpha-output-handoff-qualified.tar.xz",
+            "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
+          },
+          {
+            "file": "vp8-trellis-candidate-preparation-qualified.tar.xz",
+            "sha256": "0cb9428ef776647daea6a809c66e86d07f4e3e2997c1cd1d5109ccba85641430"
+          },
+          {
+            "file": "vp8-current-validation-state-attribution.tar.xz",
+            "sha256": "89398293287135112cfdc17075d56cec7ca2f62660449faf7eb4ff689dbd4794"
+          },
+          {
+            "file": "vp8-block-state-reservoir-qualified.tar.xz",
+            "sha256": "f4ee950171f4e6ea02d101022aeb49140cac243ab1d8b8eb0d29adfdff5b5186"
+          },
+          {
+            "file": "current-retained-png-decode-cost.tar.xz",
+            "sha256": "4cad0b918916e1d1a0bb661ca2a6e4fb81ea9db5c529e593a2ca7224f1dd836f"
+          },
+          {
+            "file": "png-retained-root-current-attribution.tar.xz",
+            "sha256": "5f30795b21030f904942a4f0b2679283a241ebfb8f4e7dda34fe70dfb1be7ced"
+          },
+          {
+            "file": "png-prepared-prefix-qualified.tar.xz",
+            "sha256": "3a57e9ffd77680fe3dda7a121bbd4fc41ed7ca83756828eccdc129543ed3a699"
+          },
+          {
+            "file": "current-tight-png-decode-costs.tar.xz",
+            "sha256": "e5319918f7ce7bbaaafd940384bf191d76cebb5931199b01381d9e377d869824"
+          },
+          {
+            "file": "png-current-framing-costs.tar.xz",
+            "sha256": "def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe"
+          },
+          {
+            "file": "png-core-word-current-costs.tar.xz",
+            "sha256": "e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555"
           }
         ]
       }

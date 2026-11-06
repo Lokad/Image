@@ -54,17 +54,15 @@ Current scope and remaining work:
   Current ratio 1.009/upper 1.014 remains a gap. Nominal arrays fit the same4KiB
   scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
   Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
-  [Seven refreshed controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md) now have current
-  independent evidence: **five pass/stop, two gaps**. Live RGBA8 ratio1.104/upper1.113
-  and tight RGBA16 ratio1.043/upper1.052 remain gaps; allocations4,472/70,272B.
-  Tight RGBA8, both-depth coding validation, indexed Adam7 and async word validation
-  pass. Historical point movements are not paired effects; the report records the
-  adverse word-validation point and faster native tight-word clock. Header-only
-  inspection/identification and encoding stay unaffected. Five additional existing
-  core/word/Paeth confirmations give four passes and one small default-RGBA16 gap
-  (upper1.031). Adam7 word now passes, upper0.785; its historical gap is superseded,
-  not a paired gain. The family report holds all12controls:9pass/3gaps;39other
-  already-named decode cases still need current evidence.
+  [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
+  18 independently confirmed controls, 14 pass/stop,
+  4 gaps and 0 uncertain. Gaps are live RGBA8 (upper1.113),
+  tight/default RGBA16 (uppers1.052/1.031) and RGB16 (upper1.062). All other
+  confirmed color/Paeth/Adam7/coding-validation controls pass. The report retains
+  allocations, boundaries and historical contradictions; no paired historical gain
+  is inferred. 33 already-named decode cases need current evidence. Seven displayed
+  rows are refreshed; additional cases stay in the family report. Header-only
+  inspection/identification and encoding are unaffected.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse

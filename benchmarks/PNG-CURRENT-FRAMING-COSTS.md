@@ -1,9 +1,9 @@
 # Current PNG framing costs
 
-Twelve existing comparisons now have independent evidence on the immutable
-qualified LPP437 build. Nine pass and stop; live RGBA8, default RGBA16 and tight
-RGBA16 retain demonstrated gaps. Seven comparisons refresh the public summary;
-five core/word/Paeth controls stay in this family report. No production, fixture,
+Eighteen existing comparisons now have independent evidence on the immutable
+qualified LPP437 build. Fourteen pass and stop; live RGBA8, default/tight RGBA16
+and RGB16 retain demonstrated gaps. Seven comparisons refresh the public summary;
+eleven additional controls stay in this family report. No production, fixture,
 setting or workload boundary changes.
 
 | Complete operation, existing input | Managed µs | Reference µs | Ratio / upper | Managed B/op | Current status |
@@ -20,6 +20,12 @@ setting or workload boundary changes.
 | RGBA16, Adam7 | 3,062.16 | 3,927.59 | 0.780 / 0.785 | 23,240 | Pass; stop |
 | RGBA8, Paeth | 2,803.38 | 2,843.39 | 0.986 / 0.989 | 4,472 | Pass; stop |
 | RGBA16, Paeth | 4,826.89 | 5,512.13 | 0.876 / 0.885 | 8,568 | Pass; stop |
+| RGB8 into RGBA8 | 1,129.16 | 1,526.29 | 0.740 / 0.752 | 3,448 | Pass; stop |
+| RGB16 into RGBA16 | 2,336.31 | 2,221.40 | 1.052 / 1.062 | 6,520 | Gap |
+| Gray8 into RGBA8 | 344.42 | 367.29 | 0.938 / 0.949 | 1,400 | Pass; stop |
+| Gray16 into RGBA16 | 725.86 | 958.75 | 0.757 / 0.761 | 2,424 | Pass; stop |
+| Gray-alpha8 into RGBA8 | 764.32 | 1,158.31 | 0.660 / 0.661 | 2,424 | Pass; stop |
+| Gray-alpha16 into RGBA16 | 1,563.99 | 1,798.70 | 0.870 / 0.877 | 4,472 | Pass; stop |
 
 Every job retains twelve actuals, both native brackets, filtered/all-actual
 confidence views and idle-v2 guards, sequentially on one CPU. Validation returns
@@ -30,12 +36,13 @@ independent output and disposal. Live polling and original tight limits remain.
 Native codec/conversion contexts retain their declared preparation. FFmpeg has no
 equivalent cooperative-admission API. Startup and checks remain outside timing.
 
-All eight decoder comparisons use the original worker
+All fourteen decoder comparisons use the original worker
 `cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f`, recovered
 byte-exactly with its source/build identity into the prepared isolated root. The
 current ordinary worker differs after encoder-tool changes; it is not substituted.
 The None inputs remain 218,775/960,565 bytes; Adam7 and Paeth retain their own
-frozen packets. Four validation controls retain the
+frozen packets. RGB/grayscale controls retain their own original color packets.
+Four validation controls retain the
 original natural-frame worker/metadata adapter and their distinct frozen inputs.
 Original proof metadata is borrowed only for the current module identity and
 restored byte-exactly after each job; every descriptor/native/source gate runs.
@@ -80,6 +87,14 @@ remain linked history and no longer supply renderer assertions. Full 283-path
 parity remains open. The five additional records are retained in
 `png-core-word-current-costs.tar.xz`: 2,279,384 bytes / 73 members, SHA256
 `e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555`, mirrored/member-verified
-with pinned dependencies. The current evidence file lists the 39 remaining
+with pinned dependencies. The current evidence file lists the 33 remaining
 already-required WarmPng decode cases. No new grid, full actual-package release
 refresh or broad PNG pass is claimed.
+
+The six color/depth controls retain complete source-to-RGBA normalization. Five
+pass; RGB16 lower1.026/upper1.062 establishes a gap. No historical point comparison
+establishes a causal gain. Their raw `png-color-current-costs.tar.xz` is 2,734,300
+bytes / 90 members, SHA256
+`725e794723ec992403ceb1fc77efc898889fe242dd3f73e20ca38d968efc4e4f`, mirrored and
+member-verified, with pinned dependencies. The immutable DLL and qualification
+remain unchanged; no repeat full suite or package proof.
