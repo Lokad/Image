@@ -53,6 +53,9 @@ The unselected [live VP8 cancellation lifetime study](VP8-LIVE-CANCELLATION-LIFE
 restores qualified sources/modules/bindings exactly; all125current costs remain valid.
 The [PNG greedy publication study](PNG-GREEDY-PUBLICATION-EXPERIMENT.md) likewise
 restores its unpromising candidate without repeated broad/package qualification.
+The [ordinary VP8 row-window study](VP8-ROW-WINDOW-EXPERIMENT.md) establishes an
+opaque regression and no confirmed alpha gain. Qualified sources/modules/bindings
+are restored exactly; no current displayed cost or package changes.
 
 ## Finite required inventory
 
