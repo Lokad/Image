@@ -1,5 +1,9 @@
 # Successful-block publication in the live VP8 reader
 
+The live CPU cost and subsequent kernel attribution are superseded by
+[direct coefficient classes](VP8-DIRECT-COEFFICIENT-CLASSES.md). Earlier gains,
+failed/inconclusive designs and profile shares below retain their pinned scope.
+
 CPT479, 2026-11-07. Accepted architectural simplification; publication postponed.
 [Current evidence](vp8-completed-block-publication-evidence.json) owns the existing
 `OpaqueCancelable8` cost. All283 named required paths remain in scope and incomplete.

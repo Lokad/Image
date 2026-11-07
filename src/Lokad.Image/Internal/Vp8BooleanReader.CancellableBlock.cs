@@ -34,31 +34,62 @@ internal partial struct Vp8BooleanReader
         var model = MemoryMarshal.Cast<byte, CoefficientModelRow>(probabilities);
         ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
-        var previousZero = false; var predictor = initialContext;
+        var previousZero = false; var predictor = initialContext; var planeBase = plane * 24;
         for (var c = plane == 0 ? 1 : 0; c < 16; c++)
         {
-            ref readonly var p = ref model[(plane * 8 + bands[c]) * 3 + predictor];
-            var token = CancellableBlockReader.Token(in data, in p, previousZero, cancellation,
-                ref position, ref bits, ref range, ref value);
-            if (token == 11) break;
-            var sample = token < 5 ? token : CancellableBlockReader.Category(in data, token - 5, cancellation,
-                ref position, ref bits, ref range, ref value);
-            if (typeof(TMode) == typeof(PixelMode))
+            ref readonly var p = ref model[planeBase + bands[c] * 3 + predictor];
+            // RFC6386 section13.2. Traverse coefficient classes directly;
+            // zero skips the next EOB decision, while nonzero classes already
+            // determine the next context before sign and quantization.
+            if (!previousZero && CancellableBlockReader.TokenRead(in data, p[0], cancellation,
+                ref position, ref bits, ref range, ref value) == 0) break;
+            if (CancellableBlockReader.TokenRead(in data, p[1], cancellation,
+                ref position, ref bits, ref range, ref value) == 0)
             {
-                previousZero = sample == 0; predictor = Math.Min(sample, 2);
-                if (sample == 0) continue;
-                nonzero = 1;
-                if (CancellableBlockReader.Read(in data, 128, cancellation,
-                    ref position, ref bits, ref range, ref value) != 0) sample = -sample;
-                values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
+                previousZero = true; predictor = 0;
+                continue;
+            }
+            previousZero = false;
+            int sample;
+            if (CancellableBlockReader.TokenRead(in data, p[2], cancellation,
+                ref position, ref bits, ref range, ref value) == 0)
+            {
+                sample = 1; predictor = 1;
             }
             else
             {
-                previousZero = token == 0; predictor = Math.Min(token, 2);
-                if (token == 0) continue;
-                nonzero = 1;
-                CancellableBlockReader.Read(in data, 128, cancellation,
+                predictor = 2;
+                if (CancellableBlockReader.TokenRead(in data, p[3], cancellation,
+                    ref position, ref bits, ref range, ref value) == 0)
+                    sample = CancellableBlockReader.TokenRead(in data, p[4], cancellation,
+                        ref position, ref bits, ref range, ref value) == 0 ? 2
+                        : 3 + CancellableBlockReader.TokenRead(in data, p[5], cancellation,
+                            ref position, ref bits, ref range, ref value);
+                else
+                {
+                    int category;
+                    if (CancellableBlockReader.TokenRead(in data, p[6], cancellation,
+                        ref position, ref bits, ref range, ref value) == 0)
+                        category = CancellableBlockReader.TokenRead(in data, p[7], cancellation,
+                            ref position, ref bits, ref range, ref value);
+                    else
+                    {
+                        var upper = CancellableBlockReader.TokenRead(in data, p[8], cancellation,
+                            ref position, ref bits, ref range, ref value);
+                        category = 2 + 2 * upper + CancellableBlockReader.TokenRead(in data, p[9 + upper], cancellation,
+                            ref position, ref bits, ref range, ref value);
+                    }
+                    sample = CancellableBlockReader.Category(in data, category, cancellation,
+                        ref position, ref bits, ref range, ref value);
+                }
+            }
+            nonzero = 1;
+            var sign = CancellableBlockReader.Read(in data, 128, cancellation,
                     ref position, ref bits, ref range, ref value);
+            if (typeof(TMode) == typeof(PixelMode))
+            {
+                if (sign != 0) sample = -sample;
+                values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
             }
         }
         reader.Position = position; reader.Bits = bits; reader.Range = range; reader.Value = value;
@@ -77,28 +108,11 @@ internal partial struct Vp8BooleanReader
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int TokenRead(in ReadOnlySpan<byte> data, int probability, CancellationToken cancellation,
+        internal static int TokenRead(in ReadOnlySpan<byte> data, int probability, CancellationToken cancellation,
             ref int position, ref int bits, ref int range, ref ulong value)
         {
             cancellation.ThrowIfCancellationRequested();
             return BlockReader.TokenRead(in data, probability, ref position, ref bits, ref range, ref value);
-        }
-
-        // RFC6386 section13.2, preserving the original probability/read order.
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Token(in ReadOnlySpan<byte> data, in CoefficientModelRow p, bool previousZero,
-            CancellationToken cancellation, ref int position, ref int bits, ref int range, ref ulong value)
-        {
-            if (!previousZero && TokenRead(in data, p[0], cancellation, ref position, ref bits, ref range, ref value) == 0) return 11;
-            if (TokenRead(in data, p[1], cancellation, ref position, ref bits, ref range, ref value) == 0) return 0;
-            if (TokenRead(in data, p[2], cancellation, ref position, ref bits, ref range, ref value) == 0) return 1;
-            if (TokenRead(in data, p[3], cancellation, ref position, ref bits, ref range, ref value) == 0)
-                return TokenRead(in data, p[4], cancellation, ref position, ref bits, ref range, ref value) == 0 ? 2
-                    : 3 + TokenRead(in data, p[5], cancellation, ref position, ref bits, ref range, ref value);
-            if (TokenRead(in data, p[6], cancellation, ref position, ref bits, ref range, ref value) == 0)
-                return 5 + TokenRead(in data, p[7], cancellation, ref position, ref bits, ref range, ref value);
-            var upper = TokenRead(in data, p[8], cancellation, ref position, ref bits, ref range, ref value);
-            return 7 + 2 * upper + TokenRead(in data, p[9 + upper], cancellation, ref position, ref bits, ref range, ref value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

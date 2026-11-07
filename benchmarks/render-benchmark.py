@@ -41,10 +41,12 @@ def render():
     assert trellis['lower'] == launches['lower'] and trellis['upper'] == launches['upper']
     assert trellis['status'] == launches['status']
     assert all(trellis['lower'] <= v['lower'] and trellis['upper'] >= v['upper'] for v in [*launches['launches'], *launches['views'].values()])
-    live_decode = json.loads((ROOT / 'benchmarks/vp8-completed-block-publication-evidence.json').read_text(encoding='utf-8'))
+    live_decode = json.loads((ROOT / 'benchmarks/vp8-direct-coefficient-classes-evidence.json').read_text(encoding='utf-8'))
     assert live_decode['productionAccepted'] and live_decode['requiredMaterialPaths'] == 283
     assert live_decode['raw']['mirrored'] and live_decode['raw']['allMembersVerified']
-    assert live_decode['sourceProof']['wholeSourceUndoEqualsQualifiedOriginal']
+    assert live_decode['sourceProof']['bitArithmeticNormalizationCategoryAndEveryReadPollBodiesExact']
+    assert live_decode['sourceProof']['entryGuardAndInputWindowBoundUnchanged']
+    assert live_decode['sourceProof']['obsoleteLiveTokenRemoved']
     live = live_decode['current']
     assert live['caseId'] == 'OpaqueCancelable8' and live['actualIterations'] == 12
     assert len(live['managed']['actual']) == len(live['receipt']['nativeBefore']) == len(live['receipt']['nativeAfter']) == 12
@@ -1714,11 +1716,13 @@ Current scope and remaining work:
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
   Those five displayed decoder costs reuse unchanged executed paths.
-  [Successful-block publication](../benchmarks/VP8-COMPLETED-BLOCK-PUBLICATION.md)
-  separately saves **82.55µs/1.60% raw**,1.79% normalized on complete live opaque VP8.
-  Current {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,upper{live['upper']:.3f} remains a gap;
-  GC stays{live['allocatedBytes']:,}B/op. Only abandoned private failure-state work is removed;
-  successful cursors, every decision poll and public cleanup stay exact.
+  [Direct coefficient classes](../benchmarks/VP8-DIRECT-COEFFICIENT-CLASSES.md)
+  separately save **74.05µs/1.46% raw**,1.55% normalized on complete live opaque VP8;
+  both confidence views separate. Current {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
+  upper{live['upper']:.3f} remains a gap. GC stays{live['allocatedBytes']:,}B/op.
+  Numeric token dispatch retires; actual complete-kernel coverage witnesses all12
+  symbols. Probability/category/sign order, every poll, exact cursor/pixels and
+  ownership remain. No new owner, capacity, model table or retained state.
 - **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
   saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.
   Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
@@ -1799,14 +1803,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{live_decode['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected JPEG paths pass398 internal/375 public checks per normal/scalar mode
-on each OS, including signed fields, exact cursor/partial state, terminal refusal,
-cancellation/recovery and surviving outputs. Unchanged word/WebP/other ISA evidence is reused.
+Affected VP8 paths pass929 internal/239 public checks per normal/scalar mode
+on each OS, including actual coefficient classes, exact cursor/following reads,
+terminal refusal, cancellation/recovery and survivors. Unchanged JPEG/word/other ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

@@ -10,6 +10,7 @@ public sealed partial class Vp8CoefficientBlockTests
     public void ValidationConsumesOriginalTokensAndContextsWithoutTouchingDestination(bool live)
     {
         var random = new Random(6386454);
+        var seenTokens = new bool[12];
         using var token = new CancellationTokenSource();
         using var root = new TestMemoryBudget(0);
         using var context = new OperationContext(new() { MemoryBudget = root }, live ? token.Token : default);
@@ -25,7 +26,7 @@ public sealed partial class Vp8CoefficientBlockTests
             var samples = new short[16]; var guarded = Enumerable.Repeat((short)-23456, 18).ToArray();
             var plane = trial % 4; var predictor = trial % 3;
             var expectedNonzero = Original(ref expected, data, probabilities, samples, plane, predictor,
-                trial % 2 == 0 ? 32767 : 132, trial % 2 == 0 ? 1 : 284, reference);
+                trial % 2 == 0 ? 32767 : 132, trial % 2 == 0 ? 1 : 284, reference, seenTokens);
             byte seen;
             var any = live
                 ? actual.ReadCancellableCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, probabilities,
@@ -43,6 +44,7 @@ public sealed partial class Vp8CoefficientBlockTests
             }
             Assert.Equal(saved, data);
         }
+        Assert.All(seenTokens, seen => Assert.True(seen));
         Assert.Equal(0, root.GrowthAttempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 

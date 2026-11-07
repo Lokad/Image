@@ -19,7 +19,7 @@ public sealed partial class Vp8CoefficientBlockTests
     // Retain the original block composition over the independently tested
     // bit-at-a-time reader. It neither calls the window nor reuses its state.
     private static byte Original(ref Vp8BooleanReader reader, byte[] data, byte[] probabilities,
-        Span<short> values, int plane, int predictor, int dc, int ac, OperationContext context)
+        Span<short> values, int plane, int predictor, int dc, int ac, OperationContext context, Span<bool> seen = default)
     {
         byte[] bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         byte[] zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
@@ -28,6 +28,7 @@ public sealed partial class Vp8CoefficientBlockTests
         {
             var p = probabilities.AsSpan(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
             var token = reader.CoefficientToken(data, p, context, zero);
+            if (!seen.IsEmpty) seen[token] = true;
             if (token == 11) break;
             var sample = token;
             if (token >= 5)

@@ -9,6 +9,7 @@ public sealed partial class Vp8CoefficientBlockTests
     public void LiveBlocksMatchOriginalCoefficientsCursorAndFollowingReads()
     {
         var random = new Random(63862602);
+        var seenTokens = new bool[12];
         using var cancellation = new CancellationTokenSource();
         for (var trial = 0; trial < 1024; trial++)
         {
@@ -20,7 +21,7 @@ public sealed partial class Vp8CoefficientBlockTests
             using var reference = new OperationContext(new() {},cancellation.Token);
             Assert.True(reader.CanReadCancellableCoefficientBlock(data,context));
             var dc = trial%2==0 ? 132 : 32767; var ac = trial%2==0 ? 284 : 1;
-            var nonzero = Original(ref original,data,probabilities,expected.AsSpan(1,16),trial%4,trial%3,dc,ac,reference);
+            var nonzero = Original(ref original,data,probabilities,expected.AsSpan(1,16),trial%4,trial%3,dc,ac,reference,seenTokens);
             var result = reader.ReadCancellableCoefficientBlock<Vp8BooleanReader.PixelMode>(data,probabilities,actual.AsSpan(1,16),trial%4,trial%3,dc,ac,context,out var seen);
             Assert.Equal(nonzero,seen);Assert.Equal(nonzero!=0,result);Assert.Equal(expected,actual);
             Assert.Equal(State(original),State(reader));            for (var i=0;i<19;i++)
@@ -28,6 +29,7 @@ public sealed partial class Vp8CoefficientBlockTests
                 var p=random.Next(256);Assert.Equal(original.Read(data,p,reference),reader.Read(data,p,context));
                 Assert.Equal(State(original),State(reader));            }
         }
+        Assert.All(seenTokens, seen => Assert.True(seen));
         Assert.True(cancellation.Token.CanBeCanceled); // Library borrowed it.
     }
 
