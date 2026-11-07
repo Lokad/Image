@@ -95,3 +95,41 @@ Raw `jpeg-plain-reader-qualified.tar.xz`, SHA256
 `17a0f0c611c43fa315f1642062c6aa49488a2bd9518e36dec6492ae3440e3f40`, 17613968B/503members,
 is mirrored and member-verified, with referenced input/history providers retained.
 All283 material paths remain in scope; this is not a release-wide timing refresh.
+
+## Architectural follow-up
+
+A two-second current-DLL profile retains **1,741 leaf samples**: fused baseline
+reader 690, plain AC 145, inverse AVX2 320. CoreLib/unresolved 170 and other runtime
+frames remain included. Sampling starts after the existing short driver's pilot
+begins and includes warmup; these are attribution leads, not phase times or
+predicted savings. The operation uses CPU0; diagnostic profiler affinity is
+inherited. No elapsed-time claim follows. Frozen input/output, native settings,
+source, ownership and quiet-process checks pass. Zero builds or production changes;
+the costs above and later correctness/package qualification remain valid.
+
+Source/JIT review selects a **shared high-aligned local bit reservoir** for the
+next bounded experiment. The existing right-aligned loops repeatedly derive
+prefix/amplitude shifts from the changing pending count and reconstruct signed
+thresholds. Target one reservoir convention across fused DC/AC, plain AC and
+live-token AC, retaining exact canonical cursor publication at every existing
+exit, slow readers, malformed-input behavior and cancellation checkpoints. No
+scan copy, widened table, new owner or cross-operation state is proposed.
+FFmpeg's `decode_block` and `ff_mjpeg_unescape_sos` supply strategy insight only:
+its owned unescaped scan and retained context do not justify excluding managed
+preparation or copying full scans. No upstream implementation is copied.
+
+Use the existing DirectRgb444, NativeDecodeCancelable8 and CmykAdobeSparse2D
+complete controls. Judge elapsed time, allocations and simplification together;
+preserve adverse/inconclusive results and confirm a promising completed stage
+independently. This is a materially different design from the unselected
+[prepared-amplitude nibble](JPEG-PREPARED-AMPLITUDE-EXPERIMENT.md), without a
+performance claim or merge authorization. An independent integer identity checks
+all 4,094 amplitude fields in categories 1–11; production tests still govern actual
+cursor, coefficient, marker/restart, failure and ownership behavior.
+
+Raw `jpeg-current-entropy-architecture.tar.xz`, SHA256
+`ed873b12e8ddadde0ca05a64f9f282a0ea2a56e166307917780770c362d747f8`,
+779,220 B / 32 members, is mirrored/member-verified. It retains current producers,
+source/JIT/map/samples, gates, scripts, the post-processing mode correction and
+the bounded design, with pinned dependencies on this reader's qualification and
+shared-word preparation. No completed profile or timing job was repeated.
