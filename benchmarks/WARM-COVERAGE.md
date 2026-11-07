@@ -49,6 +49,8 @@ Earlier [JPEG publication](JPEG-PLAIN-READER.md),
 comparisons, adverse results and raw evidence separately.
 The unselected [live VP8 cancellation lifetime study](VP8-LIVE-CANCELLATION-LIFETIMES-EXPERIMENT.md)
 restores qualified sources/modules/bindings exactly; all125current costs remain valid.
+The [PNG greedy publication study](PNG-GREEDY-PUBLICATION-EXPERIMENT.md) likewise
+restores its unpromising candidate without repeated broad/package qualification.
 
 ## Finite required inventory
 
