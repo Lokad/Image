@@ -680,7 +680,7 @@ cache = candidateCache; pending = candidatePending - length;
         symbol = token; return true;
     }
 
-    internal void ReadPlainBaselineAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
+    internal void ReadPlainBaselineAc(JpegHuffman ac, scoped Span<int> block, ref int coefficient)
     {
         // Two shifts also discard stale bits when available is zero.
         var localBits = ((ulong)bits << 32) << (32 - available);
@@ -696,7 +696,7 @@ cache = candidateCache; pending = candidatePending - length;
                 if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
                 localBits |= (ulong)word << (32 - localAvailable); localAvailable += 32; localPosition += 4;
             }
-            var packed = shortCodes[(int)(localBits >> 56)]; var count = packed & 15;
+            var packed = ac.LookupBaselinePrefix(localBits, localAvailable); var count = packed & 15;
             var token = packed >> 4; var size = token & 15; var run = token >> 4;
             if (count == 0) break;
             if (token == 0)

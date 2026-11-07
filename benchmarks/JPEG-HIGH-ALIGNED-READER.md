@@ -1,5 +1,8 @@
 # JPEG high-aligned entropy readers
 
+Current baseline costs are superseded by [buffered canonical lookup](JPEG-BUFFERED-LONG-LOOKUP.md).
+This report retains the earlier paired gains, sparse contradictions and raw evidence.
+
 One high-aligned local bit reservoir and shared signed-field arithmetic replace
 repeated pending-dependent extraction in fused DC/AC, plain AC and live-token AC.
 Original fractional bits and minimum logical cursor publish at every existing

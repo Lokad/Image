@@ -4,7 +4,7 @@ namespace Lokad.Image.Internal;
 
 internal ref partial struct JpegEntropyReader
 {
-    internal bool TryReadPlainBaselineBlock(ReadOnlySpan<ushort> dcCodes, ReadOnlySpan<ushort> acCodes,
+    internal bool TryReadPlainBaselineBlock(ReadOnlySpan<ushort> dcCodes, JpegHuffman ac,
         scoped Span<int> block, ref int predictor, ref int coefficient)
     {
         if (context.Cancellation.CanBeCanceled || data.Length - position < 4) return false;
@@ -33,7 +33,7 @@ internal ref partial struct JpegEntropyReader
                 if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
                 cache |= (ulong)word << (32 - pending); pending += 32; cursor += 4;
             }
-            var packed = acCodes[(int)(cache >> 56)]; var count = packed & 15;
+            var packed = ac.LookupBaselinePrefix(cache, pending); var count = packed & 15;
             var symbol = packed >> 4; var size = symbol & 15; var run = symbol >> 4;
             if (count == 0) break;
             if (symbol == 0) { cache <<= count; pending -= count; k = 64; break; }

@@ -2,7 +2,7 @@ using Lokad.Image.Internal;
 
 namespace Lokad.Image.Tests;
 
-public sealed class JpegBaselineBlockTests
+public sealed partial class JpegBaselineBlockTests
 {
     private static readonly byte[] AcSymbols = [0, .. Enumerable.Range(0, 16).SelectMany(run => Enumerable.Range(1, 10).Select(size => (byte)(run << 4 | size))), 0xF0, 0x10, 0x0B];
 

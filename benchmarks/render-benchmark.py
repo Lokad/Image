@@ -1133,13 +1133,14 @@ def render():
                 updated_vertical += 1
     assert updated_vertical == 3
     # Retained gains remain claims about their original paired experiments.
-    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-high-aligned-reader-evidence.json').read_text(encoding='utf-8'))
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-buffered-long-lookup-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_scan['productionAccepted'] and jpeg_scan['requiredMaterialPaths'] == 283
-    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5867
+    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5870
     assert jpeg_scan['qualification']['sameActualPackageBothOs']
     assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
-    assert jpeg_scan['sourceProof']['outsideThreeReaderLoopsAndSharedHelperUnchanged']
-    assert jpeg_scan['sourceProof']['originalFieldsAndSlowHelpersUnchanged']
+    assert jpeg_scan['sourceProof']['onlyOrdinaryLookupAndArgumentBindingChanged']
+    assert jpeg_scan['sourceProof']['entropyArithmeticRefillPublicationAndEveryReadPollUnchanged']
+    assert jpeg_scan['sourceProof']['tablePreparationAndOwnedCapacityUnchanged']
     assert jpeg_scan['storage']['newOwnedCapacityBytes'] == jpeg_scan['storage']['newCrossOperationRetainedBytes'] == 0
     assert len(jpeg_scan['cases']) == 29
     assert jpeg_scan['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_scan['cases'].values())
@@ -1151,7 +1152,7 @@ def render():
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for case in ('DirectRgb444', 'NativeDecodeCancelable8')
+               for case in ('DirectRgb444',)
                for v in jpeg_scan['comparison'][case]['views'].values())
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
     replacements += [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
@@ -1777,20 +1778,21 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [high-aligned entropy readers](../benchmarks/JPEG-HIGH-ALIGNED-READER.md)
-  independently save37.62µs/2.13%raw on complete RGB decode and82.26µs/4.01%raw on
-  live-token decode; both raw/normalized confidence views separate. Allocation stays
-  10,088B/op. Shared signed-field arithmetic preserves canonical cursor/fallbacks,
-  cancellation, exact pixels and packets. Current RGB/live uppers1.206/1.163 remain gaps.
-  Sparse CMYK's first raw/normalized disagreement and reversed-order check remain
-  recorded; no reliable normalized gain/loss is claimed. Twenty-three affected baseline
-  costs refresh; six progressive confirmations reuse unchanged paths. Fourteen pass,
-  fourteen gaps, one uncertain: baseline420 now passes; callerCMYK upper1.001 is uncertain.
-  Ten displayed rows refresh;115 rows reuse unchanged paths. No blanket JPEG gain.
-  [Full-grid ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md) retains earlier paired
-  gains and adverse stages. Its source-valid native444 governed peak541,253B and retained
-  output531,468B are unchanged; default pool remains bounded, governed calls bypass it.
-  These capacity facts are separate from total allocations and unmeasured physical/native peaks.
+- **JPEG and reading:** [reuse of prepared canonical codes](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md)
+  keeps existing9/10-bit codes inside ordinary entropy windows. Independent complete
+  RGB decode saves82.75µs/4.79%raw/4.74%normalized; both confidence views separate.
+  CurrentRGB{jpeg_scan['cases']['DirectRgb444']['managedMicroseconds']:,.2f}/native{jpeg_scan['cases']['DirectRgb444']['nativeMicroseconds']:,.2f}µs,
+  upper{jpeg_scan['cases']['DirectRgb444']['upper']:.3f} remains a gap; GC10,088B/op unchanged.
+  No new table, owned capacity or retained state. Cursor, fallbacks, checkpoints,
+  exact pixels and packets remain. Twenty-three baseline costs refresh; six
+  progressive confirmations reuse unchanged paths:14pass/13gaps/2uncertain.
+  Ordinary native444/callerCMYK uppers1.018/1.004 are uncertain, without demonstrated
+  optimization gaps. Live-token JPEG remains a gap; no blanket JPEG speedup is claimed.
+  Ten displayed rows refresh;115 reuse unchanged paths. Earlier [high-aligned readers](../benchmarks/JPEG-HIGH-ALIGNED-READER.md)
+  retain paired gains and adverse/inconclusive controls as source-specific history.
+  [Full-grid ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md) retains unchanged
+  native444 governed peak541,253B/output531,468B and bounded default pool/governed bypass.
+  These capacity facts differ from GC and unmeasured physical/native peaks.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
@@ -1803,14 +1805,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{live_decode['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected VP8 paths pass929 internal/239 public checks per normal/scalar mode
-on each OS, including actual coefficient classes, exact cursor/following reads,
-terminal refusal, cancellation/recovery and survivors. Unchanged JPEG/word/other ISA evidence is reused.
+Affected JPEG paths pass401 internal/375 public checks per normal/scalar mode
+on each OS, including actual nine/ten-bit traversal, exact cursor/following reads,
+terminal refusal, cancellation/recovery and survivors. Unchanged VP8/word/other ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

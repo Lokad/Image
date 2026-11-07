@@ -108,11 +108,24 @@ internal sealed class JpegHuffman
         => reader.ReadPlainCancelableAc(shortCodes, block, ref coefficient);
 
     internal void ReadPlainBaselineAc(ref JpegEntropyReader reader, scoped Span<int> block, ref int coefficient)
-        => reader.ReadPlainBaselineAc(shortCodes, block, ref coefficient);
+        => reader.ReadPlainBaselineAc(this, block, ref coefficient);
 
     internal bool TryReadPlainBaselineBlock(ref JpegEntropyReader reader, JpegHuffman ac,
         scoped Span<int> block, ref int predictor, ref int coefficient)
-        => reader.TryReadPlainBaselineBlock(shortCodes, ac.shortCodes, block, ref predictor, ref coefficient);
+        => reader.TryReadPlainBaselineBlock(shortCodes, ac, block, ref predictor, ref coefficient);
+
+    // Reuse the encoded table's existing nine/ten-bit lookup in an ordinary
+    // bounded entropy window. No additional table preparation or capacity.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal int LookupBaselinePrefix(ulong cache, int pending)
+    {
+        var packed = shortCodes[(int)(cache >> 56)];
+        if (packed != 0 || longCodes is null) return packed;
+        packed = longCodes[(int)(cache >> 54)];
+        // Ordinary windows guarantee18bits. A long prefix plus its amplitude
+        // can require20; leave an incomplete field entirely unconsumed.
+        return (packed & 15) + ((packed >> 4) & 15) <= pending ? packed : 0;
+    }
 
     // Keep canonical traversal out of the common short-code wrapper so the
     // caller can inline that wrapper without its cold loop and saved registers.
