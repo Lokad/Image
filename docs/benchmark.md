@@ -40,10 +40,16 @@ Current scope and remaining work:
   3,047.56µs, upper0.769 passes; VP8+ALPH validation4,656.82/native5,448.61µs,
   upper0.858 also passes. GC297,070/13,584B; measured first/live admitted peaks
   235,152/11,121B, retained0. These are separate from physical/native peaks.
-  Nine affected controls refresh:3pass/6gaps. Full-render contemporary comparison
-  is inconclusive with no demonstrated incremental gain/loss. These unchanged decoder
-  costs remain valid. Opaque/live VP8 paths retain
-  unchanged evidence; liveopaque5289.47/native4796.26µs remains a gap.
+  Validation and lossless reader costs reuse unchanged paths. Full-render contemporary
+  comparison is inconclusive with no demonstrated incremental gain/loss.
+  [Overwrite output ownership](../benchmarks/VP8-OVERWRITE-OUTPUT.md) independently
+  saves105.05/131.33µs (2.04%/2.48%raw) on ordinary/live opaque VP8 decode, with both
+  raw/normalized confidence views separated. GC falls760,564→228,864B/op; governed
+  peak stays747,020B and retained result531,468B until disposal. Sequential default
+  calls leave531,468B idle in the existing4MiBpool; governed calls bypass it.
+  Five affected decoder costs refresh, all remain gaps; liveopaque5,162.06/native
+  4,790.47µs,upper1.082. One displayed row refreshes;124 numerical rows reuse valid
+  paths. This does not claim a governed CPU gain or lower physical/native peaks.
   [Earlier validation materialization](../benchmarks/VP8-VALIDATION-MATERIALIZATION.md)
   and [live execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) retain scoped history.
   [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains238,384B/span
@@ -118,7 +124,7 @@ Current scope and remaining work:
   retained owned capacity is unchanged and no peak reduction is inferred.
   This round reuses those unchanged font costs.
 
-The current production build passes **5,790 full/live checks per OS**, affected
+The current production build passes **5,801 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -155,7 +161,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 6,231.39 | 5,994.69 | 1.039 / 1.046 | 238,480 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 6,235.75 | 5,992.89 | 1.041 / 1.045 | 238,480 | — |
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |

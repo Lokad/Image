@@ -39,6 +39,24 @@ def render():
     assert trellis['lower'] == launches['lower'] and trellis['upper'] == launches['upper'] < 1
     assert all(trellis['lower'] <= v['lower'] and trellis['upper'] >= v['upper'] for v in [*launches['launches'], *launches['views'].values()])
     assert vp8_current['supplementaryRaw']['mirrored'] and vp8_current['supplementaryRaw']['allMembersVerified']
+    vp8_output = json.loads((ROOT / 'benchmarks/vp8-overwrite-output-evidence.json').read_text(encoding='utf-8'))
+    assert vp8_output['productionAccepted'] and vp8_output['sourceProof']['entireOriginalProjectionEquals']
+    assert vp8_output['raw']['mirrored'] and vp8_output['raw']['allMembersVerified']
+    assert set(vp8_output['cases']) == {'Native8', 'StreamNative8', 'Opaque8', 'OpaqueCancelable8', 'SimpleOpaque8'}
+    for c in vp8_output['cases'].values():
+        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == c['allActualStatistics']['N'] == 12
+        assert c['librarySha256'] == vp8_output['producers']['linuxSha256']
+        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['alphaExact'] and c['nativeCliPixelsExact']
+        assert c['outputSha256'] == c['nativeOutputSha256'] and c['outputBytes'] == 531468
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for c in vp8_output['comparison'].values() for v in c['views'].values())
+    for platform in ['windows', 'linux']:
+        for subject in ['baseline', 'candidate']:
+            for r in vp8_output['storage'][platform][subject]['rows']:
+                assert r['sourceUnchanged'] and r['borrowedRootAlive'] and r['admittedAfterDispose'] == 0
+                assert r['peakAdmittedBytes'] == (747020 if r['governed'] else 0)
+                assert r['retainedOutputAdmittedBytes'] == (531468 if r['governed'] else 0)
+                assert r['idlePoolAfterDispose'] == (531468 if subject == 'candidate' else 0)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in vp8_current['comparison']['views'].values())
     for platform in ['windows', 'linux']:
         peak = vp8_current['storage'][platform]['candidate']['rows']
@@ -1543,12 +1561,10 @@ def render():
     rows[position:position] = vp8_rows
     selected_cost = vp8_current['cases']['selected']
     assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
-    stream = resident_decode['cases']['Vp8Stream'][-1]
-    stats = stream['managed']['statistics']
-    native = min(b['mean'] for b in stream['nativeBrackets'])
-    rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stats["Mean"] / 1000:,.2f} | '
-        f'{native / 1000:,.2f} | {stream["worstBracketRatio"]:.3f} / {stream["conservativeRatioUpper"]:.3f} | '
-        f'{stream["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
+    stream = vp8_output['cases']['StreamNative8']
+    rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
+        f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | '
+        f'{stream["allocatedBytes"]:,} | — |'))
     bilinear = json.loads((ROOT / 'benchmarks/bilinear-current-boundary-evidence.json').read_text(encoding='utf-8'))
     current = bilinear['current']
     assert not bilinear['productionChanged'] and bilinear['allBuilds'] == 0
@@ -1602,8 +1618,8 @@ def render():
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
-    vq = vp8_current['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5790
+    vq = vp8_output['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5801
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1797,10 +1813,16 @@ Current scope and remaining work:
   3,047.56µs, upper0.769 passes; VP8+ALPH validation4,656.82/native5,448.61µs,
   upper0.858 also passes. GC297,070/13,584B; measured first/live admitted peaks
   235,152/11,121B, retained0. These are separate from physical/native peaks.
-  Nine affected controls refresh:3pass/6gaps. Full-render contemporary comparison
-  is inconclusive with no demonstrated incremental gain/loss. These unchanged decoder
-  costs remain valid. Opaque/live VP8 paths retain
-  unchanged evidence; liveopaque5289.47/native4796.26µs remains a gap.
+  Validation and lossless reader costs reuse unchanged paths. Full-render contemporary
+  comparison is inconclusive with no demonstrated incremental gain/loss.
+  [Overwrite output ownership](../benchmarks/VP8-OVERWRITE-OUTPUT.md) independently
+  saves105.05/131.33µs (2.04%/2.48%raw) on ordinary/live opaque VP8 decode, with both
+  raw/normalized confidence views separated. GC falls760,564→228,864B/op; governed
+  peak stays747,020B and retained result531,468B until disposal. Sequential default
+  calls leave531,468B idle in the existing4MiBpool; governed calls bypass it.
+  Five affected decoder costs refresh, all remain gaps; liveopaque5,162.06/native
+  4,790.47µs,upper1.082. One displayed row refreshes;124 numerical rows reuse valid
+  paths. This does not claim a governed CPU gain or lower physical/native peaks.
   [Earlier validation materialization](../benchmarks/VP8-VALIDATION-MATERIALIZATION.md)
   and [live execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) retain scoped history.
   [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains238,384B/span

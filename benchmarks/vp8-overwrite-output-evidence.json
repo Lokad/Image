@@ -1,0 +1,984 @@
+{
+  "project": "Lokad.Image",
+  "stage": "OPA465",
+  "date": "2026-11-07",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+    "linuxSha256": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023"
+  },
+  "cases": {
+    "Opaque8": {
+      "managedUs": 5040.323088068181,
+      "nativeUs": 4793.3930625,
+      "ratio": 1.0515146624423484,
+      "lower": 1.0473414272849075,
+      "upper": 1.0562022667209952,
+      "allocatedBytes": 228864,
+      "status": "gap",
+      "librarySha256": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+      "caseId": "Opaque8",
+      "runId": "opa465-candidate-Opaque8-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 11,
+        "Mean": 5040323.088068182,
+        "StandardError": 962.1022918083067,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 5040323.088068182,
+          "StandardError": 962.1022918083067,
+          "Level": 12,
+          "Margin": 4413.061092426264,
+          "Lower": 5035910.026975756,
+          "Upper": 5044736.149160608
+        },
+        "OriginalValues": [
+          5045829.489583333,
+          5037062.052083333,
+          5037646.46875,
+          5036395.635416667,
+          5042983.71875,
+          5037143.010416667,
+          5042506.760416667,
+          5043112.052083333,
+          5038217.135416667,
+          5040309.052083333,
+          5042348.59375
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 5043833.786458334,
+        "StandardError": 3615.849189731392,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 5043833.786458334,
+          "StandardError": 3615.849189731392,
+          "Level": 12,
+          "Margin": 16043.448141077315,
+          "Lower": 5027790.338317256,
+          "Upper": 5059877.2345994115
+        },
+        "OriginalValues": [
+          5082416.979166667,
+          5045832.625,
+          5037065.1875,
+          5037649.604166667,
+          5036398.770833333,
+          5042986.854166667,
+          5037146.145833333,
+          5042509.895833333,
+          5043115.1875,
+          5038220.270833333,
+          5040312.1875,
+          5042351.729166667
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 4793393.0625,
+          "standardError": 622.1013731616283,
+          "confidenceLower": 4790539.549532804,
+          "confidenceUpper": 4796246.575467196
+        },
+        {
+          "mean": 4795683.166666667,
+          "standardError": 1091.5968380866493,
+          "confidenceLower": 4790676.127835358,
+          "confidenceUpper": 4800690.205497976
+        }
+      ],
+      "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "inputBytes": 72380,
+      "outputBytes": 531468,
+      "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "alphaExact": true,
+      "nativeCliPixelsExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality.",
+      "sourceNote": "Actual complete default-context decoder, original frozen input/native settings/pixels/alpha/source/owner/token and input delivery. Existing native contexts/private scratch retained; complete parse/reconstruction/filter/color and independently owned RGBA/disposal timed. Cached harness/selector/native, no new matrix or projection. OPA465changes only unprepared output allocation to existing complete-overwrite policy. Default pool capped4MiB, independently owned live images; governed calls bypass. Output/disposal remain timed; total GC is separate from idle retained capacity and admitted peaks. Short is not independent confirmation; every point retained.",
+      "receiptPath": "tmp/opa465-candidate-Opaque8-confirm-receipt.json",
+      "observationPath": "tmp/opa465-candidate-Opaque8-confirm-observation.json"
+    },
+    "OpaqueCancelable8": {
+      "managedUs": 5162.055958333334,
+      "nativeUs": 4790.474380208333,
+      "ratio": 1.0775667603317485,
+      "lower": 1.0729639736142738,
+      "upper": 1.081584316675806,
+      "allocatedBytes": 228864,
+      "status": "gap",
+      "librarySha256": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+      "caseId": "OpaqueCancelable8",
+      "runId": "opa465-candidate-OpaqueCancelable8-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 11,
+        "Mean": 5162055.958333334,
+        "StandardError": 1666.15885172812,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 5162055.958333334,
+          "StandardError": 1666.15885172812,
+          "Level": 12,
+          "Margin": 7642.493802340927,
+          "Lower": 5154413.464530993,
+          "Upper": 5169698.452135675
+        },
+        "OriginalValues": [
+          5157148.104166667,
+          5159907.0625,
+          5162083.479166667,
+          5156879.979166667,
+          5159839.666666667,
+          5170815.666666667,
+          5168345.041666667,
+          5154650.333333333,
+          5160503.166666667,
+          5170506.25,
+          5161936.791666667
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 5164558.177083333,
+        "StandardError": 2925.199411909418,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 5164558.177083333,
+          "StandardError": 2925.199411909418,
+          "Level": 12,
+          "Margin": 12979.049347676162,
+          "Lower": 5151579.127735657,
+          "Upper": 5177537.226431009
+        },
+        "OriginalValues": [
+          5192043.625,
+          5157151.645833333,
+          5159910.604166667,
+          5162087.020833333,
+          5156883.520833333,
+          5159843.208333333,
+          5170819.208333333,
+          5168348.583333333,
+          5154653.875,
+          5160506.708333333,
+          5170509.791666667,
+          5161940.333333333
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 4790474.380208333,
+          "standardError": 784.4880850608318,
+          "confidenceLower": 4786876.016629812,
+          "confidenceUpper": 4794072.743786854
+        },
+        {
+          "mean": 4794815.130208333,
+          "standardError": 1452.5606131992072,
+          "confidenceLower": 4788152.388854238,
+          "confidenceUpper": 4801477.871562428
+        }
+      ],
+      "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "inputBytes": 72380,
+      "outputBytes": 531468,
+      "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "nativeOutputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+      "alphaExact": true,
+      "nativeCliPixelsExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality.",
+      "sourceNote": "Actual complete default-context decoder, original frozen input/native settings/pixels/alpha/source/owner/token and input delivery. Existing native contexts/private scratch retained; complete parse/reconstruction/filter/color and independently owned RGBA/disposal timed. Cached harness/selector/native, no new matrix or projection. OPA465changes only unprepared output allocation to existing complete-overwrite policy. Default pool capped4MiB, independently owned live images; governed calls bypass. Output/disposal remain timed; total GC is separate from idle retained capacity and admitted peaks. Short is not independent confirmation; every point retained.",
+      "receiptPath": "tmp/opa465-candidate-OpaqueCancelable8-confirm-receipt.json",
+      "observationPath": "tmp/opa465-candidate-OpaqueCancelable8-confirm-observation.json"
+    },
+    "SimpleOpaque8": {
+      "managedUs": 5143.235851325757,
+      "nativeUs": 4890.679119791667,
+      "ratio": 1.0516404215749997,
+      "lower": 1.0469138093362254,
+      "upper": 1.0567922865946542,
+      "allocatedBytes": 228864,
+      "status": "gap",
+      "librarySha256": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+      "caseId": "SimpleOpaque8",
+      "runId": "opa465-candidate-SimpleOpaque8-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 11,
+        "Mean": 5143235.851325757,
+        "StandardError": 1360.7936085294941,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 5143235.851325757,
+          "StandardError": 1360.7936085294941,
+          "Level": 12,
+          "Margin": 6241.815844068648,
+          "Lower": 5136994.035481689,
+          "Upper": 5149477.667169825
+        },
+        "OriginalValues": [
+          5147361.864583333,
+          5142123.114583333,
+          5150891.59375,
+          5149041.28125,
+          5145626.760416667,
+          5142541.239583333,
+          5141793.84375,
+          5138376.59375,
+          5142351.989583333,
+          5137971.197916667,
+          5137514.885416667
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 5146900.204861111,
+        "StandardError": 3865.627333920962,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 5146900.204861111,
+          "StandardError": 3865.627333920962,
+          "Level": 12,
+          "Margin": 17151.70860571732,
+          "Lower": 5129748.496255394,
+          "Upper": 5164051.913466828
+        },
+        "OriginalValues": [
+          5187166.729166667,
+          5147365.625,
+          5142126.875,
+          5150895.354166667,
+          5149045.041666667,
+          5145630.520833333,
+          5142545,
+          5141797.604166667,
+          5138380.354166667,
+          5142355.75,
+          5137974.958333333,
+          5137518.645833333
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 4890679.119791667,
+          "standardError": 934.1200104478933,
+          "confidenceLower": 4886394.4104537275,
+          "confidenceUpper": 4894963.8291296065
+        },
+        {
+          "mean": 4895209.90625,
+          "standardError": 1051.776937828172,
+          "confidenceLower": 4890385.517074586,
+          "confidenceUpper": 4900034.295425414
+        }
+      ],
+      "inputSha256": "ef21a8b737cb3ffbef80939df713024482e53f102475aa4bdb0bcdda8df19319",
+      "inputBytes": 76128,
+      "outputBytes": 531468,
+      "outputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+      "nativeOutputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+      "alphaExact": true,
+      "nativeCliPixelsExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "boundary": "Identical resident frozen opaque VP8 keyframe input to independent owned RGBA8. Complete public managed Decode/disposal; native software webp decode/state reset, centered bilinear chroma expansion, limited BT601 conversion through RGBA16, no-dither RGBA8 reduction and real scratch/output allocation/release. One codec/conversion thread, normal SIMD. Opaque alpha255 comes from RGB conversion, with no alpha-plane merge. Contexts and packet/frame wrappers reused; every call decodes/converts all pixels. Padded rows exposed directly. Startup/I/O/IPC/hashing/checks/encoding excluded. One opacity projection of the existing original raster; no quality enumeration. Identical-input decode requires no matched encode quality.",
+      "sourceNote": "Actual complete default-context decoder, original frozen input/native settings/pixels/alpha/source/owner/token and input delivery. Existing native contexts/private scratch retained; complete parse/reconstruction/filter/color and independently owned RGBA/disposal timed. Cached harness/selector/native, no new matrix or projection. OPA465changes only unprepared output allocation to existing complete-overwrite policy. Default pool capped4MiB, independently owned live images; governed calls bypass. Output/disposal remain timed; total GC is separate from idle retained capacity and admitted peaks. Short is not independent confirmation; every point retained.",
+      "receiptPath": "tmp/opa465-candidate-SimpleOpaque8-confirm-receipt.json",
+      "observationPath": "tmp/opa465-candidate-SimpleOpaque8-confirm-observation.json"
+    },
+    "Native8": {
+      "managedUs": 6229.53660653409,
+      "nativeUs": 5972.66159375,
+      "ratio": 1.0430084659497356,
+      "lower": 1.0397615900079864,
+      "upper": 1.0470135575306654,
+      "allocatedBytes": 238384,
+      "status": "gap",
+      "librarySha256": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+      "caseId": "Native8",
+      "runId": "opa465-candidate-Native8-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 11,
+        "Mean": 6229536.606534091,
+        "StandardError": 1837.1118819218418,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 6229536.606534091,
+          "StandardError": 1837.1118819218418,
+          "Level": 12,
+          "Margin": 8426.637206429816,
+          "Lower": 6221109.969327661,
+          "Upper": 6237963.24374052
+        },
+        "OriginalValues": [
+          6236856.328125,
+          6227261.828125,
+          6228098.390625,
+          6225464.734375,
+          6239565.140625,
+          6237543.015625,
+          6228451.453125,
+          6227278.734375,
+          6219949.203125,
+          6224037.578125,
+          6230396.265625
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 6232107.791666667,
+        "StandardError": 3066.091556531934,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 6232107.791666667,
+          "StandardError": 3066.091556531934,
+          "Level": 12,
+          "Margin": 13604.184882132571,
+          "Lower": 6218503.606784535,
+          "Upper": 6245711.976548799
+        },
+        "OriginalValues": [
+          6260342.53125,
+          6236860.71875,
+          6227266.21875,
+          6228102.78125,
+          6225469.125,
+          6239569.53125,
+          6237547.40625,
+          6228455.84375,
+          6227283.125,
+          6219953.59375,
+          6224041.96875,
+          6230400.65625
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 5974262.020833333,
+          "standardError": 1451.3000989572317,
+          "confidenceLower": 5967605.061324272,
+          "confidenceUpper": 5980918.980342394
+        },
+        {
+          "mean": 5972661.59375,
+          "standardError": 1667.324808599385,
+          "confidenceLower": 5965013.751827248,
+          "confidenceUpper": 5980309.435672752
+        }
+      ],
+      "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "inputBytes": 98590,
+      "outputBytes": 531468,
+      "outputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "alphaExact": true,
+      "nativeCliPixelsExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "boundary": "Identical resident frozen VP8/ALPH input to independent owned RGBA8. Complete public managed Decode and disposal; native software webp decode, state reset, centered bilinear chroma expansion, limited BT.601 conversion through RGBA16, RGBA8 reduction, exact alpha merge and scratch/output allocation/release. One codec/conversion thread, normal SIMD. Native contexts and packet/frame wrappers reused; every call decodes and converts every pixel. Padded output rows exposed without a packing copy. Startup, I/O, IPC, hashing, validation and encoding excluded. One existing raster/input; no regeneration or quality enumeration. Decode does not require a matched encoder quality. Only this native keyframe/alpha profile is measured.",
+      "sourceNote": "Actual complete default-context decoder, original frozen input/native settings/pixels/alpha/source/owner/token and input delivery. Existing native contexts/private scratch retained; complete parse/reconstruction/filter/color and independently owned RGBA/disposal timed. Cached harness/selector/native, no new matrix or projection. OPA465changes only unprepared output allocation to existing complete-overwrite policy. Default pool capped4MiB, independently owned live images; governed calls bypass. Output/disposal remain timed; total GC is separate from idle retained capacity and admitted peaks. Short is not independent confirmation; every point retained.",
+      "receiptPath": "tmp/opa465-candidate-Native8-confirm-receipt.json",
+      "observationPath": "tmp/opa465-candidate-Native8-confirm-observation.json"
+    },
+    "StreamNative8": {
+      "managedUs": 6235.7458046875,
+      "nativeUs": 5992.887203125,
+      "ratio": 1.0405244739857378,
+      "lower": 1.0350743271375806,
+      "upper": 1.0450634913448305,
+      "allocatedBytes": 238480,
+      "status": "gap",
+      "librarySha256": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+      "caseId": "StreamNative8",
+      "runId": "opa465-candidate-StreamNative8-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 12,
+        "Mean": 6235745.8046875,
+        "StandardError": 4428.333188124986,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 6235745.8046875,
+          "StandardError": 4428.333188124986,
+          "Level": 12,
+          "Margin": 19648.422853712134,
+          "Lower": 6216097.381833788,
+          "Upper": 6255394.227541212
+        },
+        "OriginalValues": [
+          6265855.53125,
+          6228215.40625,
+          6226071.21875,
+          6221805.09375,
+          6219501.09375,
+          6234682.65625,
+          6215220.375,
+          6236639.96875,
+          6233070.53125,
+          6243414,
+          6256726.34375,
+          6247747.4375
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 6235750.0234375,
+        "StandardError": 4428.333188124986,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 6235750.0234375,
+          "StandardError": 4428.333188124986,
+          "Level": 12,
+          "Margin": 19648.422853712134,
+          "Lower": 6216101.600583788,
+          "Upper": 6255398.446291212
+        },
+        "OriginalValues": [
+          6265859.75,
+          6228219.625,
+          6226075.4375,
+          6221809.3125,
+          6219505.3125,
+          6234686.875,
+          6215224.59375,
+          6236644.1875,
+          6233074.75,
+          6243418.21875,
+          6256730.5625,
+          6247751.65625
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 5992887.203125,
+          "standardError": 1628.0567944716765,
+          "confidenceLower": 5985663.548768228,
+          "confidenceUpper": 6000110.857481772
+        },
+        {
+          "mean": 6000314.630208333,
+          "standardError": 1159.6371145153157,
+          "confidenceLower": 5995169.34429264,
+          "confidenceUpper": 6005459.916124026
+        }
+      ],
+      "inputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "inputBytes": 98590,
+      "outputBytes": 531468,
+      "outputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "nativeOutputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+      "alphaExact": true,
+      "nativeCliPixelsExact": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "boundary": "Fresh non-exposed seekable VP8/ALPH Stream to independent owned RGBA8. Complete default managed input buffering/copies and EOF reading, full public Decode/disposal. Native fresh AVIO/owned packet acquisition, complete reading/EOF, software webp state reset/decode, centered chroma expansion, limited BT601 through RGBA16/no-dither reduction, exact alpha merge and all input/scratch/output acquisition/release timed. Decoder/conversion/frame/packet wrappers reused; every call reacquires input and decodes/converts all pixels. No demux, exposed input-buffer shortcut, output cache or redundant packing. One CPU/codec/conversion thread, normal SIMD. Startup/I/O/IPC/generation/hashing/validation excluded. Existing frozen input and exact per-decoder pixel anchors reused; no encoding or quality search.",
+      "sourceNote": "Actual complete default-context decoder, original frozen input/native settings/pixels/alpha/source/owner/token and input delivery. Existing native contexts/private scratch retained; complete parse/reconstruction/filter/color and independently owned RGBA/disposal timed. Cached harness/selector/native, no new matrix or projection. OPA465changes only unprepared output allocation to existing complete-overwrite policy. Default pool capped4MiB, independently owned live images; governed calls bypass. Output/disposal remain timed; total GC is separate from idle retained capacity and admitted peaks. Short is not independent confirmation; every point retained.",
+      "receiptPath": "tmp/opa465-candidate-StreamNative8-confirm-receipt.json",
+      "observationPath": "tmp/opa465-candidate-StreamNative8-confirm-observation.json"
+    }
+  },
+  "statusCounts": {
+    "gap": 5
+  },
+  "comparison": {
+    "Opaque8": {
+      "project": "Lokad.Image",
+      "case": "Opaque8",
+      "mode": "confirm",
+      "reusedOriginalPrefix": "opa465",
+      "originalUs": 5145.373866666666,
+      "candidateUs": 5040.323088068181,
+      "savedUs": 105.05077859848461,
+      "rawReduction": 0.020416549180038435,
+      "normalizedPointReduction": 0.019936711263860762,
+      "nativePointChange": -0.0004895989082464025,
+      "originalAllocatedBytes": 760564,
+      "candidateAllocatedBytes": 228864,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false,
+          "candidateOriginalRawInterval": [
+            0.9772945286653038,
+            0.9818790870548436
+          ],
+          "candidateOriginalNormalizedInterval": [
+            0.9662065275087468,
+            0.9965710628346136
+          ]
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false,
+          "candidateOriginalRawInterval": [
+            0.9743083386170869,
+            0.9850141481047607
+          ],
+          "candidateOriginalNormalizedInterval": [
+            0.9632542176038613,
+            0.9997530341829786
+          ]
+        }
+      }
+    },
+    "OpaqueCancelable8": {
+      "project": "Lokad.Image",
+      "case": "OpaqueCancelable8",
+      "mode": "confirm",
+      "reusedOriginalPrefix": "opa465",
+      "originalUs": 5293.380992424242,
+      "candidateUs": 5162.055958333334,
+      "savedUs": 131.32503409090805,
+      "rawReduction": 0.02480929188336478,
+      "normalizedPointReduction": 0.025257424020980856,
+      "nativePointChange": 0.00045974408901350294,
+      "originalAllocatedBytes": 760564,
+      "candidateAllocatedBytes": 228864,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false,
+          "candidateOriginalRawInterval": [
+            0.9718571649577488,
+            0.9785372405714938
+          ],
+          "candidateOriginalNormalizedInterval": [
+            0.9684563167626109,
+            0.980445158535646
+          ]
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false,
+          "candidateOriginalRawInterval": [
+            0.9707142775669637,
+            0.9799956580116569
+          ],
+          "candidateOriginalNormalizedInterval": [
+            0.9673174287110913,
+            0.9819064195475382
+          ]
+        }
+      }
+    }
+  },
+  "storage": {
+    "windows": {
+      "baseline": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "embeddedAssemblySha256": "84c1aaff5d6ee8d382bc840d2957588cd9394127570d1e672c6e8f1a36aacfc8",
+        "boundary": "Complete public span Decode on frozen existing72380B opaque packet; fresh roots for governed calls, input borrowed. No timing/GC/physical/native measurement. Default idle exact-size pool capacity observed separately from owned/admitted storage.",
+        "rows": [
+          {
+            "governed": false,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": false,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          }
+        ]
+      },
+      "candidate": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "embeddedAssemblySha256": "814a83d3ac3ccddb5f0861f8692894f9d6f06f3b3bfef51b6d14828a4611bcc0",
+        "boundary": "Complete public span Decode on frozen existing72380B opaque packet; fresh roots for governed calls, input borrowed. No timing/GC/physical/native measurement. Default idle exact-size pool capacity observed separately from owned/admitted storage.",
+        "rows": [
+          {
+            "governed": false,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": false,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 531468,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 531468,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 531468,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          }
+        ]
+      }
+    },
+    "linux": {
+      "baseline": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "embeddedAssemblySha256": "878c969e8f367d5b9984a5af593eb7855e09b257e0bb357abebb831ba83f555c",
+        "boundary": "Complete public span Decode on frozen existing72380B opaque packet; fresh roots for governed calls, input borrowed. No timing/GC/physical/native measurement. Default idle exact-size pool capacity observed separately from owned/admitted storage.",
+        "rows": [
+          {
+            "governed": false,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": false,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 0,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          }
+        ]
+      },
+      "candidate": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "inputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "embeddedAssemblySha256": "e953e034c9c621a96c43359c20d72a49c830b2411a6bb4015b06e16ffe317b1a",
+        "boundary": "Complete public span Decode on frozen existing72380B opaque packet; fresh roots for governed calls, input borrowed. No timing/GC/physical/native measurement. Default idle exact-size pool capacity observed separately from owned/admitted storage.",
+        "rows": [
+          {
+            "governed": false,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 0,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": false,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 0,
+            "retainedOutputAdmittedBytes": 0,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 531468,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": false,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 531468,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          },
+          {
+            "governed": true,
+            "live": true,
+            "outputBytes": 531468,
+            "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+            "peakAdmittedBytes": 747020,
+            "retainedOutputAdmittedBytes": 531468,
+            "admittedAfterDispose": 0,
+            "idlePoolBefore": 531468,
+            "idlePoolAfterDispose": 531468,
+            "borrowedRootAlive": true,
+            "sourceUnchanged": true
+          }
+        ]
+      }
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "OPA465",
+    "onlyProductionChange": "src/Lokad.Image/Internal/Vp8Color.cs",
+    "originalSha256": "213842d6da2beb44b42c2d5a3eec0b37ada156fe25fff16ca04b2708d39028b7",
+    "currentSha256": "ac38508b5621299def0d3f6397b91a4e2696a579090991fc8b3dbe09b1c5df9f",
+    "entireOriginalProjectionEquals": true,
+    "unchangedOwnershipAndKernels": {
+      "src/Lokad.Image/ImageBuffer.cs": "a46c48d8fb88cc8fb7abc508d7f0ed311477827b7f7431875bf555e93fb1c17f",
+      "src/Lokad.Image/Internal/PixelStoragePool.cs": "06b27bdfa26dd9285dbb985a7c6936140ed661ea89b8235c63d285d9275a65cc",
+      "src/Lokad.Image/Internal/WebpCodec.cs": "2d73f98cfbf09093ff8dc4c34fae76d9f436ce805e9776ae0f52e1154319e203",
+      "src/Lokad.Image/Internal/Vp8Decoder.cs": "b167b2b55bb8414fcbd70782ebb9b9886e740686eb80d42a2f42951b0d22e033",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "94aac88d236e59997944add9d8b61e8be2018381e1524a9dc921e52e34fe1c9d",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "8c44f7daf645025d89940e0db1538b2be4b4f3be0929ea58a36d9dc2d7a43bfb"
+    },
+    "fullWrite": "Unprepared: every scalar RGBtriplet and alpha explicitly written. Vector row writes firstpixel then8pixel completeRGBA groups then scalar tail. keepAlphafalse; no oldsample read. Prepared ALPH owner/path unchanged, preserving existing alpha lanes.",
+    "ownership": "Existing overwrite allocator reserves local length and retained actual owner before array acquisition. Sharedbudgetfreshuninitializedbypass selected beforeadmission. Failure disposes private result, terminalrefusal unchanged. Pool max4MiB/twoexactsize slots unchanged; independentlylive images never share.",
+    "invalidatedPerformance": [
+      "Native8",
+      "StreamNative8",
+      "Opaque8",
+      "OpaqueCancelable8",
+      "SimpleOpaque8"
+    ],
+    "reused": "Encoders/VP8validation/lossless/PNG/JPEG/editing/text paths unchanged. Shared renderer callers refresh fivecurrentcosts, no causalALPH/simple gainclaim. Full public/differential assemblies reuse API/source bindings with currentDLL. Changed internal embedded sources rebuilt once perOS."
+  },
+  "qualification": {
+    "fullChecksEachOs": 5801,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+      "full": [
+        2536,
+        2317,
+        948
+      ],
+      "total": 5801,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 34,
+        "internal-scalar": 34,
+        "public-normal": 260,
+        "public-scalar": 260
+      },
+      "affectedVp8ScalarEachOs": 294,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "814a83d3ac3ccddb5f0861f8692894f9d6f06f3b3bfef51b6d14828a4611bcc0",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "2607972452d161f9f99f2acb52e5212c9004206f6fbce7eff7ba5794268ed7f6",
+        "tests\\Lokad.Image.Tests\\Vp8RenderStorageTests.cs": "daaf8e0c902acfd37a27dab15248a4480f1d9282abac576b5595a847fedc8e06"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+      "full": [
+        2536,
+        2317,
+        948
+      ],
+      "total": 5801,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 34,
+        "internal-scalar": 34,
+        "public-normal": 260,
+        "public-scalar": 260
+      },
+      "affectedVp8ScalarEachOs": 294,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "e953e034c9c621a96c43359c20d72a49c830b2411a6bb4015b06e16ffe317b1a",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "dddc1c9f1af862c0f130c6bbb7ceef60c04ca9c15c2d2f68bd84eae571a1e023",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "cd8d94bf58b51f0f9621ca4af6588e653fe7b84de3a22cf97f093226d1dbf25c",
+        "tests/Lokad.Image.Tests/Vp8RenderStorageTests.cs": "daaf8e0c902acfd37a27dab15248a4480f1d9282abac576b5595a847fedc8e06"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "3e7fcc04037988e46120b11a2820329a7e212fa6bc90834a4cf167ee5688d196",
+      "symbolsSha256": "615d4f26ad9212aaf1c16e30d839173c2b2b40eed2b046e6b643abee54d8b10f",
+      "bytes": 423205,
+      "librarySha256": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+      "actualConsumerPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "3e7fcc04037988e46120b11a2820329a7e212fa6bc90834a4cf167ee5688d196",
+      "librarySha256": "18da78b23cf4d9246defa3d60970d2db76b877726b4e9dcae6529846d79d6193",
+      "actualConsumerPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    }
+  },
+  "raw": {
+    "file": "vp8-overwrite-output-qualified.tar.xz",
+    "sha256": "abe549dbd45a6426d04608631cebe2ae47681c3283d3559b53c6aaca2bffa747",
+    "bytes": 1965612,
+    "members": 144,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-coefficient-program-qualified.tar.xz",
+        "sha256": "e0a0ac3b24ca3221be6b4fa57950efb476d19b5e544569ee20c13b0c79b49bf1"
+      },
+      {
+        "file": "vp8-current-confidence-and-decoder-attribution.tar.xz",
+        "sha256": "dc6ac6ffeedeb9d189490b5dea146c063f6f6c4c096aa953444eccfe60051daf"
+      }
+    ],
+    "scope": "OPA465single complete-overwrite allocator stage, all short/confirm/originals, guards/source/providers, W/L normal/scalar/full/live/admission and SAMEactualpackage logs. Unchanged reference/harness/source inputs resolve byhash through priorarchives. No duplicated binaries for every runtime."
+  },
+  "workflow": {
+    "coreVersionsEachOs": 1,
+    "embeddedVersionsEachOs": 1,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "displayedCostsRefreshed": 1,
+    "displayedCostsReusedUnchangedPaths": 124,
+    "allFiveAffectedConfirmed": true,
+    "notActualPackage125RowReleaseRefresh": true
+  },
+  "scope": "Complete standalone public VP8 Decode plus independent output/disposal, frozen existing inputs/native settings, onequietCPU/idle-v2. Native contexts/private scratch retained as documented. Opaque ordinary/live independent current-original comparisons; otherthree currentcosts only. Exactencoderpackets/managedpixels unchanged; totalGC/actualadmission/idlepool separate. No broadergain/parityclaim or new workloadgrid.",
+  "notes": "One diagnostic-tool reflection lookup used a field for the Shared property; corrected and original failure retained. No production/test/timing rebuild for diagnostic correction. Existing allocator/pool and numericalkernels unchanged. Caller-root and ungoverned storage policies remain distinct; no governed CPUgain inferred from default timings."
+}

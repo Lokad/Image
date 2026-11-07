@@ -30,7 +30,7 @@ internal static class Vp8Color
 
     public static ImageBuffer Render(Vp8Planes planes, byte[]? alpha, ImageBuffer? prepared, OperationContext context)
     {
-        var result = prepared ?? ImageBuffer.Allocate(planes.Width, planes.Height, 8, context);
+        var result = prepared ?? ImageBuffer.AllocateForOverwrite(planes.Width, planes.Height, 8, context);
         var keepAlpha = prepared is not null;
         try
         {
