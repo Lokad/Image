@@ -98,6 +98,11 @@ measured kernels and portable fallbacks. Qualify accepted production changes
 on Windows/Linux and through the actual Release-package consumer. Historical
 benchmark evidence is retained, not current proof.
 
+Publish completed decoder state exactly. An operation-private decoder abandoned
+on failure may publish only on success when no caller observes or resumes its
+failed state. Preserve public failure semantics, cancellation checkpoints and
+owner cleanup; establish that call boundary before removing exception-time work.
+
 Keep docs/ focused on the supported contract, usage, migration and lasting design
 guidance. Keep codec parity in one concise case table and benchmark.md as the
 current release comparison. Experiment/qualification histories belong in

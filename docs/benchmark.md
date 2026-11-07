@@ -27,7 +27,13 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  Five displayed costs refresh;120 numerical rows reuse unchanged paths.
+  Those five displayed costs remain source-valid; this round reuses all125
+  numerical table rows.
+  [Successful-block publication](../benchmarks/VP8-COMPLETED-BLOCK-PUBLICATION.md)
+  separately saves **82.55µs/1.60% raw**,1.79% normalized on complete live opaque VP8.
+  Current 5,072.31/native4,798.30µs,upper1.065 remains a gap;
+  GC stays228,864B/op. Only abandoned private failure-state work is removed;
+  successful cursors, every decision poll and public cleanup stay exact.
 - **WebP encoding:** [per-block preparation](../benchmarks/VP8-SMALL-BLOCK-PREPARATION.md)
   retains54.30µs/1.94%raw gain; all-actual normalized gain is inconclusive.
   Nine controls:5pass/3gaps/1uncertain. Effort6's fixed four-launch envelope passes;
@@ -100,12 +106,12 @@ Current scope and remaining work:
   This round reuses those unchanged font costs.
 
 The current production build passes **5,837 full/live checks per OS**, affected
-normal/AVX2-disabled/scalar checks, and the **same actual Release package/all three examples
+normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-All three modes pass49 internal/239 public checks each per OS; unrelated
-AVX512-disabled evidence is reused.
+The current reader passes40 internal/239 public checks per normal/scalar mode
+on each OS; unrelated AVX2/AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

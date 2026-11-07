@@ -20,7 +20,8 @@ internal partial struct Vp8BooleanReader
 
     // Same RFC6386 block/input bound as the noncancelable window. Preserve
     // its arithmetic unchanged, but poll before EVERY decision and publish the
-    // exact completed prefix even when that poll throws. No new storage/owner.
+    // completed-block prefix. A failed private decoder is abandoned by its caller;
+    // no cursor is resumed or exposed after an exception. No new storage/owner.
     internal bool ReadCancellableCoefficientBlock<TMode>(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
         where TMode : struct
@@ -30,45 +31,39 @@ internal partial struct Vp8BooleanReader
         var cancellation = context.Cancellation;
         var reader = BeginCoefficientWindow(data);
         var position = reader.Position; var bits = reader.Bits; var range = reader.Range; var value = reader.Value;
-        try
+        var model = MemoryMarshal.Cast<byte, CoefficientModelRow>(probabilities);
+        ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
+        ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
+        var previousZero = false; var predictor = initialContext;
+        for (var c = plane == 0 ? 1 : 0; c < 16; c++)
         {
-            var model = MemoryMarshal.Cast<byte, CoefficientModelRow>(probabilities);
-            ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
-            ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
-            var previousZero = false; var predictor = initialContext;
-            for (var c = plane == 0 ? 1 : 0; c < 16; c++)
+            ref readonly var p = ref model[(plane * 8 + bands[c]) * 3 + predictor];
+            var token = CancellableBlockReader.Token(in data, in p, previousZero, cancellation,
+                ref position, ref bits, ref range, ref value);
+            if (token == 11) break;
+            var sample = token < 5 ? token : CancellableBlockReader.Category(in data, token - 5, cancellation,
+                ref position, ref bits, ref range, ref value);
+            if (typeof(TMode) == typeof(PixelMode))
             {
-                ref readonly var p = ref model[(plane * 8 + bands[c]) * 3 + predictor];
-                var token = CancellableBlockReader.Token(in data, in p, previousZero, cancellation,
-                    ref position, ref bits, ref range, ref value);
-                if (token == 11) break;
-                var sample = token < 5 ? token : CancellableBlockReader.Category(in data, token - 5, cancellation,
-                    ref position, ref bits, ref range, ref value);
-                if (typeof(TMode) == typeof(PixelMode))
-                {
-                    previousZero = sample == 0; predictor = Math.Min(sample, 2);
-                    if (sample == 0) continue;
-                    nonzero = 1;
-                    if (CancellableBlockReader.Read(in data, 128, cancellation,
-                        ref position, ref bits, ref range, ref value) != 0) sample = -sample;
-                    values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
-                }
-                else
-                {
-                    previousZero = token == 0; predictor = Math.Min(token, 2);
-                    if (token == 0) continue;
-                    nonzero = 1;
-                    CancellableBlockReader.Read(in data, 128, cancellation,
-                        ref position, ref bits, ref range, ref value);
-                }
+                previousZero = sample == 0; predictor = Math.Min(sample, 2);
+                if (sample == 0) continue;
+                nonzero = 1;
+                if (CancellableBlockReader.Read(in data, 128, cancellation,
+                    ref position, ref bits, ref range, ref value) != 0) sample = -sample;
+                values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
             }
-            return nonzero != 0;
+            else
+            {
+                previousZero = token == 0; predictor = Math.Min(token, 2);
+                if (token == 0) continue;
+                nonzero = 1;
+                CancellableBlockReader.Read(in data, 128, cancellation,
+                    ref position, ref bits, ref range, ref value);
+            }
         }
-        finally
-        {
-            reader.Position = position; reader.Bits = bits; reader.Range = range; reader.Value = value;
-            reader.Publish(ref this);
-        }
+        reader.Position = position; reader.Bits = bits; reader.Range = range; reader.Value = value;
+        reader.Publish(ref this);
+        return nonzero != 0;
     }
 
     internal static class CancellableBlockReader

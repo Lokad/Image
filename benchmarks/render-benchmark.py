@@ -41,24 +41,21 @@ def render():
     assert trellis['lower'] == launches['lower'] and trellis['upper'] == launches['upper']
     assert trellis['status'] == launches['status']
     assert all(trellis['lower'] <= v['lower'] and trellis['upper'] >= v['upper'] for v in [*launches['launches'], *launches['views'].values()])
-    vp8_output = json.loads((ROOT / 'benchmarks/vp8-overwrite-output-evidence.json').read_text(encoding='utf-8'))
-    assert vp8_output['productionAccepted'] and vp8_output['sourceProof']['entireOriginalProjectionEquals']
-    assert vp8_output['raw']['mirrored'] and vp8_output['raw']['allMembersVerified']
-    assert set(vp8_output['cases']) == {'Native8', 'StreamNative8', 'Opaque8', 'OpaqueCancelable8', 'SimpleOpaque8'}
-    for c in vp8_output['cases'].values():
-        assert c['actualIterations'] == c['nativeSamplesEachBracket'] == c['allActualStatistics']['N'] == 12
-        assert c['librarySha256'] == vp8_output['producers']['linuxSha256']
-        assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['alphaExact'] and c['nativeCliPixelsExact']
-        assert c['outputSha256'] == c['nativeOutputSha256'] and c['outputBytes'] == 531468
-        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for c in vp8_output['comparison'].values() for v in c['views'].values())
-    for platform in ['windows', 'linux']:
-        for subject in ['baseline', 'candidate']:
-            for r in vp8_output['storage'][platform][subject]['rows']:
-                assert r['sourceUnchanged'] and r['borrowedRootAlive'] and r['admittedAfterDispose'] == 0
-                assert r['peakAdmittedBytes'] == (747020 if r['governed'] else 0)
-                assert r['retainedOutputAdmittedBytes'] == (531468 if r['governed'] else 0)
-                assert r['idlePoolAfterDispose'] == (531468 if subject == 'candidate' else 0)
+    live_decode = json.loads((ROOT / 'benchmarks/vp8-completed-block-publication-evidence.json').read_text(encoding='utf-8'))
+    assert live_decode['productionAccepted'] and live_decode['requiredMaterialPaths'] == 283
+    assert live_decode['raw']['mirrored'] and live_decode['raw']['allMembersVerified']
+    assert live_decode['sourceProof']['wholeSourceUndoEqualsQualifiedOriginal']
+    live = live_decode['current']
+    assert live['caseId'] == 'OpaqueCancelable8' and live['actualIterations'] == 12
+    assert len(live['managed']['actual']) == len(live['receipt']['nativeBefore']) == len(live['receipt']['nativeAfter']) == 12
+    assert live['librarySha256'] == live_decode['producers']['linuxSha256']
+    assert live['allOriginalGatesPassed'] and live['quietGuardsPassed']
+    assert live['receipt']['sourceUnchanged'] and live['receipt']['independentOwnedOutput']
+    assert live['outputSha256'] == live['receipt']['nativeOutputSha256'] and live['outputBytes'] == 531468
+    assert live['status'] == ('pass' if live['upper'] <= 1 else 'gap' if live['lower'] > 1 else 'uncertain')
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in live_decode['comparison']['views'].values())
+    assert live_decode['storage']['ownedCapacityUnchanged'] and live_decode['storage']['newRetainedStateBytes'] == 0
+    assert live_decode['storage']['retainedResultBytes'] == live['outputBytes']
     assert all(v['rawGainSeparated'] for v in vp8_current['comparison']['views'].values())
     assert vp8_current['normalizedGainConfirmedAllViews'] == all(v['normalizedGainSeparated']
                for v in vp8_current['comparison']['views'].values())
@@ -1660,7 +1657,7 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    vq = resident_decode['qualification']
+    vq = live_decode['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5837
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
@@ -1842,7 +1839,13 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  Five displayed costs refresh;120 numerical rows reuse unchanged paths.
+  Those five displayed costs remain source-valid; this round reuses all125
+  numerical table rows.
+  [Successful-block publication](../benchmarks/VP8-COMPLETED-BLOCK-PUBLICATION.md)
+  separately saves **82.55µs/1.60% raw**,1.79% normalized on complete live opaque VP8.
+  Current {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,upper{live['upper']:.3f} remains a gap;
+  GC stays{live['allocatedBytes']:,}B/op. Only abandoned private failure-state work is removed;
+  successful cursors, every decision poll and public cleanup stay exact.
 - **WebP encoding:** [per-block preparation](../benchmarks/VP8-SMALL-BLOCK-PREPARATION.md)
   retains54.30µs/1.94%raw gain; all-actual normalized gain is inconclusive.
   Nine controls:5pass/3gaps/1uncertain. Effort6's fixed four-launch envelope passes;
@@ -1915,12 +1918,12 @@ Current scope and remaining work:
   This round reuses those unchanged font costs.
 
 The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
-normal/AVX2-disabled/scalar checks, and the **same actual Release package/all three examples
+normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-All three modes pass49 internal/239 public checks each per OS; unrelated
-AVX512-disabled evidence is reused.
+The current reader passes40 internal/239 public checks per normal/scalar mode
+on each OS; unrelated AVX2/AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
