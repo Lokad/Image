@@ -721,40 +721,37 @@ cache = candidateCache; pending = candidatePending - length;
         var localBits = ((ulong)bits << 32) << (32 - available);
         var localAvailable = available; var localPosition = position;
 var cancellation = context.Cancellation; var k = coefficient;
-        try
+        // This reader belongs to the current decode, which abandons it on
+        // failure. Publish exact state on normal exits; outer owners handle
+        // failure/cancellation cleanup without resuming this private window.
+        while (k <= 63)
         {
-            while (k <= 63)
+            // At most eight prefix and ten amplitude bits are needed.
+            // Keep ordinary lookahead across symbols; every exit returns
+            // unused whole bytes before publishing the reader state.
+            if (localAvailable < 18)
             {
-                // At most eight prefix and ten amplitude bits are needed.
-                // Keep ordinary lookahead across symbols; every exit returns
-                // unused whole bytes before publishing the reader state.
-                if (localAvailable < 18)
-                {
-                    if (data.Length - localPosition < 4) return;
-                    var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
-                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) return;
-                    localBits |= (ulong)word << (32 - localAvailable); localAvailable += 32; localPosition += 4;
-                }
-                var packed = shortCodes[(int)(localBits >> 56)]; var count = packed & 15;
-                var token = packed >> 4; var size = token & 15; var run = token >> 4;
-                if (count == 0 || size is < 1 or > 10 || run >= 64 - k) return;
-                cancellation.ThrowIfCancellationRequested();
-                localBits <<= count; localAvailable -= count;
-                // Admit and expose the prefix before the separate amplitude
-                // checkpoint. The finally preserves it on cancellation/limit.
-                cancellation.ThrowIfCancellationRequested();
-                var amplitude = ReadHighAlignedSigned(localBits, size);
-                localBits <<= size; localAvailable -= size;
-                k += run;
-                block[JpegTransform.Zigzag[k++]] = amplitude;
+                if (data.Length - localPosition < 4) break;
+                var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
+                if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
+                localBits |= (ulong)word << (32 - localAvailable); localAvailable += 32; localPosition += 4;
             }
+            var packed = shortCodes[(int)(localBits >> 56)]; var count = packed & 15;
+            var token = packed >> 4; var size = token & 15; var run = token >> 4;
+            if (count == 0 || size is < 1 or > 10 || run >= 64 - k) break;
+            cancellation.ThrowIfCancellationRequested();
+            localBits <<= count; localAvailable -= count;
+            // Admit and expose the prefix before the separate amplitude
+            // checkpoint. A failure abandons this operation-private reader.
+            cancellation.ThrowIfCancellationRequested();
+            var amplitude = ReadHighAlignedSigned(localBits, size);
+            localBits <<= size; localAvailable -= size;
+            k += run;
+            block[JpegTransform.Zigzag[k++]] = amplitude;
         }
-        finally
-        {
-            var wholeBytes = localAvailable >> 3;
-            available = localAvailable & 7; bits = (uint)((localBits >> 1) >> (63 - available));
-            position = localPosition - wholeBytes; coefficient = k;
-        }
+        var wholeBytes = localAvailable >> 3;
+        available = localAvailable & 7; bits = (uint)((localBits >> 1) >> (63 - available));
+        position = localPosition - wholeBytes; coefficient = k;
     }
 
     internal bool TryReadLongHuffman(ReadOnlySpan<ushort> longCodes, out int symbol)

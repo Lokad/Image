@@ -89,18 +89,19 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [reuse of prepared canonical codes](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md)
-  keeps existing9/10-bit codes inside ordinary entropy windows. Independent complete
-  RGB decode saves82.75µs/4.79%raw/4.74%normalized; both confidence views separate.
-  CurrentRGB1,645.93/native1,451.85µs,
-  upper1.144 remains a gap; GC10,088B/op unchanged.
-  No new table, owned capacity or retained state. Cursor, fallbacks, checkpoints,
-  exact pixels and packets remain. Twenty-three baseline costs refresh; six
-  progressive confirmations reuse unchanged paths:14pass/13gaps/2uncertain.
-  Ordinary native444/callerCMYK uppers1.018/1.004 are uncertain, without demonstrated
-  optimization gaps. Live-token JPEG remains a gap; no blanket JPEG speedup is claimed.
-  Ten displayed rows refresh;115 reuse unchanged paths. Earlier [high-aligned readers](../benchmarks/JPEG-HIGH-ALIGNED-READER.md)
-  retain paired gains and adverse/inconclusive controls as source-specific history.
+- **JPEG and reading:** [normal-exit live publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md)
+  independently saves66.42µs/3.37%raw/3.32%normalized; both confidence views separate.
+  Current liveJPEG1,906.09/native1,718.85µs,
+  upper1.125 remains187µs gap; GC10,088B/op unchanged.
+  Audited failed readers have no public observer/resumption. Every prefix/amplitude
+  checkpoint, exact normal/fallback cursor and outer cleanup remain; exception-only
+  publication retires. No new owner, capacity or retained state. One affected live
+  cost refreshes;28JPEG costs and all125numeric rows reuse unchanged paths.
+  Status remains14pass/13gaps/2uncertain. Ordinary native444/callerCMYK uppers1.018/1.004
+  are uncertain, without demonstrated optimization gaps. [Prepared canonical codes](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md)
+  retain the source-valid82.75µs/4.79%RGBgain; its currentupper1.144 remains a gap.
+  Unselected lookup/dense-representation experiments retain their own reports/raw;
+  they are not current renderer dependencies. No blanket JPEG speedup is claimed.
   [Full-grid ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md) retains unchanged
   native444 governed peak541,253B/output531,468B and bounded default pool/governed bypass.
   These capacity facts differ from GC and unmeasured physical/native peaks.

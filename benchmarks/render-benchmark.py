@@ -1133,14 +1133,15 @@ def render():
                 updated_vertical += 1
     assert updated_vertical == 3
     # Retained gains remain claims about their original paired experiments.
-    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-buffered-long-lookup-evidence.json').read_text(encoding='utf-8'))
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-live-normal-publication-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_scan['productionAccepted'] and jpeg_scan['requiredMaterialPaths'] == 283
     assert jpeg_scan['qualification']['fullChecksEachOs'] == 5870
     assert jpeg_scan['qualification']['sameActualPackageBothOs']
     assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
-    assert jpeg_scan['sourceProof']['onlyOrdinaryLookupAndArgumentBindingChanged']
-    assert jpeg_scan['sourceProof']['entropyArithmeticRefillPublicationAndEveryReadPollUnchanged']
-    assert jpeg_scan['sourceProof']['tablePreparationAndOwnedCapacityUnchanged']
+    assert jpeg_scan['sourceProof']['onlyLivePublicationControlFlowChanged']
+    assert jpeg_scan['sourceProof']['loopArithmeticRefillsReadsAndEveryPrefixAmplitudePollExact']
+    assert jpeg_scan['sourceProof']['ordinaryExitCanonicalPublicationExact']
+    assert jpeg_scan['sourceProof']['failedPrivateReaderAbandonedWithoutPublicResumption']
     assert jpeg_scan['storage']['newOwnedCapacityBytes'] == jpeg_scan['storage']['newCrossOperationRetainedBytes'] == 0
     assert len(jpeg_scan['cases']) == 29
     assert jpeg_scan['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_scan['cases'].values())
@@ -1152,7 +1153,7 @@ def render():
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for case in ('DirectRgb444',)
+               for case in ('NativeDecodeCancelable8',)
                for v in jpeg_scan['comparison'][case]['views'].values())
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
     replacements += [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
@@ -1778,18 +1779,19 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [reuse of prepared canonical codes](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md)
-  keeps existing9/10-bit codes inside ordinary entropy windows. Independent complete
-  RGB decode saves82.75µs/4.79%raw/4.74%normalized; both confidence views separate.
-  CurrentRGB{jpeg_scan['cases']['DirectRgb444']['managedMicroseconds']:,.2f}/native{jpeg_scan['cases']['DirectRgb444']['nativeMicroseconds']:,.2f}µs,
-  upper{jpeg_scan['cases']['DirectRgb444']['upper']:.3f} remains a gap; GC10,088B/op unchanged.
-  No new table, owned capacity or retained state. Cursor, fallbacks, checkpoints,
-  exact pixels and packets remain. Twenty-three baseline costs refresh; six
-  progressive confirmations reuse unchanged paths:14pass/13gaps/2uncertain.
-  Ordinary native444/callerCMYK uppers1.018/1.004 are uncertain, without demonstrated
-  optimization gaps. Live-token JPEG remains a gap; no blanket JPEG speedup is claimed.
-  Ten displayed rows refresh;115 reuse unchanged paths. Earlier [high-aligned readers](../benchmarks/JPEG-HIGH-ALIGNED-READER.md)
-  retain paired gains and adverse/inconclusive controls as source-specific history.
+- **JPEG and reading:** [normal-exit live publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md)
+  independently saves66.42µs/3.37%raw/3.32%normalized; both confidence views separate.
+  Current liveJPEG{jpeg_scan['cases']['NativeDecodeCancelable8']['managedMicroseconds']:,.2f}/native{jpeg_scan['cases']['NativeDecodeCancelable8']['nativeMicroseconds']:,.2f}µs,
+  upper{jpeg_scan['cases']['NativeDecodeCancelable8']['upper']:.3f} remains187µs gap; GC10,088B/op unchanged.
+  Audited failed readers have no public observer/resumption. Every prefix/amplitude
+  checkpoint, exact normal/fallback cursor and outer cleanup remain; exception-only
+  publication retires. No new owner, capacity or retained state. One affected live
+  cost refreshes;28JPEG costs and all125numeric rows reuse unchanged paths.
+  Status remains14pass/13gaps/2uncertain. Ordinary native444/callerCMYK uppers1.018/1.004
+  are uncertain, without demonstrated optimization gaps. [Prepared canonical codes](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md)
+  retain the source-valid82.75µs/4.79%RGBgain; its currentupper1.144 remains a gap.
+  Unselected lookup/dense-representation experiments retain their own reports/raw;
+  they are not current renderer dependencies. No blanket JPEG speedup is claimed.
   [Full-grid ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md) retains unchanged
   native444 governed peak541,253B/output531,468B and bounded default pool/governed bypass.
   These capacity facts differ from GC and unmeasured physical/native peaks.

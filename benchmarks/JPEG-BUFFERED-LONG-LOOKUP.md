@@ -1,5 +1,8 @@
 # Reuse prepared JPEG codes inside entropy windows
 
+The live-token cost is superseded by [normal-exit publication](JPEG-LIVE-NORMAL-PUBLICATION.md).
+The other28paths and this stage's paired RGB gain remain valid.
+
 The ordinary fused DC/AC and AC readers now share a lookup that reuses the
 existing nine/ten-bit canonical table. These codes stay inside the bounded
 entropy window instead of publishing its cursor and entering slower readers.
