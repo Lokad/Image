@@ -56,12 +56,23 @@ public sealed class Vp8AlphaCoefficientStorageTests
         using var fresh = input.Frame();
         var baseline = root.Bytes;
         using var reused = input.Frame(alpha);
-        Assert.Equal(baseline - scratch + reused.CapacityBytes, root.Bytes);
-        Assert.Equal(fresh.CapacityBytes + scratch - fresh.Count * 800L, reused.CapacityBytes);
-        Assert.Equal(reused.Count * 400, reused.Coefficients.Length);
-        Assert.Equal(400, reused.Levels(reused.Count - 1).Length);
-        Assert.Throws<ArgumentOutOfRangeException>(() => reused.Levels(reused.Count));
-        Assert.Equal(fresh.Coefficients.ToArray(), reused.Coefficients.ToArray());
+        if (method == 2)
+        {
+            // This frame needs block scratch and instructions. The borrowed
+            // alpha owner keeps its unused offer until its actual disposal.
+            Assert.NotNull(reused.Program); Assert.Equal(fresh.CapacityBytes, reused.CapacityBytes);
+            Assert.Equal(baseline + reused.CapacityBytes, root.Bytes);
+            Assert.Equal(ordinary.CapacityBytes + scratch, alpha.CapacityBytes);
+        }
+        else
+        {
+            Assert.Equal(baseline - scratch + reused.CapacityBytes, root.Bytes);
+            Assert.Equal(fresh.CapacityBytes + scratch - fresh.Count * 800L, reused.CapacityBytes);
+            Assert.Equal(reused.Count * 400, reused.Coefficients.Length);
+            Assert.Equal(400, reused.Levels(reused.Count - 1).Length);
+            Assert.Throws<ArgumentOutOfRangeException>(() => reused.Levels(reused.Count));
+            Assert.Equal(fresh.Coefficients.ToArray(), reused.Coefficients.ToArray());
+        }
         Assert.Equal(fresh.BlockData.ToArray(), reused.BlockData.ToArray());
         Assert.Equal(fresh.Probabilities.ToArray(), reused.Probabilities.ToArray());
         using var expected = Vp8FrameEncoding.Create(fresh, input.Context);

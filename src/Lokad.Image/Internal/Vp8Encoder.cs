@@ -31,7 +31,7 @@ internal static class Vp8Encoder
         {
             using var input = Vp8PreparedInput.Create(image, context);
             if (input.HasAlpha) alpha = Vp8AlphaEncoding.Create(input.Alpha, input.Width, context, options.Effort,
-                coefficientLength: Vp8FramePlan.RequiredCoefficientLength(input));
+                coefficientLength: options.Effort == 2 ? 0 : Vp8FramePlan.RequiredCoefficientLength(input));
             input.CleanupTransparentArea();
             using var analysis = Vp8SourceAnalysis.Create(input, context, options.Effort, options.Quality);
             using var segments = Vp8SourceSegments.Create(analysis, options.Quality, false, context);

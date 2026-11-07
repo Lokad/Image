@@ -11,7 +11,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
-| Resident VP8 encoding | [Four-mode trellis](VP8-FOUR-MODE-TRELLIS.md) shares coefficient preparation and SIMD scores across independent Luma4 modes. Four predetermined balanced standalone launch pairs save662µs/6.4%raw,99.9%ratio[.9035,.9689]; scoped DLL gain5.63% is separate. Initial adverse standalone result retained; normalized gain unconfirmed. Current effort6 independentpoint.973, conservative launch/native-bracket envelopeupper1.711: uncertain, not parity. Effort5upper1.031 remains gap. GC754497/741065B unchanged; explicitstack+112B within16KiB, no newheap/retainedbuffer. Onecost refresh/eight source-valid reuse:3pass/2gaps/4uncertain. |
+| Resident VP8 encoding | [Compact residual programs](VP8-COEFFICIENT-PROGRAM.md) replace method2 full-frame coefficients with block scratch and operation-owned compact/literal instructions recorded with direct statistics. Independent complete effort2 saves61.81µs/2.14%raw/2.15%normalized; both confidence views separate. Current2825.91/native2510.76µs,upper1.132 remains gap. GC741386→406705B; public admitted diagrampeak732597→397205B, retained0. Densepeak886733→930669B is a measured tradeoff. Nine existing costs current:4pass/3gaps/2uncertain. Effort6current confirmation passes; selectedeffort5/photo gaps, bothALPHcontrols uncertain. Earlier [four-mode launch history](VP8-FOUR-MODE-TRELLIS.md) is retained; no other incremental or cross-launch-stability claim. Passing cases stop. |
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG decoding/coding validation | [Current framing controls](PNG-CURRENT-FRAMING-COSTS.md):24 independent confirmations,20pass/4gaps. Gaps:liveRGBA8 upper1.113, tight/defaultRGBA16 uppers1.052/1.031, RGB16 upper1.062; allotherconfirmed cases stop. [Shared-root control](PNG-PREPARED-PREFIX.md) separately retains422µs/12.8%gain,upper1.014gap,1638214B/op and1766641Bcoarsepeak. Eight displayed controls5pass/3gaps; remaining costs and allocations in family report. Twenty-seven existing named decode cases still need current proof. Historical contradictions/raw retained; header-only operations/encoding unaffected. |
 | PNG encoding | [Lazy view preparation](PNG-LAZY-VIEW-PREPARATION.md) independently saves390.08/375.08µs (1.83%/2.16%) on complete Optimal16/Smallest8. Exact packets and384KiB admission remain; Grayscale8 measures+408B/op to551,772, ten other fresh allocations unchanged. All11level6/9 fresh one-shot costs refresh; fourFastest costs reuse unchanged source bodies. Fifteen controls:9pass/stop,2gap,4uncertain. ByteFastest and byteGray remain gaps; wordSmallest and ordinary/live/forward wordFastest are uncertain. Resolve uncertainty before tuning. [Greedy preparation](PNG-GREEDY-VIEW-PREPARATION.md) retains independent269/836µs gains; earlier evidence stays linked history. |
@@ -24,17 +24,20 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. [Owned font preparation](FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw against a contemporary original; current294.11/native13.95µs,upper21.246 remains gap. Owned capacity unchanged, allocation~758KB; no peak reduction inferred. Other current fill/copy/composite costs remain in the summary. |
 
-The current [main validation milestone](VP8L-VALIDATION-ELISION.md) qualifies
-5,780 full/live checks per OS (2,515 internal / 2,317 public / 948 differential),
-433 internal / 295 public per normal/scalar mode, and the SAME actual private
-Release package/all three examples on Windows/Linux, including bounded validation
-and asynchronous ownership. No ISA selection changes; existing vector evidence
-remains valid. One immutable main/embedded/public build per OS; zero benchmark/
-native/selector/fixture builds. Five displayed costs refresh;120 numerical rows
-reuse unchanged paths. [Owned fonts](FONT-LOAD-PREPARATION.md),
-[VP8 tokens](VP8-VALIDATION-MATERIALIZATION.md), [JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md)
-and linked family reports retain source-valid evidence and pinned raw history.
-The 283-path objective remains open.
+The current [residual-program milestone](VP8-COEFFICIENT-PROGRAM.md) qualifies
+5,790 full/live checks per OS (2,525 internal / 2,317 public / 948 differential),
+73 internal / 260 public per normal/scalar mode, and the SAME actual private
+Release package/all three examples on Windows/Linux, including exact method2
+async encoding under512KiB shared admission, cancellation/recovery and independent
+output. Existing vector kernels reuse disabled-ISA evidence. Two coherent core
+versions per OS; final core/embedded immutable for full/package qualification;
+extra Windows internal build extends domain/ownership tests. No public/benchmark/
+native/selector/fixture build. Eight displayed costs refresh;117 numerical rows
+reuse unchanged paths. [Validation elision](VP8L-VALIDATION-ELISION.md),
+[owned fonts](FONT-LOAD-PREPARATION.md), [VP8 tokens](VP8-VALIDATION-MATERIALIZATION.md)
+and [JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md) retain unchanged-path
+evidence and raw history. The283-path objective remains open; this is not a full
+actual-package performance refresh.
 The following [seven-control refresh](PNG-CURRENT-FRAMING-COSTS.md) changes no production:
 seven current independentconfirmations,5pass/2gap,7displayedrowsfresh/118numbersreused.
 Alloriginal gates andfrozenworkers pass. No rebuild/newfixture/profile or repeated

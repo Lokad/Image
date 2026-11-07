@@ -57,13 +57,13 @@ internal sealed class Vp8FrameEncoding : IDisposable
         else { Bit(ref writer, mode != 6, p[6]); if (mode != 6) { Bit(ref writer, mode != 7, p[7]); if (mode != 7) Bit(ref writer, mode == 9, p[8]); } }
     }
 
-    private static ReadOnlySpan<byte> Category(int category) => category switch
+    internal static ReadOnlySpan<byte> Category(int category) => category switch
     {
         0 => [159], 1 => [165, 145], 2 => [173, 148, 140], 3 => [176, 155, 140, 135],
         4 => [180, 157, 141, 134, 130], _ => [254, 254, 243, 230, 196, 177, 153, 140, 133, 130, 129]
     };
 
-    private static bool Coefficients(ref Vp8PartitionWriter.Cursor writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities)
+    internal static bool Coefficients(ref Vp8PartitionWriter.Cursor writer, ReadOnlySpan<short> levels, int type, int first, int initialContext, ReadOnlySpan<byte> probabilities)
     {
         var last = Vp8ResidualSummary.Last(levels, first, validate: false);
         var at = ((type * 8 + Vp8Tables.CoefficientBand(first)) * 3 + initialContext) * 11;
@@ -122,6 +122,8 @@ internal sealed class Vp8FrameEncoding : IDisposable
         var deltas = frame.Deltas; Signed(ref h, deltas.LumaDc, 4); Signed(ref h, deltas.WalshDc, 4); Signed(ref h, deltas.WalshAc, 4); Signed(ref h, deltas.ChromaDc, 4); Signed(ref h, deltas.ChromaAc, 4);
         h.Write(false); // No subsequent frame's entropy refresh.
         var probabilities = frame.Probabilities;
+        var prepared = frame.Program;
+        var instructions = prepared?.Borrow() ?? default;
         for (var i = 0; i < 1056; i++) { var changed = probabilities[i] != Vp8Tables.CoefficientProbabilities[i]; Bit(ref h, changed, Vp8Tables.CoefficientUpdateProbabilities[i]); if (changed) h.Literal(probabilities[i], 8); }
         Bit(ref h, frame.UseSkipProbability);
         if (frame.UseSkipProbability) h.Literal(frame.SkipProbability, 8);
@@ -148,6 +150,11 @@ internal sealed class Vp8FrameEncoding : IDisposable
                 }
             }
             var uv = block.ChromaMode; Bit(ref h, uv != 0, 142); if (uv != 0) { Bit(ref h, uv != 2, 114); if (uv != 2) Bit(ref h, uv == 1, 183); }
+            if (prepared is not null)
+            {
+                instructions.WriteBlock(ref t, probabilities, frame.UseSkipProbability && block.Skipped);
+                continue;
+            }
             coefficientTop.AsSpan(x * 9, 9).CopyTo(contexts); var top = contexts[..9]; var left = contexts.Slice(9, 9); var levels = frame.Levels(index);
             if (frame.UseSkipProbability && block.Skipped)
             {

@@ -62,7 +62,9 @@ public sealed class Vp8FrameEncodingTests
     public async Task CompletePacketMatchesNativeWithIndependentSourceAndOutputLifetimes(string name, int bytes, string expected, int method, int quality)
     {
         using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs(name, root, method, quality); using var frame = input.Frame();
-        Assert.Equal(0, frame.HeaderRetries); Assert.Equal(frame.Count * 820L + 1376, frame.CapacityBytes);
+        Assert.Equal(0, frame.HeaderRetries);
+        if (method == 2) { Assert.NotNull(frame.Program); Assert.True(frame.CapacityBytes < frame.Count * 820L + 1376); }
+        else Assert.Equal(frame.Count * 820L + 1376, frame.CapacityBytes);
         using var packet = Vp8FrameEncoding.Create(frame, input.Context); input.ReleaseInputs(); frame.Dispose();
         Assert.Equal(packet.CapacityBytes, root.Bytes); Assert.Equal(bytes, packet.WebpLength);
         using var sync = new MemoryStream(); packet.WriteOpaqueWebp(sync); var first = sync.ToArray();
@@ -108,11 +110,13 @@ public sealed class Vp8FrameEncodingTests
     }
 
     [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public void FrameGrowthRefusalOrCancellationReleasesPartialStorage(bool cancellation)
+    [InlineData(4, false)]
+    [InlineData(4, true)]
+    [InlineData(2, false)]
+    [InlineData(2, true)]
+    public void FrameGrowthRefusalOrCancellationReleasesPartialStorage(int method, bool cancellation)
     {
-        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("diagram", root);
+        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("diagram", root, method);
         var growth = root.GrowthAttempts;
         using (var reference = input.Frame()) { }
         var boundaries = root.GrowthAttempts - growth; Assert.True(boundaries >= 3);
@@ -133,9 +137,27 @@ public sealed class Vp8FrameEncodingTests
             Assert.Equal(baseline, root.Bytes); Assert.False(root.IsDisposed);
             root.Admitted = null; root.RefuseAtGrowth = 0;
             using (var next = input.Frame())
-            using (var packet = Vp8FrameEncoding.Create(next, input.Context)) Assert.Equal(7100, packet.WebpLength);
+            using (var packet = Vp8FrameEncoding.Create(next, input.Context)) Assert.Equal(method == 2 ? 7330 : 7100, packet.WebpLength);
             Assert.Equal(baseline, root.Bytes);
         }
+    }
+
+    [Fact]
+    public void FinalDistortionFramesAndSurvivingPartitionsOwnIndependentCapacity()
+    {
+        using var root = new TestMemoryBudget(16_000_000); using var input = new Inputs("diagram", root, 2);
+        using var first = input.Frame(); using var second = input.Frame();
+        using var packet = Vp8FrameEncoding.Create(first, input.Context);
+        input.ReleaseInputs(); Assert.Equal(first.CapacityBytes + second.CapacityBytes + packet.CapacityBytes, root.Bytes);
+        first.Dispose(); Assert.Equal(second.CapacityBytes + packet.CapacityBytes, root.Bytes);
+        using var expected = new MemoryStream(); packet.WriteOpaqueWebp(expected);
+        using var next = Vp8FrameEncoding.Create(second, input.Context);
+        second.Dispose(); Assert.Equal(packet.CapacityBytes + next.CapacityBytes, root.Bytes);
+        using var actual = new MemoryStream(); next.WriteOpaqueWebp(actual);
+        Assert.Equal(expected.ToArray(), actual.ToArray());
+        Assert.Equal("325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            Convert.ToHexStringLower(SHA256.HashData(actual.ToArray())));
+        packet.Dispose(); next.Dispose(); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
     }
 
     [Fact]

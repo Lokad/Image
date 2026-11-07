@@ -11,6 +11,7 @@ internal sealed class Vp8FramePlan : IDisposable
     private const int MetadataBytes = 256, BlockBytes = 20;
     private readonly OperationContext context;
     private short[]? coefficients;
+    private Vp8CoefficientProgram? program;
     private byte[]? blocks, probabilities;
     private int[]? parameters;
     private long capacity;
@@ -27,7 +28,8 @@ internal sealed class Vp8FramePlan : IDisposable
     internal Vp8QuantizationPlan.Deltas Deltas { get; }
     internal (byte Root, byte Left, byte Right) SegmentProbabilities { get; private set; }
     internal bool UpdateMap => SegmentCount > 1 && SegmentProbabilities != ((byte)255, (byte)255, (byte)255);
-    internal long CapacityBytes => capacity;
+    internal long CapacityBytes => capacity + (program?.CapacityBytes ?? 0);
+    internal Vp8CoefficientProgram? Program => program;
     internal ReadOnlySpan<short> Coefficients => (coefficients ?? throw new ObjectDisposedException(nameof(Vp8FramePlan))).AsSpan(0, checked(Count * 400));
     internal ReadOnlySpan<byte> BlockData => blocks ?? throw new ObjectDisposedException(nameof(Vp8FramePlan));
     internal ReadOnlySpan<byte> Probabilities => probabilities ?? throw new ObjectDisposedException(nameof(Vp8FramePlan));
@@ -68,16 +70,23 @@ internal sealed class Vp8FramePlan : IDisposable
 
     // Advance logical edge contexts directly, without depending on the native
     // observer's packed internal representation. The Y2 edge survives I4 blocks.
-    internal static void Record(ReadOnlySpan<short> levels, bool intra16, Span<byte> contexts, Span<uint> statistics, bool tokenBuffer = true)
+    internal static void Record(ReadOnlySpan<short> levels, bool intra16, Span<byte> contexts, Span<uint> statistics, bool tokenBuffer = true,
+        Vp8CoefficientProgram? prepared = null)
     {
         var top = contexts[..9]; var left = contexts.Slice(9, 9);
-        if (intra16) top[8] = left[8] = Vp8TokenStatistics.Record(levels[..16], 1, 0, top[8] + left[8], statistics, tokenBuffer) ? (byte)1 : (byte)0;
+        if (intra16) top[8] = left[8] = (prepared is null
+            ? Vp8TokenStatistics.Record(levels[..16], 1, 0, top[8] + left[8], statistics, tokenBuffer)
+            : prepared.Record(levels[..16], 1, 0, top[8] + left[8], statistics)) ? (byte)1 : (byte)0;
         for (var y = 0; y < 4; y++) for (var x = 0; x < 4; x++)
-            top[x] = left[y] = Vp8TokenStatistics.Record(levels.Slice(16 + (y * 4 + x) * 16, 16), intra16 ? 0 : 3, intra16 ? 1 : 0, top[x] + left[y], statistics, tokenBuffer) ? (byte)1 : (byte)0;
+            top[x] = left[y] = (prepared is null
+                ? Vp8TokenStatistics.Record(levels.Slice(16 + (y * 4 + x) * 16, 16), intra16 ? 0 : 3, intra16 ? 1 : 0, top[x] + left[y], statistics, tokenBuffer)
+                : prepared.Record(levels.Slice(16 + (y * 4 + x) * 16, 16), intra16 ? 0 : 3, intra16 ? 1 : 0, top[x] + left[y], statistics)) ? (byte)1 : (byte)0;
         for (var channel = 0; channel < 2; channel++) for (var y = 0; y < 2; y++) for (var x = 0; x < 2; x++)
         {
             var a = 4 + channel * 2 + x; var b = 4 + channel * 2 + y;
-            top[a] = left[b] = Vp8TokenStatistics.Record(levels.Slice(272 + (channel * 4 + y * 2 + x) * 16, 16), 2, 0, top[a] + left[b], statistics, tokenBuffer) ? (byte)1 : (byte)0;
+            top[a] = left[b] = (prepared is null
+                ? Vp8TokenStatistics.Record(levels.Slice(272 + (channel * 4 + y * 2 + x) * 16, 16), 2, 0, top[a] + left[b], statistics, tokenBuffer)
+                : prepared.Record(levels.Slice(272 + (channel * 4 + y * 2 + x) * 16, 16), 2, 0, top[a] + left[b], statistics)) ? (byte)1 : (byte)0;
         }
     }
 
@@ -102,19 +111,19 @@ internal sealed class Vp8FramePlan : IDisposable
         catch { result.Dispose(); throw; }
     }
 
-    private void Initialize(Vp8SourceSegments segments, Vp8AlphaEncoding? coefficientStorage)
+    private void Initialize(Vp8SourceSegments segments, Vp8AlphaEncoding? coefficientStorage, bool prepareProgram = false)
     {
         var length = checked(Count * 400);
-        coefficients = coefficientStorage?.DetachCoefficientStorage(length, context);
-        var bytes = Count * 820L + 1056 + 16 * sizeof(int) + MetadataBytes;
+        coefficients = prepareProgram ? null : coefficientStorage?.DetachCoefficientStorage(length, context);
+        var bytes = Count * (prepareProgram ? 20L : 820L) + 1056 + 16 * sizeof(int) + MetadataBytes;
         if (coefficients is not null)
         {
             capacity = coefficients.LongLength * sizeof(short);
             bytes -= length * (long)sizeof(short);
         }
         context.Reserve(bytes); capacity += bytes; context.Cancellation.ThrowIfCancellationRequested();
-        if (coefficients is null) coefficients = new short[length];
-        else
+        if (!prepareProgram && coefficients is null) coefficients = new short[length];
+        else if (coefficients is not null)
             for (var at = 0; at < length; at += 4096)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
@@ -122,6 +131,7 @@ internal sealed class Vp8FramePlan : IDisposable
             }
         blocks = new byte[checked(Count * BlockBytes)];
         probabilities = Vp8Tables.CoefficientProbabilities.ToArray(); parameters = new int[16];
+        if (prepareProgram) program = new Vp8CoefficientProgram(context);
         for (var s = 0; s < 4; s++) { parameters[s] = segments.Parameters[s].Quantizer; parameters[4 + s] = segments.Parameters[s].InitialFilter; }
     }
 
@@ -147,7 +157,7 @@ internal sealed class Vp8FramePlan : IDisposable
         context.Cancellation.ThrowIfCancellationRequested(); var result = new Vp8FramePlan(input, segments, quantization, 65536, context);
         try
         {
-            result.Initialize(segments, coefficientStorage);
+            result.Initialize(segments, coefficientStorage, prepareProgram: method == 2);
             var scratch = Vp8DistortionDecision.ScratchBytes + 4096L + 45L * result.Columns + 4224 + 512;
             context.Reserve(scratch);
             try { context.Cancellation.ThrowIfCancellationRequested(); result.PrepareDistortion(input, analysis, segments, quantization, method, correctDc); }
@@ -165,6 +175,9 @@ internal sealed class Vp8FramePlan : IDisposable
         Span<byte> source = stackalloc byte[384]; Span<byte> neighbors = stackalloc byte[71]; Span<byte> modeContexts = stackalloc byte[8];
         Span<byte> contexts = stackalloc byte[18]; Span<byte> modeLeft = stackalloc byte[4]; Span<sbyte> diffusion = stackalloc sbyte[8]; diffusion.Clear();
         Span<sbyte> errors = stackalloc sbyte[14]; Span<byte> pixels = stackalloc byte[384]; Span<int> counts = stackalloc int[4]; counts.Clear();
+        // Fits the enclosing4KiB preparation workspace. Method2 publishes
+        // instructions after these selected coefficients finish reconstruction.
+        Span<short> selected = stackalloc short[400];
         context.Cancellation.ThrowIfCancellationRequested();
         for (var index = 0; index < Count; index++)
         {
@@ -200,7 +213,8 @@ internal sealed class Vp8FramePlan : IDisposable
                 yTop.AsSpan(x * 16, 16).CopyTo(neighbors[35..]); uvTop.AsSpan(x * 16, 16).CopyTo(neighbors[51..]);
                 for (var p = 0; p < 4; p++) neighbors[67 + p] = x + 1 < Columns ? yTop[(x + 1) * 16 + p] : yTop[x * 16 + 15];
                 modeTop.AsSpan(x * 4, 4).CopyTo(modeContexts); modeLeft.CopyTo(modeContexts[4..]);
-                var data = blocks!.AsSpan(index * BlockBytes, BlockBytes); var levels = coefficients!.AsSpan(index * 400, 400); var segment = data[19];
+                var data = blocks!.AsSpan(index * BlockBytes, BlockBytes);
+                var levels = program is null ? coefficients!.AsSpan(index * 400, 400) : selected; var segment = data[19];
                 var score = Vp8DistortionDecision.Select(source, neighbors, modeContexts, diffusion, y != 0, x != 0,
                     method, (data[18] & 1) != 0, data[17], 256L * 510 * 8 * 1024 / Count, correctDc,
                     quantization.Matrix(segment, Vp8CoefficientPlane.Luma), quantization.Matrix(segment, Vp8CoefficientPlane.Walsh), quantization.Matrix(segment, Vp8CoefficientPlane.Chroma),
@@ -210,7 +224,8 @@ internal sealed class Vp8FramePlan : IDisposable
                 if (pass == 0)
                 {
                     if (score.Nonzero == 0) skipped++;
-                    coefficientTop.AsSpan(x * 9, 9).CopyTo(contexts); Record(levels, score.Intra16, contexts, statistics, tokenBuffer: false);
+                    coefficientTop.AsSpan(x * 9, 9).CopyTo(contexts); Record(levels, score.Intra16, contexts, statistics, tokenBuffer: false, prepared: program);
+                    program?.EndBlock();
                     contexts[..9].CopyTo(coefficientTop.AsSpan(x * 9, 9));
                 }
                 for (var p = 0; p < 4; p++)
@@ -333,6 +348,7 @@ internal sealed class Vp8FramePlan : IDisposable
 
     public void Dispose()
     {
+        Interlocked.Exchange(ref program, null)?.Dispose();
         Interlocked.Exchange(ref coefficients, null); Interlocked.Exchange(ref blocks, null);
         Interlocked.Exchange(ref probabilities, null); Interlocked.Exchange(ref parameters, null);
         var bytes = Interlocked.Exchange(ref capacity, 0); if (bytes != 0) context.Release(bytes);

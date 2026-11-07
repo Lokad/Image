@@ -1,0 +1,1991 @@
+{
+  "project": "Lokad.Image",
+  "stage": "CEP461/462",
+  "date": "2026-11-07",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+    "linuxSha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72"
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9b39296636892288a6f109c14097f9a590a7dcd85284a6e5007234267b96c8dc",
+    "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "3d8cc552e81d82a6d3e8e30e9c4cefc524bcea5e2f325c2e1e3d43b631df1a16",
+    "src/Lokad.Image/Internal/Vp8Encoder.cs": "6d5b8a910d9e6f5e0a4abe51c5f0d6bcfbf89d1eefba4bf97141715a4f720e17",
+    "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "770df364161b33514b2054fd798e9ae4f5c792c96c3627b4b746c607d84330d1",
+    "tests/Lokad.Image.Tests/Vp8CoefficientProgramTests.cs": "b8bff12e90045212fd230627e0fb3ad0531604884979bc32f2cb8c5300db0ce9",
+    "tests/Lokad.Image.Tests/Vp8FrameEncodingTests.cs": "f466251418bcceb6b8ca75356440c937e2345b20495eb1071252df3d4e8b16f0",
+    "tests/Lokad.Image.Tests/Vp8AlphaCoefficientStorageTests.cs": "dcdaf757a1d7f40847537f7624fe84842028dff41f680dea01e9dc48e1d4a7a1"
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "CEP461/462",
+    "projection": {
+      "Vp8Encoder.cs": {
+        "outsideNamedChangesEqualsEntireQualifiedOriginal": true,
+        "unchangedProjectionSha256": "e7cbb665e4a0e35117fa05be1b50b132f6c52aff7c5d6bedffa9fa0014ae0885"
+      },
+      "Vp8FrameEncoding.cs": {
+        "outsideNamedChangesEqualsEntireQualifiedOriginal": true,
+        "unchangedProjectionSha256": "9cafc86fd1d571f7f8c4152b22d9f920ff463e81953b8ec78dce7dc1237e3370"
+      },
+      "Vp8FramePlan.cs": {
+        "outsideNamedChangesEqualsEntireQualifiedOriginal": true,
+        "unchangedProjectionSha256": "9e7dd5d0dd2a3de1904f86e450ff3b70db5faa022bf14e35f0cdf7fa10506007"
+      }
+    },
+    "unchangedKernels": {
+      "src/Lokad.Image/Internal/Vp8TokenStatistics.cs": "011dc1d77e5193f501c4f9b24aee6287f319a7ec2b43498297daf3ca79dd40b9",
+      "src/Lokad.Image/Internal/Vp8ResidualSummary.cs": "df2e23b2f10a127c3885326ad0749941bb4f983e5b08f23b82fcdd8616aac56a",
+      "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "5d425ff6fbffa142bde31536f41a0a2faf3ece13aab8c616c6904cadb13f3d91",
+      "src/Lokad.Image/Internal/Vp8ForwardTransform.cs": "1fcd22f7ecc137cf450b671c36f645ece33ae764da0a3fd76ce5a147e8256c3b",
+      "src/Lokad.Image/Internal/Vp8BlockQuantization.cs": "27bc79856e5eea4e67369e92b2428993132cb0e1b6082c53dce6521ea6223309",
+      "src/Lokad.Image/Internal/Vp8MacroblockDecision.cs": "1eab8bf37fed5a3de7d7207c09e91b982b67a4df2b343002e10c1b96fc247bf2",
+      "src/Lokad.Image/Internal/Vp8Prediction.cs": "75320bf26977546b258605f5593e51bad6fe80ad8331b3edfc741e46bb855926"
+    },
+    "syntax": "Method2 shares existing decision/quantization/reconstruction. Program.Record validates signed domain and records direct counters in same branch/order as TokenStatistics.Record(false). Class/remainder/sign/EOB instruction projection has exact wholepartitions/counters on13 frozen frames plus every signed level/context/category/renormalization tests. Dense words reenter actual unchanged Coefficients emitter; visibility only changes.",
+    "storage": "Method2 Initialize omits fullcoefficients and creates explicit program owner before chunks. Selected400short frame scratch+17/9uint record scratch fits existing4KiB preparation workspace. Append selects smaller representation from values before admission, charges node+actualarray capacity before allocation, never uses remaining budget or retries refusal. Failure unwinds program/frame; packet retains independent partitions through actualasyncusers. No newpool/cache/session/quota.",
+    "skip": "Method2 finaldecisions already computed once. Record includes allzero blocks before SkipProbability selection; its exact context updates equal final skipped resets, including preservedY2 onI4. Boundary marker skips selected allzero block instructions, without output. HeaderCost0 leaves defaultprobabilities/useSkip asbefore. Singleton/hidden/diagram/dense publicpacket baseline checks cover exactbytes/source/rootcleanup with normal/live tokens.",
+    "otherMethods": "Frame Program remainsnull for0/1/3..6; Initialize/Record old branches, original decision/grammar/arithmetic preserved. Shared frame/property/nullable dispatch can change costs, so refresh all9existing lossyencode controls. Encoder alpha-handoff condition changes onlymethod2; numeric alpha input/candidate order/ties unchanged. Decoders/losslessencoders/PNG/JPEG/editing/font sources unchanged; reuse theircosts.",
+    "limits": "No API, quality/sampling/flattening, metadata/pixel tolerance, source ownership or resource-limit relaxation. Chunkstorage can increase densemethod2capacity; report actual fourinput admission peaks, not a blanketmemoryclaim. TotalGC/admission/retained/physical remain distinct."
+  },
+  "cases": {
+    "opaque8": {
+      "managedUs": 14299.502523809522,
+      "nativeUs": 15518.453791666667,
+      "ratio": 0.9214514999869565,
+      "lower": 0.9135975595848794,
+      "upper": 0.9276821839159156,
+      "allocatedBytes": 1201677,
+      "status": "pass",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "EncodeOpaque8",
+      "runId": "cep462-candidate-opaque8-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 12,
+        "Mean": 14299502.523809522,
+        "StandardError": 17662.9484911517,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 14299502.523809522,
+          "StandardError": 17662.9484911517,
+          "Level": 12,
+          "Margin": 78370.13748832897,
+          "Lower": 14221132.386321193,
+          "Upper": 14377872.661297852
+        },
+        "OriginalValues": [
+          14349693.57142857,
+          14225236.5,
+          14229533,
+          14213337.785714285,
+          14238971.57142857,
+          14372207.57142857,
+          14373672.642857144,
+          14358260.785714285,
+          14268449.785714285,
+          14337759,
+          14320726.142857144,
+          14306181.92857143
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 14299502.523809522,
+        "StandardError": 17662.9484911517,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 14299502.523809522,
+          "StandardError": 17662.9484911517,
+          "Level": 12,
+          "Margin": 78370.13748832897,
+          "Lower": 14221132.386321193,
+          "Upper": 14377872.661297852
+        },
+        "OriginalValues": [
+          14349693.57142857,
+          14225236.5,
+          14229533,
+          14213337.785714285,
+          14238971.57142857,
+          14372207.57142857,
+          14373672.642857144,
+          14358260.785714285,
+          14268449.785714285,
+          14337759,
+          14320726.142857144,
+          14306181.92857143
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 15540405.729166666,
+          "standardError": 5786.352652605991,
+          "confidenceLower": 15514731.802009609,
+          "confidenceUpper": 15566079.656323723
+        },
+        {
+          "mean": 15518453.791666666,
+          "standardError": 4450.91553048373,
+          "confidenceLower": 15498705.171426523,
+          "confidenceUpper": 15538202.411906809
+        }
+      ],
+      "managedPacketBytes": 72380,
+      "nativePacketBytes": 72380,
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "nativePacketSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "rasterSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "depth": 8,
+      "effort": 4,
+      "managedQuality": {
+        "Setting": 75,
+        "EncodedBytes": 72380,
+        "EncodedSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "NativeDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "PublicDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 2100446356,
+          "Maximum": 169,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 169,
+          "RgbRmse": 72.59163951572671,
+          "RgbPsnr": 10.913071503566103
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+      },
+      "nativeQuality": {
+        "Setting": 75,
+        "EncodedBytes": 72380,
+        "EncodedSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "NativeDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "PublicDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 2100446356,
+          "Maximum": 169,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 169,
+          "RgbRmse": 72.59163951572671,
+          "RgbPsnr": 10.913071503566103
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+      },
+      "receiptPath": "tmp/cep462-candidate-opaque8-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-opaque8-confirm-observation.json",
+      "boundary": "Resident original RGBA8 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+    },
+    "opaque16": {
+      "managedUs": 14150.856059523812,
+      "nativeUs": 15516.487583333334,
+      "ratio": 0.9119883597060727,
+      "lower": 0.9093334010120845,
+      "upper": 0.9144635479371943,
+      "allocatedBytes": 1201560,
+      "status": "pass",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "EncodeOpaque16",
+      "runId": "cep462-candidate-opaque16-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 12,
+        "Mean": 14150856.059523812,
+        "StandardError": 4020.9529143797604,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 14150856.059523812,
+          "StandardError": 4020.9529143797604,
+          "Level": 12,
+          "Margin": 17840.884996743345,
+          "Lower": 14133015.174527068,
+          "Upper": 14168696.944520555
+        },
+        "OriginalValues": [
+          14168836.285714285,
+          14126595.857142856,
+          14146454.5,
+          14154089.714285715,
+          14165074.857142856,
+          14162459.92857143,
+          14162302.57142857,
+          14140096.785714285,
+          14140677.714285715,
+          14156881.57142857,
+          14156777.785714285,
+          14130025.142857144
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 14150856.059523812,
+        "StandardError": 4020.9529143797604,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 14150856.059523812,
+          "StandardError": 4020.9529143797604,
+          "Level": 12,
+          "Margin": 17840.884996743345,
+          "Lower": 14133015.174527068,
+          "Upper": 14168696.944520555
+        },
+        "OriginalValues": [
+          14168836.285714285,
+          14126595.857142856,
+          14146454.5,
+          14154089.714285715,
+          14165074.857142856,
+          14162459.92857143,
+          14162302.57142857,
+          14140096.785714285,
+          14140677.714285715,
+          14156881.57142857,
+          14156777.785714285,
+          14130025.142857144
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 15520744.6875,
+          "standardError": 4829.021473370138,
+          "confidenceLower": 15499318.419004017,
+          "confidenceUpper": 15542170.955995983
+        },
+        {
+          "mean": 15516487.583333334,
+          "standardError": 5068.531398280328,
+          "confidenceLower": 15493998.614249485,
+          "confidenceUpper": 15538976.552417183
+        }
+      ],
+      "managedPacketBytes": 72380,
+      "nativePacketBytes": 72380,
+      "packetSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "nativePacketSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "rasterSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "depth": 16,
+      "effort": 4,
+      "managedQuality": {
+        "Setting": 75,
+        "EncodedBytes": 72380,
+        "EncodedSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "NativeDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "PublicDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 2100446356,
+          "Maximum": 169,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 169,
+          "RgbRmse": 72.59163951572671,
+          "RgbPsnr": 10.913071503566103
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+      },
+      "nativeQuality": {
+        "Setting": 75,
+        "EncodedBytes": 72380,
+        "EncodedSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+        "NativeDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "PublicDecodedSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 2100446356,
+          "Maximum": 169,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 169,
+          "RgbRmse": 72.59163951572671,
+          "RgbPsnr": 10.913071503566103
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c796f73f1736e63452e2eed4802b17605f39c16ff203de201b383b888f84bc42"
+      },
+      "receiptPath": "tmp/cep462-candidate-opaque16-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-opaque16-confirm-observation.json",
+      "boundary": "Resident original RGBA16 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Opaque source: whole-raster RGB source-error matching, no alpha-plane encoding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+    },
+    "photograph": {
+      "managedUs": 9933.830901988636,
+      "nativeUs": 9715.883291666665,
+      "ratio": 1.0224320943118888,
+      "lower": 1.0181877392066312,
+      "upper": 1.0264743735518085,
+      "allocatedBytes": 809233,
+      "status": "gap",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "PhotographLossy8",
+      "runId": "cep462-candidate-photograph-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 11,
+        "Mean": 9933830.901988637,
+        "StandardError": 3652.41884169348,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 9933830.901988637,
+          "StandardError": 3652.41884169348,
+          "Level": 12,
+          "Margin": 16753.257549389127,
+          "Lower": 9917077.644439248,
+          "Upper": 9950584.159538025
+        },
+        "OriginalValues": [
+          9932679.984375,
+          9922908.296875,
+          9928718.359375,
+          9915407.890625,
+          9941533.078125,
+          9938024.640625,
+          9933062.140625,
+          9924556.765625,
+          9950182.734375,
+          9928410.390625,
+          9956655.640625
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 9937919.4609375,
+        "StandardError": 5272.187159876053,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 9937919.4609375,
+          "StandardError": 5272.187159876053,
+          "Level": 12,
+          "Margin": 23392.585489940906,
+          "Lower": 9914526.875447558,
+          "Upper": 9961312.046427442
+        },
+        "OriginalValues": [
+          9982843.59375,
+          9932684.53125,
+          9922912.84375,
+          9928722.90625,
+          9915412.4375,
+          9941537.625,
+          9938029.1875,
+          9933066.6875,
+          9924561.3125,
+          9950187.28125,
+          9928414.9375,
+          9956660.1875
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 9715883.291666666,
+          "standardError": 2589.3752965175363,
+          "confidenceLower": 9704006.102024727,
+          "confidenceUpper": 9727760.481308606
+        },
+        {
+          "mean": 9723880.28125,
+          "standardError": 3052.7177207384657,
+          "confidenceLower": 9709877.789088558,
+          "confidenceUpper": 9737882.773411442
+        }
+      ],
+      "managedPacketBytes": 17688,
+      "nativePacketBytes": 17688,
+      "packetSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "nativePacketSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "rasterSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "depth": 8,
+      "effort": 4,
+      "managedQuality": 75,
+      "nativeQuality": 75,
+      "receiptPath": "tmp/cep462-candidate-photograph-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-photograph-confirm-observation.json",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
+    },
+    "diagram": {
+      "managedUs": 5685.469275,
+      "nativeUs": 5820.190322916667,
+      "ratio": 0.9768528105711234,
+      "lower": 0.9651060333475704,
+      "upper": 0.9865254891235691,
+      "allocatedBytes": 741230,
+      "status": "pass",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "DiagramLossy8",
+      "runId": "cep462-candidate-diagram-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 10,
+        "Mean": 5685469.275,
+        "StandardError": 2285.7492075879904,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 5685469.275,
+          "StandardError": 2285.7492075879904,
+          "Level": 12,
+          "Margin": 10927.967151836621,
+          "Lower": 5674541.307848164,
+          "Upper": 5696397.242151837
+        },
+        "OriginalValues": [
+          5668282.739583333,
+          5680135.885416667,
+          5684458.489583333,
+          5691137.760416667,
+          5690698.947916667,
+          5684271.71875,
+          5692518.385416667,
+          5685522.15625,
+          5686370.322916667,
+          5691296.34375
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 5689015.918402777,
+        "StandardError": 3061.687030192773,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 5689015.918402777,
+          "StandardError": 3061.687030192773,
+          "Level": 12,
+          "Margin": 13584.642089775794,
+          "Lower": 5675431.276313001,
+          "Upper": 5702600.560492553
+        },
+        "OriginalValues": [
+          5704111.145833333,
+          5668285.875,
+          5680139.020833333,
+          5684461.625,
+          5691140.895833333,
+          5690702.083333333,
+          5684274.854166667,
+          5692521.520833333,
+          5709355.770833333,
+          5685525.291666667,
+          5686373.458333333,
+          5691299.479166667
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 5828247.75,
+          "standardError": 10763.610272716298,
+          "confidenceLower": 5776787.870191254,
+          "confidenceUpper": 5879707.629808746
+        },
+        {
+          "mean": 5820190.322916667,
+          "standardError": 3992.433415058568,
+          "confidenceLower": 5801102.847759367,
+          "confidenceUpper": 5839277.798073967
+        }
+      ],
+      "managedPacketBytes": 7100,
+      "nativePacketBytes": 7100,
+      "packetSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+      "nativePacketSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "rasterSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "depth": 8,
+      "effort": 4,
+      "managedQuality": 75,
+      "nativeQuality": 75,
+      "receiptPath": "tmp/cep462-candidate-diagram-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-diagram-confirm-observation.json",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort4, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
+    },
+    "selected": {
+      "managedUs": 6598.7842890625,
+      "nativeUs": 6452.5969375,
+      "ratio": 1.022655583942167,
+      "lower": 1.0177855013593589,
+      "upper": 1.0261554610117496,
+      "allocatedBytes": 741073,
+      "status": "gap",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "DiagramLossySelectedTrellis8",
+      "runId": "cep462-candidate-selected-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 12,
+        "Mean": 6598784.2890625,
+        "StandardError": 4150.937279749381,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 6598784.2890625,
+          "StandardError": 4150.937279749381,
+          "Level": 12,
+          "Margin": 18417.622940040495,
+          "Lower": 6580366.66612246,
+          "Upper": 6617201.91200254
+        },
+        "OriginalValues": [
+          6604720.59375,
+          6609598,
+          6601930.125,
+          6605587.21875,
+          6591914.96875,
+          6574920.78125,
+          6568343.65625,
+          6609884.65625,
+          6606247.90625,
+          6591203.875,
+          6612816.28125,
+          6608243.40625
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 6598789.6015625,
+        "StandardError": 4150.937279749381,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 6598789.6015625,
+          "StandardError": 4150.937279749381,
+          "Level": 12,
+          "Margin": 18417.622940040495,
+          "Lower": 6580371.97862246,
+          "Upper": 6617207.22450254
+        },
+        "OriginalValues": [
+          6604725.90625,
+          6609603.3125,
+          6601935.4375,
+          6605592.53125,
+          6591920.28125,
+          6574926.09375,
+          6568348.96875,
+          6609889.96875,
+          6606253.21875,
+          6591209.1875,
+          6612821.59375,
+          6608248.71875
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 6459282.1875,
+          "standardError": 1373.5724401942457,
+          "confidenceLower": 6453187.674964784,
+          "confidenceUpper": 6465376.700035216
+        },
+        {
+          "mean": 6452596.9375,
+          "standardError": 913.756354196391,
+          "confidenceLower": 6448542.619437244,
+          "confidenceUpper": 6456651.255562756
+        }
+      ],
+      "managedPacketBytes": 7026,
+      "nativePacketBytes": 7026,
+      "packetSha256": "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68",
+      "nativePacketSha256": "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "rasterSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "depth": 8,
+      "effort": 5,
+      "managedQuality": 75,
+      "nativeQuality": 75,
+      "receiptPath": "tmp/cep462-candidate-selected-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-selected-confirm-observation.json",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort5, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
+    },
+    "trellis": {
+      "managedUs": 9478.035584375,
+      "nativeUs": 9796.362302083335,
+      "ratio": 0.9675056201585523,
+      "lower": 0.956588575872268,
+      "upper": 0.9738990532176565,
+      "allocatedBytes": 754505,
+      "status": "pass",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "DiagramLossyTrellis8",
+      "runId": "cep462-candidate-trellis-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 10,
+        "Mean": 9478035.584375,
+        "StandardError": 2531.4946441149164,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 9478035.584375,
+          "StandardError": 2531.4946441149164,
+          "Level": 12,
+          "Margin": 12102.854601940493,
+          "Lower": 9465932.72977306,
+          "Upper": 9490138.43897694
+        },
+        "OriginalValues": [
+          9481822.59375,
+          9477212.03125,
+          9485465.125,
+          9478560.9375,
+          9461371.46875,
+          9477306.21875,
+          9490151.28125,
+          9474263.15625,
+          9482814.53125,
+          9471388.5
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 9482287.424479166,
+        "StandardError": 3547.9918024055446,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 9482287.424479166,
+          "StandardError": 3547.9918024055446,
+          "Level": 12,
+          "Margin": 15742.36631563976,
+          "Lower": 9466545.058163526,
+          "Upper": 9498029.790794807
+        },
+        "OriginalValues": [
+          9504677.375,
+          9481827.4375,
+          9477216.875,
+          9485469.96875,
+          9478565.78125,
+          9461376.3125,
+          9477311.0625,
+          9502367.4375,
+          9490156.125,
+          9474268,
+          9482819.375,
+          9471393.34375
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 9796362.302083334,
+          "standardError": 2520.7056916779025,
+          "confidenceLower": 9784311.028519874,
+          "confidenceUpper": 9808413.575646793
+        },
+        {
+          "mean": 9821379.71875,
+          "standardError": 15505.666050016116,
+          "confidenceLower": 9747248.484798603,
+          "confidenceUpper": 9895510.952701397
+        }
+      ],
+      "managedPacketBytes": 6818,
+      "nativePacketBytes": 6818,
+      "packetSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+      "nativePacketSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "rasterSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "depth": 8,
+      "effort": 6,
+      "managedQuality": 75,
+      "nativeQuality": 75,
+      "receiptPath": "tmp/cep462-candidate-trellis-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-trellis-confirm-observation.json",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort6, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
+    },
+    "distortion": {
+      "managedUs": 2825.906430681818,
+      "nativeUs": 2510.7620234375,
+      "ratio": 1.125517434269956,
+      "lower": 1.1205007785775052,
+      "upper": 1.1319669729981126,
+      "allocatedBytes": 406705,
+      "status": "gap",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "DiagramLossyDistortion8",
+      "runId": "cep462-candidate-distortion-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 11,
+        "Mean": 2825906.430681818,
+        "StandardError": 1029.4147372695932,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 2825906.430681818,
+          "StandardError": 1029.4147372695932,
+          "Level": 12,
+          "Margin": 4721.816135035033,
+          "Lower": 2821184.6145467833,
+          "Upper": 2830628.246816853
+        },
+        "OriginalValues": [
+          2830803.175,
+          2823405.975,
+          2821166.2,
+          2826267.3,
+          2827502.55,
+          2828309.0125,
+          2827956.725,
+          2829260.2625,
+          2822002.0125,
+          2827193.5,
+          2821104.025
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 2827677.1958333333,
+        "StandardError": 2002.3482497199336,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 2827677.1958333333,
+          "StandardError": 2002.3482497199336,
+          "Level": 12,
+          "Margin": 8884.377809779478,
+          "Lower": 2818792.818023554,
+          "Upper": 2836561.5736431126
+        },
+        "OriginalValues": [
+          2847126.7375,
+          2830805.8,
+          2823408.6,
+          2821168.825,
+          2826269.925,
+          2827505.175,
+          2828311.6375,
+          2827959.35,
+          2829262.8875,
+          2822004.6375,
+          2827196.125,
+          2821106.65
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 2510762.0234375,
+          "standardError": 1102.6577266660443,
+          "confidenceLower": 2505704.2494843095,
+          "confidenceUpper": 2515819.7973906905
+        },
+        {
+          "mean": 2512648.1067708335,
+          "standardError": 581.1506900776133,
+          "confidenceLower": 2509982.430240329,
+          "confidenceUpper": 2515313.783301338
+        }
+      ],
+      "managedPacketBytes": 7330,
+      "nativePacketBytes": 7330,
+      "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+      "nativePacketSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "rasterSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "depth": 8,
+      "effort": 2,
+      "managedQuality": 75,
+      "nativeQuality": 75,
+      "receiptPath": "tmp/cep462-candidate-distortion-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-distortion-confirm-observation.json",
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort2, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion."
+    },
+    "alpha": {
+      "managedUs": 53422.92597916666,
+      "nativeUs": 53399.29716666666,
+      "ratio": 1.0004424929494156,
+      "lower": 0.9919644406488549,
+      "upper": 1.0086605766381078,
+      "allocatedBytes": 7034400,
+      "status": "uncertain",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "Encode8",
+      "runId": "cep462-candidate-alpha-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 12,
+        "Mean": 53422925.979166664,
+        "StandardError": 73708.03700606445,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 53422925.979166664,
+          "StandardError": 73708.03700606445,
+          "Level": 12,
+          "Margin": 327041.0371775623,
+          "Lower": 53095884.9419891,
+          "Upper": 53749967.01634423
+        },
+        "OriginalValues": [
+          53621810.5,
+          53190575.5,
+          53148954.75,
+          53185265,
+          53092146.5,
+          53615631,
+          53746028.5,
+          53667504.5,
+          53087722.25,
+          53587411,
+          53587426,
+          53544636.25
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 53422925.979166664,
+        "StandardError": 73708.03700606445,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 53422925.979166664,
+          "StandardError": 73708.03700606445,
+          "Level": 12,
+          "Margin": 327041.0371775623,
+          "Lower": 53095884.9419891,
+          "Upper": 53749967.01634423
+        },
+        "OriginalValues": [
+          53621810.5,
+          53190575.5,
+          53148954.75,
+          53185265,
+          53092146.5,
+          53615631,
+          53746028.5,
+          53667504.5,
+          53087722.25,
+          53587411,
+          53587426,
+          53544636.25
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 53399297.166666664,
+          "standardError": 24980.717378408073,
+          "confidenceLower": 53288458.23983156,
+          "confidenceUpper": 53510136.09350177
+        },
+        {
+          "mean": 53411083.583333336,
+          "standardError": 25898.853637745608,
+          "confidenceLower": 53296170.90488687,
+          "confidenceUpper": 53525996.2617798
+        }
+      ],
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "effort": 4,
+      "managedQuality": {
+        "Setting": 75,
+        "EncodedBytes": 98590,
+        "EncodedSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "NativeDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "PublicDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 36019095866581,
+          "Maximum": 30613,
+          "Samples": 398601,
+          "Scale": 255,
+          "RgbMaximum": 120.05098039215686,
+          "RgbRmse": 37.27838001414046,
+          "RgbPsnr": 16.701662984721693
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      "nativeQuality": {
+        "Setting": 75,
+        "EncodedBytes": 98590,
+        "EncodedSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "NativeDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "PublicDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 36019095866581,
+          "Maximum": 30613,
+          "Samples": 398601,
+          "Scale": 255,
+          "RgbMaximum": 120.05098039215686,
+          "RgbRmse": 37.27838001414046,
+          "RgbPsnr": 16.701662984721693
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      "receiptPath": "tmp/cep462-candidate-alpha-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-alpha-confirm-observation.json",
+      "boundary": "Resident original RGBA8 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Alpha-weighted RGB source-error matching before composite rounding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+    },
+    "alpha16": {
+      "managedUs": 53333.30335416667,
+      "nativeUs": 53367.521916666665,
+      "ratio": 0.9993588129770493,
+      "lower": 0.9926076132336329,
+      "upper": 1.0026485281070494,
+      "allocatedBytes": 7033584,
+      "status": "uncertain",
+      "librarySha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "caseId": "Encode16",
+      "runId": "cep462-candidate-alpha16-confirm",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "statistics": {
+        "N": 12,
+        "Mean": 53333303.354166664,
+        "StandardError": 13499.437495522167,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 53333303.354166664,
+          "StandardError": 13499.437495522167,
+          "Level": 12,
+          "Margin": 59896.72523073708,
+          "Lower": 53273406.628935926,
+          "Upper": 53393200.0793974
+        },
+        "OriginalValues": [
+          53372696.5,
+          53319042.75,
+          53285707.5,
+          53391429.75,
+          53329486.25,
+          53314851.5,
+          53373803.25,
+          53372270.75,
+          53269084.75,
+          53334198.25,
+          53384036.25,
+          53253032.75
+        ]
+      },
+      "allActualStatistics": {
+        "N": 12,
+        "Mean": 53333303.354166664,
+        "StandardError": 13499.437495522167,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 53333303.354166664,
+          "StandardError": 13499.437495522167,
+          "Level": 12,
+          "Margin": 59896.72523073708,
+          "Lower": 53273406.628935926,
+          "Upper": 53393200.0793974
+        },
+        "OriginalValues": [
+          53372696.5,
+          53319042.75,
+          53285707.5,
+          53391429.75,
+          53329486.25,
+          53314851.5,
+          53373803.25,
+          53372270.75,
+          53269084.75,
+          53334198.25,
+          53384036.25,
+          53253032.75
+        ]
+      },
+      "nativeBrackets": [
+        {
+          "mean": 53511977.25,
+          "standardError": 35650.36631163008,
+          "confidenceLower": 53353797.311313584,
+          "confidenceUpper": 53670157.188686416
+        },
+        {
+          "mean": 53367521.916666664,
+          "standardError": 26000.049053700328,
+          "confidenceLower": 53252160.236250594,
+          "confidenceUpper": 53482883.597082734
+        }
+      ],
+      "managedPacketBytes": 98590,
+      "nativePacketBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "nativePacketSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "effort": 4,
+      "managedQuality": {
+        "Setting": 75,
+        "EncodedBytes": 98590,
+        "EncodedSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "NativeDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "PublicDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 36019095866581,
+          "Maximum": 30613,
+          "Samples": 398601,
+          "Scale": 255,
+          "RgbMaximum": 120.05098039215686,
+          "RgbRmse": 37.27838001414046,
+          "RgbPsnr": 16.701662984721693
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      "nativeQuality": {
+        "Setting": 75,
+        "EncodedBytes": 98590,
+        "EncodedSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+        "NativeDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "PublicDecodedSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+        "Codec": "VP8",
+        "Sampling": "4:2:0",
+        "SourceError": {
+          "SumSquared": 36019095866581,
+          "Maximum": 30613,
+          "Samples": 398601,
+          "Scale": 255,
+          "RgbMaximum": 120.05098039215686,
+          "RgbRmse": 37.27838001414046,
+          "RgbPsnr": 16.701662984721693
+        },
+        "DecoderDifference": {
+          "SumSquared": 0,
+          "Maximum": 0,
+          "Samples": 398601,
+          "Scale": 1,
+          "RgbMaximum": 0,
+          "RgbRmse": 0,
+          "RgbPsnr": null
+        },
+        "AlphaExact": true,
+        "AlphaSha256": "c879f6709c3f9686ff110c901d7130e2d1f5a91d3453d321eeda1c65caf708ee"
+      },
+      "receiptPath": "tmp/cep462-candidate-alpha16-confirm-receipt.json",
+      "observationPath": "tmp/cep462-candidate-alpha16-confirm-observation.json",
+      "boundary": "Resident original RGBA16 to complete independent VP8 WebP bytes with exact normalized alpha. Full source normalization and repacking included. Native codec/scratch/frame/packet wrappers reused; RGBA-to-BGRA repacking and complete encode execute every operation. Fresh managed MemoryStream creation, growth, encode and disposal included; no redundant ToArray. Both effort settings fixed at 4; managed coefficient modeling follows the identified producer's geometry, memory and cancellation eligibility; native adaptive coding declared. Alpha-weighted RGB source-error matching before composite rounding, Complete native packet equality at frozen quality75/method4 is required; matched-packet reconstruction is a sanity check, including hidden RGB. Fresh geometry/decoder/alpha/source/ownership/bitstream checks before/after. Startup, IPC, I/O, fixture generation, quality enumeration and checks excluded."
+    }
+  },
+  "statusCounts": {
+    "pass": 4,
+    "gap": 3,
+    "uncertain": 2
+  },
+  "comparison": {
+    "project": "Lokad.Image",
+    "case": "distortion",
+    "mode": "confirm",
+    "reusedOriginalPrefix": "tmp/cep461-baseline-distortion-confirm-observation.json",
+    "originalUs": 2887.716634375,
+    "candidateUs": 2825.906430681818,
+    "savedUs": 61.81020369318185,
+    "rawReduction": 0.02140452527696146,
+    "normalizedPointReduction": 0.021517412662144797,
+    "nativePointChange": 0.00011536984576343556,
+    "originalAllocatedBytes": 741386,
+    "candidateAllocatedBytes": 406705,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false,
+        "candidateOriginalRawInterval": [
+          0.9744210695464889,
+          0.9827916931049974
+        ],
+        "candidateOriginalNormalizedInterval": [
+          0.9691276442057765,
+          0.9882832277776556
+        ]
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": true,
+        "normalizedGainSeparated": true,
+        "rawLossSeparated": false,
+        "normalizedLossSeparated": false,
+        "candidateOriginalRawInterval": [
+          0.9735941349045585,
+          0.9848509034623526
+        ],
+        "candidateOriginalNormalizedInterval": [
+          0.9683052017868955,
+          0.9903539443627853
+        ]
+      }
+    }
+  },
+  "storage": {
+    "windows": {
+      "baseline": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "internalAssemblySha256": "88598f674fe597c2388cba1e49c83cad1358baf6c47556bf3e03e3ba6077a27b",
+        "boundary": "Complete public method2 EncodeWebp with fresh root per operation, caller-owned source/output outside admission; all library-owned storage admitted. Four existing deterministic inputs, normal/live cancellation; no timing/GC/native/physical measurement.",
+        "rows": [
+          {
+            "name": "diagram",
+            "live": false,
+            "peakAdmittedBytes": 732597,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "diagram",
+            "live": true,
+            "peakAdmittedBytes": 732597,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": false,
+            "peakAdmittedBytes": 886733,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": true,
+            "peakAdmittedBytes": 886733,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": false,
+            "peakAdmittedBytes": 56229,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": true,
+            "peakAdmittedBytes": 56229,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": false,
+            "peakAdmittedBytes": 51808,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": true,
+            "peakAdmittedBytes": 51808,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          }
+        ]
+      },
+      "candidate": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "internalAssemblySha256": "84c1aaff5d6ee8d382bc840d2957588cd9394127570d1e672c6e8f1a36aacfc8",
+        "boundary": "Complete public method2 EncodeWebp with fresh root per operation, caller-owned source/output outside admission; all library-owned storage admitted. Four existing deterministic inputs, normal/live cancellation; no timing/GC/native/physical measurement.",
+        "rows": [
+          {
+            "name": "diagram",
+            "live": false,
+            "peakAdmittedBytes": 397205,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "diagram",
+            "live": true,
+            "peakAdmittedBytes": 397205,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": false,
+            "peakAdmittedBytes": 930669,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": true,
+            "peakAdmittedBytes": 930669,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": false,
+            "peakAdmittedBytes": 54821,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": true,
+            "peakAdmittedBytes": 54821,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": false,
+            "peakAdmittedBytes": 51200,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": true,
+            "peakAdmittedBytes": 51200,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          }
+        ]
+      }
+    },
+    "linux": {
+      "baseline": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "internalAssemblySha256": "7abdcc109bb388497b398f5184eace8c0c9560e5f7a7d75e25c13ecd306ac52c",
+        "boundary": "Complete public method2 EncodeWebp with fresh root per operation, caller-owned source/output outside admission; all library-owned storage admitted. Four existing deterministic inputs, normal/live cancellation; no timing/GC/native/physical measurement.",
+        "rows": [
+          {
+            "name": "diagram",
+            "live": false,
+            "peakAdmittedBytes": 732597,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "diagram",
+            "live": true,
+            "peakAdmittedBytes": 732597,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": false,
+            "peakAdmittedBytes": 886733,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": true,
+            "peakAdmittedBytes": 886733,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": false,
+            "peakAdmittedBytes": 56229,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": true,
+            "peakAdmittedBytes": 56229,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": false,
+            "peakAdmittedBytes": 51808,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": true,
+            "peakAdmittedBytes": 51808,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          }
+        ]
+      },
+      "candidate": {
+        "project": "Lokad.Image",
+        "statisticalTiming": false,
+        "internalAssemblySha256": "878c969e8f367d5b9984a5af593eb7855e09b257e0bb357abebb831ba83f555c",
+        "boundary": "Complete public method2 EncodeWebp with fresh root per operation, caller-owned source/output outside admission; all library-owned storage admitted. Four existing deterministic inputs, normal/live cancellation; no timing/GC/native/physical measurement.",
+        "rows": [
+          {
+            "name": "diagram",
+            "live": false,
+            "peakAdmittedBytes": 397205,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "diagram",
+            "live": true,
+            "peakAdmittedBytes": 397205,
+            "retainedBytes": 0,
+            "packetBytes": 7330,
+            "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": false,
+            "peakAdmittedBytes": 930669,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "opaque",
+            "live": true,
+            "peakAdmittedBytes": 930669,
+            "retainedBytes": 0,
+            "packetBytes": 71802,
+            "packetSha256": "59147bdc09415a8824f182c27ae4e5ea803a490e5b13ac9b79a994efad4d8048",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": false,
+            "peakAdmittedBytes": 54821,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "hidden",
+            "live": true,
+            "peakAdmittedBytes": 54821,
+            "retainedBytes": 0,
+            "packetBytes": 216,
+            "packetSha256": "28ac54984c4c32cb149fee6db4e06438fb3ab0cb1de9f147645b8e50fa97fc53",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": false,
+            "peakAdmittedBytes": 51200,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          },
+          {
+            "name": "singleton",
+            "live": true,
+            "peakAdmittedBytes": 51200,
+            "retainedBytes": 0,
+            "packetBytes": 98,
+            "packetSha256": "c9cd55edb26b8955dffe639e298ccf90f4481a07305d4dc0624bbfedb45d56ff",
+            "borrowedSourceUnchanged": true,
+            "borrowedRootAlive": true
+          }
+        ]
+      }
+    }
+  },
+  "qualification": {
+    "fullChecksEachOs": 5790,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+      "full": [
+        2525,
+        2317,
+        948
+      ],
+      "total": 5790,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 73,
+        "internal-scalar": 73,
+        "public-normal": 260,
+        "public-scalar": 260
+      },
+      "affectedVp8ScalarEachOs": 333,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "84c1aaff5d6ee8d382bc840d2957588cd9394127570d1e672c6e8f1a36aacfc8",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "2607972452d161f9f99f2acb52e5212c9004206f6fbce7eff7ba5794268ed7f6",
+        "tests\\Lokad.Image.PublicApi.Tests\\WebpLosslessValidationStorageTests.cs": "aadc5ab1c2d0b93dc07e2a09cf7110cb2c9ee912d7f387a3d452646e592332cb"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+      "full": [
+        2525,
+        2317,
+        948
+      ],
+      "total": 5790,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 73,
+        "internal-scalar": 73,
+        "public-normal": 260,
+        "public-scalar": 260
+      },
+      "affectedVp8ScalarEachOs": 333,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "878c969e8f367d5b9984a5af593eb7855e09b257e0bb357abebb831ba83f555c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "d1495aa2e9820fa1f7bd22f6e37b0b88b94040b4397db9e63c06825c32729a72",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "cd8d94bf58b51f0f9621ca4af6588e653fe7b84de3a22cf97f093226d1dbf25c",
+        "tests/Lokad.Image.PublicApi.Tests/WebpLosslessValidationStorageTests.cs": "aadc5ab1c2d0b93dc07e2a09cf7110cb2c9ee912d7f387a3d452646e592332cb"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "f686130b802260b2bfca18396e65ec096d2882c675f616c6c394fe59d066decd",
+      "symbolsSha256": "5f1f5f04be30643d7f1bd74b7cb765bbb466738d3d5f4ffc903d750caf6f978b",
+      "bytes": 423187,
+      "librarySha256": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+      "actualConsumerPassed": true,
+      "method2InstructionOwnershipPassed": true,
+      "mainValidationOwnedAsyncPassed": true,
+      "boundedPriceViewPassed": true,
+      "sharedOrdinaryBlockQuantizationPassed": true,
+      "liveJpegCorrectionBitOwnershipPassed": true,
+      "unshiftedLiveReservoirPassed": true,
+      "sharedByteWordEnlargementExactOwnedPassed": true,
+      "defaultByteEnlargementExactOwnershipPassed": true,
+      "liveVp8ModelSyncAsyncOwnedPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "f686130b802260b2bfca18396e65ec096d2882c675f616c6c394fe59d066decd",
+      "librarySha256": "a68f25c74d37aacb73e0d9299e1b4471c18d340e12407a1d945d45989122e84c",
+      "actualConsumerPassed": true,
+      "method2InstructionOwnershipPassed": true,
+      "mainValidationOwnedAsyncPassed": true,
+      "boundedPriceViewPassed": true,
+      "sharedOrdinaryBlockQuantizationPassed": true,
+      "liveJpegCorrectionBitOwnershipPassed": true,
+      "unshiftedLiveReservoirPassed": true,
+      "sharedByteWordEnlargementExactOwnedPassed": true,
+      "defaultByteEnlargementExactOwnershipPassed": true,
+      "liveVp8ModelSyncAsyncOwnedPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "outputWorkspaceBicubicPassed": true,
+      "opaqueWordTilesPassed": true,
+      "sharedAlphaBothDepthsPassed": true,
+      "textIntervalFramesExact": true,
+      "lanczosPlanRetainedSurvivorPassed": true,
+      "largeFrameHeadTokenHandoffPassed": true,
+      "webpSyncAsyncSharedWorkspaceGeneralizationPassed": true,
+      "streamingBicubicSharedSurvivorPassed": true,
+      "wordColumnBicubicSharedSurvivorPassed": true,
+      "wideColumnBothDepthsSharedSurvivorPassed": true,
+      "alphaCoefficientStoragePassed": true,
+      "pngBlockWorkspacePassed": true,
+      "grayscale8And16FrozenPacketsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true
+    }
+  },
+  "raw": {
+    "file": "vp8-coefficient-program-qualified.tar.xz",
+    "sha256": "e0a0ac3b24ca3221be6b4fa57950efb476d19b5e544569ee20c13b0c79b49bf1",
+    "bytes": 4138584,
+    "members": 333,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "reusedInputsMaterializedByHashWithoutDuplicatePayloads": true,
+    "dependencies": [
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      },
+      {
+        "file": "vp8-current-token-state-attribution.tar.xz",
+        "sha256": "4a3904796aa33f60713bbae063eff9fc668f826147bb981d3eadd87f6d529c72"
+      },
+      {
+        "file": "vp8-prepared-token-state-qualified.tar.xz",
+        "sha256": "c576bb577602050497af68ba6103114572ae41c6cb72bf32e536769a25e8ff45"
+      },
+      {
+        "file": "png-lazy-view-preparation-qualified.tar.xz",
+        "sha256": "94a5284c79cf9feb85774f20b3a9e922b2fc530eb74959c5f08f94e19bcaf635"
+      },
+      {
+        "file": "vp8-word-alpha-attribution-crosscheck.tar.xz",
+        "sha256": "ac98d9a0ee9dceb5b0a49738d7b845596d4d7c9d046621b79ee5f745c04adff9"
+      },
+      {
+        "file": "vp8-trellis-execution-qualified.tar.xz",
+        "sha256": "653aa9d1048f3f502a2bbf6db82d921e268b352b48d5fb081e240f57c160a868"
+      },
+      {
+        "file": "vp8-photograph-price-attribution.tar.xz",
+        "sha256": "265e0ed66d2b69eefaf1fa984093513c64c0582bfcdb9539800b0dea3b1f674a"
+      },
+      {
+        "file": "vp8-candidate-score-publication-qualified.tar.xz",
+        "sha256": "824cbbede338912f716c42ddcea64b7eebc9e092628b0b81a50cff98e008e5e8"
+      },
+      {
+        "file": "vp8-rate-view-preparation-qualified.tar.xz",
+        "sha256": "5f4ae51b20ab75c765cbd18871de056ba8eea223a7fb5d17d2dad373bc2fce9b"
+      },
+      {
+        "file": "jpeg-current-signed-refinement-attribution.tar.xz",
+        "sha256": "8a63eb2edf9ed2cdfb136dad2b2f5671f953bfb5d79b2b489a2292c7060d4cc7"
+      },
+      {
+        "file": "jpeg-buffered-correction-preparation-inconclusive.tar.xz",
+        "sha256": "55c1706b9ece7c261054bfead98ea6544ea8537b53d3d4fccd97868934621f9a"
+      },
+      {
+        "file": "jpeg-buffered-correction-restoration.tar.xz",
+        "sha256": "3a5b3b034083b5febd3e4b7bd7fe5178cf666d86cd469a52e35522d46230d7ed"
+      },
+      {
+        "file": "jpeg-progressive-plane-scheduling-qualified.tar.xz",
+        "sha256": "c293e06a01c2871466e642a2f7a7b865809942633ca589640068468729424be1"
+      },
+      {
+        "file": "vp8-current-candidate-preparation-attribution.tar.xz",
+        "sha256": "6dac21c11b1468276246dece9ad8f2ab43840b82f4187ddb77af02641edef431"
+      },
+      {
+        "file": "vp8-complete-prediction-preparation-qualified.tar.xz",
+        "sha256": "3aa49c6208945ab6e7de97f9884a64e4dbfaf3b4cc69ee8d407b807264227937"
+      },
+      {
+        "file": "vp8-decoded-storage-preparation-audit.tar.xz",
+        "sha256": "b6eb264bc3f748af7adc47f4ce9ce0a6513bc04e808a3240d74b94d6d8decd67"
+      },
+      {
+        "file": "vp8-current-live-model-attribution.tar.xz",
+        "sha256": "9ee1e678dfbc2bd19b3476126e494384a769fce619d7d8e16a0b0ae4d749f5c4"
+      },
+      {
+        "file": "vp8-live-model-preparation-qualified.tar.xz",
+        "sha256": "0fc1cf44376739a9f5529a1c85a89cb2c7e6728706f276011764a0fdf263f7ae"
+      },
+      {
+        "file": "vp8-current-trellis-epoch-attribution.tar.xz",
+        "sha256": "15692374c69d047607a16a81ff722fb6804854fbf6bb9e60578c19398c7ff955"
+      },
+      {
+        "file": "vp8-rate-epoch-pricing-experiment.tar.xz",
+        "sha256": "b30b81c7d50cd9049d4b38f7c8060ea67bb08dd2e9fb66bd20d1c9dfe8c693d4"
+      },
+      {
+        "file": "bicubic-output-workspace-qualified.tar.xz",
+        "sha256": "2c134f576350a45356cc2fd8a2251c373fbb8496d046a21a2776fb9eb396ebc6"
+      },
+      {
+        "file": "bicubic-default-output-workspace-qualified.tar.xz",
+        "sha256": "a4ff4eb24fc61dce4599aae3328bffa0b07a56e991d6b636b6cbc39c53e0317b"
+      },
+      {
+        "file": "parity-p40-qualified-evidence.tar.gz",
+        "sha256": "21114dd252c7f82cfcac745418a34eee442c4c3d3bf33ce6b71765b88250939d"
+      },
+      {
+        "file": "bicubic-shared-enlargement-qualified.tar.xz",
+        "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+      },
+      {
+        "file": "vp8-unshifted-live-reservoir-qualified.tar.xz",
+        "sha256": "5a773cc39f02710dc5dc27e744d60f7a77babdce2365b9b8bcb0f4614189fe03"
+      },
+      {
+        "file": "bilinear-current-boundary-audit.tar.xz",
+        "sha256": "3639131210285af2f483a1fc3b005f1c8dc31ee599e13c4e789b762524f1f018"
+      },
+      {
+        "file": "jpeg-correction-bit-qualified.tar.xz",
+        "sha256": "624f0b847f29b7465f96a7c2dbaecf2ed5f64f85359cecb5c9d1364bd893a1d1"
+      },
+      {
+        "file": "vp8-selected-trellis-boundary.tar.xz",
+        "sha256": "923340a5011063d8196bb6fff05ca95923388ff024abb7bf80159e005e1a8f79"
+      },
+      {
+        "file": "vp8-trellis-architecture-audit.tar.xz",
+        "sha256": "73f1d0fd787fd732f1aa8146f78ee58be6dd4c856fcd6547fead6e0189869fd4"
+      },
+      {
+        "file": "vp8-ordinary-block-preparation-qualified.tar.xz",
+        "sha256": "0d3dfc7b21f6f3b7fb3b546b367ae3fb270615ad4d3264f4de1b077a807c987f"
+      },
+      {
+        "file": "vp8-current-photograph-attribution.tar.xz",
+        "sha256": "1c35f956ef35e6ab08cc1f80066e23aa26e90bb46d08459a64beed7657125421"
+      },
+      {
+        "file": "vp8-bounded-price-view-qualified.tar.xz",
+        "sha256": "830067c12147668abe8ed024ad63c7bfd17026d1c3b3aea0efa817843f0ec3e3"
+      },
+      {
+        "file": "vp8-alpha-output-handoff-qualified.tar.xz",
+        "sha256": "84cced428c1e306b20760e8b02e8763debfb67f871ef60f0fb18530929e7f1ea"
+      },
+      {
+        "file": "vp8-trellis-candidate-preparation-qualified.tar.xz",
+        "sha256": "0cb9428ef776647daea6a809c66e86d07f4e3e2997c1cd1d5109ccba85641430"
+      },
+      {
+        "file": "vp8-current-validation-state-attribution.tar.xz",
+        "sha256": "89398293287135112cfdc17075d56cec7ca2f62660449faf7eb4ff689dbd4794"
+      },
+      {
+        "file": "vp8-block-state-reservoir-qualified.tar.xz",
+        "sha256": "f4ee950171f4e6ea02d101022aeb49140cac243ab1d8b8eb0d29adfdff5b5186"
+      },
+      {
+        "file": "current-retained-png-decode-cost.tar.xz",
+        "sha256": "4cad0b918916e1d1a0bb661ca2a6e4fb81ea9db5c529e593a2ca7224f1dd836f"
+      },
+      {
+        "file": "png-retained-root-current-attribution.tar.xz",
+        "sha256": "5f30795b21030f904942a4f0b2679283a241ebfb8f4e7dda34fe70dfb1be7ced"
+      },
+      {
+        "file": "png-prepared-prefix-qualified.tar.xz",
+        "sha256": "3a57e9ffd77680fe3dda7a121bbd4fc41ed7ca83756828eccdc129543ed3a699"
+      },
+      {
+        "file": "current-tight-png-decode-costs.tar.xz",
+        "sha256": "e5319918f7ce7bbaaafd940384bf191d76cebb5931199b01381d9e377d869824"
+      },
+      {
+        "file": "png-current-framing-costs.tar.xz",
+        "sha256": "def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe"
+      },
+      {
+        "file": "png-core-word-current-costs.tar.xz",
+        "sha256": "e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555"
+      },
+      {
+        "file": "png-color-current-costs.tar.xz",
+        "sha256": "725e794723ec992403ceb1fc77efc898889fe242dd3f73e20ca38d968efc4e4f"
+      },
+      {
+        "file": "png-filter-current-costs.tar.xz",
+        "sha256": "f1fc8bd0cbeeaa76c216014da77a6eb4c2871271f1cb10eab0c41b4660e337ec"
+      },
+      {
+        "file": "vp8-current-trellis-preparation-attribution.tar.xz",
+        "sha256": "02bafe8eefd87f0f7541932ca20b6e7bced1495d3c8b9e50f4c2cf8cb2e613eb"
+      },
+      {
+        "file": "vp8-coefficient-local-trellis-qualified.tar.xz",
+        "sha256": "3a335e5a05f83414b5a7fedf645bacff36b04cd64ac99a5a07dad088b8d619dd"
+      },
+      {
+        "file": "vp8-current-mode-batch-attribution.tar.xz",
+        "sha256": "190943351d6971881df43a6eacc30e2ef9024adf614151da3d40896876d9eb53"
+      },
+      {
+        "file": "vp8-four-mode-trellis-qualified.tar.xz",
+        "sha256": "29190b53f424f2498b3872f98876fdee93766ac940d8812f481053606bf1b939"
+      },
+      {
+        "file": "vp8-live-block-execution-qualified.tar.xz",
+        "sha256": "0996b584a9c36e468d1cb9579161db0bff3855960d21bba6670821c8b16510f9"
+      },
+      {
+        "file": "jpeg-current-refinement-boundary-attribution.tar.xz",
+        "sha256": "911a7dd6ea23c9f8169f012f739fa547d9b1c3796a54001e1c62697901c8e874"
+      },
+      {
+        "file": "jpeg-coefficient-reference-lifetime-qualified.tar.xz",
+        "sha256": "b7b81f8eae46e659d692425cefe11f35da8c57503e009eb56f084c5fa143ff06"
+      },
+      {
+        "file": "vp8-current-validator-storage-attribution.tar.xz",
+        "sha256": "cb3dd2cd7898fef2e6716419bc9d393d4372a27aac3379e028ccdabee937a731"
+      },
+      {
+        "file": "vp8-validation-materialization-qualified.tar.xz",
+        "sha256": "859ce3a287dddcf9516f4d4898dd0df239274280421372d3808d90741341174f"
+      },
+      {
+        "file": "font-load-current-preparation-attribution.tar.xz",
+        "sha256": "471e1b9e253e3661cc5fa2c645ea74888fd7dc84b1abdec0573506b9aacff889"
+      },
+      {
+        "file": "font-load-preparation-qualified.tar.xz",
+        "sha256": "3253da301972a8468b23753d4794d50d1f6169713d4c613deec4b03b0a520ccc"
+      },
+      {
+        "file": "vp8l-validation-elision-qualified.tar.xz",
+        "sha256": "0343d021464500db0a492680f2a591d711f5083e34da5b2e68efae86dbad7fab"
+      },
+      {
+        "file": "vp8-distortion-instruction-projection.tar.xz",
+        "sha256": "77f188abc8378c77ec9ef31999c84b8b3515584187d9ff89c7f8c67f33fef112"
+      }
+    ]
+  },
+  "scope": "Complete existing frozen513x259public VP8 encodes, normalization/preparation/admission/outputgrowth/independentownership/disposal timed. NativeFFmpeg/libwebp codec/wrappers/private scratch retained as declared; onequietCPU0. No new workload/settingsgrid. Currentmodule confirmation per existingcontrol, not crosslaunchstability or genericcompressionclaim.",
+  "transition": {
+    "initial": "CEP461 removed method2fullframecoefficients; confirmed1.55%raw gain, allactualnormalizedinconclusive and318233BGC saved. Fourinputmemoryaudit founddenseopaque+372896Badmittedpeak. Retainadverseevidence, notselected.",
+    "selected": "CEP462 chooses compact instruction or literal16level residual bywordcount before admission. Dense literalusesactualunchangedCoefficients emitter; not admissionfallback. Diagrampublicpeak732597->397205B, dense886733->930669B; hidden/singletonfall. Exactpackets andnormal/live freshrootcleanup bothOS.",
+    "history": "EarlierVST224/225two-byteeventstream hadinconclusiveCPU/denseallocationgrowth. Currentrepresentation anddirectmethod2statistics differ; its adversehistory remains linked."
+  },
+  "workflow": {
+    "coreVersionsEachOs": 2,
+    "internalVersionsWindows": 3,
+    "internalVersionsLinux": 2,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "testOnlyWindowsCompileFailureCorrected": true,
+    "diagnosticMemoryBuilds": 1,
+    "noUnchangedTimingRepeats": true,
+    "standaloneReferenceActualQualified": true,
+    "newCrossOperationRetainedBytes": 0,
+    "displayedCostsRefreshed": 8,
+    "displayedCostsReusedUnchangedPaths": 117,
+    "notActualPackage125RowReleaseRefresh": true
+  },
+  "notes": "Onlydistortion/method2 uses the new program; other eight costs refresh because shared frame/Record/writer dispatch changed. SourceNote in the firstselected rawreceipt used an overbroad method2 label; actual caseId/effort/commands/packet/source gates identify effort5. Corrected prose in retained script before laterrefreshes, no replay. All costs are currentscope; incrementalclaim onlyprimary. Newfinalcore/embedded immutable throughout each boundedstage; extraWindowsinternalbuild added meaningful domain/ownershiptests, without core/timing rebuild."
+}

@@ -17,24 +17,22 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [four-mode trellis](../benchmarks/VP8-FOUR-MODE-TRELLIS.md)
-  saves662µs/6.4% raw across four fixed counterbalanced standalone launch pairs;
-  99.9% ratio interval[0.9035,0.9689]. A scoped DLL comparison independently shows5.63%.
-  The earlier adverse standalone comparison is retained; normalized gain remains uncertain.
-  Effort6's displayed independent twelve has ratio 0.973;
-  upper 1.711 also includes launch-level uncertainty, so parity is unconfirmed.
-  Effort5 remains a gap, ratio 1.020/upper 1.031.
-  Allocations754,497/741,065B are unchanged; the four-mode path adds112B explicit stack
-  capacity within existing16KiB admission, no new heap or retained storage. Whole-operation
-  physical peak is unmeasured. One cost refreshes; eight reuse unchanged paths:
-  **3pass,2gaps,4uncertain**. No further timing resampling this round.
-  [Earlier candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
-  retains its own scoped gains and actual costs as history.
-  [Prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md) retain their
-  photograph gain and diagram/opaque16 tradeoffs; both passing cases remain stopped.
-  Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
-  [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
-  [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
+- **WebP:** [compact residual programs](../benchmarks/VP8-COEFFICIENT-PROGRAM.md)
+  remove method2 full-frame coefficient retention and repeated sparse residual parsing.
+  Complete effort2 encoding saves61.81µs/2.14%raw/2.15%normalized, with both confidence
+  views separated;2,825.91µs/native2,510.76µs, upper1.132 remains a gap. Allocation
+  falls741,386→406,705B/op; measured public admitted peak732,597→397,205B, retained0.
+  Dense opaque peak increases886,733→930,669B: storage gains are content-specific.
+  Nine existing costs refresh: **4pass,3gaps,2uncertain**. Effort6's current module
+  confirmation passes; effort5 and photograph retain gaps. Earlier launch variation
+  remains in [four-mode trellis history](../benchmarks/VP8-FOUR-MODE-TRELLIS.md);
+  no cross-launch stability or incremental gain is claimed for those other cases.
+  Eight displayed costs refresh;117 numerical rows reuse unchanged paths.
+  [Earlier candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md),
+  [price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md),
+  [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md) and
+  [prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
+  retain scoped history. Passing cases stop; uncertain cases do not justify tuning.
   [Main validation elision](../benchmarks/VP8L-VALIDATION-ELISION.md) keeps one
   syntax scheduler and all auxiliary values/checks, omitting discarded main raster,
   cache values and inverse output. Complete VP8L validation saves1,031µs/30.66%raw
@@ -43,8 +41,8 @@ Current scope and remaining work:
   upper0.858 also passes. GC297,070/13,584B; measured first/live admitted peaks
   235,152/11,121B, retained0. These are separate from physical/native peaks.
   Nine affected controls refresh:3pass/6gaps. Full-render contemporary comparison
-  is inconclusive with no demonstrated incremental gain/loss. Five displayed costs
-  refresh;120 numerical rows reuse unchanged paths. Opaque/live VP8 paths retain
+  is inconclusive with no demonstrated incremental gain/loss. These unchanged decoder
+  costs remain valid. Opaque/live VP8 paths retain
   unchanged evidence; liveopaque5289.47/native4796.26µs remains a gap.
   [Earlier validation materialization](../benchmarks/VP8-VALIDATION-MATERIALIZATION.md)
   and [live execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) retain scoped history.
@@ -120,11 +118,11 @@ Current scope and remaining work:
   retained owned capacity is unchanged and no peak reduction is inferred.
   This round reuses those unchanged font costs.
 
-The current production build passes **5,780 full/live checks per OS**, affected
+The current production build passes **5,790 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
-sync/async consumers, plus bounded main validation and its asynchronous ownership.
+sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
 Normal/scalar checks pass; unchanged vector-path
 AVX2/AVX512-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
@@ -163,16 +161,16 @@ settings do not establish matched quality.
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
 | JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
 | JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
-| VP8 diagram, effort2 / distortion-only search † | 3,139.96 | 2,702.54 | 1.162 / 1.169 | 741,375 | 7,330 / 7,330 |
-| VP8 RGBA16 + alpha, including normalization † | 53,574.22 | 53,530.63 | 1.001 / 1.017 | 7,033,984 | 98,590 / 98,590 |
-| VP8 opaque RGBA8 † | 14,109.85 | 15,494.13 | 0.911 / 0.922 | 1,201,669 | 72,380 / 72,380 |
-| VP8 opaque photograph † | 10,421.63 | 9,778.81 | 1.066 / 1.113 | 809,225 | 17,688 / 17,688 |
-| VP8 opaque text/diagram † | 5,701.25 | 5,823.43 | 0.979 / 0.985 | 741,222 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 10,409.98 | 10,694.42 | 0.973 / 1.711 | 754,497 | 6,818 / 6,818 |
-| VP8 opaque RGBA16, including normalization † | 15,614.22 | 16,700.17 | 0.935 / 0.939 | 1,201,552 | 72,380 / 72,380 |
-| VP8 RGBA8 + lossless alpha † | 56,041.55 | 56,143.03 | 0.998 / 1.005 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,550.15 | 9,576.69 | 0.788 / 0.823 | 4,363,930 | 7,234 / 7,234 |
+| VP8 opaque RGBA8 † | 14,299.50 | 15,518.45 | 0.921 / 0.928 | 1,201,677 | 72,380 / 72,380 |
+| VP8 opaque RGBA16, including normalization † | 14,150.86 | 15,516.49 | 0.912 / 0.914 | 1,201,560 | 72,380 / 72,380 |
+| VP8 opaque photograph † | 9,933.83 | 9,715.88 | 1.022 / 1.026 | 809,233 | 17,688 / 17,688 |
+| VP8 opaque text/diagram † | 5,685.47 | 5,820.19 | 0.977 / 0.987 | 741,230 | 7,100 / 7,100 |
+| VP8 diagram, effort2 / distortion-only search † | 2,825.91 | 2,510.76 | 1.126 / 1.132 | 406,705 | 7,330 / 7,330 |
+| VP8 diagram, effort6 / trellis † | 9,478.04 | 9,796.36 | 0.968 / 0.974 | 754,505 | 6,818 / 6,818 |
+| VP8 RGBA8 + lossless alpha † | 53,422.93 | 53,399.30 | 1.000 / 1.009 | 7,034,400 | 98,590 / 98,590 |
+| VP8 RGBA16 + alpha, including normalization † | 53,333.30 | 53,367.52 | 0.999 / 1.003 | 7,033,584 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 109,807.33 | 127,005.55 | 0.865 / 0.940 | 7,476,544 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 75,840.35 | 76,643.85 | 0.990 / 1.008 | 5,983,328 | 121,896 / 121,896 |
 | PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,972.34 | 17,224.29 | 0.985 / 0.993 | 820,452 | 210,973 / 210,973 |

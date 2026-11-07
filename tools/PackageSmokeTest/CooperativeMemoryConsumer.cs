@@ -2,6 +2,32 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyDistortionInstructionStorage()
+    {
+        using var source = OriginalVp8lControls.Buffer("diagram", 8);
+        var unchanged = OriginalPixels.Bytes(source);
+        using var root = new TestMemoryBudget(512 * 1024);
+        var options = new WebpEncodeOptions { Lossless = false, Quality = 75, Effort = 2,
+            Limits = new() { MemoryBudget = root } };
+        using var output = new MemoryStream();
+        await ImageCodec.EncodeWebpAsync(source, output, options);
+        var packet = output.ToArray();
+        if (packet.Length != 7330 || Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet))
+            != "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b" || root.Bytes != 0 || root.IsDisposed)
+            throw new Exception("Packaged method2 encoding changed its exact packet or bounded ownership.");
+        using var canceled = new CancellationTokenSource(); root.Admitted = _ => canceled.Cancel();
+        var stopped = false;
+        try { await ImageCodec.EncodeWebpAsync(source, Stream.Null, options, canceled.Token); }
+        catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token) { stopped = true; }
+        root.Admitted = null;
+        if (!stopped || root.Bytes != 0) throw new Exception("Packaged method2 cancellation leaked storage.");
+        using var recovered = new MemoryStream(); ImageCodec.EncodeWebp(source, recovered, options);
+        if (root.Bytes != 0 || root.IsDisposed || !packet.AsSpan().SequenceEqual(recovered.ToArray())
+            || !unchanged.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)) || !output.CanWrite)
+            throw new Exception("Packaged method2 recovery changed input, output or budget ownership.");
+        Console.WriteLine("Packaged method2 residual storage preserves exact packets, bounded admission, cancellation and independent output.");
+    }
+
     private static async Task VerifyLosslessValidationStorage()
     {
         foreach (var lossy in new[] { false, true })
@@ -716,6 +742,7 @@ internal static class CooperativeMemoryConsumer
         VerifyRectangleFill();
         VerifyCompositingRows();
         await VerifyLosslessValidationStorage();
+        await VerifyDistortionInstructionStorage();
         await VerifyWebpCandidateWorkspace();
         await VerifyWebpAlphaCoefficientStorage();
         await VerifyLanczosPlans();
