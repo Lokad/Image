@@ -101,16 +101,18 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [coefficient-reference lifetimes](../benchmarks/JPEG-COEFFICIENT-REFERENCE-LIFETIME.md)
-  independently saves103µs/2.69%raw and2.77%normalized on complete live progressive444;
-  both confidence views separate. Current3722.09µs/native3361.34µs,ratio1.107/upper1.114
-  remains a gap. Exact pixels/read/error prefixes stay unchanged. Both contemporary
-  builds report701,233B/op; older701,182B diagnostic evidence remains separate.
-  No new heap/retention, frame200→168B; whole physical/admitted peak unmeasured.
-  Five unchanged controls reuse evidence: six total,1pass/3gaps/2uncertain.
-  [Earlier correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md) retains history.
-  [Plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retains
-  ordinary/live444 allocation984KB→701KB/op and its stated peak/retention boundaries.
+- **JPEG and reading:** [progressive output ownership](../benchmarks/JPEG-PROGRESSIVE-OUTPUT.md)
+  independently saves161.72/183.00µs (4.46%/4.90%raw) on ordinary/live progressive444;
+  both raw/normalized confidence views separate. Current3,466.85/3,555.20µs versus
+  FFmpeg3,355.46/3,363.08µs retain gaps, uppers1.037/1.066. GC falls701,233→169,584B/op.
+  Governed peak1,864,806B and result531,468B until disposal stay unchanged. Sequential
+  default idle pixel capacity increases531,468B; coefficient capacity stays1,697,280B.
+  Both existing caches are bypassed with caller budgets; no governed CPU or physical/
+  native peak claim. Two displayed rows refresh;123 numerical rows reuse valid paths.
+  Four distinct JPEG controls reuse unchanged paths: six total,1pass/3gaps/2uncertain.
+  [Reference lifetimes](../benchmarks/JPEG-COEFFICIENT-REFERENCE-LIFETIME.md),
+  [correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md) and
+  [plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retain history.
   [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
   retains prior gains. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
@@ -124,7 +126,7 @@ Current scope and remaining work:
   retained owned capacity is unchanged and no peak reduction is inferred.
   This round reuses those unchanged font costs.
 
-The current production build passes **5,801 full/live checks per OS**, affected
+The current production build passes **5,808 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -216,8 +218,8 @@ settings do not establish matched quality.
 | JPEG progressive grayscale, resident decode † | 2,023.81 | 1,829.96 | 1.106 / 1.111 | 683,136 | — |
 | JPEG progressive420, resident decode † | 1,831.21 | 2,088.88 | 0.877 / 0.882 | 775,314 | — |
 | JPEG progressive422, resident decode † | 2,292.77 | 2,245.05 | 1.021 / 1.074 | 847,116 | — |
-| JPEG ordinary progressive444, resident decode † | 3,657.90 | 3,353.21 | 1.091 / 1.102 | 701,233 | — |
-| JPEG progressive444, live-token resident decode † | 3,722.09 | 3,361.34 | 1.107 / 1.114 | 701,233 | — |
+| JPEG ordinary progressive444, resident decode † | 3,466.85 | 3,355.46 | 1.033 / 1.037 | 169,584 | — |
+| JPEG progressive444, live-token resident decode † | 3,555.20 | 3,363.08 | 1.057 / 1.066 | 169,584 | — |
 | JPEG dense CMYK, resident decode (confirmed pass) † | 2,575.62 | 3,161.31 | 0.815 / 0.860 | 1,085,661 | — |
 | JPEG horizontal-only CMYK, resident decode † | 518.51 | 396.74 | 1.307 / 1.353 | 1,085,763 | — |
 | JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 441.76 | 624.43 | 0.707 / 0.742 | 762,700 | — |

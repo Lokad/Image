@@ -135,7 +135,7 @@ internal ref partial struct JpegDecoder
     {
         var first = components[0]; var second = components[1]; var third = components[2];
         MaterializeSamplePlane(first);
-        var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context);
+        var result = ImageBuffer.AllocateForOverwrite(info.Width, info.Height, 8, context);
         result.Orientation = info.Orientation;
         try
         {

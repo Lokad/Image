@@ -865,19 +865,29 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-coefficient-reference-lifetime-evidence.json').read_text(encoding='utf-8'))
+    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-progressive-output-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_current['productionAccepted']
     assert jpeg_current['raw']['mirrored'] and jpeg_current['raw']['allMembersVerified']
-    assert jpeg_current['sourceProof']['onlyCorrectionReferenceLifetimeAndKnownBoundsChanged']
+    assert jpeg_current['sourceProof']['entireOriginalProjectionEquals']
+    assert jpeg_current['sourceProof']['invalidatedPerformance'] == ['Progressive444', 'ProgressiveCancelable444']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in jpeg_current['independentComparison']['views'].values())
-    assert all(q['fullLivePassed'] and q['total'] == 5767
-               for q in jpeg_current['qualification']['full'].values())
+               for c in jpeg_current['comparison'].values() for v in c['views'].values())
+    assert all(jpeg_current['qualification'][p]['fullLivePassed'] and jpeg_current['qualification'][p]['total'] == 5808
+               for p in ['windows', 'linux'])
     assert set(jpeg_current['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422',
         'Progressive444', 'ProgressiveCancelable444'}
     assert set(jpeg_current['reusedCases']) == {'ValidateJpegProgressive420'}
     assert jpeg_current['qualification']['actualPackage']['sha256'] == jpeg_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert jpeg_current['qualification']['actualPackage']['progressiveStripsOwnershipPassed'] and jpeg_current['qualification']['samePackageLinux']['progressiveStripsOwnershipPassed']
+    assert jpeg_current['statusCounts'] == {'gap': 3, 'pass': 1, 'uncertain': 2}
+    for platform in ['windows', 'linux']:
+        for subject in ['baseline', 'candidate']:
+            for r in jpeg_current['storage'][platform][subject]['rows']:
+                assert r['sourceUnchanged'] and r['borrowedRootAlive'] and r['admittedAfterDispose'] == 0
+                assert r['peakAdmittedBytes'] == (1864806 if r['governed'] else 0)
+                assert r['retainedOutputAdmittedBytes'] == (531468 if r['governed'] else 0)
+                assert r['idlePoolAfterDispose'] == (531468 if subject == 'candidate' else 0)
+                assert r['idleCoefficientAfterDispose'] == 1697280
     for case, current in jpeg_current['cases'].items():
         assert current['caseId'] == case
         assert current['reusedUnchangedPath'] or current['librarySha256'] == jpeg_current['producers']['linuxSha256']
@@ -1618,8 +1628,8 @@ def render():
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
-    vq = vp8_output['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5801
+    vq = jpeg_current['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5808
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1874,16 +1884,18 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [coefficient-reference lifetimes](../benchmarks/JPEG-COEFFICIENT-REFERENCE-LIFETIME.md)
-  independently saves103µs/2.69%raw and2.77%normalized on complete live progressive444;
-  both confidence views separate. Current3722.09µs/native3361.34µs,ratio1.107/upper1.114
-  remains a gap. Exact pixels/read/error prefixes stay unchanged. Both contemporary
-  builds report701,233B/op; older701,182B diagnostic evidence remains separate.
-  No new heap/retention, frame200→168B; whole physical/admitted peak unmeasured.
-  Five unchanged controls reuse evidence: six total,1pass/3gaps/2uncertain.
-  [Earlier correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md) retains history.
-  [Plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retains
-  ordinary/live444 allocation984KB→701KB/op and its stated peak/retention boundaries.
+- **JPEG and reading:** [progressive output ownership](../benchmarks/JPEG-PROGRESSIVE-OUTPUT.md)
+  independently saves161.72/183.00µs (4.46%/4.90%raw) on ordinary/live progressive444;
+  both raw/normalized confidence views separate. Current3,466.85/3,555.20µs versus
+  FFmpeg3,355.46/3,363.08µs retain gaps, uppers1.037/1.066. GC falls701,233→169,584B/op.
+  Governed peak1,864,806B and result531,468B until disposal stay unchanged. Sequential
+  default idle pixel capacity increases531,468B; coefficient capacity stays1,697,280B.
+  Both existing caches are bypassed with caller budgets; no governed CPU or physical/
+  native peak claim. Two displayed rows refresh;123 numerical rows reuse valid paths.
+  Four distinct JPEG controls reuse unchanged paths: six total,1pass/3gaps/2uncertain.
+  [Reference lifetimes](../benchmarks/JPEG-COEFFICIENT-REFERENCE-LIFETIME.md),
+  [correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md) and
+  [plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retain history.
   [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
   retains prior gains. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
   against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
