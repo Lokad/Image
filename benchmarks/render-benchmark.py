@@ -1706,13 +1706,14 @@ Current scope and remaining work:
   Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
   [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
   {len(png_framing['cases'])} independently confirmed controls, {png_framing['statusCounts']['pass']} pass/stop,
-  {png_framing['statusCounts']['gap']} gaps and {png_framing['statusCounts']['uncertain']} uncertain. Gaps are live RGBA8 (upper1.113),
-  tight/default RGBA16 (uppers1.052/1.031) and RGB16 (upper1.062). All other
-  confirmed color/filter/Adam7/coding-validation controls pass. The report retains
-  allocations, boundaries and historical contradictions; no paired historical gain
-  is inferred. {len(png_framing['remainingNamedDecodeCases'])} already-named decode cases need current evidence. Seven displayed
-  rows are refreshed; additional cases stay in the family report. Header-only
-  inspection/identification and encoding are unaffected.
+  {png_framing['statusCounts']['gap']} gaps and {png_framing['statusCounts']['uncertain']} uncertain. All47 existing resident
+  decode controls and four coding validators now have evidence; no resident
+  confirmation remains missing. Passing cases stop. The report lists exact scopes,
+  allocations and remaining gaps. Twenty-seven confirmations reuse the immutable
+  prepared build, worker and harness; all125 displayed numbers reuse valid evidence.
+  No new case, source change, rebuild or repeated package qualification. Header-only
+  inspection/identification, stream/composition/shared-root boundaries and encoding
+  keep their separate required coverage. No historical paired gain is inferred.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
   Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse

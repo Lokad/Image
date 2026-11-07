@@ -1,116 +1,101 @@
-# Current PNG framing costs
+# Current PNG decode and coding-validation costs
 
-Twenty-four existing comparisons now have independent evidence on the immutable
-qualified LPP437 build. Twenty pass and stop; live RGBA8, default/tight RGBA16
-and RGB16 retain demonstrated gaps. Seven comparisons refresh the public summary;
-seventeen additional controls stay in this family report. No production, fixture,
-setting or workload boundary changes.
+All **47 existing resident decode controls and four coding validators** now have
+independent evidence: **45 pass and stop, 6 gaps, 0 uncertain**.
+The final 27 missing confirmations reuse the prepared immutable build, worker,
+harness and fixtures. No production change, rebuild, extra image/settings grid,
+repeated passing measurement or repeated package qualification.
 
-| Complete operation, existing input | Managed µs | Reference µs | Ratio / upper | Managed B/op | Current status |
-| --- | ---: | ---: | ---: | ---: | --- |
-| RGBA8 decode, live token | 1,539.10 | 1,394.18 | 1.104 / 1.113 | 4,472 | Gap |
-| RGBA8 decode, tight working limit | 1,297.38 | 1,395.09 | 0.930 / 0.935 | 68,224 | Pass; stop |
-| RGBA16 decode, tight working limit | 3,019.22 | 2,895.06 | 1.043 / 1.052 | 70,272 | Gap |
-| Validate PNG8, span | 1,287.37 | 1,377.05 | 0.935 / 0.938 | 240 | Pass; stop |
-| Validate PNG16, span | 2,906.21 | 2,961.99 | 0.981 / 0.983 | 240 | Pass; stop |
-| Validate indexed Adam7, 19×17 | 1.76 | 3.94 | 0.447 / 0.463 | 792 | Pass; stop |
-| Validate PNG16, async nonseekable | 2,956.81 | 3,613.24 | 0.818 / 0.826 | 8,544 | Pass; stop |
-| RGBA8, resident None | 1,307.81 | 1,393.64 | 0.938 / 0.944 | 4,472 | Pass; stop |
-| RGBA16, resident None | 2,952.03 | 2,898.14 | 1.019 / 1.031 | 8,568 | Gap |
-| RGBA16, Adam7 | 3,062.16 | 3,927.59 | 0.780 / 0.785 | 23,240 | Pass; stop |
-| RGBA8, Paeth | 2,803.38 | 2,843.39 | 0.986 / 0.989 | 4,472 | Pass; stop |
-| RGBA16, Paeth | 4,826.89 | 5,512.13 | 0.876 / 0.885 | 8,568 | Pass; stop |
-| RGB8 into RGBA8 | 1,129.16 | 1,526.29 | 0.740 / 0.752 | 3,448 | Pass; stop |
-| RGB16 into RGBA16 | 2,336.31 | 2,221.40 | 1.052 / 1.062 | 6,520 | Gap |
-| Gray8 into RGBA8 | 344.42 | 367.29 | 0.938 / 0.949 | 1,400 | Pass; stop |
-| Gray16 into RGBA16 | 725.86 | 958.75 | 0.757 / 0.761 | 2,424 | Pass; stop |
-| Gray-alpha8 into RGBA8 | 764.32 | 1,158.31 | 0.660 / 0.661 | 2,424 | Pass; stop |
-| Gray-alpha16 into RGBA16 | 1,563.99 | 1,798.70 | 0.870 / 0.877 | 4,472 | Pass; stop |
-| RGBA8, Up | 1,123.47 | 1,508.68 | 0.745 / 0.750 | 4,472 | Pass; stop |
-| RGBA16, Up | 1,533.72 | 1,910.94 | 0.803 / 0.807 | 8,568 | Pass; stop |
-| RGBA8, Sub | 517.24 | 685.78 | 0.754 / 0.759 | 4,472 | Pass; stop |
-| RGBA16, Sub | 301.91 | 741.90 | 0.407 / 0.412 | 8,568 | Pass; stop |
-| RGBA8, Average | 1,619.39 | 1,849.21 | 0.876 / 0.879 | 4,472 | Pass; stop |
-| RGBA16, Average | 4,102.68 | 4,476.03 | 0.917 / 0.920 | 8,568 | Pass; stop |
+| Existing case | Lokad / FFmpeg µs | Ratio / upper | Managed B/op | Status |
+| --- | ---: | ---: | ---: | --- |
+| DecodeCancelable8 | 1,539.10 / 1,394.18 | 1.104 / 1.113 | 4,472 | gap |
+| DecodeTight8 | 1,297.38 / 1,395.09 | 0.930 / 0.935 | 68,224 | pass |
+| DecodeTight16 | 3,019.22 / 2,895.06 | 1.043 / 1.052 | 70,272 | gap |
+| ValidatePng8 | 1,287.37 / 1,377.05 | 0.935 / 0.938 | 240 | pass |
+| ValidatePng16 | 2,906.21 / 2,961.99 | 0.981 / 0.983 | 240 | pass |
+| ValidateIndexedAdam7 | 1.76 / 3.94 | 0.447 / 0.463 | 792 | pass |
+| ValidatePng16Async | 2,956.81 / 3,613.24 | 0.818 / 0.826 | 8,544 | pass |
+| Decode8 | 1,307.81 / 1,393.64 | 0.938 / 0.944 | 4,472 | pass |
+| Decode16 | 2,952.03 / 2,898.14 | 1.019 / 1.031 | 8,568 | gap |
+| DecodeAdam7_16 | 3,062.16 / 3,927.59 | 0.780 / 0.785 | 23,240 | pass |
+| DecodePaeth8 | 2,803.38 / 2,843.39 | 0.986 / 0.989 | 4,472 | pass |
+| DecodePaeth16 | 4,826.89 / 5,512.13 | 0.876 / 0.885 | 8,568 | pass |
+| DecodeRgb8 | 1,129.16 / 1,526.29 | 0.740 / 0.752 | 3,448 | pass |
+| DecodeRgb16 | 2,336.31 / 2,221.40 | 1.052 / 1.062 | 6,520 | gap |
+| DecodeGray8 | 344.42 / 367.29 | 0.938 / 0.949 | 1,400 | pass |
+| DecodeGray16 | 725.86 / 958.75 | 0.757 / 0.761 | 2,424 | pass |
+| DecodeGrayAlpha8 | 764.32 / 1,158.31 | 0.660 / 0.661 | 2,424 | pass |
+| DecodeGrayAlpha16 | 1,563.99 / 1,798.70 | 0.870 / 0.877 | 4,472 | pass |
+| DecodeUp8 | 1,123.47 / 1,508.68 | 0.745 / 0.750 | 4,472 | pass |
+| DecodeUp16 | 1,533.72 / 1,910.94 | 0.803 / 0.807 | 8,568 | pass |
+| DecodeSub8 | 517.24 / 685.78 | 0.754 / 0.759 | 4,472 | pass |
+| DecodeSub16 | 301.91 / 741.90 | 0.407 / 0.412 | 8,568 | pass |
+| DecodeAverage8 | 1,619.39 / 1,849.21 | 0.876 / 0.879 | 4,472 | pass |
+| DecodeAverage16 | 4,102.68 / 4,476.03 | 0.917 / 0.920 | 8,568 | pass |
+| DecodeCancelable16 | 2,950.95 / 2,895.32 | 1.019 / 1.025 | 8,568 | gap |
+| DecodeTightCancelable16 | 3,005.70 / 2,900.91 | 1.036 / 1.041 | 70,272 | gap |
+| DecodeNoCompression8 | 92.78 / 135.99 | 0.682 / 0.686 | 4,472 | pass |
+| DecodeNoCompression16 | 208.13 / 296.12 | 0.703 / 0.708 | 8,568 | pass |
+| DecodeTightCancelable8 | 1,315.05 / 1,392.42 | 0.944 / 0.951 | 68,224 | pass |
+| DecodeGray1 | 54.78 / 308.41 | 0.178 / 0.181 | 504 | pass |
+| DecodeGray2 | 64.14 / 107.30 | 0.598 / 0.605 | 632 | pass |
+| DecodeGray4 | 95.91 / 171.17 | 0.560 / 0.570 | 888 | pass |
+| DecodePalette1 | 50.69 / 83.50 | 0.607 / 0.610 | 568 | pass |
+| DecodePalette2 | 60.06 / 98.17 | 0.612 / 0.615 | 704 | pass |
+| DecodePalette4 | 91.47 / 141.39 | 0.647 / 0.664 | 1,000 | pass |
+| DecodePalette8 | 338.37 / 362.85 | 0.933 / 0.939 | 2,472 | pass |
+| DecodeGray1Adam7 | 253.99 / 1,158.69 | 0.219 / 0.222 | 1,440 | pass |
+| DecodeGrayAlphaPaeth8 | 1,807.90 / 2,002.94 | 0.903 / 0.909 | 2,424 | pass |
+| DecodeGrayPaeth8 | 956.41 / 1,029.75 | 0.929 / 0.932 | 1,400 | pass |
+| DecodeRgbPaeth16 | 3,913.69 / 4,463.85 | 0.877 / 0.880 | 6,520 | pass |
+| DecodeRgbPaeth8 | 2,356.48 / 2,627.15 | 0.897 / 0.906 | 3,448 | pass |
+| DecodePalette4Adam7 | 493.33 / 1,133.13 | 0.435 / 0.437 | 2,608 | pass |
+| DecodePalette8Adam7 | 779.66 / 1,336.12 | 0.584 / 0.590 | 4,976 | pass |
+| DecodePalette8PartialAlpha | 351.76 / 365.63 | 0.962 / 0.969 | 2,224 | pass |
+| DecodePalette8Short | 76.82 / 109.89 | 0.699 / 0.705 | 1,512 | pass |
+| DecodeGray1Transparency | 59.80 / 691.10 | 0.087 / 0.088 | 536 | pass |
+| DecodeGray2Transparency | 64.46 / 499.54 | 0.129 / 0.130 | 664 | pass |
+| DecodeGray16Transparency | 732.70 / 2,054.27 | 0.357 / 0.357 | 2,456 | pass |
+| DecodeGray8Transparency | 352.90 / 760.86 | 0.464 / 0.473 | 1,432 | pass |
+| DecodeRgb16Transparency | 2,259.63 / 3,180.54 | 0.710 / 0.713 | 6,552 | pass |
+| DecodeRgb8Transparency | 1,117.12 / 1,283.24 | 0.871 / 0.873 | 3,480 | pass |
 
-Every job retains twelve actuals, both native brackets, filtered/all-actual
-confidence views and idle-v2 guards, sequentially on one CPU. Validation returns
-an exact independently owned 36-byte metadata descriptor after full coding checks,
-without RGBA normalization. Async includes complete nonseekable acquisition/EOF.
-Decode includes exact full samples, alpha/hidden RGB, normalization, working storage,
-independent output and disposal. Live polling and original tight limits remain.
-Native codec/conversion contexts retain their declared preparation. FFmpeg has no
-equivalent cooperative-admission API. Startup and checks remain outside timing.
+Each control retains twelve actuals, twelve samples in each native bracket,
+filtered/all-actual confidence and idle-v2 guards on one pinned CPU. Inputs,
+sampling/filter/transparency settings and native output are frozen. Decode includes
+parsing, preparation, workspace, full-depth RGBA normalization, independent output
+and disposal. Live cancellation and exact tight-memory ceilings remain. Validation
+checks complete coding and returns metadata without RGBA normalization.
 
-All twenty decoder comparisons use the original worker
-`cfb2403dbdbc4dd4fd1195c64ac64a2fea9c4bc2a0c93a2bd5a38ae004960e2f`, recovered
-byte-exactly with its source/build identity into the prepared isolated root. The
-current ordinary worker differs after encoder-tool changes; it is not substituted.
-The None inputs remain 218,775/960,565 bytes; Adam7 and Paeth retain their own
-frozen packets. RGB/grayscale controls retain their own original color packets.
-Four validation controls retain the
-original natural-frame worker/metadata adapter and their distinct frozen inputs.
-Original proof metadata is borrowed only for the current module identity and
-restored byte-exactly after each job; every descriptor/native/source gate runs.
+Decode samples, alpha/hidden RGB, normal/scalar native CLI output, source
+immutability and independent output ownership pass their original gates. Coding
+validators retain exact metadata and prefix/coding scope checks. The resident
+decode worker `cfb2403d…`, source `a75eaefa…`, compiler/static archives and settings
+remain unchanged in the prepared isolated root; the four coding validators keep
+their separate frozen natural-frame worker and metadata adapter. The existing one-bit grayscale transparency
+control includes its declared native filter/one filter thread; other controls retain
+their declared conversions and threading. Native contexts/wrappers remain prepared.
 
-The first live decode completed successfully, then an overly strict comparison
-against an older reference schema failed: four normal-SIMD readiness fields were
-absent there. The current retained reference carries those exact fields. Strict
-full equality succeeds against it; completed logs are recovered without replay.
-Inputs, worker, output, settings and quality gates are unchanged.
+Measurement DLL `05f30275…` is unchanged from the qualified PNG framing milestone.
+Production changes through `172de02d` affect other codecs, fonts and bicubic resizing;
+PNG decode and shared ownership paths are unchanged. Reuse its Windows/Linux
+5,751-check/scalar/same-package proof. The current library also passes5,850 full/live
+checks and the same actual package on both OSes; this update adds no production or
+package changes. These are source-valid reused proofs, not new runs on all DLLs.
 
-Historical points remain context, not paired causal effects. Tight RGBA16 managed
-time falls 3,120→3,019 µs, while native falls 3,129→2,895 µs: ratio movement alone
-does not establish a managed regression. Current lower 1.033 confirms a gap.
-Word coding validation's 2,806→2,906 µs point is adverse, but upper 0.983 still
-passes. No unchanged favorable repeats or retuning of passing controls.
+B/op measures total managed allocation, separately from peak live capacity and
+retained storage. Complete physical/native peaks are unmeasured. The separate
+[shared-root operation](PNG-PREPARED-PREFIX.md) retains its own paired gain and
+capacity evidence; do not transfer its figures to these resident controls. Stream,
+composition, prefix/Identify and shared-root boundaries keep their own finite
+coverage. This closes missing resident confirmations, not all PNG or283-path parity.
 
-GC totals are per complete operation; peak live capacity and retained pools are
-not newly measured. The shared-root peak/pair in the
-[prepared-prefix report](PNG-PREPARED-PREFIX.md) belongs to its separate two-result
-operation. Do not transfer those figures to these controls or infer CPU effects
-from allocations alone. Existing output ownership/admission qualification remains.
+Historical costs and adverse results remain in [evidence](png-current-framing-costs-evidence.json)
+and its linked raw archives; they are not paired causal effects of this measurement
+update. Passing cases stop; uncertain results are not demonstrated gaps. The earlier
+framing/source reports remain in Git history and the recorded measurement rounds.
 
-The five additional controls preserve their own frozen None/Adam7/Paeth packets,
-including all seven passes and full word samples. The old Adam7 ratio 1.377 is
-superseded by current 0.780; this establishes current passing evidence, not a
-paired causal speed gain. The default word lower 1.0031 confirms a small gap.
-
-The immutable Linux DLL is
-`05f302755073e4711cdecd7158ce5aa37165bcbc2bf0fe6f9c67eaedf825befb`.
-Reuse Windows/Linux **5,751 full/live checks**, affected normal/scalar and the SAME
-actual Release package/all three examples from LPP437. No rebuild, new profile,
-matrix expansion, repeated full suite or package proof is required. Published
-releases remain unchanged; publication is postponed.
-
-[Evidence](png-current-framing-costs-evidence.json) keeps current scope, points,
-guards, reference recovery and qualified-source reuse. Raw
-`png-current-framing-costs.tar.xz`: 1,970,652 bytes / 110 members, SHA256
-`def1bbc0127a093e3623a3bd50c053d6ea0ac88c3a834deebff3af0fc19afefe`,
-mirrored and member-verified with pinned dependencies. Seven displayed numerical
-rows refresh; 118 reuse unchanged paths. Historical cursor/indexed/tight studies
-remain linked history and no longer supply renderer assertions. Full 283-path
-parity remains open. The five additional records are retained in
-`png-core-word-current-costs.tar.xz`: 2,279,384 bytes / 73 members, SHA256
-`e64816b63d7dbde293403b3a1fe682e38f6464501a6283787b51e54c76022555`, mirrored/member-verified
-with pinned dependencies. The current evidence file lists the 27 remaining
-already-required WarmPng decode cases. No new grid, full actual-package release
-refresh or broad PNG pass is claimed.
-
-The six color/depth controls retain complete source-to-RGBA normalization. Five
-pass; RGB16 lower1.026/upper1.062 establishes a gap. No historical point comparison
-establishes a causal gain. Their raw `png-color-current-costs.tar.xz` is 2,734,300
-bytes / 90 members, SHA256
-`725e794723ec992403ceb1fc77efc898889fe242dd3f73e20ca38d968efc4e4f`, mirrored and
-member-verified, with pinned dependencies. The immutable DLL and qualification
-remain unchanged; no repeat full suite or package proof.
-
-Both depths of Up/Sub/Average pass and stop. Before timing, their original
-encoded/raster hashes match the frozen controls; the cached builders/runtime
-are unchanged. Full output/settings/boundary gates pass again after timing.
-Raw `png-filter-current-costs.tar.xz`: 1,349,712 bytes / 84 members, SHA256
-`f1fc8bd0cbeeaa76c216014da77a6eb4c2871271f1cb10eab0c41b4660e337ec`, mirrored and
-member-verified with pinned dependencies. No builds, new images or repeated
-qualification. These are current costs, not paired speedup claims. The remaining
-27 named decode cases stay on the checklist while independent larger codec work
-proceeds; pending confirmations do not block that work.
+The final batch raw `png-remaining-current-costs.tar.xz`, SHA256
+`6f763998fe9c148045fa65278e25bb74edc9cfacb0674f4c66973acca8b837e3`, 5512732B/338members,
+is mirrored/member-verified with frozen input and tool providers. Earlier rounds
+retain their original raw identities. Publication remains postponed.
