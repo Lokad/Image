@@ -22,16 +22,16 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Complete bilinear enlargement | [Current boundary audit](bilinear-current-boundary-evidence.json) reuses the qualified immutable build without production changes or rebuilds. Existing RGBA8 Up8 measures2357.04µs/native2155.92µs, ratio1.093/upper1.134/lower.971: uncertain.102891B/op includes fresh~103KBhorizontal preparation and independent output ownership; the unchanged4MiBdefault pool reuses output backing. Older2914.62µs/2235512Bcost is superseded, not paired causal gain evidence. Native graph/context preparation remains retained and labeled. Stop tuning this uncertain case while larger demonstrated gaps remain. |
 | Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
-| Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. Other current fill/copy/composite/font costs remain in the summary. |
+| Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. [Owned font preparation](FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw against a contemporary original; current294.11/native13.95µs,upper21.246 remains gap. Owned capacity unchanged, allocation~758KB; no peak reduction inferred. Other current fill/copy/composite costs remain in the summary. |
 
-The current [VP8 validation milestone](VP8-VALIDATION-MATERIALIZATION.md) qualifies
-5,772 full/live checks per OS (2,515 internal / 2,309 public / 948 differential),
-69 internal / 65 public per normal/scalar mode, and the SAME actual private Release
-package/all three examples on Windows/Linux. No ISA selection changes; existing
-portable/vector evidence remains valid. One immutable final main/embedded per OS;
-zero benchmark/native/selector/fixture builds. Two displayed costs refresh; 123
-numerical rows reuse unchanged paths. [JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md),
-[four-mode trellis](VP8-FOUR-MODE-TRELLIS.md) and [prepared-prefix PNG](PNG-PREPARED-PREFIX.md)
+The current [owned-font preparation milestone](FONT-LOAD-PREPARATION.md) qualifies
+5,774 full/live checks per OS (2,515 internal / 2,311 public / 948 differential),
+204 internal / 144 public per normal/scalar mode, and the SAME actual private
+Release package/all three examples on Windows/Linux. No ISA selection changes;
+existing portable/vector evidence remains valid. One immutable main/embedded/public
+build per OS; zero benchmark/native/selector/fixture builds. One displayed cost
+refreshes; 124 numerical rows reuse unchanged paths. [VP8 validation](VP8-VALIDATION-MATERIALIZATION.md),
+[JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md) and the linked family reports
 retain source-valid evidence and pinned raw history. The 283-path objective remains open.
 The following [seven-control refresh](PNG-CURRENT-FRAMING-COSTS.md) changes no production:
 seven current independentconfirmations,5pass/2gap,7displayedrowsfresh/118numbersreused.

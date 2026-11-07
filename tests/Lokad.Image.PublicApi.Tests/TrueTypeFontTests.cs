@@ -198,4 +198,42 @@ public sealed class TrueTypeFontTests
             catch (UnsupportedImageException) { }
         }
     }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void GlyphScanFailuresReleaseTheOwnedCopyAndAllowSubsequentLoads(bool longLocations)
+    {
+        var original = AuthoredTrueType.Build(longLocations: longLocations);
+        using var root = new TestMemoryBudget(original.Length + 256L);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 2L * original.Length + 256 };
+        foreach (var field in new[] { "first-range", "last-range", "reverse", "short-header", "x-bounds", "y-bounds" })
+        {
+            var input = original.ToArray();
+            var loca = AuthoredTrueType.Offset(input, "loca"); var glyf = AuthoredTrueType.Offset(input, "glyf");
+            void Location(int index, uint value)
+            {
+                if (longLocations) AuthoredTrueType.W32(input, loca + index * 4, value);
+                else AuthoredTrueType.W16(input, loca + index * 2, (int)(value / 2));
+            }
+            switch (field)
+            {
+                case "first-range": Location(0, longLocations ? uint.MaxValue : 131070); break;
+                case "last-range": Location(8, longLocations ? uint.MaxValue : 131070); break;
+                case "reverse": Location(3, 0); break;
+                case "short-header": Location(1, longLocations ? 9u : 8u); break;
+                case "x-bounds": AuthoredTrueType.W16(input, glyf + 2, short.MaxValue); break;
+                default: AuthoredTrueType.W16(input, glyf + 4, short.MaxValue); break;
+            }
+            var unchanged = input.ToArray();
+            Assert.Throws<ImageDataException>(() => TrueTypeFont.Load(input, limits));
+            Assert.Equal(unchanged, input); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+            using (var recovered = TrueTypeFont.Load(original, limits))
+            {
+                Assert.Equal(original.Length + 256L, recovered.StorageBytes);
+                Assert.Equal(recovered.StorageBytes, root.Bytes);
+                Assert.Equal(600, recovered.GetGlyphMetrics(2).AdvanceWidth);
+            }
+            Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        }
+    }
 }

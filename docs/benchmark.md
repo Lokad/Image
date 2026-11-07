@@ -112,8 +112,13 @@ Current scope and remaining work:
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
+  [Owned font preparation](../benchmarks/FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw
+  on complete loading,294.11µs versus labeledFreeType13.95µs, upper21.246 still a gap.
+  Source/metrics and eager/lazy validation disclosure remain; allocation stays~758KB,
+  retained owned capacity is unchanged and no peak reduction is inferred. One cost
+  refreshes; other124 numerical rows reuse unchanged paths.
 
-The current production build passes **5,772 full/live checks per OS**, affected
+The current production build passes **5,774 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -252,7 +257,7 @@ settings do not establish matched quality.
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.19 | 1.57 | 0.759 / 0.775 | 56 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.29 | 4.20 | 0.546 / 0.567 | 56 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (gap) | 4.18 | 3.78 | 1.106 / 1.152 | 112 |
-| Font loading / FreeType 2.13.2 (gap) | 339.68 | 14.88 | 22.824 / 23.618 | 757,598 |
+| Font loading / FreeType 2.13.2 (gap) † | 294.11 | 13.95 | 21.089 / 21.246 | 757,597 |
 | Wrapped logical layout / SixLabors public API (pass) | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 |
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |

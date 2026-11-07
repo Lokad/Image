@@ -1346,6 +1346,15 @@ def render():
     assert allocation_values['DrawText8'] == allocation_values['DrawText16']
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
+    font_load = json.loads((ROOT / 'benchmarks/font-load-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert font_load['productionAccepted'] and font_load['requiredMaterialPaths'] == 283
+    assert font_load['sourceProof']['onlyOwnedCopyAndLoadValidationPreparationChanged']
+    assert font_load['raw']['mirrored'] and font_load['raw']['allMembersVerified']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for v in font_load['comparison']['views'].values())
+    assert font_load['current']['librarySha256'] == font_load['producers']['linuxSha256']
+    assert font_load['current']['allOriginalGatesPassed'] and font_load['current']['conservativeRatioLower'] > 1
+    assert font_load['storage']['addedOwnedPayloadBytes'] == font_load['storage']['addedRetainedStateBytes'] == 0
     composites = json.loads((ROOT / 'benchmarks/compositing-shared-rows-evidence.json').read_text(encoding='utf-8'))
     assert composites['productionAccepted'] and composites['independentQuietConfirmation']
     assert composites['qualification']['fullChecksEachOs'] == 5423
@@ -1358,7 +1367,8 @@ def render():
     assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert all(c['rawGainConfidenceSeparates'] and c['normalizedGainConfidenceSeparates'] for c in raster['comparison'])
     for case_id, previous in text_current['observations'].items():
-        case = raster['cases'].get(case_id, composites['cases'].get(case_id, previous))
+        case = (font_load['current'] if case_id == 'FontLoadRegular'
+                else raster['cases'].get(case_id, composites['cases'].get(case_id, previous)))
         if case_id in raster['cases']:
             assert case['librarySha256'] == raster['producers']['linuxSha256']
             assert case['validation']['frozenManagedObservationsExact']
@@ -1371,7 +1381,8 @@ def render():
         assert case['approvedScopeDate'] == '2026-11-02'
         native_mean = min(bracket['mean'] for bracket in case['nativeBrackets'])
         status = 'pass' if case['status'] == 'Confirmed pass' else 'gap' if case['status'] == 'Confirmed gap' else 'confidence open'
-        rows.append(('editing', f'| {case["label"]} ({status}) | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
+        mark = ' †' if case_id == 'FontLoadRegular' else ''
+        rows.append(('editing', f'| {case["label"]} ({status}){mark} | {case["managed"]["statistics"]["Mean"] / 1000:,.2f} | '
                      f'{native_mean / 1000:,.2f} | {case["worstBracketRatio"]:.3f} / {case["conservativeRatioUpper"]:.3f} | '
                      f'{case["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
     lanczos_current = json.loads((ROOT / 'benchmarks/lanczos-paired-certificate-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1705,8 +1716,8 @@ def render():
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
-    vq = decoder_owned['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5772
+    vq = font_load['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5774
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1978,6 +1989,11 @@ Current scope and remaining work:
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
+  [Owned font preparation](../benchmarks/FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw
+  on complete loading,294.11µs versus labeledFreeType13.95µs, upper21.246 still a gap.
+  Source/metrics and eager/lazy validation disclosure remain; allocation stays~758KB,
+  retained owned capacity is unchanged and no peak reduction is inferred. One cost
+  refreshes; other124 numerical rows reuse unchanged paths.
 
 The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples

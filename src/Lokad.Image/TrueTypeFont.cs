@@ -40,7 +40,11 @@ public sealed partial class TrueTypeFont : IDisposable
         var context = InputContext(input.Length, limits, cancellationToken);
         try
         {
-            var font = new TrueTypeFont(input.ToArray(), context) { storageOwner = context };
+            // Admission owns this exact capacity before allocation. Copy every
+            // byte before parsing or publishing the independently owned face.
+            var owned = GC.AllocateUninitializedArray<byte>(input.Length);
+            input.CopyTo(owned);
+            var font = new TrueTypeFont(owned, context) { storageOwner = context };
             return font;
         }
         catch { context.Dispose(); throw; }
@@ -140,13 +144,18 @@ public sealed partial class TrueTypeFont : IDisposable
         glyf = Required("glyf"u8, context); loca = Required("loca"u8, context); hmtx = Required("hmtx"u8, context);
         if ((GlyphCount + 1L) * locationWidth > loca.Length || metricCount * 4L + (GlyphCount - metricCount) * 2L > hmtx.Length)
             throw new ImageDataException("Truncated glyph locations or horizontal metrics.");
-        var first = Location(0);
+        // Directory and total loca extent are validated above. Borrow the two
+        // table views once for the complete glyph-header scan.
+        var locations = Span(loca); var glyphs = Span(glyf);
+        var first = locationWidth == 2 ? (uint)U16(locations) * 2 : U32(locations);
         if (first > glyf.Length) throw new ImageDataException("Invalid glyph location.");
         for (var i = 0; i < GlyphCount; i++)
         {
-            context.Cancellation.ThrowIfCancellationRequested(); var last = Location(i + 1);
+            context.Cancellation.ThrowIfCancellationRequested();
+            var location = locations[((i + 1) * locationWidth)..];
+            var last = locationWidth == 2 ? (uint)U16(location) * 2 : U32(location);
             if (last < first || last > glyf.Length) throw new ImageDataException("Invalid glyph location ordering.");
-            if (last != first) Header(data.AsSpan(glyf.Offset + (int)first, (int)(last - first)));
+            if (last != first) Header(glyphs.Slice((int)first, (int)(last - first)));
             first = last;
         }
         cmap = SelectMapping(context); cmapFormat = U16(Span(cmap));
@@ -174,6 +183,7 @@ public sealed partial class TrueTypeFont : IDisposable
     private static void Header(ReadOnlySpan<byte> glyph)
     {
         if (glyph.Length < 10) throw new ImageDataException("Invalid glyph header.");
+        glyph = glyph[..10];
         if (I16(glyph) != 0 && (I16(glyph[2..]) > I16(glyph[6..]) || I16(glyph[4..]) > I16(glyph[8..])))
             throw new ImageDataException("Invalid glyph bounds.");
     }

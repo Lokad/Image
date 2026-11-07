@@ -1,14 +1,14 @@
 # Current text and drawing comparisons
 
 All nine controls have independent twelve-actual measurements with reference
-brackets and passing quiet-VM guards. Five unchanged font/layout/fitting controls
-reuse valid costs; shared compositing rows and active-edge raster scheduling
-provide the other four current comparisons. Times are µs; upper bounds include
+brackets and passing quiet-VM guards. Four unchanged layout/fitting controls
+reuse valid costs; owned font preparation, shared compositing rows and active-edge
+raster scheduling provide the other five comparisons. Times are µs; upper bounds include
 filtered/all-sample confidence.
 
 | Complete operation / reference | Lokad µs | Reference µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Font loading / FreeType 2.13.2 | 339.68 | 14.88 | 22.824 / 23.618 | 757,598 | Confirmed gap |
+| Font loading / FreeType 2.13.2 | 294.11 | 13.95 | 21.089 / 21.246 | 757,597 | Confirmed gap |
 | Wrapped logical layout / SixLabors public API | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 | Confirmed pass |
 | Latin OpenType layout / SixLabors public API | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 | Confirmed pass |
 | Arabic OpenType layout / SixLabors public API | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 | Confirmed pass |
@@ -36,7 +36,10 @@ drawing controls. [Earlier preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) is hi
 
 Font loading compares copy/open/retain/dispose on the frozen DejaVu Sans face
 against FreeType 2.13.2. Eager/lazy validation differs; this is not general parser
-equivalence. RGBA8 composites use FFmpeg with native RGB≤1/RMSE≤.5 and exact alpha,
+equivalence. [Owned font preparation](FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw
+against a contemporary original, with raw/normalized confidence separated. Owned
+capacity is unchanged; the rounded one-byte allocation difference is not a causal
+reduction. The reference gap remains open. RGBA8 composites use FFmpeg with native RGB≤1/RMSE≤.5 and exact alpha,
 untouched and zero-source-alpha pixels. RGBA16 uses explicitly labeled ImageSharp
 3.1.12 Rgba64 SrcOver, RGB/alpha≤1 and RMSE≤.25 each; it is not FFmpeg performance.
 Managed composition remains exact.
@@ -49,5 +52,5 @@ Current evidence: [active-edge scheduling](text-active-edge-scheduling-evidence.
 [original confirmations](text-drawing-current-evidence.json) and
 [allocation controls](TEXT-DRAWING-ALLOCATION-CONTROLS.md) retain superseded drawing
 costs, initial driver failures/corrections and raw archive identities. Their
-unchanged font/layout/fitting results remain valid; historical costs are not
+unchanged layout/fitting results remain valid; historical font/drawing costs are not
 substituted for refreshed drawing measurements.
