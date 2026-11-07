@@ -19,8 +19,8 @@ internal ref partial struct JpegDecoder
     private Component[] components;
     private int position, maxH, maxV, mcuColumns, mcuRows, restartInterval;
     private bool progressive, frameSeen, scanSeen, rgb, directBaseline, validateBaseline;
-    private bool allowRgbResult;
-    private ImageBuffer? rgbResult;
+    private bool allowInterleavedResult;
+    private ImageBuffer? interleavedResult;
 
     private sealed class Component
     {
@@ -43,7 +43,7 @@ internal ref partial struct JpegDecoder
         components = []; position = 2; maxH = 0; maxV = 0; mcuColumns = 0; mcuRows = 0; restartInterval = 0;
         progressive = false; frameSeen = false; scanSeen = false; rgb = false;
         directBaseline = false; validateBaseline = false;
-        allowRgbResult = false; rgbResult = null;
+        allowInterleavedResult = false; interleavedResult = null;
     }
 
     public ImageBuffer Decode() => DecodeCore(validateOnly: false)!;
@@ -58,7 +58,7 @@ internal ref partial struct JpegDecoder
     {
         directBaseline = !validateOnly;
         validateBaseline = validateOnly;
-        allowRgbResult = !validateOnly;
+        allowInterleavedResult = !validateOnly;
         var adobeTransform = -1;
         try
         {
@@ -82,10 +82,10 @@ internal ref partial struct JpegDecoder
                     }
                     if (components.Length == 4) return RenderCmyk(adobeTransform);
                     if (adobeTransform == 2) throw UnsupportedColorTransform();
-                    if (rgbResult is { } completed)
+                    if (interleavedResult is { } completed)
                     {
                         context.Cancellation.ThrowIfCancellationRequested();
-                        rgbResult = null; return completed;
+                        interleavedResult = null; return completed;
                     }
                     return Render();
                 }
@@ -112,7 +112,7 @@ internal ref partial struct JpegDecoder
         }
         finally
         {
-            rgbResult?.Dispose(); rgbResult = null;
+            interleavedResult?.Dispose(); interleavedResult = null;
             foreach(var component in components)
             {
                 if(component is null || component.Coefficients.Length==0)continue;
@@ -178,17 +178,18 @@ internal ref partial struct JpegDecoder
         mcuColumns = (info.Width + 8 * maxH - 1) / (8 * maxH);
         mcuRows = (info.Height + 8 * maxV - 1) / (8 * maxV);
         // The bounded header pass already examined the entire container. Only
-        // an unambiguous final RGB declaration selects this retained result;
+        // a final RGB or four-component declaration selects this retained result;
         // caller sample buffers and validation keep their original storage.
-        if (allowRgbResult && !progressive && count == 3 && info.SourceColor == SourceColorModel.Rgb)
+        if (allowInterleavedResult && !progressive && (count == 3 && info.SourceColor == SourceColorModel.Rgb
+            || count == 4 && info.SourceColor is SourceColorModel.Cmyk or SourceColorModel.Ycck))
         {
             var fullResolution = true;
             foreach (var component in components)
                 fullResolution &= component.H == maxH && component.V == maxV;
             if (fullResolution)
             {
-                rgbResult = ImageBuffer.AllocateForOverwrite(info.Width, info.Height, 8, context);
-                rgbResult.Orientation = info.Orientation;
+                interleavedResult = ImageBuffer.AllocateForOverwrite(info.Width, info.Height, 8, context);
+                interleavedResult.Orientation = info.Orientation;
             }
         }
         foreach (var component in components)
@@ -200,8 +201,8 @@ internal ref partial struct JpegDecoder
             if (countValues > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG coefficient plane is too large.");
             if (!progressive && (directBaseline || validateBaseline))
             {
-                context.Reserve((directBaseline && rgbResult is null ? countValues : 0) + 64 * 4);
-                if (directBaseline && rgbResult is null) component.Plane = new byte[(int)countValues];
+                context.Reserve((directBaseline && interleavedResult is null ? countValues : 0) + 64 * 4);
+                if (directBaseline && interleavedResult is null) component.Plane = new byte[(int)countValues];
             }
             else
             {
@@ -297,7 +298,17 @@ internal ref partial struct JpegDecoder
         var reader = new JpegEntropyReader(data, position, context);
         if (!progressive && (directBaseline || validateBaseline))
         {
-            ReadBaselineBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, interleaved, directBaseline);
+            var stagingBytes = directBaseline && interleaved && count == components.Length && interleavedResult is not null
+                ? count * maxH * maxV * 64 : 0;
+            if (stagingBytes != 0 && context.RemainingWorkingBytes >= stagingBytes)
+            {
+                // Local workspace selection precedes shared admission. Refusal
+                // terminates the operation; the private result never escapes.
+                context.Reserve(stagingBytes);
+                ReadComponentMcuBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, stagingBytes);
+                context.Release(stagingBytes);
+            }
+            else ReadBaselineBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, interleaved, directBaseline, default);
             reader.Align(); position = reader.Position;
             return;
         }
@@ -911,16 +922,20 @@ internal ref partial struct JpegDecoder
         var x = 0;
         if (Avx2.IsSupported)
             for (; x <= red.Length - 8; x += 8)
-            {
-                var r = WidenSamples8(red.Slice(x, 8)).AsUInt32();
-                var g = Avx2.ShiftLeftLogical(WidenSamples8(green.Slice(x, 8)).AsUInt32(), 8);
-                var b = Avx2.ShiftLeftLogical(WidenSamples8(blue.Slice(x, 8)).AsUInt32(), 16);
-                Avx2.Or(Avx2.Or(r, g), Avx2.Or(b, Vector256.Create(0xFF000000u))).AsByte().CopyTo(rgba.Slice(x * 4, 32));
-            }
+                WriteComponents8(red.Slice(x, 8), green.Slice(x, 8), blue.Slice(x, 8), Vector256.Create(0xff000000u), rgba.Slice(x * 4, 32));
         for (; x < red.Length; x++)
         {
             rgba[x * 4] = red[x]; rgba[x * 4 + 1] = green[x]; rgba[x * 4 + 2] = blue[x]; rgba[x * 4 + 3] = 255;
         }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void WriteComponents8(ReadOnlySpan<byte> red, ReadOnlySpan<byte> green, ReadOnlySpan<byte> blue, Vector256<uint> fourth, Span<byte> rgba)
+    {
+        var r = WidenSamples8(red).AsUInt32();
+        var g = Avx2.ShiftLeftLogical(WidenSamples8(green).AsUInt32(), 8);
+        var b = Avx2.ShiftLeftLogical(WidenSamples8(blue).AsUInt32(), 16);
+        Avx2.Or(Avx2.Or(r, g), Avx2.Or(b, fourth)).AsByte().CopyTo(rgba);
     }
 
     private static Vector256<int> WidenSamples8(ReadOnlySpan<byte> samples)

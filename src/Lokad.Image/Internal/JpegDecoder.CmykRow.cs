@@ -5,6 +5,38 @@ namespace Lokad.Image.Internal;
 
 internal ref partial struct JpegDecoder
 {
+    // The private full-resolution result holds four raw components until EOI.
+    // Read every lane before replacing K with opaque alpha. Keep the pinned
+    // Q16 reciprocal, including its deliberately non-rounded white endpoint.
+    internal static void RenderCmykInPlace(Span<byte> pixels, bool inverted)
+    {
+        if (pixels.Length % 4 != 0) throw new ArgumentException("CMYK pixels require four bytes per pixel.");
+        var offset = 0;
+        if (Avx2.IsSupported)
+        {
+            var mask = Vector256.Create(255u);
+            var scale = Vector256.Create((uint)JpegBlackColor.ProductScale);
+            for (; offset <= pixels.Length - 32; offset += 32)
+            {
+                var raw = Vector256.Create(pixels.Slice(offset, 32)).AsUInt32();
+                if (!inverted) raw = ~raw;
+                var black = Avx2.ShiftRightLogical(raw, 24);
+                var red = Product(raw & mask, black, scale);
+                var green = Avx2.ShiftLeftLogical(Product(Avx2.ShiftRightLogical(raw, 8) & mask, black, scale), 8);
+                var blue = Avx2.ShiftLeftLogical(Product(Avx2.ShiftRightLogical(raw, 16) & mask, black, scale), 16);
+                (red | green | blue | Vector256.Create(0xff000000u)).AsByte().CopyTo(pixels.Slice(offset, 32));
+            }
+        }
+        for (; offset < pixels.Length; offset += 4)
+        {
+            var pixel = pixels.Slice(offset, 4);
+            JpegBlackColor.WriteCmyk(pixel[0], pixel[1], pixel[2], pixel[3], inverted, pixel, 4);
+        }
+
+        static Vector256<uint> Product(Vector256<uint> value, Vector256<uint> black, Vector256<uint> scale)
+            => Avx2.ShiftRightLogical(Avx2.MultiplyLow(Avx2.MultiplyLow(value, black), scale), 16);
+    }
+
     internal static void RenderCmykRow(ReadOnlySpan<byte> cyan, ReadOnlySpan<byte> magenta, ReadOnlySpan<byte> yellow,
         ReadOnlySpan<byte> black, bool inverted, Span<byte> output)
     {

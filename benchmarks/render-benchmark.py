@@ -901,64 +901,6 @@ def render():
         rows.append(('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | '
                      f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                      f'{current["allocatedBytes"]:,} | — |'))
-    dense_cmyk = json.loads((ROOT / 'benchmarks/current-dense-cmyk-jpeg-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not dense_cmyk['productionChanged'] and dense_cmyk['status']['CmykAdobeGeneral'] == 'confirmed-pass'
-    assert dense_cmyk['oracle']['independentArbitraryPrecisionMatrix'] and dense_cmyk['oracle']['normalScalarNativeAndManagedExact']
-    assert dense_cmyk['windowsProof']['normalScalarIndependentMatrixAndNativeExact'] and dense_cmyk['restoration']['originalDerivedFixtureByteExact']
-    observation = dense_cmyk['cases']['CmykAdobeGeneral'][-1]
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == dense_cmyk['producers']['linuxSha256']
-    assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] == dense_cmyk['oracle']['rgbaSha256']
-    assert observation['conservativeRatioUpper'] <= 1 and all(q['passed'] for q in observation['quietness'].values())
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    rows.append(('codec', f'| JPEG dense CMYK, resident decode (confirmed pass) † | {stats["Mean"] / 1000:,.2f} | '
-                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
-    horizontal_cmyk = json.loads((ROOT / 'benchmarks/current-horizontal-cmyk-jpeg-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not horizontal_cmyk['productionChanged'] and horizontal_cmyk['status']['CmykAdobeAc'] == 'confirmed-gap'
-    assert horizontal_cmyk['comparisonLowerBound'] > 1
-    assert horizontal_cmyk['oracle']['independentIntegerQ14Q16'] and horizontal_cmyk['oracle']['managedAndNativeNormalScalarExact']
-    assert horizontal_cmyk['windowsProof']['managedNormalScalarIndependentOracleAndNativeExact'] and horizontal_cmyk['restoration']['originalDerivedFixtureByteExact']
-    observation = horizontal_cmyk['cases']['CmykAdobeAc'][-1]
-    receipt, stats = observation['receipt'], observation['managed']['statistics']
-    assert receipt['librarySha256'] == horizontal_cmyk['producers']['linuxSha256']
-    assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] == horizontal_cmyk['oracle']['rgbaSha256']
-    assert all(q['passed'] for q in observation['quietness'].values())
-    assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-    rows.append(('codec', f'| JPEG horizontal-only CMYK, resident decode † | {stats["Mean"] / 1000:,.2f} | '
-                 f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                 f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                 f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |'))
-    owned_cmyk = json.loads((ROOT / 'benchmarks/owned-cmyk-frame-unqualified-evidence.json').read_text(encoding='utf-8'))
-    assert not owned_cmyk['accepted'] and not owned_cmyk['productionChanged']
-    assert not owned_cmyk['decisions']['confirm']['passed'] and owned_cmyk['decisions']['short']['independentConfirmationAllowed']
-    assert owned_cmyk['memory']['allocatedFractionRemoved'] > .5
-    assert all(v['productionSourceAndTestSourceRestored'] and v['bothTestAssembliesRestored'] for v in owned_cmyk['restoration'].values())
-    completed_rows = json.loads((ROOT / 'benchmarks/warm-jpeg-completed-row-reuse-evidence.json').read_text(encoding='utf-8'))
-    assert completed_rows['accepted'] and completed_rows['decisions']['confirm']['defaultFivePercentPassed']
-    assert completed_rows['decisions']['confirm']['normalizedSeparated']
-    assert completed_rows['qualification']['fullChecksEachOs'] == 5291
-    assert completed_rows['qualification']['sameActualPackageBothOs']
-    assert completed_rows['qualification']['package']['sha256'] == completed_rows['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert completed_rows['correctness']['headersAndOraclesRestored']['originalHeadersAndOraclesRestoredByteExact']
-    assert completed_rows['memory']['newOwnedCapacityBytes'] == 0
-    assert len(completed_rows['sourceScope']['noCalls']) == 8
-    for key, label in [('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('NativeDecode420', 'JPEG baseline420, resident decode')]:
-        observation = completed_rows['cases'][key][-1]
-        receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert receipt['librarySha256'] == completed_rows['producers']['linuxSha256']
-        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert all(q['passed'] for q in observation['quietness'].values())
-        assert completed_rows['comparisonLowerBounds'][key] > 1
-        new_row = (f'| {label} † | {stats["Mean"] / 1000:,.2f} | '
-                   f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
-                   f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                   f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | — |')
-        matches = [i for i, (kind, row) in enumerate(rows) if kind == 'codec' and row.startswith('| ' + label) ]
-        assert len(matches) == 1, (key, matches)
-        rows[matches[0]] = ('codec', new_row)
     wide_current = json.loads((ROOT / 'benchmarks/wide-bicubic-independent-repair-evidence.json').read_text(encoding='utf-8'))
     assert wide_current['accepted'] and wide_current['decision']['normalizedSeparated']
     assert wide_current['independentQuietConfirmations'] == len(wide_current['cases']) == 8
@@ -1123,21 +1065,6 @@ def render():
                               f'{ratio:.3f} / {upper:.3f} | {allocated:,} | {packet_bytes:,} / {native_bytes:,} |')
                 updated_gray += 1
     assert updated_gray == 2
-    baseline_gray_cost = json.loads((ROOT / 'benchmarks/current-baseline-grayscale-jpeg-decode-cost-evidence.json').read_text(encoding='utf-8'))
-    assert not baseline_gray_cost['productionChanged'] and baseline_gray_cost['allBuilds'] == 0
-    assert baseline_gray_cost['producers'] == factored_jpeg16['producers']
-    assert baseline_gray_cost['correctness']['allSixPixelOutputsExact']
-    assert baseline_gray_cost['pixelReconciliation']['catalog']['firstSetupActuals'] == 0
-    assert len(baseline_gray_cost['cases']['OwnedDecodeGray'][-1]['managed']['actual']) == 12
-    owned_cmyk_current = json.loads((ROOT / 'benchmarks/current-owned-cmyk-jpeg-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not owned_cmyk_current['productionChanged'] and owned_cmyk_current['allBuilds'] == 0
-    assert owned_cmyk_current['status']['CmykAdobe'] == 'confirmed-confidence-open'
-    dc_cmyk = owned_cmyk_current['cases']['CmykAdobe'][-1]
-    assert owned_cmyk_current['comparisonLowerBound'] <= 1 < dc_cmyk['conservativeRatioUpper']
-    assert len(dc_cmyk['managed']['actual']) == 12 and all(q['passed'] for q in dc_cmyk['quietness'].values())
-    assert dc_cmyk['receipt']['managedOutputSha256'] == dc_cmyk['receipt']['nativeOutputSha256']
-    assert owned_cmyk_current['restoration']['originalDerivedFixtureRestoredByteExact']
-    assert owned_cmyk_current['qualificationReused']['sameActualReleasePackageProofReused']
     jpeg444_rows = json.loads((ROOT / 'benchmarks/jpeg444-row-normalization-evidence.json').read_text(encoding='utf-8'))
     assert jpeg444_rows['accepted'] and jpeg444_rows['decision']['normalizedSeparated']
     assert all(q['total'] == 5342 for q in jpeg444_rows['qualification'].values())
@@ -1160,38 +1087,6 @@ def render():
                        f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | 133,039 / 133,041 |')
         position = next(i for i, (kind, row) in enumerate(rows) if row.startswith('| ' + label))
         rows[position] = ('codec', replacement)
-    jpeg444_decode = json.loads((ROOT / 'benchmarks/current-baseline-jpeg444-decode-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not jpeg444_decode['productionChanged'] and jpeg444_decode['allBuilds'] == 0
-    assert jpeg444_decode['producers'] == jpeg444_rows['producers']
-    for case in ['Decode8', 'NativeDecode8', 'NativeDecodeCancelable8']:
-        observation = jpeg444_decode['cases'][case][-1]
-        receipt = observation['receipt']
-        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
-        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
-        assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
-        assert jpeg444_decode['comparisonLowerBounds'][case] > 1
-    direct_rgb = json.loads((ROOT / 'benchmarks/current-direct-rgb-jpeg-decode-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not direct_rgb['productionChanged'] and direct_rgb['workflow']['allMeasurementBuilds'] == 0
-    assert direct_rgb['producers'] == jpeg444_rows['producers']
-    for case in ['DirectRgb444', 'DirectRgb422', 'DirectRgb420']:
-        observation = direct_rgb['cases'][case][-1]
-        receipt = observation['receipt']
-        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
-        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
-        assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
-        assert direct_rgb['comparisonLowerBounds'][case] > 1
-    caller_samples = json.loads((ROOT / 'benchmarks/current-caller-jpeg-decode-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not caller_samples['productionChanged'] and caller_samples['workflow']['allBuilds'] == 0
-    assert caller_samples['producers'] == jpeg444_rows['producers']
-    for case in ['Gray', 'Rgb']:
-        observation = caller_samples['cases'][case][-1]
-        receipt = observation['receipt']
-        assert len(observation['managed']['actual']) == 12 and all(q['passed'] for q in observation['quietness'].values())
-        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
-        assert receipt['librarySha256'] == jpeg444_rows['producers']['linuxSha256']
-        assert receipt['callerPaddingUnchanged'] and receipt['independentOwnedOutput'] and receipt['noRgbaIntermediate']
-    assert caller_samples['comparisonLowerBounds']['Gray'] > 1
-    assert caller_samples['cases']['Rgb'][-1]['conservativeRatioUpper'] < 1
     mixed_costs = json.loads((ROOT / 'benchmarks/current-default-mixed-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
     assert not mixed_costs['productionChanged'] and mixed_costs['allBuilds'] == mixed_costs['newCases'] == 0
     assert mixed_costs['producers'] == jpeg444_rows['producers']
@@ -1269,37 +1164,24 @@ def render():
                 updated_vertical += 1
     assert updated_vertical == 3
     # Retained gains remain claims about their original paired experiments.
-    jpeg_rgb_result = json.loads((ROOT / 'benchmarks/jpeg-direct-rgb-result-evidence.json').read_text(encoding='utf-8'))
-    caller_ycck = json.loads((ROOT / 'benchmarks/jpeg-caller-ycck-row-evidence.json').read_text(encoding='utf-8'))
-    for retained in [jpeg_rgb_result, caller_ycck]:
-        assert retained['accepted'] and retained['decision']['passed'] and retained['decision']['normalizedSeparated']
-        assert retained['qualification']['sameActualPackageBothOs']
-        assert retained['raw']['mirrored'] and retained['raw']['allMembersVerified']
-    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-container-scan-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_scan['accepted'] and jpeg_scan['decision']['passed'] and jpeg_scan['decision']['normalizedSeparated']
-    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5369
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-component-frame-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_scan['productionAccepted'] and jpeg_scan['requiredMaterialPaths'] == 283
+    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5845
     assert jpeg_scan['qualification']['sameActualPackageBothOs']
     assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
-    assert len(jpeg_scan['cases']) == 29
-    assert jpeg_scan['cases']['Decode8']['status'] == 'confirmed-pass-stop'
+    assert jpeg_scan['sourceProof']['fourFileSourceProjectionEqualsQualifiedOriginal']
+    assert jpeg_scan['sourceProof']['originalRgb8ArithmeticExact']
+    assert len(jpeg_scan['cases']) == 23
+    assert jpeg_scan['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_scan['cases'].values())
+                                        for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
     for cost in jpeg_scan['cases'].values():
-        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12 and cost['quietGuardsPassed']
-        assert (cost['status'] == 'confirmed-pass-stop') == (cost['upper'] <= 1)
+        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
+        assert cost['librarySha256'] == jpeg_scan['producers']['linuxSha256']
+        assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
-    jpeg_confidence = json.loads((ROOT / 'benchmarks/current-jpeg-confidence-evidence.json').read_text(encoding='utf-8'))
-    assert not jpeg_confidence['productionChanged'] and jpeg_confidence['allBuilds'] == 0
-    assert jpeg_confidence['independentConfirmations'] == 6 and jpeg_confidence['newCases'] == 0
-    assert set(jpeg_confidence['cases']) == {'NativeDecode420', 'NativeDecode422', 'OwnedDecodeGray',
-                                            'CmykCaller', 'CallerGray', 'ValidateJpegProgressive420'}
-    assert jpeg_confidence['producers'] == jpeg_scan['producers']
-    assert jpeg_confidence['raw']['mirrored'] and jpeg_confidence['raw']['allMembersVerified']
-    for case, cost in jpeg_confidence['cases'].items():
-        assert jpeg_scan['cases'][case]['status'] == 'confirmed-confidence-open'
-        assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12 and cost['quietGuardsPassed']
-        assert (cost['status'] == 'confirmed-pass-stop') == (cost['upper'] <= 1)
-        assert (cost['status'] == 'confirmed-gap') == (cost['lower'] > 1)
-        assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
-        jpeg_scan['cases'][case] = cost
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for c in jpeg_scan['comparison'].values() for v in c['views'].values())
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
     for case, label in replacements:
         c = jpeg_scan['cases'][case]
@@ -1307,7 +1189,7 @@ def render():
         row = (f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
                f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
                f'{c["allocatedBytes"]:,} | — |')
-        if case == 'Ycck420CallerRgb':
+        if case in {'Ycck420CallerRgb', 'CmykAdobeGeneral', 'CmykAdobeAc'}:
             rows.append(('codec', row))
         else:
             position = next(i for i, (kind, previous) in enumerate(rows) if previous.startswith('| ' + label))
@@ -1657,8 +1539,8 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    vq = live_decode['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5837
+    vq = jpeg_scan['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5845
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1839,8 +1721,7 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  Those five displayed costs remain source-valid; this round reuses all125
-  numerical table rows.
+  Those five displayed costs remain source-valid through the JPEG-only changes.
   [Successful-block publication](../benchmarks/VP8-COMPLETED-BLOCK-PUBLICATION.md)
   separately saves **82.55µs/1.60% raw**,1.79% normalized on complete live opaque VP8.
   Current {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,upper{live['upper']:.3f} remains a gap;
@@ -1892,21 +1773,22 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [progressive output ownership](../benchmarks/JPEG-PROGRESSIVE-OUTPUT.md)
-  independently saves161.72/183.00µs (4.46%/4.90%raw) on ordinary/live progressive444;
-  both raw/normalized confidence views separate. Current3,466.85/3,555.20µs versus
-  FFmpeg3,355.46/3,363.08µs retain gaps, uppers1.037/1.066. GC falls701,233→169,584B/op.
-  Governed peak1,864,806B and result531,468B until disposal stay unchanged. Sequential
-  default idle pixel capacity increases531,468B; coefficient capacity stays1,697,280B.
-  Both existing caches are bypassed with caller budgets; no governed CPU or physical/
-  native peak claim. Two displayed rows refresh;123 numerical rows reuse valid paths.
-  Four distinct JPEG controls reuse unchanged paths: six total,1pass/3gaps/2uncertain.
-  [Reference lifetimes](../benchmarks/JPEG-COEFFICIENT-REFERENCE-LIFETIME.md),
-  [correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md) and
-  [plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retain history.
-  [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
-  retains prior gains. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
-  against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
+- **JPEG and reading:** [shared component storage](../benchmarks/JPEG-COMPONENT-FRAME.md)
+  independently saves34.93µs/1.86%raw (1.89%normalized) on complete directRGB444,
+  and48.67µs/8.22%raw (5.53%normalized) on sparse2D CMYK. Both confidence views
+  separate; native moves+.026%/−2.84%. Current1,841.96/native1,450.50µs and
+  543.34/native437.35µs remain gaps (uppers1.279/1.247).
+  RGB GC stays10,088B/op; CMYK falls1,085,757→4,520B/op by removing four padded
+  planes and reusing the existing default pixel pool. Pool retention is explicit;
+  shared-budget calls bypass it. Governed allocations are not timed here.
+  Twenty-three existing baseline/caller/stream/live/validation costs refresh:
+  9pass/13gaps/1uncertain; passing cases stop.
+  ten displayed rows update,115 reuse unchanged paths. Six source-valid progressive
+  costs reuse [progressive ownership](../benchmarks/JPEG-PROGRESSIVE-OUTPUT.md):
+  1pass/3gaps/2uncertain, including161.72/183.00µs prior gains. Exact packets,
+  managed pixels, native bounds and complete operation ownership remain.
+  [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
+  labeled SIMD libjpeg-turbo and other unchanged encoder costs are reused.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
@@ -1922,7 +1804,7 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-The current reader passes40 internal/239 public checks per normal/scalar mode
+The affected JPEG paths pass88 internal/375 public checks per normal/scalar mode
 on each OS; unrelated AVX2/AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained

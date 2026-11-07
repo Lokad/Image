@@ -27,8 +27,7 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  Those five displayed costs remain source-valid; this round reuses all125
-  numerical table rows.
+  Those five displayed costs remain source-valid through the JPEG-only changes.
   [Successful-block publication](../benchmarks/VP8-COMPLETED-BLOCK-PUBLICATION.md)
   separately saves **82.55µs/1.60% raw**,1.79% normalized on complete live opaque VP8.
   Current 5,072.31/native4,798.30µs,upper1.065 remains a gap;
@@ -80,21 +79,22 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [progressive output ownership](../benchmarks/JPEG-PROGRESSIVE-OUTPUT.md)
-  independently saves161.72/183.00µs (4.46%/4.90%raw) on ordinary/live progressive444;
-  both raw/normalized confidence views separate. Current3,466.85/3,555.20µs versus
-  FFmpeg3,355.46/3,363.08µs retain gaps, uppers1.037/1.066. GC falls701,233→169,584B/op.
-  Governed peak1,864,806B and result531,468B until disposal stay unchanged. Sequential
-  default idle pixel capacity increases531,468B; coefficient capacity stays1,697,280B.
-  Both existing caches are bypassed with caller budgets; no governed CPU or physical/
-  native peak claim. Two displayed rows refresh;123 numerical rows reuse valid paths.
-  Four distinct JPEG controls reuse unchanged paths: six total,1pass/3gaps/2uncertain.
-  [Reference lifetimes](../benchmarks/JPEG-COEFFICIENT-REFERENCE-LIFETIME.md),
-  [correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md) and
-  [plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retain history.
-  [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)
-  retains prior gains. Other JPEG paths, including [grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md)
-  against labeled SIMD libjpeg-turbo, reuse unchanged evidence.
+- **JPEG and reading:** [shared component storage](../benchmarks/JPEG-COMPONENT-FRAME.md)
+  independently saves34.93µs/1.86%raw (1.89%normalized) on complete directRGB444,
+  and48.67µs/8.22%raw (5.53%normalized) on sparse2D CMYK. Both confidence views
+  separate; native moves+.026%/−2.84%. Current1,841.96/native1,450.50µs and
+  543.34/native437.35µs remain gaps (uppers1.279/1.247).
+  RGB GC stays10,088B/op; CMYK falls1,085,757→4,520B/op by removing four padded
+  planes and reusing the existing default pixel pool. Pool retention is explicit;
+  shared-budget calls bypass it. Governed allocations are not timed here.
+  Twenty-three existing baseline/caller/stream/live/validation costs refresh:
+  9pass/13gaps/1uncertain; passing cases stop.
+  ten displayed rows update,115 reuse unchanged paths. Six source-valid progressive
+  costs reuse [progressive ownership](../benchmarks/JPEG-PROGRESSIVE-OUTPUT.md):
+  1pass/3gaps/2uncertain, including161.72/183.00µs prior gains. Exact packets,
+  managed pixels, native bounds and complete operation ownership remain.
+  [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
+  labeled SIMD libjpeg-turbo and other unchanged encoder costs are reused.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
@@ -105,12 +105,12 @@ Current scope and remaining work:
   retained owned capacity is unchanged and no peak reduction is inferred.
   This round reuses those unchanged font costs.
 
-The current production build passes **5,837 full/live checks per OS**, affected
+The current production build passes **5,845 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-The current reader passes40 internal/239 public checks per normal/scalar mode
+The affected JPEG paths pass88 internal/375 public checks per normal/scalar mode
 on each OS; unrelated AVX2/AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
@@ -181,14 +181,14 @@ settings do not establish matched quality.
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,727.28 | 18,564.11 | 1.009 / 1.016 | 2,437,660 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, forward-only output † | 18,557.49 | 18,594.14 | 0.998 / 1.004 | 2,437,692 | 968,216 / 968,216 |
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,996.93 | 17,633.09 | 0.964 / 0.968 | 882,212 | 210,973 / 210,973 |
-| JPEG baseline420, resident decode † | 1,062.27 | 1,017.29 | 1.044 / 1.078 | 757,362 | — |
-| JPEG DC-only, caller CMYK decode (confidence open) † | 335.68 | 336.82 | 0.997 / 1.032 | 1,085,963 | — |
+| JPEG baseline420, resident decode † | 1,037.62 | 1,007.13 | 1.030 / 1.039 | 757,362 | — |
+| JPEG DC-only, caller CMYK decode † | 338.62 | 331.44 | 1.022 / 1.025 | 1,085,959 | — |
 | VP8L RGBA8, resident decode † | 3,093.70 | 3,008.39 | 1.028 / 1.034 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 3,090.59 | 3,027.80 | 1.021 / 1.027 | 152,824 | — |
-| JPEG CMYK sparse-2D, resident decode † | 607.81 | 446.62 | 1.361 / 1.429 | 1,085,757 | — |
-| JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
-| JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
-| JPEG 4:1:0, resident decode (confirmed pass) † | 372.23 | 509.10 | 0.731 / 0.756 | 720,838 | — |
+| JPEG CMYK sparse-2D, resident decode † | 543.34 | 437.35 | 1.242 / 1.247 | 4,520 | — |
+| JPEG YCCK420, resident decode (confirmed pass) † | 416.50 | 706.67 | 0.589 / 0.591 | 895,547 | — |
+| JPEG 4:1:1, resident decode † | 523.45 | 447.61 | 1.169 / 1.188 | 751,299 | — |
+| JPEG 4:1:0, resident decode (confirmed pass) † | 364.80 | 506.86 | 0.720 / 0.735 | 720,838 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 116,271.20 | 123,756.44 | 0.940 / 0.977 | 7,476,544 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 108,317.01 | 123,053.03 | 0.880 / 0.953 | 7,476,928 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
@@ -199,9 +199,9 @@ settings do not establish matched quality.
 | JPEG progressive422, resident decode † | 2,292.77 | 2,245.05 | 1.021 / 1.074 | 847,116 | — |
 | JPEG ordinary progressive444, resident decode † | 3,466.85 | 3,355.46 | 1.033 / 1.037 | 169,584 | — |
 | JPEG progressive444, live-token resident decode † | 3,555.20 | 3,363.08 | 1.057 / 1.066 | 169,584 | — |
-| JPEG dense CMYK, resident decode (confirmed pass) † | 2,575.62 | 3,161.31 | 0.815 / 0.860 | 1,085,661 | — |
-| JPEG horizontal-only CMYK, resident decode † | 518.51 | 396.74 | 1.307 / 1.353 | 1,085,763 | — |
-| JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 441.76 | 624.43 | 0.707 / 0.742 | 762,700 | — |
+| JPEG dense CMYK, resident decode (confirmed pass) † | 2,448.42 | 3,111.90 | 0.787 / 0.788 | 4,520 | — |
+| JPEG horizontal-only CMYK, resident decode † | 475.07 | 392.22 | 1.211 / 1.217 | 4,520 | — |
+| JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 428.34 | 604.11 | 0.709 / 0.711 | 762,704 | — |
 
 **Editing**
 
@@ -266,7 +266,7 @@ settings do not establish matched quality.
 | Validate PNG8, span † | 1,287.369 | 1,377.047 | 0.935 / 0.938 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,906.210 | 2,961.985 | 0.981 / 0.983 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.760 | 3.939 | 0.447 / 0.463 | 792 | Confirmed pass |
-| Validate JPEG baseline420, span | 543.780 | 689.481 | 0.789 / 0.815 | 9,984 | Confirmed pass |
+| Validate JPEG baseline420, span | 537.903 | 679.193 | 0.792 / 0.800 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 286.239 | 289.052 | 0.990 / 1.001 | 4,072 | Confidence open |
 | Validate VP8L+alpha, span | 2,309.164 | 3,044.518 | 0.758 / 0.765 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span | 4,646.035 | 5,440.023 | 0.854 / 0.860 | 13,584 | Confirmed pass |

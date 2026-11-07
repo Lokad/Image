@@ -21,6 +21,23 @@ internal ref partial struct JpegDecoder
     {
         var source = ResolveSampleColorSpace(JpegColorSpace.Auto, adobeTransform);
         var invert = ResolveCmykInversion(JpegCmykInversion.Auto, adobeTransform);
+        if (interleavedResult is { } completed)
+        {
+            for (var y = 0; y < info.Height; y++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var row = completed.GetRow8(y);
+                if (source == JpegColorSpace.Cmyk) RenderCmykInPlace(row, invert);
+                else
+                    for (var x = 0; x < info.Width; x++)
+                    {
+                        var pixel = row.Slice(x * 4, 4);
+                        JpegBlackColor.WriteYcck(pixel[0], pixel[1], pixel[2], pixel[3], invert, pixel, 4);
+                    }
+            }
+            interleavedResult = null;
+            return completed;
+        }
         var fullResolution = source == JpegColorSpace.Cmyk && components.Length == 4;
         for (var c = 0; fullResolution && c < components.Length; c++)
             fullResolution = components[c].H == maxH && components[c].V == maxV;
