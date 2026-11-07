@@ -37,6 +37,13 @@ build. One displayed cost refreshes;124 numerical rows reuse unchanged paths.
 and [JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md) retain unchanged-path
 evidence and raw history. The283-path objective remains open; this is not a full
 actual-package performance refresh.
+
+[Two live-window prototypes](VP8-LIVE-WINDOW-PROTOTYPES.md) are unselected.
+The first confirms149.74µs/2.90%raw live regression with unchanged allocation;
+the revised readonly-input capture remains unpromising in its short screen.
+Both qualified originals are restored byte for byte, including embedded tests and
+bindings; current OPA465 costs/package evidence remain valid. No full/package replay
+or renderer dependency. The next independent investigation is progressive JPEG.
 The following [seven-control refresh](PNG-CURRENT-FRAMING-COSTS.md) changes no production:
 seven current independentconfirmations,5pass/2gap,7displayedrowsfresh/118numbersreused.
 Alloriginal gates andfrozenworkers pass. No rebuild/newfixture/profile or repeated
