@@ -1,5 +1,3 @@
-using System.Buffers.Binary;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -28,7 +26,9 @@ internal partial struct Vp8BooleanReader
     {
         nonzero = 0;
         context.Cancellation.ThrowIfCancellationRequested();
-        var reader = new CancellableBlockReader(data, this, context.Cancellation);
+        var cancellation = context.Cancellation;
+        var reader = BeginCoefficientWindow(data);
+        var position = reader.Position; var bits = reader.Bits; var range = reader.Range; var value = reader.Value;
         try
         {
             var model = MemoryMarshal.Cast<byte, CoefficientModelRow>(probabilities);
@@ -38,103 +38,65 @@ internal partial struct Vp8BooleanReader
             for (var c = plane == 0 ? 1 : 0; c < 16; c++)
             {
                 ref readonly var p = ref model[(plane * 8 + bands[c]) * 3 + predictor];
-                var token = reader.Token(p, previousZero);
+                var token = CancellableBlockReader.Token(in data, in p, previousZero, cancellation,
+                    ref position, ref bits, ref range, ref value);
                 if (token == 11) break;
-                var sample = token < 5 ? token : reader.Category(token - 5);
+                var sample = token < 5 ? token : CancellableBlockReader.Category(in data, token - 5, cancellation,
+                    ref position, ref bits, ref range, ref value);
                 previousZero = sample == 0; predictor = Math.Min(sample, 2);
                 if (sample == 0) continue;
                 nonzero = 1;
-                if (reader.Read(128) != 0) sample = -sample;
+                if (CancellableBlockReader.Read(in data, 128, cancellation,
+                    ref position, ref bits, ref range, ref value) != 0) sample = -sample;
                 values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
             }
             return nonzero != 0;
         }
-        finally { reader.Publish(ref this); }
+        finally
+        {
+            reader.Position = position; reader.Bits = bits; reader.Range = range; reader.Value = value;
+            reader.Publish(ref this);
+        }
     }
 
-    internal ref struct CancellableBlockReader
+    internal static class CancellableBlockReader
     {
-        private readonly ReadOnlySpan<byte> data;
-        private int position, bits, range;
-        private ulong value;
-        private readonly CancellationToken cancellation;
-
-        internal CancellableBlockReader(ReadOnlySpan<byte> data, Vp8BooleanReader initial, CancellationToken cancellation)
-        {
-            this.data = data;
-            position = initial.position + 1; bits = initial.shift + 1; range = initial.range;
-            value = ((ulong)initial.value << bits) | ((uint)data[initial.position] & ((1u << bits) - 1));
-            this.cancellation = cancellation;
-            Fill();
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal int Read(int probability)
+        internal static int Read(in ReadOnlySpan<byte> data, int probability, CancellationToken cancellation,
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
             cancellation.ThrowIfCancellationRequested();
-            Normalize();
-            var boundary = 1 + ((range - 1) * probability >> 8);
-            var result = value >= ((ulong)boundary << bits) ? 1 : 0; var mask = -result;
-            value -= (ulong)(boundary & mask) << bits;
-            range = boundary + ((range - 2 * boundary) & mask);
-            return result;
+            return BlockReader.Read(in data, probability, ref position, ref bits, ref range, ref value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int TokenRead(int probability)
+        private static int TokenRead(in ReadOnlySpan<byte> data, int probability, CancellationToken cancellation,
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
             cancellation.ThrowIfCancellationRequested();
-            Normalize();
-            var boundary = 1 + ((range - 1) * probability >> 8);
-            var split = (ulong)boundary << bits;
-            if (value < split) { range = boundary; return 0; }
-            range -= boundary; value -= split; return 1;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Normalize()
-        {
-            // RFC6386 section7.2: the code's binary point moves with the
-            // interval. Keep the reservoir fixed instead of shifting it too.
-            var count = BitOperations.LeadingZeroCount((uint)range) - 24;
-            range <<= count; bits -= count; Fill();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Fill()
-        {
-            // At most7 low bits plus8 interval bits precede a32-bit append,
-            // so the complete reservoir fits in47bits. The admitted block's
-            // 272-byte bound includes this four-byte lookahead.
-            if (bits >= 8) return;
-            value = (value << 32) | BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4));
-            position += 4; bits += 32;
-        }
-
-        internal void Publish(ref Vp8BooleanReader target)
-        {
-            // A canceled poll does not normalize or consume input. Publish
-            // only the completed prefix, without another read or poll.
-            var count = BitOperations.LeadingZeroCount((uint)range) - 24;
-            var remaining = bits - count;
-            target.position = position - (remaining + 7) / 8;
-            target.shift = (remaining - 1) & 7;
-            target.range = range << count;
-            target.value = (int)(value >> remaining);
+            return BlockReader.TokenRead(in data, probability, ref position, ref bits, ref range, ref value);
         }
 
         // RFC6386 section13.2, preserving the original probability/read order.
-        internal int Token(in CoefficientModelRow p, bool previousZero)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Token(in ReadOnlySpan<byte> data, in CoefficientModelRow p, bool previousZero,
+            CancellationToken cancellation, ref int position, ref int bits, ref int range, ref ulong value)
         {
-            if (!previousZero && TokenRead(p[0]) == 0) return 11;
-            if (TokenRead(p[1]) == 0) return 0;
-            if (TokenRead(p[2]) == 0) return 1;
-            if (TokenRead(p[3]) == 0) return TokenRead(p[4]) == 0 ? 2 : 3 + TokenRead(p[5]);
-            if (TokenRead(p[6]) == 0) return 5 + TokenRead(p[7]);
-            var upper = TokenRead(p[8]); return 7 + 2 * upper + TokenRead(p[9 + upper]);
+            if (!previousZero && TokenRead(in data, p[0], cancellation, ref position, ref bits, ref range, ref value) == 0) return 11;
+            if (TokenRead(in data, p[1], cancellation, ref position, ref bits, ref range, ref value) == 0) return 0;
+            if (TokenRead(in data, p[2], cancellation, ref position, ref bits, ref range, ref value) == 0) return 1;
+            if (TokenRead(in data, p[3], cancellation, ref position, ref bits, ref range, ref value) == 0)
+                return TokenRead(in data, p[4], cancellation, ref position, ref bits, ref range, ref value) == 0 ? 2
+                    : 3 + TokenRead(in data, p[5], cancellation, ref position, ref bits, ref range, ref value);
+            if (TokenRead(in data, p[6], cancellation, ref position, ref bits, ref range, ref value) == 0)
+                return 5 + TokenRead(in data, p[7], cancellation, ref position, ref bits, ref range, ref value);
+            var upper = TokenRead(in data, p[8], cancellation, ref position, ref bits, ref range, ref value);
+            return 7 + 2 * upper + TokenRead(in data, p[9 + upper], cancellation, ref position, ref bits, ref range, ref value);
         }
 
-        internal int Category(int category)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Category(in ReadOnlySpan<byte> data, int category, CancellationToken cancellation,
+            ref int position, ref int bits, ref int range, ref ulong value)
         {
             ReadOnlySpan<byte> p = category switch
             {
@@ -142,9 +104,10 @@ internal partial struct Vp8BooleanReader
                 3 => [176, 155, 140, 135], 4 => [180, 157, 141, 134, 130],
                 _ => [254, 254, 243, 230, 196, 177, 153, 140, 133, 130, 129]
             };
-            ReadOnlySpan<int> bases = [5, 7, 11, 19, 35, 67]; var value = 0;
-            foreach (var probability in p) value = value * 2 + Read(probability);
-            return bases[category] + value;
+            ReadOnlySpan<int> bases = [5, 7, 11, 19, 35, 67]; var sample = 0;
+            foreach (var probability in p) sample = sample * 2 + Read(in data, probability, cancellation,
+                ref position, ref bits, ref range, ref value);
+            return bases[category] + sample;
         }
     }
 }

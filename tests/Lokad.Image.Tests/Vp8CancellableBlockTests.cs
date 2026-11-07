@@ -42,14 +42,14 @@ public sealed partial class Vp8CoefficientBlockTests
             using var context=new OperationContext(new() {MemoryBudget=root},cancellation.Token);
             using var reference=new OperationContext(new() {},cancellation.Token);
             var range=128+stop%128;var actual=Reader(data,stop%12,stop%8,range,stop%range);var expected=actual;
-            var buffered=new Vp8BooleanReader.CancellableBlockReader(data,actual,cancellation.Token);
+            var buffered=actual.BeginCoefficientWindow(data);
             for (var i=0;i<stop;i++)
             {
                 var p=probabilityCycle[i%6];
-                Assert.Equal(expected.Read(data,p,reference),buffered.Read(p));
+                Assert.Equal(expected.Read(data,p,reference),Vp8BooleanReader.CancellableBlockReader.Read(data, p, cancellation.Token, ref buffered.Position, ref buffered.Bits, ref buffered.Range, ref buffered.Value));
             }
             cancellation.Cancel();
-            try {buffered.Read(128);throw new Exception("Canceled decision was accepted.");}
+            try {Vp8BooleanReader.CancellableBlockReader.Read(data, 128, cancellation.Token, ref buffered.Position, ref buffered.Bits, ref buffered.Range, ref buffered.Value);throw new Exception("Canceled decision was accepted.");}
             catch(OperationCanceledException error) {Assert.Equal(cancellation.Token,error.CancellationToken);}
             buffered.Publish(ref actual);
             Assert.Equal(State(expected),State(actual));Assert.Equal(0,root.GrowthAttempts);

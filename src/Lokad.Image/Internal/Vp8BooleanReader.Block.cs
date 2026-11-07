@@ -90,7 +90,7 @@ internal partial struct Vp8BooleanReader
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int TokenRead(in ReadOnlySpan<byte> data, int probability,
+        internal static int TokenRead(in ReadOnlySpan<byte> data, int probability,
             ref int position, ref int bits, ref int range, ref ulong value)
         {
             Normalize(in data, ref position, ref bits, ref range, ref value);

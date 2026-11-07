@@ -1621,12 +1621,12 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-block-state-reservoir-evidence.json').read_text(encoding='utf-8'))
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-live-block-execution-evidence.json').read_text(encoding='utf-8'))
     selected_cost = vp8_current['cases']['selected']
     assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
     dq = decoder_owned['qualification']
-    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['selectionTextExact']
-    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5750
+    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['normalBlockMathAndExecutionExactExceptPrivateInternalVisibility']
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5764
     assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
     assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
     assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
@@ -1705,7 +1705,7 @@ def render():
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
-    vq = vp8_current['qualification']
+    vq = decoder_owned['qualification']
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5764
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
@@ -1901,13 +1901,15 @@ Current scope and remaining work:
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
   [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
-  [Block-local arithmetic state](../benchmarks/VP8-BLOCK-STATE-RESERVOIR.md) removes
-  repeated state publication and code-value shifts. Complete alpha validation
-  independently saves207µs/3.35%raw; span/stream decode saves158/106µs. All five
-  affected complete controls have separated raw/normalized confidence views.
-  Five costs refresh; unchanged per-bit cancellable decoding reuses valid evidence.
-  No added heap/retained storage; at most8Bextra window stack layout fits the existing
-  allowance. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
+  [Shared live block execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) removes
+  duplicated reservoir machinery and keeps cancellable arithmetic local to a block.
+  Complete live opaque decoding saves285µs/5.11%raw and5.17%normalized, with both
+  confidence views separated. Every decision checkpoint and exact completed prefix
+  remain. Current5288.78µs/native4792.47µs, ratio1.104/upper1.106 remains a gap;
+  allocation760,564B is unchanged. No new heap/retention;232Bframe fits existing8KiB
+  admission. Five reader costs reuse unchanged paths; all six remain gaps.
+  [Earlier block-local execution](../benchmarks/VP8-BLOCK-STATE-RESERVOIR.md) retains
+  its alpha-validation/span/stream gains. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
   its allocation reduction:238,384B/span and238,480B/stream. Coarse admitted peak
   751,768B, retained output531,468B remain unchanged.
   Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays

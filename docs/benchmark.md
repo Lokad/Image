@@ -35,13 +35,15 @@ Current scope and remaining work:
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
   [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
-  [Block-local arithmetic state](../benchmarks/VP8-BLOCK-STATE-RESERVOIR.md) removes
-  repeated state publication and code-value shifts. Complete alpha validation
-  independently saves207µs/3.35%raw; span/stream decode saves158/106µs. All five
-  affected complete controls have separated raw/normalized confidence views.
-  Five costs refresh; unchanged per-bit cancellable decoding reuses valid evidence.
-  No added heap/retained storage; at most8Bextra window stack layout fits the existing
-  allowance. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
+  [Shared live block execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) removes
+  duplicated reservoir machinery and keeps cancellable arithmetic local to a block.
+  Complete live opaque decoding saves285µs/5.11%raw and5.17%normalized, with both
+  confidence views separated. Every decision checkpoint and exact completed prefix
+  remain. Current5288.78µs/native4792.47µs, ratio1.104/upper1.106 remains a gap;
+  allocation760,564B is unchanged. No new heap/retention;232Bframe fits existing8KiB
+  admission. Five reader costs reuse unchanged paths; all six remain gaps.
+  [Earlier block-local execution](../benchmarks/VP8-BLOCK-STATE-RESERVOIR.md) retains
+  its alpha-validation/span/stream gains. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
   its allocation reduction:238,384B/span and238,480B/stream. Coarse admitted peak
   751,768B, retained output531,468B remain unchanged.
   Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays

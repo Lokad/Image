@@ -22,7 +22,7 @@ public sealed partial class Vp8CoefficientBlockTests
             var data = new byte[1024]; random.NextBytes(data); var saved = data.ToArray();
             var range = 128 + trial; var initial = Reader(data, trial % 12, trial % 8, range, random.Next(range));
             var expected = initial; var window = initial.BeginCoefficientWindow(data);
-            var checkedReader = new Vp8BooleanReader.CancellableBlockReader(data, initial, cancellation.Token);
+            var checkedReader = initial.BeginCoefficientWindow(data);
             Assert.True(initial.CanReadCoefficientWindow(data, reference, 1));
             Assert.True(initial.CanReadCancellableCoefficientBlock(data, live));
             var probabilities = new byte[11];
@@ -37,7 +37,7 @@ public sealed partial class Vp8CoefficientBlockTests
                 seen[token] = true;
                 Assert.Equal(token, Vp8BooleanReader.BlockReader.Token(data, probabilities, previousZero,
                     ref window.Position, ref window.Bits, ref window.Range, ref window.Value));
-                Assert.Equal(token, checkedReader.Token(in row, previousZero));
+                Assert.Equal(token, Vp8BooleanReader.CancellableBlockReader.Token(data, in row, previousZero, cancellation.Token, ref checkedReader.Position, ref checkedReader.Bits, ref checkedReader.Range, ref checkedReader.Value));
                 var actual = initial; window.Publish(ref actual);
                 var checkedActual = initial; checkedReader.Publish(ref checkedActual);
                 Assert.Equal(State(expected), State(actual));
@@ -49,7 +49,7 @@ public sealed partial class Vp8CoefficientBlockTests
                     sample += bases[category];
                     Assert.Equal(sample, Vp8BooleanReader.BlockReader.Category(data, category,
                         ref window.Position, ref window.Bits, ref window.Range, ref window.Value));
-                    Assert.Equal(sample, checkedReader.Category(category));
+                    Assert.Equal(sample, Vp8BooleanReader.CancellableBlockReader.Category(data, category, cancellation.Token, ref checkedReader.Position, ref checkedReader.Bits, ref checkedReader.Range, ref checkedReader.Value));
                     window.Publish(ref actual); checkedReader.Publish(ref checkedActual);
                     Assert.Equal(State(expected), State(actual)); Assert.Equal(State(expected), State(checkedActual));
                 }
@@ -57,7 +57,7 @@ public sealed partial class Vp8CoefficientBlockTests
                 var bit = expected.Read(data, probability, reference);
                 Assert.Equal(bit, Vp8BooleanReader.BlockReader.Read(data, probability,
                     ref window.Position, ref window.Bits, ref window.Range, ref window.Value));
-                Assert.Equal(bit, checkedReader.Read(probability));
+                Assert.Equal(bit, Vp8BooleanReader.CancellableBlockReader.Read(data, probability, cancellation.Token, ref checkedReader.Position, ref checkedReader.Bits, ref checkedReader.Range, ref checkedReader.Value));
                 window.Publish(ref actual); checkedReader.Publish(ref checkedActual);
                 Assert.Equal(State(expected), State(actual));
                 Assert.Equal(State(expected), State(checkedActual));
@@ -65,7 +65,12 @@ public sealed partial class Vp8CoefficientBlockTests
             if (trial == 127)
             {
                 var before = initial; checkedReader.Publish(ref before); cancellation.Cancel();
-                try { checkedReader.Token(in row, false); Assert.Fail("A canceled bit was read."); }
+                try
+                {
+                    Vp8BooleanReader.CancellableBlockReader.Token(data, in row, false, cancellation.Token,
+                        ref checkedReader.Position, ref checkedReader.Bits, ref checkedReader.Range, ref checkedReader.Value);
+                    Assert.Fail("A canceled bit was read.");
+                }
                 catch (OperationCanceledException error) { Assert.Equal(cancellation.Token, error.CancellationToken); }
                 var after = initial; checkedReader.Publish(ref after);
                 Assert.Equal(State(before), State(after));
