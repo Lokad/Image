@@ -56,6 +56,12 @@ restores its unpromising candidate without repeated broad/package qualification.
 The [ordinary VP8 row-window study](VP8-ROW-WINDOW-EXPERIMENT.md) establishes an
 opaque regression and no confirmed alpha gain. Qualified sources/modules/bindings
 are restored exactly; no current displayed cost or package changes.
+The [VP8 frame-preparation study](VP8-FRAME-PHASE-PREPARATION-EXPERIMENT.md)
+retains three correct but unpromising/inconclusive structural stages. Exact
+restoration preserves the current costs and package without broad-check repeats.
+[Current JPEG attribution](JPEG-CURRENT-ENTROPY-ATTRIBUTION.md) reuses the immutable
+build and frozen `DirectRgb444` control. It selects entropy preparation/execution
+for further investigation, without a new timing claim or changed displayed cost.
 
 ## Finite required inventory
 

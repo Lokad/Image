@@ -1,0 +1,2669 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JBA530",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "librarySha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+  "sources": {
+    "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3",
+    "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+    "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+    "src/Lokad.Image/Internal/JpegDecoder.cs": "87f74718ad1920315d00df0c8646c6bc3016e0b42ef7d671bdaaec98eae2a0e1",
+    "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed",
+    "src/Lokad.Image/Internal/JpegDecoder.RgbFrame.cs": "bfb0245e25347508c20d2ef1c8898cd068117ea5ba4bafdeb980e0700c21cc34",
+    "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379"
+  },
+  "receipt": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "productionChanged": false,
+    "allBuilds": 0,
+    "librarySha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+    "sourceSha256": "730968fbf64657d717a93d1c300264f9cda103a72ef50cbbc6c41cd1ed5bd987",
+    "validation": {
+      "schemaVersion": 1,
+      "name": "WarmJpegDecode",
+      "caseId": "DirectRgb444",
+      "smoke": false,
+      "runId": "jba530-rgb444-profile",
+      "width": 513,
+      "height": 259,
+      "depth": 8,
+      "cpu": 0,
+      "managedAffinityCount": 1,
+      "processorCount": 1,
+      "serverGc": false,
+      "gcConfiguration": {
+        "ServerGC": false,
+        "ConcurrentGC": false,
+        "RetainVM": false,
+        "NoAffinitize": false,
+        "GCCpuGroup": false,
+        "GCLargePages": false,
+        "LOHThreshold": 85000,
+        "HeapCount": 1,
+        "MaxHeapCount": 0,
+        "GCHeapAffinitizeMask": 0,
+        "GCHeapAffinitizeRanges": "",
+        "GCHighMemPercent": 90,
+        "GCGen0MaxBudget": 134217728,
+        "GCHeapHardLimit": 0,
+        "GCHeapHardLimitPercent": 0,
+        "GCRegionRange": 33532829696,
+        "GCRegionSize": 0,
+        "UOHWaitBGCSizeIncPercent": 200,
+        "GCHeapHardLimitSOH": 0,
+        "GCHeapHardLimitLOH": 0,
+        "GCHeapHardLimitPOH": 0,
+        "GCHeapHardLimitSOHPercent": 0,
+        "GCHeapHardLimitLOHPercent": 0,
+        "GCHeapHardLimitPOHPercent": 0,
+        "GCConserveMem": 0,
+        "GCName": "",
+        "GCPath": "",
+        "GCDynamicAdaptationMode": 1,
+        "GCDTargetTCP": 0,
+        "GCDGen0GrowthPercent": 0,
+        "GCDGen0GrowthMinFactor": 0,
+        "GCDGen0GrowthMaxFactor": 0
+      },
+      "runtime": ".NET 10.0.8",
+      "platform": "linux-x64",
+      "cancellationCanBeCanceled": false,
+      "cancellationRequested": false,
+      "alreadyCanceledRejected": null,
+      "inputAnchorCase": null,
+      "cancellationBoundary": null,
+      "sourceIdentity": {
+        "sourceSha256": "730968fbf64657d717a93d1c300264f9cda103a72ef50cbbc6c41cd1ed5bd987",
+        "sourceRevision": "fee5380bd9eaf9c1a91acd321e665046a4bd1358"
+      },
+      "inputOrigin": "original-native-marker-only-direct-rgb",
+      "sampling": "1x2,1x2,1x2",
+      "progressive": false,
+      "inputBytes": 133057,
+      "directRgb": true,
+      "markerOnlyInterpretation": true,
+      "directRgbSourcePacketSha256": "c115cd7d17eb2cd3f34e31c439bdd48421e58ea2c0fce264c1cc8ad3eb1f8274",
+      "rgbCenteredPhaseCorrectionTimed": false,
+      "uncorrectedRgbPhaseNegativeControl": false,
+      "rgbComponentPlaneInterpretationTimed": false,
+      "misinterpretedRgbPlanesNegativeControl": false,
+      "restartInterval": 0,
+      "restartMarkers": 0,
+      "freshSeekableStream": false,
+      "inputView": false,
+      "inputCopiesTimed": false,
+      "callerInputLifetimeChecked": false,
+      "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+      "rasterSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "managedOutputBytes": 531468,
+      "nativeOutputBytes": 531468,
+      "managedOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+      "nativeOutputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+      "alphaExact": true,
+      "decoderAgreementWithinBounds": true,
+      "decoderMaximum": 0,
+      "decoderRmse": 0,
+      "nativeCliPixelsExact": true,
+      "scalarCliAgreementWithinBounds": true,
+      "scalarDecoderMaximum": 0,
+      "scalarDecoderRmse": 0,
+      "nativeSampleTargetMilliseconds": "50",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeExitCode": 0,
+      "librarySha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+      "benchmarkAssemblySha256": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Original development-only warm JPEG decode FFmpeg worker",
+        "sourceSha256": "9cce738b3e7c2e97ad1170fe0527d0c1aa9e2d89e81454119cb8d5e0b8225dff",
+        "buildScriptSha256": "880887e1b96adf7ae293e17d9b1df8a306c306d43f7e6795af2a8a5dbee4e032",
+        "workerSha256": "ef8158ed03bca7c79b9801ec4b778237a5c293d39184f534808079c6c9e93681",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "jpeg-rgb-decode",
+        "width": 513,
+        "height": 259,
+        "depth": 8,
+        "cpu": 0,
+        "affinityCount": 1,
+        "codecThreads": 1,
+        "threadType": 0,
+        "activeThreadType": 0,
+        "conversionThreads": 1,
+        "decoder": "mjpeg",
+        "sampling": "444",
+        "chromaExpansionTimed": false,
+        "chromaVerticalFactor": 1,
+        "grayscale": false,
+        "directRgb": true,
+        "rgbCenteredPhaseCorrectionTimed": false,
+        "rgbComponentPlaneInterpretationTimed": false,
+        "decodedPixelFormat": "gbrp",
+        "colorConversionTimed": true,
+        "stateResetTimed": true,
+        "pixelsDeterministic": true,
+        "outputBytes": 531468,
+        "initialCompletedOperations": 3,
+        "independentLiveOutputs": true,
+        "ffmpegVersion": "n8.1",
+        "avcodecVersion": 4070500,
+        "swscaleVersion": 591204
+      },
+      "nativeBefore": [
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92889153,
+          "CompletedOperations": 386,
+          "Observed": 38214,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1451393.015625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92722822,
+          "CompletedOperations": 450,
+          "Observed": 44550,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448794.09375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92719667,
+          "CompletedOperations": 514,
+          "Observed": 50886,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448744.796875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92882804,
+          "CompletedOperations": 578,
+          "Observed": 57222,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1451293.8125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92799557,
+          "CompletedOperations": 642,
+          "Observed": 63558,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449993.078125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92750874,
+          "CompletedOperations": 706,
+          "Observed": 69894,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449232.40625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92758897,
+          "CompletedOperations": 770,
+          "Observed": 76230,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449357.765625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92784415,
+          "CompletedOperations": 834,
+          "Observed": 82566,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449756.484375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92742241,
+          "CompletedOperations": 898,
+          "Observed": 88902,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449097.515625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92779998,
+          "CompletedOperations": 962,
+          "Observed": 95238,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449687.46875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92783694,
+          "CompletedOperations": 1026,
+          "Observed": 101574,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449745.21875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92789783,
+          "CompletedOperations": 1090,
+          "Observed": 107910,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449840.359375
+        }
+      ],
+      "nativeAfter": [
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92816946,
+          "CompletedOperations": 1346,
+          "Observed": 133254,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450264.78125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92812239,
+          "CompletedOperations": 1410,
+          "Observed": 139590,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450191.234375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92814953,
+          "CompletedOperations": 1474,
+          "Observed": 145926,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450233.640625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92756264,
+          "CompletedOperations": 1538,
+          "Observed": 152262,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449316.625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92847602,
+          "CompletedOperations": 1602,
+          "Observed": 158598,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1450743.78125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92784608,
+          "CompletedOperations": 1666,
+          "Observed": 164934,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449759.5
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92732319,
+          "CompletedOperations": 1730,
+          "Observed": 171270,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448942.484375
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92717406,
+          "CompletedOperations": 1794,
+          "Observed": 177606,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448709.46875
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92771698,
+          "CompletedOperations": 1858,
+          "Observed": 183942,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1449557.78125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92710034,
+          "CompletedOperations": 1922,
+          "Observed": 190278,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448594.28125
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92637985,
+          "CompletedOperations": 1986,
+          "Observed": 196614,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1447468.515625
+        },
+        {
+          "State": "sample",
+          "Operations": 64,
+          "ElapsedNanoseconds": 92695493,
+          "CompletedOperations": 2050,
+          "Observed": 202950,
+          "OutputStride": 2080,
+          "Cpu": 0,
+          "OutputBytes": 531468,
+          "CpuElapsedNanoseconds": null,
+          "NanosecondsPerOperation": 1448367.078125
+        }
+      ],
+      "boundary": "Identical resident prepared 8-bit JPEG to independent owned RGBA8. Public managed Decode, allocation and disposal; native software mjpeg decoder, per-operation state reset, GBRP direct-plane packing, owned output allocation and release. For subsampled inputs, expand both ceil-sized chroma planes by their sampling factors and crop to the original grid inside every operation, including intermediate acquisition/release. Grayscale includes expanding owned decoded GRAY8 samples into independent RGBA8 inside every operation. Native context/conversion/input packet/frame wrappers reused; every call decodes and converts all pixels. Padded native rows are exposed without a gratuitous packing copy. Startup, I/O, IPC, generation, hashing, checks and tight-row file writes excluded. No encoder quality search or additional source raster. Decoder RGB maximum 4/RMSE 1.5, exact opaque alpha."
+    },
+    "identities": {
+      "tmp/jba530-rgb444-runtime/JpegDecodeShortDriver.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/jba530-rgb444-runtime/Drgb31DirectRgb420Confirm.dll": "944cf0d25c8352ede256c9e265cfe68ad89713e4732b01ae8760573d0b6c322c",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+      "tmp/jba530-rgb444-runtime/Dmc31Confirm.dll": "4891d4446201896d2723d528e5865ebb2672e840ad6608f106c30f46c2d9040b",
+      "tmp/jba530-rgb444-runtime/E172Sampler.dll": "23581c695c93b5b5dce0c6e99332af889120238afea4144d41e005da3ca57cc1",
+      "tmp/jba530-rgb444-runtime/J4n31AsyncConfirm.dll": "9c6b38e0267d749de73d2e66dd599f955b70623ee725cdab6bd28ce7548fc31b",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks-WarmShort-1.dll": "89d299c14c2574f1b8941d1d80e5de8088c93518e12851b76a92b13ee785173b",
+      "tmp/jba530-rgb444-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/jba530-rgb444-runtime/DR1WebpStreamConfirm.dll": "8cb5b885cb2922e6fa04bdf1d19c561b91bec60838aaf92f93e3a5c00dfdc6ed",
+      "tmp/jba530-rgb444-runtime/DR1WebpResidentShort.dll": "c6a2d2b56d0e0b80678c227f9737704b11ba9058555bcdc8c8a8c8d4f8aee593",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks.deps.json": "14676a16346e78fca39fe33f096b7c8db3e85097f3099e9d0a8bce425c4a2803",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks.pdb": "a88e18f1e39af31ffa24e7e84dbc5143b78812a4bf93afa13f14dc764a9b97cd",
+      "tmp/jba530-rgb444-runtime/Fmp1PngShort.dll": "2cbaf0816efff60b9eec4c257fd915e9bff51abca6e106d7ebe80edf317eb9f1",
+      "tmp/jba530-rgb444-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/jba530-rgb444-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/jba530-rgb444-runtime/VpsEffort2Short.dll": "6e7aa436eaa983f3f8be6a09db9bb4cf9679aa6e3d83f7d81638698b4a93385e",
+      "tmp/jba530-rgb444-runtime/Drgb31DirectRgb444Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/PngDecodeConfirmDriver.dll": "2aa4da79d900818f0521df9e434a48759c9abc0902e1c35f4e3600831e225f9a",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks-WarmShort-1.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/jba530-rgb444-runtime/J4n31Confirm.dll": "21bd4803a9438a3b1ad3b78a02f118976020a1de31aa4941f3f308f8247974f7",
+      "tmp/jba530-rgb444-runtime/J4n31Short.dll": "54bcad7b990b94467d33e2513a5793fa12527d00035c1a26e39791833551cdd1",
+      "tmp/jba530-rgb444-runtime/PredictablePngConfirm.dll": "5c23f5476c268764ff3cfd7a5e9f48558afab2e0e121a1de242880e807c1e3aa",
+      "tmp/jba530-rgb444-runtime/DR1Jpeg420Short.dll": "a5d78210a450bf8183ac08fc5af80fb1a52cbf32c179f9f0276bf7e71f9f9c67",
+      "tmp/jba530-rgb444-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/jba530-rgb444-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/jba530-rgb444-runtime/B44431NativeDecode8Confirm.dll": "529c8caeed6bba79c5c0e4d197459c00f7f7726f6dbc232e66e2cc00fb7c0c20",
+      "tmp/jba530-rgb444-runtime/JIV1Jpeg420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/jba530-rgb444-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/jba530-rgb444-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/jba530-rgb444-runtime/B44431NativeDecodeCancelable8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/B44431Decode8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/BatchedPredictablePngConfirm.dll": "2db276b4bf30872487f6c37787a22d9227cf1cd76c0c204380e818c909d68443",
+      "tmp/jba530-rgb444-runtime/B44431Decode8Confirm.dll": "14aa04e245d5c8db3dc4a55e41be76e3def7cc6f601d943dde86568d63b52c99",
+      "tmp/jba530-rgb444-runtime/Fmp1PngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/Drgb31DirectRgb444Confirm.dll": "c443e73aeea27c1b6211c87142b0544cd7163d33e3f71e0db366ed06dbdc1682",
+      "tmp/jba530-rgb444-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/jba530-rgb444-runtime/JpegDecodeShortDriver.dll": "6dd6c70aaab0890daba23e233d569de1b3eb10847d30e82c8f56a6e01d054a88",
+      "tmp/jba530-rgb444-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/jba530-rgb444-runtime/Profile.pdb": "3146d7589cbd824b27c4cbc92135e76307494c0841a7ea1a597cd38ddf63ed5e",
+      "tmp/jba530-rgb444-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/jba530-rgb444-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/jba530-rgb444-runtime/BatchedPredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/B44431NativeDecode8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/DR1Jpeg420Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/B44431NativeDecodeCancelable8Confirm.dll": "17cd2e2421bd397517b598ae4e0fd4926a08ebd94b55ceafa798064e5074ef56",
+      "tmp/jba530-rgb444-runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Dmc31Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Dmc31Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/jba530-rgb444-runtime/J4n31Resident8Confirm.dll": "5408fab8b719301c521aa676f5846c8f58f34846d17c773f6161e281e42aa792",
+      "tmp/jba530-rgb444-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/jba530-rgb444-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/jba530-rgb444-runtime/J4n31AsyncConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/PngStreamShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/DR1WebpResidentConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/J4n31Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks.dll": "cf61425f000f6ff0df570e4a7d840b4cae8b7379ac0c59c5fd7784b0c8a374a2",
+      "tmp/jba530-rgb444-runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+      "tmp/jba530-rgb444-runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+      "tmp/jba530-rgb444-runtime/JIV1Jpeg420Confirm.dll": "6bbe042780b58539c40fc62f9407425ead99016f2f562565d1efefe3e0ddb3c2",
+      "tmp/jba530-rgb444-runtime/PredictablePngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+      "tmp/jba530-rgb444-runtime/PngStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/ReadDriverShort.dll": "df531eb4653937bf4f1ea6af223908db74931e502d9cd9f5720ca65a2955cbe9",
+      "tmp/jba530-rgb444-runtime/Profile.dll": "373505f8d07bd4ec9e3f50bf69be4f0fc307bd35a5e1df26e6d55238c84fca3f",
+      "tmp/jba530-rgb444-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/jba530-rgb444-runtime/ReadDriver.dll": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+      "tmp/jba530-rgb444-runtime/VpsEffort2Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/ReadDriverShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/PngStreamConfirmHost.dll": "ddae2cd023c6d6487e28f408d6c5b90b239fe3bcbc2998e2c314cff53b3614b6",
+      "tmp/jba530-rgb444-runtime/Jav32Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/PredictablePngShort.dll": "441c80445443335123284c911bb8362fd53ee4bd27b22ad652c3bf229f6d74c5",
+      "tmp/jba530-rgb444-runtime/CmykDecodeConfirmDriver.dll": "e56fff257699610fc9d928b7ed3e4fd9e745d37dddcc169df078e94114dfc7b4",
+      "tmp/jba530-rgb444-runtime/J4n31Resident16Confirm.dll": "fe80e2c07eb809f0b9103e5bb4b4d5b80f89417063275140b6ea7b48557df940",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+      "tmp/jba530-rgb444-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/jba530-rgb444-runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/DR1WebpStreamShort.dll": "8fa8a00a1de342996490d26300116f375f2998b9f1c6a29d798bd0be9a76a76e",
+      "tmp/jba530-rgb444-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/jba530-rgb444-runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+      "tmp/jba530-rgb444-runtime/Drgb31DirectRgb422Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/PredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/DR1WebpStreamConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/J4n31Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Jav32Short.dll": "7fe7941538ea6ccfca8f4b92b3824c102079300881a44034fb3d76d2c8b81d98",
+      "tmp/jba530-rgb444-runtime/J4n31Resident8Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Drgb31DirectRgb420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/PngDecodeConfirmDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/ReadDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/DR1WebpStreamShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+      "tmp/jba530-rgb444-runtime/DR1WebpResidentShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/jba530-rgb444-runtime/J4n31CancelableConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks-WarmConfirm-1.dll": "1195d51f9a7d4bf32abf0e21c303bdc4bd809045080e21f248e7735e795d5473",
+      "tmp/jba530-rgb444-runtime/Dmc31Short.dll": "759446ba1b94c4cabdb331638ad76d48cd202f82f23aab21298d92212ef6f24a",
+      "tmp/jba530-rgb444-runtime/Drgb31DirectRgb422Confirm.dll": "5a0049cc7f526a4af5c3442c8cae0bd932f65e4f40da9cdb0106beda713c40b0",
+      "tmp/jba530-rgb444-runtime/PngStreamShortHost.dll": "0075d31dbce00be8712baf02cfa8b40b1767007078e0048d7e98b4d7649c755b",
+      "tmp/jba530-rgb444-runtime/J4n31Resident16Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/jba530-rgb444-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/jba530-rgb444-runtime/Profile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/CmykDecodeConfirmDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/jba530-rgb444-runtime/J4n31CancelableConfirm.dll": "8848f146b950303813af0fd0bce377d67398be2953c3f35a7643badc49931f79",
+      "tmp/jba530-rgb444-runtime/DR1WebpResidentConfirm.dll": "315cebc4bb2ed72d8bb1de3e2181e7ecfc8a1595651a501e402d46e5713bd3b3",
+      "tmp/jba530-rgb444-runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+      "tmp/jba530-rgb444-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/jba530-rgb444-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/jba530-rgb444-runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/jba530-rgb444-runtime/CmykDecodeConfirmDriver.runtimeconfig.json",
+      "tmp/jba530-rgb444-runtime/CmykDecodeConfirmDriver.dll",
+      "--benchmarkName",
+      "WarmJpegDecode.Managed(Case: DirectRgb444)",
+      "--job",
+      "WarmConfirm",
+      "--benchmarkId",
+      "0"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "1622240",
+      "-o",
+      "tmp/jba530-rgb444-profile.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "quietGuardsPassed": true,
+    "traceSha256": "6441a1d296f985fe4694333c3706f5ff3f2594f73e780c6397d5168a4a19249c",
+    "traceBytes": 739604,
+    "scope": "JBA530 current immutableb1621ebf complete existingDirectRgb444 residentJPEG to independentRGBA8/publicDecode/disposal. One bounded2second capture, CPU0operation/CPU1sampler, all frozen source/settings/native/pixel/ownership/idle-v2 gates. Cached128operation selector, zero builds/newfixtures/productionchanges. Retained native contexts/wrappers remain declared. Instrumented elapsed discarded; sample locations and current JIT select shared preparation/execution work, not phase costs or projected gains."
+  },
+  "summary": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1995,
+    "managedSamples": 1699,
+    "methods": [
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        958
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        394
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        69
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        60
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        57
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        29
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        26
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        21
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        18
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        18
+      ],
+      [
+        "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]",
+        13
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        11
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        10
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        6
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        3
+      ],
+      [
+        "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        3
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        1
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        1
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        1
+      ]
+    ],
+    "targetCode": [
+      {
+        "address": "0x758bdeaa6390",
+        "size": 247,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa7100",
+        "size": 1358,
+        "name": "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.JpegDecoder::DecodeCore(bool)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa76c0",
+        "size": 411,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadMarker()[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa7880",
+        "size": 364,
+        "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadSegment()[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa7a20",
+        "size": 760,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadQuantization(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa7e40",
+        "size": 542,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa8080",
+        "size": 1377,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa8720",
+        "size": 2165,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadFrame(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaa9440",
+        "size": 4464,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadScan(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaaab80",
+        "size": 161,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadComponentMcuBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaaac40",
+        "size": 2212,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaab520",
+        "size": 1318,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaaba80",
+        "size": 816,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaabdd0",
+        "size": 523,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaac000",
+        "size": 227,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaac100",
+        "size": 1772,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaac840",
+        "size": 191,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::.cctor()[Optimized]"
+      },
+      {
+        "address": "0x758bdeaac920",
+        "size": 285,
+        "name": "int32[] [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::BuildKernel()[Optimized]"
+      },
+      {
+        "address": "0x758bdeaacaa0",
+        "size": 308,
+        "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::BuildRowPair(int32)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaacc00",
+        "size": 93,
+        "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaace20",
+        "size": 1231,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaad340",
+        "size": 549,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaad5a0",
+        "size": 547,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaad7e0",
+        "size": 311,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaad940",
+        "size": 350,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaadac0",
+        "size": 305,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaadc10",
+        "size": 247,
+        "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaadd20",
+        "size": 410,
+        "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]"
+      },
+      {
+        "address": "0x758bdeaadee0",
+        "size": 752,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderRgbRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+      }
+    ],
+    "offsets": [
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x231",
+        "samples": 225
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1eb",
+        "samples": 93
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x2ba",
+        "samples": 61
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x247",
+        "samples": 54
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x161",
+        "samples": 52
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1ca",
+        "samples": 48
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x206",
+        "samples": 46
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x8c",
+        "samples": 45
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x2ac",
+        "samples": 41
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1d7",
+        "samples": 32
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x224",
+        "samples": 25
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xb0",
+        "samples": 22
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x305",
+        "samples": 22
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x113",
+        "samples": 21
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x2bf",
+        "samples": 17
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xac",
+        "samples": 16
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x270",
+        "samples": 16
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x29c",
+        "samples": 16
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x157",
+        "samples": 16
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x17f",
+        "samples": 15
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x16b",
+        "samples": 14
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1e7",
+        "samples": 13
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x68a",
+        "samples": 12
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x2c7",
+        "samples": 11
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x2b6",
+        "samples": 11
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x230",
+        "samples": 11
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x446",
+        "samples": 11
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x19a",
+        "samples": 10
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x276",
+        "samples": 10
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xc4",
+        "samples": 9
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1b1",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0xba",
+        "samples": 9
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x10f",
+        "samples": 9
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1c7",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x649",
+        "samples": 8
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x12a",
+        "samples": 8
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xeb",
+        "samples": 8
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x10a",
+        "samples": 8
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1bf",
+        "samples": 8
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x106",
+        "samples": 7
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x418",
+        "samples": 7
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x43e",
+        "samples": 7
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x213",
+        "samples": 7
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1f3",
+        "samples": 7
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x43a",
+        "samples": 7
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x18e",
+        "samples": 7
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1d6",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0xa2",
+        "samples": 7
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x140",
+        "samples": 7
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x24a",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xd9",
+        "samples": 6
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x256",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3d2",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1c2",
+        "samples": 6
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x100",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x20d",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x136",
+        "samples": 5
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x18b",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x92",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x2b",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x17",
+        "samples": 5
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x8b",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x693",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x381",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x2fc",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x17d",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2b2",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x423",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xe3",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x64",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0xd8",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0x1e",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x201",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x1",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x153",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2c5",
+        "samples": 4
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x0",
+        "samples": 4
+      },
+      {
+        "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]",
+        "offset": "0x40",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x14c",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0xa5",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xba",
+        "samples": 4
+      },
+      {
+        "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x31",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3f2",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x6d5",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x7f6",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x173",
+        "samples": 4
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0xa8",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x2e7",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3f6",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x459",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0xdd",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x3b8",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x356",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x0",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3da",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xa0",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x80",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x39b",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x47e",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x315",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x79",
+        "samples": 3
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x12b",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x464",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x0",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0xa9",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3cf",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x7f",
+        "samples": 3
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x2d6",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x0",
+        "samples": 3
+      },
+      {
+        "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]",
+        "offset": "0x55",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x13",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x71",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0xbe",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x3d",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0xc3",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x7ac",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x457",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x33a",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2ca",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x415",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x70",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x82",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x33b",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x59",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x2a1",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x344",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x16",
+        "samples": 2
+      },
+      {
+        "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]",
+        "offset": "0x1b",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0x9b",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x83",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x159",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0xf6",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x31e",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0xa9",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x13e",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x6bd",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x321",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2f0",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x822",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2eb",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xba",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x82",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x5b0",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x1b9",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x286",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x813",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x30a",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x39e",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x169",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x361",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1b8",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x0",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0xdf",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3be",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x53",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x19",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3b7",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x586",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x31d",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0x35",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x261",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x317",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x47a",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x119",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x487",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x0",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x71",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3b4",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x33e",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x174",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0x66",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2fb",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x15b",
+        "samples": 2
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x4f",
+        "samples": 2
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0x67",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x215",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x59d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x18d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x23b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x33c",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x443",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x69d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x206",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x32",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x7d",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x115",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x68",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0xe4",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x14f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0xe5",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x346",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x31a",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x96",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x18f",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x248",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x32",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x3d3",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x470",
+        "samples": 1
+      },
+      {
+        "method": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x31f",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1ab",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x33f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x232",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x817",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2e4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x24",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x7d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x48c",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x163",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x200",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x40",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x1d9",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x382",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x682",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x125",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x4ef",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x227",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0xa1",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xe7",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x13",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x392",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x640",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x12d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0xe8",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x49c",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x5fa",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x7b5",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x192",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x243",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x93",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x113",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x4a6",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x216",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x18c",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x64",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x704",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x3c9",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x17a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x2d1",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x2b9",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x388",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0xbd",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x7ec",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0xf7",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x360",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x299",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x151",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x4f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x181",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0xd0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x48a",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x13",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0xa7",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x37e",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x32",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x353",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2bf",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0xe4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3e6",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x175",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0xc8",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x19e",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x376",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x175",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0x13",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x79",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x350",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x55",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x191",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x8e",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x227",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x21c",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x17a",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x26b",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x2b0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x40f",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x274",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x346",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x7e9",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x3df",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x1d7",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x1b4",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0xe9",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x341",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+        "offset": "0x109",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x9d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1de",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1bf",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x286",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x21f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x6de",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x108",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x15",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x152",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x5b0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0xe8",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1d3",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x451",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x6e5",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x6ac",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0xd5",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x203",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x38a",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+        "offset": "0x39",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x14",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xaa",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x83b",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0x1ad",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x338",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0x10b",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x5c",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xa5",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x7d4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2a2",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x6d",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x3a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x155",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xe4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x33f",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0xab",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x5f3",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xec",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0xb0",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+        "offset": "0xd4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xe0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x3b",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x436",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0xa0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0x30d",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0x50",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+        "offset": "0xcd",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "offset": "0xcd",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x2f4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0xc4",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x243",
+        "samples": 1
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+        "offset": "0x27",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        "offset": "0x40",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+        "offset": "0x313",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "offset": "0x1cf",
+        "samples": 1
+      },
+      {
+        "method": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "offset": "0xb9",
+        "samples": 1
+      }
+    ]
+  },
+  "observations": [
+    "Current fused reader has958of1995sample locations; inverseAVX2 has394, plainAC60, baseline scheduler69 andMCUpacking57. Locations/skid are leads, not phase times or predicted savings.",
+    "Current fused routine is816B. JIT repeats primary table field/length/index handling within its AC loop. Hot locations also cover signed amplitude and zigzag stores; no component-time attribution is established.",
+    "Actual baseline calls initialize/fill and publish the high-aligned cache per block. No shared MCU entropy window exists in this source. Geometry/cursor applicability must be established before a shared-window prototype.",
+    "Existing long9/10lookup and live normal publication are retained. Prepared-amplitude nibble and row-pair implementations are not blindly replayed. Current CallerRgb output-buffer control passes and is not this DirectRgb444 decoding target."
+  ],
+  "next": "First inspect borrowing fixed-length existing Huffman views once per actual ordinary reader entry, preserving long-code/full-field guards and storage. This can remove repeated object field/length setup without extra tables/capacity. A coherent shared MCU reservoir remains a separate lead requiring applicability/cursor proof. Complete frozen controls and exact grammar/poll/ownership boundaries govern continuation.",
+  "currentDisplayCostsChanged": 0,
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "raw": {
+    "file": "jpeg-current-entropy-attribution.tar.xz",
+    "sha256": "f915afc6cb8774e4bb9ae35ab34158cab20a37a924a9844085decd8bbaeaf2d0",
+    "bytes": 6202504,
+    "members": 115,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1"
+      },
+      {
+        "file": "jpeg-buffered-long-lookup-qualified.tar.xz",
+        "sha256": "7fd6f413347ed69862a1228b3be73aa067e42b997e1649ad19c14e64cdb227c6"
+      }
+    ]
+  }
+}
