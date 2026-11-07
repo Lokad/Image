@@ -1,5 +1,9 @@
 # Baseline JPEG AC publication screen
 
+Historical AC-only screen under a retired continuation threshold. The later
+[plain-reader round](JPEG-PLAIN-READER.md) evaluates both current hot kernels with
+independent evidence; this screen is not a permanent restriction on the design.
+
 One existing 513×259 resident baseline420 JPEG decode, frozen 52,093-byte packet.
 Complete public decode, independently owned RGBA8 output and release remain.
 All 531,468 output bytes, alpha, source and ownership gates pass.

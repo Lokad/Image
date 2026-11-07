@@ -672,41 +672,35 @@ cache = candidateCache; pending = candidatePending - length;
     internal void ReadPlainBaselineAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
     {
         ulong localBits = bits; var localAvailable = available; var localPosition = position; var k = coefficient;
-        try
+        while (k <= 63)
         {
-            while (k <= 63)
+            // Eight prefix bits plus at most ten amplitude bits. Reuse
+            // unused lookahead across symbols instead of refilling each one.
+            if (localAvailable < 18)
             {
-                // Eight prefix bits plus at most ten amplitude bits. Reuse
-                // unused lookahead across symbols instead of refilling each one.
-                if (localAvailable < 18)
-                {
-                    if (data.Length - localPosition < 4) return;
-                    var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
-                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) return;
-                    localBits = localBits << 32 | word; localAvailable += 32; localPosition += 4;
-                }
-                var packed = shortCodes[(int)((localBits >> (localAvailable - 8)) & 255)]; var count = packed & 15;
-                var token = packed >> 4; var size = token & 15; var run = token >> 4;
-                if (count == 0) return;
-                if (token == 0)
-                {
-localAvailable -= count; k = 64; return;
-                }
-                if (size is < 1 or > 10 || run >= 64 - k) return;
-                localAvailable -= count + size;
-                var amplitude = (int)((localBits >> localAvailable) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
-                k += run;
-                block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
+                if (data.Length - localPosition < 4) break;
+                var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
+                if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
+                localBits = localBits << 32 | word; localAvailable += 32; localPosition += 4;
             }
+            var packed = shortCodes[(int)((localBits >> (localAvailable - 8)) & 255)]; var count = packed & 15;
+            var token = packed >> 4; var size = token & 15; var run = token >> 4;
+            if (count == 0) break;
+            if (token == 0)
+            {
+                localAvailable -= count; k = 64; break;
+            }
+            if (size is < 1 or > 10 || run >= 64 - k) break;
+            localAvailable -= count + size;
+            var amplitude = (int)((localBits >> localAvailable) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
+            k += run;
+            block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
         }
-        finally
-        {
-            // Speculative whole bytes are not consumed. Publish the original
-            // reader's minimum byte position and only its pending fractional bits.
-            var wholeBytes = localAvailable >> 3;
-            bits = unchecked((uint)(localBits >> (wholeBytes * 8))); available = localAvailable & 7;
-            position = localPosition - wholeBytes; coefficient = k;
-        }
+        // Speculative whole bytes are not consumed. Publish the original
+        // reader's minimum byte position and only its pending fractional bits.
+        var wholeBytes = localAvailable >> 3;
+        bits = unchecked((uint)(localBits >> (wholeBytes * 8))); available = localAvailable & 7;
+        position = localPosition - wholeBytes; coefficient = k;
     }
 
     internal void ReadPlainCancelableAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)

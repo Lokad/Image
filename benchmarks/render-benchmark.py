@@ -1131,14 +1131,14 @@ def render():
                 updated_vertical += 1
     assert updated_vertical == 3
     # Retained gains remain claims about their original paired experiments.
-    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-full-grid-output-evidence.json').read_text(encoding='utf-8'))
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-plain-reader-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_scan['productionAccepted'] and jpeg_scan['requiredMaterialPaths'] == 283
     assert jpeg_scan['qualification']['fullChecksEachOs'] == 5850
     assert jpeg_scan['qualification']['sameActualPackageBothOs']
     assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
-    assert jpeg_scan['sourceProof']['wholeTwoFileProjectionEqualsQualifiedOriginal']
-    assert jpeg_scan['sourceProof']['sharedVectorArithmeticExact'] and jpeg_scan['sourceProof']['sharedScalarArithmeticExact']
-    assert jpeg_scan['sourceProof']['deadFallbackRemovalExact']
+    assert jpeg_scan['sourceProof']['cancellableAndProgressiveUnchanged']
+    assert all(p['outsideSelectedMethodByteIdentical'] and p['normalExitTransformationTokenExact']
+               for p in jpeg_scan['sourceProof']['proof'])
     assert len(jpeg_scan['cases']) == 29
     assert jpeg_scan['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_scan['cases'].values())
                                         for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
@@ -1149,7 +1149,7 @@ def render():
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for name in ['NativeDecode8', 'NativeDecodeCancelable8'] for v in jpeg_scan['comparison'][name]['views'].values())
+               for v in jpeg_scan['comparison']['DirectRgb444']['views'].values())
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
     replacements += [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
                      ('Progressive420', 'JPEG progressive420, resident decode'),
@@ -1740,25 +1740,22 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [full-grid output ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md)
-  independently saves147.45µs/6.74%raw on live-token native444 and80.68µs/4.03%
-  on ordinary native444 (6.81%/4.06%normalized). Both confidence views separate.
-  Current2,040.63/native1,720.80µs and1,920.61/native1,719.39µs remain gaps,
-  uppers1.192/1.130. GC falls966,367/966,370→10,088B/op. Exact sharedQ13 math
-  converts the private final image after complete scans/Adobe validation; encoded
-  SourceColor.Unknown stays unknown. Two unreachable full-grid fallback branches
-  are removed; caller buffers, progressive/subsampled storage and portable kernels remain.
-  Governed peak965,189→541,253B; result531,468B stays charged until disposal.
-  Default idle pool+531,468B is explicit; governed calls bypass it. Physical/native
-  peaks and governed CPU/GC are unmeasured. All29 existing decode/caller/stream/live/coding-validation costs
-  refresh on the final immutable DLL.
-  Sixteen displayed numerical rows update;109 source-valid rows reuse evidence.
-  A postscan borrower repairs50.04µs of the intermediate64.79µs RGB regression.
-  FinalRGB1,856.71/native1,451.57µs,upper1.285 remains a gap. Residual14.75µs/.80%
-  versus the earlier build is a point loss: filtered raw separates; all-actual raw
-  and normalized intervals overlap. No equivalence claim or favorable resampling.
-  [Earlier shared components](../benchmarks/JPEG-COMPONENT-FRAME.md) retain their
-  RGB/CMYK paired gains; their costs are superseded where the color pipeline changed.
+- **JPEG and reading:** [plain-reader publication](../benchmarks/JPEG-PLAIN-READER.md)
+  saves55.01µs/2.96%raw and2.94%normalized on complete full-grid RGB decode;
+  both filtered/all-actual confidence views separate. Current1,801.70/native1,451.29µs,
+  ratio1.241/upper1.263 remains a gap. Allocation stays10,088B/op. Normal exits share
+  the same canonical cursor publication; partial/fallback/error behavior, exact pixels,
+  cancellable/progressive readers and encoded packets are preserved.
+  Live-token decode regresses22.57µs/1.11%raw and1.29%normalized, both confidence views
+  separated; current2,063.20µs/upper1.207 remains a gap. A caller-bypass short did not
+  demonstrate repair and was restored without rebuilding. This is a scoped gain
+  with an explicit tradeoff, not an improvement across all JPEG paths.
+  Twenty-three affected baseline costs refresh; six unchanged progressive confirmations reuse
+  valid evidence. Ten displayed rows refresh;115 rows reuse unchanged paths.
+  [Full-grid ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md) retains earlier paired
+  gains and adverse stages. Its source-valid native444 governed peak541,253B and retained
+  output531,468B are unchanged; default pool remains bounded, governed calls bypass it.
+  These capacity facts are separate from total allocations and unmeasured physical/native peaks.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
@@ -1776,7 +1773,7 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-The affected JPEG paths pass101 internal/375 public checks per normal/scalar mode
+The affected JPEG paths pass108 internal/375 public checks per normal/scalar mode
 on each OS; unrelated AVX2/AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained

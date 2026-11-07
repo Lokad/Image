@@ -27,36 +27,32 @@ internal ref partial struct JpegEntropyReader
         // Only a fully validated DC commits. A later miss hands the remaining
         // AC traversal its exact logical cursor; nothing is replayed.
         predictor = (int)next; block[0] = predictor; var k = 1;
-        try
+        // Plain production callers supply validated tables and a full block;
+        // every normal exit publishes the same canonical cursor below.
+        while (k <= 63)
         {
-            while (k <= 63)
+            if (pending < 18)
             {
-                if (pending < 18)
-                {
-                    if (data.Length - cursor < 4) return true;
-                    word = BinaryPrimitives.ReadUInt32BigEndian(data.Slice(cursor, 4));
-                    if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) return true;
-                    cache = cache << 32 | word; pending += 32; cursor += 4;
-                }
-                var packed = acCodes[(int)((cache >> (pending - 8)) & 255)]; var count = packed & 15;
-                var symbol = packed >> 4; var size = symbol & 15; var run = symbol >> 4;
-                if (count == 0) return true;
-                if (symbol == 0) { pending -= count; k = 64; return true; }
-                // T.81 F.2.2: leave zero runs, long codes and syntax failures
-                // to the original traversal before consuming their prefix.
-                if (size is < 1 or > 10 || run >= 64 - k) return true;
-                pending -= count + size;
-                amplitude = (int)((cache >> pending) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
-                k += run;
-                block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
+                if (data.Length - cursor < 4) break;
+                word = BinaryPrimitives.ReadUInt32BigEndian(data.Slice(cursor, 4));
+                if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
+                cache = cache << 32 | word; pending += 32; cursor += 4;
             }
-            return true;
+            var packed = acCodes[(int)((cache >> (pending - 8)) & 255)]; var count = packed & 15;
+            var symbol = packed >> 4; var size = symbol & 15; var run = symbol >> 4;
+            if (count == 0) break;
+            if (symbol == 0) { pending -= count; k = 64; break; }
+            // T.81 F.2.2: leave zero runs, long codes and syntax failures
+            // to the original traversal before consuming their prefix.
+            if (size is < 1 or > 10 || run >= 64 - k) break;
+            pending -= count + size;
+            amplitude = (int)((cache >> pending) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
+            k += run;
+            block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
         }
-        finally
-        {
-            var wholeBytes = pending >> 3;
-            bits = unchecked((uint)(cache >> (wholeBytes * 8))); available = pending & 7;
-            position = cursor - wholeBytes; coefficient = k;
-        }
+        var wholeBytes = pending >> 3;
+        bits = unchecked((uint)(cache >> (wholeBytes * 8))); available = pending & 7;
+        position = cursor - wholeBytes; coefficient = k;
+        return true;
     }
 }
