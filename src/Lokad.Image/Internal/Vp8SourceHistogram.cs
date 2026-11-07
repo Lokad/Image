@@ -17,6 +17,50 @@ internal static class Vp8SourceHistogram
         internal int RawScore => PeakPopulation > 1 ? 510 * LastBin / PeakPopulation : 0;
     }
 
+    // Source analysis has finished every DCT read of this private workspace.
+    // Recycle its64 coefficients for bins, retaining the per16 density policy.
+    internal static void AddFourBlocks(Span<short> workspace, Span<int> population)
+    {
+        if (workspace.Length < 64 || population.Length < 32)
+            throw new ArgumentException("Analysis requires64coefficients and32buckets.");
+        if (!Avx512F.IsSupported || !Avx512BW.IsSupported
+            || MemoryMarshal.AsBytes(workspace[..64]).Overlaps(MemoryMarshal.AsBytes(population[..32])))
+        {
+            // Aliased populations can modify a later coefficient block. Keep
+            // the original call/read order before mutating any workspace.
+            for (var block = 0; block < 4; block++) AddBlock(workspace.Slice(block * 16, 16), population);
+            return;
+        }
+        var first = Vector512.Create(workspace);
+        var second = Vector512.Create(workspace[32..]);
+        var limit = Vector512.Create((ushort)31);
+        var low = Avx512BW.Min(Avx512BW.ShiftRightLogical(Avx512BW.Abs(first).AsUInt16(), 3), limit);
+        var high = Avx512BW.Min(Avx512BW.ShiftRightLogical(Avx512BW.Abs(second).AsUInt16(), 3), limit);
+        var lowZeros = (uint)Vector512.ExtractMostSignificantBits(Vector512.Equals(low, Vector512<ushort>.Zero));
+        var highZeros = (uint)Vector512.ExtractMostSignificantBits(Vector512.Equals(high, Vector512<ushort>.Zero));
+        if ((lowZeros & highZeros) == uint.MaxValue) { population[0] += 64; return; }
+        var buckets = MemoryMarshal.Cast<short, ushort>(workspace[..64]);
+        low.CopyTo(buckets); high.CopyTo(buckets[32..]);
+        var combinedZeros = 0;
+        for (var block = 0; block < 4; block++)
+        {
+            var offset = block * 16;
+            var mask = ((block < 2 ? lowZeros : highZeros) >> ((block & 1) * 16)) & 65535u;
+            var zeros = BitOperations.PopCount(mask);
+            if (zeros < 8)
+            {
+                for (var p = 0; p < 16; p++) population[buckets[offset + p]]++;
+            }
+            else
+            {
+                combinedZeros += zeros;
+                for (var pending = ~mask & 65535u; pending != 0; pending &= pending - 1)
+                    population[buckets[offset + BitOperations.TrailingZeroCount(pending)]]++;
+            }
+        }
+        if (combinedZeros != 0) population[0] += combinedZeros;
+    }
+
     internal static void AddBlock(ReadOnlySpan<short> coefficients, Span<int> population)
     {
         if (coefficients.Length < 16 || population.Length < 32) throw new ArgumentException("Analysis requires16coefficients and32buckets.");

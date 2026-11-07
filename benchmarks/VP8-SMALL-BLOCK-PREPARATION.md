@@ -1,5 +1,9 @@
 # Per-block VP8 candidate preparation
 
+Current encode costs are superseded by
+[four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md). The scoped gains, normalized
+uncertainty and raw evidence below remain historical evidence for this stage.
+
 The distortion search now prepares its thirteen border/DC values and packed
 source once per block, reusing them across visited modes. It calls the existing
 exact geometry and squared-error kernels. Header pruning, strict ties, candidate

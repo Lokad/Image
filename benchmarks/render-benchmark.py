@@ -16,7 +16,7 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
-    vp8_current = json.loads((ROOT / 'benchmarks/vp8-small-block-preparation-evidence.json').read_text(encoding='utf-8'))
+    vp8_current = json.loads((ROOT / 'benchmarks/vp8-four-block-histogram-evidence.json').read_text(encoding='utf-8'))
     assert vp8_current['productionAccepted'] and vp8_current['requiredMaterialPaths'] == 283
     assert vp8_current['raw']['mirrored'] and vp8_current['raw']['allMembersVerified']
     assert vp8_current['statusCounts'] == {state: sum(c['status'] == state for c in vp8_current['cases'].values())
@@ -30,8 +30,13 @@ def render():
         assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['sourceUnchanged'] and c['independentOwnedOutput']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    assert vp8_current['sourceProof']['entireDecisionOutsidePreparationReconstructsExact']
-    assert vp8_current['sourceProof']['allPredictionGeometryAndExistingCandidateGenerationExact']
+    assert vp8_current['sourceProof']['originalSingleBlockHistogramAndDescribeExact']
+    assert vp8_current['sourceProof']['sourceAnalysisOnlyReplacesExistingFourCallBoundary']
+    assert vp8_current['sourceProof']['allForwardTransformsPredictionsRecordsAndLiveCheckpointsUnchanged']
+    assert vp8_current['sourceProof']['recycledDeadCoefficientsAfterAllDctUsers']
+    assert vp8_current['sourceProof']['aliasAndNon512FallbackOriginalFourCallsBeforeWrites']
+    assert vp8_current['qualification']['fullChecksEachOs'] == 5875
+    assert vp8_current['qualification']['sameActualPackageBothOs']
     trellis = vp8_current['cases']['trellis']
     launches = trellis['additionalLaunchEvidence']
     assert launches['productionChanged'] is False and launches['allBuilds'] == 0
@@ -1441,18 +1446,17 @@ def render():
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     vp8_rows = []
     for case, label in vp8_labels.items():
-        c = webp_owned['cases'][case] if case in ('alpha', 'alpha16') else vp8_current['cases'][case]
+        c = vp8_current['cases'][case]
         assert not any(row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label for _, row in rows)
         vp8_rows.append(('codec', f'| {label} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
             f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | '
             f'{c["managedPacketBytes"]:,} / {c["nativePacketBytes"]:,} |'))
     rows[position:position] = vp8_rows
-    vp8_status_counts = {state: sum((webp_owned['cases'][case] if case in ('alpha', 'alpha16')
-                                   else vp8_current['cases'][case])['status'] == state
+    vp8_status_counts = {state: sum(vp8_current['cases'][case]['status'] == state
                                   for case in vp8_current['cases'])
                          for state in ('pass', 'gap', 'uncertain')}
     selected_cost = vp8_current['cases']['selected']
-    assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
+    assert selected_cost['managedPacketBytes'] == 7026
     stream = resident_decode['costs']['Vp8Stream']
     rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
         f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | '
@@ -1728,10 +1732,16 @@ Current scope and remaining work:
 - **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
   saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.
   Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
-  Eight affected comparisons refresh:5pass/3uncertain (photograph/opaque/Alpha8).
-  No causal CPU-gain claim. Seven unaffected lossy controls reuse
-  [per-block preparation](../benchmarks/VP8-SMALL-BLOCK-PREPARATION.md), including
-  its54.30µs raw gain and normalized uncertainty. Combined lossy scope:
+  Six unchanged lossless comparisons reuse that evidence; photograph/opaque
+  remain uncertain. No causal CPU-gain claim for that storage change.
+  [Four-block histograms](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md) separately
+  save **101.15µs/3.69% raw**,3.47% reference-normalized, on complete effort2.
+  Both confidence views separate. The same128B dead coefficient workspace holds
+  bins; no new owned capacity or retained state. GC stays406,705B/op. Current
+  2,638.29/native2,504.45µs,upper1.058 remains a134µs gap. All nine affected lossy
+  controls refresh, including alpha; causal gain is established only for effort2.
+  Photograph and Alpha8 remain uncertain; effort6 passes its fixed four-launch
+  envelope. Combined lossy scope:
   {vp8_status_counts['pass']}pass/{vp8_status_counts['gap']}gaps/{vp8_status_counts['uncertain']}uncertain.
   Exact complete packets remain unchanged; passing controls stop.
 - **PNG:** [prepared literal prefixes](../benchmarks/PNG-PREPARED-PREFIX.md) save
@@ -1807,14 +1817,15 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{vp8_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected JPEG paths pass401 internal/375 public checks per normal/scalar mode
-on each OS, including actual nine/ten-bit traversal, exact cursor/following reads,
-terminal refusal, cancellation/recovery and survivors. Unchanged VP8/word/other ISA evidence is reused.
+Affected VP8 paths pass152 internal/239 public checks per normal/scalar mode
+on each OS, including every zero-mask, signed/overflow bins, aliased sequential
+feedback, exact packets, terminal refusal, cancellation/recovery and survivors.
+Unchanged JPEG/decoder/word/other ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

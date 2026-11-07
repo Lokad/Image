@@ -69,7 +69,7 @@ internal sealed class Vp8SourceAnalysis : IDisposable
             {
                 Vp8ForwardTransform.DctFourBlocks(plane[((y + by) * stride + x)..], prediction[(by * size)..],
                     stride, size, coefficients);
-                for (var block = 0; block < 4; block++) Vp8SourceHistogram.AddBlock(coefficients.Slice(block * 16, 16), population);
+                Vp8SourceHistogram.AddFourBlocks(coefficients, population);
             }
             else for (var bx = 0; bx < size; bx += 4)
             {
