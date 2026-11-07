@@ -9,7 +9,7 @@ namespace Lokad.Image.Internal;
 // define coefficient syntax, scan and quantizer geometry. Candidate selection
 // is pinned encoder policy. All storage is borrowed or stack scratch, admitted
 // once by the enclosing operation; no caches, heap or per-block scope.
-internal static class Vp8TrellisQuantization
+internal static partial class Vp8TrellisQuantization
 {
     internal const int ScratchBytes = 2048;
 
@@ -151,6 +151,30 @@ internal static class Vp8TrellisQuantization
                 return false;
             }
             return Search(coefficients, levels, in this, type, initialContext, lambda);
+        }
+
+        // Four disjoint Luma4 modes with one matrix/context. The enclosing
+        // macroblock admits its 16-KiB workspace, rather than ScratchBytes
+        // (the standalone single-search allowance). Nothing escapes the call.
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        internal uint ApplyFourLuma4(Span<short> coefficients, Span<short> levels, int initialContext, int lambda)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            _ = rate.Values;
+            coefficients = coefficients[..64]; levels = levels[..64];
+            if (!Avx2.IsSupported)
+            {
+                uint result = 0;
+                for (var lane = 0; lane < 4; lane++)
+                    if (Apply(coefficients.Slice(lane * 16, 16), levels.Slice(lane * 16, 16), 3, initialContext, lambda))
+                        result |= 1u << lane;
+                return result;
+            }
+            uint zeroMask = 0;
+            for (var lane = 0; lane < 4; lane++)
+                if (zero.AreZero(coefficients.Slice(lane * 16, 16), 0)) zeroMask |= 1u << lane;
+            if (zeroMask == 15) { coefficients.Clear(); levels.Clear(); return 0; }
+            return SearchFourLuma4(coefficients, levels, in this, initialContext, lambda, zeroMask, cancellation);
         }
     }
 

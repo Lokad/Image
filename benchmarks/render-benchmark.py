@@ -1568,22 +1568,20 @@ def render():
                for v in vp8_owned['independentPhotograph']['views'].values())
     assert vp8_owned['storage']['newOwnedHeapCapacityBytes'] == 0
     assert set(vp8_owned['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'distortion', 'trellis', 'alpha', 'alpha16'}
-    vp8_current = json.loads((ROOT / 'benchmarks/vp8-coefficient-local-trellis-evidence.json').read_text(encoding='utf-8'))
+    vp8_current = json.loads((ROOT / 'benchmarks/vp8-four-mode-trellis-evidence.json').read_text(encoding='utf-8'))
     assert vp8_current['productionAccepted'] and vp8_current['requiredMaterialPaths'] == 283
-    assert vp8_current['sourceProof']['scoringArithmeticAndPublicationNormalizedExact']
-    assert vp8_current['sourceProof']['tracebackExact']
+    assert vp8_current['sourceProof']['plainModeProjectionExact']
+    assert vp8_current['sourceProof']['singleExecutionAndScalarKernelExact']
     assert vp8_current['storage']['newOwnedHeapBytes'] == vp8_current['storage']['newRetainedBytes'] == 0
     assert vp8_current['raw']['mirrored'] and vp8_current['raw']['allMembersVerified']
-    assert vp8_current['statusCounts'] == {'pass': 3, 'gap': 3, 'uncertain': 3}
+    assert vp8_current['statusCounts'] == {'pass': 3, 'gap': 2, 'uncertain': 4}
     assert vp8_current['cases']['diagram']['upper'] <= 1
     pair = vp8_current['pairedTrellis']['result']
     assert len(pair['pairs']) == 12 and pair['outputExact'] and pair['independentOwners']
     assert math.exp(pair['logRatioStatistics']['ConfidenceInterval']['Upper']) < 1
-    assert all(v['rawGainSeparated'] and not v['normalizedGainSeparated']
-               for v in vp8_current['independentTrellis']['views'].values())
-    assert all(not v['rawGainSeparated'] and not v['normalizedGainSeparated']
-               and not v['rawLossSeparated'] and not v['normalizedLossSeparated']
-               for v in vp8_current['selectedComparison']['views'].values())
+    assert all(v['raw']['upper'] < 1 and v['normalized']['lower'] < 1 < v['normalized']['upper']
+               for v in vp8_current['boundedBalancedLaunches']['views'].values())
+    assert vp8_current['cases']['trellis']['status'] == 'uncertain'
     current_labels = {
         'ordinary': 'VP8L RGBA8 / libwebp exact=1',
         'photograph': 'VP8L photograph / libwebp exact=1',
@@ -1708,7 +1706,7 @@ def render():
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
     vq = vp8_current['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5751
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5764
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1868,7 +1866,7 @@ def render():
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
-Updated 2026-11-06. These **{displayed_count} selected comparisons** combine qualified
+Updated 2026-11-07. These **{displayed_count} selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -1885,14 +1883,17 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [coefficient-local trellis](../benchmarks/VP8-COEFFICIENT-LOCAL-TRELLIS.md)
-  retains1.90% scoped counterbalanced gain and350µs/3.13% standalone raw saving;
-  different populations/magnitudes. Native brackets move; the normalized point is
-  adverse but neither normalized gain nor loss is established. Current effort6
-  ratio {vp8_current['cases']['trellis']['ratio']:.3f}/upper {vp8_current['cases']['trellis']['upper']:.3f} and effort5 ratio {vp8_current['cases']['selected']['ratio']:.3f}/upper {vp8_current['cases']['selected']['upper']:.3f} remain gaps.
-  Allocations754,497/741,065B and scratch/admission/retention stay unchanged.
-  Both affected controls refresh; seven reuse unchanged paths: **3pass,3gaps,3uncertain**.
-  Effort5's +36µs raw adverse point is inconclusive; no favorable standalone repeats.
+- **WebP:** [four-mode trellis](../benchmarks/VP8-FOUR-MODE-TRELLIS.md)
+  saves662µs/6.4% raw across four fixed counterbalanced standalone launch pairs;
+  99.9% ratio interval[0.9035,0.9689]. A scoped DLL comparison independently shows5.63%.
+  The earlier adverse standalone comparison is retained; normalized gain remains uncertain.
+  Effort6's displayed independent twelve has ratio {vp8_current['cases']['trellis']['ratio']:.3f};
+  upper {vp8_current['cases']['trellis']['upper']:.3f} also includes launch-level uncertainty, so parity is unconfirmed.
+  Effort5 remains a gap, ratio {vp8_current['cases']['selected']['ratio']:.3f}/upper {vp8_current['cases']['selected']['upper']:.3f}.
+  Allocations754,497/741,065B are unchanged; the four-mode path adds112B explicit stack
+  capacity within existing16KiB admission, no new heap or retained storage. Whole-operation
+  physical peak is unmeasured. One cost refreshes; eight reuse unchanged paths:
+  **3pass,2gaps,4uncertain**. No further timing resampling this round.
   [Earlier candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
   retains its own scoped gains and actual costs as history.
   [Prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md) retain their

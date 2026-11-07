@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-06. These **125 selected comparisons** combine qualified
+Updated 2026-11-07. These **125 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -17,14 +17,17 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [coefficient-local trellis](../benchmarks/VP8-COEFFICIENT-LOCAL-TRELLIS.md)
-  retains1.90% scoped counterbalanced gain and350µs/3.13% standalone raw saving;
-  different populations/magnitudes. Native brackets move; the normalized point is
-  adverse but neither normalized gain nor loss is established. Current effort6
-  ratio 1.104/upper 1.111 and effort5 ratio 1.020/upper 1.031 remain gaps.
-  Allocations754,497/741,065B and scratch/admission/retention stay unchanged.
-  Both affected controls refresh; seven reuse unchanged paths: **3pass,3gaps,3uncertain**.
-  Effort5's +36µs raw adverse point is inconclusive; no favorable standalone repeats.
+- **WebP:** [four-mode trellis](../benchmarks/VP8-FOUR-MODE-TRELLIS.md)
+  saves662µs/6.4% raw across four fixed counterbalanced standalone launch pairs;
+  99.9% ratio interval[0.9035,0.9689]. A scoped DLL comparison independently shows5.63%.
+  The earlier adverse standalone comparison is retained; normalized gain remains uncertain.
+  Effort6's displayed independent twelve has ratio 0.973;
+  upper 1.711 also includes launch-level uncertainty, so parity is unconfirmed.
+  Effort5 remains a gap, ratio 1.020/upper 1.031.
+  Allocations754,497/741,065B are unchanged; the four-mode path adds112B explicit stack
+  capacity within existing16KiB admission, no new heap or retained storage. Whole-operation
+  physical peak is unmeasured. One cost refreshes; eight reuse unchanged paths:
+  **3pass,2gaps,4uncertain**. No further timing resampling this round.
   [Earlier candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md)
   retains its own scoped gains and actual costs as history.
   [Prepared price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md) retain their
@@ -102,7 +105,7 @@ Current scope and remaining work:
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
 
-The current production build passes **5,751 full/live checks per OS**, affected
+The current production build passes **5,764 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -149,7 +152,7 @@ settings do not establish matched quality.
 | VP8 opaque RGBA8 † | 14,109.85 | 15,494.13 | 0.911 / 0.922 | 1,201,669 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 10,421.63 | 9,778.81 | 1.066 / 1.113 | 809,225 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,701.25 | 5,823.43 | 0.979 / 0.985 | 741,222 | 7,100 / 7,100 |
-| VP8 diagram, effort6 / trellis † | 10,831.46 | 9,811.63 | 1.104 / 1.111 | 754,497 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 10,409.98 | 10,694.42 | 0.973 / 1.711 | 754,497 | 6,818 / 6,818 |
 | VP8 opaque RGBA16, including normalization † | 15,614.22 | 16,700.17 | 0.935 / 0.939 | 1,201,552 | 72,380 / 72,380 |
 | VP8 RGBA8 + lossless alpha † | 56,041.55 | 56,143.03 | 0.998 / 1.005 | 7,034,392 | 98,590 / 98,590 |
 | VP8L photograph / libwebp exact=1 † | 81,361.78 | 83,323.50 | 0.976 / 1.022 | 6,517,158 | 160,032 / 160,032 |

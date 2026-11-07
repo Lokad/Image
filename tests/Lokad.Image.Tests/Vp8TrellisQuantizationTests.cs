@@ -7,7 +7,7 @@ using Lokad.Image.Tooling;
 
 namespace Lokad.Image.Tests;
 
-public sealed class Vp8TrellisQuantizationTests
+public sealed partial class Vp8TrellisQuantizationTests
 {
     [Theory]
     [InlineData(0)] [InlineData(63)] [InlineData(127)]

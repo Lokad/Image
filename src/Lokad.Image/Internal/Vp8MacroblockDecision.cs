@@ -156,6 +156,8 @@ internal static class Vp8MacroblockDecision
         Span<short> trellisScratch = trellis ? stackalloc short[64] : default;
         var execution = trellis ? new Vp8TrellisQuantization.Execution(matrix, rate, trellisWeights, context, trellisScratch) : default;
         Span<byte> predictions = stackalloc byte[192]; Span<short> transforms = stackalloc short[192];
+        var fourTrellis = trellis && Vp8ForwardTransform.SupportsFour && !context.Cancellation.CanBeCanceled;
+        Span<short> fourLevels = fourTrellis ? stackalloc short[64] : default;
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
         var fused = !trellis && Avx512F.IsSupported && Avx2.IsSupported;
         var fullQuantizer = fused ? new Vp8BlockQuantization.FullBlockQuantizer(matrix) : default;
@@ -192,6 +194,7 @@ internal static class Vp8MacroblockDecision
                     Vp8ForwardTransform.DctFourPredictions(source[offset..], 16,
                         predictions.Slice(mode * 16, 64), transforms.Slice(mode * 16, 64));
             }
+            uint fourNonzero = 0;
             for (var mode = 0; mode < 10; mode++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
@@ -208,6 +211,10 @@ internal static class Vp8MacroblockDecision
                     continue;
                 }
                 var candidate = batch ? transforms.Slice(mode * 16, 16) : coefficients;
+                var candidateLevels = fourTrellis ? fourLevels.Slice((mode & 3) * 16, 16) : trialLevels;
+                if (fourTrellis && (mode & 3) == 0)
+                    fourNonzero = execution.ApplyFourLuma4(transforms.Slice(mode * 16, 64), fourLevels,
+                        initialContext, costs.Luma4Trellis);
                 if (batch)
                 {
                     if (!packedPixels) predictions.Slice(mode * 16, 16).CopyTo(trial);
@@ -228,11 +235,11 @@ internal static class Vp8MacroblockDecision
                 }
                 else
                 {
-                    any = trellis
-                        ? execution.Apply(candidate, trialLevels, 3, initialContext, costs.Luma4Trellis)
-                        : Vp8BlockQuantization.Apply(candidate, trialLevels, matrix);
-                    flat = mode > 0 && Flat(trialLevels, 1, 3);
-                    rateCost = rate.Residual(trialLevels, 3, 0, initialContext, out _);
+                    any = fourTrellis ? (fourNonzero & (1u << (mode & 3))) != 0 : trellis
+                        ? execution.Apply(candidate, candidateLevels, 3, initialContext, costs.Luma4Trellis)
+                        : Vp8BlockQuantization.Apply(candidate, candidateLevels, matrix);
+                    flat = mode > 0 && Flat(candidateLevels, 1, 3);
+                    rateCost = rate.Residual(candidateLevels, 3, 0, initialContext, out _);
                 }
                 var header = modeHeaders[mode];
                 if (mode > 0 && flat) rateCost += 140;
@@ -264,11 +271,11 @@ internal static class Vp8MacroblockDecision
                 var score = new Metric(distortion, texture, header, rateCost, total);
                 // Uniform mode0 is the first candidate and always wins, so its
                 // reuse snapshot has the same fields at this publication point.
-                if (uniform) { uniformScore = score; uniformFlat = fused ? flat : Flat(trialLevels, 1, 3); }
+                if (uniform) { uniformScore = score; uniformFlat = fused ? flat : Flat(candidateLevels, 1, 3); }
                 bestMode = mode; best = score; bestNonzero = any;
                 if (packedPixels) reconstructed.CopyTo(bestPixels); else trial.CopyTo(bestPixels);
                 if (fused) prepared.PublishLevels(levels.Slice(b * 16, 16));
-                else trialLevels.CopyTo(levels.Slice(b * 16, 16));
+                else candidateLevels.CopyTo(levels.Slice(b * 16, 16));
             }
             result = result.Add(best.Price(costs.Mode)); headers += best.H;
             if (result.Total >= previousScore || headers > headerLimit) return false;
