@@ -1,0 +1,397 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JTV531/JHP532",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "stages": {
+    "A": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "JTV531",
+        "paths": [
+          "src/Lokad.Image/Internal/JpegHuffman.cs",
+          "src/Lokad.Image/Internal/JpegEntropyReader.cs",
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs"
+        ],
+        "baseline": {
+          "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2"
+        },
+        "hypothesis": "JBA530 current fused JPEG reader958/1995sample locations. Its816BJIT reloads the primary table and dynamic array length inside each AC iteration. Borrow fixed-length existing primary/long table views once at actual fused/plain reader entry.",
+        "endState": "One shared static prefix lookup over borrowed views; same256/1024ushort arrays and constructor/admission/ownership. Remove obsolete object-based lookup, without forwarding wrappers. Same long-code/full-amplitude guards, bit arithmetic, publication, grammar and polls.",
+        "workloads": [
+          "DirectRgb444",
+          "CmykAdobeSparse2D"
+        ],
+        "temporaryTradeoffs": "Two borrowed views may increase register pressure or caller code; fewer field loads/bounds checks alone prove no gain. Screen complete operations, independent contemporary confirmation only if promising. No extra table/capacity, cache/session or fixed fixture specialization.",
+        "workflow": "One immutable core/embedded perOS, focused JPEG normal/scalar checks, reuse all prepared harness/native/selectors/fixtures and unchanged qualification. Accepted production milestone requires affected current costs plus broad Windows/Linux/scalar/live and same actual package consumer once.",
+        "attribution": "JBA530 f915afc6 current immutableb1621ebf two-second capture, zero builds; frozen133057BDirectRgb444 to exact531468BRGBA. Retain current source and native context boundary, not a new timing claim."
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "JTV531",
+        "sources": {
+          "src/Lokad.Image/Internal/JpegHuffman.cs": "63bd4438f28d7fca077d26e310acbc358cc19e153d1c53bed462441de8ca81dd",
+          "src/Lokad.Image/Internal/JpegEntropyReader.cs": "a94bd8a99795686cf8c91b3ae61afdc7213faef50106e915730e00ae7241d2b7",
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "af67848d02e4c820be706c001cff145f34f73741da4b47d471c40d75d77205e5"
+        },
+        "wholeSourceUndoEqualsQualifiedOriginal": true,
+        "prefixLookupBodyExactExceptBorrowedViews": true,
+        "constructorAndAllAdmissionsExact": true,
+        "allArithmeticRefillPollPublicationFailureBodiesExact": true,
+        "primaryCapacityEntries": 256,
+        "longCapacityEntries": 1024,
+        "viewPreparationOncePerActualFusedPlainEntry": true,
+        "obsoleteObjectLookupRemoved": true,
+        "newOwnedHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "borrowedViews": "Only underlying operation-owned immutable table arrays; same capacities and context lifetime. No new table, pool or codec session. TwoSpanlocals are borrowed stack state, not independently owned capacity."
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "candidateSha256": "1a1039a9f79c986eeee3db5dbf45d3aa6b655545bfdb3cf5bd9009966cc220e2",
+          "internalTestAssemblySha256": "e08cae4dcd60d0cf78086f403a8b6c14deae3db4e735821548345d400ff973b1",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "63bd4438f28d7fca077d26e310acbc358cc19e153d1c53bed462441de8ca81dd",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "a94bd8a99795686cf8c91b3ae61afdc7213faef50106e915730e00ae7241d2b7",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "af67848d02e4c820be706c001cff145f34f73741da4b47d471c40d75d77205e5"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+          "candidateSha256": "13045529db4bb2c10afe22dd0047350840f62a4865762aafe556e96d480ddf1f",
+          "internalTestAssemblySha256": "4f49db39092a6f08cb0e2e0bcb6e6333482359874fadd7c0fabb57f677d6c6d1",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "63bd4438f28d7fca077d26e310acbc358cc19e153d1c53bed462441de8ca81dd",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "a94bd8a99795686cf8c91b3ae61afdc7213faef50106e915730e00ae7241d2b7",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "af67848d02e4c820be706c001cff145f34f73741da4b47d471c40d75d77205e5"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "DirectRgb444": {
+          "runId": "jtv531-candidate-DirectRgb444-short",
+          "managedUs": 1685.9412890625,
+          "nativeUs": 1450.8112447916667,
+          "ratio": 1.1620679775642333,
+          "lower": 1.0801231538942693,
+          "upper": 1.2448116862149614,
+          "allocatedBytes": 10088,
+          "librarySha256": "13045529db4bb2c10afe22dd0047350840f62a4865762aafe556e96d480ddf1f",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+          "outputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369"
+        },
+        "CmykAdobeSparse2D": {
+          "runId": "jtv531-candidate-CmykAdobeSparse2D-short",
+          "managedUs": 528.6407378472222,
+          "nativeUs": 436.985953125,
+          "ratio": 1.2097430914352625,
+          "lower": 1.1131722003610245,
+          "upper": 1.3083845877533644,
+          "allocatedBytes": 4520,
+          "librarySha256": "13045529db4bb2c10afe22dd0047350840f62a4865762aafe556e96d480ddf1f",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+          "outputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf"
+        }
+      }
+    },
+    "B": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "JHP532",
+        "paths": [
+          "src/Lokad.Image/Internal/JpegHuffman.cs",
+          "src/Lokad.Image/Internal/JpegEntropyReader.cs",
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs"
+        ],
+        "baseline": {
+          "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2"
+        },
+        "hypothesis": "JTV531 removes field reloads but actual JIT retains primary bounds check and grows8Bframe to24B. Retain only hot primary view, narrow its provably8bit index explicitly, and leave rare long lookup on the owner. Reduce live values while completing intended primary bounds removal.",
+        "endState": "One hot256entry borrowed primary view per fused/plain entry. Shared ordinary prefix core uses an explicit byte index; a genuine owner long lookup preserves exact9/10full-field logic. Same arrays/constructor/admission/owned lifetimes, no extra table/cache/session. No obsolete forwarding wrapper.",
+        "workloads": [
+          "DirectRgb444",
+          "CmykAdobeSparse2D"
+        ],
+        "temporaryTradeoffs": "Extra borrowed pointer and split cold helper can still affect inlining/register pressure. StageA source/JIT/screens remain. One bounded revised B, complete short screens then contemporary confirmation only if promising; otherwise restore exact originals and investigate shared MCU lifetime.",
+        "workflow": "One immutable core/embedded perOS, focused JPEG normal/scalar checks, reuse all prepared harness/native/selectors/fixtures and unchanged qualification. Accepted production milestone requires affected current costs plus broad Windows/Linux/scalar/live and same actual package consumer once.",
+        "attribution": "JBA530 f915afc6 current immutableb1621ebf two-second capture, zero builds; frozen133057BDirectRgb444 to exact531468BRGBA. Retain current source and native context boundary, not a new timing claim.",
+        "previousCandidate": {
+          "windowsSha256": "1a1039a9f79c986eeee3db5dbf45d3aa6b655545bfdb3cf5bd9009966cc220e2",
+          "linuxSha256": "13045529db4bb2c10afe22dd0047350840f62a4865762aafe556e96d480ddf1f"
+        }
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "JHP532",
+        "sources": {
+          "src/Lokad.Image/Internal/JpegHuffman.cs": "e0d1bd6e2d4866f01881949e3d961bc59c50eb11908a555b502764acb067b735",
+          "src/Lokad.Image/Internal/JpegEntropyReader.cs": "972fca2547fa4c7dfc2db1b6c00c07e4d560f6818eb1c22143387c373fa7880d",
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "74c545f9df04cbedd50c57b7cf78fe34d5bb5835f9b878db1e18e21b77e66857"
+        },
+        "wholeSourceUndoEqualsQualifiedOriginal": true,
+        "longLookupBodyExact": true,
+        "constructorAndAllAdmissionsExact": true,
+        "allArithmeticRefillPollPublicationFailureBodiesExact": true,
+        "primaryCapacityEntries": 256,
+        "longCapacityEntries": 1024,
+        "onePrimaryViewPreparedPerActualFusedPlainEntry": true,
+        "obsoleteObjectLookupRemoved": true,
+        "newOwnedHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "explicitByteIndexSameForEntireUInt64Domain": true,
+        "indexProof": "Logical UInt64 rightshift56 lies in0..255; byte narrowing is the same index for every possible cache, independent of its lower56bits. Fixed primary capacity256 comes from the unchanged private constructor.",
+        "stageA": {
+          "project": "Lokad.Image",
+          "round": "JTV531",
+          "sources": {
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "63bd4438f28d7fca077d26e310acbc358cc19e153d1c53bed462441de8ca81dd",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "a94bd8a99795686cf8c91b3ae61afdc7213faef50106e915730e00ae7241d2b7",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "af67848d02e4c820be706c001cff145f34f73741da4b47d471c40d75d77205e5"
+          },
+          "wholeSourceUndoEqualsQualifiedOriginal": true,
+          "prefixLookupBodyExactExceptBorrowedViews": true,
+          "constructorAndAllAdmissionsExact": true,
+          "allArithmeticRefillPollPublicationFailureBodiesExact": true,
+          "primaryCapacityEntries": 256,
+          "longCapacityEntries": 1024,
+          "viewPreparationOncePerActualFusedPlainEntry": true,
+          "obsoleteObjectLookupRemoved": true,
+          "newOwnedHeapCapacityBytes": 0,
+          "newRetainedStateBytes": 0,
+          "borrowedViews": "Only underlying operation-owned immutable table arrays; same capacities and context lifetime. No new table, pool or codec session. TwoSpanlocals are borrowed stack state, not independently owned capacity."
+        }
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "candidateSha256": "078d610238a42d2fb94156f3e91cd270d16c4955621b01ba1cffd5e2c5fa0336",
+          "internalTestAssemblySha256": "312e5102e55f39eb4b3793ad7fbfa6aa60d6cce1b84a4d9699b091a3524b3855",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "e0d1bd6e2d4866f01881949e3d961bc59c50eb11908a555b502764acb067b735",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "972fca2547fa4c7dfc2db1b6c00c07e4d560f6818eb1c22143387c373fa7880d",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "74c545f9df04cbedd50c57b7cf78fe34d5bb5835f9b878db1e18e21b77e66857"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+          "candidateSha256": "b7cf68f0560c02589ca007a28808098bc016127575895a6014629c2723c5fa16",
+          "internalTestAssemblySha256": "eb741bc9234ee3d348f3caef5e53bae11bddaf0d582492601875b12535a952d7",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "e0d1bd6e2d4866f01881949e3d961bc59c50eb11908a555b502764acb067b735",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "972fca2547fa4c7dfc2db1b6c00c07e4d560f6818eb1c22143387c373fa7880d",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "74c545f9df04cbedd50c57b7cf78fe34d5bb5835f9b878db1e18e21b77e66857"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "DirectRgb444": {
+          "runId": "jhp532-candidate-DirectRgb444-short",
+          "managedUs": 1745.3112559523813,
+          "nativeUs": 1450.299359375,
+          "ratio": 1.203414484513401,
+          "lower": 1.1738131920323576,
+          "upper": 1.2338641205890557,
+          "allocatedBytes": 10088,
+          "librarySha256": "b7cf68f0560c02589ca007a28808098bc016127575895a6014629c2723c5fa16",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+          "outputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369"
+        },
+        "CmykAdobeSparse2D": {
+          "runId": "jhp532-candidate-CmykAdobeSparse2D-short",
+          "managedUs": 531.6511015625,
+          "nativeUs": 437.79000260416666,
+          "ratio": 1.2143975385458927,
+          "lower": 1.1222764210380256,
+          "upper": 1.3080461982747396,
+          "allocatedBytes": 4520,
+          "librarySha256": "b7cf68f0560c02589ca007a28808098bc016127575895a6014629c2723c5fa16",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+          "outputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf"
+        }
+      }
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "760ff31c9f5e3819afe4a5ff0e601af3655191d2bc47c93aed9df8ea7b577e7d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "563a259358e8c3a70a2682ad0b50f4b9735f431e5c22bca4878561ecdda56f0e"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+        "tmp/benchmark-source.json": "3b1af5b9209faf943d88d8d691a78467b30ad2081d9cda24af5d9adc54fc171d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "0c3a072ae28f2272b7a84553dc7a3f1711bc240d48740a74c4379d96001f908d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "95760c034e7612b2baa42acaed6ab0898d817eae78bba9f7ad94b1589d1085fa"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    }
+  },
+  "jit": {
+    "originalCodeBytes": 816,
+    "originalLocalFrameBytes": 8,
+    "stageACodeBytes": 894,
+    "stageALocalFrameBytes": 24,
+    "stageAPrimaryBoundsRemoved": false,
+    "stageBCodeBytes": 883,
+    "stageBLocalFrameBytes": 24,
+    "stageBPrimaryBoundsRemoved": true,
+    "note": "Actual production JIT, optimized/tieringoff, same selected two public original422/420 sync/async/ownership controls. B implements intended primary bounds removal but retains larger frame; no elapsed claim follows code size or static load counts."
+  },
+  "decision": "Unselected. Correct focused A/B stages have unpromising complete short screens. A incompletely removes primary checks; B removes them but pointRGB1745.31us remains unpromising. No causal gain/loss/equivalence, independent confirmation, expanded matrix or broad/package qualification. Exact qualified sources/main/embedded/bindings restored. These are implementation/codegen results and unconfirmed timing differences, not a permanent table-preparation ban.",
+  "storage": {
+    "newOwnedHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "tableCapacitiesUnchanged": true,
+    "admittedPhysicalNativePeaksRemeasured": false,
+    "note": "Two borrowed views in A, one hot view and existing owner in B. No extra tables, owner, cache or session; unchanged constructor/admission/lifetime. Actual full GC10088/4520Bop unchanged; no peak reduction inferred."
+  },
+  "workflow": {
+    "coreEmbeddedVersionsEachOs": 2,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "focusedInternalEachModeStage": 401,
+    "focusedPublicEachModeStage": 375,
+    "completeShortControlsEachStage": 2,
+    "actualsEachShort": 3,
+    "independentConfirmationRuns": 0,
+    "targetedJitControlsEachStage": 2,
+    "newBroadQualificationRuns": 0,
+    "newPackageRuns": 0,
+    "displayedCostsChanged": 0,
+    "additionalFavorableRepeats": 0
+  },
+  "next": "Audit source-valid DirectRgb444 MCU geometry and repeated entropy cache initialization/publication using the existing frozen packet. A shared reservoir may eliminate per-block repeated work without new owned storage; preserve current stuffing/marker/tail/cursor/predictor/failure/poll boundaries. Do not replay table-view variants without materially new evidence.",
+  "raw": {
+    "file": "jpeg-borrowed-table-views-experiment.tar.xz",
+    "sha256": "cff391bd82defa7c2f176f4a0fa694140c34b7f45e074e49fc5924344fd4f579",
+    "bytes": 13726768,
+    "members": 265,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1"
+      },
+      {
+        "file": "jpeg-current-entropy-attribution.tar.xz",
+        "sha256": "f915afc6cb8774e4bb9ae35ab34158cab20a37a924a9844085decd8bbaeaf2d0"
+      }
+    ]
+  }
+}

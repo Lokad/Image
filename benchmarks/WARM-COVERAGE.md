@@ -62,6 +62,9 @@ restoration preserves the current costs and package without broad-check repeats.
 [Current JPEG attribution](JPEG-CURRENT-ENTROPY-ATTRIBUTION.md) reuses the immutable
 build and frozen `DirectRgb444` control. It selects entropy preparation/execution
 for further investigation, without a new timing claim or changed displayed cost.
+The [borrowed JPEG table-view study](JPEG-BORROWED-TABLE-VIEWS-EXPERIMENT.md)
+retains two correct but unpromising representations. Intended bounds removal
+does not yield a demonstrated gain; qualified sources/modules are restored exactly.
 
 ## Finite required inventory
 
