@@ -146,6 +146,53 @@ var eob = 1; OverflowException? failure = null;
         Assert.Equal(set ? 2 : 1, reader.Position); Assert.Equal(set ? 127 : 0, reader.ReadBits(7));
     }
 
+    [Theory]
+    [InlineData(1)] [InlineData(31)] [InlineData(63)]
+    public void DelayedCoefficientAccessPreservesGuardedSamplesAndFailurePrefixes(int coefficient)
+    {
+        if (!Avx2.IsSupported || !Bmi2.X64.IsSupported) return;
+        using var tables = new OperationContext(ImageLimits.Default, default);
+        var counts = new byte[16]; counts[0] = 1;
+        var table = new JpegHuffman(counts, [0], tables);
+        using var root = new Lokad.Image.Tooling.TestMemoryBudget(0);
+        byte[][] packets = [[], [0], [0x80], [255, 0], [255, 217], [0x5A, 0x63, 0x81, 0x10, 255, 217]];
+        foreach (var data in packets)
+        foreach (var phase in new[] { 0, 7 })
+        foreach (var sample in new[] { 0, 2, -2, 3, int.MinValue, int.MaxValue })
+        foreach (var canceled in new[] { false, true })
+        {
+            var original = data.ToArray();
+            Assert.Equal(Run(false), Run(true));
+            Assert.Equal(original, data);
+
+            string Run(bool buffered)
+            {
+                using var cancellation = new CancellationTokenSource();
+                using var context = new OperationContext(new() { MemoryBudget = root }, cancellation.Token);
+                var values = new int[66]; values[0] = 12345; values[65] = -12345;
+                values[coefficient + 1] = sample;
+                var reader = new JpegEntropyReader(data, 0, context); var eob = 1;
+                Exception? failure = null; Exception? tailFailure = null; var tail = -1;
+                try
+                {
+                    if (phase != 0) reader.ReadBits(phase);
+                    if (canceled) cancellation.Cancel();
+                    if (buffered) Assert.True(table.TryReadCancelableRefinementBlock(ref reader,
+                        values.AsSpan(1, 64), coefficient, coefficient, 0, ref eob));
+                    else Reference(ref reader, values.AsSpan(1, 64), table, coefficient, coefficient, 0, ref eob);
+                }
+                catch (Exception error) when (error is ImageDataException or OverflowException or OperationCanceledException)
+                { failure = error; }
+                var position = reader.Position;
+                try { tail = reader.ReadBits(3); }
+                catch (Exception error) when (error is ImageDataException or OperationCanceledException) { tailFailure = error; }
+                Assert.Equal(12345, values[0]); Assert.Equal(-12345, values[65]);
+                Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
+                return $"{failure?.GetType().Name}/{position}/{eob}/{string.Join(',', values)}/{tail}/{tailFailure?.GetType().Name}/{reader.Position}";
+            }
+        }
+    }
+
     [Fact]
     public void BufferedCancelableLookaheadKeepsConsecutiveBlocksAndLogicalPendingBits()
     {

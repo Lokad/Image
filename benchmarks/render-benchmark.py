@@ -865,13 +865,13 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-correction-bit-evidence.json').read_text(encoding='utf-8'))
+    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-coefficient-reference-lifetime-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_current['productionAccepted']
     assert jpeg_current['raw']['mirrored'] and jpeg_current['raw']['allMembersVerified']
-    assert jpeg_current['sourceProof']['onlyBufferedLiveCorrectionBitDataflowChanged']
+    assert jpeg_current['sourceProof']['onlyCorrectionReferenceLifetimeAndKnownBoundsChanged']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
                for v in jpeg_current['independentComparison']['views'].values())
-    assert all(q['fullLivePassed'] and q['total'] == 5742
+    assert all(q['fullLivePassed'] and q['total'] == 5767
                for q in jpeg_current['qualification']['full'].values())
     assert set(jpeg_current['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422',
         'Progressive444', 'ProgressiveCancelable444'}
@@ -1644,7 +1644,7 @@ def render():
     assert storage['rows']['candidate']['firstPeakAdmittedBytes'] == 751768
     assert storage['governedRetainedOutputBytes'] == 531468
     vq = jpeg_current['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5742
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5767
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['sharedByteWordEnlargementExactOwnedPassed']
     assert vq['samePackageLinux']['sharedByteWordEnlargementExactOwnedPassed']
@@ -1705,8 +1705,8 @@ def render():
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
-    vq = decoder_owned['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5764
+    vq = jpeg_current['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5767
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1959,10 +1959,14 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md)
-  independently saves108µs/2.53%raw and2.07%normalized on complete live progressive444,
-  with exact pixels and701,182B/op unchanged. Ratio1.140/upper1.151 remains a gap.
+- **JPEG and reading:** [coefficient-reference lifetimes](../benchmarks/JPEG-COEFFICIENT-REFERENCE-LIFETIME.md)
+  independently saves103µs/2.69%raw and2.77%normalized on complete live progressive444;
+  both confidence views separate. Current3722.09µs/native3361.34µs,ratio1.107/upper1.114
+  remains a gap. Exact pixels/read/error prefixes stay unchanged. Both contemporary
+  builds report701,233B/op; older701,182B diagnostic evidence remains separate.
+  No new heap/retention, frame200→168B; whole physical/admitted peak unmeasured.
   Five unchanged controls reuse evidence: six total,1pass/3gaps/2uncertain.
+  [Earlier correction-bit selection](../benchmarks/JPEG-CORRECTION-BIT.md) retains history.
   [Plane scheduling](../benchmarks/JPEG-PROGRESSIVE-PLANE-SCHEDULING.md) retains
   ordinary/live444 allocation984KB→701KB/op and its stated peak/retention boundaries.
   [Signed preparation](../benchmarks/JPEG-SIGNED-PREPARED-INSTRUCTIONS.md)

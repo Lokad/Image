@@ -84,6 +84,7 @@ internal ref partial struct JpegEntropyReader
             || available is < 0 or > 7
             || block.Length != 64 || start < 1 || start > end || end > 63 || low is < 0 or > 13)
             return false;
+        block = block[..64];
         var cancellation = context.Cancellation;
         var input = data;
         var cursor = position; ulong cache = bits; var pending = available;
@@ -201,7 +202,6 @@ var index = start; var increment = 1 << low;
             }
             while (correctionPositions != 0)
             {
-                ref var value = ref block[BitOperations.TrailingZeroCount(correctionPositions)];
                 if (pending == 0 && input.Length - cursor >= 4)
                 {
                     var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(input.Slice(cursor, 4));
@@ -223,6 +223,10 @@ bit = (int)((cache >> --pending) & 1);
                     PublishRefinementLookahead(cache, pending, cursor);                     bit = ReadBits(1);
                     cache = bits; pending = available; cursor = position;
                 }
+                // The nonzero UInt64 mask proves the index is0..63. Keep
+                // coefficient references out of fallible input delivery.
+                var coefficientIndex = BitOperations.TrailingZeroCount(correctionPositions) & 63;
+                var value = block[coefficientIndex];
                 if (value == int.MinValue && bit != 0)
                 {
                     PublishRefinementLookahead(cache, pending, cursor);
@@ -235,7 +239,7 @@ bit = (int)((cache >> --pending) & 1);
                 var magnitude = unchecked((value ^ sign) - sign);
                 var active = -bit & (((magnitude & increment) - 1) >> 31);
                 var nonPositive = unchecked(value - 1) >> 31;
-                value = unchecked(value + (((increment ^ nonPositive) - nonPositive) & active));
+                block[coefficientIndex] = unchecked(value + (((increment ^ nonPositive) - nonPositive) & active));
                 correctionPositions &= correctionPositions - 1;
             }
             if (finish)
