@@ -52,6 +52,11 @@ packages are immutable.
 retain source-specific evidence and raw. They do not establish current blanket
 qualification or permanent algorithm exclusions.
 
+[JPEG row-pair experiment](JPEG-ROW-PAIR-EXPERIMENT.md) is unselected: mathematical
+work reduction did not establish a robust elapsed gain, and a targeted paired
+comparison contradicts the standalone point. Qualified sources/modules/package
+restore exactly; current JPEG results stay valid. No permanent family restriction.
+
 Superseded experiments, source-specific invalidation notes and raw archive identities
 remain in linked family reports and the
 [preceding coverage record](https://github.com/lokad/image/blob/65533a6c82743194dca90dcc4daae07955ea385a/benchmarks/WARM-COVERAGE.md).
