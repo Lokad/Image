@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
@@ -104,11 +105,34 @@ internal static class Vp8Prediction
         if (topSamples.Length < 8 || leftSamples.Length < 4 || destination.Length < 16)
             throw new ArgumentException("Small prediction requires eight top samples, four left samples and sixteen output pixels.");
         Span<int> neighbors = stackalloc int[13];
+        var dc = PrepareSmallBlock(topSamples, leftSamples, corner, neighbors);
+        SmallBlock(mode, neighbors, dc, destination);
+    }
+
+    // Borrowed, operation-owned scratch may be reused across ordered candidates.
+    // Snapshot borders before trial output can overwrite them. The caller keeps
+    // these thirteen values unchanged until the current block's search ends.
+    internal static int PrepareSmallBlock(ReadOnlySpan<byte> topSamples, ReadOnlySpan<byte> leftSamples,
+        byte corner, Span<int> neighbors)
+    {
+        if (topSamples.Length < 8 || leftSamples.Length < 4 || neighbors.Length < 13)
+            throw new ArgumentException("Small prediction preparation requires complete borders and thirteen scratch values.");
+        var bytes = MemoryMarshal.AsBytes(neighbors[..13]);
+        if (topSamples[..8].Overlaps(bytes) || leftSamples[..4].Overlaps(bytes))
+            throw new ArgumentException("Prediction scratch must not overlap borrowed borders.");
         for (var p = 0; p < 8; p++) neighbors[p] = topSamples[p];
         for (var p = 0; p < 4; p++) neighbors[8 + p] = leftSamples[p];
         neighbors[12] = corner;
-        var dc = (neighbors[0] + neighbors[1] + neighbors[2] + neighbors[3]
+        return (neighbors[0] + neighbors[1] + neighbors[2] + neighbors[3]
             + neighbors[8] + neighbors[9] + neighbors[10] + neighbors[11] + 4) >> 3;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void SmallBlock(Vp8SmallIntraMode mode, ReadOnlySpan<int> neighbors, int dc, Span<byte> destination)
+    {
+        if ((uint)mode > 9) throw new ArgumentOutOfRangeException(nameof(mode));
+        if (neighbors.Length < 13 || destination.Length < 16)
+            throw new ArgumentException("Prepared small prediction requires thirteen values and sixteen output pixels.");
         // Shared geometry indexes LD/RD/VR as4/5/6; encoder visits RD/VR/LD.
         var geometry = mode switch
         {

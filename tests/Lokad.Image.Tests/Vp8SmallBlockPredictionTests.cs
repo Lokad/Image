@@ -23,14 +23,24 @@ public sealed class Vp8SmallBlockPredictionTests
     private static byte Sample(ReadOnlySpan<byte> plane, int stride, int x, int y)
         => y < 0 ? (byte)127 : x < 0 ? (byte)129 : plane[y * stride + Math.Min(x, stride - 1)];
 
+    public static IEnumerable<object[]> ModesAndPreparation()
+    {
+        foreach (var row in Modes())
+        {
+            yield return [row[0], row[1], false];
+            yield return [row[0], row[1], true];
+        }
+    }
+
     [Theory]
-    [MemberData(nameof(Modes))]
-    public void AllNativeModePixelsMatchOnFiftyBoundedSourceAndRoundingContexts(int mode, string expected)
+    [MemberData(nameof(ModesAndPreparation))]
+    public void AllNativeModePixelsMatchOnFiftyBoundedSourceAndRoundingContexts(int mode, string expected, bool prepared)
     {
         using var root = new TestMemoryBudget(16_000_000); using var image = OriginalVp8lControls.Buffer("opaque", 8, root);
         using var context = new OperationContext(new() { MemoryBudget = root }, default); using var input = Vp8PreparedInput.Create(image, context);
         var original = Vp8PreparedInputTests.Hash(input); var retained = root.Bytes;
         Span<byte> top = stackalloc byte[8]; Span<byte> left = stackalloc byte[4]; Span<byte> destination = stackalloc byte[18];
+        Span<int> neighbors = stackalloc int[13];
         destination[16] = 97; destination[17] = 98;
         using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256); var contexts = 0;
         foreach (var (mx, my) in new[] { (0, 0), (16, 16), (512, 256) })
@@ -40,17 +50,28 @@ var x = mx + bx; var y = my + by;
             for (var p = 0; p < 8; p++) top[p] = Sample(input.Y, input.Stride, x + p, bx == 12 && p >= 4 ? my - 1 : y - 1);
             for (var p = 0; p < 4; p++) left[p] = Sample(input.Y, input.Stride, x - 1, y + p);
             var corner = Sample(input.Y, input.Stride, x - 1, y - 1);
-            Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, destination); hash.AppendData(destination[..16]); contexts++;
+            Predict(mode, top, left, corner, destination, neighbors, prepared); hash.AppendData(destination[..16]); contexts++;
         }
         for (var corner = 0; corner <= 255; corner += 255)
         {
             for (var p = 0; p < 8; p++) top[p] = p % 2 == 0 ? (byte)0 : (byte)255;
             for (var p = 0; p < 4; p++) left[p] = p % 2 == 0 ? (byte)255 : (byte)0;
-            Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, (byte)corner, destination); hash.AppendData(destination[..16]); contexts++;
+            Predict(mode, top, left, (byte)corner, destination, neighbors, prepared); hash.AppendData(destination[..16]); contexts++;
         }
         Assert.Equal(50, contexts); Assert.Equal(expected, Convert.ToHexStringLower(hash.GetHashAndReset()));
         Assert.Equal((97, 98), ((int)destination[16], (int)destination[17]));
         Assert.Equal(original, Vp8PreparedInputTests.Hash(input)); Assert.Equal(retained, root.Bytes);
+    }
+
+    private static void Predict(int mode, ReadOnlySpan<byte> top, ReadOnlySpan<byte> left, byte corner,
+        Span<byte> destination, Span<int> neighbors, bool prepared)
+    {
+        if (!prepared) Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, destination);
+        else
+        {
+            var dc = Vp8Prediction.PrepareSmallBlock(top, left, corner, neighbors);
+            Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, neighbors, dc, destination);
+        }
     }
 
     [Fact]

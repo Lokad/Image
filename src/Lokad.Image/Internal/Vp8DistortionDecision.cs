@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -54,12 +56,16 @@ internal static class Vp8DistortionDecision
         Span<byte> top = stackalloc byte[8]; Span<byte> left = stackalloc byte[4];
         Span<byte> trial = stackalloc byte[16]; Span<byte> selected = stackalloc byte[16];
         Span<short> coefficients = stackalloc short[16]; Span<short> residual = stackalloc short[16];
+        Span<int> prepared = stackalloc int[13];
+        var packedPixels = Avx2.IsSupported;
         for (var b = 0; b < 16; b++)
         {
             var bx = b % 4; var by = b / 4; var x = bx * 4; var y = by * 4; var offset = Block(b);
             for (var p = 0; p < 8; p++) top[p] = by == 0 || bx == 3 && p >= 4 ? Top(neighbors, x + p) : pixels[(y - 1) * 16 + x + p];
             for (var p = 0; p < 4; p++) left[p] = bx == 0 ? neighbors[1 + y + p] : pixels[(y + p) * 16 + x - 1];
             var corner = bx == 0 ? neighbors[y] : by == 0 ? Top(neighbors, x - 1) : pixels[(y - 1) * 16 + x - 1];
+            var dc = Vp8Prediction.PrepareSmallBlock(top, left, corner, prepared);
+            var sourcePixels = packedPixels ? Vp8Distortion.PackFourRows(source[offset..], 16) : default;
             var above = by == 0 ? contexts[bx] : modes[b - 4]; var side = bx == 0 ? contexts[4 + by] : modes[b - 1];
             var costs = prices.Slice(8 + (above * 10 + side) * 10, 10); var bestMode = 0; var best = Unselected;
             for (var mode = 0; mode < 10; mode++)
@@ -69,8 +75,10 @@ internal static class Vp8DistortionDecision
                 // strict-less decision either. Keep polling before every mode.
                 var modeHeader = costs[mode] * 11L;
                 if (modeHeader >= best) continue;
-                Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, top, left, corner, trial);
-                var current = 256L * Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4) + modeHeader;
+                Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, prepared, dc, trial);
+                var distortion = packedPixels ? Vp8Distortion.Squared(sourcePixels, Vector128.Create(trial))
+                    : Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
+                var current = 256L * distortion + modeHeader;
                 if (current < best) { best = current; bestMode = mode; trial.CopyTo(selected); }
             }
             modes[b] = (byte)bestMode; score += best; header += costs[bestMode];

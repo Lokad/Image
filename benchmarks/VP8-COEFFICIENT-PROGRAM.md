@@ -1,5 +1,9 @@
 # Compact VP8 residual programs
 
+Current costs are superseded by [per-block preparation](VP8-SMALL-BLOCK-PREPARATION.md).
+This report retains the residual representation, earlier CPU/storage evidence and
+dense tradeoff; its raw sources and experiments remain reproducible.
+
 CEP461/462, 2026-11-07. Accepted architectural stage; publication postponed.
 [Evidence](vp8-coefficient-program-evidence.json) owns the nine affected existing
 complete encode controls. Full parity across283 named paths remains open.
