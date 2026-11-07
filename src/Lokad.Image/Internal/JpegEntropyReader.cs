@@ -52,6 +52,17 @@ internal ref partial struct JpegEntropyReader
         return value + (((value - threshold) >> 31) & (1 - (threshold << 1)));
     }
 
+    // T.81 F.2.2: complementing a negative field yields its magnitude.
+    // Read the field from the high end without rebuilding a variable mask
+    // or threshold. Callers have already admitted 1..11 available bits.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static int ReadHighAlignedSigned(ulong cache, int count)
+    {
+        var negative = ~((long)cache >> 63);
+        var magnitude = (int)((cache ^ (ulong)negative) >> (64 - count));
+        return (magnitude ^ (int)negative) - (int)negative;
+    }
+
     internal bool TryReadCorrectionBits(int count, out int value)
     {
         value = 0;
@@ -671,7 +682,9 @@ cache = candidateCache; pending = candidatePending - length;
 
     internal void ReadPlainBaselineAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
     {
-        ulong localBits = bits; var localAvailable = available; var localPosition = position; var k = coefficient;
+        // Two shifts also discard stale bits when available is zero.
+        var localBits = ((ulong)bits << 32) << (32 - available);
+        var localAvailable = available; var localPosition = position; var k = coefficient;
         while (k <= 63)
         {
             // Eight prefix bits plus at most ten amplitude bits. Reuse
@@ -681,31 +694,32 @@ cache = candidateCache; pending = candidatePending - length;
                 if (data.Length - localPosition < 4) break;
                 var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
                 if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
-                localBits = localBits << 32 | word; localAvailable += 32; localPosition += 4;
+                localBits |= (ulong)word << (32 - localAvailable); localAvailable += 32; localPosition += 4;
             }
-            var packed = shortCodes[(int)((localBits >> (localAvailable - 8)) & 255)]; var count = packed & 15;
+            var packed = shortCodes[(int)(localBits >> 56)]; var count = packed & 15;
             var token = packed >> 4; var size = token & 15; var run = token >> 4;
             if (count == 0) break;
             if (token == 0)
             {
-                localAvailable -= count; k = 64; break;
+                localBits <<= count; localAvailable -= count; k = 64; break;
             }
             if (size is < 1 or > 10 || run >= 64 - k) break;
-            localAvailable -= count + size;
-            var amplitude = (int)((localBits >> localAvailable) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
+            var amplitude = ReadHighAlignedSigned(localBits << count, size);
+            localBits <<= count + size; localAvailable -= count + size;
             k += run;
-            block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
+            block[JpegTransform.Zigzag[k++]] = amplitude;
         }
         // Speculative whole bytes are not consumed. Publish the original
         // reader's minimum byte position and only its pending fractional bits.
         var wholeBytes = localAvailable >> 3;
-        bits = unchecked((uint)(localBits >> (wholeBytes * 8))); available = localAvailable & 7;
+        available = localAvailable & 7; bits = (uint)((localBits >> 1) >> (63 - available));
         position = localPosition - wholeBytes; coefficient = k;
     }
 
     internal void ReadPlainCancelableAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
     {
-        ulong localBits = bits; var localAvailable = available; var localPosition = position;
+        var localBits = ((ulong)bits << 32) << (32 - available);
+        var localAvailable = available; var localPosition = position;
 var cancellation = context.Cancellation; var k = coefficient;
         try
         {
@@ -719,26 +733,26 @@ var cancellation = context.Cancellation; var k = coefficient;
                     if (data.Length - localPosition < 4) return;
                     var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
                     if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) return;
-                    localBits = localBits << 32 | word; localAvailable += 32; localPosition += 4;
+                    localBits |= (ulong)word << (32 - localAvailable); localAvailable += 32; localPosition += 4;
                 }
-                var packed = shortCodes[(int)((localBits >> (localAvailable - 8)) & 255)]; var count = packed & 15;
+                var packed = shortCodes[(int)(localBits >> 56)]; var count = packed & 15;
                 var token = packed >> 4; var size = token & 15; var run = token >> 4;
                 if (count == 0 || size is < 1 or > 10 || run >= 64 - k) return;
                 cancellation.ThrowIfCancellationRequested();
-                localAvailable -= count;
+                localBits <<= count; localAvailable -= count;
                 // Admit and expose the prefix before the separate amplitude
                 // checkpoint. The finally preserves it on cancellation/limit.
                 cancellation.ThrowIfCancellationRequested();
-                localAvailable -= size;
-                var amplitude = (int)((localBits >> localAvailable) & ((1u << size) - 1)); var threshold = 1 << (size - 1);
+                var amplitude = ReadHighAlignedSigned(localBits, size);
+                localBits <<= size; localAvailable -= size;
                 k += run;
-                block[JpegTransform.Zigzag[k++]] = amplitude + (((amplitude - threshold) >> 31) & (1 - (threshold << 1)));
+                block[JpegTransform.Zigzag[k++]] = amplitude;
             }
         }
         finally
         {
             var wholeBytes = localAvailable >> 3;
-            bits = unchecked((uint)(localBits >> (wholeBytes * 8))); available = localAvailable & 7;
+            available = localAvailable & 7; bits = (uint)((localBits >> 1) >> (63 - available));
             position = localPosition - wholeBytes; coefficient = k;
         }
     }

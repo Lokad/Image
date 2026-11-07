@@ -1,5 +1,9 @@
 # JPEG plain-reader publication
 
+Affected CPU costs are superseded by [high-aligned entropy readers](JPEG-HIGH-ALIGNED-READER.md).
+The publication gains, adverse live-token result and attribution below remain evidence
+for their pinned source stage; they are not current method costs or shares.
+
 Two noncancellable baseline entropy loops now publish their canonical cursor at
 one ordinary exit. Partial blocks, EOB, long-code and marker/stuffing fallbacks
 retain their exact cursor, predictor, coefficients and next-read behavior. The
@@ -33,7 +37,7 @@ was inconclusive and stopped under the retired fixed5% continuation rule. This
 round targets both current fused/plain loops on a later implementation, motivated
 by current profile evidence and judged by independent complete-operation results.
 
-## Current JPEG controls
+## Qualified controls for this stage
 
 Twenty-three affected baseline controls refresh on one immutable build; six
 unchanged progressive-path confirmations are reused. Each has twelve actuals and
@@ -71,7 +75,7 @@ twelve samples per native bracket. Passing cases stop.
 | ValidateJpegBaseline420 | 502.50 / 674.08 | 0.745 / 0.750 | 9,984 | pass-stop |
 | ValidateJpegProgressive420 (reused) | 271.02 / 268.34 | 1.010 / 1.019 | 4,072 | gap |
 
-Current status: {'confirmed-pass-stop': 14, 'confirmed-gap': 15, 'confirmed-confidence-open': 0}.
+Stage status: {'confirmed-pass-stop': 14, 'confirmed-gap': 15, 'confirmed-confidence-open': 0}.
 
 Windows/Linux each pass **5,850 full/live checks** (2,585 internal, 2,317 public,
 948 differential), plus108 internal/375 public affected checks in normal/scalar
