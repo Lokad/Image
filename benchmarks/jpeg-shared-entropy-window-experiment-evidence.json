@@ -1,0 +1,612 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JMW534/JRB535",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "stages": {
+    "A": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "JMW534",
+        "paths": [
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs",
+          "src/Lokad.Image/Internal/JpegHuffman.cs",
+          "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs",
+          "src/Lokad.Image/Internal/JpegDecoder.cs",
+          "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs"
+        ],
+        "baseline": {
+          "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2"
+        },
+        "hypothesis": "JMC533 frozenRGB444 has1105MCUs/sixblocks each=6630blocks. Carry the ordinary high-aligned entropy reservoir across eligible blocks instead of initializing/publishing at every block. Geometry upper5525saved boundaries is not measured applicability or CPU savings.",
+        "endState": "One codec-local borrowed32Bwindow and one coefficient kernel shared by standalone and MCU execution. Publish before scalar fallback and MCU/restart boundary, reopen after fallback as needed. Separate common scalar remainder avoids replaying committed DC/AC. Live operations retain standalone polling route. All preparation remains timed.",
+        "correctness": "Same constructor/input4byte guards, FF stuffing/markers, table/long/full-field checks, signed/DC/predictor/AC math, partial writes, exact logical cursor and following reads. New DC continuation needs19bits before validating its complete short prefix/amplitude. Test every cached phase, multi-block, tails, malformed, long codes, restart and live exclusion plus public corpus/admission/owners.",
+        "storage": "One32Bborrowed stack window under existing1024Bfixed coarse parser allowance; no new heap/table/cache/session, owned capacity or retained state. Input remains borrowed/owned under original context through all actual users; all original reservation/refusal/cleanup statements unchanged.",
+        "workloads": [
+          "DirectRgb444",
+          "CmykAdobeSparse2D"
+        ],
+        "temporaryTradeoffs": "Extra window field homes/calls, fallback/reopening and DC lookahead branch may outweigh reduced setup. A coherent complete stage, not a kernel-only timing. Source projections and exact focused checks precede complete short screens; independent contemporary confirmation only if promising.",
+        "workflow": "One immutable core/embedded perOS, reuse prepared harness/native/selectors/fixtures and unchanged qualification. Accepted milestone refreshes affected costs and batches broad Windows/Linux/scalar/live plus same actual package once.",
+        "attribution": {
+          "project": "Lokad.Image",
+          "stage": "JMC533",
+          "productionChanged": false,
+          "allBuilds": 0,
+          "performanceMeasured": false,
+          "inputFile": "tmp/jar509-direct-rgb-input.jpg",
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+          "inputBytes": 133057,
+          "cachedOriginalControlReused": true,
+          "width": 513,
+          "height": 259,
+          "frame": [
+            {
+              "id": 82,
+              "horizontal": 1,
+              "vertical": 2
+            },
+            {
+              "id": 71,
+              "horizontal": 1,
+              "vertical": 2
+            },
+            {
+              "id": 66,
+              "horizontal": 1,
+              "vertical": 2
+            }
+          ],
+          "mcuColumns": 65,
+          "mcuRows": 17,
+          "mcus": 1105,
+          "blocksEachMcu": 6,
+          "blocks": 6630,
+          "sources": {
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed",
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "87f74718ad1920315d00df0c8646c6bc3016e0b42ef7d671bdaaec98eae2a0e1",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3"
+          },
+          "sourceFinding": "Current nested baseline MCU/component/by/bx loops invoke ReadBaselineBlock once per block, which attempts the fused wrapper and initializes/publishes its cache per successful fast block. No shared MCU entropy window exists.",
+          "theoreticalBlockBoundarySetupsRemovedUpperBound": 5525,
+          "limitation": "Geometry/call-boundary bound only; not a count of currently eligible complete fast windows, actual refill savings or CPU time. Stuffing, long DC/AC and incomplete words require fallback and may reopen a window within an MCU.",
+          "intendedEndState": "One borrowed high-aligned entropy reservoir across eligible blocks in one MCU. Reuse one block kernel for standalone and shared execution, no duplicate bit grammar or new table/heap/cache/session. Publish before scalar fallback and restart/MCU end; lazily reopen after fallback if safe. Preserve exact logical state, completed prefixes, predictors, coefficients, polls and existing owners.",
+          "acceptance": "Actual multi-block window versus independent scalar grammar at every checkpoint, all cached phases, categories/signed values, stuffing/markers/EOI/tails, long DC/AC, failures, restart and live exclusion. Complete DirectRgb444 and one existing representative boundary first; no grid expansion. Default/governed admission unchanged, no retry after refusal.",
+          "next": "Implement the shared-reservoir stage after recording the unselected table-view round; new state is codec-local borrowed stack storage, charged within a verified existing coarse allowance or accounted before use. Current profiling958fusedlocations selects this path but does not predict gains."
+        }
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "JMW534",
+        "sources": {
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b6328cc725eac518aaa22f59b39d8931eac416daada166efbc6e291282ffed5a",
+          "src/Lokad.Image/Internal/JpegHuffman.cs": "3dd14a099608fa43ee2c4e50d52d70f88fbae984e12a9d179234d89b6dfa19ae",
+          "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "5924b798f3fd3cd38f46fef2ca4b83fb8e363cc63a69d2531fe224b35db66af2",
+          "src/Lokad.Image/Internal/JpegDecoder.cs": "63560282b1ac84a661d4d80920d51335cd1f64960173b1d72e0a88a15b5fdbbe",
+          "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "3b519a9f585dcfa6490580b1bbcee1be1411e5e1d26132b84951cb59ac2e139f"
+        },
+        "oneSharedCoefficientKernel": true,
+        "dcAcArithmeticTableGrammarLoopExact": true,
+        "scalarRemainderAndEveryLivePollBodyExact": true,
+        "wholeDecoderOutsideEntryRefactorExact": true,
+        "wholeMcuGeometryIdctColorStorageOutsideWindowSelectionExact": true,
+        "wholeHuffmanOutsideActualSharedDelegateExact": true,
+        "originalTestsScalarOracleExact": true,
+        "newTestCases": 6,
+        "continuedDcLookaheadBits": 19,
+        "dcLookaheadProof": "At most8short-prefix+11amplitude bits. Refill reads4bytes only under original bounded/stuff-free guard; pending<19 keeps32bit append within UInt64. Reject DC before any output/window commit. Publish completed window before scalar continuation; no prefix replay.",
+        "windowStateEstimatedBytes": 32,
+        "existingFixedParserAllowanceBytes": 1024,
+        "newOwnedHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "allAdmissionCleanupAndOwnedStorageStatementsUnchanged": true,
+        "liveSelection": "Shared MCU execution only when interleaved and token cannot be canceled. Both window begin and shared wrapper exclude live tokens; scalar live/DC/AC checkpoints unchanged.",
+        "normalState": "Standalone source initialization and canonical publication preserved. Shared checkpoints publish exact minimum logical cursor and fractional bits; every new multi-block test compares coefficients, predictor, canonical position and following reads. Fresh DC rejection leaves original reader representation untouched."
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "candidateSha256": "507ded257ec73881159166040e22b6be4d8cf8f9ded7406b39b5973d85692314",
+          "internalTestAssemblySha256": "00ee8e5d39e3f09f58e64d8dab653430a6fd50563556b6ec11597bec42783624",
+          "focused": {
+            "internal-normal": 407,
+            "internal-scalar": 407,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b6328cc725eac518aaa22f59b39d8931eac416daada166efbc6e291282ffed5a",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "3dd14a099608fa43ee2c4e50d52d70f88fbae984e12a9d179234d89b6dfa19ae",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "5924b798f3fd3cd38f46fef2ca4b83fb8e363cc63a69d2531fe224b35db66af2",
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "63560282b1ac84a661d4d80920d51335cd1f64960173b1d72e0a88a15b5fdbbe",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "3b519a9f585dcfa6490580b1bbcee1be1411e5e1d26132b84951cb59ac2e139f"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+          "candidateSha256": "d3adfea5588c13e5b4c6eff5e6f683951fb1a6b6f0f7b89547a010edc0cbeb51",
+          "internalTestAssemblySha256": "6d041ac0e1d47c3f86a37b482977d645cd8d6ebeec000c054478dccf0e2fd3c4",
+          "focused": {
+            "internal-normal": 407,
+            "internal-scalar": 407,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b6328cc725eac518aaa22f59b39d8931eac416daada166efbc6e291282ffed5a",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "3dd14a099608fa43ee2c4e50d52d70f88fbae984e12a9d179234d89b6dfa19ae",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "5924b798f3fd3cd38f46fef2ca4b83fb8e363cc63a69d2531fe224b35db66af2",
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "63560282b1ac84a661d4d80920d51335cd1f64960173b1d72e0a88a15b5fdbbe",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "3b519a9f585dcfa6490580b1bbcee1be1411e5e1d26132b84951cb59ac2e139f"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "DirectRgb444": {
+          "runId": "jmw534-candidate-DirectRgb444-short",
+          "managedUs": 1684.3672526041667,
+          "nativeUs": 1452.373171875,
+          "ratio": 1.1597344850632738,
+          "lower": 1.0789056119829148,
+          "upper": 1.2427225945872702,
+          "allocatedBytes": 10088,
+          "librarySha256": "d3adfea5588c13e5b4c6eff5e6f683951fb1a6b6f0f7b89547a010edc0cbeb51",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+          "outputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369"
+        },
+        "CmykAdobeSparse2D": {
+          "runId": "jmw534-candidate-CmykAdobeSparse2D-short",
+          "managedUs": 506.1154908333334,
+          "nativeUs": 439.4932578125,
+          "ratio": 1.1515887487158136,
+          "lower": 1.079686022638234,
+          "upper": 1.2230932533085517,
+          "allocatedBytes": 4520,
+          "librarySha256": "d3adfea5588c13e5b4c6eff5e6f683951fb1a6b6f0f7b89547a010edc0cbeb51",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+          "outputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf"
+        }
+      }
+    },
+    "B": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "JRB535",
+        "paths": [
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs",
+          "src/Lokad.Image/Internal/JpegHuffman.cs",
+          "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs",
+          "src/Lokad.Image/Internal/JpegDecoder.cs",
+          "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs",
+          "src/Lokad.Image/Internal/JpegEntropyReader.cs"
+        ],
+        "baseline": {
+          "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2"
+        },
+        "hypothesis": "A MCU windows pass exact tests and show mixed RGB1684.37/sparse506.12us shorts. Native retains scan-wide bit state over an unescaped scan. Retain ordinary state across MCU boundaries until fallback/restart, and use cached vector-searched nonFF run bounds to remove repeated per-word stuffing masks without an encoded-input copy.",
+        "endState": "One operation-local reservoir across an ordinary interleaved scan, exact publication at fallback/restart/end. Two scalar range bounds in reader memoize input-only nonFF runs; window borrows original span truncated at nextFF, so ordinary4byte bounds imply stuffing-free refills. Constructor/storage/owners and all actual live polls preserved; no table/buffer/pool/session or input copy.",
+        "correctness": "Same constructor/input4byte guards, FF stuffing/markers, table/long/full-field checks, signed/DC/predictor/AC math, partial writes, exact logical cursor and following reads. New DC continuation needs19bits before validating its complete short prefix/amplitude. Test every cached phase, multi-block, tails, malformed, long codes, restart and live exclusion plus public corpus/admission/owners.",
+        "storage": "Same32Bborrowed window plus two scalar byte indices8B under existing1024Bfixed coarse parser allowance. No new owned heap/table capacity or retained state; all old reservation/refusal/cleanup statements unchanged.",
+        "workloads": [
+          "DirectRgb444",
+          "CmykAdobeSparse2D"
+        ],
+        "temporaryTradeoffs": "Initial IndexOf setup and range memo/scan lifetime can alter codegen or outweigh mask/setup savings. Immutable input and backward-cursor checks preserve exact guard equivalence. A sources/modules/JIT and mixed short results retained; judge complete B against qualified originals, not favorable point selection.",
+        "workflow": "One immutable core/embedded perOS, reuse prepared harness/native/selectors/fixtures and unchanged qualification. Accepted milestone refreshes affected costs and batches broad Windows/Linux/scalar/live plus same actual package once.",
+        "attribution": {
+          "previous": {
+            "project": "Lokad.Image",
+            "stage": "JMC533",
+            "productionChanged": false,
+            "allBuilds": 0,
+            "performanceMeasured": false,
+            "inputFile": "tmp/jar509-direct-rgb-input.jpg",
+            "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+            "inputBytes": 133057,
+            "cachedOriginalControlReused": true,
+            "width": 513,
+            "height": 259,
+            "frame": [
+              {
+                "id": 82,
+                "horizontal": 1,
+                "vertical": 2
+              },
+              {
+                "id": 71,
+                "horizontal": 1,
+                "vertical": 2
+              },
+              {
+                "id": 66,
+                "horizontal": 1,
+                "vertical": 2
+              }
+            ],
+            "mcuColumns": 65,
+            "mcuRows": 17,
+            "mcus": 1105,
+            "blocksEachMcu": 6,
+            "blocks": 6630,
+            "sources": {
+              "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed",
+              "src/Lokad.Image/Internal/JpegDecoder.cs": "87f74718ad1920315d00df0c8646c6bc3016e0b42ef7d671bdaaec98eae2a0e1",
+              "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+              "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+              "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3"
+            },
+            "sourceFinding": "Current nested baseline MCU/component/by/bx loops invoke ReadBaselineBlock once per block, which attempts the fused wrapper and initializes/publishes its cache per successful fast block. No shared MCU entropy window exists.",
+            "theoreticalBlockBoundarySetupsRemovedUpperBound": 5525,
+            "limitation": "Geometry/call-boundary bound only; not a count of currently eligible complete fast windows, actual refill savings or CPU time. Stuffing, long DC/AC and incomplete words require fallback and may reopen a window within an MCU.",
+            "intendedEndState": "One borrowed high-aligned entropy reservoir across eligible blocks in one MCU. Reuse one block kernel for standalone and shared execution, no duplicate bit grammar or new table/heap/cache/session. Publish before scalar fallback and restart/MCU end; lazily reopen after fallback if safe. Preserve exact logical state, completed prefixes, predictors, coefficients, polls and existing owners.",
+            "acceptance": "Actual multi-block window versus independent scalar grammar at every checkpoint, all cached phases, categories/signed values, stuffing/markers/EOI/tails, long DC/AC, failures, restart and live exclusion. Complete DirectRgb444 and one existing representative boundary first; no grid expansion. Default/governed admission unchanged, no retry after refusal.",
+            "next": "Implement the shared-reservoir stage after recording the unselected table-view round; new state is codec-local borrowed stack storage, charged within a verified existing coarse allowance or accounted before use. Current profiling958fusedlocations selects this path but does not predict gains."
+          },
+          "nativeInsight": "Pinned external FFmpeg mjpegdec.c init_get_bits8 over unescaped scan and scan decoder uses context-owned bit state. Insight only, no copied code/tables. Managed design vector-finds plain-run ends and retains existing scalar stuffing fallback, with zero encoded-input copy."
+        },
+        "previousCandidate": {
+          "windowsSha256": "507ded257ec73881159166040e22b6be4d8cf8f9ded7406b39b5973d85692314",
+          "linuxSha256": "d3adfea5588c13e5b4c6eff5e6f683951fb1a6b6f0f7b89547a010edc0cbeb51"
+        },
+        "affectedOnAcceptance": "All29existing JPEG read/validation costs: new reader fields/constructor are also used by progressive/live paths. Refresh current evidence at one accepted milestone; no workload grid expansion."
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "JRB535",
+        "sources": {
+          "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "3b3dd44e5d0b685b16be4123eb41d5d30d748cd0489f26fb752cfbba6f474e8e",
+          "src/Lokad.Image/Internal/JpegHuffman.cs": "3dd14a099608fa43ee2c4e50d52d70f88fbae984e12a9d179234d89b6dfa19ae",
+          "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "41c18ab8aec4f02772db2a4b126023d899b77598d34f83e1ad28a4f0d4270733",
+          "src/Lokad.Image/Internal/JpegDecoder.cs": "63560282b1ac84a661d4d80920d51335cd1f64960173b1d72e0a88a15b5fdbbe",
+          "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "c58343ead71129a6f621ae7d12a598b4244c7e78766de65a35d7e57cceb08515",
+          "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4a6f877ec22dedbc1c1024b10e2d492e235b222cc48a2e78b752d3d4c85cde75"
+        },
+        "stageAProof": {
+          "project": "Lokad.Image",
+          "round": "JMW534",
+          "sources": {
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "b6328cc725eac518aaa22f59b39d8931eac416daada166efbc6e291282ffed5a",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "3dd14a099608fa43ee2c4e50d52d70f88fbae984e12a9d179234d89b6dfa19ae",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "5924b798f3fd3cd38f46fef2ca4b83fb8e363cc63a69d2531fe224b35db66af2",
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "63560282b1ac84a661d4d80920d51335cd1f64960173b1d72e0a88a15b5fdbbe",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "3b519a9f585dcfa6490580b1bbcee1be1411e5e1d26132b84951cb59ac2e139f"
+          },
+          "oneSharedCoefficientKernel": true,
+          "dcAcArithmeticTableGrammarLoopExact": true,
+          "scalarRemainderAndEveryLivePollBodyExact": true,
+          "wholeDecoderOutsideEntryRefactorExact": true,
+          "wholeMcuGeometryIdctColorStorageOutsideWindowSelectionExact": true,
+          "wholeHuffmanOutsideActualSharedDelegateExact": true,
+          "originalTestsScalarOracleExact": true,
+          "newTestCases": 6,
+          "continuedDcLookaheadBits": 19,
+          "dcLookaheadProof": "At most8short-prefix+11amplitude bits. Refill reads4bytes only under original bounded/stuff-free guard; pending<19 keeps32bit append within UInt64. Reject DC before any output/window commit. Publish completed window before scalar continuation; no prefix replay.",
+          "windowStateEstimatedBytes": 32,
+          "existingFixedParserAllowanceBytes": 1024,
+          "newOwnedHeapCapacityBytes": 0,
+          "newRetainedStateBytes": 0,
+          "allAdmissionCleanupAndOwnedStorageStatementsUnchanged": true,
+          "liveSelection": "Shared MCU execution only when interleaved and token cannot be canceled. Both window begin and shared wrapper exclude live tokens; scalar live/DC/AC checkpoints unchanged.",
+          "normalState": "Standalone source initialization and canonical publication preserved. Shared checkpoints publish exact minimum logical cursor and fractional bits; every new multi-block test compares coefficients, predictor, canonical position and following reads. Fresh DC rejection leaves original reader representation untouched."
+        },
+        "huffmanAndScalarRemainderLivePollBodiesExactToStageA": true,
+        "wholeReaderOutsideTwoBoundsInitializationAndFindHelperExact": true,
+        "nonFfGuardProof": "Input is immutable during an operation. FindPlainEnd memoizes the first FF at/after the requested cursor, recomputing outside its interval. Window borrows data truncated there. A4byte bounds test on that span is exactly the original stuffing-free word predicate; all256values at each of4positions and16adjacent FF patterns compare the actual window guard to the original predicate.",
+        "canonicalPublication": "One kernel, unchanged DC/AC math, tables, partial writes and canonical publication formula from stageA. Whole-scan lifetime publishes before scalar fallback, restart and completed scan; no input copy or replay. Long DC/AC, truncation, allcached phases, stuffing and following reads compare independent scalar grammar. Fresh DC rejection leaves original state; active rejection publishes completed prefix.",
+        "continuationDcLookaheadBits": 19,
+        "estimatedBorrowedWindowBytes": 32,
+        "additionalScalarRangeBytes": 8,
+        "existingFixedParserAllowanceBytes": 1024,
+        "newOwnedHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "ownershipAdmissionCleanupUnchanged": true,
+        "focusedChecks": {
+          "windows": {
+            "internal-normal": 411,
+            "internal-scalar": 411,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "linux": {
+            "internal-normal": 411,
+            "internal-scalar": 411,
+            "public-normal": 375,
+            "public-scalar": 375
+          }
+        },
+        "testAuthoringCorrection": {
+          "initialExpectedPosition": 2,
+          "actualAndCorrectPosition": 1,
+          "reason": "Existing cached complete short codes require no new byte. Production unchanged; failed source/module/logs preserved; only embedded test assemblies rebuilt."
+        },
+        "all29JpegReadValidationCostsInvalidatedOnAcceptance": true,
+        "unrelatedProductionQualificationReusable": true
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "candidateSha256": "8b63e07e9aa6870dd8a260fb307f31ec4045b8f86475c8a27168dc042c1f7321",
+          "internalTestAssemblySha256": "8c3c7d0a40af18b82886ab5d2cfd2431c4b0e91cc5a7523080b5fc8147c93153",
+          "focused": {
+            "internal-normal": 411,
+            "internal-scalar": 411,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "3b3dd44e5d0b685b16be4123eb41d5d30d748cd0489f26fb752cfbba6f474e8e",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "3dd14a099608fa43ee2c4e50d52d70f88fbae984e12a9d179234d89b6dfa19ae",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "41c18ab8aec4f02772db2a4b126023d899b77598d34f83e1ad28a4f0d4270733",
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "63560282b1ac84a661d4d80920d51335cd1f64960173b1d72e0a88a15b5fdbbe",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "c58343ead71129a6f621ae7d12a598b4244c7e78766de65a35d7e57cceb08515",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4a6f877ec22dedbc1c1024b10e2d492e235b222cc48a2e78b752d3d4c85cde75"
+          },
+          "coreVersions": 1,
+          "internalVersions": 2,
+          "failedInitialAssertionExpected2Actual1": true,
+          "productionCoreRebuiltForTestFix": false,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+          "candidateSha256": "a6a69c8e804d2c7547f6454845828b9674ceea095fa1bf819c6d60759278adb8",
+          "internalTestAssemblySha256": "e81b5a43c387a3f66e95c363a11b3b034600ce34b0565659ee8a1767106c94d1",
+          "focused": {
+            "internal-normal": 411,
+            "internal-scalar": 411,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "3b3dd44e5d0b685b16be4123eb41d5d30d748cd0489f26fb752cfbba6f474e8e",
+            "src/Lokad.Image/Internal/JpegHuffman.cs": "3dd14a099608fa43ee2c4e50d52d70f88fbae984e12a9d179234d89b6dfa19ae",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "41c18ab8aec4f02772db2a4b126023d899b77598d34f83e1ad28a4f0d4270733",
+            "src/Lokad.Image/Internal/JpegDecoder.cs": "63560282b1ac84a661d4d80920d51335cd1f64960173b1d72e0a88a15b5fdbbe",
+            "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "c58343ead71129a6f621ae7d12a598b4244c7e78766de65a35d7e57cceb08515",
+            "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4a6f877ec22dedbc1c1024b10e2d492e235b222cc48a2e78b752d3d4c85cde75"
+          },
+          "coreVersions": 1,
+          "internalVersions": 2,
+          "failedInitialAssertionExpected2Actual1": true,
+          "productionCoreRebuiltForTestFix": false,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "DirectRgb444": {
+          "runId": "jrb535-candidate-DirectRgb444-short",
+          "managedUs": 1689.225546875,
+          "nativeUs": 1455.7231510416668,
+          "ratio": 1.1604030242056993,
+          "lower": 0.7655759517325587,
+          "upper": 1.5623233024314391,
+          "allocatedBytes": 10088,
+          "librarySha256": "a6a69c8e804d2c7547f6454845828b9674ceea095fa1bf819c6d60759278adb8",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+          "outputSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369"
+        },
+        "CmykAdobeSparse2D": {
+          "runId": "jrb535-candidate-CmykAdobeSparse2D-short",
+          "managedUs": 501.50551458333337,
+          "nativeUs": 438.0545885416667,
+          "ratio": 1.1448470754590243,
+          "lower": 1.0792788620777078,
+          "upper": 1.2116812174469798,
+          "allocatedBytes": 4520,
+          "librarySha256": "a6a69c8e804d2c7547f6454845828b9674ceea095fa1bf819c6d60759278adb8",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "c25100b5a547cb15861a4f2f08b27c35a04d5e4250fca10021105823ba98b4a1",
+          "outputSha256": "4deaf3f5b49a6357e5522e909bcbcd9256677dc6ba835b9079e57b71ec7105cf"
+        }
+      }
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3",
+        "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed",
+        "src/Lokad.Image/Internal/JpegDecoder.cs": "87f74718ad1920315d00df0c8646c6bc3016e0b42ef7d671bdaaec98eae2a0e1",
+        "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "bc1f1ee14a7f1d415b1d18cf6f4b4224dc26b7bd8f976b1f643e9287bc9d7e97",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "760ff31c9f5e3819afe4a5ff0e601af3655191d2bc47c93aed9df8ea7b577e7d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "563a259358e8c3a70a2682ad0b50f4b9735f431e5c22bca4878561ecdda56f0e"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3",
+        "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed",
+        "src/Lokad.Image/Internal/JpegDecoder.cs": "87f74718ad1920315d00df0c8646c6bc3016e0b42ef7d671bdaaec98eae2a0e1",
+        "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "bc1f1ee14a7f1d415b1d18cf6f4b4224dc26b7bd8f976b1f643e9287bc9d7e97",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+        "tmp/benchmark-source.json": "3b1af5b9209faf943d88d8d691a78467b30ad2081d9cda24af5d9adc54fc171d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "0c3a072ae28f2272b7a84553dc7a3f1711bc240d48740a74c4379d96001f908d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "95760c034e7612b2baa42acaed6ab0898d817eae78bba9f7ad94b1589d1085fa"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    }
+  },
+  "geometryAudit": {
+    "project": "Lokad.Image",
+    "stage": "JMC533",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "performanceMeasured": false,
+    "inputFile": "tmp/jar509-direct-rgb-input.jpg",
+    "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+    "inputBytes": 133057,
+    "cachedOriginalControlReused": true,
+    "width": 513,
+    "height": 259,
+    "frame": [
+      {
+        "id": 82,
+        "horizontal": 1,
+        "vertical": 2
+      },
+      {
+        "id": 71,
+        "horizontal": 1,
+        "vertical": 2
+      },
+      {
+        "id": 66,
+        "horizontal": 1,
+        "vertical": 2
+      }
+    ],
+    "mcuColumns": 65,
+    "mcuRows": 17,
+    "mcus": 1105,
+    "blocksEachMcu": 6,
+    "blocks": 6630,
+    "sources": {
+      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed",
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "87f74718ad1920315d00df0c8646c6bc3016e0b42ef7d671bdaaec98eae2a0e1",
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "bb14ce3a7888fb4056957655afad015478a9e5633ba911b9bd84e02fd788479c",
+      "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "de1b15b263bcf04d3fcd39f9f2b71e94eae1138e27aa32c8661fb681413a2fa0",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "423b718139603ed12258857f12dd059e3b951982a85341ff84d9e4140bfa3ea3"
+    },
+    "sourceFinding": "Current nested baseline MCU/component/by/bx loops invoke ReadBaselineBlock once per block, which attempts the fused wrapper and initializes/publishes its cache per successful fast block. No shared MCU entropy window exists.",
+    "theoreticalBlockBoundarySetupsRemovedUpperBound": 5525,
+    "limitation": "Geometry/call-boundary bound only; not a count of currently eligible complete fast windows, actual refill savings or CPU time. Stuffing, long DC/AC and incomplete words require fallback and may reopen a window within an MCU.",
+    "intendedEndState": "One borrowed high-aligned entropy reservoir across eligible blocks in one MCU. Reuse one block kernel for standalone and shared execution, no duplicate bit grammar or new table/heap/cache/session. Publish before scalar fallback and restart/MCU end; lazily reopen after fallback if safe. Preserve exact logical state, completed prefixes, predictors, coefficients, polls and existing owners.",
+    "acceptance": "Actual multi-block window versus independent scalar grammar at every checkpoint, all cached phases, categories/signed values, stuffing/markers/EOI/tails, long DC/AC, failures, restart and live exclusion. Complete DirectRgb444 and one existing representative boundary first; no grid expansion. Default/governed admission unchanged, no retry after refusal.",
+    "next": "Implement the shared-reservoir stage after recording the unselected table-view round; new state is codec-local borrowed stack storage, charged within a verified existing coarse allowance or accounted before use. Current profiling958fusedlocations selects this path but does not predict gains."
+  },
+  "decision": "Unselected. A shares one borrowed entropy reservoir within an MCU; B spans eligible ordinary scan blocks and vector-finds immutable-input nonFF ranges, removing repeated word masks without copying input. Both correct designs have mixed or unpromising complete short screens. No causal gain/loss/equivalence or independent confirmation follows. Qualified sources/main/embedded/bindings restored exactly, actual package unchanged. These implementations do not justify further variants without new evidence; no permanent family ban.",
+  "storage": {
+    "newOwnedHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "stageABorrowedWindowEstimatedBytes": 32,
+    "stageBAdditionalScalarRangeBytes": 8,
+    "existingFixedParserAllowanceBytes": 1024,
+    "admittedPhysicalNativePeaksRemeasured": false,
+    "note": "No new table/buffer/owner/cache/pool/session, no encoded-input copy. Full GC10088/4520Bop remains unchanged. Borrowed state and range fields fit the existing fixed coarse parser allowance; ownership/admission/refusal/cleanup statements unchanged. No peak or CPU reduction inferred."
+  },
+  "testCorrection": {
+    "initialExpectedPosition": 2,
+    "actualAndCorrectPosition": 1,
+    "reason": "Existing complete cached short codes consume no new byte. One added test made a wrong assumption; other410internal checks passed. Preserve failed source/embedded modules/logs. Correct only test name/assertion/comment; reuse already built production cores and rebuild only embedded tests. All411 then pass bothOS normal/scalar."
+  },
+  "workflow": {
+    "coreVersionsEachOs": 2,
+    "embeddedVersionsEachOs": 3,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "focusedInternalEachModeStage": {
+      "A": 407,
+      "B": 411
+    },
+    "focusedPublicEachModeStage": 375,
+    "shortControlsEachStage": 2,
+    "actualsEachShort": 3,
+    "independentConfirmationRuns": 0,
+    "newBroadQualificationRuns": 0,
+    "newPackageRuns": 0,
+    "restoreBuilds": 0,
+    "displayedCostsChanged": 0,
+    "additionalFavorableRepeats": 0
+  },
+  "boundary": "Original frozen RGB444 and sparse Adobe CMYK packets/settings; complete parse/table preparation, entropy/IDCT/color conversion, independent owned output and disposal timed. Native contexts retained as declared. Exact output/cursor/partial grammar, all live polls, source/native/pixel/alpha/ownership gates and idle-v2 singleCPU guards remain. Sample locations and theoretical geometry counts do not establish elapsed savings.",
+  "next": "Select an independent material gap. PNG Fastest remains about187us slower than equivalent fresh FFmpeg; first reuse source-valid evidence and obtain adequate current attribution with a long-enough cached selector, without another production build or replaying the failed success-publication variant.",
+  "raw": {
+    "file": "jpeg-shared-entropy-window-experiment.tar.xz",
+    "sha256": "f35314fed298c43be69dc19b59a941ff81084ab1fd36d5ab6e0211d92691d02c",
+    "bytes": 16251996,
+    "members": 326,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1"
+      },
+      {
+        "file": "jpeg-current-entropy-attribution.tar.xz",
+        "sha256": "f915afc6cb8774e4bb9ae35ab34158cab20a37a924a9844085decd8bbaeaf2d0"
+      }
+    ]
+  }
+}
