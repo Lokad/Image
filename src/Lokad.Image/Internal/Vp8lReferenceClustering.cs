@@ -391,7 +391,7 @@ internal static class Vp8lReferenceClustering
     }
 
     internal static Vp8lHistogramPlan Build(ReadOnlySpan<Vp8lToken> tokens, int width, int height,
-        int tileBits, int cacheBits, bool lowEffort, OperationContext context, int quality = 75)
+        int tileBits, int cacheBits, bool lowEffort, OperationContext context, int quality = 75, Span<int> scratch = default)
     {
         if (width is < 1 or > 16384 || height is < 1 or > 16384 || tileBits is < 2 or > 9)
             throw new ArgumentOutOfRangeException(nameof(width));
@@ -428,7 +428,7 @@ internal static class Vp8lReferenceClustering
             layout = new Vp8lHistogramLayout(cacheBits, constantBanks);
         }
         var supportWords = SupportWords(layout, tiles);
-        using var populations = Vp8lPopulationWorkspace.Create(tokens, width, height, tileBits, layout, supportWords, context);
+        using var populations = Vp8lPopulationWorkspace.Create(tokens, width, height, tileBits, layout, supportWords, context, scratch);
         var reserved = tiles * 192L + pairCapacity * 64L + 512;
         context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(reserved);
         try

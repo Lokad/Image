@@ -7,8 +7,9 @@ memory, compression correctness and CPU parity are separate requirements.
 Completion needs current passing evidence for every named path, with scope stated.
 
 [Current preparation/storage audit](ARCHITECTURAL-PREPARATION-AND-STORAGE.md)
-reconciles one-shot/prepared boundaries and measures three WebP admission lifetimes
-without changing production or current timing claims. The latest
+reconciles one-shot/prepared boundaries and measures three WebP admission lifetimes.
+The subsequent [matching-index handoff](WEBP-MATCHING-POPULATION-STORAGE.md) refreshes
+eight affected costs after its qualified allocation reduction. The latest
 [JPEG prepared-amplitude experiment](JPEG-PREPARED-AMPLITUDE-EXPERIMENT.md) is
 unselected; qualified sources, modules, costs and package proof remain unchanged.
 
@@ -16,9 +17,9 @@ unselected; qualified sources, modules, costs and package proof remain unchanged
 
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
-| Resident lossless WebP | [Isolated green prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) preserves full-color visitor/fields and shares map coarsening/copy. Four refreshed lossless controls pass/stop; opaque/photo remain uncertain, uppers1.008/1.022. Final independent photo ratio.999646 has interval.991485–1.007836: no demonstrated gain/loss or equivalence. Previous cost owners and adverse stages remain linked history. |
+| Resident lossless WebP | [Matching/population storage](WEBP-MATCHING-POPULATION-STORAGE.md) reuses the ordinary index after its final reader. Four lossless controls pass/stop; opaque/photo remain uncertain (uppers1.015/1.008). Direct photo/diagram allocation falls134736B each, admitted peaks3470059/3251328B unchanged; retained scratch zero. Exact packets and source settings remain. No causal CPU gain inferred from refreshed costs. [Isolated prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) retains earlier numerical/CPU evidence and adverse history. |
 | Resident VP8 encoding | [Per-block candidate preparation](VP8-SMALL-BLOCK-PREPARATION.md) reuses border/DC values and packed source across visited modes. Complete effort2 saves 54.30 µs/1.94% raw elapsed with both raw confidence views separated. Native moves −0.84%; normalized point improves 1.11%, but the all-actual interval overlaps neutral. Current 2,745.35/native 2,501.11 µs, upper 1.104 remains a gap; GC stays 406,705 B/op. Nine affected costs: 5 pass/3 gaps/1 uncertain. Effort6 passes the predeclared four-launch envelope, upper 0.993439; Alpha16 passes its current confirmation, Alpha8 remains uncertain. Diagram/dense admitted peaks stay 397,205/930,669 B, retained zero. [Compact residual programs](VP8-COEFFICIENT-PROGRAM.md) retain earlier storage gains and dense tradeoffs as history. No all-views relative-gain, other causal gain or generic launch-stability claim. Passing cases stop. |
-| Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
+| Other WebP encoding boundaries | [Current eight-control storage stage](WEBP-MATCHING-POPULATION-STORAGE.md):5pass/3uncertain across lossless/alpha. Full-depth normalization and fresh awaited nonseekable async ownership remain timed. Transparent alpha allocation falls70560B; admitted peak3656309B/retained0 unchanged. Alpha16 remains pass, Alpha8 uncertain. Native contexts retain their declared preparation boundary. Passing cases stop; photo/opaque/Alpha8 uncertainty is not a demonstrated optimization gap. Older fresh-histogram costs remain linked history. |
 | PNG decoding/coding validation | [Current resident controls](PNG-CURRENT-FRAMING-COSTS.md): all47requiredWarmPngdecode+4codingvalidation cases now have independent evidence;45pass/stop,6gaps,none missing or uncertain. The final25controls all pass; prior liveword2 remain gaps. Largest gaps are liveRGBA8(~145µs), tightRGBA16(~124µs) andRGB16(~115µs); ordinary/live/tight word controls retain their exact bounds. No tuning of passing packed/indexed/tRNS/Paeth/Adam7/stored paths. [Shared-root control](PNG-PREPARED-PREFIX.md) separately remainsgap; stream/composition/inspection boundaries keep their own finite coverage. No production/build/package changes or historical causal-gain claim. |
 | PNG encoding | [Lazy view preparation](PNG-LAZY-VIEW-PREPARATION.md) independently saves390.08/375.08µs (1.83%/2.16%) on complete Optimal16/Smallest8. Exact packets and384KiB admission remain; Grayscale8 measures+408B/op to551,772, ten other fresh allocations unchanged. All11level6/9 fresh one-shot costs refresh; fourFastest costs reuse unchanged source bodies. Fifteen controls:9pass/stop,2gap,4uncertain. ByteFastest and byteGray remain gaps; wordSmallest and ordinary/live/forward wordFastest are uncertain. Resolve uncertainty before tuning. [Greedy preparation](PNG-GREEDY-VIEW-PREPARATION.md) retains independent269/836µs gains; earlier evidence stays linked history. |
 | WebP image reading | [Successful-block publication](VP8-COMPLETED-BLOCK-PUBLICATION.md) saves82.55µs/1.60%raw and1.79%normalized on complete live opaque VP8; both confidence views separate. Current5072.31/native4798.30µs,upper1.065 remains gap; GC228864B/owned capacity unchanged. Only abandoned private failure-state publication removed; every poll/public cleanup and successful cursor remain. [VP8L final publication](VP8L-FINAL-PUBLICATION.md) owns nine unchanged costs:3pass/6gaps, including155.66µs gain and explicit19.25µs palette regression. Validation/literal pass and stop. Earlier output/validation reports retain source-valid storage and raw history. |
@@ -31,15 +32,13 @@ unselected; qualified sources, modules, costs and package proof remain unchanged
 | Mixed-axis RGBA16 bicubic | [Shared quartet scheduling](BICUBIC-MIXED-WORD-SCHEDULING.md) reuses the active exact certificate across four output rows. Default/bounded complete operations save15.20/22.87µs (1.34%/2.00%raw); both raw confidence views separate, bounded normalized separates, default normalized remains open. Current1121.96/1118.45µs, uppers1.331/1.327; tight vertical718.57µs,upper1.223. All3affected controls remain gaps, with114/114/113B/op and unchanged4KiB admission/output ownership. The merged15word controls retain1pass/13gaps/1uncertain; other12costs reuse unchanged paths. No broader gain or peak reduction claim. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. [Owned font storage](FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw against a contemporary original; current31.86/native13.42µs,upper2.396 remains gap. GC757597→176B/op; the isolated load retains757076B idle within the existing2slot/4MiBdefault cap. Rooted loads bypass the cache and retain exact charges; fullcopy/eager parsing stay timed. No physical-peak/general-parser/governedCPUclaim. Other current fill/copy/composite costs remain in the summary. |
 
-The latest [mixed-word scheduling stage](BICUBIC-MIXED-WORD-SCHEDULING.md)
-refreshes3affected controls/one displayed cost and reuses124 unchanged displayed
-paths. Windows/Linux each pass5862 full/live checks plus98internal/703public in
-normal/scalar modes, and the SAMEactualReleasepackage/all3examples, including
-frozen mixed output, shared-root refusal/cancellation/recovery and independent
-survivors. Exact source undo preserves all other arithmetic/dispatch/ownership.
-The [font stage](FONT-OWNED-STORAGE.md), [PNG confirmation](PNG-CURRENT-FRAMING-COSTS.md)
-and JPEG29costs remain source-valid. This is not a full125-row actual-package
-release refresh or completion of all283paths.
+The latest [WebP matching-storage stage](WEBP-MATCHING-POPULATION-STORAGE.md)
+refreshes eight affected costs and reuses 117 unchanged displayed paths. Windows/
+Linux each pass 5,865 full/live checks plus 989 internal/402 public per normal/scalar
+mode and the SAME actual Release package/all three examples. Exact packets,
+refusal/cancellation cleanup and surviving owners remain qualified. Source-valid
+[mixed-word](BICUBIC-MIXED-WORD-SCHEDULING.md), font, PNG and JPEG costs are reused.
+This is not a 125-row actual-package release refresh or completion of all 283 paths.
 
 Earlier [JPEG publication](JPEG-PLAIN-READER.md),
 [word publication](BICUBIC-WORD-PUBLICATION-PIPELINE.md) and the unselected

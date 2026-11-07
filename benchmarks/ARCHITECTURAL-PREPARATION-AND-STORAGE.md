@@ -36,6 +36,11 @@ cost remain unmeasured. No full-operation peak saving is predicted. Insufficient
 capacity must select the existing allocation before admission, with no refusal
 fallback. Two simultaneously live parsing candidates cannot simply share storage.
 
+The subsequent [matching-index handoff](WEBP-MATCHING-POPULATION-STORAGE.md)
+qualifies a revised design: token-tail capacity misses the photograph, so the
+ordinary matching index lends storage after its final reader. Current allocation,
+peak and timing evidence belongs to that report; this audit remains attribution.
+
 Preparation boundaries remain explicit:
 
 - Lanczos compares both complete one-shot operations and separately prepared

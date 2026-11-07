@@ -46,29 +46,37 @@ internal sealed class Vp8lPreparedEncoding : IDisposable
             {
                 var owned = seed; seed = null;
                 var tokens = Vp8lReferenceLz.Greedy(pixels, matches.Values, context, owned);
-                Consider(candidatePrefix, Vp8lImageCode.TakeMain(tokens, width, height, analysis.HistogramBits, true, context, quality));
+                Consider(candidatePrefix, Vp8lImageCode.TakeMain(tokens, width, height, analysis.HistogramBits, true, context, quality, matches.Storage));
                 return;
             }
+            var tryBox = paletteColors is >= 1 and <= 16
+                || effort == 6 && quality == 100 && analysis.DistinctColorsCapped is >= 1 and <= 16;
             var ordinarySeed = seed; seed = null;
             var ordinary = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, false, maximumCacheBits, context, quality >= 25, ordinarySeed, greenOnly);
             var compareOrdinary = tryNoCache && ordinary.CacheBits != 0;
-            Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context, quality));
+            // Only the final matching reader may lend its still-charged index.
+            // Population preparation returns before later filter/family reuse.
+            Consider(candidatePrefix, Vp8lImageCode.TakeMain(ordinary, width, height, analysis.HistogramBits, false, context, quality,
+                !compareOrdinary && !tryBox ? matches.Storage.AsSpan() : default));
             // Native already considers this profile complete when caching chose0.
             if (compareOrdinary)
             {
                 var uncached = Vp8lReferenceMainParsing.Encode(pixels, matches.Values, width, true, maximumCacheBits, context, quality >= 25);
-                Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
+                Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality,
+                    !tryBox ? matches.Storage.AsSpan() : default));
             }
-            if (paletteColors is >= 1 and <= 16 || effort == 6 && quality == 100 && analysis.DistinctColorsCapped is >= 1 and <= 16)
+            if (tryBox)
             {
                 using var box = Vp8lReferenceMatcher.BuildBox(pixels, width, matches.Values, context);
                 var boxed = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, false, maximumCacheBits, context, quality >= 25);
                 var compareBox = tryNoCache && boxed.CacheBits != 0;
-                Consider(candidatePrefix, Vp8lImageCode.TakeMain(boxed, width, height, analysis.HistogramBits, false, context, quality));
+                // BuildBox owns a separate index. The ordinary index has no
+                // remaining readers, including during an uncached box trial.
+                Consider(candidatePrefix, Vp8lImageCode.TakeMain(boxed, width, height, analysis.HistogramBits, false, context, quality, matches.Storage));
                 if (compareBox)
                 {
                     var uncached = Vp8lReferenceMainParsing.EncodeBox(pixels, box.Values, width, true, maximumCacheBits, context, quality >= 25);
-                    Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality));
+                    Consider(candidatePrefix, Vp8lImageCode.TakeMain(uncached, width, height, analysis.HistogramBits, false, context, quality, matches.Storage));
                 }
             }
         }

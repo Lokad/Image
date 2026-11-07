@@ -1373,7 +1373,7 @@ def render():
     # Current WebP costs use scoped unchanged-path reuse. Older reports
     # above retain their source-specific proofs; do not copy their experiment
     # histories or substitute old costs for this accepted stage's current rows.
-    webp_owned = json.loads((ROOT / 'benchmarks/webp-isolated-green-prediction-evidence.json').read_text(encoding='utf-8'))
+    webp_owned = json.loads((ROOT / 'benchmarks/webp-matching-population-storage-evidence.json').read_text(encoding='utf-8'))
     assert webp_owned['productionAccepted']
     qualification = webp_owned['qualification']
     assert qualification['fullChecksEachOs'] == qualification['windows']['total'] == qualification['linux']['total']
@@ -1381,6 +1381,15 @@ def render():
     assert qualification['actualPackage']['sha256'] == qualification['samePackageLinux']['sameActualPackageSha256']
     assert qualification['actualPackage']['actualConsumerPassed'] and qualification['samePackageLinux']['actualConsumerPassed']
     assert webp_owned['raw']['mirrored'] and webp_owned['raw']['allMembersVerified']
+    assert set(webp_owned['cases']) == {'ordinary', 'opaque', 'photograph', 'diagram', 'rgba16', 'async', 'alpha', 'alpha16'}
+    for current in webp_owned['cases'].values():
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['sourceUnchanged'] and current['independentOwnedOutput'] and current['completePacketExact']
+        assert current['librarySha256'] == webp_owned['producers']['linuxSha256']
+        assert current['packetSha256'] == current['nativePacketSha256']
+        assert current['managedPacketBytes'] == current['nativePacketBytes']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     streaming = json.loads((ROOT / 'benchmarks/bicubic-shared-streaming-evidence.json').read_text(encoding='utf-8'))
     assert streaming['productionAccepted'] and streaming['design']['sharedDriversAfter'] == 2
     assert streaming['qualification']['fullChecksEachOs'] == 5587
@@ -1403,10 +1412,6 @@ def render():
     for case, label in current_labels.items():
         owner = webp_owned
         current = owner['cases'][case]
-        assert current['actualIterations'] == 12 and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        assert current['librarySha256'] == owner['producers']['linuxSha256']
-        assert current['completePacketExact'] and current['packetSha256'] == current['nativePacketSha256']
-        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
         positions = [i for i, (_, row) in enumerate(rows) if row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label]
         assert len(positions) == 1, label
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
@@ -1425,12 +1430,16 @@ def render():
     position = next(i for i, (_, row) in enumerate(rows) if row.startswith('| VP8L RGBA8 /'))
     vp8_rows = []
     for case, label in vp8_labels.items():
-        c = vp8_current['cases'][case]
+        c = webp_owned['cases'][case] if case in ('alpha', 'alpha16') else vp8_current['cases'][case]
         assert not any(row.split('|')[1].strip().removesuffix(' H').removesuffix(' †') == label for _, row in rows)
         vp8_rows.append(('codec', f'| {label} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
             f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | '
             f'{c["managedPacketBytes"]:,} / {c["nativePacketBytes"]:,} |'))
     rows[position:position] = vp8_rows
+    vp8_status_counts = {state: sum((webp_owned['cases'][case] if case in ('alpha', 'alpha16')
+                                   else vp8_current['cases'][case])['status'] == state
+                                  for case in vp8_current['cases'])
+                         for state in ('pass', 'gap', 'uncertain')}
     selected_cost = vp8_current['cases']['selected']
     assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
     stream = resident_decode['costs']['Vp8Stream']
@@ -1704,17 +1713,21 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  Those five displayed costs remain source-valid through the JPEG-only changes.
+  Those five displayed decoder costs reuse unchanged executed paths.
   [Successful-block publication](../benchmarks/VP8-COMPLETED-BLOCK-PUBLICATION.md)
   separately saves **82.55µs/1.60% raw**,1.79% normalized on complete live opaque VP8.
   Current {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,upper{live['upper']:.3f} remains a gap;
   GC stays{live['allocatedBytes']:,}B/op. Only abandoned private failure-state work is removed;
   successful cursors, every decision poll and public cleanup stay exact.
-- **WebP encoding:** [per-block preparation](../benchmarks/VP8-SMALL-BLOCK-PREPARATION.md)
-  retains54.30µs/1.94%raw gain; all-actual normalized gain is inconclusive.
-  Nine controls:5pass/3gaps/1uncertain. Effort6's fixed four-launch envelope passes;
-  photograph/effort5/effort2 remain gaps, Alpha8 uncertain. Exact packets unchanged.
-  [Coverage](../benchmarks/WARM-COVERAGE.md) links workspace/alpha/validation history.
+- **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
+  saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.
+  Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
+  Eight affected comparisons refresh:5pass/3uncertain (photograph/opaque/Alpha8).
+  No causal CPU-gain claim. Seven unaffected lossy controls reuse
+  [per-block preparation](../benchmarks/VP8-SMALL-BLOCK-PREPARATION.md), including
+  its54.30µs raw gain and normalized uncertainty. Combined lossy scope:
+  {vp8_status_counts['pass']}pass/{vp8_status_counts['gap']}gaps/{vp8_status_counts['uncertain']}uncertain.
+  Exact complete packets remain unchanged; passing controls stop.
 - **PNG:** [prepared literal prefixes](../benchmarks/PNG-PREPARED-PREFIX.md) save
   422µs/12.8% on two complete retained-output decodes under one shared root.
   Current ratio {png_decode['current']['ratio']:.3f}/upper {png_decode['current']['upper']:.3f} remains a gap. Nominal arrays fit the same4KiB
@@ -1790,12 +1803,13 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{webp_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Bicubic/resize paths pass98 internal/703 public checks per normal/scalar mode
+Affected WebP paths pass989 internal/402 public checks per normal/scalar mode.
+Source-valid bicubic/resize evidence retains98 internal/703 public checks per mode
 on each OS, including direct mixed-word tails, terminal refusal/cancellation/recovery
 and independent surviving outputs. Unchanged codec/resize ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,

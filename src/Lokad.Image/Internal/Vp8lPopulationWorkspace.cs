@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace Lokad.Image.Internal;
 
 // Operation-owned immutable sparse leaves and reusable dense merged populations.
@@ -40,25 +42,31 @@ internal sealed class Vp8lPopulationWorkspace : IDisposable
     }
 
     internal static Vp8lPopulationWorkspace Create(ReadOnlySpan<Vp8lToken> tokens, int width, int height,
-        int bits, Vp8lHistogramLayout layout, int supportWords, OperationContext context)
+        int bits, Vp8lHistogramLayout layout, int supportWords, OperationContext context, Span<int> scratch = default)
     {
         var columns = (width + (1 << bits) - 1) >> bits;
         var tiles = columns * ((height + (1 << bits) - 1) >> bits);
         var result = new Vp8lPopulationWorkspace(tiles, layout, supportWords, context);
-        try { result.Prepare(tokens, width, height, bits, columns); return result; }
+        try { result.Prepare(tokens, width, height, bits, columns, scratch); return result; }
         catch { result.Dispose(); throw; }
     }
 
-    private void Prepare(ReadOnlySpan<Vp8lToken> tokens, int width, int height, int bits, int columns)
+    private void Prepare(ReadOnlySpan<Vp8lToken> tokens, int width, int height, int bits, int columns, Span<int> scratch)
     {
         // Row indexes live only through the two preparation passes. One admitted
         // scratch population supplies exact nonzero sizes before CSR allocation.
-        var cells = columns * height; var indexBytes = cells * 8L + 64;
-        context.Cancellation.ThrowIfCancellationRequested(); context.Reserve(indexBytes);
+        var cells = columns * height; var borrowed = scratch.Length >= cells * 2;
+        if (borrowed && MemoryMarshal.AsBytes(tokens).Overlaps(MemoryMarshal.AsBytes(scratch[..(cells * 2)])))
+            throw new ArgumentException("Population indexes must not overlap live tokens.", nameof(scratch));
+        var indexBytes = borrowed ? 0 : cells * 8L + 64;
+        context.Cancellation.ThrowIfCancellationRequested(); if (indexBytes != 0) context.Reserve(indexBytes);
         try
         {
             context.Cancellation.ThrowIfCancellationRequested();
-            var rowTokens = new int[cells]; rowTokens.AsSpan().Fill(-1); var rowPositions = new int[cells];
+            Span<int> rowTokens = borrowed ? scratch[..cells] : new int[cells];
+            Span<int> rowPositions = borrowed ? scratch.Slice(cells, cells) : new int[cells];
+            // Only positions whose token index is set are ever read.
+            rowTokens.Fill(-1);
             var position = 0; var lastCell = -1;
             for (var i = 0; i < tokens.Length; i++)
             {
@@ -105,7 +113,7 @@ internal sealed class Vp8lPopulationWorkspace : IDisposable
                 if (at != offsets[tile + 1]) throw new InvalidOperationException("Leaf population changed during preparation.");
             }
         }
-        finally { context.Release(indexBytes); }
+        finally { if (indexBytes != 0) context.Release(indexBytes); }
     }
 
     private void Replay(ReadOnlySpan<Vp8lToken> tokens, int width, int height, int bits, int columns, int tile,

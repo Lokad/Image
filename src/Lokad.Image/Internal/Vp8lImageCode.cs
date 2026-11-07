@@ -58,12 +58,13 @@ internal sealed class Vp8lImageCode : IDisposable
     // Ownership of tokens transfers on entry, including failure. The caller
     // must not dispose or modify them after passing them here.
     internal static Vp8lImageCode TakeMain(Vp8lTokenBuffer tokens, int width, int height,
-        int tileBits, bool lowEffort, OperationContext context, int quality = 75)
+        int tileBits, bool lowEffort, OperationContext context, int quality = 75, Span<int> scratch = default)
     {
         var result = new Vp8lImageCode(tokens, width, height, true, context);
         try
         {
-            var plan = result.histograms = Vp8lReferenceClustering.Build(tokens.Tokens, width, height, tileBits, tokens.CacheBits, lowEffort, context, quality);
+            var plan = result.histograms = Vp8lReferenceClustering.Build(tokens.Tokens, width, height, tileBits, tokens.CacheBits,
+                lowEffort, context, quality, scratch);
             result.StoredTileBits = tileBits;
             if (plan.GroupCount > 1)
             {
