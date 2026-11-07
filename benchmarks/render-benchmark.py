@@ -1349,10 +1349,16 @@ def render():
     labels = {'Down8': 'Bicubic resize RGBA8', 'Up16': 'Bicubic upscale RGBA16',
               'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
               'Up8': 'Bicubic upscale RGBA8, default workspace'}
-    # Default and tight rows share the current enlargement owner above.
+    # One unchanged-build confirmation resolves default-byte uncertainty;
+    # other enlargement cases keep their source-valid current owners.
+    default_byte = json.loads((ROOT / 'benchmarks/bicubic-byte-enlargement-current-evidence.json').read_text(encoding='utf-8'))
+    assert not default_byte['productionChanged'] and default_byte['allBuilds'] == 0
+    assert default_byte['raw']['mirrored'] and default_byte['raw']['allMembersVerified']
+    assert default_byte['cases']['Up8']['status'] == 'gap' and default_byte['cases']['Up8']['lower'] > 1
+    assert default_byte['qualificationReused']['sameActualPackageBothOs']
     assert set(overwrite['cases']) == set(labels)
     for case, label in labels.items():
-        owner = enlargement if case in {'Up8', 'Up16'} else overwrite
+        owner = default_byte if case == 'Up8' else enlargement if case == 'Up16' else overwrite
         observation = owner['cases'][case]; receipt = observation['receipt']
         assert receipt['librarySha256'] == owner['producers']['linuxSha256']
         assert receipt['managedRationalReferenceExact'] and observation['quietGuardsPassed']
@@ -1759,7 +1765,10 @@ Current scope and remaining work:
   Four displayed rows refresh;121 numerical rows reuse unchanged paths. No new
   owned arrays or retained state; admitted/physical peaks are not newly measured.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
-  workspace savings and source-valid byte costs. No new retained cache/pool or precision policy.
+  workspace savings and source-valid byte costs. Its unchanged-build defaultRGBA8
+  confirmation measures3,108.21/native3,037.83µs,upper1.026/116Bop: a70.38µs gap.
+  This resolves earlier uncertainty without a causal historical-gain claim.
+  No new retained cache/pool or precision policy.
   [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.

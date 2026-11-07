@@ -79,7 +79,10 @@ Current scope and remaining work:
   Four displayed rows refresh;121 numerical rows reuse unchanged paths. No new
   owned arrays or retained state; admitted/physical peaks are not newly measured.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
-  workspace savings and source-valid byte costs. No new retained cache/pool or precision policy.
+  workspace savings and source-valid byte costs. Its unchanged-build defaultRGBA8
+  confirmation measures3,108.21/native3,037.83µs,upper1.026/116Bop: a70.38µs gap.
+  This resolves earlier uncertainty without a causal historical-gain claim.
+  No new retained cache/pool or precision policy.
   [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
@@ -226,7 +229,7 @@ settings do not establish matched quality.
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 549.84 | 418.61 | 1.313 / 1.321 | 199,981 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,752.40 | 2,874.23 | 0.958 / 0.966 | 4,264,573 |
-| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,315.52 | 3,040.01 | 1.091 / 1.120 | 116 |
+| Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,108.21 | 3,037.83 | 1.023 / 1.026 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |

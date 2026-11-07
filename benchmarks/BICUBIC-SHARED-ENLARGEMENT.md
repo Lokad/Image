@@ -1,8 +1,27 @@
 # Shared byte/word bicubic enlargement
 
-Word costs are superseded by the [publication pipeline](BICUBIC-WORD-PUBLICATION-PIPELINE.md).
-Byte costs and unchanged workspace evidence remain valid; this report retains
-the earlier consolidation and its adverse stages.
+The current [default-byte confirmation](bicubic-byte-enlargement-current-evidence.json)
+uses the unchanged qualified build and original 513×259→1027×519 control:
+**3,108.21 / 3,037.83 µs**, ratio **1.023 / upper1.026 / lower1.019**, **116 B/op**.
+One twelve-actual confirmation resolves the previous broad uncertainty to a
+**70.38 µs gap**. No production/build/fixture change or causal historical-gain claim.
+Exact rational pixels, native float bounds, source and independent output gates
+remain. Prepared zimg graph/scratch and complete managed preparation/output/disposal
+retain their declared boundary. Admitted capacity/retention are unchanged, with no
+new physical-peak measurement. Existing 5,867 full/live checks per OS and the same
+actual package/all three examples remain valid; no qualification repeat follows.
+
+Raw `bicubic-byte-enlargement-current.tar.xz`, SHA256
+`3c9674dfeef2344e917a9b0f8ab9848d6d251bafdbb6f1747c376dfc33219280`,
+20,980 B /13 members, is mirrored/member-verified, with qualified module/tooling
+providers pinned. Larger demonstrated codec gaps take priority over this control.
+
+The shared stage below retains its original costs, uncertainty and adverse results.
+Default Up8 above supersedes its old cost. Word costs are superseded by
+[shared word preparation](BICUBIC-SHARED-WORD-PREPARATION.md). Other byte costs and
+unchanged workspace evidence remain valid.
+
+## Shared enlargement stage
 
 Byte and word enlargement now share geometry/filter preparation and two
 output-backed prefix/tail schedules. Typed decoding, certified pixel publication
@@ -18,7 +37,7 @@ output. Do not describe that output as removable scratch or enlarge the idle poo
 
 | Existing 513×259 source / zimg boundary | Managed µs | Reference µs | Ratio / upper | Allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| RGBA8, 1027×519, default | 3,315.52 | 3,040.01 | 1.091 / 1.120 | 116 | uncertain |
+| RGBA8, 1027×519, default (superseded) | 3,315.52 | 3,040.01 | 1.091 / 1.120 | 116 | uncertain |
 | RGBA16, 1027×519, default | 3,429.17 | 3,125.34 | 1.097 / 1.113 | 4,264,538 | gap |
 | RGBA8, 1027×259, default | 1,538.01 | 1,520.28 | 1.012 / 1.040 | 114 | uncertain |
 | RGBA16, 1027×259, default | 1,599.46 | 1,457.53 | 1.097 / 1.104 | 114 | gap |

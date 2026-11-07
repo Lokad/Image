@@ -95,3 +95,29 @@ algebra witnesses, JIT and full Windows/Linux/package logs. Its `tmp/vfw478-*`,
 The preceding [VP8L milestone](VP8L-FINAL-PUBLICATION.md) owns nine unchanged reader
 costs, including its explicit palette regression; its global qualification is
 superseded here. Publication remains postponed.
+
+## Current architectural attribution
+
+A later unchanged-build capture uses the qualified JAR505 DLL and this frozen live
+control: **1,994 leaf samples**, **1,439 in the cancellable coefficient reader**
+(72.2%). Its generated body remains 3,195 B. Sampling covers two seconds of actual
+workload on CPU0, with the sampler pinned to CPU1. Exact pixels, source, ownership,
+native settings and quiet guards pass; instrumented times are discarded. These
+locations are leads, not phase times, projected gains or new comparative costs.
+
+Source/JIT review selects direct coefficient-class traversal for the next bounded
+experiment: avoid materializing a token number and then reconstructing zero/unit/
+larger classes and publication choices. Keep probability/category/sign order,
+every cancellation checkpoint, arithmetic representation and exact successful
+cursor; no new model table, owner or numerical policy. Existing FFmpeg source
+supplies strategy insight only. Audit real helper/test users before removing any
+obsolete helper; preserve coverage through the actual production route. Cross-block
+window reuse remains a separate lead, with less entry/publication evidence than
+the token loop. Failed representation/prediction designs are not replayed.
+
+Raw `vp8-live-current-attribution.tar.xz`, SHA256
+`2a00132cfaf9b4692baac63550c32d3afef843393bc93cef919ae4a0bbc6b070`,
+144,200 B /19 members, is mirrored/member-verified. It retains current sources,
+JIT/map/samples, scripts, frozen gates and bounded design, with qualified tooling
+and module providers pinned. Zero builds or production changes; current elapsed,
+allocation and Windows/Linux/same-package evidence remain valid.
