@@ -100,6 +100,12 @@ public sealed class JpegAdmissionTests
         // all with short prefixes and one quantization table.
         const int tables = 2 * (204 + 512) + 12 + 176;
         var state = 1024 + quantization + tables + components * (256 + 128);
+        // Full-grid baseline color uses its final owner instead of temporary
+        // planes. At this minimum local ceiling the optional MCU packing
+        // workspace is not selected; component stores require no extra owner.
+        // Shared refusal remains terminal and is qualified separately.
+        if (!progressive && sampling == JpegSampling.YCbCr444)
+            return state + (long)width * height * 4 * (orient ? 2 : 1);
         var coefficientPeak = progressive ? allPlanes * 4 + firstPlane : allPlanes;
         var resultPeak = allPlanes + (long)width * height * 4 * (orient ? 2 : 1);
         return state + Math.Max(coefficientPeak, resultPeak);

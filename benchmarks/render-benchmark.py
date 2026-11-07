@@ -868,39 +868,6 @@ def render():
                            f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
             updated += 1
     assert updated == 1
-    jpeg_current = json.loads((ROOT / 'benchmarks/jpeg-progressive-output-evidence.json').read_text(encoding='utf-8'))
-    assert jpeg_current['productionAccepted']
-    assert jpeg_current['raw']['mirrored'] and jpeg_current['raw']['allMembersVerified']
-    assert jpeg_current['sourceProof']['entireOriginalProjectionEquals']
-    assert jpeg_current['sourceProof']['invalidatedPerformance'] == ['Progressive444', 'ProgressiveCancelable444']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for c in jpeg_current['comparison'].values() for v in c['views'].values())
-    assert all(jpeg_current['qualification'][p]['fullLivePassed'] and jpeg_current['qualification'][p]['total'] == 5808
-               for p in ['windows', 'linux'])
-    assert set(jpeg_current['cases']) == {'ProgressiveGray', 'Progressive420', 'Progressive422',
-        'Progressive444', 'ProgressiveCancelable444'}
-    assert set(jpeg_current['reusedCases']) == {'ValidateJpegProgressive420'}
-    assert jpeg_current['qualification']['actualPackage']['sha256'] == jpeg_current['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert jpeg_current['qualification']['actualPackage']['progressiveStripsOwnershipPassed'] and jpeg_current['qualification']['samePackageLinux']['progressiveStripsOwnershipPassed']
-    assert jpeg_current['statusCounts'] == {'gap': 3, 'pass': 1, 'uncertain': 2}
-    for platform in ['windows', 'linux']:
-        for subject in ['baseline', 'candidate']:
-            for r in jpeg_current['storage'][platform][subject]['rows']:
-                assert r['sourceUnchanged'] and r['borrowedRootAlive'] and r['admittedAfterDispose'] == 0
-                assert r['peakAdmittedBytes'] == (1864806 if r['governed'] else 0)
-                assert r['retainedOutputAdmittedBytes'] == (531468 if r['governed'] else 0)
-                assert r['idlePoolAfterDispose'] == (531468 if subject == 'candidate' else 0)
-                assert r['idleCoefficientAfterDispose'] == 1697280
-    for case, current in jpeg_current['cases'].items():
-        assert current['caseId'] == case
-        assert current['reusedUnchangedPath'] or current['librarySha256'] == jpeg_current['producers']['linuxSha256']
-        assert current['actualIterations'] == len(current['actualNanoseconds']) == 12
-        assert current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-        assert current['exactFrozenPixels']
-        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-        rows.append(('codec', f'| {current["label"]} † | {current["managedUs"]:,.2f} | '
-                     f'{current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
-                     f'{current["allocatedBytes"]:,} | — |'))
     wide_current = json.loads((ROOT / 'benchmarks/wide-bicubic-independent-repair-evidence.json').read_text(encoding='utf-8'))
     assert wide_current['accepted'] and wide_current['decision']['normalizedSeparated']
     assert wide_current['independentQuietConfirmations'] == len(wide_current['cases']) == 8
@@ -1164,32 +1131,38 @@ def render():
                 updated_vertical += 1
     assert updated_vertical == 3
     # Retained gains remain claims about their original paired experiments.
-    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-component-frame-evidence.json').read_text(encoding='utf-8'))
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-full-grid-output-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_scan['productionAccepted'] and jpeg_scan['requiredMaterialPaths'] == 283
-    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5845
+    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5850
     assert jpeg_scan['qualification']['sameActualPackageBothOs']
     assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
-    assert jpeg_scan['sourceProof']['fourFileSourceProjectionEqualsQualifiedOriginal']
-    assert jpeg_scan['sourceProof']['originalRgb8ArithmeticExact']
-    assert len(jpeg_scan['cases']) == 23
+    assert jpeg_scan['sourceProof']['wholeTwoFileProjectionEqualsQualifiedOriginal']
+    assert jpeg_scan['sourceProof']['sharedVectorArithmeticExact'] and jpeg_scan['sourceProof']['sharedScalarArithmeticExact']
+    assert jpeg_scan['sourceProof']['deadFallbackRemovalExact']
+    assert len(jpeg_scan['cases']) == 29
     assert jpeg_scan['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_scan['cases'].values())
                                         for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
     for cost in jpeg_scan['cases'].values():
         assert cost['managedActuals'] == cost['nativeSamplesEachBracket'] == 12
         assert cost['quietGuardsPassed'] and cost['allOriginalGatesPassed']
-        assert cost['librarySha256'] == jpeg_scan['producers']['linuxSha256']
+        assert cost['reusedUnchangedPath'] or cost['librarySha256'] == jpeg_scan['producers']['linuxSha256']
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for c in jpeg_scan['comparison'].values() for v in c['views'].values())
+               for name in ['NativeDecode8', 'NativeDecodeCancelable8'] for v in jpeg_scan['comparison'][name]['views'].values())
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
+    replacements += [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
+                     ('Progressive420', 'JPEG progressive420, resident decode'),
+                     ('Progressive422', 'JPEG progressive422, resident decode'),
+                     ('Progressive444', 'JPEG ordinary progressive444, resident decode'),
+                     ('ProgressiveCancelable444', 'JPEG progressive444, live-token resident decode')]
     for case, label in replacements:
         c = jpeg_scan['cases'][case]
         qualifier = ' (confirmed pass)' if c['status'] == 'confirmed-pass-stop' else ' (confidence open)' if c['status'] == 'confirmed-confidence-open' else ''
         row = (f'| {label}{qualifier} † | {c["managedMicroseconds"]:,.2f} | '
                f'{c["nativeMicroseconds"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | '
                f'{c["allocatedBytes"]:,} | — |')
-        if case in {'Ycck420CallerRgb', 'CmykAdobeGeneral', 'CmykAdobeAc'}:
+        if case in {'Ycck420CallerRgb', 'CmykAdobeGeneral', 'CmykAdobeAc', 'ProgressiveGray', 'Progressive420', 'Progressive422', 'Progressive444', 'ProgressiveCancelable444'}:
             rows.append(('codec', row))
         else:
             position = next(i for i, (kind, previous) in enumerate(rows) if previous.startswith('| ' + label))
@@ -1540,7 +1513,7 @@ def render():
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
     vq = jpeg_scan['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5845
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5850
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1614,12 +1587,12 @@ def render():
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             refreshed_png_reads.add(case)
             continue
-        if case == 'ValidateJpegProgressive420':
-            current = jpeg_current['reusedCases'][case]
-            assert current['exactDescriptor'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
-            assert current['actualIterations'] == len(current['actualNanoseconds']) == 12
-            status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
-            read_rows.append(f'| {label} | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
+        if case in {'ValidateJpegBaseline420', 'ValidateJpegProgressive420'}:
+            current = jpeg_scan['cases'][case]
+            assert current['descriptorSha256'] and current['quietGuardsPassed'] and current['allOriginalGatesPassed']
+            assert current['managedActuals'] == current['nativeSamplesEachBracket'] == 12
+            status = 'Confirmed pass' if current['status'] == 'confirmed-pass-stop' else 'Confirmed gap' if current['status'] == 'confirmed-gap' else 'Confidence open'
+            read_rows.append(f'| {label} | {current["managedMicroseconds"]:,.3f} | {current["nativeMicroseconds"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             continue
         producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else resident_decode if case in {'ValidateVp8lAlpha', 'ValidateVp8Alpha'} else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
@@ -1642,12 +1615,6 @@ def render():
         status = 'Confidence open' if producer['status'][case] == 'confirmed-confidence-open' else 'Confirmed pass' if upper <= 1 else 'Confirmed gap' if confirmed else 'Screen gap'
         read_rows.append(f'| {label} | {stats["Mean"] / 1000:,.3f} | {native / 1000:,.3f} | '
                          f'{ratio:.3f} / {upper:.3f} | {observation["managedMemory"]["BytesAllocatedPerOperation"]:,} | {status} |')
-    for case, label in [('ValidateJpegBaseline420', 'Validate JPEG baseline420, span')]:
-        c = jpeg_scan['cases'][case]
-        status = 'Confirmed pass' if c['status'] == 'confirmed-pass-stop' else 'Confidence open' if c['status'] == 'confirmed-confidence-open' else 'Confirmed gap'
-        position = next(i for i, row in enumerate(read_rows) if row.startswith('| ' + label))
-        read_rows[position] = (f'| {label} | {c["managedMicroseconds"]:,.3f} | {c["nativeMicroseconds"]:,.3f} | '
-                               f'{c["ratio"]:.3f} / {c["upper"]:.3f} | {c["allocatedBytes"]:,} | {status} |')
     headers = header_skips['cases']['PngHeaders'][-1]
     assert headers['receipt']['descriptorExact'] and headers['receipt']['typedSourceMetadataExact']
     assert headers['receipt']['librarySha256'] == header_skips['producers']['linuxSha256']
@@ -1773,22 +1740,27 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [shared component storage](../benchmarks/JPEG-COMPONENT-FRAME.md)
-  independently saves34.93µs/1.86%raw (1.89%normalized) on complete directRGB444,
-  and48.67µs/8.22%raw (5.53%normalized) on sparse2D CMYK. Both confidence views
-  separate; native moves+.026%/−2.84%. Current1,841.96/native1,450.50µs and
-  543.34/native437.35µs remain gaps (uppers1.279/1.247).
-  RGB GC stays10,088B/op; CMYK falls1,085,757→4,520B/op by removing four padded
-  planes and reusing the existing default pixel pool. Pool retention is explicit;
-  shared-budget calls bypass it. Governed allocations are not timed here.
-  Twenty-three existing baseline/caller/stream/live/validation costs refresh:
-  9pass/13gaps/1uncertain; passing cases stop.
-  ten displayed rows update,115 reuse unchanged paths. Six source-valid progressive
-  costs reuse [progressive ownership](../benchmarks/JPEG-PROGRESSIVE-OUTPUT.md):
-  1pass/3gaps/2uncertain, including161.72/183.00µs prior gains. Exact packets,
-  managed pixels, native bounds and complete operation ownership remain.
+- **JPEG and reading:** [full-grid output ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md)
+  independently saves147.45µs/6.74%raw on live-token native444 and80.68µs/4.03%
+  on ordinary native444 (6.81%/4.06%normalized). Both confidence views separate.
+  Current2,040.63/native1,720.80µs and1,920.61/native1,719.39µs remain gaps,
+  uppers1.192/1.130. GC falls966,367/966,370→10,088B/op. Exact sharedQ13 math
+  converts the private final image after complete scans/Adobe validation; encoded
+  SourceColor.Unknown stays unknown. Two unreachable full-grid fallback branches
+  are removed; caller buffers, progressive/subsampled storage and portable kernels remain.
+  Governed peak965,189→541,253B; result531,468B stays charged until disposal.
+  Default idle pool+531,468B is explicit; governed calls bypass it. Physical/native
+  peaks and governed CPU/GC are unmeasured. All29 existing decode/caller/stream/live/coding-validation costs
+  refresh on the final immutable DLL.
+  Sixteen displayed numerical rows update;109 source-valid rows reuse evidence.
+  A postscan borrower repairs50.04µs of the intermediate64.79µs RGB regression.
+  FinalRGB1,856.71/native1,451.57µs,upper1.285 remains a gap. Residual14.75µs/.80%
+  versus the earlier build is a point loss: filtered raw separates; all-actual raw
+  and normalized intervals overlap. No equivalence claim or favorable resampling.
+  [Earlier shared components](../benchmarks/JPEG-COMPONENT-FRAME.md) retain their
+  RGB/CMYK paired gains; their costs are superseded where the color pipeline changed.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
-  labeled SIMD libjpeg-turbo and other unchanged encoder costs are reused.
+  labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
@@ -1804,7 +1776,7 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-The affected JPEG paths pass88 internal/375 public checks per normal/scalar mode
+The affected JPEG paths pass101 internal/375 public checks per normal/scalar mode
 on each OS; unrelated AVX2/AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained

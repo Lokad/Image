@@ -84,6 +84,7 @@ internal ref partial struct JpegDecoder
                     if (adobeTransform == 2) throw UnsupportedColorTransform();
                     if (interleavedResult is { } completed)
                     {
+                        if (!rgb) ConvertCompletedYcbcr(completed);
                         context.Cancellation.ThrowIfCancellationRequested();
                         interleavedResult = null; return completed;
                     }
@@ -177,10 +178,11 @@ internal ref partial struct JpegDecoder
         if (count == 3 && components[0].Id == 'R' && components[1].Id == 'G' && components[2].Id == 'B') rgb = true;
         mcuColumns = (info.Width + 8 * maxH - 1) / (8 * maxH);
         mcuRows = (info.Height + 8 * maxV - 1) / (8 * maxV);
-        // The bounded header pass already examined the entire container. Only
-        // a final RGB or four-component declaration selects this retained result;
-        // caller sample buffers and validation keep their original storage.
-        if (allowInterleavedResult && !progressive && (count == 3 && info.SourceColor == SourceColorModel.Rgb
+        // Equal-grid raw components can occupy the private result even when
+        // source metadata is unspecified. Complete scans and final Adobe
+        // interpretation precede publication. Caller samples and validation
+        // keep their independent storage.
+        if (allowInterleavedResult && !progressive && (count == 3
             || count == 4 && info.SourceColor is SourceColorModel.Cmyk or SourceColorModel.Ycck))
         {
             var fullResolution = true;
@@ -681,6 +683,18 @@ internal ref partial struct JpegDecoder
         return true;
     }
 
+    // Keep post-scan row views out of the shared parsing/entropy caller frame.
+    // The existing private result owns every borrowed row until this returns.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private void ConvertCompletedYcbcr(ImageBuffer target)
+    {
+        for (var y = 0; y < info.Height; y++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            JpegInverseColor.WriteInPlace(target.GetRow8(y));
+        }
+    }
+
     private ImageBuffer Render()
     {
         if (progressive && components.Length == 3
@@ -692,14 +706,6 @@ internal ref partial struct JpegDecoder
         var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try
         {
-            var fullResolutionYcbcr = components.Length == 3 && !rgb;
-            if (fullResolutionYcbcr)
-                foreach (var component in components)
-                    fullResolutionYcbcr &= component.H == maxH && component.V == maxV;
-            var fullResolutionRgb = components.Length == 3 && rgb;
-            if (fullResolutionRgb)
-                foreach (var component in components)
-                    fullResolutionRgb &= component.H == maxH && component.V == maxV;
             var horizontalRgb422 = components.Length == 3 && rgb
                 && components[0].H == maxH && components[0].V == maxV
                 && components[1].H * 2 == maxH && components[1].V == maxV
@@ -714,15 +720,6 @@ internal ref partial struct JpegDecoder
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 var row = result.GetRow8(y);
-                if (fullResolutionRgb)
-                {
-                    // IDCT already rounded/clipped these full-resolution bytes.
-                    // Centered interpolation has zero fractions and Round is exact.
-                    RenderRgbRow(components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
-                        components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
-                        components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width), row);
-                    continue;
-                }
                 if (horizontalRgb422)
                 {
                     // Centered 2:1 coordinates are exact quarters; vertical
@@ -764,14 +761,6 @@ internal ref partial struct JpegDecoder
                         var value = samples[x];
                         row[x * 4] = value; row[x * 4 + 1] = value; row[x * 4 + 2] = value; row[x * 4 + 3] = 255;
                     }
-                    continue;
-                }
-                if (fullResolutionYcbcr)
-                {
-                    JpegInverseColor.WriteRow(
-                        components[0].Plane.AsSpan(y * components[0].BlockColumns * 8, info.Width),
-                        components[1].Plane.AsSpan(y * components[1].BlockColumns * 8, info.Width),
-                        components[2].Plane.AsSpan(y * components[2].BlockColumns * 8, info.Width), row, 4);
                     continue;
                 }
                 if (subsampledYcbcr)

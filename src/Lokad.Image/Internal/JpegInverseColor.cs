@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
@@ -37,21 +38,10 @@ internal static partial class JpegInverseColor
         var x = 0;
         if (luma.Length >= 8 && Avx2.IsSupported && (channels == 4 || Ssse3.IsSupported))
         {
-            var red = Vector256.Create(Red); var blue = Vector256.Create(Blue);
-            var greenU = Vector256.Create(GreenU); var greenV = Vector256.Create(GreenV);
-            var center = Vector256.Create(128); var bias = Vector256.Create(1 << 12);
             var rgb = Vector128.Create((byte)0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 128, 128, 128, 128);
             for (; x + 8 <= luma.Length; x += 8)
             {
-                var y = Avx2.Add(Avx2.ShiftLeftLogical(WidenEight(luma, x), 13), bias);
-                var u = Avx2.Subtract(WidenEight(cb, x), center);
-                var v = Avx2.Subtract(WidenEight(cr, x), center);
-                var r = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(y, Avx2.MultiplyLow(v, red)), 13));
-                var g = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(Avx2.Add(y, Avx2.MultiplyLow(u, greenU)),
-                    Avx2.MultiplyLow(v, greenV)), 13));
-                var b = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(y, Avx2.MultiplyLow(u, blue)), 13));
-                var packed = Avx2.Or(Avx2.Or(r.AsUInt32(), Avx2.ShiftLeftLogical(g.AsUInt32(), 8)),
-                    Avx2.Or(Avx2.ShiftLeftLogical(b.AsUInt32(), 16), Vector256.Create(0xFF000000u))).AsByte();
+                var packed = ConvertEight(WidenEight(luma, x), WidenEight(cb, x), WidenEight(cr, x));
                 if (channels == 4) packed.CopyTo(target.Slice(x * 4, 32));
                 else
                 {
@@ -63,14 +53,60 @@ internal static partial class JpegInverseColor
             }
         }
         for (; x < luma.Length; x++)
+            WritePixel(luma[x], cb[x], cr[x], target.Slice(x * channels, channels), channels);
+    }
+
+    // The private final image holds Y/Cb/Cr in its first three lanes until EOI.
+    // Read a complete group before replacing it; disjoint WriteRow keeps its
+    // original alias contract. Neither leaf owns storage or checks cancellation.
+    internal static void WriteInPlace(Span<byte> pixels)
+    {
+        if (pixels.Length % 4 != 0) throw new ArgumentException("YCbCr pixels require four bytes per pixel.");
+        var offset = 0;
+        if (Avx2.IsSupported)
         {
-            var y = (luma[x] << 13) + (1 << 12);
-            var u = cb[x] - 128; var v = cr[x] - 128;
-            target[x * channels] = (byte)Math.Clamp((y + v * Red) >> 13, 0, 255);
-            target[x * channels + 1] = (byte)Math.Clamp((y + u * GreenU + v * GreenV) >> 13, 0, 255);
-            target[x * channels + 2] = (byte)Math.Clamp((y + u * Blue) >> 13, 0, 255);
-            if (channels == 4) target[x * channels + 3] = 255;
+            var mask = Vector256.Create(255u);
+            for (; offset <= pixels.Length - 32; offset += 32)
+            {
+                var raw = Vector256.Create(pixels.Slice(offset, 32)).AsUInt32();
+                var y = (raw & mask).AsInt32();
+                var u = (Avx2.ShiftRightLogical(raw, 8) & mask).AsInt32();
+                var v = (Avx2.ShiftRightLogical(raw, 16) & mask).AsInt32();
+                ConvertEight(y, u, v).CopyTo(pixels.Slice(offset, 32));
+            }
         }
+        for (; offset < pixels.Length; offset += 4)
+        {
+            var pixel = pixels.Slice(offset, 4);
+            WritePixel(pixel[0], pixel[1], pixel[2], pixel, 4);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector256<byte> ConvertEight(Vector256<int> luma, Vector256<int> cb, Vector256<int> cr)
+    {
+        var red = Vector256.Create(Red); var blue = Vector256.Create(Blue);
+        var greenU = Vector256.Create(GreenU); var greenV = Vector256.Create(GreenV);
+        var center = Vector256.Create(128); var bias = Vector256.Create(1 << 12);
+        var y = Avx2.Add(Avx2.ShiftLeftLogical(luma, 13), bias);
+        var u = Avx2.Subtract(cb, center); var v = Avx2.Subtract(cr, center);
+        var r = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(y, Avx2.MultiplyLow(v, red)), 13));
+        var g = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(Avx2.Add(y, Avx2.MultiplyLow(u, greenU)),
+            Avx2.MultiplyLow(v, greenV)), 13));
+        var b = Clip(Avx2.ShiftRightArithmetic(Avx2.Add(y, Avx2.MultiplyLow(u, blue)), 13));
+        return Avx2.Or(Avx2.Or(r.AsUInt32(), Avx2.ShiftLeftLogical(g.AsUInt32(), 8)),
+            Avx2.Or(Avx2.ShiftLeftLogical(b.AsUInt32(), 16), Vector256.Create(0xFF000000u))).AsByte();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void WritePixel(byte luma, byte cb, byte cr, Span<byte> target, int channels)
+    {
+        var y = (luma << 13) + (1 << 12);
+        var u = cb - 128; var v = cr - 128;
+        target[0] = (byte)Math.Clamp((y + v * Red) >> 13, 0, 255);
+        target[1] = (byte)Math.Clamp((y + u * GreenU + v * GreenV) >> 13, 0, 255);
+        target[2] = (byte)Math.Clamp((y + u * Blue) >> 13, 0, 255);
+        if (channels == 4) target[3] = 255;
     }
 
     private static Vector256<int> WidenEight(ReadOnlySpan<byte> row, int x)

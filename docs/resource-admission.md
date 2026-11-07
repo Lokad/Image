@@ -11,9 +11,13 @@ storage/copies, not caller-owned input storage again.
 storage (PNG compressed input/rows/inflater, progressive JPEG coefficients, WebP
 entropy models and auxiliary images). Bounded indexed PNG validation reuses certified filtered bytes;
 larger or uncertain streams retain the inflater path. Baseline JPEG validates with
-block scratch; baseline decoding reconstructs admitted component sample planes
-without full-frame coefficients. Unambiguous equal-grid baseline RGB decoding
-writes directly into the retained image, avoiding those temporary planes.
+block scratch; baseline decoding avoids full-frame coefficients. Eligible equal-grid
+RGB/YCbCr/CMYK/YCCK decoding writes raw samples into its private retained image,
+then applies final color interpretation after all scans and container validation.
+Caller JPEG sample buffers keep their independent storage. Bounded MCU packing
+admits actual component capacity before its stack borrower; a tight local ceiling
+can select component stores before shared admission. Shared refusal is terminal.
+Other sampling layouts retain their admitted component planes.
 Owned JPEG 4:1:1/4:1:0 rendering also admits 1,536/1,792 bytes of fixed stack workspace
 alongside its live component planes and output.
 Progressive AC scans with enough blocks to reuse preparation also admit a 2 KiB
