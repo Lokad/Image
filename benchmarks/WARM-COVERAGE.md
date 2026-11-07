@@ -6,6 +6,12 @@ are a summary. Publication is postponed. Functional compatibility, cooperative
 memory, compression correctness and CPU parity are separate requirements.
 Completion needs current passing evidence for every named path, with scope stated.
 
+[Current preparation/storage audit](ARCHITECTURAL-PREPARATION-AND-STORAGE.md)
+reconciles one-shot/prepared boundaries and measures three WebP admission lifetimes
+without changing production or current timing claims. The latest
+[JPEG prepared-amplitude experiment](JPEG-PREPARED-AMPLITUDE-EXPERIMENT.md) is
+unselected; qualified sources, modules, costs and package proof remain unchanged.
+
 ## Current family status
 
 | Required family/boundary | Current evidence and remaining work |

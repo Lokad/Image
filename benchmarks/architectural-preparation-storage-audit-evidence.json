@@ -1,0 +1,164 @@
+{
+  "project": "Lokad.Image",
+  "stage": "WP498",
+  "productionChanged": false,
+  "productionBuilds": 0,
+  "auditToolBuilds": 1,
+  "completeEncodes": 3,
+  "newPerformanceMeasurements": 0,
+  "librarySha256": "f07f57b9fcdcbb59849cd087b044d9886befdc95eaf2b6b4b2498bd5793357e1",
+  "sources": {
+    "src/Lokad.Image/Internal/WebpLosslessEncoder.cs": "84eec5fba3cd7ab9b1ae8d56071e041206cd52536d07689f2ec11ff20c0bf5c0",
+    "src/Lokad.Image/Internal/Vp8lPreparedEncoding.cs": "6cf05f6988cd832124a6655456e46161cce661539246c6b7524f21406bd3a90b",
+    "src/Lokad.Image/Internal/Vp8lImageCode.cs": "6da72b152c898766525cb3c6afe9e24b244949f763a1989857401dfd91c635e9",
+    "src/Lokad.Image/Internal/Vp8lTokenBuffer.cs": "e336d7fe24be94072efa05d0c2e53095fb6eb904ec14c13fc11f10160f369a7b",
+    "src/Lokad.Image/Internal/Vp8lReferenceMainParsing.cs": "61bb8d6d7484f06b2d1476715f2e9d65d8140bdc55104f5f51288a37a4005185",
+    "src/Lokad.Image/Internal/Vp8lReferenceLz.cs": "62f7dd05db8734789eb858998c36151b8129f3eef0c70ddc71f9b9989316a788",
+    "src/Lokad.Image/Internal/Vp8lReferenceMatcher.cs": "48528f02e7f448fa25d6edc69fbd83fbd7e345ba4264de6af266e805829543d3",
+    "src/Lokad.Image/Internal/Vp8lPopulationWorkspace.cs": "6908e75f2d7cf511e2488dd2286a2eaf1e362eaa74333b7f73038ca19b061657",
+    "src/Lokad.Image/Internal/Vp8lReferenceClustering.cs": "47e13d85070d399b3652b2dfae08601b4f270cc189ed1d3cf414749c4905b323",
+    "src/Lokad.Image/Internal/Vp8lReferencePredictor.cs": "8355e5cc3cb98629392284fd75192380325ce69aebf368f3162a05842b8446f4",
+    "src/Lokad.Image/Internal/Vp8lReferenceColorTransform.cs": "d790180240297c5fe9766918637d5e26bc3aeadc9e79943e464ca8d13a647306",
+    "src/Lokad.Image/Internal/Vp8lReferenceCache.History.cs": "25a3bb59ae9f76211eaf24edae87ca4aa69c8a1d50337fd015ec08b72597b804",
+    "src/Lokad.Image/Internal/Vp8AlphaEncoding.cs": "9699e9c3c57e7e539a7f718eff2d67ee8f2a8f98f371d443fa3188e07ae31956"
+  },
+  "tool": {
+    "project": "Lokad.Image",
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "auditToolBuilds": 1,
+    "folder": "tmp/wp498/bin/Release/net10.0",
+    "hashes": {
+      "Lokad.Image.pdb": "8df84b5b07762022188f9d89c01bde657d3b30a0d5a55583402bf73218e8b46a",
+      "Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+      "Wp498.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "Wp498.dll": "236df179cd9aba694284d2042af2d41a584da6efb1ea2e369a6b883f2cee3883",
+      "Wp498.deps.json": "29e56ba94446a6297d152579ecb83891a451523173f050288e95c9646bbb65c6",
+      "Lokad.Image.dll": "f07f57b9fcdcbb59849cd087b044d9886befdc95eaf2b6b4b2498bd5793357e1",
+      "Wp498.pdb": "787785a5ac55bb912fb5c82b3f6588d1d06f1ab445b3c768d15dc4b2d8ffb0b6"
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "tmp/wp498/bin/Release/net10.0/Wp498.dll",
+      "."
+    ],
+    "quietGuardsPassed": true
+  },
+  "cases": [
+    {
+      "caseId": "photograph",
+      "packetBytes": 160032,
+      "packetSha256": "8e8c2a10a1be8c27233d7c70ab5c704d95924759408ecb8c02a3da50927aabb8",
+      "inputSha256": "2b970f3ddee2a651ca381aab10b90db78a2ce08db8c7f70154bec92c1ec33090",
+      "admissionEvents": 1130,
+      "admittedPeakOwnedBytes": 3470059,
+      "retainedRootBytes": 0,
+      "callerOutputCapacity": 262144,
+      "rowIndexAdmissions": [
+        {
+          "sequence": 102,
+          "bytes": 134744,
+          "live": 2349548
+        }
+      ]
+    },
+    {
+      "caseId": "diagram",
+      "packetBytes": 7234,
+      "packetSha256": "399c218d2fd333724a3b9f77d8c53bd958f01483b314c496935b022d7a03e0bf",
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "admissionEvents": 164,
+      "admittedPeakOwnedBytes": 3251328,
+      "retainedRootBytes": 0,
+      "callerOutputCapacity": 8192,
+      "rowIndexAdmissions": [
+        {
+          "sequence": 22,
+          "bytes": 134744,
+          "live": 2314716
+        }
+      ]
+    },
+    {
+      "caseId": "alpha",
+      "packetBytes": 98590,
+      "packetSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "admissionEvents": 808,
+      "admittedPeakOwnedBytes": 3656309,
+      "retainedRootBytes": 0,
+      "callerOutputCapacity": 197178,
+      "rowIndexAdmissions": [
+        {
+          "sequence": 66,
+          "bytes": 35288,
+          "live": 2531935
+        },
+        {
+          "sequence": 635,
+          "bytes": 35288,
+          "live": 2590217
+        }
+      ]
+    }
+  ],
+  "sourceValidCurrentAllocatedBytesPerOp": {
+    "photograph": 6517158,
+    "diagram": 4363930,
+    "alpha": 7034400
+  },
+  "allocationsOwners": {
+    "photograph": "webp-isolated-green-prediction-evidence.json",
+    "diagram": "webp-isolated-green-prediction-evidence.json",
+    "alpha": "vp8-small-block-preparation-evidence.json"
+  },
+  "distinction": "Allocation figures reuse current displayed confirmations, not callback diagnostics. New ordered admission deltas measure coarse library charges, excluding borrowed inputs/caller stream. No physical or native allocation/peak measurement or CPU-gain claim. All roots return to zero; output remains caller-owned.",
+  "boundaryReconciliation": {
+    "lanczos": "Explicit managed Lanczos3ResizePlan and zimg prepared graph retain setup equally; separate complete one-shot adapters create/dispose state inside timing. Current cost owner is LANCZOS-PAIRED-CERTIFICATE-PREPARATION, not initial asymmetric attribution.",
+    "png": "Current fresh-context controls include FFmpeg codec/options/zlib/packet/endian conversion and managed preparation/output/disposal. Retained-context historical rows stay separately labeled. Initial 659576B/12-26us Deflate construction observations are historical; later source changes invalidate interpreting them as current method costs. No current CPU case for another session.",
+    "webp": "Complete one-shot normalization, candidate preparation/order/selection, fresh output growth/ownership/disposal remain included. Operation-owned scratch currently retained zero; selected candidates independent."
+  },
+  "nextHypothesis": {
+    "repeatedStorage": "Two row-index arrays in sparse-population preparation; 134744B admitted per photo/diagram and two 35288B alpha trials. They die after two population passes. Tokens retain independent admitted backing through code construction and emission.",
+    "endState": "Borrow unused tail of the existing token owner only when actual capacity covers both indexes; never alias live token prefix. Return synchronously before subsequent users. No cache/pool/new admission abstraction. Otherwise retain existing allocation chosen before reservation, without refusal fallback.",
+    "uncertainty": "Token-tail capacity eligibility was not observable through this public admission decorator; it remains unmeasured. A prototype must prove no prefix/selected-state corruption, actual allocation benefit and complete-operation cost. No predicted full-operation peak saving.",
+    "workloads": "Reuse three frozen controls and one existing authored generalization only if needed; exact packets, live/scalar cancellation, terminal refusal cleanup and source/output ownership. This candidate touches all clustering users, which invalidates their affected CPU costs if accepted.",
+    "laterStages": "Reassess operation scratch across subsequent code preparation only with non-overlapping actual users. Two simultaneously live parsing candidates cannot blindly share storage. No generic workspace framework.",
+    "evidenceRule": "Storage/capacity eligibility is not CPU evidence. Use a bounded byte/allocation screen first, then useful complete-operation confirmation. Broad Windows/Linux/scalar/actual-package once at an accepted coherent milestone."
+  },
+  "priorCountingAddition": "Already accepted together in VP8L-FUSED-PREPARED-COUNTING; old rejection thresholds/closed-family rules are superseded, not replay instructions.",
+  "qualificationReused": {
+    "fullChecksPerOs": 5862,
+    "packageSha256": "8a46b970ad452a023572c2ac7791bce28ac061c67082e4954053b982af0e0feb",
+    "windowsLinuxScalarAndActualPackage": true
+  },
+  "raw": {
+    "file": "architectural-preparation-storage-audit.tar.xz",
+    "sha256": "0d92947e30049a241de7bc5b4b5622b735d5fb5fb67e0233f1076a3e5aa94344",
+    "bytes": 1202364,
+    "members": 75,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-mixed-word-scheduling-qualified.tar.xz",
+        "sha256": "a4ccddcbb560b33bd9bc41a8324e750c77b29a94f45062071eeb7f7fea790b07"
+      },
+      {
+        "file": "webp-isolated-green-prediction-qualified.tar.xz",
+        "sha256": "6c616579c4898110911cea8f84c4400111f065e0eee57f6c02827e6126c09fdf"
+      },
+      {
+        "file": "vp8-small-block-preparation-qualified-v2.tar.xz",
+        "sha256": "289597c32d451e82526b2e7b6e7742f2db3b8d680aab3dfde8d8a2a512fbc6c3"
+      },
+      {
+        "file": "vp8l-trace-forward-window.tar.xz",
+        "sha256": "43fc1fba702cfad183f961d149de19a1db207ea172b528000aa395284b478211"
+      }
+    ]
+  }
+}

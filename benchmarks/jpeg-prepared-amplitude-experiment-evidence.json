@@ -1,0 +1,162 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JHC497",
+  "productionAccepted": false,
+  "decision": "Stop this bounded implementation. Stage A fails 38 unchanged public admission controls; no timing. B/C spare-nibble versions preserve capacity and pass focused checks but establish no reliable complete-operation gain. Final C RGB point is adverse, sparse CMYK normalized point nearly unchanged, all gain/loss intervals overlap. No causal gain/loss or equivalence claim. No independent confirmations, favorable repeats or permanent architecture ban.",
+  "stages": {
+    "A": "32-bit primary; existing public capacity checks fail; not timed",
+    "B": "16-bit primary, prepared signed nibble, split traversal; two candidate-only shorts",
+    "C": "Same metadata, single traversal; contemporary original/candidate shorts on two existing controls"
+  },
+  "comparisons": {
+    "DirectRgb444": {
+      "originalUs": 1766.4569830729167,
+      "candidateUs": 1845.5624895833332,
+      "pointChangeFraction": 0.044782016923392565,
+      "nativeNormalizedPointChange": 0.043196923430487644,
+      "originalAllocatedBytes": 10088,
+      "candidateAllocatedBytes": 10088,
+      "gatesPassed": true,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedGainSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedGainSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      }
+    },
+    "CmykAdobeSparse2D": {
+      "originalUs": 533.3943446180555,
+      "candidateUs": 528.336796875,
+      "pointChangeFraction": -0.009481817334746956,
+      "nativeNormalizedPointChange": -0.0005143718411468878,
+      "originalAllocatedBytes": 4520,
+      "candidateAllocatedBytes": 4520,
+      "gatesPassed": true,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedGainSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": false,
+          "rawLossSeparated": false,
+          "normalizedGainSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      }
+    }
+  },
+  "focused": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "3f7a105d60e47bf5d1031d92dbeb5626face275b0e5d614d4e6a1de2f897f6ae",
+      "candidateSha256": "cae4131a34b37fd2ec1d41ce792428412b7f95b325e1e7a6a9480a64302e7f23",
+      "internalTestAssemblySha256": "da79ea07a8ffb6a701b2c4624a5c088aea39868fd19f1ade621cb5d6a1fbcedb",
+      "focused": {
+        "internal-normal": 400,
+        "internal-scalar": 400,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "d3a980f9fd154b329031e38ef8693d59ce9cc7e4b44f7909c05a5183d32f4cde",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "6fbdad1902ae8227610614403ee23480c7a29f5f1c152b0549c3f021148a4002",
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "7f96daacef67140dde7f2fe12c5955d35559be2f6ae89f36643e89b72fa8b090",
+        "tests/Lokad.Image.Tests/JpegHuffmanTests.cs": "31e24d5b96e7157520ea5fee52641c75361f653a2c270016ca860f69dfe25e6d",
+        "tests/Lokad.Image.Tests/JpegAdmissionTests.cs": "12e1dd5605fe95b49175ebf8129559b2793ecb0143baad73079839bb6fe6895e",
+        "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "c6246e4710a4a10a7795e9d590209c3981cb24a1eed599ada5725aeb7ff137ab",
+        "tests/Lokad.Image.Tests/JpegMixedCanonicalTests.cs": "607b78329bc566b81b437daffeeda75d27d50dfe8c4b41eedd1756bab21a35c2"
+      },
+      "coreVersions": 3,
+      "internalVersions": 4,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "f07f57b9fcdcbb59849cd087b044d9886befdc95eaf2b6b4b2498bd5793357e1",
+      "candidateSha256": "d5fdc04e45cc7bed711431a6a81f7f2a4d5fd5ce26179e273a65c77207232e0d",
+      "internalTestAssemblySha256": "d45df8806c168ff0c2ff00f0e91709719bd3a0f47d466e3b6ff9c2d5723a7af9",
+      "focused": {
+        "internal-normal": 400,
+        "internal-scalar": 400,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "d3a980f9fd154b329031e38ef8693d59ce9cc7e4b44f7909c05a5183d32f4cde",
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "6fbdad1902ae8227610614403ee23480c7a29f5f1c152b0549c3f021148a4002",
+        "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "7f96daacef67140dde7f2fe12c5955d35559be2f6ae89f36643e89b72fa8b090",
+        "tests/Lokad.Image.Tests/JpegHuffmanTests.cs": "31e24d5b96e7157520ea5fee52641c75361f653a2c270016ca860f69dfe25e6d",
+        "tests/Lokad.Image.Tests/JpegAdmissionTests.cs": "12e1dd5605fe95b49175ebf8129559b2793ecb0143baad73079839bb6fe6895e",
+        "tests/Lokad.Image.Tests/JpegBaselineBlockTests.cs": "c6246e4710a4a10a7795e9d590209c3981cb24a1eed599ada5725aeb7ff137ab",
+        "tests/Lokad.Image.Tests/JpegMixedCanonicalTests.cs": "607b78329bc566b81b437daffeeda75d27d50dfe8c4b41eedd1756bab21a35c2"
+      },
+      "coreVersions": 3,
+      "internalVersions": 4,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "JHC497",
+      "system": "windows",
+      "productionSha256": "3f7a105d60e47bf5d1031d92dbeb5626face275b0e5d614d4e6a1de2f897f6ae",
+      "internalAssemblySha256": "4d034323ada1aba9c78f798e2c00952b2313210d5ee92a447fd481fe21051da2",
+      "allOriginalIdentitiesRestored": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "exactQualifiedBuildReused": true,
+      "fullTestsPackagesBuildsRepeated": 0,
+      "existingFullChecksPerOs": 5862,
+      "actualPackageUnchangedSha256": "8a46b970ad452a023572c2ac7791bce28ac061c67082e4954053b982af0e0feb",
+      "trialTestsRemoved": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "stage": "JHC497",
+      "system": "linux",
+      "productionSha256": "f07f57b9fcdcbb59849cd087b044d9886befdc95eaf2b6b4b2498bd5793357e1",
+      "internalAssemblySha256": "50666e2c5635aa9330860b6e292637a041f32859be3fe9f99846e28daf72b76d",
+      "allOriginalIdentitiesRestored": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "exactQualifiedBuildReused": true,
+      "fullTestsPackagesBuildsRepeated": 0,
+      "existingFullChecksPerOs": 5862,
+      "actualPackageUnchangedSha256": "8a46b970ad452a023572c2ac7791bce28ac061c67082e4954053b982af0e0feb",
+      "trialTestsRemoved": true
+    }
+  },
+  "exactQualifiedBuildAndPackageReused": true,
+  "newFullPackageRunsAfterRestore": 0,
+  "independentConfirmations": 0,
+  "sourceChangesRemaining": false,
+  "next": "WP498 current WebP ownership and preparation-boundary reconciliation; no replay of superseded allocation reports or body-count/histogram experiments.",
+  "raw": {
+    "file": "jpeg-prepared-amplitude-experiment.tar.xz",
+    "sha256": "80eee50044eaed20e83506d35746e904f9ee65e7fb0bde0c64f474a8e93251e1",
+    "bytes": 16795200,
+    "members": 435,
+    "allMembersVerified": true,
+    "mirrored": true,
+    "dependencies": [
+      "bicubic-mixed-word-scheduling-qualified.tar.xz",
+      "jpeg-plain-reader-qualified.tar.xz",
+      "jpeg-current-rgb-attribution.tar.xz",
+      "jpeg-row-pair-experiment.tar.xz"
+    ]
+  }
+}
