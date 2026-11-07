@@ -1,11 +1,11 @@
 # Fused VP8L inverse transform and publication
 
 LPF476, 2026-11-07. Accepted scoped tradeoff; publication postponed.
-Global/package qualification is superseded by
-[completed-block publication](VP8-COMPLETED-BLOCK-PUBLICATION.md); all nine reader
-costs and the palette tradeoff remain source-valid.
-[Current evidence](vp8l-final-publication-evidence.json) owns nine existing
-VP8L/ALPH decoding costs. The full 283-path performance objective remains open.
+Current package qualification and three VP8 costs (`Native8`, `Vp8Stream`,
+`ValidateVp8Alpha`) are superseded by
+[prepared models](VP8-PREPARED-COEFFICIENT-MODEL.md). Six lossless costs and the
+palette tradeoff remain source-valid in [evidence](vp8l-final-publication-evidence.json).
+The full 283-path performance objective remains open.
 
 ## Design and exactness
 

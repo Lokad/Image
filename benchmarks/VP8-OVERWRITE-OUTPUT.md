@@ -1,8 +1,10 @@
 # Complete-overwrite VP8 output ownership
 
 OPA465, 2026-11-07. Accepted; publication postponed.
-[Evidence](vp8-overwrite-output-evidence.json) owns five affected complete decoder
-controls. The283-path performance objective remains open.
+[Evidence](vp8-overwrite-output-evidence.json) retains five historical decoder
+costs; [prepared models](VP8-PREPARED-COEFFICIENT-MODEL.md) own their current costs
+and qualification. The ownership design below remains unchanged. The 283-path
+performance objective remains open.
 
 Unprepared VP8 rendering now uses the existing complete-overwrite image allocator.
 Every RGB/alpha sample is written before publication, including scalar/vector edges

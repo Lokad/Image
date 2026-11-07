@@ -1,5 +1,9 @@
 # Direct coefficient classes in live VP8 decoding
 
+Historical scoped gain. Current live cost, typed model ownership and package
+qualification are superseded by [prepared models](VP8-PREPARED-COEFFICIENT-MODEL.md).
+The numeric ordinary token helper mentioned below has since been removed.
+
 The live pixel/validation loop now traverses zero, unit and larger coefficients
 directly, with one plane-base setup and common sign handling. It avoids producing
 a numeric token and reconstructing its coefficient/context class. The obsolete

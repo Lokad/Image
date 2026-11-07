@@ -29,9 +29,9 @@ public sealed partial class Vp8CoefficientBlockTests
                 trial % 2 == 0 ? 32767 : 132, trial % 2 == 0 ? 1 : 284, reference, seenTokens);
             byte seen;
             var any = live
-                ? actual.ReadCancellableCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, probabilities,
+                ? actual.ReadCancellableCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, Model(probabilities),
                     guarded.AsSpan(1, 16), plane, predictor, 0, 0, context, out seen)
-                : actual.ReadCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, probabilities,
+                : actual.ReadCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, Model(probabilities),
                     guarded.AsSpan(1, 16), plane, predictor, 0, 0, context, out seen);
             Assert.Equal(expectedNonzero, seen); Assert.Equal(seen != 0, any);
             Assert.Equal(State(expected), State(actual));
@@ -68,17 +68,17 @@ public sealed partial class Vp8CoefficientBlockTests
             byte firstNonzero = 55, secondNonzero = 55;
             try
             {
-                if (live) materialized.ReadCancellableCoefficientBlock<Vp8BooleanReader.PixelMode>(data, probabilities,
+                if (live) materialized.ReadCancellableCoefficientBlock<Vp8BooleanReader.PixelMode>(data, Model(probabilities),
                     samples, 3, 2, 132, 284, context, out firstNonzero);
-                else materialized.ReadCoefficientBlock<Vp8BooleanReader.PixelMode>(data, probabilities,
+                else materialized.ReadCoefficientBlock<Vp8BooleanReader.PixelMode>(data, Model(probabilities),
                     samples, 3, 2, 132, 284, context, out firstNonzero);
             }
             catch (Exception error) { first = error; }
             try
             {
-                if (live) validation.ReadCancellableCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, probabilities,
+                if (live) validation.ReadCancellableCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, Model(probabilities),
                     default, 3, 2, 0, 0, context, out secondNonzero);
-                else validation.ReadCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, probabilities,
+                else validation.ReadCoefficientBlock<Vp8BooleanReader.ValidationMode>(data, Model(probabilities),
                     default, 3, 2, 0, 0, context, out secondNonzero);
             }
             catch (Exception error) { second = error; }

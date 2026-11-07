@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
@@ -15,7 +16,7 @@ internal ref struct Vp8Decoder
     private readonly int width, height, columns, rows;
     private Vp8BooleanReader header;
     private Vp8BooleanReader[] partitions;
-    private byte[] probabilities;
+    private Vp8BooleanReader.CoefficientModelRow[] probabilities;
     private int[] segmentQuantizers, segmentFilters, referenceDeltas, modeDeltas, quantizerDeltas;
     private byte[] segmentProbabilities;
     private bool segmentMap, absoluteSegments, segmentation, simpleFilter, deltasEnabled, skipEnabled;
@@ -41,7 +42,9 @@ internal ref struct Vp8Decoder
         var firstLength = (data[0] | data[1] << 8 | data[2] << 16) >> 5;
         if (firstLength < 1 || firstLength > data.Length - 10) throw new ImageDataException("Invalid VP8 first partition length.");
         header = new Vp8BooleanReader(data, 10, firstLength);
-        probabilities = Vp8Tables.CoefficientProbabilities.ToArray(); partitions = [];
+        probabilities = new Vp8BooleanReader.CoefficientModelRow[4 * 8 * 3];
+        Vp8Tables.CoefficientProbabilities.CopyTo(MemoryMarshal.AsBytes(probabilities.AsSpan()));
+        partitions = [];
         segmentQuantizers = new int[4]; segmentFilters = new int[4]; segmentProbabilities = [255, 255, 255];
         referenceDeltas = new int[4]; modeDeltas = new int[4]; quantizerDeltas = new int[5];
         ReadHeader(firstLength);
@@ -79,8 +82,11 @@ internal ref struct Vp8Decoder
         quantizer = Literal(7);
         for (var i = 0; i < 5; i++) if (Bit() != 0) quantizerDeltas[i] = Signed(4);
         Bit(); // Entropy refresh is immaterial for an independently decoded still frame.
-        for (var i = 0; i < probabilities.Length; i++)
-            if (Bit(Vp8Tables.CoefficientUpdateProbabilities[i]) != 0) probabilities[i] = (byte)Literal(8);
+        // RFC6386 section13.2: one owned model, byte updates during the header,
+        // then borrowed typed rows throughout coefficient decoding.
+        var modelBytes = MemoryMarshal.AsBytes(probabilities.AsSpan());
+        for (var i = 0; i < modelBytes.Length; i++)
+            if (Bit(Vp8Tables.CoefficientUpdateProbabilities[i]) != 0) modelBytes[i] = (byte)Literal(8);
         skipEnabled = Bit() != 0; skipProbability = skipEnabled ? Literal(8) : 0;
         var sizesOffset = 10 + firstLength; var start = sizesOffset + 3 * (partitionCount - 1);
         if (start > data.Length) throw new ImageDataException("Truncated VP8 partition sizes.");
@@ -279,7 +285,7 @@ internal ref struct Vp8Decoder
         var previousZero = false; var predictor = initialContext; nonzero = 0;
         for (var c = plane == 0 ? 1 : 0; c < 16; c++)
         {
-            var p = probabilities.AsSpan(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
+            ref readonly var p = ref probabilities[(plane * 8 + bands[c]) * 3 + predictor];
             var token = tokens.CoefficientToken(data, p, context, previousZero);
             if (token == 11) break;
             var value = token < 5 ? token : Category(ref tokens, token - 5);

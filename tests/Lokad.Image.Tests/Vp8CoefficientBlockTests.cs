@@ -6,6 +6,9 @@ namespace Lokad.Image.Tests;
 
 public sealed partial class Vp8CoefficientBlockTests
 {
+    private static ReadOnlySpan<Vp8BooleanReader.CoefficientModelRow> Model(byte[] bytes)
+        => System.Runtime.InteropServices.MemoryMarshal.Cast<byte, Vp8BooleanReader.CoefficientModelRow>(bytes);
+
     private static readonly FieldInfo[] Fields = new[] { "position", "end", "shift", "range", "value" }
         .Select(n => typeof(Vp8BooleanReader).GetField(n, BindingFlags.Instance | BindingFlags.NonPublic)!).ToArray();
     private static int[] State(Vp8BooleanReader reader) => Fields.Select(f => (int)f.GetValue(reader)!).ToArray();
@@ -63,7 +66,7 @@ public sealed partial class Vp8CoefficientBlockTests
             Assert.True(reader.CanReadCoefficientBlock(data, context));
             var dc = trial % 2 == 0 ? 132 : 32767; var ac = trial % 2 == 0 ? 284 : 1;
             var nonzero = Original(ref original, data, probabilities, expected.AsSpan(1, 16), trial % 4, trial % 3, dc, ac, reference);
-            var result = reader.ReadCoefficientBlock<Vp8BooleanReader.PixelMode>(data, probabilities, actual.AsSpan(1, 16), trial % 4, trial % 3, dc, ac, context, out var seen);
+            var result = reader.ReadCoefficientBlock<Vp8BooleanReader.PixelMode>(data, Model(probabilities), actual.AsSpan(1, 16), trial % 4, trial % 3, dc, ac, context, out var seen);
             Assert.Equal(nonzero, seen); Assert.Equal(nonzero != 0, result); Assert.Equal(expected, actual);
             Assert.Equal(State(original), State(reader));             for (var i = 0; i < 19; i++)
             {
@@ -84,7 +87,7 @@ public sealed partial class Vp8CoefficientBlockTests
             using var reference = new OperationContext(new() { }, default);
             Assert.True(reader.CanReadCoefficientBlock(data, context));
             Assert.Equal(1, Original(ref original, data, probabilities, expected, 3, 0, 132, 284, reference));
-            Assert.True(reader.ReadCoefficientBlock<Vp8BooleanReader.PixelMode>(data, probabilities, actual, 3, 0, 132, 284, context, out var nonzero));
+            Assert.True(reader.ReadCoefficientBlock<Vp8BooleanReader.PixelMode>(data, Model(probabilities), actual, 3, 0, 132, 284, context, out var nonzero));
             Assert.Equal(1, nonzero); Assert.Equal(expected, actual); Assert.Equal(State(original), State(reader));
             Assert.Equal(original.Read(data, 128, reference), reader.Read(data, 128, context));
             Assert.Equal(State(original), State(reader));

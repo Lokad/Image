@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
@@ -22,7 +21,7 @@ internal partial struct Vp8BooleanReader
     // its arithmetic unchanged, but poll before EVERY decision and publish the
     // completed-block prefix. A failed private decoder is abandoned by its caller;
     // no cursor is resumed or exposed after an exception. No new storage/owner.
-    internal bool ReadCancellableCoefficientBlock<TMode>(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
+    internal bool ReadCancellableCoefficientBlock<TMode>(ReadOnlySpan<byte> data, ReadOnlySpan<CoefficientModelRow> model,
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
         where TMode : struct
     {
@@ -31,7 +30,6 @@ internal partial struct Vp8BooleanReader
         var cancellation = context.Cancellation;
         var reader = BeginCoefficientWindow(data);
         var position = reader.Position; var bits = reader.Bits; var range = reader.Range; var value = reader.Value;
-        var model = MemoryMarshal.Cast<byte, CoefficientModelRow>(probabilities);
         ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
         var previousZero = false; var predictor = initialContext; var planeBase = plane * 24;

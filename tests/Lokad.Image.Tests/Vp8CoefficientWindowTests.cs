@@ -30,10 +30,10 @@ public sealed partial class Vp8CoefficientBlockTests
                 var plane = (trial + block) % 4; var predictor = (trial + block) % 3;
                 var dc = trial % 2 == 0 ? 132 : 32767; var ac = trial % 2 == 0 ? 284 : 1;
                 var nonzero = Original(ref expected, data, probabilities, original.AsSpan(1, 16), plane, predictor, dc, ac, reference);
-                var seenAny = window.ReadCoefficients<Vp8BooleanReader.PixelMode>(probabilities, values.AsSpan(1, 16), plane, predictor, dc, ac, out var seen);
+                var seenAny = window.ReadCoefficients<Vp8BooleanReader.PixelMode>(Model(probabilities), values.AsSpan(1, 16), plane, predictor, dc, ac, out var seen);
                 Assert.Equal(nonzero, seen); Assert.Equal(nonzero != 0, seenAny); Assert.Equal(original, values);
                 // Inspect without rebuilding or replacing the live shared cursor.
-                var validationAny = validationWindow.ReadCoefficients<Vp8BooleanReader.ValidationMode>(probabilities, default, plane, predictor, 0, 0, out var validationNonzero);
+                var validationAny = validationWindow.ReadCoefficients<Vp8BooleanReader.ValidationMode>(Model(probabilities), default, plane, predictor, 0, 0, out var validationNonzero);
                 Assert.Equal(nonzero, validationNonzero); Assert.Equal(nonzero != 0, validationAny);
                 validationWindow.Publish(ref validation); Assert.Equal(State(expected), State(validation));
                 var checkpoint = actual; window.Publish(ref checkpoint);

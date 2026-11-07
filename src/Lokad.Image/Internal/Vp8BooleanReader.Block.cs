@@ -35,12 +35,12 @@ internal partial struct Vp8BooleanReader
     // The decoder supplies its complete private model,16sample block and valid
     // plane/context. The selected input bounds exclude mid-block failures.
     // One small stack state lives inside the existing8192B coarse allowance.
-    internal bool ReadCoefficientBlock<TMode>(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
+    internal bool ReadCoefficientBlock<TMode>(ReadOnlySpan<byte> data, ReadOnlySpan<CoefficientModelRow> model,
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
         where TMode : struct
     {
         var reader = BeginCoefficientWindow(data);
-        var result = reader.ReadCoefficients<TMode>(probabilities, values, plane, initialContext, dc, ac, out nonzero);
+        var result = reader.ReadCoefficients<TMode>(model, values, plane, initialContext, dc, ac, out nonzero);
         reader.Publish(ref this);
         return result;
     }
@@ -58,7 +58,7 @@ internal partial struct Vp8BooleanReader
             Fill(in data, ref Position, ref Bits, ref Value);
         }
 
-        internal bool ReadCoefficients<TMode>(ReadOnlySpan<byte> probabilities, scoped Span<short> values,
+        internal bool ReadCoefficients<TMode>(ReadOnlySpan<CoefficientModelRow> model, scoped Span<short> values,
             int plane, int initialContext, int dc, int ac, out byte nonzero)
             where TMode : struct
         {
@@ -67,27 +67,48 @@ internal partial struct Vp8BooleanReader
             // The admitted window/full private model exclude mid-block failure.
             // Only the completed block publishes arithmetic state to its window.
             var position = Position; var bits = Bits; var range = Range; var value = Value;
+            var planeBase = plane * 24;
             var previousZero = false; var predictor = initialContext; nonzero = 0;
             for (var c = plane == 0 ? 1 : 0; c < 16; c++)
             {
-                var p = probabilities.Slice(((plane * 8 + bands[c]) * 3 + predictor) * 11, 11);
-                var token = Token(in data, p, previousZero, ref position, ref bits, ref range, ref value);
-                if (token == 11) break;
-                var sample = token < 5 ? token : Category(in data, token - 5, ref position, ref bits, ref range, ref value);
-                if (typeof(TMode) == typeof(PixelMode))
+                ref readonly var p = ref model[planeBase + bands[c] * 3 + predictor];
+                if (!previousZero && TokenRead(in data, p[0], ref position, ref bits, ref range, ref value) == 0) break;
+                if (TokenRead(in data, p[1], ref position, ref bits, ref range, ref value) == 0)
                 {
-                    previousZero = sample == 0; predictor = Math.Min(sample, 2);
-                    if (sample == 0) continue;
-                    nonzero = 1;
-                    if (Read(in data, 128, ref position, ref bits, ref range, ref value) != 0) sample = -sample;
-                    values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
+                    previousZero = true; predictor = 0;
+                    continue;
+                }
+                previousZero = false;
+                int sample;
+                if (TokenRead(in data, p[2], ref position, ref bits, ref range, ref value) == 0)
+                {
+                    sample = 1; predictor = 1;
                 }
                 else
                 {
-                    previousZero = token == 0; predictor = Math.Min(token, 2);
-                    if (token == 0) continue;
-                    nonzero = 1;
-                    Read(in data, 128, ref position, ref bits, ref range, ref value);
+                    predictor = 2;
+                    if (TokenRead(in data, p[3], ref position, ref bits, ref range, ref value) == 0)
+                        sample = TokenRead(in data, p[4], ref position, ref bits, ref range, ref value) == 0 ? 2
+                            : 3 + TokenRead(in data, p[5], ref position, ref bits, ref range, ref value);
+                    else
+                    {
+                        int category;
+                        if (TokenRead(in data, p[6], ref position, ref bits, ref range, ref value) == 0)
+                            category = TokenRead(in data, p[7], ref position, ref bits, ref range, ref value);
+                        else
+                        {
+                            var upper = TokenRead(in data, p[8], ref position, ref bits, ref range, ref value);
+                            category = 2 + 2 * upper + TokenRead(in data, p[9 + upper], ref position, ref bits, ref range, ref value);
+                        }
+                        sample = Category(in data, category, ref position, ref bits, ref range, ref value);
+                    }
+                }
+                nonzero = 1;
+                var sign = Read(in data, 128, ref position, ref bits, ref range, ref value);
+                if (typeof(TMode) == typeof(PixelMode))
+                {
+                    if (sign != 0) sample = -sample;
+                    values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
                 }
             }
             Position = position; Bits = bits; Range = range; Value = value;
@@ -145,31 +166,6 @@ internal partial struct Vp8BooleanReader
             if (bits >= 8) return;
             value = value << 32 | BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4));
             position += 4; bits += 32;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Token(in ReadOnlySpan<byte> data, ReadOnlySpan<byte> p, bool previousZero,
-            ref int position, ref int bits, ref int range, ref ulong value)
-        {
-            int token;
-            if (!previousZero && TokenRead(in data, p[0], ref position, ref bits, ref range, ref value) == 0)
-            { token = 11; goto Complete; }
-            if (TokenRead(in data, p[1], ref position, ref bits, ref range, ref value) == 0)
-            { token = 0; goto Complete; }
-            if (TokenRead(in data, p[2], ref position, ref bits, ref range, ref value) == 0)
-            { token = 1; goto Complete; }
-            if (TokenRead(in data, p[3], ref position, ref bits, ref range, ref value) == 0)
-            {
-                token = TokenRead(in data, p[4], ref position, ref bits, ref range, ref value) == 0
-                    ? 2 : 3 + TokenRead(in data, p[5], ref position, ref bits, ref range, ref value);
-                goto Complete;
-            }
-            if (TokenRead(in data, p[6], ref position, ref bits, ref range, ref value) == 0)
-            { token = 5 + TokenRead(in data, p[7], ref position, ref bits, ref range, ref value); goto Complete; }
-            var upper = TokenRead(in data, p[8], ref position, ref bits, ref range, ref value);
-            token = 7 + 2 * upper + TokenRead(in data, p[9 + upper], ref position, ref bits, ref range, ref value);
-        Complete:
-            return token;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
