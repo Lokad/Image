@@ -1,5 +1,9 @@
 # Shared byte/word bicubic enlargement
 
+Word costs are superseded by the [publication pipeline](BICUBIC-WORD-PUBLICATION-PIPELINE.md).
+Byte costs and unchanged workspace evidence remain valid; this report retains
+the earlier consolidation and its adverse stages.
+
 Byte and word enlargement now share geometry/filter preparation and two
 output-backed prefix/tail schedules. Typed decoding, certified pixel publication
 and exact repair remain separate. This removes duplicated scheduling while adding

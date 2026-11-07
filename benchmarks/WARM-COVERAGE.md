@@ -21,18 +21,20 @@ Completion needs current passing evidence for every named path, with scope state
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Complete bilinear enlargement | [Current boundary audit](bilinear-current-boundary-evidence.json) reuses the qualified immutable build without production changes or rebuilds. Existing RGBA8 Up8 measures2357.04µs/native2155.92µs, ratio1.093/upper1.134/lower.971: uncertain.102891B/op includes fresh~103KBhorizontal preparation and independent output ownership; the unchanged4MiBdefault pool reuses output backing. Older2914.62µs/2235512Bcost is superseded, not paired causal gain evidence. Native graph/context preparation remains retained and labeled. Stop tuning this uncertain case while larger demonstrated gaps remain. |
-| Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
+| Complete bicubic enlargement and small-support word publication | [Word publication pipeline](BICUBIC-WORD-PUBLICATION-PIPELINE.md) independently saves130.43/135.29µs (4.11%/4.25%raw,4.40%/4.20%normalized) on complete bounded/default RGBA16 enlargement; both confidence views separate. Current3045.35/3048.24µs, uppers1.070/1.067 remain gaps. GC4264538→4264573B/op(+35 measured); required4264104B output and owned workspace unchanged. All15affected word costs current:1pass/stop(Down16),13gaps,1uncertain. Six word enlargement controls5gaps/1uncertain; source-valid byte costs give12enlargement controls7gaps/5uncertain. [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) retains earlier workspace gains and byte uncertainty/adverse evidence as history. No broader causal or parity claim. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. [Owned font preparation](FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw against a contemporary original; current294.11/native13.95µs,upper21.246 remains gap. Owned capacity unchanged, allocation~758KB; no peak reduction inferred. Other current fill/copy/composite costs remain in the summary. |
 
-The current [progressive-output milestone](JPEG-PROGRESSIVE-OUTPUT.md) qualifies
-5,808 full/live checks per OS (2,543 internal / 2,317 public / 948 differential),
-42 internal / 375 public per normal/scalar mode, and the SAME actual private
+The current [word-publication milestone](BICUBIC-WORD-PUBLICATION-PIPELINE.md) qualifies
+5,812 full/live checks per OS (2,547 internal / 2,317 public / 948 differential),
+51 internal / 571 public per normal/scalar mode, and the SAME actual private
 Release package/all three examples on Windows/Linux. Exact progressive sync/async
 results retain independent charged lifetimes; existing VP8, method2, validation and
-editing consumers also pass. Existing numerical kernels reuse disabled-ISA proof.
-One immutable core/embedded per OS; the existing authored JPEG helper is linked into
-internal tests. No public/benchmark/native/selector/fixture-producer build.
-Two displayed costs refresh;123 numerical rows reuse unchanged paths.
+editing consumers also pass, including both-depth/both-workspace enlargement.
+Frozen quartet guard decisions and independent rounding execute on Linux AVX512;
+Windows/scalar checks cover portable paths. Unchanged disabled-ISA proof is reused.
+One immutable core/embedded per OS; no public/benchmark/native/selector/fixture build.
+Four displayed costs refresh;121 numerical rows reuse unchanged paths.
+[Progressive output](JPEG-PROGRESSIVE-OUTPUT.md),
 [Overwrite VP8 output](VP8-OVERWRITE-OUTPUT.md), [residual programs](VP8-COEFFICIENT-PROGRAM.md), [validation elision](VP8L-VALIDATION-ELISION.md),
 [owned fonts](FONT-LOAD-PREPARATION.md), [VP8 tokens](VP8-VALIDATION-MATERIALIZATION.md)
 and [JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md) retain unchanged-path
@@ -50,8 +52,11 @@ two short comparisons have overlapping intervals and unchanged allocation.
 Qualified originals/main/embedded/bindings restore byte for byte on both OSs,
 so no current cost or package proof is invalidated. One current enlargement
 profile attributes73.4% to word-row filtering/certified publication and16.4% to
-horizontal filtering, versus1.1% vertical preparation. The next resize task
-investigates that dominant publication/filter pipeline, preserving exact results.
+horizontal filtering, versus1.1% vertical preparation. It leads to the accepted
+pipeline above. A reference audit initially matches bilinear/bicubic Down16;
+the completed bicubic run is recovered by family without timing replay. Existing
+reference inputs/settings/native-only bounds stay fixed. Larger independent codec
+work comes next; stop current passing cases and resolve uncertainty before tuning.
 The following [seven-control refresh](PNG-CURRENT-FRAMING-COSTS.md) changes no production:
 seven current independentconfirmations,5pass/2gap,7displayedrowsfresh/118numbersreused.
 Alloriginal gates andfrozenworkers pass. No rebuild/newfixture/profile or repeated

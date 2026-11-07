@@ -106,6 +106,33 @@ internal static class BicubicMath
         if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
         var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
         var values = Avx512F.Divide(sum, divisors);
+        return WritePreparedWordPair(values, a0, a1, output);
+    }
+
+    // Prepare two independent quotients before either certificate. Each pair
+    // retains its own acceptance bit and leaves refused output untouched.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static int WriteWordQuartet(Vector512<double> first, Vector512<double> second,
+        double n0, double n1, double n2, double n3, Span<byte> output)
+    {
+        const double alphaError = 2.3283064365386963e-10 * 65535d;
+        var a0 = first.GetElement(3); var a1 = first.GetElement(7);
+        var a2 = second.GetElement(3); var a3 = second.GetElement(7);
+        var validFirst = n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError;
+        var validSecond = n2 >= .5 && n3 >= .5 && a2 > alphaError && a3 > alphaError;
+        var firstValues = validFirst
+            ? Avx512F.Divide(first, Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1)) : default;
+        var secondValues = validSecond
+            ? Avx512F.Divide(second, Vector512.Create(a2, a2, a2, n2, a3, a3, a3, n3)) : default;
+        var acceptedFirst = validFirst && WritePreparedWordPair(firstValues, a0, a1, output[..16]);
+        var acceptedSecond = validSecond && WritePreparedWordPair(secondValues, a2, a3, output.Slice(16, 16));
+        return (acceptedFirst ? 1 : 0) | (acceptedSecond ? 2 : 0);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool WritePreparedWordPair(Vector512<double> values, double a0, double a1, Span<byte> output)
+    {
+        const double maximum = 65535d;
         // Established 2^-40*16^2 word bounds cover every in-range
         // rounding threshold: alpha margin 1e-4, color below 2.0001/alpha.
         // Alpha's lower power of two gives a conservative reciprocal bound.

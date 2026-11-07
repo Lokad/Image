@@ -42,6 +42,29 @@ internal static class EnlargingWordColumnBicubicResize
     {
         var destination = result.Pixels.Slice(y * result.Stride, result.Stride);
         var outputX = 0;
+        for (; outputX + 3 < length; outputX += 4)
+        {
+            var firstSum = Vector512<double>.Zero; var secondSum = Vector512<double>.Zero;
+            for (var t = 0; t < vertical.Length; t++)
+            {
+                var weight = Vector512.Create(vertical[t]);
+                var row = MemoryMarshal.AsBytes(cache.Slice(rows[t] + outputX, 4));
+                firstSum = Avx512F.Add(firstSum, Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(row), weight));
+                secondSum = Avx512F.Add(secondSum, Avx512F.Multiply(MemoryMarshal.Read<Vector512<double>>(row[64..]), weight));
+            }
+            var n0 = normalizers[outputX] * normalizerY;
+            var n1 = normalizers[outputX + 1] * normalizerY;
+            var n2 = normalizers[outputX + 2] * normalizerY;
+            var n3 = normalizers[outputX + 3] * normalizerY;
+            var accepted = BicubicMath.WriteWordQuartet(firstSum, secondSum, n0, n1, n2, n3,
+                destination.Slice((tile + outputX) * 8, 32));
+            if ((accepted & 1) == 0 && (!(n0 >= .5 && n1 >= .5)
+                || !RepairPair(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
+                    vertical, first, context, ref deferred))) return false;
+            if ((accepted & 2) == 0 && (!(n2 >= .5 && n3 >= .5)
+                || !RepairPair(source, result, tile, y, outputX + 2, weights, offsets, counts, sourceFirst,
+                    vertical, first, context, ref deferred))) return false;
+        }
         for (; outputX + 1 < length; outputX += 2)
         {
             var sum = Vector512<double>.Zero;
@@ -58,10 +81,8 @@ internal static class EnlargingWordColumnBicubicResize
             if (!BicubicMath.TryWriteWordPair(sum, n0, n1, destination.Slice((tile + outputX) * 8, 16)))
             {
                 if (!(n0 >= .5 && n1 >= .5)
-                    || !OriginalWord(source, result, tile + outputX, y, weights.Slice(outputX * 5, counts[outputX]),
-                        offsets.Slice(outputX * 5, counts[outputX]), sourceFirst, vertical, first, context, ref deferred)
-                    || !OriginalWord(source, result, tile + outputX + 1, y, weights.Slice((outputX + 1) * 5, counts[outputX + 1]),
-                        offsets.Slice((outputX + 1) * 5, counts[outputX + 1]), sourceFirst, vertical, first, context, ref deferred)) return false;
+                    || !RepairPair(source, result, tile, y, outputX, weights, offsets, counts, sourceFirst,
+                        vertical, first, context, ref deferred)) return false;
             }
         }
         for (var x = outputX; x < length; x++)
@@ -78,6 +99,16 @@ internal static class EnlargingWordColumnBicubicResize
             }
         }
         return true;
+    }
+
+    private static bool RepairPair(ImageBuffer source, ImageBuffer result, int tile, int y, int x,
+        ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts, int sourceFirst,
+        ReadOnlySpan<double> vertical, int first, OperationContext context, ref bool deferred)
+    {
+        return OriginalWord(source, result, tile + x, y, weights.Slice(x * 5, counts[x]),
+                offsets.Slice(x * 5, counts[x]), sourceFirst, vertical, first, context, ref deferred)
+            && OriginalWord(source, result, tile + x + 1, y, weights.Slice((x + 1) * 5, counts[x + 1]),
+                offsets.Slice((x + 1) * 5, counts[x + 1]), sourceFirst, vertical, first, context, ref deferred);
     }
 
     private static bool OriginalWord(ImageBuffer source, ImageBuffer result, int x, int y,
