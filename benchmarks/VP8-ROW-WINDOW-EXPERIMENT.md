@@ -35,9 +35,10 @@ heap capacity, cache, session or retained state was introduced. Admitted/physica
 native peaks were not remeasured; allocation counts establish no peak reduction.
 
 Earlier [applicability counts](VP8-VALIDATION-READER-ATTRIBUTION.md) identify
-13,389 buffered initializations, but the retained macroblock design already
-removes 11,684. Only 1,705 remain before this experiment. Those counts are
-applicability evidence, not predicted time savings or current CPU attribution.
+13,389 buffered initializations on the frozen **coding-validation input**; the
+retained macroblock design removes 11,684, leaving 1,705 on that input. Its packet
+differs from the frozen resident decoding packet. These counts do not establish
+decoding-control applicability, predicted time savings or current CPU attribution.
 This failure concerns this lifetime/layout implementation, not a permanent ban
 on row scheduling or architectural experiments.
 
