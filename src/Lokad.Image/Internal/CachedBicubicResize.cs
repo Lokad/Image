@@ -246,22 +246,19 @@ internal static partial class CachedBicubicResize
             for(var t=0;t<vertical.Length;t++)
                 sum=Avx512F.Add(sum,Avx512F.Multiply(cached[(rows[t]>>3)+(x>>1)],Vector512.Create(vertical[t])));
             var n0=normalizers[x]*normalizerY;var n1=normalizers[x+1]*normalizerY;
-            var a0=sum.GetElement(3);var a1=sum.GetElement(7);
-            var values=Avx512F.Divide(sum,Vector512.Create(Vector256.Create(a0,a0,a0,n0),Vector256.Create(a1,a1,a1,n1)));
+            if(!BicubicMath.PrepareWordPair(sum,n0,n1,out var values,out var margins))
+            {
+                Original(source,result,x,y,weights,offsets,counts,vertical,firstY,16,context);
+                Original(source,result,x+1,y,weights,offsets,counts,vertical,firstY,16,context);
+                continue;
+            }
             var fractional=Avx512F.Subtract(values,Avx512F.RoundScale(values,1));
             var delta=Avx512F.Subtract(fractional,Vector512.Create(.5));
             var distance=Avx512F.AndNot(Vector512.Create(long.MinValue),delta.AsInt64()).AsDouble();
-            // Keep the same power-of-two bounds without calls that spill
-            // live vectors in this per-pair precision check.
-            var exponent0=(int)((BitConverter.DoubleToUInt64Bits(a0)>>52)&2047);
-            var exponent1=(int)((BitConverter.DoubleToUInt64Bits(a1)>>52)&2047);
-            var margin0=2.0001*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent0)<<52);
-            var margin1=2.0001*BitConverter.UInt64BitsToDouble((ulong)(2046-exponent1)<<52);
-            var margins=Vector512.Create(margin0,margin0,margin0,1e-4,margin1,margin1,margin1,1e-4);
             var inRange=Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values,Vector512<double>.Zero).AsInt64(),
                 Avx512F.CompareLessThanOrEqual(values,Vector512.Create(65535d)).AsInt64());
             var ambiguous=Avx512F.And(inRange,Avx512F.CompareLessThanOrEqual(distance,margins).AsInt64());
-            if(n0<.5 || n1<.5 || !(values.GetElement(3)>=1+1e-4 && values.GetElement(7)>=1+1e-4)
+            if(!(values.GetElement(3)>=1+1e-4 && values.GetElement(7)>=1+1e-4)
                 || Vector512.ExtractMostSignificantBits(ambiguous)!=0)
             {
                 Original(source,result,x,y,weights,offsets,counts,vertical,firstY,16,context);

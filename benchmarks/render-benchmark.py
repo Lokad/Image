@@ -1501,44 +1501,37 @@ def render():
     assert current['lower'] > 1 and current['status'] == 'gap'
     # One current owner for small-support word publication. The earlier owners
     # above still supply unchanged byte/wide-word rows and linked history.
-    word_pipeline = json.loads((ROOT / 'benchmarks/bicubic-word-publication-pipeline-evidence.json').read_text(encoding='utf-8'))
-    assert word_pipeline['productionAccepted'] and word_pipeline['raw']['mirrored'] and word_pipeline['raw']['allMembersVerified']
-    assert len(word_pipeline['cases']) == 15
-    assert word_pipeline['sourceProof']['originalPairReconstructedByteForByte']
-    assert word_pipeline['sourceProof']['originalWordAndTinyReplayBodiesExact']
-    assert word_pipeline['storage']['newOwnedCapacityBytes'] == word_pipeline['storage']['newCrossOperationRetainedBytes'] == 0
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for c in word_pipeline['comparison'].values() for v in c['views'].values())
-    for current in word_pipeline['cases'].values():
-        assert current['actualIterations'] == 12 and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-        assert current['librarySha256'] == word_pipeline['producers']['linuxSha256']
+    word_prep = json.loads((ROOT / 'benchmarks/bicubic-shared-word-preparation-evidence.json').read_text(encoding='utf-8'))
+    assert word_prep['productionAccepted'] and word_prep['raw']['mirrored'] and word_prep['raw']['allMembersVerified']
+    assert len(word_prep['cases']) == 15
+    assert word_prep['sourceProof']['outsideWordPreparationAndCachedWordWriterUnchanged']
+    assert word_prep['sourceProof']['all2048ExponentConstructionsBitIdentical']
+    assert word_prep['storage']['newOwnedCapacityBytes'] == word_prep['storage']['newCrossOperationRetainedBytes'] == 0
+    for current in word_prep['cases'].values():
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['librarySha256'] == word_prep['producers']['linuxSha256']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    mixed_word = json.loads((ROOT / 'benchmarks/bicubic-mixed-word-scheduling-evidence.json').read_text(encoding='utf-8'))
-    assert mixed_word['productionAccepted'] and mixed_word['sourceProof']['exactUndoUnchanged']
-    assert mixed_word['raw']['mirrored'] and mixed_word['raw']['allMembersVerified']
-    assert set(mixed_word['cases']) == {'Mixed16', 'TightMixed16', 'TightVertical16'}
-    assert mixed_word['storage']['admittedWorkspaceBytes'] == 4096
-    assert mixed_word['storage']['newOwnedCapacityBytes'] == mixed_word['storage']['newCrossOperationRetainedBytes'] == 0
-    assert all(v['rawGainSeparated'] for c in mixed_word['comparison'].values() for v in c['views'].values())
-    assert all(v['normalizedGainSeparated'] for v in mixed_word['comparison']['TightMixed16']['views'].values())
-    for case in mixed_word['cases'].values():
-        assert case['actualIterations'] == 12 and case['allOriginalGatesPassed'] and case['quietGuardsPassed']
-        assert case['managedRationalReferenceExact'] and case['independentOwnedOutput'] and case['sourceUnchanged']
-        assert case['librarySha256'] == mixed_word['producers']['linuxSha256']
+    assert word_prep['statusCounts'] == {state: sum(c['status'] == state for c in word_prep['cases'].values())
+                                       for state in ('pass', 'gap', 'uncertain')}
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for case in ('Mixed16', 'Cross16') for v in word_prep['comparison'][case]['views'].values())
+    assert all(v['rawLossSeparated'] and v['normalizedLossSeparated']
+               for v in word_prep['comparison']['TightVertical16']['views'].values())
     word_labels = {'Up16': 'Bicubic upscale RGBA16',
                    'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
                    'TightMixed16': 'Bicubic RGBA16, width up / height down, input+output+4 KiB',
                    'Cross16': 'Bicubic RGBA16, width down / height up, default workspace'}
     for case, label in word_labels.items():
-        current = mixed_word['cases'].get(case, word_pipeline['cases'][case])
+        current = word_prep['cases'][case]
         positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
         assert len(positions) == 1, label
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    vq = mixed_word['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5862
+    vq = word_prep['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5866
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1757,13 +1750,13 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Word publication pipeline](../benchmarks/BICUBIC-WORD-PUBLICATION-PIPELINE.md)
-  batches two independent pixel pairs before certification. Complete bounded/default
-  enlargement independently saves130.43/135.29µs (4.11%/4.25%raw); raw/normalized
-  confidence views separate. Current3,045.35/3,048.24µs retain gaps, uppers1.070/1.067.
-  GC4,264,538→4,264,573B/op(+35 measured); mandatory4,264,104Boutput and owned workspace
-  are unchanged. Fifteen existing affected word costs:1pass/stop,13gaps,1uncertain.
-  Four displayed rows refresh;121 numerical rows reuse unchanged paths.
+  [Shared word preparation](../benchmarks/BICUBIC-SHARED-WORD-PREPARATION.md) removes
+  duplicated divisor/certificate setup. Independent mixed/cross gains41.73/83.80µs
+  have separated raw/normalized confidence; tight vertical regresses11.96µs/1.66%,
+  also separated. Existing division, guards, rounding, exact repair and pixels remain.
+  Fifteen current word controls:6pass/9gaps; default/bounded full enlargement pass.
+  Four displayed rows refresh;121 numerical rows reuse unchanged paths. No new
+  owned arrays or retained state; admitted/physical peaks are not newly measured.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
   workspace savings and source-valid byte costs. No new retained cache/pool or precision policy.
   [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
@@ -1803,15 +1796,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{webp_owned['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected WebP paths pass989 internal/402 public checks per normal/scalar mode.
-Source-valid bicubic/resize evidence retains98 internal/703 public checks per mode
-on each OS, including direct mixed-word tails, terminal refusal/cancellation/recovery
-and independent surviving outputs. Unchanged codec/resize ISA evidence is reused.
+Affected word paths pass58 internal/688 public checks per normal/scalar mode
+on each OS, including frozen preparation/rounding, terminal refusal/cancellation/
+recovery and surviving outputs. Source-valid WebP scalar evidence is reused. Unchanged codec/resize ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

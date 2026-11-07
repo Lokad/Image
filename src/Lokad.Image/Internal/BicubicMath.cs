@@ -99,14 +99,8 @@ internal static class BicubicMath
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static bool TryWriteWordPair(Vector512<double> sum, double n0, double n1, Span<byte> output)
     {
-        const double unitError = 2.3283064365386963e-10;
-        const double maximum = 65535d;
-        const double alphaError = unitError * maximum;
-        var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
-        if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
-        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
-        var values = Avx512F.Divide(sum, divisors);
-        return WritePreparedWordPair(values, a0, a1, output);
+        return PrepareWordPair(sum, n0, n1, out var values, out var margins)
+            && WritePreparedWordPair(values, margins, output);
     }
 
     // Prepare two independent quotients before either certificate. Each pair
@@ -115,34 +109,39 @@ internal static class BicubicMath
     internal static int WriteWordQuartet(Vector512<double> first, Vector512<double> second,
         double n0, double n1, double n2, double n3, Span<byte> output)
     {
-        const double alphaError = 2.3283064365386963e-10 * 65535d;
-        var a0 = first.GetElement(3); var a1 = first.GetElement(7);
-        var a2 = second.GetElement(3); var a3 = second.GetElement(7);
-        var validFirst = n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError;
-        var validSecond = n2 >= .5 && n3 >= .5 && a2 > alphaError && a3 > alphaError;
-        var firstValues = validFirst
-            ? Avx512F.Divide(first, Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1)) : default;
-        var secondValues = validSecond
-            ? Avx512F.Divide(second, Vector512.Create(a2, a2, a2, n2, a3, a3, a3, n3)) : default;
-        var acceptedFirst = validFirst && WritePreparedWordPair(firstValues, a0, a1, output[..16]);
-        var acceptedSecond = validSecond && WritePreparedWordPair(secondValues, a2, a3, output.Slice(16, 16));
+        var validFirst = PrepareWordPair(first, n0, n1, out var firstValues, out var firstMargins);
+        var validSecond = PrepareWordPair(second, n2, n3, out var secondValues, out var secondMargins);
+        var acceptedFirst = validFirst && WritePreparedWordPair(firstValues, firstMargins, output[..16]);
+        var acceptedSecond = validSecond && WritePreparedWordPair(secondValues, secondMargins, output.Slice(16, 16));
         return (acceptedFirst ? 1 : 0) | (acceptedSecond ? 2 : 0);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool WritePreparedWordPair(Vector512<double> values, double a0, double a1, Span<byte> output)
+    internal static bool PrepareWordPair(Vector512<double> sum, double n0, double n1,
+        out Vector512<double> values, out Vector512<double> margins)
+    {
+        const double alphaError = 2.3283064365386963e-10 * 65535d;
+        values = margins = default;
+        if (!(n0 >= .5 && n1 >= .5 && sum.GetElement(3) > alphaError && sum.GetElement(7) > alphaError)) return false;
+        var alpha = Avx512F.PermuteVar8x64(sum, Vector512.Create(3L, 3, 3, 3, 7, 7, 7, 7));
+        var alphaLanes = Vector512.Create(0L, 0, 0, -1L, 0, 0, 0, -1L).AsDouble();
+        var normalizers = Vector512.Create(Vector256.Create(n0), Vector256.Create(n1));
+        values = Avx512F.Divide(sum, Vector512.ConditionalSelect(alphaLanes, normalizers, alpha));
+        // Established 2^-40*16^2 word bounds cover every in-range
+        // rounding threshold. The integer shifts reproduce the scalar exponent
+        // construction bit for bit; arithmetic and division precision stay intact.
+        var exponents = Avx512F.And(Avx512F.ShiftRightLogical(alpha.AsUInt64(), 52), Vector512.Create(2047UL));
+        var powers = Avx512F.ShiftLeftLogical(Avx512F.Subtract(Vector512.Create(2046UL), exponents), 52).AsDouble();
+        margins = Vector512.ConditionalSelect(alphaLanes, Vector512.Create(1e-4), Avx512F.Multiply(powers, Vector512.Create(2.0001)));
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool WritePreparedWordPair(Vector512<double> values, Vector512<double> margins, Span<byte> output)
     {
         const double maximum = 65535d;
-        // Established 2^-40*16^2 word bounds cover every in-range
-        // rounding threshold: alpha margin 1e-4, color below 2.0001/alpha.
-        // Alpha's lower power of two gives a conservative reciprocal bound.
-        var exponent0 = (int)((BitConverter.DoubleToUInt64Bits(a0) >> 52) & 2047);
-        var exponent1 = (int)((BitConverter.DoubleToUInt64Bits(a1) >> 52) & 2047);
-        var margin0 = 2.0001 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent0) << 52);
-        var margin1 = 2.0001 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent1) << 52);
-        if (margin0 >= .25 || margin1 >= .25
+        if (Vector512.ExtractMostSignificantBits(Avx512F.CompareGreaterThanOrEqual(margins, Vector512.Create(.25))) != 0
             || !(values.GetElement(3) >= 1 + 1e-4 && values.GetElement(7) >= 1 + 1e-4)) return false;
-        var margins = Vector512.Create(margin0, margin0, margin0, 1e-4, margin1, margin1, margin1, 1e-4);
         var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
         var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
             Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();

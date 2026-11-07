@@ -71,13 +71,13 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Word publication pipeline](../benchmarks/BICUBIC-WORD-PUBLICATION-PIPELINE.md)
-  batches two independent pixel pairs before certification. Complete bounded/default
-  enlargement independently saves130.43/135.29µs (4.11%/4.25%raw); raw/normalized
-  confidence views separate. Current3,045.35/3,048.24µs retain gaps, uppers1.070/1.067.
-  GC4,264,538→4,264,573B/op(+35 measured); mandatory4,264,104Boutput and owned workspace
-  are unchanged. Fifteen existing affected word costs:1pass/stop,13gaps,1uncertain.
-  Four displayed rows refresh;121 numerical rows reuse unchanged paths.
+  [Shared word preparation](../benchmarks/BICUBIC-SHARED-WORD-PREPARATION.md) removes
+  duplicated divisor/certificate setup. Independent mixed/cross gains41.73/83.80µs
+  have separated raw/normalized confidence; tight vertical regresses11.96µs/1.66%,
+  also separated. Existing division, guards, rounding, exact repair and pixels remain.
+  Fifteen current word controls:6pass/9gaps; default/bounded full enlargement pass.
+  Four displayed rows refresh;121 numerical rows reuse unchanged paths. No new
+  owned arrays or retained state; admitted/physical peaks are not newly measured.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
   workspace savings and source-valid byte costs. No new retained cache/pool or precision policy.
   [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
@@ -117,15 +117,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,865 full/live checks per OS**, affected
+The current production build passes **5,866 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected WebP paths pass989 internal/402 public checks per normal/scalar mode.
-Source-valid bicubic/resize evidence retains98 internal/703 public checks per mode
-on each OS, including direct mixed-word tails, terminal refusal/cancellation/recovery
-and independent surviving outputs. Unchanged codec/resize ISA evidence is reused.
+Affected word paths pass58 internal/688 public checks per normal/scalar mode
+on each OS, including frozen preparation/rounding, terminal refusal/cancellation/
+recovery and surviving outputs. Source-valid WebP scalar evidence is reused. Unchanged codec/resize ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
@@ -233,9 +232,9 @@ settings do not establish matched quality.
 | Bilinear upscale RGBA8 † → 1027×519 | 2,357.04 | 2,155.92 | 1.093 / 1.134 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
 | Bicubic resize RGBA8 † → 256×129 | 549.84 | 418.61 | 1.313 / 1.321 | 199,981 |
-| Bicubic upscale RGBA16 † → 1027×519 | 3,048.24 | 2,873.36 | 1.061 / 1.067 | 4,264,573 |
+| Bicubic upscale RGBA16 † → 1027×519 | 2,752.40 | 2,874.23 | 0.958 / 0.966 | 4,264,573 |
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,315.52 | 3,040.01 | 1.091 / 1.120 | 116 |
-| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 967.78 | 821.74 | 1.178 / 1.182 | 114 |
+| Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
 | Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 384.00 | 403.93 | 0.951 / 0.962 | 197,298 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,212.58 | 3,052.03 | 1.053 / 1.072 | 116 |
@@ -244,14 +243,14 @@ settings do not establish matched quality.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,118.45 | 846.38 | 1.321 / 1.327 | 114 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,017.38 | 847.82 | 1.200 / 1.204 | 114 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 480.55 | 347.12 | 1.384 / 1.394 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 532.73 | 404.07 | 1.318 / 1.329 | 113 |
 | Bicubic RGBA8, width down / height up, default workspace † H → 256×519 | 912.31 | 841.39 | 1.084 / 1.107 | 731,768 |
-| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 940.78 | 819.83 | 1.148 / 1.154 | 199,893 |
+| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 862.04 | 819.16 | 1.052 / 1.057 | 199,892 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
 | Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
