@@ -9,7 +9,7 @@ storage/copies, not caller-owned input storage again.
 
 `ValidatePixels` retains no raster charge. It still admits substantial codec
 storage (PNG compressed input/rows/inflater, progressive JPEG coefficients, WebP
-planes/history). Bounded indexed PNG validation reuses certified filtered bytes;
+entropy models and auxiliary images). Bounded indexed PNG validation reuses certified filtered bytes;
 larger or uncertain streams retain the inflater path. Baseline JPEG validates with
 block scratch; baseline decoding reconstructs admitted component sample planes
 without full-frame coefficients. Unambiguous equal-grid baseline RGB decoding
@@ -22,7 +22,9 @@ geometry selects the path before admission, independently of remaining capacity.
 Stream acquisition stays charged through validation; successful metadata results
 contain only scalar facts. Its memory bounds can therefore differ from Decode's.
 Non-indexed VP8L decoding on little-endian systems uses the returned image's
-storage for its pixel history; validation still needs that history without a result.
+storage for its pixel history. Validation decodes auxiliary predictor/entropy/palette
+images but omits main-raster history and inverse output; eligible Huffman lookups
+use separately admitted temporary storage.
 Eligible bicubic enlargement also uses unmaterialized owned output capacity for
 preparation and filtered rows. Temporary views retire before overlapping output
 writes; callers receive a complete, independently owned raster.

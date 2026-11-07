@@ -35,23 +35,25 @@ Current scope and remaining work:
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
   [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
-  [Validation materialization](../benchmarks/VP8-VALIDATION-MATERIALIZATION.md) shares
-  one geometry/storage scheduler and omits discarded residual/mode output while
-  preserving every entropy decision and exact completed prefix. Complete validation
-  saves596µs/9.97%raw and10.04%normalized, with both confidence views separated;
-  5378.92µs/native5450.06µs, upper0.993 passes parity. Allocation falls9000B to545,478;
-  whole admitted peak stays536,248B because ALPH dominates, retained state zero.
-  All six reader costs refresh:1pass/5gaps. Earlier2%live regressions are resolved by
-  the shared scheduler; current5289.47µs/native4796.26µs remains a gap. Incremental
-  live/ordinary comparisons are inconclusive, with no gain claim. Two displayed rows
-  refresh;123 numerical rows retain unchanged paths. [Earlier live execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md)
-  retains its gains and adverse history. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
-  its allocation reduction:238,384B/span and238,480B/stream. Coarse admitted peak
-  751,768B, retained output531,468B remain unchanged.
+  [Main validation elision](../benchmarks/VP8L-VALIDATION-ELISION.md) keeps one
+  syntax scheduler and all auxiliary values/checks, omitting discarded main raster,
+  cache values and inverse output. Complete VP8L validation saves1,031µs/30.66%raw
+  and30.60%normalized; both confidence views separate. Current2,330.73µs/native
+  3,047.56µs, upper0.769 passes; VP8+ALPH validation4,656.82/native5,448.61µs,
+  upper0.858 also passes. GC297,070/13,584B; measured first/live admitted peaks
+  235,152/11,121B, retained0. These are separate from physical/native peaks.
+  Nine affected controls refresh:3pass/6gaps. Full-render contemporary comparison
+  is inconclusive with no demonstrated incremental gain/loss. Five displayed costs
+  refresh;120 numerical rows reuse unchanged paths. Opaque/live VP8 paths retain
+  unchanged evidence; liveopaque5289.47/native4796.26µs remains a gap.
+  [Earlier validation materialization](../benchmarks/VP8-VALIDATION-MATERIALIZATION.md)
+  and [live execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) retain scoped history.
+  [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains238,384B/span
+  and238,480B/stream, coarse decode peak751,768B and output531,468B.
   Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays
   idle after this sequential case. Governed calls bypass it. GC totals, admitted
   capacity and physical peak differ; native allocation/physical peak are unmeasured.
-  All six reader cases remain gaps. Original/native contexts and boundaries remain
+  Full decoding retains gaps. Original/native contexts and boundaries remain
   explicit; no fresh-context setup parity is claimed. Earlier
   [token](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) and
   [live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md) work stays linked history.
@@ -115,14 +117,15 @@ Current scope and remaining work:
   [Owned font preparation](../benchmarks/FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw
   on complete loading,294.11µs versus labeledFreeType13.95µs, upper21.246 still a gap.
   Source/metrics and eager/lazy validation disclosure remain; allocation stays~758KB,
-  retained owned capacity is unchanged and no peak reduction is inferred. One cost
-  refreshes; other124 numerical rows reuse unchanged paths.
+  retained owned capacity is unchanged and no peak reduction is inferred.
+  This round reuses those unchanged font costs.
 
-The current production build passes **5,774 full/live checks per OS**, affected
+The current production build passes **5,780 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
-sync/async consumers. Normal/scalar checks pass; unchanged vector-path
+sync/async consumers, plus bounded main validation and its asynchronous ownership.
+Normal/scalar checks pass; unchanged vector-path
 AVX2/AVX512-disabled proof is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
@@ -154,7 +157,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 6,238.72 | 5,987.12 | 1.042 / 1.046 | 238,480 | — |
+| WebP VP8 + alpha, fresh seekable Stream † | 6,231.39 | 5,994.69 | 1.039 / 1.046 | 238,480 | — |
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
@@ -195,8 +198,8 @@ settings do not establish matched quality.
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,996.93 | 17,633.09 | 0.964 / 0.968 | 882,212 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode † | 1,062.27 | 1,017.29 | 1.044 / 1.078 | 757,362 | — |
 | JPEG DC-only, caller CMYK decode (confidence open) † | 335.68 | 336.82 | 0.997 / 1.032 | 1,085,963 | — |
-| VP8L RGBA8, resident decode † | 3,224.25 | 3,019.22 | 1.068 / 1.079 | 152,728 | — |
-| VP8L RGBA8, fresh seekable Stream decode † | 3,271.53 | 3,048.58 | 1.073 / 1.102 | 152,824 | — |
+| VP8L RGBA8, resident decode † | 3,248.80 | 3,008.34 | 1.080 / 1.085 | 152,728 | — |
+| VP8L RGBA8, fresh seekable Stream decode † | 3,297.50 | 3,030.29 | 1.088 / 1.094 | 152,824 | — |
 | JPEG CMYK sparse-2D, resident decode † | 607.81 | 446.62 | 1.361 / 1.429 | 1,085,757 | — |
 | JPEG YCCK420, resident decode (confirmed pass) † | 436.05 | 728.08 | 0.599 / 0.626 | 895,546 | — |
 | JPEG 4:1:1, resident decode † | 529.90 | 450.86 | 1.175 / 1.213 | 751,290 | — |
@@ -280,8 +283,8 @@ settings do not establish matched quality.
 | Validate indexed Adam7 19×17, span † | 1.760 | 3.939 | 0.447 / 0.463 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span | 543.780 | 689.481 | 0.789 / 0.815 | 9,984 | Confirmed pass |
 | Validate JPEG progressive420, span | 286.239 | 289.052 | 0.990 / 1.001 | 4,072 | Confidence open |
-| Validate VP8L+alpha, span | 3,397.141 | 3,049.808 | 1.114 / 1.134 | 685,421 | Confirmed gap |
-| Validate VP8+alpha, span | 5,378.920 | 5,450.061 | 0.987 / 0.993 | 545,478 | Confirmed pass |
+| Validate VP8L+alpha, span | 2,330.733 | 3,047.558 | 0.765 / 0.769 | 297,070 | Confirmed pass |
+| Validate VP8+alpha, span | 4,656.819 | 5,448.615 | 0.855 / 0.858 | 13,584 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,956.807 | 3,613.242 | 0.818 / 0.826 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

@@ -15,7 +15,7 @@ Completion needs current passing evidence for every named path, with scope state
 | Other WebP encoding boundaries | [Current eight-control qualification](WEBP-FRESH-HISTOGRAM.md) preserves complete depth normalization and fresh awaited nonseekable async ownership. Passing cases stop. Other affected H costs remain historical; source/settings/full-packet/quality/resource gates stay unchanged. |
 | PNG decoding/coding validation | [Current framing controls](PNG-CURRENT-FRAMING-COSTS.md):24 independent confirmations,20pass/4gaps. Gaps:liveRGBA8 upper1.113, tight/defaultRGBA16 uppers1.052/1.031, RGB16 upper1.062; allotherconfirmed cases stop. [Shared-root control](PNG-PREPARED-PREFIX.md) separately retains422µs/12.8%gain,upper1.014gap,1638214B/op and1766641Bcoarsepeak. Eight displayed controls5pass/3gaps; remaining costs and allocations in family report. Twenty-seven existing named decode cases still need current proof. Historical contradictions/raw retained; header-only operations/encoding unaffected. |
 | PNG encoding | [Lazy view preparation](PNG-LAZY-VIEW-PREPARATION.md) independently saves390.08/375.08µs (1.83%/2.16%) on complete Optimal16/Smallest8. Exact packets and384KiB admission remain; Grayscale8 measures+408B/op to551,772, ten other fresh allocations unchanged. All11level6/9 fresh one-shot costs refresh; fourFastest costs reuse unchanged source bodies. Fifteen controls:9pass/stop,2gap,4uncertain. ByteFastest and byteGray remain gaps; wordSmallest and ordinary/live/forward wordFastest are uncertain. Resolve uncertainty before tuning. [Greedy preparation](PNG-GREEDY-VIEW-PREPARATION.md) retains independent269/836µs gains; earlier evidence stays linked history. |
-| VP8 image reading | [Validation materialization](VP8-VALIDATION-MATERIALIZATION.md) shares one geometry/storage scheduler and specializes token output. Complete validation saves595.69µs/9.97%raw/10.04%normalized, both confidence views separated;5378.92/native5450.06µs,upper.993PASS/STOP. GC554478→545478B; whole admittedpeak536248B unchanged, retained0. All six costs refresh:1pass/5gaps. Liveopaque5289.47/native4796.26µs,upper1.107 remains gap; incremental live/ordinary comparisons inconclusive. Earlier A/B/C2%live/ordinary regressions retained/resolved by shared schedulerD; no source/JIT-only acceptance. [Earlier live execution](VP8-LIVE-BLOCK-EXECUTION.md) and [alpha handoff](VP8-ALPHA-OUTPUT-HANDOFF.md) retain gains and separate decode peak/output evidence. |
+| WebP image reading | [Main validation elision](VP8L-VALIDATION-ELISION.md) removes discarded main VP8L raster/cache/inverse output, preserving auxiliary values and the shared syntax scheduler. Complete VP8L validation saves1030.69µs/30.66%raw/30.60%normalized;2330.73/native3047.56µs,upper.769PASS/STOP. VP8+ALPH validation4656.82/native5448.61µs,upper.858PASS/STOP. GC297070/13584B, first/live admitted peaks235152/11121B, retained0. Nine affected controls refresh:3pass/6gaps/0uncertain. Contemporary full-render comparison inconclusive, no demonstrated gain/loss. Opaque/live/simple VP8 paths reuse unchanged evidence; liveopaque5289.47/native4796.26µs remains gap. [Prior materialization](VP8-VALIDATION-MATERIALIZATION.md) and [alpha handoff](VP8-ALPHA-OUTPUT-HANDOFF.md) retain history and separate decode ownership evidence. |
 | JPEG decoding | [Coefficient-reference lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md) prepares fixed block bounds and keeps integer cursors across fallible bit delivery. Independent live444 saves102.83µs/2.69%raw and2.77%normalized, both confidence views separated;3722.09/native3361.34µs,upper1.114 remains gap. Bothcontemporary GC samples701233B, no newheap/retention; frame200→168B. Fourordinary decoder controls/codingvalidation reuse unchanged paths: six total1pass/3gaps/2uncertain. [Earlier correction selection](JPEG-CORRECTION-BIT.md) and plane scheduling retain history/ownership evidence. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
@@ -24,15 +24,17 @@ Completion needs current passing evidence for every named path, with scope state
 | Complete bicubic enlargement | [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) uses one geometry/filter source and two output-backed schedules. Complete default RGBA16 independently saves179.26µs/4.97%raw (4.90%normalized),5,016,602→4,264,538B/op; the4,264,104B independent output remains required. All12existing full/axial/depth/default/bounded controls refresh:8gaps/4uncertain. Byte incremental timing is inconclusive, including its adverse normalized point; no equivalence or broader parity claim. Earlier output-reuse gains remain linked history. |
 | Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. [Owned font preparation](FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw against a contemporary original; current294.11/native13.95µs,upper21.246 remains gap. Owned capacity unchanged, allocation~758KB; no peak reduction inferred. Other current fill/copy/composite costs remain in the summary. |
 
-The current [owned-font preparation milestone](FONT-LOAD-PREPARATION.md) qualifies
-5,774 full/live checks per OS (2,515 internal / 2,311 public / 948 differential),
-204 internal / 144 public per normal/scalar mode, and the SAME actual private
-Release package/all three examples on Windows/Linux. No ISA selection changes;
-existing portable/vector evidence remains valid. One immutable main/embedded/public
-build per OS; zero benchmark/native/selector/fixture builds. One displayed cost
-refreshes; 124 numerical rows reuse unchanged paths. [VP8 validation](VP8-VALIDATION-MATERIALIZATION.md),
-[JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md) and the linked family reports
-retain source-valid evidence and pinned raw history. The 283-path objective remains open.
+The current [main validation milestone](VP8L-VALIDATION-ELISION.md) qualifies
+5,780 full/live checks per OS (2,515 internal / 2,317 public / 948 differential),
+433 internal / 295 public per normal/scalar mode, and the SAME actual private
+Release package/all three examples on Windows/Linux, including bounded validation
+and asynchronous ownership. No ISA selection changes; existing vector evidence
+remains valid. One immutable main/embedded/public build per OS; zero benchmark/
+native/selector/fixture builds. Five displayed costs refresh;120 numerical rows
+reuse unchanged paths. [Owned fonts](FONT-LOAD-PREPARATION.md),
+[VP8 tokens](VP8-VALIDATION-MATERIALIZATION.md), [JPEG lifetimes](JPEG-COEFFICIENT-REFERENCE-LIFETIME.md)
+and linked family reports retain source-valid evidence and pinned raw history.
+The 283-path objective remains open.
 The following [seven-control refresh](PNG-CURRENT-FRAMING-COSTS.md) changes no production:
 seven current independentconfirmations,5pass/2gap,7displayedrowsfresh/118numbersreused.
 Alloriginal gates andfrozenworkers pass. No rebuild/newfixture/profile or repeated
@@ -170,8 +172,8 @@ complete coding validation and pixel decoding are distinct operations.
 | ValidateIndexedAdam7 | AuthoredPng c3-d4-adam7-all-filters, 19×17 | Seven passes and palette-index validity |
 | ValidateJpegBaseline420 | OriginalExif baseline420, 513×259 | Huffman/coefficient validation without inverse/render planes |
 | ValidateJpegProgressive420 | OriginalExif progressive420, 513×259 | Distinct spectral/refinement/progression checks |
-| ValidateVp8lAlpha | OriginalExif VP8L alpha, 513×259 | Required ARGB history/inverse transforms without RGBA copy |
-| ValidateVp8Alpha | OriginalExif lossy alpha, 513×259 | VP8 planes plus compressed-ALPH coding |
+| ValidateVp8lAlpha | OriginalExif VP8L alpha, 513×259 | Complete main syntax and auxiliary numeric validation; no discarded main raster/inverses |
+| ValidateVp8Alpha | OriginalExif lossy alpha, 513×259 | VP8 token/context validation plus compressed-ALPH syntax; no discarded pixel planes |
 | ValidatePng16Async | Same PNG16 | Complete asynchronous acquisition, retained input capacity and cleanup |
 
 Validation is optional for replacement readiness, but these supported public

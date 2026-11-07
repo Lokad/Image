@@ -110,12 +110,12 @@ internal ref struct WebpLosslessDecoder
     internal void ValidatePixels()
     {
         ImageBuffer? unused = null;
-        var pixels = DecodePixels(false, ref unused);
-        context.Release(pixels.Length * 4L + 32 + 512);
+        DecodePixels(false, ref unused, validateOnly: true);
+        context.Release(512);
         context.Cancellation.ThrowIfCancellationRequested();
     }
 
-    private Span<uint> DecodePixels(bool retainResult, scoped ref ImageBuffer? result)
+    private Span<uint> DecodePixels(bool retainResult, scoped ref ImageBuffer? result, bool validateOnly = false)
     {
         context.Reserve(512); // Four transform descriptors and fixed parser scratch.
         var transforms = new Transform[4]; var count = 0; var seen = 0; var codedWidth = width;
@@ -144,10 +144,19 @@ internal ref struct WebpLosslessDecoder
         // A palette can expand/change the raster width; keep its existing array
         // ownership. Other transforms operate in place on a full-width frame.
         var pixels = ReadImageCore(codedWidth, height, true,
-            retainResult && (seen & 8) == 0 && BitConverter.IsLittleEndian, ref result, out _);
+            retainResult && (seen & 8) == 0 && BitConverter.IsLittleEndian, ref result, out _, validateOnly);
         for (var index = count - 1; index >= 0; index--)
         {
             var transform = transforms[index];
+            if (validateOnly)
+            {
+                // Auxiliary values already validated every predictor/group. The
+                // inverse arithmetic is total; preserve delayed expansion bounds.
+                if (transform.Type == 3) RasterCount(transform.Width, height);
+                context.Release(transform.Data.Length == 0 ? 0 : transform.Data.Length * 4L + 32);
+                transform.Data = [];
+                continue;
+            }
             if (transform.Type == 3)
             {
                 var expanded = Allocate(transform.Width, height);
@@ -181,7 +190,7 @@ internal ref struct WebpLosslessDecoder
     }
 
     private Span<uint> ReadImageCore(int imageWidth, int imageHeight, bool spatial,
-        bool retainResult, scoped ref ImageBuffer? result, out uint[]? allocated)
+        bool retainResult, scoped ref ImageBuffer? result, out uint[]? allocated, bool validateOnly = false)
     {
         allocated = null;
         var cacheEnabled = reader.Read(1) != 0;
@@ -189,8 +198,8 @@ internal ref struct WebpLosslessDecoder
         if (cacheEnabled && cacheBits is < 1 or > 11)
             throw new ImageDataException("Invalid VP8L cache size.");
         var cacheSize = cacheBits == 0 ? 0 : 1 << cacheBits;
-        var cacheBytes = cacheSize == 0 ? 0 : cacheSize * 4L + 32;
-        context.Reserve(cacheBytes); var cache = cacheSize == 0 ? [] : new uint[cacheSize];
+        var cacheBytes = cacheSize == 0 || validateOnly ? 0 : cacheSize * 4L + 32;
+        context.Reserve(cacheBytes); var cache = cacheBytes == 0 ? [] : new uint[cacheSize];
         uint[] entropy = []; int entropyWidth = 0, entropyBits = 0, groups = 1;
         if (spatial && reader.Read(1) != 0)
         {
@@ -206,26 +215,35 @@ internal ref struct WebpLosslessDecoder
             for (var channel = 1; channel < 4; channel++) tables[group * 5 + channel] = ReadHuffman(256);
             tables[group * 5 + 4] = ReadHuffman(40);
         }
+        var pixelCount = RasterCount(imageWidth, imageHeight);
         Span<uint> pixels;
-        if (retainResult)
+        if (validateOnly) pixels = default;
+        else if (retainResult)
         {
-            var count = (long)imageWidth * imageHeight;
-            if (count <= 0 || count > Array.MaxLength / 4) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8L auxiliary raster is too large.");
             result = ImageBuffer.AllocateForOverwrite(imageWidth, imageHeight, 8, context);
             pixels = MemoryMarshal.Cast<byte, uint>(result.Pixels);
         }
         else pixels = allocated = Allocate(imageWidth, imageHeight);
         var position = 0;
         var scratchStart = 0; var lookupEntries = (long)groups * 4096;
-        if (lookupEntries <= pixels.Length / 2)
+        uint[] validationLookup = []; long lookupBytes = 0;
+        if (lookupEntries <= pixelCount / 2)
         {
             for (var group = 0; group < groups; group++)
             {
                 var green = tables[group * 5];
                 if (!green.CanBuildWideGreen) continue;
                 context.Cancellation.ThrowIfCancellationRequested();
-                scratchStart = pixels.Length - (int)lookupEntries;
-                var lookup = pixels.Slice(scratchStart + group * 4096, 4096);
+                scratchStart = pixelCount - (int)lookupEntries;
+                if (validateOnly && validationLookup.Length == 0)
+                {
+                    // Keep the original lookup/reader schedule without retaining
+                    // a discarded raster. This workspace belongs to this image.
+                    lookupBytes = lookupEntries * 4 + 32;
+                    context.Reserve(lookupBytes); validationLookup = new uint[(int)lookupEntries];
+                }
+                var lookup = validateOnly ? validationLookup.AsSpan(group * 4096, 4096)
+                    : pixels.Slice(scratchStart + group * 4096, 4096);
                 // Pooled/uninitialized result storage is not necessarily zero.
                 // Longer canonical codes leave lookup holes for slow traversal.
                 if (retainResult) lookup.Clear();
@@ -235,10 +253,10 @@ internal ref struct WebpLosslessDecoder
         var greenTree = tables[0]; var redTree = tables[1]; var blueTree = tables[2];
         var alphaTree = tables[3]; var distanceTree = tables[4];
         ReadOnlySpan<uint> greenLookup = scratchStart != 0 && greenTree.CanBuildWideGreen
-            ? pixels.Slice(scratchStart, 4096) : default;
-        var nextGroupBoundary = entropy.Length == 0 ? pixels.Length : 0;
+            ? validateOnly ? validationLookup.AsSpan(0, 4096) : pixels.Slice(scratchStart, 4096) : default;
+        var nextGroupBoundary = entropy.Length == 0 ? pixelCount : 0;
         var tileSize = 1 << entropyBits;
-        while (position < pixels.Length)
+        while (position < pixelCount)
         {
             context.Cancellation.ThrowIfCancellationRequested();
             if (position >= nextGroupBoundary)
@@ -251,7 +269,8 @@ internal ref struct WebpLosslessDecoder
                 greenTree = tables[start]; redTree = tables[start + 1]; blueTree = tables[start + 2];
                 alphaTree = tables[start + 3]; distanceTree = tables[start + 4];
                 greenLookup = scratchStart != 0 && greenTree.CanBuildWideGreen
-                    ? pixels.Slice(scratchStart + group * 4096, 4096) : default;
+                    ? validateOnly ? validationLookup.AsSpan(group * 4096, 4096)
+                        : pixels.Slice(scratchStart + group * 4096, 4096) : default;
                 nextGroupBoundary = position + Math.Min(imageWidth - column, tileSize - (column & (tileSize - 1)));
             }
             // The borrowed lookup occupies unwritten output storage; stop using
@@ -270,16 +289,18 @@ internal ref struct WebpLosslessDecoder
                     var alpha=alphaTree.Read(ref reader);
                     pixel=(uint)(alpha<<24|red<<16|symbol<<8|blue);
                 }
-                pixels[position++] = pixel; Insert(cache, cacheBits, pixel);
+                if (validateOnly) position++;
+                else { pixels[position++] = pixel; Insert(cache, cacheBits, pixel); }
             }
             else if (symbol < 280)
             {
                 var length = Prefix(symbol - 256);
                 var distance = WebpDistances.Resolve(Prefix(distanceTree.Read(ref reader)), imageWidth);
-                if (distance > position || length > pixels.Length - position)
+                if (distance > position || length > pixelCount - position)
                     throw new ImageDataException("VP8L backward reference exceeds the raster.");
                 context.Cancellation.ThrowIfCancellationRequested();
-                for (var i = 0; i < length; i++)
+                if (validateOnly) position += length;
+                else for (var i = 0; i < length; i++)
                 {
                     var pixel = pixels[position - distance]; pixels[position++] = pixel; Insert(cache, cacheBits, pixel);
                 }
@@ -287,12 +308,13 @@ internal ref struct WebpLosslessDecoder
             else
             {
                 var cacheIndex = symbol - 280;
-                if ((uint)cacheIndex >= (uint)cache.Length) throw new ImageDataException("Invalid VP8L cache index.");
-                var pixel = cache[cacheIndex]; pixels[position++] = pixel; Insert(cache, cacheBits, pixel);
+                if ((uint)cacheIndex >= (uint)cacheSize) throw new ImageDataException("Invalid VP8L cache index.");
+                if (validateOnly) position++;
+                else { var pixel = cache[cacheIndex]; pixels[position++] = pixel; Insert(cache, cacheBits, pixel); }
             }
         }
         foreach (var table in tables) context.Release(table.MemoryBytes);
-        context.Release(tableBytes + cacheBytes + (entropy.Length == 0 ? 0 : entropy.Length * 4L + 32));
+        context.Release(tableBytes + cacheBytes + lookupBytes + (entropy.Length == 0 ? 0 : entropy.Length * 4L + 32));
         return pixels;
 
     }
@@ -352,11 +374,17 @@ internal ref struct WebpLosslessDecoder
         return ((2 + (code & 1)) << bits) + reader.Read(bits) + 1;
     }
 
-    private uint[] Allocate(int imageWidth, int imageHeight)
+    private static int RasterCount(int imageWidth, int imageHeight)
     {
         var count = (long)imageWidth * imageHeight;
         if (count <= 0 || count > Array.MaxLength / 4) throw new ImageLimitException(ImageLimitKind.BufferLength, "VP8L auxiliary raster is too large.");
-        context.Reserve(count * 4 + 32); return new uint[(int)count];
+        return (int)count;
+    }
+
+    private uint[] Allocate(int imageWidth, int imageHeight)
+    {
+        var count = RasterCount(imageWidth, imageHeight);
+        context.Reserve(count * 4L + 32); return new uint[count];
     }
 
     private void Apply(Transform transform, Span<uint> pixels, int imageWidth)

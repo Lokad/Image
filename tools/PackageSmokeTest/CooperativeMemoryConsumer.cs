@@ -2,6 +2,46 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static async Task VerifyLosslessValidationStorage()
+    {
+        foreach (var lossy in new[] { false, true })
+        {
+            using var source = OriginalPixels.Buffer(513, 259, 8);
+            source.GetRow8(0)[3] = 0;
+            using var encoded = new MemoryStream();
+            ImageCodec.EncodeWebp(source, encoded, new() { Lossless = !lossy, Quality = 85, Effort = 4 });
+            var packet = encoded.ToArray(); var unchanged = packet.ToArray();
+            var expectedHash = lossy ? "183b90c4faff3b575ae98cb770d5d3fb3a9066fbf815dba04cdb4b392ea1af71"
+                : "db796bb9ad5d480eb273db8ae966d4fa1a8f5995bceaa724475c09d6201dbfb7";
+            if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(packet)) != expectedHash)
+                throw new Exception("Packaged validation source packet differs.");
+            var expected = ImageCodec.Identify(packet);
+            using var root = new TestMemoryBudget(256 * 1024);
+            var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 1024 * 1024 };
+            using var live = new CancellationTokenSource();
+            if (ImageCodec.ValidatePixels(packet, limits) != expected
+                || ImageCodec.ValidatePixels(packet, limits, live.Token) != expected || root.Bytes != 0 || root.IsDisposed)
+                throw new Exception("Packaged validation retained discarded raster storage or changed metadata.");
+            var refused = false;
+            try { using var image = ImageCodec.Decode(packet, new() { Limits = limits }); }
+            catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { refused = true; }
+            if (!refused || root.Bytes != 0) throw new Exception("Packaged full decode ignored admission or leaked ownership.");
+            using var canceled = new CancellationTokenSource(); root.Admitted = _ => canceled.Cancel();
+            var stopped = false;
+            try { ImageCodec.ValidatePixels(packet, limits, canceled.Token); }
+            catch (OperationCanceledException error) when (error.CancellationToken == canceled.Token) { stopped = true; }
+            root.Admitted = null;
+            if (!stopped || root.Bytes != 0 || ImageCodec.ValidatePixels(packet, limits) != expected)
+                throw new Exception("Packaged validation cancellation leaked storage or prevented recovery.");
+            using var asyncRoot = new TestMemoryBudget(4 * 1024 * 1024);
+            using var input = new MemoryStream(packet, writable: false);
+            if (await ImageCodec.ValidatePixelsAsync(input, new() { MemoryBudget = asyncRoot }, live.Token) != expected
+                || asyncRoot.Bytes != 0 || asyncRoot.IsDisposed || !input.CanRead || !unchanged.AsSpan().SequenceEqual(packet))
+                throw new Exception("Packaged asynchronous validation changed input ownership or retained storage.");
+        }
+        Console.WriteLine("Packaged main validation preserves exact packets/metadata, bounded admission, cancellation and asynchronous ownership.");
+    }
+
     private static async Task VerifyProgressivePlaneOwnership()
     {
         const int width = 31, height = 23, frameBytes = width * height * 4;
@@ -675,6 +715,7 @@ internal static class CooperativeMemoryConsumer
         VerifyRectangleCopy();
         VerifyRectangleFill();
         VerifyCompositingRows();
+        await VerifyLosslessValidationStorage();
         await VerifyWebpCandidateWorkspace();
         await VerifyWebpAlphaCoefficientStorage();
         await VerifyLanczosPlans();

@@ -154,7 +154,7 @@ validity is needed without a retained raster. Results describe coded dimensions
 and pending orientation. These operations use codec-dependent memory, read streams
 through EOF and leave them open. Pass `metadataPolicy: ImageMetadataPolicy.IgnoreInvalid`
 explicitly when needed. PNG retains compressed input/rows/inflater, JPEG retains
-coefficients and WebP retains planes/history; validation is not fixed-memory or
+coefficients and WebP retains entropy/auxiliary/lookup state; validation is not fixed-memory or
 an incremental decoder. Use Decode directly when pixels are needed.
 
 `Decode(Stream)` reads through EOF into private storage and decodes its acquired
