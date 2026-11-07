@@ -2,6 +2,49 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyMixedWordSchedule()
+    {
+        const int width = 1027, height = 129, outputBytes = width * height * 8;
+        using var source = OriginalPixels.Buffer(513, 259, 16);
+        source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
+        var input = OriginalPixels.Bytes(source);
+        using var root = new TestMemoryBudget(2L * outputBytes + 4096);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = input.Length + outputBytes + 4096L };
+        var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+        var second = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+        var expected = OriginalPixels.Bytes(second);
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected))
+            != "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a"
+            || root.Bytes != 2L * outputBytes || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first)))
+            throw new Exception("Packaged mixed-word rows changed frozen pixels or retained admission.");
+        try
+        {
+            using var unexpected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
+            throw new Exception("Packaged mixed-word rows ignored aggregate admission.");
+        }
+        catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+        if (root.Bytes != 2L * outputBytes) throw new Exception("Packaged mixed-word refusal changed surviving ownership.");
+        first.GetRow16(0)[0] ^= 65535; first.Dispose();
+        if (root.Bytes != outputBytes || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second)))
+            throw new Exception("Packaged mixed-word owners alias.");
+        second.Dispose();
+        using var token = new CancellationTokenSource(); root.Admitted = _ => token.Cancel();
+        try
+        {
+            using var unexpected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits, token.Token);
+            throw new Exception("Packaged mixed-word rows ignored cancellation.");
+        }
+        catch (OperationCanceledException error) when (error.CancellationToken == token.Token) { }
+        root.Admitted = null;
+        if (root.Bytes != 0) throw new Exception("Packaged mixed-word cancellation leaked ownership.");
+        using (var recovered = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits))
+            if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(recovered)))
+                throw new Exception("Packaged mixed-word recovery changed pixels.");
+        if (root.Bytes != 0 || root.IsDisposed || !input.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
+            throw new Exception("Packaged mixed-word rows lost source or borrowed-root ownership.");
+        Console.WriteLine("Packaged mixed-word scheduling preserves frozen pixels, aggregate admission, cancellation and independent survivors.");
+    }
+
     private static void VerifyOwnedFonts()
     {
         var input = AuthoredTrueType.Build();
@@ -737,6 +780,7 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
+        VerifyMixedWordSchedule();
         VerifyOwnedFonts();
         await VerifyProgressivePlaneOwnership();
         await VerifyOpaqueWordTiles();

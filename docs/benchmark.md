@@ -98,6 +98,11 @@ Current scope and remaining work:
   These capacity facts are separate from total allocations and unmeasured physical/native peaks.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
+- **Mixed word resizing:** [shared quartet scheduling](../benchmarks/BICUBIC-MIXED-WORD-SCHEDULING.md)
+  saves15.20/22.87µs (1.34%/2.00%raw) on default/bounded complete mixed-axis resize.
+  Bounded raw/normalized confidence separates; default raw separates while its
+  normalized intervals overlap. All3affected controls remain gaps. GC114/114/113B/op,
+  4KiB admission and independent output capacity stay unchanged; no physical-peak claim.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
@@ -108,14 +113,14 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,859 full/live checks per OS**, affected
+The current production build passes **5,862 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Font/storage paths pass238 internal/144 public checks per normal/scalar mode
-on each OS, including independent layouts after font reuse and terminal shared-root
-refusal/recovery. Unchanged codec/resize AVX2/AVX512-disabled evidence is reused.
+Bicubic/resize paths pass98 internal/703 public checks per normal/scalar mode
+on each OS, including direct mixed-word tails, terminal refusal/cancellation/recovery
+and independent surviving outputs. Unchanged codec/resize ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
@@ -234,7 +239,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,134.10 | 852.37 | 1.331 / 1.336 | 114 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,118.45 | 846.38 | 1.321 / 1.327 | 114 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |

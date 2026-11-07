@@ -1,5 +1,9 @@
 # Bicubic word publication pipeline
 
+The three mixed/tight-vertical word costs are superseded by
+[shared quartet scheduling](BICUBIC-MIXED-WORD-SCHEDULING.md). Other costs and
+this enlargement-stage history remain valid.
+
 Batching two independent pixel pairs before certification saves **130.43/135.29 µs
 (4.11%/4.25% raw, 4.40%/4.20% reference-normalized)** on complete bounded/default
 word enlargement. Independent original/candidate twelve-actual confirmations

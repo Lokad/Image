@@ -130,6 +130,43 @@ internal static class MixedWordColumnBicubicResize
                         }
                     }
                     var outputY = 0;
+                    for (; outputY + 3 < length; outputY += 4)
+                    {
+                        // Share the horizontal taps across two independent row
+                        // pairs, then prepare both quotients before certification.
+                        var firstSum = Vector512<double>.Zero;
+                        var secondSum = Vector512<double>.Zero;
+                        for (var t = 0; t < count; t++)
+                        {
+                            var at = columns[t] + outputY;
+                            var firstPair = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cache.Slice(at, 2)));
+                            var secondPair = MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(cache.Slice(at + 2, 2)));
+                            var weight = Vector512.Create(horizontal[t]);
+                            firstSum = Avx512F.Add(firstSum, Avx512F.Multiply(firstPair, weight));
+                            secondSum = Avx512F.Add(secondSum, Avx512F.Multiply(secondPair, weight));
+                        }
+                        // Decoded source values have retired into the column cache.
+                        // Reuse their storage for four independently checked rows.
+                        var packed = MemoryMarshal.AsBytes(decoded)[..32];
+                        var accepted = BicubicMath.WriteWordQuartet(firstSum, secondSum,
+                            normalizerX * normalizers[outputY], normalizerX * normalizers[outputY + 1],
+                            normalizerX * normalizers[outputY + 2], normalizerX * normalizers[outputY + 3], packed);
+                        for (var pair = 0; pair < 2; pair++)
+                        {
+                            var y = outputY + 2 * pair;
+                            if ((accepted & (1 << pair)) != 0)
+                            {
+                                BinaryPrimitives.WriteUInt64LittleEndian(output.Slice((tileY + y) * outputStride + x * 8, 8),
+                                    BinaryPrimitives.ReadUInt64LittleEndian(packed.Slice(pair * 16, 8)));
+                                BinaryPrimitives.WriteUInt64LittleEndian(output.Slice((tileY + y + 1) * outputStride + x * 8, 8),
+                                    BinaryPrimitives.ReadUInt64LittleEndian(packed.Slice(pair * 16 + 8, 8)));
+                            }
+                            else if (!OriginalWord(source, result, x, tileY + y, center, first,
+                                vertical.Slice(y * 10, counts[y]), rowOffsets.Slice(y * 10, counts[y]), sourceFirst, context)
+                                || !OriginalWord(source, result, x, tileY + y + 1, center, first,
+                                    vertical.Slice((y + 1) * 10, counts[y + 1]), rowOffsets.Slice((y + 1) * 10, counts[y + 1]), sourceFirst, context)) return false;
+                        }
+                    }
                     for (; outputY + 1 < length; outputY += 2)
                     {
                         var sum = Vector512<double>.Zero;

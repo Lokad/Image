@@ -1505,19 +1505,31 @@ def render():
         assert current['librarySha256'] == word_pipeline['producers']['linuxSha256']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    mixed_word = json.loads((ROOT / 'benchmarks/bicubic-mixed-word-scheduling-evidence.json').read_text(encoding='utf-8'))
+    assert mixed_word['productionAccepted'] and mixed_word['sourceProof']['exactUndoUnchanged']
+    assert mixed_word['raw']['mirrored'] and mixed_word['raw']['allMembersVerified']
+    assert set(mixed_word['cases']) == {'Mixed16', 'TightMixed16', 'TightVertical16'}
+    assert mixed_word['storage']['admittedWorkspaceBytes'] == 4096
+    assert mixed_word['storage']['newOwnedCapacityBytes'] == mixed_word['storage']['newCrossOperationRetainedBytes'] == 0
+    assert all(v['rawGainSeparated'] for c in mixed_word['comparison'].values() for v in c['views'].values())
+    assert all(v['normalizedGainSeparated'] for v in mixed_word['comparison']['TightMixed16']['views'].values())
+    for case in mixed_word['cases'].values():
+        assert case['actualIterations'] == 12 and case['allOriginalGatesPassed'] and case['quietGuardsPassed']
+        assert case['managedRationalReferenceExact'] and case['independentOwnedOutput'] and case['sourceUnchanged']
+        assert case['librarySha256'] == mixed_word['producers']['linuxSha256']
     word_labels = {'Up16': 'Bicubic upscale RGBA16',
                    'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
                    'TightMixed16': 'Bicubic RGBA16, width up / height down, input+output+4 KiB',
                    'Cross16': 'Bicubic RGBA16, width down / height up, default workspace'}
     for case, label in word_labels.items():
-        current = word_pipeline['cases'][case]
+        current = mixed_word['cases'].get(case, word_pipeline['cases'][case])
         positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
         assert len(positions) == 1, label
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    vq = font_load['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5859
+    vq = mixed_word['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5862
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1763,6 +1775,11 @@ Current scope and remaining work:
   These capacity facts are separate from total allocations and unmeasured physical/native peaks.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
+- **Mixed word resizing:** [shared quartet scheduling](../benchmarks/BICUBIC-MIXED-WORD-SCHEDULING.md)
+  saves15.20/22.87µs (1.34%/2.00%raw) on default/bounded complete mixed-axis resize.
+  Bounded raw/normalized confidence separates; default raw separates while its
+  normalized intervals overlap. All3affected controls remain gaps. GC114/114/113B/op,
+  4KiB admission and independent output capacity stay unchanged; no physical-peak claim.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
@@ -1778,9 +1795,9 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Font/storage paths pass238 internal/144 public checks per normal/scalar mode
-on each OS, including independent layouts after font reuse and terminal shared-root
-refusal/recovery. Unchanged codec/resize AVX2/AVX512-disabled evidence is reused.
+Bicubic/resize paths pass98 internal/703 public checks per normal/scalar mode
+on each OS, including direct mixed-word tails, terminal refusal/cancellation/recovery
+and independent surviving outputs. Unchanged codec/resize ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
