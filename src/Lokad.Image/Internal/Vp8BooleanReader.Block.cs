@@ -6,6 +6,11 @@ namespace Lokad.Image.Internal;
 
 internal partial struct Vp8BooleanReader
 {
+    // Codec-local value types select storage at entry. Both modes consume
+    // identical token/category/sign decisions and publish the same cursor.
+    internal readonly struct PixelMode { }
+    internal readonly struct ValidationMode { }
+
     // RFC6386 sections7.2/13.2: at most7token,11category and1sign decisions
     // for each of16coefficients. Each decision consumes at most7input bits.
     // The initial normalized range and32bit refills need at most269bytes,
@@ -30,11 +35,12 @@ internal partial struct Vp8BooleanReader
     // The decoder supplies its complete private model,16sample block and valid
     // plane/context. The selected input bounds exclude mid-block failures.
     // One small stack state lives inside the existing8192B coarse allowance.
-    internal bool ReadCoefficientBlock(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
+    internal bool ReadCoefficientBlock<TMode>(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
+        where TMode : struct
     {
         var reader = BeginCoefficientWindow(data);
-        var result = reader.ReadCoefficients(probabilities, values, plane, initialContext, dc, ac, out nonzero);
+        var result = reader.ReadCoefficients<TMode>(probabilities, values, plane, initialContext, dc, ac, out nonzero);
         reader.Publish(ref this);
         return result;
     }
@@ -52,8 +58,9 @@ internal partial struct Vp8BooleanReader
             Fill(in data, ref Position, ref Bits, ref Value);
         }
 
-        internal bool ReadCoefficients(ReadOnlySpan<byte> probabilities, scoped Span<short> values,
+        internal bool ReadCoefficients<TMode>(ReadOnlySpan<byte> probabilities, scoped Span<short> values,
             int plane, int initialContext, int dc, int ac, out byte nonzero)
+            where TMode : struct
         {
             ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
             ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
@@ -67,11 +74,21 @@ internal partial struct Vp8BooleanReader
                 var token = Token(in data, p, previousZero, ref position, ref bits, ref range, ref value);
                 if (token == 11) break;
                 var sample = token < 5 ? token : Category(in data, token - 5, ref position, ref bits, ref range, ref value);
-                previousZero = sample == 0; predictor = Math.Min(sample, 2);
-                if (sample == 0) continue;
-                nonzero = 1;
-                if (Read(in data, 128, ref position, ref bits, ref range, ref value) != 0) sample = -sample;
-                values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
+                if (typeof(TMode) == typeof(PixelMode))
+                {
+                    previousZero = sample == 0; predictor = Math.Min(sample, 2);
+                    if (sample == 0) continue;
+                    nonzero = 1;
+                    if (Read(in data, 128, ref position, ref bits, ref range, ref value) != 0) sample = -sample;
+                    values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
+                }
+                else
+                {
+                    previousZero = token == 0; predictor = Math.Min(token, 2);
+                    if (token == 0) continue;
+                    nonzero = 1;
+                    Read(in data, 128, ref position, ref bits, ref range, ref value);
+                }
             }
             Position = position; Bits = bits; Range = range; Value = value;
             return nonzero != 0;

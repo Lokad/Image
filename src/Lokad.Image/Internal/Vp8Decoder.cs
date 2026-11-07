@@ -103,9 +103,10 @@ internal ref struct Vp8Decoder
 
     private Vp8Planes? ReadPlanes(bool reconstruct)
     {
-        var count = columns * rows; var metadataBytes = count * 20L + columns * 13L + 256;
+        var count = columns * rows; var metadataBytes = count * (reconstruct ? 20L : 4L) + columns * 13L + 256;
         context.Reserve(metadataBytes);
-        var blocks = new Macroblock[count]; var modes = new byte[count * 16]; var aboveModes = new byte[columns * 4];
+        var blocks = new Macroblock[count]; var modes = reconstruct ? new byte[count * 16] : Array.Empty<byte>();
+        var aboveModes = new byte[columns * 4];
         Span<byte> leftModes = stackalloc byte[4];
         for (var my = 0; my < rows; my++)
         {
@@ -127,7 +128,8 @@ internal ref struct Vp8Decoder
                         {
                             var contextIndex = (aboveModes[mx * 4 + bx] * 10 + leftModes[by]) * 9;
                             var mode = ReadSmallMode(Vp8Tables.BlockModeProbabilities.Slice(contextIndex, 9));
-                            aboveModes[mx * 4 + bx] = leftModes[by] = modes[index * 16 + by * 4 + bx] = (byte)mode;
+                            aboveModes[mx * 4 + bx] = leftModes[by] = (byte)mode;
+                            if (reconstruct) modes[index * 16 + by * 4 + bx] = (byte)mode;
                         }
                 else
                 {
@@ -147,8 +149,8 @@ internal ref struct Vp8Decoder
             result = new Vp8Planes(width, height, stride, new byte[(int)lumaSize], new byte[(int)chromaSize], new byte[(int)chromaSize]);
         }
         var aboveCoefficients = new byte[columns * 9]; Span<byte> leftCoefficients = stackalloc byte[9];
-        Span<short> coefficients = stackalloc short[25 * 16];
-        Span<int> predictionSamples = stackalloc int[13];
+        Span<short> coefficients = reconstruct ? stackalloc short[25 * 16] : default;
+        Span<int> predictionSamples = reconstruct ? stackalloc int[13] : default;
         for (var my = 0; my < rows; my++)
         {
             leftCoefficients.Clear();
@@ -156,7 +158,7 @@ internal ref struct Vp8Decoder
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 var index = my * columns + mx; ref var block = ref blocks[index];
-                var q = segmentation ? segmentQuantizers[block.Segment] + (absoluteSegments ? 0 : quantizer) : quantizer;
+                var q = reconstruct ? segmentation ? segmentQuantizers[block.Segment] + (absoluteSegments ? 0 : quantizer) : quantizer : 0;
                 q = Math.Clamp(q, 0, 127); var any = false; coefficients.Clear();
                 ref var tokens = ref partitions[my % partitions.Length];
                 var above = aboveCoefficients.AsSpan(mx * 9, 9);
@@ -167,20 +169,21 @@ internal ref struct Vp8Decoder
                     var window = reuseWindow ? tokens.BeginCoefficientWindow(data) : default;
                     if (hasY2)
                     {
-                        any |= Coefficients(ref tokens, ref window, reuseWindow, coefficients[..16], 1, above[8] + leftCoefficients[8],
-                            2 * Dc(q + quantizerDeltas[1]), Math.Max(8, Ac(q + quantizerDeltas[2]) * 155 / 100), out var nonzero);
+                        any |= Coefficients(reconstruct, ref tokens, ref window, reuseWindow, reconstruct ? coefficients[..16] : default,
+                            1, above[8] + leftCoefficients[8], reconstruct ? 2 * Dc(q + quantizerDeltas[1]) : 0,
+                            reconstruct ? Math.Max(8, Ac(q + quantizerDeltas[2]) * 155 / 100) : 0, out var nonzero);
                         above[8] = leftCoefficients[8] = nonzero;
-                        Vp8Transforms.InverseWalsh(coefficients[..16]);
+                        if (reconstruct) Vp8Transforms.InverseWalsh(coefficients[..16]);
                     }
                     for (var b = 0; b < 24; b++)
                     {
                         var luma = b < 16; var local = luma ? b : (b - 16) % 4; var side = luma ? 4 : 2;
                         var offset = luma ? 0 : b < 20 ? 4 : 6;
                         var a = offset + local % side; var l = offset + local / side;
-                        var subblock = coefficients.Slice((b + 1) * 16, 16);
-                        any |= Coefficients(ref tokens, ref window, reuseWindow, subblock, luma ? hasY2 ? 0 : 3 : 2, above[a] + leftCoefficients[l],
-                            luma ? Dc(q + quantizerDeltas[0]) : Math.Min(132, Dc(q + quantizerDeltas[3])),
-                            luma ? Ac(q) : Ac(q + quantizerDeltas[4]), out var nonzero);
+                        var subblock = reconstruct ? coefficients.Slice((b + 1) * 16, 16) : default;
+                        any |= Coefficients(reconstruct, ref tokens, ref window, reuseWindow, subblock, luma ? hasY2 ? 0 : 3 : 2,
+                            above[a] + leftCoefficients[l], reconstruct ? luma ? Dc(q + quantizerDeltas[0]) : Math.Min(132, Dc(q + quantizerDeltas[3])) : 0,
+                            reconstruct ? luma ? Ac(q) : Ac(q + quantizerDeltas[4]) : 0, out var nonzero);
                         above[a] = leftCoefficients[l] = nonzero;
                     }
                     if (reuseWindow) window.Publish(ref tokens);
@@ -190,7 +193,7 @@ internal ref struct Vp8Decoder
                     above[..8].Clear(); leftCoefficients[..8].Clear();
                     if (hasY2) above[8] = leftCoefficients[8] = 0;
                 }
-                if (!any && hasY2) block.Flags |= 2;
+                if (reconstruct && !any && hasY2) block.Flags |= 2;
                 // Entropy contexts depend on parsed nonzeros, never on pixels.
                 // Validation consumes the identical tokens without discarded planes.
                 if (result is null) continue;
@@ -249,16 +252,28 @@ internal ref struct Vp8Decoder
         return Bit(p[8]) == 0 ? 8 : 9;
     }
 
-    private bool Coefficients(ref Vp8BooleanReader tokens, scoped ref Vp8BooleanReader.BlockReader window,
+    // Geometry and ownership are shared. Only token materialization specializes;
+    // the validation mode still consumes every category/sign/cancellation decision.
+    private bool Coefficients(bool reconstruct, ref Vp8BooleanReader tokens,
+        scoped ref Vp8BooleanReader.BlockReader window, bool reuseWindow, scoped Span<short> values,
+        int plane, int initialContext, int dc, int ac, out byte nonzero)
+        => reconstruct
+            ? Coefficients<Vp8BooleanReader.PixelMode>(ref tokens, ref window, reuseWindow,
+                values, plane, initialContext, dc, ac, out nonzero)
+            : Coefficients<Vp8BooleanReader.ValidationMode>(ref tokens, ref window, reuseWindow,
+                values, plane, initialContext, dc, ac, out nonzero);
+
+    private bool Coefficients<TMode>(ref Vp8BooleanReader tokens, scoped ref Vp8BooleanReader.BlockReader window,
         bool reuseWindow, scoped Span<short> values, int plane, int initialContext,
         int dc, int ac, out byte nonzero)
+        where TMode : struct
     {
         if (reuseWindow)
-            return window.ReadCoefficients(probabilities, values, plane, initialContext, dc, ac, out nonzero);
+            return window.ReadCoefficients<TMode>(probabilities, values, plane, initialContext, dc, ac, out nonzero);
         if (tokens.CanReadCoefficientBlock(data, context))
-            return tokens.ReadCoefficientBlock(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
+            return tokens.ReadCoefficientBlock<TMode>(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
         if (tokens.CanReadCancellableCoefficientBlock(data, context))
-            return tokens.ReadCancellableCoefficientBlock(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
+            return tokens.ReadCancellableCoefficientBlock<TMode>(data, probabilities, values, plane, initialContext, dc, ac, context, out nonzero);
         ReadOnlySpan<byte> bands = [0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7];
         ReadOnlySpan<byte> zigzag = [0, 1, 4, 8, 5, 2, 3, 6, 9, 12, 13, 10, 7, 11, 14, 15];
         var previousZero = false; var predictor = initialContext; nonzero = 0;
@@ -268,11 +283,21 @@ internal ref struct Vp8Decoder
             var token = tokens.CoefficientToken(data, p, context, previousZero);
             if (token == 11) break;
             var value = token < 5 ? token : Category(ref tokens, token - 5);
-            previousZero = value == 0; predictor = Math.Min(value, 2);
-            if (value == 0) continue;
-            nonzero = 1;
-            if (tokens.Read(data, 128, context) != 0) value = -value;
-            values[zigzag[c]] = unchecked((short)(value * (c == 0 ? dc : ac)));
+            if (typeof(TMode) == typeof(Vp8BooleanReader.PixelMode))
+            {
+                previousZero = value == 0; predictor = Math.Min(value, 2);
+                if (value == 0) continue;
+                nonzero = 1;
+                if (tokens.Read(data, 128, context) != 0) value = -value;
+                values[zigzag[c]] = unchecked((short)(value * (c == 0 ? dc : ac)));
+            }
+            else
+            {
+                previousZero = token == 0; predictor = Math.Min(token, 2);
+                if (token == 0) continue;
+                nonzero = 1;
+                tokens.Read(data, 128, context);
+            }
         }
         return nonzero != 0;
     }

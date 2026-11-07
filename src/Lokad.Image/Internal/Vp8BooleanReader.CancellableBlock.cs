@@ -21,8 +21,9 @@ internal partial struct Vp8BooleanReader
     // Same RFC6386 block/input bound as the noncancelable window. Preserve
     // its arithmetic unchanged, but poll before EVERY decision and publish the
     // exact completed prefix even when that poll throws. No new storage/owner.
-    internal bool ReadCancellableCoefficientBlock(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
+    internal bool ReadCancellableCoefficientBlock<TMode>(ReadOnlySpan<byte> data, ReadOnlySpan<byte> probabilities,
         Span<short> values, int plane, int initialContext, int dc, int ac, OperationContext context, out byte nonzero)
+        where TMode : struct
     {
         nonzero = 0;
         context.Cancellation.ThrowIfCancellationRequested();
@@ -43,12 +44,23 @@ internal partial struct Vp8BooleanReader
                 if (token == 11) break;
                 var sample = token < 5 ? token : CancellableBlockReader.Category(in data, token - 5, cancellation,
                     ref position, ref bits, ref range, ref value);
-                previousZero = sample == 0; predictor = Math.Min(sample, 2);
-                if (sample == 0) continue;
-                nonzero = 1;
-                if (CancellableBlockReader.Read(in data, 128, cancellation,
-                    ref position, ref bits, ref range, ref value) != 0) sample = -sample;
-                values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
+                if (typeof(TMode) == typeof(PixelMode))
+                {
+                    previousZero = sample == 0; predictor = Math.Min(sample, 2);
+                    if (sample == 0) continue;
+                    nonzero = 1;
+                    if (CancellableBlockReader.Read(in data, 128, cancellation,
+                        ref position, ref bits, ref range, ref value) != 0) sample = -sample;
+                    values[zigzag[c]] = unchecked((short)(sample * (c == 0 ? dc : ac)));
+                }
+                else
+                {
+                    previousZero = token == 0; predictor = Math.Min(token, 2);
+                    if (token == 0) continue;
+                    nonzero = 1;
+                    CancellableBlockReader.Read(in data, 128, cancellation,
+                        ref position, ref bits, ref range, ref value);
+                }
             }
             return nonzero != 0;
         }

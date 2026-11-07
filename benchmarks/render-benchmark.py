@@ -1621,12 +1621,14 @@ def render():
         rows[positions[0]] = ('codec', f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | '
                              f'{current["managedPacketBytes"]:,} / {current["nativePacketBytes"]:,} |')
-    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-live-block-execution-evidence.json').read_text(encoding='utf-8'))
+    decoder_owned = json.loads((ROOT / 'benchmarks/vp8-validation-materialization-evidence.json').read_text(encoding='utf-8'))
     selected_cost = vp8_current['cases']['selected']
     assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
     dq = decoder_owned['qualification']
-    assert decoder_owned['productionAccepted'] and decoder_owned['sourceProof']['normalBlockMathAndExecutionExactExceptPrivateInternalVisibility']
-    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5764
+    assert decoder_owned['productionAccepted'] and decoder_owned['requiredMaterialPaths'] == 283
+    assert all(p['pixelProjectionEqualsEntireOriginalSourceIgnoringWhitespace']
+               for p in decoder_owned['sourceProof']['readerProof'].values())
+    assert dq['fullChecksEachOs'] == dq['windows']['total'] == dq['linux']['total'] == 5772
     assert dq['actualPackage']['sha256'] == dq['samePackageLinux']['sameActualPackageSha256']
     assert dq['actualPackage']['actualConsumerPassed'] and dq['samePackageLinux']['actualConsumerPassed']
     assert decoder_owned['raw']['mirrored'] and decoder_owned['raw']['allMembersVerified']
@@ -1636,19 +1638,17 @@ def render():
         assert current['reusedUnchangedPath'] or current['librarySha256'] == decoder_owned['producers']['linuxSha256']
         assert current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    for comparison in decoder_owned['comparisons'].values():
-        assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-                   for v in comparison['views'].values())
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for v in decoder_owned['comparisons']['ValidateVp8Alpha']['views'].values())
+    for case in ['Opaque8', 'OpaqueCancelable8']:
+        assert not any(v['rawLossSeparated'] or v['normalizedLossSeparated']
+                       for v in decoder_owned['comparisons'][case]['views'].values())
     storage = decoder_owned['storage']
-    assert storage['rows']['baseline']['firstPeakAdmittedBytes'] == 884699
-    assert storage['rows']['candidate']['firstPeakAdmittedBytes'] == 751768
-    assert storage['governedRetainedOutputBytes'] == 531468
-    vq = jpeg_current['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5767
-    assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
-    assert vq['actualPackage']['sharedByteWordEnlargementExactOwnedPassed']
-    assert vq['samePackageLinux']['sharedByteWordEnlargementExactOwnedPassed']
-    assert vq['actualPackage']['liveJpegCorrectionBitOwnershipPassed'] and vq['samePackageLinux']['liveJpegCorrectionBitOwnershipPassed']
+    assert storage['validationGcBytesRemoved'] == 9000 and storage['retainedValidationBytes'] == 0
+    for platform in ['windows', 'linux']:
+        assert storage[platform]['peakReductionBytes'] == 0
+        assert all(row['firstPeakAdmittedBytes'] == row['livePeakAdmittedBytes'] == 536248
+                   and row['retainedBytes'] == 0 for row in storage[platform]['rows'].values())
     stream = decoder_owned['cases']['StreamNative8']
     rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
         f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | {stream["allocatedBytes"]:,} | — |'))
@@ -1705,8 +1705,8 @@ def render():
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
     assert current['librarySha256'] == png_decode['producers']['linuxSha256']
     assert current['lower'] > 1 and current['status'] == 'gap'
-    vq = jpeg_current['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5767
+    vq = decoder_owned['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5772
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1901,15 +1901,17 @@ Current scope and remaining work:
   Earlier [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md),
   [prediction](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md) and
   [rate preparation](../benchmarks/VP8-CANDIDATE-SCORE-PUBLICATION.md) retain history.
-  [Shared live block execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) removes
-  duplicated reservoir machinery and keeps cancellable arithmetic local to a block.
-  Complete live opaque decoding saves285µs/5.11%raw and5.17%normalized, with both
-  confidence views separated. Every decision checkpoint and exact completed prefix
-  remain. Current5288.78µs/native4792.47µs, ratio1.104/upper1.106 remains a gap;
-  allocation760,564B is unchanged. No new heap/retention;232Bframe fits existing8KiB
-  admission. Five reader costs reuse unchanged paths; all six remain gaps.
-  [Earlier block-local execution](../benchmarks/VP8-BLOCK-STATE-RESERVOIR.md) retains
-  its alpha-validation/span/stream gains. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
+  [Validation materialization](../benchmarks/VP8-VALIDATION-MATERIALIZATION.md) shares
+  one geometry/storage scheduler and omits discarded residual/mode output while
+  preserving every entropy decision and exact completed prefix. Complete validation
+  saves596µs/9.97%raw and10.04%normalized, with both confidence views separated;
+  5378.92µs/native5450.06µs, upper0.993 passes parity. Allocation falls9000B to545,478;
+  whole admitted peak stays536,248B because ALPH dominates, retained state zero.
+  All six reader costs refresh:1pass/5gaps. Earlier2%live regressions are resolved by
+  the shared scheduler; current5289.47µs/native4796.26µs remains a gap. Incremental
+  live/ordinary comparisons are inconclusive, with no gain claim. Two displayed rows
+  refresh;123 numerical rows retain unchanged paths. [Earlier live execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md)
+  retains its gains and adverse history. [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains
   its allocation reduction:238,384B/span and238,480B/stream. Coarse admitted peak
   751,768B, retained output531,468B remain unchanged.
   Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays

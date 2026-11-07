@@ -21,7 +21,7 @@ public sealed partial class Vp8CoefficientBlockTests
             Assert.True(reader.CanReadCancellableCoefficientBlock(data,context));
             var dc = trial%2==0 ? 132 : 32767; var ac = trial%2==0 ? 284 : 1;
             var nonzero = Original(ref original,data,probabilities,expected.AsSpan(1,16),trial%4,trial%3,dc,ac,reference);
-            var result = reader.ReadCancellableCoefficientBlock(data,probabilities,actual.AsSpan(1,16),trial%4,trial%3,dc,ac,context,out var seen);
+            var result = reader.ReadCancellableCoefficientBlock<Vp8BooleanReader.PixelMode>(data,probabilities,actual.AsSpan(1,16),trial%4,trial%3,dc,ac,context,out var seen);
             Assert.Equal(nonzero,seen);Assert.Equal(nonzero!=0,result);Assert.Equal(expected,actual);
             Assert.Equal(State(original),State(reader));            for (var i=0;i<19;i++)
             {
@@ -80,11 +80,11 @@ public sealed partial class Vp8CoefficientBlockTests
             Assert.False(Reader(data,0,phase,255,255).CanReadCancellableCoefficientBlock(data,context));
             var probabilities=new byte[1056];var actual=new short[16];var expected=new short[16];
             Assert.Equal(1,Original(ref original,data,probabilities,expected,3,0,132,284,reference));
-            Assert.True(reader.ReadCancellableCoefficientBlock(data,probabilities,actual,3,0,132,284,context,out var nonzero));
+            Assert.True(reader.ReadCancellableCoefficientBlock<Vp8BooleanReader.PixelMode>(data,probabilities,actual,3,0,132,284,context,out var nonzero));
             Assert.Equal(1,nonzero);Assert.Equal(expected,actual);Assert.Equal(State(original),State(reader));
             using var canceledContext=new OperationContext(new() {MemoryBudget=root},cancellation.Token);
             var before=State(reader);var guarded=Enumerable.Repeat((short)1234,18).ToArray();cancellation.Cancel();
-            Assert.Throws<OperationCanceledException>(()=>reader.ReadCancellableCoefficientBlock(data,probabilities,guarded.AsSpan(1,16),3,0,132,284,canceledContext,out _));
+            Assert.Throws<OperationCanceledException>(()=>reader.ReadCancellableCoefficientBlock<Vp8BooleanReader.PixelMode>(data,probabilities,guarded.AsSpan(1,16),3,0,132,284,canceledContext,out _));
             Assert.Equal(before,State(reader));            Assert.All(guarded,x=>Assert.Equal(1234,x));Assert.Equal(0,root.Bytes);Assert.Equal(0,root.GrowthAttempts);
         }
         Assert.False(root.IsDisposed);
