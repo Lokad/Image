@@ -1205,15 +1205,19 @@ def render():
     assert allocation_values['DrawText8'] == allocation_values['DrawText16']
     text_current = json.loads((ROOT / 'benchmarks/text-drawing-current-evidence.json').read_text(encoding='utf-8'))
     assert text_current['allNinePreviouslyMissingMeasured'] and text_current['requiredMaterialPaths'] == 282
-    font_load = json.loads((ROOT / 'benchmarks/font-load-preparation-evidence.json').read_text(encoding='utf-8'))
+    font_load = json.loads((ROOT / 'benchmarks/font-owned-storage-evidence.json').read_text(encoding='utf-8'))
     assert font_load['productionAccepted'] and font_load['requiredMaterialPaths'] == 283
-    assert font_load['sourceProof']['onlyOwnedCopyAndLoadValidationPreparationChanged']
+    assert font_load['sourceProof']['parserAndLookupAndAdmissionSourceUnchanged']
+    assert font_load['sourceProof']['poolOriginalFieldsRentReturnSourceUnchanged']
     assert font_load['raw']['mirrored'] and font_load['raw']['allMembersVerified']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
                for v in font_load['comparison']['views'].values())
     assert font_load['current']['librarySha256'] == font_load['producers']['linuxSha256']
     assert font_load['current']['allOriginalGatesPassed'] and font_load['current']['conservativeRatioLower'] > 1
-    assert font_load['storage']['addedOwnedPayloadBytes'] == font_load['storage']['addedRetainedStateBytes'] == 0
+    assert font_load['storage']['addedOwnedPayloadBytes'] == 0
+    assert font_load['storage']['globalPoolCeilingBytes'] == 4194304
+    assert font_load['storage']['globalPoolIdleSlots'] == 2
+    assert font_load['current']['managedMemory']['BytesAllocatedPerOperation'] == 176
     composites = json.loads((ROOT / 'benchmarks/compositing-shared-rows-evidence.json').read_text(encoding='utf-8'))
     assert composites['productionAccepted'] and composites['independentQuietConfirmation']
     assert composites['qualification']['fullChecksEachOs'] == 5423
@@ -1512,8 +1516,8 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    vq = jpeg_scan['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5850
+    vq = font_load['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5859
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1763,19 +1767,20 @@ Current scope and remaining work:
   preserve exact frames,92,384B/draw and48,544B admitted Latin workspace;
   drawing remains a gap. [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
-  [Owned font preparation](../benchmarks/FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw
-  on complete loading,294.11µs versus labeledFreeType13.95µs, upper21.246 still a gap.
-  Source/metrics and eager/lazy validation disclosure remain; allocation stays~758KB,
-  retained owned capacity is unchanged and no peak reduction is inferred.
-  This round reuses those unchanged font costs.
+  [Owned font storage](../benchmarks/FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
+  on complete loading:31.86µs versus labeledFreeType13.42µs, upper2.396 still a gap.
+  Allocation falls757,597→176B/op; fullcopy/eager checks remain timed. The isolated
+  load retains757,076B idle within the existing shared two-array/4MiB ceiling;
+  governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
 The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-The affected JPEG paths pass108 internal/375 public checks per normal/scalar mode
-on each OS; unrelated AVX2/AVX512-disabled evidence is reused.
+Font/storage paths pass238 internal/144 public checks per normal/scalar mode
+on each OS, including independent layouts after font reuse and terminal shared-root
+refusal/recovery. Unchanged codec/resize AVX2/AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

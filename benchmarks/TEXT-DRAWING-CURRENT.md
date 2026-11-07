@@ -8,7 +8,7 @@ filtered/all-sample confidence.
 
 | Complete operation / reference | Lokad µs | Reference µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Font loading / FreeType 2.13.2 | 294.11 | 13.95 | 21.089 / 21.246 | 757,597 | Confirmed gap |
+| Font loading / FreeType 2.13.2 | 31.86 | 13.42 | 2.375 / 2.396 | 176 | Confirmed gap |
 | Wrapped logical layout / SixLabors public API | 6.07 | 96.16 | 0.063 / 0.097 | 3,153 | Confirmed pass |
 | Latin OpenType layout / SixLabors public API | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 | Confirmed pass |
 | Arabic OpenType layout / SixLabors public API | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 | Confirmed pass |
@@ -36,10 +36,13 @@ drawing controls. [Earlier preparation](TEXT-EDGE-INTERVAL-PREPARATION.md) is hi
 
 Font loading compares copy/open/retain/dispose on the frozen DejaVu Sans face
 against FreeType 2.13.2. Eager/lazy validation differs; this is not general parser
-equivalence. [Owned font preparation](FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw
-against a contemporary original, with raw/normalized confidence separated. Owned
-capacity is unchanged; the rounded one-byte allocation difference is not a causal
-reduction. The reference gap remains open. RGBA8 composites use FFmpeg with native RGB≤1/RMSE≤.5 and exact alpha,
+equivalence. [Owned font storage](FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
+against a contemporary original, with raw/normalized confidence separated. The
+757,076-byte copy and eager parsing remain timed. Default loads reuse exact-size
+storage within the existing two-array/4MiB image pool; governed loads bypass it.
+The isolated serial workload retains757,076B idle after disposal. Owned face
+capacity/charge stays unchanged; GC savings are not a measured peak reduction.
+The reference gap remains open. RGBA8 composites use FFmpeg with native RGB≤1/RMSE≤.5 and exact alpha,
 untouched and zero-source-alpha pixels. RGBA16 uses explicitly labeled ImageSharp
 3.1.12 Rgba64 SrcOver, RGB/alpha≤1 and RMSE≤.25 each; it is not FFmpeg performance.
 Managed composition remains exact.
@@ -47,7 +50,8 @@ Managed composition remains exact.
 Passing layout/fitting and RGBA16 compositing controls stop. Drawing, font loading
 and RGBA8 compositing gaps stay visible alongside larger codec/resizing costs.
 
-Current evidence: [active-edge scheduling](text-active-edge-scheduling-evidence.json),
+Current evidence: [font storage](font-owned-storage-evidence.json),
+[active-edge scheduling](text-active-edge-scheduling-evidence.json),
 [shared compositing rows](compositing-shared-rows-evidence.json). The
 [original confirmations](text-drawing-current-evidence.json) and
 [allocation controls](TEXT-DRAWING-ALLOCATION-CONTROLS.md) retain superseded drawing

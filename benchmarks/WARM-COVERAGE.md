@@ -22,52 +22,21 @@ Completion needs current passing evidence for every named path, with scope state
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Complete bilinear enlargement | [Current boundary audit](bilinear-current-boundary-evidence.json) reuses the qualified immutable build without production changes or rebuilds. Existing RGBA8 Up8 measures2357.04µs/native2155.92µs, ratio1.093/upper1.134/lower.971: uncertain.102891B/op includes fresh~103KBhorizontal preparation and independent output ownership; the unchanged4MiBdefault pool reuses output backing. Older2914.62µs/2235512Bcost is superseded, not paired causal gain evidence. Native graph/context preparation remains retained and labeled. Stop tuning this uncertain case while larger demonstrated gaps remain. |
 | Complete bicubic enlargement and small-support word publication | [Word publication pipeline](BICUBIC-WORD-PUBLICATION-PIPELINE.md) independently saves130.43/135.29µs (4.11%/4.25%raw,4.40%/4.20%normalized) on complete bounded/default RGBA16 enlargement; both confidence views separate. Current3045.35/3048.24µs, uppers1.070/1.067 remain gaps. GC4264538→4264573B/op(+35 measured); required4264104B output and owned workspace unchanged. All15affected word costs current:1pass/stop(Down16),13gaps,1uncertain. Six word enlargement controls5gaps/1uncertain; source-valid byte costs give12enlargement controls7gaps/5uncertain. [Shared byte/word preparation](BICUBIC-SHARED-ENLARGEMENT.md) retains earlier workspace gains and byte uncertainty/adverse evidence as history. No broader causal or parity claim. |
-| Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. [Owned font preparation](FONT-LOAD-PREPARATION.md) saves14.84µs/4.80%raw against a contemporary original; current294.11/native13.95µs,upper21.246 remains gap. Owned capacity unchanged, allocation~758KB; no peak reduction inferred. Other current fill/copy/composite costs remain in the summary. |
+| Text and drawing | All 14 additions below now have measured evidence. [Layout/fitting and approved references](TEXT-DRAWING-CURRENT.md) close the old reference decisions. Four layout/fitting controls and RGBA16 compositing pass and stop. [Active-edge scheduling](TEXT-ACTIVE-EDGE-SCHEDULING.md) saves179.16/170.49µs (48.55%/47.38%) on prepared drawing8/16, with exact frames. Allocation+8672B/draw to92384; admitted Latin workspace stays48544B, retained scratch zero. Current uppers5.230/5.226 remain gaps; eight-frame Arabic/wrapped/fitting generalization is correctness, not broader CPU proof. [Owned font storage](FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw against a contemporary original; current31.86/native13.42µs,upper2.396 remains gap. GC757597→176B/op; the isolated load retains757076B idle within the existing2slot/4MiBdefault cap. Rooted loads bypass the cache and retain exact charges; fullcopy/eager parsing stay timed. No physical-peak/general-parser/governedCPUclaim. Other current fill/copy/composite costs remain in the summary. |
 
-The latest [PNG evidence update](PNG-CURRENT-FRAMING-COSTS.md) closes27missing
-resident confirmations using the unchanged prepared PNG build, harness, worker and
-fixtures. All125 displayed numbers reuse valid evidence; only current scope/status
-text changes. Its source-valid Windows/Linux/scalar/package proof is reused, with
-no production change or repeated local qualification.
+The latest [font storage stage](FONT-OWNED-STORAGE.md) refreshes one displayed
+cost and reuses124 unchanged executed paths. Windows/Linux each pass5859 full/live
+checks plus238internal/144public normal/scalar, and the SAMEactualReleasepackage/
+all3examples, including independently surviving layouts and shared-root recovery.
+No encoder, pixel, numerical, reference or validation policy changes. The
+[PNG confirmation](PNG-CURRENT-FRAMING-COSTS.md) retains all51resident controls;
+JPEG's29costs and codec/resize ownership evidence stay valid. This is not a full
+125-row actual-package release refresh or completion of all283paths.
 
-The current [plain-reader milestone](JPEG-PLAIN-READER.md) qualifies
-**5,850 full/live checks per OS** (2,585 internal/2,317 public/948 differential),
-108 internal/375 public affected checks per normal/scalar mode, and the SAME actual
-private Release package/all three examples on Windows/Linux. One immutable build
-per source epoch; the rejected caller-bypass epoch receives focused tests and short
-screens, then restores the verified final sources/modules exactly. No repeated full
-suite or package proof after restoration, no native/harness/selector/fixture builds.
-Ten displayed rows refresh;115 unchanged rows reuse evidence. Current ordinary gains,
-live regression and inconclusive bypass are all retained; no causal explanation is
-inferred from static source or allocation counts. Earlier AC-only publication stopped
-under a retired fixed threshold; it is history, not a family ban. Publication, full
-actual-package performance refresh and all283-path parity remain open. Published
-packages are immutable.
-[Shared JPEG components](JPEG-COMPONENT-FRAME.md),
-[Completed-block VP8](VP8-COMPLETED-BLOCK-PUBLICATION.md),
-[VP8L final publication](VP8L-FINAL-PUBLICATION.md),
-[Candidate preparation](VP8-SMALL-BLOCK-PREPARATION.md),
-[Word publication](BICUBIC-WORD-PUBLICATION-PIPELINE.md),
-[Progressive output](JPEG-PROGRESSIVE-OUTPUT.md) and their linked histories
-retain source-specific evidence and raw. They do not establish current blanket
-qualification or permanent algorithm exclusions.
-
-[JPEG row-pair experiment](JPEG-ROW-PAIR-EXPERIMENT.md) is unselected: mathematical
-work reduction did not establish a robust elapsed gain, and a targeted paired
-comparison contradicts the standalone point. Qualified sources/modules/package
-restore exactly; current JPEG results stay valid. No permanent family restriction.
-
-Superseded experiments, source-specific invalidation notes and raw archive identities
-remain in linked family reports and the
-[preceding coverage record](https://github.com/lokad/image/blob/65533a6c82743194dca90dcc4daae07955ea385a/benchmarks/WARM-COVERAGE.md).
-In particular, [live-window prototypes](VP8-LIVE-WINDOW-PROTOTYPES.md),
-[geometry study](BICUBIC-TAIL-GEOMETRY-EXPERIMENT.md),
-[rate-core prototype](VP8-CANONICAL-RATE-BOUNDARY.md) and
-[rate-epoch pricing](VP8-RATE-EPOCH-PRICING-EXPERIMENT.md) remain historical experiments.
-They do not establish current costs, permanent exclusions or a mandate to replay.
-The initial selected-mode effort5 boundary and its raw identities also remain in
-that preceding record; its named required path is retained below.
-Retain cited raw evidence; publication remains separate and postponed.
+Earlier [JPEG publication](JPEG-PLAIN-READER.md),
+[word publication](BICUBIC-WORD-PUBLICATION-PIPELINE.md) and the unselected
+[JPEG row-pair experiment](JPEG-ROW-PAIR-EXPERIMENT.md) retain their source-specific
+comparisons, adverse results and raw evidence separately.
 
 ## Finite required inventory
 

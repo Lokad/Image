@@ -1,5 +1,8 @@
 # Owned font-load preparation
 
+Font costs/storage are superseded by [owned storage](FONT-OWNED-STORAGE.md).
+This report retains the earlier parser preparation and its raw evidence.
+
 Font loading prepares its validated `loca` and glyph-table views once for the glyph
 scan. Glyph headers retain their original ten-byte minimum and explicit fixed
 extent. Fresh, exact-length managed storage is completely overwritten by the caller's

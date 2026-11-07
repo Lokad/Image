@@ -2,6 +2,39 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
+    private static void VerifyOwnedFonts()
+    {
+        var input = AuthoredTrueType.Build();
+        var font = TrueTypeFont.Load(input);
+        using var layout = TextLayout.Create(font, "Ag A\u0301", new() { FontSize = 20 });
+        using var before = ImageBuffer.Create(100, 40, 16);
+        ImageDrawing.DrawText(before, layout, 1, 1, RgbaColor.From8(123, 234, 45));
+        var expected = OriginalPixels.Bytes(before);
+        input.AsSpan().Clear(); font.Dispose(); font.Dispose();
+        using var bold = TrueTypeFont.Load(AuthoredTrueType.Build(style: FontStyle.Bold));
+        if (bold.GetGlyphMetrics(2).AdvanceWidth != 660) throw new Exception("Packaged replacement font differs.");
+        using var after = ImageBuffer.Create(100, 40, 16);
+        ImageDrawing.DrawText(after, layout, 1, 1, RgbaColor.From8(123, 234, 45));
+        if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(after)))
+            throw new Exception("Packaged layout borrowed disposed or reused font storage.");
+        var valid = AuthoredTrueType.Build();
+        using var root = new TestMemoryBudget(valid.Length + 256L);
+        var limits = new ImageLimits { MemoryBudget = root };
+        var governed = TrueTypeFont.Load(valid, limits);
+        try
+        {
+            using var unexpected = TrueTypeFont.Load(valid, limits);
+            throw new Exception("Packaged retained font ignored aggregate admission.");
+        }
+        catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+        if (root.Bytes != governed.StorageBytes) throw new Exception("Packaged refused font changed retained ownership.");
+        governed.Dispose();
+        using (var recovered = TrueTypeFont.Load(valid, limits))
+            if (root.Bytes != recovered.StorageBytes) throw new Exception("Packaged font recovery was not charged.");
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged font disposed the borrowed budget or leaked capacity.");
+        Console.WriteLine("Packaged font storage preserves independent faces/layouts, aggregate admission and recovery.");
+    }
+
     private static async Task VerifyDistortionInstructionStorage()
     {
         using var source = OriginalVp8lControls.Buffer("diagram", 8);
@@ -704,6 +737,7 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
+        VerifyOwnedFonts();
         await VerifyProgressivePlaneOwnership();
         await VerifyOpaqueWordTiles();
         VerifyStreamingBicubic();

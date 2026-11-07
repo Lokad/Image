@@ -21,6 +21,7 @@ public sealed partial class TrueTypeFont : IDisposable
     private const int DescriptorBytes = 256;
     private byte[] data;
     private OperationContext? storageOwner;
+    private PixelStoragePool? storagePool;
     private bool disposed;
     private readonly int tableCount, metricCount, locationWidth, cmapFormat, mappingCount;
     private readonly TableRange glyf, loca, hmtx, cmap;
@@ -36,15 +37,22 @@ public sealed partial class TrueTypeFont : IDisposable
 
     /// <summary>Copy and validate a supplied standalone TrueType face within finite admission limits.</summary>
     public static TrueTypeFont Load(ReadOnlySpan<byte> input, ImageLimits? limits = null, CancellationToken cancellationToken = default)
+        => LoadCore(input, limits, cancellationToken, PixelStoragePool.Shared);
+
+    internal static TrueTypeFont LoadCore(ReadOnlySpan<byte> input, ImageLimits? limits,
+        CancellationToken cancellationToken, PixelStoragePool pool)
     {
         var context = InputContext(input.Length, limits, cancellationToken);
         try
         {
             // Admission owns this exact capacity before allocation. Copy every
             // byte before parsing or publishing the independently owned face.
-            var owned = GC.AllocateUninitializedArray<byte>(input.Length);
+            // Governed faces never enter the default idle-storage pool.
+            var ownerPool = context.HasMemoryBudget ? null : pool;
+            var owned = ownerPool is null ? GC.AllocateUninitializedArray<byte>(input.Length)
+                : ownerPool.RentPreservingIdle(input.Length);
             input.CopyTo(owned);
-            var font = new TrueTypeFont(owned, context) { storageOwner = context };
+            var font = new TrueTypeFont(owned, context) { storageOwner = context, storagePool = ownerPool };
             return font;
         }
         catch { context.Dispose(); throw; }
@@ -101,8 +109,9 @@ public sealed partial class TrueTypeFont : IDisposable
     public void Dispose()
     {
         if (disposed) return;
-        disposed = true; data = [];
+        disposed = true; var released = data; data = [];
         Interlocked.Exchange(ref storageOwner, null)?.Dispose();
+        Interlocked.Exchange(ref storagePool, null)?.ReturnLatest(released);
     }
 
     // Format facts: Microsoft OpenType specifications otff/head/hhea/maxp/hmtx/loca/glyf.

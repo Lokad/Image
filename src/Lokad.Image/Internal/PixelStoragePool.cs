@@ -50,4 +50,39 @@ internal sealed class PixelStoragePool
             }
         }
     }
+
+    // Font loads may interleave with differently sized images. A miss must not
+    // discard those idle image arrays, and a newly released font must be eligible
+    // for reuse even when both slots previously held other sizes.
+    public byte[] RentPreservingIdle(int length)
+    {
+        if (length <= maxRetainedBytes)
+        {
+            lock (gate)
+            {
+                if (first?.Length == length)
+                {
+                    var buffer = first; first = second; second = null; return buffer;
+                }
+                if (second?.Length == length)
+                {
+                    var buffer = second; second = null; return buffer;
+                }
+            }
+        }
+        return GC.AllocateUninitializedArray<byte>(length);
+    }
+
+    public void ReturnLatest(byte[] buffer)
+    {
+        if (buffer.Length <= maxRetainedBytes)
+        {
+            lock (gate)
+            {
+                if (ReferenceEquals(first, buffer) || ReferenceEquals(second, buffer)) return;
+                second = first is not null && first.Length <= maxRetainedBytes - buffer.Length ? first : null;
+                first = buffer;
+            }
+        }
+    }
 }
