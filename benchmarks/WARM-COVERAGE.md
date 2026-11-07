@@ -47,6 +47,8 @@ Earlier [JPEG publication](JPEG-PLAIN-READER.md),
 [word publication](BICUBIC-WORD-PUBLICATION-PIPELINE.md) and the unselected
 [JPEG row-pair experiment](JPEG-ROW-PAIR-EXPERIMENT.md) retain their source-specific
 comparisons, adverse results and raw evidence separately.
+The unselected [live VP8 cancellation lifetime study](VP8-LIVE-CANCELLATION-LIFETIMES-EXPERIMENT.md)
+restores qualified sources/modules/bindings exactly; all125current costs remain valid.
 
 ## Finite required inventory
 

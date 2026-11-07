@@ -1,0 +1,514 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VDR518/VCP519",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "audit": {
+    "project": "Lokad.Image",
+    "stage": "VDR518",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8BooleanReader.cs": "7f50bbc9618ee650f115f69f46ec6f88f26cb296e5ffc42fdb001293478992f7",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "94aac88d236e59997944add9d8b61e8be2018381e1524a9dc921e52e34fe1c9d",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "914cf85fded2643f1f01396cc31319db283d7651a5edf181f21da6de7392c45d",
+      "src/Lokad.Image/Internal/Vp8Decoder.cs": "b167b2b55bb8414fcbd70782ebb9b9886e740686eb80d42a2f42951b0d22e033",
+      "src/Lokad.Image/Internal/Vp8LoopFilter.cs": "b892f7b0397be3e5b5fc06df2cdf19162f2a4bdc3de94cecdb2de54775d992fb",
+      "src/Lokad.Image/Internal/Vp8Prediction.cs": "ae5aab65663ef1c9978779d233d53217282717f555dc92ce8d915666c102368d",
+      "src/Lokad.Image/Internal/Vp8Color.cs": "ac38508b5621299def0d3f6397b91a4e2696a579090991fc8b3dbe09b1c5df9f",
+      "src/Lokad.Image/Internal/Vp8BlockReconstruction.cs": "8f7695d8921688c3fdd1680b28a95c56623a07b4533a9449297d514f20aa9913"
+    },
+    "currentLinuxSha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+    "currentCostOwner": "benchmarks/vp8-direct-coefficient-classes-evidence.json",
+    "currentCompleteUs": 5011.41,
+    "currentNativeUs": 4793.54,
+    "conservativeUpper": 1.055,
+    "candidates": [
+      {
+        "name": "macroblock live window",
+        "repeatedWork": "Per-block construction/refill and scalar publication",
+        "history": "VP8-LIVE-WINDOW-PROTOTYPES.md: prior finally-based shared window lost149.74us; captured span unpromising. New direct coefficient classes and success-only publication materially alter codegen, but require current attribution before any implementation."
+      },
+      {
+        "name": "read normalization/decision preparation",
+        "repeatedWork": "Leading-zero normalization/refill and cancellation checks inside each entropy decision",
+        "constraints": "Every poll/order must remain. No relaxation of arithmetic/cursor/pixel/input/admission contract. No replay of failed high56/fixed-alignment representation without distinct current rationale."
+      }
+    ],
+    "next": "One bounded2second current actual-workload sampling/JIT capture with current immutable production module/cached driver/reference. Instrumented elapsed discarded. Attribute sites, then select/revise/abandon a concrete architecture; no production changes or broad/package/test repetition."
+  },
+  "profile": {
+    "totalSamples": 1998,
+    "managedSamples": 1987,
+    "topMethods": [
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader::ReadCancellableCoefficientBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,class Lokad.Image.Internal.OperationContext,uint8&)[Optimized]",
+        1435
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadSmallMode(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        84
+      ],
+      [
+        "instance class Lokad.Image.Internal.Vp8Planes [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::ReadPlanes(bool)[Optimized]",
+        83
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Color::WritePixels8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        60
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+        53
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::Large(uint8[],int32,int32,int32,int32,int32)[Optimized]",
+        41
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8LoopFilter::Vertical8(uint8[],int32,int32,int32,int32,int32,bool,bool)[Optimized]",
+        40
+      ],
+      [
+        "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32> [Lokad.Image] Lokad.Image.Internal.Vp8Color::Chroma8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32)[Optimized]",
+        27
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8Decoder::Coefficients(valuetype Lokad.Image.Internal.Vp8BooleanReader&,valuetype Lokad.Image.Internal.Vp8BooleanReader/BlockReader&,bool,valuetype [System.Runtime]System.Span`1<int16>,int32,int32,int32,int32,uint8&)[Optimized]",
+        24
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.Vp8BooleanReader+BlockReader::Publish(valuetype Lokad.Image.Internal.Vp8BooleanReader&)[Optimized]",
+        20
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::PrepareSmall(uint8[],int32,int32,int32,int32,int32,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        19
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallPrepared(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        18
+      ]
+    ],
+    "quietGuardsPassed": true,
+    "librarySha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+    "instrumentedElapsedDiscarded": true,
+    "receipt": "tmp/vdr518-live-profile-receipt.json",
+    "summary": "tmp/vdr518-live-profile-summary.json",
+    "note": "Raw trace/map/offsets/JIT/guards/input identities retained in the archive; samples are sites, not phase times or projected gains."
+  },
+  "variants": {
+    "A": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "VCP519",
+        "paths": [
+          "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs",
+          "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs"
+        ],
+        "originalAbsent": [],
+        "baseline": {
+          "windowsSha256": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+          "linuxSha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f"
+        },
+        "hypothesis": "Avoid eagerly materializing a distinct addressable CancellationToken copy for every inlined decision; retain the same live read poll and original throwing routine on the failure branch.",
+        "endState": "Both production live Read/TokenRead helpers first read IsCancellationRequested, and call the existing ThrowIfCancellationRequested only on the canceled branch. Same entry/decision/category/sign order, arithmetic, refills, successful state and public token/exception/cleanup. No state owner/storage/cache/session or window scheduler.",
+        "acceptance": "Same exact scalar/rational/native pixels and packets, source/owner/admission/cancel/survivor gates. Generalize305ordinal cancellation/cursor/following-read witnesses to both live decision primitives. W-Lfocused normal/scalar, original narrow live short vs current source-valid reference, independent original/candidate12 only if promising, one broadW-L/SAMEpackage milestone if accepted.",
+        "attribution": "tmp/vdr518-audit.json and live-profile raw:1998samples/1435livecoefficient, current3107Bbody/248Blocalframe. Multiple per-decision token homes observed; not phase times/predicted savings.",
+        "tradeoffs": "Extra conditional source expression may fail to reduce JIT token homes or worsen branch/code layout. Canceled path reads cancellation twice at the same checkpoint and invokes the original throw; cancellation cannot be cleared on a canceled source. Failed implementation may be restored exactly; no fixed percentage gate or favorable resampling.",
+        "invalidation": "Only cancellable VP8 coefficient Read/TokenRead in complete pixels/validation. Ordinary readers, tail scalar path, encoders, JPEG/PNG/VP8L/edit/text unchanged. Current named live OpaqueCancelable8 cost must refresh on acceptance; no generic helper wrapping/whole-library cancellation changes.",
+        "newOwnedCapacityBytes": 0,
+        "newRetainedStateBytes": 0
+      },
+      "short": {
+        "runId": "vcp519-candidate-OpaqueCancelable8-short",
+        "managedUs": 5028.44540625,
+        "nativeUs": 4785.226520833333,
+        "ratio": 1.0508270369976782,
+        "lower": 0.9644460612891831,
+        "upper": 1.1394660295277044,
+        "allocatedBytes": 228864,
+        "librarySha256": "5d56fe98771db23ee0671b744eb90583af0fbe9990f0fb3e5ce36598d6fc100d",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "status": "uncertain"
+      },
+      "preparation": {
+        "windows": {
+          "candidateSha256": "2aea8e5f4b6e7e379e4d57dc59465615076b4aadcbb01c81e5a82d5ba4e71eb2",
+          "internalTestAssemblySha256": "a39baca997522cdc87d1c041e6ca7bfa7ae87857d60b8b61145406e678188109",
+          "focused": {
+            "internal-normal": 935,
+            "internal-scalar": 935,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0
+        },
+        "linux": {
+          "candidateSha256": "5d56fe98771db23ee0671b744eb90583af0fbe9990f0fb3e5ce36598d6fc100d",
+          "internalTestAssemblySha256": "daf7172710880d0666dc3accbfd38d8d0753b5744cf9768d28d5df8e7f24f9d8",
+          "focused": {
+            "internal-normal": 935,
+            "internal-scalar": 935,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0
+        }
+      },
+      "sourceEvidence": {
+        "receipt": "tmp/vcp519-candidate-OpaqueCancelable8-short-receipt.json",
+        "observation": "tmp/vcp519-candidate-OpaqueCancelable8-short-observation.json",
+        "statistics": "tmp/vcp519-candidate-OpaqueCancelable8-short-statistics.json"
+      }
+    },
+    "B": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "VCP519B",
+        "paths": [
+          "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs",
+          "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs"
+        ],
+        "originalAbsent": [],
+        "baseline": {
+          "windowsSha256": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+          "linuxSha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f"
+        },
+        "hypothesis": "A explicit guarded inline throw retained token homes and248Bframe, with unpromising5028us3actual screen. B passes the token by value to one no-inline cold throw routine, keeping the original BCLthrow/token while removing its addressability requirement from the hot inlined decision.",
+        "endState": "Each Read/TokenRead polls IsCancellationRequested then invokes one private no-inline ThrowCanceled(cancellation) only onfailure; that routine calls original ThrowIfCancellationRequested. Identical per-decision polls/bit arithmetic/category/sign/state/cleanup. No window scheduler/owner/cache/session/unsafe.",
+        "acceptance": "Same exact scalar/rational/native pixels and packets, source/owner/admission/cancel/survivor gates. Generalize305ordinal cancellation/cursor/following-read witnesses to both live decision primitives. W-Lfocused normal/scalar, original narrow live short vs current source-valid reference, independent original/candidate12 only if promising, one broadW-L/SAMEpackage milestone if accepted.",
+        "attribution": "tmp/vdr518-audit.json and live-profile raw:1998samples/1435livecoefficient, current3107Bbody/248Blocalframe. Multiple per-decision token homes observed; not phase times/predicted savings.",
+        "tradeoffs": "Extra conditional source expression may fail to reduce JIT token homes or worsen branch/code layout. Canceled path reads cancellation twice at the same checkpoint and invokes the original throw; cancellation cannot be cleared on a canceled source. Failed implementation may be restored exactly; no fixed percentage gate or favorable resampling.",
+        "invalidation": "Only cancellable VP8 coefficient Read/TokenRead in complete pixels/validation. Ordinary readers, tail scalar path, encoders, JPEG/PNG/VP8L/edit/text unchanged. Current named live OpaqueCancelable8 cost must refresh on acceptance; no generic helper wrapping/whole-library cancellation changes.",
+        "newOwnedCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "stage": "B",
+        "previousCandidate": {
+          "windowsSha256": "2aea8e5f4b6e7e379e4d57dc59465615076b4aadcbb01c81e5a82d5ba4e71eb2",
+          "linuxSha256": "5d56fe98771db23ee0671b744eb90583af0fbe9990f0fb3e5ce36598d6fc100d"
+        }
+      },
+      "short": {
+        "runId": "vcp519b-candidate-OpaqueCancelable8-short",
+        "managedUs": 5087.267163194444,
+        "nativeUs": 4788.775729166667,
+        "ratio": 1.0623314706950622,
+        "lower": 0.9585523701081441,
+        "upper": 1.1710592751892583,
+        "allocatedBytes": 228864,
+        "librarySha256": "56a33763186f084003be8436e9a152418695b1ff31a2187a6dceb7d8d6843193",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "status": "uncertain"
+      },
+      "preparation": {
+        "windows": {
+          "candidateSha256": "4c11ee9a23c1dd9e86d52511b3b3666fbd39247e83d181dac5b9f6405d2f23d0",
+          "internalTestAssemblySha256": "c36de44505de3c4f3dc2998a4cd7901383de17f18e1b7599511d20450922f2d5",
+          "focused": {
+            "internal-normal": 41,
+            "internal-scalar": 41,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0
+        },
+        "linux": {
+          "candidateSha256": "56a33763186f084003be8436e9a152418695b1ff31a2187a6dceb7d8d6843193",
+          "internalTestAssemblySha256": "033985537265b97bb10979f536eef7d8ca5cc1c11fd37a0fb7cc4768df1ad08d",
+          "focused": {
+            "internal-normal": 41,
+            "internal-scalar": 41,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0
+        }
+      },
+      "sourceEvidence": {
+        "receipt": "tmp/vcp519b-candidate-OpaqueCancelable8-short-receipt.json",
+        "observation": "tmp/vcp519b-candidate-OpaqueCancelable8-short-observation.json",
+        "statistics": "tmp/vcp519b-candidate-OpaqueCancelable8-short-statistics.json"
+      }
+    },
+    "C": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "VCP519C",
+        "paths": [
+          "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs",
+          "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs"
+        ],
+        "originalAbsent": [],
+        "baseline": {
+          "windowsSha256": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+          "linuxSha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f"
+        },
+        "hypothesis": "B removed token homes but JIT treats its cold helper as returning, spilling arithmetic state across possible calls. C throws the standard token-carrying OperationCanceledException directly on the original cancellation branch, removing both addressability and returning-call paths.",
+        "endState": "Two live helper polls use if(IsCancellationRequested) throw new OperationCanceledException(cancellation). No new helper/wrapper/storage/owner/window. Runtime tests compare original BCLthrow type/message/HResult/inner/token as well as every ordinal, exact cursor and following reads. Earlier A/B short/codegen outcomes retained; no further guard variants planned.",
+        "acceptance": "Same exact scalar/rational/native pixels and packets, source/owner/admission/cancel/survivor gates. Generalize305ordinal cancellation/cursor/following-read witnesses to both live decision primitives. W-Lfocused normal/scalar, original narrow live short vs current source-valid reference, independent original/candidate12 only if promising, one broadW-L/SAMEpackage milestone if accepted.",
+        "attribution": "tmp/vdr518-audit.json and live-profile raw:1998samples/1435livecoefficient, current3107Bbody/248Blocalframe. Multiple per-decision token homes observed; not phase times/predicted savings.",
+        "tradeoffs": "Generated code may still spill or lose branch/code layout. Original exception identity fields must compare exactly on both platforms before timing. Standard constructor can alter stack trace, as ordinary refactoring does. Arithmetic/input/read/poll order and all public resource/ownership contracts unchanged. One representative short decides whether independent confirmation is warranted; no favorable repeats.",
+        "invalidation": "Only cancellable VP8 coefficient Read/TokenRead in complete pixels/validation. Ordinary readers, tail scalar path, encoders, JPEG/PNG/VP8L/edit/text unchanged. Current named live OpaqueCancelable8 cost must refresh on acceptance; no generic helper wrapping/whole-library cancellation changes.",
+        "newOwnedCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "stage": "C",
+        "previousCandidate": {
+          "windowsSha256": "4c11ee9a23c1dd9e86d52511b3b3666fbd39247e83d181dac5b9f6405d2f23d0",
+          "linuxSha256": "56a33763186f084003be8436e9a152418695b1ff31a2187a6dceb7d8d6843193"
+        }
+      },
+      "short": {
+        "runId": "vcp519c-candidate-OpaqueCancelable8-short",
+        "managedUs": 4947.997736111111,
+        "nativeUs": 4792.722375,
+        "ratio": 1.0323981547358272,
+        "lower": 0.9333426800509438,
+        "upper": 1.1359156898665264,
+        "allocatedBytes": 228864,
+        "librarySha256": "284a5e0ccaf2a25ab96ac6c3de6b1705ce7f72f72fcb6a71eb9c9ce2a2b4e012",
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "status": "uncertain"
+      },
+      "preparation": {
+        "windows": {
+          "candidateSha256": "b70716cbb7de3e7fbd397036b854354e2960a090943b8b657b9a995312173962",
+          "internalTestAssemblySha256": "4a32ed87cf9ba4224a19a5c34db0150f22f8fe0958916269db16c03b75db9342",
+          "focused": {
+            "internal-normal": 41,
+            "internal-scalar": 41,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0
+        },
+        "linux": {
+          "candidateSha256": "284a5e0ccaf2a25ab96ac6c3de6b1705ce7f72f72fcb6a71eb9c9ce2a2b4e012",
+          "internalTestAssemblySha256": "fb1712cc4d019d991afe68c3f3a5b0c34d7d1ab1baa1b2edf596a03d23aa8f3b",
+          "focused": {
+            "internal-normal": 41,
+            "internal-scalar": 41,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0
+        }
+      },
+      "sourceEvidence": {
+        "receipt": "tmp/vcp519c-candidate-OpaqueCancelable8-short-receipt.json",
+        "observation": "tmp/vcp519c-candidate-OpaqueCancelable8-short-observation.json",
+        "statistics": "tmp/vcp519c-candidate-OpaqueCancelable8-short-statistics.json"
+      }
+    }
+  },
+  "comparison": {
+    "originalUs": 5019.610052083332,
+    "currentUs": 5030.660642045455,
+    "rawUsSaved": -11.050589962122103,
+    "rawReduction": -0.002201483750223998,
+    "nativeNormalizedReduction": -0.002049266480961043,
+    "nativePointChange": 0.00015190597344338919,
+    "originalAllocatedBytes": 228864,
+    "currentAllocatedBytes": 228864,
+    "views": {
+      "statistics": {
+        "rawGainSeparated": false,
+        "rawLossSeparated": false,
+        "normalizedGainSeparated": false,
+        "normalizedLossSeparated": false
+      },
+      "unfilteredActualStatistics": {
+        "rawGainSeparated": false,
+        "rawLossSeparated": false,
+        "normalizedGainSeparated": false,
+        "normalizedLossSeparated": false
+      }
+    }
+  },
+  "independent": {
+    "baseline": {
+      "runId": "vcp519c-baseline-OpaqueCancelable8-confirm",
+      "managedUs": 5019.610052083332,
+      "nativeUs": 4792.232546875,
+      "ratio": 1.0474470933921194,
+      "lower": 1.0437643433235924,
+      "upper": 1.0521943659312596,
+      "allocatedBytes": 228864,
+      "librarySha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "status": "gap",
+      "sourceEvidence": "tmp/vcp519c-baseline-OpaqueCancelable8-confirm-observation.json"
+    },
+    "candidate": {
+      "runId": "vcp519c-candidate-OpaqueCancelable8-confirm",
+      "managedUs": 5030.660642045455,
+      "nativeUs": 4792.960515625,
+      "ratio": 1.0495935916111878,
+      "lower": 1.0442487162016922,
+      "upper": 1.0533650006144404,
+      "allocatedBytes": 228864,
+      "librarySha256": "284a5e0ccaf2a25ab96ac6c3de6b1705ce7f72f72fcb6a71eb9c9ce2a2b4e012",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "status": "gap",
+      "sourceEvidence": "tmp/vcp519c-candidate-OpaqueCancelable8-confirm-observation.json"
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "VCP519C",
+    "onlyProductionFile": "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "f61d62935929a59746e7a97984c1a5e00a800f49e6191567c824ac8782f9bfc5",
+      "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "b05e171fc9c3762797cb1b6cd7db8cbdef51049b934e5162dbc671167f50dcf0"
+    },
+    "productionPollExpressionsChanged": 2,
+    "originalReconstructed": true,
+    "originalBaseline": "tmp/vcp519-original-windows",
+    "allBitArithmeticModelCategorySignRefillAndPublicationBodiesUnchanged": true,
+    "entryPollAndEveryDecisionCheckpointPreserved": true,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "postprocessingCorrection": "Initial reconstruction expression accidentally reused the later test-edit variable. Corrected literal maps the two actual production poll expressions to original and reconstructs the entire source. No production/test/build/measurement repeated; initial false proof retained."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "914cf85fded2643f1f01396cc31319db283d7651a5edf181f21da6de7392c45d",
+        "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "16fd40723abdd2bc67af9d43c882fb2d4d43fd93c15ccff12ffb72c914a6d83f",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "30a958c89461cc00c84c919626eb34df5cb60774b7efe6dc6feddb3941b87cd7",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "cb1d2dbe19c0d795af3d38d391c62741957b5264b6a06cebc0fc210038ab388e",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "a566d887ea6101b20badbc48c9f713997a132274ef7d99db6e7789f9f618634b"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "30a958c89461cc00c84c919626eb34df5cb60774b7efe6dc6feddb3941b87cd7",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "30a958c89461cc00c84c919626eb34df5cb60774b7efe6dc6feddb3941b87cd7",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "30a958c89461cc00c84c919626eb34df5cb60774b7efe6dc6feddb3941b87cd7",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "packageSha256": "282e0b839cf7ad84a167bd90a173bbd1964b1faf4262b929dc4dcc2d6f2f1f69",
+      "productionSha256": "e3a653b664bc56d67d974bd238bc14c5ae82c27b8988da81f0312fc4fe9140e7",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VHB517 5875full/live and152internal239public normal/scalar eachOS, sameactualpackage/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "914cf85fded2643f1f01396cc31319db283d7651a5edf181f21da6de7392c45d",
+        "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "16fd40723abdd2bc67af9d43c882fb2d4d43fd93c15ccff12ffb72c914a6d83f",
+        "tmp/benchmark-source.json": "680ffe0b055df81ff37d9e02b21b825196ea5ea02c2fd03c71b30477ca4520cc",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "07e99a89e2c652ea3811188f590197e24cf17e543669cfe1ae56e20c6bf2e43f",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "e6e1beac37706d69891283191a78f62fc157409951f6e5a8f25366443375e4e6",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "c5c67ed041da632e2ff9168b3bf132d7363475fff164b6049cda2a6cfdd43704"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "07e99a89e2c652ea3811188f590197e24cf17e543669cfe1ae56e20c6bf2e43f",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "07e99a89e2c652ea3811188f590197e24cf17e543669cfe1ae56e20c6bf2e43f",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "07e99a89e2c652ea3811188f590197e24cf17e543669cfe1ae56e20c6bf2e43f",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795"
+      },
+      "packageSha256": "282e0b839cf7ad84a167bd90a173bbd1964b1faf4262b929dc4dcc2d6f2f1f69",
+      "productionSha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VHB517 5875full/live and152internal239public normal/scalar eachOS, sameactualpackage/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    }
+  },
+  "jit": {
+    "original": {
+      "codeBytes": 3107,
+      "localFrameBytes": 248
+    },
+    "A": {
+      "codeBytes": 3400,
+      "localFrameBytes": 248
+    },
+    "B": {
+      "codeBytes": 3568,
+      "localFrameBytes": 216
+    },
+    "C": {
+      "codeBytes": 3161,
+      "localFrameBytes": 152
+    },
+    "note": "Actual production module onLinux, tieringoff. A retains token homes; B replaces them with arithmetic-state spills across returning calls; C removes both. Local frame subtraction excludes saved registers/return/alignment and does not measure physical/whole-operation peak. No elapsed gain inferred from code shape."
+  },
+  "decision": "Do not retain any variant. Final independent5019.61original/5030.66candidateus, native4792.23/4792.96us, GC228864B unchanged. Raw/normalized filtered/allactual intervals overlap; no useful gain established, no confirmed regression/equivalence. C shorter frame alone does not justify changing standard cancellation idioms. Exact qualified originals restored without builds/broad/package repetition; no further guard variants or favorable resampling.",
+  "workflow": {
+    "coreEmbeddedVersionsEachOs": 3,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "newPackageRuns": 0,
+    "newBroadQualificationRuns": 0,
+    "displayedNumericRowsChanged": 0,
+    "currentQualificationReused": "VHB5175875full/live+152internal239public normal/scalar eachOS/SAMEpackage/all3examples",
+    "postprocessingCorrections": "A test-edit whitespace assertion stopped before build/test/timing; continued from verified snapshots. C source reconstruction initially reused later test-edit string; corrected literal reconstructs original entire source, initialfalse proof retained. No completed job repeated. A receipt sourceNote inherited VCT508 base traversal prose; actual A change is pinned two conditional throw expressions in sources/modules/design. All measured hashes/commands/pixels/gates remain valid."
+  },
+  "storage": {
+    "measuredAllocatedBytesEachOperation": 228864,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "note": "No owned payload/session/pool/allowance introduced. Existing governed747020Bpeak/531468Bretained output and defaultpool/budget-bypass ownership unchanged, not remeasured; no physical/native capacity reduction claim."
+  },
+  "next": "Stop this implementation family for this bounded round, not a permanent ban. Audit current PNGFastest complete preparation/working-storage boundaries while preserving original byte packets; no reference/text blockers. All283required paths and existing performance objectives remain open.",
+  "raw": {
+    "file": "vp8-live-cancellation-lifetimes-experiment.tar.xz",
+    "sha256": "6e9f729613d33e1d3cc3d4cbf181d5c7c1c38b9f0b791718069edc4c0ab59fab",
+    "bytes": 10798720,
+    "members": 312,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-four-block-histogram-qualified.tar.xz",
+        "sha256": "4f8b1b05bbfb83c9c4161778befe4d92f05b19330396b9f7cbef1449b3bcfdbc"
+      },
+      {
+        "file": "vp8-direct-coefficient-classes-qualified.tar.xz",
+        "sha256": "f44881978218e0dc28783698c5eaa03a6c2e88d0fa339e0dac78d269f0ab185a"
+      }
+    ]
+  }
+}
