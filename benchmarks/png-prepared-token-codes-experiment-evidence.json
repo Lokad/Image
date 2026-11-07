@@ -1,0 +1,343 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PFA536/PCP537",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "round": "PCP537",
+    "paths": [
+      "src/Lokad.Image/Internal/PngDeflater.Block.cs",
+      "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs"
+    ],
+    "originalAbsent": [],
+    "baseline": {
+      "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+      "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2"
+    },
+    "hypothesis": "CurrentPFA536 adequate1957samples:1249greedy302writer126block70LengthSymbol. Classification repeated between frequency scan and writer. PriorPTP283/PTV284 did not help the earlier byte-draining writer; do not replay unchanged. New coherent stage prepares symbols/residuals in existing token words AND Huffman bits/width/extra widths in existing320code cells for the current whole-token32bit-draining writer. Remove per-token classification/base arithmetic and separate width-array acquisition. Added prepare-table pass must earn its cost across complete operations.",
+    "endState": "In-place phase handoff of existing operation-owned uint tokens and int codes. Raw parser token lives through expanded-length census; replace with prepared symbols/residuals after its last raw consumer. Code slots gain Huffman/extra widths after header coding ends. One complete-token cursor emits prepared matches/literaltriplets; portable and live paths remain. No extra buffer/pool/cache/session/owner/reservation.",
+    "correctness": "RFC1951canonical symbols/residuals/codes/widths, exact packets, token order/ties/block pricing/selection, stored/fixed/dynamic, flushing4KiB and partial accepted output prefixes, same cancellation/refusal/ownership. Existing independent raw-token bitstream oracle uses actual production preparation then actual writer; all256lengths x56distance endpoints and1152alignment/tree/edge cases.",
+    "workloads": [
+      "EncodeFast8",
+      "EncodeSmallest16"
+    ],
+    "temporaryTradeoffs": "One additional small code-cell preparation pass and writes to match token slots may outweigh removal; stored blocks prepare fields never emitted. Stage judged as coherent whole, not a gain attributed to one subprimitive.",
+    "workflow": "One immutable core/embedded perOS, reuse existing public/harness/native/selectors/fixtures and source-valid qualification. Focused normal/scalar then two short complete controls, independent contemporary confirmation only if promising. Accepted coherent stage refreshes affected15PNG encode costs and broadWindowsLinux/live/scalar plus SAME actual package once.",
+    "storage": "Existing384KiBcoarse allowance, same history/dictionary/token/tree/code/output arrays and escaping owners.0newownedcapacity/retainedstorage; measure complete GC separately, do not infer peaks/CPU from fewer arrays.",
+    "attribution": {
+      "receipt": "tmp/pfa536-byte-fast-profile-receipt.json",
+      "sha256": "de642fd40ca93e73041416457645422f231ab15c40210cd3afbfdb00b9bc7f88",
+      "statisticalTiming": false
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "round": "PCP537",
+    "sources": {
+      "src/Lokad.Image/Internal/PngDeflater.Block.cs": "491087bb46c7c63ec30e0dcbe10a645b41447e951aebb90545a29d6e00f8cf32",
+      "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs": "1e3aca77f63484659a1f115666cdc4104d626fdd7ad7c8682c98fb709a2ff9a0"
+    },
+    "actualWholeTokenCursorExact": true,
+    "independentRawTokenOracleBodyExact": true,
+    "parserMatcherDictionaryInputRowsCancellationUntouched": true,
+    "allOriginalOwnedCapacitiesAdmissionAndCleanupUntouched": true,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "representation": "Prepared literal0..255 unchanged. Matchtag31; lengthcode0..4=0..28, distancecode5..9=0..29; lengthresidual10..14<=31, distanceresidual15..27<=8191. Expanded raw length consumed before overwrite. Existing codecell low16bits unchanged reversedcode<=15bits, width16..19<=15, extraWidth20..23<=13; no overlap/signextension. Prepafterheader, beforewriter; no raw consumer remains.",
+    "exactPacketReason": "Histogram indexes/expanded length unchanged, identical trees and bit prices decide stored/fixed/dynamic. Same symbols/residuals/code widths feed identical cursor in identical token/triplet order. Existing independent oracle checks actual production helper + actual writer against raw independent grammar across all256lengths x56distance range endpoints and1152alignment/tree/flush controls.",
+    "temporaryCost": "Additional small code-cell pass and overwritten match slots. Stored blocks may prepareunused fields. No elapsed/peak inference; complete short controls determine continuation."
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+      "candidateSha256": "2593796c20f15fc64d9199bc9493f3214de6bcbbb43a709cc4f7075a8cb4cf4b",
+      "internalTestAssemblySha256": "265d8dba415f2ee5019a311be190c8552905dd4c253654a413ea98e888a02400",
+      "focused": {
+        "internal-normal": 43,
+        "internal-scalar": 43,
+        "public-normal": 246,
+        "public-scalar": 246
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "491087bb46c7c63ec30e0dcbe10a645b41447e951aebb90545a29d6e00f8cf32",
+        "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs": "1e3aca77f63484659a1f115666cdc4104d626fdd7ad7c8682c98fb709a2ff9a0"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+      "candidateSha256": "e981f975a7bfc9a6b89993f17ccead893ce4d5819fe74ed12217781f352a1da2",
+      "internalTestAssemblySha256": "c761534ae9473e78577b3283e2e9d48d96ab35849196e1d72e50ad667570a05c",
+      "focused": {
+        "internal-normal": 43,
+        "internal-scalar": 43,
+        "public-normal": 246,
+        "public-scalar": 246
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "491087bb46c7c63ec30e0dcbe10a645b41447e951aebb90545a29d6e00f8cf32",
+        "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs": "1e3aca77f63484659a1f115666cdc4104d626fdd7ad7c8682c98fb709a2ff9a0"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "screens": {
+    "EncodeFast8": {
+      "runId": "pcp537-candidate-EncodeFast8-short",
+      "managedUs": 4733.331392361111,
+      "nativeUs": 4355.628104166667,
+      "ratio": 1.0867161472838158,
+      "lower": 0.9304813562692632,
+      "upper": 1.253314161742731,
+      "allocatedBytes": 820857,
+      "packetBytes": 236828,
+      "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "librarySha256": "e981f975a7bfc9a6b89993f17ccead893ce4d5819fe74ed12217781f352a1da2",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80"
+    },
+    "EncodeSmallest16": {
+      "runId": "pcp537-candidate-EncodeSmallest16-short",
+      "managedUs": 20820.2028,
+      "nativeUs": 20865.62441666667,
+      "ratio": 0.9978231364775076,
+      "lower": 0.9520702715633795,
+      "upper": 1.045194418006025,
+      "allocatedBytes": 2437586,
+      "packetBytes": 963202,
+      "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+      "librarySha256": "e981f975a7bfc9a6b89993f17ccead893ce4d5819fe74ed12217781f352a1da2",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "bcecb331a71516193b89800b8f994e0eebff0eab3afdb2208477f64309547473",
+        "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs": "63ff498d49918e29da8ecd5b4cf43c3947dc8a54e1ea3d4e858a81198a3e455d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "760ff31c9f5e3819afe4a5ff0e601af3655191d2bc47c93aed9df8ea7b577e7d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "563a259358e8c3a70a2682ad0b50f4b9735f431e5c22bca4878561ecdda56f0e"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "bcecb331a71516193b89800b8f994e0eebff0eab3afdb2208477f64309547473",
+        "tests/Lokad.Image.Tests/PngDeflaterBitOracleTests.cs": "63ff498d49918e29da8ecd5b4cf43c3947dc8a54e1ea3d4e858a81198a3e455d",
+        "tmp/benchmark-source.json": "3b1af5b9209faf943d88d8d691a78467b30ad2081d9cda24af5d9adc54fc171d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "0c3a072ae28f2272b7a84553dc7a3f1711bc240d48740a74c4379d96001f908d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "95760c034e7612b2baa42acaed6ab0898d817eae78bba9f7ad94b1589d1085fa"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    }
+  },
+  "attribution": {
+    "librarySha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+    "sourceSha256": "730968fbf64657d717a93d1c300264f9cda103a72ef50cbbc6c41cd1ed5bd987",
+    "totalSamples": 1957,
+    "managedSamples": 1930,
+    "methods": [
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        1249
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        302
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        126
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+        70
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        68
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        48
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+        18
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        9
+      ],
+      [
+        "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        9
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ComputeChunk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        5
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.PngRowPrediction::Useful(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        5
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        4
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Runs(uint8[],valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.DeflateHuffman/Run>)[Optimized]",
+        4
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+        3
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.PngCodec::Encode(class Lokad.Image.ImageBuffer,class [System.Runtime]System.IO.Stream,class Lokad.Image.PngEncodeOptions,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        2
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+        2
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::AdvanceOrigin()[Optimized]",
+        1
+      ],
+      [
+        "stub ReportStubBlock<MethodCallThunk>",
+        1
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::Reduce(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector128`1<uint64>)[Optimized]",
+        1
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.PngCodec::WriteChunk(class [System.Runtime]System.IO.Stream,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngCodec+IdatWriter::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        1
+      ]
+    ],
+    "allBuilds": 0,
+    "quietGuardsPassed": true,
+    "statisticalTiming": false,
+    "traceSha256": "c99c12674e034e8fa4275b7799daa65fd35d872e7e35ebd293ef1f89afe436b2",
+    "traceBytes": 676312,
+    "scope": "PFA536 current immutableb1621ebf complete513x259RGBA8 PNGFastest1; exact236828Bpacket, originalsource/settings/ownership/nativefreshoneShot codec-zlib-packet boundaries. One2second CPU0 actualwork capture/CPU1sampler, tieringoff. Reuse cached adaptive12actual/200ms selector; same existing complete WarmPng.Managed operation and native validation, no selector build. Prior fixed4operation capture had insufficient samples; new adequate-duration attribution justified, not a favorable timing repeat.0builds/newcontrols/productionchanges; instrumentedelapsed discarded. Samples/JIT identify preparation/execution sites, notphasecosts/projectedgains. PriorFast8profile predates acquiredview changes.",
+    "note": "Cached adaptive12actual/200ms selector allows adequate2second attachment. Prior135sample capture remains insufficient. Current exclusive locations and JIT are leads, not phase times or projected gains. Instrumented elapsed discarded."
+  },
+  "decision": "Unselected. Current whole-token cursor motivates a materially revised preparation design beyond the earlier PTP283/PTV284 byte-draining writer: in-place token symbols/residuals AND existing Huffman code/width/extra-width cells. Exact focused checks pass but completeFastest84733.33us is unpromising; Smallest1620820.20us is essentially its existing cost. No causal gain/loss/equivalence, independent confirmation, favorable repeat, matrix expansion or broad/package runs. Exact qualified sources/modules/bindings restored, actual package unchanged. No permanent family ban; another variant requires new evidence.",
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "existingDeflateAllowanceBytes": 393216,
+    "allOwnedArrayCapacitiesAndOwnersUnchanged": true,
+    "admittedPhysicalNativePeaksRemeasured": false,
+    "note": "Tokens and320code cells are overwritten only after earlier phase consumers finish. Additional preparation and stored-block unused fields may cost CPU. ShortGC820857/2437586Bop differs slightly from historical820916/2437660Bop without a storage explanation; no allocation reduction inferred. Peaks and retained storage are separate from total GC."
+  },
+  "workflow": {
+    "coreEmbeddedVersionsEachOs": 1,
+    "focusedInternalEachMode": 43,
+    "focusedPublicEachMode": 246,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "currentProfileCaptures": 1,
+    "completeShortControls": 2,
+    "actualsEachShort": 3,
+    "independentConfirmationRuns": 0,
+    "newBroadQualificationRuns": 0,
+    "newPackageRuns": 0,
+    "restoreBuilds": 0,
+    "displayedCostsChanged": 0,
+    "additionalFavorableRepeats": 0
+  },
+  "next": "Inspect current mixed-word bicubic preparation/execution ownership and scheduling for repeated work with exactQ30/rational/certified publication. Reuse valid existing controls and source-qualified evidence; do not replay PNG token variants without materially new evidence. Independent work remains unblocked.",
+  "raw": {
+    "file": "png-prepared-token-codes-experiment.tar.xz",
+    "sha256": "67eacafdfbdc233770f453e926213d07e381356a49f69f61ff88ac440484dea5",
+    "bytes": 11579832,
+    "members": 181,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1"
+      },
+      {
+        "file": "png-greedy-view-preparation-qualified.tar.xz",
+        "sha256": "3ab99fc03dfb475a049da76686e1355fc394daab36358459853dab1d04011bb5"
+      }
+    ]
+  }
+}
