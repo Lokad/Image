@@ -30,6 +30,15 @@ def render():
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     assert all(p['outsideNamedChangesEqualsEntireQualifiedOriginal'] for p in vp8_current['sourceProof']['projection'].values())
+    trellis = vp8_current['cases']['trellis']
+    launches = trellis['additionalLaunchEvidence']
+    assert launches['productionChanged'] is False and launches['allBuilds'] == 0
+    assert launches['librarySha256'] == trellis['librarySha256'] and len(launches['launches']) == 4
+    assert launches['protocol']['predeclaredAdditionalCount'] == 3
+    assert all(l['actuals'] == 12 and l['allOriginalGatesPassed'] and l['quietGuardsPassed'] for l in launches['launches'])
+    assert trellis['lower'] == launches['lower'] and trellis['upper'] == launches['upper'] < 1
+    assert all(trellis['lower'] <= v['lower'] and trellis['upper'] >= v['upper'] for v in [*launches['launches'], *launches['views'].values()])
+    assert vp8_current['supplementaryRaw']['mirrored'] and vp8_current['supplementaryRaw']['allMembersVerified']
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in vp8_current['comparison']['views'].values())
     for platform in ['windows', 'linux']:
         peak = vp8_current['storage'][platform]['candidate']['rows']
@@ -1771,8 +1780,8 @@ Current scope and remaining work:
   views separated;2,825.91µs/native2,510.76µs, upper1.132 remains a gap. Allocation
   falls741,386→406,705B/op; measured public admitted peak732,597→397,205B, retained0.
   Dense opaque peak increases886,733→930,669B: storage gains are content-specific.
-  Nine existing costs refresh: **4pass,3gaps,2uncertain**. Effort6's current module
-  confirmation passes; effort5 and photograph retain gaps. Earlier launch variation
+  Nine existing costs refresh: **4pass,3gaps,2uncertain**. Effort6 passes a fixed
+  four-current-launch check (upper0.981); effort5 and photograph retain gaps. Earlier launch variation
   remains in [four-mode trellis history](../benchmarks/VP8-FOUR-MODE-TRELLIS.md);
   no cross-launch stability or incremental gain is claimed for those other cases.
   Eight displayed costs refresh;117 numerical rows reuse unchanged paths.

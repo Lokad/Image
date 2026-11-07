@@ -41,7 +41,7 @@ development-module costs, not a125-row actual-package release refresh.
 | Photograph, effort4 | 9,933.83 | 9,715.88 | 1.022 / 1.026 | 809,233 | 17,688 | gap |
 | Diagram, effort4 | 5,685.47 | 5,820.19 | 0.977 / 0.987 | 741,230 | 7,100 | pass |
 | Diagram, effort5 | 6,598.78 | 6,452.60 | 1.023 / 1.026 | 741,073 | 7,026 | gap |
-| Diagram, effort6 | 9,478.04 | 9,796.36 | 0.968 / 0.974 | 754,505 | 6,818 | pass |
+| Diagram, effort6 | 9,478.04 | 9,796.36 | 0.968 / 0.981 | 754,505 | 6,818 | pass |
 | Diagram, effort2 | 2,825.91 | 2,510.76 | 1.126 / 1.132 | 406,705 | 7,330 | gap |
 | RGBA8 + alpha, effort4 | 53,422.93 | 53,399.30 | 1.000 / 1.009 | 7,034,400 | 98,590 | uncertain |
 | RGBA16 + alpha, effort4 | 53,333.30 | 53,367.52 | 0.999 / 1.003 | 7,033,584 | 98,590 | uncertain |
@@ -50,10 +50,15 @@ Four pass, three gaps and two uncertain. All nine costs refresh because the shar
 frame/statistics/writer dispatch changed; only method2 uses the new representation.
 The eight displayed rows refresh;117 numerical rows reuse unchanged paths. Effort5
 is retained in this family report. Other cases establish current costs and status,
-without incremental CPU claims. Effort6's current module confirmation passes; the
-older [four-mode report](VP8-FOUR-MODE-TRELLIS.md) retains its launch variability.
-There is no broader cross-launch-stability claim or repetition to seek favorable
-points. Decoder/lossless/PNG/JPEG/editing/font paths are unchanged.
+without incremental CPU claims. Effort6 passes the fixed CFC464 four-launch check:
+the first current confirmation plus exactly three predeclared corroborations on
+the same immutable module. The conservative filtered/all-actual launch-mean and
+native-bracket envelope is0.948334–0.981384; the table retains the first independent
+twelve-iteration point. The initial single-launch assessment omitted existing
+launch uncertainty; this corrects it without production changes or replaying
+qualification. The older [four-mode report](VP8-FOUR-MODE-TRELLIS.md) retains its
+launch variability. This is scoped current evidence, not general stability or an
+incremental effort6 gain. Decoder/lossless/PNG/JPEG/editing/font paths are unchanged.
 
 ## Storage and transition evidence
 
@@ -111,3 +116,10 @@ inputs. A first shared-control receipt's overbroad method2SourceNote is clarifie
 by its actual caseId/effort/commands and the corrected retained script; no data was
 replayed or hidden. Current rendering uses one owner for this family; superseded
 generation overlays no longer become summary dependencies.
+
+Supplementary raw`vp8-current-confidence-and-decoder-attribution.tar.xz`,151,168B/
+59members, SHA256`dc6ac6ffeedeb9d189490b5dea146c063f6f6c4c096aa953444eccfe60051daf`,
+is mirrored/member-verified and depends on the main archive for unchanged inputs.
+It preserves the fixed confidence protocol, every additional launch and analysis,
+plus the next decoder's bounded attribution capture. No new build, fixture or
+functional/package qualification was needed for this evidence-only correction.

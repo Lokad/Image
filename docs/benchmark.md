@@ -23,8 +23,8 @@ Current scope and remaining work:
   views separated;2,825.91µs/native2,510.76µs, upper1.132 remains a gap. Allocation
   falls741,386→406,705B/op; measured public admitted peak732,597→397,205B, retained0.
   Dense opaque peak increases886,733→930,669B: storage gains are content-specific.
-  Nine existing costs refresh: **4pass,3gaps,2uncertain**. Effort6's current module
-  confirmation passes; effort5 and photograph retain gaps. Earlier launch variation
+  Nine existing costs refresh: **4pass,3gaps,2uncertain**. Effort6 passes a fixed
+  four-current-launch check (upper0.981); effort5 and photograph retain gaps. Earlier launch variation
   remains in [four-mode trellis history](../benchmarks/VP8-FOUR-MODE-TRELLIS.md);
   no cross-launch stability or incremental gain is claimed for those other cases.
   Eight displayed costs refresh;117 numerical rows reuse unchanged paths.
@@ -168,7 +168,7 @@ settings do not establish matched quality.
 | VP8 opaque photograph † | 9,933.83 | 9,715.88 | 1.022 / 1.026 | 809,233 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,685.47 | 5,820.19 | 0.977 / 0.987 | 741,230 | 7,100 / 7,100 |
 | VP8 diagram, effort2 / distortion-only search † | 2,825.91 | 2,510.76 | 1.126 / 1.132 | 406,705 | 7,330 / 7,330 |
-| VP8 diagram, effort6 / trellis † | 9,478.04 | 9,796.36 | 0.968 / 0.974 | 754,505 | 6,818 / 6,818 |
+| VP8 diagram, effort6 / trellis † | 9,478.04 | 9,796.36 | 0.968 / 0.981 | 754,505 | 6,818 / 6,818 |
 | VP8 RGBA8 + lossless alpha † | 53,422.93 | 53,399.30 | 1.000 / 1.009 | 7,034,400 | 98,590 / 98,590 |
 | VP8 RGBA16 + alpha, including normalization † | 53,333.30 | 53,367.52 | 0.999 / 1.003 | 7,033,584 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 109,807.33 | 127,005.55 | 0.865 / 0.940 | 7,476,544 | 183,812 / 183,812 |
