@@ -44,7 +44,14 @@ The first confirms149.74µs/2.90%raw live regression with unchanged allocation;
 the revised readonly-input capture remains unpromising in its short screen.
 Both qualified originals are restored byte for byte, including embedded tests and
 bindings; current OPA465 costs/package evidence remain valid. No full/package replay
-or renderer dependency. The next independent investigation is progressive JPEG.
+or renderer dependency. The subsequent progressive JPEG gain is recorded above.
+The [tail-geometry study](BICUBIC-TAIL-GEOMETRY-EXPERIMENT.md) is also unselected:
+two short comparisons have overlapping intervals and unchanged allocation.
+Qualified originals/main/embedded/bindings restore byte for byte on both OSs,
+so no current cost or package proof is invalidated. One current enlargement
+profile attributes73.4% to word-row filtering/certified publication and16.4% to
+horizontal filtering, versus1.1% vertical preparation. The next resize task
+investigates that dominant publication/filter pipeline, preserving exact results.
 The following [seven-control refresh](PNG-CURRENT-FRAMING-COSTS.md) changes no production:
 seven current independentconfirmations,5pass/2gap,7displayedrowsfresh/118numbersreused.
 Alloriginal gates andfrozenworkers pass. No rebuild/newfixture/profile or repeated

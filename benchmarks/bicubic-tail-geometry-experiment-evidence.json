@@ -1,0 +1,223 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BSA469/BVP470/BCA471",
+  "date": "2026-11-07",
+  "productionAccepted": false,
+  "decision": "Restore qualified originals: short points do not establish a useful gain for added alias-lifetime complexity. No regression/equivalence claim, unchanged favorable repeat, permanent family ban or CPU confirmation.",
+  "cases": {
+    "TightUp16": {
+      "originalUs": 3180.46890625,
+      "candidateUs": 3161.19803125,
+      "originalNativeUs": 2874.1286770833335,
+      "candidateNativeUs": 2880.4807291666666,
+      "savedPointUs": 19.27087500000016,
+      "rawPointReduction": 0.006059130137109792,
+      "normalizedPointReduction": 0.008250974057186666,
+      "allocatedBytes": 4264538,
+      "bothViewsInconclusive": true,
+      "independentConfirmation": false
+    },
+    "Up16": {
+      "originalUs": 3184.9533515625,
+      "candidateUs": 3174.3584895833333,
+      "originalNativeUs": 2875.04896875,
+      "candidateNativeUs": 2873.5987708333337,
+      "savedPointUs": 10.59486197916658,
+      "rawPointReduction": 0.003326535999018332,
+      "normalizedPointReduction": 0.0028235521462405266,
+      "allocatedBytes": 4264538,
+      "bothViewsInconclusive": true,
+      "independentConfirmation": false
+    }
+  },
+  "hypothesis": {
+    "project": "Lokad.Image",
+    "stage": "BVP470",
+    "productionAccepted": false,
+    "paths": [
+      "src/Lokad.Image/Internal/EnlargingBicubicResize.cs",
+      "tests/Lokad.Image.Tests/Lokad.Image.Tests.csproj",
+      "tests/Lokad.Image.Tests/EnlargementTailGeometryTests.cs"
+    ],
+    "baseline": {
+      "windowsSha256": "6f1085756c052e01faf9a93a77ec6c00d496c537da4d4ea73ed1685b93c6a13a",
+      "linuxSha256": "d47ded652a05f05776b690818e3adadc028a5f550b59f239736679b311008407"
+    },
+    "hypothesis": "Tail repeats identical verticalgeometry across horizontaltiles. Borrow alreadyadmitted finalrow storage for56B exact binary64 records. Consume only until the firstoverlap tile, then recompute with the same helper. Source-derived TightUp16 geometrycalls2782->1046; no CPUgainclaimed.",
+    "endState": "One actual tail scheduler, row-boundary prepared/recomputed selection outside pixel loops. Same PrepareVertical math/typeddecode/filter/certificates/repair. Temporary1736Bresult-view on primary, no heap/pool/session/API/workspace enlargement. Guard by outputgeometry and reuse, never availablebudget/refusal.",
+    "risks": "Records must not be read after firstoverlap tile; all bytes overwritten before publication or deferred replay. Memory loads/extra rowdispatch/helper codegen may erase saved math or hurt otherexisting layouts. Source-level counts do not prove gain. Preserve failures/adverse measurements, revise with concrete cause or restore.",
+    "affectedExistingCases": [
+      "Up8",
+      "Up16",
+      "HorizontalUp8",
+      "VerticalUp8",
+      "HorizontalUp16",
+      "VerticalUp16",
+      "TightUp8",
+      "TightUp16",
+      "TightHorizontalUp8",
+      "TightVerticalUp8",
+      "TightHorizontalUp16",
+      "TightVerticalUp16"
+    ],
+    "contracts": "Exact managed rational/qualified half/full-word pixels, original floatingorder, tinyalpha repair, native-only scopedbounds, orientation, source/independent outputownership, root/refusal/cancellation. Existing4000Bfixedbuffers/4KiBadmission andrequired4264104Bprimaryoutput. No nativefloat substitution, enlargedpool or newperformancegrid.",
+    "protocol": "Snapshot qualified main/embedded andnamed sources. Focus metadatafit/identity/nonfit/overlap/bitwise geometry andindependent exactframes/tinyalpha/ownership normal/scalar plus existingfallbackchecks. One immutablebuild eachOS, cachedharness/native/selectors. Existing TightUp16/Up16 short, independentconfirmation ifcredible, affected12currentcosts and coherent W/L/full/scalar/actualpackage ifaccepted."
+  },
+  "sourceLoopCounts": {
+    "sourceWidth": 513,
+    "sourceHeight": 259,
+    "width": 1027,
+    "height": 519,
+    "depth": 16,
+    "outputBytes": 4264104,
+    "outputStride": 8216,
+    "prefixWorkspaceBytes": 254680,
+    "prefixRows": 488,
+    "tailRows": 31,
+    "tiles": 74,
+    "currentPrefixVerticalPreparations": 488,
+    "currentTailVerticalPreparations": 2294,
+    "currentTotalVerticalPreparations": 2782,
+    "candidateEntryBytes": 56,
+    "candidateMetadataBytes": 1736,
+    "candidateFirstProtectedColumn": 810,
+    "candidatePreparedWholeTiles": 57,
+    "candidateTailVerticalPreparations": 558,
+    "candidateTotalVerticalPreparations": 1046,
+    "removedVerticalPreparations": 1736
+  },
+  "focused": {
+    "windows": {
+      "internal-normal": 61,
+      "internal-scalar": 61,
+      "public-normal": 571,
+      "public-scalar": 571
+    },
+    "linux": {
+      "internal-normal": 61,
+      "internal-scalar": 61,
+      "public-normal": 571,
+      "public-scalar": 571
+    }
+  },
+  "restoredProducers": {
+    "windows": "6f1085756c052e01faf9a93a77ec6c00d496c537da4d4ea73ed1685b93c6a13a",
+    "linux": "d47ded652a05f05776b690818e3adadc028a5f550b59f239736679b311008407"
+  },
+  "restoration": "All named production/test sources, main/embedded modules, source manifest and cached bindings restored byte for byte on both OSs. Candidate-only tests removed after raw preservation. JPO468 full/live/actual-package qualification remains valid; no repetition.",
+  "profile": {
+    "profilingOnly": true,
+    "noTimingClaim": true,
+    "productionSha256": "d47ded652a05f05776b690818e3adadc028a5f550b59f239736679b311008407",
+    "seconds": 2,
+    "samples": 1977,
+    "methods": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.EnlargingWordColumnBicubicResize::WriteRow(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,float64,class Lokad.Image.Internal.OperationContext,bool&)[Optimized]",
+        "samples": 1452,
+        "fraction": 0.7344461305007587
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.EnlargingBicubicResize::FilterHorizontal(valuetype [System.Runtime]System.ReadOnlySpan`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 325,
+        "fraction": 0.16439049064238745
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.EnlargingWordColumnBicubicResize::OriginalWord(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,int32,class Lokad.Image.Internal.OperationContext,bool&)[Optimized]",
+        "samples": 60,
+        "fraction": 0.030349013657056147
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.EnlargingWordColumnBicubicResize::DecodeRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 25,
+        "fraction": 0.012645422357106728
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.Internal.EnlargingBicubicResize::PrepareVertical(int32,int32,int32,float64,valuetype [System.Runtime]System.Span`1<float64>,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+        "samples": 22,
+        "fraction": 0.01112797167425392
+      },
+      {
+        "method": "Native or unresolved",
+        "samples": 20,
+        "fraction": 0.010116337885685382
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.EnlargingBicubicResize::PrepareHorizontal(int32,int32,int32,int32,float64,valuetype [System.Runtime]System.Span`1<float64>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Span`1<float64>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 14,
+        "fraction": 0.0070814365199797676
+      },
+      {
+        "method": "uint16 [Lokad.Image] Lokad.Image.Internal.BicubicMath::RoundWord(float64)[Optimized]",
+        "samples": 13,
+        "fraction": 0.0065756196256954984
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "samples": 12,
+        "fraction": 0.006069802731411229
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.EnlargingBicubicResize::TryApplyStrips(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int32,class Lokad.Image.Internal.OperationContext,bool&)[Optimized]",
+        "samples": 11,
+        "fraction": 0.00556398583712696
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "samples": 9,
+        "fraction": 0.004552352048558422
+      },
+      {
+        "method": "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        "samples": 7,
+        "fraction": 0.0035407182599898838
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BicubicMath::TryWriteWord(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 4,
+        "fraction": 0.0020232675771370764
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.EnlargingBicubicResize::TryApplyPrefix(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,class Lokad.Image.Internal.OperationContext,int32&,bool&)[Optimized]",
+        "samples": 3,
+        "fraction": 0.0015174506828528073
+      }
+    ]
+  },
+  "profileScope": "One two-second CPU0 user-clock capture,1977 samples, complete original TightUp16 operation. Cached profile driver/harness/native backend, no build. Method self-samples are attribution, not phase elapsed costs; inlining and sample skid prevent instruction-level cost claims.",
+  "preparation": "Managed complete Resize includes geometry, working preparation, output allocation and disposal. zimg3.0.6 graph/input/scratch prepared outside timing, with conversion/filter/owned output/quantization timed as in frozen boundary. No one-shot parity claim.",
+  "memory": "No added owned capacity in prototype; output4264104B and GC4264538B/op unchanged. Borrowed1736B result-tail records; existing4000B stack/4096B admission. No newly measured physical/native peak; no cross-operation retained state added.",
+  "corrections": "Initial missing scoped span declaration fixed before valid core/timing; invalid zero local limit corrected to1 in tests, leaving shared refusal root0. One core per OS, Windows2internal/Linux1internal, no public/harness/native/selector/fixture rebuild. All failures retained.",
+  "raw": {
+    "file": "bicubic-tail-geometry-experiment.tar.xz",
+    "sha256": "c62ff91683ddbfdf9e39d1141d5083f2f320c8d7ea9b291b0dd8e50d5439dd6b",
+    "bytes": 1466836,
+    "members": 110,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-coefficient-program-qualified.tar.xz",
+        "sha256": "e0a0ac3b24ca3221be6b4fa57950efb476d19b5e544569ee20c13b0c79b49bf1"
+      },
+      {
+        "file": "vp8-current-confidence-and-decoder-attribution.tar.xz",
+        "sha256": "dc6ac6ffeedeb9d189490b5dea146c063f6f6c4c096aa953444eccfe60051daf"
+      },
+      {
+        "file": "vp8-overwrite-output-qualified.tar.xz",
+        "sha256": "abe549dbd45a6426d04608631cebe2ae47681c3283d3559b53c6aaca2bffa747"
+      },
+      {
+        "file": "jpeg-progressive-output-qualified.tar.xz",
+        "sha256": "653eebc202f4fdcf10c007a9596fe6052df8e6ff8894efe9d9ea996d0011e2fc"
+      },
+      {
+        "file": "bicubic-shared-enlargement-qualified.tar.xz",
+        "sha256": "a65b2dda8201a4d856f3b6750094f9b2fa10907e85bb34aa9213c654d8199f41"
+      }
+    ],
+    "scope": "Unselected BVP470 operation-owned geometry prototype: sources/main/embedded/originals, initial compile/test corrections, both complete short pairs/guards/outputs, W/L normal/scalar focus, byte-verified qualified restoration, BSA469 counts and one BCA471 current profile. Existing reference/harness/selectors retained through content-addressed archive providers. No independent CPU confirmation, broad/package replay or production acceptance."
+  },
+  "next": "Inspect the dominant word publication/filter path: vector lane construction, certificate transitions and row scheduling. Preserve exact rational/qualified-half output, bounds, repair and portable fallback. Select a concrete redesign from current attribution; do not repeat geometry-only sampling."
+}
