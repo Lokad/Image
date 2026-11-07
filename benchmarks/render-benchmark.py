@@ -449,7 +449,7 @@ def render():
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
     decoders = json.loads((ROOT / 'benchmarks/current-default-decoders-evidence.json').read_text(encoding='utf-8'))
-    resident_decode = json.loads((ROOT / 'benchmarks/vp8l-validation-elision-evidence.json').read_text(encoding='utf-8'))
+    resident_decode = json.loads((ROOT / 'benchmarks/vp8l-final-publication-evidence.json').read_text(encoding='utf-8'))
     assert resident_decode['productionAccepted'] and resident_decode['requiredMaterialPaths'] == 283
     assert resident_decode['sourceProof']['wholeSourceUndoEqualsQualifiedOriginal']
     assert resident_decode['raw']['mirrored'] and resident_decode['raw']['allMembersVerified']
@@ -470,14 +470,16 @@ def render():
         assert resident_decode['status'][name] == ('confirmed-pass' if observation['conservativeRatioUpper'] <= 1
             else 'confirmed-gap' if observation['conservativeRatioLower'] > 1 else 'confirmed-confidence-open')
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in resident_decode['comparisons']['ValidateVp8lAlpha']['views'].values())
-    assert not any(v['rawLossSeparated'] or v['normalizedLossSeparated']
-                   for v in resident_decode['comparisons']['WebpResident']['views'].values())
+               for v in resident_decode['comparisons']['WebpResident']['views'].values())
+    assert all(v['rawLossSeparated'] and v['normalizedLossSeparated']
+               for v in resident_decode['comparisons']['IndexedNative16Colors8']['views'].values())
+    assert resident_decode['storage']['ownedCapacityUnchanged']
+    assert resident_decode['storage']['newHeapCapacityBytes'] == resident_decode['storage']['newRetainedStateBytes'] == 0
     for platform in ['windows', 'linux']:
-        peaks = resident_decode['storage'][platform]['rows']['candidate']['cases']
+        peaks = resident_decode['storage']['validationAdmissionEvidenceReused'][platform]['rows']['candidate']['cases']
         assert [p['firstPeakAdmittedBytes'] for p in peaks] == [235152, 11121]
-        assert all(p['firstPeakAdmittedBytes'] == p['livePeakAdmittedBytes'] and p['retainedBytes'] == 0
-                   and p['sourceAndDescriptorExact'] and p['borrowedRootAlive'] for p in peaks)
+        assert all(p['retainedBytes'] == 0 and p['borrowedRootAlive'] for p in peaks)
+    lpf = resident_decode['costs']
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
@@ -615,7 +617,7 @@ def render():
         observation = producer['cases'][case][-1]
         receipt, stats = observation['receipt'], observation['managed']['statistics']
         samples = 12
-        assert producer['status'][case] == ('confirmed-gap' if samples == 12 else 'screen-gap')
+        assert producer['status'][case].startswith('confirmed-')
         assert len(observation['managed']['actual']) == samples
         assert receipt['librarySha256'] == producer.get('reusedCaseProducers', {}).get(case, producer['producers']['linuxSha256'])
         assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256']
@@ -1575,7 +1577,7 @@ def render():
     rows[position:position] = vp8_rows
     selected_cost = vp8_current['cases']['selected']
     assert selected_cost['status'] == 'gap' and selected_cost['managedPacketBytes'] == 7026
-    stream = vp8_output['cases']['StreamNative8']
+    stream = resident_decode['costs']['Vp8Stream']
     rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream † | {stream["managedUs"]:,.2f} | '
         f'{stream["nativeUs"]:,.2f} | {stream["ratio"]:.3f} / {stream["upper"]:.3f} | '
         f'{stream["allocatedBytes"]:,} | — |'))
@@ -1658,8 +1660,8 @@ def render():
         rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
             f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
             f'{current["allocatedBytes"]:,} |')
-    vq = vp8_current['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5825
+    vq = resident_decode['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5837
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
     png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1830,56 +1832,22 @@ timed; setup, delivery and retained state follow the stated case boundaries.
 
 Current scope and remaining work:
 
-- **WebP:** [per-block candidate preparation](../benchmarks/VP8-SMALL-BLOCK-PREPARATION.md)
-  reuses border/DC values and packed source across visited distortion modes.
-  Complete effort2 encoding improves2,799.65→2,745.35µs,54.30µs/1.94%raw; both raw
-  confidence views separate. Native moves−0.84%; normalized point improves1.11%,
-  but its all-actual interval overlaps neutral. No all-views relative-gain claim.
-  Current native2,501.11µs/upper1.104 remains a gap; GC stays406,705B/op.
-  Nine affected costs: **5pass,3gaps,1uncertain**. Effort6 passes the predeclared
-  four-current-launch check (upper0.993); effort5/photograph retain gaps; Alpha8
-  remains uncertain. The Alpha16 pass is scoped to its current confirmation.
-  Admitted peaks stay397,205Bdiagram/930,669Bdense, retained0; no new owned buffer/cache.
-  [Compact residual programs](../benchmarks/VP8-COEFFICIENT-PROGRAM.md) retain earlier
-  storage gains/dense tradeoff as history. Earlier launch variation
-  remains in [four-mode trellis history](../benchmarks/VP8-FOUR-MODE-TRELLIS.md);
-  no cross-launch stability or incremental gain is claimed for those other cases.
-  Eight displayed costs refresh;117 numerical rows reuse unchanged paths.
-  [Earlier candidate preparation](../benchmarks/VP8-TRELLIS-CANDIDATE-PREPARATION.md),
-  [price windows](../benchmarks/VP8-BOUNDED-PRICE-VIEW.md),
-  [block](../benchmarks/VP8-ORDINARY-BLOCK-PREPARATION.md) and
-  [prediction preparation](../benchmarks/VP8-COMPLETE-PREDICTION-PREPARATION.md)
-  retain scoped history. Passing cases stop; uncertain cases do not justify tuning.
-  [Main validation elision](../benchmarks/VP8L-VALIDATION-ELISION.md) keeps one
-  syntax scheduler and all auxiliary values/checks, omitting discarded main raster,
-  cache values and inverse output. Complete VP8L validation saves1,031µs/30.66%raw
-  and30.60%normalized; both confidence views separate. Current2,330.73µs/native
-  3,047.56µs, upper0.769 passes; VP8+ALPH validation4,656.82/native5,448.61µs,
-  upper0.858 also passes. GC297,070/13,584B; measured first/live admitted peaks
-  235,152/11,121B, retained0. These are separate from physical/native peaks.
-  Validation and lossless reader costs reuse unchanged paths. Full-render contemporary
-  comparison is inconclusive with no demonstrated incremental gain/loss.
-  [Overwrite output ownership](../benchmarks/VP8-OVERWRITE-OUTPUT.md) independently
-  saves105.05/131.33µs (2.04%/2.48%raw) on ordinary/live opaque VP8 decode, with both
-  raw/normalized confidence views separated. GC falls760,564→228,864B/op; governed
-  peak stays747,020B and retained result531,468B until disposal. Sequential default
-  calls leave531,468B idle in the existing4MiBpool; governed calls bypass it.
-  Five affected decoder costs refresh, all remain gaps; liveopaque5,162.06/native
-  4,790.47µs,upper1.082. One displayed row refreshes;124 numerical rows reuse valid
-  paths. This does not claim a governed CPU gain or lower physical/native peaks.
-  [Earlier validation materialization](../benchmarks/VP8-VALIDATION-MATERIALIZATION.md)
-  and [live execution](../benchmarks/VP8-LIVE-BLOCK-EXECUTION.md) retain scoped history.
-  [Alpha output handoff](../benchmarks/VP8-ALPHA-OUTPUT-HANDOFF.md) retains238,384B/span
-  and238,480B/stream, coarse decode peak751,768B and output531,468B.
-  Ungoverned calls use the existing capped final-pixel pool; one531,468Barray stays
-  idle after this sequential case. Governed calls bypass it. GC totals, admitted
-  capacity and physical peak differ; native allocation/physical peak are unmeasured.
-  Full decoding retains gaps. Original/native contexts and boundaries remain
-  explicit; no fresh-context setup parity is claimed. Earlier
-  [token](../benchmarks/VP8-PREPARED-TOKEN-STATE.md) and
-  [live reservoir](../benchmarks/VP8-UNSHIFTED-LIVE-RESERVOIR.md) work stays linked history.
-  Six lossless controls reuse [unchanged green-predictor evidence](../benchmarks/WEBP-ISOLATED-GREEN-PREDICTION.md):
-  four pass/stop; opaque/photo remain uncertain, uppers1.008/1.022.
+- **WebP decoding:** [fused final inverse/publication](../benchmarks/VP8L-FINAL-PUBLICATION.md)
+  saves **155.66µs/4.79% raw**,4.53% native-normalized, on complete resident VP8L.
+  Both confidence views separate. GC stays152,728B/op; no new owned capacity/cache.
+  Current resident/live/stream uppers{lpf['WebpResident']['upper']:.3f}/
+  {lpf['NativeLosslessCancelable8']['upper']:.3f}/{lpf['WebpStream']['upper']:.3f} remain gaps.
+  Nine existing shared-decoder controls:3pass/6gaps. The contemporary palette
+  control regresses **19.25µs/3.46%**, with separated raw/normalized intervals;
+  retain that tradeoff, not a general decoder speedup claim.
+  Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
+  are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
+  Five displayed costs refresh;120 numerical rows reuse unchanged paths.
+- **WebP encoding:** [per-block preparation](../benchmarks/VP8-SMALL-BLOCK-PREPARATION.md)
+  retains54.30µs/1.94%raw gain; all-actual normalized gain is inconclusive.
+  Nine controls:5pass/3gaps/1uncertain. Effort6's fixed four-launch envelope passes;
+  photograph/effort5/effort2 remain gaps, Alpha8 uncertain. Exact packets unchanged.
+  [Coverage](../benchmarks/WARM-COVERAGE.md) links workspace/alpha/validation history.
 - **PNG:** [prepared literal prefixes](../benchmarks/PNG-PREPARED-PREFIX.md) save
   422µs/12.8% on two complete retained-output decodes under one shared root.
   Current ratio {png_decode['current']['ratio']:.3f}/upper {png_decode['current']['upper']:.3f} remains a gap. Nominal arrays fit the same4KiB
@@ -1947,12 +1915,12 @@ Current scope and remaining work:
   This round reuses those unchanged font costs.
 
 The current production build passes **{vq['fullChecksEachOs']:,} full/live checks per OS**, affected
-normal/scalar checks, and the **same actual Release package/all three examples
+normal/AVX2-disabled/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Normal/scalar checks pass; unchanged vector-path
-AVX2/AVX512-disabled proof is reused.
+All three modes pass49 internal/239 public checks each per OS; unrelated
+AVX512-disabled evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and

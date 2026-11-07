@@ -1,6 +1,9 @@
 # Main VP8L validation without discarded pixels
 
 VLS458, 2026-11-07. Accepted architectural stage; publication postponed.
+Its nine decoder costs and global/package qualification are superseded by
+[final publication](VP8L-FINAL-PUBLICATION.md); validation design/gain and
+source-valid ownership evidence remain retained history.
 [Current evidence](vp8l-validation-elision-evidence.json) owns the nine existing
 affected controls. The full 283-path performance objective remains open.
 

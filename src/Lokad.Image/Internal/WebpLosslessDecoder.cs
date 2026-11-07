@@ -12,6 +12,8 @@ internal ref struct WebpLosslessDecoder
     private readonly OperationContext context;
     private readonly int width, height;
 
+    private enum PixelOutput { Rgba, Green, Validate }
+
     private sealed class Transform
     {
         public int Type, Width, Bits;
@@ -32,7 +34,7 @@ internal ref struct WebpLosslessDecoder
         var temporary = false;
         try
         {
-            pixels = DecodePixels(true, ref result);
+            pixels = DecodePixels(PixelOutput.Rgba, ref result, out var rgbaPublished);
             temporary = result is null;
             if (temporary)
             {
@@ -49,7 +51,7 @@ internal ref struct WebpLosslessDecoder
                     }
                 }
             }
-            else
+            else if (!rgbaPublished)
             {
                 // The stored words still have RFC 9649's ARGB channel positions.
                 // On little-endian hosts, exchanging R/B publishes RGBA in place.
@@ -80,7 +82,7 @@ internal ref struct WebpLosslessDecoder
     // The caller owns result, including when decoding or extraction throws.
     internal byte[]? DecodeGreen(scoped ref ImageBuffer? result)
     {
-        var pixels = DecodePixels(true, ref result);
+        var pixels = DecodePixels(PixelOutput.Green, ref result, out _);
         var temporary = result is null;
         try
         {
@@ -110,13 +112,15 @@ internal ref struct WebpLosslessDecoder
     internal void ValidatePixels()
     {
         ImageBuffer? unused = null;
-        DecodePixels(false, ref unused, validateOnly: true);
+        DecodePixels(PixelOutput.Validate, ref unused, out _);
         context.Release(512);
         context.Cancellation.ThrowIfCancellationRequested();
     }
 
-    private Span<uint> DecodePixels(bool retainResult, scoped ref ImageBuffer? result, bool validateOnly = false)
+    private Span<uint> DecodePixels(PixelOutput output, scoped ref ImageBuffer? result, out bool rgbaPublished)
     {
+        rgbaPublished = false;
+        var validateOnly = output == PixelOutput.Validate;
         context.Reserve(512); // Four transform descriptors and fixed parser scratch.
         var transforms = new Transform[4]; var count = 0; var seen = 0; var codedWidth = width;
         while (reader.Read(1) != 0)
@@ -144,7 +148,7 @@ internal ref struct WebpLosslessDecoder
         // A palette can expand/change the raster width; keep its existing array
         // ownership. Other transforms operate in place on a full-width frame.
         var pixels = ReadImageCore(codedWidth, height, true,
-            retainResult && (seen & 8) == 0 && BitConverter.IsLittleEndian, ref result, out _, validateOnly);
+            !validateOnly && (seen & 8) == 0 && BitConverter.IsLittleEndian, ref result, out _, validateOnly);
         for (var index = count - 1; index >= 0; index--)
         {
             var transform = transforms[index];
@@ -157,7 +161,16 @@ internal ref struct WebpLosslessDecoder
                 transform.Data = [];
                 continue;
             }
-            if (transform.Type == 3)
+            // Only the last inverse may publish RGBA: earlier transforms and
+            // ALPH extraction still need the RFC's ARGB channel positions.
+            // An existing result also guarantees full-width little-endian storage.
+            if (index == 0 && transform.Type == 2 && output == PixelOutput.Rgba && result is not null)
+            {
+                for (var y = 0; y < height; y++)
+                    PublishSubtractGreenRgba(pixels.Slice(y * width, width), context);
+                rgbaPublished = true;
+            }
+            else if (transform.Type == 3)
             {
                 var expanded = Allocate(transform.Width, height);
                 var perByte = 1 << transform.Bits; var indexBits = 8 >> transform.Bits;
@@ -180,6 +193,47 @@ internal ref struct WebpLosslessDecoder
             transform.Data = [];
         }
         return pixels;
+    }
+
+    // RFC 9649 section 3.3: restore R/B modulo 256, then publish RGBA in
+    // little-endian output storage. G/A, including RGB under alpha=0, stay exact.
+    internal static void PublishSubtractGreenRgba(Span<uint> row, OperationContext context)
+    {
+        var swap = Vector128.Create((byte)2, 1, 0, 3, 6, 5, 4, 7, 10, 9, 8, 11, 14, 13, 12, 15);
+        var green = Vector128.Create((byte)1, 128, 1, 128, 5, 128, 5, 128, 9, 128, 9, 128, 13, 128, 13, 128);
+        for (var start = 0; start < row.Length; start += 256)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var end = start + Math.Min(256, row.Length - start);
+            var x = start;
+            if (Avx2.IsSupported)
+            {
+                var swapWide = Vector256.Create(swap, swap); var greenWide = Vector256.Create(green, green);
+                for (; x <= end - 8; x += 8)
+                {
+                    var bytes = MemoryMarshal.AsBytes(row.Slice(x, 8));
+                    var value = MemoryMarshal.Read<Vector256<byte>>(bytes);
+                    var rgba = Avx2.Add(Avx2.Shuffle(value, swapWide), Avx2.Shuffle(value, greenWide));
+                    MemoryMarshal.Write(bytes, in rgba);
+                }
+            }
+            else if (Ssse3.IsSupported)
+            {
+                for (; x <= end - 4; x += 4)
+                {
+                    var bytes = MemoryMarshal.AsBytes(row.Slice(x, 4));
+                    var value = MemoryMarshal.Read<Vector128<byte>>(bytes);
+                    var rgba = Sse2.Add(Ssse3.Shuffle(value, swap), Ssse3.Shuffle(value, green));
+                    MemoryMarshal.Write(bytes, in rgba);
+                }
+            }
+            for (; x < end; x++)
+            {
+                var pixel = row[x]; var g = pixel >> 8 & 255;
+                row[x] = pixel & 0xFF00FF00 | ((pixel + g) & 255) << 16 | ((pixel >> 16) + g) & 255;
+            }
+        }
+        context.Cancellation.ThrowIfCancellationRequested();
     }
 
     private uint[] ReadImage(int imageWidth, int imageHeight, bool spatial)
