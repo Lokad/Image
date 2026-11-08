@@ -65,7 +65,7 @@ internal static class CooperativeMemoryConsumer
         }
     }
 
-    private static async Task VerifyLivePngCursor()
+    private static async Task VerifyPngCursors(bool cancellable)
     {
         foreach (var depth in new[] { 8, 16 })
         {
@@ -75,15 +75,17 @@ internal static class CooperativeMemoryConsumer
             ImageCodec.EncodePng(source, encodedOutput);
             var encoded = encodedOutput.ToArray(); var saved = encoded.ToArray();
             using var cancellation = new CancellationTokenSource();
-            using var first = ImageCodec.Decode(encoded, cancellationToken: cancellation.Token);
-            using var second = ImageCodec.Decode(encoded, cancellationToken: cancellation.Token);
+            var token = cancellable ? cancellation.Token : default;
+            using var first = ImageCodec.Decode(encoded, cancellationToken: token);
+            using var second = ImageCodec.Decode(encoded, cancellationToken: token);
             using var input = new MemoryStream(encoded, writable: false);
-            using var asynchronous = await ImageCodec.DecodeAsync(input, cancellationToken: cancellation.Token);
+            using var asynchronous = await ImageCodec.DecodeAsync(input, cancellationToken: token);
             if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first))
                 || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second))
                 || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(asynchronous))
                 || !encoded.AsSpan().SequenceEqual(saved) || !input.CanRead)
                 throw new Exception("Packaged live PNG cursor changed samples, input or borrowed stream ownership.");
+            VerifyPngCursorAdmission(encoded, expected, expected.Length, token);
             if (depth == 8) first.GetRow8(0)[0] ^= 255; else first.GetRow16(0)[0] ^= 65535;
             encoded.AsSpan().Clear();
             if (!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(second))
@@ -91,8 +93,8 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged live PNG cursor outputs alias caller input or other owners.");
         }
 
-        // RGB avoids the separate governed-RGBA rolling-history strategy and
-        // exercises materialized live framing with a borrowed shared root.
+        // RGB exercises materialized framing; governed RGBA above exercises
+        // bounded rolling history. Both use the borrowed shared root.
         const int outputBytes = 513 * 259 * 4;
         using var opaque = OriginalPixels.Buffer(513, 259, 8, opaque: true);
         var opaqueExpected = OriginalPixels.Bytes(opaque);
@@ -100,34 +102,59 @@ internal static class CooperativeMemoryConsumer
         ImageCodec.EncodePng(opaque, output, new PngEncodeOptions { ColorType = PngColorType.Rgb });
         var packet = output.ToArray(); var packetSaved = packet.ToArray();
         using var live = new CancellationTokenSource();
+        VerifyPngCursorAdmission(packet, opaqueExpected, outputBytes, cancellable ? live.Token : default);
+        if (!packetSaved.AsSpan().SequenceEqual(packet)) throw new Exception("Packaged PNG cursor changed borrowed input.");
+        Console.WriteLine(cancellable
+            ? "Packaged live PNG cursors preserve exact byte/word sync/async samples, shared admission and independent survivors."
+            : "Packaged ordinary PNG cursors preserve exact byte/word sync/async samples, shared admission and independent survivors.");
+    }
+
+    private static void VerifyPngCursorAdmission(byte[] packet, byte[] opaqueExpected, int outputBytes, CancellationToken token)
+    {
+        var packetSaved = packet.ToArray();
         using var probe = new TestMemoryBudget(8 * 1024 * 1024);
-        using (var image = ImageCodec.Decode(packet, new() { Limits = new() { MemoryBudget = probe } }, live.Token))
+        using (var image = ImageCodec.Decode(packet, new() { Limits = new() { MemoryBudget = probe } }, token))
             if (!opaqueExpected.AsSpan().SequenceEqual(OriginalPixels.Bytes(image)))
-                throw new Exception("Packaged governed live RGB PNG changed samples.");
+                throw new Exception("Packaged governed PNG cursor changed samples.");
         if (probe.Bytes != 0 || probe.IsDisposed || probe.Peak <= outputBytes)
-            throw new Exception("Packaged live RGB PNG did not release its framing storage.");
+            throw new Exception("Packaged PNG cursor did not release its framing storage.");
         using var root = new TestMemoryBudget(probe.Peak + outputBytes);
         var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
-        using var held = ImageCodec.Decode(packet, options, live.Token);
-        using var survivor = ImageCodec.Decode(packet, options, live.Token);
+        var borrowedPacket = packet.ToArray();
+        using var held = ImageCodec.Decode(borrowedPacket, options, token);
+        using var survivor = ImageCodec.Decode(borrowedPacket, options, token);
+        borrowedPacket.AsSpan().Clear();
         if (root.Bytes != 2L * outputBytes || root.Peak != probe.Peak + outputBytes)
-            throw new Exception("Packaged live RGB PNG changed retained capacity or overlapping admission.");
+            throw new Exception("Packaged PNG cursor changed retained capacity or overlapping admission.");
         var refused = false;
-        try { using var unexpected = ImageCodec.Decode(packet, options, live.Token); }
+        try { using var unexpected = ImageCodec.Decode(packet, options, token); }
         catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { refused = true; }
         if (!refused || root.Refusals != 1 || root.Bytes != 2L * outputBytes)
-            throw new Exception("Packaged live RGB PNG did not clean up terminal admission refusal.");
+            throw new Exception("Packaged PNG cursor did not clean up terminal admission refusal.");
+        if (held.BitDepth == 8) held.GetRow8(0)[0] ^= 255; else held.GetRow16(0)[0] ^= 65535;
         held.Dispose();
-        using (var recovered = ImageCodec.Decode(packet, options, live.Token))
+        using (var recovered = ImageCodec.Decode(packet, options, token))
             if (!opaqueExpected.AsSpan().SequenceEqual(OriginalPixels.Bytes(recovered)))
-                throw new Exception("Packaged live RGB PNG failed after capacity was released.");
-        if (!packet.AsSpan().SequenceEqual(packetSaved)) throw new Exception("Packaged live RGB PNG mutated borrowed input.");
-        packet.AsSpan().Clear();
+                throw new Exception("Packaged PNG cursor failed after capacity was released.");
+        if (!packet.AsSpan().SequenceEqual(packetSaved)) throw new Exception("Packaged PNG cursor mutated borrowed input.");
         if (!opaqueExpected.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor)))
-            throw new Exception("Packaged live RGB PNG lost a surviving owner.");
+            throw new Exception("Packaged PNG cursor lost a surviving owner.");
         survivor.Dispose();
-        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged live RGB PNG lost borrowed-root ownership.");
-        Console.WriteLine("Packaged live PNG cursors preserve exact byte/word sync/async samples, shared admission and independent survivors.");
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged PNG cursor lost borrowed-root ownership.");
+        using var cancellation = new CancellationTokenSource(); root.Admitted = _ => cancellation.Cancel();
+        try
+        {
+            using var unexpected = ImageCodec.Decode(packet, options, cancellation.Token);
+            throw new Exception("Packaged shared PNG cursor ignored cancellation.");
+        }
+        catch (OperationCanceledException error) when (error.CancellationToken == cancellation.Token) { }
+        root.Admitted = null;
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged shared PNG cursor cancellation leaked ownership.");
+        using (var recovered = ImageCodec.Decode(packet, options, token))
+            if (!opaqueExpected.AsSpan().SequenceEqual(OriginalPixels.Bytes(recovered)))
+                throw new Exception("Packaged shared PNG cursor did not recover after cancellation.");
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged shared PNG cursor retained released storage.");
+        Console.WriteLine("Packaged shared PNG cursors preserve exact samples, bounded rows, aggregate admission, refusal, cancellation and independent survivors.");
     }
 
     private static void VerifyOwnedFonts()
@@ -930,7 +957,8 @@ internal static class CooperativeMemoryConsumer
         VerifyMixedWordSchedule(8192);
         VerifyMixedWordSchedule(4096, vertical: true);
         VerifyMixedWordSchedule(8192, vertical: true);
-        await VerifyLivePngCursor();
+        await VerifyPngCursors(cancellable: true);
+        await VerifyPngCursors(cancellable: false);
         VerifyOwnedFonts();
         await VerifyProgressivePlaneOwnership();
         await VerifyOpaqueWordTiles();

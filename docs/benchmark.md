@@ -60,29 +60,24 @@ Current scope and remaining work:
   envelope. Combined lossy scope:
   6pass/1gaps/2uncertain.
   Exact complete packets remain unchanged; passing controls stop.
-- **PNG:** [prepared literal prefixes](../benchmarks/PNG-PREPARED-PREFIX.md) save
-  422µs/12.8% on two complete retained-output decodes under one shared root.
-  Current ratio 1.009/upper 1.014 remains a gap. Nominal arrays fit the same4KiB
-  scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
-  Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
+- **PNG:** [ordinary/slab cursor publication](../benchmarks/PNG-NORMAL-CURSOR-PUBLICATION.md)
+  removes exception-only publication of abandoned private state. Completed cursors,
+  public errors/partial stores, lookahead, polls and owner cleanup remain exact.
+  Tight/default RGBA16, RGB16 and tight-live RGBA16 save **192/125/216/217µs**;
+  all four former gaps now pass. The two-image shared-root operation saves260µs:
+  2610.86/native2847.04µs, upper0.920, passes. Filtered/allactual raw/normalized
+  intervals separate. Its admitted peak1,766,641B, retained pair1,062,936B and
+  GC1,638,214B/op remain unchanged; all51 inventory allocations are unchanged.
   [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
-  51 independently confirmed controls, 45 pass/stop,
-  5 gaps and 1 uncertain. All47 existing resident
-  decode controls and four coding validators now have evidence; no resident
-  confirmation remains missing. Passing cases stop. The report lists exact scopes,
-  allocations and remaining gaps.
-  [Live local cursors](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) save
-  **147.18µs/9.56% raw/9.54% normalized** on RGBA8 and **31.01µs/1.05% raw/1.04%
-  normalized** on RGBA16; filtered/allactual raw/normalized intervals separate.
-  Current1391.93/native1393.91µs upper1.004 remains uncertain; word2919.94/
-  native2894.87µs upper1.012 remains a gap. No favorable resampling or parity claim.
-  GC4472/8568Bop and4KiB framing admission unchanged; no new heap capacity or
-  retained scratch. Exact pixels, full lookahead, per-field polls, public errors
-  and completed cursor remain. Failed private readers are abandoned; outer owner
-  cleanup stays. Two costs refresh and49 unchanged controls reuse prior evidence.
-  One displayed row refreshes;124 numerical rows reuse unchanged paths.
-  Header-only inspection/identification, stream/composition/shared-root boundaries
-  and encoding keep their separate required coverage.
+  51 confirmed controls, 49 pass/stop,
+  1 gap and 1 uncertain.
+  All43 affected costs refresh; eight unchanged costs retain explicit providers.
+  Live materialized RGBA16 remains2919.94/native2894.87µs upper1.012, a gap;
+  liveRGBA8 upper1.004 remains uncertain. No favorable resampling or global parity
+  claim. Header-only work and encoding are unchanged; older stream/composition
+  costs remain historical. Physical/native peaks are not remeasured. Earlier
+  [prefix](../benchmarks/PNG-PREPARED-PREFIX.md) and
+  [live-cursor](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) gains remain linked history.
   [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
   remove the greedy block's second token census using its existing storage.
   Independent live/plain word gains are516–550/557µs; filtered/allactual raw and
@@ -158,7 +153,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,905 full/live checks per OS**, affected
+The current production build passes **5,907 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -168,7 +163,9 @@ admission, terminalrefusal, cancellationcleanup and independent survivors.
 JPEG paths pass407 internal/375 public checks per normal/scalar mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
-The current PNG package also exercises frozen Fastest8/16 sync/async packets,
+The current PNG package also verifies ordinary/live byte/word sync/async pixels,
+terminal refusal, cancellation cleanup/recovery and independent survivors, plus
+frozen Fastest8/16 sync/async packets,
 shared admission and independent ownership. The current package also exercises
 authored grouped-AC JPEG pixels, sync/async scan storage, terminal refusal and
 independent survivors. Its live baseline witnesses also pass. Unchanged
@@ -236,8 +233,8 @@ settings do not establish matched quality.
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,023.86 | 10,524.89 | 0.952 / 0.963 | 1,360,900 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG RGBA8 decode, live token † | 1,391.93 | 1,393.91 | 0.999 / 1.004 | 4,472 | — |
-| PNG RGBA8 decode, tight working limit † | 1,297.38 | 1,395.09 | 0.930 / 0.935 | 68,224 | — |
-| PNG RGBA16 decode, tight working limit † | 3,019.22 | 2,895.06 | 1.043 / 1.052 | 70,272 | — |
+| PNG RGBA8 decode, tight working limit † | 1,184.46 | 1,395.39 | 0.849 / 0.855 | 68,224 | — |
+| PNG RGBA16 decode, tight working limit † | 2,826.77 | 2,894.02 | 0.977 / 0.981 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
 | PNG RGBA16, one-shot Fastest1 / native1 † | 17,956.64 | 18,627.96 | 0.964 / 0.970 | 2,437,660 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,279.79 | 18,615.61 | 0.982 / 0.987 | 2,437,660 | 968,216 / 968,216 |
@@ -255,7 +252,7 @@ settings do not establish matched quality.
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 104,422.47 | 120,958.63 | 0.863 / 0.876 | 7,342,192 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
-| PNG8 decode, two retained images / shared caller root † | 2,870.80 | 2,845.40 | 1.009 / 1.014 | 1,638,214 | — |
+| PNG8 decode, two retained images / shared caller root † | 2,610.86 | 2,847.04 | 0.917 / 0.920 | 1,638,214 | — |
 | JPEG dense CMYK, resident decode (confirmed pass) † | 1,390.69 | 3,111.67 | 0.447 / 0.450 | 20,944 | — |
 | JPEG horizontal-only CMYK, resident decode † | 453.31 | 392.03 | 1.156 / 1.162 | 20,944 | — |
 | JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 435.42 | 604.87 | 0.720 / 0.722 | 762,721 | — |
@@ -326,14 +323,14 @@ settings do not establish matched quality.
 | Probe JPEG dimensions, seekable | 0.326 | 0.194 | 1.681 / 1.736 | 744 | Confirmed gap |
 | Probe WebP dimensions, seekable | 0.165 | 0.125 | 1.323 / 1.425 | 744 | Confirmed gap |
 | Probe JPEG dimensions, async nonseekable | 0.404 | 0.201 | 2.007 / 2.052 | 744 | Confirmed gap |
-| Validate PNG8, span † | 1,287.369 | 1,377.047 | 0.935 / 0.938 | 240 | Confirmed pass |
-| Validate PNG16, span † | 2,906.210 | 2,961.985 | 0.981 / 0.983 | 240 | Confirmed pass |
+| Validate PNG8, span † | 1,169.541 | 1,380.849 | 0.847 / 0.857 | 240 | Confirmed pass |
+| Validate PNG16, span † | 2,768.710 | 2,962.790 | 0.934 / 0.938 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.760 | 3.939 | 0.447 / 0.463 | 792 | Confirmed pass |
 | Validate JPEG baseline420, span | 477.351 | 674.564 | 0.708 / 0.711 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span | 330.131 | 268.515 | 1.229 / 1.237 | 4,088 | Confirmed gap |
 | Validate VP8L+alpha, span | 2,309.164 | 3,044.518 | 0.758 / 0.765 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span | 4,529.581 | 5,446.763 | 0.832 / 0.836 | 13,584 | Confirmed pass |
-| Validate PNG16, async nonseekable † | 2,956.807 | 3,613.242 | 0.818 / 0.826 | 8,544 | Confirmed pass |
+| Validate PNG16, async nonseekable † | 2,759.145 | 3,611.996 | 0.764 / 0.765 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |
 | Identify JPEG420, resident, canonical adapter | 0.501 | 1.193 | 0.420 / 0.426 | 96 | Confirmed pass |

@@ -92,11 +92,10 @@ namespace Lokad.Image.Internal
                         Assert.Equal(referenceError?.Message, actualError?.Message);
                         if (actualError is null) { Assert.Equal(referenceCount, actualCount); Assert.Equal(referenceEnded, actualEnded); }
                         Assert.Equal(referenceOutput, actualOutput);
-                        // Walk discards a failed live-block reader. Its public
-                        // error and partial stores remain exact above. Completed
-                        // blocks (including a failed following Read) keep exact
-                        // cache/cursor state; ordinary cursor behavior is unchanged.
-                        if (actualError is null || !live || !cursor || actualEnded)
+                        // Walk/WalkRows discard any failed private cursor. Public
+                        // errors and partial stores remain exact. Completed blocks,
+                        // including a failed following Read, keep exact cached state.
+                        if (actualError is null || !cursor || actualEnded)
                             Assert.Equal(reference.PreparedPrefixTestState, actual.PreparedPrefixTestState);
                     }
                     Assert.Equal(saved, input);

@@ -16,8 +16,9 @@ namespace Lokad.Image.Tests
 
     public sealed partial class ZlibMaterializationTests
     {
-        [Fact]
-        public void FailedLiveFramingReleasesAdmissionBeforeTheNextIndependentReader()
+        [Theory]
+        [InlineData(false)] [InlineData(true)]
+        public void FailedFramingReleasesAdmissionBeforeTheNextIndependentReader(bool cancelable)
         {
             var raw = Enumerable.Range(0, 128).Select(i => (byte)i).ToArray();
             var bits = new Writer(); bits.Number(1, 1); bits.Number(1, 2);
@@ -26,7 +27,7 @@ namespace Lokad.Image.Tests
             var saved = encoded.ToArray();
             using var cancellation = new CancellationTokenSource();
             using var root = new TestMemoryBudget(4096);
-            using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = root }, cancellation.Token);
+            using var context = new OperationContext(new() { MaxWorkingBytes = 4096, MemoryBudget = root }, cancelable ? cancellation.Token : default);
             var partial = Enumerable.Repeat((byte)165, raw.Length).ToArray();
             Assert.Throws<ImageDataException>(() => { ZlibFraming.ValidateAndInflate(encoded.AsSpan(0, 8), partial, context, out _); });
             Assert.Equal(0, partial[0]); Assert.Contains((byte)165, partial);

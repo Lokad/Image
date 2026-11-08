@@ -15,89 +15,93 @@ internal static partial class ZlibFraming
         {
             ended = false;
             var bytes = data; var cached = buffer; var bits = available;
-            var offset = position;             try
+            var offset = position;
+            // Walk/WalkRows discard a failed private reader. Keep public errors
+            // and partial stores, publishing only completed blocks/slabs below.
+            // A streaming slab stops with room for the largest next token.
+            // Materialized output uses int.MaxValue and ends only on EOB.
+            while (output < stop)
             {
-                // A streaming slab stops with room for the largest next token.
-                // Materialized output uses int.MaxValue and ends only on EOB.
-                while (output < stop)
+                FillCursor(bytes, ref cached, ref bits, ref offset, 9);
+                var entry = literalLookup[(int)(cached & 1023)];
+                var codeBits = entry & 15;
+                if (codeBits is 0 or > 9)
                 {
-                    FillCursor(bytes, ref cached, ref bits, ref offset, 9);
-                    var entry = literalLookup[(int)(cached & 1023)];
-                    var codeBits = entry & 15;
-                    if (codeBits is 0 or > 9)
-                    {
-                        // Match the original canonical fallback's full lookahead
-                        // before trusting any tenth bit, including short tails.
-                        FillCursor(bytes, ref cached, ref bits, ref offset, literals.Maximum);
-                        entry = literalLookup[(int)(cached & 1023)]; codeBits = entry & 15;
-                    }
-                    int symbol;
-                    if (codeBits != 0)
-                    {
-                        symbol = entry >> 4;
-                        cached >>= codeBits; bits -= codeBits;                     }
-                    else
-                    {
-                        // Keep the original canonical decoder and exact error/cursor
-                        // behavior for long prefixes, publishing only at this boundary.
-                        buffer = cached; available = bits; position = offset;                         try { symbol = DecodeLongLiteral(ref this, literals, literalLookup); }
-                        finally { cached = buffer; bits = available; offset = position; }
-                    }
-                    if (symbol == 256) { ended = true; return output; }
-                    if (symbol < 256)
-                    {
-                        if (output == expected) throw new ImageDataException("PNG contains excess decompressed pixels.");
-                        destination[output++] = (byte)symbol;
-                        continue;
-                    }
-                    if (symbol > 285) throw new ImageDataException("Invalid PNG Deflate length code.");
-                    int length;
-                    if (symbol < 265) length = symbol - 254;
-                    else if (symbol == 285) length = 258;
-                    else
-                    {
-                        var extra = (symbol - 265) / 4 + 1;
-                        length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra)
-                            + ReadCursor(bytes, ref cached, ref bits, ref offset, extra);
-                    }
-                    FillCursor(bytes, ref cached, ref bits, ref offset, 5);
-                    entry = distanceLookup[(int)(cached & 31)]; codeBits = entry & 15;
-                    int distanceSymbol;
-                    if (codeBits != 0)
-                    {
-                        distanceSymbol = entry >> 4;
-                        cached >>= codeBits; bits -= codeBits;                     }
-                    else
-                    {
-                        buffer = cached; available = bits; position = offset;                         try { distanceSymbol = Decode(ref this, distances.Counts, distances.Symbols, distances.Maximum); }
-                        finally { cached = buffer; bits = available; offset = position; }
-                    }
-                    if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
-                    var distance = distanceSymbol + 1;
-                    if (distanceSymbol >= 4)
-                    {
-                        var extra = distanceSymbol / 2 - 1;
-                        distance = 1 + ((2 + (distanceSymbol & 1)) << extra)
-                            + ReadCursor(bytes, ref cached, ref bits, ref offset, extra);
-                    }
-                    if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
-                    if (length > expected - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
-                    if (distance == 1) destination.Slice(output, length).Fill(destination[output - 1]);
-                    else
-                    {
-                        var copied = Math.Min(length, distance);
-                        destination.Slice(output - distance, copied).CopyTo(destination.Slice(output, copied));
-                        while (copied < length)
-                        {
-                            var count = Math.Min(copied, length - copied);
-                            destination.Slice(output, count).CopyTo(destination.Slice(output + copied, count));
-                            copied += count;
-                        }
-                    }
-                    output += length;
+                    // Match the original canonical fallback's full lookahead
+                    // before trusting any tenth bit, including short tails.
+                    FillCursor(bytes, ref cached, ref bits, ref offset, literals.Maximum);
+                    entry = literalLookup[(int)(cached & 1023)]; codeBits = entry & 15;
                 }
+                int symbol;
+                if (codeBits != 0)
+                {
+                    symbol = entry >> 4;
+                    cached >>= codeBits; bits -= codeBits;
+                }
+                else
+                {
+                    // Keep the original canonical decoder and exact error/cursor
+                    // behavior for long prefixes, publishing only at this boundary.
+                    buffer = cached; available = bits; position = offset;
+                    symbol = DecodeLongLiteral(ref this, literals, literalLookup);
+                    cached = buffer; bits = available; offset = position;
+                }
+                if (symbol == 256) { ended = true; break; }
+                if (symbol < 256)
+                {
+                    if (output == expected) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                    destination[output++] = (byte)symbol;
+                    continue;
+                }
+                if (symbol > 285) throw new ImageDataException("Invalid PNG Deflate length code.");
+                int length;
+                if (symbol < 265) length = symbol - 254;
+                else if (symbol == 285) length = 258;
+                else
+                {
+                    var extra = (symbol - 265) / 4 + 1;
+                    length = 3 + (1 << (extra + 2)) + ((symbol - 265) % 4 << extra)
+                        + ReadCursor(bytes, ref cached, ref bits, ref offset, extra);
+                }
+                FillCursor(bytes, ref cached, ref bits, ref offset, 5);
+                entry = distanceLookup[(int)(cached & 31)]; codeBits = entry & 15;
+                int distanceSymbol;
+                if (codeBits != 0)
+                {
+                    distanceSymbol = entry >> 4;
+                    cached >>= codeBits; bits -= codeBits;
+                }
+                else
+                {
+                    buffer = cached; available = bits; position = offset;
+                    distanceSymbol = Decode(ref this, distances.Counts, distances.Symbols, distances.Maximum);
+                    cached = buffer; bits = available; offset = position;
+                }
+                if (distanceSymbol > 29) throw new ImageDataException("Invalid PNG Deflate distance code.");
+                var distance = distanceSymbol + 1;
+                if (distanceSymbol >= 4)
+                {
+                    var extra = distanceSymbol / 2 - 1;
+                    distance = 1 + ((2 + (distanceSymbol & 1)) << extra)
+                        + ReadCursor(bytes, ref cached, ref bits, ref offset, extra);
+                }
+                if (distance > output || distance > window) throw new ImageDataException("PNG Deflate distance exceeds history or window.");
+                if (length > expected - output) throw new ImageDataException("PNG contains excess decompressed pixels.");
+                if (distance == 1) destination.Slice(output, length).Fill(destination[output - 1]);
+                else
+                {
+                    var copied = Math.Min(length, distance);
+                    destination.Slice(output - distance, copied).CopyTo(destination.Slice(output, copied));
+                    while (copied < length)
+                    {
+                        var count = Math.Min(copied, length - copied);
+                        destination.Slice(output, count).CopyTo(destination.Slice(output + copied, count));
+                        copied += count;
+                    }
+                }
+                output += length;
             }
-            finally { buffer = cached; available = bits; position = offset; }
+            buffer = cached; available = bits; position = offset;
             return output;
         }
 

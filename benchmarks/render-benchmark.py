@@ -469,48 +469,32 @@ def render():
     assert word_color_png['qualification']['sameActualPackageBothOs']
     assert word_color_png['qualification']['package']['sha256'] == word_color_png['qualification']['linuxPackage']['sameActualPackageSha256']
     assert set(word_color_png['cases']) == {'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16'}
-    png_framing = json.loads((ROOT / 'benchmarks/png-current-framing-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not png_framing['productionChanged'] and png_framing['allBuilds'] == 0
+    png_framing = json.loads((ROOT / 'benchmarks/png-normal-cursor-publication-evidence.json').read_text(encoding='utf-8'))
+    assert png_framing['productionAccepted'] and png_framing['requiredMaterialPaths'] == 283
+    assert len(png_framing['cases']) == 51 and len(png_framing['refreshedCases']) == 43
+    assert len(png_framing['retainedCases']) == 8
     assert png_framing['statusCounts'] == {status: sum(c['status'] == status for c in png_framing['cases'].values())
         for status in ('pass', 'gap', 'uncertain')}
     assert png_framing['raw']['mirrored'] and png_framing['raw']['allMembersVerified']
-    assert png_framing['qualificationReused']['sameActualPackageBothOs']
-    assert set(png_framing['displayedCases']) == {'DecodeCancelable8', 'DecodeTight8', 'DecodeTight16',
-        'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
-    for case, framing_case in png_framing['cases'].items():
-        if case in {'DecodeCancelable8', 'DecodeCancelable16'}:
-            continue  # Superseded costs remain in the original report/raw data.
+    assert png_framing['sourceProof']['sameNormalTraversalModuloEobBreakAndExceptionPublication']
+    assert png_framing['sourceProof']['refillReadHelpersByteExact']
+    assert png_framing['sourceProof']['allExplicitExceptionMessagesAndOrderExact']
+    for name, framing_case in png_framing['cases'].items():
         assert framing_case['actualIterations'] == len(framing_case['managedActualNanoseconds']) == 12
-        assert framing_case['librarySha256'] == png_framing['producers']['linuxSha256']
+        expected = (png_framing['retainedCases'][name]['librarySha256'] if name in png_framing['retainedCases']
+                    else png_framing['producers']['linuxSha256'])
+        assert framing_case['librarySha256'] == expected
         assert framing_case['allOriginalGatesPassed'] and framing_case['quietGuardsPassed']
         assert framing_case['sourceUnchanged'] and framing_case['independentOwnedOutput']
-        assert framing_case['status'] == ('pass' if framing_case['upper'] <= 1 else 'gap' if framing_case['lower'] > 1 else 'uncertain')
         assert framing_case.get('descriptorExact', framing_case.get('managedExact', False))
-    png_live = json.loads((ROOT / 'benchmarks/png-live-prepared-cursor-evidence.json').read_text(encoding='utf-8'))
-    assert png_live['productionAccepted'] and png_live['requiredMaterialPaths'] == 283
-    assert png_live['raw']['mirrored'] and png_live['raw']['allMembersVerified']
-    assert set(png_live['cases']) == {'DecodeCancelable8', 'DecodeCancelable16'}
-    assert png_live['sourceProof']['fullCSourceReconstructsBOutsideKnownTenthBitBranch']
-    assert png_live['sourceProof']['ordinaryCursorHuffmanPreparationCanonicalLiteralRunCountingStreamingBodiesExact']
-    assert png_live['sourceProof']['publicFailurePartialOutputPollLookaheadContractsUnchanged']
-    for live_name, live_case in png_live['cases'].items():
-        assert live_case['actualIterations'] == len(live_case['managedActualNanoseconds']) == live_case['nativeSamplesEachBracket'] == 12
-        assert live_case['librarySha256'] == png_live['producers']['linuxSha256']
-        assert live_case['allOriginalGatesPassed'] and live_case['quietGuardsPassed']
-        assert live_case['managedExact'] and live_case['alphaExact'] and live_case['hiddenRgbExact']
-        assert live_case['sourceUnchanged'] and live_case['independentOwnedOutput']
-        assert live_case['status'] == ('pass' if live_case['upper'] <= 1 else 'gap' if live_case['lower'] > 1 else 'uncertain')
-        png_framing['cases'][live_name] = live_case
-    png_framing['statusCounts'] = {s: sum(c['status'] == s for c in png_framing['cases'].values())
-                                  for s in ('pass', 'gap', 'uncertain')}
-    png_framing['displayedStatusCounts'] = {s: sum(png_framing['cases'][c]['status'] == s for c in png_framing['displayedCases'])
-                                           for s in ('pass', 'gap', 'uncertain')}
+        assert framing_case['status'] == ('pass' if framing_case['upper'] <= 1 else 'gap' if framing_case['lower'] > 1 else 'uncertain')
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for comparison in png_live['comparison'].values() for v in comparison['views'].values())
-    png_live_q = png_live['qualification']
-    assert png_live_q['fullChecksEachOs'] == png_live_q['windows']['total'] == png_live_q['linux']['total'] == 5891
-    assert png_live_q['actualPackage']['sha256'] == png_live_q['samePackageLinux']['sameActualPackageSha256']
-    assert png_live_q['actualPackage']['livePngCursorSamplesAndOwnershipPassed'] and png_live_q['samePackageLinux']['livePngCursorSamplesAndOwnershipPassed']
+               for comparison in png_framing['comparison'].values() for v in comparison['views'].values())
+    png_q = png_framing['qualification']
+    assert png_q['fullChecksEachOs'] == png_q['windows']['total'] == png_q['linux']['total'] == 5907
+    assert png_q['actualPackage']['sha256'] == png_q['samePackageLinux']['sameActualPackageSha256']
+    assert all(q['sharedOrdinaryPngCursorAndRowsOwnershipPassed']
+               for q in (png_q['actualPackage'], png_q['samePackageLinux']))
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -1571,23 +1555,12 @@ def render():
     rows.insert(positions[0] + 1, ('editing', f'| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | '
                                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                                 f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
-    # One current PNG owner; superseded experiments stay linked history.
-    # The latest coherent production stage owns current global qualification.
-    png_decode = json.loads((ROOT / 'benchmarks/png-prepared-prefix-evidence.json').read_text(encoding='utf-8'))
-    assert png_decode['productionAccepted'] and png_decode['requiredMaterialPaths'] == 283
-    assert png_framing['producers'] == png_decode['producers']
-    assert png_framing['qualificationReused']['packageSha256'] == png_decode['qualification']['actualPackage']['sha256']
-    assert png_decode['sourceProof']['unchangedBitsPeekFillConsumeAlignSkipText']
-    assert png_decode['storage']['admittedScratchBytes'] == 4096
-    assert png_decode['storage']['newHeapPayloadBytes'] == png_decode['storage']['newRetainedBytes'] == 0
-    assert png_decode['raw']['mirrored'] and png_decode['raw']['allMembersVerified']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in png_decode['comparison']['views'].values())
-    current = png_decode['current']
+    current = png_framing['currentSharedRoot']
     assert current['actualIterations'] == len(current['managedActualNanoseconds']) == 12
+    assert current['librarySha256'] == png_framing['producers']['linuxSha256']
     assert current['managedExact'] and current['independentOwnedOutputs'] and current['sourceUnchanged']
     assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-    assert current['librarySha256'] == png_decode['producers']['linuxSha256']
-    assert current['lower'] > 1 and current['status'] == 'gap'
+    assert current['status'] == 'pass' and current['upper'] <= 1
     # One current owner for small-support word publication. The earlier owners
     # above still supply unchanged byte/wide-word rows and linked history.
     word_prep = json.loads((ROOT / 'benchmarks/bicubic-shared-word-preparation-evidence.json').read_text(encoding='utf-8'))
@@ -1718,7 +1691,7 @@ def render():
     for index, (kind, row) in enumerate(rows):
         label = row.split('|')[1].strip().removesuffix(' †')
         if label == 'PNG8 decode, two retained images / shared caller root':
-            current = png_decode['current']
+            current = png_framing['currentSharedRoot']
             rows[index] = (kind, f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                            f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | — |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
@@ -1877,29 +1850,24 @@ Current scope and remaining work:
   envelope. Combined lossy scope:
   {vp8_status_counts['pass']}pass/{vp8_status_counts['gap']}gaps/{vp8_status_counts['uncertain']}uncertain.
   Exact complete packets remain unchanged; passing controls stop.
-- **PNG:** [prepared literal prefixes](../benchmarks/PNG-PREPARED-PREFIX.md) save
-  422µs/12.8% on two complete retained-output decodes under one shared root.
-  Current ratio {png_decode['current']['ratio']:.3f}/upper {png_decode['current']['upper']:.3f} remains a gap. Nominal arrays fit the same4KiB
-  scratch; admitted peak1,766,641B and retained pair1,062,936B stay unchanged.
-  Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
+- **PNG:** [ordinary/slab cursor publication](../benchmarks/PNG-NORMAL-CURSOR-PUBLICATION.md)
+  removes exception-only publication of abandoned private state. Completed cursors,
+  public errors/partial stores, lookahead, polls and owner cleanup remain exact.
+  Tight/default RGBA16, RGB16 and tight-live RGBA16 save **192/125/216/217µs**;
+  all four former gaps now pass. The two-image shared-root operation saves260µs:
+  2610.86/native2847.04µs, upper0.920, passes. Filtered/allactual raw/normalized
+  intervals separate. Its admitted peak1,766,641B, retained pair1,062,936B and
+  GC1,638,214B/op remain unchanged; all51 inventory allocations are unchanged.
   [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
-  {len(png_framing['cases'])} independently confirmed controls, {png_framing['statusCounts']['pass']} pass/stop,
-  {png_framing['statusCounts']['gap']} gaps and {png_framing['statusCounts']['uncertain']} uncertain. All47 existing resident
-  decode controls and four coding validators now have evidence; no resident
-  confirmation remains missing. Passing cases stop. The report lists exact scopes,
-  allocations and remaining gaps.
-  [Live local cursors](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) save
-  **147.18µs/9.56% raw/9.54% normalized** on RGBA8 and **31.01µs/1.05% raw/1.04%
-  normalized** on RGBA16; filtered/allactual raw/normalized intervals separate.
-  Current1391.93/native1393.91µs upper1.004 remains uncertain; word2919.94/
-  native2894.87µs upper1.012 remains a gap. No favorable resampling or parity claim.
-  GC4472/8568Bop and4KiB framing admission unchanged; no new heap capacity or
-  retained scratch. Exact pixels, full lookahead, per-field polls, public errors
-  and completed cursor remain. Failed private readers are abandoned; outer owner
-  cleanup stays. Two costs refresh and49 unchanged controls reuse prior evidence.
-  One displayed row refreshes;124 numerical rows reuse unchanged paths.
-  Header-only inspection/identification, stream/composition/shared-root boundaries
-  and encoding keep their separate required coverage.
+  {len(png_framing['cases'])} confirmed controls, {png_framing['statusCounts']['pass']} pass/stop,
+  {png_framing['statusCounts']['gap']} gap and {png_framing['statusCounts']['uncertain']} uncertain.
+  All43 affected costs refresh; eight unchanged costs retain explicit providers.
+  Live materialized RGBA16 remains2919.94/native2894.87µs upper1.012, a gap;
+  liveRGBA8 upper1.004 remains uncertain. No favorable resampling or global parity
+  claim. Header-only work and encoding are unchanged; older stream/composition
+  costs remain historical. Physical/native peaks are not remeasured. Earlier
+  [prefix](../benchmarks/PNG-PREPARED-PREFIX.md) and
+  [live-cursor](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) gains remain linked history.
   [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
   remove the greedy block's second token census using its existing storage.
   Independent live/plain word gains are516–550/557µs; filtered/allactual raw and
@@ -1975,7 +1943,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{vertical_word['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{png_q['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -1985,7 +1953,9 @@ admission, terminalrefusal, cancellationcleanup and independent survivors.
 JPEG paths pass407 internal/375 public checks per normal/scalar mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
-The current PNG package also exercises frozen Fastest8/16 sync/async packets,
+The current PNG package also verifies ordinary/live byte/word sync/async pixels,
+terminal refusal, cancellation cleanup/recovery and independent survivors, plus
+frozen Fastest8/16 sync/async packets,
 shared admission and independent ownership. The current package also exercises
 authored grouped-AC JPEG pixels, sync/async scan storage, terminal refusal and
 independent survivors. Its live baseline witnesses also pass. Unchanged
