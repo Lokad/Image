@@ -1,0 +1,92 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VPQ631/MXC632",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "newInputs": 0,
+  "newProfiles": 0,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "current": {
+    "managedUs": 1319.8644776041665,
+    "nativeUs": 860.2988619791666,
+    "ratio": 1.53419298331715,
+    "lower": 1.5074861599816431,
+    "upper": 1.545027009344721,
+    "allocatedBytes": 114,
+    "status": "gap",
+    "librarySha256": "56acf730ef4cd87e644237e5128004c925e3a4736d73348daac8f4526a923477",
+    "caseId": "TightMixed8",
+    "width": 513,
+    "height": 259,
+    "depth": 8,
+    "outputWidth": 1027,
+    "outputHeight": 129,
+    "managedMaxWorkingBytes": 1065496,
+    "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+    "outputSha256": "1ca9938539ba1421fe4f1540055be5d0675ac8ddc1ea87df5932a93ca35a0356",
+    "nativeOutputSha256": "fd6e9bcf0b7992f71a169551e52d3d8c4920fe4a70382065c46134ac98e1dbd8",
+    "boundary": "One resident original 513x259 RGBA8 raster to independently owned 1027x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1065496 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true,
+    "managedRationalReferenceExact": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true
+  },
+  "actualPackage": {
+    "sha256": "307d8866270fb021c6307a372f71b69675a058c37f09711b202d000a02235e44",
+    "librarySha256": "56acf730ef4cd87e644237e5128004c925e3a4736d73348daac8f4526a923477",
+    "file": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+    "qualifiedSamePackageBothOs": true
+  },
+  "reusedQualification": {
+    "provider": "benchmarks/vp8-frame-quantizer-preparation-evidence.json",
+    "fullChecksEachOs": 5955,
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "newBuildsOrTestOrPackageRuns": 0
+  },
+  "sources": {
+    "src/Lokad.Image/Internal/MixedColumnBicubicResize.cs": "f25d47659860777c8690dc42e283766a1425bc647889edcf45f3b40777dfd9d1",
+    "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "790643a112e5aa8e8c4d5a880294f5e0b31306b445a94d5bcc4b03616bbae08f",
+    "src/Lokad.Image/ImageTransforms.cs": "bde520912950fdffaccdcb2b12ce6f74cb67cefa7a4cae3b622521bd911ba3d0"
+  },
+  "purpose": "Resolve the largest displayed historical point before optimization. Same original513x259RGBA8 source,1027x129output,input+output+4096local limit, prepared zimg backend/input/scratch boundary and every original pixel/source/ownership gate. Actual immutable package DLL already qualified W/L. No causal gain/regression claim from older1167.23us point.",
+  "storage": {
+    "totalAllocatedBytes": 114,
+    "retainedOutputBytes": 529932,
+    "localAdditionalWorkingBytes": 4096,
+    "physicalAndNativePeaksMeasured": false,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0
+  },
+  "workflow": {
+    "currentConfirmations": 1,
+    "actuals": 12,
+    "favorableRepeats": 0,
+    "packageChanges": 0,
+    "mainEmbeddedHarnessSelectorNativeBuilds": 0,
+    "guard": "idle-v2 versioned process/idle guard before and after, sequential CPU0 and existing one-CPU boundaries"
+  },
+  "next": "Largest current demonstrated displayed gap is now~459.57us. Inspect current mixed-byte scheduling and certified publication/tiny-alpha repair before architectural prototype. Existing8row bands, paired512column decode, result-backed geometry and per-pair certification already exist; do not propose absent preparation. Preserve exact byte pixels/certificates/deferred tiny-alpha replay, working/admission/cancellation and independently owned outputs. Current source uses no64row result bank or quartet byte publication; model their separate removed work/lifetimes before implementation.",
+  "raw": {
+    "file": "bicubic-mixed-byte-current-package.tar.xz",
+    "sha256": "814aa535ff8796f93393901afd204cf816c8cb420876c5b925ff2682171fa651",
+    "bytes": 6968600,
+    "members": 121,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-frame-quantizer-preparation-qualified.tar.xz",
+        "sha256": "845e24ce204393658cdd89e9bc910bbb42d2d0cab292f419f8478413bb96c176",
+        "bytes": 13831460,
+        "members": 294
+      }
+    ]
+  }
+}

@@ -917,30 +917,12 @@ def render():
                        f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                        f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
-    tight_mixed = json.loads((ROOT / 'benchmarks/warm-mixed-bicubic-geometry-evidence.json').read_text(encoding='utf-8'))
-    assert tight_mixed['productionChanged'] and tight_mixed['independentQuietConfirmation']
-    assert tight_mixed['decision']['defaultFivePercentPassed'] and tight_mixed['decision']['normalizedSeparated']
-    assert tight_mixed['memory']['newOwnedCapacityBytes'] == 0
-    assert tight_mixed['workflow']['allMeasurementBuilds'] == 0
-    assert tight_mixed['qualification']['fullChecksEachOs'] == 5314
-    assert tight_mixed['qualification']['package']['sha256'] == tight_mixed['qualification']['linuxPackage']['sameActualPackageSha256']
-    assert set(tight_mixed['cases']) == {'Mixed8', 'Mixed16', 'TightMixed8', 'TightMixed16', 'TightVertical8', 'TightVertical16'}
-    for case, observations in tight_mixed['cases'].items():
-        observation = observations[-1]
-        receipt, stats = observation['receipt'], observation['managed']['statistics']
-        assert receipt['librarySha256'] == tight_mixed['producers']['linuxSha256']
-        assert receipt['managedQualifiedOriginalPixelsExact']
-        assert all(q['passed'] for q in observation['quietness'].values())
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert tight_mixed['comparisonLowerBounds'][case] > 1 and tight_mixed['status'][case] == 'confirmed-gap'
-        if case not in {'TightMixed8', 'TightMixed16'}:
-            continue
-        assert receipt['managedRationalReferenceExact']
-        native = min(b['mean'] for b in observation['nativeBrackets'])
-        rows.append(('editing', f'| Bicubic RGBA{receipt["depth"]}, width up / height down, input+output+4 KiB † → 1027×129 | '
-                     f'{stats["Mean"] / 1000:,.2f} | {native / 1000:,.2f} | '
-                     f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
-                     f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |'))
+    mixed_byte_current = json.loads((ROOT / 'benchmarks/bicubic-mixed-byte-current-evidence.json').read_text(encoding='utf-8'))
+    result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
+    for depth, current in [(8, mixed_byte_current['current']), (16, result_bands['cases']['TightMixed16'])]:
+        rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
+                     f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
+                     f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
     for depth, name in [(8, 'byte'), (16, 'word')]:
         tight_wide = json.loads((ROOT / f'benchmarks/current-tight-wide-{name}-bicubic-costs-evidence.json').read_text(encoding='utf-8'))
         assert not tight_wide['productionChanged'] and tight_wide['independentQuietConfirmation']
@@ -1459,7 +1441,6 @@ def render():
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5866
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
-    result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
     assert result_bands['productionAccepted'] and result_bands['requiredMaterialPaths'] == 283
     assert result_bands['raw']['mirrored'] and result_bands['raw']['allMembersVerified']
     assert set(result_bands['cases']) == {'Mixed16', 'TightMixed16', 'TightVertical16'}
@@ -1590,6 +1571,21 @@ def render():
                    'Validate JPEG baseline420, span', 'Validate JPEG progressive420, span',
                    'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
                    'Validate PNG16, async nonseekable']
+    assert not mixed_byte_current['productionChanged'] and mixed_byte_current['allBuilds'] == 0
+    assert mixed_byte_current['raw']['mirrored'] and mixed_byte_current['raw']['allMembersVerified']
+    current = mixed_byte_current['current']
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+    assert current['managedRationalReferenceExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['sourceUnchanged'] and current['independentOwnedOutput']
+    assert current['status'] == 'gap' and current['lower'] > 1
+    assert current['librarySha256'] == mixed_byte_current['actualPackage']['librarySha256']
+    assert mixed_byte_current['actualPackage']['sha256'] == prepared_model['qualification']['actualPackage']['sha256']
+    label = 'Bicubic RGBA8, width up / height down, input+output+4 KiB'
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| {label} † → 1027×129 | '
+        f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+        f'{current["allocatedBytes"]:,} |')
     read_rows = []
     refreshed_png_reads = set()
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
@@ -1778,7 +1774,13 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
+- **Resizing:** [Current tight mixed-byte](../benchmarks/BICUBIC-MIXED-BYTE-CURRENT.md)
+  refreshes the historical point using the same qualified actual package DLL:
+  {mixed_byte_current['current']['managedUs']:.2f}/zimg{mixed_byte_current['current']['nativeUs']:.2f}µs,
+  upper{mixed_byte_current['current']['upper']:.3f},114B/op; about459.57µs gap.
+  Exact rational pixels and original complete boundaries remain. No production,
+  build, test, package or fixture changes; previous qualification is reused.
+  [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
   close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
   normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.
   Filtered/all-actual confidence separates; parity uppers0.908/0.904.
