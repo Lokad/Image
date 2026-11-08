@@ -16,36 +16,29 @@ def render():
     assert evidence['allDisplayedCasesRefreshed'] and not evidence['productionChanged']
     stored = json.loads((ROOT / 'benchmarks/warm-png-bulk-stored-evidence.json').read_text(encoding='utf-8'))
     current = json.loads((ROOT / 'benchmarks/warm-png-distance-symbol-evidence.json').read_text(encoding='utf-8'))
-    vp8_current = json.loads((ROOT / 'benchmarks/vp8-four-block-histogram-evidence.json').read_text(encoding='utf-8'))
+    vp8_current = json.loads((ROOT / 'benchmarks/vp8-rounded-border-prediction-evidence.json').read_text(encoding='utf-8'))
     assert vp8_current['productionAccepted'] and vp8_current['requiredMaterialPaths'] == 283
     assert vp8_current['raw']['mirrored'] and vp8_current['raw']['allMembersVerified']
     assert vp8_current['statusCounts'] == {state: sum(c['status'] == state for c in vp8_current['cases'].values())
                                          for state in ('pass', 'gap', 'uncertain')}
     assert set(vp8_current['cases']) == {'opaque8', 'opaque16', 'photograph', 'diagram', 'selected', 'trellis', 'distortion', 'alpha', 'alpha16'}
-    for c in vp8_current['cases'].values():
+    for name, c in vp8_current['cases'].items():
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
-        assert c['librarySha256'] == vp8_current['producers']['linuxSha256']
+        assert c['librarySha256'] == (vp8_current['producers']['linuxSha256'] if name == 'distortion'
+                                      else vp8_current['reuse']['originalLinuxSha256'])
         assert c['completePacketExact'] and c['packetSha256'] == c['nativePacketSha256']
         assert c['managedPacketBytes'] == c['nativePacketBytes']
         assert c['allOriginalGatesPassed'] and c['quietGuardsPassed'] and c['sourceUnchanged'] and c['independentOwnedOutput']
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
-    assert vp8_current['sourceProof']['originalSingleBlockHistogramAndDescribeExact']
-    assert vp8_current['sourceProof']['sourceAnalysisOnlyReplacesExistingFourCallBoundary']
-    assert vp8_current['sourceProof']['allForwardTransformsPredictionsRecordsAndLiveCheckpointsUnchanged']
-    assert vp8_current['sourceProof']['recycledDeadCoefficientsAfterAllDctUsers']
-    assert vp8_current['sourceProof']['aliasAndNon512FallbackOriginalFourCallsBeforeWrites']
-    assert vp8_current['qualification']['fullChecksEachOs'] == 5875
+    proof = vp8_current['sourceProof']
+    assert proof['sharedPredictionAndEncoderFrameAnalysisHistogramSourcesByteExact']
+    assert proof['selectReconstructionAndUvBodiesExact'] and proof['originalPortablePredictionBodyPreserved']
+    assert proof['perModeCancellationOrderAndStrictHeaderPrunePreserved']
+    assert proof['actualCSharpPredictedSamples'] == 696320
+    assert vp8_current['reuse']['unchangedCases'] == sorted(set(vp8_current['cases']) - {'distortion'})
+    assert vp8_current['qualification']['fullChecksEachOs'] == 5939
     assert vp8_current['qualification']['sameActualPackageBothOs']
-    trellis = vp8_current['cases']['trellis']
-    launches = trellis['additionalLaunchEvidence']
-    assert launches['productionChanged'] is False and launches['allBuilds'] == 0
-    assert launches['librarySha256'] == trellis['librarySha256'] and len(launches['launches']) == 4
-    assert launches['protocol']['predeclaredAdditionalCount'] == 3
-    assert all(l['actuals'] == 12 and l['allOriginalGatesPassed'] and l['quietGuardsPassed'] for l in launches['launches'])
-    assert trellis['lower'] == launches['lower'] and trellis['upper'] == launches['upper']
-    assert trellis['status'] == launches['status']
-    assert all(trellis['lower'] <= v['lower'] and trellis['upper'] >= v['upper'] for v in [*launches['launches'], *launches['views'].values()])
     prepared_model = json.loads((ROOT / 'benchmarks/vp8-model-row-stride-evidence.json').read_text(encoding='utf-8'))
     assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 283
     assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
@@ -80,12 +73,8 @@ def render():
     assert q['sameActualPackageBothOs'] and q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
     live = prepared_model['costs']['OpaqueCancelable8']
     assert all(v['rawGainSeparated'] for v in vp8_current['comparison']['views'].values())
-    assert vp8_current['normalizedGainConfirmedAllViews'] == all(v['normalizedGainSeparated']
-               for v in vp8_current['comparison']['views'].values())
-    for platform in ['windows', 'linux']:
-        peak = vp8_current['storage'][platform]['rows']
-        assert [p['peakAdmittedBytes'] for p in peak] == [397205,397205,930669,930669,54821,54821,51200,51200]
-        assert all(p['retainedBytes'] == 0 and p['borrowedSourceUnchanged'] and p['borrowedRootAlive'] for p in peak)
+    assert all(v['normalizedGainSeparated'] for v in vp8_current['comparison']['views'].values())
+    assert vp8_current['storage']['newOwnedHeapCapacityBytes'] == vp8_current['storage']['newRetainedStateBytes'] == 0
     jpeg = json.loads((ROOT / 'benchmarks/warm-jpeg-column-plans-evidence.json').read_text(encoding='utf-8'))
     assert jpeg['qualification']['fullChecksEachOs'] == 5163 and jpeg['decision']['passed']
     assert jpeg['qualification']['package']['sha256'] == jpeg['qualification']['linuxPackage']['sameActualPackageSha256']
@@ -1492,6 +1481,7 @@ def render():
                                   for case in vp8_current['cases'])
                          for state in ('pass', 'gap', 'uncertain')}
     selected_cost = vp8_current['cases']['selected']
+    distortion_cost = vp8_current['cases']['distortion']
     assert selected_cost['managedPacketBytes'] == 7026
     stream = lpf['Vp8Stream']
     rows.insert(0, ('codec', f'| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | {stream["managedUs"]:,.2f} | '
@@ -1855,14 +1845,15 @@ Current scope and remaining work:
   Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
   Six unchanged lossless comparisons reuse that evidence; photograph/opaque
   remain uncertain. No causal CPU-gain claim for that storage change.
-  [Four-block histograms](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md) separately
-  save **101.15µs/3.69% raw**,3.47% reference-normalized, on complete effort2.
-  Both confidence views separate. The same128B dead coefficient workspace holds
-  bins; no new owned capacity or retained state. GC stays406,705B/op. Current
-  2,638.29/native2,504.45µs,upper1.058 remains a134µs gap. All nine affected lossy
-  controls refresh, including alpha; causal gain is established only for effort2.
-  Photograph and Alpha8 remain uncertain; effort6 passes its fixed four-launch
-  envelope. Combined lossy scope:
+  [Rounded-border prediction](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
+  saves **{vp8_current['comparison']['savedUs']:.2f}µs/{100*vp8_current['comparison']['rawReduction']:.2f}% raw**,
+  {100*vp8_current['comparison']['normalizedPointReduction']:.2f}% reference-normalized, on complete effort2.
+  Both filtered/all-actual confidence views separate. GC remains406,705B/op;
+  no new owned heap capacity or retained state. Current
+  {distortion_cost['managedUs']:,.2f}/native{distortion_cost['nativeUs']:,.2f}µs,
+  upper{distortion_cost['upper']:.3f} is uncertain, not a parity pass or demonstrated gap.
+  Eight unchanged encode costs reuse [histogram-stage evidence](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md);
+  shared RDO/decoder prediction code is untouched. Combined lossy scope:
   {vp8_status_counts['pass']}pass/{vp8_status_counts['gap']}gaps/{vp8_status_counts['uncertain']}uncertain.
   Exact complete packets remain unchanged; passing controls stop.
 - **PNG:** [ordinary/slab cursor publication](../benchmarks/PNG-NORMAL-CURSOR-PUBLICATION.md)

@@ -48,15 +48,16 @@ Current scope and remaining work:
   Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
   Six unchanged lossless comparisons reuse that evidence; photograph/opaque
   remain uncertain. No causal CPU-gain claim for that storage change.
-  [Four-block histograms](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md) separately
-  save **101.15µs/3.69% raw**,3.47% reference-normalized, on complete effort2.
-  Both confidence views separate. The same128B dead coefficient workspace holds
-  bins; no new owned capacity or retained state. GC stays406,705B/op. Current
-  2,638.29/native2,504.45µs,upper1.058 remains a134µs gap. All nine affected lossy
-  controls refresh, including alpha; causal gain is established only for effort2.
-  Photograph and Alpha8 remain uncertain; effort6 passes its fixed four-launch
-  envelope. Combined lossy scope:
-  6pass/1gaps/2uncertain.
+  [Rounded-border prediction](../benchmarks/VP8-ROUNDED-BORDER-PREDICTION.md)
+  saves **112.73µs/4.27% raw**,
+  4.55% reference-normalized, on complete effort2.
+  Both filtered/all-actual confidence views separate. GC remains406,705B/op;
+  no new owned heap capacity or retained state. Current
+  2,525.56/native2,511.68µs,
+  upper1.013 is uncertain, not a parity pass or demonstrated gap.
+  Eight unchanged encode costs reuse [histogram-stage evidence](../benchmarks/VP8-FOUR-BLOCK-HISTOGRAM.md);
+  shared RDO/decoder prediction code is untouched. Combined lossy scope:
+  6pass/0gaps/3uncertain.
   Exact complete packets remain unchanged; passing controls stop.
 - **PNG:** [ordinary/slab cursor publication](../benchmarks/PNG-NORMAL-CURSOR-PUBLICATION.md)
   removes exception-only publication of abandoned private state. Completed cursors,
@@ -209,7 +210,7 @@ settings do not establish matched quality.
 | VP8 opaque RGBA16, including normalization † | 13,882.59 | 15,579.01 | 0.891 / 0.894 | 1,201,560 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 9,630.85 | 9,657.98 | 0.997 / 1.001 | 809,233 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,476.34 | 5,803.20 | 0.944 / 0.952 | 741,196 | 7,100 / 7,100 |
-| VP8 diagram, effort2 / distortion-only search † | 2,638.29 | 2,504.45 | 1.053 / 1.058 | 406,705 | 7,330 / 7,330 |
+| VP8 diagram, effort2 / distortion-only search † | 2,525.56 | 2,511.68 | 1.006 / 1.013 | 406,705 | 7,330 / 7,330 |
 | VP8 diagram, effort6 / trellis † | 9,256.01 | 9,813.99 | 0.943 / 0.999 | 754,505 | 6,818 / 6,818 |
 | VP8 RGBA8 + lossless alpha † | 53,302.41 | 53,807.33 | 0.991 / 1.002 | 6,963,840 | 98,590 / 98,590 |
 | VP8 RGBA16 + alpha, including normalization † | 53,129.08 | 53,549.12 | 0.992 / 0.996 | 6,963,024 | 98,590 / 98,590 |

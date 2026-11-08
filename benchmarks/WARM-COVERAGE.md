@@ -9,8 +9,9 @@ Completion needs current passing evidence for every named path, with scope state
 [Current preparation/storage audit](ARCHITECTURAL-PREPARATION-AND-STORAGE.md)
 reconciles one-shot/prepared boundaries and measures three WebP admission lifetimes.
 The [matching-index handoff](WEBP-MATCHING-POPULATION-STORAGE.md) retains six
-unchanged lossless costs. [Four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md)
-own all nine lossy encode controls. [Completed JPEG output](JPEG-COMPLETED-OUTPUT.md)
+unchanged lossless costs. [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md)
+owns effort2; eight unchanged lossy costs reuse [four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md).
+[Completed JPEG output](JPEG-COMPLETED-OUTPUT.md)
 owns twelve read costs, with seventeen unchanged paired-AC controls; [model rows](VP8-MODEL-ROW-STRIDE.md) own six VP8
 pixel/validation costs. Six lossless reader controls retain source-valid evidence.
 Historical experiments remain linked separately, with raw evidence retained.
@@ -20,7 +21,7 @@ Historical experiments remain linked separately, with raw evidence retained.
 | Required family/boundary | Current evidence and remaining work |
 | --- | --- |
 | Resident lossless WebP | [Matching/population storage](WEBP-MATCHING-POPULATION-STORAGE.md) reuses the ordinary index after its final reader. Four lossless controls pass/stop; opaque/photo remain uncertain (uppers1.015/1.008). Direct photo/diagram allocation falls134736B each, admitted peaks3470059/3251328B unchanged; retained scratch zero. Exact packets and source settings remain. No causal CPU gain inferred from refreshed costs. [Isolated prediction](WEBP-ISOLATED-GREEN-PREDICTION.md) retains earlier numerical/CPU evidence and adverse history. |
-| Resident VP8 encoding | [Four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md) recycle dead coefficients after all transform reads, with alias/non512 fallbacks unchanged. Complete effort2 saves101.15µs/3.69%raw/3.47%normalized; both confidence views separate, native−0.23%. Current2638.29/native2504.45µs,upper1.058 remains134µs gap; GC406705B unchanged. Nine affected current costs:6pass/1gap/2uncertain. Effort6 passes its predeclared four-launch envelope,upper0.998836; photograph/Alpha8 remain uncertain, Alpha16 passes. Diagram/dense admitted peaks397205/930669B and retained0 remain. No new scratch payload/owner/cache or other causal gain claim. [Earlier preparation](VP8-SMALL-BLOCK-PREPARATION.md) retains its raw gain/normalized uncertainty as history. Passing cases stop. |
+| Resident VP8 encoding | [Rounded-border prediction](VP8-ROUNDED-BORDER-PREDICTION.md) shares exact interpolation preparation within distortion search and stores only the surviving winner. Complete effort2 saves112.73µs/4.27%raw/4.55%normalized; filtered/all-actual intervals separate. Current2525.56/native2511.68µs,upper1.013 is uncertain; GC406705B unchanged. Eight other costs reuse source-valid [histogram evidence](VP8-FOUR-BLOCK-HISTOGRAM.md): combined6pass/0gaps/3uncertain. Shared prediction, RDO and decoder source remain unchanged. Methods0/1/2 preserve exact packets, ordered ties, cancellation and ownership;32B rounded stack payload stays inside16KiB decision allowance. No new heap capacity or retention; physical/native peaks unmeasured. Passing cases stop; uncertainty is not a demonstrated gap. |
 | Other WebP encoding boundaries | [Storage stage](WEBP-MATCHING-POPULATION-STORAGE.md) retains six unchanged lossless costs:4pass/2uncertain. Full-depth normalization and fresh awaited nonseekable async ownership remain timed. Transparent alpha allocation falls70560B; admitted peak3656309B/retained0 unchanged. [Current histogram stage](VP8-FOUR-BLOCK-HISTOGRAM.md) refreshes alpha8/16: Alpha16 passes, Alpha8 remains uncertain. Native contexts retain their declared preparation boundary. Passing cases stop; uncertainty is not a demonstrated optimization gap. Earlier costs remain linked history. |
 | PNG decoding/coding validation | [Ordinary/slab publication](PNG-NORMAL-CURSOR-PUBLICATION.md) removes three exception-only publication regions from abandoned private readers, preserving exact completed cursors/public errors/partial stores/lookahead/polls/ownership. Tight/default RGBA16, RGB16 and tight-live RGBA16 save192/125/216/217us; all four former gaps pass. Separate shared-root pair saves260us and passes upper0.920, retaining1,638,214B/op, admitted1,766,641B and retainedpair1,062,936B. [All51controls](PNG-CURRENT-FRAMING-COSTS.md):49pass/1gap/1uncertain;43 refreshed,8 unchanged providers reused, no allocation change. Separate materialized-live word remains2919.94/native2894.87us upper1.012 gap; livebyte upper1.004 uncertain. Stop passing cases; resolve uncertainty before tuning. Older stream/composition costs remain historical. |
 | PNG encoding | [Exact length classification](PNG-LENGTH-CLASSIFICATION.md) replaces repeated range search with the exact integer-logarithm formula. All15 complete one-shot costs refresh:13pass/0gaps/2uncertain. WordSmallest now passes/stops; ByteFastest upper1.017 and Gray8 upper1.047 remain uncertain, requiring confidence before more tuning. Word raw180.09us/1.00% intervals separate both views, normalized intervals overlap; byte84.29us point gain has allactual uncertainty. No robust normalized/blanket gain claim. All packets remain exact,384KiB admission/retained0scratch and primaryGC820916/2437660Bop unchanged. [Streaming census](PNG-STREAMING-TOKEN-FREQUENCIES.md) and prior preparation remain history. |
@@ -35,15 +36,15 @@ Historical experiments remain linked separately, with raw evidence retained.
 | Cached bicubic preparation/execution | [Direct identity cache](BICUBIC-IDENTITY-CACHE-ROWS.md) removes the separate decoded row/copy, sharing exact conversion with entry-selected polling. Vertical byte636.49→530.97us saves105.52us/16.58%raw/16.50%normalized; word666.59→511.76us saves154.84us/23.23%raw/21.26%normalized. Both confidence views separate; uppers0.908/0.904 pass, superseding the earlier word regression. Nine refreshed controls:7pass/1gap/1uncertain. Byte reduction remains485.10/native416.46us gap; horizontal word~2us difference is uncertain. Workspace383852→367436B; totalGC367675/367595Bop, scratch0/result264708/529416B retained until disposal. Exact repair4KiB remains separately admitted; no new owner/pool/cache/API. Native graph/input/scratch remain prepared, managed one-shot setup timed. Four displayed rows refresh; passing cases stop. |
 | Text and drawing | [Exact interior coverage](TEXT-INTERIOR-COVERAGE.md) reuses one exact area per fully covered run, preserving clipping at boundaries, pixel additions and cancellation. Current130.55/132.38us vs labeledImageSharp.Drawing45.72/45.83us, uppers4.456/4.174: both gaps. Contemporaneous filtered pointmeans5.94%/6.49% lower, allactual4.05%/5.80%; intervals overlap, CPUgain inconclusive. Allocation67,368B/draw,48,544BadmittedLatinworkspace, retainedscratch0 unchanged; physical/native peaks unmeasured. Eight-frame Latin/Arabic/wrapping/fitting correctness does not establish broaderCPUclaims. [Earlier clipping](TEXT-CLIPPING-WORKSPACE.md) and [shared sorting](TEXT-RASTER-SHARED-SORT.md) retain history. [Layout/fitting and RGBA16composition](TEXT-DRAWING-CURRENT.md) pass/stop. [Font loading](FONT-OWNED-STORAGE.md) remains31.86/nativeFreeType13.42us,upper2.396gap,176B/op and757076Bidleretention in the existing2slot/4MiBpool; governed loads bypass it. Independent codec/resize work continues. |
 
-The latest [identity-cache stage](BICUBIC-IDENTITY-CACHE-ROWS.md) refreshes nine
-affected costs and four displayed rows, preserving126comparisons/283requiredpaths.
-Windows/Linux each pass5,938full/live,188internal/703public normal/scalar and
-disabledAVX2/AVX512 modes, andthe SAMEactualReleasepackage/threeexamples. Six new
-cached controls cover exact byte/word samples, odd/even tails, live polling,
-admission/refusal/cancellation/recovery and overlapping exact repair. One adverse
-first execution layout and two test-only storage setup repairs are retained;
-the selected main/embedded build perOS is reused throughout. Exact packets/pixels
-and independent ownership remain. Other families retain source-valid evidence.
+The latest [rounded-border stage](VP8-ROUNDED-BORDER-PREDICTION.md) refreshes one
+cost/displayed row, preserving126comparisons/283requiredpaths. Windows/Linux each
+pass5,939full/live,73internal/239public normal/scalar and disabledAVX2/SSSE3/SSE4.1
+checks, andthe SAMEactualReleasepackage/threeexamples. The actualC# independent
+RFC oracle checks696,320predicted samples; existing decision traces and complete
+packets cover methods0/1/2, clipping, ordering/ties, alias/cancellation/admission
+and independent survivors. One immutable main/embedded build perOS is reused.
+The [identity-cache stage](BICUBIC-IDENTITY-CACHE-ROWS.md) remains valid for resizing.
+Other families retain source-valid evidence.
 This is scoped development qualification; fullparity and the full126row actual-
 package release refresh remain open.
 
@@ -223,9 +224,10 @@ Current evidence ownership and invalidation:
 - LPF476 owns six unchanged VP8L reader costs after final inverse/publication;
   its former VP8 costs are superseded. Encoders, other codecs, resizing and text
   retain their own source-valid evidence.
-- VHB517 owns nine lossy WebP encode costs after four-block histogram preparation;
-  affected unmeasured H boundaries remain historical. Earlier profiles are leads,
-  not current whole-execution CPU shares.
+- VPR619 owns distortion effort2 after search-local rounded-border preparation.
+  Methods0/1/2 Try4 changes; other shared prediction/RDO/decoder paths are exact
+  source-unchanged. Eight other encode costs reuse VHB517. Earlier effort2 costs
+  and affected unmeasured H boundaries are historical. No broader speedup claim.
 - RBC567 owns Mixed16/TightMixed16 after shared bounded-band execution;
   [identity geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md) owns TightVertical16.
   RPA503 retains eight unchanged word controls after shared preparation;
@@ -235,9 +237,9 @@ Current evidence ownership and invalidation:
   remain attributed separately. Unrefreshed allocator/filter/pipeline H costs stay
   historical. Lanczos owns eight refreshed one-shot/prepared controls; exact
   certificates, repair, plans/owners and portable fallbacks remain required.
-- [TAP604](TEXT-CURRENT-RASTER-ATTRIBUTION.md) retains one current drawing sample
-  capture and strict-interior numerical model; no production or displayed cost
-  changes. Actual C# exactness and complete-operation evidence are required next.
+- [TAP604](TEXT-CURRENT-RASTER-ATTRIBUTION.md) retains the pre-TIR605 drawing capture
+  and strict-interior model. Actual C# and complete-operation qualification landed
+  in TIR605; earlier profile shares are historical, not current phase costs.
 - TIR605 owns the two prepared drawing costs after exact interior coverage reuse.
   TCR587 retains the earlier clipping costs. TSC573's
   earlier allocation savings remain history; font/layout/fitting and compositing
@@ -258,4 +260,4 @@ current blanket qualification or permanently close algorithm families.
 retains an unselected implementation and current live profile. Its two short
 complete-operation screens show no useful lead. Exact qualified sources and
 binaries are restored; current costs and package qualification remain unchanged.
-It adds no renderer dependency. Mixed-word bicubic attribution proceeds next.
+It adds no renderer dependency or restriction on materially revised work.

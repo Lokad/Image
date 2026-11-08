@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -14,6 +15,72 @@ internal static class Vp8DistortionDecision
     private static int Block(int b) => (b / 4 * 4) * 16 + b % 4 * 4;
     private static int UvBlock(int b) => b / 4 * 8 + b % 4 / 2 * 64 + b % 2 * 4;
     private static byte Top(ReadOnlySpan<byte> neighbors, int x) => x < 16 ? neighbors[35 + x] : neighbors[67 + x - 16];
+
+    // Search-local preparation: each angular mode projects the same rounded
+    // border. The shared predictor and its strided/RDO consumers remain separate.
+    internal readonly struct RoundedBorder(Vector128<byte> half, Vector128<byte> smooth)
+    {
+        internal readonly Vector128<byte> Half = half;
+        internal readonly Vector128<byte> Smooth = smooth;
+    }
+
+    internal static RoundedBorder PrepareRoundedBorder(ReadOnlySpan<int> prepared)
+    {
+        // PrepareSmallBlock supplies thirteen byte-valued integers. Pack them as
+        // L3 L2 L1 L0 X T0 ... T7 T7 T7 T7 before rounding; widening is required
+        // for the three-tap sum (nested rounded byte averages are not equivalent).
+        var first = Sse2.PackSignedSaturate(Vector128.Create(prepared[..4]), Vector128.Create(prepared.Slice(4, 4)));
+        var last = Sse2.PackSignedSaturate(Vector128.Create(prepared.Slice(8, 4)), Vector128.CreateScalar(prepared[12]));
+        var border = Ssse3.Shuffle(Sse2.PackUnsignedSaturate(first, last),
+            Vector128.Create((byte)11, 10, 9, 8, 12, 0, 1, 2, 3, 4, 5, 6, 7, 7, 7, 7));
+        var previous = Ssse3.Shuffle(border, Vector128.Create((byte)0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
+        var next = Ssse3.Shuffle(border, Vector128.Create((byte)1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15));
+        var lo = Sse2.Add(Sse2.Add(Sse2.UnpackLow(previous, Vector128<byte>.Zero).AsUInt16(),
+            Sse2.UnpackLow(next, Vector128<byte>.Zero).AsUInt16()),
+            Sse2.ShiftLeftLogical(Sse2.UnpackLow(border, Vector128<byte>.Zero).AsUInt16(), 1));
+        var hi = Sse2.Add(Sse2.Add(Sse2.UnpackHigh(previous, Vector128<byte>.Zero).AsUInt16(),
+            Sse2.UnpackHigh(next, Vector128<byte>.Zero).AsUInt16()),
+            Sse2.ShiftLeftLogical(Sse2.UnpackHigh(border, Vector128<byte>.Zero).AsUInt16(), 1));
+        var smooth = Sse2.PackUnsignedSaturate(Sse2.ShiftRightLogical(Sse2.Add(lo, Vector128.Create((ushort)2)), 2).AsInt16(),
+            Sse2.ShiftRightLogical(Sse2.Add(hi, Vector128.Create((ushort)2)), 2).AsInt16());
+        // Angular projections need only S0..S12; reserve S13 for the raw last
+        // left sample used by horizontal-up's replicated bottom edge.
+        smooth = Sse41.Insert(smooth, (byte)prepared[11], 13);
+        return new(Sse2.Average(border, next), smooth);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Vector128<byte> PackedPrediction(int mode, ReadOnlySpan<int> prepared, int dc, in RoundedBorder rounded)
+    {
+        switch (mode)
+        {
+            case 0: return Vector128.Create((byte)dc);
+            case 1:
+                var top = Vector128.Create(prepared[..4]);
+                var a = Sse2.Add(top, Vector128.Create(prepared[8] - prepared[12]));
+                var b = Sse2.Add(top, Vector128.Create(prepared[9] - prepared[12]));
+                var c = Sse2.Add(top, Vector128.Create(prepared[10] - prepared[12]));
+                var d = Sse2.Add(top, Vector128.Create(prepared[11] - prepared[12]));
+                return Sse2.PackUnsignedSaturate(Sse2.PackSignedSaturate(a, b), Sse2.PackSignedSaturate(c, d));
+            case 2: return Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)5, 6, 7, 8, 5, 6, 7, 8, 5, 6, 7, 8, 5, 6, 7, 8));
+            case 3: return Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0));
+            case 4: return Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)4, 5, 6, 7, 3, 4, 5, 6, 2, 3, 4, 5, 1, 2, 3, 4));
+            case 5: return Sse2.Or(
+                Ssse3.Shuffle(rounded.Half, Vector128.Create((byte)4, 5, 6, 7, 128, 128, 128, 128, 128, 4, 5, 6, 128, 128, 128, 128)),
+                Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)128, 128, 128, 128, 4, 5, 6, 7, 3, 128, 128, 128, 2, 4, 5, 6)));
+            case 6: return Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)6, 7, 8, 9, 7, 8, 9, 10, 8, 9, 10, 11, 9, 10, 11, 12));
+            case 7: return Sse2.Or(
+                Ssse3.Shuffle(rounded.Half, Vector128.Create((byte)5, 6, 7, 8, 128, 128, 128, 128, 6, 7, 8, 128, 128, 128, 128, 128)),
+                Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)128, 128, 128, 128, 6, 7, 8, 9, 128, 128, 128, 10, 7, 8, 9, 11)));
+            case 8: return Sse2.Or(
+                Ssse3.Shuffle(rounded.Half, Vector128.Create((byte)3, 128, 128, 128, 2, 128, 3, 128, 1, 128, 2, 128, 0, 128, 1, 128)),
+                Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)128, 4, 5, 6, 128, 3, 128, 4, 128, 2, 128, 3, 128, 1, 128, 2)));
+            case 9: return Sse2.Or(
+                Ssse3.Shuffle(rounded.Half, Vector128.Create((byte)2, 128, 1, 128, 1, 128, 0, 128, 0, 128, 128, 128, 128, 128, 128, 128)),
+                Ssse3.Shuffle(rounded.Smooth, Vector128.Create((byte)128, 2, 128, 1, 128, 1, 128, 0, 128, 0, 13, 13, 13, 13, 13, 13)));
+            default: throw new ArgumentOutOfRangeException(nameof(mode));
+        }
+    }
 
     private static void Predict16(ReadOnlySpan<byte> neighbors, bool top, bool left, int mode, Span<byte> prediction)
         => Vp8BlockPrediction.Fill(16, (Vp8IntraMode)mode, top ? neighbors.Slice(35, 16) : default,
@@ -58,6 +125,7 @@ internal static class Vp8DistortionDecision
         Span<short> coefficients = stackalloc short[16]; Span<short> residual = stackalloc short[16];
         Span<int> prepared = stackalloc int[13];
         var packedPixels = Avx2.IsSupported;
+        var packedPrediction = packedPixels && Ssse3.IsSupported && Sse41.IsSupported;
         for (var b = 0; b < 16; b++)
         {
             var bx = b % 4; var by = b / 4; var x = bx * 4; var y = by * 4; var offset = Block(b);
@@ -68,6 +136,8 @@ internal static class Vp8DistortionDecision
             var sourcePixels = packedPixels ? Vp8Distortion.PackFourRows(source[offset..], 16) : default;
             var above = by == 0 ? contexts[bx] : modes[b - 4]; var side = bx == 0 ? contexts[4 + by] : modes[b - 1];
             var costs = prices.Slice(8 + (above * 10 + side) * 10, 10); var bestMode = 0; var best = Unselected;
+            RoundedBorder rounded = default; var roundedReady = false;
+            Vector128<byte> selectedPixels = default;
             for (var mode = 0; mode < 10; mode++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
@@ -75,15 +145,30 @@ internal static class Vp8DistortionDecision
                 // strict-less decision either. Keep polling before every mode.
                 var modeHeader = costs[mode] * 11L;
                 if (modeHeader >= best) continue;
-                Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, prepared, dc, trial);
-                var distortion = packedPixels ? Vp8Distortion.Squared(sourcePixels, Vector128.Create(trial))
-                    : Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
+                Vector128<byte> trialPixels = default; int distortion;
+                if (packedPrediction)
+                {
+                    if (mode >= 2 && !roundedReady) { rounded = PrepareRoundedBorder(prepared); roundedReady = true; }
+                    trialPixels = PackedPrediction(mode, prepared, dc, rounded);
+                    distortion = Vp8Distortion.Squared(sourcePixels, trialPixels);
+                }
+                else
+                {
+                    Vp8Prediction.SmallBlock((Vp8SmallIntraMode)mode, prepared, dc, trial);
+                    distortion = packedPixels ? Vp8Distortion.Squared(sourcePixels, Vector128.Create(trial))
+                        : Vp8Distortion.Squared(source[offset..], 16, trial, 4, 4, 4);
+                }
                 var current = 256L * distortion + modeHeader;
-                if (current < best) { best = current; bestMode = mode; trial.CopyTo(selected); }
+                if (current < best)
+                {
+                    best = current; bestMode = mode;
+                    if (packedPrediction) selectedPixels = trialPixels; else trial.CopyTo(selected);
+                }
             }
             modes[b] = (byte)bestMode; score += best; header += costs[bestMode];
             if (score >= previous || header > headerLimit) return false;
             context.Cancellation.ThrowIfCancellationRequested();
+            if (packedPrediction) selectedPixels.CopyTo(selected);
             for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++)
                 residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - selected[yy * 4 + xx]);
             Vp8ForwardTransform.Dct(residual, coefficients);
