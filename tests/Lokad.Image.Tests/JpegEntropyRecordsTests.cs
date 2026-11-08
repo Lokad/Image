@@ -7,6 +7,83 @@ namespace Lokad.Image.Tests;
 
 public sealed class JpegEntropyRecordsTests
 {
+    [Fact]
+    public void PreparedReplayMatchesIndependentBitPackingAcrossFamiliesWidthsAndMcuEdges()
+    {
+        var tables = new JpegEncodingTable[4]; var records = new List<int>(); var expected = new List<byte>();
+        ReadOnlySpan<int> widths = [0, 1, 7, 8, 15, 16, 31];
+        for (var frame = 0; frame < 16; frame++)
+        {
+            for (var family = 0; family < 4; family++)
+            {
+                var codes = new ushort[256]; var lengths = new byte[256];
+                for (var symbol = 0; symbol < 256; symbol++)
+                {
+                    var length = 1 + (symbol + frame + family) % 16; lengths[symbol] = (byte)length;
+                    codes[symbol] = (ushort)((symbol * 251 + family * 16381 + frame * 29) & ((1 << length) - 1));
+                }
+                tables[family] = new(new byte[16], new byte[256], codes, lengths);
+            }
+            records.Clear(); expected.Clear(); var pending = 0; var used = 0;
+            void Bits(int value, int count)
+            {
+                for (var bit = count - 1; bit >= 0; bit--)
+                {
+                    pending = (pending << 1) | (value >> bit & 1);
+                    if (++used != 8) continue;
+                    var next = (byte)pending; expected.Add(next); if (next == 255) expected.Add(0);
+                    pending = used = 0;
+                }
+            }
+            for (var family = 0; family < 4; family++)
+            for (var symbol = 0; symbol < 256; symbol++)
+            foreach (var bits in widths)
+            {
+                var payload = bits == 31 ? 65535 : ((1 << bits) - 1) & (symbol * 257 + frame * 31);
+                var record = (uint)payload | (uint)symbol << 16 | (uint)family << 24 | (uint)bits << 27;
+                if ((symbol & 7) == 0) record |= JpegEntropyRecords.EndMcuBit;
+                records.Add(unchecked((int)record));
+                Bits(tables[family].Codes[symbol], tables[family].Lengths[symbol]);
+                if (bits != 31) Bits(payload, bits);
+            }
+            records[^1] |= (int)JpegEntropyRecords.EndMcuBit;
+            if (used != 0) Bits((1 << (8 - used)) - 1, 8 - used);
+            using var context = new OperationContext(new() { }, default); using var output = new MemoryStream();
+            using var writer = new JpegEntropyWriter(output, context);
+            JpegEntropyRecords.WriteRecords(CollectionsMarshal.AsSpan(records), tables, writer, context); writer.Align();
+            Assert.True(CollectionsMarshal.AsSpan(expected).SequenceEqual(output.GetBuffer().AsSpan(0, (int)output.Length)));
+        }
+    }
+
+    [Fact]
+    public void EmptyReplayDoesNotInspectTablesOrPollDisposedWriter()
+    {
+        using var cancellation = new CancellationTokenSource();
+        using var context = new OperationContext(new() { }, cancellation.Token); using var output = new MemoryStream();
+        cancellation.Cancel();
+        using var writer = new JpegEntropyWriter(output, context); writer.Dispose();
+        JpegEntropyRecords.WriteRecords([], [], writer, context); Assert.Equal(0, output.Length);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void MissingGrayEntryPreservesPublishedPrefixAndReleasesOnlyWriterStorage(bool nullSlot)
+    {
+        var tables = new JpegEncodingTable[4]; var codes = new ushort[256]; var lengths = new byte[256];
+        codes[0] = 91; lengths[0] = 8; tables[0] = new(new byte[16], [], codes, lengths);
+        var records = Enumerable.Repeat(unchecked((int)(31U << 27 | JpegEntropyRecords.EndMcuBit)), 513).ToArray();
+        records[^1] |= nullSlot ? 1 << 24 : 1 << 16;
+        using var root = new TestMemoryBudget(16_384 + JpegEntropyWriter.StorageBytes);
+        using var context = new OperationContext(new() { MemoryBudget = root }, default); context.Reserve(16_384);
+        using var output = new MemoryStream(); using var writer = new JpegEntropyWriter(output, context);
+        Assert.Throws<ImageDataException>(() => JpegEntropyRecords.WriteRecords(records, tables, writer, context));
+        Assert.Equal(256, output.Length); Assert.All(output.ToArray(), b => Assert.Equal((byte)91, b));
+        Assert.Equal(16_384 + JpegEntropyWriter.StorageBytes, root.Bytes);
+        writer.Dispose(); Assert.Equal(16_384, root.Bytes); context.Release(16_384);
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.True(output.CanWrite);
+    }
+
     private uint state = 0x6d2b79f5;
     private uint Next() { state ^= state << 13; state ^= state >> 17; state ^= state << 5; return state; }
     private void Input(Span<short> data, int test, int blocks)

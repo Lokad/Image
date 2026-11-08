@@ -14,6 +14,8 @@ owns effort2; eight unchanged lossy costs reuse [four-block histograms](VP8-FOUR
 [Completed JPEG output](JPEG-COMPLETED-OUTPUT.md)
 owns twelve read costs, with seventeen unchanged paired-AC controls; [model rows](VP8-MODEL-ROW-STRIDE.md) own six VP8
 pixel/validation costs. Six lossless reader controls retain source-valid evidence.
+[Prepared Huffman replay](JPEG-PREPARED-HUFFMAN-BANK.md) owns17 affected JPEG
+encoder boundaries; restart/tight recomputation retains unchanged evidence.
 Historical experiments remain linked separately, with raw evidence retained.
 
 ## Current family status
@@ -27,6 +29,7 @@ Historical experiments remain linked separately, with raw evidence retained.
 | PNG encoding | [Exact length classification](PNG-LENGTH-CLASSIFICATION.md) replaces repeated range search with the exact integer-logarithm formula. All15 complete one-shot costs refresh:13pass/0gaps/2uncertain. WordSmallest now passes/stops; ByteFastest upper1.017 and Gray8 upper1.047 remain uncertain, requiring confidence before more tuning. Word raw180.09us/1.00% intervals separate both views, normalized intervals overlap; byte84.29us point gain has allactual uncertainty. No robust normalized/blanket gain claim. All packets remain exact,384KiB admission/retained0scratch and primaryGC820916/2437660Bop unchanged. [Streaming census](PNG-STREAMING-TOKEN-FREQUENCIES.md) and prior preparation remain history. |
 | WebP image reading | [Power-of-two model rows](VP8-MODEL-ROW-STRIDE.md) prepare one1,536B model instead of1,056B. Six complete costs save49.93–137.23us, filtered/allactual raw/normalized intervals separate; live59.31us/1.19%raw/1.18%normalized. AllGC+480B/op; same8KiBadmitted model/state/frame allowance, physical/native peaks unmeasured, independent retainedframe531468B. Current3pass/3gaps/0uncertain: alpharesident/stream andvalidation pass/stop; live4920.12/native4789.06us upper1.032gap. Exact semanticprobabilities/headerorder/polls/cursor/pixels andterminalrefusal/cleanup remain. [Earlier preparation](VP8-PREPARED-COEFFICIENT-MODEL.md) and [alpha publication](WEBP-HORIZONTAL-ALPHA-PUBLICATION.md) retain history. [VP8L final publication](VP8L-FINAL-PUBLICATION.md) retains six unchanged lossless costs:2pass/4gaps,155.66us gain and19.25us palette regression. |
 | JPEG decoding | [Completed output](JPEG-COMPLETED-OUTPUT.md) reuses existing overwrite storage after exact full-plane writes. Progressivegray saves98.02us/5.17%raw/5.11%normalized with separatedfiltered/allactual confidence; GC683176→151432B. Current1797.74/native1711.60us upper1.054 remainsgap. Twelve costs refresh/seventeen unchanged reuse:29now16pass/12gap/1uncertain. Ownedgray nowpasses602.47/native681.27us upper.891; stream420restart upper1.002 isuncertain, resolvebeforetuning. Fourgoverned peaks remain699834/756276/752177/721969B; result531468B until disposal. Default idlepixels0→531468B insideexisting2slot/4MiBpool, governedcalls bypass; no newowner/pool/cache. Gray idlecoefficients549120B unchanged. [Paired AC](JPEG-PAIRED-AC-WINDOW.md) retains RGB1530.34/native1450.52us upper1.065 and its574069Badmittedpeak. Liveprogressive444 remainsanindependent201.57usgap. |
+| JPEG encoding | [Prepared Huffman replay](JPEG-PREPARED-HUFFMAN-BANK.md) replaces repeated table/code/length traversal with a4KiB stack bank inside the existing16KiB owner. Complete RGBA→gray saves151.45µs/9.43%raw/10.09%normalized; filtered/allactual intervals separate. Current1455.31/labeledSIMDlibjpeg-turbo1409.83µs upper1.042 remains~45µs gap. All17 affected boundaries refresh:15pass/1gap/1uncertain. CallerGRAY now passes upper.994; callerRGB420 upper1.009 is uncertain. PrimaryGC155436B/op and governedRGBA16 peak1704856B unchanged; no new heap/retention/cache. Existing coefficient pools/governed bypass remain; physical/native peaks unmeasured. Exact packets and strict metadata exceptions remain. Passing cases stop; restart/tight recomputation reuses source-valid evidence. |
 | Bicubic columns | [Wide shared preparation](BICUBIC-WIDE-PREPARATION.md) saves24.28/94.49µs (4.81%/15.07%raw) on byte/word128×64 controls, unchanged113B/op and4KiB admission. Both remain gaps, uppers1.394/1.329; native clocks−0.65%/−3.85% disclosed. [Small word preparation](BICUBIC-WORD-COLUMN-PREPARATION.md) and [small byte preparation](BICUBIC-COLUMN-PREPARATION.md) reuse unchanged gains and gaps1.223/1.363. Four drivers share the same result-tail geometry helper; kernels and exact pixels remain. Other affected named H costs remain historical. |
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
@@ -36,14 +39,16 @@ Historical experiments remain linked separately, with raw evidence retained.
 | Cached bicubic preparation/execution | [Direct identity cache](BICUBIC-IDENTITY-CACHE-ROWS.md) removes the separate decoded row/copy, sharing exact conversion with entry-selected polling. Vertical byte636.49→530.97us saves105.52us/16.58%raw/16.50%normalized; word666.59→511.76us saves154.84us/23.23%raw/21.26%normalized. Both confidence views separate; uppers0.908/0.904 pass, superseding the earlier word regression. Nine refreshed controls:7pass/1gap/1uncertain. Byte reduction remains485.10/native416.46us gap; horizontal word~2us difference is uncertain. Workspace383852→367436B; totalGC367675/367595Bop, scratch0/result264708/529416B retained until disposal. Exact repair4KiB remains separately admitted; no new owner/pool/cache/API. Native graph/input/scratch remain prepared, managed one-shot setup timed. Four displayed rows refresh; passing cases stop. |
 | Text and drawing | [Exact interior coverage](TEXT-INTERIOR-COVERAGE.md) reuses one exact area per fully covered run, preserving clipping at boundaries, pixel additions and cancellation. Current130.55/132.38us vs labeledImageSharp.Drawing45.72/45.83us, uppers4.456/4.174: both gaps. Contemporaneous filtered pointmeans5.94%/6.49% lower, allactual4.05%/5.80%; intervals overlap, CPUgain inconclusive. Allocation67,368B/draw,48,544BadmittedLatinworkspace, retainedscratch0 unchanged; physical/native peaks unmeasured. Eight-frame Latin/Arabic/wrapping/fitting correctness does not establish broaderCPUclaims. [Earlier clipping](TEXT-CLIPPING-WORKSPACE.md) and [shared sorting](TEXT-RASTER-SHARED-SORT.md) retain history. [Layout/fitting and RGBA16composition](TEXT-DRAWING-CURRENT.md) pass/stop. [Font loading](FONT-OWNED-STORAGE.md) remains31.86/nativeFreeType13.42us,upper2.396gap,176B/op and757076Bidleretention in the existing2slot/4MiBpool; governed loads bypass it. Independent codec/resize work continues. |
 
-The latest [rounded-border stage](VP8-ROUNDED-BORDER-PREDICTION.md) refreshes one
-cost/displayed row, preserving126comparisons/283requiredpaths. Windows/Linux each
-pass5,939full/live,73internal/239public normal/scalar and disabledAVX2/SSSE3/SSE4.1
-checks, andthe SAMEactualReleasepackage/threeexamples. The actualC# independent
-RFC oracle checks696,320predicted samples; existing decision traces and complete
-packets cover methods0/1/2, clipping, ordering/ties, alias/cancellation/admission
-and independent survivors. One immutable main/embedded build perOS is reused.
-The [identity-cache stage](BICUBIC-IDENTITY-CACHE-ROWS.md) remains valid for resizing.
+The latest [Huffman replay stage](JPEG-PREPARED-HUFFMAN-BANK.md) refreshes17costs
+and seven displayed rows, preserving126comparisons/283requiredpaths. Windows/Linux
+each pass5,943full/live,424internal/375public JPEG checks per normal/scalar and
+disabledAVX2/AVX512 mode, andthe SAMEactualReleasepackage/threeexamples. ActualC#
+independent packing checks114688records; the frozen28672block/946249record corpus,
+complete packets, cancellation/admission/failure prefixes and owners remain exact.
+One main perOS is reused; a corrected Windows test setup needs a second embedded
+version. Completed async receipts are recovered after schema-only reporting
+corrections, without replaying measurements. The [rounded-border](VP8-ROUNDED-BORDER-PREDICTION.md)
+and [identity-cache](BICUBIC-IDENTITY-CACHE-ROWS.md) stages remain valid for WebP/resizing.
 Other families retain source-valid evidence.
 This is scoped development qualification; fullparity and the full126row actual-
 package release refresh remain open.
@@ -207,6 +212,12 @@ approved scopes and current evidence above.
 
 Current evidence ownership and invalidation:
 
+- JHB622 owns17 recorded JPEG encoding boundaries, including caller samples,
+  normal/live, byte/word, forward/async and governed inputs. Only replay changes;
+  generators, writer, tables and ownership stay exact. Prior corresponding encoder
+  costs are superseded. Restart/fixed-table and tight recomputation do not call
+  replay. Other codecs, decoding, editing and text evidence stays source-valid.
+
 - LSF584 owns15PNGencoding costs after exact shared length classification.
   All complete packets remain exact; no parser/owner/checkpoint/field change.
   RNC579decode/header and othercodec/edit/text paths are source-unchanged.
@@ -252,11 +263,10 @@ workspace lifetimes, shared resize execution and further codec work selected fro
 attribution. Keep passing cases stopped. Text/drawing proceeds independently;
 pending references never block justified codec/resizing work. PLAN.md stays ignored.
 
-[Current grayscale JPEG attribution](JPEG-GRAYSCALE-CURRENT-ATTRIBUTION.md) locates
-repeated entropy table/record traversal on the qualified module, without new costs,
-builds or qualification repeats. RGBA→gray and callerGRAY remain distinct complete
-boundaries. A bounded prepared replay design is the next lead, not a proven gain;
-it does not add a renderer dependency or invalidate unchanged qualification.
+[Pre-bank grayscale attribution](JPEG-GRAYSCALE-CURRENT-ATTRIBUTION.md) led to the
+accepted replay stage. Its old replay locations/shares are historical; unchanged
+preparation locations remain leads, not current isolated phase costs. It adds no
+renderer dependency. RGBA→gray and callerGRAY remain distinct complete boundaries.
 
 All earlier reports, raw evidence, release packages and source-specific
 invalidation notes are retained through the linked history. They do not establish

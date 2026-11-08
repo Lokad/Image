@@ -134,8 +134,19 @@ Current scope and remaining work:
   Earlier [live windows](../benchmarks/JPEG-LIVE-ENTROPY-WINDOW.md),
   [publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md) and
   [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
-  [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
-  labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
+  [Prepared Huffman replay](../benchmarks/JPEG-PREPARED-HUFFMAN-BANK.md) saves
+  **151.45µs/9.43% raw**,
+  10.09% reference-normalized, on complete RGBA→gray encoding
+  versus explicitly labeled SIMD libjpeg-turbo. Filtered/all-actual intervals separate;
+  exact58,910B packets and155,436B/op remain. Current
+  1,455.31/native1,409.83µs,
+  upper1.042 remains a gap. All17 affected encoder
+  boundaries refresh: 15pass/1gaps/1uncertain.
+  A4KiB stack lookup fits the existing16KiB table allowance, with no new heap or
+  retained state. GovernedRGBA16 peak remains1,704,856B. Existing coefficient pools
+  and their governed bypass are unchanged; physical/native peaks are unmeasured.
+  Strict JPEG metadata exceptions remain; passing cases stop. Restart/recomputed
+  paths retain source-valid evidence. Older normalization/replay stages remain history.
 - **Text/drawing:** [exact interior coverage](../benchmarks/TEXT-INTERIOR-COVERAGE.md)
   reuses one exact area across fully covered pixels. Current130.55/132.38µs means are5.94%/6.49%
   lower than the contemporaneous original; intervals overlap, so a causal CPUgain
@@ -150,7 +161,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,939 full/live checks per OS**, affected
+The current production build passes **5,943 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -199,11 +210,11 @@ settings do not establish matched quality.
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,875.90 | 5,992.57 | 0.981 / 0.984 | 238,960 | — |
-| JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
-| JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
-| JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
-| JPEG grayscale, standalone SIMD libjpeg-turbo † | 1,660.52 | 1,522.24 | 1.091 / 1.103 | 155,436 | 58,910 / 58,910 |
-| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo † | 1,218.17 | 1,136.37 | 1.072 / 1.090 | 155,439 | 58,910 / 58,910 |
+| JPEG 4:4:4, forward-only / exact reference (parity confirmed) † | 3,492.70 | 3,776.95 | 0.925 / 0.931 | 820,120 | 133,039 / 133,041 |
+| JPEG 4:2:0 from caller RGB samples (confidence open) † | 1,584.61 | 1,578.98 | 1.004 / 1.009 | 388,220 | 52,091 / 52,093 |
+| JPEG RGBA16 4:2:0 / caller IMemoryBudget (parity confirmed) † | 1,706.53 | 1,836.80 | 0.929 / 0.934 | 819,475 | 52,115 / 52,117 |
+| JPEG grayscale, standalone SIMD libjpeg-turbo (confirmed gap) † | 1,455.31 | 1,409.83 | 1.032 / 1.042 | 155,436 | 58,910 / 58,910 |
+| JPEG from caller GRAY8, standalone SIMD libjpeg-turbo (parity confirmed) † | 1,061.94 | 1,076.74 | 0.986 / 0.994 | 155,438 | 58,910 / 58,910 |
 | VP8L photograph / libwebp exact=1 † | 81,999.54 | 82,030.95 | 1.000 / 1.008 | 6,382,422 | 160,032 / 160,032 |
 | VP8L text/diagram / libwebp exact=1 † | 7,408.85 | 10,140.97 | 0.731 / 0.742 | 4,229,194 | 7,234 / 7,234 |
 | VP8 opaque RGBA8 † | 13,865.79 | 15,509.82 | 0.894 / 0.898 | 1,201,560 | 72,380 / 72,380 |
@@ -247,8 +258,8 @@ settings do not establish matched quality.
 | JPEG 4:1:0, resident decode (confirmed pass) † | 339.51 | 505.41 | 0.672 / 0.678 | 189,090 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 107,919.76 | 121,030.61 | 0.892 / 0.901 | 7,341,808 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 104,422.47 | 120,958.63 | 0.863 / 0.876 | 7,342,192 | 183,812 / 183,812 |
-| JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
-| JPEG RGBA8 async nonseekable, 444 (confirmed pass) † | 3,727.72 | 3,877.52 | 0.961 / 0.971 | 820,531 | 133,039 / 133,041 |
+| JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,581.70 | 1,629.27 | 0.971 / 0.979 | 309,524 | 52,091 / 52,093 |
+| JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,517.84 | 3,856.40 | 0.912 / 0.918 | 820,531 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 2,610.86 | 2,847.04 | 0.917 / 0.920 | 1,638,214 | — |
 | JPEG dense CMYK, resident decode (confirmed pass) † | 1,390.69 | 3,111.67 | 0.447 / 0.450 | 20,944 | — |
 | JPEG horizontal-only CMYK, resident decode † | 453.31 | 392.03 | 1.156 / 1.162 | 20,944 | — |

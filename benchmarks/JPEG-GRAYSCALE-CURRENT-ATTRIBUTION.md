@@ -1,8 +1,12 @@
 # Current grayscale JPEG attribution
 
+This pre-bank capture led to [prepared Huffman replay](JPEG-PREPARED-HUFFMAN-BANK.md).
+Its replay locations/shares and former costs are historical; that report owns
+current comparisons. Unchanged preparation locations remain leads, not phase costs.
+
 JGA620 profiles the qualified VPR619 module without changing or rebuilding it.
 The target is complete **RGBA8→grayscale JPEG**, including flattening and
-normalization: current source-valid **1,660.52/1,522.24µs**, upper1.103, versus the
+normalization: then source-valid **1,660.52/1,522.24µs**, upper1.103, versus the
 explicitly labeled SIMD-enabled libjpeg-turbo reference. Caller-GRAY8 is a separate
 **1,218.17/1,136.37µs** boundary. Their difference is not precise normalization
 attribution. Both retain exact 58,910-byte packets.

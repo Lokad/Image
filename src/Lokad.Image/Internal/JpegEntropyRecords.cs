@@ -155,18 +155,37 @@ internal sealed partial class JpegEntropyRecords : IDisposable
 
     internal static void WriteRecords(ReadOnlySpan<int> records, JpegEncodingTable[] tables, JpegEntropyWriter writer, OperationContext context)
     {
+        if (records.IsEmpty) return;
+        context.Cancellation.ThrowIfCancellationRequested();
+        if (tables.Length != 4) throw new ArgumentException("Four JPEG encoding table slots required.", nameof(tables));
+        // The enclosing encoder admits its16KiB retained table owner before
+        // building these private tables. Their payload/metadata plus this4KiB
+        // stack bank fit that allowance; temporary builder graphs have ended.
+        // Grayscale leaves two unused slots null. No table or record is exposed
+        // to output callbacks, so this operation-local snapshot stays valid.
+        Span<uint> bank = stackalloc uint[1024]; bank.Clear();
+        for (var family = 0; family < 4; family++)
+        {
+            var table = tables[family];
+            if (table is null) continue;
+            if (table.Codes.Length != 256 || table.Lengths.Length != 256)
+                throw new ArgumentException("Complete JPEG code and length arrays required.", nameof(tables));
+            var target = bank.Slice(family * 256, 256);
+            for (var symbol = 0; symbol < 256; symbol++)
+                target[symbol] = table.Codes[symbol] | (uint)table.Lengths[symbol] << 16;
+        }
         var offset = 0;
         while (offset < records.Length)
         {
             context.Cancellation.ThrowIfCancellationRequested(); uint record;
             do
             {
-                record = (uint)records[offset++]; var table = tables[(int)(record >> 24 & 3)];
-                var symbol = (int)(record >> 16 & 255); var length = table.Lengths[symbol];
+                record = (uint)records[offset++]; var packed = bank[(int)(record >> 16 & 1023)];
+                var length = (int)(packed >> 16); var code = (int)(packed & 65535);
                 if (length == 0) throw new ImageDataException("JPEG source changed between encoding passes.");
                 var bits = (int)(record >> 27);
-                if (bits == 31) writer.Write(table.Codes[symbol], length);
-                else writer.WritePair(table.Codes[symbol], length, (int)(record & 65535), bits);
+                if (bits == 31) writer.Write(code, length);
+                else writer.WritePair(code, length, (int)(record & 65535), bits);
             } while ((record & EndMcuBit) == 0);
         }
     }
