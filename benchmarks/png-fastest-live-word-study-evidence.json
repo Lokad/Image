@@ -1,0 +1,2451 @@
+{
+  "project": "Lokad.Image",
+  "stage": "PLW552/PFH553",
+  "productionAccepted": false,
+  "productionRestoredExactly": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "round": "PFH553",
+    "paths": [
+      "src/Lokad.Image/Internal/PngDeflater.cs"
+    ],
+    "originalAbsent": [],
+    "baseline": {
+      "windowsSha256": "c66ca82ae97d8aff10a663392d3b250b3428f8aea1a73bfbf2f9231266b5a3ee",
+      "linuxSha256": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c"
+    },
+    "hypothesis": "Current live-word sample places1473/1937samples inProcessFast includinginlinedmatching/insertion. Original861228literals yield mostlyconsecutive dictionaryinsertions. Reuse the existing qualified lazy sequential-key helper in the acquired greedy sweep to avoid two repeated input-byte reads/hash recombination for adjacent inserts. Samples do not prove hashcosts or availablegain.",
+    "endState": "One existing InsertSequential implementation reused by greedy/lazy; two sweep-local scalars, recompute after skips and slides. No persistent cache/owner/table/kernelduplicate. All originalchainorder/ties/depth4/nice8/shortmatchbackfill/tokens/packets/cancellation/publication remain.",
+    "prior": "Earlier rolling-hash field/local prototypes predate current acquired views and qualified successful lazy-only recurrence. This trial is greedy-only on current live-word literal-heavy input, existinghelperreuse with bounded currentcodegen/completeactuals. Earlier target-triple preparations remain unselected; do not combine them or prefix kernels.",
+    "workloads": [
+      "EncodeFastCancelable16",
+      "EncodeFast8",
+      "EncodeFast16"
+    ],
+    "correctness": "Existing wholepacket/ring/overlap/origin/chunk/cancellation/writerfailure/admission tests normal/scalar eachOS. Current complete packet968216/236828 exact. Live and plain preserve all16bits/hiddenRGB. No changes to other production methods.",
+    "transition": "One current immutable stage perOS. Liveword shortscreen first; byte screen if useful, then independent confirmation/current fourFastest costs ifpromising. Preserve and abandon adverse/inconclusive stages without favorable resampling. Zero newfixture/harness/native/selector/publicbuild. Broad/package onceonly foraccepted coherentstage. Originallive O1/O2, byte/plain independent confirmations reused.",
+    "profile": "plw552-live-word-profile",
+    "profileSha256": "2d974cd9d1a74807adc6f2e8b019e46719a7f1f96aa84a76e38f7dc22484cd24"
+  },
+  "profile": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "totalSamples": 1937,
+    "managedSamples": 1908,
+    "methods": [
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        1473
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        162
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        85
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        84
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        59
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+        13
+      ],
+      [
+        "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        13
+      ],
+      [
+        "uint32 [Lokad.Image] Lokad.Image.Internal.PngIdentificationCrc32::ComputeChunk(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        4
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        4
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        2
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+        2
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.PngRowPrediction::Useful(class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        2
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+        2
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+        1
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        1
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Runs(uint8[],valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.DeflateHuffman/Run>)[Optimized]",
+        1
+      ]
+    ],
+    "targetCode": [
+      {
+        "address": "0x74b7b2ac3d70",
+        "size": 565,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::.ctor(class [System.Runtime]System.IO.Stream,class Lokad.Image.Internal.OperationContext,int32)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac4c80",
+        "size": 69,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteByte(uint8)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac4ce0",
+        "size": 558,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac4f30",
+        "size": 180,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Start()[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac5000",
+        "size": 185,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::AdvanceOrigin()[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac50e0",
+        "size": 484,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac5340",
+        "size": 1548,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac5980",
+        "size": 2901,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac6500",
+        "size": 83,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac6580",
+        "size": 1692,
+        "name": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac6d20",
+        "size": 240,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac6e30",
+        "size": 105,
+        "name": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac6ec0",
+        "size": 468,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Runs(uint8[],valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.DeflateHuffman/Run>)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac70b0",
+        "size": 49,
+        "name": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac7100",
+        "size": 128,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac71a0",
+        "size": 373,
+        "name": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac7340",
+        "size": 3417,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac8170",
+        "size": 171,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Flush()[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac9340",
+        "size": 358,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac9500",
+        "size": 656,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Complete()[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac97b0",
+        "size": 96,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Align()[Optimized]"
+      },
+      {
+        "address": "0x74b7b2ac9830",
+        "size": 101,
+        "name": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Dispose(bool)[Optimized]"
+      }
+    ],
+    "offsets": [
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3d0",
+        "samples": 178
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2e7",
+        "samples": 137
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3c6",
+        "samples": 107
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0xe3",
+        "samples": 92
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x1cc",
+        "samples": 91
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x1ed",
+        "samples": 76
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3bf",
+        "samples": 72
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3fa",
+        "samples": 67
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x409",
+        "samples": 53
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x583",
+        "samples": 52
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2c6",
+        "samples": 47
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2f3",
+        "samples": 39
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0xf7",
+        "samples": 30
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2dc",
+        "samples": 26
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x1a7",
+        "samples": 24
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3d6",
+        "samples": 20
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x256",
+        "samples": 20
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x232",
+        "samples": 19
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x17d",
+        "samples": 18
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x32",
+        "samples": 17
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x218",
+        "samples": 15
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x100",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x173",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3d9",
+        "samples": 14
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3dc",
+        "samples": 13
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x41",
+        "samples": 13
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3e1",
+        "samples": 13
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x588",
+        "samples": 13
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x356",
+        "samples": 12
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3ac",
+        "samples": 12
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x24a",
+        "samples": 12
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x37",
+        "samples": 11
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x31e",
+        "samples": 11
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x223",
+        "samples": 11
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x1e",
+        "samples": 11
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2a7",
+        "samples": 11
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x273",
+        "samples": 11
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x15c",
+        "samples": 10
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xd3",
+        "samples": 9
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xae",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x280",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3d3",
+        "samples": 9
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x486",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2f7",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x229",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x29e",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x5fb",
+        "samples": 8
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+        "offset": "0x4b",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x783",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x30c",
+        "samples": 8
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0xe6",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0xdf",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3a5",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x1f8",
+        "samples": 7
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2bc",
+        "samples": 7
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x0",
+        "samples": 6
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x1",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x172",
+        "samples": 6
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xa5",
+        "samples": 6
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0xfa",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x8c6",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x532",
+        "samples": 5
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xc9",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x89b",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x295",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x165",
+        "samples": 5
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x434",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x115",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x336",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2ea",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x33b",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x4df",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x8b8",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x43e",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7b3",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x74",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x511",
+        "samples": 4
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x51",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7a3",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3c2",
+        "samples": 4
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x15e",
+        "samples": 3
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+        "offset": "0x1",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x0",
+        "samples": 3
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x1b",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x34c",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x105",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x119",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x328",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x38f",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3b0",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7d3",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x139",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x338",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x9e0",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x52e",
+        "samples": 3
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xe",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x348",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x97c",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x525",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x763",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x17",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x9e9",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x897",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x39d",
+        "samples": 3
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x259",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xb2",
+        "samples": 3
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x33",
+        "samples": 3
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x92",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x767",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x2ef",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x791",
+        "samples": 2
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x175",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x9a7",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x48a",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x28",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x1d2",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x105",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x4ee",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xd7",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0xe7",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x776",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7ea",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x520",
+        "samples": 2
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::LengthSymbol(int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x3c",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3ee",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x89f",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x4fa",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x437",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x47",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x3d0",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x4f1",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x2e6",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x360",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x9a0",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x3b",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xbb",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x4ff",
+        "samples": 2
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x253",
+        "samples": 2
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x5e",
+        "samples": 2
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x16d",
+        "samples": 2
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0xa3",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x42d",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x456",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0xd0",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.PngDeflater::FixedLength(int32)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xf2",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x751",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7f2",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x42d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3f2",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        "offset": "0x143",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x988",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x127",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x54f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x2f9",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x417",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x26d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x857",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x4be",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x125",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x108",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x112",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7d0",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x505",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x2fd",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0xc6",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+        "offset": "0x1a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0xfd",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7e3",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x2f3",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x3ec",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Codes(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        "offset": "0x92",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Write(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        "offset": "0x9a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x85a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x24e",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x98b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x4e2",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xdd",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0xe2",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x516",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x6c",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x30d",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x246",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0xea",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x32b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Put(int32,int32)[Optimized]",
+        "offset": "0x78",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x28b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x306",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x26a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x8ab",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7f6",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x8a",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x226",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x343",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x6db",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7fc",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x149",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x479",
+        "samples": 1
+      },
+      {
+        "method": "int32 [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Runs(uint8[],valuetype [System.Runtime]System.Span`1<valuetype Lokad.Image.Internal.DeflateHuffman/Run>)[Optimized]",
+        "offset": "0xa8",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xba",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x77a",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x226",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x3ba",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x1",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x53f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x558",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x3df",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x16d",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x428",
+        "samples": 1
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Before|2_0(int32,int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x51",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7c7",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x80",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x29",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x40b",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x515",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x404",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x866",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7be",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x502",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x7e7",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x560",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x8bc",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x222",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x4e5",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::ProcessFast(bool)[Optimized]",
+        "offset": "0x564",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.Adler32::Append(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32&,uint32&,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "offset": "0xc8",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x99d",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x33f",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x96f",
+        "samples": 1
+      },
+      {
+        "method": "void [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::<Lengths>g__Sink|2_1(int32,valuetype Lokad.Image.Internal.DeflateHuffman/<>c__DisplayClass2_0&)[Optimized]",
+        "offset": "0x38",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x519",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::Block(bool)[Optimized]",
+        "offset": "0x102",
+        "samples": 1
+      },
+      {
+        "method": "uint8[] [Lokad.Image] Lokad.Image.Internal.DeflateHuffman::Lengths(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,class Lokad.Image.Internal.OperationContext,class Lokad.Image.Internal.DeflateHuffman/Workspace)[Optimized]",
+        "offset": "0x445",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+        "offset": "0x93",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::SlideLinks(uint16[])[Optimized]",
+        "offset": "0x79",
+        "samples": 1
+      },
+      {
+        "method": "instance void [Lokad.Image] Lokad.Image.Internal.PngDeflater::WriteTokens(uint8[],uint8[])[Optimized]",
+        "offset": "0x985",
+        "samples": 1
+      }
+    ]
+  },
+  "profileReceipt": {
+    "project": "Lokad.Image",
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "productionChanged": false,
+    "allBuilds": 0,
+    "librarySha256": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+    "sourceSha256": "407e6ce2d4df220375c79fc8c694e26182f102dd8f8d69f414a971c89e2be346",
+    "validation": {
+      "schemaVersion": 1,
+      "name": "WarmPng",
+      "caseId": "EncodeFastCancelable16",
+      "smoke": false,
+      "nativeSampleCount": 12,
+      "runId": "plw552-live-word-profile",
+      "width": 513,
+      "height": 259,
+      "depth": 16,
+      "cpu": 0,
+      "managedAffinityCount": 1,
+      "processorCount": 1,
+      "serverGc": false,
+      "gcConfiguration": {
+        "ServerGC": false,
+        "ConcurrentGC": false,
+        "RetainVM": false,
+        "NoAffinitize": false,
+        "GCCpuGroup": false,
+        "GCLargePages": false,
+        "LOHThreshold": 85000,
+        "HeapCount": 1,
+        "MaxHeapCount": 0,
+        "GCHeapAffinitizeMask": 0,
+        "GCHeapAffinitizeRanges": "",
+        "GCHighMemPercent": 90,
+        "GCGen0MaxBudget": 134217728,
+        "GCHeapHardLimit": 0,
+        "GCHeapHardLimitPercent": 0,
+        "GCRegionRange": 33532829696,
+        "GCRegionSize": 0,
+        "UOHWaitBGCSizeIncPercent": 200,
+        "GCHeapHardLimitSOH": 0,
+        "GCHeapHardLimitLOH": 0,
+        "GCHeapHardLimitPOH": 0,
+        "GCHeapHardLimitSOHPercent": 0,
+        "GCHeapHardLimitLOHPercent": 0,
+        "GCHeapHardLimitPOHPercent": 0,
+        "GCConserveMem": 0,
+        "GCName": "",
+        "GCPath": "",
+        "GCDynamicAdaptationMode": 1,
+        "GCDTargetTCP": 0,
+        "GCDGen0GrowthPercent": 0,
+        "GCDGen0GrowthMinFactor": 0,
+        "GCDGen0GrowthMaxFactor": 0
+      },
+      "runtime": ".NET 10.0.8",
+      "platform": "linux-x64",
+      "jitPolicy": "Tiered compilation disabled; fully optimized JIT before measurement",
+      "sourceIdentity": {
+        "sourceSha256": "407e6ce2d4df220375c79fc8c694e26182f102dd8f8d69f414a971c89e2be346",
+        "sourceRevision": "fee5380bd9eaf9c1a91acd321e665046a4bd1358"
+      },
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "rasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "managedOutputBytes": 968216,
+      "nativeOutputBytes": 968216,
+      "managedEncodedSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativeOutputSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "interlace": 0,
+      "colorType": 6,
+      "codedDepth": 16,
+      "rasterRecipe": "Existing original RGBA raster, all samples unchanged.",
+      "originalRasterSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "filter": 0,
+      "compression": "Safe managed greedy level1 / FFmpeg fast level1; complete row packing/compression/output timed; exact full RGBA16, filter None, complete-packet size gate",
+      "encoderLevel": 1,
+      "managedEncoderLevel": 1,
+      "nativeEncoderLevel": 1,
+      "storedDeflateBlocksExact": false,
+      "nativePackedTransparencyFilterTimed": false,
+      "nativePackedTransparencyFilter": null,
+      "grayTransparencyKey": null,
+      "grayTransparencyBytes": null,
+      "rgbTransparencyKey": null,
+      "rgbTransparencyBytes": null,
+      "managedIdatBytes": 965318,
+      "nativeIdatBytes": 965318,
+      "paletteEntries": null,
+      "transparencyEntries": null,
+      "forwardOnlyOutput": false,
+      "forwardPacketMatchesStock": false,
+      "callerOutputLeftOpen": true,
+      "cancellationCanBeCanceled": true,
+      "cancellationRequested": false,
+      "alreadyCanceledRejected": true,
+      "cancellationBoundary": "Live cancelable token, never signaled; token/source setup and disposal outside timing. Native backend has no equivalent cancellation setting; complete codec operation, full sample conversion and owned output release remain timed.",
+      "tightWorkingBytes": null,
+      "tightWorkingBoundaryExact": null,
+      "oneByteBelowRejected": null,
+      "budgetExcludesOptionalFilteredAndReadBuffers": null,
+      "originalInflaterAllowanceBytes": null,
+      "originalTwoRowBytes": null,
+      "allRgbaSamplesExact": true,
+      "alphaExact": true,
+      "hiddenRgbExact": true,
+      "nativeCliNormalScalarPixelsExact": true,
+      "nativeDecodeEndianConversionTimed": false,
+      "nativeEndianRepackingTimed": true,
+      "nativeEndianWorkspaceReused": false,
+      "nativeRgbPackingTimed": false,
+      "nativeRgbWorkspaceReused": false,
+      "nativeGrayPackingTimed": false,
+      "nativeGrayWorkspaceReused": false,
+      "nativeGrayPlaneExtractionTimed": false,
+      "nativeGrayFilterOutputAllocationTimed": false,
+      "nativeGrayAlphaPackingTimed": false,
+      "nativeGrayAlphaWorkspaceReused": false,
+      "nativeGrayAlphaStoragePackingTimed": false,
+      "nativeSampleTargetMilliseconds": "50",
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "nativeExitCode": 0,
+      "librarySha256": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+      "benchmarkAssemblySha256": "0475f03fb5c5825cfdda0f9ef01cd8e63baf7d2dc889372c82814551ad5d39d8",
+      "nativeBuild": {
+        "schemaVersion": 1,
+        "project": "Lokad.Image",
+        "purpose": "Complete one-shot RGBA16 PNG FFmpeg adapter",
+        "oneShotCodec": true,
+        "scope": "Existing RGBA16 Optimal/Fastest controls only",
+        "wordWorkspacePreparationTimed": true,
+        "wordWorkspaceRetainedBetweenOperations": false,
+        "sourceSha256": "d9c5f92713565e9563e3aea3665948ed0c9eeb898b548dc3d7713aa86db41db4",
+        "buildScriptSha256": "c0ca487064763e7d141cf410b51861260f4357c2ef0352599780cc4a2f167fae",
+        "compiledSourceSha256": "1a848f58aaebb15f0966b55186d15c41e340f50a5e0e8dc85d8cdfdb91f75477",
+        "workerSha256": "7aa2df40bbe8b3cb2afea67cd8d22f384f11746fde516ba97530b8afd561a8b4",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "flags": [
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DLOKAD_IMAGE_PNG_ONE_SHOT=1"
+        ],
+        "staticArchives": {
+          "libavcodec.a": "b7b13701a5ea1c8907616c9ef4b075fcacf83cd3f52db4360c13a74d66affed6",
+          "libavdevice.a": "0cabd77b9c1ba4a1c31d47500a05068b08d21af453f7ad53d37a02368b78ce92",
+          "libavfilter.a": "ebf6160b561c3bb47129b53ca907bc7f72e8056fa8465b031de68c6b66c6a6e3",
+          "libavformat.a": "c4ecf065fc664a65bbf5b72cdf771b2fc57b45eabb56f0ebf4431edf2f6293cf",
+          "libavutil.a": "8c94c7bf4041f8ee38aad92c07f63c2d768a722df94db28ef2ba58d50281aedd",
+          "libsharpyuv.a": "e4bf8ca423ff70c6ee778b2e57385fcb123908da8b4406adea4d2f9f5da98d94",
+          "libswresample.a": "cb205cc0e45fb8358fe2b48d331dbf4549f55d8f20822657a0fb03b311ec21e0",
+          "libswscale.a": "fc2cf15b63fbfc11b8b85acea4096b71e1ec7843f107454f40c569188059436d",
+          "libwebp.a": "f64e61b5b4d25c67d395dce6e5471858d3173f8a9486b553335df0561c807278",
+          "libwebpdecoder.a": "157e4c753b9a219601edacda36939bf3e9ec9bd2dc8798982bf21ab0339dd068",
+          "libwebpdemux.a": "81eb41109ed62d0fbb986b10b7ec1794ac81323a65f6115ca3ad3fbbb2e8aede",
+          "libz.a": "59c8835cc98aa9ac64979ccde164560b2b29ee1db450bdb96761ed1741168bcd",
+          "libzimg.a": "d060689ac769813084d440cc5f0f1073061cf1e9c0ba9aaf68b8412b98bc263e"
+        },
+        "libraries": "-L{native-prefix}/lib -lavcodec -lm -lwebp -lsharpyuv -lavfilter -lm -lzimg -lstdc++ -lswscale -lavutil -lm -lz -latomic -pthread"
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "png-fast16-encode",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "codedDepth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "codecThreads": 1,
+        "threadType": 0,
+        "activeThreadType": 0,
+        "compressionLevel": 1,
+        "filter": 0,
+        "colorType": 6,
+        "conversionThreads": 0,
+        "rgbExpansionTimed": false,
+        "rgbTransparencyExpansionTimed": false,
+        "rgbPackingTimed": false,
+        "grayExpansionTimed": false,
+        "grayTransparencyExpansionTimed": false,
+        "grayPackingTimed": false,
+        "grayPlaneExtractionTimed": false,
+        "grayFilterOutputAllocationTimed": false,
+        "grayAlphaExpansionTimed": false,
+        "grayAlphaPackingTimed": false,
+        "grayAlphaStoragePackingTimed": false,
+        "paletteExpansionTimed": false,
+        "packedTransparencyFilterTimed": false,
+        "filterThreads": 0,
+        "scalarMode": false,
+        "cpuFlags": 8377307,
+        "outputBytes": 968216,
+        "initialCompletedOperations": 3,
+        "codecPreparationTimed": true,
+        "packetWrapperPreparationTimed": true,
+        "codecRetainedBetweenOperations": false,
+        "borrowedResidentSource": true,
+        "wordWorkspacePreparationTimed": true,
+        "wordWorkspaceRetainedBetweenOperations": false,
+        "independentLiveOutputs": true,
+        "ffmpegVersion": "n8.1",
+        "avcodecVersion": 4070500,
+        "avutilVersion": 3938916
+      },
+      "nativeBefore": [
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74886130,
+          "CompletedOperations": 26,
+          "Observed": 3484,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74706164,
+          "NanosecondsPerOperation": 18721532.5
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74805237,
+          "CompletedOperations": 30,
+          "Observed": 4020,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74670931,
+          "NanosecondsPerOperation": 18701309.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74926060,
+          "CompletedOperations": 34,
+          "Observed": 4556,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74780948,
+          "NanosecondsPerOperation": 18731515
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 75028115,
+          "CompletedOperations": 38,
+          "Observed": 5092,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74882230,
+          "NanosecondsPerOperation": 18757028.75
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 75016337,
+          "CompletedOperations": 42,
+          "Observed": 5628,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74890440,
+          "NanosecondsPerOperation": 18754084.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 75209579,
+          "CompletedOperations": 46,
+          "Observed": 6164,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 75085350,
+          "NanosecondsPerOperation": 18802394.75
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 75404565,
+          "CompletedOperations": 50,
+          "Observed": 6700,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 75237687,
+          "NanosecondsPerOperation": 18851141.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74861802,
+          "CompletedOperations": 54,
+          "Observed": 7236,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74733536,
+          "NanosecondsPerOperation": 18715450.5
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 75139504,
+          "CompletedOperations": 58,
+          "Observed": 7772,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 75011121,
+          "NanosecondsPerOperation": 18784876
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74823775,
+          "CompletedOperations": 62,
+          "Observed": 8308,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74646850,
+          "NanosecondsPerOperation": 18705943.75
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74684194,
+          "CompletedOperations": 66,
+          "Observed": 8844,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74615914,
+          "NanosecondsPerOperation": 18671048.5
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74878628,
+          "CompletedOperations": 70,
+          "Observed": 9380,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74628596,
+          "NanosecondsPerOperation": 18719657
+        }
+      ],
+      "nativeAfter": [
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 75025320,
+          "CompletedOperations": 86,
+          "Observed": 11524,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74895412,
+          "NanosecondsPerOperation": 18756330
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74978279,
+          "CompletedOperations": 90,
+          "Observed": 12060,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74826654,
+          "NanosecondsPerOperation": 18744569.75
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74880591,
+          "CompletedOperations": 94,
+          "Observed": 12596,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74725494,
+          "NanosecondsPerOperation": 18720147.75
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74898549,
+          "CompletedOperations": 98,
+          "Observed": 13132,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74761014,
+          "NanosecondsPerOperation": 18724637.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74923837,
+          "CompletedOperations": 102,
+          "Observed": 13668,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74763090,
+          "NanosecondsPerOperation": 18730959.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74910517,
+          "CompletedOperations": 106,
+          "Observed": 14204,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74778553,
+          "NanosecondsPerOperation": 18727629.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74948394,
+          "CompletedOperations": 110,
+          "Observed": 14740,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74807810,
+          "NanosecondsPerOperation": 18737098.5
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74960873,
+          "CompletedOperations": 114,
+          "Observed": 15276,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74786894,
+          "NanosecondsPerOperation": 18740218.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74898649,
+          "CompletedOperations": 118,
+          "Observed": 15812,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74774140,
+          "NanosecondsPerOperation": 18724662.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74994473,
+          "CompletedOperations": 122,
+          "Observed": 16348,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74866568,
+          "NanosecondsPerOperation": 18748618.25
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 75532899,
+          "CompletedOperations": 126,
+          "Observed": 16884,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 75394517,
+          "NanosecondsPerOperation": 18883224.75
+        },
+        {
+          "State": "sample",
+          "Operations": 4,
+          "ElapsedNanoseconds": 74920652,
+          "CompletedOperations": 130,
+          "Observed": 17420,
+          "OutputStride": 0,
+          "Cpu": 0,
+          "OutputBytes": 968216,
+          "CpuElapsedNanoseconds": 74778233,
+          "NanosecondsPerOperation": 18730163
+        }
+      ],
+      "nativeCodecLifetime": "One-shot: fresh codec/options/zlib and packet wrapper; independent payload and codec/packet disposal timed; resident source borrowed. Word endian-conversion frame allocation, conversion and disposal timed; no retained working frame.",
+      "boundary": "Warm identical borrowed resident RGBA16 input to complete independent PNG packets: fresh managed MemoryStream creation/growth/public EncodePng/disposal, no redundant ToArray; fresh native codec/options/zlib and AVPacket wrapper creation, complete encode, independent payload and codec/packet disposal timed. Both 1/filter None/color6 frozen controls, exact complete packets and RGBA samples including hidden RGB. Source fixtures retained on both sides, no redundant source copy. Native word endian-conversion frame allocation, complete conversion and disposal timed; working frame not retained. Managed receives a live cancelable token; token-source creation and cancellation correctness checks are outside timing. Native has no equivalent caller token. Startup/IPC/file IO/hashes/validation excluded."
+    },
+    "identities": {
+      "tmp/plw552-live-word-runtime/Pragmastat.dll": "767bbf0cff62484bd01665a99776a75c16523dff1dcbfd41379c9142c70e15da",
+      "tmp/plw552-live-word-runtime/Lokad.Image.pdb": "c0c98ad7fc9f1a9c557fcd5503fb292ebc5fc57adeb5ebcea6f22a3d2c6a7ea9",
+      "tmp/plw552-live-word-runtime/Iced.dll": "f058c01321b4cdfc9b9151879e88e59571c8d0ba176fbcf95bc936a8f3d073ed",
+      "tmp/plw552-live-word-runtime/DR1WebpStreamConfirm.dll": "8cb5b885cb2922e6fa04bdf1d19c561b91bec60838aaf92f93e3a5c00dfdc6ed",
+      "tmp/plw552-live-word-runtime/DR1WebpResidentShort.dll": "c6a2d2b56d0e0b80678c227f9737704b11ba9058555bcdc8c8a8c8d4f8aee593",
+      "tmp/plw552-live-word-runtime/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+      "tmp/plw552-live-word-runtime/Lokad.Image.Benchmarks.deps.json": "2d446e5a71eeabad02af2fcf6cc1d00222969f3bea77ee037801e727a1e65d95",
+      "tmp/plw552-live-word-runtime/Lokad.Image.Benchmarks.pdb": "d6d7531fa8600d69ec5d873660483ae21dc26998e95422b5c2f5bfb626fbe840",
+      "tmp/plw552-live-word-runtime/Fmp1PngShort.dll": "2cbaf0816efff60b9eec4c257fd915e9bff51abca6e106d7ebe80edf317eb9f1",
+      "tmp/plw552-live-word-runtime/System.CodeDom.dll": "8d0cf191c86feea81c9875652c06e454abe8dbff66bea9e4cb5f8aa2dc02f32a",
+      "tmp/plw552-live-word-runtime/BenchmarkDotNet.dll": "566a77e5e584ac9904c6fb818423b6a0d33893f5020c7c4e17f8bd5e3de24725",
+      "tmp/plw552-live-word-runtime/VpsEffort2Short.dll": "6e7aa436eaa983f3f8be6a09db9bb4cf9679aa6e3d83f7d81638698b4a93385e",
+      "tmp/plw552-live-word-runtime/PngDecodeConfirmDriver.dll": "2aa4da79d900818f0521df9e434a48759c9abc0902e1c35f4e3600831e225f9a",
+      "tmp/plw552-live-word-runtime/Microsoft.CodeAnalysis.dll": "395736b2d0e02be77bedc3847b269da7a93bf8e49cd3431a4a8e68d2c52d5846",
+      "tmp/plw552-live-word-runtime/PredictablePngConfirm.dll": "5c23f5476c268764ff3cfd7a5e9f48558afab2e0e121a1de242880e807c1e3aa",
+      "tmp/plw552-live-word-runtime/DR1Jpeg420Short.dll": "a5d78210a450bf8183ac08fc5af80fb1a52cbf32c179f9f0276bf7e71f9f9c67",
+      "tmp/plw552-live-word-runtime/CommandLine.dll": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "tmp/plw552-live-word-runtime/Microsoft.Diagnostics.Runtime.dll": "06f9910c8a37f8d4d758538e6dd307de58bcfb3bb13e83658142c08087a25382",
+      "tmp/plw552-live-word-runtime/JIV1Jpeg420Confirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/Gee.External.Capstone.dll": "6dfda67784598de9677173b89d0692593935f1a4024d36040c95dea48c1b5965",
+      "tmp/plw552-live-word-runtime/Microsoft.Extensions.Options.dll": "786112cb2f6646ef1170219a8c0bb813c9f14a6781e67c6266414f55a679565d",
+      "tmp/plw552-live-word-runtime/BenchmarkDotNet.Annotations.dll": "e83ceac98dae516c180e4b6695a9d7200af2dd5525c752010b9b88601f622da4",
+      "tmp/plw552-live-word-runtime/BatchedPredictablePngConfirm.dll": "2db276b4bf30872487f6c37787a22d9227cf1cd76c0c204380e818c909d68443",
+      "tmp/plw552-live-word-runtime/PngFast8ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/Fmp1PngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/Microsoft.Extensions.Logging.dll": "183650081b551dfad967a7cbf79946a229cb79458b8d04a12db7c44b03bb9ab7",
+      "tmp/plw552-live-word-runtime/Dia2Lib.dll": "6c4cac68010fe032218efe5e9fcf46eef9f77bfaa5f3bd33f03c5ff77d5a8fac",
+      "tmp/plw552-live-word-runtime/Profile.pdb": "3146d7589cbd824b27c4cbc92135e76307494c0841a7ea1a597cd38ddf63ed5e",
+      "tmp/plw552-live-word-runtime/Microsoft.Diagnostics.NETCore.Client.dll": "baed2d25ca5bc53a3447c237d5572c92eac1fd842807b3e72602a711749b1b22",
+      "tmp/plw552-live-word-runtime/TraceReloggerLib.dll": "6830c0f1d3f3c17719181e73dd5cfa8ccbb3f3c575329d2120576545103467b5",
+      "tmp/plw552-live-word-runtime/BatchedPredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/DR1Jpeg420Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/PngSmallest16ShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/Perfolizer.dll": "2725d0d9a4ec1a20f9cd442516915424d5c5781e864814e4059aa905df726d9a",
+      "tmp/plw552-live-word-runtime/System.Management.dll": "0be24b09da5abad0b20efcb58fab14b0dedc79b09d4fbdcb894be268105a2195",
+      "tmp/plw552-live-word-runtime/Microsoft.CodeAnalysis.CSharp.dll": "53302acca07700e9bb10dcf21034435d6e0454c8eebf2481164ec13e520004c9",
+      "tmp/plw552-live-word-runtime/PngStreamShortHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/DR1WebpResidentConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/Lokad.Image.Benchmarks.dll": "0475f03fb5c5825cfdda0f9ef01cd8e63baf7d2dc889372c82814551ad5d39d8",
+      "tmp/plw552-live-word-runtime/PngStored16ConfirmHost.dll": "dc1a19a58b507ef97910e17a835fa81c0c5e263d4b32c24d94bbe84d6c9bf162",
+      "tmp/plw552-live-word-runtime/PngStored16ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/PngSmallest8Host.dll": "879e4f9ab41eea0e9c8c316a4bc58dc44ccc2366336e12d59fa9113c1b16a5f8",
+      "tmp/plw552-live-word-runtime/JIV1Jpeg420Confirm.dll": "6bbe042780b58539c40fc62f9407425ead99016f2f562565d1efefe3e0ddb3c2",
+      "tmp/plw552-live-word-runtime/PredictablePngShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/Lokad.Image.dll": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+      "tmp/plw552-live-word-runtime/PngStreamConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/ReadDriverShort.dll": "df531eb4653937bf4f1ea6af223908db74931e502d9cd9f5720ca65a2955cbe9",
+      "tmp/plw552-live-word-runtime/Profile.dll": "373505f8d07bd4ec9e3f50bf69be4f0fc307bd35a5e1df26e6d55238c84fca3f",
+      "tmp/plw552-live-word-runtime/Microsoft.Extensions.Logging.Abstractions.dll": "d575c9d1543ca726ce14dbdffd103e93ea527cd46bb28316da1f4122dbc55d56",
+      "tmp/plw552-live-word-runtime/ReadDriver.dll": "a513a0e5a4f55bad54f7ba532ef90d585f741bc7d3cc1f109a76bf60f71f1594",
+      "tmp/plw552-live-word-runtime/VpsEffort2Short.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/ReadDriverShort.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/PngStreamConfirmHost.dll": "ddae2cd023c6d6487e28f408d6c5b90b239fe3bcbc2998e2c314cff53b3614b6",
+      "tmp/plw552-live-word-runtime/PredictablePngShort.dll": "441c80445443335123284c911bb8362fd53ee4bd27b22ad652c3bf229f6d74c5",
+      "tmp/plw552-live-word-runtime/Lokad.Image.Benchmarks": "4a632e715c0759fec82b92200991bb6dfc150b5ce3889615642678a5702ed35a",
+      "tmp/plw552-live-word-runtime/Microsoft.Diagnostics.FastSerialization.dll": "83e89baf0bbecca8cfa194cff13365f716849e22efc374b669206f26998a019f",
+      "tmp/plw552-live-word-runtime/PngSmallest8Host.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/DR1WebpStreamShort.dll": "8fa8a00a1de342996490d26300116f375f2998b9f1c6a29d798bd0be9a76a76e",
+      "tmp/plw552-live-word-runtime/Microsoft.Diagnostics.Tracing.TraceEvent.dll": "401e948dac99d0f9756ef96d5a8b8e4736e19e9f82ce8cdd744495951e3a94bb",
+      "tmp/plw552-live-word-runtime/PngFast8ConfirmHost.dll": "311fe575cf30fb7a2687811a09ea048cf2fd2a9e16adff0354d4a141f48c6c8c",
+      "tmp/plw552-live-word-runtime/PredictablePngConfirm.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/DR1WebpStreamConfirm.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/PngDecodeConfirmDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/ReadDriver.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/PngFast8ConfirmHost.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/DR1WebpStreamShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/ImageProbe": "010f415e3f738b4de3b63cfa3499e10517e83470c61be6ba2f224e278b030642",
+      "tmp/plw552-live-word-runtime/DR1WebpResidentShort.runtimeconfig.json": "6511701ca759b96f53125b160715f098456aee8b5376f905e9ad6e778fec9b0f",
+      "tmp/plw552-live-word-runtime/Microsoft.Extensions.DependencyInjection.dll": "2aa8182b5356a8cc5c35fc3641a87e814857d8d9be399ac78f260343754d09e0",
+      "tmp/plw552-live-word-runtime/Lokad.Image.Benchmarks.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+      "tmp/plw552-live-word-runtime/PngStreamShortHost.dll": "0075d31dbce00be8712baf02cfa8b40b1767007078e0048d7e98b4d7649c755b",
+      "tmp/plw552-live-word-runtime/Microsoft.Extensions.Primitives.dll": "8ce9a85927ec7507b11ffe90080e7a811d51304a9e8b1da20c350159ba403902",
+      "tmp/plw552-live-word-runtime/PngFast8ShortHost.dll": "a5a0f29fd092cb7a45973374e9f8c01ca641d6589f407cccedf439d02312b0a0",
+      "tmp/plw552-live-word-runtime/Profile.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+      "tmp/plw552-live-word-runtime/DR1WebpResidentConfirm.dll": "315cebc4bb2ed72d8bb1de3e2181e7ecfc8a1595651a501e402d46e5713bd3b3",
+      "tmp/plw552-live-word-runtime/PngSmallest16ShortHost.dll": "73db7de317becc3cf926b6a649c264061cf85bcd13a52e607ebef162669e2563",
+      "tmp/plw552-live-word-runtime/Microsoft.DotNet.PlatformAbstractions.dll": "b1f4ad169fb192747f5d2d3111c01db4257e3ec1f7f18f301f7fc4be3b869ff3",
+      "tmp/plw552-live-word-runtime/Microsoft.Extensions.DependencyInjection.Abstractions.dll": "9ccd830351aa28bc683d4f8d1cefd9e724161f972d25bfb64eee5bf55c48c5e3"
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "dotnet",
+      "exec",
+      "--depsfile",
+      "tmp/plw552-live-word-runtime/Lokad.Image.Benchmarks.deps.json",
+      "--runtimeconfig",
+      "tmp/plw552-live-word-runtime/PngDecodeConfirmDriver.runtimeconfig.json",
+      "tmp/plw552-live-word-runtime/PngDecodeConfirmDriver.dll",
+      "--benchmarkName",
+      "WarmPng.Managed(Case: EncodeFastCancelable16)",
+      "--job",
+      "WarmConfirm",
+      "--benchmarkId",
+      "0"
+    ],
+    "collectorCommand": [
+      "sudo",
+      "-n",
+      "taskset",
+      "-c",
+      "1",
+      "perf",
+      "record",
+      "--no-inherit",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "999",
+      "--call-graph",
+      "fp",
+      "-p",
+      "1751170",
+      "-o",
+      "tmp/plw552-live-word-profile.perf.data",
+      "--",
+      "sleep",
+      "2"
+    ],
+    "quietGuardsPassed": true,
+    "traceSha256": "2d974cd9d1a74807adc6f2e8b019e46719a7f1f96aa84a76e38f7dc22484cd24",
+    "traceBytes": 666824,
+    "scope": "PLW552 current immutable fe8c3364 complete513x259RGBA16 PNGFastest1 with live noncancelled token. Exact968216Bpacket and original source/settings/full16bit/hiddenRGB/ownership/nativefreshoneShot codec-zlib-packet boundaries. One2second CPU0 actualwork capture/CPU1sampler, tieringoff. Reuse cached adaptive12actual/200ms selector and unchanged completeWarmPng.Managed operation. Zero builds/newcontrols/productionchanges; instrumented elapsed discarded. Counts/skid locate work, not precise phase costs or projected gains. Current manifest differs from JFW547 only in retained packageconsumer source. Plainword confirmed passing and stops."
+  },
+  "focusedQualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "c66ca82ae97d8aff10a663392d3b250b3428f8aea1a73bfbf2f9231266b5a3ee",
+      "candidateSha256": "ccbb5abdb70d6da844500770d2776c953becbcc2830f9b6a52602f9c729645c6",
+      "internalTestAssemblySha256": "eca1be8f8e8b09fc8a556391d7cc8b08d8c1d550f99a05ec2db816a724c739a4",
+      "focused": {
+        "internal-normal": 43,
+        "internal-scalar": 43,
+        "public-normal": 246,
+        "public-scalar": 246
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "99e45dffceafce153150c9fd793a61ae21e7cf7ec666e018ce49de0a4e0d8063"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+      "candidateSha256": "58e98104f6176c9b570be66a836f1f2969745f0536568d9a6c4fd0187ceb17e5",
+      "internalTestAssemblySha256": "49c22536096a7bb41cb1fd92020d2fafe89e0dfeee49d45df34290ab2ae17c00",
+      "focused": {
+        "internal-normal": 43,
+        "internal-scalar": 43,
+        "public-normal": 246,
+        "public-scalar": 246
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "99e45dffceafce153150c9fd793a61ae21e7cf7ec666e018ce49de0a4e0d8063"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "caseId": "EncodeFastCancelable16",
+    "subject": "candidate",
+    "mode": "short",
+    "runId": "pfh553-candidate-EncodeFastCancelable16-short",
+    "managed": {
+      "statistics": {
+        "OriginalValues": [
+          19241526.8,
+          19251983.6,
+          19254243.1
+        ],
+        "N": 3,
+        "Min": 19241526.8,
+        "LowerFence": 19237217.975000005,
+        "Q1": 19246755.200000003,
+        "Median": 19251983.6,
+        "Mean": 19249251.166666668,
+        "Q3": 19253113.35,
+        "UpperFence": 19262650.575,
+        "Max": 19254243.1,
+        "InterquartileRange": 6358.14999999851,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 3916.8744071150695,
+        "Variance": 46025715.36333908,
+        "StandardDeviation": 6784.225479989524,
+        "Skewness": -0.3374274512618621,
+        "Kurtosis": 0.6666666666666669,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 19249251.166666668,
+          "StandardError": 3916.8744071150695,
+          "Level": 12,
+          "Margin": 123769.52765864611,
+          "Lower": 19125481.639008023,
+          "Upper": 19373020.694325313
+        },
+        "Percentiles": {
+          "P0": 19241526.8,
+          "P25": 19246755.200000003,
+          "P50": 19251983.6,
+          "P67": 19252751.830000002,
+          "P80": 19253339.3,
+          "P85": 19253565.25,
+          "P90": 19253791.200000003,
+          "P95": 19254017.150000002,
+          "P100": 19254243.1
+        }
+      },
+      "unfilteredActualStatistics": {
+        "OriginalValues": [
+          19241526.8,
+          19251983.6,
+          19254243.1
+        ],
+        "N": 3,
+        "Min": 19241526.8,
+        "LowerFence": 19237217.975000005,
+        "Q1": 19246755.200000003,
+        "Median": 19251983.6,
+        "Mean": 19249251.166666668,
+        "Q3": 19253113.35,
+        "UpperFence": 19262650.575,
+        "Max": 19254243.1,
+        "InterquartileRange": 6358.14999999851,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 3916.8744071150695,
+        "Variance": 46025715.36333908,
+        "StandardDeviation": 6784.225479989524,
+        "Skewness": -0.3374274512618621,
+        "Kurtosis": 0.6666666666666669,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 19249251.166666668,
+          "StandardError": 3916.8744071150695,
+          "Level": 12,
+          "Margin": 123769.52765864611,
+          "Lower": 19125481.639008023,
+          "Upper": 19373020.694325313
+        },
+        "Percentiles": {
+          "P0": 19241526.8,
+          "P25": 19246755.200000003,
+          "P50": 19251983.6,
+          "P67": 19252751.830000002,
+          "P80": 19253339.3,
+          "P85": 19253565.25,
+          "P90": 19253791.200000003,
+          "P95": 19254017.150000002,
+          "P100": 19254243.1
+        }
+      },
+      "actual": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 10,
+          "Nanoseconds": 192415268
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 10,
+          "Nanoseconds": 192519836
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 10,
+          "Nanoseconds": 192542431
+        }
+      ],
+      "results": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 10,
+          "Nanoseconds": 192415268
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 10,
+          "Nanoseconds": 192519836
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 10,
+          "Nanoseconds": 192542431
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 24375856 10",
+      "rawThreading": "// Threading:  0 0 10",
+      "extraStatsRecorded": true
+    },
+    "nativeBrackets": [
+      {
+        "mean": 18700061.583333332,
+        "standardError": 13276.630083010941,
+        "confidenceLower": 18280532.626446724,
+        "confidenceUpper": 19119590.54021994,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 4,
+            "ElapsedNanoseconds": 74850085,
+            "CompletedOperations": 26,
+            "Observed": 3484,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 968216,
+            "CpuElapsedNanoseconds": 74728099,
+            "NanosecondsPerOperation": 18712521.25
+          },
+          {
+            "State": "sample",
+            "Operations": 4,
+            "ElapsedNanoseconds": 74856555,
+            "CompletedOperations": 30,
+            "Observed": 4020,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 968216,
+            "CpuElapsedNanoseconds": 74737690,
+            "NanosecondsPerOperation": 18714138.75
+          },
+          {
+            "State": "sample",
+            "Operations": 4,
+            "ElapsedNanoseconds": 74694099,
+            "CompletedOperations": 34,
+            "Observed": 4556,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 968216,
+            "CpuElapsedNanoseconds": 74557532,
+            "NanosecondsPerOperation": 18673524.75
+          }
+        ]
+      },
+      {
+        "mean": 18662258.833333332,
+        "standardError": 11973.837596099998,
+        "confidenceLower": 18283896.887175813,
+        "confidenceUpper": 19040620.77949085,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 4,
+            "ElapsedNanoseconds": 74743626,
+            "CompletedOperations": 50,
+            "Observed": 6700,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 968216,
+            "CpuElapsedNanoseconds": 74612413,
+            "NanosecondsPerOperation": 18685906.5
+          },
+          {
+            "State": "sample",
+            "Operations": 4,
+            "ElapsedNanoseconds": 74614830,
+            "CompletedOperations": 54,
+            "Observed": 7236,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 968216,
+            "CpuElapsedNanoseconds": 74493841,
+            "NanosecondsPerOperation": 18653707.5
+          },
+          {
+            "State": "sample",
+            "Operations": 4,
+            "ElapsedNanoseconds": 74588650,
+            "CompletedOperations": 58,
+            "Observed": 7772,
+            "OutputStride": 0,
+            "Cpu": 0,
+            "OutputBytes": 968216,
+            "CpuElapsedNanoseconds": 74456142,
+            "NanosecondsPerOperation": 18647162.5
+          }
+        ]
+      }
+    ],
+    "managedUs": 19249.25116666667,
+    "nativeUs": 18662.258833333333,
+    "ratio": 1.0314534450826975,
+    "lower": 1.0003081184597384,
+    "upper": 1.0597623761956514,
+    "allocatedBytes": 2437586,
+    "packetBytes": 968216,
+    "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+    "librarySha256": "58e98104f6176c9b570be66a836f1f2969745f0536568d9a6c4fd0187ceb17e5",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "gap"
+  },
+  "originalLiveCost": {
+    "managedUs": 18830.061899999997,
+    "nativeUs": 18588.3708125,
+    "upper": 1.018440618423421,
+    "conservativeStandaloneLaunches": 2
+  },
+  "decision": "Unselected: live-word short19249.25us/native18662.26 versus currentoriginal~18800us gives no promising lead. Three-actual adversepoint is not independentlyconfirmed causal loss/equivalence. No byte/plain expansion, independent candidate confirmation, favorable repeat, broadsuite or package run. Exact JFW547 sources/main/embedded/bindings/manifest restore withoutbuilds, actualpackage unchanged.",
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionAccepted": false,
+      "sourcesMainEmbeddedBindingsRestoredExactly": true,
+      "identities": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "e84323728f44051e49e5544d518fe4f43ddabb6d5031c39c37aaea35190aef30",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "c66ca82ae97d8aff10a663392d3b250b3428f8aea1a73bfbf2f9231266b5a3ee",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "d43591b77e1cca9175dd5f4aee4666967c5f713692600f681dbf9390248d78be",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "5572ccda3fcc35e58293a92bc051087c10950cede7fc26c3593026a934d0077b",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "52ca9d64e55b82a3c5b3078205cc83ecd338f9e714a4fbc4d11df1a0da15d444"
+      },
+      "bindings": {
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "c66ca82ae97d8aff10a663392d3b250b3428f8aea1a73bfbf2f9231266b5a3ee",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.pdb": "d43591b77e1cca9175dd5f4aee4666967c5f713692600f681dbf9390248d78be",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "c66ca82ae97d8aff10a663392d3b250b3428f8aea1a73bfbf2f9231266b5a3ee",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.pdb": "d43591b77e1cca9175dd5f4aee4666967c5f713692600f681dbf9390248d78be",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "c66ca82ae97d8aff10a663392d3b250b3428f8aea1a73bfbf2f9231266b5a3ee",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.pdb": "d43591b77e1cca9175dd5f4aee4666967c5f713692600f681dbf9390248d78be",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "packageUnchanged": true,
+      "packageSha256": "cdbaa146508f2300b88b24dd1195582bf3eeabcc3358fd9b9dc80d330bb3fc8f",
+      "restorationBuilds": 0,
+      "broadRuns": 0,
+      "packageRuns": 0,
+      "reusedQualification": "JFW547 accepted5,879full/live perOS+affectednormal/scalar and SAMEactualpackage/all3examples; latestFastestconsumerproof also valid. Exactrestoration, no productionchange."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionAccepted": false,
+      "sourcesMainEmbeddedBindingsRestoredExactly": true,
+      "identities": {
+        "src/Lokad.Image/Internal/PngDeflater.cs": "e84323728f44051e49e5544d518fe4f43ddabb6d5031c39c37aaea35190aef30",
+        "tmp/benchmark-source.json": "22968f05ef688dd2f446ba06559bca456d27aa810db25afbb63fec257a50bb26",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "c0c98ad7fc9f1a9c557fcd5503fb292ebc5fc57adeb5ebcea6f22a3d2c6a7ea9",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "dee76bb601789eb4f018cb194a4045eb2992d53eac2a0aac656a753ea229ee9c",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "146283e9ffa9fe0aff52b01b0ff3608c95b7fb81e381409cbcf85714b6a186be"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "c0c98ad7fc9f1a9c557fcd5503fb292ebc5fc57adeb5ebcea6f22a3d2c6a7ea9",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "c0c98ad7fc9f1a9c557fcd5503fb292ebc5fc57adeb5ebcea6f22a3d2c6a7ea9",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "fe8c3364f062820af743786993980b7f89b9f3126ac1171b9eeb7a5f71ef0d2c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "c0c98ad7fc9f1a9c557fcd5503fb292ebc5fc57adeb5ebcea6f22a3d2c6a7ea9",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795"
+      },
+      "packageUnchanged": true,
+      "packageSha256": "cdbaa146508f2300b88b24dd1195582bf3eeabcc3358fd9b9dc80d330bb3fc8f",
+      "restorationBuilds": 0,
+      "broadRuns": 0,
+      "packageRuns": 0,
+      "reusedQualification": "JFW547 accepted5,879full/live perOS+affectednormal/scalar and SAMEactualpackage/all3examples; latestFastestconsumerproof also valid. Exactrestoration, no productionchange."
+    }
+  },
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "workspaceAdmissionBytes": 393216,
+    "originalConfirmedGcBytes": 2437660,
+    "candidateShortGcCeilingBytes": 2437586,
+    "physicalNativePeakMeasured": false,
+    "note": "Different batch-amortization ceilings do not prove an allocation reduction. Sameownedcapacities/admission; twosweep-localscalars, no owner/cache/session."
+  },
+  "workflow": {
+    "mainVersionsEachOs": 1,
+    "embeddedVersionsEachOs": 1,
+    "focusedInternalEachModeOs": 43,
+    "focusedPublicEachModeOs": 246,
+    "harnessNativeSelectorPublicFixtureBuilds": 0,
+    "candidateShortActuals": 3,
+    "independentCandidateConfirmations": 0,
+    "broadRuns": 0,
+    "packageRuns": 0,
+    "restorationBuilds": 0,
+    "setupSyntaxFailureBeforeMutationRetained": true
+  },
+  "next": "Switch independentcodeclead: source-valid ordinary RGB444 JPEG entropy/IDCT attribution and current~191usgap, or liveopaqueVP8~190us. No blind PNGmatching microvariant or pass-case tuning. Current125costs and JFW547 full/SAMEpackage proof unchanged.",
+  "raw": {
+    "file": "png-fastest-live-word-study.tar.xz",
+    "sha256": "8ecf5f3c99828f9fad701efd2180e75487d814a6a52c0c598dc025942980eb0d",
+    "bytes": 11594980,
+    "members": 187,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-live-entropy-window-qualified.tar.xz",
+        "sha256": "e60ed31cde1a103805c8d5182fabea667d6b2b66c04eb866d7b10f1579367bdf"
+      },
+      {
+        "file": "png-prefix-preparation-experiment.tar.xz",
+        "sha256": "f4048fad6ce2137fa6f4bc66b4d725fcf120e654cee791f07f752957b27aa3e9"
+      }
+    ]
+  }
+}

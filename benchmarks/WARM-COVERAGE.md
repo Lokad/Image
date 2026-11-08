@@ -57,7 +57,8 @@ Earlier unselected [VP8 windows](VP8-ROW-WINDOW-EXPERIMENT.md),
 [PNG token/code preparation](PNG-PREPARED-TOKEN-CODES-EXPERIMENT.md) and
 [resize phases](BICUBIC-COLUMN-PHASE-EXPERIMENT.md) and
 [paired JPEG rows](JPEG-PAIRED-INVERSE-ROWS-EXPERIMENT.md) and
-[PNG prefix preparation](PNG-PREFIX-PREPARATION-EXPERIMENT.md) retain exact restoration,
+[PNG prefix preparation](PNG-PREFIX-PREPARATION-EXPERIMENT.md) and
+[live-word hash preparation](PNG-FASTEST-LIVE-WORD-STUDY.md) retain exact restoration,
 adverse/inconclusive results and raw evidence separately. They establish no
 current production gain or permanent family ban.
 [Source-valid JPEG attribution](JPEG-CURRENT-ENTROPY-ATTRIBUTION.md) remains useful
