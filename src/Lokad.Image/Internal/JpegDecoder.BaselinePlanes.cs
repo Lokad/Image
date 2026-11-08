@@ -22,6 +22,37 @@ internal ref partial struct JpegDecoder
         scoped ReadOnlySpan<int> indexes, scoped ReadOnlySpan<int> dc,
         scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels, scoped Span<byte> staged)
     {
+        var tables = 0;
+        if (writePixels && !context.Cancellation.CanBeCanceled && (long)columns * rows >= 64)
+        {
+            var used = 0;
+            for (var i = 0; i < indexes.Length; i++) used |= 1 << ac[i];
+            for (var i = 0; i < acTables.Length; i++)
+                if ((used & (1 << i)) != 0 && acTables[i]!.CanPrepareBaselinePairs) tables |= 1 << i;
+        }
+        var bytes = System.Numerics.BitOperations.PopCount((uint)tables) * JpegHuffman.BaselinePairBytes;
+        // Choose from the local ceiling before asking the borrowed shared root.
+        // A shared refusal terminates; no lower-memory retry follows it.
+        var prepare = tables != 0 && context.RemainingWorkingBytes >= bytes;
+        try
+        {
+            if (prepare)
+                for (var i = 0; i < acTables.Length; i++)
+                    if ((tables & (1 << i)) != 0) acTables[i]!.PrepareBaselinePairs(context);
+            ReadBaselineBlockCore(ref reader, indexes, dc, ac, columns, rows, interleaved, writePixels, staged);
+        }
+        finally
+        {
+            if (prepare)
+                for (var i = 0; i < acTables.Length; i++)
+                    if ((tables & (1 << i)) != 0) acTables[i]!.ReleaseBaselinePairs(context);
+        }
+    }
+
+    private void ReadBaselineBlockCore(scoped ref JpegEntropyReader reader,
+        scoped ReadOnlySpan<int> indexes, scoped ReadOnlySpan<int> dc,
+        scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels, scoped Span<byte> staged)
+    {
         if (writePixels && !interleaved && interleavedResult is null) FillUncodedBaselinePadding(components[indexes[0]], columns, rows);
         Span<int> coefficients = stackalloc int[64];
         Span<byte> pixels = stackalloc byte[64];

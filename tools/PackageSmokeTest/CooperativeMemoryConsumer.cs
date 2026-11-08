@@ -629,6 +629,65 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine("Packaged live baseline JPEG window preserves exact samples and admitted sync/async ownership.");
     }
 
+    private static async Task VerifyGroupedJpegResult()
+    {
+        // Original T.81 stream: RGB, zero DC, two signed AC coefficients and EOB
+        // perblock. Frozen on the qualified PFC554 decoder before this change.
+        const int width = 513, height = 259, bytes = width * height * 4;
+        using var encoded = new MemoryStream(); encoded.Write(new byte[] { 255, 216 });
+        void Segment(byte marker, byte[] payload)
+        {
+            encoded.Write(new byte[] { 255, marker, (byte)((payload.Length + 2) >> 8), (byte)(payload.Length + 2) });
+            encoded.Write(payload);
+        }
+        Segment(238, [65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, 0]);
+        Segment(219, [0, .. Enumerable.Repeat((byte)64, 64)]);
+        Segment(192, [8, 1, 3, 2, 1, 3, 82, 17, 0, 71, 17, 0, 66, 17, 0]);
+        Segment(196, [0, 1, .. new byte[15], 0]);
+        Segment(196, [16, 1, 1, .. new byte[14], 1, 0]);
+        Segment(218, [3, 82, 0, 71, 0, 66, 0, 0, 63, 0]);
+        var pending = 0; var count = 0;
+        void Bit(int bit)
+        {
+            pending = pending * 2 + bit;
+            if (++count != 8) return;
+            encoded.WriteByte((byte)pending); if (pending == 255) encoded.WriteByte(0);
+            pending = 0; count = 0;
+        }
+        for (var block = 0; block < 65 * 33 * 3; block++)
+            foreach (var bit in new[] { 0, 0, 1, 0, 0, 1, 0 }) Bit(bit);
+        while (count != 0) Bit(1);
+        encoded.Write(new byte[] { 255, 217 }); var data = encoded.ToArray();
+        if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(data))
+            != "ba4b888bb53664a59b38eea752598638aa7a85640eba5c18aa2acd9c92e414d2")
+            throw new Exception("Authored packaged JPEG pair input changed.");
+        using var root = new TestMemoryBudget(data.Length + 2L * bytes + 128 * 1024);
+        if (!root.TryReserve(data.Length, out var input)) throw new Exception("Cannot admit paired JPEG input.");
+        using var inputOwner = input;
+        var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
+        using var first = ImageCodec.Decode(data, options);
+        using var stream = new MemoryStream(data, writable: false);
+        using var second = await ImageCodec.DecodeAsync(stream, options);
+        if (root.Bytes != data.Length + 2L * bytes || !stream.CanRead || root.IsDisposed)
+            throw new Exception("Packaged JPEG pair scratch or borrowed ownership differs.");
+        try { using var unexpected = ImageCodec.Decode(data, options); throw new Exception("JPEG pair aggregate refusal ignored."); }
+        catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
+        if (root.Refusals != 1 || root.Bytes != data.Length + 2L * bytes)
+            throw new Exception("Packaged JPEG pair refusal was retried or leaked.");
+        first.Dispose(); using var recovered = ImageCodec.Decode(data, options); data.AsSpan().Clear();
+        foreach (var image in new[] { second, recovered })
+        {
+            using var hash = System.Security.Cryptography.IncrementalHash.CreateHash(System.Security.Cryptography.HashAlgorithmName.SHA256);
+            for (var y = 0; y < height; y++) hash.AppendData(image.GetRow8(y));
+            if (Convert.ToHexStringLower(hash.GetHashAndReset())
+                != "a1980c44cfe0ffe7baf040e66f254059fe1ef0702d815399326441f56796d240")
+                throw new Exception("Packaged JPEG pair samples or independent lifetime differ.");
+        }
+        recovered.Dispose(); second.Dispose(); inputOwner?.Dispose();
+        if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged JPEG pair storage leaked.");
+        Console.WriteLine("Packaged grouped JPEG entropy preserves frozen pixels, sync/async, scan storage and shared admission.");
+    }
+
     private static void VerifyTranspose(int depth)
     {
         const int width = 35, height = 37;
@@ -828,6 +887,7 @@ internal static class CooperativeMemoryConsumer
         await VerifyLanczosPlans();
         await VerifyCompactPngDictionary(budget, limits);
         await VerifyDirectRgbResult();
+        await VerifyGroupedJpegResult();
         using var empty = new TestMemoryBudget(0);
         try
         {

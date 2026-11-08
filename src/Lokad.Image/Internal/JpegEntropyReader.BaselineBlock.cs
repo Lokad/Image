@@ -28,6 +28,7 @@ internal ref partial struct JpegEntropyReader
         predictor = (int)next; block[0] = predictor; var k = 1;
         // Plain production callers supply validated tables and a full block;
         // every normal exit publishes the same canonical cursor below.
+        var pairs = ac.BaselinePairs;
         while (k <= 63)
         {
             if (pending < 18)
@@ -36,6 +37,21 @@ internal ref partial struct JpegEntropyReader
                 word = BinaryPrimitives.ReadUInt32BigEndian(data.Slice(cursor, 4));
                 if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) break;
                 cache |= (ulong)word << (32 - pending); pending += 32; cursor += 4;
+            }
+            if (pairs is not null)
+            {
+                var pair = pairs[(int)(cache >> 52)];
+                var secondIndex = k + (int)((pair >> 8) & 31);
+                if (pair != 0 && secondIndex <= 63)
+                {
+                    var firstIndex = k + (int)((pair >> 4) & 15);
+                    block[JpegTransform.Zigzag[firstIndex]] = unchecked((sbyte)(pair >> 16));
+                    var second = unchecked((int)pair) >> 24;
+                    var consumed = (int)(pair & 15); cache <<= consumed; pending -= consumed;
+                    if (second == 0) { k = 64; break; }
+                    block[JpegTransform.Zigzag[secondIndex]] = second; k = secondIndex + 1;
+                    continue;
+                }
             }
             var packed = ac.LookupBaselinePrefix(cache, pending); var count = packed & 15;
             var symbol = packed >> 4; var size = symbol & 15; var run = symbol >> 4;

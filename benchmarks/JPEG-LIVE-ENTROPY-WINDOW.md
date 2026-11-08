@@ -1,5 +1,7 @@
 # Shared live JPEG entropy window
 
+Current JPEG read costs are superseded by [paired AC windows](JPEG-PAIRED-AC-WINDOW.md); this report retains the live-window stage and its evidence.
+
 DC and AC decoding now share one live-token window and canonical cursor
 publication. Short EOB codes complete inside that window. AC continuation uses
 the same kernel; stuffing, long codes and syntax failures retain scalar traversal.

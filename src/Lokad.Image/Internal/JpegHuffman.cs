@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 namespace Lokad.Image.Internal;
 
 /// <summary>Canonical JPEG Huffman tables derived from the encoded length counts.</summary>
-internal sealed class JpegHuffman
+internal sealed partial class JpegHuffman
 {
     private readonly int[] firstCode;
     private readonly int[] counts;

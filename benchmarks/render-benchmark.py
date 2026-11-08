@@ -1179,18 +1179,22 @@ def render():
                 updated_vertical += 1
     assert updated_vertical == 3
     # Retained gains remain claims about their original paired experiments.
-    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-live-entropy-window-evidence.json').read_text(encoding='utf-8'))
+    jpeg_scan = json.loads((ROOT / 'benchmarks/jpeg-paired-ac-window-evidence.json').read_text(encoding='utf-8'))
     assert jpeg_scan['productionAccepted'] and jpeg_scan['requiredMaterialPaths'] == 283
-    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5879
+    assert jpeg_scan['qualification']['fullChecksEachOs'] == 5883
     assert jpeg_scan['qualification']['sameActualPackageBothOs']
     assert jpeg_scan['raw']['mirrored'] and jpeg_scan['raw']['allMembersVerified']
-    assert jpeg_scan['sourceProof']['ordinaryFusedBlockBodyByteExact']
-    assert jpeg_scan['sourceProof']['entropyOutsideLiveKernelByteExact']
-    assert jpeg_scan['sourceProof']['decoderOutsideBaselineBlocksByteExact']
-    assert jpeg_scan['sourceProof']['allPrefixAmplitudeBlockCheckpointsPreserved']
-    assert jpeg_scan['sourceProof']['exactNormalCursorRequired']
-    assert sum(not c['reusedUnchangedPath'] for c in jpeg_scan['cases'].values()) == 23
-    assert jpeg_scan['storage']['newOwnedCapacityBytes'] == jpeg_scan['storage']['newCrossOperationRetainedBytes'] == 0
+    assert jpeg_scan['sourceProof']['originalBaselineSchedulingBodyExact']
+    assert jpeg_scan['sourceProof']['originalDcSetupAndCanonicalCursorExact']
+    assert jpeg_scan['sourceProof']['originalSingleSymbolAndLongFallbackExact']
+    assert jpeg_scan['sourceProof']['liveAndProgressiveEntropySourceExact']
+    assert jpeg_scan['sourceProof']['allLiveCancellationCheckpointsPreserved']
+    assert jpeg_scan['sourceProof']['pairArraysReleasedAfterActualScanUsers']
+    assert sum(not c['reusedUnchangedPath'] for c in jpeg_scan['cases'].values()) == 29
+    assert jpeg_scan['storage']['tableAdmissionBytesEach'] == 16408
+    assert jpeg_scan['storage']['retainedPairScratchAfterScanBytes'] == 0
+    assert jpeg_scan['qualification']['actualPackage']['groupedJpegEntropyAndOwnershipPassed']
+    assert jpeg_scan['qualification']['samePackageLinux']['groupedJpegEntropyAndOwnershipPassed']
     assert len(jpeg_scan['cases']) == 29
     assert jpeg_scan['statusCounts'] == {state: sum(c['status'] == state for c in jpeg_scan['cases'].values())
                                         for state in ('confirmed-pass-stop', 'confirmed-gap', 'confirmed-confidence-open')}
@@ -1201,7 +1205,7 @@ def render():
         assert cost['status'] == ('confirmed-pass-stop' if cost['upper'] <= 1 else 'confirmed-gap' if cost['lower'] > 1 else 'confirmed-confidence-open')
         assert math.isclose(cost['managedMicroseconds'] / cost['nativeMicroseconds'], cost['ratio'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for case in ('NativeDecodeCancelable8',)
+               for case in ('DirectRgb444', 'CmykAdobeSparse2D')
                for v in jpeg_scan['comparison'][case]['views'].values())
     replacements = [('NativeDecode420', 'JPEG baseline420, resident decode'), ('CmykCaller', 'JPEG DC-only, caller CMYK decode'), ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'), ('Ycck420', 'JPEG YCCK420, resident decode'), ('Decode411', 'JPEG 4:1:1, resident decode'), ('Decode410', 'JPEG 4:1:0, resident decode'), ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'), ('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'), ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')]
     replacements += [('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
@@ -1847,24 +1851,22 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [shared live entropy window](../benchmarks/JPEG-LIVE-ENTROPY-WINDOW.md)
-  saves **138.44µs/7.25% raw**,7.58% normalized against a contemporary original;
-  filtered/all-actual raw/normalized confidence separates. Complete live decoding
-  measures{jpeg_scan['cases']['NativeDecodeCancelable8']['managedMicroseconds']:,.2f}/native{jpeg_scan['cases']['NativeDecodeCancelable8']['nativeMicroseconds']:,.2f}µs,
-  upper{jpeg_scan['cases']['NativeDecodeCancelable8']['upper']:.3f}: a49µs gap remains. GC stays10,088B/op.
-  DC/AC share preparation/publication and short EOB handling. Every required poll,
-  exact cursor/predictor/pixels and scalar failure/cleanup remain; no new storage.
-  Ordinary RGB has no separated gain/loss/equivalence. Sparse CMYK raw intervals
-  overlap; its adverse1.86% normalized movement with native−1.65% is retained. All23 affected
-  baseline costs refresh; six unchanged progressive costs reuse evidence.
-  Current JPEG scope:{jpeg_scan['statusCounts']['confirmed-pass-stop']}pass/{jpeg_scan['statusCounts']['confirmed-gap']}gaps/{jpeg_scan['statusCounts']['confirmed-confidence-open']}uncertain.
-  Claims remain scoped to the frozen live-token input, not JPEG generally.
-  Earlier [publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md) and
-  [canonical lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain their own
-  historical paired gains. Unselected experiments remain separate from rendering.
-  [Full-grid ownership](../benchmarks/JPEG-FULL-GRID-OUTPUT.md) retains unchanged
-  native444 governed peak541,253B/output531,468B and bounded default pool/governed bypass.
-  These capacity facts differ from GC and unmeasured physical/native peaks.
+- **JPEG and reading:** [paired AC windows](../benchmarks/JPEG-PAIRED-AC-WINDOW.md)
+  save **113.83µs/6.92% raw/6.75% normalized** on the frozen RGB444 control and
+  15.91µs/3.02% raw on sparse CMYK; filtered/allactual raw/normalized intervals
+  separate. RGB1530.34/native1450.52µs,upper1.065 remains an80µs gap. New scan-owned
+  tables cost32,848/16,424 extra GC B/op forRGB/CMYK; no retained pair scratch.
+  Governed RGB peak541,253→574,069B, output531,468B unchanged; live peak stays
+  541,253B. Default idle pixel pool531,468B is unchanged, governed calls bypass it.
+  Physical/native peaks are unmeasured. Header preparation is timed and admission
+  precedes allocation; refusal remains terminal. Empty plans skip allocation.
+  All29JPEG controls refresh, including constructor layout on progressive paths:
+  {jpeg_scan['statusCounts']['confirmed-pass-stop']}pass/{jpeg_scan['statusCounts']['confirmed-gap']}gaps/{jpeg_scan['statusCounts']['confirmed-confidence-open']}uncertain. Owned gray moved from passing to uncertain
+  (679.83/native679.12µs,upper1.009); the adverse result remains, with no broader
+  nonregression claim. Native444 now passes; callerCMYK is a demonstrated gap.
+  Earlier [live windows](../benchmarks/JPEG-LIVE-ENTROPY-WINDOW.md),
+  [publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md) and
+  [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
 - **Text/drawing:** [active edges](../benchmarks/TEXT-ACTIVE-EDGE-SCHEDULING.md)
@@ -1877,17 +1879,18 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{png['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Unchanged JPEG paths retain403 internal/375 public checks per normal/scalar mode
+JPEG paths pass407 internal/375 public checks per normal/scalar mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
 The current PNG package also exercises frozen Fastest8/16 sync/async packets,
-shared admission and independent ownership. Unchanged JPEG full/scalar path proof
-is retained; its live baseline sync/async package witnesses run again. Unchanged
+shared admission and independent ownership. The current package also exercises
+authored grouped-AC JPEG pixels, sync/async scan storage, terminal refusal and
+independent survivors. Its live baseline witnesses also pass. Unchanged
 alpha prefix/border/tail/palette, compressed horizontal-alpha package and other
 coefficient/decoder/word/ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
