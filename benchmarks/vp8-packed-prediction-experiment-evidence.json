@@ -1,0 +1,1094 @@
+{
+  "project": "Lokad.Image",
+  "date": "2026-11-08",
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "stages": {
+    "VPK596": {
+      "productionAccepted": false,
+      "cases": {
+        "distortion": {
+          "managedUs": 2548.790304545454,
+          "nativeUs": 2510.3540052083335,
+          "ratio": 1.0153111072212826,
+          "lower": 1.0087856613918822,
+          "upper": 1.0206701684260813,
+          "allocatedBytes": 406705,
+          "status": "gap",
+          "librarySha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "actuals": 12,
+          "receipt": "tmp/vpk596-candidate-distortion-confirm-receipt.json",
+          "observation": "tmp/vpk596-candidate-distortion-confirm-observation.json",
+          "packetOrFrameBytes": 7330,
+          "outputSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+          "exact": true
+        },
+        "Native8": {
+          "managedUs": 6004.631331439394,
+          "nativeUs": 5954.348442708333,
+          "ratio": 1.008444733998165,
+          "lower": 1.004853970453933,
+          "upper": 1.011558484788918,
+          "allocatedBytes": 238864,
+          "status": "gap",
+          "librarySha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "actuals": 12,
+          "receipt": "tmp/vpk596-candidate-Native8-confirm-receipt.json",
+          "observation": "tmp/vpk596-candidate-Native8-confirm-observation.json",
+          "packetOrFrameBytes": 531468,
+          "outputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+          "exact": true
+        },
+        "StreamNative8": {
+          "managedUs": 5905.305791666667,
+          "nativeUs": 5984.09203125,
+          "ratio": 0.986834052823403,
+          "lower": 0.9825975424903297,
+          "upper": 0.9913718945734579,
+          "allocatedBytes": 238960,
+          "status": "pass",
+          "librarySha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "actuals": 12,
+          "receipt": "tmp/vpk596-candidate-StreamNative8-confirm-receipt.json",
+          "observation": "tmp/vpk596-candidate-StreamNative8-confirm-observation.json",
+          "packetOrFrameBytes": 531468,
+          "outputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+          "exact": true
+        },
+        "Opaque8": {
+          "managedUs": 4851.1219157196965,
+          "nativeUs": 4783.397729166667,
+          "ratio": 1.0141581759217058,
+          "lower": 1.0091912619330712,
+          "upper": 1.0194644147873793,
+          "allocatedBytes": 229344,
+          "status": "gap",
+          "librarySha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "actuals": 12,
+          "receipt": "tmp/vpk596-candidate-Opaque8-confirm-receipt.json",
+          "observation": "tmp/vpk596-candidate-Opaque8-confirm-observation.json",
+          "packetOrFrameBytes": 531468,
+          "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exact": true
+        },
+        "SimpleOpaque8": {
+          "managedUs": 4946.731989583333,
+          "nativeUs": 4884.31228125,
+          "ratio": 1.0127796309365704,
+          "lower": 1.007747078507774,
+          "upper": 1.0165188080355734,
+          "allocatedBytes": 229344,
+          "status": "gap",
+          "librarySha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "actuals": 12,
+          "receipt": "tmp/vpk596-candidate-SimpleOpaque8-confirm-receipt.json",
+          "observation": "tmp/vpk596-candidate-SimpleOpaque8-confirm-observation.json",
+          "packetOrFrameBytes": 531468,
+          "outputSha256": "a2a4cd04da6eaebd4ae7a2e2fc18d6c9ffb79fae743278f013ca3d2da6349aab",
+          "exact": true
+        },
+        "OpaqueCancelable8": {
+          "managedUs": 4966.83481875,
+          "nativeUs": 4797.0031302083335,
+          "ratio": 1.0354037060080656,
+          "lower": 1.0325540484834514,
+          "upper": 1.0400921669770098,
+          "allocatedBytes": 229344,
+          "status": "gap",
+          "librarySha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "actuals": 12,
+          "receipt": "tmp/vpk596-candidate-OpaqueCancelable8-confirm-receipt.json",
+          "observation": "tmp/vpk596-candidate-OpaqueCancelable8-confirm-observation.json",
+          "packetOrFrameBytes": 531468,
+          "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exact": true
+        }
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "stage": "VPK596",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8Prediction.cs": "f87ae34d4b0f023d3e7346a78cbeb06515f4a85859df186a3d37af40fca1da2d",
+          "src/Lokad.Image/Internal/Vp8Distortion.cs": "a6b8b140f25879bd57498883d85e7848bcaf8867b40de49c08602e95e3b2f106",
+          "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "7d697e25ecfcfa7d93b97ae635305d1628f44baa935c70291522b6afd9cc49b2"
+        },
+        "allTenOriginalRowFormulasValidationsAveragesPackAndOrderSourceExact": true,
+        "encoderGeometryModeMappingExact": true,
+        "distortionSourceReconstructsOriginalOutsidePreparedValueReuse": true,
+        "existingAllOtherDistortionAndPredictionKernelsUnchanged": true,
+        "modeOrderStrictTiesHeaderPruningAndEveryPollExact": true,
+        "allQuantizationTransformReconstructionProgramAndOwnerBodiesUnchanged": true,
+        "packedSourceWordDomain": [
+          0,
+          255
+        ],
+        "residualDomain": [
+          -255,
+          255
+        ],
+        "maximumFourByFourSse": 1040400,
+        "endianness": "Logicaluintrowlanes retainstrided LE writes; contiguousAsByte uses explicitbyte-reversal onbigendian. AVX2wordpath alreadygated; allscalarfallbacks retained. NativeEndianbranch notphysicallytested onBEhardware.",
+        "newHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "physicalStackPeakMeasured": false,
+        "proof": "Samefourcomputeduintrows form16littleendianpixels. PackedSSE shortdifferences/squaredadjacentintsum identical; selectedresidualreusesexact16source samples. Helpersholdonlyborrowed/value/stackstate, originalowner/admission/disposal unchanged. CurrentindependentRFCpixeloracle/frozennativehash/overlap/failure/cancelandcompletepacket controls, not paired-only performance, qualify actualpaths."
+      },
+      "comparison": {
+        "Opaque8": {
+          "originalUs": 4849.442333333334,
+          "candidateUs": 4851.1219157196965,
+          "rawSavedUs": -1.679582386362199,
+          "normalizedReduction": -0.0009451226858245843,
+          "nativeClockChange": -0.0005982118318005325,
+          "allocatedBytes": 229344,
+          "originalAllocatedBytes": 229344,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "SimpleOpaque8": {
+          "originalUs": 4944.717968750001,
+          "candidateUs": 4946.731989583333,
+          "rawSavedUs": -2.0140208333323244,
+          "normalizedReduction": -0.001951932558925007,
+          "nativeClockChange": -0.0015416159045258393,
+          "allocatedBytes": 229344,
+          "originalAllocatedBytes": 229344,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "OpaqueCancelable8": {
+          "originalUs": 4920.116164772728,
+          "candidateUs": 4966.83481875,
+          "rawSavedUs": -46.71865397727197,
+          "normalizedReduction": -0.007824250617535444,
+          "nativeClockChange": 0.0016582122972013114,
+          "allocatedBytes": 229344,
+          "originalAllocatedBytes": 229344,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            }
+          }
+        },
+        "Native8": {
+          "originalUs": 5844.186849431818,
+          "candidateUs": 6004.631331439394,
+          "rawSavedUs": -160.44448200757597,
+          "normalizedReduction": -0.02939724077743322,
+          "nativeClockChange": -0.0018880493980628632,
+          "allocatedBytes": 238864,
+          "originalAllocatedBytes": 238864,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            }
+          }
+        },
+        "StreamNative8": {
+          "originalUs": 5875.903068181819,
+          "candidateUs": 5905.305791666667,
+          "rawSavedUs": -29.40272348484723,
+          "normalizedReduction": -0.006428412929456506,
+          "nativeClockChange": -0.0014153646656925867,
+          "allocatedBytes": 238960,
+          "originalAllocatedBytes": 238960,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "distortion": {
+          "originalUs": 2638.2921284090908,
+          "candidateUs": 2548.790304545454,
+          "rawSavedUs": 89.50182386363667,
+          "normalizedReduction": 0.03619543422704119,
+          "nativeClockChange": 0.0023565793837310167,
+          "allocatedBytes": 406705,
+          "originalAllocatedBytes": 406705,
+          "views": {
+            "statistics": {
+              "rawGain": true,
+              "normalizedGain": true,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": true,
+              "normalizedGain": true,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        }
+      },
+      "preparation": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+          "candidateSha256": "585caf36380be78d87ef477183ed5d0281f9f93ba8614c4307be12781b064151",
+          "internalTestAssemblySha256": "a6046a21d452a24b79e471b640c5acd2daabe9d9d7ab49e28c8ba25b9512a874",
+          "focused": {
+            "internal-normal": 110,
+            "internal-scalar": 110,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8Prediction.cs": "f87ae34d4b0f023d3e7346a78cbeb06515f4a85859df186a3d37af40fca1da2d",
+            "src/Lokad.Image/Internal/Vp8Distortion.cs": "a6b8b140f25879bd57498883d85e7848bcaf8867b40de49c08602e95e3b2f106",
+            "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "7d697e25ecfcfa7d93b97ae635305d1628f44baa935c70291522b6afd9cc49b2"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+          "candidateSha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "internalTestAssemblySha256": "63a433498bc3040990cd63c382ff43dc93807991d1bd818dfed42f094c24cb70",
+          "focused": {
+            "internal-normal": 110,
+            "internal-scalar": 110,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8Prediction.cs": "f87ae34d4b0f023d3e7346a78cbeb06515f4a85859df186a3d37af40fca1da2d",
+            "src/Lokad.Image/Internal/Vp8Distortion.cs": "a6b8b140f25879bd57498883d85e7848bcaf8867b40de49c08602e95e3b2f106",
+            "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "7d697e25ecfcfa7d93b97ae635305d1628f44baa935c70291522b6afd9cc49b2"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "fullWindows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSha256": "585caf36380be78d87ef477183ed5d0281f9f93ba8614c4307be12781b064151",
+        "full": [
+          2644,
+          2317,
+          948
+        ],
+        "total": 5909,
+        "fullLivePassed": true,
+        "focused": {
+          "internal-normal": 110,
+          "internal-scalar": 110,
+          "public-normal": 239,
+          "public-scalar": 239
+        },
+        "affectedVp8ScalarEachOs": 349,
+        "identities": {
+          "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "585caf36380be78d87ef477183ed5d0281f9f93ba8614c4307be12781b064151",
+          "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "a6046a21d452a24b79e471b640c5acd2daabe9d9d7ab49e28c8ba25b9512a874",
+          "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "585caf36380be78d87ef477183ed5d0281f9f93ba8614c4307be12781b064151",
+          "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "585caf36380be78d87ef477183ed5d0281f9f93ba8614c4307be12781b064151",
+          "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "585caf36380be78d87ef477183ed5d0281f9f93ba8614c4307be12781b064151",
+          "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+          "src\\Lokad.Image\\Internal\\Vp8Prediction.cs": "f87ae34d4b0f023d3e7346a78cbeb06515f4a85859df186a3d37af40fca1da2d"
+        },
+        "immutableCandidateReused": true,
+        "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+      },
+      "fullLinuxNotRun": true,
+      "packageNotRun": true
+    },
+    "VPI597": {
+      "productionAccepted": false,
+      "cases": {
+        "opaque8": {
+          "managedUs": 14030.853090909091,
+          "nativeUs": 15423.082375,
+          "ratio": 0.9097308015194395,
+          "lower": 0.9001281519903814,
+          "upper": 0.9146809689521735,
+          "allocatedBytes": 1201560,
+          "status": "pass",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-opaque8-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-opaque8-confirm-observation.json",
+          "packetOrFrameBytes": 72380,
+          "outputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+          "exact": true
+        },
+        "opaque16": {
+          "managedUs": 13807.399964285716,
+          "nativeUs": 15569.475166666665,
+          "ratio": 0.8868250096089655,
+          "lower": 0.8848230639533373,
+          "upper": 0.8887939977199258,
+          "allocatedBytes": 1201560,
+          "status": "pass",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-opaque16-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-opaque16-confirm-observation.json",
+          "packetOrFrameBytes": 72380,
+          "outputSha256": "39eb4095d1aaebc21fee2a92aa45180fb6adcd92bc5538589f914f53aa9ed88f",
+          "exact": true
+        },
+        "photograph": {
+          "managedUs": 9630.008751420455,
+          "nativeUs": 9694.193197916666,
+          "ratio": 0.9933790832113801,
+          "lower": 0.9899234332383076,
+          "upper": 0.9978846275392861,
+          "allocatedBytes": 809233,
+          "status": "pass",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-photograph-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-photograph-confirm-observation.json",
+          "packetOrFrameBytes": 17688,
+          "outputSha256": "e2df1f461cb04516aa8630f326efdc959e1ae8a7dce578ef3d064b20c788719b",
+          "exact": true
+        },
+        "diagram": {
+          "managedUs": 5533.556131944444,
+          "nativeUs": 5828.813619791667,
+          "ratio": 0.9493451828954215,
+          "lower": 0.9459298822966301,
+          "upper": 0.9523717700807562,
+          "allocatedBytes": 741196,
+          "status": "pass",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-diagram-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-diagram-confirm-observation.json",
+          "packetOrFrameBytes": 7100,
+          "outputSha256": "0b71843059a6c3224cec9df38a460ce6087ad21e1e0f499978f7767747a1a050",
+          "exact": true
+        },
+        "selected": {
+          "managedUs": 6521.891786458333,
+          "nativeUs": 6422.536,
+          "ratio": 1.0154698683601513,
+          "lower": 1.011335942991761,
+          "upper": 1.0189042202277105,
+          "allocatedBytes": 741073,
+          "status": "gap",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-selected-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-selected-confirm-observation.json",
+          "packetOrFrameBytes": 7026,
+          "outputSha256": "0e994ebda4b10234f2e9f00caf7ea6c27ae03ce82c1f3cada8eda355430cba68",
+          "exact": true
+        },
+        "trellis": {
+          "managedUs": 9386.964598011364,
+          "nativeUs": 9796.239072916665,
+          "ratio": 0.9582212651346158,
+          "lower": 0.9547261915948717,
+          "upper": 0.9625087152675671,
+          "allocatedBytes": 754505,
+          "status": "pass",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-trellis-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-trellis-confirm-observation.json",
+          "packetOrFrameBytes": 6818,
+          "outputSha256": "3c98407656841ff97b185e241e76f750f036c972cfe2a0b704ae2eb35cf0adee",
+          "exact": true
+        },
+        "distortion": {
+          "managedUs": 2532.6006306818185,
+          "nativeUs": 2494.3804921875,
+          "ratio": 1.015322497355165,
+          "lower": 1.0032888783206981,
+          "upper": 1.0218056631076897,
+          "allocatedBytes": 406705,
+          "status": "gap",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-distortion-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-distortion-confirm-observation.json",
+          "packetOrFrameBytes": 7330,
+          "outputSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+          "exact": true
+        },
+        "alpha": {
+          "managedUs": 53033.10702083333,
+          "nativeUs": 53384.86241666666,
+          "ratio": 0.993410952470236,
+          "lower": 0.9845703585316914,
+          "upper": 1.0015826423100547,
+          "allocatedBytes": 6963840,
+          "status": "uncertain",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-alpha-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-alpha-confirm-observation.json",
+          "packetOrFrameBytes": 98590,
+          "outputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "exact": true
+        },
+        "alpha16": {
+          "managedUs": 52876.91535416667,
+          "nativeUs": 53470.334,
+          "ratio": 0.9889019087512463,
+          "lower": 0.9830796602555393,
+          "upper": 0.9914607515446517,
+          "allocatedBytes": 6963024,
+          "status": "pass",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-alpha16-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-alpha16-confirm-observation.json",
+          "packetOrFrameBytes": 98590,
+          "outputSha256": "8fcc1c935850d7813ebfce329a8b00c41fe9b02683d2be40b91dedfd74192a10",
+          "exact": true
+        },
+        "Native8": {
+          "managedUs": 5867.525971590909,
+          "nativeUs": 5960.358354166667,
+          "ratio": 0.9844250333520866,
+          "lower": 0.9811687357465583,
+          "upper": 0.9884190105747729,
+          "allocatedBytes": 238864,
+          "status": "pass",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597-candidate-Native8-confirm-receipt.json",
+          "observation": "tmp/vpi597-candidate-Native8-confirm-observation.json",
+          "packetOrFrameBytes": 531468,
+          "outputSha256": "55cdb9d8ce5e4dbaf16967129b299f6f900aa1c2fa8dad554d26d91b02295dcd",
+          "exact": true
+        },
+        "decodeOpaque8": {
+          "managedUs": 4848.705672916668,
+          "nativeUs": 4788.756322916667,
+          "ratio": 1.0125187722985844,
+          "lower": 1.0082843914691324,
+          "upper": 1.0158643111560341,
+          "allocatedBytes": 229344,
+          "status": "gap",
+          "librarySha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "actuals": 12,
+          "receipt": "tmp/vpi597decode-candidate-Opaque8-confirm-receipt.json",
+          "observation": "tmp/vpi597decode-candidate-Opaque8-confirm-observation.json",
+          "packetOrFrameBytes": 531468,
+          "outputSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+          "exact": true
+        }
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "stage": "VPI597",
+        "sources": {
+          "src/Lokad.Image/Internal/Vp8Prediction.cs": "5a333aa63a5170c461b8d8d64e10ade1fb4383ace3929323020a2b9192f7ab10",
+          "src/Lokad.Image/Internal/Vp8Distortion.cs": "a6b8b140f25879bd57498883d85e7848bcaf8867b40de49c08602e95e3b2f106",
+          "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "7d697e25ecfcfa7d93b97ae635305d1628f44baa935c70291522b6afd9cc49b2"
+        },
+        "allTenOriginalRowFormulasValidationsAveragesPackAndOrderSourceExact": true,
+        "encoderGeometryModeMappingExact": true,
+        "distortionSourceReconstructsOriginalOutsidePreparedValueReuse": true,
+        "existingAllOtherDistortionAndPredictionKernelsUnchanged": true,
+        "modeOrderStrictTiesHeaderPruningAndEveryPollExact": true,
+        "allQuantizationTransformReconstructionProgramAndOwnerBodiesUnchanged": true,
+        "packedSourceWordDomain": [
+          0,
+          255
+        ],
+        "residualDomain": [
+          -255,
+          255
+        ],
+        "maximumFourByFourSse": 1040400,
+        "endianness": "Logicaluintrowlanes retainstrided LE writes; contiguousAsByte uses explicitbyte-reversal onbigendian. AVX2wordpath alreadygated; allscalarfallbacks retained. NativeEndianbranch notphysicallytested onBEhardware.",
+        "newHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "physicalStackPeakMeasured": false,
+        "proof": "Samefourcomputeduintrows form16littleendianpixels. PackedSSE shortdifferences/squaredadjacentintsum identical; selectedresidualreusesexact16source samples. Helpersholdonlyborrowed/value/stackstate, originalowner/admission/disposal unchanged. CurrentindependentRFCpixeloracle/frozennativehash/overlap/failure/cancelandcompletepacket controls, not paired-only performance, qualify actualpaths.",
+        "revisionFromVPK596OnlyInliningAttribute": true,
+        "formerEncoderGainAndDecoderLossRetained": "tmp/vpk596-boundary-review.json"
+      },
+      "comparison": {
+        "opaque8": {
+          "originalUs": 13865.792571428572,
+          "candidateUs": 14030.853090909091,
+          "rawSavedUs": -165.06051948051936,
+          "normalizedReduction": -0.017594804305429035,
+          "nativeClockChange": -0.005592256414239882,
+          "allocatedBytes": 1201560,
+          "originalAllocatedBytes": 1201560,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            }
+          }
+        },
+        "opaque16": {
+          "originalUs": 13882.592886904762,
+          "candidateUs": 13807.399964285716,
+          "rawSavedUs": 75.19292261904593,
+          "normalizedReduction": 0.004807348980931159,
+          "nativeClockChange": -0.0006119385450676917,
+          "allocatedBytes": 1201560,
+          "originalAllocatedBytes": 1201560,
+          "views": {
+            "statistics": {
+              "rawGain": true,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": true,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "photograph": {
+          "originalUs": 9630.847758522727,
+          "candidateUs": 9630.008751420455,
+          "rawSavedUs": 0.8390071022713528,
+          "normalizedReduction": 0.0038219729324587837,
+          "nativeClockChange": 0.0037491855777158634,
+          "allocatedBytes": 809233,
+          "originalAllocatedBytes": 809233,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "diagram": {
+          "originalUs": 5476.342224999999,
+          "candidateUs": 5533.556131944444,
+          "rawSavedUs": -57.213906944444716,
+          "normalizedReduction": -0.006006748603317957,
+          "nativeClockChange": 0.004414203798336125,
+          "allocatedBytes": 741196,
+          "originalAllocatedBytes": 741196,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "selected": {
+          "originalUs": 6396.626614583333,
+          "candidateUs": 6521.891786458333,
+          "rawSavedUs": -125.2651718749994,
+          "normalizedReduction": -0.02511481883055322,
+          "nativeClockChange": -0.005396286921695359,
+          "allocatedBytes": 741073,
+          "originalAllocatedBytes": 741073,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            }
+          }
+        },
+        "trellis": {
+          "originalUs": 9256.00881818182,
+          "candidateUs": 9386.964598011364,
+          "rawSavedUs": -130.95577982954455,
+          "normalizedReduction": -0.01598541939687581,
+          "nativeClockChange": -0.001808321705441096,
+          "allocatedBytes": 754505,
+          "originalAllocatedBytes": 754505,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            }
+          }
+        },
+        "distortion": {
+          "originalUs": 2638.2921284090908,
+          "candidateUs": 2532.6006306818185,
+          "rawSavedUs": 105.69149772727224,
+          "normalizedReduction": 0.0361846219125076,
+          "nativeClockChange": -0.004021467632381315,
+          "allocatedBytes": 406705,
+          "originalAllocatedBytes": 406705,
+          "views": {
+            "statistics": {
+              "rawGain": true,
+              "normalizedGain": true,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": true,
+              "normalizedGain": true,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "alpha": {
+          "originalUs": 53302.41341666666,
+          "candidateUs": 53033.10702083333,
+          "rawSavedUs": 269.3063958333296,
+          "normalizedReduction": -0.002821302781172763,
+          "nativeClockChange": -0.007851575167144631,
+          "allocatedBytes": 6963840,
+          "originalAllocatedBytes": 6963840,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "alpha16": {
+          "originalUs": 53129.078727272725,
+          "candidateUs": 52876.91535416667,
+          "rawSavedUs": 252.1633731060574,
+          "normalizedReduction": 0.0032797609178820686,
+          "nativeClockChange": -0.001471304883057356,
+          "allocatedBytes": 6963024,
+          "originalAllocatedBytes": 6963024,
+          "views": {
+            "statistics": {
+              "rawGain": true,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": true,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "decodeNative8": {
+          "originalUs": 5844.186849431818,
+          "candidateUs": 5867.525971590909,
+          "rawSavedUs": -23.339122159090948,
+          "normalizedReduction": -0.004878481607217822,
+          "nativeClockChange": -0.0008806235635925308,
+          "allocatedBytes": 238864,
+          "originalAllocatedBytes": 238864,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": true,
+              "normalizedLoss": true
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        },
+        "decodeOpaque8": {
+          "originalUs": 4849.442333333334,
+          "candidateUs": 4848.705672916668,
+          "rawSavedUs": 0.7366604166663819,
+          "normalizedReduction": 0.0006729218161440897,
+          "nativeClockChange": 0.0005213664426888531,
+          "allocatedBytes": 229344,
+          "originalAllocatedBytes": 229344,
+          "views": {
+            "statistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            },
+            "unfilteredActualStatistics": {
+              "rawGain": false,
+              "normalizedGain": false,
+              "rawLoss": false,
+              "normalizedLoss": false
+            }
+          }
+        }
+      },
+      "preparation": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "585caf36380be78d87ef477183ed5d0281f9f93ba8614c4307be12781b064151",
+          "candidateSha256": "daeddb3fd0f39d83a0741f504dc1146c3ef2a9a5baf643cacf2b88a849c60779",
+          "internalTestAssemblySha256": "6ef48f08c1110c1cd5abde06939df8951688f4925388c193f18e44ef340d9d67",
+          "focused": {
+            "internal-normal": 110,
+            "internal-scalar": 110,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8Prediction.cs": "5a333aa63a5170c461b8d8d64e10ade1fb4383ace3929323020a2b9192f7ab10",
+            "src/Lokad.Image/Internal/Vp8Distortion.cs": "a6b8b140f25879bd57498883d85e7848bcaf8867b40de49c08602e95e3b2f106",
+            "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "7d697e25ecfcfa7d93b97ae635305d1628f44baa935c70291522b6afd9cc49b2"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b8c2f7d8fffb11ff8d863f9af2d728e1093d38ccf2553683adc854903efd544a",
+          "candidateSha256": "4fe2bae699b8edfcc207578ebc20e0640938aa9f7a928f2315f9cfb1402cc8fd",
+          "internalTestAssemblySha256": "7994b6423706ef5625f0fdf8da7de0cf074b2f63cd144d86ee72692892aaf1ce",
+          "focused": {
+            "internal-normal": 110,
+            "internal-scalar": 110,
+            "public-normal": 239,
+            "public-scalar": 239
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/Vp8Prediction.cs": "5a333aa63a5170c461b8d8d64e10ade1fb4383ace3929323020a2b9192f7ab10",
+            "src/Lokad.Image/Internal/Vp8Distortion.cs": "a6b8b140f25879bd57498883d85e7848bcaf8867b40de49c08602e95e3b2f106",
+            "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "7d697e25ecfcfa7d93b97ae635305d1628f44baa935c70291522b6afd9cc49b2"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "fullWindows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "productionSha256": "daeddb3fd0f39d83a0741f504dc1146c3ef2a9a5baf643cacf2b88a849c60779",
+        "full": [
+          2644,
+          2317,
+          948
+        ],
+        "total": 5909,
+        "fullLivePassed": true,
+        "focused": {
+          "internal-normal": 110,
+          "internal-scalar": 110,
+          "public-normal": 239,
+          "public-scalar": 239
+        },
+        "affectedVp8ScalarEachOs": 349,
+        "identities": {
+          "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "daeddb3fd0f39d83a0741f504dc1146c3ef2a9a5baf643cacf2b88a849c60779",
+          "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "6ef48f08c1110c1cd5abde06939df8951688f4925388c193f18e44ef340d9d67",
+          "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "daeddb3fd0f39d83a0741f504dc1146c3ef2a9a5baf643cacf2b88a849c60779",
+          "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "daeddb3fd0f39d83a0741f504dc1146c3ef2a9a5baf643cacf2b88a849c60779",
+          "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "daeddb3fd0f39d83a0741f504dc1146c3ef2a9a5baf643cacf2b88a849c60779",
+          "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+          "src\\Lokad.Image\\Internal\\Vp8Prediction.cs": "5a333aa63a5170c461b8d8d64e10ade1fb4383ace3929323020a2b9192f7ab10"
+        },
+        "immutableCandidateReused": true,
+        "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+      },
+      "fullLinuxNotRun": true,
+      "packageNotRun": true
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "stage": "VPK596/VPI597",
+      "productionAccepted": false,
+      "productionSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+      "sourceAndEmbeddedRestoredByteExact": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "fullChecksEachOsReused": 5909,
+      "packageSha256": "198d255e7f78f50e951f3cfce68a87dbae602e20200a03de58895a33057f3e08",
+      "sameActualPackageBothOsAndThreeExamplesReused": true,
+      "additionalBuildsTestsPackages": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "productionAccepted": false,
+      "productionSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+      "sourceAndEmbeddedRestoredByteExact": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "sourceManifestSha256": "0f275adb2addf6d42917de74e8ccd4f1fbacb240a578aac546e51680bbffd1f9",
+      "fullChecksEachOsReused": 5909,
+      "packageSha256": "198d255e7f78f50e951f3cfce68a87dbae602e20200a03de58895a33057f3e08",
+      "sameActualPackageBothOsAndThreeExamplesReused": true,
+      "additionalBuildsTestsPackages": 0
+    }
+  },
+  "storage": {
+    "newHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "totalAllocationChangesBytes": 0,
+    "physicalAndNativePeaksMeasured": false,
+    "note": "Existing operation-owned scratch and independently owned packets/frames remain. Only borrowed spans/vector values are introduced. GC observations are unchanged at every measured complete boundary; do not infer physical/JIT stack or native peaks."
+  },
+  "decision": "Neither implementation is accepted. VPK596 effort2 saves89.50us/3.39percent raw with raw/normalized filtered/allactual intervals separated, but residentalpha decoding loses160.44us. VPI597 inlining saves105.69us/4.01percent raw/3.62percent normalized effort2, but selected-trellis loses125.27us/2.51percent normalized and changes a passing boundary to a demonstrated gap. Opaque8 and effort6 also have separated raw/normalized regressions. This is a consumer-routing/code-generation setback, not an encoder correctness failure or permanent family ban.",
+  "correctness": "Original ten prediction formulas/geometry mapping/rounding and all mode order/ties/pruning/polls/transforms/quantization are preserved. Each epoch/OS passes110internal+239public checks per normal/scalar mode; independent RFCperpixel oracle and10mode hashes/50contexts. Both Windows full/live runs pass5909; unselected Linux broad/package runs are avoided. Complete measured packets/pixels stay exact.",
+  "recovery": {
+    "project": "Lokad.Image",
+    "stage": "VPI597",
+    "measurementsRepeated": 0,
+    "sourceOfTruth": "Case-sensitive VM originals, all source/packet/pixel/idle gates retained.",
+    "collision": "Windows encoder opaque8 and decoder Opaque8 paths alias. Parser refused to overwrite encoder statistics after completed decoder timing. Decoder downloads now have distinct family prefix; encoder files restored byte-exact from VM.",
+    "recoveredDecoder": "vpi597decode-candidate-Opaque8-confirm",
+    "originalDecoderRunId": "vpi597-candidate-Opaque8-confirm",
+    "verified": {
+      "vpi597-candidate-opaque8-confirm.log": "19bb93be2d59f9ecef3c62692f5dc51d2a1939b97cc64a554b55cee709ddb887",
+      "vpi597-candidate-opaque8-confirm-receipt.json": "7c0d790fb330efdeb715a646e159ccc6bf3499d3b93c9dc3aabdca4db2c7bf05",
+      "vpi597-candidate-opaque8-confirm-before.json": "49cd72f45907c748720ff71d0c9d3084c5b39935014474c346926f1a0dc6ac47",
+      "vpi597-candidate-opaque8-confirm-after.json": "37d61d910f04b48c1e79815d4b1b805baadd95256aaa309f398f87c888fe3481",
+      "vpi597-candidate-Opaque8-confirm.log": "da35d5552279ea9b9b8fc0ac1cef56d4bc1f4ea351e30d64fb0b5df418921e94",
+      "vpi597-candidate-Opaque8-confirm-receipt.json": "649b05d696d1ec9c9f6d7825399c64cac54de3cebdab825797a39649db70a057",
+      "vpi597-candidate-Opaque8-confirm-before.json": "53b83294651a34a86f50ec14dedd0207424d8bbcf3d227082af73897fb16b2b4",
+      "vpi597-candidate-Opaque8-confirm-after.json": "208ebcbc64a0a7f883e13e7013736a6190094fee4ff2fa96688f2058d4408f2f"
+    },
+    "additionalEffort6Launches": 0,
+    "remainingDecoderCostsNotMeasured": [
+      "SimpleOpaque8",
+      "OpaqueCancelable8",
+      "StreamNative8"
+    ],
+    "reasonStopped": "Independent selected-trellis regression makes this source epoch unselected; do not repeat timing or complete unnecessary qualification."
+  },
+  "additionalEffort6": {
+    "stage": "VPI597",
+    "additionalLaunchesRun": 0,
+    "reason": "Stage not accepted: independent selected-trellis boundary regressed. Retain initial effort6 result but do not claim current crosslaunch qualification. No favorable sampling or attempt to rescue this epoch."
+  },
+  "workflow": {
+    "coreEmbeddedBuildsEachEpochEachOs": 1,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "newProfiles": 0,
+    "measurementsRepeated": 0,
+    "sourceValidOriginalConfirmationsReused": true,
+    "fullPackageAfterRestorationRuns": 0,
+    "lesson": "Check shared consumers before broad qualification. Scope output names by workload family on Windows; preserve and recover completed VM logs after observer failure. No outcome-selected extra measurements."
+  },
+  "next": "Preserve packed-prediction lead for a materially revised design that keeps strided reconstruction/RDO costs intact, using shared arithmetic without an extra vector-return boundary. Do not replay either implementation. Resume an independent current-attribution codec/resize ownership boundary; all283paths remain open.",
+  "raw": {
+    "file": "vp8-packed-prediction-experiment.tar.xz",
+    "sha256": "e2e7482ef16b2844038ab517a074c1a85e04c3eb6b0c99b3b798d97350fb4108",
+    "bytes": 15212304,
+    "members": 571,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "path": "tmp/vp8-model-row-stride-qualified.tar.xz",
+        "sha256": "6ba2ce0bd7569e29a86521f20c5721df558492e1973b5d8b2a1d1803b1b4d607",
+        "bytes": 6012200,
+        "members": 147,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "path": "tmp/text-clipping-workspace-qualified.tar.xz",
+            "sha256": "3ab0d954235be6477b98b583c4dde5e239203d00ce860e927e3f67cdc06d5434",
+            "bytes": 5955596,
+            "members": 148,
+            "mirrored": true,
+            "allMembersVerified": true
+          },
+          {
+            "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+            "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1",
+            "bytes": 10813884,
+            "members": 356,
+            "mirrored": true,
+            "allMembersVerified": true
+          },
+          {
+            "file": "webp-horizontal-alpha-publication-qualified.tar.xz",
+            "sha256": "cfbfd93f72c02d9094452726314d8268d493719efe2d281e276ba1834516b9fe",
+            "bytes": 15884220,
+            "members": 261,
+            "mirrored": true,
+            "allMembersVerified": true
+          }
+        ],
+        "scope": "Retained source-valid VP8 profile dependency; original/candidate W/L main/internalmodules and source; focused normal/scalar/full/live; originalsourcevalid baselineprovider; new short/independent actuals/brackets/gates; six exact complete VP8 pixel/validation controls; SAME actualpackage andthreeexamples W/L; design/scripts/source manifest. Existingworker/reference/font dependencies retained in citedarchives, no vendoring."
+      },
+      {
+        "file": "vp8-four-block-histogram-qualified.tar.xz",
+        "sha256": "4f8b1b05bbfb83c9c4161778befe4d92f05b19330396b9f7cbef1449b3bcfdbc",
+        "bytes": 7777224,
+        "members": 293,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "vp8-small-block-preparation-qualified-v2.tar.xz",
+            "sha256": "289597c32d451e82526b2e7b6e7742f2db3b8d680aab3dfde8d8a2a512fbc6c3"
+          },
+          {
+            "file": "jpeg-live-normal-publication-qualified.tar.xz",
+            "sha256": "372c151b086e0e7bd75bd3bacacb98bb3810b4af48411ef5b3b836f8c9ce008e"
+          },
+          {
+            "file": "vp8-four-block-histogram-audit.tar.xz",
+            "sha256": "c051503b3d21b51935cceedc85e75e1edb3b8fe2d06f16b3474bf4472f7120f5"
+          },
+          {
+            "file": "vp8-current-literal-preparation-attribution.tar.xz",
+            "sha256": "b69908f975974e645e3e98305cf24411a439800f6e5436d3d21738ec1fac0e93"
+          }
+        ]
+      },
+      {
+        "path": "tmp/vp8-effort2-current-attribution-vep593.tar.xz",
+        "sha256": "34aa171c0716cc7aeacbcf12bf6b49e0de27dd5b765fefe13c99b297396d24ca",
+        "bytes": 277012,
+        "members": 22,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "currentModuleDependency": {
+          "path": "tmp/vp8-model-row-stride-qualified.tar.xz",
+          "sha256": "6ba2ce0bd7569e29a86521f20c5721df558492e1973b5d8b2a1d1803b1b4d607",
+          "bytes": 6012200,
+          "members": 147,
+          "mirrored": true,
+          "allMembersVerified": true,
+          "dependencies": [
+            {
+              "path": "tmp/text-clipping-workspace-qualified.tar.xz",
+              "sha256": "3ab0d954235be6477b98b583c4dde5e239203d00ce860e927e3f67cdc06d5434",
+              "bytes": 5955596,
+              "members": 148,
+              "mirrored": true,
+              "allMembersVerified": true
+            },
+            {
+              "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+              "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1",
+              "bytes": 10813884,
+              "members": 356,
+              "mirrored": true,
+              "allMembersVerified": true
+            },
+            {
+              "file": "webp-horizontal-alpha-publication-qualified.tar.xz",
+              "sha256": "cfbfd93f72c02d9094452726314d8268d493719efe2d281e276ba1834516b9fe",
+              "bytes": 15884220,
+              "members": 261,
+              "mirrored": true,
+              "allMembersVerified": true
+            }
+          ],
+          "scope": "Retained source-valid VP8 profile dependency; original/candidate W/L main/internalmodules and source; focused normal/scalar/full/live; originalsourcevalid baselineprovider; new short/independent actuals/brackets/gates; six exact complete VP8 pixel/validation controls; SAME actualpackage andthreeexamples W/L; design/scripts/source manifest. Existingworker/reference/font dependencies retained in citedarchives, no vendoring."
+        },
+        "sourceValidCostDependency": "vp8-four-block-histogram-evidence.json"
+      }
+    ]
+  }
+}
