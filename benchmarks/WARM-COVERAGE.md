@@ -48,6 +48,7 @@ This is scoped development qualification; fullparity and the full126row actual-
 package release refresh remain open.
 
 Earlier unselected [cached JPEG corrections](JPEG-CACHED-CORRECTION-EXPERIMENT.md),
+[validated progression](JPEG-VALIDATED-PROGRESSION-EXPERIMENT.md),
 [immutable JPEG geometry](JPEG-IMMUTABLE-MAP-EXPERIMENT.md),
 [JPEG input preparation](JPEG-PREPARED-INPUT-EXPERIMENT.md),
 [result row history](BICUBIC-RESULT-HISTORY-EXPERIMENT.md),

@@ -1,0 +1,681 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JFA615/JVF616/JVC617",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "algebra": {
+    "project": "Lokad.Image",
+    "stage": "JFA615",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newStatisticalMeasurements": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "9aa1578ba7ad44874b3428bb1400bb723f95ef83c14abf1d2b0378965fa23b48",
+      "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4d4ada898c4df7967aac34936c81daaf760e051bb172b26c68f5c5e7a6c79a63",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "d5dfa36f080c27428001fc19b3be2015299619886ee3e4e8883fa56e14e4bedf",
+      "src/Lokad.Image/Internal/JpegCoefficientPool.cs": "1f6302b0cb591a4e06dc9d3b370c403dbacb700b2e09b30674004d2da2b29825",
+      "src/Lokad.Image/Internal/OperationContext.cs": "4e9ece1c1cc44a2e36bbaaeb51474287f3bcda4479d0b7613b780f5044153ca9"
+    },
+    "jprRelevantSourcesUnchanged": true,
+    "coefficientCorrectionComparisons": 49952,
+    "completeChainTransitions": 546,
+    "counterexamples": [
+      {
+        "value": 8,
+        "increment": 8,
+        "bit": 1,
+        "general": 8,
+        "specialized": 16
+      },
+      {
+        "value": -8,
+        "increment": 8,
+        "bit": 1,
+        "general": -8,
+        "specialized": -16
+      }
+    ],
+    "proof": [
+      "ReadFrame obtains zeroed private coefficient arrays; no caller coefficient storage escapes into the decoder.",
+      "ReadScan validates AH=AL+1 and Approximation[k]==AH for every coefficient in the band before entering a prepared refinement scan. Prior incomplete scans throw and the operation cannot resume.",
+      "Initial AC signed category<=10 and AL<=13 bounds magnitude by(1<<23)-1 after all refinements. Existing AC coefficients are multiples of2^(AL+1) at scan entry, so the current magnitude bit is clear and Int32.MinValue is impossible.",
+      "Prepared row/column traversal visits each block once. Within a block index advances monotonically; newly inserted +-increment coefficients lie behind the remaining correction mask. EOB runs/restarts do not reprocess coefficients.",
+      "No input suspension, MCU retry or exposed coefficient-state resumption occurs in this resident-span decoder. Every cancellation/read/invalid-symbol/error path still must publish the same canonical prefix and immediately committed updates."
+    ],
+    "hypothesis": "Eliminate the repeated magnitude-bit and MinValue checks only in the live prepared scan under its validated progression invariant. Use one original correction body with an entry-selected private value-type precondition mode if actual C# proof is sound; generic arbitrary-block entry keeps every existing check, including already-set bits/MinValue. No grouped corrections, changed polls, new input lookahead, cross-block state, buffers, owners or caches.",
+    "priorReview": "JRB170-173 scan-owned lookahead/whole-scan cursor/atomic groups already received inconclusive or unpromising complete measurements. Cross-block baseline-CMYK lookahead likewise has no proven gain. Do not replay these. JRF frontier trial removed valid-run zero-prefix counting, a different invariant. TMB609 precomputed SIMD group values, not validated progression. Historical closed-family wording is not a ban; materially distinct evidence is required.",
+    "attribution": "JPR608 relevant production source identities remain unchanged. Its signed-update block has92locations and correction region287; locations are not phase times or predicted savings. Per-bit publication is already conditional, mask discovery23doesnotjustify a cache. No new capture/confirmation merely for this algebra.",
+    "next": "Verify the progression proof against actual C# decoder-generated scan states and malformed/failure/cancellation-prefix cases, including category/level bounds, band overlaps and inserted coefficients. Preserve generic primitive tests/counterexamples. Only then prototype the specialized validated scan and run one existing complete live444 short, followed by independent confirmation if useful. Full W/L/live/ISA/SAMEpackage at accepted coherent stage; no matrix expansion."
+  },
+  "actualCSharp": {
+    "project": "Lokad.Image",
+    "stage": "JVF616",
+    "productionChanged": false,
+    "productionBuilds": 0,
+    "privateDiagnosticBuilds": 1,
+    "samePrivateAssemblyBothOs": true,
+    "diagnosticAssemblySha256": "73fe98679b4268dae554823f115c8e757e5bfb543476d49bf11d00ac99c4302a",
+    "proof": {
+      "project": "Lokad.Image",
+      "stage": "JVF616",
+      "statisticalTiming": false,
+      "productionChanged": false,
+      "inputs": 5,
+      "executions": [
+        {
+          "name": "frozen444",
+          "live": false,
+          "outcome": "complete",
+          "hash": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "frozen444",
+          "live": true,
+          "outcome": "complete",
+          "hash": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+          "corrections": 89516,
+          "admittedAfter": 0
+        },
+        {
+          "name": "high-gray",
+          "live": false,
+          "outcome": "complete",
+          "hash": "43abcc849c8fc44b3c7118b3e47bca23337051882ebd63ba520fcbb751235c79",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "high-gray",
+          "live": true,
+          "outcome": "complete",
+          "hash": "43abcc849c8fc44b3c7118b3e47bca23337051882ebd63ba520fcbb751235c79",
+          "corrections": 170,
+          "admittedAfter": 0
+        },
+        {
+          "name": "restart444",
+          "live": false,
+          "outcome": "complete",
+          "hash": "b683fe5ff83aee515850ab1cd90b3c04916e83c080eef707333ee3371a5fc29f",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "restart444",
+          "live": true,
+          "outcome": "complete",
+          "hash": "b683fe5ff83aee515850ab1cd90b3c04916e83c080eef707333ee3371a5fc29f",
+          "corrections": 510,
+          "admittedAfter": 0
+        },
+        {
+          "name": "padded420",
+          "live": false,
+          "outcome": "complete",
+          "hash": "9920ed7e372779c6dc8b3b41a3493c72ba5276cbdc0171319958441fca2d3983",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "padded420",
+          "live": true,
+          "outcome": "complete",
+          "hash": "9920ed7e372779c6dc8b3b41a3493c72ba5276cbdc0171319958441fca2d3983",
+          "corrections": 486,
+          "admittedAfter": 0
+        },
+        {
+          "name": "small-sparse",
+          "live": false,
+          "outcome": "complete",
+          "hash": "371cd805ea0f022d3cde103efb278dc50ffea7b1ac3d707217df4100deb09851",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "small-sparse",
+          "live": true,
+          "outcome": "complete",
+          "hash": "371cd805ea0f022d3cde103efb278dc50ffea7b1ac3d707217df4100deb09851",
+          "corrections": 4,
+          "admittedAfter": 0
+        },
+        {
+          "name": "truncated-47419",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "truncated-47420",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "truncated-47421",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "truncated-47426",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "truncated-47450",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "truncated-132959",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "bad-scan-0-0",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "bad-scan-1-64",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "bad-scan-2-238",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "bad-scan-2-32",
+          "live": true,
+          "outcome": "ImageDataException",
+          "hash": "",
+          "corrections": 0,
+          "admittedAfter": 0
+        },
+        {
+          "name": "cancel-1",
+          "live": true,
+          "outcome": "OperationCanceledException",
+          "hash": "",
+          "corrections": 1,
+          "admittedAfter": 0
+        },
+        {
+          "name": "cancel-31",
+          "live": true,
+          "outcome": "OperationCanceledException",
+          "hash": "",
+          "corrections": 31,
+          "admittedAfter": 0
+        },
+        {
+          "name": "cancel-1024",
+          "live": true,
+          "outcome": "OperationCanceledException",
+          "hash": "",
+          "corrections": 1024,
+          "admittedAfter": 0
+        }
+      ],
+      "Blocks": 18764,
+      "EntryValues": 1182132,
+      "Corrections": 91742,
+      "Negative": 45450,
+      "lowBits": [
+        0,
+        1,
+        12
+      ],
+      "genericCounterexamplesExact": true,
+      "allBorrowedRootsAndInputsPreserved": true
+    }
+  },
+  "prototype": {
+    "project": "Lokad.Image",
+    "stage": "JVC617",
+    "productionAccepted": false,
+    "baseline": {
+      "windowsSha256": "6cdf4f0c028f056ef6f858714a8eedde7576c87e863cba92ac18e89faaa21d85",
+      "linuxSha256": "33d9ec9a66036729ba661723f1aa068b2cf7a6d87d0209b164fbb006d3cd7c55"
+    },
+    "baselineCommit": "ba2a6d98",
+    "paths": [
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs",
+      "src/Lokad.Image/Internal/JpegHuffman.cs",
+      "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs",
+      "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs",
+      "tests/Lokad.Image.Tests/JpegRefinementPrefixTests.cs"
+    ],
+    "transitionFromLinuxSha256": "33d9ec9a66036729ba661723f1aa068b2cf7a6d87d0209b164fbb006d3cd7c55",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4d4ada898c4df7967aac34936c81daaf760e051bb172b26c68f5c5e7a6c79a63",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "d5dfa36f080c27428001fc19b3be2015299619886ee3e4e8883fa56e14e4bedf",
+      "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "e56f8df8a46bdfa6866d24b0ac8bb3de8195f6a65d48a18a3fc9432535b27ee4",
+      "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs": "b0a6953db2964242363f0d729c4011ac50f9e8e86c14f789263e59e59b4c23d5",
+      "tests/Lokad.Image.Tests/JpegRefinementPrefixTests.cs": "aafe23150c0b9678ed91b94acd357c5b50388fec4b1f9c26d5d13ab27a0ed02a"
+    },
+    "actualCSharpProof": {
+      "project": "Lokad.Image",
+      "stage": "JVF616",
+      "productionChanged": false,
+      "productionBuilds": 0,
+      "privateDiagnosticBuilds": 1,
+      "samePrivateAssemblyBothOs": true,
+      "diagnosticAssemblySha256": "73fe98679b4268dae554823f115c8e757e5bfb543476d49bf11d00ac99c4302a",
+      "proof": {
+        "project": "Lokad.Image",
+        "stage": "JVF616",
+        "statisticalTiming": false,
+        "productionChanged": false,
+        "inputs": 5,
+        "executions": [
+          {
+            "name": "frozen444",
+            "live": false,
+            "outcome": "complete",
+            "hash": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "frozen444",
+            "live": true,
+            "outcome": "complete",
+            "hash": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+            "corrections": 89516,
+            "admittedAfter": 0
+          },
+          {
+            "name": "high-gray",
+            "live": false,
+            "outcome": "complete",
+            "hash": "43abcc849c8fc44b3c7118b3e47bca23337051882ebd63ba520fcbb751235c79",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "high-gray",
+            "live": true,
+            "outcome": "complete",
+            "hash": "43abcc849c8fc44b3c7118b3e47bca23337051882ebd63ba520fcbb751235c79",
+            "corrections": 170,
+            "admittedAfter": 0
+          },
+          {
+            "name": "restart444",
+            "live": false,
+            "outcome": "complete",
+            "hash": "b683fe5ff83aee515850ab1cd90b3c04916e83c080eef707333ee3371a5fc29f",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "restart444",
+            "live": true,
+            "outcome": "complete",
+            "hash": "b683fe5ff83aee515850ab1cd90b3c04916e83c080eef707333ee3371a5fc29f",
+            "corrections": 510,
+            "admittedAfter": 0
+          },
+          {
+            "name": "padded420",
+            "live": false,
+            "outcome": "complete",
+            "hash": "9920ed7e372779c6dc8b3b41a3493c72ba5276cbdc0171319958441fca2d3983",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "padded420",
+            "live": true,
+            "outcome": "complete",
+            "hash": "9920ed7e372779c6dc8b3b41a3493c72ba5276cbdc0171319958441fca2d3983",
+            "corrections": 486,
+            "admittedAfter": 0
+          },
+          {
+            "name": "small-sparse",
+            "live": false,
+            "outcome": "complete",
+            "hash": "371cd805ea0f022d3cde103efb278dc50ffea7b1ac3d707217df4100deb09851",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "small-sparse",
+            "live": true,
+            "outcome": "complete",
+            "hash": "371cd805ea0f022d3cde103efb278dc50ffea7b1ac3d707217df4100deb09851",
+            "corrections": 4,
+            "admittedAfter": 0
+          },
+          {
+            "name": "truncated-47419",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "truncated-47420",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "truncated-47421",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "truncated-47426",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "truncated-47450",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "truncated-132959",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "bad-scan-0-0",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "bad-scan-1-64",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "bad-scan-2-238",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "bad-scan-2-32",
+            "live": true,
+            "outcome": "ImageDataException",
+            "hash": "",
+            "corrections": 0,
+            "admittedAfter": 0
+          },
+          {
+            "name": "cancel-1",
+            "live": true,
+            "outcome": "OperationCanceledException",
+            "hash": "",
+            "corrections": 1,
+            "admittedAfter": 0
+          },
+          {
+            "name": "cancel-31",
+            "live": true,
+            "outcome": "OperationCanceledException",
+            "hash": "",
+            "corrections": 31,
+            "admittedAfter": 0
+          },
+          {
+            "name": "cancel-1024",
+            "live": true,
+            "outcome": "OperationCanceledException",
+            "hash": "",
+            "corrections": 1024,
+            "admittedAfter": 0
+          }
+        ],
+        "Blocks": 18764,
+        "EntryValues": 1182132,
+        "Corrections": 91742,
+        "Negative": 45450,
+        "lowBits": [
+          0,
+          1,
+          12
+        ],
+        "genericCounterexamplesExact": true,
+        "allBorrowedRootsAndInputsPreserved": true
+      }
+    },
+    "hypothesis": "ReadScan progression and monotonic scan/block traversal prove every existing AC coefficient current magnitude bit clear, nonzero and bounded below2^23. Remove repeated magnitude/MinValue tests only in that prepared live scan. Generic arbitrary-block entry retains exact original behavior.",
+    "endState": "One buffered refinement source body with two private value-type preconditions: arbitrary state and validated progression. Select prepared specialization only at ReadPreparedRefinementScan after full metadata validation. Same per-bit polls/input reads/immediate writes/publication, no grouped corrections or lookahead/cursor cache.",
+    "storage": "No new fields/owned capacity/API/cache/pool or reservations. Existing2KiB scan headers/coarse decoder frame and independent output remain. Shared refusal/cancellation cleanup and generic partial-state semantics unchanged.",
+    "invalidation": "Prepared live progressive refinement changes; ordinary prepared scan loop JIT also affected. First completeLive444 short only; broader affected progressive costs on accepted coherent stage. Other baseline/caller/CMYK/codec/edit paths unchanged.",
+    "acceptance": "Actual C# source-instrumented decoder proves18764blockentries/91742corrections/1182132entryvalues onfive bounded inputs and malformed/truncated/cancel cases, same diagnosticassembly bothOS. New legal-frontier prefix/tail/low/sign tests and existing arbitrary-state/MinValue tests plus concurrentprefix oracle inboth modes. Oneimmutablemain/embedded/OS, existing completeLive444 short then independentconfirmation ifuseful, fullW/L/live/ISA/SAMEpackage onlyat acceptedstage.",
+    "publicationPostponed": true,
+    "affectedExistingCases": [
+      "ProgressiveCancelable444"
+    ]
+  },
+  "preparation": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "6cdf4f0c028f056ef6f858714a8eedde7576c87e863cba92ac18e89faaa21d85",
+      "candidateSha256": "978ef3b322711cffa3f8c0fd010414a312ba61ae7f7b1f742d57cc21af2d6acf",
+      "internalTestAssemblySha256": "1e66e8834590760970f00faa4e9c357f855955f1231c67ffbeac9c8363543dec",
+      "focused": {
+        "internal-normal": 421,
+        "internal-scalar": 421,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "a3c61962437d36d0fcefec38e883bd8f7f9407fd563590ec05ad646824380696",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "ed955b690aec2deddd704546241a859cab6117ace324c4c4dffe2db696e38c60",
+        "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "54bd45604e89c02c48e38b389f6a426dbca7f0d50bca5faeac56909fc355882c",
+        "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs": "ccf93eb21ab576fbc5815103767b62f68bf07723c7cc26ab04e5664d483bed2a",
+        "tests/Lokad.Image.Tests/JpegRefinementPrefixTests.cs": "9c6ee22c36730eb635f3effb604a42851192effb9338829744b562326c8de550"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "33d9ec9a66036729ba661723f1aa068b2cf7a6d87d0209b164fbb006d3cd7c55",
+      "candidateSha256": "754d449f4c7f305813ce24f6e7bcad2b413c325522742d7ba1842354fd4f9b91",
+      "internalTestAssemblySha256": "b3c5f562fb03f06abf29be4fdb0aeade6fff89677779c8e399e9ec120552f1e5",
+      "focused": {
+        "internal-normal": 421,
+        "internal-scalar": 421,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "a3c61962437d36d0fcefec38e883bd8f7f9407fd563590ec05ad646824380696",
+        "src/Lokad.Image/Internal/JpegHuffman.cs": "ed955b690aec2deddd704546241a859cab6117ace324c4c4dffe2db696e38c60",
+        "src/Lokad.Image/Internal/JpegDecoder.Refinement.cs": "54bd45604e89c02c48e38b389f6a426dbca7f0d50bca5faeac56909fc355882c",
+        "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs": "ccf93eb21ab576fbc5815103767b62f68bf07723c7cc26ab04e5664d483bed2a",
+        "tests/Lokad.Image.Tests/JpegRefinementPrefixTests.cs": "9c6ee22c36730eb635f3effb604a42851192effb9338829744b562326c8de550"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "screen": {
+    "caseId": "ProgressiveCancelable444",
+    "mode": "short",
+    "runId": "jvc617-candidate-ProgressiveCancelable444-short",
+    "managedUs": 3577.6301848958333,
+    "nativeUs": 3359.4506041666664,
+    "ratio": 1.0649450182296363,
+    "lower": 0.9959959366545799,
+    "upper": 1.1356141382803457,
+    "allocatedBytes": 169664,
+    "packetBytes": 531468,
+    "packetSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "librarySha256": "754d449f4c7f305813ce24f6e7bcad2b413c325522742d7ba1842354fd4f9b91",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "uncertain"
+  },
+  "screenActuals": 3,
+  "sourceValidOriginal": {
+    "managedMicroseconds": 3553.05955859375,
+    "nativeMicroseconds": 3351.4900364583336,
+    "ratio": 1.060143255669178,
+    "lower": 1.0531116428782195,
+    "upper": 1.0657062608738581,
+    "allocatedBytes": 169664,
+    "status": "confirmed-gap",
+    "managedActuals": 12,
+    "nativeSamplesEachBracket": 12,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "librarySha256": "08e796d8f0706167fb0f73f2fc35d311e380f88eb5bf98756cb6f2f3e4da53aa",
+    "inputBytes": 132961,
+    "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+    "managedOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "nativeOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "descriptorSha256": null,
+    "outputBytes": 531468,
+    "runId": "jpe562-current-ProgressiveCancelable444-confirm",
+    "receiptFile": "jpe562-current-ProgressiveCancelable444-confirm-receipt.json",
+    "reusedUnchangedPath": true,
+    "measurementOwner": "jpeg-paired-ac-window-evidence.json"
+  },
+  "point": {
+    "deltaUs": 24.570626302083383,
+    "fraction": 0.006915343212487102,
+    "nativeShift": 0.0023752323956616195
+  },
+  "decision": "Unselected: sole complete3actual screen3577.63/native3359.45us versus source-valid3553.06/native3351.49us, unchanged169664B/op. Adverse24.57us/0.69percentpoint, wideinconclusivebounds; no causalregression/equivalence claim, no usefulpointlead or allocation/simplification benefit. No confirmation/variants/fullsuite/package. Validated-progression proof remains a lead for different coherent designs, not gain evidence or automatic merge authorization.",
+  "qualificationReused": {
+    "fullChecksEachOs": 5938,
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "packageSha256": "803496727199042f36184f40b7c418350444301e23dba638f9a0807a52b9773b",
+    "productionSourcesModulesBindingsAndManifestRestoredByteExact": true,
+    "additionalBuildsTestsPackages": 0
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionAccepted": false,
+      "productionSha256": "6cdf4f0c028f056ef6f858714a8eedde7576c87e863cba92ac18e89faaa21d85",
+      "sourcesAndModulesRestoredByteExact": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "sourceManifestSha256": null,
+      "fullChecksEachOsReused": 5938,
+      "packageSha256": "803496727199042f36184f40b7c418350444301e23dba638f9a0807a52b9773b",
+      "sameActualPackageAndThreeExamplesBothOsReused": true,
+      "additionalBuildsTestsPackages": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionAccepted": false,
+      "productionSha256": "33d9ec9a66036729ba661723f1aa068b2cf7a6d87d0209b164fbb006d3cd7c55",
+      "sourcesAndModulesRestoredByteExact": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "sourceManifestSha256": "1de0fcb727601a38ac3c4bb43c83150f3ca785976116cd1d075a1737924d0ee6",
+      "fullChecksEachOsReused": 5938,
+      "packageSha256": "803496727199042f36184f40b7c418350444301e23dba638f9a0807a52b9773b",
+      "sameActualPackageAndThreeExamplesBothOsReused": true,
+      "additionalBuildsTestsPackages": 0
+    }
+  },
+  "workflow": {
+    "privateDiagnosticBuildsTotal": 1,
+    "samePrivateDiagnosticAssemblyBothOs": true,
+    "candidateMainAndEmbeddedVersionsEachOs": 1,
+    "publicHarnessNativeFixtureSelectorBuilds": 0,
+    "completedFavorableSamplingRepeats": 0,
+    "candidateCompileOrQualityFailures": 0,
+    "privateProbeDirectorySetupStoppedBeforeCompilation": 1
+  },
+  "next": "Independent VP8 effort2 encode gap~134us: audit current exact candidate/preparation/workspace graph using source-valid existing attribution. Seek repeated macroblock work/storage rather than another signed-correction microvariant. No family ban; new JPEG work needs materially revised evidence. Currentbenchmark/package/283path objective unchanged.",
+  "raw": {
+    "file": "jpeg-validated-progression-experiment.tar.xz",
+    "sha256": "f68e4fcbb21b644ccc121858d0f08087e9dce529ed02be1b8239933095980739",
+    "bytes": 5580420,
+    "members": 115,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "bicubic-identity-cache-rows-qualified.tar.xz",
+        "sha256": "38182d3e21a2f068072676b45213be99288187cdb3fd68a6fd8cd838951c449e",
+        "bytes": 10891128,
+        "members": 308
+      },
+      {
+        "file": "jpeg-validated-progression-model.tar.xz",
+        "sha256": "2af22b895a731e6e16de42ca01aac6e6739aa6a7b3732732257020d9389f78a5",
+        "bytes": 25096,
+        "members": 8,
+        "mirrored": true,
+        "allMembersVerified": true
+      }
+    ]
+  }
+}
