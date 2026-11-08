@@ -93,13 +93,19 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Shared word preparation](../benchmarks/BICUBIC-SHARED-WORD-PREPARATION.md) removes
-  duplicated divisor/certificate setup. Independent mixed/cross gains41.73/83.80µs
-  have separated raw/normalized confidence; tight vertical regresses11.96µs/1.66%,
-  also separated. Existing division, guards, rounding, exact repair and pixels remain.
-  Fifteen current word controls:6pass/9gaps; default/bounded full enlargement pass.
-  Four displayed rows refresh;121 numerical rows reuse unchanged paths. No new
-  owned arrays or retained state; admitted/physical peaks are not newly measured.
+  [Shared band execution](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md) saves
+  **159.23µs/14.79% raw/15.40% normalized** on default mixed-word resizing and
+  **86.23µs/8.03% raw/8.71% normalized** at4KiB, with separated raw/normalized
+  confidence. Current917.38/native851.87µs upper1.079 and987.47/native851.08µs
+  upper1.164 remain gaps; bounded vertical730.32/native591.71µs upper1.240.
+  GC stays114/113Bop. Sixteen-row scratch7596B is admitted as8192B; bounded
+  mode stays3992/4096B. Scratch retention0, mixed output1059864B until disposal;
+  existing pixel-pool retention stays separate, physical/native peaks unmeasured.
+  Three current costs supersede shared-word preparation; twelve unchanged word
+  controls reuse it. Fifteen remain6pass/9gaps; passing enlargement stays stopped.
+  One displayed row refreshes;124 numerical rows reuse unchanged paths. Earlier
+  dynamic-capacity regression remains in the report, without renderer dependencies.
+  One source loop/static capacities, no new heap/pool/session or pixel tolerance.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
   workspace savings and source-valid byte costs. Its unchanged-build defaultRGBA8
   confirmation measures3,108.21/native3,037.83µs,upper1.026/116Bop: a70.38µs gap.
@@ -269,7 +275,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 1,017.38 | 847.82 | 1.200 / 1.204 | 114 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 987.47 | 851.08 | 1.160 / 1.164 | 114 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |

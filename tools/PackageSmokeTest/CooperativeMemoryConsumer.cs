@@ -2,21 +2,26 @@ namespace Lokad.Image.Tooling;
 
 internal static class CooperativeMemoryConsumer
 {
-    private static void VerifyMixedWordSchedule()
+    private static void VerifyMixedWordSchedule(int workspaceBytes)
     {
         const int width = 1027, height = 129, outputBytes = width * height * 8;
         using var source = OriginalPixels.Buffer(513, 259, 16);
         source.GetRow16(0)[3] = source.GetRow16(0)[513 * 4 - 1] = 0;
         var input = OriginalPixels.Bytes(source);
-        using var root = new TestMemoryBudget(2L * outputBytes + 4096);
-        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = input.Length + outputBytes + 4096L };
+        using var root = new TestMemoryBudget(2L * outputBytes + workspaceBytes);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = input.Length + outputBytes + (long)workspaceBytes };
         var first = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
         var second = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
         var expected = OriginalPixels.Bytes(second);
+        var vectorBands = System.Runtime.Intrinsics.X86.Avx512F.IsSupported
+            && System.Runtime.Intrinsics.X86.Avx2.IsSupported && System.Runtime.Intrinsics.X86.Avx.IsSupported
+            && System.Runtime.Intrinsics.X86.Sse41.IsSupported;
         if (Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected))
             != "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a"
-            || root.Bytes != 2L * outputBytes || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first)))
-            throw new Exception("Packaged mixed-word rows changed frozen pixels or retained admission.");
+            || root.Bytes != 2L * outputBytes || root.Peak > 2L * outputBytes + workspaceBytes
+            || vectorBands && root.Peak != 2L * outputBytes + workspaceBytes
+            || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first)))
+            throw new Exception($"Packaged mixed-word rows changed frozen pixels or retained admission: workspace={workspaceBytes}, hash={Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(expected))}, retained={root.Bytes}, peak={root.Peak}.");
         try
         {
             using var unexpected = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic, limits);
@@ -43,6 +48,11 @@ internal static class CooperativeMemoryConsumer
         if (root.Bytes != 0 || root.IsDisposed || !input.AsSpan().SequenceEqual(OriginalPixels.Bytes(source)))
             throw new Exception("Packaged mixed-word rows lost source or borrowed-root ownership.");
         Console.WriteLine("Packaged mixed-word scheduling preserves frozen pixels, aggregate admission, cancellation and independent survivors.");
+        if (workspaceBytes == 8192)
+        {
+            Console.WriteLine("Packaged8KiB mixed-word boundary preserves exact samples and admitted lifetimes.");
+            Console.WriteLine($"Packaged mixed-word vector execution active: {vectorBands}.");
+        }
     }
 
     private static void VerifyOwnedFonts()
@@ -841,7 +851,8 @@ internal static class CooperativeMemoryConsumer
 
     internal static async Task Verify()
     {
-        VerifyMixedWordSchedule();
+        VerifyMixedWordSchedule(4096);
+        VerifyMixedWordSchedule(8192);
         VerifyOwnedFonts();
         await VerifyProgressivePlaneOwnership();
         await VerifyOpaqueWordTiles();

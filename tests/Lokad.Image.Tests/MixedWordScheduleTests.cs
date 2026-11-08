@@ -7,6 +7,46 @@ namespace Lokad.Image.Tests;
 public sealed class MixedWordScheduleTests
 {
     [Theory]
+    [InlineData(35, 17)] [InlineData(39, 19)]
+    [InlineData(69, 33)] [InlineData(137, 65)]
+    public void LargerBandsPreserveExactFramesTailsAndBorrowedOwnership(int sourceHeight, int height)
+    {
+        if (!Avx512F.IsSupported) return;
+        using var source = OriginalPixels.Buffer(17, sourceHeight, 16);
+        var input = OriginalPixels.Bytes(source);
+        using var expected = ImageTransforms.Resize(source, 35, height, ResizeFilter.Bicubic,
+            new() { MaxWorkingBytes = input.Length + 35L * height * 8 + 4095 });
+        using var result = ImageBuffer.Create(35, height, 16);
+        using var root = new TestMemoryBudget(8192);
+        using var context = new OperationContext(new() { MaxWorkingBytes = 8192, MemoryBudget = root }, default);
+        Assert.True(MixedWordColumnBicubicResize.TryApply(source, result, 1, (double)sourceHeight / height, 5, 10, context));
+        Assert.Equal(OriginalPixels.Bytes(expected), OriginalPixels.Bytes(result));
+        Assert.Equal(input, OriginalPixels.Bytes(source));
+        Assert.Equal(0, root.Bytes); Assert.Equal(8192, root.Peak);
+        Assert.Equal(8192, context.RemainingWorkingBytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void LargerBandRefusalIsTerminalAndCancellationReleasesBeforeRecovery()
+    {
+        if (!Avx512F.IsSupported) return;
+        using var source = OriginalPixels.Buffer(17, 35, 16);
+        using var result = ImageBuffer.Create(35, 17, 16);
+        using var denied = new TestMemoryBudget(8191);
+        using (var context = new OperationContext(new() { MaxWorkingBytes = 8192, MemoryBudget = denied }, default))
+            Assert.Throws<ImageLimitException>(() => MixedWordColumnBicubicResize.TryApply(source, result, 1, 35d / 17, 5, 10, context));
+        Assert.Equal(1, denied.Refusals); Assert.Equal(1, denied.Attempts); Assert.Equal(0, denied.Bytes);
+        using var root = new TestMemoryBudget(8192);
+        using var cancellation = new CancellationTokenSource(); root.Admitted = _ => cancellation.Cancel();
+        using (var context = new OperationContext(new() { MaxWorkingBytes = 8192, MemoryBudget = root }, cancellation.Token))
+            Assert.Throws<OperationCanceledException>(() => MixedWordColumnBicubicResize.TryApply(source, result, 1, 35d / 17, 5, 10, context));
+        Assert.Equal(0, root.Bytes); root.Admitted = null;
+        using (var context = new OperationContext(new() { MaxWorkingBytes = 8192, MemoryBudget = root }, default))
+            Assert.True(MixedWordColumnBicubicResize.TryApply(source, result, 1, 35d / 17, 5, 10, context));
+        Assert.Equal(0, root.Bytes); Assert.Equal(8192, root.Peak); Assert.False(root.IsDisposed);
+    }
+
+    [Theory]
     [InlineData(13, 7)] [InlineData(29, 15)]
     public void FourTwoAndOneRowTailsUseTheKernelAndPreserveExactFrames(int sourceHeight, int height)
     {

@@ -1577,10 +1577,6 @@ def render():
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert word_prep['statusCounts'] == {state: sum(c['status'] == state for c in word_prep['cases'].values())
                                        for state in ('pass', 'gap', 'uncertain')}
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for case in ('Mixed16', 'Cross16') for v in word_prep['comparison'][case]['views'].values())
-    assert all(v['rawLossSeparated'] and v['normalizedLossSeparated']
-               for v in word_prep['comparison']['TightVertical16']['views'].values())
     word_labels = {'Up16': 'Bicubic upscale RGBA16',
                    'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
                    'TightMixed16': 'Bicubic RGBA16, width up / height down, input+output+4 KiB',
@@ -1596,6 +1592,33 @@ def render():
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5866
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
+    band_execution = json.loads((ROOT / 'benchmarks/bicubic-bounded-band-execution-evidence.json').read_text(encoding='utf-8'))
+    assert band_execution['productionAccepted'] and band_execution['requiredMaterialPaths'] == 283
+    assert band_execution['raw']['mirrored'] and band_execution['raw']['allMembersVerified']
+    assert set(band_execution['cases']) == {'Mixed16', 'TightMixed16', 'TightVertical16'}
+    assert band_execution['sourceProof']['fullBSourceReconstructsAOutsideEntryAndCompileTimeCapacitySelection']
+    assert band_execution['sourceProof']['allSampleDecodeTapMultiplyAddQuotientCertificateRoundingRepairBodiesExact']
+    for current in band_execution['cases'].values():
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['librarySha256'] == band_execution['producers']['linuxSha256']
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for c in band_execution['comparison'].values() for v in c['views'].values())
+    # Current costs supply the displayed bounded case. Superseded experiments
+    # remain in their reports, without becoming summary-rendering dependencies.
+    current = band_execution['cases']['TightMixed16']
+    label = word_labels['TightMixed16']
+    positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
+    assert len(positions) == 1
+    rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
+        f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+        f'{current["allocatedBytes"]:,} |')
+    bq = band_execution['qualification']
+    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5888
+    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
+    assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
     png = json.loads((ROOT / 'benchmarks/png-streaming-token-frequencies-evidence.json').read_text(encoding='utf-8'))
     assert png['productionAccepted'] and png['requiredMaterialPaths'] == 283
     pq = png['qualification']
@@ -1835,13 +1858,19 @@ Current scope and remaining work:
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
   [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
   [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Shared word preparation](../benchmarks/BICUBIC-SHARED-WORD-PREPARATION.md) removes
-  duplicated divisor/certificate setup. Independent mixed/cross gains41.73/83.80µs
-  have separated raw/normalized confidence; tight vertical regresses11.96µs/1.66%,
-  also separated. Existing division, guards, rounding, exact repair and pixels remain.
-  Fifteen current word controls:6pass/9gaps; default/bounded full enlargement pass.
-  Four displayed rows refresh;121 numerical rows reuse unchanged paths. No new
-  owned arrays or retained state; admitted/physical peaks are not newly measured.
+  [Shared band execution](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md) saves
+  **159.23µs/14.79% raw/15.40% normalized** on default mixed-word resizing and
+  **86.23µs/8.03% raw/8.71% normalized** at4KiB, with separated raw/normalized
+  confidence. Current917.38/native851.87µs upper1.079 and987.47/native851.08µs
+  upper1.164 remain gaps; bounded vertical730.32/native591.71µs upper1.240.
+  GC stays114/113Bop. Sixteen-row scratch7596B is admitted as8192B; bounded
+  mode stays3992/4096B. Scratch retention0, mixed output1059864B until disposal;
+  existing pixel-pool retention stays separate, physical/native peaks unmeasured.
+  Three current costs supersede shared-word preparation; twelve unchanged word
+  controls reuse it. Fifteen remain6pass/9gaps; passing enlargement stays stopped.
+  One displayed row refreshes;124 numerical rows reuse unchanged paths. Earlier
+  dynamic-capacity regression remains in the report, without renderer dependencies.
+  One source loop/static capacities, no new heap/pool/session or pixel tolerance.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
   workspace savings and source-valid byte costs. Its unchanged-build defaultRGBA8
   confirmation measures3,108.21/native3,037.83µs,upper1.026/116Bop: a70.38µs gap.

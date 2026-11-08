@@ -10,6 +10,8 @@ namespace Lokad.Image.Internal;
 internal static class MixedWordColumnBicubicResize
 {
     private const int WorkspaceBytes = 4096;
+    private readonly struct EightRowBand { }
+    private readonly struct SixteenRowBand { }
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
@@ -25,19 +27,35 @@ internal static class MixedWordColumnBicubicResize
             && 85L * source.Width <= Array.MaxLength
             && context.RemainingWorkingBytes >= 85L * source.Width * sizeof(double)
                 + 17L * source.Width * sizeof(int) + 128 + ResizeAlpha.ScratchBytes) return false;
-        context.Reserve(WorkspaceBytes);
+        // Select by the local ceiling before shared admission. A refused root
+        // reservation is terminal; never retry with a smaller band afterward.
+        return result.Height >= 16 && scaleY <= 2.125 && context.RemainingWorkingBytes >= 8192
+            ? Apply<SixteenRowBand>(source, result, scaleY, context)
+            : Apply<EightRowBand>(source, result, scaleY, context);
+    }
+
+    private static bool Apply<TBand>(ImageBuffer source, ImageBuffer result,
+        double scaleY, OperationContext context) where TBand : struct
+    {
+        // Value-type specialization makes these capacities and cache strides
+        // constants in both kernels, while keeping one execution source body.
+        var rowCapacity = typeof(TBand) == typeof(SixteenRowBand) ? 16 : 8;
+        var sourceCapacity = rowCapacity == 16 ? 42 : 24;
+        var workspaceBytes = rowCapacity == 16 ? 8192 : WorkspaceBytes;
+        context.Reserve(workspaceBytes);
         try
         {
-            // These fixed arrays occupy 3,992 bytes; row offsets are bounded below 24.
+            // Explicit arrays occupy 3,992 or 7,596 bytes. Six columns cover
+            // five active taps and the paired-column prefetch in either band.
             // Intermediate values remain
             // unrounded; the frame returns before exact tiny-alpha scratch.
-            Span<Vector256<double>> cache = stackalloc Vector256<double>[6 * 8];
+            Span<Vector256<double>> cache = stackalloc Vector256<double>[6 * rowCapacity];
             Span<int> columnIds = stackalloc int[6];
-            Span<Vector512<double>> decoded = stackalloc Vector512<double>[24];
-            Span<double> vertical = stackalloc double[8 * 10];
-            Span<byte> rowOffsets = stackalloc byte[8 * 10];
-            Span<int> counts = stackalloc int[8];
-            Span<double> normalizers = stackalloc double[8];
+            Span<Vector512<double>> decoded = stackalloc Vector512<double>[sourceCapacity];
+            Span<double> vertical = stackalloc double[rowCapacity * 10];
+            Span<byte> rowOffsets = stackalloc byte[rowCapacity * 10];
+            Span<int> counts = stackalloc int[rowCapacity];
+            Span<double> normalizers = stackalloc double[rowCapacity];
             Span<double> horizontal = stackalloc double[5];
             Span<int> columns = stackalloc int[5];
             Span<int> samplesX = stackalloc int[5];
@@ -45,9 +63,10 @@ internal static class MixedWordColumnBicubicResize
             var inputStride = source.Stride;
             var output = result.Pixels;
             var outputStride = result.Stride;
-            // At eight rows, support spans at most 24 source rows in this range.
-            // Larger vertical scales retain four-row bands and the same dispatch.
-            var bandRows = scaleY <= 2.125 ? 8 : 4;
+            // Support spans at most floor((rows+3)*scaleY)+1 source rows:
+            // <=41 for16rows and <=24 for8rows at scaleY<=2.125.
+            // Larger scales retain the existing four-row band.
+            var bandRows = scaleY <= 2.125 ? rowCapacity : 4;
             var geometry = MixedBicubicGeometry.Prepare(source, result, bandRows, context.Cancellation);
             for (var tileY = 0; tileY < result.Height; tileY += bandRows)
             {
@@ -68,7 +87,7 @@ internal static class MixedWordColumnBicubicResize
                         var w = ImageTransforms.Kernel((first + t - center) / scaleY, ResizeFilter.Bicubic);
                         vertical[y * 10 + t] = w; normalizer += w;
                         var relative = Math.Clamp(first + t, 0, source.Height - 1) - sourceFirst;
-                        if ((uint)relative >= 24) return false;
+                        if ((uint)relative >= (uint)sourceCapacity) return false;
                         rowOffsets[y * 10 + t] = (byte)relative;
                     }
                     normalizers[y] = normalizer;
@@ -98,7 +117,7 @@ internal static class MixedWordColumnBicubicResize
                     for (var t = 0; t < count; t++)
                     {
                         var sx = samplesX[t];
-                        var slot = sx % 6; columns[t] = slot * 8;
+                        var slot = sx % 6; columns[t] = slot * rowCapacity;
                         if (columnIds[slot] == sx) continue;
                         columnIds[slot] = sx;
                         // Decode adjacent columns together. Each source row supplies
@@ -125,8 +144,8 @@ internal static class MixedWordColumnBicubicResize
                             var sum = Vector512<double>.Zero;
                             for (var ty = 0; ty < weights.Length; ty++)
                                 sum = Avx512F.Add(sum, Avx512F.Multiply(decoded[offsets[ty]], Vector512.Create(weights[ty])));
-                            cache[slot * 8 + y] = sum.GetLower();
-                            if (paired) cache[nextSlot * 8 + y] = sum.GetUpper();
+                            cache[slot * rowCapacity + y] = sum.GetLower();
+                            if (paired) cache[nextSlot * rowCapacity + y] = sum.GetUpper();
                         }
                     }
                     var outputY = 0;
@@ -206,7 +225,7 @@ internal static class MixedWordColumnBicubicResize
             context.Cancellation.ThrowIfCancellationRequested();
             return true;
         }
-        finally { context.Release(WorkspaceBytes); }
+        finally { context.Release(workspaceBytes); }
     }
 
     private static bool OriginalWord(ImageBuffer source, ImageBuffer result, int x, int y,
