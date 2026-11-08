@@ -1,5 +1,3 @@
-using System.Runtime.ExceptionServices;
-
 namespace Lokad.Image.Internal;
 
 // Original scan conversion: split linear edges at vertices/intersections, then
@@ -12,9 +10,6 @@ internal sealed class TextRasterizer : IDisposable
     private readonly Dictionary<TextLayout.Shape, RasterShape> shapes = new();
     private readonly Crossing[] crossings;
     private readonly double[] row;
-    private readonly IComparer<Crossing> crossingComparer;
-    private readonly IComparer<double> eventComparer;
-    private readonly IComparer<Edge> edgeComparer;
     private long bytes;
 
     private readonly record struct Point(double X, double Y)
@@ -31,17 +26,27 @@ internal sealed class TextRasterizer : IDisposable
     private readonly record struct Curve(Point A, Point C, Point B, int Depth);
     private readonly record struct Crossing(double X, int Index, int Order);
 
+    private readonly struct CrossingOrder : TextRasterSort.IOrder<Crossing>
+    {
+        public static int Compare(in Crossing a, in Crossing b)
+        { var order = a.X.CompareTo(b.X); return order != 0 ? order : a.Order.CompareTo(b.Order); }
+    }
+    private readonly struct EventOrder : TextRasterSort.IOrder<double>
+    {
+        public static int Compare(in double a, in double b) => a.CompareTo(b);
+    }
+    private readonly struct EdgeOrder : TextRasterSort.IOrder<Edge>
+    {
+        public static int Compare(in Edge a, in Edge b)
+        { var order = a.MinY.CompareTo(b.MinY); return order != 0 ? order : a.Order.CompareTo(b.Order); }
+    }
+
     internal TextRasterizer(TextLayout layout, OperationContext context, int width)
     {
         this.context = context;
-        Admit(4096); // Owner/comparers plus bounded sort/integration frame allowance.
+        Admit(4096); // Owner plus bounded sort/integration frame allowance.
         try
         {
-            crossingComparer = Comparer<Crossing>.Create((a, b) =>
-            { context.Cancellation.ThrowIfCancellationRequested(); var order = a.X.CompareTo(b.X); return order != 0 ? order : a.Order.CompareTo(b.Order); });
-            eventComparer = Comparer<double>.Create((a, b) => { context.Cancellation.ThrowIfCancellationRequested(); return a.CompareTo(b); });
-            edgeComparer = Comparer<Edge>.Create((a, b) =>
-            { context.Cancellation.ThrowIfCancellationRequested(); var order = a.MinY.CompareTo(b.MinY); return order != 0 ? order : a.Order.CompareTo(b.Order); });
             var maximum = 0;
             foreach (var p in layout.Placements)
             {
@@ -124,7 +129,7 @@ internal sealed class TextRasterizer : IDisposable
             if (middle < edge.MaxY) crossings[count++] = new(edge.X(middle), index, edge.Order);
         }
         activeCount = count;
-        Sort(crossings, count, crossingComparer);
+        TextRasterSort.Sort<Crossing, CrossingOrder>(crossings.AsSpan(0, count), context.Cancellation);
         var winding = 0; Edge start = default;
         for (var i = 0; i < count; i++)
         {
@@ -193,13 +198,6 @@ internal sealed class TextRasterizer : IDisposable
         canvas.SetSample(x, y, 3, (int)((alpha + denominator / 2) / denominator));
     }
 
-    private static void Sort<T>(T[] values, int count, IComparer<T> comparer)
-    {
-        try { Array.Sort(values, 0, count, comparer); }
-        catch (InvalidOperationException e) when (e.InnerException is OperationCanceledException or ImageLimitException)
-        { ExceptionDispatchInfo.Capture(e.InnerException).Throw(); }
-    }
-
     private sealed class RasterShape(TextRasterizer owner) : IDisposable
     {
         internal Edge[] Edges = [];
@@ -244,7 +242,7 @@ internal sealed class TextRasterizer : IDisposable
                 Event(Edges[i].MinY); Event(Edges[i].MaxY);
                 order[i] = new(Edges[i].MinY, i, i);
             }
-            Sort(order, Count, owner.crossingComparer);
+            TextRasterSort.Sort<Crossing, CrossingOrder>(order.AsSpan(0, Count), owner.context.Cancellation);
             for (var i = 0; i < Count; i++)
             {
                 owner.context.Cancellation.ThrowIfCancellationRequested();
@@ -265,7 +263,7 @@ internal sealed class TextRasterizer : IDisposable
                     }
                 }
             }
-            Sort(Events, EventCount, owner.eventComparer);
+            TextRasterSort.Sort<double, EventOrder>(Events.AsSpan(0, EventCount), owner.context.Cancellation);
             var unique = 0;
             for (var i = 0; i < EventCount; i++)
             { owner.context.Cancellation.ThrowIfCancellationRequested(); if (unique == 0 || Events[i] != Events[unique - 1]) Events[unique++] = Events[i]; }
@@ -273,7 +271,7 @@ internal sealed class TextRasterizer : IDisposable
             if (unique != 0) { MinY = Events[0]; MaxY = Events[unique - 1]; }
             // Event calculations above retain original edge-index arithmetic.
             // Only execution order changes; crossing ties keep that identity.
-            Sort(Edges, Count, owner.edgeComparer);
+            TextRasterSort.Sort<Edge, EdgeOrder>(Edges.AsSpan(0, Count), owner.context.Cancellation);
         }
         private void Add(Point a, Point b)
         {
