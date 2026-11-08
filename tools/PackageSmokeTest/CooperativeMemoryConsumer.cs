@@ -256,10 +256,10 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine("Packaged main validation preserves exact packets/metadata, bounded admission, cancellation and asynchronous ownership.");
     }
 
-    private static async Task VerifyProgressivePlaneOwnership()
+    private static async Task VerifyProgressivePlaneOwnership(JpegSampling sampling = JpegSampling.YCbCr444)
     {
         const int width = 31, height = 23, frameBytes = width * height * 4;
-        var data = AuthoredJpeg.ProgressiveFrame(width, height, JpegSampling.YCbCr444, 3);
+        var data = AuthoredJpeg.ProgressiveFrame(width, height, sampling, 3);
         var original = data.ToArray();
         using var root = new TestMemoryBudget(128 * 1024);
         var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
@@ -961,6 +961,9 @@ internal static class CooperativeMemoryConsumer
         await VerifyPngCursors(cancellable: false);
         VerifyOwnedFonts();
         await VerifyProgressivePlaneOwnership();
+        foreach (var sampling in new[] { JpegSampling.Grayscale, JpegSampling.YCbCr420, JpegSampling.YCbCr422 })
+            await VerifyProgressivePlaneOwnership(sampling);
+        Console.WriteLine("Packaged completed JPEG planes preserve exact gray/subsampled samples, async, terminal refusal and surviving ownership.");
         await VerifyOpaqueWordTiles();
         VerifyStreamingBicubic();
         VerifyOutputWorkspaceBicubic();

@@ -122,19 +122,20 @@ Current scope and remaining work:
   enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
   Its older751µs gap is superseded; keep current uncertainty before further tuning.
   Exact Q30/rational/certified pixels remain required versus native float.
-- **JPEG and reading:** [paired AC windows](../benchmarks/JPEG-PAIRED-AC-WINDOW.md)
-  save **113.83µs/6.92% raw/6.75% normalized** on the frozen RGB444 control and
-  15.91µs/3.02% raw on sparse CMYK; filtered/allactual raw/normalized intervals
-  separate. RGB1530.34/native1450.52µs,upper1.065 remains an80µs gap. New scan-owned
-  tables cost32,848/16,424 extra GC B/op forRGB/CMYK; no retained pair scratch.
-  Governed RGB peak541,253→574,069B, output531,468B unchanged; live peak stays
-  541,253B. Default idle pixel pool531,468B is unchanged, governed calls bypass it.
-  Physical/native peaks are unmeasured. Header preparation is timed and admission
-  precedes allocation; refusal remains terminal. Empty plans skip allocation.
-  All29JPEG controls refresh, including constructor layout on progressive paths:
-  14pass/14gaps/1uncertain. Owned gray moved from passing to uncertain
-  (679.83/native679.12µs,upper1.009); the adverse result remains, with no broader
-  nonregression claim. Native444 now passes; callerCMYK is a demonstrated gap.
+- **JPEG and reading:** [completed output storage](../benchmarks/JPEG-COMPLETED-OUTPUT.md)
+  saves **98.02µs/5.17% raw/5.11% normalized** on progressive grayscale; filtered/
+  allactual raw/normalized intervals separate. Current1797.74/native1711.60µs,
+  upper1.054 remains a gap. GC683,176→151,432B/op; governed gray peak699,834B and
+  retained output531,468B stay unchanged. Sequential default idle pixels rise
+  0→531,468B within the existing two-slot/4MiB pool; gray idlecoefficients stay
+  549,120B. Governed calls bypass both pools; physical/native peaks are unmeasured.
+  Twelve affected costs refresh and seventeen unchanged paths reuse evidence:
+  16pass/12gaps/1uncertain. Owned gray now passes (602.47/native681.27µs,upper.891);
+  stream420restart is uncertain (upper1.002); stop passing cases and resolve
+  uncertainty before tuning. Live444 remains an independent201.57µs gap.
+  [Paired AC windows](../benchmarks/JPEG-PAIRED-AC-WINDOW.md) retain earlier causal
+  RGB/CMYK gains, unchanged RGB1530.34/native1450.52µs upper1.065 and its574,069B
+  governed peak. Current scan tables/owner/cancellation contracts remain intact.
   Earlier [live windows](../benchmarks/JPEG-LIVE-ENTROPY-WINDOW.md),
   [publication](../benchmarks/JPEG-LIVE-NORMAL-PUBLICATION.md) and
   [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
@@ -154,7 +155,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,911 full/live checks per OS**, affected
+The current production build passes **5,924 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -241,14 +242,14 @@ settings do not establish matched quality.
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,197.48 | 19,178.63 | 0.949 / 0.954 | 2,437,660 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, forward-only output † | 17,856.45 | 18,591.70 | 0.960 / 0.966 | 2,437,692 | 968,216 / 968,216 |
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,825.68 | 18,080.22 | 0.931 / 0.941 | 882,212 | 210,973 / 210,973 |
-| JPEG baseline420, resident decode (confirmed pass) † | 929.80 | 1,012.30 | 0.918 / 0.924 | 790,211 | — |
+| JPEG baseline420, resident decode (confirmed pass) † | 829.94 | 1,009.76 | 0.822 / 0.829 | 258,450 | — |
 | JPEG DC-only, caller CMYK decode † | 337.97 | 332.25 | 1.017 / 1.019 | 1,085,977 | — |
 | VP8L RGBA8, resident decode † | 3,093.70 | 3,008.39 | 1.028 / 1.034 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 3,090.59 | 3,027.80 | 1.021 / 1.027 | 152,824 | — |
 | JPEG CMYK sparse-2D, resident decode † | 511.72 | 436.56 | 1.172 / 1.178 | 20,944 | — |
 | JPEG YCCK420, resident decode (confirmed pass) † | 428.14 | 706.85 | 0.606 / 0.608 | 895,563 | — |
-| JPEG 4:1:1, resident decode † | 521.14 | 448.78 | 1.161 / 1.180 | 751,315 | — |
-| JPEG 4:1:0, resident decode (confirmed pass) † | 363.99 | 506.96 | 0.718 / 0.731 | 720,854 | — |
+| JPEG 4:1:1, resident decode † | 493.78 | 448.75 | 1.100 / 1.110 | 219,548 | — |
+| JPEG 4:1:0, resident decode (confirmed pass) † | 339.51 | 505.41 | 0.672 / 0.678 | 189,090 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 107,919.76 | 121,030.61 | 0.892 / 0.901 | 7,341,808 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 104,422.47 | 120,958.63 | 0.863 / 0.876 | 7,342,192 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (confidence open) † | 1,654.09 | 1,635.82 | 1.011 / 1.026 | 309,524 | 52,091 / 52,093 |
@@ -257,9 +258,9 @@ settings do not establish matched quality.
 | JPEG dense CMYK, resident decode (confirmed pass) † | 1,390.69 | 3,111.67 | 0.447 / 0.450 | 20,944 | — |
 | JPEG horizontal-only CMYK, resident decode † | 453.31 | 392.03 | 1.156 / 1.162 | 20,944 | — |
 | JPEG YCCK420, caller RGB24 decode (confirmed pass) † | 435.42 | 604.87 | 0.720 / 0.722 | 762,721 | — |
-| JPEG progressive grayscale, resident decode † | 1,898.18 | 1,710.59 | 1.110 / 1.113 | 683,176 | — |
-| JPEG progressive420, resident decode (confirmed pass) † | 1,717.43 | 1,950.80 | 0.880 / 0.884 | 775,403 | — |
-| JPEG progressive422, resident decode (confirmed pass) † | 2,205.54 | 2,240.65 | 0.984 / 0.991 | 847,196 | — |
+| JPEG progressive grayscale, resident decode † | 1,797.74 | 1,711.60 | 1.050 / 1.054 | 151,432 | — |
+| JPEG progressive420, resident decode (confirmed pass) † | 1,600.87 | 1,949.71 | 0.821 / 0.824 | 243,664 | — |
+| JPEG progressive422, resident decode (confirmed pass) † | 2,089.26 | 2,248.06 | 0.929 / 0.934 | 315,496 | — |
 | JPEG ordinary progressive444, resident decode † | 3,490.94 | 3,355.24 | 1.040 / 1.049 | 169,664 | — |
 | JPEG progressive444, live-token resident decode † | 3,553.06 | 3,351.49 | 1.060 / 1.066 | 169,664 | — |
 

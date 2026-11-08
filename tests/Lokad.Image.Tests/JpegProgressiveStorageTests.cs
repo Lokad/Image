@@ -13,8 +13,24 @@ public sealed class JpegProgressiveStorageTests
     [InlineData(513, 259, false)]
     [InlineData(513, 259, true)]
     public void DirtyResultAndStripTailsMatchCallerSamplesWithoutSharingLiveStorage(int width, int height, bool rgb)
+        => VerifyDirtyResult(Input(width, height, rgb), width, height);
+
+    [Theory]
+    [InlineData("progressive-gray", 1, 1)]
+    [InlineData("progressive-gray", 17, 11)]
+    [InlineData("baseline-gray", 31, 23)]
+    [InlineData("progressive-420", 17, 11)]
+    [InlineData("progressive-422", 31, 23)]
+    [InlineData("rgb-422", 17, 11)]
+    [InlineData("rgb-420", 31, 23)]
+    [InlineData("quarter-411", 65, 19)]
+    [InlineData("quarter-410", 65, 19)]
+    public void CompletedPlaneWritersOverwriteDirtyPixelsAndKeepLiveResultsIndependent(string path, int width, int height)
+        => VerifyDirtyResult(CompletedInput(path, width, height), width, height);
+
+    private static void VerifyDirtyResult(byte[] data, int width, int height)
     {
-        var data = Input(width, height, rgb); var source = data.ToArray();
+        var source = data.ToArray();
         var expected = CallerPixels(data, width, height); var dirty = Poison(expected.Length);
         using var first = ImageCodec.Decode(data);
         Assert.True(first.Pixels.Overlaps(dirty));
@@ -34,19 +50,35 @@ public sealed class JpegProgressiveStorageTests
     [Theory]
     [InlineData(false)] [InlineData(true)]
     public async Task GovernedResultBypassesPoolAndPreservesRefusalCancellationAndAsyncSurvivors(bool rgb)
+        => await VerifyGovernedResult(Input(513, 259, rgb));
+
+    [Theory]
+    [InlineData("progressive-gray")]
+    [InlineData("progressive-420")]
+    [InlineData("progressive-422")]
+    [InlineData("quarter-410")]
+    public async Task CompletedPlaneAdmissionAndAsyncLifetimesBypassIdleStorage(string path)
+        => await VerifyGovernedResult(CompletedInput(path, 513, 259));
+
+    private static async Task VerifyGovernedResult(byte[] data)
     {
         const int width = 513, height = 259, outputBytes = width * height * 4;
-        var data = Input(width, height, rgb); var expected = CallerPixels(data, width, height);
-        var dirty = Poison(outputBytes); long outputGrowth;
-        using (var probe = new TestMemoryBudget(4 * 1024 * 1024))
+        var expected = CallerPixels(data, width, height);
+        var dirty = Poison(outputBytes);
+        long ProbeGrowth(CancellationToken token)
         {
-            using (var image = ImageCodec.Decode(data, new() { Limits = new() { MemoryBudget = probe } }))
+            using var probe = new TestMemoryBudget(4 * 1024 * 1024);
+            using (var image = ImageCodec.Decode(data, new() { Limits = new() { MemoryBudget = probe } }, token))
             {
                 Assert.False(image.Pixels.Overlaps(dirty)); Assert.Equal(outputBytes, probe.Bytes);
-                outputGrowth = probe.GrowthAttempts;
             }
-            Assert.Equal(0, probe.Bytes);
+            Assert.Equal(0, probe.Bytes); return probe.GrowthAttempts;
         }
+        var outputGrowth = ProbeGrowth(default);
+        // Ordinary baseline scans may prepare different lookup storage when
+        // cancellation is enabled. Target the actual mode's last admission.
+        using var probeCancellation = new CancellationTokenSource();
+        var cancelGrowth = ProbeGrowth(probeCancellation.Token);
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
         var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
         root.RefuseAtGrowth = outputGrowth;
@@ -56,7 +88,7 @@ public sealed class JpegProgressiveStorageTests
         Assert.Equal(0, root.Bytes); root.RefuseAtGrowth = 0;
 
         using var canceled = new CancellationTokenSource();
-        var stop = root.GrowthAttempts + outputGrowth;
+        var stop = root.GrowthAttempts + cancelGrowth;
         root.Admitted = _ => { if (root.GrowthAttempts == stop) canceled.Cancel(); };
         Assert.Equal(canceled.Token, Assert.Throws<OperationCanceledException>(() => ImageCodec.Decode(data, options, canceled.Token)).CancellationToken);
         Assert.Equal(0, root.Bytes); root.Admitted = null;
@@ -88,7 +120,24 @@ public sealed class JpegProgressiveStorageTests
     private static byte[] Input(int width, int height, bool rgb)
     {
         var data = AuthoredJpeg.ProgressiveFrame(width, height, JpegSampling.YCbCr444, restartInterval: 3);
-        if (!rgb) return data;
+        return rgb ? AdobeRgb(data) : data;
+    }
+
+    private static byte[] CompletedInput(string path, int width, int height) => path switch
+    {
+        "progressive-gray" => AuthoredJpeg.ProgressiveFrame(width, height, JpegSampling.Grayscale, restartInterval: 3),
+        "baseline-gray" => AuthoredJpeg.SequentialFrame(width, height, JpegSampling.Grayscale, restartInterval: 3),
+        "progressive-420" => AuthoredJpeg.ProgressiveFrame(width, height, JpegSampling.YCbCr420, restartInterval: 3),
+        "progressive-422" => AuthoredJpeg.ProgressiveFrame(width, height, JpegSampling.YCbCr422, restartInterval: 3),
+        "rgb-422" => AdobeRgb(AuthoredJpeg.SequentialFrame(width, height, JpegSampling.YCbCr422, restartInterval: 3)),
+        "rgb-420" => AdobeRgb(AuthoredJpeg.SequentialFrame(width, height, JpegSampling.YCbCr420, restartInterval: 3)),
+        "quarter-411" => AuthoredJpegCompatibility.Create(width, height, [123, 97, 155], h: 4, v: 1, vary: true, nonzeroAc: true),
+        "quarter-410" => AuthoredJpegCompatibility.Create(width, height, [123, 97, 155], h: 4, v: 2, vary: true, nonzeroAc: true),
+        _ => throw new ArgumentOutOfRangeException(nameof(path))
+    };
+
+    private static byte[] AdobeRgb(byte[] data)
+    {
         byte[] adobe = [255, 238, 0, 14, 65, 100, 111, 98, 101, 0, 100, 0, 0, 0, 0, 0];
         return data[..^2].Concat(adobe).Concat(new byte[] { 255, 217 }).ToArray();
     }

@@ -711,7 +711,8 @@ internal ref partial struct JpegDecoder
             && components[2].H == maxH && components[2].V == maxV)
             return RenderProgressiveFullResolution();
         MaterializeSamplePlanes();
-        var result = ImageBuffer.Allocate(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
+        // Every writer below fills all visible RGBA samples before publication.
+        var result = ImageBuffer.AllocateForOverwrite(info.Width, info.Height, 8, context); result.Orientation = info.Orientation;
         try
         {
             var horizontalRgb422 = components.Length == 3 && rgb

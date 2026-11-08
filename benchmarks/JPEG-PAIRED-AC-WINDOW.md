@@ -1,5 +1,9 @@
 # Paired JPEG AC windows
 
+Twelve completed-plane costs are superseded by
+[completed output storage](JPEG-COMPLETED-OUTPUT.md). Seventeen unchanged controls
+and the paired gains below remain valid.
+
 JGA556–JPE562, 2026-11-08. Accepted scoped decoder improvement; all 283 required
 paths and the warm parity objective remain open.
 [Evidence](jpeg-paired-ac-window-evidence.json) owns all 29 current JPEG read costs.
