@@ -30,6 +30,11 @@ related work. Their adverse implementations remain useful evidence, not permanen
 family bans. `DirectRgb444` is owned RGB-encoded-image decoding, distinct from the
 passing caller-sample RGB boundary. No passing or uncertain case is a tuning target.
 
+Later [bounded input preparation](JPEG-PREPARED-INPUT-EXPERIMENT.md) and
+[immutable scan-order data](JPEG-IMMUTABLE-MAP-EXPERIMENT.md) have no useful complete
+point gain. Both are restored byte for byte; this capture remains source-valid.
+Retain their allocation costs and inconclusive bounds without replaying them.
+
 [Current evidence](jpeg-paired-current-attribution-evidence.json) pins sources,
 producer, exact receipt, JIT/map/trace and guards. Mirrored/member-verified raw
 `jpeg-paired-current-attribution-jcp600.tar.xz`, SHA256
