@@ -1,0 +1,629 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JIA543/JRP544/JRI545",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "stages": {
+    "A": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "JRP544",
+        "paths": [
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs"
+        ],
+        "originalAbsent": [],
+        "baseline": {
+          "windowsSha256": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+          "linuxSha256": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d"
+        },
+        "hypothesis": "JBA530sourcevalid394InverseAvx2samples and independentJIA5436630block model:23519alignedACrowpairs cover96.12percentof48937ACrows. Current256bitrowkernels repeat dot-pair weight preparation/execution. A512bitrowpair computes two independent output rows through identical word/int32matrix arithmetic; no cross-block staging needed.",
+        "endState": "Only adjacent evenaligned rows withAC onboth andAVX512F/BW use one paired matrix. Reuse existingRow01/23/45/67vectors, original64wordinput/rows; no additionalarray/staticcache/owner/API. ExistingDC/singleAVX2/scalar rows and entirecolumnpass unchanged. One sharedactualRowPairProduct combines independent halves; no generic pixel abstraction.",
+        "correctness": "Each512bithalf exactlymatches original row:shortpair loads, signedMultiplyAddAdjacent, moduloInt32sum with1024bias, arithmeticshift11, signedword saturation. Preserve originaldequantization/clampedDC+1024/signedword columnbias/reflections/packing, everypoll/validation/failure and ownership. Existing640basis/2048densefull-domain/32extreme frozenindependentscalaroracles plusnativeimages prove actualInverse, normal/scalar bothOS; no mirrorednewtests.",
+        "eligibility": {
+          "project": "Lokad.Image",
+          "stage": "JIA543",
+          "productionChanged": false,
+          "allBuilds": 0,
+          "performanceMeasured": false,
+          "diagnosticModelOnly": true,
+          "inputPath": "tmp/jar509-direct-rgb-input.jpg",
+          "inputBytes": 133057,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+          "geometry": {
+            "width": 513,
+            "height": 259,
+            "mcuColumns": 65,
+            "mcuRows": 17,
+            "mcus": 1105,
+            "frame": {
+              "82": {
+                "h": 1,
+                "v": 2,
+                "q": 0
+              },
+              "71": {
+                "h": 1,
+                "v": 2,
+                "q": 0
+              },
+              "66": {
+                "h": 1,
+                "v": 2,
+                "q": 0
+              }
+            }
+          },
+          "counts": {
+            "blocks": 6630,
+            "fullRowsBlocks": 6433,
+            "existingRowVisits": 51852,
+            "existingAcRowTransforms": 48937,
+            "rowPairsbothAc": 23519,
+            "rowPairssecondAcOnly": 911,
+            "rowPairsfirstAcOnly": 988,
+            "rowPairsbothDc": 508,
+            "twoLowRowsBlocks": 194,
+            "globalDcOnlyBlocks": 3
+          },
+          "components": {
+            "82": {
+              "blocks": 2210,
+              "existingRowVisits": 17282,
+              "existingAcRowTransforms": 16461,
+              "rowPairsbothAc": 7991,
+              "rowPairsfirstAcOnly": 265,
+              "rowPairssecondAcOnly": 214,
+              "rowPairsbothDc": 171,
+              "globalDcOnlyBlocks": 1
+            },
+            "71": {
+              "blocks": 2210,
+              "existingRowVisits": 17288,
+              "existingAcRowTransforms": 15958,
+              "rowPairsbothAc": 7493,
+              "rowPairssecondAcOnly": 434,
+              "rowPairsfirstAcOnly": 538,
+              "rowPairsbothDc": 179,
+              "globalDcOnlyBlocks": 1
+            },
+            "66": {
+              "blocks": 2210,
+              "existingRowVisits": 17282,
+              "existingAcRowTransforms": 16518,
+              "rowPairsbothAc": 8035,
+              "rowPairsfirstAcOnly": 185,
+              "rowPairssecondAcOnly": 263,
+              "rowPairsbothDc": 158,
+              "globalDcOnlyBlocks": 1
+            }
+          },
+          "eligibleRowPairPositions": {
+            "0": 6149,
+            "2": 6014,
+            "4": 5997,
+            "6": 5359
+          },
+          "eligibleAcRowFraction": 0.9611950058238143,
+          "finalLogicalCursor": 133055,
+          "finalPendingBits": 1,
+          "entropyPhysicalBytes": 132708,
+          "entropyStuffedBytes": 368,
+          "finalPaddingAndEoiVerified": true,
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed"
+          },
+          "scope": "Existing frozen DirectRgb444 only. Independent canonical baseline entropy/dequantization and current inverse dispatch eligibility, no fast-table/lookahead model, runtime instrumentation, new fixture or elapsed claim. Finalpadding/EOI and exact6630blocks/1105MCUsverified. Counts do not establish CPUgain or general content distribution.",
+          "next": "Assess whether two independent ACrow transforms can share a512bit matrix execution without new ownedcapacity. Preserve each Int32dot-sum wrap, shift/saturation, signedwordDCbias and column pass; existing sparse/AVX2/scalar paths remain. A materially revised512bit stage needs complete-operation evidence; avoid cross-blockbuffer/quotas or fixedfixture shortcuts."
+        },
+        "workloads": [
+          "DirectRgb444",
+          "CmykAdobeSparse2D"
+        ],
+        "storage": "Same256Bexplicit input/rowsstackarrays, original64byte outputborrowed. No newownedcapacity/admission/retention. Additionalvectorregister/minorcallstate only; do not infer physicalpeak orCPU fromcounts.",
+        "temporaryTradeoffs": "Wider vectorassembly/calls and extraadjacentACcheck can outweigh sharedmath; AVX512clock/ISA costs needcompleteoperationmeasurement. Preserve currentAVX2/scalar/DCfallbackbody; no fixedfixture dispatch/precisionpolicy change. No automatic acceptance from96percent eligibility.",
+        "workflow": "One immutable main/embedded perOS, reuse unchangedpublic/harness/native/selectors/fixtures andqualification. FocusedJPEGnormal/scalar, shortcompleteRGBandexistingsparsegeneralization. Independentcontemporaryconfirmationifpromising; acceptedglobalinverse changes refresh onlyexistingdecodepaths that invokeInverse, codingvalidation skipsit. FullWindows/Linux/live/scalar/SAMEactualpackage onceatcoherentacceptedstage. Preserveadverse/currentoriginals; newbenchmarkgridnotneeded."
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "JRP544",
+        "sources": {
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "15cf16076eae0a41b2a3f4d495000fd69fd10fe1dace0cbc5a0f9832adb755ad"
+        },
+        "wholeFileOutsideGuardAndPairedRowKernelExact": true,
+        "dequantizationDcGlobalSparsityOriginalAvx2ScalarAndEntireColumnPassExact": true,
+        "allValidationPerBlockPollsAdmissionOwnershipFailureAndOutputContractsExact": true,
+        "newOwnedCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "newStaticCapacityBytes": 0,
+        "stackInputRowsBytes": 256,
+        "eligibility": "Evenaligned adjacentrows, both containAC, within currentrowCount2or8 andAVX512F/BW. JIA543model23519pairs/96.12percentofACrowsonfrozenRGB444; productioncountandgainnotmeasured.",
+        "arithmeticProof": "512bitintegerMADD adjacent shortpairs has independent128/256halves; lower256 duplicates original firstrowRowProduct, upper256 secondrow. Duplicated existingRow01/23/45/67weights,1024bias, four moduloInt32sums and arithmeticshift11 match each original row. Separately signed-saturating8values/16Bstores preserve rowordering. No crossrow arithmetic, new constanttable or changedquantization/bias/columns.",
+        "tests": "Reuse actualInverse independent640basis+2048densefullInt32coeff/UInt16quantizer+32extreme frozen scalar hashes, originalnormalSIMDnativefixtures and header/sampling/caller/publicownership corpus, normal/scalar bothOS. No newtests mirroring helpers."
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+          "candidateSha256": "001187f4120941699957ceca56584084db1e67294bd315261fd9517fe5ef76a4",
+          "internalTestAssemblySha256": "927fc3e5a4eb263e906644ddd9a423103a92d93fa07ed3893f49fb0fdda31ccc",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "15cf16076eae0a41b2a3f4d495000fd69fd10fe1dace0cbc5a0f9832adb755ad"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d",
+          "candidateSha256": "9ecff199bf9cdb932619ab6a4eebb0530db12d10fae7a2d986c606d888469599",
+          "internalTestAssemblySha256": "568c13a53a2b66a85aeb057d238774431a9ab0ddbd06c0518b021131ef122a9e",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "15cf16076eae0a41b2a3f4d495000fd69fd10fe1dace0cbc5a0f9832adb755ad"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "DirectRgb444": {
+          "runId": "jrp544-candidate-DirectRgb444-short",
+          "managedUs": 1712.8902565104167,
+          "nativeUs": 1451.0042135416668,
+          "ratio": 1.180486066494272,
+          "lower": 0.9977190986958983,
+          "upper": 1.3753475592429965,
+          "allocatedBytes": 10088,
+          "packetBytes": 531468,
+          "packetSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+          "librarySha256": "9ecff199bf9cdb932619ab6a4eebb0530db12d10fae7a2d986c606d888469599",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729"
+        }
+      }
+    },
+    "B": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "JRI545",
+        "paths": [
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs"
+        ],
+        "originalAbsent": [],
+        "baseline": {
+          "windowsSha256": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+          "linuxSha256": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d"
+        },
+        "hypothesis": "JRP544correct401internal375publicnormal/scalar bothOS. CompleteRGBshort1712.89us unpromising. ActualInverseAvx21976B/frame248 calls576BInverseRowPair inside hotloop; repeated call/argument handoff undermines intended sharedmatrixexecution. CoherentBrequestsInlining of actualpairedkernel, same arithmetic/capacity/owners. Codegen/rowcounts are leads, not gain proof.",
+        "endState": "One inlined actual rowpair execution using originaltwoindependentmatrixhalves. Only MethodImplAggressiveInlining on actualhelper changes fromA; fallback/columns/dequant/taps/polls/ownership unchanged. No duplicatekernel or generalabstraction/cache.",
+        "correctness": "Each512bithalf exactlymatches original row:shortpair loads, signedMultiplyAddAdjacent, moduloInt32sum with1024bias, arithmeticshift11, signedword saturation. Preserve originaldequantization/clampedDC+1024/signedword columnbias/reflections/packing, everypoll/validation/failure and ownership. Existing640basis/2048densefull-domain/32extreme frozenindependentscalaroracles plusnativeimages prove actualInverse, normal/scalar bothOS; no mirrorednewtests.",
+        "eligibility": {
+          "project": "Lokad.Image",
+          "stage": "JIA543",
+          "productionChanged": false,
+          "allBuilds": 0,
+          "performanceMeasured": false,
+          "diagnosticModelOnly": true,
+          "inputPath": "tmp/jar509-direct-rgb-input.jpg",
+          "inputBytes": 133057,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+          "geometry": {
+            "width": 513,
+            "height": 259,
+            "mcuColumns": 65,
+            "mcuRows": 17,
+            "mcus": 1105,
+            "frame": {
+              "82": {
+                "h": 1,
+                "v": 2,
+                "q": 0
+              },
+              "71": {
+                "h": 1,
+                "v": 2,
+                "q": 0
+              },
+              "66": {
+                "h": 1,
+                "v": 2,
+                "q": 0
+              }
+            }
+          },
+          "counts": {
+            "blocks": 6630,
+            "fullRowsBlocks": 6433,
+            "existingRowVisits": 51852,
+            "existingAcRowTransforms": 48937,
+            "rowPairsbothAc": 23519,
+            "rowPairssecondAcOnly": 911,
+            "rowPairsfirstAcOnly": 988,
+            "rowPairsbothDc": 508,
+            "twoLowRowsBlocks": 194,
+            "globalDcOnlyBlocks": 3
+          },
+          "components": {
+            "82": {
+              "blocks": 2210,
+              "existingRowVisits": 17282,
+              "existingAcRowTransforms": 16461,
+              "rowPairsbothAc": 7991,
+              "rowPairsfirstAcOnly": 265,
+              "rowPairssecondAcOnly": 214,
+              "rowPairsbothDc": 171,
+              "globalDcOnlyBlocks": 1
+            },
+            "71": {
+              "blocks": 2210,
+              "existingRowVisits": 17288,
+              "existingAcRowTransforms": 15958,
+              "rowPairsbothAc": 7493,
+              "rowPairssecondAcOnly": 434,
+              "rowPairsfirstAcOnly": 538,
+              "rowPairsbothDc": 179,
+              "globalDcOnlyBlocks": 1
+            },
+            "66": {
+              "blocks": 2210,
+              "existingRowVisits": 17282,
+              "existingAcRowTransforms": 16518,
+              "rowPairsbothAc": 8035,
+              "rowPairsfirstAcOnly": 185,
+              "rowPairssecondAcOnly": 263,
+              "rowPairsbothDc": 158,
+              "globalDcOnlyBlocks": 1
+            }
+          },
+          "eligibleRowPairPositions": {
+            "0": 6149,
+            "2": 6014,
+            "4": 5997,
+            "6": 5359
+          },
+          "eligibleAcRowFraction": 0.9611950058238143,
+          "finalLogicalCursor": 133055,
+          "finalPendingBits": 1,
+          "entropyPhysicalBytes": 132708,
+          "entropyStuffedBytes": 368,
+          "finalPaddingAndEoiVerified": true,
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379",
+            "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed"
+          },
+          "scope": "Existing frozen DirectRgb444 only. Independent canonical baseline entropy/dequantization and current inverse dispatch eligibility, no fast-table/lookahead model, runtime instrumentation, new fixture or elapsed claim. Finalpadding/EOI and exact6630blocks/1105MCUsverified. Counts do not establish CPUgain or general content distribution.",
+          "next": "Assess whether two independent ACrow transforms can share a512bit matrix execution without new ownedcapacity. Preserve each Int32dot-sum wrap, shift/saturation, signedwordDCbias and column pass; existing sparse/AVX2/scalar paths remain. A materially revised512bit stage needs complete-operation evidence; avoid cross-blockbuffer/quotas or fixedfixture shortcuts."
+        },
+        "workloads": [
+          "DirectRgb444",
+          "CmykAdobeSparse2D"
+        ],
+        "storage": "Same256Bexplicit input/rowsstackarrays, original64byte outputborrowed. No newownedcapacity/admission/retention. Additionalvectorregister/minorcallstate only; do not infer physicalpeak orCPU fromcounts.",
+        "temporaryTradeoffs": "Inlinecanincrease parentcode/registerpressure andmaynotmaterialize. JudgecompleteRGBandexistingsparseboundary, notcalls/framealone. RetainAmodules/source/JIT/short; no favorableAmeasurementrepeat.",
+        "workflow": "One immutable main/embedded perOS, reuse unchangedpublic/harness/native/selectors/fixtures andqualification. FocusedJPEGnormal/scalar, shortcompleteRGBandexistingsparsegeneralization. Independentcontemporaryconfirmationifpromising; acceptedglobalinverse changes refresh onlyexistingdecodepaths that invokeInverse, codingvalidation skipsit. FullWindows/Linux/live/scalar/SAMEactualpackage onceatcoherentacceptedstage. Preserveadverse/currentoriginals; newbenchmarkgridnotneeded.",
+        "previousCandidate": {
+          "windowsSha256": "001187f4120941699957ceca56584084db1e67294bd315261fd9517fe5ef76a4",
+          "linuxSha256": "9ecff199bf9cdb932619ab6a4eebb0530db12d10fae7a2d986c606d888469599"
+        }
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "JRI545",
+        "sources": {
+          "src/Lokad.Image/Internal/JpegInverseTransform.cs": "32ce6f1cfcb362b53376a6d25861cfd0f6c812140f636ad6db709b6823f595df"
+        },
+        "wholeFileOutsideGuardAndPairedRowKernelExact": true,
+        "dequantizationDcGlobalSparsityOriginalAvx2ScalarAndEntireColumnPassExact": true,
+        "allValidationPerBlockPollsAdmissionOwnershipFailureAndOutputContractsExact": true,
+        "newOwnedCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "newStaticCapacityBytes": 0,
+        "stackInputRowsBytes": 256,
+        "eligibility": "Evenaligned adjacentrows, both containAC, within currentrowCount2or8 andAVX512F/BW. JIA543model23519pairs/96.12percentofACrowsonfrozenRGB444; productioncountandgainnotmeasured.",
+        "arithmeticProof": "512bitintegerMADD adjacent shortpairs has independent128/256halves; lower256 duplicates original firstrowRowProduct, upper256 secondrow. Duplicated existingRow01/23/45/67weights,1024bias, four moduloInt32sums and arithmeticshift11 match each original row. Separately signed-saturating8values/16Bstores preserve rowordering. No crossrow arithmetic, new constanttable or changedquantization/bias/columns.",
+        "tests": "Reuse actualInverse independent640basis+2048densefullInt32coeff/UInt16quantizer+32extreme frozen scalar hashes, originalnormalSIMDnativefixtures and header/sampling/caller/publicownership corpus, normal/scalar bothOS. No newtests mirroring helpers.",
+        "stageAProof": "tmp/jrp544-source-proof.json",
+        "wholeFileAndAllBodiesExactToStageAExceptInlineAttribute": true,
+        "note": "Actualpairedhelper onlyrequestsInlining. Attribute is a codegen hint, no acceptance proof. Sameexactarithmetic, guards, capacity, callers, fallback, columnpass and allchecks; original640basis/dense/extremeoracles reused."
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+          "candidateSha256": "3df52c6eaada1812e253c797f3f9a7bbc8cf14de7550e1b8ce97d36589d0ab6a",
+          "internalTestAssemblySha256": "b5ea58f7194ee2804dc0e7d23a7a6489df67670d69d359a46d87210bec161eef",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "32ce6f1cfcb362b53376a6d25861cfd0f6c812140f636ad6db709b6823f595df"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d",
+          "candidateSha256": "1c168102c13e642891606bb8aacf7eeaafeea9ecf4bde6b75988855c2c6bd3e7",
+          "internalTestAssemblySha256": "8f619712fbddb42fd618a2db6a344c3566fc956b470eb8bfa616154f64b2b13c",
+          "focused": {
+            "internal-normal": 401,
+            "internal-scalar": 401,
+            "public-normal": 375,
+            "public-scalar": 375
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/JpegInverseTransform.cs": "32ce6f1cfcb362b53376a6d25861cfd0f6c812140f636ad6db709b6823f595df"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "DirectRgb444": {
+          "runId": "jri545-candidate-DirectRgb444-short",
+          "managedUs": 1734.0299309895834,
+          "nativeUs": 1450.1855677083333,
+          "ratio": 1.1957296842567515,
+          "lower": 0.7784088389109479,
+          "upper": 1.6265498933097664,
+          "allocatedBytes": 10088,
+          "packetBytes": 531468,
+          "packetSha256": "b13fa169ad04f9181c49cd5613f4d7483b1cd3650d8b63528a2474a7ce5bd369",
+          "librarySha256": "1c168102c13e642891606bb8aacf7eeaafeea9ecf4bde6b75988855c2c6bd3e7",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729"
+        }
+      }
+    }
+  },
+  "eligibilityModel": {
+    "project": "Lokad.Image",
+    "stage": "JIA543",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "performanceMeasured": false,
+    "diagnosticModelOnly": true,
+    "inputPath": "tmp/jar509-direct-rgb-input.jpg",
+    "inputBytes": 133057,
+    "inputSha256": "63ea38365b2fc9db4a759b86e199a8e5681d38369dff289559a0b4ae4ac91729",
+    "geometry": {
+      "width": 513,
+      "height": 259,
+      "mcuColumns": 65,
+      "mcuRows": 17,
+      "mcus": 1105,
+      "frame": {
+        "82": {
+          "h": 1,
+          "v": 2,
+          "q": 0
+        },
+        "71": {
+          "h": 1,
+          "v": 2,
+          "q": 0
+        },
+        "66": {
+          "h": 1,
+          "v": 2,
+          "q": 0
+        }
+      }
+    },
+    "counts": {
+      "blocks": 6630,
+      "fullRowsBlocks": 6433,
+      "existingRowVisits": 51852,
+      "existingAcRowTransforms": 48937,
+      "rowPairsbothAc": 23519,
+      "rowPairssecondAcOnly": 911,
+      "rowPairsfirstAcOnly": 988,
+      "rowPairsbothDc": 508,
+      "twoLowRowsBlocks": 194,
+      "globalDcOnlyBlocks": 3
+    },
+    "components": {
+      "82": {
+        "blocks": 2210,
+        "existingRowVisits": 17282,
+        "existingAcRowTransforms": 16461,
+        "rowPairsbothAc": 7991,
+        "rowPairsfirstAcOnly": 265,
+        "rowPairssecondAcOnly": 214,
+        "rowPairsbothDc": 171,
+        "globalDcOnlyBlocks": 1
+      },
+      "71": {
+        "blocks": 2210,
+        "existingRowVisits": 17288,
+        "existingAcRowTransforms": 15958,
+        "rowPairsbothAc": 7493,
+        "rowPairssecondAcOnly": 434,
+        "rowPairsfirstAcOnly": 538,
+        "rowPairsbothDc": 179,
+        "globalDcOnlyBlocks": 1
+      },
+      "66": {
+        "blocks": 2210,
+        "existingRowVisits": 17282,
+        "existingAcRowTransforms": 16518,
+        "rowPairsbothAc": 8035,
+        "rowPairsfirstAcOnly": 185,
+        "rowPairssecondAcOnly": 263,
+        "rowPairsbothDc": 158,
+        "globalDcOnlyBlocks": 1
+      }
+    },
+    "eligibleRowPairPositions": {
+      "0": 6149,
+      "2": 6014,
+      "4": 5997,
+      "6": 5359
+    },
+    "eligibleAcRowFraction": 0.9611950058238143,
+    "finalLogicalCursor": 133055,
+    "finalPendingBits": 1,
+    "entropyPhysicalBytes": 132708,
+    "entropyStuffedBytes": 368,
+    "finalPaddingAndEoiVerified": true,
+    "sources": {
+      "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379",
+      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "4b2451d49965a78d0c961e9cdcb9424961b6711137eec2e10da6a7d971eda1ed"
+    },
+    "scope": "Existing frozen DirectRgb444 only. Independent canonical baseline entropy/dequantization and current inverse dispatch eligibility, no fast-table/lookahead model, runtime instrumentation, new fixture or elapsed claim. Finalpadding/EOI and exact6630blocks/1105MCUsverified. Counts do not establish CPUgain or general content distribution.",
+    "next": "Assess whether two independent ACrow transforms can share a512bit matrix execution without new ownedcapacity. Preserve each Int32dot-sum wrap, shift/saturation, signedwordDCbias and column pass; existing sparse/AVX2/scalar paths remain. A materially revised512bit stage needs complete-operation evidence; avoid cross-blockbuffer/quotas or fixedfixture shortcuts."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "a70b576699963b68c07967a0d46499bb59f56d42f1a37aeb1c04d66004095e2d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "dcdbfb9dcd55cbbd8dc7fc5a89c242498bb74d8b2fd6bcc1486eb6dc40b74070",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "16ae985952e43fa9555f2097ee8730e52e8fc1e5331391f6b06e027cca6e46c0"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "a70b576699963b68c07967a0d46499bb59f56d42f1a37aeb1c04d66004095e2d",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "a70b576699963b68c07967a0d46499bb59f56d42f1a37aeb1c04d66004095e2d",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "a70b576699963b68c07967a0d46499bb59f56d42f1a37aeb1c04d66004095e2d",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "packageSha256": "5a7cd5db03813ec219ba1e03f76dde024be859fba4849b66fd1cb361ad3061d6",
+      "productionSha256": "e6bc25c6f307236291d80a3a1fb0feae51f970853c9da4af12b86413766b546c",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "WAF542: 5877 full/live and25 internal/402 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379",
+        "tmp/benchmark-source.json": "f4eee5f1f2412e64772660f8120e35be3df6236e9603d804c8cada9cb2108718",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "875e9c6a60213b29d9481cf31ac4c95655d5d40df82d96d9c82c54a88db2b875",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "1738d0bc2d200ea946cd9e791b7232b9618a12d96fc2e98ba043228fa6002980",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "beaa1a2cec3f100b71778d4c9aa3b2d941194843f11559b656530c7d8e7998fb"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "875e9c6a60213b29d9481cf31ac4c95655d5d40df82d96d9c82c54a88db2b875",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "875e9c6a60213b29d9481cf31ac4c95655d5d40df82d96d9c82c54a88db2b875",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "875e9c6a60213b29d9481cf31ac4c95655d5d40df82d96d9c82c54a88db2b875",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795"
+      },
+      "packageSha256": "5a7cd5db03813ec219ba1e03f76dde024be859fba4849b66fd1cb361ad3061d6",
+      "productionSha256": "589a9034f78d9e896bc74c528d99860ffb5f7ba4ea9d4368a39d549a78f4df7d",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "WAF542: 5877 full/live and25 internal/402 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    }
+  },
+  "jit": {
+    "stageAInverseCodeBytes": 1976,
+    "stageAReportedLocalFrameBytes": 248,
+    "stageAPairedCodeBytes": 576,
+    "stageAPairedCallInsideLoop": true,
+    "stageBInverseCodeBytes": 2585,
+    "stageBReportedLocalFrameBytes": 808,
+    "stageBPairedCallInsideLoop": false,
+    "note": "Actual productionJIT from two existing fullyqualifiedpublicsync/async/ownership checks eachstage, no builds/performanceclaims. Bmaterializes intended inlined matrix but largerframe. Staticcode/rowcounts/callremoval are not elapsed orphysicalpeakproof."
+  },
+  "decision": "Unselected. Correct512bittwo-independent-rowmatrix stageA screens1712.89us/native1451.00, unpromising. Actualpairedcall motivatesBInlining; B removescall butgrowsframe808B and screens1734.03/native1450.19us, also unpromising. No causal gain/loss/equivalence or independentconfirmation/favorable repeat/workloadexpansion/broad/package runs. RestoreexactWAF542qualifiedsources/main/embedded/bindings, actual5a7cd5dbpackageunchanged. These implementation/codegen results are not a permanentSIMD/inversefamilyban; another variant needs new evidence.",
+  "storage": {
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "newStaticCapacityBytes": 0,
+    "originalInputRowsStackBytes": 256,
+    "admittedPhysicalNativePeaksRemeasured": false,
+    "note": "Two halves use existing64wordinput/rows and originalformatweights. Extra register/call/spill state is visible in JIT frame; explicitarrays/frame are not additivephysicalpeakcounts. CompleteGC10088Bop unchanged. No newowner/buffer/pool/session/API or crossblockstaging."
+  },
+  "workflow": {
+    "coreEmbeddedVersionsEachOs": 2,
+    "focusedInternalEachModeStage": 401,
+    "focusedPublicEachModeStage": 375,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "newTests": 0,
+    "shortControlsEachStage": 1,
+    "actualsEachShort": 3,
+    "targetedJitChecksEachStage": 2,
+    "independentConfirmationRuns": 0,
+    "newBroadQualificationRuns": 0,
+    "newPackageRuns": 0,
+    "restoreBuilds": 0,
+    "displayedCostsChanged": 0,
+    "completedJobsRepeated": 0
+  },
+  "boundary": "OriginalDirectRgb444133057Bpacket63ea3836; completepublicdecode/parse/preparation/entropy/dequantization/IDCT/color/independent531468BRGBAoutput/disposal. Exactpixels/native/source/ownership/settings/idle-v2singleCPU gates retained. Independentmodelcounts23519alignedpairs/96.12percentACrowsandfinalEOI; not runtime instrumentation, CPUtime or generalcontent proof. No qualitysearch/newfixture.",
+  "next": "Inspect current liveJPEG DC/AC preparation and source-valid attributed call boundaries before another transform variant. Context.Cancellation is already captured in hotAC/refinement loops; do not propose its capture as newly removed per-bit overhead. Investigate any genuinely repeated cross-boundary setup only after current source/JIT evidence. Preserve all polls, exact normal/failure cursor and public cleanup; no guessed speedup.",
+  "raw": {
+    "file": "jpeg-paired-inverse-rows-experiment.tar.xz",
+    "sha256": "f9be869a3f2f849008f9ae877070c543aaae5e870e0d9ed7f110b6df7248e7b2",
+    "bytes": 13692696,
+    "members": 234,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "webp-horizontal-alpha-publication-qualified.tar.xz",
+        "sha256": "cfbfd93f72c02d9094452726314d8268d493719efe2d281e276ba1834516b9fe"
+      },
+      {
+        "file": "jpeg-current-entropy-attribution.tar.xz",
+        "sha256": "f915afc6cb8774e4bb9ae35ab34158cab20a37a924a9844085decd8bbaeaf2d0"
+      }
+    ]
+  }
+}
