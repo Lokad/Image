@@ -917,9 +917,9 @@ def render():
                        f'{min(b["mean"] for b in observation["nativeBrackets"]) / 1000:,.2f} | '
                        f'{observation["worstBracketRatio"]:.3f} / {observation["conservativeRatioUpper"]:.3f} | '
                        f'{observation["managedMemory"]["BytesAllocatedPerOperation"]:,} |')
-    mixed_byte_current = json.loads((ROOT / 'benchmarks/bicubic-mixed-byte-current-evidence.json').read_text(encoding='utf-8'))
+    byte_bands = json.loads((ROOT / 'benchmarks/bicubic-byte-result-bands-evidence.json').read_text(encoding='utf-8'))
     result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
-    for depth, current in [(8, mixed_byte_current['current']), (16, result_bands['cases']['TightMixed16'])]:
+    for depth, current in [(8, byte_bands['cases']['TightMixed8']), (16, result_bands['cases']['TightMixed16'])]:
         rows.append(('editing', f'| Bicubic RGBA{depth}, width up / height down, input+output+4 KiB † → 1027×129 | '
                      f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                      f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} |'))
@@ -1564,28 +1564,35 @@ def render():
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
                          *(row for kind, row in rows if kind == 'codec')])
-    editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_labels = ['Probe PNG dimensions, seekable', 'Probe JPEG dimensions, seekable',
                    'Probe WebP dimensions, seekable', 'Probe JPEG dimensions, async nonseekable',
                    'Validate PNG8, span', 'Validate PNG16, span', 'Validate indexed Adam7 19×17, span',
                    'Validate JPEG baseline420, span', 'Validate JPEG progressive420, span',
                    'Validate VP8L+alpha, span', 'Validate VP8+alpha, span',
                    'Validate PNG16, async nonseekable']
-    assert not mixed_byte_current['productionChanged'] and mixed_byte_current['allBuilds'] == 0
-    assert mixed_byte_current['raw']['mirrored'] and mixed_byte_current['raw']['allMembersVerified']
-    current = mixed_byte_current['current']
-    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-    assert current['managedRationalReferenceExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-    assert current['sourceUnchanged'] and current['independentOwnedOutput']
-    assert current['status'] == 'gap' and current['lower'] > 1
-    assert current['librarySha256'] == mixed_byte_current['actualPackage']['librarySha256']
-    assert mixed_byte_current['actualPackage']['sha256'] == prepared_model['qualification']['actualPackage']['sha256']
+    assert byte_bands['productionAccepted'] and byte_bands['requiredMaterialPaths'] == 283
+    assert byte_bands['raw']['mirrored'] and byte_bands['raw']['allMembersVerified']
+    assert set(byte_bands['cases']) == {'Mixed8', 'TightMixed8', 'TightVertical8'}
+    bq = byte_bands['qualification']
+    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5964
+    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
+    assert bq['packageByteBandsBothOs'] and bq['allThreeExamplesBothOs']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in byte_bands['comparison']['views'].values())
+    for current in byte_bands['cases'].values():
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['managedQualifiedOriginalPixelsExact'] and current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['certifiedExactRationalAlphaHalves'] == 25 if current['caseId'] == 'TightVertical8' else current['managedRationalReferenceExact']
+        assert current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['librarySha256'] == bq['actualPackage']['librarySha256'] == byte_bands['producers']['windowsSha256']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    current = byte_bands['cases']['TightMixed8']
     label = 'Bicubic RGBA8, width up / height down, input+output+4 KiB'
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
     assert len(positions) == 1
     rows[positions[0]] = ('editing', f'| {label} † → 1027×129 | '
         f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
         f'{current["allocatedBytes"]:,} |')
+    editing = '\n'.join([header, separator, *(row for kind, row in rows if kind == 'editing')])
     read_rows = []
     refreshed_png_reads = set()
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
@@ -1774,12 +1781,18 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Current tight mixed-byte](../benchmarks/BICUBIC-MIXED-BYTE-CURRENT.md)
-  refreshes the historical point using the same qualified actual package DLL:
-  {mixed_byte_current['current']['managedUs']:.2f}/zimg{mixed_byte_current['current']['nativeUs']:.2f}µs,
-  upper{mixed_byte_current['current']['upper']:.3f},114B/op; about459.57µs gap.
-  Exact rational pixels and original complete boundaries remain. No production,
-  build, test, package or fixture changes; previous qualification is reused.
+- **Resizing:** [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
+  reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
+  with separated filtered/all-actual raw/normalized confidence. Current exact
+  package DLL: default/tight mixed960.04/980.90µs, uppers1.116/1.142 remain gaps;
+  vertical503.50/zimg587.18µs upper.862 passes/stops. Allocations114/114/113Bop,
+  no added owned capacity/retained scratch;28,136B borrows existing output and
+  retires before suffix writes. Existing4KiB admission and exact replay remain.
+  The earlier1,319.86µs point overstates the contemporary gain; cross-artifact
+  timing differences remain unexplained despite identical sources/configuration
+  and targeted IL. Current claims use matched Windows-produced artifacts and
+  the exact actual package DLL. Both OSes pass5,964full/live, affected scalar/ISA,
+  SAME actual package/byte-band ownership checks and allthree examples.
   [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
   close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
   normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.

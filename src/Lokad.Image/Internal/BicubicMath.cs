@@ -240,4 +240,63 @@ internal static class BicubicMath
 
     internal static double Coefficient(uint low, ushort high)
         => BitConverter.UInt64BitsToDouble(((ulong)high << 48) | ((ulong)low << 16));
+
+    // Four independently owned pixels; each original pair keeps its acceptance
+    // bit and leaves refused staging bytes untouched. Existing pair users retain
+    // their direct path. Prepare both quotients before either certificate.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static int WriteByteQuartet(Vector512<double> first, Vector512<double> second,
+        double n0, double n1, double n2, double n3, Span<byte> output)
+    {
+        var validFirst = PrepareByteQuartetPair(first, n0, n1, out var firstValues, out var firstMargins);
+        var validSecond = PrepareByteQuartetPair(second, n2, n3, out var secondValues, out var secondMargins);
+        var acceptedFirst = validFirst && CertifyByteQuartetPair(firstValues, firstMargins, output[..8]);
+        var acceptedSecond = validSecond && CertifyByteQuartetPair(secondValues, secondMargins, output.Slice(8, 8));
+        return (acceptedFirst ? 1 : 0) | (acceptedSecond ? 2 : 0);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool PrepareByteQuartetPair(Vector512<double> sum, double n0, double n1,
+        out Vector512<double> values, out Vector512<double> margins)
+    {
+        const double unitError = 2.3283064365386963e-10;
+        const double maximum = 255d;
+        const double alphaError = unitError * maximum;
+        values = margins = default;
+        var a0 = sum.GetElement(3); var a1 = sum.GetElement(7);
+        if (!(n0 >= .5 && n1 >= .5 && a0 > alphaError && a1 > alphaError)) return false;
+        var divisors = Vector512.Create(a0, a0, a0, n0, a1, a1, a1, n1);
+        values = Avx512F.Divide(sum, divisors);
+        // With 2^-40*16^2 and maximum 255, quotient bounds at every
+        // in-range threshold are below 1e-6 for alpha and 1e-4/alpha
+        // for color. The quarter-margin guard protects clipping thresholds.
+        // Alpha's lower power of two gives a conservative reciprocal bound.
+        var exponent0 = (int)((BitConverter.DoubleToUInt64Bits(a0) >> 52) & 2047);
+        var exponent1 = (int)((BitConverter.DoubleToUInt64Bits(a1) >> 52) & 2047);
+        var margin0 = 1e-4 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent0) << 52);
+        var margin1 = 1e-4 * BitConverter.UInt64BitsToDouble((ulong)(2046 - exponent1) << 52);
+        margins = Vector512.Create(margin0, margin0, margin0, 1e-6, margin1, margin1, margin1, 1e-6);
+        return true;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool CertifyByteQuartetPair(Vector512<double> values, Vector512<double> margins, Span<byte> output)
+    {
+        const double maximum = 255d;
+        if (Vector512.ExtractMostSignificantBits(Avx512F.CompareGreaterThanOrEqual(margins, Vector512.Create(.25))) != 0
+            || !(values.GetElement(3) >= 1 + 1e-6 && values.GetElement(7) >= 1 + 1e-6)) return false;
+        var fractional = Avx512F.Subtract(values, Avx512F.RoundScale(values, 1));
+        var distance = Avx512F.AndNot(Vector512.Create(long.MinValue),
+            Avx512F.Subtract(fractional, Vector512.Create(.5)).AsInt64()).AsDouble();
+        var inRange = Avx512F.And(Avx512F.CompareGreaterThanOrEqual(values, Vector512<double>.Zero).AsInt64(),
+            Avx512F.CompareLessThanOrEqual(values, Vector512.Create(maximum)).AsInt64());
+        var ambiguous = Avx512F.And(inRange, Avx512F.CompareLessThanOrEqual(distance, margins).AsInt64());
+        if (Vector512.ExtractMostSignificantBits(ambiguous) != 0) return false;
+        var clipped = Avx512F.Min(Vector512.Create(maximum), Avx512F.Max(Vector512<double>.Zero, values));
+        var ints = Avx512F.ConvertToVector256Int32WithTruncation(Avx512F.RoundScale(clipped, 0));
+        var shorts = Sse2.PackSignedSaturate(ints.GetLower(), ints.GetUpper());
+        var packed = Sse2.PackUnsignedSaturate(shorts, Vector128<short>.Zero).AsUInt64().GetElement(0);
+        BinaryPrimitives.WriteUInt64LittleEndian(output, packed);
+        return true;
+    }
 }

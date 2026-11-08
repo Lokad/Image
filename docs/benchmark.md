@@ -96,12 +96,18 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Current tight mixed-byte](../benchmarks/BICUBIC-MIXED-BYTE-CURRENT.md)
-  refreshes the historical point using the same qualified actual package DLL:
-  1319.86/zimg860.30µs,
-  upper1.545,114B/op; about459.57µs gap.
-  Exact rational pixels and original complete boundaries remain. No production,
-  build, test, package or fixture changes; previous qualification is reused.
+- **Resizing:** [Result-backed byte bands](../benchmarks/BICUBIC-BYTE-RESULT-BANDS.md)
+  reduce tight mixed **1,130.05→980.90µs /149.15µs/13.20%raw/13.02%normalized**,
+  with separated filtered/all-actual raw/normalized confidence. Current exact
+  package DLL: default/tight mixed960.04/980.90µs, uppers1.116/1.142 remain gaps;
+  vertical503.50/zimg587.18µs upper.862 passes/stops. Allocations114/114/113Bop,
+  no added owned capacity/retained scratch;28,136B borrows existing output and
+  retires before suffix writes. Existing4KiB admission and exact replay remain.
+  The earlier1,319.86µs point overstates the contemporary gain; cross-artifact
+  timing differences remain unexplained despite identical sources/configuration
+  and targeted IL. Current claims use matched Windows-produced artifacts and
+  the exact actual package DLL. Both OSes pass5,964full/live, affected scalar/ISA,
+  SAME actual package/byte-band ownership checks and allthree examples.
   [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
   close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
   normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.
@@ -320,7 +326,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
-| Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,319.86 | 860.30 | 1.534 / 1.545 | 114 |
+| Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 980.90 | 865.74 | 1.133 / 1.142 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
