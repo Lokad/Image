@@ -44,7 +44,8 @@ remain. [Text clipping](TEXT-CLIPPING-WORKSPACE.md) retains current source-valid
 drawing costs with inconclusive CPUgain. Other unchanged paths reuse evidence;
 this is not a full126comparison actual-package release refresh.
 
-Earlier unselected [result row history](BICUBIC-RESULT-HISTORY-EXPERIMENT.md),
+Earlier unselected [JPEG input preparation](JPEG-PREPARED-INPUT-EXPERIMENT.md),
+[result row history](BICUBIC-RESULT-HISTORY-EXPERIMENT.md),
 [packed prediction](VP8-PACKED-PREDICTION-EXPERIMENT.md),
 [compact geometry](BICUBIC-COMPACT-GEOMETRY-EXPERIMENT.md),
 [row/certificate preparation](BICUBIC-ROW-CERTIFICATE-EXPERIMENT.md),
