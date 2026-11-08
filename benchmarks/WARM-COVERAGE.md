@@ -213,3 +213,9 @@ pending references never block justified codec/resizing work. PLAN.md stays igno
 All earlier reports, raw evidence, release packages and source-specific
 invalidation notes are retained through the linked history. They do not establish
 current blanket qualification or permanently close algorithm families.
+
+[Fixed-alignment VP8 arithmetic](VP8-HIGH-ALIGNED-ARITHMETIC-EXPERIMENT.md)
+retains an unselected implementation and current live profile. Its two short
+complete-operation screens show no useful lead. Exact qualified sources and
+binaries are restored; current costs and package qualification remain unchanged.
+It adds no renderer dependency. Mixed-word bicubic attribution proceeds next.
