@@ -21,7 +21,7 @@ internal sealed partial class PngDeflater : Stream
     private uint[] tokens = [];
     private DeflateHuffman.Workspace? treeWorkspace;
     private long position, filled, windowOrigin, deferredStart, blockStart;
-    private int storedCount;
+    private int storedCount, fastExpanded;
     private int deferredLength = Minimum - 1, tokenCount, encodedCount, pendingBits;
     private ulong pending;
     private uint adlerA = 1, adlerB;
@@ -160,7 +160,8 @@ internal sealed partial class PngDeflater : Stream
         Span<ushort> chainHeads = heads, links = older;
         Span<uint> outputTokens = tokens;
         var cancellation = context.Cancellation;
-        var usedTokens = tokenCount;
+        var usedTokens = tokenCount; var expanded = fastExpanded;
+        Span<int> frequencies = treeWorkspace!.BlockFrequencies;
         try
         {
             while (current < inputEnd && (final || inputEnd - current >= Lookahead))
@@ -168,7 +169,7 @@ internal sealed partial class PngDeflater : Stream
                 cancellation.ThrowIfCancellationRequested();
                 if (current >= 2 * Window - Lookahead + 1)
                 {
-                    PublishFast(origin + current, usedTokens); AdvanceOrigin();
+                    PublishFast(origin + current, usedTokens, expanded); AdvanceOrigin();
                     origin = windowOrigin; current -= Window; inputEnd -= Window;
                 }
                 var prior = current + Minimum <= inputEnd ? Insert(bytes, chainHeads, links, current) : 0;
@@ -198,10 +199,20 @@ internal sealed partial class PngDeflater : Stream
                     } while (prior > limit && --searches != 0);
                 }
                 var copied = length >= Minimum;
-                outputTokens[usedTokens++] = copied ? (uint)length | (uint)(current - start) << 9 : bytes[current];
+                if (copied)
+                {
+                    var distance = current - start;
+                    frequencies[LengthSymbol(length)]++; frequencies[286 + DistanceSymbol(distance)]++;
+                    expanded += length; outputTokens[usedTokens++] = (uint)length | (uint)distance << 9;
+                }
+                else
+                {
+                    var literal = bytes[current]; frequencies[literal]++;
+                    expanded++; outputTokens[usedTokens++] = literal;
+                }
                 if (usedTokens == TokenCapacity)
                 {
-                    PublishFast(origin + current, usedTokens); Block(false); usedTokens = tokenCount;
+                    PublishFast(origin + current, usedTokens, expanded); Block(false); usedTokens = tokenCount; expanded = fastExpanded;
                 }
                 if (copied)
                 {
@@ -212,12 +223,12 @@ internal sealed partial class PngDeflater : Stream
                 else current++;
             }
         }
-        finally { PublishFast(origin + current, usedTokens); }
+        finally { PublishFast(origin + current, usedTokens, expanded); }
     }
 
-    private void PublishFast(long cursorPosition, int usedTokens)
+    private void PublishFast(long cursorPosition, int usedTokens, int expanded)
     {
-        position = cursorPosition; tokenCount = usedTokens;
+        position = cursorPosition; tokenCount = usedTokens; fastExpanded = expanded;
     }
 
     private void ProcessLazy(bool final)

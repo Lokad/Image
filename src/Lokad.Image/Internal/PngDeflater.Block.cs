@@ -31,9 +31,11 @@ internal sealed partial class PngDeflater
     {
         context.Cancellation.ThrowIfCancellationRequested();
         var workspace = treeWorkspace!;
-        var frequencies = workspace.BlockFrequencies.AsSpan(); frequencies.Clear();
+        var frequencies = workspace.BlockFrequencies.AsSpan();
+        if (level != 1) frequencies.Clear();
         var literalFrequency = frequencies[..286]; var distanceFrequency = frequencies.Slice(286, 30); literalFrequency[256] = 1;
-        var expanded = 0;
+        var expanded = level == 1 ? fastExpanded : 0;
+        if (level != 1)
         for (var index = 0; index < tokenCount; index++)
         {
             var token = tokens[index]; var back = (int)(token >> 9);
@@ -97,6 +99,7 @@ internal sealed partial class PngDeflater
             WriteTokens(literals, distances);
         }
         blockStart += expanded; tokenCount = 0;
+        if (level == 1) { frequencies.Clear(); fastExpanded = 0; }
     }
 
     private void WriteTokens(byte[] literalLengths, byte[] distanceLengths)

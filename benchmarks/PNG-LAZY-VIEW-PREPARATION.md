@@ -1,5 +1,7 @@
 # PNG lazy view preparation
 
+Current encoding costs are superseded by [streaming token frequencies](PNG-STREAMING-TOKEN-FREQUENCIES.md); this report retains the lazy stage and its evidence.
+
 Retain one acquired-state design for level6/9 lazy compression. Complete RGBA16
 Optimal encoding independently saves **390.08µs/1.83%**; RGBA8 SmallestSize saves
 **375.08µs/2.16%**, with exact frozen packets and unchanged paired allocation.

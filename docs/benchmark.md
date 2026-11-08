@@ -75,16 +75,18 @@ Current scope and remaining work:
   No new case, source change, rebuild or repeated package qualification. Header-only
   inspection/identification, stream/composition/shared-root boundaries and encoding
   keep their separate required coverage. No historical paired gain is inferred.
-  [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
-  independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
-  [Current Fastest costs](../benchmarks/CURRENT-PNG-FASTEST-COSTS.md) refresh three
-  unchanged-production controls: ordinary word passes/stop; live word is a242µs
-  gap and byte remains a208µs gap. Twelve other costs reuse unchanged paths.
-  Fifteen controls:10pass/stop,3gaps,2uncertain. Exact packets and
-  384KiB admission remain unchanged; retained scratch is zero. Grayscale8 measures
-  +408B/op (551,772); ten other fresh allocations are unchanged. Earlier
-  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md)
-  retains independent269/836µs gains; output/preparation histories stay linked.
+  [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
+  remove the greedy block's second token census using its existing storage.
+  Independent live/plain word gains are516–550/557µs; filtered/allactual raw and
+  normalized intervals separate. All three word Fastest delivery controls pass/stop.
+  Byte's filtered113µs gain has overlapping allactual intervals. Fifteen fresh
+  complete one-shot controls:12pass/stop,2gaps,1uncertain. ByteFastest(~87µs) and
+  Gray8(~60µs) remain gaps; wordSmallest remains uncertain. Exact packets and
+  384KiB admission/zero retained scratch remain. Primary allocations are unchanged;
+  Gray8 measures−408B/op without a capacity-saving claim. Earlier
+  [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
+  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain their
+  independent gains as linked history.
 - **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
   Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
@@ -142,10 +144,12 @@ normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected JPEG paths pass403 internal/375 public checks per normal/scalar mode
+Unchanged JPEG paths retain403 internal/375 public checks per normal/scalar mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
-The package exercises admitted live baseline JPEG sync/async ownership. Unchanged
+The current PNG package also exercises frozen Fastest8/16 sync/async packets,
+shared admission and independent ownership. Unchanged JPEG full/scalar path proof
+is retained; its live baseline sync/async package witnesses run again. Unchanged
 alpha prefix/border/tail/palette, compressed horizontal-alpha package and other
 coefficient/decoder/word/ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
@@ -196,27 +200,27 @@ settings do not establish matched quality.
 | VP8 RGBA16 + alpha, including normalization † | 53,129.08 | 53,549.12 | 0.992 / 0.996 | 6,963,024 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 105,483.31 | 122,008.61 | 0.865 / 0.875 | 7,341,808 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 69,832.01 | 69,828.52 | 1.000 / 1.015 | 5,848,592 | 121,896 / 121,896 |
-| PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,972.34 | 17,224.29 | 0.985 / 0.993 | 820,452 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,800.66 | 20,840.32 | 0.998 / 1.004 | 2,437,660 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 4,540.44 | 4,332.94 | 1.048 / 1.065 | 820,916 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 17,026.17 | 17,248.19 | 0.987 / 0.992 | 820,452 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,847.84 | 20,894.28 | 0.998 / 1.004 | 2,437,660 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 4,427.44 | 4,340.50 | 1.020 / 1.040 | 820,916 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 2,053.51 | 1,974.20 | 1.040 / 1.075 | 551,772 | 72,586 / 72,586 |
-| PNG RGB8, one-shot Optimal6 / native6 † | 9,471.66 | 9,769.77 | 0.969 / 0.984 | 819,884 | 168,729 / 168,729 |
-| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,276.85 | 4,484.44 | 0.954 / 0.971 | 552,332 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 16,932.50 | 17,259.94 | 0.981 / 0.987 | 820,452 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 20,534.92 | 20,745.47 | 0.990 / 0.995 | 2,437,660 | 963,202 / 963,202 |
-| PNG RGB16, one-shot Optimal6 / native6 † | 15,576.65 | 16,093.65 | 0.968 / 0.975 | 2,431,492 | 739,472 / 739,472 |
-| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,773.10 | 5,394.24 | 0.885 / 0.902 | 822,740 | 265,433 / 265,433 |
-| PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,050.55 | 10,479.84 | 0.959 / 0.967 | 1,360,900 | 506,887 / 506,887 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 2,043.52 | 1,983.53 | 1.030 / 1.065 | 551,364 | 72,586 / 72,586 |
+| PNG RGB8, one-shot Optimal6 / native6 † | 9,481.32 | 9,777.65 | 0.970 / 0.982 | 819,884 | 168,729 / 168,729 |
+| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,229.81 | 4,423.13 | 0.956 / 0.972 | 552,332 | 120,366 / 120,366 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 16,857.24 | 17,278.11 | 0.976 / 0.982 | 820,452 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 20,491.90 | 20,771.24 | 0.987 / 0.992 | 2,437,660 | 963,202 / 963,202 |
+| PNG RGB16, one-shot Optimal6 / native6 † | 15,546.19 | 16,190.43 | 0.960 / 0.967 | 2,431,492 | 739,472 / 739,472 |
+| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,826.60 | 5,417.93 | 0.891 / 0.911 | 822,740 | 265,433 / 265,433 |
+| PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,023.86 | 10,524.89 | 0.952 / 0.963 | 1,360,900 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG RGBA8 decode, live token † | 1,539.10 | 1,394.18 | 1.104 / 1.113 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,297.38 | 1,395.09 | 0.930 / 0.935 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit † | 3,019.22 | 2,895.06 | 1.043 / 1.052 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 18,513.54 | 18,638.38 | 0.993 / 0.999 | 2,437,660 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,830.06 | 18,588.37 | 1.013 / 1.018 | 2,437,660 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, forward-only output † | 18,557.49 | 18,594.14 | 0.998 / 1.004 | 2,437,692 | 968,216 / 968,216 |
-| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,996.93 | 17,633.09 | 0.964 / 0.968 | 882,212 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 17,956.64 | 18,627.96 | 0.964 / 0.970 | 2,437,660 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,279.79 | 18,615.61 | 0.982 / 0.987 | 2,437,660 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, forward-only output † | 18,019.73 | 18,642.40 | 0.967 / 0.982 | 2,437,692 | 968,216 / 968,216 |
+| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,950.89 | 17,518.41 | 0.968 / 0.973 | 882,212 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode (confirmed pass) † | 976.05 | 1,010.51 | 0.966 / 0.970 | 757,363 | — |
 | JPEG DC-only, caller CMYK decode (confidence open) † | 333.57 | 330.37 | 1.010 / 1.021 | 1,085,963 | — |
 | VP8L RGBA8, resident decode † | 3,093.70 | 3,008.39 | 1.028 / 1.034 | 152,728 | — |

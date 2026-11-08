@@ -1,4 +1,7 @@
-# Current PNG Fastest costs
+# Earlier original PNG Fastest costs
+
+Superseded by [streaming token frequencies](PNG-STREAMING-TOKEN-FREQUENCIES.md).
+These measurements remain the unchanged-original comparison evidence.
 
 2026-11-08. These are the unchanged production implementation after exact
 restoration to [JFW547](JPEG-LIVE-ENTROPY-WINDOW.md), not the unselected prefix

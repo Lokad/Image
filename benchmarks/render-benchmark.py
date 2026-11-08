@@ -1592,51 +1592,33 @@ def render():
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5866
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
-    png = json.loads((ROOT / 'benchmarks/png-lazy-view-preparation-evidence.json').read_text(encoding='utf-8'))
-    assert png['productionAccepted'] and png['qualification']['fullChecksEachOs'] > 0
-    assert png['qualification']['actualPackage']['sha256'] == png['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert png['qualification']['actualPackage']['actualConsumerPassed'] and png['qualification']['samePackageLinux']['actualConsumerPassed']
+    png = json.loads((ROOT / 'benchmarks/png-streaming-token-frequencies-evidence.json').read_text(encoding='utf-8'))
+    assert png['productionAccepted'] and png['requiredMaterialPaths'] == 283
+    pq = png['qualification']
+    assert pq['fullChecksEachOs'] == pq['windows']['total'] == pq['linux']['total'] == 5879
+    assert pq['actualPackage']['sha256'] == pq['samePackageLinux']['sameActualPackageSha256']
+    assert pq['actualPackage']['actualConsumerPassed'] and pq['samePackageLinux']['actualConsumerPassed']
+    assert pq['sameActualPackageBothOs']
+    assert pq['actualPackage']['fastestPngExactByteWordSyncAsyncAdmissionPassed']
+    assert pq['samePackageLinux']['fastestPngExactByteWordSyncAsyncAdmissionPassed']
     assert set(png['cases']) == {'Encode8', 'Encode16', 'EncodeFast8', 'EncodeFast16',
         'EncodeSmallest8', 'EncodeSmallest16', 'EncodeGray8', 'EncodeRgb8',
         'EncodeGrayAlpha8', 'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16',
         'EncodeFastCancelable16', 'EncodeFastForward16', 'Png8AsyncNonSeekable'}
     assert png['storage']['workspaceAdmissionBytes'] == 393216 and png['storage']['retainedOperationScratchBytes'] == 0
-    assert png['sourceProof']['outsidePairSequentialInsertionAndProcessLazyUnchanged']
-    assert set(png['unchangedCases']) == set(png['cases']) - set(png['sourceProof']['invalidatedComparisons'])
-    png_fastest = json.loads((ROOT / 'benchmarks/current-png-fastest-costs-evidence.json').read_text(encoding='utf-8'))
-    assert not png_fastest['productionChanged'] and png_fastest['allMeasurementBuilds'] == 0
-    assert png_fastest['sourceProof']['productionSourcesMainEmbeddedBindingsRestoredExactly']
-    assert png_fastest['producers'] == jpeg_scan['producers']
-    assert set(png_fastest['cases']) == {'EncodeFast8', 'EncodeFast16', 'EncodeFastCancelable16'}
-    assert set(png_fastest['unchangedOtherCases']) == set(png['cases']) - set(png_fastest['cases'])
-    pq = png_fastest['qualification']
-    assert pq['fullChecksEachOs'] == 5879 and pq['sameActualPackageBothOs']
-    for package_check in pq['actualPackageChecks'].values():
-        assert package_check['actualConsumerPassed'] and package_check['usageExamples'] == 3
-        assert package_check['newFastestByteWordFrozenSyncAsyncAdmissionChecksPassed']
-        assert package_check['packageSha256'] == jpeg_scan['qualification']['actualPackage']['sha256']
-    effective_png = png['cases'] | png_fastest['cases']
-    assert {s: sum(c['status'] == s for c in effective_png.values()) for s in ['pass', 'gap', 'uncertain']} == png_fastest['familyStatusCounts'] == {'pass': 10, 'gap': 3, 'uncertain': 2}
+    assert png['sourceProof']['greedyMatchingAndInsertionKernelExact']
+    assert png['sourceProof']['lazyParserExact'] and png['sourceProof']['tokenWriterAndOutputCursorExact']
+    assert png['sourceProof']['allOriginalCancellationCheckpointsPreserved']
+    assert {t: sum(c['status'] == t for c in png['cases'].values()) for t in ['pass', 'gap', 'uncertain']} == png['statusCounts']
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
              else row) for kind, row in rows]
     def png_label(label):
         return label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ').replace(', red-plane reference', '')
-    for case, current in effective_png.items():
+    for case, current in png['cases'].items():
         assert current['caseId'] == case
-        if case in png_fastest['cases']:
-            assert not current['reusedUnchangedPath']
-            assert current['librarySha256'] == png_fastest['producers']['linuxSha256']
-            if case == 'EncodeFastCancelable16':
-                assert current['standaloneLaunches'] == len(current['envelopeRunIds']) == 2
-        elif case in png['unchangedCases']:
-            reuse = png['unchangedCases'][case]
-            assert current['reusedUnchangedPath'] and reuse['sourceApplies']
-            assert current['librarySha256'] == reuse['librarySha256']
-            assert reuse['unchangedProductionProjection'] == png['sourceProof']['unchangedProjectionSha256']
-        else:
-            assert not current['reusedUnchangedPath']
-            assert current['librarySha256'] == png['producers']['linuxSha256']
+        assert not current['reusedUnchangedPath']
+        assert current['librarySha256'] == png['producers']['linuxSha256']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['completePacketExact']
         assert current['actualIterations'] == len(current['managedActualNanoseconds']) == 12
         assert current['packetSha256'] == current['nativePacketSha256'] and current['packetBytes'] == current['nativePacketBytes']
@@ -1831,16 +1813,18 @@ Current scope and remaining work:
   No new case, source change, rebuild or repeated package qualification. Header-only
   inspection/identification, stream/composition/shared-root boundaries and encoding
   keep their separate required coverage. No historical paired gain is inferred.
-  [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
-  independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
-  [Current Fastest costs](../benchmarks/CURRENT-PNG-FASTEST-COSTS.md) refresh three
-  unchanged-production controls: ordinary word passes/stop; live word is a242µs
-  gap and byte remains a208µs gap. Twelve other costs reuse unchanged paths.
-  Fifteen controls:10pass/stop,3gaps,2uncertain. Exact packets and
-  384KiB admission remain unchanged; retained scratch is zero. Grayscale8 measures
-  +408B/op (551,772); ten other fresh allocations are unchanged. Earlier
-  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md)
-  retains independent269/836µs gains; output/preparation histories stay linked.
+  [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
+  remove the greedy block's second token census using its existing storage.
+  Independent live/plain word gains are516–550/557µs; filtered/allactual raw and
+  normalized intervals separate. All three word Fastest delivery controls pass/stop.
+  Byte's filtered113µs gain has overlapping allactual intervals. Fifteen fresh
+  complete one-shot controls:12pass/stop,2gaps,1uncertain. ByteFastest(~87µs) and
+  Gray8(~60µs) remain gaps; wordSmallest remains uncertain. Exact packets and
+  384KiB admission/zero retained scratch remain. Primary allocations are unchanged;
+  Gray8 measures−408B/op without a capacity-saving claim. Earlier
+  [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
+  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain their
+  independent gains as linked history.
 - **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
   Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
@@ -1893,15 +1877,17 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{png['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected JPEG paths pass403 internal/375 public checks per normal/scalar mode
+Unchanged JPEG paths retain403 internal/375 public checks per normal/scalar mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
-The package exercises admitted live baseline JPEG sync/async ownership. Unchanged
+The current PNG package also exercises frozen Fastest8/16 sync/async packets,
+shared admission and independent ownership. Unchanged JPEG full/scalar path proof
+is retained; its live baseline sync/async package witnesses run again. Unchanged
 alpha prefix/border/tail/palette, compressed horizontal-alpha package and other
 coefficient/decoder/word/ISA evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
