@@ -71,6 +71,10 @@ shared-window report; instrumented elapsed is not timing evidence.
 [Current live progressive attribution](JPEG-LIVE-CURRENT-ATTRIBUTION.md) uses one
 qualified JPR608 capture: buffered refinement dominates sampled locations, with
 little nonzero-mask discovery. No production, displayed cost or scope change.
+[Bicubic byte attribution](BICUBIC-BYTE-CURRENT-ATTRIBUTION.md) records current
+source/JIT boundaries and a completed diagnostic capture with a failed post-run
+I/O guard. Its locations motivate an overlapping-window model; they establish
+no passing quiet measurement, phase time or current-cost change.
 
 ## Finite required inventory
 
