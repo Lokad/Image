@@ -1,0 +1,142 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BRM538",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+  "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+  "sources": {
+    "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "e9b826d8c2d2412807d3c7f5fb7e293524819517e654037a9e2274c89c6a0bda",
+    "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795",
+    "src/Lokad.Image/Internal/BicubicMath.cs": "790643a112e5aa8e8c4d5a880294f5e0b31306b445a94d5bcc4b03616bbae08f",
+    "src/Lokad.Image/ImageTransforms.cs": "bde520912950fdffaccdcb2b12ce6f74cb67cefa7a4cae3b622521bd911ba3d0"
+  },
+  "allBuilds": 0,
+  "newBroadQualificationRuns": 0,
+  "newPackageRuns": 0,
+  "displayedCostsChanged": 0,
+  "quietGuardsPassed": true,
+  "allOriginalGatesPassed": true,
+  "control": {
+    "caseId": "Mixed16",
+    "width": 513,
+    "height": 259,
+    "depth": 16,
+    "outputWidth": 1027,
+    "outputHeight": 129,
+    "managedMaxWorkingBytes": null,
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+    "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
+    "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+    "nativeRgbMaximum": 1,
+    "nativeRgbRmse": 0.048111977689428514,
+    "nativeAlphaMaximum": 1,
+    "nativeAlphaRmse": 0.038167927407420775
+  },
+  "attribution": {
+    "seconds": 2,
+    "totalSamples": 1995,
+    "methods": [
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::TryApply(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,float64,float64,int64,int64,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 1830,
+        "fraction": 0.9172932330827067
+      },
+      {
+        "method": "float64 [Lokad.Image] Lokad.Image.ImageTransforms::Kernel(float64,valuetype Lokad.Image.ResizeFilter)[Optimized]",
+        "samples": 55,
+        "fraction": 0.02756892230576441
+      },
+      {
+        "method": "Native or unresolved",
+        "samples": 39,
+        "fraction": 0.019548872180451128
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.BicubicMath::TryWriteWord(valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<float64>,float64,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        "samples": 27,
+        "fraction": 0.013533834586466165
+      },
+      {
+        "method": "valuetype Lokad.Image.Internal.MixedBicubicGeometry [Lokad.Image] Lokad.Image.Internal.MixedBicubicGeometry::Prepare(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,valuetype [System.Runtime]System.Threading.CancellationToken)[Optimized]",
+        "samples": 20,
+        "fraction": 0.010025062656641603
+      },
+      {
+        "method": "bool [Lokad.Image] Lokad.Image.Internal.MixedWordColumnBicubicResize::OriginalWord(class Lokad.Image.ImageBuffer,class Lokad.Image.ImageBuffer,int32,int32,float64,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<float64>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        "samples": 19,
+        "fraction": 0.009523809523809525
+      },
+      {
+        "method": "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        "samples": 2,
+        "fraction": 0.0010025062656641604
+      },
+      {
+        "method": "uint16 [Lokad.Image] Lokad.Image.Internal.BicubicMath::RoundWord(float64)[Optimized]",
+        "samples": 2,
+        "fraction": 0.0010025062656641604
+      },
+      {
+        "method": "stub ReportStubBlock<MethodCallThunk>",
+        "samples": 1,
+        "fraction": 0.0005012531328320802
+      }
+    ],
+    "actualTryApplyCodeBytes": 8262,
+    "jitReportedLocalFrameBytes": 872,
+    "wholeTryApplySamples": 1830,
+    "geometryPrepareSamples": 20,
+    "scalarRepairSamples": 19,
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "note": "Current standalone immutable producer; cached complete-operation driver and original reference gates, CPU0operation/CPU1sampler. Actual TryApply includes inlined horizontal/vertical execution and exact certification. Hot offsets span decoded storage, multiply/add, division/exponent margins, certification/clipping/packing; skid and locations are not phase times, stall proof or predicted gains. PriorBRM493hot shares predateRPA503 math and remain historical."
+  },
+  "existingArchitecture": "Shared borrowed output-suffix geometry, paired source-column decode/vertical cache, quartet publication, sharedBicubicMath quotient/certification and exact scalar repair already exist. Do not rediscover these as new work or assume nativefloat has equivalent exactness costs.",
+  "workspace": {
+    "fixedArrayBytes": {
+      "cache": 1536,
+      "columnIds": 24,
+      "decoded": 1536,
+      "vertical": 640,
+      "rowOffsets": 80,
+      "counts": 32,
+      "normalizers": 64,
+      "horizontal": 40,
+      "columns": 20,
+      "samplesX": 20
+    },
+    "totalFixedArrayBytes": 3992,
+    "reservedWorkspaceBytes": 4096,
+    "retainedScratchBytes": 0,
+    "wholePhysicalAdmittedNativePeaksRemeasured": false,
+    "note": "Source-derived explicit stack-array capacities only. JIT frame may include some fixed storage; these figures are not additive or measured total stack/live peak. Existing admission/result ownership unchanged."
+  },
+  "nextHypothesis": "Investigate retiring paired-column decode/vertical filtering into one bounded execution helper with existing prepared row-band metadata. Current8,262B mixed driver keeps preparation, decode, vertical cache, horizontal accumulation, certificate and stores in one function. Removing decode temporaries from the long-lived horizontal/certification driver may simplify its state, not automatically improve CPU. Keep specialized SIMD and exact tap/certification/repair arithmetic; no generic pixel loop.",
+  "intendedEndState": "One operation-owned4KiBworkspace and shared geometry descriptor, explicit paired-column vertical phase followed by existing quartet/pair/single publication. Borrow existing input/cache spans, no heap/cache/session/API. Reuse the same actual column phase rather than duplicate it; later byte/word preparation consolidation only where source/evidence justifies it.",
+  "transition": "First prove decode-span lifetime and packed32Bpublication scratch after extraction. Replacing1536Bdecoded caller array with1536Bcallee scratch plus32Bcaller staging gives4024Bexplicit overlap, within existing4096Bworkspace; this is a design bound, not measured peak or gain. Preserve every poll, failure boundary, fallback, output bit, input/root and retained-result lifetime. Calls/codegen can outweigh shorter-lived state; revise/abandon from complete workloads, not frame size.",
+  "workloads": "Existing Mixed16,TightMixed16, and relevant TightVertical16 generalization if this executed column phase changes. Current declared~175/~170/~142us gaps. No new shape/depth/filter grid. Resolve actual eligibility/source scope before refresh; default vertical takes cached path and other kernels stay unchanged.",
+  "acceptance": "Focused exact rational/pair/quartet/tail/native-bound/ownership/cancellation/admission checks on bothOS/scalar, then short complete controls on one immutable build. Independent contemporary confirmation only if promising. At accepted coherent stage qualify affected costs and broadWindows/Linux/live/SAMEactualpackage once; unchanged paths reuse evidence. No numerical-policy relaxation or speed inference from sample/frame counts.",
+  "raw": {
+    "file": "bicubic-mixed-current-execution-attribution.tar.xz",
+    "sha256": "a88958cbfc6dae4ec1555f698edaca50be23afe776b8a5ae84867a5a167d68ce",
+    "bytes": 6222684,
+    "members": 137,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1"
+      },
+      {
+        "file": "bicubic-shared-word-preparation-qualified.tar.xz",
+        "sha256": "1c9528ea15b55ccb329dd9b6a64fc8d9ab1af52192b368e867d087474ace77aa"
+      }
+    ]
+  }
+}
