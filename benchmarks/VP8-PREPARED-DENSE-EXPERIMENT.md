@@ -55,3 +55,28 @@ retain the current two-second attribution and qualified fixture/tool providers.
 An initial staging-script syntax error occurred before mutation; the corrected
 design also fixes its inherited construction-only invalidation wording before
 timing. No completed measurement or qualification job was replayed.
+
+## Shared-recorder follow-up
+
+VEP593/VPD594 revisits early literal selection after four-block histogram
+preparation, using the existing direct statistics recorder instead of generic
+modes. Its three-actual screen costs **2,654.71µs / native 2,512.72µs**, versus
+the source-valid original 2,638.29/2,504.45µs, with unchanged 406,705B/op and the
+exact 7,330B packet. No useful gain is demonstrated; no confirmation or further
+representation variant follows. Repeated validation/last-index preparation is
+an observed difference, not a measured isolated cost.
+
+Windows/Linux each pass 71 internal/239 public checks per normal/scalar mode.
+Qualified sources/modules/bindings are restored byte for byte; existing 5,909
+full/live checks and the SAME actual package/three examples are reused. An
+inherited runner description was corrected with its original record retained;
+no measurement was repeated. Earlier related experiments were consulted late;
+their adverse evidence is now reused before further program work.
+
+[Follow-up evidence](vp8-direct-recording-experiment-evidence.json) retains the
+current capture, source proof, screen and restoration. Raw
+`vp8-direct-recording-experiment.tar.xz`, SHA256
+`ff1f9ebaa25e000bdff244b2e41045bfe681f751189c32040e472b83a8846bc8`,
+4,772,100B/87 members, is mirrored/member-verified. Its current two-second encoder
+attribution dependency is `vp8-effort2-current-attribution-vep593.tar.xz`, SHA256
+`34aa171c0716cc7aeacbcf12bf6b49e0de27dd5b765fefe13c99b297396d24ca`.

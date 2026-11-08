@@ -1,0 +1,640 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VEP593/VPD594",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "round": "VPD594",
+    "paths": [
+      "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs"
+    ],
+    "originalAbsent": [],
+    "baselineCommit": "14bb0ff73edaa8ec3fe3c15996b16f08f0035d54",
+    "baseline": {
+      "windowsSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+      "linuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21"
+    },
+    "transitionFromLinuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "770df364161b33514b2054fd798e9ae4f5c792c96c3627b4b746c607d84330d1"
+    },
+    "hypothesis": "CurrentVEP593 locates Record163/1973samples plusdense emission187. Recordbuilds category/remainder/packed instructions then discards them when morethan9words andcopiesrawlevels. Knownlast determines exactrepresentation count before loop; avoid discardedpreparation for dense residuals.",
+    "endState": "Preselect identicalnineword literal using (last-first+1)+(last<15?1:0)>9. Reuse existing Vp8TokenStatistics.Record(tokenBuffer:false) directcounterpolicy, append identicalrawlevels. Sparse originalloop and emission untouched; no duplicatedstats tree, newhelper/API/schema/cache/owner. Representation order/ties/counters/probabilities/packets unchanged.",
+    "proof": "Each first..last coefficient appendsoneword, plusoneEOB iff last<15; last is alreadyvalidatedandknownnonzero. Allzero remainsoneEOB. Same literalheader/rawlevels/Append sizes/order/chunks. Shareddirectstatistics matches originalbranch/counter10zero/EOB/saturation semantics (existing independentactualwriter/signeddomain/model tests). Alloriginalcheckpoints retained; same actualbufferusers andadmission beforeallocation.",
+    "workloads": [
+      "DiagramLossyDistortion8"
+    ],
+    "affected": "Only CreateDistortion(method==2) enables coefficientProgram; namedVHB517distortioncontrol refreshesonacceptance, other8 encodecosts anddecode/edit/font/PNG/JPEG paths unchanged. Method2 publicsync/async/word/alpha/resource packet behavior remainsqualified; no expandedgrid.",
+    "acceptance": "Existing coefficientProgram fourtypes/signedcategory/contexts/first/positions/saturatedcounter/guard/source/actualwriter andfullsigneddomain oracles plus TokenStatistics/Residual/Partition controls. WebP/root publicnormal+scalar W/L. Oneexistingcompleteeffort2shortfirst, independentifuseful, acceptedstage fullW/L/live/SAMEactualpackage/all3examples once. Frozen7330Bpacket, native/input/quality/settings, safeowner/cancellation/gates remain.",
+    "tradeoffs": "Sharedrecorder repeats validation/Last summary andadds onecall on dense path; mayeraseclassification/packing saving. No CPUgaininferred fromsamplecounts. No newheap/admitted/retainedstorage, same9wordAppend and sparepath; stackphysicalpeak unmeasured. Preserveunhelpfulscreen andrestorequalifiedimmutablemodules withoutrepeatingfull/packageproof.",
+    "productionAccepted": false
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "VPD594",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "0df154243f33e74e660c601ad1f1459f34d588a8eb918852ce3fd93eac3f6811",
+      "src/Lokad.Image/Internal/Vp8TokenStatistics.cs": "011dc1d77e5193f501c4f9b24aee6287f319a7ec2b43498297daf3ca79dd40b9",
+      "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9b39296636892288a6f109c14097f9a590a7dcd85284a6e5007234267b96c8dc"
+    },
+    "wholeSourceReconstructsOriginalOutsideEquivalentLiteralPreselection": true,
+    "sparseInstructionTreeWriterChunkLayoutBorrowDisposeAndAllFieldsExact": true,
+    "representationSelectionCases": [
+      {
+        "first": 0,
+        "last": 0,
+        "words": 2,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 1,
+        "words": 3,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 2,
+        "words": 4,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 3,
+        "words": 5,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 4,
+        "words": 6,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 5,
+        "words": 7,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 6,
+        "words": 8,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 7,
+        "words": 9,
+        "literal": false
+      },
+      {
+        "first": 0,
+        "last": 8,
+        "words": 10,
+        "literal": true
+      },
+      {
+        "first": 0,
+        "last": 9,
+        "words": 11,
+        "literal": true
+      },
+      {
+        "first": 0,
+        "last": 10,
+        "words": 12,
+        "literal": true
+      },
+      {
+        "first": 0,
+        "last": 11,
+        "words": 13,
+        "literal": true
+      },
+      {
+        "first": 0,
+        "last": 12,
+        "words": 14,
+        "literal": true
+      },
+      {
+        "first": 0,
+        "last": 13,
+        "words": 15,
+        "literal": true
+      },
+      {
+        "first": 0,
+        "last": 14,
+        "words": 16,
+        "literal": true
+      },
+      {
+        "first": 0,
+        "last": 15,
+        "words": 16,
+        "literal": true
+      },
+      {
+        "first": 1,
+        "last": 1,
+        "words": 2,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 2,
+        "words": 3,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 3,
+        "words": 4,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 4,
+        "words": 5,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 5,
+        "words": 6,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 6,
+        "words": 7,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 7,
+        "words": 8,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 8,
+        "words": 9,
+        "literal": false
+      },
+      {
+        "first": 1,
+        "last": 9,
+        "words": 10,
+        "literal": true
+      },
+      {
+        "first": 1,
+        "last": 10,
+        "words": 11,
+        "literal": true
+      },
+      {
+        "first": 1,
+        "last": 11,
+        "words": 12,
+        "literal": true
+      },
+      {
+        "first": 1,
+        "last": 12,
+        "words": 13,
+        "literal": true
+      },
+      {
+        "first": 1,
+        "last": 13,
+        "words": 14,
+        "literal": true
+      },
+      {
+        "first": 1,
+        "last": 14,
+        "words": 15,
+        "literal": true
+      },
+      {
+        "first": 1,
+        "last": 15,
+        "words": 15,
+        "literal": true
+      }
+    ],
+    "sharedDirectStatisticsPolicyTokenBufferFalse": true,
+    "statisticsGuardSaturationZeroContextAndEobOrderPreserved": true,
+    "originalEntryAndAppendCancellationChecksRetained": true,
+    "identicalLiteralHeaderLevelsAppendLengthsOrderAndAdmission": true,
+    "onlyProductionProgramSelectionIsMethod2": true,
+    "ownedCapacityChangeBytes": 0,
+    "newRetainedStateBytes": 0,
+    "physicalStackPeakMeasured": false,
+    "scope": "Knownlast replacespostconstructioncount test; validnonzero inputs produceexactlyfirst..last plusEOBiflast<15. Existingdirectstatistics helper is already fourtype/category/context/position/saturation/fullsigneddomain oracle. It repeatsvalidation/Last but has no cancellationpolls or allocations, preserving checkpoints/guardprecedence on borrowedprivateimmutableinput. Allzero remainsoriginaloneEOBpath; no newmodelowner/schema/cache."
+  },
+  "attribution": {
+    "project": "Lokad.Image",
+    "stage": "VEP593",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newFixtures": 0,
+    "statisticalTiming": false,
+    "profileSeconds": 2,
+    "case": "DiagramLossyDistortion8",
+    "costProvider": "vp8-four-block-histogram-evidence.json",
+    "currentControl": {
+      "managedUs": 2638.2921284090908,
+      "nativeUs": 2504.4520651041666,
+      "ratio": 1.053440856453109,
+      "lower": 1.0492246659616877,
+      "upper": 1.0584286891964008,
+      "allocatedBytes": 406705,
+      "status": "gap",
+      "librarySha256": "3eb9f39b6bfcee6c2d5d5457df87d11084f6a9e420ce0ef245061073f2ce386f",
+      "runId": "vhb517-candidate-distortion-confirm",
+      "caseId": "DiagramLossyDistortion8",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "filteredIterations": 11,
+      "managedPacketBytes": 7330,
+      "nativePacketBytes": 7330,
+      "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+      "nativePacketSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+      "completePacketExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "rasterSha256": "ba885c79271ce0e2861cce19458d141b5462f2a169634e7c46a33fc0afb9d243",
+      "depth": 8,
+      "effort": 2,
+      "managedQuality": 75,
+      "nativeQuality": 75,
+      "boundary": "One frozen resident 513x259 opaque RGBA8 photograph or text/diagram to complete owned WebP. Public managed EncodeWebp/admission, source processing, fresh MemoryStream growth/disposal included, no redundant ToArray. Native normalization/repacking, pixel import/encoding and independent packet ownership included. Wrappers/private scratch reused; every pixel reprocessed, no packet cache. Font/image preparation, I/O, IPC, validation and startup excluded. One CPU; effort2, frozen reference quality75. Complete packets exact; VP8L source pixels exact, VP8 identical reconstructed pixels, exact alpha. Quality numbers are not the matching criterion.",
+      "sourceEvidence": {
+        "receipt": "tmp/vhb517-candidate-distortion-confirm-receipt.json",
+        "statistics": "tmp/vhb517-candidate-distortion-confirm-statistics.json",
+        "observation": "tmp/vhb517-candidate-distortion-confirm-observation.json"
+      }
+    },
+    "unchangedHistogramSourceIdentities": {
+      "src/Lokad.Image/Internal/Vp8SourceHistogram.cs": "ab29c1c54d797ba5f804b294fb3b51339600723d391e07ebf827c3214630dc20",
+      "src/Lokad.Image/Internal/Vp8SourceAnalysis.cs": "475c2c7dcc30ba58cc8289b9fa6a946d3c8ac5e0f6896b3030fb5d5d1ae5e181",
+      "tests/Lokad.Image.Tests/Vp8SourceHistogramBatchTests.cs": "6f9974a49547c6b668e1f52c9beaed34c053ca82b7ddacb8fd0a4b2d49ee327e"
+    },
+    "expectedLinuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+    "hypothesis": "Currenteffort2 completeencode has134usdemonstratedgap. Older effort2profiles predatefourblock histogramstage; retainunchanged locationleads but doonecurrentcapture before another productionchoice. Separate sourceanalysis/preparation, mode/quantization, packetwork andownership. Samples/skid are locations notcomponenttimes or predictedgains.",
+    "boundary": "Existing513x259 diagram/Q75/effort2; exact7330B completepacket, samefrozeninput/native/fullquality/ownership gates. Completepublicencode includesnormalization/preparation/output/disposal. Nativecodeccontext retained as previouslydeclared; benchmarkworker reused currentDLL, no fixture/harness/native rebuild. Discardallinstrumentedelapsed.",
+    "next": "Select coherent removed-work/storage hypothesis from currenttoplocations; preserve candidateorder/ties/byteexactpackets, actualsharedadmission/refusal/cancellation andindependentoutputs. No passingcase retune or broadergrid.",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "770df364161b33514b2054fd798e9ae4f5c792c96c3627b4b746c607d84330d1",
+      "src/Lokad.Image/Internal/Vp8FrameEncoding.cs": "3d8cc552e81d82a6d3e8e30e9c4cefc524bcea5e2f325c2e1e3d43b631df1a16",
+      "src/Lokad.Image/Internal/Vp8FramePlan.cs": "9b39296636892288a6f109c14097f9a590a7dcd85284a6e5007234267b96c8dc",
+      "src/Lokad.Image/Internal/Vp8TokenStatistics.cs": "011dc1d77e5193f501c4f9b24aee6287f319a7ec2b43498297daf3ca79dd40b9",
+      "src/Lokad.Image/Internal/Vp8ResidualSummary.cs": "df2e23b2f10a127c3885326ad0749941bb4f983e5b08f23b82fcdd8616aac56a"
+    },
+    "capture": {
+      "totalSamples": 1973,
+      "managedSamples": 1895,
+      "receipt": "vep593-effort2-profile-receipt.json",
+      "receiptSha256": "bcbcf40c3042095e023f0cadb57aec01596d231e89d1cc2097319f0590cf6c06",
+      "traceSha256": "203e7cf6fffded0ce30301c60b21b410a38457354ae3be955b47e46cc65d20e1",
+      "traceBytes": 700304,
+      "instrumentedElapsedDiscarded": true
+    },
+    "methods": [
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8FrameEncoding::Coefficients(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+        187
+      ],
+      [
+        "bool [Lokad.Image] Lokad.Image.Internal.Vp8DistortionDecision::Try4(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int64,int64,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext,int64&,uint32&)[Optimized]",
+        186
+      ],
+      [
+        "instance bool [Lokad.Image] Lokad.Image.Internal.Vp8CoefficientProgram::Record(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32,int32,valuetype [System.Runtime]System.Span`1<uint32>)[Optimized]",
+        163
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockPrediction::Fill(int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint8,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        130
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8ForwardTransform::Dct(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        127
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceAnalysis::CollectPlane(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,int32,int32,int32,int32,valuetype Lokad.Image.Internal.Vp8IntraMode,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        80
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8BlockReconstruction::AddVector(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,int32)[Optimized]",
+        73
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.Vp8PreparedInput::PrepareOpaqueTiles(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,bool,int32,int32,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        70
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8CoefficientProgram::WriteInstruction(valuetype Lokad.Image.Internal.Vp8PartitionWriter/Cursor&,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,uint32)[Optimized]",
+        64
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8SourceHistogram::AddBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        59
+      ],
+      [
+        "valuetype Lokad.Image.Internal.Vp8MacroblockScore [Lokad.Image] Lokad.Image.Internal.Vp8DistortionDecision::Select(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<int8>,bool,bool,int32,bool,int32,int64,bool,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationMatrix,valuetype Lokad.Image.Internal.Vp8QuantizationCosts,class Lokad.Image.Internal.Vp8RatePlan,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>,valuetype [System.Runtime]System.Span`1<int8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        55
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.Vp8Prediction::SmallPrepared(valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32)[Optimized]",
+        51
+      ]
+    ],
+    "findings": [
+      "Coefficientprogram recording andemission accountfor414/1973samplelocations acrossCoefficients187/Record163/WriteInstruction64, comparedtosourceanalysis/histogram139. No phasecost/gaininference.",
+      "Record firstbuilds per-coefficient instructions andcategory/remainder fields, then discards them when count>9 and copies16rawlevels into nine literalwords. Last is alreadyknown before thiswork.",
+      "Forlast>=0 exact count=(last-first+1)+(last<15?1:0); allzero emitsone EOB word. This decides samephysicalrepresentation beforebuildingdiscardedinstructions.",
+      "Existing Vp8TokenStatistics.Record(tokenBuffer:false) implements the exactdirect0-2counterpolicy usedhere, includingcategory5/6counter10, saturatedcounts, zero-context/EOB order. It is already the independentcounteroracle andmethod0/1productionpath; reuseinstead ofduplicatingstats tree.",
+      "Only CreateDistortion(method==2) sets prepareProgram; methods0/1 retainrawframecoefficients, methods3..6 useotherrecording. MapDiagramLossyDistortion8 asaffectednamedCPUcontrol; allrequiredmethod2 sync/async/depth/resourcepixel/packetbehavior remainscoveredby existingtests/packagedconsumer."
+    ],
+    "nextHypothesis": "Select literalrepresentation fromknownlast beforeinstructionconstruction; use existingdirectstatistics recorder, appendidenticalnineword literal, keep sparse instructionloop/semantics. Removes discardedcategory/remainder/packing work without owner/cache/layout/representation changes. Additionalvalidation/Last in sharedrecorder may erasebenefit; oneexisting completeeffort2shortfirst. Existing exactcounter/signedcategory/actualwriter plus root/cancel/packettests precede acceptedW/L/package; no gains assumed fromsamples.",
+    "status": "Attributioncomplete;0builds/newfixtures/statisticalclaims. Qualifiedproductionunchanged, no pendingreference blocks independentwork."
+  },
+  "preparation": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+      "candidateSha256": "0d22c3c3a71e6d7cdf9a6ad6effc0f3c46aa0f84bbc17c26c2738ba20ae756f0",
+      "internalTestAssemblySha256": "0717e256d82ab6b62aa7bb057309aa1ac88e19897b43545b00573c2bc4560eb1",
+      "focused": {
+        "internal-normal": 71,
+        "internal-scalar": 71,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "0df154243f33e74e660c601ad1f1459f34d588a8eb918852ce3fd93eac3f6811"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+      "candidateSha256": "b883a70d5bf4e76b795f44004deab570f5483812b65bc911cf8170ef13e6204a",
+      "internalTestAssemblySha256": "bcf5da8a05641c8a4d68707b4a2fafc7d6102097b83d3dbb2c4c36b2cae9775b",
+      "focused": {
+        "internal-normal": 71,
+        "internal-scalar": 71,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "0df154243f33e74e660c601ad1f1459f34d588a8eb918852ce3fd93eac3f6811"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "restored": true,
+      "productionSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "1a596b82d57ea082dc2650a4912bce031e901a919eb12243beccd9702bfdd37e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "267a59574a5fd24f7df6e86e3d651bf44b4be9dff29608137939548c5d266ab0",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "5ab2af30cac5bdbf6249a622270753566a52ff2ef6cd80e9f27072d7ce6bda1e",
+        "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "770df364161b33514b2054fd798e9ae4f5c792c96c3627b4b746c607d84330d1"
+      },
+      "qualificationReused": "VPS588sameactualproduction/modules5909full/live eachOS plusaffectednormal/scalar/SAMEpackage/all3examples; unpublishedactual198dpackageunchanged. No repeatedfull/package or rebuild."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "restored": true,
+      "productionSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "50f25f9f672c5918ffc2fd787d9d64c685bcf036bc5360e4a00b642b81b4ae5c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "fdeab971bcfb1638024b19554a2b84f95d27832cdfd03be2b71bca3142a44724",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "5cf98e65a530689f4740e283425c1278f01385b927d6dd6e7e337fcda2c20777",
+        "src/Lokad.Image/Internal/Vp8CoefficientProgram.cs": "770df364161b33514b2054fd798e9ae4f5c792c96c3627b4b746c607d84330d1"
+      },
+      "sourceSha256": "0f275adb2addf6d42917de74e8ccd4f1fbacb240a578aac546e51680bbffd1f9",
+      "qualificationReused": "ExactVPS588modules/source restore; existing5909full/live/scalar/SAMEpackage reused. No rebuild/full/package repeat."
+    }
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "caseId": "distortion",
+    "subject": "candidate",
+    "mode": "short",
+    "runId": "vpd594-candidate-distortion-short",
+    "managed": {
+      "statistics": {
+        "N": 3,
+        "Min": 2644822.0125,
+        "LowerFence": 2622921.5656250007,
+        "Q1": 2644964.35625,
+        "Median": 2645106.7,
+        "Mean": 2654713.7041666666,
+        "Q3": 2659659.55,
+        "UpperFence": 2681702.3406249993,
+        "Max": 2674212.4,
+        "InterquartileRange": 14695.193749999627,
+        "StandardError": 9749.694288263549,
+        "Variance": 285169616.1437966,
+        "StandardDeviation": 16886.96586553655,
+        "Skewness": 0.3847771182090467,
+        "Kurtosis": 0.6666666666666808,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 2654713.7041666666,
+          "StandardError": 9749.694288263549,
+          "Level": 12,
+          "Margin": 308081.1206717685,
+          "Lower": 2346632.583494898,
+          "Upper": 2962794.8248384353
+        }
+      },
+      "unfilteredActualStatistics": {
+        "N": 3,
+        "Min": 2644824.7,
+        "LowerFence": 2622924.2531250007,
+        "Q1": 2644967.04375,
+        "Median": 2645109.3875,
+        "Mean": 2654716.3916666666,
+        "Q3": 2659662.2375,
+        "UpperFence": 2681705.0281249993,
+        "Max": 2674215.0875,
+        "InterquartileRange": 14695.193749999627,
+        "StandardError": 9749.694288263549,
+        "Variance": 285169616.1437966,
+        "StandardDeviation": 16886.96586553655,
+        "Skewness": 0.3847771182090467,
+        "Kurtosis": 0.6666666666666808,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 2654716.3916666666,
+          "StandardError": 9749.694288263549,
+          "Level": 12,
+          "Margin": 308081.1206717685,
+          "Lower": 2346635.270994898,
+          "Upper": 2962797.5123384353
+        }
+      },
+      "actual": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 80,
+          "Nanoseconds": 213937207
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 80,
+          "Nanoseconds": 211608751
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 80,
+          "Nanoseconds": 211585976
+        }
+      ],
+      "rawGc": "// GC:  2 2 2 32536384 80",
+      "rawThreading": "// Threading:  0 0 80",
+      "extraStatsRecorded": true
+    },
+    "nativeBrackets": [
+      {
+        "mean": 2512720.6666666665,
+        "standardError": 1049.6773004139607,
+        "confidenceLower": 2479551.856497456,
+        "confidenceUpper": 2545889.476835877,
+        "sampleCount": 3
+      },
+      {
+        "mean": 2513925.4166666665,
+        "standardError": 3596.8537309469866,
+        "confidenceLower": 2400268.2397789243,
+        "confidenceUpper": 2627582.5935544088,
+        "sampleCount": 3
+      }
+    ],
+    "managedUs": 2654.7137041666665,
+    "nativeUs": 2512.7206666666666,
+    "ratio": 1.0565096786856,
+    "lower": 0.8930766207887451,
+    "upper": 1.234361003173263,
+    "allocatedBytes": 406705,
+    "packetBytes": 7330,
+    "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+    "librarySha256": "b883a70d5bf4e76b795f44004deab570f5483812b65bc911cf8170ef13e6204a",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "uncertain"
+  },
+  "qualifiedOriginal": {
+    "managedUs": 2638.2921284090908,
+    "nativeUs": 2504.4520651041666,
+    "ratio": 1.053440856453109,
+    "lower": 1.0492246659616877,
+    "upper": 1.0584286891964008,
+    "allocatedBytes": 406705
+  },
+  "decision": "Unselected. Shared-direct-recorder literal preselection has no useful complete-screen gain:2654.71/native2512.72us vsretained2638.29/native2504.45us,406705Bop unchanged. No statisticalregression/equivalence claim from3actuals. No confirmation/variants/passingcost refresh/full-package repeat. Qualifiedsource/modules/publicbindings restored byteexact.",
+  "relatedHistory": {
+    "provider": "vp8-prepared-dense-experiment-evidence.json",
+    "note": "Earlier A used two genericconstruction modes; B used prepared16bit densecells/last. This trial shared existingdirectstatistics instead, but stillfindsnousefulgain. Historicalreport was consulted late; no packed-replay/generic variant repeated. Reuse its adverse evidence before any futureprogramproposal."
+  },
+  "workflow": {
+    "coreEmbeddedBuildsEachOs": 1,
+    "focusedInternalEachModeEachOs": 71,
+    "focusedPublicEachModeEachOs": 239,
+    "shortActuals": 3,
+    "independentConfirmations": 0,
+    "newProfiles": 1,
+    "profileSeconds": 2,
+    "publicHarnessNativeFixtureSelectorBuilds": 0,
+    "fullPackageRepeats": 0,
+    "favorableRepeats": 0,
+    "descriptionCorrection": {
+      "reason": "Inherited histogram description remained in reusedrunner; actual source/module/input/packet/command/gates were correct. Correcteddescription from pinnedVPD594source, no measurementrepeated.",
+      "originalReceiptSha256": "5f04bf8bbd7a9d2477e8910892e11042c3481c64f290f4f4fca67404ecd631cb",
+      "originalReceipt": "vpd594-short-receipt-before-description-correction.json"
+    }
+  },
+  "storage": {
+    "totalManagedAllocatedBytes": 406705,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "physicalNativePeaksRemeasured": false
+  },
+  "next": "Use source-validVEP593 Try4/source preparation locationstoinspectwhetherprepared sourcepixels are reread/widened forselected residual. Check relevant history/actualcodegen before another prototype. Keep exactpacket/order/ties/polls/owners. No permanentfamilyban or globalblock.",
+  "raw": {
+    "path": "tmp/vp8-direct-recording-experiment.tar.xz",
+    "sha256": "ff1f9ebaa25e000bdff244b2e41045bfe681f751189c32040e472b83a8846bc8",
+    "bytes": 4772100,
+    "members": 87,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "path": "tmp/vp8-effort2-current-attribution-vep593.tar.xz",
+        "sha256": "34aa171c0716cc7aeacbcf12bf6b49e0de27dd5b765fefe13c99b297396d24ca",
+        "bytes": 277012,
+        "members": 22,
+        "mirrored": true,
+        "allMembersVerified": true
+      },
+      {
+        "path": "tmp/vp8-model-row-stride-qualified.tar.xz",
+        "sha256": "6ba2ce0bd7569e29a86521f20c5721df558492e1973b5d8b2a1d1803b1b4d607",
+        "bytes": 6012200,
+        "members": 147,
+        "mirrored": true,
+        "allMembersVerified": true
+      },
+      {
+        "file": "vp8-prepared-dense-experiment.tar.xz",
+        "sha256": "f5353128c13440c859a3fd91db72c308b0ef3c7d86f689423f75a0a2e2ecf20c",
+        "bytes": 7570788,
+        "members": 141,
+        "mirrored": true,
+        "allMembersVerified": true
+      }
+    ]
+  },
+  "evidenceScope": "Rejected follow-up summary; full distributions/native samples/original and corrected receipts/modules/source retained in immutable raw/dependencies. No renderer dependency or current cost replacement."
+}
