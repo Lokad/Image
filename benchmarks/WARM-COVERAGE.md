@@ -199,23 +199,26 @@ Current evidence ownership and invalidation:
   two separate materialized-live costs. No other codec/encoder/editing path changes.
   Historical stream/composition timings stay historical rather than current proof.
 
-- WAF542 owns Native8 and Vp8Stream costs after fused ALPHcompression1/filter1
-  final-green publication. Resident remains uncertain; stream passes. Otherfilters
-  retain old extraction/inversion; rawalpha and codingvalidation do not enter it.
-- VPM524 owns four unchanged opaque/live/validation costs. Earlier VCT508 classes
-  and CPT479 successful-only publication remain; failed private cursor is not
-  observed/resumed and every poll/public cleanup stays.
+- VPS588 owns all six VP8 pixel/validation costs after model-row preparation:
+  Native8, Vp8Stream, Opaque8, SimpleOpaque8, OpaqueCancelable8 and ValidateVp8Alpha.
+  Model stride invalidates older WAF542/VPM524 costs. Their alpha publication,
+  typed borrowing and successful-only private cursor behavior remain; every
+  checkpoint, public failure and owner cleanup is preserved.
 - LPF476 owns six unchanged VP8L reader costs after final inverse/publication;
   its former VP8 costs are superseded. Encoders, other codecs, resizing and text
   retain their own source-valid evidence.
 - VHB517 owns nine lossy WebP encode costs after four-block histogram preparation;
   affected unmeasured H boundaries remain historical. Earlier profiles are leads,
   not current whole-execution CPU shares.
-- RBC567 owns Mixed16/TightMixed16/TightVertical16 after shared bounded-band execution.
+- RBC567 owns Mixed16/TightMixed16 after shared bounded-band execution;
+  [identity geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md) owns TightVertical16.
   RPA503 retains twelve unchanged word controls after shared preparation; source-valid byte controls
   remain attributed separately. Unrefreshed allocator/filter/pipeline H costs stay
   historical. Lanczos owns eight refreshed one-shot/prepared controls; exact
   certificates, repair, plans/owners and portable fallbacks remain required.
+- TCR587 owns the two prepared drawing costs after band clipping reuse. TSC573's
+  earlier allocation savings remain history; font/layout/fitting and compositing
+  evidence are unaffected. Drawing CPU gains remain inconclusive.
 - Other current owners and their precise source scopes are linked in the family
   table. Reuse confirmations only when relevant paths/boundaries remain unchanged.
 
