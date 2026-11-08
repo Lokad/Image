@@ -1603,14 +1603,33 @@ def render():
     assert png['storage']['workspaceAdmissionBytes'] == 393216 and png['storage']['retainedOperationScratchBytes'] == 0
     assert png['sourceProof']['outsidePairSequentialInsertionAndProcessLazyUnchanged']
     assert set(png['unchangedCases']) == set(png['cases']) - set(png['sourceProof']['invalidatedComparisons'])
+    png_fastest = json.loads((ROOT / 'benchmarks/current-png-fastest-costs-evidence.json').read_text(encoding='utf-8'))
+    assert not png_fastest['productionChanged'] and png_fastest['allMeasurementBuilds'] == 0
+    assert png_fastest['sourceProof']['productionSourcesMainEmbeddedBindingsRestoredExactly']
+    assert png_fastest['producers'] == jpeg_scan['producers']
+    assert set(png_fastest['cases']) == {'EncodeFast8', 'EncodeFast16', 'EncodeFastCancelable16'}
+    assert set(png_fastest['unchangedOtherCases']) == set(png['cases']) - set(png_fastest['cases'])
+    pq = png_fastest['qualification']
+    assert pq['fullChecksEachOs'] == 5879 and pq['sameActualPackageBothOs']
+    for package_check in pq['actualPackageChecks'].values():
+        assert package_check['actualConsumerPassed'] and package_check['usageExamples'] == 3
+        assert package_check['newFastestByteWordFrozenSyncAsyncAdmissionChecksPassed']
+        assert package_check['packageSha256'] == jpeg_scan['qualification']['actualPackage']['sha256']
+    effective_png = png['cases'] | png_fastest['cases']
+    assert {s: sum(c['status'] == s for c in effective_png.values()) for s in ['pass', 'gap', 'uncertain']} == png_fastest['familyStatusCounts'] == {'pass': 10, 'gap': 3, 'uncertain': 2}
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
              else row) for kind, row in rows]
     def png_label(label):
         return label.replace(' † H', '').replace(' †', '').replace(', one-shot ', ', ').replace(', red-plane reference', '')
-    for case, current in png['cases'].items():
+    for case, current in effective_png.items():
         assert current['caseId'] == case
-        if case in png['unchangedCases']:
+        if case in png_fastest['cases']:
+            assert not current['reusedUnchangedPath']
+            assert current['librarySha256'] == png_fastest['producers']['linuxSha256']
+            if case == 'EncodeFastCancelable16':
+                assert current['standaloneLaunches'] == len(current['envelopeRunIds']) == 2
+        elif case in png['unchangedCases']:
             reuse = png['unchangedCases'][case]
             assert current['reusedUnchangedPath'] and reuse['sourceApplies']
             assert current['librarySha256'] == reuse['librarySha256']
@@ -1814,8 +1833,10 @@ Current scope and remaining work:
   keep their separate required coverage. No historical paired gain is inferred.
   [Lazy encoder preparation](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md)
   independently saves390/375µs (1.83%/2.16%) on complete Optimal16/Smallest8.
-  Eleven affected fresh one-shot comparisons refresh; four Fastest costs reuse
-  unchanged bodies. Fifteen controls:9pass/stop,2gaps,4uncertain. Exact packets and
+  [Current Fastest costs](../benchmarks/CURRENT-PNG-FASTEST-COSTS.md) refresh three
+  unchanged-production controls: ordinary word passes/stop; live word is a242µs
+  gap and byte remains a208µs gap. Twelve other costs reuse unchanged paths.
+  Fifteen controls:10pass/stop,3gaps,2uncertain. Exact packets and
   384KiB admission remain unchanged; retained scratch is zero. Grayscale8 measures
   +408B/op (551,772); ten other fresh allocations are unchanged. Earlier
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md)
