@@ -80,7 +80,7 @@ internal ref struct WebpLosslessDecoder
     // format permits output-backed decoding. Its alpha lanes survive YUV rendering;
     // palette/byte-order paths keep compact alpha storage, chosen before admission.
     // The caller owns result, including when decoding or extraction throws.
-    internal byte[]? DecodeGreen(scoped ref ImageBuffer? result)
+    internal byte[]? DecodeGreen(scoped ref ImageBuffer? result, bool horizontal)
     {
         var pixels = DecodePixels(PixelOutput.Green, ref result, out _);
         var temporary = result is null;
@@ -91,6 +91,11 @@ internal ref struct WebpLosslessDecoder
             {
                 context.Reserve((long)width * height + 32);
                 alpha = new byte[width * height];
+            }
+            if (horizontal)
+            {
+                WebpAlpha.PublishHorizontalGreen(pixels, alpha, width, height, context);
+                return alpha;
             }
             for (var y = 0; y < height; y++)
             {

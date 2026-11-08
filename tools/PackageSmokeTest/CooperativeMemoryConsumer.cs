@@ -900,6 +900,19 @@ internal static class CooperativeMemoryConsumer
             alphaSource.GetRow8(0)[3] = 0;
             ImageCodec.EncodeWebp(alphaSource, alphaPacket, new() { Lossless = false, Quality = 85, Effort = 4 });
             var alphaBytes = alphaPacket.ToArray();
+            var horizontalCompressed = false;
+            for (var chunk = 12; chunk < alphaBytes.Length;)
+            {
+                var size = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(alphaBytes.AsSpan(chunk + 4));
+                if (alphaBytes.AsSpan(chunk, 4).SequenceEqual("ALPH"u8))
+                {
+                    horizontalCompressed = (alphaBytes[chunk + 8] & 15) == 5;
+                    break;
+                }
+                chunk += 8 + size + (size & 1);
+            }
+            if (!horizontalCompressed)
+                throw new Exception("Packaged alpha control must exercise compressed horizontal publication.");
             var alphaLimits = new ImageLimits { MemoryBudget = alphaBudget,
                 MaxWorkingBytes = alphaBytes.Length + 2L * 513 * 259 * 4 };
             using (var decoded = ImageCodec.Decode(alphaBytes, new() { Limits = alphaLimits }))
@@ -915,6 +928,7 @@ internal static class CooperativeMemoryConsumer
                 throw new Exception("Packaged compressed alpha leaked storage or disposed the borrowed root.");
         }
         Console.WriteLine("Packaged compressed alpha fits two RGBA frames.");
+        Console.WriteLine("Packaged horizontal alpha publication preserves exact samples and admitted ownership.");
         {
             const int losslessFrameBytes = 257 * 33 * 4;
             var longGreen = AuthoredWebp.LongGreenCacheRaster();

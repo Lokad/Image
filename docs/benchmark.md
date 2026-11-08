@@ -29,15 +29,22 @@ Current scope and remaining work:
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
   [Prepared coefficient models](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md)
   separately save **155.50µs/3.08% raw**,3.16% normalized on complete opaque VP8;
-  both confidence views separate. Resident alpha establishes no gain/regression.
-  Six affected VP8 costs refresh: 1 pass / 5 gaps. Live opaque is now
+  both confidence views separate. That model-only stage established no alpha gain.
+  [Fused horizontal alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
+  separately saves **196.04µs/3.21% raw**,3.25% normalized, on complete resident
+  decoding, with separated filtered/all-actual raw/normalized confidence.
+  Current resident5,919.97/native5,962.52µs,
+  upper1.002 is uncertain; stream upper0.992 passes/stop.
+  GC stays238,384/238,480B/op, retained output531,468B; no new owned capacity.
+  Two alpha costs refresh, four unchanged VP8 costs reuse their model evidence:
+  two pass, three gaps, one uncertain. Live opaque is now
   4,979.43/native4,789.64µs,
   upper1.044 remains a gap. GC stays228,864B/op.
   One 1,056 B typed owner serves header and readers; per-block casting and ordinary
   numeric token dispatch retire. Actual complete-kernel coverage witnesses all12
   symbols. Probability/category/sign order, every poll, exact cursor/pixels and
   ownership remain. No extra model, capacity, cache or retained state.
-  Two displayed rows refresh; 123 reuse unchanged paths. Earlier
+  One displayed stream row refreshes; 124 reuse unchanged paths. Earlier
   [live-class gains](../benchmarks/VP8-DIRECT-COEFFICIENT-CLASSES.md) remain history.
 - **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
   saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.
@@ -127,15 +134,16 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,875 full/live checks per OS**, affected
+The current production build passes **5,877 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
-Affected VP8 paths pass40 internal/239 public checks per normal/scalar mode
-on each OS, including all12coefficient symbols, model/header updates, contexts,
-signed wrapping, tails, exact cursors/pixels, terminal refusal, cancellation/recovery and survivors.
-Unchanged JPEG/decoder/word/other ISA evidence is reused.
+Affected alpha paths pass25 internal/402 public checks per normal/scalar mode
+on each OS, including exact prefix/border/tail/dense/in-place bytes, palette integration,
+terminal refusal, cancellation/recovery and survivors. Package checks explicitly
+exercise compressed horizontal alpha. Unchanged coefficient/JPEG/decoder/word/ISA
+evidence is reused.
 Unchanged paths reuse valid evidence. This is correctness/package qualification,
 not a full release refresh or whole-library performance pass. The retained
 long-run cases are included in this full qualification. Original adverse and
@@ -166,7 +174,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream † | 6,132.96 | 5,985.53 | 1.025 / 1.028 | 238,480 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,939.22 | 6,011.78 | 0.988 / 0.992 | 238,480 | — |
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |

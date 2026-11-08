@@ -141,6 +141,57 @@ public sealed class Vp8PrimitiveTests
     }
 
     [Fact]
+    public void HorizontalGreenPublicationKeepsPrefixesBordersTailsAndOwnership()
+    {
+        foreach (var width in new[] { 1, 3, 4, 5, 7, 8, 9, 31, 32, 33, 513 })
+        foreach (var seed in new[] { 0, 1, 255 })
+        {
+            const int height = 3;
+            var input = Enumerable.Repeat(0xA731D649u, width * height + 2).ToArray();
+            var expected = new byte[width * height];
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var green = unchecked((byte)(seed + i * 91 + (i / width) * 37));
+                input[i + 1] = 0xA700D649u & ~0xFF00u | (uint)green << 8;
+                expected[i] = green;
+            }
+            // Independent byte recurrence from RFC 9649. First-column samples
+            // use the sample above; every other sample uses its left neighbor.
+            for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
+            {
+                var at = y * width + x;
+                var predictor = x != 0 ? expected[at - 1] : y != 0 ? expected[at - width] : 0;
+                expected[at] = unchecked((byte)(expected[at] + predictor));
+            }
+            var original = input.ToArray();
+            using var root = new Lokad.Image.Tooling.TestMemoryBudget(0);
+            using var context = new OperationContext(new() { MemoryBudget = root }, default);
+            var compact = Enumerable.Repeat((byte)0xAD, expected.Length + 6).ToArray();
+            WebpAlpha.PublishHorizontalGreen(input.AsSpan(1, expected.Length), compact.AsSpan(3, expected.Length), width, height, context);
+            Assert.Equal(expected, compact.AsSpan(3, expected.Length).ToArray());
+            Assert.Equal(original, input);
+            Assert.All(compact[..3], b => Assert.Equal(0xAD, b)); Assert.All(compact[^3..], b => Assert.Equal(0xAD, b));
+            WebpAlpha.PublishHorizontalGreen(input.AsSpan(1, expected.Length), default, width, height, context);
+            for (var i = 0; i < expected.Length; i++) Assert.Equal((uint)expected[i] << 24, input[i + 1]);
+            Assert.Equal(original[0], input[0]); Assert.Equal(original[^1], input[^1]);
+            Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
+        }
+    }
+
+    [Fact]
+    public void HorizontalGreenPublicationChecksCancellationBeforeBorrowedStorage()
+    {
+        using var token = new CancellationTokenSource();
+        using var context = new OperationContext(ImageLimits.Default, token.Token); token.Cancel();
+        uint[] input = [0x17AD8321, 0xFE001122, 0xAA55EEFF, 0xFF9321AD, 0xAAFF1177];
+        var original = input.ToArray(); var compact = Enumerable.Repeat((byte)0xA7, 5).ToArray();
+        var error = Assert.Throws<OperationCanceledException>(() => WebpAlpha.PublishHorizontalGreen(input, compact, 5, 1, context));
+        Assert.Equal(token.Token, error.CancellationToken); Assert.Equal(original, input); Assert.All(compact, b => Assert.Equal(0xA7, b));
+        Assert.Throws<OperationCanceledException>(() => WebpAlpha.PublishHorizontalGreen(input, default, 5, 1, context));
+        Assert.Equal(original, input);
+    }
+
+    [Fact]
     public void AllAlphaFiltersHaveHandComputedBordersClampAndModuloCases()
     {
         byte[] expected = [10, 20, 250, 30, 40, 50, 240, 100, 110];

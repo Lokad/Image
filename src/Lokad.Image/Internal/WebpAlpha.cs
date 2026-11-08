@@ -1,3 +1,8 @@
+using System.Buffers.Binary;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Lokad.Image.Internal;
 
 /// <summary>Owned RFC 9649 section 2.7.1.2 alpha decoding and inverse filtering.</summary>
@@ -34,9 +39,64 @@ internal static class WebpAlpha
             CopyRaw(payload[1..], alpha, context);
         }
         else
-            alpha = new WebpLosslessDecoder(payload[1..], width, height, context, header: false).DecodeGreen(ref result);
+        {
+            var horizontal = filter == 1;
+            alpha = new WebpLosslessDecoder(payload[1..], width, height, context, header: false).DecodeGreen(ref result, horizontal);
+            if (horizontal) return alpha;
+        }
         Unfilter(alpha is null ? result!.Pixels[3..] : alpha, width, height, filter, context, alpha is null ? 4 : 1);
         return alpha;
+    }
+
+    // RFC 9649 horizontal inversion while the final VP8L greens are published.
+    // An empty compact destination selects the already owned RGBA frame in pixels.
+    // Every source word is read before its in-place alpha publication replaces it.
+    internal static void PublishHorizontalGreen(Span<uint> pixels, Span<byte> compact,
+        int width, int height, OperationContext context)
+    {
+        var inPlace = compact.IsEmpty;
+        byte firstAbove = 0;
+        for (var y = 0; y < height; y++)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            var row = pixels.Slice(y * width, width);
+            var destination = inPlace ? default : compact.Slice(y * width, width);
+            var first = unchecked((byte)((byte)(row[0] >> 8) + firstAbove));
+            var previous = firstAbove; var x = 0;
+            if (Sse2.IsSupported)
+                for (; x <= width - 4; x += 4)
+                {
+                    var values = Sse2.ShiftRightLogical(MemoryMarshal.Read<Vector128<uint>>(MemoryMarshal.AsBytes(row.Slice(x, 4))), 8).AsByte();
+                    // Four independent byte-lane additions form green prefixes;
+                    // ignored R/B/A lanes never carry into the low green byte.
+                    values = Sse2.Add(values, Sse2.ShiftLeftLogical128BitLane(values, 4));
+                    values = Sse2.Add(values, Sse2.ShiftLeftLogical128BitLane(values, 8));
+                    values = Sse2.Add(values, Vector128.Create((uint)previous).AsByte());
+                    previous = (byte)values.AsUInt32().GetElement(3);
+                    if (inPlace)
+                    {
+                        var alpha = Sse2.ShiftLeftLogical(values.AsUInt32(), 24);
+                        MemoryMarshal.Write(MemoryMarshal.AsBytes(row.Slice(x, 4)), in alpha);
+                    }
+                    else
+                    {
+                        var samples = Sse2.And(values.AsUInt32(), Vector128.Create(255u)).AsInt32();
+                        var words = Sse2.PackSignedSaturate(samples, Vector128<int>.Zero);
+                        var packed = Sse2.PackUnsignedSaturate(words, Vector128<short>.Zero).AsUInt32().GetElement(0);
+                        BinaryPrimitives.WriteUInt32LittleEndian(destination.Slice(x, 4), packed);
+                    }
+                }
+            for (; x < width; x++)
+            {
+                previous = unchecked((byte)(previous + (byte)(row[x] >> 8)));
+                if (inPlace) row[x] = (uint)previous << 24;
+                else destination[x] = previous;
+            }
+            firstAbove = first;
+            // Extraction and inverse filtering previously each polled per row.
+            // Keep two bounded checkpoints while retiring the extra frame pass.
+            context.Cancellation.ThrowIfCancellationRequested();
+        }
     }
 
     internal static void Unfilter(Span<byte> alpha, int width, int height, int filter, OperationContext context,

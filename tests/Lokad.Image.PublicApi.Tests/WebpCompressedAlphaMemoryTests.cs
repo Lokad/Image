@@ -17,15 +17,22 @@ public sealed class WebpCompressedAlphaMemoryTests(ITestOutputHelper output)
         using var root = new TestMemoryBudget(4 * 1024 * 1024);
         var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
         foreach (var (colors, predictor) in new[] { (2, false), (4, false), (16, false), (17, false), (2, true) })
+        foreach (var filter in new[] { 0, 1 })
         {
             var palette = AuthoredWebp.Palette(colors, predictor);
             var length = BinaryPrimitives.ReadInt32LittleEndian(palette.AsSpan(16));
-            var alpha = new byte[length - 4]; alpha[0] = 1;
+            var alpha = new byte[length - 4]; alpha[0] = (byte)(1 | filter << 2);
             palette.AsSpan(25, length - 5).CopyTo(alpha.AsSpan(1));
             var encoded = ReplaceAlpha(fixture.Encoded, alpha);
             var unchanged = encoded.ToArray();
             var palettePixels = AuthoredWebp.ExpectedPalette(colors);
-            for (var i = 0; i < 9; i++) expected[i * 4 + 3] = palettePixels[i * 4 + 1];
+            var previous = 0;
+            for (var i = 0; i < 9; i++)
+            {
+                var green = palettePixels[i * 4 + 1];
+                previous = filter == 0 ? green : (previous + green) & 255;
+                expected[i * 4 + 3] = (byte)previous;
+            }
             using (var first = ImageCodec.Decode(encoded, options))
             using (var survivor = ImageCodec.Decode(encoded, options))
             {
