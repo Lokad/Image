@@ -1,5 +1,9 @@
 # Shared bounded-band bicubic execution
 
+The mixed-axis costs below remain valid. The vertical control is now superseded
+by [identity-axis geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md); its earlier cost
+and qualification are retained here as stage history.
+
 RBS566/RBC567 uses one source loop for 4/8/16-row mixed-word bands. With local
 8 KiB headroom, sixteen rows reduce repeated column-cache setup and overlapping
 source conversion. Entry-selected value types make capacities and cache strides

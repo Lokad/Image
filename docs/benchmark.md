@@ -1,6 +1,6 @@
 # Lokad.Image benchmarks
 
-Updated 2026-11-08. These **125 selected comparisons** combine qualified
+Updated 2026-11-08. These **126 selected comparisons** combine qualified
 **0.2.1 development** costs with retained **0.2.0** evidence. Full parity remains
 open across the [283 required paths](../benchmarks/WARM-COVERAGE.md). **†** marks
 development costs; **H** marks affected historical costs that are not current
@@ -105,13 +105,18 @@ Current scope and remaining work:
   **159.23µs/14.79% raw/15.40% normalized** on default mixed-word resizing and
   **86.23µs/8.03% raw/8.71% normalized** at4KiB, with separated raw/normalized
   confidence. Current917.38/native851.87µs upper1.079 and987.47/native851.08µs
-  upper1.164 remain gaps; bounded vertical730.32/native591.71µs upper1.240.
+  upper1.164 remain gaps.
   GC stays114/113Bop. Sixteen-row scratch7596B is admitted as8192B; bounded
   mode stays3992/4096B. Scratch retention0, mixed output1059864B until disposal;
   existing pixel-pool retention stays separate, physical/native peaks unmeasured.
-  Three current costs supersede shared-word preparation; twelve unchanged word
-  controls reuse it. Fifteen remain6pass/9gaps; passing enlargement stays stopped.
-  One displayed row refreshes;124 numerical rows reuse unchanged paths. Earlier
+  [Identity-axis geometry](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md) saves
+  **271.81µs/37.22% raw/36.98% normalized** on bounded word height reduction:
+  458.51/native589.46µs,upper0.779 passes/stop,113B/op unchanged. It removes four
+  exactzero horizontal taps in the shared loop; exactpixels, repair and ownership
+  remain. Its result retains529,416B, scratch0; existingidlepool staysseparate.
+  Fourteen other word costs reuse valid paths. Fifteen now7pass/8gaps;
+  passing enlargement stays stopped. One existing materialcase is newly displayed,
+  with125 numerical rows reused. Earlier
   dynamic-capacity regression remains in the report, without renderer dependencies.
   One source loop/static capacities, no new heap/pool/session or pixel tolerance.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
@@ -153,11 +158,13 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,898 full/live checks per OS**, affected
+The current production build passes **5,905 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
+The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
+admission, terminalrefusal, cancellationcleanup and independent survivors.
 JPEG paths pass407 internal/375 public checks per normal/scalar mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
@@ -309,6 +316,7 @@ settings do not establish matched quality.
 | Prepared text RGBA16 / ImageSharp.Drawing (gap) | 147.75 | 45.90 | 3.219 / 4.522 | 67,368 |
 | Composite RGBA8 / FFmpeg (gap) | 625.41 | 498.73 | 1.254 / 1.270 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
+| Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 458.51 | 589.46 | 0.778 / 0.779 | 113 |
 
 **Inspection and pixel-coding validation**
 

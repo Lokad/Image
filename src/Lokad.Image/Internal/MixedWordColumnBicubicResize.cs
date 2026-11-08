@@ -12,6 +12,8 @@ internal static class MixedWordColumnBicubicResize
     private const int WorkspaceBytes = 4096;
     private readonly struct EightRowBand { }
     private readonly struct SixteenRowBand { }
+    private readonly struct VerticalEightRowBand { }
+    private readonly struct VerticalSixteenRowBand { }
 
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
         double scaleX, double scaleY, long tapsX, long tapsY, OperationContext context)
@@ -29,7 +31,15 @@ internal static class MixedWordColumnBicubicResize
                 + 17L * source.Width * sizeof(int) + 128 + ResizeAlpha.ScratchBytes) return false;
         // Select by the local ceiling before shared admission. A refused root
         // reservation is terminal; never retry with a smaller band afterward.
-        return result.Height >= 16 && scaleY <= 2.125 && context.RemainingWorkingBytes >= 8192
+        var largerBand = result.Height >= 16 && scaleY <= 2.125 && context.RemainingWorkingBytes >= 8192;
+        // Up to this width, (x+.5)*width is an exact half-integer below 2^52.
+        // The original center is exactly x; its five weights are 0,0,1,0,0.
+        // Retain the original geometry for larger caller-permitted dimensions.
+        if (source.Width == result.Width && source.Width <= 1 << 26)
+            return largerBand
+                ? Apply<VerticalSixteenRowBand>(source, result, scaleY, context)
+                : Apply<VerticalEightRowBand>(source, result, scaleY, context);
+        return largerBand
             ? Apply<SixteenRowBand>(source, result, scaleY, context)
             : Apply<EightRowBand>(source, result, scaleY, context);
     }
@@ -39,7 +49,8 @@ internal static class MixedWordColumnBicubicResize
     {
         // Value-type specialization makes these capacities and cache strides
         // constants in both kernels, while keeping one execution source body.
-        var rowCapacity = typeof(TBand) == typeof(SixteenRowBand) ? 16 : 8;
+        var identity = typeof(TBand) == typeof(VerticalEightRowBand) || typeof(TBand) == typeof(VerticalSixteenRowBand);
+        var rowCapacity = typeof(TBand) == typeof(SixteenRowBand) || typeof(TBand) == typeof(VerticalSixteenRowBand) ? 16 : 8;
         var sourceCapacity = rowCapacity == 16 ? 42 : 24;
         var workspaceBytes = rowCapacity == 16 ? 8192 : WorkspaceBytes;
         context.Reserve(workspaceBytes);
@@ -67,7 +78,7 @@ internal static class MixedWordColumnBicubicResize
             // <=41 for16rows and <=24 for8rows at scaleY<=2.125.
             // Larger scales retain the existing four-row band.
             var bandRows = scaleY <= 2.125 ? rowCapacity : 4;
-            var geometry = MixedBicubicGeometry.Prepare(source, result, bandRows, context.Cancellation);
+            var geometry = identity ? default : MixedBicubicGeometry.Prepare(source, result, bandRows, context.Cancellation);
             for (var tileY = 0; tileY < result.Height; tileY += bandRows)
             {
                 var length = Math.Min(bandRows, result.Height - tileY);
@@ -99,7 +110,12 @@ internal static class MixedWordColumnBicubicResize
                     context.Cancellation.ThrowIfCancellationRequested();
                     double center, normalizerX;
                     int first, count;
-                    if (planned)
+                    if (identity)
+                    {
+                        center = x; first = x - 2; count = 1; normalizerX = 1;
+                        horizontal[0] = 1; samplesX[0] = x;
+                    }
+                    else if (planned)
                         geometry.Read(x, horizontal, samplesX, out center, out first, out count, out normalizerX);
                     else
                     {

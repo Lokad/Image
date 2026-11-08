@@ -1597,13 +1597,13 @@ def render():
     assert word_prep['sourceProof']['all2048ExponentConstructionsBitIdentical']
     assert word_prep['storage']['newOwnedCapacityBytes'] == word_prep['storage']['newCrossOperationRetainedBytes'] == 0
     for current in word_prep['cases'].values():
+        if current['caseId'] == 'TightVertical16':
+            continue  # Refreshed by identity geometry below.
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['librarySha256'] == word_prep['producers']['linuxSha256']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    assert word_prep['statusCounts'] == {state: sum(c['status'] == state for c in word_prep['cases'].values())
-                                       for state in ('pass', 'gap', 'uncertain')}
     word_labels = {'Up16': 'Bicubic upscale RGBA16',
                    'TightCross16': 'Bicubic RGBA16, width down / height up / input+output+4 KiB',
                    'TightMixed16': 'Bicubic RGBA16, width up / height down, input+output+4 KiB',
@@ -1626,6 +1626,8 @@ def render():
     assert band_execution['sourceProof']['fullBSourceReconstructsAOutsideEntryAndCompileTimeCapacitySelection']
     assert band_execution['sourceProof']['allSampleDecodeTapMultiplyAddQuotientCertificateRoundingRepairBodiesExact']
     for current in band_execution['cases'].values():
+        if current['caseId'] == 'TightVertical16':
+            continue  # Its previous geometry is superseded.
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
         assert current['librarySha256'] == band_execution['producers']['linuxSha256']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
@@ -1646,6 +1648,29 @@ def render():
     assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5888
     assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
     assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
+    vertical_word = json.loads((ROOT / 'benchmarks/bicubic-identity-word-geometry-evidence.json').read_text(encoding='utf-8'))
+    assert vertical_word['productionAccepted'] and vertical_word['requiredMaterialPaths'] == 283
+    assert vertical_word['raw']['mirrored'] and vertical_word['raw']['allMembersVerified']
+    assert vertical_word['sourceProof']['originalReconstructedOutsideEntryAndIdentityGeometry']
+    assert vertical_word['sourceProof']['allVerticalAccumulationQuotientCertificateRepairAndOwnershipBodiesExact']
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in vertical_word['comparison']['views'].values())
+    current = vertical_word['current']
+    assert current['caseId'] == 'TightVertical16' and current['status'] == 'pass' and current['upper'] <= 1
+    assert current['librarySha256'] == vertical_word['producers']['linuxSha256']
+    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+    assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
+    merged_word = {**word_prep['cases'], **band_execution['cases'], 'TightVertical16': current}
+    assert vertical_word['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
+                                                     for state in ('pass', 'gap', 'uncertain')}
+    vq = vertical_word['qualification']
+    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5905
+    assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
+    assert vq['actualPackage']['verticalWordGeometryFrozenAdmissionAndSurvivorsPassed']
+    assert vq['samePackageLinux']['verticalWordGeometryFrozenAdmissionAndSurvivorsPassed']
+    rows.append(('editing', f'| Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → {current["outputWidth"]}×{current["outputHeight"]} | '
+                 f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+                 f'{current["allocatedBytes"]:,} |'))
     png = json.loads((ROOT / 'benchmarks/png-streaming-token-frequencies-evidence.json').read_text(encoding='utf-8'))
     assert png['productionAccepted'] and png['requiredMaterialPaths'] == 283
     pq = png['qualification']
@@ -1897,13 +1922,18 @@ Current scope and remaining work:
   **159.23µs/14.79% raw/15.40% normalized** on default mixed-word resizing and
   **86.23µs/8.03% raw/8.71% normalized** at4KiB, with separated raw/normalized
   confidence. Current917.38/native851.87µs upper1.079 and987.47/native851.08µs
-  upper1.164 remain gaps; bounded vertical730.32/native591.71µs upper1.240.
+  upper1.164 remain gaps.
   GC stays114/113Bop. Sixteen-row scratch7596B is admitted as8192B; bounded
   mode stays3992/4096B. Scratch retention0, mixed output1059864B until disposal;
   existing pixel-pool retention stays separate, physical/native peaks unmeasured.
-  Three current costs supersede shared-word preparation; twelve unchanged word
-  controls reuse it. Fifteen remain6pass/9gaps; passing enlargement stays stopped.
-  One displayed row refreshes;124 numerical rows reuse unchanged paths. Earlier
+  [Identity-axis geometry](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md) saves
+  **271.81µs/37.22% raw/36.98% normalized** on bounded word height reduction:
+  458.51/native589.46µs,upper0.779 passes/stop,113B/op unchanged. It removes four
+  exactzero horizontal taps in the shared loop; exactpixels, repair and ownership
+  remain. Its result retains529,416B, scratch0; existingidlepool staysseparate.
+  Fourteen other word costs reuse valid paths. Fifteen now7pass/8gaps;
+  passing enlargement stays stopped. One existing materialcase is newly displayed,
+  with125 numerical rows reused. Earlier
   dynamic-capacity regression remains in the report, without renderer dependencies.
   One source loop/static capacities, no new heap/pool/session or pixel tolerance.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
@@ -1945,11 +1975,13 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{raster['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{vertical_word['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
 sync/async consumers, plus bounded main validation and exact method2 residual storage/cancellation/recovery.
+The package also verifies frozen vertical RGBA16 pixels at4/8KiB, aggregate
+admission, terminalrefusal, cancellationcleanup and independent survivors.
 JPEG paths pass407 internal/375 public checks per normal/scalar mode
 on each OS, including actual live-window DC/EOB/following-read witnesses,
 truncation/stuffing/partial failures, refusal/cancellation cleanup and survivors.
@@ -2006,7 +2038,7 @@ evidence. Historical experiment reports remain separate. Update with
 if __name__ == '__main__':
     text = render()
     assert len(re.findall(r'^\| ---', text, re.M)) == 3
-    assert len(re.findall(r'^\|', text, re.M)) - 6 == 125, 'Expected125comparison rows.'
+    assert len(re.findall(r'^\|', text, re.M)) - 6 == 126, 'Expected126comparison rows.'
     output = ROOT / 'docs/benchmark.md'
     if '--check' in sys.argv:
         assert output.read_text(encoding='utf-8') == text, 'Benchmark summary differs from retained evidence.'
