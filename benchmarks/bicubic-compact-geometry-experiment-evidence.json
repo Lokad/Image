@@ -1,0 +1,962 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RGA589/RGC590/RGS591/RGX592",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "stages": {
+    "rgc590": {
+      "label": "Scalar index reconstruction",
+      "design": {
+        "project": "Lokad.Image",
+        "round": "RGC590",
+        "paths": [
+          "src/Lokad.Image/Internal/MixedBicubicGeometry.cs"
+        ],
+        "originalAbsent": [],
+        "baselineCommit": "8bd2cb0d822f5559dcdd266d38e1226068add383",
+        "baseline": {
+          "windowsSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+          "linuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21"
+        },
+        "transitionFromLinuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+        "transitionFromSources": {
+          "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795"
+        },
+        "hypothesis": "RGA589 source-valid audit finds84B/column temporarygeometry in unpublished result suffix; bounded8row plan ends112, requiring17tailrows recomputation. Store originalseven doubles andtwo ints only (64B), derive five redundantclampedindices whileRead. Plan survives through120 (nine tailrows), lesspreparation/storage/copy at costof repeatedintegerclamps. Not a certificate-mask/rowbase replay.",
+        "endState": "One64B shared geometry record for byte/word callers, sameRead API and exactcenter/normalizer/weights/first/count; sourceWidth fills viewmetadata. No newgeometry schema perband, owner, buffer/cache or session. Resultowner alreadyadmitted fulloutput before borrowed preparation; existingplannedband lifetimecheck remains.",
+        "workloads": [
+          "TightMixed16",
+          "Mixed16"
+        ],
+        "affected": [
+          "TightMixed8",
+          "Mixed8",
+          "TightMixed16",
+          "Mixed16"
+        ],
+        "unaffected": "Identitywidth Prepare returnsdefault; wordidentity specialization bypassesit, noRead. Otheraxisgeometry helpers and numeric kernels, bounds/certificates/repair/packing/polls/owners unchanged. No codec/text changes.",
+        "proof": "Every reconstructed sample=tap originalfirst+t clampedto same sourceWidth; weights/normalizer/center use originaloperations/order, neither roundingnorquantization changed. Sharedview sourceWidth changes metadata only, not ownedcapacity. SafeRows=floor((resultbytes-width*64)/stride) protects allstores before read; spanlengths derive same source/result limits. Reuse exactoriginalmanagedframes/rationalreference onnormal/scalar modes and sourceprojection.",
+        "storage": "Current1027wide wordgeometry86268to65728B inside alreadyowned1059864Boutput, planned8rowend112to120; 16rowend112unchanged. No newheap/admitted/retainedcapacity, 4/8KiB stackallowances unchanged; physicalpeaknotmeasured. Bytecase suffix proportionchanges and needs currentqualification ifaccepted.",
+        "acceptance": "Focused73internal/688public resize/column/admission normal+scalar W/L; existing frozen full16sample/rational/tinyalpha/edge/refusal/cancel/survivor controls. ExistingcompleteTightMixed16+Mixed16shorts first, independentifuseful, boundedbyte generalization/currentfouraffectedcosts onacceptance. Samequiet/nativefloatgates/exactmanagedcontract/outputownership. Acceptedcoherentstage fullW/L/live/SAMEactualpackage/all3examples once; otherwise restorebyteexactwithoutrebuild/repeatingqualification.",
+        "tradeoffs": "RepeatedRead clamp loop can costmore than storedindexcopy, changeinlining/registerpressure andhurtdefault16row case. Smallerplan may enablecache in casespreviouslyusingexactfallback; unchanged exactpixeloracles coverit. Counts/oldprofilelocations do notprove gain. Retain adverseevidence, no fixedpercentage/favorablerepeats.",
+        "productionAccepted": false
+      },
+      "preparation": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+          "candidateSha256": "dd04940562dc171d940b98272e0eb689f1425ca51794084721ad0ff2d588db20",
+          "internalTestAssemblySha256": "aadea51193fa4d2cbcae3eebff0675814461e5fce91f8ac5b08c66ff1af3df71",
+          "focused": {
+            "internal-normal": 73,
+            "internal-scalar": 73,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "a96ecc7e53cdbf7a63fd6e99bb036a72af62119dbbf691068322ec146ca0f2d3"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+          "candidateSha256": "843d01256f1982a72b7aadd3e777505e23de221a8ff78665edd1a9787cc0de0c",
+          "internalTestAssemblySha256": "e3a4a8467c38a2c9be350d31a9dc3abfea345849784ca5d5ccfc90f46bd769b9",
+          "focused": {
+            "internal-normal": 73,
+            "internal-scalar": 73,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "a96ecc7e53cdbf7a63fd6e99bb036a72af62119dbbf691068322ec146ca0f2d3"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "cases": {
+        "TightMixed16": {
+          "current": {
+            "project": "Lokad.Image",
+            "caseId": "TightMixed16",
+            "subject": "candidate",
+            "mode": "short",
+            "runId": "rgc590-candidate-TightMixed16-short",
+            "managed": {
+              "statistics": {
+                "N": 3,
+                "Min": 1048332.0494791666,
+                "LowerFence": 1047431.9726562501,
+                "Q1": 1048476.484375,
+                "Median": 1048620.9192708333,
+                "Mean": 1048892.5668402778,
+                "Q3": 1049172.8255208333,
+                "UpperFence": 1050217.337239583,
+                "Max": 1049724.7317708333,
+                "InterquartileRange": 696.3411458332557,
+                "StandardError": 424.35649041392213,
+                "Variance": 540235.2928692636,
+                "StandardDeviation": 735.0070019185283,
+                "Skewness": 0.31910225473394915,
+                "Kurtosis": 0.6666666666665991,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 1048892.5668402778,
+                  "StandardError": 424.35649041392213,
+                  "Level": 12,
+                  "Margin": 13409.263846194324,
+                  "Lower": 1035483.3029940834,
+                  "Upper": 1062301.8306864721
+                }
+              },
+              "unfilteredActualStatistics": {
+                "N": 3,
+                "Min": 1048333.9791666666,
+                "LowerFence": 1047433.9023437501,
+                "Q1": 1048478.4140625,
+                "Median": 1048622.8489583333,
+                "Mean": 1048894.4965277778,
+                "Q3": 1049174.7552083333,
+                "UpperFence": 1050219.266927083,
+                "Max": 1049726.6614583333,
+                "InterquartileRange": 696.3411458332557,
+                "StandardError": 424.35649041392213,
+                "Variance": 540235.2928692636,
+                "StandardDeviation": 735.0070019185283,
+                "Skewness": 0.31910225473394915,
+                "Kurtosis": 0.6666666666665991,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 1048894.4965277778,
+                  "StandardError": 424.35649041392213,
+                  "Level": 12,
+                  "Margin": 13409.263846194324,
+                  "Lower": 1035485.2326815834,
+                  "Upper": 1062303.7603739721
+                }
+              },
+              "actual": [
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 1,
+                  "Operations": 192,
+                  "Nanoseconds": 201547519
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 2,
+                  "Operations": 192,
+                  "Nanoseconds": 201335587
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 3,
+                  "Operations": 192,
+                  "Nanoseconds": 201280124
+                }
+              ],
+              "rawGc": "// GC:  0 0 0 21752 192",
+              "rawThreading": "// Threading:  0 0 192",
+              "extraStatsRecorded": true
+            },
+            "nativeBrackets": [
+              {
+                "mean": 850845.125,
+                "standardError": 591.5773041514603,
+                "confidenceLower": 832151.8415555788,
+                "confidenceUpper": 869538.4084444212,
+                "sampleCount": 3
+              },
+              {
+                "mean": 854586.46875,
+                "standardError": 1047.166839335689,
+                "confidenceLower": 821496.9867770928,
+                "confidenceUpper": 887675.9507229072,
+                "sampleCount": 3
+              }
+            ],
+            "managedUs": 1048.8925668402778,
+            "nativeUs": 850.845125,
+            "ratio": 1.2327655598194533,
+            "lower": 1.1665104840914127,
+            "upper": 1.2931316577819907,
+            "allocatedBytes": 114,
+            "packetBytes": 1059864,
+            "packetSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+            "librarySha256": "843d01256f1982a72b7aadd3e777505e23de221a8ff78665edd1a9787cc0de0c",
+            "allOriginalGatesPassed": true,
+            "quietGuardsPassed": true,
+            "status": "gap"
+          },
+          "qualifiedOriginal": {
+            "managedUs": 987.4677059294871,
+            "nativeUs": 851.0759388020833,
+            "ratio": 1.1602580462084024,
+            "lower": 1.1494644548651713,
+            "upper": 1.1637724794899953,
+            "allocatedBytes": 114
+          },
+          "originalProvider": "tmp/rbc567-candidate-TightMixed16-confirm-observation.json",
+          "receipt": "tmp/rgc590-candidate-TightMixed16-short-receipt.json"
+        },
+        "Mixed16": {
+          "current": {
+            "project": "Lokad.Image",
+            "caseId": "Mixed16",
+            "subject": "candidate",
+            "mode": "short",
+            "runId": "rgc590-candidate-Mixed16-short",
+            "managed": {
+              "statistics": {
+                "N": 3,
+                "Min": 931444.3705357143,
+                "LowerFence": 930556.4620535716,
+                "Q1": 931545.752232143,
+                "Median": 931647.1339285715,
+                "Mean": 931951.6428571428,
+                "Q3": 932205.2790178572,
+                "UpperFence": 933194.5691964284,
+                "Max": 932763.4241071428,
+                "InterquartileRange": 659.5267857142026,
+                "StandardError": 410.0893588635536,
+                "Variance": 504519.84675936133,
+                "StandardDeviation": 710.2956051950212,
+                "Skewness": 0.34991521819770793,
+                "Kurtosis": 0.6666666666667431,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 931951.6428571428,
+                  "StandardError": 410.0893588635536,
+                  "Level": 12,
+                  "Margin": 12958.435979509295,
+                  "Lower": 918993.2068776336,
+                  "Upper": 944910.0788366521
+                }
+              },
+              "unfilteredActualStatistics": {
+                "N": 3,
+                "Min": 931445.9553571428,
+                "LowerFence": 930558.0468749999,
+                "Q1": 931547.3370535714,
+                "Median": 931648.71875,
+                "Mean": 931953.2276785714,
+                "Q3": 932206.8638392857,
+                "UpperFence": 933196.1540178572,
+                "Max": 932765.0089285715,
+                "InterquartileRange": 659.526785714319,
+                "StandardError": 410.08935886359205,
+                "Variance": 504519.84675945586,
+                "StandardDeviation": 710.2956051950877,
+                "Skewness": 0.3499152181978236,
+                "Kurtosis": 0.6666666666668194,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 931953.2276785714,
+                  "StandardError": 410.08935886359205,
+                  "Level": 12,
+                  "Margin": 12958.435979510508,
+                  "Lower": 918994.7916990608,
+                  "Upper": 944911.6636580819
+                }
+              },
+              "actual": [
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 1,
+                  "Operations": 224,
+                  "Nanoseconds": 208689313
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 2,
+                  "Operations": 224,
+                  "Nanoseconds": 208643894
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 3,
+                  "Operations": 224,
+                  "Nanoseconds": 208939362
+                }
+              ],
+              "rawGc": "// GC:  0 0 0 25336 224",
+              "rawThreading": "// Threading:  0 0 224",
+              "extraStatsRecorded": true
+            },
+            "nativeBrackets": [
+              {
+                "mean": 844940.2916666666,
+                "standardError": 202.3693639944222,
+                "confidenceLower": 838545.611115084,
+                "confidenceUpper": 851334.9722182492,
+                "sampleCount": 3
+              },
+              {
+                "mean": 846356.2395833334,
+                "standardError": 273.95356692423655,
+                "confidenceLower": 837699.565905714,
+                "confidenceUpper": 855012.9132609528,
+                "sampleCount": 3
+              }
+            ],
+            "managedUs": 931.9516428571428,
+            "nativeUs": 844.9402916666667,
+            "ratio": 1.1029792898369708,
+            "lower": 1.0748296225991079,
+            "upper": 1.1279839480834053,
+            "allocatedBytes": 114,
+            "packetBytes": 1059864,
+            "packetSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+            "librarySha256": "843d01256f1982a72b7aadd3e777505e23de221a8ff78665edd1a9787cc0de0c",
+            "allOriginalGatesPassed": true,
+            "quietGuardsPassed": true,
+            "status": "gap"
+          },
+          "qualifiedOriginal": {
+            "managedUs": 917.3832180059525,
+            "nativeUs": 851.866546875,
+            "ratio": 1.0769095480639483,
+            "lower": 1.0679623643120248,
+            "upper": 1.0792064888670712,
+            "allocatedBytes": 114
+          },
+          "originalProvider": "tmp/rbc567-candidate-Mixed16-confirm-observation.json",
+          "receipt": "tmp/rgc590-candidate-Mixed16-short-receipt.json"
+        }
+      }
+    },
+    "rgs591": {
+      "label": "Four-index SIMD reconstruction",
+      "design": {
+        "project": "Lokad.Image",
+        "round": "RGS591",
+        "paths": [
+          "src/Lokad.Image/Internal/MixedBicubicGeometry.cs",
+          "tests/Lokad.Image.Tests/MixedBicubicGeometryTests.cs"
+        ],
+        "originalAbsent": [
+          "tests/Lokad.Image.Tests/MixedBicubicGeometryTests.cs"
+        ],
+        "baselineCommit": "8bd2cb0d822f5559dcdd266d38e1226068add383",
+        "baseline": {
+          "windowsSha256": "dd04940562dc171d940b98272e0eb689f1425ca51794084721ad0ff2d588db20",
+          "linuxSha256": "843d01256f1982a72b7aadd3e777505e23de221a8ff78665edd1a9787cc0de0c"
+        },
+        "transitionFromLinuxSha256": "843d01256f1982a72b7aadd3e777505e23de221a8ff78665edd1a9787cc0de0c",
+        "transitionFromSources": {
+          "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "a96ecc7e53cdbf7a63fd6e99bb036a72af62119dbbf691068322ec146ca0f2d3"
+        },
+        "hypothesis": "RGC590scalar reconstruction costs1048.89us bounded vs987.47 and931.95us default vs917.38, not useful. Compactrecordarchitecture still removescopy/storage/tail geometry; reviseexecution by reconstructing four consecutiveindices with one integerSIMDclamp, fifthonlyfor5tap case. Removes scalarloop/repeatedclamps without adding formats/kernelbranches/cache. Earlierfailedscalarimplementation isretained, not a familyban.",
+        "endState": "One64B geometry schema/sharedRead, four Vector128<int> indices computed/clamped together andthe optionalfifth scalar. Exactfirst+t andboundednonnegative max; allother geometry/owners/pixels/polls unchanged. .NETsafe SIMD withportable intrinsicfallback; actualcallers already requireAVX512/AVX2/SSE4.1.",
+        "workloads": [
+          "TightMixed16",
+          "Mixed16"
+        ],
+        "affected": [
+          "TightMixed8",
+          "Mixed8",
+          "TightMixed16",
+          "Mixed16"
+        ],
+        "unaffected": "Identitywidth Prepare returnsdefault; wordidentity specialization bypassesit, noRead. Otheraxisgeometry helpers and numeric kernels, bounds/certificates/repair/packing/polls/owners unchanged. No codec/text changes.",
+        "proof": "Finitecenter support [center-2,center+2] contains4or5integer taps for admitted dimensions; actualcallers provide5slots. SIMD min/max integerclamp equals originalMath.Clamp elementwise. No interpolation/reduction/sum/rounding changes, fifthslot untouchedwhen4taps. Literal edge/interior/duplicateindex tests atbothdepths plus existingindependent publicpixels/rational/guard oracles.",
+        "storage": "Current1027wide wordgeometry86268to65728B inside alreadyowned1059864Boutput, planned8rowend112to120; 16rowend112unchanged. No newheap/admitted/retainedcapacity, 4/8KiB stackallowances unchanged; physicalpeaknotmeasured. Bytecase suffix proportionchanges and needs currentqualification ifaccepted.",
+        "acceptance": "Focused73internal/688public resize/column/admission normal+scalar W/L; existing frozen full16sample/rational/tinyalpha/edge/refusal/cancel/survivor controls. ExistingcompleteTightMixed16+Mixed16shorts first, independentifuseful, boundedbyte generalization/currentfouraffectedcosts onacceptance. Samequiet/nativefloatgates/exactmanagedcontract/outputownership. Acceptedcoherentstage fullW/L/live/SAMEactualpackage/all3examples once; otherwise restorebyteexactwithoutrebuild/repeatingqualification.",
+        "tradeoffs": "Vectorconstruction/clamp/store andRead inlining/registerpressure maystillcostmore than originalindexcopy. No gainpredicted. Focused W/Lmodes, sametwo completewordshorts first; independentandfouraffectedcosts onlyifuseful. Restorequalified original usingRGC590snapshot if bothstagesunhelpful, removeprototype-only newtest and reuse exact5909/packageproof withoutrebuild.",
+        "productionAccepted": false,
+        "qualifiedBaseline": {
+          "windowsSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+          "linuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21"
+        },
+        "qualifiedOriginalSnapshotPrefix": "rgc590-original"
+      },
+      "preparation": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "dd04940562dc171d940b98272e0eb689f1425ca51794084721ad0ff2d588db20",
+          "candidateSha256": "628d8b1f2c6d4e7295dcb9af7f7215ff1bcfefcb7f6d8890cb1b80950c163702",
+          "internalTestAssemblySha256": "65fe434b108461bc205e3389fa3cf73207f877d3a5249a977a2b2e901667f36b",
+          "focused": {
+            "internal-normal": 79,
+            "internal-scalar": 79,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "83aa3184ead02a11ef6959f255a9202cbad69d0c8abbe27396f58ab4c0e40bd5",
+            "tests/Lokad.Image.Tests/MixedBicubicGeometryTests.cs": "a986cb8e09541dd185b44084456a920e6338ee9df77cc4a753b97da1448a8d6d"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "843d01256f1982a72b7aadd3e777505e23de221a8ff78665edd1a9787cc0de0c",
+          "candidateSha256": "dddb44d34b0fcd83c1533c85d55ae1852991b0ab548926f41a9819333a30aac5",
+          "internalTestAssemblySha256": "2c33a384161ff76070ace8047266134b159b2c8b0d07c2b066b9bc70b37d14ff",
+          "focused": {
+            "internal-normal": 79,
+            "internal-scalar": 79,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "83aa3184ead02a11ef6959f255a9202cbad69d0c8abbe27396f58ab4c0e40bd5",
+            "tests/Lokad.Image.Tests/MixedBicubicGeometryTests.cs": "a986cb8e09541dd185b44084456a920e6338ee9df77cc4a753b97da1448a8d6d"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "cases": {
+        "TightMixed16": {
+          "current": {
+            "project": "Lokad.Image",
+            "caseId": "TightMixed16",
+            "subject": "candidate",
+            "mode": "short",
+            "runId": "rgs591-candidate-TightMixed16-short",
+            "managed": {
+              "statistics": {
+                "N": 3,
+                "Min": 1041849.6067708334,
+                "LowerFence": 1040373.1263020834,
+                "Q1": 1042295.6458333334,
+                "Median": 1042741.6848958334,
+                "Mean": 1043001.4192708334,
+                "Q3": 1043577.3255208334,
+                "UpperFence": 1045499.8450520834,
+                "Max": 1044412.9661458334,
+                "InterquartileRange": 1281.6796875,
+                "StandardError": 751.2876236873993,
+                "Variance": 1693299.2805175781,
+                "StandardDeviation": 1301.2683353242628,
+                "Skewness": 0.19164872635330124,
+                "Kurtosis": 0.6666666666666667,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 1043001.4192708334,
+                  "StandardError": 751.2876236873993,
+                  "Level": 12,
+                  "Margin": 23739.978527436186,
+                  "Lower": 1019261.4407433972,
+                  "Upper": 1066741.3977982695
+                }
+              },
+              "unfilteredActualStatistics": {
+                "N": 3,
+                "Min": 1041851.4322916666,
+                "LowerFence": 1040374.9518229166,
+                "Q1": 1042297.4713541666,
+                "Median": 1042743.5104166666,
+                "Mean": 1043003.2447916666,
+                "Q3": 1043579.1510416666,
+                "UpperFence": 1045501.6705729166,
+                "Max": 1044414.7916666666,
+                "InterquartileRange": 1281.6796875,
+                "StandardError": 751.2876236873993,
+                "Variance": 1693299.2805175781,
+                "StandardDeviation": 1301.2683353242628,
+                "Skewness": 0.19164872635330124,
+                "Kurtosis": 0.6666666666666667,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 1043003.2447916666,
+                  "StandardError": 751.2876236873993,
+                  "Level": 12,
+                  "Margin": 23739.978527436186,
+                  "Lower": 1019263.2662642305,
+                  "Upper": 1066743.2233191028
+                }
+              },
+              "actual": [
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 1,
+                  "Operations": 192,
+                  "Nanoseconds": 200035475
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 2,
+                  "Operations": 192,
+                  "Nanoseconds": 200206754
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 3,
+                  "Operations": 192,
+                  "Nanoseconds": 200527640
+                }
+              ],
+              "rawGc": "// GC:  0 0 0 21752 192",
+              "rawThreading": "// Threading:  0 0 192",
+              "extraStatsRecorded": true
+            },
+            "nativeBrackets": [
+              {
+                "mean": 859200.5729166666,
+                "standardError": 2028.9808521038858,
+                "confidenceLower": 795086.6964959265,
+                "confidenceUpper": 923314.4493374068,
+                "sampleCount": 3
+              },
+              {
+                "mean": 852009.421875,
+                "standardError": 181.82692014653375,
+                "confidenceLower": 846263.8631250736,
+                "confidenceUpper": 857754.9806249264,
+                "sampleCount": 3
+              }
+            ],
+            "managedUs": 1043.0014192708334,
+            "nativeUs": 852.009421875,
+            "ratio": 1.224166532073696,
+            "lower": 1.1039158343886466,
+            "upper": 1.3416690632863182,
+            "allocatedBytes": 114,
+            "packetBytes": 1059864,
+            "packetSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+            "librarySha256": "dddb44d34b0fcd83c1533c85d55ae1852991b0ab548926f41a9819333a30aac5",
+            "allOriginalGatesPassed": true,
+            "quietGuardsPassed": true,
+            "status": "gap"
+          },
+          "qualifiedOriginal": {
+            "managedUs": 987.4677059294871,
+            "nativeUs": 851.0759388020833,
+            "ratio": 1.1602580462084024,
+            "lower": 1.1494644548651713,
+            "upper": 1.1637724794899953,
+            "allocatedBytes": 114
+          },
+          "originalProvider": "tmp/rbc567-candidate-TightMixed16-confirm-observation.json",
+          "receipt": "tmp/rgs591-candidate-TightMixed16-short-receipt.json"
+        },
+        "Mixed16": {
+          "current": {
+            "project": "Lokad.Image",
+            "caseId": "Mixed16",
+            "subject": "candidate",
+            "mode": "short",
+            "runId": "rgs591-candidate-Mixed16-short",
+            "managed": {
+              "statistics": {
+                "N": 3,
+                "Min": 922491.4107142857,
+                "LowerFence": 921876.0167410711,
+                "Q1": 923205.060267857,
+                "Median": 923918.7098214285,
+                "Mean": 923557.863095238,
+                "Q3": 924091.0892857143,
+                "UpperFence": 925420.1328125002,
+                "Max": 924263.46875,
+                "InterquartileRange": 886.0290178572759,
+                "StandardError": 542.4343863045248,
+                "Variance": 882705.1903366989,
+                "StandardDeviation": 939.5239168518804,
+                "Skewness": -0.32741816475330127,
+                "Kurtosis": 0.6666666666665587,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 923557.863095238,
+                  "StandardError": 542.4343863045248,
+                  "Level": 12,
+                  "Margin": 17140.413707614258,
+                  "Lower": 906417.4493876237,
+                  "Upper": 940698.2768028523
+                }
+              },
+              "unfilteredActualStatistics": {
+                "N": 3,
+                "Min": 922493.15625,
+                "LowerFence": 921877.7622767854,
+                "Q1": 923206.8058035714,
+                "Median": 923920.4553571428,
+                "Mean": 923559.6086309524,
+                "Q3": 924092.8348214286,
+                "UpperFence": 925421.8783482146,
+                "Max": 924265.2142857143,
+                "InterquartileRange": 886.0290178572759,
+                "StandardError": 542.4343863045248,
+                "Variance": 882705.190336699,
+                "StandardDeviation": 939.5239168518804,
+                "Skewness": -0.32741816475354907,
+                "Kurtosis": 0.6666666666667208,
+                "ConfidenceInterval": {
+                  "N": 3,
+                  "Mean": 923559.6086309524,
+                  "StandardError": 542.4343863045248,
+                  "Level": 12,
+                  "Margin": 17140.413707614258,
+                  "Lower": 906419.1949233381,
+                  "Upper": 940700.0223385667
+                }
+              },
+              "actual": [
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 1,
+                  "Operations": 224,
+                  "Nanoseconds": 206638467
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 2,
+                  "Operations": 224,
+                  "Nanoseconds": 206958182
+                },
+                {
+                  "IterationMode": 1,
+                  "IterationStage": 3,
+                  "LaunchIndex": 0,
+                  "IterationIndex": 3,
+                  "Operations": 224,
+                  "Nanoseconds": 207035408
+                }
+              ],
+              "rawGc": "// GC:  0 0 0 25336 224",
+              "rawThreading": "// Threading:  0 0 224",
+              "extraStatsRecorded": true
+            },
+            "nativeBrackets": [
+              {
+                "mean": 852463.4427083334,
+                "standardError": 791.6972822856151,
+                "confidenceLower": 827446.557178604,
+                "confidenceUpper": 877480.3282380628,
+                "sampleCount": 3
+              },
+              {
+                "mean": 852828.3697916666,
+                "standardError": 56.968460250604046,
+                "confidenceLower": 851028.2203143565,
+                "confidenceUpper": 854628.5192689768,
+                "sampleCount": 3
+              }
+            ],
+            "managedUs": 923.557863095238,
+            "nativeUs": 852.4634427083333,
+            "ratio": 1.0833987908748708,
+            "lower": 1.0329775155275165,
+            "upper": 1.1368710331530416,
+            "allocatedBytes": 114,
+            "packetBytes": 1059864,
+            "packetSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+            "librarySha256": "dddb44d34b0fcd83c1533c85d55ae1852991b0ab548926f41a9819333a30aac5",
+            "allOriginalGatesPassed": true,
+            "quietGuardsPassed": true,
+            "status": "gap"
+          },
+          "qualifiedOriginal": {
+            "managedUs": 917.3832180059525,
+            "nativeUs": 851.866546875,
+            "ratio": 1.0769095480639483,
+            "lower": 1.0679623643120248,
+            "upper": 1.0792064888670712,
+            "allocatedBytes": 114
+          },
+          "originalProvider": "tmp/rbc567-candidate-Mixed16-confirm-observation.json",
+          "receipt": "tmp/rgs591-candidate-Mixed16-short-receipt.json"
+        }
+      }
+    }
+  },
+  "sourceProof": {
+    "scalar": {
+      "project": "Lokad.Image",
+      "stage": "RGC590",
+      "sources": {
+        "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "a96ecc7e53cdbf7a63fd6e99bb036a72af62119dbbf691068322ec146ca0f2d3"
+      },
+      "wholeSourceReconstructsOriginalOutsideStorageAndIndexReconstruction": true,
+      "allCenterFirstCountWeightNormalizerOperationsAndOrderExact": true,
+      "allOriginalCancellationCheckpointsRetained": true,
+      "originalSuffixStoreBeforeReadLifetimeGuardUnchanged": true,
+      "noPixelCertificateRepairOrOwnerBodyChanges": true,
+      "recordBytesBefore": 84,
+      "recordBytesAfter": 64,
+      "ownedCapacityChangeBytes": 0,
+      "retainedStateChangeBytes": 0,
+      "borrowedViewNewMetadata": "Sourcewidth copied into oneInt32 field; no retained source/image/reference.",
+      "currentWordSuffixStartAlignmentBefore": 4,
+      "currentWordSuffixStartAlignmentAfter": 0,
+      "alignmentModulus": 8,
+      "alignmentScope": "Deterministic1027wideRGBA16control only; naturally aligneddoubledata is not an instruction-cost/gainclaim or vectoralignment guarantee.",
+      "proof": "Read reconstructs exactly originalMath.Clamp(first+t,0,width-1). Storedfirst/count unchanged; valid imagebounds keep sameInt32 domain. No newfloatingoperation/quantization. Smallerprivateplan extends SafeRows, and allbandstores stillprecede suffix. Directnormal/scalar publicexact/rational/frozen/root/cancel tests validate actualproduction."
+    },
+    "simdReconstructsScalarAOutsideIntegerIndexGeneration": true,
+    "simdIntegerClampEqualsOriginalPerLane": true,
+    "originalGeometryFieldsFloatOperationsLifetimeGuardsOwnersAndPollsUnchanged": true
+  },
+  "attribution": {
+    "project": "Lokad.Image",
+    "stage": "RGA589",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newProfiles": 0,
+    "newTimingJobs": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "b2faa7cc1f251f5580af75f3340fe2eb2d8ac0d284ca546f2f4d3a035894c6e0",
+      "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795",
+      "src/Lokad.Image/Internal/BicubicMath.cs": "790643a112e5aa8e8c4d5a880294f5e0b31306b445a94d5bcc4b03616bbae08f"
+    },
+    "sourceValidAttribution": "rma580-findings.json",
+    "profileScope": "Retained source-valid1994samples/1811sharedApply locations; not phase costs or predicted gains.",
+    "case": "TightMixed16",
+    "bands": [
+      [
+        0,
+        18
+      ],
+      [
+        13,
+        34
+      ],
+      [
+        29,
+        50
+      ],
+      [
+        45,
+        66
+      ],
+      [
+        61,
+        82
+      ],
+      [
+        77,
+        98
+      ],
+      [
+        93,
+        114
+      ],
+      [
+        109,
+        131
+      ],
+      [
+        125,
+        147
+      ],
+      [
+        142,
+        163
+      ],
+      [
+        158,
+        179
+      ],
+      [
+        174,
+        195
+      ],
+      [
+        190,
+        211
+      ],
+      [
+        206,
+        227
+      ],
+      [
+        222,
+        243
+      ],
+      [
+        238,
+        258
+      ],
+      [
+        254,
+        258
+      ]
+    ],
+    "sourceRowsDecodedPerColumnPair": 355,
+    "uniqueSourceRows": 259,
+    "maxAdjacentBandOverlap": 7,
+    "crossBandDecodedRowStorageBytes": 114912,
+    "crossBandPremultipliedRowStorageBytes": 57456,
+    "rejectedCheapLead": "A simple all-column overlap ring exceeds both4/8KiB ceilings: existingdecoded scratch belongs to onecolumnpair and is overwritten by rowcertification; onlysix columns are cached. Moving it across bands without a scheduling redesign would reuse unrelated or dead data. Columnouter traversal needs a separate partial-output/lifetime design, not a trivialrowcache.",
+    "geometry": {
+      "84": {
+        "recordBytes": 84,
+        "geometryBytes": 86268,
+        "safeRows": 118,
+        "lastPlanned8": 112,
+        "recomputedRows8": 17,
+        "lastPlanned16": 112,
+        "recomputedRows16": 17
+      },
+      "64": {
+        "recordBytes": 64,
+        "geometryBytes": 65728,
+        "safeRows": 121,
+        "lastPlanned8": 120,
+        "recomputedRows8": 9,
+        "lastPlanned16": 112,
+        "recomputedRows16": 17
+      },
+      "56": {
+        "recordBytes": 56,
+        "geometryBytes": 57512,
+        "safeRows": 122,
+        "lastPlanned8": 120,
+        "recomputedRows8": 9,
+        "lastPlanned16": 112,
+        "recomputedRows16": 17
+      }
+    },
+    "selectedHypothesis": "One64B shared geometry record: sevenoriginaldoublefields plusfirst/count, replacing84Brecord withfive redundant clampedindices. Derive samples=clamp(first+t) duringRead; same API/center/weights/normalizer and existingbyte/word callers. This extends bounded8row plannedend112to120, removing8rows/8216column geometry recomputations, andsaves20540temporarybytes insidealreadyownedoutput. No fallbackcenter policy change or new reservation/cache/owner.",
+    "tradeoff": "Moving indexclamps fromone-time preparation to repeatedRead addswork andcanregress default16row case, whoseplannedendstays112. No CPUgain inferred fromgeometrycounts. CompareexistingTightMixed16andMixed16 first; identifybyteMixedGeometry callers foraffectedconfirmation beforeadoption. Exactdoubleoperationorder/Q30repair, full16samples/nativefloatbounds andcancel/admission/lifetimes remain.",
+    "next": "Record coherent64Bgeometry preparation/execution experiment beforeediting, includealways-originalsampleindex oracle andexistingexact mixedframes. Existing8row/default16row complete shorts thenindependentifuseful; no rowbases/certificate-mask replay or newshapegrid."
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "restored": true,
+      "productionSha256": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "6b46b95156ac273d3351badea6be3b90ab19d7d351f9fb0c9453e6d0a68021ac",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "1a596b82d57ea082dc2650a4912bce031e901a919eb12243beccd9702bfdd37e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "267a59574a5fd24f7df6e86e3d651bf44b4be9dff29608137939548c5d266ab0",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "5ab2af30cac5bdbf6249a622270753566a52ff2ef6cd80e9f27072d7ce6bda1e",
+        "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795"
+      },
+      "removedPrototypeOnlyTests": [
+        "tests/Lokad.Image.Tests/MixedBicubicGeometryTests.cs"
+      ],
+      "qualificationReused": "Byte-exact VPS588qualifiedmain/embedded/source/publicbindings5909full/live eachOS, affectednormal/scalar/SAMEactual198dpackage/all3examples; no rebuild/full/package repeat."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "restored": true,
+      "productionSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "50f25f9f672c5918ffc2fd787d9d64c685bcf036bc5360e4a00b642b81b4ae5c",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "fdeab971bcfb1638024b19554a2b84f95d27832cdfd03be2b71bca3142a44724",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "5cf98e65a530689f4740e283425c1278f01385b927d6dd6e7e337fcda2c20777",
+        "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795"
+      },
+      "removedPrototypeOnlyTests": [
+        "tests/Lokad.Image.Tests/MixedBicubicGeometryTests.cs"
+      ],
+      "sourceSha256": "0f275adb2addf6d42917de74e8ccd4f1fbacb240a578aac546e51680bbffd1f9",
+      "qualificationReused": "ExactVPS588source/modules/publicbindings restore;5909full/live/scalar/SAME198dpackage/all3examples reused. No rebuild/full/package repeat."
+    }
+  },
+  "decision": "Both implementations unselected. Scalar1048.89/931.95us andSIMD1043.00/923.56us vs qualified987.47/917.38us forbounded/defaultwordcompleteoperations. No useful pointgain or allocation/admittedcapacity saving, despite smaller borrowedplan andlateroverwrites. Short confidence doesnotestablish isolatedcausal cost or blanketstatisticalregression. No independentconfirmation, further variants, bytecostrefresh or full/package repeats. Restore exactqualifiedsources/modules/publicbindings; removeprototype-only tests. Failed implementations are not a permanentfamilyban.",
+  "storage": {
+    "recordBytesBefore": 84,
+    "recordBytesCandidate": 64,
+    "borrowedWordPlanBytesBefore": 86268,
+    "borrowedWordPlanBytesCandidate": 65728,
+    "ownedOutputBytes": 1059864,
+    "workspaceEightRowBytes": 3992,
+    "admissionEightRowBytes": 4096,
+    "workspaceSixteenRowBytes": 7596,
+    "admissionSixteenRowBytes": 8192,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "physicalNativePeaksRemeasured": false
+  },
+  "workflow": {
+    "coreEmbeddedBuildsEachOs": 2,
+    "reason": "Distinctscalar andSIMDproductioninputs; oneimmutable validmain/embedded perstage/OS throughoutfocused/screen. No rebuild ofunchangedinputs.",
+    "focusedInternalScalarAEachModeEachOs": 73,
+    "focusedInternalSimdBEachModeEachOs": 79,
+    "focusedPublicEachModeEachOs": 688,
+    "newLiteralIndexCases": 6,
+    "shortJobs": 4,
+    "actualsPerShort": 3,
+    "independentConfirmations": 0,
+    "publicHarnessNativeFixtureSelectorBuilds": 0,
+    "newProfiles": 0,
+    "originalTimingJobs": 0,
+    "fullOrPackageRepeats": 0,
+    "favorableRepeats": 0
+  },
+  "next": "Leave boundedmixedword136usgap visible; no more schema/rowmask variants without materiallynew evidence. Prioritize effort2VP8 encode134usgap with boundedcurrentattribution; prior histogramshares invalid afterfourblockstage. Preservebyteexactencoderpackets, sharedadmission/cancel/owners andoriginal9controls. No newfixture/settingsgrid or passingcase retune.",
+  "raw": {
+    "path": "tmp/bicubic-compact-geometry-experiment.tar.xz",
+    "sha256": "a32e2297000c19eaeaae4dd5eec116f77fc5cd71692dd6c415829e64d30ff592",
+    "bytes": 6933272,
+    "members": 170,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "path": "tmp/bicubic-mixed-current-attribution-rma580.tar.xz",
+        "sha256": "70ac02023143ed4fa45b98eb467a8ac04cea55c3beb209368ba9bf83a2170f54",
+        "bytes": 119992,
+        "members": 22,
+        "mirrored": true,
+        "allMembersVerified": true
+      },
+      {
+        "file": "bicubic-bounded-band-execution-qualified.tar.xz",
+        "sha256": "44d5a1a39b9baad657db64cb42bca0e993158844ed74865cdf3c2873208ec089",
+        "bytes": 19758948,
+        "members": 435,
+        "mirrored": true,
+        "allMembersVerified": true
+      },
+      {
+        "path": "tmp/vp8-model-row-stride-qualified.tar.xz",
+        "sha256": "6ba2ce0bd7569e29a86521f20c5721df558492e1973b5d8b2a1d1803b1b4d607",
+        "bytes": 6012200,
+        "members": 147,
+        "mirrored": true,
+        "allMembersVerified": true
+      }
+    ]
+  },
+  "evidenceScope": "Concise rejected-stage summary; all original distributions/native samples/receipts/source snapshots/modules/tests retained in immutable raw archive. No current results or renderer dependency."
+}
