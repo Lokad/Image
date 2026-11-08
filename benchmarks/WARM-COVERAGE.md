@@ -220,6 +220,9 @@ Current evidence ownership and invalidation:
   remain attributed separately. Unrefreshed allocator/filter/pipeline H costs stay
   historical. Lanczos owns eight refreshed one-shot/prepared controls; exact
   certificates, repair, plans/owners and portable fallbacks remain required.
+- [TAP604](TEXT-CURRENT-RASTER-ATTRIBUTION.md) retains one current drawing sample
+  capture and strict-interior numerical model; no production or displayed cost
+  changes. Actual C# exactness and complete-operation evidence are required next.
 - TCR587 owns the two prepared drawing costs after band clipping reuse. TSC573's
   earlier allocation savings remain history; font/layout/fitting and compositing
   evidence are unaffected. Drawing CPU gains remain inconclusive.
