@@ -1,0 +1,219 @@
+{
+  "project": "Lokad.Image",
+  "stage": "TMB609",
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "TMB609",
+    "productionAccepted": false,
+    "baseline": {
+      "windowsSha256": "bbace27f51eafa82c6c0afef2865a0ff776470327b9b660ba2534d6e720ff617",
+      "linuxSha256": "4fa5539090f3b109b1960916be46404ab0dc75a911dbf65d6e11f7aeea0ed8f3"
+    },
+    "baselineCommit": "24305649",
+    "paths": [
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs",
+      "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs"
+    ],
+    "transitionFromLinuxSha256": "4fa5539090f3b109b1960916be46404ab0dc75a911dbf65d6e11f7aeea0ed8f3",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4d4ada898c4df7967aac34936c81daaf760e051bb172b26c68f5c5e7a6c79a63",
+      "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs": "b0a6953db2964242363f0d729c4011ac50f9e8e86c14f789263e59e59b4c23d5"
+    },
+    "hypothesis": "JPR608 bufferedcorrection region287locations, signedupdate92. Prepare fourormore cached corrections within onephysical eightcoefficient group using existingAVX2/BMI2 arithmetic, thenpoll/consume/checkoverflow/commit everybitinoriginalorder. Scalar math repeatedperbit isremoved, cancellation/cachedelivery order isnot.",
+    "endState": "Smallvalue-returning group helper called onlywhen existingcache contains entiredensegroup. No newinput read/lookahead, no byref cursorlocals, no EH aroundhotstate. Original sparse/insufficient-cache loop retained, no generalframework/cache/session/owner.",
+    "proof": {
+      "project": "Lokad.Image",
+      "stage": "TMB609",
+      "productionChanged": false,
+      "allBuilds": 0,
+      "newProfilesOrTimings": 0,
+      "eightLaneMaskFields": 6560,
+      "extremeConfigurations": 392,
+      "randomGroups": 10000,
+      "partialCommitComparisons": 53349,
+      "invariant": "Only correction positions whose original coefficients are nonzero, as provedby existingmask. Cachedbits>=groupcount, no newinput delivery/lookahead. SIMDpreparation maycompute allvalues but doesnotpublish/consume/throw; actualper-bit poll, consume, MinValueoverflow and immediatecommit remainordered. Unselectedlanes stayunchanged; cancellation/overflow coefficients andpending exactlymatch scalar.",
+      "result": "All bit-mapping, fullvalue, consumedprefix, cancellation/overflow and inputnonmutation comparisons pass. This is a numerical/state model, not actualC#SIMD/CPU/quality qualification.",
+      "next": "Bounded actualC#cache-limited correctionprototype with originalfallback andzero newheap/cache/owner. Preserve exactfollowingcursor/partialstate witnesses normal/scalar W/L, then oneexistinglive444 complete screen. Alltemporaryvectorstorage mustfit admittedfixedframe orbeaccounted explicitly. No sampledmethod/ALUcount establishesgain; priorbufferedeligibility variants are not replayed."
+    },
+    "invalidation": "Onlybufferedcancelable refinement source changes; current29JPEG costs haveonecaller, ProgressiveCancelable444. Ordinaryprogressive, baseline/livebaseline, caller-default andvalidation paths donotenterCanBeCanceled fastbody. No field/layout/publicAPI change. Broaderfunctional coverage still required onacceptance.",
+    "storage": "No newheap/retainedcapacity. Two32B vector temporaries use existing1KiB coarse parser/decoder frame allowance; physical/nativepeak notclaimed. Sharedadmission, per-bit cancellation, canonicalcomplete/error cursors and independentresults preserved.",
+    "acceptance": "ActualC#6560mask/field mapping andextreme values, followingbit/overflow/canceled state, existingconcurrent cancellation-prefix andfullrefinement reference models; focusednormal/scalar W/L first. Oneexisting live444complete short, independentconfirmation ifuseful. Actual standaloneboundary andfullW/L/live/scalar/SAMEpackage atacceptedcoherent milestone; reuseunchanged costs. No threshold/familyban ornewworkloadgrid.",
+    "risks": "Group eligibility/popcount/dynamiclane extraction/callcodegeneration canoutweigh removedarithmetic. Scalarfallback remainsneeded. Currentprofile isattribution only; numerical model isnotCPUevidence. Preserve adversepoints/restorequalifiedmodules ifunhelpful.",
+    "publicationPostponed": true,
+    "affectedExistingCases": [
+      "ProgressiveCancelable444"
+    ],
+    "compileRepair": "InitialWindowscompile requiredscoped span lifetime annotation. No executablemodule produced, no tests/timing onfailedcompile. One finalcore/embedded module perOS."
+  },
+  "model": {
+    "project": "Lokad.Image",
+    "stage": "TMB609",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newProfilesOrTimings": 0,
+    "eightLaneMaskFields": 6560,
+    "extremeConfigurations": 392,
+    "randomGroups": 10000,
+    "partialCommitComparisons": 53349,
+    "invariant": "Only correction positions whose original coefficients are nonzero, as provedby existingmask. Cachedbits>=groupcount, no newinput delivery/lookahead. SIMDpreparation maycompute allvalues but doesnotpublish/consume/throw; actualper-bit poll, consume, MinValueoverflow and immediatecommit remainordered. Unselectedlanes stayunchanged; cancellation/overflow coefficients andpending exactlymatch scalar.",
+    "result": "All bit-mapping, fullvalue, consumedprefix, cancellation/overflow and inputnonmutation comparisons pass. This is a numerical/state model, not actualC#SIMD/CPU/quality qualification.",
+    "next": "Bounded actualC#cache-limited correctionprototype with originalfallback andzero newheap/cache/owner. Preserve exactfollowingcursor/partialstate witnesses normal/scalar W/L, then oneexistinglive444 complete screen. Alltemporaryvectorstorage mustfit admittedfixedframe orbeaccounted explicitly. No sampledmethod/ALUcount establishesgain; priorbufferedeligibility variants are not replayed."
+  },
+  "preparation": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "bbace27f51eafa82c6c0afef2865a0ff776470327b9b660ba2534d6e720ff617",
+      "candidateSha256": "f00e16c7f095506491cda8f85603f7f05a8d3eecf8e5290ab62d7bfe1aeb8da0",
+      "internalTestAssemblySha256": "be2916015851c6365d1c0a2847ce297f8cbd7b55ef6153574709b5cfc428a0bf",
+      "focused": {
+        "internal-normal": 423,
+        "internal-scalar": 423,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "3794d4227b3a3cfc5ca7ef4a12a0c432b859893e5ea9047b55384de82e73575e",
+        "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs": "86c1b5ac4d01f89851d9eded27981119d42423938a6be4a78fdb6f69663bc00d"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "4fa5539090f3b109b1960916be46404ab0dc75a911dbf65d6e11f7aeea0ed8f3",
+      "candidateSha256": "03334380f1e5b68949dc381b1418f4e49682e1f0ffea6d543e30ba642bd34b96",
+      "internalTestAssemblySha256": "994761c000ad38637be00863856f5550899b7b7f8d032f485a94aee4c9d67e6f",
+      "focused": {
+        "internal-normal": 423,
+        "internal-scalar": 423,
+        "public-normal": 375,
+        "public-scalar": 375
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/JpegEntropyReader.cs": "3794d4227b3a3cfc5ca7ef4a12a0c432b859893e5ea9047b55384de82e73575e",
+        "tests/Lokad.Image.Tests/JpegCorrectionValueTests.cs": "86c1b5ac4d01f89851d9eded27981119d42423938a6be4a78fdb6f69663bc00d"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "screen": {
+    "caseId": "ProgressiveCancelable444",
+    "mode": "short",
+    "runId": "tmb609-candidate-ProgressiveCancelable444-short",
+    "managedUs": 3637.8577552083334,
+    "nativeUs": 3356.267375,
+    "ratio": 1.0838998651614677,
+    "lower": 0.9405715009815148,
+    "upper": 1.2311630537351563,
+    "allocatedBytes": 169664,
+    "packetBytes": 531468,
+    "packetSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "librarySha256": "03334380f1e5b68949dc381b1418f4e49682e1f0ffea6d543e30ba642bd34b96",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "uncertain",
+    "actuals": 3
+  },
+  "referenceOriginal": {
+    "managedMicroseconds": 3553.05955859375,
+    "nativeMicroseconds": 3351.4900364583336,
+    "ratio": 1.060143255669178,
+    "lower": 1.0531116428782195,
+    "upper": 1.0657062608738581,
+    "allocatedBytes": 169664,
+    "status": "confirmed-gap",
+    "managedActuals": 12,
+    "nativeSamplesEachBracket": 12,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "librarySha256": "08e796d8f0706167fb0f73f2fc35d311e380f88eb5bf98756cb6f2f3e4da53aa",
+    "inputBytes": 132961,
+    "inputSha256": "852352cbc921c7c9bea5ec7633613213685b603c33a110b9775459b87b65059a",
+    "managedOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "nativeOutputSha256": "960a8cdce2bdab9b24fed2adb0f48771317c7c8b55ac208299ad91ece48302f4",
+    "descriptorSha256": null,
+    "outputBytes": 531468,
+    "runId": "jpe562-current-ProgressiveCancelable444-confirm",
+    "receiptFile": "jpe562-current-ProgressiveCancelable444-confirm-receipt.json",
+    "reusedUnchangedPath": true,
+    "measurementOwner": "jpeg-paired-ac-window-evidence.json"
+  },
+  "pointChange": {
+    "absoluteUs": 84.7981966145835,
+    "fraction": 0.023866246882769726,
+    "nativeShift": 0.0014254371905322305
+  },
+  "decision": "Unselected: complete3actual screen3637.86/native3356.27us versus source-valid3553.06/native3351.49us, unchanged169664B/op. Adversepoint84.80us/2.39percent has wideinconclusive confidence; no causalregression claim or usefulpointlead. Addedcall/eligibility/lane extraction/codegeneration arepossiblecosts, notattributedcauses. No confirmation/variants/fullsuite/package repeats. Failedimplementation, notfamilyban.",
+  "correctness": "EachOS423internal/375public normal/scalar. Threeactualproductionhelper tests cover6560eightlane mask/field pairs,14lowbits/extreme overflow/followingstate andalreadycanceled precedence; SIMDcore executeswhenhardware supported, existingfallback suites executeinscalar mode. Existingconcurrentcancellation prefixes/frozenmanagedpixels/source/native/ownedoutput gates pass. OneinitialWindowscompile lackedscopedannotation, no executablewritten. Onefinalcore/embedded module perOS.",
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "productionAccepted": false,
+      "productionSha256": "bbace27f51eafa82c6c0afef2865a0ff776470327b9b660ba2534d6e720ff617",
+      "sourcesAndModulesRestoredByteExact": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "sourceManifestSha256": null,
+      "fullChecksEachOsReused": 5924,
+      "packageSha256": "9f5b9380af17f861f497d3dce3d1ff20419a0136f23537be93b9ca9687fb884d",
+      "sameActualPackageAndThreeExamplesBothOsReused": true,
+      "additionalBuildsTestsPackages": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "productionAccepted": false,
+      "productionSha256": "4fa5539090f3b109b1960916be46404ab0dc75a911dbf65d6e11f7aeea0ed8f3",
+      "sourcesAndModulesRestoredByteExact": true,
+      "publicDifferentialProbeBindingsRestored": true,
+      "sourceManifestSha256": "cfc379d2199304fb33bb0470a8d73747d78c90b37be96f39bafa386b249e0f2e",
+      "fullChecksEachOsReused": 5924,
+      "packageSha256": "9f5b9380af17f861f497d3dce3d1ff20419a0136f23537be93b9ca9687fb884d",
+      "sameActualPackageAndThreeExamplesBothOsReused": true,
+      "additionalBuildsTestsPackages": 0
+    }
+  },
+  "qualificationReused": {
+    "fullChecksEachOs": 5924,
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "packageSha256": "9f5b9380af17f861f497d3dce3d1ff20419a0136f23537be93b9ca9687fb884d",
+    "productionSourcesAndModulesByteExact": true
+  },
+  "next": "Audit currentbicubicbyte reduction preparation/execution boundary. Current549.84/native418.61us gap and199981B/op; native retainsgraph/scratch. Establish actualcaller/geometry/materialcost attribution before proposing publicpreparedAPI; no newshape/settings grid or blindreplay.",
+  "raw": {
+    "file": "jpeg-cached-correction-experiment.tar.xz",
+    "sha256": "81d633ad48554eea28dcfb7f62698767f98e951517b36c583b9f14cb07656e9e",
+    "bytes": 5207088,
+    "members": 81,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "evidence": "benchmarks/jpeg-completed-output-evidence.json",
+        "file": "jpeg-completed-output-qualified.tar.xz",
+        "sha256": "3ca6d81b0c0ba52ce3d6e6740c978751510f4b9402d54393bb4bcdbfe98948ae",
+        "bytes": 6434100,
+        "members": 290
+      },
+      {
+        "evidence": "benchmarks/jpeg-live-current-attribution-evidence.json",
+        "file": "jpeg-live-current-attribution-jpr608.tar.xz",
+        "sha256": "0c7987ade22237920072542d1cb0d2d83ee785b6eefecf1762ede5fa7b0c9a15",
+        "bytes": 196416,
+        "members": 72
+      }
+    ],
+    "scope": "Exactqualified/candidateW/L sources/main/embeddedmodules; numericalandactualhelper/reference/prefix/frozenpixel checks; firstfailedcompile; solecomplete3actual screen/allgates/nativebrackets; exactsource/module/binding/manifest/package restoration; model/design/reproduction. Existingworker/input/native/qualification dependencies linked, no newvendoredmaterial."
+  }
+}

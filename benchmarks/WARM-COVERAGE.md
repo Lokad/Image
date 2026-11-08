@@ -44,7 +44,8 @@ admission, cancellationcleanup andindependent outputs remain. Otherfamilies reus
 source-valid evidence. This is a scoped development refresh; fullparity and the
 full126row actual-package release refresh remain open.
 
-Earlier unselected [immutable JPEG geometry](JPEG-IMMUTABLE-MAP-EXPERIMENT.md),
+Earlier unselected [cached JPEG corrections](JPEG-CACHED-CORRECTION-EXPERIMENT.md),
+[immutable JPEG geometry](JPEG-IMMUTABLE-MAP-EXPERIMENT.md),
 [JPEG input preparation](JPEG-PREPARED-INPUT-EXPERIMENT.md),
 [result row history](BICUBIC-RESULT-HISTORY-EXPERIMENT.md),
 [packed prediction](VP8-PACKED-PREDICTION-EXPERIMENT.md),
