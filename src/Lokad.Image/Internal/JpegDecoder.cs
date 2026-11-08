@@ -362,18 +362,22 @@ internal ref partial struct JpegDecoder
         // while removing progressive/refinement state from this hot loop.
         context.Cancellation.ThrowIfCancellationRequested();
         var k = 1;
-        if (!dc.TryReadPlainBaselineBlock(ref reader, ac, block, ref predictor, ref k))
+        var cancelable = context.Cancellation.CanBeCanceled;
+        var prepared = cancelable
+            ? dc.TryReadCancelableBaselineBlock(ref reader, ac, block, ref predictor, ref k)
+            : dc.TryReadPlainBaselineBlock(ref reader, ac, block, ref predictor, ref k);
+        if (!prepared)
         {
             var category = dc.Read(ref reader);
             if (category > 11) throw new ImageDataException("Invalid JPEG DC coefficient category.");
             var nextPredictor = (long)predictor + reader.ReadSigned(category);
             if (nextPredictor is < -32768 or > 32767) throw new ImageDataException("JPEG DC predictor is out of range.");
             predictor = (int)nextPredictor; block[0] = predictor;
-            if (context.Cancellation.CanBeCanceled)
-            {
-                ReadCancelableBaselineAc(ref reader, block, ac);
-                return;
-            }
+        }
+        if (cancelable)
+        {
+            ReadCancelableBaselineAc(ref reader, block, ac, k, prepared);
+            return;
         }
         while (k <= 63)
         {
@@ -399,13 +403,17 @@ internal ref partial struct JpegDecoder
         }
     }
 
-    private static void ReadCancelableBaselineAc(ref JpegEntropyReader reader, scoped Span<int> block, JpegHuffman ac)
+    private static void ReadCancelableBaselineAc(ref JpegEntropyReader reader, scoped Span<int> block, JpegHuffman ac,
+        int k, bool windowMiss)
     {
-        var k = 1;
         while (k <= 63)
         {
-            ac.ReadPlainCancelableAc(ref reader, block, ref k);
-            if (k > 63) return;
+            if (!windowMiss)
+            {
+                ac.ReadPlainCancelableAc(ref reader, block, ref k);
+                if (k > 63) return;
+            }
+            windowMiss = false;
             var symbol = ac.Read(ref reader); var run = symbol >> 4; var size = symbol & 15;
             if (size == 0)
             {

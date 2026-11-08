@@ -596,21 +596,22 @@ internal static class CooperativeMemoryConsumer
         if (!root.TryReserve(data.Length, out var input)) throw new Exception("Cannot admit packaged RGB input.");
         using var inputOwner = input;
         var options = new DecodeOptions { Limits = new() { MemoryBudget = root } };
-        using var first = ImageCodec.Decode(data, options);
+        using var live = new CancellationTokenSource();
+        using var first = ImageCodec.Decode(data, options, live.Token);
         using var stream = new MemoryStream(data, writable: false);
-        using var second = await ImageCodec.DecodeAsync(stream, options);
+        using var second = await ImageCodec.DecodeAsync(stream, options, live.Token);
         if (root.Bytes != data.Length + 2L * bytes || !stream.CanRead || root.IsDisposed)
             throw new Exception("Packaged RGB result or stream ownership differs.");
         try
         {
-            using var unexpected = ImageCodec.Decode(data, options);
+            using var unexpected = ImageCodec.Decode(data, options, live.Token);
             throw new Exception("Packaged RGB ignored aggregate refusal.");
         }
         catch (ImageLimitException error) when (error.Scope == ImageLimitScope.SharedBudget) { }
         if (root.Refusals != 1 || root.Bytes != data.Length + 2L * bytes)
             throw new Exception("Packaged RGB admission was retried or leaked storage.");
         first.Dispose();
-        using var recovered = ImageCodec.Decode(data, options);
+        using var recovered = ImageCodec.Decode(data, options, live.Token);
         data.AsSpan().Clear();
         foreach (var image in new[] { second, recovered })
             for (var y = 0; y < height; y++)
@@ -625,6 +626,7 @@ internal static class CooperativeMemoryConsumer
         inputOwner?.Dispose();
         if (root.Bytes != 0 || root.IsDisposed) throw new Exception("Packaged RGB borrowed root differs.");
         Console.WriteLine("Packaged direct RGB JPEG preserves exact pixels, bounded ownership, async and admission recovery.");
+        Console.WriteLine("Packaged live baseline JPEG window preserves exact samples and admitted sync/async ownership.");
     }
 
     private static void VerifyTranspose(int depth)

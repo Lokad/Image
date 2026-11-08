@@ -114,6 +114,10 @@ internal sealed class JpegHuffman
         scoped Span<int> block, ref int predictor, ref int coefficient)
         => reader.TryReadPlainBaselineBlock(shortCodes, ac, block, ref predictor, ref coefficient);
 
+    internal bool TryReadCancelableBaselineBlock(ref JpegEntropyReader reader, JpegHuffman ac,
+        scoped Span<int> block, ref int predictor, ref int coefficient)
+        => reader.TryReadCancelableBaselineBlock(shortCodes, ac.shortCodes, block, ref predictor, ref coefficient);
+
     // Reuse the encoded table's existing nine/ten-bit lookup in an ordinary
     // bounded entropy window. No additional table preparation or capacity.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

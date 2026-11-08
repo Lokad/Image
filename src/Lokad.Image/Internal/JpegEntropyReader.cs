@@ -718,9 +718,35 @@ cache = candidateCache; pending = candidatePending - length;
 
     internal void ReadPlainCancelableAc(ReadOnlySpan<ushort> shortCodes, scoped Span<int> block, ref int coefficient)
     {
+        var predictor = 0;
+        _ = ReadCancelableBaselineWindow(default, shortCodes, block, ref predictor, ref coefficient);
+    }
+
+    private bool ReadCancelableBaselineWindow(ReadOnlySpan<ushort> dcCodes, ReadOnlySpan<ushort> shortCodes,
+        scoped Span<int> block, ref int predictor, ref int coefficient)
+    {
         var localBits = ((ulong)bits << 32) << (32 - available);
         var localAvailable = available; var localPosition = position;
-var cancellation = context.Cancellation; var k = coefficient;
+        var cancellation = context.Cancellation; var k = coefficient;
+        if (!dcCodes.IsEmpty)
+        {
+            if (data.Length - localPosition < 4) return false;
+            var word = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(data.Slice(localPosition, 4));
+            if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) return false;
+            localBits |= (ulong)word << (32 - localAvailable); localAvailable += 32; localPosition += 4;
+            var dc = dcCodes[(int)(localBits >> 56)]; var count = dc & 15; var category = dc >> 4;
+            if (count == 0 || category > 11) return false;
+            var delta = category == 0 ? 0 : ReadHighAlignedSigned(localBits << count, category);
+            var next = (long)predictor + delta;
+            if (next is < -32768 or > 32767) return false;
+            // Commit only a complete DC. Invalid or incomplete input still
+            // enters the original scalar grammar without consuming a prefix.
+            cancellation.ThrowIfCancellationRequested();
+            localBits <<= count; localAvailable -= count;
+            if (category != 0) cancellation.ThrowIfCancellationRequested();
+            localBits <<= category; localAvailable -= category;
+            predictor = (int)next; block[0] = predictor;
+        }
         // This reader belongs to the current decode, which abandons it on
         // failure. Publish exact state on normal exits; outer owners handle
         // failure/cancellation cleanup without resuming this private window.
@@ -738,7 +764,14 @@ var cancellation = context.Cancellation; var k = coefficient;
             }
             var packed = shortCodes[(int)(localBits >> 56)]; var count = packed & 15;
             var token = packed >> 4; var size = token & 15; var run = token >> 4;
-            if (count == 0 || size is < 1 or > 10 || run >= 64 - k) break;
+            if (count == 0) break;
+            if (token == 0)
+            {
+                // EOB has one prefix checkpoint and no amplitude read.
+                cancellation.ThrowIfCancellationRequested();
+                localBits <<= count; localAvailable -= count; k = 64; break;
+            }
+            if (size is < 1 or > 10 || run >= 64 - k) break;
             cancellation.ThrowIfCancellationRequested();
             localBits <<= count; localAvailable -= count;
             // Admit and expose the prefix before the separate amplitude
@@ -752,6 +785,7 @@ var cancellation = context.Cancellation; var k = coefficient;
         var wholeBytes = localAvailable >> 3;
         available = localAvailable & 7; bits = (uint)((localBits >> 1) >> (63 - available));
         position = localPosition - wholeBytes; coefficient = k;
+        return true;
     }
 
     internal bool TryReadLongHuffman(ReadOnlySpan<ushort> longCodes, out int symbol)
