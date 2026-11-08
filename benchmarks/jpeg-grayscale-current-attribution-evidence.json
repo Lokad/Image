@@ -1,0 +1,205 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JGA620",
+  "productionChanged": false,
+  "productionBuilds": 0,
+  "privateHarnessNativeFixtureBuilds": 0,
+  "newPerformanceControls": 0,
+  "statisticalTiming": false,
+  "librarySha256": "f8238ab17d6411bd3d1970b4a014762d8d210e36d219507c8b7d9d50a84fff61",
+  "sourceSha256": "af13df8ffe4ef379d33345586be2d547b6fd8a6277fe9a85be00366b7661bc06",
+  "sources": {
+    "src/Lokad.Image/Internal/JpegEncoder.ReferenceGray.cs": "e7f5cc94451a8b6fc4a9f99925bef4acf18b7b72660c644ce164af39acebedc8",
+    "src/Lokad.Image/Internal/JpegGrayPreparation.cs": "6b79cca96b4725788d54d3692bc9eb8d84a5fc44142a4ed96330b0c390b39439",
+    "src/Lokad.Image/Internal/JpegGrayReferenceTransform.cs": "5b9de955724082f08c59471f619a4a0163f95890c2828e04c4728b426597233f",
+    "src/Lokad.Image/Internal/JpegGrayReferenceTransform.Avx2.cs": "00a472b52a47ad26d8263efa0d69f809294a2c6ac5bb914d824b4dbb08c65ca5",
+    "src/Lokad.Image/Internal/JpegGrayQuantization.cs": "5314ca1a48e063f121c50e1277c47797eb1a22375e959b26815fd09cd199edd7",
+    "src/Lokad.Image/Internal/JpegReferenceColor.Normalize.cs": "2e981346578a2ebf29332f16bf6af4478cebf1448595ae8c8d1af6889fa92be7",
+    "src/Lokad.Image/Internal/JpegEntropyRecords.cs": "1e9273aefb438c92da263dcf24e3f26474eabf22d2989203d7e25890c8723079",
+    "src/Lokad.Image/Internal/JpegEntropyWriter.cs": "b9987bf08e2b3675387d06415da0e48f9d3a36f847547ce5a83d8192e7a9e587",
+    "src/Lokad.Image/Internal/JpegEncodingTable.cs": "d1b550ffe2a6b538bc514998ca1b9d718d87dd2248f6b571a8cf54facec25c3e"
+  },
+  "currentRgbaGrayCost": {
+    "managedUs": 1660.5232515624998,
+    "nativeUs": 1522.2380559895832,
+    "ratio": 1.090843344133201,
+    "lower": 1.0712581909155587,
+    "upper": 1.1030754561819403,
+    "allocatedBytes": 155436,
+    "status": "gap",
+    "packetBytes": 58910,
+    "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+    "librarySha256": "70a343110b8c4b83c486582502459efc5b59c43cb1af1af87fceb42ea39a1bc6"
+  },
+  "correctedBoundary": "1660.52/native1522.24us is completeRGBA8-to-grayJPEG, including once-rounded alpha flattening on0x204060, exact binary64 BT601 grayscale, transform/quantization/adaptive entropy and independent output. CallerGRAY is separate1218.17/native1136.37us; differences between the controls are not precise method attribution.",
+  "profile": {
+    "totalSamples": 1997,
+    "managedSamples": 1954,
+    "methods": [
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegEntropyRecords::WriteRecords(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext)[Optimized]",
+        443
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegGrayPreparation::GrayRow(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        230
+      ],
+      [
+        "int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyRecords::RecordBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,valuetype [System.Runtime]System.Span`1<int32>,int32[][],valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        224
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyWriter::Append(uint64,int32)[Optimized]",
+        193
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyWriter::WritePair(int32,int32,int32,int32)[Optimized]",
+        187
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegGrayPreparation::CopyBlock(class Lokad.Image.ImageBuffer,valuetype Lokad.Image.Internal.JpegSampleInput,int32,int32,int32,int32,valuetype [System.Runtime]System.Nullable`1<uint32>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+        149
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegReferenceColor::NormalizeRgba8(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int32>,valuetype [System.Runtime]System.Nullable`1<uint32>)[Optimized]",
+        123
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyWriter::Emit(uint8)[Optimized]",
+        94
+      ],
+      [
+        "class Lokad.Image.Internal.JpegEncodingTable [Lokad.Image] Lokad.Image.Internal.JpegGrayReferenceTables::Build(int32[],class Lokad.Image.Internal.OperationContext)[Optimized]",
+        73
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegGrayReferenceTransform::TransformAvx2(valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>>,bool)[Optimized]",
+        47
+      ],
+      [
+        "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+        31
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegGrayReferenceTransform::ForwardAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        24
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegGrayQuantization::Quantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        21
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegGrayReferenceTransform::TransposeAvx2(valuetype [System.Runtime]System.Span`1<valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int32>>)[Optimized]",
+        17
+      ],
+      [
+        "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+        15
+      ],
+      [
+        "uint64 [Lokad.Image] Lokad.Image.Internal.JpegNonzeroMask::Ac(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>)[Optimized]",
+        13
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegEncoder::ReferenceGrayPass(class Lokad.Image.ImageBuffer,valuetype Lokad.Image.Internal.JpegSampleInput,int32,int32,valuetype [System.Runtime]System.Nullable`1<uint32>,uint16[],valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32[][],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.JpegEntropyWriter,class Lokad.Image.Internal.OperationContext,int32,class Lokad.Image.Internal.JpegEntropyRecords)[Optimized]",
+        13
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+        13
+      ],
+      [
+        "instance int32[] [Lokad.Image] Lokad.Image.Internal.JpegEntropyRecords::GetStorage()[Optimized]",
+        10
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegEntropyRecords::PrepareRecordValues(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int32>)[Optimized]",
+        9
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyWriter::Write(int32,int32)[Optimized]",
+        5
+      ],
+      [
+        "instance valuetype [System.Runtime]System.Span`1<int32> [Lokad.Image] Lokad.Image.Internal.JpegEntropyRecords::BeginBlock()[Optimized]",
+        5
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyRecords::MarkMcuEnd()[Optimized]",
+        4
+      ],
+      [
+        "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyRecords::Commit(int32)[Optimized]",
+        3
+      ],
+      [
+        "instance void [System.Collections] System.Collections.Generic.PriorityQueue`2[System.__Canon,System.ValueTuple`2[System.Int64,System.Int32]]::RemoveRootNode()[Optimized]",
+        3
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegGrayReferenceTransform::Forward(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+        2
+      ],
+      [
+        "instance void [System.Collections] System.Collections.Generic.PriorityQueue`2[System.__Canon,System.ValueTuple`2[System.Int64,System.Int32]]::Enqueue(!0,!1)[Optimized]",
+        1
+      ],
+      [
+        "void [Lokad.Image] Lokad.Image.Internal.JpegEncoder::WriteReferenceGrayHeader(class [System.Runtime]System.IO.Stream,int32,int32,uint16[],class Lokad.Image.Internal.JpegEncodingTable[],class Lokad.Image.Internal.OperationContext,int32)[Optimized]",
+        1
+      ],
+      [
+        "instance void [System.Collections] System.Collections.Generic.PriorityQueue`2[System.__Canon,System.ValueTuple`2[System.Int64,System.Int32]]::MoveDownDefaultComparer(valuetype [System.Private.CoreLib]System.ValueTuple`2<!0,!1>,int32)[Optimized]",
+        1
+      ]
+    ],
+    "quietGuardsPassed": true,
+    "profilingOnly": true,
+    "statisticalTiming": false,
+    "collectorSeconds": 2,
+    "actualCompletePacketBytes": 58910,
+    "packetSha256": "444e39e6126dd3077d22c0b4f60e38d8a22611fa5721b226c5168a63b7e94423",
+    "referenceLabel": "SIMD-enabled libjpeg-turbo 3.1.4.1, standalone single-component grayscale reference",
+    "harnessReused": true
+  },
+  "findings": [
+    "No duplicate full grayscale transform pass in ordinary eligible record-backed encoding: the first pass records coefficients and histograms; the second replays records after optimal tables exist. Tight/restart paths intentionally recompute. Do not remove a nonexistent ordinary second transform.",
+    "WriteRecords22.18percent own samples follows each record through table family, symbol, Lengths and Codes arrays before separate Write/WritePair entry. Actual JIT confirms separate table/length/code loads and checks; sampled offsets are locations subject to skid, not isolated instruction costs.",
+    "GrayRow230, CopyBlock149 and NormalizeRgba8123 samples locate another independent preparation lead; their total is not a measured standalone normalization phase. Existing eight-pixel GrayRow batching is already present.",
+    "Current forward transform already uses exact AVX2 factorization/transposes; reciprocals prepare once per operation. No reason to replay prior transform/row arithmetic variants before addressing repeated record dispatch."
+  ],
+  "hypothesis": "Prepare one bounded packed Huffman symbol bank after optimal tables are built, then replay records using one family+symbol index and one code/length load. Investigate eliminating repeated table-object/array traversal and redundant writer pair dispatch without changing bits, per-record cancellation, MCU boundaries, stuffing/flushes or caller failure publication.",
+  "intendedEndState": "One coherent prepared entropy replay boundary; no new general cache/session/pool or fixture specialization. A candidate1024entry uint bank needs4096stackbytes or explicitly admitted operation storage, charged within a justified substantial owner. Assess this against existing16KiB table allowance and actual overlapping table capacities before allocation. Temporary old/new representation must have a declared removal path; do not leave a test-only production writer alive.",
+  "next": "First bound the bank layout and live table/record ownership, preserve or deliberately scope invalid arbitrary-table behavior using actual production call boundaries, then one main/embedded candidate perOS and existing completeRGBAgray short. Compression/exactness before timing; other encoder paths are affected if shared replay changes and require representative standalone costs at acceptance. No production change or prototype measurement yet.",
+  "qualificationReused": {
+    "fullChecksEachOs": 5939,
+    "packageSha256": "91fcaa8e65756a64764efff147dd3ccd5308c8e33c38ae8b8c740ca2869d8d8e",
+    "allThreeExamplesBothOs": true,
+    "additionalBuildsChecksPackages": 0
+  },
+  "publicationPostponed": true,
+  "requiredMaterialPaths": 283,
+  "raw": {
+    "file": "jpeg-grayscale-current-attribution.tar.xz",
+    "sha256": "5685820ec4424e93e81c3445f8bf409a6956498de9e075d88a119b0535415aa9",
+    "bytes": 97292,
+    "members": 25,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-rounded-border-prediction-qualified.tar.xz",
+        "sha256": "ca9e817ee7a60089947b3d6967f7723a91987d9d48dfeb17d45f8e48ec240115",
+        "bytes": 13845760,
+        "members": 272
+      },
+      {
+        "file": "jpeg-grayscale-row-batch-qualified.tar.xz",
+        "sha256": "6468a48369bf6b1037e31547d99e0e78353cb760918ed41b44e0694acacfb204",
+        "bytes": 4711412,
+        "members": 199
+      }
+    ]
+  },
+  "postprocessingRecovery": "Archive and every local/VM member already verified; final dependency field used raw instead of JGB269 rawArchive. Recovered metadata from completed archive, no profile/guard/build/measurement/qualification rerun."
+}

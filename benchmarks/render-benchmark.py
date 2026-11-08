@@ -39,6 +39,7 @@ def render():
     assert vp8_current['reuse']['unchangedCases'] == sorted(set(vp8_current['cases']) - {'distortion'})
     assert vp8_current['qualification']['fullChecksEachOs'] == 5939
     assert vp8_current['qualification']['sameActualPackageBothOs']
+    assert vp8_current['qualification']['actualPackage']['sha256'] == vp8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
     prepared_model = json.loads((ROOT / 'benchmarks/vp8-model-row-stride-evidence.json').read_text(encoding='utf-8'))
     assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 283
     assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
@@ -1947,7 +1948,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{jpeg_scan['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{vp8_current['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

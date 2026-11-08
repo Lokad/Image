@@ -252,6 +252,12 @@ workspace lifetimes, shared resize execution and further codec work selected fro
 attribution. Keep passing cases stopped. Text/drawing proceeds independently;
 pending references never block justified codec/resizing work. PLAN.md stays ignored.
 
+[Current grayscale JPEG attribution](JPEG-GRAYSCALE-CURRENT-ATTRIBUTION.md) locates
+repeated entropy table/record traversal on the qualified module, without new costs,
+builds or qualification repeats. RGBA→gray and callerGRAY remain distinct complete
+boundaries. A bounded prepared replay design is the next lead, not a proven gain;
+it does not add a renderer dependency or invalidate unchanged qualification.
+
 All earlier reports, raw evidence, release packages and source-specific
 invalidation notes are retained through the linked history. They do not establish
 current blanket qualification or permanently close algorithm families.
