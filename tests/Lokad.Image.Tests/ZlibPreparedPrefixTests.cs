@@ -57,8 +57,16 @@ namespace Lokad.Image.Internal
                         {
                             actual.Read(phase);
                             if (cursor)
-                                actualCount = actual.InflateCursor(literals, distances, lookup, distanceLookup,
+                            {
+                                if (live)
+                                {
+                                    actualCount = actual.InflateLiveCursor(literals, distances, lookup, distanceLookup,
+                                        actualOutput, 0, 32768);
+                                    actualEnded = true;
+                                }
+                                else actualCount = actual.InflateCursor(literals, distances, lookup, distanceLookup,
                                     actualOutput, 0, 32768, maximum, int.MaxValue, out actualEnded);
+                            }
                             else actualCount = DecodeLiteral(ref actual, literals, lookup);
                             actual.Read(3);
                         }
@@ -84,7 +92,12 @@ namespace Lokad.Image.Internal
                         Assert.Equal(referenceError?.Message, actualError?.Message);
                         if (actualError is null) { Assert.Equal(referenceCount, actualCount); Assert.Equal(referenceEnded, actualEnded); }
                         Assert.Equal(referenceOutput, actualOutput);
-                        Assert.Equal(reference.PreparedPrefixTestState, actual.PreparedPrefixTestState);
+                        // Walk discards a failed live-block reader. Its public
+                        // error and partial stores remain exact above. Completed
+                        // blocks (including a failed following Read) keep exact
+                        // cache/cursor state; ordinary cursor behavior is unchanged.
+                        if (actualError is null || !live || !cursor || actualEnded)
+                            Assert.Equal(reference.PreparedPrefixTestState, actual.PreparedPrefixTestState);
                     }
                     Assert.Equal(saved, input);
                 }

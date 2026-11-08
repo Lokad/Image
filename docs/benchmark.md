@@ -67,14 +67,22 @@ Current scope and remaining work:
   Total GC measures1,638,214B/op, +694B; no allocation-reduction claim.
   [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
   51 independently confirmed controls, 45 pass/stop,
-  6 gaps and 0 uncertain. All47 existing resident
+  5 gaps and 1 uncertain. All47 existing resident
   decode controls and four coding validators now have evidence; no resident
   confirmation remains missing. Passing cases stop. The report lists exact scopes,
-  allocations and remaining gaps. Twenty-seven confirmations reuse the immutable
-  prepared build, worker and harness, reusing unchanged paths.
-  No new case, source change, rebuild or repeated package qualification. Header-only
-  inspection/identification, stream/composition/shared-root boundaries and encoding
-  keep their separate required coverage. No historical paired gain is inferred.
+  allocations and remaining gaps.
+  [Live local cursors](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) save
+  **147.18µs/9.56% raw/9.54% normalized** on RGBA8 and **31.01µs/1.05% raw/1.04%
+  normalized** on RGBA16; filtered/allactual raw/normalized intervals separate.
+  Current1391.93/native1393.91µs upper1.004 remains uncertain; word2919.94/
+  native2894.87µs upper1.012 remains a gap. No favorable resampling or parity claim.
+  GC4472/8568Bop and4KiB framing admission unchanged; no new heap capacity or
+  retained scratch. Exact pixels, full lookahead, per-field polls, public errors
+  and completed cursor remain. Failed private readers are abandoned; outer owner
+  cleanup stays. Two costs refresh and49 unchanged controls reuse prior evidence.
+  One displayed row refreshes;124 numerical rows reuse unchanged paths.
+  Header-only inspection/identification, stream/composition/shared-root boundaries
+  and encoding keep their separate required coverage.
   [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
   remove the greedy block's second token census using its existing storage.
   Independent live/plain word gains are516–550/557µs; filtered/allactual raw and
@@ -218,7 +226,7 @@ settings do not establish matched quality.
 | PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,826.60 | 5,417.93 | 0.891 / 0.911 | 822,740 | 265,433 / 265,433 |
 | PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,023.86 | 10,524.89 | 0.952 / 0.963 | 1,360,900 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
-| PNG RGBA8 decode, live token † | 1,539.10 | 1,394.18 | 1.104 / 1.113 | 4,472 | — |
+| PNG RGBA8 decode, live token † | 1,391.93 | 1,393.91 | 0.999 / 1.004 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,297.38 | 1,395.09 | 0.930 / 0.935 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit † | 3,019.22 | 2,895.06 | 1.043 / 1.052 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |

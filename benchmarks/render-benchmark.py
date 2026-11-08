@@ -471,7 +471,6 @@ def render():
     assert set(word_color_png['cases']) == {'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16'}
     png_framing = json.loads((ROOT / 'benchmarks/png-current-framing-costs-evidence.json').read_text(encoding='utf-8'))
     assert not png_framing['productionChanged'] and png_framing['allBuilds'] == 0
-    assert png_framing['displayedStatusCounts'] == {'pass': 5, 'gap': 2, 'uncertain': 0}
     assert png_framing['statusCounts'] == {status: sum(c['status'] == status for c in png_framing['cases'].values())
         for status in ('pass', 'gap', 'uncertain')}
     assert png_framing['raw']['mirrored'] and png_framing['raw']['allMembersVerified']
@@ -479,12 +478,39 @@ def render():
     assert set(png_framing['displayedCases']) == {'DecodeCancelable8', 'DecodeTight8', 'DecodeTight16',
         'ValidatePng8', 'ValidatePng16', 'ValidateIndexedAdam7', 'ValidatePng16Async'}
     for case, framing_case in png_framing['cases'].items():
+        if case in {'DecodeCancelable8', 'DecodeCancelable16'}:
+            continue  # Superseded costs remain in the original report/raw data.
         assert framing_case['actualIterations'] == len(framing_case['managedActualNanoseconds']) == 12
         assert framing_case['librarySha256'] == png_framing['producers']['linuxSha256']
         assert framing_case['allOriginalGatesPassed'] and framing_case['quietGuardsPassed']
         assert framing_case['sourceUnchanged'] and framing_case['independentOwnedOutput']
         assert framing_case['status'] == ('pass' if framing_case['upper'] <= 1 else 'gap' if framing_case['lower'] > 1 else 'uncertain')
         assert framing_case.get('descriptorExact', framing_case.get('managedExact', False))
+    png_live = json.loads((ROOT / 'benchmarks/png-live-prepared-cursor-evidence.json').read_text(encoding='utf-8'))
+    assert png_live['productionAccepted'] and png_live['requiredMaterialPaths'] == 283
+    assert png_live['raw']['mirrored'] and png_live['raw']['allMembersVerified']
+    assert set(png_live['cases']) == {'DecodeCancelable8', 'DecodeCancelable16'}
+    assert png_live['sourceProof']['fullCSourceReconstructsBOutsideKnownTenthBitBranch']
+    assert png_live['sourceProof']['ordinaryCursorHuffmanPreparationCanonicalLiteralRunCountingStreamingBodiesExact']
+    assert png_live['sourceProof']['publicFailurePartialOutputPollLookaheadContractsUnchanged']
+    for live_name, live_case in png_live['cases'].items():
+        assert live_case['actualIterations'] == len(live_case['managedActualNanoseconds']) == live_case['nativeSamplesEachBracket'] == 12
+        assert live_case['librarySha256'] == png_live['producers']['linuxSha256']
+        assert live_case['allOriginalGatesPassed'] and live_case['quietGuardsPassed']
+        assert live_case['managedExact'] and live_case['alphaExact'] and live_case['hiddenRgbExact']
+        assert live_case['sourceUnchanged'] and live_case['independentOwnedOutput']
+        assert live_case['status'] == ('pass' if live_case['upper'] <= 1 else 'gap' if live_case['lower'] > 1 else 'uncertain')
+        png_framing['cases'][live_name] = live_case
+    png_framing['statusCounts'] = {s: sum(c['status'] == s for c in png_framing['cases'].values())
+                                  for s in ('pass', 'gap', 'uncertain')}
+    png_framing['displayedStatusCounts'] = {s: sum(png_framing['cases'][c]['status'] == s for c in png_framing['displayedCases'])
+                                           for s in ('pass', 'gap', 'uncertain')}
+    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
+               for comparison in png_live['comparison'].values() for v in comparison['views'].values())
+    png_live_q = png_live['qualification']
+    assert png_live_q['fullChecksEachOs'] == png_live_q['windows']['total'] == png_live_q['linux']['total'] == 5891
+    assert png_live_q['actualPackage']['sha256'] == png_live_q['samePackageLinux']['sameActualPackageSha256']
+    assert png_live_q['actualPackage']['livePngCursorSamplesAndOwnershipPassed'] and png_live_q['samePackageLinux']['livePngCursorSamplesAndOwnershipPassed']
     resident = json.loads((ROOT / 'benchmarks/current-png-resident-identify-evidence.json').read_text(encoding='utf-8'))
     resident_other = json.loads((ROOT / 'benchmarks/current-jpeg-webp-resident-identify-evidence.json').read_text(encoding='utf-8'))
     stream_identify = json.loads((ROOT / 'benchmarks/current-png-stream-identify-evidence.json').read_text(encoding='utf-8'))
@@ -1835,11 +1861,19 @@ Current scope and remaining work:
   {png_framing['statusCounts']['gap']} gaps and {png_framing['statusCounts']['uncertain']} uncertain. All47 existing resident
   decode controls and four coding validators now have evidence; no resident
   confirmation remains missing. Passing cases stop. The report lists exact scopes,
-  allocations and remaining gaps. Twenty-seven confirmations reuse the immutable
-  prepared build, worker and harness, reusing unchanged paths.
-  No new case, source change, rebuild or repeated package qualification. Header-only
-  inspection/identification, stream/composition/shared-root boundaries and encoding
-  keep their separate required coverage. No historical paired gain is inferred.
+  allocations and remaining gaps.
+  [Live local cursors](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) save
+  **147.18µs/9.56% raw/9.54% normalized** on RGBA8 and **31.01µs/1.05% raw/1.04%
+  normalized** on RGBA16; filtered/allactual raw/normalized intervals separate.
+  Current1391.93/native1393.91µs upper1.004 remains uncertain; word2919.94/
+  native2894.87µs upper1.012 remains a gap. No favorable resampling or parity claim.
+  GC4472/8568Bop and4KiB framing admission unchanged; no new heap capacity or
+  retained scratch. Exact pixels, full lookahead, per-field polls, public errors
+  and completed cursor remain. Failed private readers are abandoned; outer owner
+  cleanup stays. Two costs refresh and49 unchanged controls reuse prior evidence.
+  One displayed row refreshes;124 numerical rows reuse unchanged paths.
+  Header-only inspection/identification, stream/composition/shared-root boundaries
+  and encoding keep their separate required coverage.
   [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
   remove the greedy block's second token census using its existing storage.
   Independent live/plain word gains are516–550/557µs; filtered/allactual raw and

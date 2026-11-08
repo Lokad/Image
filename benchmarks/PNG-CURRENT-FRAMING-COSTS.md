@@ -1,14 +1,16 @@
 # Current PNG decode and coding-validation costs
 
 All **47 existing resident decode controls and four coding validators** now have
-independent evidence: **45 pass and stop, 6 gaps, 0 uncertain**.
-The final 27 missing confirmations reuse the prepared immutable build, worker,
-harness and fixtures. No production change, rebuild, extra image/settings grid,
-repeated passing measurement or repeated package qualification.
+independent evidence: **45 pass and stop, 5 gaps, 1 uncertain**.
+The [live prepared cursor](PNG-LIVE-PREPARED-CURSOR.md) refreshes the two default
+live-token costs below; 49 unchanged controls retain their source-valid evidence.
+The earlier completion of missing confirmations remains retained history.
+The live-cursor stage reuses the frozen worker, harness and fixtures without a
+new image/settings grid or repeated passing measurement.
 
 | Existing case | Lokad / FFmpeg µs | Ratio / upper | Managed B/op | Status |
 | --- | ---: | ---: | ---: | --- |
-| DecodeCancelable8 | 1,539.10 / 1,394.18 | 1.104 / 1.113 | 4,472 | gap |
+| DecodeCancelable8 | 1,391.93 / 1,393.91 | 0.999 / 1.004 | 4,472 | uncertain |
 | DecodeTight8 | 1,297.38 / 1,395.09 | 0.930 / 0.935 | 68,224 | pass |
 | DecodeTight16 | 3,019.22 / 2,895.06 | 1.043 / 1.052 | 70,272 | gap |
 | ValidatePng8 | 1,287.37 / 1,377.05 | 0.935 / 0.938 | 240 | pass |
@@ -32,7 +34,7 @@ repeated passing measurement or repeated package qualification.
 | DecodeSub16 | 301.91 / 741.90 | 0.407 / 0.412 | 8,568 | pass |
 | DecodeAverage8 | 1,619.39 / 1,849.21 | 0.876 / 0.879 | 4,472 | pass |
 | DecodeAverage16 | 4,102.68 / 4,476.03 | 0.917 / 0.920 | 8,568 | pass |
-| DecodeCancelable16 | 2,950.95 / 2,895.32 | 1.019 / 1.025 | 8,568 | gap |
+| DecodeCancelable16 | 2,919.94 / 2,894.87 | 1.009 / 1.012 | 8,568 | gap |
 | DecodeTightCancelable16 | 3,005.70 / 2,900.91 | 1.036 / 1.041 | 70,272 | gap |
 | DecodeNoCompression8 | 92.78 / 135.99 | 0.682 / 0.686 | 4,472 | pass |
 | DecodeNoCompression16 | 208.13 / 296.12 | 0.703 / 0.708 | 8,568 | pass |
@@ -76,12 +78,13 @@ their separate frozen natural-frame worker and metadata adapter. The existing on
 control includes its declared native filter/one filter thread; other controls retain
 their declared conversions and threading. Native contexts/wrappers remain prepared.
 
-Measurement DLL `05f30275…` is unchanged from the qualified PNG framing milestone.
-Production changes through `172de02d` affect other codecs, fonts and bicubic resizing;
-PNG decode and shared ownership paths are unchanged. Reuse its Windows/Linux
-5,751-check/scalar/same-package proof. The current library also passes5,850 full/live
-checks and the same actual package on both OSes; this update adds no production or
-package changes. These are source-valid reused proofs, not new runs on all DLLs.
+DLL `05f30275…` supplies the 49 unchanged costs and the original live baselines.
+Current `bad642c2…` supplies the two refreshed live costs. The source projection
+preserves ordinary/rolling/counting, canonical, Huffman and literal-run bodies;
+only materialized live execution changes. Current Windows/Linux each pass5,891
+full/live checks, scalar checks and the same actual package/all three examples.
+The earlier broad proof remains historical; current qualification and measured
+scopes belong to the linked live-cursor report. Passing costs are not retimed.
 
 B/op measures total managed allocation, separately from peak live capacity and
 retained storage. Complete physical/native peaks are unmeasured. The separate
