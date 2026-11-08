@@ -1,0 +1,393 @@
+{
+  "project": "Lokad.Image",
+  "stage": "BRM539/BRO540",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "stages": {
+    "A": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "BRM539",
+        "paths": [
+          "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs"
+        ],
+        "originalAbsent": [],
+        "baseline": {
+          "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2"
+        },
+        "hypothesis": "BRM538 current8,262Bdriver/872Breportedlocalframe mixes paired-column decode/vertical filtering with horizontal/certified publication. Retire1536Bdecoded scratch into one actual bounded helper; main retains32Bpublication staging. Reduce long-lived decode state and simplify explicit phase lifetime. Code/frame alone is not CPU proof.",
+        "endState": "One actual paired-column decode/vertical filter helper, borrowed original spans and prepared band metadata. Same specialized SIMD arithmetic and cache ownership, same quartet/pair/single publication and scalar repair. No heap/pool/cache/session/API or generic pixel abstraction. NoInlining makes callee-local stack scratch retire after every column pair, before caller publication; no duplicate implementation.",
+        "correctness": "Geometry/selection, source-count bounds, column-ID/prefetch choices, tap order, AVX decode/multiply/add, exact quotient/certification/repair, every poll, normal/exception/refusal cleanup, original source and independent output ownership unchanged.",
+        "storage": {
+          "originalExplicitArrayBytes": 3992,
+          "candidateExplicitArrayOverlapBytes": 4024,
+          "workspaceReservationBytes": 4096,
+          "newCallerStagingBytes": 32,
+          "calleeDecodedBytes": 1536,
+          "newOwnedHeapCapacityBytes": 0,
+          "newRetainedStateBytes": 0,
+          "note": "Source capacity bound only, not measured total stack or physical/admitted peak; JITlocalframe and explicitarray counts not additive."
+        },
+        "workloads": [
+          "Mixed16",
+          "TightMixed16",
+          "TightVertical16"
+        ],
+        "scope": "Actual helper only entered after existing mixed-word guard. Default Mixed16 and bounded Mixed16/vertical execute it. Default vertical retains earlier cached selection. Reuse every unchanged numerical helper, codec/encoder/editing path; qualify affected complete controls if accepted.",
+        "temporaryTradeoffs": "One call per cache miss and additional32Bstaging can outweigh shorter-lived frame state. Judge complete elapsed/allocation/retention/simplification together; no fixedgain threshold or phasecode-size inference.",
+        "workflow": "One immutable main/embedded perOS; unchanged public/harness/native/selector/fixture builds reused. Focused58internal/688public normal/scalar, then narrow complete screens. Independent contemporary confirmation only if promising, affectedcosts/fullWindowsLinux/live/SAMEactualpackage once at coherent acceptance. Preserve adverse evidence; exactrestore without builds if unselected."
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "BRM539",
+        "sources": {
+          "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "e68247d47e9ce3bd557a7623a80423f76ae473ac8e38a5350ce20d2709a597a0"
+        },
+        "wholeMainOutsidePhaseAndScratchLocationExact": true,
+        "wholePairedDecodeAndVerticalArithmeticBodyExact": true,
+        "wholeOriginalWordRepairBodyExact": true,
+        "geometryDispatchCacheIdsPrefetchTapOrderAndAllPollsExact": true,
+        "quotientCertificatesQuartetPairSinglePackingExact": true,
+        "allAdmissionOwnedStorageReleaseAndEscapingOutputStatementsExact": true,
+        "calleeDecodedArrayBytes": 1536,
+        "callerStagingBytes": 32,
+        "originalExplicitArrayBytes": 3992,
+        "candidateExplicitArrayOverlapBytes": 4024,
+        "workspaceReservationBytes": 4096,
+        "newOwnedHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "lifetime": "NoInlining helper borrows immutable input and caller cache/metadata, owns1536Bstack decoded products, writes same filtered cache before returning. Span cannot escape; stack retires percall. Caller32Bstaging is disjoint and used only after helper returns. Fixed array bound within4096Bexistingreservation; frame/arraycounts are not additive physicalpeak.",
+        "dispatch": "Guard unchanged:RGBA16,width>=source,height<source,tapsX<=5,tapsY<=10,requiredISA,remaining>=4096. Eligible defaultMixed16/TightMixed16/TightVertical16 use actual phase. Defaultwidth-identity vertical retains cached path when earlier heapcache allowance fits. Otherwordguards/unsupportedreturns identical.",
+        "failure": "Borrowed private result is never published before completed Resize. Existing returnfalse and callerfallback boundaries unchanged; actual span/index/math checks same. Every existing cancellation poll and finallyRelease remains. Tinyalpha fallback starts after bothframes retire; no retry after shared admission refusal.",
+        "tests": "Existing public mixed-word exact hash, cachewrap/width1/odd band/tails/negative lobes/tinyalpha/exact rational/4095vs4096/admission boundary/independent survivors/rootrefusal/cancellation/subsequent operation controls, plus actual pair/quartet preparation oracles. No new test mirroring helper."
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "candidateSha256": "e53c3b0a4b720a5b9aa7ac6915d803ead6f07e1424256019c6a31a2021805dfb",
+          "internalTestAssemblySha256": "94189403381a90330401c6fda340645e31bfd499a24cfd15e5fa3df95187b52a",
+          "focused": {
+            "internal-normal": 58,
+            "internal-scalar": 58,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "e68247d47e9ce3bd557a7623a80423f76ae473ac8e38a5350ce20d2709a597a0"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+          "candidateSha256": "1b8dda63aadf276f856442bdd61e8409fdd69165f4f6f332063bd76d82234eed",
+          "internalTestAssemblySha256": "e4e712703e02a83d9bad23b1d5e3caa12bba00a969767c7cc44d99536187f450",
+          "focused": {
+            "internal-normal": 58,
+            "internal-scalar": 58,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "e68247d47e9ce3bd557a7623a80423f76ae473ac8e38a5350ce20d2709a597a0"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "Mixed16": {
+          "runId": "brm539-candidate-Mixed16-short",
+          "managedUs": 1058.357974826389,
+          "nativeUs": 848.0479947916666,
+          "ratio": 1.247993016110353,
+          "lower": 1.1168871739559165,
+          "upper": 1.3933103134620863,
+          "allocatedBytes": 114,
+          "packetBytes": 1059864,
+          "packetSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+          "librarySha256": "1b8dda63aadf276f856442bdd61e8409fdd69165f4f6f332063bd76d82234eed",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+        }
+      }
+    },
+    "B": {
+      "design": {
+        "project": "Lokad.Image",
+        "round": "BRO540",
+        "paths": [
+          "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs"
+        ],
+        "originalAbsent": [],
+        "baseline": {
+          "windowsSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "linuxSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2"
+        },
+        "hypothesis": "BRM539 bounded-callee phase passes focused tests but completeMixed16short1058.36us is unpromising. Actual helper JIT804B/frame40 allocates and clears1536B on EVERYcachefill, main7498B/frame984 versus baseline8262B/frame872. Revise storage lifetime: one caller-owned decoded array serves each actual helper and, after return, packed publication as in original. Eliminate repeated initialization while keeping shorter-lived decode temporaries and one actual phase.",
+        "endState": "One operation-owned4KiBworkspace and shared prepared-band metadata. Helper borrows decoded/cache/input spans; all1536Bdecoded slots used by vertical filtering are rewritten each call before read. Packed output aliases retired decoded prefix after return; next call replaces it before read. No duplicate implementation, perfill scratchallocation/zeroing, addedcaller32Bstaging, heap/cache/session/owner/API.",
+        "correctness": "Geometry/selection, source-count bounds, column-ID/prefetch choices, tap order, AVX decode/multiply/add, exact quotient/certification/repair, every poll, normal/exception/refusal cleanup, original source and independent output ownership unchanged.",
+        "storage": {
+          "originalExplicitArrayBytes": 3992,
+          "candidateExplicitArrayOverlapBytes": 3992,
+          "workspaceReservationBytes": 4096,
+          "decodedCapacityBytes": 1536,
+          "newOwnedHeapCapacityBytes": 0,
+          "newRetainedStateBytes": 0,
+          "note": "Existing operation-owned storage reused across nonoverlapping actual users; source capacity bound, not measured total stack/physical/admittedpeak. NoInlining preserves execution phase but carries no percall stackarray."
+        },
+        "workloads": [
+          "Mixed16",
+          "TightMixed16",
+          "TightVertical16"
+        ],
+        "scope": "Actual helper only entered after existing mixed-word guard. Default Mixed16 and bounded Mixed16/vertical execute it. Default vertical retains earlier cached selection. Reuse every unchanged numerical helper, codec/encoder/editing path; qualify affected complete controls if accepted.",
+        "temporaryTradeoffs": "Operation-owned decoded span remains live in caller, more borrowed argument metadata can affectcodegen. Judge complete workloads; no frame-size inference or automatic merge. A source/modules/JIT/mixedshort retained; no repeatedAmeasurement.",
+        "workflow": "One new immutable main/embedded B perOS. Reuse unchanged tests/harness/native/selectors/fixtures. Focusednormal/scalar then completeMixed16and existingboundedgeneralization ifpromising. Independentcontemporaryconfirm onlyifuseful, fullWindowsLinux/live/SAMEpackage at accepted coherent milestone.",
+        "previousCandidate": {
+          "windowsSha256": "e53c3b0a4b720a5b9aa7ac6915d803ead6f07e1424256019c6a31a2021805dfb",
+          "linuxSha256": "1b8dda63aadf276f856442bdd61e8409fdd69165f4f6f332063bd76d82234eed"
+        }
+      },
+      "sourceProof": {
+        "project": "Lokad.Image",
+        "round": "BRO540",
+        "sources": {
+          "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "958a90cc6bb9eeeecc20585813bfc54d101a85ea4305b98e3e297f126e33733d"
+        },
+        "wholeMainOutsidePhaseAndScratchLocationExact": true,
+        "wholePairedDecodeAndVerticalArithmeticBodyExact": true,
+        "wholeOriginalWordRepairBodyExact": true,
+        "geometryDispatchCacheIdsPrefetchTapOrderAndAllPollsExact": true,
+        "quotientCertificatesQuartetPairSinglePackingExact": true,
+        "allAdmissionOwnedStorageReleaseAndEscapingOutputStatementsExact": true,
+        "calleeDecodedArrayBytes": 0,
+        "callerStagingBytes": 0,
+        "originalExplicitArrayBytes": 3992,
+        "candidateExplicitArrayOverlapBytes": 3992,
+        "workspaceReservationBytes": 4096,
+        "newOwnedHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "lifetime": "Original1536Bdecoded allocation once peroperation. Helper borrows exactly[..sourceCount], overwrites every slot0..sourceCount-1 before tap reads; caller sourceCount=maxrowOffset+1 ensures allreadindicesinitialized. Callerpackedoutput aliases first32/16bytes only after helper returns. Next helper overwrites allactive slots before read. Same3992Bexplicit arrays/reservation4096B, no newheap/retainedstorage, no perfillallocation/zeroing. Frame/array figures are not additive peak measures.",
+        "dispatch": "Guard unchanged:RGBA16,width>=source,height<source,tapsX<=5,tapsY<=10,requiredISA,remaining>=4096. Eligible defaultMixed16/TightMixed16/TightVertical16 use actual phase. Defaultwidth-identity vertical retains cached path when earlier heapcache allowance fits. Otherwordguards/unsupportedreturns identical.",
+        "failure": "Borrowed private result is never published before completed Resize. Existing returnfalse and callerfallback boundaries unchanged; actual span/index/math checks same. Every existing cancellation poll and finallyRelease remains. Tinyalpha fallback starts after bothframes retire; no retry after shared admission refusal.",
+        "tests": "Existing public mixed-word exact hash, cachewrap/width1/odd band/tails/negative lobes/tinyalpha/exact rational/4095vs4096/admission boundary/independent survivors/rootrefusal/cancellation/subsequent operation controls, plus actual pair/quartet preparation oracles. No new test mirroring helper.",
+        "sourceProofChain": "tmp/brm539-source-proof.json",
+        "stageADecodeVerticalBodyExactExceptSourceCountFromBoundedSpanLength": true,
+        "wholeSourceOutsideBorrowedScratchHandoffExactToStageA": true,
+        "borrowedOperationDecodedBytes": 1536
+      },
+      "qualification": {
+        "windows": {
+          "project": "Lokad.Image",
+          "system": "windows",
+          "baselineSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+          "candidateSha256": "a446e955d26ce6a37a765a445a5fbe78f46c9c8aa501065305afe33e505b3b40",
+          "internalTestAssemblySha256": "43f486766b093bb6fb55a68fa26fd5073f7630c37bd0a22cf8c023fb1536d604",
+          "focused": {
+            "internal-normal": 58,
+            "internal-scalar": 58,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "958a90cc6bb9eeeecc20585813bfc54d101a85ea4305b98e3e297f126e33733d"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        },
+        "linux": {
+          "project": "Lokad.Image",
+          "system": "linux",
+          "baselineSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+          "candidateSha256": "2440e530c827c99836a59602e1c6a149846c3ecee182a1f39203c6ea62ee7196",
+          "internalTestAssemblySha256": "bd570833da2d24f11a1081921330f5d5cd2d6b549c6214cd58a47ec47aa19356",
+          "focused": {
+            "internal-normal": 58,
+            "internal-scalar": 58,
+            "public-normal": 688,
+            "public-scalar": 688
+          },
+          "sources": {
+            "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "958a90cc6bb9eeeecc20585813bfc54d101a85ea4305b98e3e297f126e33733d"
+          },
+          "coreVersions": 1,
+          "internalVersions": 1,
+          "publicHarnessNativeSelectorFixtureBuilds": 0,
+          "productionAccepted": false
+        }
+      },
+      "screens": {
+        "Mixed16": {
+          "runId": "bro540-candidate-Mixed16-short",
+          "managedUs": 1039.1804956597223,
+          "nativeUs": 850.402046875,
+          "ratio": 1.2219872935142062,
+          "lower": 1.1778667521673623,
+          "upper": 1.2685470081943473,
+          "allocatedBytes": 114,
+          "packetBytes": 1059864,
+          "packetSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+          "librarySha256": "2440e530c827c99836a59602e1c6a149846c3ecee182a1f39203c6ea62ee7196",
+          "allOriginalGatesPassed": true,
+          "quietGuardsPassed": true,
+          "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+        }
+      }
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "e9b826d8c2d2412807d3c7f5fb7e293524819517e654037a9e2274c89c6a0bda",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "760ff31c9f5e3819afe4a5ff0e601af3655191d2bc47c93aed9df8ea7b577e7d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "563a259358e8c3a70a2682ad0b50f4b9735f431e5c22bca4878561ecdda56f0e"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "037c141fba038f7160edc3ab6f09656c3cf506a3b79ff8e53f9543f19dc7cced",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "476fe896c224574271081ced3c4ab413ef7374261a0309cc10cdcdc4e68d6622",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "sourceMainEmbeddedManifestExact": true,
+      "identities": {
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "e9b826d8c2d2412807d3c7f5fb7e293524819517e654037a9e2274c89c6a0bda",
+        "tmp/benchmark-source.json": "3b1af5b9209faf943d88d8d691a78467b30ad2081d9cda24af5d9adc54fc171d",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "0c3a072ae28f2272b7a84553dc7a3f1711bc240d48740a74c4379d96001f908d",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "95760c034e7612b2baa42acaed6ab0898d817eae78bba9f7ad94b1589d1085fa"
+      },
+      "bindings": {
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.pdb": "27e19f1541f7ae4f0586ebab307b90ae42dace8fa3a4ccf3521e7d351ffd494e",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795"
+      },
+      "packageSha256": "fab41fa8a54f00e6acb3d58e116a1f7a9e84ce74775f2c60ccd8b51005cea9fb",
+      "productionSha256": "b1621ebff1cbe7ae4c08748c186d8ecd25656498b3909aaeeb82dcc2fcc529b2",
+      "newBroadQualificationRuns": 0,
+      "newPackageRuns": 0,
+      "newBuilds": 0,
+      "reusedQualification": "VPM524: 5875 full/live and40 internal/239 public checks per normal/scalar mode eachOS, same actual package/all3examples bothOS. Exact source/main/embedded/bindings restoration; no new production change remains.",
+      "current125DisplayedCostsUnchanged": true
+    }
+  },
+  "jit": {
+    "originalMainCodeBytes": 8262,
+    "originalReportedLocalFrameBytes": 872,
+    "stageAMainCodeBytes": 7498,
+    "stageAReportedLocalFrameBytes": 984,
+    "stageAHelperCodeBytes": 804,
+    "stageAHelperReportedLocalFrameBytes": 40,
+    "stageAHelperClearsDecodedBytesEachCall": 1536,
+    "stageBMainCodeBytes": 7565,
+    "stageBReportedLocalFrameBytes": 920,
+    "stageBHelperCodeBytes": 486,
+    "stageBHelperReportedLocalFrameBytes": 24,
+    "stageBHelperDecodedArrayClears": 0,
+    "note": "Actual production JIT. A main becomes smaller but local frame grows and helper repeatedly clears1536B. B keeps operation-owned decoded array and no perfill clear; frame/calls still differ. Static code/frame and initialization differences are not elapsed attribution, a physical peak or CPU gain proof."
+  },
+  "decision": "Unselected. A separates exact paired-column decode/vertical filtering, but completeMixed16short1058.36us is unpromising. Generated helper clears1536Bperfill, justifying coherent B. B borrows original operation-owned scratch and restores original3992Bexplicit array capacity, but1039.18us remains unpromising relative to source-valid1016.78us. No causal gain/loss/equivalence, independent confirmation, favorable repeat, workload expansion or broad/package runs. Exact qualified sources/main/embedded/bindings restored and actual package unchanged. No permanent phase/family ban; another variant requires new evidence.",
+  "storage": {
+    "originalExplicitArrayBytes": 3992,
+    "stageAExplicitArrayOverlapBytes": 4024,
+    "stageBExplicitArrayOverlapBytes": 3992,
+    "workspaceReservationBytes": 4096,
+    "newOwnedHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "admittedPhysicalNativePeaksRemeasured": false,
+    "note": "B reuses decoded scratch only after helper users finish, then overwrites allactive decoded slots before nextread. All input/cache/table/result owners and admission/refusal/cleanup statements unchanged. Complete GC114Bop unchanged. Explicit arrays/JITframe are not additive physicalpeak measures."
+  },
+  "observerRecovery": {
+    "project": "Lokad.Image",
+    "diagnosticOnly": true,
+    "completedJobReused": true,
+    "additionalExecution": 0,
+    "actualPassed": 40,
+    "observerExpectedPassed": 2,
+    "reason": "Reused short method-name filter also selected existing other-column controls; observer count failed after passing execution. Recover actual log/JIT without rerunning. Next diagnostic uses full class-qualified filter."
+  },
+  "workflow": {
+    "coreEmbeddedVersionsEachOs": 2,
+    "focusedInternalEachModeStage": 58,
+    "focusedPublicEachModeStage": 688,
+    "publicHarnessNativeSelectorFixtureBuilds": 0,
+    "shortControlsEachStage": 1,
+    "actualsEachShort": 3,
+    "independentConfirmationRuns": 0,
+    "newBroadQualificationRuns": 0,
+    "newPackageRuns": 0,
+    "restoreBuilds": 0,
+    "displayedCostsChanged": 0,
+    "completedJobsRepeated": 0,
+    "targetedJitPassingChecks": {
+      "A": 40,
+      "B": 2
+    },
+    "note": "A diagnostic reused a method-name filter that selected40existingcolumncontrols, not2. Observer count failed after successful execution; recovered completed log/JIT without rerun. B uses fullclass-qualified filter."
+  },
+  "boundary": "Existing513x259RGBA16 to1027x129Mixed16. Complete publicResize/admission/geometry/filtering/certified output/independent ownership/disposal remain timed; nativezimg graph/scratch/context retained as declared, full source deinterleave/halo/filter/output normalization/ownership timed. Exact rational managed output and original bounded native pixels/source/settings/ownership/idle-v2 singleCPU gates unchanged.",
+  "next": "Audit independent completeVP8Native8 alpha path and packet before more coefficient-loop variants. Current alpha versus opaque gaps differ materially; prepared output/green-alpha handoff already exists. Reuse frozen actual packet/validated harness and qualified immutable build, identify real ALPHcompression/filter/transforms and current source-valid attribution. Do not infer missing copies from documentation or extrapolate distinct validation packets.",
+  "raw": {
+    "file": "bicubic-column-phase-experiment.tar.xz",
+    "sha256": "c73f2a1ed83d4ed9abbe313b4f5bca4e0313458ab6add994a3574c18cf200623",
+    "bytes": 13783172,
+    "members": 249,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1"
+      },
+      {
+        "file": "bicubic-mixed-current-execution-attribution.tar.xz",
+        "sha256": "a88958cbfc6dae4ec1555f698edaca50be23afe776b8a5ae84867a5a167d68ce"
+      }
+    ]
+  }
+}
