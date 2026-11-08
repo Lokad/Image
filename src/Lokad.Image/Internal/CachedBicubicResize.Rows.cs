@@ -8,6 +8,43 @@ namespace Lokad.Image.Internal;
 
 internal static partial class CachedBicubicResize
 {
+    private readonly struct PollRow { }
+    private readonly struct NoRowPolling { }
+
+    // Keep conversion in one small body. The two operation-selected polling
+    // modes remove policy/context accesses from ordinary row arithmetic.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void DecodePremultipliedRow<TPolling>(ReadOnlySpan<byte> row,Span<double> decoded,
+        int width,bool wide16,CancellationToken cancellation)
+    {
+        var sx=0;
+        for(;sx+1<width;sx+=2)
+        {
+            if(typeof(TPolling)==typeof(PollRow))cancellation.ThrowIfCancellationRequested();
+            var channels=wide16
+                ?Avx2.ConvertToVector256Int32(MemoryMarshal.Read<Vector128<ushort>>(row.Slice(sx*8,16)))
+                :Avx2.ConvertToVector256Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(sx*4,8))).AsByte());
+            var factors=Avx2.Blend(Avx2.Shuffle(channels,255),Vector256.Create(1),136);
+            // UInt16 products can exceed Int32.MaxValue. Convert the
+            // unsigned low products directly; every product fits
+            // UInt32 and remains exact in binary64.
+            var values=Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(channels,factors).AsUInt32());
+            MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,8)),in values);
+        }
+        for(;sx<width;sx++)
+        {
+            if(typeof(TPolling)==typeof(PollRow))cancellation.ThrowIfCancellationRequested();
+            var pixel=wide16?BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(sx*8,8)):BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(sx*4,4));
+            var channels=wide16?Sse41.ConvertToVector128Int32(Vector128.CreateScalar(pixel).AsUInt16())
+                :Sse41.ConvertToVector128Int32(Vector128.CreateScalar((uint)pixel).AsByte());
+            var a=(int)(wide16?pixel>>48:pixel>>24);
+            var premult=Sse41.MultiplyLow(channels,Vector128.Create(a,a,a,1));
+            var values=wide16?Avx512F.ConvertToVector512Double(Vector256.Create(premult.AsUInt32(),Vector128<uint>.Zero)).GetLower()
+                :Avx.ConvertToVector256Double(premult);
+            MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,4)),in values);
+        }
+    }
+
     internal static void PrepareOverlappingHorizontalPairs(Span<int> offsets,ReadOnlySpan<int> counts,
         int width,int sourceWidth,OperationContext context)
     {
@@ -30,21 +67,8 @@ internal static partial class CachedBicubicResize
 
     internal static void FilterHorizontal(ReadOnlySpan<double> decoded,Span<double> cached,
         ReadOnlySpan<double> weights,ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,
-        int width,int capacity,bool verticalOnly,bool adjacent,OperationContext context)
+        int width,int capacity,bool adjacent,OperationContext context)
     {
-        if(verticalOnly)
-        {
-            // Unchanged width has integer centers and horizontal
-            // weights 0,0,1,0,0. The decoded products are exact;
-            // copying them preserves every unrounded intermediate.
-            for(var offset=0;offset<decoded.Length;offset+=8)
-            {
-                context.Cancellation.ThrowIfCancellationRequested();
-                var length=Math.Min(8,decoded.Length-offset);
-                decoded.Slice(offset,length).CopyTo(cached.Slice(offset,length));
-            }
-            return;
-        }
         var x=0;
         for(;x+1<width;x+=2)
         {

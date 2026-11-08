@@ -954,16 +954,17 @@ internal static class CooperativeMemoryConsumer
     private static void VerifyCachedHorizontalWindows()
     {
         foreach(var depth in new[]{8,16})
+        foreach(var (width,height,workspace) in new[]{(16,8,12640),(33,8,23756)})
         {
             using var source=OriginalPixels.Buffer(33,17,depth);
-            var input=OriginalPixels.Bytes(source);var outputBytes=16*8*(depth/2);
-            using var oracle=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,
-                new ImageLimits {MaxWorkingBytes=input.Length+outputBytes+4095});
+            var input=OriginalPixels.Bytes(source);var outputBytes=width*height*(depth/2);
+            using var oracle=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,
+                new ImageLimits {MaxWorkingBytes=input.Length+outputBytes+(width==33?4096:4095)});
             var expected=OriginalPixels.Bytes(oracle);
-            using var root=new TestMemoryBudget(2*outputBytes+12640);
+            using var root=new TestMemoryBudget(2*outputBytes+workspace);
             var limits=new ImageLimits {MemoryBudget=root};
-            using var first=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,limits);
-            using var survivor=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,limits);
+            using var first=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,limits);
+            using var survivor=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,limits);
             if(!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first))
                 || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor))
                 || root.Bytes!=2*outputBytes)
@@ -972,10 +973,10 @@ internal static class CooperativeMemoryConsumer
             {
                 // Hold the remaining capacity rather than assuming which SIMD
                 // workspace the consumer's machine supports.
-                if(!caller.TryReserve(12640,out var held))throw new Exception("Packaged cached refusal setup differs.");
+                if(!caller.TryReserve(workspace,out var held))throw new Exception("Packaged cached refusal setup differs.");
                 try
                 {
-                    using var refused=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,limits);
+                    using var refused=ImageTransforms.Resize(source,width,height,ResizeFilter.Bicubic,limits);
                     throw new Exception("Packaged cached windows ignored shared refusal.");
                 }
                 catch(ImageLimitException e)when(e.Scope==ImageLimitScope.SharedBudget && e.Limit==ImageLimitKind.WorkingBytes){}
@@ -988,6 +989,7 @@ internal static class CooperativeMemoryConsumer
             if(root.Bytes!=0 || root.IsDisposed)throw new Exception("Packaged cached windows leaked owned capacity.");
         }
         Console.WriteLine("Packaged cached horizontal windows preserve exact byte/word samples, terminal refusal and independent owners.");
+        Console.WriteLine("Packaged identity cache rows preserve exact byte/word samples, terminal refusal and independent owners.");
     }
 
     internal static async Task Verify()

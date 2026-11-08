@@ -31,9 +31,11 @@ internal static partial class CachedBicubicResize
             || !Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported)
             return false;
         var width=result.Width;var wide16=source.BitDepth==16;
+        var identityHorizontal=verticalDown || verticalUp;
         var bounds=wide?WideErrorBounds.Create(wide16,capacity):default;
         var cacheWidth=(long)width+(mixed?(width&1):0);
-        var dataElements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+(long)source.Width*4;
+        var decodedElements=identityHorizontal?0:source.Width*4;
+        var dataElements=cacheWidth*(capacity*4)+(long)width*(capacity+1)+decodedElements;
         var geometryElements=(long)width*(capacity+1);
         var elements=dataElements+(heapMetadata?capacity:0);
         var indexElements=geometryElements+(heapMetadata?2*capacity:0);
@@ -48,7 +50,7 @@ internal static partial class CachedBicubicResize
             var cacheElements=(int)(cacheWidth*(capacity*4));
             var weights=storage.AsSpan(cacheElements,width*capacity);
             var normalizers=storage.AsSpan(cacheElements+width*capacity,width);
-            var decoded=storage.AsSpan(cacheElements+width*(capacity+1),source.Width*4);
+            var decodedWorkspace=storage.AsSpan(cacheElements+width*(capacity+1),decodedElements);
             var offsets=geometry.AsSpan(0,width*capacity);
             var counts=geometry.AsSpan(width*capacity,width);
             for(var x=0;x<width;x++)
@@ -65,11 +67,13 @@ internal static partial class CachedBicubicResize
                     offsets[x*capacity+t]=Math.Clamp(first+t,0,source.Width-1)*4;
                 }
             }
-            if(!wide)PrepareOverlappingHorizontalPairs(offsets,counts,width,source.Width,context);
+            if(!wide && !identityHorizontal)PrepareOverlappingHorizontalPairs(offsets,counts,width,source.Width,context);
             Span<int> rowIds=heapMetadata?geometry.AsSpan((int)geometryElements,capacity):stackalloc int[capacity];rowIds.Fill(-1);
             Span<int> rows=heapMetadata?geometry.AsSpan((int)geometryElements+capacity,capacity):stackalloc int[capacity];
             Span<double> vertical=heapMetadata?storage.AsSpan((int)dataElements,capacity):stackalloc double[capacity];
             var input=source.Pixels;
+            var cancellation=context.Cancellation;
+            var pollConversion=identityHorizontal && cancellation.CanBeCanceled;
             for(var y=0;y<result.Height;y++)
             {
                 context.Cancellation.ThrowIfCancellationRequested();
@@ -86,33 +90,14 @@ internal static partial class CachedBicubicResize
                     if(rowIds[slot]==sy)continue;
                     rowIds[slot]=sy;
                     var row=input.Slice(sy*source.Stride,source.Stride);
-                    var sx=0;
-                    for(;sx+1<source.Width;sx+=2)
-                    {
-                        var channels=wide16
-                            ?Avx2.ConvertToVector256Int32(MemoryMarshal.Read<Vector128<ushort>>(row.Slice(sx*8,16)))
-                            :Avx2.ConvertToVector256Int32(Vector128.CreateScalar(BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(sx*4,8))).AsByte());
-                        var factors=Avx2.Blend(Avx2.Shuffle(channels,255),Vector256.Create(1),136);
-                        // UInt16 products can exceed Int32.MaxValue. Convert the
-                        // unsigned low products directly; every product fits
-                        // UInt32 and remains exact in binary64.
-                        var values=Avx512F.ConvertToVector512Double(Avx2.MultiplyLow(channels,factors).AsUInt32());
-                        MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,8)),in values);
-                    }
-                    for(;sx<source.Width;sx++)
-                    {
-                        var pixel=wide16?BinaryPrimitives.ReadUInt64LittleEndian(row.Slice(sx*8,8)):BinaryPrimitives.ReadUInt32LittleEndian(row.Slice(sx*4,4));
-                        var channels=wide16?Sse41.ConvertToVector128Int32(Vector128.CreateScalar(pixel).AsUInt16())
-                            :Sse41.ConvertToVector128Int32(Vector128.CreateScalar((uint)pixel).AsByte());
-                        var a=(int)(wide16?pixel>>48:pixel>>24);
-                        var premult=Sse41.MultiplyLow(channels,Vector128.Create(a,a,a,1));
-                        var values=wide16?Avx512F.ConvertToVector512Double(Vector256.Create(premult.AsUInt32(),Vector128<uint>.Zero)).GetLower()
-                            :Avx.ConvertToVector256Double(premult);
-                        MemoryMarshal.Write(MemoryMarshal.AsBytes(decoded.Slice(sx*4,4)),in values);
-                    }
+                    // An unchanged horizontal axis preserves these exact products.
+                    // Convert directly into its cache slot, without a copied row.
+                    var decoded=identityHorizontal?storage.AsSpan(rows[t],width*4):decodedWorkspace;
+                    if(pollConversion)DecodePremultipliedRow<PollRow>(row,decoded,source.Width,wide16,cancellation);
+                    else DecodePremultipliedRow<NoRowPolling>(row,decoded,source.Width,wide16,default);
                     if(wide)FilterWideHorizontal(decoded,storage.AsSpan(rows[t],width*4),weights,offsets,counts,width,capacity,context);
-                    else FilterHorizontal(decoded,storage.AsSpan(rows[t],width*4),weights,offsets,counts,width,capacity,
-                        verticalDown || verticalUp,mixed || horizontalUp,context);
+                    else if(!identityHorizontal)FilterHorizontal(decoded,storage.AsSpan(rows[t],width*4),weights,offsets,counts,width,capacity,
+                        mixed || horizontalUp,context);
                 }
                 if(wide)
                 {

@@ -1674,19 +1674,25 @@ def render():
             current = png_framing['currentSharedRoot']
             rows[index] = (kind, f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                            f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | — |')
-    overlap = json.loads((ROOT / 'benchmarks/bicubic-overlapping-horizontal-evidence.json').read_text(encoding='utf-8'))
+    overlap = json.loads((ROOT / 'benchmarks/bicubic-identity-cache-rows-evidence.json').read_text(encoding='utf-8'))
     assert overlap['productionAccepted'] and overlap['requiredMaterialPaths'] == 283
     assert overlap['raw']['mirrored'] and overlap['raw']['allMembersVerified']
     oq = overlap['qualification']
-    assert oq['fullChecksEachOs'] == oq['windows']['total'] == oq['linux']['total'] == 5932
+    assert oq['fullChecksEachOs'] == oq['windows']['total'] == oq['linux']['total'] == 5938
     assert oq['actualPackage']['sha256'] == oq['samePackageLinux']['sameActualPackageSha256']
-    assert oq['actualPackage']['cachedHorizontalWindowsPassed'] and oq['samePackageLinux']['cachedHorizontalWindowsPassed']
+    assert oq['actualPackage']['identityCacheRowsPassed'] and oq['samePackageLinux']['identityCacheRowsPassed']
     assert overlap['statusCounts'] == {state: sum(c['status'] == state for c in overlap['cases'].values())
                                       for state in ('pass', 'gap', 'uncertain')}
-    assert all(v['rawGainSeparated'] for v in overlap['comparisons']['Down8']['views'].values())
-    assert all(v['rawRegressionSeparated'] for v in overlap['comparisons']['Vertical16']['views'].values())
-    assert overlap['comparisons']['Down8']['normalizedGainSeparated']
-    assert overlap['comparisons']['Vertical16']['normalizedRegressionSeparated']
+    for case in ('Vertical8', 'Vertical16'):
+        assert all(v['rawGainSeparated'] for v in overlap['comparisons'][case]['views'].values())
+        assert overlap['comparisons'][case]['normalizedGainSeparated']
+        assert overlap['cases'][case]['status'] == 'pass'
+    assert overlap['implementation']['originalConversionArithmeticVerbatim']
+    assert overlap['storage']['identity513WorkspaceAfterBytes'] == 367436
+    assert overlap['storage']['ownedDecodedCapacityRemovedBytes'] == 16416
+    merged_word.update({case: cost for case, cost in overlap['cases'].items() if case in merged_word})
+    assert overlap['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
+                                               for state in ('pass', 'gap', 'uncertain')}
     overlap_labels = {'Down8': 'Bicubic resize RGBA8',
                       'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
                       'Cross8': 'Bicubic RGBA8, width down / height up, default workspace',
@@ -1890,51 +1896,33 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Prepared overlapping windows](../benchmarks/BICUBIC-OVERLAPPING-HORIZONTAL.md)
-  save **63.74µs/11.64% raw/11.04% normalized** on complete byte reduction:
-  547.74→484.00µs, native416.63µs, upper1.167 remains a gap. Filtered/all-actual
-  confidence separates. The explicit vertical-word tradeoff is **30.04µs/4.71%
-  slower**,4.34% normalized, also separated:668.01/native589.94µs,upper1.139.
-  Nine refreshed controls:4pass/4gaps/1uncertain; wider byte reduction is now
-  uncertain (upper1.034), not a current pass. Four displayed rows refresh.
-  GC stays about199,980B/op on byte reduction; workspace199,840B, scratch
-  retention0 and output132,096B until disposal are distinct. No new capacity,
-  pool, session or numerical policy. Exact ordered arithmetic and repair remain;
-  native zimg retains graph/input/scratch, managed one-shot preparation is timed.
-  Both OSes pass5,932full/live checks, affected normal/scalar/disabled-ISA checks
-  and the SAME actual package/three examples. This is scoped development proof.
-  [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
-  has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
-  Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
-  [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
-  [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
-  [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Shared band execution](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md) saves
-  **159.23µs/14.79% raw/15.40% normalized** on default mixed-word resizing and
-  **86.23µs/8.03% raw/8.71% normalized** at4KiB, with separated raw/normalized
-  confidence. Current917.38/native851.87µs upper1.079 and987.47/native851.08µs
-  upper1.164 remain gaps.
-  GC stays114/113Bop. Sixteen-row scratch7596B is admitted as8192B; bounded
-  mode stays3992/4096B. Scratch retention0, mixed output1059864B until disposal;
-  existing pixel-pool retention stays separate, physical/native peaks unmeasured.
-  [Identity-axis geometry](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md) saves
-  **271.81µs/37.22% raw/36.98% normalized** on bounded word height reduction:
-  458.51/native589.46µs,upper0.779 passes/stop,113B/op unchanged. It removes four
-  exactzero horizontal taps in the shared loop; exactpixels, repair and ownership
-  remain. Its result retains529,416B, scratch0; existingidlepool staysseparate.
-  Four cached word controls refresh above; eleven other costs reuse valid paths.
-  Fifteen now8pass/7gaps; passing enlargement stays stopped. Earlier
-  dynamic-capacity regression remains in its report.
-  One source loop/static capacities, no new heap/pool/session or pixel tolerance.
-  [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
-  workspace savings and source-valid byte costs. Its unchanged-build defaultRGBA8
-  confirmation measures3,108.21/native3,037.83µs,upper1.026/116Bop: a70.38µs gap.
-  This resolves earlier uncertainty without a causal historical-gain claim.
-  No new retained cache/pool or precision policy.
-  [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
-  enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
-  Its older751µs gap is superseded; keep current uncertainty before further tuning.
-  Exact Q30/rational/certified pixels remain required versus native float.
+- **Resizing:** [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
+  close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
+  normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.
+  Filtered/all-actual confidence separates; parity uppers0.908/0.904.
+  The previous vertical-word regression is superseded. Nine refreshed cached
+  controls:7pass/1gap/1uncertain. Byte reduction remains485.10/native416.46µs,
+  upper1.169; horizontal word is uncertain (upper1.010). Passing cases stop.
+  Identity workspace383,852→367,436B; total allocation367,675/367,595Bop,
+  retainedscratch0/result264,708/529,416B until disposal. Exact repair's4KiB
+  overlap stays separately admitted. Physical/native peaks are unmeasured;
+  existing output-pool retention remains separate. No new API/owner/cache/pool.
+  Native zimg retains graph/input/scratch; managed one-shot preparation is timed.
+  Both OSes pass5,938full/live, affected normal/scalar/disabled-ISA checks and
+  the SAME actual package/three examples. Four displayed rows refresh.
+  Fifteen word controls now9pass/5gap/1uncertain, with eleven unchanged paths
+  reused. [Bounded bands](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md)
+  retain default/4KiB mixed-word gaps917.38/987.47µs versus851.87/851.08µs,
+  uppers1.079/1.164. [Bounded vertical](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md)
+  remains458.51/native589.46µs,upper0.779 passing;113B/op.
+  [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) has five
+  passes/three prepared gaps; plans retain139,800–333,396B and equivalent
+  one-shot setup stays timed. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  passes six of eight; small/wide-column gaps remain linked in coverage.
+  [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
+  3,108.21/native3,037.83µs,upper1.026/116Bop. Bilinear byte enlargement is
+  uncertain at2,357µs/102,891Bop,upper1.134. Preserve exact Q30/rational/
+  certified pixels versus native float; historical gains stay in linked reports.
 - **JPEG and reading:** [completed output storage](../benchmarks/JPEG-COMPLETED-OUTPUT.md)
   saves **98.02µs/5.17% raw/5.11% normalized** on progressive grayscale; filtered/
   allactual raw/normalized intervals separate. Current1797.74/native1711.60µs,

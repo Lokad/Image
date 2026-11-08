@@ -45,7 +45,7 @@ public sealed class CachedBicubicAdmissionTests
                     for(var c=0;c<4;c++)decoded[p*4+c]=c==3?alpha:(double)random.Next(maximum+1)*alpha;
                 }
                 result.AsSpan().Fill(double.NaN);
-                CachedBicubicResize.FilterHorizontal(decoded,result,weights,offsets,counts,width,16,false,false,context);
+                CachedBicubicResize.FilterHorizontal(decoded,result,weights,offsets,counts,width,16,false,context);
                 for(var x=0;x<width;x++)for(var c=0;c<4;c++)
                 {
                     double expected=0;
@@ -67,32 +67,41 @@ public sealed class CachedBicubicAdmissionTests
     [InlineData(8, 17, 19, 35, 9, 26244)]
     [InlineData(8, 33, 17, 2, 2, 13368)]
     [InlineData(16, 257, 17, 3, 2, 84036)]
+    [InlineData(8, 33, 17, 33, 8, 23756)]
+    [InlineData(16, 33, 17, 33, 8, 23756)]
+    [InlineData(8, 32, 17, 32, 8, 23040)]
+    [InlineData(16, 32, 17, 32, 8, 23040)]
+    [InlineData(8, 33, 9, 33, 19, 27852, true)]
+    [InlineData(16, 33, 9, 33, 19, 23756)]
     public void CachedStorageKeepsFrozenAdmissionRefusalCancellationAndRecovery(
-        int depth, int sourceWidth, int sourceHeight, int width, int height, int charge)
+        int depth, int sourceWidth, int sourceHeight, int width, int height, int charge, bool exactRepair = false)
     {
         if (!Avx512F.IsSupported || !Avx512DQ.IsSupported || !Avx2.IsSupported || !Sse41.IsSupported) return;
         using var source = OriginalPixels.Buffer(sourceWidth, sourceHeight, depth);
-        for (var y = 0; y < sourceHeight; y++) for (var x = 0; x < sourceWidth; x++)
+        for (var y = 0; sourceWidth != width && y < sourceHeight; y++) for (var x = 0; x < sourceWidth; x++)
             if (depth == 8) source.GetRow8(y)[x * 4 + 3] = 255;
             else source.GetRow16(y)[x * 4 + 3] = 65535;
         var input = OriginalPixels.Bytes(source);
         using var direct = ImageTransforms.Resize(source, width, height, ResizeFilter.Bicubic,
-            new ImageLimits { MaxWorkingBytes = input.Length + (long)width * height * 4 * (depth / 8) + 4095 });
+            new ImageLimits { MaxWorkingBytes = input.Length + (long)width * height * 4 * (depth / 8)
+                + (sourceWidth == width ? 4096 : 4095) });
         var expected = OriginalPixels.Bytes(direct);
         using var result = ImageBuffer.Create(width, height, depth);
         var scaleX = Math.Max(1, (double)sourceWidth / width); var scaleY = Math.Max(1, (double)sourceHeight / height);
         var tapsX = (long)Math.Ceiling(4 * scaleX) + 1; var tapsY = (long)Math.Ceiling(4 * scaleY) + 1;
+        using var live = new CancellationTokenSource();
         using var root = new TestMemoryBudget(charge);
         var limits = new ImageLimits { MaxWorkingBytes = charge + 4096L, MemoryBudget = root };
-        using (var context = new OperationContext(limits, default))
+        using (var context = new OperationContext(limits, sourceWidth == width ? live.Token : default))
         {
             Assert.True(CachedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context));
             Assert.Equal(charge + 4096L, context.RemainingWorkingBytes);
         }
         Assert.Equal(expected, OriginalPixels.Bytes(result)); Assert.Equal(input, OriginalPixels.Bytes(source));
-        Assert.Equal(charge, root.Peak); Assert.Equal(0, root.Bytes); Assert.Equal(1, root.GrowthAttempts);
+        Assert.Equal(charge, root.Peak); Assert.Equal(0, root.Bytes);
+        if(exactRepair)Assert.True(root.GrowthAttempts>1);else Assert.Equal(1, root.GrowthAttempts);
 
-        using var refused = new TestMemoryBudget(charge - 1);
+        using var refused = new TestMemoryBudget(charge - (exactRepair ? 4096 : 0) - 1);
         using (var context = new OperationContext(limits with { MemoryBudget = refused }, default))
         {
             var error = Assert.Throws<ImageLimitException>(() => CachedBicubicResize.TryApply(source, result, scaleX, scaleY, tapsX, tapsY, context));

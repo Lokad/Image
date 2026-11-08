@@ -89,51 +89,33 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Prepared overlapping windows](../benchmarks/BICUBIC-OVERLAPPING-HORIZONTAL.md)
-  save **63.74µs/11.64% raw/11.04% normalized** on complete byte reduction:
-  547.74→484.00µs, native416.63µs, upper1.167 remains a gap. Filtered/all-actual
-  confidence separates. The explicit vertical-word tradeoff is **30.04µs/4.71%
-  slower**,4.34% normalized, also separated:668.01/native589.94µs,upper1.139.
-  Nine refreshed controls:4pass/4gaps/1uncertain; wider byte reduction is now
-  uncertain (upper1.034), not a current pass. Four displayed rows refresh.
-  GC stays about199,980B/op on byte reduction; workspace199,840B, scratch
-  retention0 and output132,096B until disposal are distinct. No new capacity,
-  pool, session or numerical policy. Exact ordered arithmetic and repair remain;
-  native zimg retains graph/input/scratch, managed one-shot preparation is timed.
-  Both OSes pass5,932full/live checks, affected normal/scalar/disabled-ISA checks
-  and the SAME actual package/three examples. This is scoped development proof.
-  [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
-  has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
-  Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
-  [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
-  [small](../benchmarks/BICUBIC-WORD-COLUMN-PREPARATION.md) and
-  [wide columns](../benchmarks/BICUBIC-WIDE-PREPARATION.md) retain named gaps.
-  [Shared band execution](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md) saves
-  **159.23µs/14.79% raw/15.40% normalized** on default mixed-word resizing and
-  **86.23µs/8.03% raw/8.71% normalized** at4KiB, with separated raw/normalized
-  confidence. Current917.38/native851.87µs upper1.079 and987.47/native851.08µs
-  upper1.164 remain gaps.
-  GC stays114/113Bop. Sixteen-row scratch7596B is admitted as8192B; bounded
-  mode stays3992/4096B. Scratch retention0, mixed output1059864B until disposal;
-  existing pixel-pool retention stays separate, physical/native peaks unmeasured.
-  [Identity-axis geometry](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md) saves
-  **271.81µs/37.22% raw/36.98% normalized** on bounded word height reduction:
-  458.51/native589.46µs,upper0.779 passes/stop,113B/op unchanged. It removes four
-  exactzero horizontal taps in the shared loop; exactpixels, repair and ownership
-  remain. Its result retains529,416B, scratch0; existingidlepool staysseparate.
-  Four cached word controls refresh above; eleven other costs reuse valid paths.
-  Fifteen now8pass/7gaps; passing enlargement stays stopped. Earlier
-  dynamic-capacity regression remains in its report.
-  One source loop/static capacities, no new heap/pool/session or pixel tolerance.
-  [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
-  workspace savings and source-valid byte costs. Its unchanged-build defaultRGBA8
-  confirmation measures3,108.21/native3,037.83µs,upper1.026/116Bop: a70.38µs gap.
-  This resolves earlier uncertainty without a causal historical-gain claim.
-  No new retained cache/pool or precision policy.
-  [Bilinear boundary refresh](../benchmarks/WARM-COVERAGE.md) measures complete byte
-  enlargement2,357µs/102,891B per operation, ratio1.093/upper1.134 but uncertain.
-  Its older751µs gap is superseded; keep current uncertainty before further tuning.
-  Exact Q30/rational/certified pixels remain required versus native float.
+- **Resizing:** [Direct identity-axis cache rows](../benchmarks/BICUBIC-IDENTITY-CACHE-ROWS.md)
+  close byte/word vertical reduction: **636.49→530.97µs / 16.58% raw / 16.50%
+  normalized** and **666.59→511.76µs / 23.23% raw / 21.26% normalized**.
+  Filtered/all-actual confidence separates; parity uppers0.908/0.904.
+  The previous vertical-word regression is superseded. Nine refreshed cached
+  controls:7pass/1gap/1uncertain. Byte reduction remains485.10/native416.46µs,
+  upper1.169; horizontal word is uncertain (upper1.010). Passing cases stop.
+  Identity workspace383,852→367,436B; total allocation367,675/367,595Bop,
+  retainedscratch0/result264,708/529,416B until disposal. Exact repair's4KiB
+  overlap stays separately admitted. Physical/native peaks are unmeasured;
+  existing output-pool retention remains separate. No new API/owner/cache/pool.
+  Native zimg retains graph/input/scratch; managed one-shot preparation is timed.
+  Both OSes pass5,938full/live, affected normal/scalar/disabled-ISA checks and
+  the SAME actual package/three examples. Four displayed rows refresh.
+  Fifteen word controls now9pass/5gap/1uncertain, with eleven unchanged paths
+  reused. [Bounded bands](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md)
+  retain default/4KiB mixed-word gaps917.38/987.47µs versus851.87/851.08µs,
+  uppers1.079/1.164. [Bounded vertical](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md)
+  remains458.51/native589.46µs,upper0.779 passing;113B/op.
+  [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) has five
+  passes/three prepared gaps; plans retain139,800–333,396B and equivalent
+  one-shot setup stays timed. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
+  passes six of eight; small/wide-column gaps remain linked in coverage.
+  [Byte enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) remains
+  3,108.21/native3,037.83µs,upper1.026/116Bop. Bilinear byte enlargement is
+  uncertain at2,357µs/102,891Bop,upper1.134. Preserve exact Q30/rational/
+  certified pixels versus native float; historical gains stay in linked reports.
 - **JPEG and reading:** [completed output storage](../benchmarks/JPEG-COMPLETED-OUTPUT.md)
   saves **98.02µs/5.17% raw/5.11% normalized** on progressive grayscale; filtered/
   allactual raw/normalized intervals separate. Current1797.74/native1711.60µs,
@@ -291,12 +273,12 @@ settings do not establish matched quality.
 | Bilinear resize RGBA8 † H → 256×129 | 504.78 | 387.47 | 1.303 / 1.315 | 157,971 |
 | Bilinear upscale RGBA8 † → 1027×519 | 2,357.04 | 2,155.92 | 1.093 / 1.134 | 102,891 |
 | Bilinear resize RGBA16 † H → 256×129 | 470.26 | 418.16 | 1.125 / 1.133 | 272,815 |
-| Bicubic resize RGBA8 † → 256×129 | 484.00 | 416.63 | 1.162 / 1.167 | 199,980 |
+| Bicubic resize RGBA8 † → 256×129 | 485.10 | 416.46 | 1.165 / 1.169 | 199,980 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,752.40 | 2,874.23 | 0.958 / 0.966 | 4,264,573 |
 | Bicubic upscale RGBA8, default workspace † → 1027×519 | 3,108.21 | 3,037.83 | 1.023 / 1.026 | 116 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB † → 256×519 | 862.45 | 825.16 | 1.045 / 1.049 | 114 |
 | Bicubic RGBA8, 32×16 / input+output+4 KiB H → 32×16 | 464.68 | 375.02 | 1.239 / 1.370 | 2,185 |
-| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 365.35 | 374.87 | 0.975 / 1.034 | 197,300 |
+| Bicubic RGBA8, 32×16 / default workspace † → 32×16 | 356.88 | 375.09 | 0.951 / 0.956 | 197,300 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,212.58 | 3,052.03 | 1.053 / 1.072 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,546.70 | 1,524.36 | 1.015 / 1.066 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,811.37 | 1,745.56 | 1.038 / 1.061 | 115 |
@@ -309,8 +291,8 @@ settings do not establish matched quality.
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 128×64 | 480.55 | 347.12 | 1.384 / 1.394 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 128×64 | 532.73 | 404.07 | 1.318 / 1.329 | 113 |
-| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 810.85 | 838.70 | 0.967 / 0.973 | 199,943 |
-| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 788.95 | 830.32 | 0.950 / 0.960 | 199,891 |
+| Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 816.23 | 840.52 | 0.971 / 0.979 | 199,943 |
+| Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 790.79 | 820.20 | 0.964 / 0.983 | 199,891 |
 | Plain transpose RGBA16 † → 259×513 | 32.93 | 44.48 | 0.740 / 0.748 | 112 |
 | Plain transpose RGBA8 † → 259×513 | 26.80 | 38.79 | 0.691 / 0.711 | 112 |
 | Exact rectangle copy into borrowed RGBA8 canvas | 2.13 | 1.93 | 1.100 / 1.114 | 56 |
