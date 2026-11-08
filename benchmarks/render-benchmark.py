@@ -1644,10 +1644,10 @@ def render():
     rows.append(('editing', f'| Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → {current["outputWidth"]}×{current["outputHeight"]} | '
                  f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                  f'{current["allocatedBytes"]:,} |'))
-    png = json.loads((ROOT / 'benchmarks/png-streaming-token-frequencies-evidence.json').read_text(encoding='utf-8'))
+    png = json.loads((ROOT / 'benchmarks/png-length-classification-evidence.json').read_text(encoding='utf-8'))
     assert png['productionAccepted'] and png['requiredMaterialPaths'] == 283
     pq = png['qualification']
-    assert pq['fullChecksEachOs'] == pq['windows']['total'] == pq['linux']['total'] == 5879
+    assert pq['fullChecksEachOs'] == pq['windows']['total'] == pq['linux']['total'] == 5907
     assert pq['actualPackage']['sha256'] == pq['samePackageLinux']['sameActualPackageSha256']
     assert pq['actualPackage']['actualConsumerPassed'] and pq['samePackageLinux']['actualConsumerPassed']
     assert pq['sameActualPackageBothOs']
@@ -1658,9 +1658,10 @@ def render():
         'EncodeGrayAlpha8', 'EncodeGray16', 'EncodeRgb16', 'EncodeGrayAlpha16',
         'EncodeFastCancelable16', 'EncodeFastForward16', 'Png8AsyncNonSeekable'}
     assert png['storage']['workspaceAdmissionBytes'] == 393216 and png['storage']['retainedOperationScratchBytes'] == 0
-    assert png['sourceProof']['greedyMatchingAndInsertionKernelExact']
-    assert png['sourceProof']['lazyParserExact'] and png['sourceProof']['tokenWriterAndOutputCursorExact']
-    assert png['sourceProof']['allOriginalCancellationCheckpointsPreserved']
+    assert png['sourceProof']['wholeSourceUndoReconstructsOriginalOutsideExactLengthClassifier']
+    assert png['sourceProof']['all256LegalLengthMappingsExact']
+    assert png['sourceProof']['originalTokenOrderTreesBlockChoiceBitOutputPollsOwnershipAndFieldLayoutExact']
+    assert not png['materialReview']['separatedRegressions']
     assert {t: sum(c['status'] == t for c in png['cases'].values()) for t in ['pass', 'gap', 'uncertain']} == png['statusCounts']
     rows = [(kind, row.replace(' † |', ' † H |', 1)
              if kind == 'codec' and row.startswith('| PNG ') and 'decode' not in row.lower()
@@ -1673,6 +1674,7 @@ def render():
         assert current['librarySha256'] == png['producers']['linuxSha256']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed'] and current['completePacketExact']
         assert current['actualIterations'] == len(current['managedActualNanoseconds']) == 12
+        assert current['nativeSamplesEachBracket'] == 12
         assert current['packetSha256'] == current['nativePacketSha256'] and current['packetBytes'] == current['nativePacketBytes']
         assert current['equivalentOneShotBoundary'] and current['codecPreparationTimed'] and not current['nativeCodecRetainedBetweenOperations']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
@@ -1861,25 +1863,26 @@ Current scope and remaining work:
   [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
   {len(png_framing['cases'])} confirmed controls, {png_framing['statusCounts']['pass']} pass/stop,
   {png_framing['statusCounts']['gap']} gap and {png_framing['statusCounts']['uncertain']} uncertain.
-  All43 affected costs refresh; eight unchanged costs retain explicit providers.
+  The publication stage refreshed43 affected costs and retained eight unchanged
+  providers. The current encoding change preserves these decode paths.
   Live materialized RGBA16 remains2919.94/native2894.87µs upper1.012, a gap;
   liveRGBA8 upper1.004 remains uncertain. No favorable resampling or global parity
-  claim. Header-only work and encoding are unchanged; older stream/composition
+  claim. Header-only work is unchanged; older stream/composition
   costs remain historical. Physical/native peaks are not remeasured. Earlier
   [prefix](../benchmarks/PNG-PREPARED-PREFIX.md) and
   [live-cursor](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) gains remain linked history.
-  [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
-  remove the greedy block's second token census using its existing storage.
-  Independent live/plain word gains are516–550/557µs; filtered/allactual raw and
-  normalized intervals separate. All three word Fastest delivery controls pass/stop.
-  Byte's filtered113µs gain has overlapping allactual intervals. Fifteen fresh
-  complete one-shot controls:12pass/stop,2gaps,1uncertain. ByteFastest(~87µs) and
-  Gray8(~60µs) remain gaps; wordSmallest remains uncertain. Exact packets and
-  384KiB admission/zero retained scratch remain. Primary allocations are unchanged;
-  Gray8 measures−408B/op without a capacity-saving claim. Earlier
+  [Exact length classification](../benchmarks/PNG-LENGTH-CLASSIFICATION.md) replaces
+  repeated range search with the exact integer-logarithm formula. All15 current
+  one-shot encodes refresh: **{png['statusCounts']['pass']} pass/stop, {png['statusCounts']['gap']} gaps,
+  {png['statusCounts']['uncertain']} uncertain**. WordSmallest now passes. ByteFastest
+  upper1.017 and Gray8 upper1.047 remain uncertain; resolve before assuming tuning.
+  WordFastest saves180.09µs/1.00% raw with separated filtered/allactual intervals;
+  normalized intervals overlap. Byte's84.29µs point gain has allactual uncertainty.
+  No robust normalized or blanket gain claim. Exact packets,384KiB admission,
+  retained0scratch and primaryGC820916/2437660Bop remain. Earlier
+  [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
-  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain their
-  independent gains as linked history.
+  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
 - **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
   Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
@@ -1943,7 +1946,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{png_q['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{pq['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

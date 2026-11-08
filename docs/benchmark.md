@@ -71,25 +71,26 @@ Current scope and remaining work:
   [Current framing controls](../benchmarks/PNG-CURRENT-FRAMING-COSTS.md):
   51 confirmed controls, 49 pass/stop,
   1 gap and 1 uncertain.
-  All43 affected costs refresh; eight unchanged costs retain explicit providers.
+  The publication stage refreshed43 affected costs and retained eight unchanged
+  providers. The current encoding change preserves these decode paths.
   Live materialized RGBA16 remains2919.94/native2894.87µs upper1.012, a gap;
   liveRGBA8 upper1.004 remains uncertain. No favorable resampling or global parity
-  claim. Header-only work and encoding are unchanged; older stream/composition
+  claim. Header-only work is unchanged; older stream/composition
   costs remain historical. Physical/native peaks are not remeasured. Earlier
   [prefix](../benchmarks/PNG-PREPARED-PREFIX.md) and
   [live-cursor](../benchmarks/PNG-LIVE-PREPARED-CURSOR.md) gains remain linked history.
-  [Streaming token frequencies](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md)
-  remove the greedy block's second token census using its existing storage.
-  Independent live/plain word gains are516–550/557µs; filtered/allactual raw and
-  normalized intervals separate. All three word Fastest delivery controls pass/stop.
-  Byte's filtered113µs gain has overlapping allactual intervals. Fifteen fresh
-  complete one-shot controls:12pass/stop,2gaps,1uncertain. ByteFastest(~87µs) and
-  Gray8(~60µs) remain gaps; wordSmallest remains uncertain. Exact packets and
-  384KiB admission/zero retained scratch remain. Primary allocations are unchanged;
-  Gray8 measures−408B/op without a capacity-saving claim. Earlier
+  [Exact length classification](../benchmarks/PNG-LENGTH-CLASSIFICATION.md) replaces
+  repeated range search with the exact integer-logarithm formula. All15 current
+  one-shot encodes refresh: **13 pass/stop, 0 gaps,
+  2 uncertain**. WordSmallest now passes. ByteFastest
+  upper1.017 and Gray8 upper1.047 remain uncertain; resolve before assuming tuning.
+  WordFastest saves180.09µs/1.00% raw with separated filtered/allactual intervals;
+  normalized intervals overlap. Byte's84.29µs point gain has allactual uncertainty.
+  No robust normalized or blanket gain claim. Exact packets,384KiB admission,
+  retained0scratch and primaryGC820916/2437660Bop remain. Earlier
+  [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
-  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain their
-  independent gains as linked history.
+  [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
 - **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
   Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
@@ -219,27 +220,27 @@ settings do not establish matched quality.
 | VP8 RGBA16 + alpha, including normalization † | 53,129.08 | 53,549.12 | 0.992 / 0.996 | 6,963,024 | 98,590 / 98,590 |
 | VP8L RGBA8 / libwebp exact=1 † | 105,483.31 | 122,008.61 | 0.865 / 0.875 | 7,341,808 | 183,812 / 183,812 |
 | VP8L opaque RGBA8 / libwebp exact=1 † | 69,832.01 | 69,828.52 | 1.000 / 1.015 | 5,848,592 | 121,896 / 121,896 |
-| PNG RGBA8, one-shot SmallestSize9 / native9 † | 17,026.17 | 17,248.19 | 0.987 / 0.992 | 820,452 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,847.84 | 20,894.28 | 0.998 / 1.004 | 2,437,660 | 963,202 / 963,202 |
-| PNG RGBA8, one-shot Fastest1 / native1 † | 4,427.44 | 4,340.50 | 1.020 / 1.040 | 820,916 | 236,828 / 236,828 |
+| PNG RGBA8, one-shot SmallestSize9 / native9 † | 16,851.73 | 17,227.34 | 0.978 / 0.983 | 820,452 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot SmallestSize9 / native9 † | 20,549.38 | 20,868.88 | 0.985 / 0.991 | 2,437,660 | 963,202 / 963,202 |
+| PNG RGBA8, one-shot Fastest1 / native1 † | 4,343.15 | 4,342.02 | 1.000 / 1.017 | 820,916 | 236,828 / 236,828 |
 | PNG RGBA16, NoCompression0 / native0 † H | 203.45 | 406.60 | 0.500 / 0.539 | 1,741,468 | 1,066,552 / 1,066,552 |
-| PNG grayscale8, one-shot Optimal6 / native6 † | 2,043.52 | 1,983.53 | 1.030 / 1.065 | 551,364 | 72,586 / 72,586 |
-| PNG RGB8, one-shot Optimal6 / native6 † | 9,481.32 | 9,777.65 | 0.970 / 0.982 | 819,884 | 168,729 / 168,729 |
-| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,229.81 | 4,423.13 | 0.956 / 0.972 | 552,332 | 120,366 / 120,366 |
-| PNG RGBA8, one-shot Optimal6 / native6 † | 16,857.24 | 17,278.11 | 0.976 / 0.982 | 820,452 | 210,973 / 210,973 |
-| PNG RGBA16, one-shot Optimal6 / native6 † | 20,491.90 | 20,771.24 | 0.987 / 0.992 | 2,437,660 | 963,202 / 963,202 |
-| PNG RGB16, one-shot Optimal6 / native6 † | 15,546.19 | 16,190.43 | 0.960 / 0.967 | 2,431,492 | 739,472 / 739,472 |
-| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,826.60 | 5,417.93 | 0.891 / 0.911 | 822,740 | 265,433 / 265,433 |
-| PNG gray-alpha16, one-shot Optimal6 / native6 † | 10,023.86 | 10,524.89 | 0.952 / 0.963 | 1,360,900 | 506,887 / 506,887 |
+| PNG grayscale8, one-shot Optimal6 / native6 † | 1,993.15 | 1,968.89 | 1.012 / 1.047 | 551,364 | 72,586 / 72,586 |
+| PNG RGB8, one-shot Optimal6 / native6 † | 9,370.01 | 9,793.98 | 0.957 / 0.972 | 819,884 | 168,729 / 168,729 |
+| PNG gray-alpha8, one-shot Optimal6 / native6 † | 4,162.99 | 4,444.97 | 0.937 / 0.955 | 552,332 | 120,366 / 120,366 |
+| PNG RGBA8, one-shot Optimal6 / native6 † | 16,744.89 | 17,271.29 | 0.970 / 0.975 | 820,452 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Optimal6 / native6 † | 20,261.52 | 20,732.37 | 0.977 / 0.983 | 2,437,660 | 963,202 / 963,202 |
+| PNG RGB16, one-shot Optimal6 / native6 † | 15,330.07 | 16,071.79 | 0.954 / 0.963 | 2,431,492 | 739,472 / 739,472 |
+| PNG grayscale16, one-shot Optimal6 / native6, red-plane reference † | 4,704.74 | 5,506.13 | 0.854 / 0.875 | 822,740 | 265,433 / 265,433 |
+| PNG gray-alpha16, one-shot Optimal6 / native6 † | 9,874.42 | 10,487.03 | 0.942 / 0.950 | 1,360,900 | 506,887 / 506,887 |
 | PNG RGBA8, stored0 / native0 † H | 253.82 | 189.65 | 1.338 / 1.471 | 1,203,724 | 533,444 / 533,444 |
 | PNG RGBA8 decode, live token † | 1,391.93 | 1,393.91 | 0.999 / 1.004 | 4,472 | — |
 | PNG RGBA8 decode, tight working limit † | 1,184.46 | 1,395.39 | 0.849 / 0.855 | 68,224 | — |
 | PNG RGBA16 decode, tight working limit † | 2,826.77 | 2,894.02 | 0.977 / 0.981 | 70,272 | — |
 | PNG predictable RGBA16 3000², Optimal6 / mixed6 † H | 352,397.34 | 407,457.02 | 0.865 / 0.870 | 3,402,572 | 573,041 / 573,041 |
-| PNG RGBA16, one-shot Fastest1 / native1 † | 17,956.64 | 18,627.96 | 0.964 / 0.970 | 2,437,660 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,279.79 | 18,615.61 | 0.982 / 0.987 | 2,437,660 | 968,216 / 968,216 |
-| PNG RGBA16, one-shot Fastest1, forward-only output † | 18,019.73 | 18,642.40 | 0.967 / 0.982 | 2,437,692 | 968,216 / 968,216 |
-| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,950.89 | 17,518.41 | 0.968 / 0.973 | 882,212 | 210,973 / 210,973 |
+| PNG RGBA16, one-shot Fastest1 / native1 † | 17,776.55 | 18,600.15 | 0.956 / 0.966 | 2,437,660 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, live cancelable token † | 18,197.48 | 19,178.63 | 0.949 / 0.954 | 2,437,660 | 968,216 / 968,216 |
+| PNG RGBA16, one-shot Fastest1, forward-only output † | 17,856.45 | 18,591.70 | 0.960 / 0.966 | 2,437,692 | 968,216 / 968,216 |
+| PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 16,825.68 | 18,080.22 | 0.931 / 0.941 | 882,212 | 210,973 / 210,973 |
 | JPEG baseline420, resident decode (confirmed pass) † | 929.80 | 1,012.30 | 0.918 / 0.924 | 790,211 | — |
 | JPEG DC-only, caller CMYK decode † | 337.97 | 332.25 | 1.017 / 1.019 | 1,085,977 | — |
 | VP8L RGBA8, resident decode † | 3,093.70 | 3,008.39 | 1.028 / 1.034 | 152,728 | — |

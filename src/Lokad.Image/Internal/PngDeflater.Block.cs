@@ -9,12 +9,13 @@ internal sealed partial class PngDeflater
     // RFC1951 section3.2.7 format permutation.
     private static ReadOnlySpan<int> Order => [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int LengthSymbol(int length)
     {
         if (length == 258) return 285;
         if (length <= 10) return length + 254;
-        var extra = 1;
-        while (length >= 3 + (8 << extra)) extra++;
+        // RFC1951 section 3.2.5: four ranges per doubling above length ten.
+        var extra = BitOperations.Log2((uint)(length - 3)) - 2;
         return 261 + extra * 4 + ((length - 3) >> extra) - 4;
     }
     private static int DistanceSymbol(int distance)

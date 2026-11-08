@@ -1,5 +1,9 @@
 # Streaming PNG token frequencies
 
+Current encoding costs and qualification are now owned by
+[exact length classification](PNG-LENGTH-CLASSIFICATION.md). This report retains
+the earlier census-removal stage and its raw evidence.
+
 PFC554, 2026-11-08. Accepted. The greedy parser now produces symbol frequencies
 with accepted tokens, removing the block's second scan of its token buffer.
 The existing 335-int census stays live through parsing, tree construction, pricing

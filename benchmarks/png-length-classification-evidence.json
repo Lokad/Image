@@ -1,0 +1,2232 @@
+{
+  "project": "Lokad.Image",
+  "stage": "LSF584",
+  "productionAccepted": true,
+  "productionChanged": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+    "linuxSha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf"
+  },
+  "cases": {
+    "EncodeSmallest8": {
+      "caseId": "EncodeSmallest8",
+      "runId": "lsf584-current-EncodeSmallest8-confirm",
+      "label": "PNG RGBA8, one-shot SmallestSize9 / native9",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 16851.728988636365,
+      "nativeUs": 17227.33652083333,
+      "ratio": 0.9781970049901365,
+      "lower": 0.9744039653696102,
+      "upper": 0.9833958263046796,
+      "allocatedBytes": 820452,
+      "packetBytes": 210973,
+      "packetSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+      "nativePacketBytes": 210973,
+      "nativePacketSha256": "4d8f15d9fdb8f415544b831c8f0845c1532adc8696f2707264bced25fc424c3c",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "level": 9,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        16999727.25,
+        16848280.5,
+        16840423.5,
+        16847366.5,
+        16864307.0,
+        16853192.75,
+        16859016.5,
+        16861280.0,
+        16848090.25,
+        16850250.75,
+        16857359.0,
+        16839632.25
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 16851728.988636363,
+        "StandardError": 2443.6686908964907,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 16851728.988636363,
+          "StandardError": 2443.6686908964907,
+          "Level": 12,
+          "Margin": 11208.848907642127,
+          "Lower": 16840520.13972872,
+          "Upper": 16862937.837544005
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 17227683.458333332,
+          "standardError": 5030.760682288098,
+          "confidenceLower": 17204607.893062007,
+          "confidenceUpper": 17250759.023604658
+        },
+        {
+          "mean": 17227336.520833332,
+          "standardError": 2980.8704140944174,
+          "confidenceLower": 17213663.5846414,
+          "confidenceUpper": 17241009.457025263
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": null,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeSmallest8-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeSmallest8-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 3281808 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeSmallest16": {
+      "caseId": "EncodeSmallest16",
+      "runId": "lsf584-current-EncodeSmallest16-confirm",
+      "label": "PNG RGBA16, one-shot SmallestSize9 / native9",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 20549.379,
+      "nativeUs": 20868.883354166668,
+      "ratio": 0.9846899161424046,
+      "lower": 0.9784170930598449,
+      "upper": 0.9908616713980297,
+      "allocatedBytes": 2437660,
+      "packetBytes": 963202,
+      "packetSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+      "nativePacketBytes": 963202,
+      "nativePacketSha256": "40135537a01f3ddcda1fef33d138dd00c08c5744d5639d377b1728874da95d6d",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 9,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        20639990.75,
+        20503579.25,
+        20494290.0,
+        20516333.5,
+        20479034.5,
+        20510196.75,
+        20552806.25,
+        20551051.0,
+        20583630.5,
+        20564348.75,
+        20636768.5,
+        20560653.25
+      ],
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 20549379,
+        "StandardError": 15099.252169702984,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 20549379,
+          "StandardError": 15099.252169702984,
+          "Level": 12,
+          "Margin": 66995.06988334167,
+          "Lower": 20482383.930116657,
+          "Upper": 20616374.069883343
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 20870363.541666668,
+          "standardError": 14388.47927899135,
+          "confidenceLower": 20806522.156412818,
+          "confidenceUpper": 20934204.92692052
+        },
+        {
+          "mean": 20868883.354166668,
+          "standardError": 6843.9707501036955,
+          "confidenceLower": 20838516.79736442,
+          "confidenceUpper": 20899249.910968915
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeSmallest16-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeSmallest16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 9750640 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeFast8": {
+      "caseId": "EncodeFast8",
+      "runId": "lsf584-candidate-EncodeFast8-confirm",
+      "label": "PNG RGBA8, one-shot Fastest1 / native1",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 4343.1471363636365,
+      "nativeUs": 4342.017739583333,
+      "ratio": 1.000260108743916,
+      "lower": 0.9821981281610063,
+      "upper": 1.0173552644057475,
+      "allocatedBytes": 820916,
+      "packetBytes": 236828,
+      "packetSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "nativePacketBytes": 236828,
+      "nativePacketSha256": "a024058695b0f61d4a57440b08975132958f8fdd151f1c0c58d56dce1c720b14",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "level": 1,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        4490881.5,
+        4363038.0,
+        4339121.75,
+        4357670.0,
+        4346941.0,
+        4361077.75,
+        4353471.0,
+        4351463.0,
+        4335579.0,
+        4334111.75,
+        4322426.5,
+        4309870.0
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 4343147.136363637,
+        "StandardError": 5054.273804321407,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 4343147.136363637,
+          "StandardError": 5054.273804321407,
+          "Level": 12,
+          "Margin": 23183.417466345854,
+          "Lower": 4319963.7188972905,
+          "Upper": 4366330.553829983
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 4369848.21875,
+          "standardError": 1166.6603170442402,
+          "confidenceLower": 4364496.87170815,
+          "confidenceUpper": 4375199.56579185
+        },
+        {
+          "mean": 4342017.739583333,
+          "standardError": 791.7104594334409,
+          "confidenceLower": 4338386.247740167,
+          "confidenceUpper": 4345649.231426499
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": null,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-candidate-EncodeFast8-confirm-receipt.json",
+      "observation": "tmp/lsf584-candidate-EncodeFast8-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 3283664 4",
+      "reusedUnchangedPath": false,
+      "status": "uncertain",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeFast16": {
+      "caseId": "EncodeFast16",
+      "runId": "lsf584-candidate-EncodeFast16-confirm",
+      "label": "PNG RGBA16, one-shot Fastest1 / native1",
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 17776.5532,
+      "nativeUs": 18600.152625,
+      "ratio": 0.9557208243607087,
+      "lower": 0.944850555347275,
+      "upper": 0.9662450633284019,
+      "allocatedBytes": 2437660,
+      "packetBytes": 968216,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativePacketBytes": 968216,
+      "nativePacketSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 1,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        17950797.25,
+        17839979.5,
+        17781087.75,
+        17794475.75,
+        17761350.5,
+        17777955.75,
+        17778481.5,
+        17768043.25,
+        17775131.25,
+        17787139.75,
+        17771270.5,
+        17770747.25
+      ],
+      "managedStatistics": {
+        "N": 10,
+        "Mean": 17776553.2,
+        "StandardError": 3030.8001063731767,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 17776553.2,
+          "StandardError": 3030.8001063731767,
+          "Level": 12,
+          "Margin": 14489.990370019206,
+          "Lower": 17762063.20962998,
+          "Upper": 17791043.19037002
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 18600152.625,
+          "standardError": 7408.581177073764,
+          "confidenceLower": 18564732.84601637,
+          "confidenceUpper": 18635572.40398363
+        },
+        {
+          "mean": 18625805.020833332,
+          "standardError": 31087.431442021163,
+          "confidenceLower": 18477178.728628743,
+          "confidenceUpper": 18774431.31303792
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-candidate-EncodeFast16-confirm-receipt.json",
+      "observation": "tmp/lsf584-candidate-EncodeFast16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 9750640 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeFastCancelable16": {
+      "caseId": "EncodeFastCancelable16",
+      "runId": "lsf584-current-EncodeFastCancelable16-confirm",
+      "label": "PNG RGBA16, one-shot Fastest1, live cancelable token",
+      "actualIterations": 12,
+      "filteredIterations": 12,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 18197.48495833333,
+      "nativeUs": 19178.625458333332,
+      "ratio": 0.9488419802487105,
+      "lower": 0.9436863517171564,
+      "upper": 0.9537094552176635,
+      "allocatedBytes": 2437660,
+      "packetBytes": 968216,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativePacketBytes": 968216,
+      "nativePacketSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 1,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        18294781.5,
+        18131644.5,
+        18096689.25,
+        18109741.5,
+        18190486.25,
+        18190083.25,
+        18198836.25,
+        18210586.75,
+        18196137.25,
+        18228979.5,
+        18237980.5,
+        18284143.0
+      ],
+      "managedStatistics": {
+        "N": 12,
+        "Mean": 18197484.958333332,
+        "StandardError": 17854.789674241343,
+        "ConfidenceInterval": {
+          "N": 12,
+          "Mean": 18197484.958333332,
+          "StandardError": 17854.789674241343,
+          "Level": 12,
+          "Margin": 79221.33285371152,
+          "Lower": 18118263.62547962,
+          "Upper": 18276706.291187044
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 19178625.458333332,
+          "standardError": 3333.888526373005,
+          "confidenceLower": 19163833.063829463,
+          "confidenceUpper": 19193417.8528372
+        },
+        {
+          "mean": 19186546.208333332,
+          "standardError": 2909.360436010374,
+          "confidenceLower": 19173637.436194442,
+          "confidenceUpper": 19199454.980472222
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "live cancelable token",
+      "receipt": "tmp/lsf584-current-EncodeFastCancelable16-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeFastCancelable16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 9750640 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeFastForward16": {
+      "caseId": "EncodeFastForward16",
+      "runId": "lsf584-current-EncodeFastForward16-confirm",
+      "label": "PNG RGBA16, one-shot Fastest1, forward-only output",
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 17856.454125,
+      "nativeUs": 18591.699833333332,
+      "ratio": 0.9604530131766059,
+      "lower": 0.9560137209567735,
+      "upper": 0.9664842119753164,
+      "allocatedBytes": 2437692,
+      "packetBytes": 968216,
+      "packetSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "nativePacketBytes": 968216,
+      "nativePacketSha256": "adbcc5115ee9acce294ab70f65b6f24862b7451d90f870a082269a8008c08e25",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 1,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        18030068.75,
+        17862455.0,
+        17858055.75,
+        17828375.75,
+        17829655.25,
+        17864483.0,
+        17862357.25,
+        17861420.75,
+        17912831.25,
+        17861165.5,
+        17895076.75,
+        17841746.25
+      ],
+      "managedStatistics": {
+        "N": 10,
+        "Mean": 17856454.125,
+        "StandardError": 6145.772877019031,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 17856454.125,
+          "StandardError": 6145.772877019031,
+          "Level": 12,
+          "Margin": 29382.40288994043,
+          "Lower": 17827071.72211006,
+          "Upper": 17885836.52788994
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 18601161.020833332,
+          "standardError": 5485.083561148592,
+          "confidenceLower": 18574937.31580816,
+          "confidenceUpper": 18627384.725858506
+        },
+        {
+          "mean": 18591699.833333332,
+          "standardError": 5488.074716775143,
+          "confidenceLower": 18565461.82785458,
+          "confidenceUpper": 18617937.838812083
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "forward-only output",
+      "receipt": "tmp/lsf584-current-EncodeFastForward16-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeFastForward16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 9750768 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeGray8": {
+      "caseId": "EncodeGray8",
+      "runId": "lsf584-current-EncodeGray8-confirm",
+      "label": "PNG grayscale8, one-shot Optimal6 / native6",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 1993.14525,
+      "nativeUs": 1968.8933125,
+      "ratio": 1.012317547805171,
+      "lower": 0.9689451040967759,
+      "upper": 1.0472353764591587,
+      "allocatedBytes": 551364,
+      "packetBytes": 72586,
+      "packetSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "nativePacketBytes": 72586,
+      "nativePacketSha256": "c5b4a248c1ca0f76115d06e7795698f50ac7e623c366fcee4a659cb08da2872a",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "24609f53449ebce137f741b38af44e63fbcddeec6ac906219d13210230e9da39",
+      "depth": 8,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        2138076.75,
+        1994457.0,
+        2001415.0,
+        1990095.5,
+        1999224.25,
+        1995478.5,
+        1996632.75,
+        1992366.25,
+        1993680.75,
+        1990200.5,
+        1986810.5,
+        1984514.5
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 1993145.25,
+        "StandardError": 1531.9281515017722,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 1993145.25,
+          "StandardError": 1531.9281515017722,
+          "Level": 12,
+          "Margin": 7026.791828006523,
+          "Lower": 1986118.4581719935,
+          "Upper": 2000172.0418280065
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 2001267.2578125,
+          "standardError": 2835.645713809267,
+          "confidenceLower": 1988260.4519062417,
+          "confidenceUpper": 2014274.0637187583
+        },
+        {
+          "mean": 1968893.3125,
+          "standardError": 583.6094029456326,
+          "confidenceLower": 1966216.358114544,
+          "confidenceUpper": 1971570.266885456
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeGray8-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeGray8-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 2205456 4",
+      "reusedUnchangedPath": false,
+      "status": "uncertain",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeRgb8": {
+      "caseId": "EncodeRgb8",
+      "runId": "lsf584-current-EncodeRgb8-confirm",
+      "label": "PNG RGB8, one-shot Optimal6 / native6",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 9370.010840909092,
+      "nativeUs": 9793.978739583334,
+      "ratio": 0.9567113723699712,
+      "lower": 0.9403603701809445,
+      "upper": 0.9717716554016983,
+      "allocatedBytes": 819884,
+      "packetBytes": 168729,
+      "packetSha256": "e1b0f39154bb07b69c6fab59512dbd55f1fb855c0a9805a44892d510efb73228",
+      "nativePacketBytes": 168729,
+      "nativePacketSha256": "e1b0f39154bb07b69c6fab59512dbd55f1fb855c0a9805a44892d510efb73228",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "54e27bd73c9ee221bdd4872e6b7bf79676257346cee2eff8ddacccb89e0cdb0a",
+      "depth": 8,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        9538530.25,
+        9426412.75,
+        9408265.25,
+        9408343.0,
+        9363550.25,
+        9330878.0,
+        9316989.75,
+        9308494.25,
+        9377594.0,
+        9383540.5,
+        9377225.75,
+        9368963.25
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 9370010.840909092,
+        "StandardError": 11511.370550029333,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 9370010.840909092,
+          "StandardError": 11511.370550029333,
+          "Level": 12,
+          "Margin": 52801.434865470255,
+          "Lower": 9317209.40604362,
+          "Upper": 9422812.275774563
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 9889241.354166666,
+          "standardError": 1628.6820165375252,
+          "confidenceLower": 9881770.762629453,
+          "confidenceUpper": 9896711.945703879
+        },
+        {
+          "mean": 9793978.739583334,
+          "standardError": 12901.054535041401,
+          "confidenceLower": 9734802.971783372,
+          "confidenceUpper": 9853154.507383296
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeRgb8-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeRgb8-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 3279536 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeGrayAlpha8": {
+      "caseId": "EncodeGrayAlpha8",
+      "runId": "lsf584-current-EncodeGrayAlpha8-confirm",
+      "label": "PNG gray-alpha8, one-shot Optimal6 / native6",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 4162.985147727273,
+      "nativeUs": 4444.968927083333,
+      "ratio": 0.9365611359760191,
+      "lower": 0.9214279861599876,
+      "upper": 0.9553777601802551,
+      "allocatedBytes": 552332,
+      "packetBytes": 120366,
+      "packetSha256": "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+      "nativePacketBytes": 120366,
+      "nativePacketSha256": "eefb49b94adbd654b38b4e33edc8aac89fdfd9273a8124a1fbf7884ee8789fb5",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "a2a2e4edd7a51693352b26525a6e8bf96bb9d74047c8ffc7b207f11881bc0e5e",
+      "depth": 8,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        4304418.5,
+        4159919.5,
+        4159834.5,
+        4160951.0,
+        4160808.5,
+        4153787.75,
+        4160125.0,
+        4175959.0,
+        4162193.25,
+        4174516.5,
+        4168219.75,
+        4156619.5
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 4162985.147727273,
+        "StandardError": 2112.3330379030026,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 4162985.147727273,
+          "StandardError": 2112.3330379030026,
+          "Level": 12,
+          "Margin": 9689.047436209245,
+          "Lower": 4153296.1002910635,
+          "Upper": 4172674.1951634823
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 4444968.927083333,
+          "standardError": 4448.768831997367,
+          "confidenceLower": 4424562.896655128,
+          "confidenceUpper": 4465374.957511538
+        },
+        {
+          "mean": 4464897.90625,
+          "standardError": 1886.0243199101058,
+          "confidenceLower": 4456246.912882214,
+          "confidenceUpper": 4473548.899617786
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeGrayAlpha8-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeGrayAlpha8-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 2209328 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "Encode8": {
+      "caseId": "Encode8",
+      "runId": "lsf584-current-Encode8-confirm",
+      "label": "PNG RGBA8, one-shot Optimal6 / native6",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 16744.893136363637,
+      "nativeUs": 17271.2918125,
+      "ratio": 0.9695217542583939,
+      "lower": 0.9645166849931845,
+      "upper": 0.9745714830056531,
+      "allocatedBytes": 820452,
+      "packetBytes": 210973,
+      "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "nativePacketBytes": 210973,
+      "nativePacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        16891591.25,
+        16736148.25,
+        16779133.5,
+        16791527.25,
+        16729796.25,
+        16726426.25,
+        16759794.25,
+        16732297.5,
+        16761499.25,
+        16733880.0,
+        16723196.25,
+        16720387.0
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 16744893.136363637,
+        "StandardError": 7287.35067353353,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 16744893.136363637,
+          "StandardError": 7287.35067353353,
+          "Level": 12,
+          "Margin": 33426.30404069836,
+          "Lower": 16711466.832322938,
+          "Upper": 16778319.440404337
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 17271291.8125,
+          "standardError": 3058.1833881464727,
+          "confidenceLower": 17257264.249902297,
+          "confidenceUpper": 17285319.375097703
+        },
+        {
+          "mean": 17292783.125,
+          "standardError": 3789.478088502246,
+          "confidenceLower": 17275401.191233333,
+          "confidenceUpper": 17310165.058766667
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": null,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-Encode8-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-Encode8-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 3281808 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "Encode16": {
+      "caseId": "Encode16",
+      "runId": "lsf584-current-Encode16-confirm",
+      "label": "PNG RGBA16, one-shot Optimal6 / native6",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 20261.523772727272,
+      "nativeUs": 20732.366125,
+      "ratio": 0.9772895023445991,
+      "lower": 0.9730547208462647,
+      "upper": 0.9830291017955093,
+      "allocatedBytes": 2437660,
+      "packetBytes": 963202,
+      "packetSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+      "nativePacketBytes": 963202,
+      "nativePacketSha256": "4f8f4d9950068c51b006ea87e2200523a5064e00842373eeb9c3a7f38bc12a0b",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "depth": 16,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        20446554.25,
+        20257873.25,
+        20233396.5,
+        20263301.5,
+        20280297.5,
+        20261121.0,
+        20271709.5,
+        20273059.0,
+        20273124.0,
+        20253379.0,
+        20247450.25,
+        20262187.5
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 20261523.772727273,
+        "StandardError": 4041.2207022325433,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 20261523.772727273,
+          "StandardError": 4041.2207022325433,
+          "Level": 12,
+          "Margin": 18536.650415217315,
+          "Lower": 20242987.122312058,
+          "Upper": 20280060.42314249
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 20732366.125,
+          "standardError": 7617.187911460751,
+          "confidenceLower": 20697426.89255873,
+          "confidenceUpper": 20767305.35744127
+        },
+        {
+          "mean": 20736787.4375,
+          "standardError": 3980.0471776228005,
+          "confidenceLower": 20718531.383549046,
+          "confidenceUpper": 20755043.491450954
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-Encode16-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-Encode16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 9750640 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeRgb16": {
+      "caseId": "EncodeRgb16",
+      "runId": "lsf584-current-EncodeRgb16-confirm",
+      "label": "PNG RGB16, one-shot Optimal6 / native6",
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 15330.0731,
+      "nativeUs": 16071.7876875,
+      "ratio": 0.9538499013350658,
+      "lower": 0.9469376002044905,
+      "upper": 0.9628756750437346,
+      "allocatedBytes": 2431492,
+      "packetBytes": 739472,
+      "packetSha256": "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+      "nativePacketBytes": 739472,
+      "nativePacketSha256": "4b8a2c3c99342ab51f2919c35f5dfb50506cb6c5812e84ede61c53f0db7388bf",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "25a17b853ffe24f7c8ca7d19c1e76b1390e34ae7e6924b460721df8ce53f6f99",
+      "depth": 16,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        15508521.5,
+        15327029.0,
+        15323048.0,
+        15334347.75,
+        15330875.0,
+        15320421.5,
+        15528639.25,
+        15346971.75,
+        15340772.5,
+        15339114.75,
+        15309653.0,
+        15328649.0
+      ],
+      "managedStatistics": {
+        "N": 10,
+        "Mean": 15330073.1,
+        "StandardError": 3450.4216452184023,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 15330073.1,
+          "StandardError": 3450.4216452184023,
+          "Level": 12,
+          "Margin": 16496.164265860854,
+          "Lower": 15313576.935734138,
+          "Upper": 15346569.264265861
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 16096049.854166666,
+          "standardError": 5847.158041669456,
+          "confidenceLower": 16068095.102701003,
+          "confidenceUpper": 16124004.60563233
+        },
+        {
+          "mean": 16071787.6875,
+          "standardError": 4364.940210887882,
+          "confidenceLower": 16050919.289914664,
+          "confidenceUpper": 16092656.085085336
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeRgb16-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeRgb16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 9725968 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeGray16": {
+      "caseId": "EncodeGray16",
+      "runId": "lsf584-current-EncodeGray16-confirm",
+      "label": "PNG grayscale16, one-shot Optimal6 / native6, red-plane reference",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 4704.739090909091,
+      "nativeUs": 5506.12875,
+      "ratio": 0.8544549727263626,
+      "lower": 0.8383558063845921,
+      "upper": 0.8748595547124492,
+      "allocatedBytes": 822740,
+      "packetBytes": 265433,
+      "packetSha256": "97b2e6d66070a7f42d3f487e837bd5c3ef2a1beb0362d5ec02110794007c3f70",
+      "nativePacketBytes": 265433,
+      "nativePacketSha256": "97b2e6d66070a7f42d3f487e837bd5c3ef2a1beb0362d5ec02110794007c3f70",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "346f1646546bce543afb6e800a81610727af1e5f0cb39eaa123f1f77b584ccd1",
+      "depth": 16,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        4862946.75,
+        4718981.0,
+        4712731.75,
+        4699849.75,
+        4714026.0,
+        4705268.0,
+        4704807.0,
+        4707656.5,
+        4709253.75,
+        4696224.25,
+        4689586.5,
+        4693938.0
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 4704739.090909091,
+        "StandardError": 2738.2947761319883,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 4704739.090909091,
+          "StandardError": 2738.2947761319883,
+          "Level": 12,
+          "Margin": 12560.26748822035,
+          "Lower": 4692178.82342087,
+          "Upper": 4717299.3583973115
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 5506128.75,
+          "standardError": 7185.432318949473,
+          "confidenceLower": 5473169.934633893,
+          "confidenceUpper": 5539087.565366107
+        },
+        {
+          "mean": 5508721.265625,
+          "standardError": 10790.411992191996,
+          "confidenceLower": 5459226.791139869,
+          "confidenceUpper": 5558215.740110131
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeGray16-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeGray16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 3290960 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "EncodeGrayAlpha16": {
+      "caseId": "EncodeGrayAlpha16",
+      "runId": "lsf584-current-EncodeGrayAlpha16-confirm",
+      "label": "PNG gray-alpha16, one-shot Optimal6 / native6",
+      "actualIterations": 12,
+      "filteredIterations": 11,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 9874.421818181818,
+      "nativeUs": 10487.03215625,
+      "ratio": 0.9415840126223812,
+      "lower": 0.935002277613433,
+      "upper": 0.9497137599665945,
+      "allocatedBytes": 1360900,
+      "packetBytes": 506887,
+      "packetSha256": "addd3f236e49cef7fc937ab70022420681cf4d9f61d895b680605934429aca76",
+      "nativePacketBytes": 506887,
+      "nativePacketSha256": "addd3f236e49cef7fc937ab70022420681cf4d9f61d895b680605934429aca76",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "9d0ed2b90676c863eb54a8adfca3d0d9e975af34b1986bc26308ea980e883280",
+      "depth": 16,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        10032943.25,
+        9887450.25,
+        9907488.25,
+        9925195.0,
+        9889683.75,
+        9855216.5,
+        9862092.0,
+        9843791.75,
+        9876929.5,
+        9861573.75,
+        9855950.25,
+        9853489.0
+      ],
+      "managedStatistics": {
+        "N": 11,
+        "Mean": 9874421.818181818,
+        "StandardError": 7677.463996251605,
+        "ConfidenceInterval": {
+          "N": 11,
+          "Mean": 9874421.818181818,
+          "StandardError": 7677.463996251605,
+          "Level": 12,
+          "Margin": 35215.71244433958,
+          "Lower": 9839206.10573748,
+          "Upper": 9909637.530626157
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 10492545.989583334,
+          "standardError": 2591.514834086124,
+          "confidenceLower": 10480658.986109665,
+          "confidenceUpper": 10504432.993057003
+        },
+        {
+          "mean": 10487032.15625,
+          "standardError": 666.625891590107,
+          "confidenceLower": 10483974.414042722,
+          "confidenceUpper": 10490089.898457278
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": true,
+      "delivery": "resident input / independent packet",
+      "receipt": "tmp/lsf584-current-EncodeGrayAlpha16-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-EncodeGrayAlpha16-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 5443600 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    },
+    "Png8AsyncNonSeekable": {
+      "caseId": "Png8AsyncNonSeekable",
+      "runId": "lsf584-current-Png8AsyncNonSeekable-confirm",
+      "label": "PNG RGBA8 async, one-shot Optimal6, nonseekable output",
+      "actualIterations": 12,
+      "filteredIterations": 10,
+      "operationsPerActual": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "managedUs": 16825.6835,
+      "nativeUs": 18080.21547916667,
+      "ratio": 0.9306129962548162,
+      "lower": 0.9244315898201547,
+      "upper": 0.9412193974255665,
+      "allocatedBytes": 882212,
+      "packetBytes": 210973,
+      "packetSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "nativePacketBytes": 210973,
+      "nativePacketSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920",
+      "librarySha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "depth": 8,
+      "level": 6,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "completePacketExact": true,
+      "managedActualNanoseconds": [
+        16979331.75,
+        16815478.75,
+        16837647.25,
+        16820704.25,
+        16853806.75,
+        16842302.0,
+        16818921.5,
+        16817056.25,
+        16824757.75,
+        16800994.5,
+        16825241.0,
+        17149529.5
+      ],
+      "managedStatistics": {
+        "N": 10,
+        "Mean": 16825683.5,
+        "StandardError": 4795.722589946401,
+        "ConfidenceInterval": {
+          "N": 10,
+          "Mean": 16825683.5,
+          "StandardError": 4795.722589946401,
+          "Level": 12,
+          "Margin": 22927.93048260859,
+          "Lower": 16802755.569517393,
+          "Upper": 16848611.430482607
+        }
+      },
+      "nativeBrackets": [
+        {
+          "mean": 18080511.479166668,
+          "standardError": 3507.575620615405,
+          "confidenceLower": 18063742.066740572,
+          "confidenceUpper": 18097280.891592763
+        },
+        {
+          "mean": 18080215.479166668,
+          "standardError": 5504.080805949932,
+          "confidenceLower": 18053900.94997475,
+          "confidenceUpper": 18106530.008358587
+        }
+      ],
+      "equivalentOneShotBoundary": true,
+      "codecPreparationTimed": true,
+      "nativeCodecRetainedBetweenOperations": false,
+      "nativeWordWorkspacePreparationTimed": null,
+      "delivery": "async nonseekable",
+      "receipt": "tmp/lsf584-current-Png8AsyncNonSeekable-confirm-receipt.json",
+      "observation": "tmp/lsf584-current-Png8AsyncNonSeekable-confirm-observation.json",
+      "rawGc": "// GC:  0 0 0 3528848 4",
+      "reusedUnchangedPath": false,
+      "status": "pass",
+      "nativeSamplesEachBracket": 12
+    }
+  },
+  "statusCounts": {
+    "pass": 13,
+    "gap": 0,
+    "uncertain": 2
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "LSF584",
+    "sources": {
+      "src/Lokad.Image/Internal/PngDeflater.Block.cs": "1af6f43d7f2ce4fd79d29d6ec9fb72388b71d3ec5a53fd4fd1bfca64bc4f581f"
+    },
+    "wholeSourceUndoReconstructsOriginalOutsideExactLengthClassifier": true,
+    "all256LegalLengthMappingsExact": true,
+    "mappingSha256": "03c6ea9cf23a7f2e78ba9377eb2209a49327dcffdbbeff26c3f7aa67ed634edb",
+    "originalTokenOrderTreesBlockChoiceBitOutputPollsOwnershipAndFieldLayoutExact": true,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "qualification": "Deterministic256lengthintervalmodel is supplementary; existingactualproductionWriteTokens independent all-length/distanceedge bitstreamoracle pluscompletepacket/fragmented/failure/root tests remainauthoritative. No newtest that mirrors helper implementation.",
+    "affectedCases": "All15existingPNGencodingcurrentcosts enter sharedclassifier directly or throughlazyGreedy/block/writer; acceptedstage must refreshaffectedcompleteoperations. No decode/header/othercodec/edit/text change."
+  },
+  "design": {
+    "project": "Lokad.Image",
+    "round": "LSF584",
+    "paths": [
+      "src/Lokad.Image/Internal/PngDeflater.Block.cs"
+    ],
+    "baselineCommit": "5c416a9d58b9e6480ad0bb8f9038b7a8840fd5c2",
+    "baseline": {
+      "windowsSha256": "efc1b050d7606f74f31b14a3f275f70c805b0259658d7257a40ca7a9eb3d8079",
+      "linuxSha256": "23d65df329902c9427ba086ca9a7b38267591a10a0b1b9578c7ff9b05575ad42"
+    },
+    "transitionFromLinuxSha256": "23d65df329902c9427ba086ca9a7b38267591a10a0b1b9578c7ff9b05575ad42",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/PngDeflater.Block.cs": "3cf8489eb6342d1a704b46389a3bac5ff0ba92375f3868c186ed5bdae9c734e6"
+    },
+    "hypothesis": "CurrentPFA58282/1961samples inLengthSymbol, calledduringgreedycensus andagain emission. Replace repeatedrange search with existingBitOperations.Log2 primitive and allowinlining. This is simplificationselectedfromcurrentattribution, not predictedgain or preparedtokenformat redesign.",
+    "proof": "For11<=L<=257, m=L-3 in8..254. Originalloop ends at e satisfying2^(e+2)<=m<2^(e+3), hence e=floor(log2(m))-2. Samefinalsymbolarithmetic. Preserve L258special285 and<=10directmapping. RFC1951sec3.2.5. No source/table/vendorcopy, numericaltolerance or changedpacketdecision.",
+    "endState": "One constanttime sharedlengthclassifier, noloop/table/heap. Greedy/lazy/census/writer useexact same mapping. No newtokenformat, API,owner,cache/session ormemory/work allowance.",
+    "workloads": [
+      "EncodeFast8"
+    ],
+    "acceptance": "ExistingEveryLengthAndDistanceBucketBoundary independenttokenbitstreamoraclescoverall256legal lengths, everydistancebucketedge; alignment/short/overflowguards andcompletepacket/fragmented/failure/ownership oracles preserved. FocusedW/Lnormal/scalar, thenonecompleteexistingbyteFastestshort; independentifpromising. Acceptedsharedclassifier changes require15existingencodingcostrefresh plusfullW/L/live/scalar/SAMEpackage, reuseunchangedcodecs/editing.",
+    "invalidation": "LengthSymbol usedby greedy/lazy blockpricing/census andemission acrossall15currentencodingcontrols. Classfields/owners/admission unchanged, storedasyncOptimalcaseclassification mustnameactualuse. No changeddecode/header/othercodec/resize/text source.",
+    "tradeoffs": "BitLog2 plusinlining maygrowhotcode orfail tohelp smalllengths; usecompletebyte shortfirst. Keepimmutableoriginals, adverseevidence andno favorable repeats. No gainclaimfrom primitive/JIT alone.",
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "productionAccepted": true
+  },
+  "comparison": {
+    "EncodeFast8": {
+      "caseId": "EncodeFast8",
+      "originalUs": 4427.438318181818,
+      "currentUs": 4343.1471363636365,
+      "rawUsSaved": 84.29118181818194,
+      "rawReduction": 0.019038363893638,
+      "nativeNormalizedReduction": 0.0193816962395148,
+      "nativePointChange": 0.0003501182310796658,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "baselineRawBounds": [
+            4412.003953186998,
+            4442.872683176639
+          ],
+          "candidateRawBounds": [
+            4319.96371889729,
+            4366.330553829983
+          ],
+          "baselineNormalizedBounds": [
+            1.0145120415796838,
+            1.0250883332824559
+          ],
+          "candidateNormalizedBounds": [
+            0.987375239445892,
+            1.0064411752421472
+          ]
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": false,
+          "normalizedGainSeparated": false,
+          "baselineRawBounds": [
+            4377.529928010816,
+            4505.57673865585
+          ],
+          "candidateRawBounds": [
+            4297.141038065256,
+            4413.800836934744
+          ],
+          "baselineNormalizedBounds": [
+            1.0066126044862285,
+            1.0395059511824196
+          ],
+          "candidateNormalizedBounds": [
+            0.9821981281610063,
+            1.0173552644057475
+          ]
+        }
+      },
+      "originalProvider": "tmp/pfc554-candidate-EncodeFast8-confirm-observation.json",
+      "sourceValidOriginalConfirmationReused": true,
+      "newOriginalTimingRuns": 0
+    },
+    "EncodeFast16": {
+      "caseId": "EncodeFast16",
+      "originalUs": 17956.64225,
+      "currentUs": 17776.5532,
+      "rawUsSaved": 180.08905000000232,
+      "rawReduction": 0.010029104968107383,
+      "nativeNormalizedReduction": 0.008549178262928447,
+      "nativePointChange": -0.0014926879606455001,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": false,
+          "baselineRawBounds": [
+            17912.74318307047,
+            18000.54131692953
+          ],
+          "candidateRawBounds": [
+            17762.063209629978,
+            17791.04319037002
+          ],
+          "baselineNormalizedBounds": [
+            0.9583389033651877,
+            0.9680340582163277
+          ],
+          "candidateNormalizedBounds": [
+            0.9460772959495768,
+            0.962865784417855
+          ]
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": false,
+          "baselineRawBounds": [
+            17902.7189059315,
+            18034.6489690685
+          ],
+          "candidateRawBounds": [
+            17728.929509133013,
+            17863.813824200322
+          ],
+          "baselineNormalizedBounds": [
+            0.957862015526128,
+            0.9698120295857147
+          ],
+          "candidateNormalizedBounds": [
+            0.944850555347275,
+            0.9662450633284019
+          ]
+        }
+      },
+      "originalProvider": "tmp/pfc554-candidate-EncodeFast16-confirm-observation.json",
+      "sourceValidOriginalConfirmationReused": true,
+      "newOriginalTimingRuns": 0
+    }
+  },
+  "originalAttribution": {
+    "provider": "PFA582/PNP583",
+    "totalSamples": 1961,
+    "greedyParserSamples": 1361,
+    "tokenEmissionSamples": 311,
+    "lengthSymbolSamples": 82,
+    "scope": "One currentoriginal2secondcapture, not phasecosts or projectedgain. Raw remains inpng-private-parser-publication-experiment archive."
+  },
+  "storage": {
+    "workspaceAdmissionBytes": 393216,
+    "newOwnedCapacityBytes": 0,
+    "retainedOperationScratchBytes": 0,
+    "newCrossOperationRetainedBytes": 0,
+    "completePhysicalNativePeakRemeasured": false,
+    "totalAllocatedBytes": {
+      "EncodeSmallest8": 820452,
+      "EncodeSmallest16": 2437660,
+      "EncodeFast8": 820916,
+      "EncodeFast16": 2437660,
+      "EncodeFastCancelable16": 2437660,
+      "EncodeFastForward16": 2437692,
+      "EncodeGray8": 551364,
+      "EncodeRgb8": 819884,
+      "EncodeGrayAlpha8": 552332,
+      "Encode8": 820452,
+      "Encode16": 2437660,
+      "EncodeRgb16": 2431492,
+      "EncodeGray16": 822740,
+      "EncodeGrayAlpha16": 1360900,
+      "Png8AsyncNonSeekable": 882212
+    },
+    "retainedOutput": "Independentlyownedcompletepackets; exactsizeineachcase. Existingdefaultoutputpool separate/unremeasured; governedoutputs bypassit.",
+    "interpretation": "No allocation/owner site changed. GCcosts aredistinct from livecapacity andretention. Primarybyte/word confirmedGC stays820916/2437660Bop. No capacityclaim from otherobservedGC differences.",
+    "all15MeasuredAllocationCountsUnchanged": true
+  },
+  "qualification": {
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+      "full": [
+        2642,
+        2317,
+        948
+      ],
+      "total": 5907,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 43,
+        "internal-scalar": 43,
+        "public-normal": 246,
+        "public-scalar": 246
+      },
+      "affectedPngScalarEachOs": 289,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "2a6bbaffb444ecd25092b3449e439ac4972ced6baf63e831fd5cdada001f3dd3",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\PngDeflater.Block.cs": "1af6f43d7f2ce4fd79d29d6ec9fb72388b71d3ec5a53fd4fd1bfca64bc4f581f"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "full": [
+        2642,
+        2317,
+        948
+      ],
+      "total": 5907,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 43,
+        "internal-scalar": 43,
+        "public-normal": 246,
+        "public-scalar": 246
+      },
+      "affectedPngScalarEachOs": 289,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "2bc27a445688d82c6ab25a957e51ec88db081d5a8c4dce7bd5c3ae3ad69ca321",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/PngDeflater.Block.cs": "1af6f43d7f2ce4fd79d29d6ec9fb72388b71d3ec5a53fd4fd1bfca64bc4f581f"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "fullChecksEachOs": 5907,
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "8b6c2a50a6ada0048428d1d752d0f8d2b6cb14e3242425210e35dd1846ccc360",
+      "symbolsSha256": "523c8af03f14bf189a4e5e377d0df915c444a8b226c723eb686eea460f777d11",
+      "bytes": 430742,
+      "librarySha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "sharedOrdinaryPngCursorAndRowsOwnershipPassed": true,
+      "verticalWordGeometryFrozenAdmissionAndSurvivorsPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "8b6c2a50a6ada0048428d1d752d0f8d2b6cb14e3242425210e35dd1846ccc360",
+      "librarySha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "sharedOrdinaryPngCursorAndRowsOwnershipPassed": true,
+      "verticalWordGeometryFrozenAdmissionAndSurvivorsPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "tieredCompilation": false,
+      "jpegFullResolutionCmykExistingConsumerChecks": "Existing varying CMYK hash, owned/stream/async/caller RGB-gray, orientation, retained charges and cleanup plus directRGB MCU owner checks exercised without new consumer build inputs."
+    },
+    "sameActualPackageBothOs": true
+  },
+  "workflow": {
+    "validCoreEmbeddedVersionsEachOs": 1,
+    "focusedInternalEachModeEachOs": 43,
+    "focusedPublicEachModeEachOs": 246,
+    "publicHarnessNativeFixtureSelectorBuilds": 0,
+    "originalConfirmationRuns": 0,
+    "primaryShorts": 2,
+    "independentConfirmations": 2,
+    "otherAffectedConfirmations": 13,
+    "fullSuitesEachOs": 1,
+    "packagePacks": 1,
+    "favorableRepeats": 0,
+    "scope": "Sameimmutablebuild acrossallfocusedchecks/screens/confirmations/refresh/qualification. Twooriginalconfirmations reused. Existing15completecasesonly, no newimage/settingsgrid. Onebundletransfer, no per-receiptSCP loop.",
+    "actualPackageScope": "LinuxRelease39d95e02 suppliescurrent15CPUcosts; Windows92eae3b8 DLLinactual8b6c2a50package isconsumer-qualifiedbothOS. Developmentround, notfullactualpackage126comparisonreleaserefresh.",
+    "unchangedConsumerInputsReused": true,
+    "publicSummary": "Mean/SE/intervals and12managedactuals retained here; fullstatisticaldistributions/nativesamples/receipts remain inmember-verifiedrawobservations. No duplicatedrawsample arrays inpublicsummary."
+  },
+  "decision": "Retain exactconstant-timeRFC1951classifier simplification. Bytepoint saves84.29us/1.90%raw, filteredraw/normalizedintervalsseparate butallactualoverlap: robustgainunproven andcurrentupper1.017355uncertain. Wordraw180.09us/1.00%intervalsseparatebothviews; normalizedintervalsoverlap, so no robustnormalizedgainclaim. Wordstillpassesupper0.966245. All15frozencompletepackets/qualitycontracts remainexact. No generalCPU/parityclaim; otherrefreshedcosts arecurrentstandaloneevidence, notcausalpairedgains.",
+  "priorEvidence": "PNG-STREAMING-TOKEN-FREQUENCIES.md",
+  "next": "Stop confirmedpassingcosts. Resolveuncertainty beforeassumingmoreoptimization. RemaininglargerVP8/tightmixedword/drawing/JPEGopportunities remainindependent; failedrow/certificate/privatepublication implementations arepreserved, not permanentbans. Full283pathobjective open; publicationpostponed.",
+  "materialReview": {
+    "project": "Lokad.Image",
+    "cases": {
+      "EncodeSmallest8": {
+        "originalUs": 17026.165886363637,
+        "currentUs": 16851.728988636365,
+        "pointUsSaved": 174.43689772727157,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9843854027378494,
+              0.9898231883727509
+            ],
+            "candidateNormalizedBounds": [
+              0.9762190821102656,
+              0.9801407821880216
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9834922330188357,
+              0.9920140554740009
+            ],
+            "candidateNormalizedBounds": [
+              0.9744039653696102,
+              0.9833958263046796
+            ]
+          }
+        }
+      },
+      "EncodeSmallest16": {
+        "originalUs": 20847.835113636364,
+        "currentUs": 20549.379,
+        "pointUsSaved": 298.4561136363627,
+        "originalStatus": "uncertain",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9819251627322458,
+              1.000439476159217
+            ],
+            "candidateNormalizedBounds": [
+              0.9784170930598449,
+              0.9908611307021885
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9801995380146831,
+              1.0038771438270664
+            ],
+            "candidateNormalizedBounds": [
+              0.9784176304578517,
+              0.9908616713980297
+            ]
+          }
+        }
+      },
+      "EncodeFast8": {
+        "originalUs": 4427.438318181818,
+        "currentUs": 4343.1471363636365,
+        "pointUsSaved": 84.29118181818194,
+        "originalStatus": "gap",
+        "currentStatus": "uncertain",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              1.0145120415796838,
+              1.0250883332824559
+            ],
+            "candidateNormalizedBounds": [
+              0.987375239445892,
+              1.0064411752421472
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              1.0066126044862285,
+              1.0395059511824196
+            ],
+            "candidateNormalizedBounds": [
+              0.9821981281610063,
+              1.0173552644057475
+            ]
+          }
+        }
+      },
+      "EncodeFast16": {
+        "originalUs": 17956.64225,
+        "currentUs": 17776.5532,
+        "pointUsSaved": 180.08905000000232,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9583389033651877,
+              0.9680340582163277
+            ],
+            "candidateNormalizedBounds": [
+              0.9460772959495768,
+              0.962865784417855
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.957862015526128,
+              0.9698120295857147
+            ],
+            "candidateNormalizedBounds": [
+              0.944850555347275,
+              0.9662450633284019
+            ]
+          }
+        }
+      },
+      "EncodeFastCancelable16": {
+        "originalUs": 18279.7895,
+        "currentUs": 18197.48495833333,
+        "pointUsSaved": 82.30454166666823,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9778831072795868,
+              0.9853280194597218
+            ],
+            "candidateNormalizedBounds": [
+              0.9436863517171564,
+              0.9537082811310429
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9772337126534907,
+              0.9870043482742572
+            ],
+            "candidateNormalizedBounds": [
+              0.9436875236254227,
+              0.9537094552176635
+            ]
+          }
+        }
+      },
+      "EncodeFastForward16": {
+        "originalUs": 18019.729,
+        "currentUs": 17856.454125,
+        "pointUsSaved": 163.27487499999916,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9492109115771065,
+              0.9806143646781513
+            ],
+            "candidateNormalizedBounds": [
+              0.957035675403351,
+              0.96339303022643
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9493459593864877,
+              0.9816790758824823
+            ],
+            "candidateNormalizedBounds": [
+              0.9560137209567735,
+              0.9664842119753164
+            ]
+          }
+        }
+      },
+      "EncodeGray8": {
+        "originalUs": 2043.5162045454547,
+        "currentUs": 1993.14525,
+        "pointUsSaved": 50.37095454545465,
+        "originalStatus": "gap",
+        "currentStatus": "uncertain",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              1.0183604187718909,
+              1.0352601380086894
+            ],
+            "candidateNormalizedBounds": [
+              0.9860219589509166,
+              1.0172695561062381
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              1.0008632672882494,
+              1.065189415608093
+            ],
+            "candidateNormalizedBounds": [
+              0.9689451040967759,
+              1.0472353764591587
+            ]
+          }
+        }
+      },
+      "EncodeRgb8": {
+        "originalUs": 9481.322386363636,
+        "currentUs": 9370.010840909092,
+        "pointUsSaved": 111.3115454545441,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9616230578454112,
+              0.9777224369474267
+            ],
+            "candidateNormalizedBounds": [
+              0.941444942235404,
+              0.9679510004554664
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.960332027093655,
+              0.982321155726076
+            ],
+            "candidateNormalizedBounds": [
+              0.9403603701809445,
+              0.9717716554016983
+            ]
+          }
+        }
+      },
+      "EncodeGrayAlpha8": {
+        "originalUs": 4229.8101,
+        "currentUs": 4162.985147727273,
+        "pointUsSaved": 66.82495227272648,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9287821249142557,
+              0.9592805109007609
+            ],
+            "candidateNormalizedBounds": [
+              0.9284119148995814,
+              0.9430703761309239
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9230162447356529,
+              0.9716289538510786
+            ],
+            "candidateNormalizedBounds": [
+              0.9214279861599876,
+              0.9553777601802551
+            ]
+          }
+        }
+      },
+      "Encode8": {
+        "originalUs": 16857.242575,
+        "currentUs": 16744.893136363637,
+        "pointUsSaved": 112.34943863636363,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9721889802551115,
+              0.979110908796716
+            ],
+            "candidateNormalizedBounds": [
+              0.965413488293659,
+              0.9722467708344519
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9711140422164811,
+              0.9823287734046465
+            ],
+            "candidateNormalizedBounds": [
+              0.9645166849931845,
+              0.9745714830056531
+            ]
+          }
+        }
+      },
+      "Encode16": {
+        "originalUs": 20491.90186363636,
+        "currentUs": 20261.523772727272,
+        "pointUsSaved": 230.37809090908922,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9822239534405227,
+              0.989241120518412
+            ],
+            "candidateNormalizedBounds": [
+              0.9747527073876564,
+              0.9798348620056585
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9809303780031886,
+              0.9921938408404911
+            ],
+            "candidateNormalizedBounds": [
+              0.9730547208462647,
+              0.9830291017955093
+            ]
+          }
+        }
+      },
+      "EncodeRgb16": {
+        "originalUs": 15546.185806818181,
+        "currentUs": 15330.0731,
+        "pointUsSaved": 216.11270681818132,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9568638312392571,
+              0.9634829106716798
+            ],
+            "candidateNormalizedBounds": [
+              0.949737817017548,
+              0.956117776625332
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.954978279029348,
+              0.9673030989195859
+            ],
+            "candidateNormalizedBounds": [
+              0.9469376002044905,
+              0.9628756750437346
+            ]
+          }
+        }
+      },
+      "EncodeGray16": {
+        "originalUs": 4826.596181818181,
+        "currentUs": 4704.739090909091,
+        "pointUsSaved": 121.8570909090904,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.8770855095255073,
+              0.9026395113868714
+            ],
+            "candidateNormalizedBounds": [
+              0.8441879629753088,
+              0.8640966090753586
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.8728668011918306,
+              0.9109486593272166
+            ],
+            "candidateNormalizedBounds": [
+              0.8383558063845921,
+              0.8748595547124492
+            ]
+          }
+        }
+      },
+      "EncodeGrayAlpha16": {
+        "originalUs": 10023.863045454545,
+        "currentUs": 9874.421818181818,
+        "pointUsSaved": 149.4412272727277,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9471820198923299,
+              0.9575208063161889
+            ],
+            "candidateNormalizedBounds": [
+              0.9366717948737251,
+              0.9455166458292079
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9451027901330321,
+              0.9626387931108031
+            ],
+            "candidateNormalizedBounds": [
+              0.935002277613433,
+              0.9497137599665945
+            ]
+          }
+        }
+      },
+      "Png8AsyncNonSeekable": {
+        "originalUs": 16950.8864,
+        "currentUs": 16825.6835,
+        "pointUsSaved": 125.20290000000023,
+        "originalStatus": "pass",
+        "currentStatus": "pass",
+        "views": {
+          "statistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9649209785673799,
+              0.9692651406686705
+            ],
+            "candidateNormalizedBounds": [
+              0.9279942408490568,
+              0.9332393856135658
+            ]
+          },
+          "unfilteredActualStatistics": {
+            "rawRegressionSeparated": false,
+            "normalizedRegressionSeparated": false,
+            "originalNormalizedBounds": [
+              0.9632415689763941,
+              0.9732099689700349
+            ],
+            "candidateNormalizedBounds": [
+              0.9244315898201547,
+              0.9412193974255665
+            ]
+          }
+        }
+      }
+    },
+    "separatedRegressions": [],
+    "claim": "Currentcompletecosts, not blanketcausalgains. Reviewanymaterialcontradiction beforeadoption. No fixedpercentagegate."
+  },
+  "raw": {
+    "file": "png-length-classification-qualified.tar.xz",
+    "sha256": "4358bf7b5a731d9daa43d7023e5e186a04fc150a73bf9ae1dabaf07b91a569fb",
+    "bytes": 15382356,
+    "members": 377,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "receiptIdentitiesVerified": 1349,
+    "dependencies": [
+      {
+        "file": "png-streaming-token-frequencies-qualified.tar.xz",
+        "sha256": "f01517e50ed3f7b3c5d5ea7da2c9cd48194a89da77a130d2ed3301f42b2ee8ad"
+      },
+      {
+        "file": "png-normal-cursor-publication-qualified.tar.xz",
+        "sha256": "a22235f789fcbb8de23cfce7f819d58b78327561f264c565d8b3b7a6d40ed9b9"
+      },
+      {
+        "file": "png-private-parser-publication-experiment.tar.xz",
+        "sha256": "58be25b15fb5c4f0f33a7959f0e7122141c40cc0d331118f8af155367e4dcf44"
+      }
+    ]
+  }
+}
