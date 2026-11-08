@@ -4,7 +4,7 @@ namespace Lokad.Image.Internal;
 // integrate each nonzero-winding trapezoid clipped to a pixel. Quadratic curves
 // are subdivided until their control-to-chord midpoint deviation is <=1/1024 px.
 // Only edges, event/crossing arrays and one coverage row are stored, never a raster.
-internal sealed class TextRasterizer : IDisposable
+internal sealed partial class TextRasterizer : IDisposable
 {
     private readonly OperationContext context;
     private readonly Dictionary<TextLayout.Shape, RasterShape> shapes = new();
@@ -130,6 +130,7 @@ internal sealed class TextRasterizer : IDisposable
         }
         activeCount = count;
         TextRasterSort.Sort<Crossing, CrossingOrder>(crossings.AsSpan(0, count), context.Cancellation);
+        Span<Point> firstPolygon = stackalloc Point[8]; Span<Point> secondPolygon = stackalloc Point[8];
         var winding = 0; Edge start = default;
         for (var i = 0; i < count; i++)
         {
@@ -144,7 +145,7 @@ internal sealed class TextRasterizer : IDisposable
                 for (var px = (int)first; px < last; px++)
                 {
                     context.Cancellation.ThrowIfCancellationRequested();
-                    row[px - left] += Area(a - px, b - px, c - px, d - px, top + dy, bottom + dy);
+                    row[px - left] += Area(a - px, b - px, c - px, d - px, top + dy, bottom + dy, firstPolygon, secondPolygon);
                 }
             }
         }
@@ -152,15 +153,23 @@ internal sealed class TextRasterizer : IDisposable
     }
 
     // Polygon clipping happens in pixel-local coordinates before the area sum.
-    private static double Area(double a, double b, double c, double d, double top, double bottom)
+    private static double Area(double a, double b, double c, double d, double top, double bottom,
+        Span<Point> first, Span<Point> second)
     {
-        Span<Point> first = stackalloc Point[8]; Span<Point> second = stackalloc Point[8];
         first[0] = new(a, top); first[1] = new(b, top); first[2] = new(c, bottom); first[3] = new(d, bottom);
-        var count = Clip(first[..4], second, 0, greater: true);
-        count = Clip(second[..count], first, 1, greater: false);
-        if (count < 3) return 0;
-        double result = 0; var previous = first[count - 1];
-        for (var i = 0; i < count; i++) { var p = first[i]; result += previous.X * p.Y - p.X * previous.Y; previous = p; }
+        var leftInside = a >= 0 && b >= 0 && c >= 0 && d >= 0;
+        ReadOnlySpan<Point> polygon = first[..4];
+        if (!leftInside) polygon = second[..Clip(polygon, second, 0, greater: true)];
+        // A no-op clip only copies vertices in their original order. Clipping
+        // left introduces x=0 vertices, which also satisfy the right boundary.
+        if (!(a <= 1 && b <= 1 && c <= 1 && d <= 1))
+        {
+            var output = leftInside ? second : first;
+            polygon = output[..Clip(polygon, output, 1, greater: false)];
+        }
+        if (polygon.Length < 3) return 0;
+        double result = 0; var previous = polygon[^1];
+        foreach (var p in polygon) { result += previous.X * p.Y - p.X * previous.Y; previous = p; }
         return Math.Abs(result) * .5;
     }
     private static int Clip(ReadOnlySpan<Point> input, Span<Point> output, double boundary, bool greater)

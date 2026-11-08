@@ -1291,11 +1291,13 @@ def render():
     assert composites['qualification']['actualPackage']['sha256'] == composites['qualification']['samePackageLinux']['sameActualPackageSha256']
     assert composites['cases']['DrawingComposite8']['status'] == 'Confirmed gap'
     assert composites['cases']['DrawingComposite16']['status'] == 'Confirmed pass'
-    raster = json.loads((ROOT / 'benchmarks/text-raster-shared-sort-evidence.json').read_text(encoding='utf-8'))
+    raster = json.loads((ROOT / 'benchmarks/text-clipping-workspace-evidence.json').read_text(encoding='utf-8'))
     assert raster['productionAccepted'] and raster['independentQuietConfirmation']
-    assert raster['qualification']['fullChecksEachOs'] == 5898
+    assert raster['qualification']['fullChecksEachOs'] == 5909
     assert raster['qualification']['actualPackage']['sha256'] == raster['qualification']['samePackageLinux']['sameActualPackageSha256']
-    assert raster['decision']['allocationReductionVerified'] and raster['decision']['cpuGainInconclusive']
+    assert raster['decision']['cpuGainInconclusive']
+    assert raster['sourceProof']['unchangedRasterSourceOutsideScratchPlacementAndArea']
+    assert raster['sourceProof']['unchangedClippingIntersectionsSortGeometryEventsBlendOwnersLimitsAndPolls']
     assert raster['rawArchive']['mirrored'] and raster['rawArchive']['allMembersVerified']
     for case_id, previous in text_current['observations'].items():
         case = (font_load['current'] if case_id == 'FontLoadRegular'
@@ -1934,10 +1936,12 @@ Current scope and remaining work:
   [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
-- **Text/drawing:** [shared raster sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md)
-  cuts allocation by25,016B/draw (27.08%) to67,368B. Point costs153.86/147.75µs
-  have inconclusive causal CPUgains; both reference gaps remain. Exactframes,
- 48,544B admitted Latin workspace and zero retainedscratch remain.
+- **Text/drawing:** [band clipping workspace](../benchmarks/TEXT-CLIPPING-WORKSPACE.md)
+  reuses scratch and skips no-op copies. Current136.57/137.43µs means are7.6%/8.5%
+  lower than the contemporaneous original; intervals overlap, so a causal CPUgain
+  remains inconclusive. Both reference gaps remain. Allocation67,368B/draw,
+  exactframes,48,544B admitted Latin workspace and zero retainedscratch are unchanged.
+  [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
   [Owned font storage](../benchmarks/FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
@@ -1946,7 +1950,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{pq['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{raster['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8

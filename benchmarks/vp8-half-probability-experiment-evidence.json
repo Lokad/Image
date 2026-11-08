@@ -1,0 +1,640 @@
+{
+  "project": "Lokad.Image",
+  "stage": "VRA585/VHP586",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "design": {
+    "project": "Lokad.Image",
+    "round": "VHP586",
+    "paths": [
+      "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs",
+      "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs",
+      "tests/Lokad.Image.Tests/Vp8HalfProbabilityTests.cs"
+    ],
+    "originalAbsent": [
+      "tests/Lokad.Image.Tests/Vp8HalfProbabilityTests.cs"
+    ],
+    "baselineCommit": "8e7e0b627aedcf60ee0092dc0aaac6fb5b45a052",
+    "baseline": {
+      "windowsSha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+      "linuxSha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf"
+    },
+    "transitionFromLinuxSha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+    "transitionFromSources": {
+      "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1004c68e9ff7c90c6b8b82513da980d49f06be96ea1cb9f0dbc9d9ce31946c5f",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "f9d66901a88f16b92fcbe27693a2dd84cdd5c4cc008e3d95a8ec6d93dcc69644",
+      "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "764403fe6b00063125e8ae70e1e91b87788f1e2f7175a38c7a1c273ce3cc35c8"
+    },
+    "hypothesis": "VRA585source-validliveprofile identifies fixed128sign arithmetic retaining multiply/shift andgenericrangeupdate. Directhalf formulas remove redundant arithmetic while preserving sharednormalization/refill andeverypoll. Samplelocations areleads, notphasetimes orpredictedgain.",
+    "endState": "One codec-localReadHalf primitive with directhalfboundary/range formulas andsharedNormalize/Fill, usedonlybylivesign decision throughoneexisting-equivalent cancellationcheck. GeneralRead/TokenRead/categories/traversal/owners remainunchanged. A smallfixed-probabilityprimitive, not a window-lifetime or canceled-tokenhome replay.",
+    "proof": {
+      "format": "RFC6386section7.2",
+      "normalizedRangeDomain": [
+        128,
+        255
+      ],
+      "strongerExhaustiveRangeDomain": [
+        1,
+        255
+      ],
+      "combinations": 510,
+      "boundary": "Forprobability128, 1+(((range-1)*128)>>8) == (range+1)>>1.",
+      "remainingRange": "boundary+((range-2*boundary)&(-bit)) == (range+1-bit)>>1.",
+      "valueAndInput": "Samevalue comparison/subtraction and sharedNormalize/Fill beforedecision; no changedlookahead, codealignment, canonicalstate or cancellationpoll.",
+      "modelSha256": "c6c2d19d3534be96f2c4adfdcb302d656d5a834a1b5c0b04082ec81893f9a59f",
+      "intendedEndState": "One codec-localReadHalf primitive with directhalfboundary/range formulas andsharedNormalize/Fill, usedonlybylivesign decision throughoneexisting-equivalent cancellationcheck. GeneralRead/TokenRead/categories/traversal/owners remainunchanged. A smallfixed-probabilityprimitive, not a window-lifetime or canceled-tokenhome replay.",
+      "nextRequiredProof": "Beforeadoption actualproductionHalf vs unchangedgeneralRead acrosslegalranges/cachebitphases/refillthresholds/valuecutoffs/followingreads, exactcanceledprefix/token, fullcoefficientclasses/pixels andownership/nativecompletecase. Sourceidentity/math isnotCPUproof; oneexistingOpaqueCancelable8shortfirst, no newmatrix.",
+      "risks": "JITmayalreadyhideinstructioncost or addedinlinehelper/codeplacementmaynegateit. Refills/normalization/domains muststayexact; generalizedReadmustnotgainaprobabilitybranch. No fixedpercentage orpredictedgain."
+    },
+    "workloads": [
+      "OpaqueCancelable8"
+    ],
+    "acceptance": "ActualHalf vs unchangedgeneralRead for255ranges*32cachebitpositions*5cutoffvalues includingrefill, exactstate andfollowingdecisions. Generalizeexisting305cancellationordinal/canonicalprefix/followingread oracle toHalf. Existingfullcoefficientclass/model/quantization/frozenpixel, rootownership/refusal/cancel/recovery controls unchanged. Focusednormal/scalarW/L thenexistingcompleteOpaqueCancelable8short; independentifuseful, acceptedcoherentstageW/Lfull/live/SAMEactualpackage.",
+    "invalidation": "Only livecoefficient sign invokesHalf. GeneralRead/TokenRead/categories/ordinarydecoder/shorttail/encoders unchanged, no classfields. Refresh existingliveOpaqueCancelable8 ifaccepted; audit frozenothercontroltokens before source-validevidence reuse. Pixel/Validationfunctional modes remainexact; no newworkloadgrid.",
+    "tradeoffs": "Inlinehelper/codeplacement mayerase arithmeticbenefit. No generalizedprobabilitybranch, cache/session/allocation orbound changes. Preserveadverseresults and exactimmutableoriginalrestore ifunhelpful. No fixedpercentage or gainclaim fromalgebra.",
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "productionAccepted": false
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "VHP586",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1c31f407ff95018ee434146953eb2cd473a5131369902474f6987e08542dd834",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "bb5126676b4571ebf4cdb3a1adcb314149a7e7b23f0b079c2437c973b6ad0823",
+      "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "ebca0fc34931a5cbd22ffafa2f96aa640a869c68501c160a21a081a0ff56c16e",
+      "tests/Lokad.Image.Tests/Vp8HalfProbabilityTests.cs": "e6f450d3cc5df102d7295b5e1c7ee46d067b6a9287bd182e0eed8fbb27472f2f"
+    },
+    "fullOrdinaryBlockSourceReconstructsOriginalOutsideNewHalfPrimitive": true,
+    "fullLiveBlockSourceReconstructsOriginalOutsideHalfWrapperAndSignCall": true,
+    "generalReadTokenReadNormalizeFillPublishCategoriesAndAllFieldLayoutExact": true,
+    "coefficientTraversalModelQuantizationStoresAndEveryDecisionPollExact": true,
+    "proof": {
+      "format": "RFC6386section7.2",
+      "normalizedRangeDomain": [
+        128,
+        255
+      ],
+      "strongerExhaustiveRangeDomain": [
+        1,
+        255
+      ],
+      "combinations": 510,
+      "boundary": "Forprobability128, 1+(((range-1)*128)>>8) == (range+1)>>1.",
+      "remainingRange": "boundary+((range-2*boundary)&(-bit)) == (range+1-bit)>>1.",
+      "valueAndInput": "Samevalue comparison/subtraction and sharedNormalize/Fill beforedecision; no changedlookahead, codealignment, canonicalstate or cancellationpoll.",
+      "modelSha256": "c6c2d19d3534be96f2c4adfdcb302d656d5a834a1b5c0b04082ec81893f9a59f",
+      "intendedEndState": "One codec-localReadHalf primitive with directhalfboundary/range formulas andsharedNormalize/Fill, usedonlybylivesign decision throughoneexisting-equivalent cancellationcheck. GeneralRead/TokenRead/categories/traversal/owners remainunchanged. A smallfixed-probabilityprimitive, not a window-lifetime or canceled-tokenhome replay.",
+      "nextRequiredProof": "Beforeadoption actualproductionHalf vs unchangedgeneralRead acrosslegalranges/cachebitphases/refillthresholds/valuecutoffs/followingreads, exactcanceledprefix/token, fullcoefficientclasses/pixels andownership/nativecompletecase. Sourceidentity/math isnotCPUproof; oneexistingOpaqueCancelable8shortfirst, no newmatrix.",
+      "risks": "JITmayalreadyhideinstructioncost or addedinlinehelper/codeplacementmaynegateit. Refills/normalization/domains muststayexact; generalizedReadmustnotgainaprobabilitybranch. No fixedpercentage orpredictedgain."
+    },
+    "runtimeProof": "ActualunchangedGeneralRead vsnewHalf across40800legalrange/cache/cutoff states andfollowingdecisions; original+half305ordinalcancel/canonicalprefix and19followingreads; actualfullcoefficientclasses andpublicroot/stream/pixel tests passbothOSnormal/scalar.",
+    "storage": "No newarray/cache/session/owner/classfield orreservation. Existing8192BcoarseVP8decoder allowance andoutputownership unchanged; no physical/nativepeakclaim.",
+    "invalidation": "Only livecoefficient sign usesnewhelper. Sourceunchangedordinary/shorttail/categories andencoders/PNG/JPEG/VP8L/edit/text reuse evidence. ExistingOpaqueCancelable8 currentcost mustrefresh ifaccepted; auditdeclaredtokenuse forotherexistingcontrols, no newgrid."
+  },
+  "attribution": {
+    "project": "Lokad.Image",
+    "stage": "VRA585",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newProfilesOrTimingJobs": 0,
+    "currentWindowsSha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+    "sources": {
+      "src/Lokad.Image/Internal/Vp8BooleanReader.cs": "7f50bbc9618ee650f115f69f46ec6f88f26cb296e5ffc42fdb001293478992f7",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1004c68e9ff7c90c6b8b82513da980d49f06be96ea1cb9f0dbc9d9ce31946c5f",
+      "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "f9d66901a88f16b92fcbe27693a2dd84cdd5c4cc008e3d95a8ec6d93dcc69644",
+      "src/Lokad.Image/Internal/Vp8Decoder.cs": "d1cd5d50be93b2dcd2e1107b56c69b3aebaeac3e592d11cf82966ec2e7f19c46",
+      "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "764403fe6b00063125e8ae70e1e91b87788f1e2f7175a38c7a1c273ce3cc35c8"
+    },
+    "sourceValidProfile": "tmp/vla563-live-profile-summary.json",
+    "profileSha256": "f28cf3a8f60ef03472a91800b7384002283e7afc1bdd567b3ea70f22d1085488",
+    "existingRawProvider": "tmp/vp8-live-macroblock-window-experiment.tar.xz",
+    "scope": "Allfive relevantreader/decoder/oracle sources match existingVLA563qualifiedaudit exactly. Reuse1484/1998samplelocations; no currentexactcodegen orphasetime claim, no recapture afterunrelatedPNG edit.",
+    "categoryAlreadyInlined": true,
+    "hotBlocks": [
+      {
+        "block": "G_M000_IG72",
+        "offset": "0x9ee",
+        "samples": 148,
+        "code": "G_M000_IG72:                ;; offset=0x09EE\n       488B85F0FEFFFF       mov      rax, bword ptr [rbp-0x110]\n       488B8D10FFFFFF       mov      rcx, qword ptr [rbp-0xF0]\n       440FB60408           movzx    r8, byte  ptr [rax+rcx]\n       443B4518             cmp      r8d, dword ptr [rbp+0x18]\n       0F8301020000         jae      G_M000_IG98\n       488B5D10             mov      rbx, bword ptr [rbp+0x10]\n       4E8D0443             lea      r8, bword ptr [rbx+2*r8]\n       85C9                 test     ecx, ecx\n       7405                 je       SHORT G_M000_IG73\n       8B5D30               mov      ebx, dword ptr [rbp+0x30]\n       EB03                 jmp      SHORT G_M000_IG74\n \n"
+      },
+      {
+        "block": "G_M000_IG17",
+        "offset": "0x2af",
+        "samples": 132,
+        "code": "G_M000_IG17:                ;; offset=0x02AF\n       418D5DFF             lea      ebx, [r13-0x01]\n       440FAFD3             imul     r10d, ebx\n       41C1FA08             sar      r10d, 8\n       41FFC2               inc      r10d\n       4963DA               movsxd   rbx, r10d\n       C4E289F7DB           shlx     rbx, rbx, r14\n       4C3BE3               cmp      r12, rbx\n       7318                 jae      SHORT G_M000_IG18\n       458BEA               mov      r13d, r10d\n       41B901000000         mov      r9d, 1\n       41BA01000000         mov      r10d, 1\n       448955A0             mov      dword ptr [rbp-0x60], r10d\n       E94F060000           jmp      G_M000_IG68\n \n"
+      },
+      {
+        "block": "G_M000_IG76",
+        "offset": "0xa4b",
+        "samples": 102,
+        "code": "G_M000_IG76:                ;; offset=0x0A4B\n       83F910               cmp      ecx, 16\n       0F83B8010000         jae      G_M000_IG98\n       48898D10FFFFFF       mov      qword ptr [rbp-0xF0], rcx\n       450FB6140A           movzx    r10, byte  ptr [r10+rcx]\n       478D1452             lea      r10d, [r10+2*r10]\n       4403D3               add      r10d, ebx\n       4503CA               add      r9d, r10d\n       44898520FFFFFF       mov      dword ptr [rbp-0xE0], r8d\n       453BC8               cmp      r9d, r8d\n       0F8392010000         jae      G_M000_IG98\n       4D6BC90B             imul     r9, r9, 11\n       4C038D00FFFFFF       add      r9, bword ptr [rbp-0x100]\n       4585DB               test     r11d, r11d\n       0F85EEF6FFFF         jne      G_M000_IG08\n \n"
+      },
+      {
+        "block": "G_M000_IG71",
+        "offset": "0x9a0",
+        "samples": 91,
+        "code": "G_M000_IG71:                ;; offset=0x09A0\n       418D5DFF             lea      ebx, [r13-0x01]\n       C1E307               shl      ebx, 7\n       C1FB08               sar      ebx, 8\n       FFC3                 inc      ebx\n       4C63C3               movsxd   r8, ebx\n       C44289F7C0           shlx     r8, r8, r14\n       4D3BC4               cmp      r8, r12\n       410F96C0             setbe    r8b\n       450FB6C0             movzx    r8, r8b\n       418BC0               mov      eax, r8d\n       F7D8                 neg      eax\n       898524FFFFFF         mov      dword ptr [rbp-0xDC], eax\n       23C3                 and      eax, ebx\n       4898                 cdqe     \n       C4E289F7C0           shlx     rax, rax, r14\n       4C2BE0               sub      r12, rax\n       8D041B               lea      eax, [rbx+rbx]\n       442BE8               sub      r13d, eax\n       4423AD24FFFFFF       and      r13d, dword ptr [rbp-0xDC]\n       4403EB               add      r13d, ebx\n       4585C0               test     r8d, r8d\n       7403                 je       SHORT G_M000_IG72\n       41F7D9               neg      r9d\n \n"
+      },
+      {
+        "block": "G_M000_IG11",
+        "offset": "0x1dc",
+        "samples": 86,
+        "code": "G_M000_IG11:                ;; offset=0x01DC\n       458D55FF             lea      r10d, [r13-0x01]\n       450FAFD3             imul     r10d, r11d\n       41C1FA08             sar      r10d, 8\n       41FFC2               inc      r10d\n       4D63DA               movsxd   r11, r10d\n       C44289F7DB           shlx     r11, r11, r14\n       4D3BE3               cmp      r12, r11\n       733E                 jae      SHORT G_M000_IG14\n \n"
+      },
+      {
+        "block": "G_M000_IG12",
+        "offset": "0x1f8",
+        "samples": 80,
+        "code": "G_M000_IG12:                ;; offset=0x01F8\n       458BEA               mov      r13d, r10d\n       41BB01000000         mov      r11d, 1\n       4533D2               xor      r10d, r10d\n       448955A0             mov      dword ptr [rbp-0x60], r10d\n       44895DA4             mov      dword ptr [rbp-0x5C], r11d\n       488B85F0FEFFFF       mov      rax, bword ptr [rbp-0x110]\n       488B8D10FFFFFF       mov      rcx, qword ptr [rbp-0xF0]\n       E908080000           jmp      G_M000_IG75\n                            align    [0 bytes for IG56]\n \n"
+      },
+      {
+        "block": "G_M000_IG09",
+        "offset": "0x196",
+        "samples": 76,
+        "code": "G_M000_IG09:                ;; offset=0x0196\n       4533D2               xor      r10d, r10d\n       F3450FBDD5           lzcnt    r10d, r13d\n       4183C2E8             add      r10d, -24\n       C44229F7ED           shlx     r13d, r13d, r10d\n       452BF2               sub      r14d, r10d\n       4183FE08             cmp      r14d, 8\n       7D2C                 jge      SHORT G_M000_IG11\n \n"
+      },
+      {
+        "block": "G_M000_IG18",
+        "offset": "0x2e3",
+        "samples": 69,
+        "code": "G_M000_IG18:                ;; offset=0x02E3\n       452BEA               sub      r13d, r10d\n       4C2BE3               sub      r12, rbx\n       C745A002000000       mov      dword ptr [rbp-0x60], 2\n       410FB65903           movzx    rbx, byte  ptr [r9+0x03]\n       4889BD68FFFFFF       mov      gword ptr [rbp-0x98], rdi\n       4883BD68FFFFFF00     cmp      gword ptr [rbp-0x98], 0\n       7412                 je       SHORT G_M000_IG20\n \n"
+      }
+    ],
+    "calls": [
+      "FF1552AD7A01         call     [Lokad.Image.Internal.Vp8BooleanReader+BlockReader:Publish(byref):this]",
+      "FF15319F4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15269F4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15189F4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF150A9F4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15FC9E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15EE9E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15E09E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15D29E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15C49E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15B69E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15A89E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF159A9E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF158C9E4101         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF15C514F8FF         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+      "E8BF5AF7FF           call     CORINFO_HELP_RNGCHKFAIL"
+    ],
+    "removedLead": "A category return-by-value ABI wouldnotremoveanexistingcall: Category is alreadyinlined in actuallivecoefficientbody. Do notprototype it on a falseboundary assumption.",
+    "previousExperiments": "VCW574/VCB575macroblockwindow, VCP519CancellationToken homes andVHA564alignment arepreservedunselected implementations, notpermanentbans. Anynewdesign mustremove materiallydifferent repeatedwork or present newevidence.",
+    "next": "Prepare boundedfixed-half live-sign experiment from thisexactarithmeticlead; no newproductionedit/build/profile/timingyet.",
+    "halfProbabilityLead": {
+      "format": "RFC6386section7.2",
+      "normalizedRangeDomain": [
+        128,
+        255
+      ],
+      "strongerExhaustiveRangeDomain": [
+        1,
+        255
+      ],
+      "combinations": 510,
+      "boundary": "Forprobability128, 1+(((range-1)*128)>>8) == (range+1)>>1.",
+      "remainingRange": "boundary+((range-2*boundary)&(-bit)) == (range+1-bit)>>1.",
+      "valueAndInput": "Samevalue comparison/subtraction and sharedNormalize/Fill beforedecision; no changedlookahead, codealignment, canonicalstate or cancellationpoll.",
+      "modelSha256": "c6c2d19d3534be96f2c4adfdcb302d656d5a834a1b5c0b04082ec81893f9a59f",
+      "intendedEndState": "One codec-localReadHalf primitive with directhalfboundary/range formulas andsharedNormalize/Fill, usedonlybylivesign decision throughoneexisting-equivalent cancellationcheck. GeneralRead/TokenRead/categories/traversal/owners remainunchanged. A smallfixed-probabilityprimitive, not a window-lifetime or canceled-tokenhome replay.",
+      "nextRequiredProof": "Beforeadoption actualproductionHalf vs unchangedgeneralRead acrosslegalranges/cachebitphases/refillthresholds/valuecutoffs/followingreads, exactcanceledprefix/token, fullcoefficientclasses/pixels andownership/nativecompletecase. Sourceidentity/math isnotCPUproof; oneexistingOpaqueCancelable8shortfirst, no newmatrix.",
+      "risks": "JITmayalreadyhideinstructioncost or addedinlinehelper/codeplacementmaynegateit. Refills/normalization/domains muststayexact; generalizedReadmustnotgainaprobabilitybranch. No fixedpercentage orpredictedgain."
+    }
+  },
+  "preparation": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "baselineSha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+      "candidateSha256": "f98082ada6d05ab05f7a87d8612cdec537aa09977ec5a7b139299a9ef7d204ee",
+      "internalTestAssemblySha256": "27056caa51d899e8aa97823ebb7c8f70d93bfc30a3bda92048453e238b686255",
+      "focused": {
+        "internal-normal": 16,
+        "internal-scalar": 16,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1c31f407ff95018ee434146953eb2cd473a5131369902474f6987e08542dd834",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "bb5126676b4571ebf4cdb3a1adcb314149a7e7b23f0b079c2437c973b6ad0823",
+        "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "ebca0fc34931a5cbd22ffafa2f96aa640a869c68501c160a21a081a0ff56c16e",
+        "tests/Lokad.Image.Tests/Vp8HalfProbabilityTests.cs": "e6f450d3cc5df102d7295b5e1c7ee46d067b6a9287bd182e0eed8fbb27472f2f"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "baselineSha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "candidateSha256": "23114dff69745728e1abc86adc9e5e3c18e995ca178dc8a20cea315d84e3653d",
+      "internalTestAssemblySha256": "5246e75f94ad41111a9ab94b162b002dfea1b4c7cb5f5ec7a4ce409cfd81199a",
+      "focused": {
+        "internal-normal": 16,
+        "internal-scalar": 16,
+        "public-normal": 239,
+        "public-scalar": 239
+      },
+      "sources": {
+        "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1c31f407ff95018ee434146953eb2cd473a5131369902474f6987e08542dd834",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "bb5126676b4571ebf4cdb3a1adcb314149a7e7b23f0b079c2437c973b6ad0823",
+        "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "ebca0fc34931a5cbd22ffafa2f96aa640a869c68501c160a21a081a0ff56c16e",
+        "tests/Lokad.Image.Tests/Vp8HalfProbabilityTests.cs": "e6f450d3cc5df102d7295b5e1c7ee46d067b6a9287bd182e0eed8fbb27472f2f"
+      },
+      "coreVersions": 1,
+      "internalVersions": 1,
+      "publicHarnessNativeSelectorFixtureBuilds": 0,
+      "productionAccepted": false
+    }
+  },
+  "restoration": {
+    "windows": {
+      "project": "Lokad.Image",
+      "system": "windows",
+      "restored": true,
+      "productionSha256": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "92eae3b82cfccf5b7115eeafb244fc423a0b17bfee4e749d6fc283df56cd47e7",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "9b28350e913452ddf9ed870d7029edd5b8c1fa5ec088b1334de93f3f21b648d1",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "856a25807b27dd5cde3d8ba415782c85b7ec4872c337375f9db28355df64fb64",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "2a6bbaffb444ecd25092b3449e439ac4972ced6baf63e831fd5cdada001f3dd3",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "0ab65cb1ddf46d15c5ae2fa0dc628f57e1ef07fa89850b1ca1985bcb43f54fcb",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1004c68e9ff7c90c6b8b82513da980d49f06be96ea1cb9f0dbc9d9ce31946c5f",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "f9d66901a88f16b92fcbe27693a2dd84cdd5c4cc008e3d95a8ec6d93dcc69644",
+        "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "764403fe6b00063125e8ae70e1e91b87788f1e2f7175a38c7a1c273ce3cc35c8"
+      },
+      "qualificationReused": "LSF584sameactualproduction/modules5907full/live eachOS plusaffectednormal/scalar/SAMEpackage/all3examples; unpublishedactual8b6cpackageunchanged. No repeatedfull/package or rebuild."
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "system": "linux",
+      "restored": true,
+      "productionSha256": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "39d95e020437af1b71be13507a0d4e2af95aa053e74d1c3bce1749665f870edf",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.pdb": "0f9b72601f421fd3c87ec0afc3ff94c7b8fa1bdd306250ea3b1a6903828b4bce",
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.xml": "ffbc3a4c34986bf8507f3534f7827e9d6382fe978ae042c305531cf85c5a4795",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "2bc27a445688d82c6ab25a957e51ec88db081d5a8c4dce7bd5c3ae3ad69ca321",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.pdb": "95d104ddf3f14599b4e99c24c81bf9ba17ed5cd416898ca3db4d5afcd90f8ff4",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": "1004c68e9ff7c90c6b8b82513da980d49f06be96ea1cb9f0dbc9d9ce31946c5f",
+        "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": "f9d66901a88f16b92fcbe27693a2dd84cdd5c4cc008e3d95a8ec6d93dcc69644",
+        "tests/Lokad.Image.Tests/Vp8CancellableBlockTests.cs": "764403fe6b00063125e8ae70e1e91b87788f1e2f7175a38c7a1c273ce3cc35c8"
+      },
+      "sourceSha256": "bfb0376c1b763f781bfb2f01f4910edfb70e084ec5fb81e3f84982c2f1252fd7",
+      "qualificationReused": "ExactLSF584modules/source restore; existing5907full/live/scalar/SAMEpackage reused. No rebuild/full/package repeat."
+    }
+  },
+  "screen": {
+    "project": "Lokad.Image",
+    "caseId": "OpaqueCancelable8",
+    "subject": "candidate",
+    "mode": "short",
+    "runId": "vhp586-candidate-OpaqueCancelable8-short",
+    "managed": {
+      "statistics": {
+        "OriginalValues": [
+          5005035.833333333,
+          4975570.604166667,
+          4976269.5625
+        ],
+        "N": 3,
+        "Min": 4975570.604166667,
+        "LowerFence": 4953821.161458336,
+        "Q1": 4975920.083333334,
+        "Median": 4976269.5625,
+        "Mean": 4985625.333333333,
+        "Q3": 4990652.697916666,
+        "UpperFence": 5012751.619791664,
+        "Max": 5005035.833333333,
+        "InterquartileRange": 14732.614583332092,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 9707.34718955055,
+        "Variance": 282697768.37542486,
+        "StandardDeviation": 16813.6185390125,
+        "Skewness": 0.3841520054187998,
+        "Kurtosis": 0.6666666666666953,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 4985625.333333333,
+          "StandardError": 9707.34718955055,
+          "Level": 12,
+          "Margin": 306742.9923937974,
+          "Lower": 4678882.340939536,
+          "Upper": 5292368.32572713
+        },
+        "Percentiles": {
+          "P0": 4975570.604166667,
+          "P25": 4975920.083333334,
+          "P50": 4976269.5625,
+          "P67": 4986050.0945833335,
+          "P80": 4993529.325,
+          "P85": 4996405.952083333,
+          "P90": 4999282.579166667,
+          "P95": 5002159.20625,
+          "P100": 5005035.833333333
+        }
+      },
+      "unfilteredActualStatistics": {
+        "OriginalValues": [
+          5005038.958333333,
+          4975573.729166667,
+          4976272.6875
+        ],
+        "N": 3,
+        "Min": 4975573.729166667,
+        "LowerFence": 4953824.286458336,
+        "Q1": 4975923.208333334,
+        "Median": 4976272.6875,
+        "Mean": 4985628.458333333,
+        "Q3": 4990655.822916666,
+        "UpperFence": 5012754.744791664,
+        "Max": 5005038.958333333,
+        "InterquartileRange": 14732.614583332092,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 9707.34718955055,
+        "Variance": 282697768.37542486,
+        "StandardDeviation": 16813.6185390125,
+        "Skewness": 0.3841520054187998,
+        "Kurtosis": 0.6666666666666953,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 4985628.458333333,
+          "StandardError": 9707.34718955055,
+          "Level": 12,
+          "Margin": 306742.9923937974,
+          "Lower": 4678885.465939536,
+          "Upper": 5292371.45072713
+        },
+        "Percentiles": {
+          "P0": 4975573.729166667,
+          "P25": 4975923.208333334,
+          "P50": 4976272.6875,
+          "P67": 4986053.2195833335,
+          "P80": 4993532.45,
+          "P85": 4996409.077083333,
+          "P90": 4999285.704166667,
+          "P95": 5002162.33125,
+          "P100": 5005038.958333333
+        }
+      },
+      "actual": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 48,
+          "Nanoseconds": 240241870
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 48,
+          "Nanoseconds": 238827539
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 48,
+          "Nanoseconds": 238861089
+        }
+      ],
+      "results": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 48,
+          "Nanoseconds": 240241720
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 48,
+          "Nanoseconds": 238827389
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 4,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 48,
+          "Nanoseconds": 238860939
+        }
+      ],
+      "rawGc": "// GC:  0 0 0 10985472 48",
+      "rawThreading": "// Threading:  0 0 48",
+      "extraStatsRecorded": true
+    },
+    "nativeBrackets": [
+      {
+        "mean": 4792208.770833333,
+        "standardError": 4861.045819447432,
+        "confidenceLower": 4638604.319307611,
+        "confidenceUpper": 4945813.222359055,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 16,
+            "ElapsedNanoseconds": 76823458,
+            "CompletedOperations": 98,
+            "Observed": 13818,
+            "OutputStride": 2080,
+            "Cpu": 0,
+            "OutputBytes": 531468,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 4801466.125
+          },
+          {
+            "State": "sample",
+            "Operations": 16,
+            "ElapsedNanoseconds": 76560129,
+            "CompletedOperations": 114,
+            "Observed": 16074,
+            "OutputStride": 2080,
+            "Cpu": 0,
+            "OutputBytes": 531468,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 4785008.0625
+          },
+          {
+            "State": "sample",
+            "Operations": 16,
+            "ElapsedNanoseconds": 76642434,
+            "CompletedOperations": 130,
+            "Observed": 18330,
+            "OutputStride": 2080,
+            "Cpu": 0,
+            "OutputBytes": 531468,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 4790152.125
+          }
+        ]
+      },
+      {
+        "mean": 4783843.020833333,
+        "standardError": 1614.2922937959618,
+        "confidenceLower": 4732832.910745765,
+        "confidenceUpper": 4834853.130920901,
+        "samples": [
+          {
+            "State": "sample",
+            "Operations": 16,
+            "ElapsedNanoseconds": 76542977,
+            "CompletedOperations": 194,
+            "Observed": 27354,
+            "OutputStride": 2080,
+            "Cpu": 0,
+            "OutputBytes": 531468,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 4783936.0625
+          },
+          {
+            "State": "sample",
+            "Operations": 16,
+            "ElapsedNanoseconds": 76496026,
+            "CompletedOperations": 210,
+            "Observed": 29610,
+            "OutputStride": 2080,
+            "Cpu": 0,
+            "OutputBytes": 531468,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 4781001.625
+          },
+          {
+            "State": "sample",
+            "Operations": 16,
+            "ElapsedNanoseconds": 76585462,
+            "CompletedOperations": 226,
+            "Observed": 31866,
+            "OutputStride": 2080,
+            "Cpu": 0,
+            "OutputBytes": 531468,
+            "CpuElapsedNanoseconds": null,
+            "NanosecondsPerOperation": 4786591.375
+          }
+        ]
+      }
+    ],
+    "managedUs": 4985.625333333333,
+    "nativeUs": 4783.843020833333,
+    "ratio": 1.0421799610943023,
+    "lower": 0.9460289199331716,
+    "upper": 1.1409404826141982,
+    "allocatedBytes": 228864,
+    "packetBytes": 531468,
+    "packetSha256": "d554b9166a0669ce581ede6b9197156c4041efa41dde182d9ffd61968fb950ac",
+    "librarySha256": "23114dff69745728e1abc86adc9e5e3c18e995ca178dc8a20cea315d84e3653d",
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "status": "uncertain"
+  },
+  "retainedOriginal": {
+    "provider": "tmp/vpm524-candidate-OpaqueCancelable8-confirm-observation.json",
+    "managedUs": 4979.430321022727,
+    "nativeUs": 4789.6380625,
+    "ratio": 1.0396255950963575,
+    "lower": 1.0364361868481475,
+    "upper": 1.043905115916846,
+    "allocatedBytes": 228864
+  },
+  "decision": "Unselected. Exacthalf formulas and40800runtimeoracles/305cancelordinals passbothOSnormal/scalar. Complete3actualOpaqueCancelable8screen4985.63/native4783.84us isflat vsretained4979.43/native4789.64us; no usefulgain or statisticalregression/parityclaim. No variants/independentconfirmation/passingcase retune. Qualifiedsources/main/embedded/publicbindings restoredbyteexact, prototypeHalf/testfile removed; no deadimplementation/tests retained. Previous5907W/L/full/live/scalar/SAME8b6package/all3examples proof reusedwithoutrebuild/repeat.",
+  "workflow": {
+    "validCoreEmbeddedVersionsEachOs": 1,
+    "focusedInternalEachModeEachOs": 16,
+    "focusedPublicEachModeEachOs": 239,
+    "publicHarnessNativeFixtureSelectorBuilds": 0,
+    "shortActuals": 3,
+    "independentConfirmations": 0,
+    "originalTimingRuns": 0,
+    "newProfiles": 0,
+    "favorableRepeats": 0,
+    "fullOrPackageRepeats": 0,
+    "failures": "No build/test/originalgate failure. Unpromisingcomplete screen retained, not resampled."
+  },
+  "storage": {
+    "allocatedBytesPerOperation": 228864,
+    "newOwnedCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "retainedOutputBytes": 531468,
+    "physicalNativePeakRemeasured": false
+  },
+  "next": "LeaveexistingliveVP8gap open. Fixedhalf failedimplementation isnotfamilyban. Prioritize drawingpipeline preparation/reuse for108us/3xrelativegap, usingboundedsourcevalidattribution beforefurthermicroarithmetic. Keep exactmanagedtext/pixels andapproved integration/visualgates; no newmatrix or productiondependency.",
+  "raw": {
+    "path": "tmp/vp8-half-probability-experiment.tar.xz",
+    "sha256": "2e2d2e7287320f236eae5a5b84688dd8a72fa6e91c899f04f5ce10270952d895",
+    "bytes": 4774444,
+    "members": 97,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "path": "tmp/vp8-live-macroblock-window-experiment.tar.xz",
+        "sha256": "d82bd9381adb79c3eeda0856fa5ab2abf10a6ec4188a22867258a13be5f5091e"
+      },
+      {
+        "file": "png-length-classification-qualified.tar.xz",
+        "sha256": "4358bf7b5a731d9daa43d7023e5e186a04fc150a73bf9ae1dabaf07b91a569fb",
+        "bytes": 15382356,
+        "members": 377,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "receiptIdentitiesVerified": 1349,
+        "dependencies": [
+          {
+            "file": "png-streaming-token-frequencies-qualified.tar.xz",
+            "sha256": "f01517e50ed3f7b3c5d5ea7da2c9cd48194a89da77a130d2ed3301f42b2ee8ad"
+          },
+          {
+            "file": "png-normal-cursor-publication-qualified.tar.xz",
+            "sha256": "a22235f789fcbb8de23cfce7f819d58b78327561f264c565d8b3b7a6d40ed9b9"
+          },
+          {
+            "file": "png-private-parser-publication-experiment.tar.xz",
+            "sha256": "58be25b15fb5c4f0f33a7959f0e7122141c40cc0d331118f8af155367e4dcf44"
+          }
+        ]
+      },
+      {
+        "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+        "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1",
+        "bytes": 10813884,
+        "members": 356,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "vp8-four-block-histogram-qualified.tar.xz",
+            "sha256": "4f8b1b05bbfb83c9c4161778befe4d92f05b19330396b9f7cbef1449b3bcfdbc"
+          },
+          {
+            "file": "vp8-overwrite-output-qualified.tar.xz",
+            "sha256": "abe549dbd45a6426d04608631cebe2ae47681c3283d3559b53c6aaca2bffa747"
+          },
+          {
+            "file": "vp8-alpha-current-execution-attribution.tar.xz",
+            "sha256": "e1370cec8197359f95e482cf574e6518f0ff27dc6ccb0c59b3311a5979e9987c"
+          }
+        ]
+      }
+    ]
+  }
+}

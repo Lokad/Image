@@ -142,10 +142,12 @@ Current scope and remaining work:
   [long lookup](../benchmarks/JPEG-BUFFERED-LONG-LOOKUP.md) retain historical gains.
   [Grayscale encoding](../benchmarks/JPEG-GRAYSCALE-ROW-BATCH.md) against explicitly
   labeled SIMD libjpeg-turbo and other encoder costs remain source-valid.
-- **Text/drawing:** [shared raster sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md)
-  cuts allocation by25,016B/draw (27.08%) to67,368B. Point costs153.86/147.75µs
-  have inconclusive causal CPUgains; both reference gaps remain. Exactframes,
- 48,544B admitted Latin workspace and zero retainedscratch remain.
+- **Text/drawing:** [band clipping workspace](../benchmarks/TEXT-CLIPPING-WORKSPACE.md)
+  reuses scratch and skips no-op copies. Current136.57/137.43µs means are7.6%/8.5%
+  lower than the contemporaneous original; intervals overlap, so a causal CPUgain
+  remains inconclusive. Both reference gaps remain. Allocation67,368B/draw,
+  exactframes,48,544B admitted Latin workspace and zero retainedscratch are unchanged.
+  [Shared sorting](../benchmarks/TEXT-RASTER-SHARED-SORT.md) retains the earlier allocation cut.
   [Layout/fitting and RGBA16 composition](../benchmarks/TEXT-DRAWING-CURRENT.md)
   pass/stop. These independent cases do not block codec or resize work.
   [Owned font storage](../benchmarks/FONT-OWNED-STORAGE.md) saves258.73µs/89.04%raw
@@ -154,7 +156,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **5,907 full/live checks per OS**, affected
+The current production build passes **5,909 full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
@@ -310,8 +312,8 @@ settings do not establish matched quality.
 | Latin OpenType layout / SixLabors public API (pass) | 20.40 | 57.62 | 0.354 / 0.717 | 6,409 |
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
-| Prepared text RGBA8 / ImageSharp.Drawing (gap) | 153.86 | 45.58 | 3.376 / 4.360 | 67,368 |
-| Prepared text RGBA16 / ImageSharp.Drawing (gap) | 147.75 | 45.90 | 3.219 / 4.522 | 67,368 |
+| Prepared text RGBA8 / ImageSharp.Drawing (gap) | 136.57 | 45.17 | 3.023 / 4.678 | 67,368 |
+| Prepared text RGBA16 / ImageSharp.Drawing (gap) | 137.43 | 46.74 | 2.941 / 4.136 | 67,368 |
 | Composite RGBA8 / FFmpeg (gap) | 625.41 | 498.73 | 1.254 / 1.270 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
 | Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 458.51 | 589.46 | 0.778 / 0.779 | 113 |
