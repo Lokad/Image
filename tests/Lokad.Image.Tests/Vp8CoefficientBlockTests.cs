@@ -7,7 +7,12 @@ namespace Lokad.Image.Tests;
 public sealed partial class Vp8CoefficientBlockTests
 {
     private static ReadOnlySpan<Vp8BooleanReader.CoefficientModelRow> Model(byte[] bytes)
-        => System.Runtime.InteropServices.MemoryMarshal.Cast<byte, Vp8BooleanReader.CoefficientModelRow>(bytes);
+    {
+        var rows = new Vp8BooleanReader.CoefficientModelRow[bytes.Length / 11];
+        System.Runtime.InteropServices.MemoryMarshal.AsBytes(rows.AsSpan()).Fill(0xA5);
+        for (var i = 0; i < rows.Length; i++) bytes.AsSpan(i * 11, 11).CopyTo(rows[i]);
+        return rows;
+    }
 
     private static readonly FieldInfo[] Fields = new[] { "position", "end", "shift", "range", "value" }
         .Select(n => typeof(Vp8BooleanReader).GetField(n, BindingFlags.Instance | BindingFlags.NonPublic)!).ToArray();

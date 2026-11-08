@@ -5,8 +5,8 @@ namespace Lokad.Image.Internal;
 internal partial struct Vp8BooleanReader
 {
     // RFC6386 section13.2 stores eleven probabilities per coefficient tree.
-    // Borrow rows from the complete private model; no copy or separate owner.
-    [InlineArray(11)]
+    // Five unused bytes give borrowed rows a power-of-two address stride.
+    [InlineArray(16)]
     internal struct CoefficientModelRow
     {
         private byte first;

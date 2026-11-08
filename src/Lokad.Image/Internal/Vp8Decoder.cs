@@ -1,5 +1,4 @@
 using System.Buffers.Binary;
-using System.Runtime.InteropServices;
 
 namespace Lokad.Image.Internal;
 
@@ -43,7 +42,8 @@ internal ref struct Vp8Decoder
         if (firstLength < 1 || firstLength > data.Length - 10) throw new ImageDataException("Invalid VP8 first partition length.");
         header = new Vp8BooleanReader(data, 10, firstLength);
         probabilities = new Vp8BooleanReader.CoefficientModelRow[4 * 8 * 3];
-        Vp8Tables.CoefficientProbabilities.CopyTo(MemoryMarshal.AsBytes(probabilities.AsSpan()));
+        for (var i = 0; i < probabilities.Length; i++)
+            Vp8Tables.CoefficientProbabilities.Slice(i * 11, 11).CopyTo(probabilities[i]);
         partitions = [];
         segmentQuantizers = new int[4]; segmentFilters = new int[4]; segmentProbabilities = [255, 255, 255];
         referenceDeltas = new int[4]; modeDeltas = new int[4]; quantizerDeltas = new int[5];
@@ -82,11 +82,13 @@ internal ref struct Vp8Decoder
         quantizer = Literal(7);
         for (var i = 0; i < 5; i++) if (Bit() != 0) quantizerDeltas[i] = Signed(4);
         Bit(); // Entropy refresh is immaterial for an independently decoded still frame.
-        // RFC6386 section13.2: one owned model, byte updates during the header,
-        // then borrowed typed rows throughout coefficient decoding.
-        var modelBytes = MemoryMarshal.AsBytes(probabilities.AsSpan());
-        for (var i = 0; i < modelBytes.Length; i++)
-            if (Bit(Vp8Tables.CoefficientUpdateProbabilities[i]) != 0) modelBytes[i] = (byte)Literal(8);
+        // RFC6386 section13.2: update eleven values per row in encoded order;
+        // padding belongs to storage, never to the probability syntax.
+        var probabilityIndex = 0;
+        for (var row = 0; row < probabilities.Length; row++)
+            for (var column = 0; column < 11; column++)
+                if (Bit(Vp8Tables.CoefficientUpdateProbabilities[probabilityIndex++]) != 0)
+                    probabilities[row][column] = (byte)Literal(8);
         skipEnabled = Bit() != 0; skipProbability = skipEnabled ? Literal(8) : 0;
         var sizesOffset = 10 + firstLength; var start = sizesOffset + 3 * (partitionCount - 1);
         if (start > data.Length) throw new ImageDataException("Truncated VP8 partition sizes.");

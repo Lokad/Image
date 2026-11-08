@@ -27,24 +27,22 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  [Prepared coefficient models](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md)
-  separately save **155.50µs/3.08% raw**,3.16% normalized on complete opaque VP8;
-  both confidence views separate. That model-only stage established no alpha gain.
-  [Fused horizontal alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
-  separately saves **196.04µs/3.21% raw**,3.25% normalized, on complete resident
-  decoding, with separated filtered/all-actual raw/normalized confidence.
-  Current resident5,919.97/native5,962.52µs,
-  upper1.002 is uncertain; stream upper0.992 passes/stop.
-  GC stays238,384/238,480B/op, retained output531,468B; no new owned capacity.
-  Two alpha costs refresh, four unchanged VP8 costs reuse their model evidence:
-  two pass, three gaps, one uncertain. Live opaque is now
-  4,979.43/native4,789.64µs,
-  upper1.044 remains a gap. GC stays228,864B/op.
-  One 1,056 B typed owner serves header and readers; per-block casting and ordinary
-  numeric token dispatch retire. Actual complete-kernel coverage witnesses all12
-  symbols. Probability/category/sign order, every poll, exact cursor/pixels and
-  ownership remain. No extra model, capacity, cache or retained state.
-  Earlier [live-class gains](../benchmarks/VP8-DIRECT-COEFFICIENT-CLASSES.md) remain history.
+  [Power-of-two model rows](../benchmarks/VP8-MODEL-ROW-STRIDE.md) prepare one
+  1,536B model in place of1,056B, avoiding repeated11-byte-stride addressing.
+  Complete live decode saves59.31µs/1.19%raw/1.18%normalized; all six affected
+  controls save49.93–137.23µs with separated filtered/all-actual raw/normalized
+  intervals. GC rises480B/op per case; the existing8KiB model/state/frame
+  admission is unchanged. Physical/native peaks are unmeasured.
+  Current resident5,844.19/native5,965.61µs,
+  upper0.983, and stream upper0.984 pass/stop.
+  All six current costs:3pass/3gaps/0uncertain. Live opaque remains
+  4,920.12/native4,789.06µs,upper1.032gap,
+  229,344B/op. Retained frames remain531,468B until disposal;
+  no second model, pool, cache or escaping state. Eleven probability values per
+  row, syntax/decision order, every poll and exact cursor/pixels remain.
+  [Earlier model preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
+  [horizontal alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
+  retain their historical gains and raw evidence separately.
 - **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
   saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.
   Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
@@ -204,7 +202,7 @@ settings do not establish matched quality.
 
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Packet B, Lokad / reference |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,939.22 | 6,011.78 | 0.988 / 0.992 | 238,480 | — |
+| WebP VP8 + alpha, fresh seekable Stream (parity confirmed) † | 5,875.90 | 5,992.57 | 0.981 / 0.984 | 238,960 | — |
 | JPEG 4:4:4, forward-only / exact reference (confidence open) † | 3,733.67 | 3,774.82 | 0.989 / 1.009 | 820,150 | 133,039 / 133,041 |
 | JPEG 4:2:0 from caller RGB samples † | 1,655.50 | 1,580.59 | 1.047 / 1.061 | 388,220 | 52,091 / 52,093 |
 | JPEG RGBA16 4:2:0 / caller IMemoryBudget (confidence open) † | 1,876.82 | 1,835.59 | 1.022 / 1.038 | 819,488 | 52,115 / 52,117 |
@@ -332,7 +330,7 @@ settings do not establish matched quality.
 | Validate JPEG baseline420, span | 477.351 | 674.564 | 0.708 / 0.711 | 10,016 | Confirmed pass |
 | Validate JPEG progressive420, span | 330.131 | 268.515 | 1.229 / 1.237 | 4,088 | Confirmed gap |
 | Validate VP8L+alpha, span | 2,309.164 | 3,044.518 | 0.758 / 0.765 | 297,070 | Confirmed pass |
-| Validate VP8+alpha, span | 4,529.581 | 5,446.763 | 0.832 / 0.836 | 13,584 | Confirmed pass |
+| Validate VP8+alpha, span | 4,392.355 | 5,447.237 | 0.806 / 0.814 | 14,064 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 2,759.145 | 3,611.996 | 0.764 / 0.765 | 8,544 | Confirmed pass |
 | Inspect PNG8 complete headers, seekable, adapter reference | 0.703 | 0.579 | 1.215 / 1.235 | 8,528 | Confirmed gap |
 | Identify PNG8 complete container, resident, adapter reference | 13.079 | 13.049 | 1.002 / 1.005 | 96 | Confirmed gap |

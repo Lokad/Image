@@ -46,15 +46,12 @@ def render():
     assert trellis['lower'] == launches['lower'] and trellis['upper'] == launches['upper']
     assert trellis['status'] == launches['status']
     assert all(trellis['lower'] <= v['lower'] and trellis['upper'] >= v['upper'] for v in [*launches['launches'], *launches['views'].values()])
-    prepared_model = json.loads((ROOT / 'benchmarks/vp8-prepared-coefficient-model-evidence.json').read_text(encoding='utf-8'))
+    prepared_model = json.loads((ROOT / 'benchmarks/vp8-model-row-stride-evidence.json').read_text(encoding='utf-8'))
     assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 283
     assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
     assert set(prepared_model['cases']) == {'Native8', 'Vp8Stream', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
-    # Alpha delivery now has its own current owner; reuse the four unchanged
-    # model/validation paths without requiring their superseded alpha clocks.
-    for name in ('Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'):
-        observations = prepared_model['cases'][name]
-        observation, cost = observations[-1], prepared_model['costs'][name]
+    for name, records in prepared_model['cases'].items():
+        observation, cost = records[-1], prepared_model['costs'][name]
         receipt = observation['receipt']
         assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
         assert receipt['librarySha256'] == cost['librarySha256'] == prepared_model['producers']['linuxSha256']
@@ -69,35 +66,18 @@ def render():
         assert cost['upper'] == observation['conservativeRatioUpper']
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in prepared_model['comparisons']['Opaque8']['views'].values())
+               for c in prepared_model['comparisons'].values() for v in c['views'].values())
     model_proof = prepared_model['sourceProof']
-    assert model_proof['stageAOrdinaryLoopAndAllArithmeticGuardRefillPublishBodiesExact']
-    assert model_proof['entireLiveClassReconstructsOriginalExceptTypedParameterAndRemovedCast']
-    assert model_proof['entireDecoderReconstructsOriginalExceptSingleModelOwnerHeaderByteViewAndTailRow']
-    assert model_proof['ownedPayloadBytes'] == model_proof['replacedByteArrayPayloadBytes'] == 1056
+    assert model_proof['entireLiveReaderReconstructsOriginalExceptRowStrideAndComment']
+    assert model_proof['entireDecoderReconstructsOriginalExceptDefaultAndHeaderStorageMapping']
+    assert model_proof['all1056HeaderValuesPreserveSyntaxOrder']
     assert model_proof['allInputPartitionModeBoundsAndPerDecisionPollsUnchanged']
-    assert prepared_model['storage']['ownedCapacityUnchanged']
-    assert prepared_model['storage']['newOwnedCapacityBytes'] == prepared_model['storage']['newRetainedStateBytes'] == 0
-    assert prepared_model['qualification']['sameActualPackageBothOs']
-    horizontal_alpha = json.loads((ROOT / 'benchmarks/webp-horizontal-alpha-publication-evidence.json').read_text(encoding='utf-8'))
-    assert horizontal_alpha['productionAccepted'] and horizontal_alpha['requiredMaterialPaths'] == 283
-    assert horizontal_alpha['raw']['mirrored'] and horizontal_alpha['raw']['allMembersVerified']
-    assert set(horizontal_alpha['costs']) == {'Native8', 'Vp8Stream'}
-    for name, cost in horizontal_alpha['costs'].items():
-        observation = horizontal_alpha['observations'][name]
-        receipt = observation['receipt']
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert receipt['librarySha256'] == cost['librarySha256'] == horizontal_alpha['producers']['linuxSha256']
-        assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] and receipt['alphaExact']
-        assert receipt['sourceUnchanged'] and receipt['independentOwnedOutput'] and receipt['managedOutputBytes'] == 531468
-        assert observation['quietGuardsPassed'] and observation['allOriginalGatesPassed']
-        assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
-        assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for v in horizontal_alpha['comparison']['Native8']['views'].values())
-    assert horizontal_alpha['storage']['newOwnedCapacityBytes'] == horizontal_alpha['storage']['newRetainedStateBytes'] == 0
-    assert horizontal_alpha['qualification']['sameActualPackageBothOs']
-    assert horizontal_alpha['qualification']['fullChecksEachOs'] == 5877
+    assert prepared_model['storage']['modelPayloadBytes'] == 1536
+    assert prepared_model['storage']['additionalOwnedPayloadBytes'] == 480
+    assert prepared_model['storage']['coarseHeaderWorkspaceBytes'] == 8192
+    q = prepared_model['qualification']
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 5909
+    assert q['sameActualPackageBothOs'] and q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
     live = prepared_model['costs']['OpaqueCancelable8']
     assert all(v['rawGainSeparated'] for v in vp8_current['comparison']['views'].values())
     assert vp8_current['normalizedGainConfirmedAllViews'] == all(v['normalizedGainSeparated']
@@ -534,7 +514,7 @@ def render():
     lpf = {name: cost for name, cost in resident_decode['costs'].items()
            if name not in {'Native8', 'Vp8Stream', 'ValidateVp8Alpha'}}
     lpf['ValidateVp8Alpha'] = prepared_model['costs']['ValidateVp8Alpha']
-    lpf.update(horizontal_alpha['costs'])
+    lpf.update(prepared_model['costs'])
     jpeg_decode = baseline_blocks
     assert not decoders['productionChanged'] and len(decoders['cases']) == 3
     assert resident_decode['productionChanged'] and resident_decode['independentQuietConfirmation']
@@ -1821,24 +1801,22 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  [Prepared coefficient models](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md)
-  separately save **155.50µs/3.08% raw**,3.16% normalized on complete opaque VP8;
-  both confidence views separate. That model-only stage established no alpha gain.
-  [Fused horizontal alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
-  separately saves **196.04µs/3.21% raw**,3.25% normalized, on complete resident
-  decoding, with separated filtered/all-actual raw/normalized confidence.
+  [Power-of-two model rows](../benchmarks/VP8-MODEL-ROW-STRIDE.md) prepare one
+  1,536B model in place of1,056B, avoiding repeated11-byte-stride addressing.
+  Complete live decode saves59.31µs/1.19%raw/1.18%normalized; all six affected
+  controls save49.93–137.23µs with separated filtered/all-actual raw/normalized
+  intervals. GC rises480B/op per case; the existing8KiB model/state/frame
+  admission is unchanged. Physical/native peaks are unmeasured.
   Current resident{lpf['Native8']['managedUs']:,.2f}/native{lpf['Native8']['nativeUs']:,.2f}µs,
-  upper{lpf['Native8']['upper']:.3f} is uncertain; stream upper{stream['upper']:.3f} passes/stop.
-  GC stays238,384/238,480B/op, retained output531,468B; no new owned capacity.
-  Two alpha costs refresh, four unchanged VP8 costs reuse their model evidence:
-  two pass, three gaps, one uncertain. Live opaque is now
-  {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
-  upper{live['upper']:.3f} remains a gap. GC stays{live['allocatedBytes']:,}B/op.
-  One 1,056 B typed owner serves header and readers; per-block casting and ordinary
-  numeric token dispatch retire. Actual complete-kernel coverage witnesses all12
-  symbols. Probability/category/sign order, every poll, exact cursor/pixels and
-  ownership remain. No extra model, capacity, cache or retained state.
-  Earlier [live-class gains](../benchmarks/VP8-DIRECT-COEFFICIENT-CLASSES.md) remain history.
+  upper{lpf['Native8']['upper']:.3f}, and stream upper{stream['upper']:.3f} pass/stop.
+  All six current costs:3pass/3gaps/0uncertain. Live opaque remains
+  {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,upper{live['upper']:.3f}gap,
+  {live['allocatedBytes']:,}B/op. Retained frames remain531,468B until disposal;
+  no second model, pool, cache or escaping state. Eleven probability values per
+  row, syntax/decision order, every poll and exact cursor/pixels remain.
+  [Earlier model preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
+  [horizontal alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
+  retain their historical gains and raw evidence separately.
 - **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
   saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.
   Separate admitted peaks remain3,470,059/3,251,328/3,656,309B; retained scratch zero.
@@ -1950,7 +1928,7 @@ Current scope and remaining work:
   load retains757,076B idle within the existing shared two-array/4MiB ceiling;
   governed calls bypass it. This is not a physical-peak reduction or parser-equivalence claim.
 
-The current production build passes **{raster['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
+The current production build passes **{prepared_model['qualification']['fullChecksEachOs']:,} full/live checks per OS**, affected
 normal/scalar checks, and the **same actual Release package/all three examples
 on Windows/Linux**, including exact mixed-alpha text at both depths, alpha and
 opaque-word, progressive-strip, wide-column, shared byte/word enlargement and live VP8
