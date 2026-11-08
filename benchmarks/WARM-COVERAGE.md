@@ -67,6 +67,9 @@ current production gain or permanent family ban.
 RGB444 capture after paired AC changes, without builds or new costs. Earlier
 whole-operation shares are historical. Live JLB546 attribution belongs to the
 shared-window report; instrumented elapsed is not timing evidence.
+[Current live progressive attribution](JPEG-LIVE-CURRENT-ATTRIBUTION.md) uses one
+qualified JPR608 capture: buffered refinement dominates sampled locations, with
+little nonzero-mask discovery. No production, displayed cost or scope change.
 
 ## Finite required inventory
 
