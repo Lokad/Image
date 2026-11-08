@@ -10,12 +10,10 @@ Completion needs current passing evidence for every named path, with scope state
 reconciles one-shot/prepared boundaries and measures three WebP admission lifetimes.
 The [matching-index handoff](WEBP-MATCHING-POPULATION-STORAGE.md) retains six
 unchanged lossless costs. [Four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md)
-refresh all nine lossy encode controls. [Shared live JPEG windows](JPEG-LIVE-ENTROPY-WINDOW.md)
-refresh23baseline costs and reuse6unchanged progressive comparisons. Historical
-experiments remain linked separately, with raw evidence retained.
-[Horizontal alpha publication](WEBP-HORIZONTAL-ALPHA-PUBLICATION.md) refreshes
-two delivery costs; four unchanged VP8 model/validation costs and six lossless
-reader costs retain source-valid evidence.
+own all nine lossy encode controls. [Paired JPEG AC](JPEG-PAIRED-AC-WINDOW.md)
+owns 29 current read costs; [model rows](VP8-MODEL-ROW-STRIDE.md) own six VP8
+pixel/validation costs. Six lossless reader controls retain source-valid evidence.
+Historical experiments remain linked separately, with raw evidence retained.
 
 ## Current family status
 
@@ -46,7 +44,8 @@ remain. [Text clipping](TEXT-CLIPPING-WORKSPACE.md) retains current source-valid
 drawing costs with inconclusive CPUgain. Other unchanged paths reuse evidence;
 this is not a full126comparison actual-package release refresh.
 
-Earlier unselected [packed prediction](VP8-PACKED-PREDICTION-EXPERIMENT.md),
+Earlier unselected [result row history](BICUBIC-RESULT-HISTORY-EXPERIMENT.md),
+[packed prediction](VP8-PACKED-PREDICTION-EXPERIMENT.md),
 [compact geometry](BICUBIC-COMPACT-GEOMETRY-EXPERIMENT.md),
 [row/certificate preparation](BICUBIC-ROW-CERTIFICATE-EXPERIMENT.md),
 [private parser publication](PNG-PRIVATE-PARSER-PUBLICATION-EXPERIMENT.md),
@@ -62,9 +61,10 @@ Earlier unselected [packed prediction](VP8-PACKED-PREDICTION-EXPERIMENT.md),
 [live-word hash preparation](PNG-FASTEST-LIVE-WORD-STUDY.md) retain exact restoration,
 adverse/inconclusive results and raw evidence separately. They establish no
 current production gain or permanent family ban.
-[Source-valid JPEG attribution](JPEG-CURRENT-ENTROPY-ATTRIBUTION.md) remains useful
-for unchanged ordinary entropy/transform bodies. Live JLB546 attribution belongs
-to the shared-window report; instrumented elapsed is not timing evidence.
+[Current JPEG attribution](JPEG-CURRENT-ENTROPY-ATTRIBUTION.md) refreshes the complete
+RGB444 capture after paired AC changes, without builds or new costs. Earlier
+whole-operation shares are historical. Live JLB546 attribution belongs to the
+shared-window report; instrumented elapsed is not timing evidence.
 
 ## Finite required inventory
 

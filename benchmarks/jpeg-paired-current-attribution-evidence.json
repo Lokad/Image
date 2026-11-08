@@ -1,0 +1,368 @@
+{
+  "project": "Lokad.Image",
+  "stage": "JCP600",
+  "date": "2026-11-08",
+  "productionChanged": false,
+  "allBuilds": 0,
+  "statisticalTiming": false,
+  "librarySha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+  "sources": {
+    "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "f84dce669d5d5ef3a6560086eef9a85dd0643be17d04ccc612215b93b98be64e",
+    "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4d4ada898c4df7967aac34936c81daaf760e051bb172b26c68f5c5e7a6c79a63",
+    "src/Lokad.Image/Internal/JpegHuffman.cs": "d5dfa36f080c27428001fc19b3be2015299619886ee3e4e8883fa56e14e4bedf",
+    "src/Lokad.Image/Internal/JpegDecoder.cs": "c213eede6ab30e33a52df988e8bb363e32fc4fc8827c395361e6de25d2294834",
+    "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "3a280a22e0a18677610f9454eef0f3d810f23e4b709bee31d79ebdc74b9bb099",
+    "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379"
+  },
+  "totalSamples": 1996,
+  "managedSamples": 1697,
+  "methods": [
+    [
+      "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]",
+      843
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      413
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlockCore(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      85
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]",
+      67
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]",
+      51
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      51
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::PrepareBaselinePairs(class Lokad.Image.Internal.OperationContext)[Optimized]",
+      34
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]",
+      27
+    ],
+    [
+      "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]",
+      25
+    ],
+    [
+      "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]",
+      24
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]",
+      21
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]",
+      14
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]",
+      10
+    ],
+    [
+      "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      7
+    ],
+    [
+      "instance int32 [Lokad.Image] Lokad.Image.ImageBuffer::get_Stride()[Optimized]",
+      5
+    ],
+    [
+      "void [System.Private.CoreLib] System.SpanHelpers::Fill(!!0&,native uint,!!0)[Optimized]",
+      5
+    ],
+    [
+      "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      3
+    ],
+    [
+      "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]",
+      3
+    ],
+    [
+      "instance valuetype [System.Runtime]System.Span`1<uint8> [Lokad.Image] Lokad.Image.ImageBuffer::get_Pixels()[Optimized]",
+      2
+    ],
+    [
+      "class Lokad.Image.ImageInfo [Lokad.Image] Lokad.Image.Internal.ContainerHeaders::Jpeg(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]",
+      2
+    ],
+    [
+      "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderRgbRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]",
+      2
+    ],
+    [
+      "stub ReportStubBlock<MethodCallThunk>",
+      1
+    ],
+    [
+      "instance bool [Lokad.Image] Lokad.Image.Internal.JpegHuffman::get_CanPrepareBaselinePairs()[Optimized]",
+      1
+    ],
+    [
+      "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadQuantization(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]",
+      1
+    ]
+  ],
+  "targetCode": [
+    {
+      "address": "0x75c91b8b6390",
+      "size": 247,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext,valuetype Lokad.Image.ImageMetadataPolicy)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b7100",
+      "size": 1358,
+      "name": "instance class Lokad.Image.ImageBuffer [Lokad.Image] Lokad.Image.Internal.JpegDecoder::DecodeCore(bool)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b76c0",
+      "size": 411,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadMarker()[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b7880",
+      "size": 364,
+      "name": "instance valuetype [System.Runtime]System.ReadOnlySpan`1<uint8> [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadSegment()[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b7a20",
+      "size": 760,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadQuantization(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b7e40",
+      "size": 542,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b8080",
+      "size": 1377,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::.ctor(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b8720",
+      "size": 2165,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadFrame(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,bool)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8b9440",
+      "size": 4464,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadScan(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bab80",
+      "size": 161,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadComponentMcuBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bac40",
+      "size": 888,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlocks(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bb000",
+      "size": 179,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegHuffman::get_CanPrepareBaselinePairs()[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bb0e0",
+      "size": 868,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegHuffman::PrepareBaselinePairs(class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bb480",
+      "size": 2212,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlockCore(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,int32,int32,bool,bool,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bbd60",
+      "size": 1444,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::ReadBaselineBlock(valuetype Lokad.Image.Internal.JpegEntropyReader&,valuetype [System.Runtime]System.Span`1<int32>,int32&,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.JpegHuffman,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bc340",
+      "size": 1011,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadPlainBaselineBlock(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&,int32&)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bc760",
+      "size": 523,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Inverse(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<uint8>,class Lokad.Image.Internal.OperationContext)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bc9a0",
+      "size": 227,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::Dequantize(valuetype [System.Runtime]System.ReadOnlySpan`1<int32>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,valuetype [System.Runtime]System.Span`1<int16>)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bcaa0",
+      "size": 1772,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::InverseAvx2(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,valuetype [System.Runtime]System.Span`1<int16>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bd1e0",
+      "size": 191,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::.cctor()[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bd2c0",
+      "size": 285,
+      "name": "int32[] [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::BuildKernel()[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bd440",
+      "size": 308,
+      "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::BuildRowPair(int32)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bd5a0",
+      "size": 93,
+      "name": "valuetype [System.Runtime.Intrinsics]System.Runtime.Intrinsics.Vector256`1<int16> [Lokad.Image] Lokad.Image.Internal.JpegInverseTransform::PairRows(valuetype [System.Runtime]System.ReadOnlySpan`1<int16>,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bd7c0",
+      "size": 1231,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::StoreComponentMcu(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>,int32,int32,int32,int32,int32,int32)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bdce0",
+      "size": 549,
+      "name": "instance void [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadPlainBaselineAc(class Lokad.Image.Internal.JpegHuffman,valuetype [System.Runtime]System.Span`1<int32>,int32&)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8bdf40",
+      "size": 547,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadBaselineAc(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32,int32&,int32&)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8be180",
+      "size": 311,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8be2e0",
+      "size": 350,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegHuffman::ReadLong(valuetype Lokad.Image.Internal.JpegEntropyReader&)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8be460",
+      "size": 305,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadLongHuffman(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8be5b0",
+      "size": 247,
+      "name": "instance bool [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::TryReadCanonicalPrefix(valuetype [System.Runtime]System.ReadOnlySpan`1<uint16>,int32&)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8be6c0",
+      "size": 410,
+      "name": "instance int32 [Lokad.Image] Lokad.Image.Internal.JpegEntropyReader::ReadBits(int32)[Optimized]"
+    },
+    {
+      "address": "0x75c91b8be880",
+      "size": 752,
+      "name": "void [Lokad.Image] Lokad.Image.Internal.JpegDecoder::RenderRgbRow(valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.ReadOnlySpan`1<uint8>,valuetype [System.Runtime]System.Span`1<uint8>)[Optimized]"
+    }
+  ],
+  "design": {
+    "project": "Lokad.Image",
+    "stage": "JCP600",
+    "productionChanged": false,
+    "allBuilds": 0,
+    "newStatisticalMeasurements": 0,
+    "sources": {
+      "src/Lokad.Image/Internal/JpegEntropyReader.BaselineBlock.cs": "f84dce669d5d5ef3a6560086eef9a85dd0643be17d04ccc612215b93b98be64e",
+      "src/Lokad.Image/Internal/JpegEntropyReader.cs": "4d4ada898c4df7967aac34936c81daaf760e051bb172b26c68f5c5e7a6c79a63",
+      "src/Lokad.Image/Internal/JpegHuffman.cs": "d5dfa36f080c27428001fc19b3be2015299619886ee3e4e8883fa56e14e4bedf",
+      "src/Lokad.Image/Internal/JpegDecoder.cs": "c213eede6ab30e33a52df988e8bb363e32fc4fc8827c395361e6de25d2294834",
+      "src/Lokad.Image/Internal/JpegDecoder.BaselinePlanes.cs": "3a280a22e0a18677610f9454eef0f3d810f23e4b709bee31d79ebdc74b9bb099",
+      "src/Lokad.Image/Internal/JpegInverseTransform.cs": "3bda5a6a5eaca198d56fa2d8c381fc05fdec6c13ea44a738b2bd119e929d0379"
+    },
+    "expectedLinuxSha256": "df93859a5f5ba839fb79e3c612eabca6bf3ae11c60fc49f9522866641c8cee21",
+    "reason": "Older JBA530 whole-operation attribution predates pairedAC changes. Sharedreader locations may still be leads, but their shares are not currentproof. CurrentDirectRgb444 has80usdemonstratedgap. Takeonecurrent2s completecapture usingexisting JPE562 worker/input/settings/currentimmutableDLL; discardinstrumentedelapsed, no newfixture/grid or localtiming.",
+    "boundary": "Existing133057B originalRGBJPEG ->exact531468B independentRGBA8/publicdecode/preparation/disposal; samefrozenpixel/source/alpha/ownership/nativecontext andidle-v2 boundaries, CPU0operation/CPU1sampler. No rebuild or packageproof.",
+    "next": "Inspect currenthot locations and priorrelated adverse studies before choosing a materiallynew execution/preparation hypothesis. JPEG dequantization is alreadyvectorized; do not propose scalarpass elimination or repeat pairedinverse/nibble/tableview/window variants unchanged."
+  },
+  "decision": "Currentcompletecapture afterpairedAC. Fusedreader843locations, inverseAVX2 413, baselinecore85, plainAC67, MCUstore51, baselinecaller51, pairpreparation34, dequantization27. Locations/skid are notcomponenttimes or predictedgains. Dequantization alreadyvectorized; existingrowpair/tableview/nibble/window adverse results mustbe consultedbefore another productiondesign.",
+  "scope": "CurrentDirectRgb444 completepublic operation, same133057Binput/exact531468Boutput/nativeboundaries andallpixel/alpha/source/owner/idle-v2 gates. One2s CPU0operation/CPU1sampler. Instrumentedelapsed discarded; sourcevalid1530.34/native1450.52us cost remains, no newperformanceclaim. Qualified5909/packageevidence reused unchanged.",
+  "next": "Focused currentfusedreader JIT/sourceaudit of lookup/refill/descriptor andblock-boundary repeatedwork, using thiscapture without moreprofiles/builds/timing. Preserve exactpackets/pixels/polls/publicfailures/ownership. No automatic mergeauthorization or replay of failedimplementations.",
+  "raw": {
+    "file": "jpeg-paired-current-attribution-jcp600.tar.xz",
+    "sha256": "7ce1508f3951011ae7f9503f9d2f395799fa20a9b91356fd3f269cad74bd438d",
+    "bytes": 143056,
+    "members": 22,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "path": "tmp/vp8-model-row-stride-qualified.tar.xz",
+        "sha256": "6ba2ce0bd7569e29a86521f20c5721df558492e1973b5d8b2a1d1803b1b4d607",
+        "bytes": 6012200,
+        "members": 147,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "path": "tmp/text-clipping-workspace-qualified.tar.xz",
+            "sha256": "3ab0d954235be6477b98b583c4dde5e239203d00ce860e927e3f67cdc06d5434",
+            "bytes": 5955596,
+            "members": 148,
+            "mirrored": true,
+            "allMembersVerified": true
+          },
+          {
+            "file": "vp8-prepared-coefficient-model-qualified.tar.xz",
+            "sha256": "1d8d81f5fe9bf6c86bb32cd7b1635df078d8868c5c534fcab19e31c63cc19ee1",
+            "bytes": 10813884,
+            "members": 356,
+            "mirrored": true,
+            "allMembersVerified": true
+          },
+          {
+            "file": "webp-horizontal-alpha-publication-qualified.tar.xz",
+            "sha256": "cfbfd93f72c02d9094452726314d8268d493719efe2d281e276ba1834516b9fe",
+            "bytes": 15884220,
+            "members": 261,
+            "mirrored": true,
+            "allMembersVerified": true
+          }
+        ],
+        "scope": "Retained source-valid VP8 profile dependency; original/candidate W/L main/internalmodules and source; focused normal/scalar/full/live; originalsourcevalid baselineprovider; new short/independent actuals/brackets/gates; six exact complete VP8 pixel/validation controls; SAME actualpackage andthreeexamples W/L; design/scripts/source manifest. Existingworker/reference/font dependencies retained in citedarchives, no vendoring."
+      },
+      {
+        "file": "jpeg-paired-ac-window-qualified.tar.xz",
+        "sha256": "ab15d8e8e28df0e5eb17625cef5a581a7109c770ce8c62aab30ff2ca95bea844",
+        "bytes": 29935048,
+        "members": 888,
+        "mirrored": true,
+        "allMembersVerified": true,
+        "dependencies": [
+          {
+            "file": "png-streaming-token-frequencies-qualified.tar.xz",
+            "sha256": "f01517e50ed3f7b3c5d5ea7da2c9cd48194a89da77a130d2ed3301f42b2ee8ad"
+          },
+          {
+            "file": "jpeg-live-entropy-window-qualified.tar.xz",
+            "sha256": "e60ed31cde1a103805c8d5182fabea667d6b2b66c04eb866d7b10f1579367bdf"
+          },
+          {
+            "file": "jpeg-full-grid-output-qualified.tar.xz",
+            "sha256": "d1dc971452111f0370e16a23257f479e3296105ddd320c0790481dd04fd67289"
+          }
+        ]
+      }
+    ]
+  }
+}
