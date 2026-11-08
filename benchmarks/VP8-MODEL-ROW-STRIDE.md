@@ -1,5 +1,7 @@
 # Prepared VP8 model-row stride
 
+Current costs are superseded by [frame-private quantizers](VP8-FRAME-QUANTIZER-PREPARATION.md). This report retains model preparation and raw history.
+
 The decoder prepares one 96-row coefficient model with a 16-byte storage stride.
 Each row still contains exactly eleven encoded probabilities; five unused bytes
 replace repeated 11-byte-stride address calculations. Defaults and header updates

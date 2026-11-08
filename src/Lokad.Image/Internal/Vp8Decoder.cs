@@ -159,6 +159,16 @@ internal ref struct Vp8Decoder
         var aboveCoefficients = new byte[columns * 9]; Span<byte> leftCoefficients = stackalloc byte[9];
         Span<short> coefficients = reconstruct ? stackalloc short[25 * 16] : default;
         Span<int> predictionSamples = reconstruct ? stackalloc int[13] : default;
+        // RFC6386 section14: quantizers are fixed for each frame segment.
+        // The constructor's8KiB fixed allowance also covers this96B table.
+        Span<int> dequantizers = reconstruct ? stackalloc int[4 * 6] : default;
+        if (reconstruct)
+            for (var segment = 0; segment < (segmentation ? 4 : 1); segment++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                var q = segmentation ? segmentQuantizers[segment] + (absoluteSegments ? 0 : quantizer) : quantizer;
+                PrepareQuantizers(q, quantizerDeltas, dequantizers.Slice(segment * 6, 6));
+            }
         for (var my = 0; my < rows; my++)
         {
             leftCoefficients.Clear();
@@ -166,20 +176,22 @@ internal ref struct Vp8Decoder
             {
                 context.Cancellation.ThrowIfCancellationRequested();
                 var index = my * columns + mx; ref var block = ref blocks[index];
-                var q = reconstruct ? segmentation ? segmentQuantizers[block.Segment] + (absoluteSegments ? 0 : quantizer) : quantizer : 0;
-                q = Math.Clamp(q, 0, 127); var any = false; coefficients.Clear();
+                var any = false; coefficients.Clear();
                 ref var tokens = ref partitions[my % partitions.Length];
                 var above = aboveCoefficients.AsSpan(mx * 9, 9);
                 var hasY2 = block.Mode != 4;
                 if ((block.Flags & 1) == 0)
                 {
+                    var prepared = reconstruct ? dequantizers.Slice((segmentation ? block.Segment : 0) * 6, 6) : default;
+                    var lumaDc = reconstruct ? prepared[2] : 0; var lumaAc = reconstruct ? prepared[3] : 0;
+                    var chromaDc = reconstruct ? prepared[4] : 0; var chromaAc = reconstruct ? prepared[5] : 0;
                     var reuseWindow = tokens.CanReadCoefficientWindow(data, context, hasY2 ? 25 : 24);
                     var window = reuseWindow ? tokens.BeginCoefficientWindow(data) : default;
                     if (hasY2)
                     {
                         any |= Coefficients(reconstruct, ref tokens, ref window, reuseWindow, reconstruct ? coefficients[..16] : default,
-                            1, above[8] + leftCoefficients[8], reconstruct ? 2 * Dc(q + quantizerDeltas[1]) : 0,
-                            reconstruct ? Math.Max(8, Ac(q + quantizerDeltas[2]) * 155 / 100) : 0, out var nonzero);
+                            1, above[8] + leftCoefficients[8], reconstruct ? prepared[0] : 0,
+                            reconstruct ? prepared[1] : 0, out var nonzero);
                         above[8] = leftCoefficients[8] = nonzero;
                         if (reconstruct) Vp8Transforms.InverseWalsh(coefficients[..16]);
                     }
@@ -190,8 +202,8 @@ internal ref struct Vp8Decoder
                         var a = offset + local % side; var l = offset + local / side;
                         var subblock = reconstruct ? coefficients.Slice((b + 1) * 16, 16) : default;
                         any |= Coefficients(reconstruct, ref tokens, ref window, reuseWindow, subblock, luma ? hasY2 ? 0 : 3 : 2,
-                            above[a] + leftCoefficients[l], reconstruct ? luma ? Dc(q + quantizerDeltas[0]) : Math.Min(132, Dc(q + quantizerDeltas[3])) : 0,
-                            reconstruct ? luma ? Ac(q) : Ac(q + quantizerDeltas[4]) : 0, out var nonzero);
+                            above[a] + leftCoefficients[l], luma ? lumaDc : chromaDc,
+                            luma ? lumaAc : chromaAc, out var nonzero);
                         above[a] = leftCoefficients[l] = nonzero;
                     }
                     if (reuseWindow) window.Publish(ref tokens);
@@ -231,21 +243,21 @@ internal ref struct Vp8Decoder
         // including positive segment overrides and reference/mode deltas.
         if (result is not null && filterLevel != 0)
             for (var my = 0; my < rows; my++)
-            for (var mx = 0; mx < columns; mx++)
-            {
-                // Check even when this block's adjustments reduce its level to zero.
-                context.Cancellation.ThrowIfCancellationRequested();
-                var block = blocks[my * columns + mx];
-                var level = segmentation ? segmentFilters[block.Segment] + (absoluteSegments ? 0 : filterLevel) : filterLevel;
-                if (deltasEnabled) level += referenceDeltas[0] + (block.Mode == 4 ? modeDeltas[0] : 0);
-                level = Math.Clamp(level, 0, 63); var skip = (block.Flags & 2) != 0;
-                Vp8LoopFilter.Macroblock(result.Y, stride, mx * 16, my * 16, 16, level, sharpness, simpleFilter, skip, context);
-                if (!simpleFilter)
+                for (var mx = 0; mx < columns; mx++)
                 {
-                    Vp8LoopFilter.Macroblock(result.U, stride / 2, mx * 8, my * 8, 8, level, sharpness, false, skip, context);
-                    Vp8LoopFilter.Macroblock(result.V, stride / 2, mx * 8, my * 8, 8, level, sharpness, false, skip, context);
+                    // Check even when this block's adjustments reduce its level to zero.
+                    context.Cancellation.ThrowIfCancellationRequested();
+                    var block = blocks[my * columns + mx];
+                    var level = segmentation ? segmentFilters[block.Segment] + (absoluteSegments ? 0 : filterLevel) : filterLevel;
+                    if (deltasEnabled) level += referenceDeltas[0] + (block.Mode == 4 ? modeDeltas[0] : 0);
+                    level = Math.Clamp(level, 0, 63); var skip = (block.Flags & 2) != 0;
+                    Vp8LoopFilter.Macroblock(result.Y, stride, mx * 16, my * 16, 16, level, sharpness, simpleFilter, skip, context);
+                    if (!simpleFilter)
+                    {
+                        Vp8LoopFilter.Macroblock(result.U, stride / 2, mx * 8, my * 8, 8, level, sharpness, false, skip, context);
+                        Vp8LoopFilter.Macroblock(result.V, stride / 2, mx * 8, my * 8, 8, level, sharpness, false, skip, context);
+                    }
                 }
-            }
         context.Release(metadataBytes + 8192); return result;
     }
 
@@ -324,6 +336,17 @@ internal ref struct Vp8Decoder
         ReadOnlySpan<int> bases = [5, 7, 11, 19, 35, 67]; var value = 0;
         foreach (var probability in p) value = value * 2 + tokens.Read(data, probability, context);
         return bases[category] + value;
+    }
+
+    internal static void PrepareQuantizers(int q, ReadOnlySpan<int> deltas, Span<int> values)
+    {
+        q = Math.Clamp(q, 0, 127);
+        values[0] = 2 * Dc(q + deltas[1]);
+        values[1] = Math.Max(8, Ac(q + deltas[2]) * 155 / 100);
+        values[2] = Dc(q + deltas[0]);
+        values[3] = Ac(q);
+        values[4] = Math.Min(132, Dc(q + deltas[3]));
+        values[5] = Ac(q + deltas[4]);
     }
 
     private static int Dc(int index) => Vp8Tables.DcQuantizers[Math.Clamp(index, 0, 127)];

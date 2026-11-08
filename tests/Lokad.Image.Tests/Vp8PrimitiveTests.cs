@@ -4,35 +4,54 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8PrimitiveTests
 {
+    [Theory]
+    [InlineData(-127, 15, -15, 15, -15, 15, 8, 29, 17, 4, 4, 19)]
+    [InlineData(0, 0, 0, 0, 0, 0, 8, 8, 4, 4, 4, 4)]
+    [InlineData(7, -15, 15, -15, 15, -15, 44, 8, 4, 11, 22, 4)]
+    [InlineData(63, 15, -15, 15, -15, 15, 88, 164, 73, 76, 44, 106)]
+    [InlineData(100, -15, 15, -15, 15, -15, 256, 189, 79, 167, 128, 122)]
+    [InlineData(127, 0, 0, 0, 0, 0, 314, 440, 157, 284, 132, 284)]
+    [InlineData(254, -15, 15, -15, 15, -15, 314, 330, 122, 284, 132, 213)]
+    public void FrameQuantizerPreparationPreservesClampsAndIndependentDeltas(int q,
+        int yDc, int y2Dc, int y2Ac, int uvDc, int uvAc,
+        int expectedY2Dc, int expectedY2Ac, int expectedYDc, int expectedYAc, int expectedUvDc, int expectedUvAc)
+    {
+        int[] deltas = [yDc, y2Dc, y2Ac, uvDc, uvAc]; var unchanged = deltas.ToArray();
+        Span<int> values = stackalloc int[8]; values.Fill(-12345);
+        Vp8Decoder.PrepareQuantizers(q, deltas, values.Slice(1, 6));
+        Assert.Equal(new[] { expectedY2Dc, expectedY2Ac, expectedYDc, expectedYAc, expectedUvDc, expectedUvAc }, values.Slice(1, 6).ToArray());
+        Assert.Equal(-12345, values[0]); Assert.Equal(-12345, values[7]); Assert.Equal(unchanged, deltas);
+    }
+
     [Fact]
     public void PreparedSmallPredictionMatchesEveryOriginalModeAndNeighborBoundary()
     {
         uint state = 0x58638619;
         foreach (var stride in new[] { 16, 32, 48 })
-        for (var macroX = 0; macroX < stride; macroX += 16)
-        foreach (var macroY in new[] { 0, 16 })
-        for (var dx = 0; dx < 16; dx += 4) for (var dy = 0; dy < 16; dy += 4)
-        for (var pattern = 0; pattern < 3; pattern++)
-        {
-            var expected = new byte[stride * (macroY + 16)];
-            for (var i = 0; i < expected.Length; i++)
-            {
-                state = unchecked(1664525 * state + 1013904223);
-                expected[i] = pattern == 0 ? (byte)(state >> 24)
-                    : pattern == 1 ? (byte)((i & 1) == 0 ? 0 : 255) : (byte)(127 + i % 3);
-            }
-            var actual = expected.ToArray(); var prepared = new int[13]; var x = macroX + dx; var y = macroY + dy;
-            var dc = Vp8Prediction.PrepareSmall(actual, stride, x, y, macroX, macroY, prepared);
-            var unchanged = prepared.ToArray();
-            // Each candidate overwrites this block; the original gathers again.
-            // Shared samples must remain valid through the final chosen mode.
-            foreach (var mode in Enumerable.Range(0, 10).Concat(new[] { 3, 1, 0, 9 }))
-            {
-                Vp8PredictionReference.Small(expected, stride, x, y, macroX, macroY, mode);
-                Vp8Prediction.SmallPrepared(actual, stride, x, y, mode, prepared, dc);
-                Assert.Equal(expected, actual); Assert.Equal(unchanged, prepared);
-            }
-        }
+            for (var macroX = 0; macroX < stride; macroX += 16)
+                foreach (var macroY in new[] { 0, 16 })
+                    for (var dx = 0; dx < 16; dx += 4) for (var dy = 0; dy < 16; dy += 4)
+                        for (var pattern = 0; pattern < 3; pattern++)
+                        {
+                            var expected = new byte[stride * (macroY + 16)];
+                            for (var i = 0; i < expected.Length; i++)
+                            {
+                                state = unchecked(1664525 * state + 1013904223);
+                                expected[i] = pattern == 0 ? (byte)(state >> 24)
+                                    : pattern == 1 ? (byte)((i & 1) == 0 ? 0 : 255) : (byte)(127 + i % 3);
+                            }
+                            var actual = expected.ToArray(); var prepared = new int[13]; var x = macroX + dx; var y = macroY + dy;
+                            var dc = Vp8Prediction.PrepareSmall(actual, stride, x, y, macroX, macroY, prepared);
+                            var unchanged = prepared.ToArray();
+                            // Each candidate overwrites this block; the original gathers again.
+                            // Shared samples must remain valid through the final chosen mode.
+                            foreach (var mode in Enumerable.Range(0, 10).Concat(new[] { 3, 1, 0, 9 }))
+                            {
+                                Vp8PredictionReference.Small(expected, stride, x, y, macroX, macroY, mode);
+                                Vp8Prediction.SmallPrepared(actual, stride, x, y, mode, prepared, dc);
+                                Assert.Equal(expected, actual); Assert.Equal(unchanged, prepared);
+                            }
+                        }
     }
 
     [Fact]
@@ -144,38 +163,38 @@ public sealed class Vp8PrimitiveTests
     public void HorizontalGreenPublicationKeepsPrefixesBordersTailsAndOwnership()
     {
         foreach (var width in new[] { 1, 3, 4, 5, 7, 8, 9, 31, 32, 33, 513 })
-        foreach (var seed in new[] { 0, 1, 255 })
-        {
-            const int height = 3;
-            var input = Enumerable.Repeat(0xA731D649u, width * height + 2).ToArray();
-            var expected = new byte[width * height];
-            for (var i = 0; i < expected.Length; i++)
+            foreach (var seed in new[] { 0, 1, 255 })
             {
-                var green = unchecked((byte)(seed + i * 91 + (i / width) * 37));
-                input[i + 1] = 0xA700D649u & ~0xFF00u | (uint)green << 8;
-                expected[i] = green;
+                const int height = 3;
+                var input = Enumerable.Repeat(0xA731D649u, width * height + 2).ToArray();
+                var expected = new byte[width * height];
+                for (var i = 0; i < expected.Length; i++)
+                {
+                    var green = unchecked((byte)(seed + i * 91 + (i / width) * 37));
+                    input[i + 1] = 0xA700D649u & ~0xFF00u | (uint)green << 8;
+                    expected[i] = green;
+                }
+                // Independent byte recurrence from RFC 9649. First-column samples
+                // use the sample above; every other sample uses its left neighbor.
+                for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
+                {
+                    var at = y * width + x;
+                    var predictor = x != 0 ? expected[at - 1] : y != 0 ? expected[at - width] : 0;
+                    expected[at] = unchecked((byte)(expected[at] + predictor));
+                }
+                var original = input.ToArray();
+                using var root = new Lokad.Image.Tooling.TestMemoryBudget(0);
+                using var context = new OperationContext(new() { MemoryBudget = root }, default);
+                var compact = Enumerable.Repeat((byte)0xAD, expected.Length + 6).ToArray();
+                WebpAlpha.PublishHorizontalGreen(input.AsSpan(1, expected.Length), compact.AsSpan(3, expected.Length), width, height, context);
+                Assert.Equal(expected, compact.AsSpan(3, expected.Length).ToArray());
+                Assert.Equal(original, input);
+                Assert.All(compact[..3], b => Assert.Equal(0xAD, b)); Assert.All(compact[^3..], b => Assert.Equal(0xAD, b));
+                WebpAlpha.PublishHorizontalGreen(input.AsSpan(1, expected.Length), default, width, height, context);
+                for (var i = 0; i < expected.Length; i++) Assert.Equal((uint)expected[i] << 24, input[i + 1]);
+                Assert.Equal(original[0], input[0]); Assert.Equal(original[^1], input[^1]);
+                Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
             }
-            // Independent byte recurrence from RFC 9649. First-column samples
-            // use the sample above; every other sample uses its left neighbor.
-            for (var y = 0; y < height; y++) for (var x = 0; x < width; x++)
-            {
-                var at = y * width + x;
-                var predictor = x != 0 ? expected[at - 1] : y != 0 ? expected[at - width] : 0;
-                expected[at] = unchecked((byte)(expected[at] + predictor));
-            }
-            var original = input.ToArray();
-            using var root = new Lokad.Image.Tooling.TestMemoryBudget(0);
-            using var context = new OperationContext(new() { MemoryBudget = root }, default);
-            var compact = Enumerable.Repeat((byte)0xAD, expected.Length + 6).ToArray();
-            WebpAlpha.PublishHorizontalGreen(input.AsSpan(1, expected.Length), compact.AsSpan(3, expected.Length), width, height, context);
-            Assert.Equal(expected, compact.AsSpan(3, expected.Length).ToArray());
-            Assert.Equal(original, input);
-            Assert.All(compact[..3], b => Assert.Equal(0xAD, b)); Assert.All(compact[^3..], b => Assert.Equal(0xAD, b));
-            WebpAlpha.PublishHorizontalGreen(input.AsSpan(1, expected.Length), default, width, height, context);
-            for (var i = 0; i < expected.Length; i++) Assert.Equal((uint)expected[i] << 24, input[i + 1]);
-            Assert.Equal(original[0], input[0]); Assert.Equal(original[^1], input[^1]);
-            Assert.Equal(0, root.Bytes); Assert.Equal(0, root.GrowthAttempts); Assert.False(root.IsDisposed);
-        }
     }
 
     [Fact]

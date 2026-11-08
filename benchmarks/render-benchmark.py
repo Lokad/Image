@@ -40,37 +40,34 @@ def render():
     assert vp8_current['qualification']['fullChecksEachOs'] == 5939
     assert vp8_current['qualification']['sameActualPackageBothOs']
     assert vp8_current['qualification']['actualPackage']['sha256'] == vp8_current['qualification']['samePackageLinux']['sameActualPackageSha256']
-    prepared_model = json.loads((ROOT / 'benchmarks/vp8-model-row-stride-evidence.json').read_text(encoding='utf-8'))
+    prepared_model = json.loads((ROOT / 'benchmarks/vp8-frame-quantizer-preparation-evidence.json').read_text(encoding='utf-8'))
     assert prepared_model['productionAccepted'] and prepared_model['requiredMaterialPaths'] == 283
     assert prepared_model['raw']['mirrored'] and prepared_model['raw']['allMembersVerified']
-    assert set(prepared_model['cases']) == {'Native8', 'Vp8Stream', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
-    for name, records in prepared_model['cases'].items():
-        observation, cost = records[-1], prepared_model['costs'][name]
-        receipt = observation['receipt']
-        assert len(observation['managed']['actual']) == len(receipt['nativeBefore']) == len(receipt['nativeAfter']) == 12
-        assert receipt['librarySha256'] == cost['librarySha256'] == prepared_model['producers']['linuxSha256']
-        assert receipt['sourceUnchanged'] and receipt['independentOwnedOutput']
-        assert all(q['passed'] for q in observation['quietness'].values())
+    assert set(prepared_model['costs']) == {'Native8', 'Vp8Stream', 'Opaque8', 'SimpleOpaque8', 'OpaqueCancelable8', 'ValidateVp8Alpha'}
+    for name, cost in prepared_model['costs'].items():
+        assert cost['actualIterations'] == cost['nativeSamplesEachBracket'] == 12
+        assert cost['librarySha256'] == prepared_model['producers']['linuxSha256']
+        assert cost['allOriginalGatesPassed'] and cost['quietGuardsPassed']
+        assert cost['sourceUnchanged'] and cost['independentOwnedOutput']
         if name.startswith('Validate'):
-            assert receipt['descriptorExact'] and receipt['prefixAndCodingScopesVerified']
+            assert cost['descriptorExact'] and cost['prefixAndCodingScopesVerified']
         else:
-            assert receipt['managedOutputSha256'] == receipt['nativeOutputSha256'] and receipt['alphaExact']
-            assert receipt['decoderMaximum'] == 0 and receipt['managedOutputBytes'] == 531468
+            assert cost['managedOutputSha256'] == cost['nativeOutputSha256'] and cost['alphaExact']
+            assert cost['decoderMaximum'] == 0 and cost['managedOutputBytes'] == 531468
         assert cost['status'] == ('pass' if cost['upper'] <= 1 else 'gap' if cost['lower'] > 1 else 'uncertain')
-        assert cost['upper'] == observation['conservativeRatioUpper']
         assert math.isclose(cost['ratio'], cost['managedUs'] / cost['nativeUs'], rel_tol=1e-12)
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for c in prepared_model['comparisons'].values() for v in c['views'].values())
+    assert all(v['rawGainSeparated'] for c in prepared_model['comparisons'].values() for v in c['views'].values())
+    assert all(v['normalizedGainSeparated'] for v in prepared_model['comparisons']['Native8']['views'].values())
+    assert not prepared_model['comparisons']['OpaqueCancelable8']['views']['unfilteredActualStatistics']['normalizedGainSeparated']
     model_proof = prepared_model['sourceProof']
-    assert model_proof['entireLiveReaderReconstructsOriginalExceptRowStrideAndComment']
-    assert model_proof['entireDecoderReconstructsOriginalExceptDefaultAndHeaderStorageMapping']
-    assert model_proof['all1056HeaderValuesPreserveSyntaxOrder']
-    assert model_proof['allInputPartitionModeBoundsAndPerDecisionPollsUnchanged']
+    assert model_proof['originalReconstructedOutsideFrameQuantizerPreparation']
+    assert model_proof['allCoefficientReaderContextTransformPredictionFilteringColorOwnershipBodiesExact']
     assert prepared_model['storage']['modelPayloadBytes'] == 1536
-    assert prepared_model['storage']['additionalOwnedPayloadBytes'] == 480
+    assert prepared_model['storage']['operationStackTableBytes'] == 96
     assert prepared_model['storage']['coarseHeaderWorkspaceBytes'] == 8192
+    assert prepared_model['storage']['newOwnedHeapCapacityBytes'] == prepared_model['storage']['newRetainedStateBytes'] == 0
     q = prepared_model['qualification']
-    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 5909
+    assert q['fullChecksEachOs'] == q['windows']['total'] == q['linux']['total'] == 5955
     assert q['sameActualPackageBothOs'] and q['actualPackage']['sha256'] == q['samePackageLinux']['sameActualPackageSha256']
     live = prepared_model['costs']['OpaqueCancelable8']
     assert all(v['rawGainSeparated'] for v in vp8_current['comparison']['views'].values())
@@ -1612,7 +1609,14 @@ def render():
             read_rows.append(f'| {label} | {current["managedMicroseconds"]:,.3f} | {current["nativeMicroseconds"]:,.3f} | '
                              f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
             continue
-        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else prepared_model if case == 'ValidateVp8Alpha' else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
+        if case == 'ValidateVp8Alpha':
+            current = prepared_model['costs'][case]
+            assert current['descriptorExact'] and current['prefixAndCodingScopesVerified'] and current['managedOutputBytes'] == 36
+            status = 'Confirmed pass' if current['status'] == 'pass' else 'Confirmed gap' if current['status'] == 'gap' else 'Confidence open'
+            read_rows.append(f'| {label} † | {current["managedUs"]:,.3f} | {current["nativeUs"]:,.3f} | '
+                             f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | {status} |')
+            continue
+        producer = (png_probe if case in png_probe['cases'] else header_skips if case in header_skips['cases'] else resident_decode if case == 'ValidateVp8lAlpha' else png_gfni if case in png_gfni['cases'] else baseline_blocks if case == 'ValidateJpegBaseline420' else png_average if case in png_average['cases'] else png_crc_scan if case in png_crc_scan['cases'] else vp8_validation if case in vp8_validation['cases'] else png_cursor if case in png_cursor['cases']
                     else webp_probe if case in webp_probe['cases'] else jpeg_probe if case in jpeg_probe['cases'] else probes if case in probes['cases'] else streamed if case in streamed['cases'] else reads)
         observations = producer['cases'][case]
         observation = observations[-1]
@@ -1705,21 +1709,27 @@ Current scope and remaining work:
   retain that tradeoff, not a general decoder speedup claim.
   Validation passes/stop; source-valid coarse peaks235,152/11,121B and retained0
   are reused, not remeasured physical peaks. Full output retains531,468B until disposal.
-  [Power-of-two model rows](../benchmarks/VP8-MODEL-ROW-STRIDE.md) prepare one
-  1,536B model in place of1,056B, avoiding repeated11-byte-stride addressing.
-  Complete live decode saves59.31µs/1.19%raw/1.18%normalized; all six affected
-  controls save49.93–137.23µs with separated filtered/all-actual raw/normalized
-  intervals. GC rises480B/op per case; the existing8KiB model/state/frame
-  admission is unchanged. Physical/native peaks are unmeasured.
-  Current resident{lpf['Native8']['managedUs']:,.2f}/native{lpf['Native8']['nativeUs']:,.2f}µs,
-  upper{lpf['Native8']['upper']:.3f}, and stream upper{stream['upper']:.3f} pass/stop.
-  All six current costs:3pass/3gaps/0uncertain. Live opaque remains
-  {live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,upper{live['upper']:.3f}gap,
-  {live['allocatedBytes']:,}B/op. Retained frames remain531,468B until disposal;
-  no second model, pool, cache or escaping state. Eleven probability values per
-  row, syntax/decision order, every poll and exact cursor/pixels remain.
-  [Earlier model preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
-  [horizontal alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
+  [Frame-private quantizers](../benchmarks/VP8-FRAME-QUANTIZER-PREPARATION.md)
+  prepare six scalar dequantizers per segment once inside complete decoding,
+  using96B within the existing8KiB allowance. Live opaque saves45.36µs/0.92%raw;
+  raw confidence separates in both views, while0.86% normalized remains a point
+  gain with all-actual uncertainty. Resident alpha saves110.85µs/1.83%raw/
+  1.82%normalized with separated confidence. Contemporary originals resolve the
+  resident historical-clock contradiction; no favorable repeats. Current resident
+  {lpf['Native8']['managedUs']:,.2f}/native{lpf['Native8']['nativeUs']:,.2f}µs,
+  upper{lpf['Native8']['upper']:.3f} is uncertain. Stream upper{stream['upper']:.3f}
+  and validation upper{lpf['ValidateVp8Alpha']['upper']:.3f} pass/stop. Six current
+  costs:{prepared_model['statusCounts']['pass']}pass/{prepared_model['statusCounts']['gap']}gaps/{prepared_model['statusCounts']['uncertain']}uncertain.
+  Live opaque remains{live['managedUs']:,.2f}/native{live['nativeUs']:,.2f}µs,
+  upper{live['upper']:.3f}gap,{live['allocatedBytes']:,}B/op. All allocation counts
+  are unchanged; no new heap/retention. Existing1,536B probability model and
+  independently retained531,468B frames remain. Physical/native peaks unmeasured;
+  logical fixed payload/coarse allowance5,108B fits8,192B. Syntax, every original
+  poll, cursor/pixels, admission and actual async lifetimes remain. Both OSes pass
+  5,955full/live, normal/scalar/disabled-ISA and SAME package/three examples.
+  [Model rows](../benchmarks/VP8-MODEL-ROW-STRIDE.md),
+  [earlier preparation](../benchmarks/VP8-PREPARED-COEFFICIENT-MODEL.md) and
+  [alpha publication](../benchmarks/WEBP-HORIZONTAL-ALPHA-PUBLICATION.md)
   retain their historical gains and raw evidence separately.
 - **WebP encoding:** [matching-to-population storage](../benchmarks/WEBP-MATCHING-POPULATION-STORAGE.md)
   saves134,736B/encode on photograph/diagram and70,560B on transparent alpha.

@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Prepare VP8 dequantizers once per frame segment, preserving exact decoded
+  pixels, bounded scratch admission and independent output ownership.
+
 - Reuse unpublished resize output for larger bicubic row bands, preserving exact
   pixels, bounded scratch admission and independently owned results.
 
