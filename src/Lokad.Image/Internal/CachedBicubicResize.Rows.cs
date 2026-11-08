@@ -8,7 +8,27 @@ namespace Lokad.Image.Internal;
 
 internal static partial class CachedBicubicResize
 {
-    private static void FilterHorizontal(ReadOnlySpan<double> decoded,Span<double> cached,
+    internal static void PrepareOverlappingHorizontalPairs(Span<int> offsets,ReadOnlySpan<int> counts,
+        int width,int sourceWidth,OperationContext context)
+    {
+        // Small-support geometry has sixteen slots per output. Eight-tap pairs
+        // never read slot fifteen, including during exact-result repair. Use it
+        // for the prepared source start plus one (zero means irregular).
+        for(var x=0;x+1<width;x+=2)
+        {
+            context.Cancellation.ThrowIfCancellationRequested();
+            if(counts[x]!=8 || counts[x+1]!=8)continue;
+            var base0=x*16;var base1=base0+16;
+            var first=offsets[base0];
+            if(first>sourceWidth*4-40 || offsets[base1]!=first+8)continue;
+            var contiguous=true;
+            for(var tap=0;tap<8;tap++)
+                contiguous &= offsets[base0+tap]==first+tap*4 && offsets[base1+tap]==first+(tap+2)*4;
+            if(contiguous)offsets[base0+15]=first+1;
+        }
+    }
+
+    internal static void FilterHorizontal(ReadOnlySpan<double> decoded,Span<double> cached,
         ReadOnlySpan<double> weights,ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,
         int width,int capacity,bool verticalOnly,bool adjacent,OperationContext context)
     {
@@ -29,9 +49,32 @@ internal static partial class CachedBicubicResize
         for(;x+1<width;x+=2)
         {
             context.Cancellation.ThrowIfCancellationRequested();
+            var base0=x*capacity;var base1=(x+1)*capacity;
+            var prepared=offsets[base0+15];
+            if(prepared!=0)
+            {
+                // Two outputs overlap six of their eight source pixels. Keep
+                // their ordered sums in the lower/upper halves, sharing five
+                // source windows rather than loading sixteen separate pixels.
+                var first=prepared-1;
+                var window=MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(first,8)));
+                var sum=Vector512<double>.Zero;
+                for(var tap=0;tap<8;tap+=2)
+                {
+                    var next=MemoryMarshal.Read<Vector512<double>>(MemoryMarshal.AsBytes(decoded.Slice(first+(tap+2)*4,8)));
+                    var even=Avx512F.Shuffle4x128(window,next,0x44);
+                    var odd=Avx512F.Shuffle4x128(window,next,0xee);
+                    var evenWeights=Vector512.Create(Vector256.Create(weights[base0+tap]),Vector256.Create(weights[base1+tap]));
+                    var oddWeights=Vector512.Create(Vector256.Create(weights[base0+tap+1]),Vector256.Create(weights[base1+tap+1]));
+                    sum=Avx512F.Add(sum,Avx512F.Multiply(even,evenWeights));
+                    sum=Avx512F.Add(sum,Avx512F.Multiply(odd,oddWeights));
+                    window=next;
+                }
+                MemoryMarshal.Write(MemoryMarshal.AsBytes(cached.Slice(x*4,8)),in sum);
+                continue;
+            }
             var sum0=Vector256<double>.Zero;
             var sum1=Vector256<double>.Zero;
-            var base0=x*capacity;var base1=(x+1)*capacity;
             var first0=offsets[base0];var first1=offsets[base1];
             if((adjacent) && counts[x]==4 && counts[x+1]==4
                 && first1==first0+4 && first1<=decoded.Length-16)

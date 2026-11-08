@@ -1,0 +1,1543 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RHW611",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+    "linuxSha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639"
+  },
+  "cases": {
+    "Down8": {
+      "caseId": "Down8",
+      "managedUs": 484.00351005244744,
+      "nativeUs": 416.6343203125,
+      "ratio": 1.1616986082409548,
+      "lower": 1.1522094740343936,
+      "upper": 1.166720603763513,
+      "allocatedBytes": 199980,
+      "packetBytes": 132096,
+      "packetSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "gap",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 11,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611-candidate-Down8-confirm",
+      "receiptFile": "rhw611-candidate-Down8-confirm-receipt.json",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "depth": 8,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 416,
+          "Nanoseconds": 202017762
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 416,
+          "Nanoseconds": 201538434
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 416,
+          "Nanoseconds": 201236242
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 416,
+          "Nanoseconds": 201178304
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 416,
+          "Nanoseconds": 201059295
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 416,
+          "Nanoseconds": 201260158
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 416,
+          "Nanoseconds": 201359609
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 416,
+          "Nanoseconds": 201687186
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 416,
+          "Nanoseconds": 201185916
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 416,
+          "Nanoseconds": 201534033
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 416,
+          "Nanoseconds": 201378918
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 416,
+          "Nanoseconds": 201388523
+        }
+      ]
+    },
+    "Down32x16_8": {
+      "caseId": "Down32x16_8",
+      "managedUs": 365.34753385416667,
+      "nativeUs": 374.8730052083333,
+      "ratio": 0.9745901379351845,
+      "lower": 0.9126357824561578,
+      "upper": 1.03422326335042,
+      "allocatedBytes": 197300,
+      "packetBytes": 2048,
+      "packetSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "uncertain",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Down32x16_8-confirm",
+      "receiptFile": "rhw611g-candidate-Down32x16_8-confirm-receipt.json",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "nativeOutputSha256": "3ec9c663c4051ce2f14b6a84acf4f21cf4c495c4017200f50f469de1f4b6132d",
+      "outputWidth": 32,
+      "outputHeight": 16,
+      "depth": 8,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 32x16 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, thirty-two-pixel clamped halo (40.269% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 576,
+          "Nanoseconds": 202741144
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 576,
+          "Nanoseconds": 202325033
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 576,
+          "Nanoseconds": 201954693
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 576,
+          "Nanoseconds": 225141172
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 576,
+          "Nanoseconds": 213129574
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 576,
+          "Nanoseconds": 209678098
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 576,
+          "Nanoseconds": 204891018
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 576,
+          "Nanoseconds": 206703544
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 576,
+          "Nanoseconds": 225996328
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 576,
+          "Nanoseconds": 226300729
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 576,
+          "Nanoseconds": 204071909
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 576,
+          "Nanoseconds": 202357864
+        }
+      ]
+    },
+    "Down16": {
+      "caseId": "Down16",
+      "managedUs": 494.324562062937,
+      "nativeUs": 571.4729700520834,
+      "ratio": 0.8650007751335725,
+      "lower": 0.8611739120319113,
+      "upper": 0.8679541980659118,
+      "allocatedBytes": 199953,
+      "packetBytes": 264192,
+      "packetSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "pass",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 11,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Down16-confirm",
+      "receiptFile": "rhw611g-candidate-Down16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+      "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "depth": 16,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 416,
+          "Nanoseconds": 206510715
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 416,
+          "Nanoseconds": 205927912
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 416,
+          "Nanoseconds": 205683692
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 416,
+          "Nanoseconds": 205356287
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 416,
+          "Nanoseconds": 205399933
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 416,
+          "Nanoseconds": 205667428
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 416,
+          "Nanoseconds": 205661519
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 416,
+          "Nanoseconds": 205540606
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 416,
+          "Nanoseconds": 205706327
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 416,
+          "Nanoseconds": 205398901
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 416,
+          "Nanoseconds": 206061614
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 416,
+          "Nanoseconds": 205631313
+        }
+      ]
+    },
+    "Horizontal16": {
+      "caseId": "Horizontal16",
+      "managedUs": 584.219129003099,
+      "nativeUs": 579.67521875,
+      "ratio": 1.0078387174509502,
+      "lower": 1.0001172224994863,
+      "upper": 1.0177747313267824,
+      "allocatedBytes": 199930,
+      "packetBytes": 530432,
+      "packetSha256": "ef78fb7dbfb05cb1a756a64702961cbe60abd5046fa5f2b7cc6fb91b3072cceb",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "gap",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 11,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Horizontal16-confirm",
+      "receiptFile": "rhw611g-candidate-Horizontal16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ef78fb7dbfb05cb1a756a64702961cbe60abd5046fa5f2b7cc6fb91b3072cceb",
+      "nativeOutputSha256": "6473a287135dc19141f06f1bbca47771f89977c01ab7fb406881b4ecd1710861",
+      "outputWidth": 256,
+      "outputHeight": 259,
+      "depth": 16,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x259 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 352,
+          "Nanoseconds": 205817686
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 352,
+          "Nanoseconds": 205511603
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 352,
+          "Nanoseconds": 205561388
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 352,
+          "Nanoseconds": 205723062
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 352,
+          "Nanoseconds": 205356378
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 352,
+          "Nanoseconds": 205146870
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 352,
+          "Nanoseconds": 205837276
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 352,
+          "Nanoseconds": 205602720
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 352,
+          "Nanoseconds": 206001985
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 352,
+          "Nanoseconds": 205817056
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 352,
+          "Nanoseconds": 205726279
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 352,
+          "Nanoseconds": 208614382
+        }
+      ]
+    },
+    "Vertical16": {
+      "caseId": "Vertical16",
+      "managedUs": 668.0086566985647,
+      "nativeUs": 589.9380078125,
+      "ratio": 1.1323370385569018,
+      "lower": 1.1267344177992498,
+      "upper": 1.1386450318819448,
+      "allocatedBytes": 384013,
+      "packetBytes": 529416,
+      "packetSha256": "275a5c3d38d7ba7e6a1ca713fb69fd2ceaf665c18db8269f0bcc1d3e58dcd6fd",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "gap",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 11,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Vertical16-confirm",
+      "receiptFile": "rhw611g-candidate-Vertical16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "275a5c3d38d7ba7e6a1ca713fb69fd2ceaf665c18db8269f0bcc1d3e58dcd6fd",
+      "nativeOutputSha256": "f22048d3816fba849e7d71cb2918a1408b68d1bcbfdde98c95df7234813b76d2",
+      "outputWidth": 513,
+      "outputHeight": 129,
+      "depth": 16,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 513x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 304,
+          "Nanoseconds": 203844531
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 304,
+          "Nanoseconds": 202822965
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 304,
+          "Nanoseconds": 203177712
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 304,
+          "Nanoseconds": 203427210
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 304,
+          "Nanoseconds": 203017619
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 304,
+          "Nanoseconds": 203173195
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 304,
+          "Nanoseconds": 202841412
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 304,
+          "Nanoseconds": 202823505
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 304,
+          "Nanoseconds": 203328860
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 304,
+          "Nanoseconds": 203180386
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 304,
+          "Nanoseconds": 202982536
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 304,
+          "Nanoseconds": 203050509
+        }
+      ]
+    },
+    "Cross16": {
+      "caseId": "Cross16",
+      "managedUs": 788.9489039417614,
+      "nativeUs": 830.3167317708334,
+      "ratio": 0.9501782557833731,
+      "lower": 0.9408989901137811,
+      "upper": 0.9603046744804757,
+      "allocatedBytes": 199891,
+      "packetBytes": 1062912,
+      "packetSha256": "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "pass",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 11,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Cross16-confirm",
+      "receiptFile": "rhw611g-candidate-Cross16-confirm-receipt.json",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "ee02e57ff550047bf5296fb5af51c9396005653a8d37c3e0032abcdbb6db0db1",
+      "nativeOutputSha256": "fb741bb37e310921a0c588ab79c72ec5c6e17ac156c11a686a95eaf8e16afd70",
+      "outputWidth": 256,
+      "outputHeight": 519,
+      "depth": 16,
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 256x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 256,
+          "Nanoseconds": 204482049
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 256,
+          "Nanoseconds": 201937446
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 256,
+          "Nanoseconds": 201843974
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 256,
+          "Nanoseconds": 202206122
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 256,
+          "Nanoseconds": 201703521
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 256,
+          "Nanoseconds": 202103476
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 256,
+          "Nanoseconds": 202110267
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 256,
+          "Nanoseconds": 202036265
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 256,
+          "Nanoseconds": 201922573
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 256,
+          "Nanoseconds": 201825286
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 256,
+          "Nanoseconds": 202065399
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 256,
+          "Nanoseconds": 201930245
+        }
+      ]
+    },
+    "Horizontal8": {
+      "caseId": "Horizontal8",
+      "managedUs": 476.4230133101852,
+      "nativeUs": 565.269056640625,
+      "ratio": 0.8428252134329643,
+      "lower": 0.8306711171550791,
+      "upper": 0.8469349842017133,
+      "allocatedBytes": 199980,
+      "packetBytes": 265216,
+      "packetSha256": "a5d2e75dbc30006f845c8a69061e096ded94ed06248e50350ec2c18456606a20",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "pass",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Horizontal8-confirm",
+      "receiptFile": "rhw611g-candidate-Horizontal8-confirm-receipt.json",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "a5d2e75dbc30006f845c8a69061e096ded94ed06248e50350ec2c18456606a20",
+      "nativeOutputSha256": "23441de997c54720b052b3a2b958e204b5162d994118d9a102497afc467617b0",
+      "outputWidth": 256,
+      "outputHeight": 259,
+      "depth": 8,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x259 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact qualified original pixels; independently certified exact rational sample halves retain SPEC binary64 rounding; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": false,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 432,
+          "Nanoseconds": 206429671
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 432,
+          "Nanoseconds": 206272313
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 432,
+          "Nanoseconds": 206185221
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 432,
+          "Nanoseconds": 205933811
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 432,
+          "Nanoseconds": 205849893
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 432,
+          "Nanoseconds": 206214295
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 432,
+          "Nanoseconds": 205271497
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 432,
+          "Nanoseconds": 205563764
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 432,
+          "Nanoseconds": 205633330
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 432,
+          "Nanoseconds": 205475912
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 432,
+          "Nanoseconds": 205374889
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 432,
+          "Nanoseconds": 205578797
+        }
+      ]
+    },
+    "Vertical8": {
+      "caseId": "Vertical8",
+      "managedUs": 637.5030494791667,
+      "nativeUs": 589.7776119791666,
+      "ratio": 1.0809210735209902,
+      "lower": 1.0743721269817872,
+      "upper": 1.0875307656110424,
+      "allocatedBytes": 384090,
+      "packetBytes": 264708,
+      "packetSha256": "56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "gap",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 12,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Vertical8-confirm",
+      "receiptFile": "rhw611g-candidate-Vertical8-confirm-receipt.json",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "56ff0d8276c6427bb3ad49e8d3af6ad26cfb99b27db697580471ac273fcd7697",
+      "nativeOutputSha256": "bb37af865b17b37835464fc609affdca80fd007d2ad8e7b46d66c9497b82db2e",
+      "outputWidth": 513,
+      "outputHeight": 129,
+      "depth": 8,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 513x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact qualified original pixels; independently certified exact rational sample halves retain SPEC binary64 rounding; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": false,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 320,
+          "Nanoseconds": 204481490
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 320,
+          "Nanoseconds": 204098018
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 320,
+          "Nanoseconds": 203653726
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 320,
+          "Nanoseconds": 204115455
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 320,
+          "Nanoseconds": 203592193
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 320,
+          "Nanoseconds": 204153353
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 320,
+          "Nanoseconds": 203947421
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 320,
+          "Nanoseconds": 204078690
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 320,
+          "Nanoseconds": 203817784
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 320,
+          "Nanoseconds": 203810724
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 320,
+          "Nanoseconds": 203920871
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 320,
+          "Nanoseconds": 204347697
+        }
+      ]
+    },
+    "Cross8": {
+      "caseId": "Cross8",
+      "managedUs": 810.8531557173296,
+      "nativeUs": 838.6954544270834,
+      "ratio": 0.9668028501134861,
+      "lower": 0.9600247182865003,
+      "upper": 0.9728373660955617,
+      "allocatedBytes": 199943,
+      "packetBytes": 531456,
+      "packetSha256": "46b86650bc27febb8c0ed688a02591b660fe77b099c5b9e2ffe42a94e38cae5e",
+      "librarySha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "status": "pass",
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "actualIterations": 12,
+      "filteredActuals": 11,
+      "nativeSamplesEachBracket": 12,
+      "runId": "rhw611g-candidate-Cross8-confirm",
+      "receiptFile": "rhw611g-candidate-Cross8-confirm-receipt.json",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "outputSha256": "46b86650bc27febb8c0ed688a02591b660fe77b099c5b9e2ffe42a94e38cae5e",
+      "nativeOutputSha256": "cb4ca24bfa2efdece339afc582e8ea1c768809464ba9e653bc10cb2bf27983c7",
+      "outputWidth": 256,
+      "outputHeight": 519,
+      "depth": 8,
+      "boundary": "One resident original 513x259 RGBA8 raster to independently owned 256x519 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "managedRationalReferenceExact": true,
+      "managedQualifiedOriginalPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedActuals": [
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 1,
+          "Operations": 256,
+          "Nanoseconds": 207844735
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 2,
+          "Operations": 256,
+          "Nanoseconds": 208159271
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 3,
+          "Operations": 256,
+          "Nanoseconds": 208841063
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 4,
+          "Operations": 256,
+          "Nanoseconds": 207795670
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 5,
+          "Operations": 256,
+          "Nanoseconds": 208007100
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 6,
+          "Operations": 256,
+          "Nanoseconds": 207040587
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 7,
+          "Operations": 256,
+          "Nanoseconds": 207707888
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 8,
+          "Operations": 256,
+          "Nanoseconds": 207302263
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 9,
+          "Operations": 256,
+          "Nanoseconds": 207233188
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 10,
+          "Operations": 256,
+          "Nanoseconds": 207617370
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 11,
+          "Operations": 256,
+          "Nanoseconds": 207285939
+        },
+        {
+          "IterationMode": 1,
+          "IterationStage": 3,
+          "LaunchIndex": 0,
+          "IterationIndex": 12,
+          "Operations": 256,
+          "Nanoseconds": 207372881
+        }
+      ]
+    }
+  },
+  "statusCounts": {
+    "pass": 4,
+    "gap": 4,
+    "uncertain": 1
+  },
+  "comparisons": {
+    "Down8": {
+      "views": {
+        "statistics": {
+          "originalUs": 547.741318181818,
+          "currentUs": 484.00351005244744,
+          "savedUs": 63.73780812937056,
+          "rawGain": 0.11636479851646564,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "originalUs": 547.8930443840579,
+          "currentUs": 484.139499198718,
+          "savedUs": 63.75354518533999,
+          "rawGain": 0.1163612968604334,
+          "rawGainSeparated": true,
+          "rawRegressionSeparated": false
+        }
+      },
+      "normalizedPointGain": 0.11035849434864209,
+      "nativePointShift": -0.006751375840345908,
+      "normalizedGainSeparated": true,
+      "normalizedRegressionSeparated": false,
+      "originalAllocatedBytes": 199981,
+      "currentAllocatedBytes": 199980
+    },
+    "Vertical16": {
+      "views": {
+        "statistics": {
+          "originalUs": 637.9719494791666,
+          "currentUs": 668.0086566985647,
+          "savedUs": -30.036707219398,
+          "rawGain": -0.04708154840337353,
+          "rawGainSeparated": false,
+          "rawRegressionSeparated": true
+        },
+        "unfilteredActualStatistics": {
+          "originalUs": 637.9734838541668,
+          "currentUs": 668.2210635964913,
+          "savedUs": -30.247579742324422,
+          "rawGain": -0.047411970101940204,
+          "rawGainSeparated": false,
+          "rawRegressionSeparated": true
+        }
+      },
+      "normalizedPointGain": -0.04344677421380405,
+      "nativePointShift": 0.0034834303765116648,
+      "normalizedGainSeparated": false,
+      "normalizedRegressionSeparated": true,
+      "originalAllocatedBytes": 384014,
+      "currentAllocatedBytes": 384013
+    }
+  },
+  "implementation": {
+    "removedWork": "Prepare contiguous eight-tap/two-pixel-stride eligibility once; five wide source windows replace sixteen separate pixel-vector loads for each eligible pair. Eight ordered wide multiply/add steps preserve two independent output sums. Original generic/adjacent/identity/odd/wide/portable execution and exact repair remain.",
+    "endState": "Small prepared eligibility marker in unused existing geometry slot15, one guarded packed execution branch in existing horizontal row kernel. No public API/session/cache/pool/owner or capacity changes; irregular/edge/odd/wide/portable paths stay original.",
+    "markerProof": "Only count8/8 pairs write existing slot15. Original paired max8 and per-output repair8 never read it. Other valid small-support geometries leave that slot zero: ceil(4*scale)+1<=16 implies 4*scale<=15. At strict inequality at most15 integer taps; at equality scale15/4 makes center-2*scale=(30*x-49)/8 noninteger, still15 taps. Geometry is clamped only after counting; no new capacity.",
+    "model": {
+      "project": "Lokad.Image",
+      "stage": "RHW611",
+      "purpose": "Numerical/geometry model only, no CPU claim. Actual C# production path bitwise oracle still required.",
+      "orderedLaneComparisons": 24000,
+      "shuffleControls": [
+        "0x44",
+        "0xee"
+      ],
+      "geometry": [
+        {
+          "sourceWidth": 513,
+          "width": 256,
+          "eligiblePairs": 124,
+          "pairs": 128,
+          "tapCounts": {
+            "8": 252,
+            "9": 4
+          }
+        },
+        {
+          "sourceWidth": 517,
+          "width": 257,
+          "eligiblePairs": 118,
+          "pairs": 128,
+          "tapCounts": {
+            "8": 244,
+            "9": 13
+          }
+        },
+        {
+          "sourceWidth": 65,
+          "width": 32,
+          "eligiblePairs": 12,
+          "pairs": 16,
+          "tapCounts": {
+            "8": 28,
+            "9": 4
+          }
+        },
+        {
+          "sourceWidth": 67,
+          "width": 33,
+          "eligiblePairs": 11,
+          "pairs": 16,
+          "tapCounts": {
+            "8": 28,
+            "9": 5
+          }
+        },
+        {
+          "sourceWidth": 33,
+          "width": 16,
+          "eligiblePairs": 4,
+          "pairs": 8,
+          "tapCounts": {
+            "8": 12,
+            "9": 4
+          }
+        },
+        {
+          "sourceWidth": 513,
+          "width": 255,
+          "eligiblePairs": 116,
+          "pairs": 127,
+          "tapCounts": {
+            "8": 240,
+            "9": 15
+          }
+        },
+        {
+          "sourceWidth": 33,
+          "width": 17,
+          "eligiblePairs": 4,
+          "pairs": 8,
+          "tapCounts": {
+            "8": 14,
+            "7": 3
+          }
+        },
+        {
+          "sourceWidth": 257,
+          "width": 513,
+          "eligiblePairs": 0,
+          "pairs": 256,
+          "tapCounts": {
+            "4": 512,
+            "5": 1
+          }
+        }
+      ],
+      "tailProof": "Mark only capacity16 pairs with counts8/8. Original paired kernel reads max(counts)=8, repair reads individual count8, neither reads slot15. Every other tail remains zero. Marker is first source offset+1, so zero remains ineligible. No new heap capacity/owner/cache. Ten source pixels must fit; clamped or noncontiguous/unequal/odd/portable paths remain original.",
+      "transition": "Prepare regular-pair eligibility once after admitted axis geometry, then five source windows for ten unique pixels replace sixteen 256-bit source loads per eligible output pair; eight ordered 512-bit multiply/add steps retain both independent four-lane sums. Weight construction and shuffle/JIT costs may erase benefit; one complete current Down8 short decides continuation. No fixed-fixture data or arithmetic relaxation."
+    },
+    "sourceProof": {
+      "driverOriginalExceptOnePreparationCall": true,
+      "rowsOriginalAfterRemovingPreparedHelperAndBranch": true,
+      "allPreviousArithmeticAndFallbacksExact": true,
+      "noPublicApiOwnerPoolCacheOrCodecChange": true
+    },
+    "risksAndTransition": "Weight half construction/shuffles/code size may erase source-load gains; extra once-only geometry scan and marker branch can cost ineligible controls. Old vector-view experiments are adverse history, not family bans. No arithmetic/certification relaxation, no instruction-count gain claim."
+  },
+  "storage": {
+    "down8WorkspaceAdmittedBytes": 199840,
+    "down8GcBytes": 199980,
+    "totalAllocationReductionClaim": false,
+    "scratchRetainedAfterOperationBytes": 0,
+    "retainedDown8ResultBytes": 132096,
+    "retainedDown16ResultBytes": 264192,
+    "preparedGeometryAddsOwnedCapacityBytes": 0,
+    "sharedAdmissionAndExistingDefaultPoolUnchanged": true,
+    "physicalAndNativePeaksMeasured": false,
+    "note": "Existing five frozen cached admission/refusal/cancel/recovery controls pass; same double/int array lengths and reservations. TotalGC, coarse admitted capacity, retained output and default idle output pool are distinct. One-byte GC rounding changes are not storage gains."
+  },
+  "qualification": {
+    "fullChecksEachOs": 5932,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+      "full": [
+        2667,
+        2317,
+        948
+      ],
+      "total": 5932,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 182,
+        "internal-scalar": 182,
+        "public-normal": 703,
+        "public-scalar": 703
+      },
+      "affectedResizeScalarEachOs": 885,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "86d961feaad873a84b4391671a85cf5d79e908cae87f0b66682d6ad79b8ddc45",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\CachedBicubicResize.Rows.cs": "e8d6c62f6a92f25f98fb4d348e4536600fb12a83221dc5fb4e0fc3c009a366e9"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+      "full": [
+        2667,
+        2317,
+        948
+      ],
+      "total": 5932,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 182,
+        "internal-scalar": 182,
+        "public-normal": 703,
+        "public-scalar": 703
+      },
+      "affectedResizeScalarEachOs": 885,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "b051196a493ed2d1c8294f8adccd5cd9dd2cea076595daf26cac2b3c74cf63d7",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/CachedBicubicResize.Rows.cs": "e8d6c62f6a92f25f98fb4d348e4536600fb12a83221dc5fb4e0fc3c009a366e9"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "focusedNormalAndScalarEachOs": {
+      "internal-normal": 182,
+      "internal-scalar": 182,
+      "public-normal": 703,
+      "public-scalar": 703
+    },
+    "disabledIsaEachOs": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 182,
+          "public-no-avx512": 703,
+          "internal-no-avx2": 182,
+          "public-no-avx2": 703
+        },
+        "coreSha256": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 182,
+          "public-no-avx512": 703,
+          "internal-no-avx2": 182,
+          "public-no-avx2": 703
+        },
+        "coreSha256": "4085c87667f7acb42c2b4dde19210378981bafd41dee27d83a6ed684f697e639",
+        "allBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "f5982a95114ead57e0612d312160e651e552c9036d0deef9c30a955a39b68c5e",
+      "symbolsSha256": "a093f120ba4e60222f40602fecbd7704e26cc5873d89d0a44e498b892a9969c5",
+      "bytes": 433151,
+      "librarySha256": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "f5982a95114ead57e0612d312160e651e552c9036d0deef9c30a955a39b68c5e",
+      "librarySha256": "bdd2fca7a385bda0f9406cf1d8234d8aaa294b195589cf55b59d17d74bbfe967",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "tieredCompilation": false,
+      "jpegFullResolutionCmykExistingConsumerChecks": "Existing varying CMYK hash, owned/stream/async/caller RGB-gray, orientation, retained charges and cleanup plus directRGB MCU owner checks exercised without new consumer build inputs."
+    },
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true,
+    "hardware": "Windows consumer reports vector execution false, exercising portable paths; Linux EPYC normal mode exercises prepared AVX512 and 44,128 bitwise horizontal-lane comparisons. Existing rational final-frame oracles and frozen native bounds pass. Scalar/disabled-ISA modes exercise their applicable fallbacks."
+  },
+  "workflow": {
+    "coreBuildsEachOs": 1,
+    "embeddedBuildsEachOs": 1,
+    "publicHarnessSelectorNativeFixtureBuilds": 0,
+    "confirmationActuals": 12,
+    "originalsMeasured": [
+      "Down8",
+      "Vertical16"
+    ],
+    "wrongCaseSelectorRunUnscored": true,
+    "consumerOnlyRepairSamePackage": true,
+    "completedFavorableSamplingRepeats": 0,
+    "firstPackageFailure": "New test assumed SIMD scratch on Windows portable hardware. Repaired caller-held refusal setup, retained failed source/log; actual package/DLL unchanged and consumer rebuilt only.",
+    "selectorFailure": "The completed Down16-labelled attempt used a Down8-fixed selector; identity gate caught it. Retained unscored, no pixels/costs reused. Existing general selector fixes subsequent distinct case runs."
+  },
+  "reuse": "Enlargement (EnlargingBicubicResize) and defaultMixed8/16 (MixedColumn/MixedWordColumn) complete before changed cached driver. Tight local-limit paths reject cached capacity before new geometry, retaining their own kernels. Lanczos/bilinear, codecs, text/drawing unchanged. Wide driver branch/JIT safety checked with existing Down32x16_8 control; no change to its tap/row kernels.",
+  "decision": "Retain scoped stage: Down8 saves63.74us/11.64percent raw/11.04percent native-normalized with separated filtered/allactual confidence. Explicit Vertical16 tradeoff loses30.04us/4.71percent raw/4.34percent normalized, also separated; no uniform gain or full parity claim. Four current passes stop, four gaps and one uncertainty remain. Prepared execution and vertical/ineligible entry costs are a next architectural lead, not an isolated proven cause. No blind variants or favorable resampling.",
+  "next": "Complete checkpoint, then audit prepared versus identity/ineligible horizontal entry and row publication using current source/JIT evidence. Preserve confirmed passes; any revised execution separation requires complete-workload proof and explicit vertical tradeoff reconciliation. Independent codec gaps remain eligible; publication and full283path objective remain open.",
+  "raw": {
+    "file": "bicubic-overlapping-horizontal-qualified.tar.xz",
+    "sha256": "8363947c550c0578bb2ffa324dce53833e20895724f1fbe59cfb013497184da9",
+    "bytes": 6312172,
+    "members": 202,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "evidence": "benchmarks/jpeg-completed-output-evidence.json",
+        "file": "jpeg-completed-output-qualified.tar.xz",
+        "sha256": "3ca6d81b0c0ba52ce3d6e6740c978751510f4b9402d54393bb4bcdbfe98948ae",
+        "bytes": 6434100,
+        "members": 290
+      },
+      {
+        "evidence": "benchmarks/bicubic-byte-current-attribution-evidence.json",
+        "file": "bicubic-byte-current-attribution.tar.xz",
+        "sha256": "aec4d116c7cecc5f7ca4c199e06410e5c8b28d7d2e3f1aa5d3ebebbfed5d48e8",
+        "bytes": 121100,
+        "members": 29
+      }
+    ]
+  },
+  "rawActualRepresentation": "Managed actuals preserve original operations and elapsed nanoseconds; divide Nanoseconds by Operations for per-operation costs. This field name is normalized from the archival draft without changing any samples."
+}

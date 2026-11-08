@@ -951,6 +951,45 @@ internal static class CooperativeMemoryConsumer
         Console.WriteLine("Packaged default byte enlargement preserves exact frame and shared output lifetime.");
     }
 
+    private static void VerifyCachedHorizontalWindows()
+    {
+        foreach(var depth in new[]{8,16})
+        {
+            using var source=OriginalPixels.Buffer(33,17,depth);
+            var input=OriginalPixels.Bytes(source);var outputBytes=16*8*(depth/2);
+            using var oracle=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,
+                new ImageLimits {MaxWorkingBytes=input.Length+outputBytes+4095});
+            var expected=OriginalPixels.Bytes(oracle);
+            using var root=new TestMemoryBudget(2*outputBytes+12640);
+            var limits=new ImageLimits {MemoryBudget=root};
+            using var first=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,limits);
+            using var survivor=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,limits);
+            if(!expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(first))
+                || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor))
+                || root.Bytes!=2*outputBytes)
+                throw new Exception("Packaged cached windows changed pixels or retained workspace.");
+            using(var caller=root.CreateScope())
+            {
+                // Hold the remaining capacity rather than assuming which SIMD
+                // workspace the consumer's machine supports.
+                if(!caller.TryReserve(12640,out var held))throw new Exception("Packaged cached refusal setup differs.");
+                try
+                {
+                    using var refused=ImageTransforms.Resize(source,16,8,ResizeFilter.Bicubic,limits);
+                    throw new Exception("Packaged cached windows ignored shared refusal.");
+                }
+                catch(ImageLimitException e)when(e.Scope==ImageLimitScope.SharedBudget && e.Limit==ImageLimitKind.WorkingBytes){}
+            }
+            if(root.Bytes!=2*outputBytes)throw new Exception("Packaged cached windows leaked refused storage.");
+            source.Dispose();first.Dispose();
+            if(root.Bytes!=outputBytes || !expected.AsSpan().SequenceEqual(OriginalPixels.Bytes(survivor)))
+                throw new Exception("Packaged cached windows alias a disposed source or sibling.");
+            survivor.Dispose();
+            if(root.Bytes!=0 || root.IsDisposed)throw new Exception("Packaged cached windows leaked owned capacity.");
+        }
+        Console.WriteLine("Packaged cached horizontal windows preserve exact byte/word samples, terminal refusal and independent owners.");
+    }
+
     internal static async Task Verify()
     {
         VerifyMixedWordSchedule(4096);
@@ -967,6 +1006,7 @@ internal static class CooperativeMemoryConsumer
         await VerifyOpaqueWordTiles();
         VerifyStreamingBicubic();
         VerifyOutputWorkspaceBicubic();
+        VerifyCachedHorizontalWindows();
         using var budget = new TestMemoryBudget(4 * 1024 * 1024);
         var limits = new ImageLimits { MemoryBudget = budget };
         using (var input = ImageBuffer.Create(19, 13, 8, limits))

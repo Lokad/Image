@@ -1674,6 +1674,37 @@ def render():
             current = png_framing['currentSharedRoot']
             rows[index] = (kind, f'| {label} † | {current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | '
                            f'{current["ratio"]:.3f} / {current["upper"]:.3f} | {current["allocatedBytes"]:,} | — |')
+    overlap = json.loads((ROOT / 'benchmarks/bicubic-overlapping-horizontal-evidence.json').read_text(encoding='utf-8'))
+    assert overlap['productionAccepted'] and overlap['requiredMaterialPaths'] == 283
+    assert overlap['raw']['mirrored'] and overlap['raw']['allMembersVerified']
+    oq = overlap['qualification']
+    assert oq['fullChecksEachOs'] == oq['windows']['total'] == oq['linux']['total'] == 5932
+    assert oq['actualPackage']['sha256'] == oq['samePackageLinux']['sameActualPackageSha256']
+    assert oq['actualPackage']['cachedHorizontalWindowsPassed'] and oq['samePackageLinux']['cachedHorizontalWindowsPassed']
+    assert overlap['statusCounts'] == {state: sum(c['status'] == state for c in overlap['cases'].values())
+                                      for state in ('pass', 'gap', 'uncertain')}
+    assert all(v['rawGainSeparated'] for v in overlap['comparisons']['Down8']['views'].values())
+    assert all(v['rawRegressionSeparated'] for v in overlap['comparisons']['Vertical16']['views'].values())
+    assert overlap['comparisons']['Down8']['normalizedGainSeparated']
+    assert overlap['comparisons']['Vertical16']['normalizedRegressionSeparated']
+    overlap_labels = {'Down8': 'Bicubic resize RGBA8',
+                      'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
+                      'Cross8': 'Bicubic RGBA8, width down / height up, default workspace',
+                      'Cross16': 'Bicubic RGBA16, width down / height up, default workspace'}
+    for case, current in overlap['cases'].items():
+        assert current['librarySha256'] == overlap['producers']['linuxSha256']
+        assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
+        assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
+        assert current['sourceUnchanged'] and current['independentOwnedOutput']
+        assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+        if case not in overlap_labels:
+            continue
+        label = overlap_labels[case]
+        positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
+        assert len(positions) == 1, label
+        rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
+            f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
+            f'{current["allocatedBytes"]:,} |')
     header = '| Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op |'
     separator = '| --- | ---: | ---: | ---: | ---: |'
     codecs = '\n'.join([header + ' Packet B, Lokad / reference |', separator + ' ---: |',
@@ -1859,7 +1890,20 @@ Current scope and remaining work:
   [streaming census](../benchmarks/PNG-STREAMING-TOKEN-FREQUENCIES.md),
   [lazy](../benchmarks/PNG-LAZY-VIEW-PREPARATION.md) and
   [greedy preparation](../benchmarks/PNG-GREEDY-VIEW-PREPARATION.md) retain history.
-- **Resizing:** [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
+- **Resizing:** [Prepared overlapping windows](../benchmarks/BICUBIC-OVERLAPPING-HORIZONTAL.md)
+  save **63.74µs/11.64% raw/11.04% normalized** on complete byte reduction:
+  547.74→484.00µs, native416.63µs, upper1.167 remains a gap. Filtered/all-actual
+  confidence separates. The explicit vertical-word tradeoff is **30.04µs/4.71%
+  slower**,4.34% normalized, also separated:668.01/native589.94µs,upper1.139.
+  Nine refreshed controls:4pass/4gaps/1uncertain; wider byte reduction is now
+  uncertain (upper1.034), not a current pass. Four displayed rows refresh.
+  GC stays about199,980B/op on byte reduction; workspace199,840B, scratch
+  retention0 and output132,096B until disposal are distinct. No new capacity,
+  pool, session or numerical policy. Exact ordered arithmetic and repair remain;
+  native zimg retains graph/input/scratch, managed one-shot preparation is timed.
+  Both OSes pass5,932full/live checks, affected normal/scalar/disabled-ISA checks
+  and the SAME actual package/three examples. This is scoped development proof.
+  [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md)
   has five passing cases and three prepared gaps (uppers1.158/1.097/1.052).
   Prepared plans retain139,800–333,396B; one-shot setup stays timed on both sides.
   [Shared streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md) passes six of eight;
@@ -1878,10 +1922,9 @@ Current scope and remaining work:
   458.51/native589.46µs,upper0.779 passes/stop,113B/op unchanged. It removes four
   exactzero horizontal taps in the shared loop; exactpixels, repair and ownership
   remain. Its result retains529,416B, scratch0; existingidlepool staysseparate.
-  Fourteen other word costs reuse valid paths. Fifteen now7pass/8gaps;
-  passing enlargement stays stopped. One existing materialcase is newly displayed,
-  with125 numerical rows reused. Earlier
-  dynamic-capacity regression remains in the report, without renderer dependencies.
+  Four cached word controls refresh above; eleven other costs reuse valid paths.
+  Fifteen now8pass/7gaps; passing enlargement stays stopped. Earlier
+  dynamic-capacity regression remains in its report.
   One source loop/static capacities, no new heap/pool/session or pixel tolerance.
   [Shared enlargement](../benchmarks/BICUBIC-SHARED-ENLARGEMENT.md) retains752,064B/op
   workspace savings and source-valid byte costs. Its unchanged-build defaultRGBA8

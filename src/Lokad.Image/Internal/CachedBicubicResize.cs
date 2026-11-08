@@ -65,6 +65,7 @@ internal static partial class CachedBicubicResize
                     offsets[x*capacity+t]=Math.Clamp(first+t,0,source.Width-1)*4;
                 }
             }
+            if(!wide)PrepareOverlappingHorizontalPairs(offsets,counts,width,source.Width,context);
             Span<int> rowIds=heapMetadata?geometry.AsSpan((int)geometryElements,capacity):stackalloc int[capacity];rowIds.Fill(-1);
             Span<int> rows=heapMetadata?geometry.AsSpan((int)geometryElements+capacity,capacity):stackalloc int[capacity];
             Span<double> vertical=heapMetadata?storage.AsSpan((int)dataElements,capacity):stackalloc double[capacity];

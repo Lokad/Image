@@ -10,8 +10,8 @@ Completion needs current passing evidence for every named path, with scope state
 reconciles one-shot/prepared boundaries and measures three WebP admission lifetimes.
 The [matching-index handoff](WEBP-MATCHING-POPULATION-STORAGE.md) retains six
 unchanged lossless costs. [Four-block histograms](VP8-FOUR-BLOCK-HISTOGRAM.md)
-own all nine lossy encode controls. [Paired JPEG AC](JPEG-PAIRED-AC-WINDOW.md)
-owns 29 current read costs; [model rows](VP8-MODEL-ROW-STRIDE.md) own six VP8
+own all nine lossy encode controls. [Completed JPEG output](JPEG-COMPLETED-OUTPUT.md)
+owns twelve read costs, with seventeen unchanged paired-AC controls; [model rows](VP8-MODEL-ROW-STRIDE.md) own six VP8
 pixel/validation costs. Six lossless reader controls retain source-valid evidence.
 Historical experiments remain linked separately, with raw evidence retained.
 
@@ -30,19 +30,22 @@ Historical experiments remain linked separately, with raw evidence retained.
 | Bicubic streaming | [Shared streaming blocks](BICUBIC-SHARED-STREAMING.md) use two schedulers/four exact kernels within4KiB, saving66.62/51.17µs on byte/word8×17. Eight current controls: six pass/stop; RGBA8 8×17/4×9 retain gaps (uppers1.127/1.269). Allocations unchanged. |
 | Lanczos3 | [Paired certificate preparation](LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) confirms175.99µs/4.20% elapsed gain on prepared word enlargement with counterbalanced immutable builds. Standalone raw/native clock movement is disclosed. All eight affected costs are current: five pass/stop; prepared byte/word reduction and word enlargement retain gaps (uppers1.158/1.097/1.052). Capacity is unchanged. Preserve exact Q30/rational/certified results and native float/prepared-state boundaries; [shared scheduling](LANCZOS-SHARED-ROW-DRIVER.md) remains linked history. |
 | Complete bilinear enlargement | [Current boundary audit](bilinear-current-boundary-evidence.json) reuses the qualified immutable build without production changes or rebuilds. Existing RGBA8 Up8 measures2357.04µs/native2155.92µs, ratio1.093/upper1.134/lower.971: uncertain.102891B/op includes fresh~103KBhorizontal preparation and independent output ownership; the unchanged4MiBdefault pool reuses output backing. Older2914.62µs/2235512Bcost is superseded, not paired causal gain evidence. Native graph/context preparation remains retained and labeled. Stop tuning this uncertain case while larger demonstrated gaps remain. |
-| Complete bicubic enlargement and small-support word publication | [Shared word preparation](BICUBIC-SHARED-WORD-PREPARATION.md) removes repeated divisor/margin setup across pair/quartet/cached writers. Fourteen unchanged costs combine with [identity geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md):15controls,7pass/8gaps. Full/bounded enlargement and default horizontal/vertical enlargement pass; stop them. Existing division, certified rounding/repair and rational pixels remain. DefaultRGBA8 [unchanged-build confirmation](bicubic-byte-enlargement-current-evidence.json) resolves old uncertainty:3,108.21/native3,037.83µs,upper1.026/116Bop,70.38µs gap; no causal historical gain. Larger codec gaps take priority. No owned capacity/retention change. [Publication pipeline](BICUBIC-WORD-PUBLICATION-PIPELINE.md) retains earlier scoped gains/history. |
-| Mixed-axis RGBA16 bicubic | [Shared bounded bands](BICUBIC-BOUNDED-BAND-EXECUTION.md) save159.23us/14.79%raw/15.40%normalized on defaultMixed16 and86.23us/8.03%raw/8.71%normalized at4KiB, with separated filtered/allactual raw/normalized confidence. Current917.38/native851.87us upper1.079 and987.47/native851.08us upper1.164 remain gaps; [Identity-axis geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md) now refreshes tightvertical:458.51/native589.46us upper0.779 passes/stop, saving271.81us/37.22%raw/36.98%normalized with separated intervals;113B/op unchanged. GC114/114/113Bop unchanged. One source loop has entry-selected constant capacities; sixteen-row scratch7596B/admitted8192B, bounded3992/4096B, retainedscratch0 and mixedoutput1059864B until disposal. Exact pixels, certificates, repair, terminal admission and bounded cancellation remain. The vertical result owns529416B; current fifteen-word inventory7pass/8gaps with14other costs reused. Initial dynamic-capacity regression is retained as history; the revised complete costs resolve it. |
+| Complete bicubic enlargement and small-support word publication | [Shared word preparation](BICUBIC-SHARED-WORD-PREPARATION.md) removes repeated divisor/margin setup across pair/quartet/cached writers. [Overlapping windows](BICUBIC-OVERLAPPING-HORIZONTAL.md) refresh four cached word costs; eleven unchanged paths, including [identity geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md), are reused:15controls,8pass/7gaps. Full/bounded enlargement and default horizontal/vertical enlargement pass; stop them. Existing division, certified rounding/repair and rational pixels remain. DefaultRGBA8 [unchanged-build confirmation](bicubic-byte-enlargement-current-evidence.json) resolves old uncertainty:3,108.21/native3,037.83µs,upper1.026/116Bop,70.38µs gap; no causal historical gain. Larger codec gaps take priority. No owned capacity/retention change. [Publication pipeline](BICUBIC-WORD-PUBLICATION-PIPELINE.md) retains earlier scoped gains/history. |
+| Mixed-axis RGBA16 bicubic | [Shared bounded bands](BICUBIC-BOUNDED-BAND-EXECUTION.md) save159.23us/14.79%raw/15.40%normalized on defaultMixed16 and86.23us/8.03%raw/8.71%normalized at4KiB, with separated filtered/allactual raw/normalized confidence. Current917.38/native851.87us upper1.079 and987.47/native851.08us upper1.164 remain gaps; [Identity-axis geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md) now refreshes tightvertical:458.51/native589.46us upper0.779 passes/stop, saving271.81us/37.22%raw/36.98%normalized with separated intervals;113B/op unchanged. GC114/114/113Bop unchanged. One source loop has entry-selected constant capacities; sixteen-row scratch7596B/admitted8192B, bounded3992/4096B, retainedscratch0 and mixedoutput1059864B until disposal. Exact pixels, certificates, repair, terminal admission and bounded cancellation remain. The vertical result owns529416B; current fifteen-word inventory8pass/7gaps after four cached costs refresh; eleven other paths are reused. Initial dynamic-capacity regression is retained as history; the revised complete costs resolve it. |
+| Cached bicubic preparation/execution | [Overlapping horizontal windows](BICUBIC-OVERLAPPING-HORIZONTAL.md) save63.74us/11.64%raw/11.04%normalized on complete byte reduction, with separated filtered/allactual confidence. Current484.00/native416.63us upper1.167 remains a gap. Explicit vertical-word tradeoff:637.97→668.01us,30.04us/4.71%raw/4.34%normalized slower, separated. Nine refreshed controls:4pass/4gaps/1uncertain. Byte/word cross-axis now pass; wider32x16 byte is uncertain upper1.034, superseding its older pass. Four displayed rows refresh. GC199980Bop, admitted199840B, retainedscratch0/result132096B; no new capacity/cache/pool/precision policy. Native zimg graph/input/scratch preparation remains retained; managed one-shot preparation is timed. Separate prepared and identity/ineligible execution costs before assuming a remedy for the vertical tradeoff. |
 | Text and drawing | [Exact interior coverage](TEXT-INTERIOR-COVERAGE.md) reuses one exact area per fully covered run, preserving clipping at boundaries, pixel additions and cancellation. Current130.55/132.38us vs labeledImageSharp.Drawing45.72/45.83us, uppers4.456/4.174: both gaps. Contemporaneous filtered pointmeans5.94%/6.49% lower, allactual4.05%/5.80%; intervals overlap, CPUgain inconclusive. Allocation67,368B/draw,48,544BadmittedLatinworkspace, retainedscratch0 unchanged; physical/native peaks unmeasured. Eight-frame Latin/Arabic/wrapping/fitting correctness does not establish broaderCPUclaims. [Earlier clipping](TEXT-CLIPPING-WORKSPACE.md) and [shared sorting](TEXT-RASTER-SHARED-SORT.md) retain history. [Layout/fitting and RGBA16composition](TEXT-DRAWING-CURRENT.md) pass/stop. [Font loading](FONT-OWNED-STORAGE.md) remains31.86/nativeFreeType13.42us,upper2.396gap,176B/op and757076Bidleretention in the existing2slot/4MiBpool; governed loads bypass it. Independent codec/resize work continues. |
 
-The latest [completed JPEG output](JPEG-COMPLETED-OUTPUT.md) refreshes twelve
-affected costs, reuses seventeen unchanged JPEG controls, and updates six displayed
-rows. No new required workload/settings/input;126comparisons summarize283paths.
-Windows/Linux each pass5,924full/live checks,420internal/375public normal/scalar,
-20storagechecks perdisabledAVX2/AVX512 mode, andthe SAMEactualReleasepackage/
-threeexamples includinggray/420/422 completed-plane consumers. Exact packets/pixels,
-admission, cancellationcleanup andindependent outputs remain. Otherfamilies reuse
-source-valid evidence. This is a scoped development refresh; fullparity and the
-full126row actual-package release refresh remain open.
+The latest [overlapping-window stage](BICUBIC-OVERLAPPING-HORIZONTAL.md) refreshes
+nine affected costs and four displayed rows. No new required inputs/settings or
+workloads;126comparisons summarize283paths. Windows/Linux each pass5,932full/live
+checks,182internal/703public pernormal/scalar anddisabledAVX2/AVX512 mode, andthe
+SAMEactualReleasepackage/threeexamples. The new cached byte/word consumer checks
+exact samples, terminal refusal and independent survivors. One fixed-selector run
+is unscored; one consumer-only portability repair reuses the unchanged pack.
+Exact packets/pixels, admission and cancellation remain. Other families reuse
+source-valid evidence, including twelve completed-output and seventeen unchanged
+JPEG costs. This is scoped development qualification; fullparity and the full126row
+actual-package release refresh remain open.
 
 Earlier unselected [cached JPEG corrections](JPEG-CACHED-CORRECTION-EXPERIMENT.md),
 [immutable JPEG geometry](JPEG-IMMUTABLE-MAP-EXPERIMENT.md),
@@ -224,7 +227,9 @@ Current evidence ownership and invalidation:
   not current whole-execution CPU shares.
 - RBC567 owns Mixed16/TightMixed16 after shared bounded-band execution;
   [identity geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md) owns TightVertical16.
-  RPA503 retains twelve unchanged word controls after shared preparation; source-valid byte controls
+  RPA503 retains eight unchanged word controls after shared preparation;
+  RHW611 owns Down16/Horizontal16/Vertical16/Cross16 and five byte costs. Its
+  vertical-word regression and wider-byte uncertainty are current, explicit; source-valid byte controls
   remain attributed separately. Unrefreshed allocator/filter/pipeline H costs stay
   historical. Lanczos owns eight refreshed one-shot/prepared controls; exact
   certificates, repair, plans/owners and portable fallbacks remain required.
