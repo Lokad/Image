@@ -1,5 +1,7 @@
 # Identity-axis word bicubic geometry
 
+Current mixed/vertical costs are superseded by [result-backed bands](BICUBIC-RESULT-BACKED-BANDS.md). This report retains stage history and raw evidence.
+
 Unchanged-width RGBA16 reduction now selects its exact center tap at entry.
 The existing band loop, column cache, vertical accumulation, checked publication,
 repair and ownership remain shared. Repeated horizontal kernel preparation and

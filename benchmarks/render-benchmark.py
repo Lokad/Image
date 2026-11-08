@@ -1462,58 +1462,37 @@ def render():
     assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5866
     assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
     assert vq['actualPackage']['actualConsumerPassed'] and vq['samePackageLinux']['actualConsumerPassed']
-    band_execution = json.loads((ROOT / 'benchmarks/bicubic-bounded-band-execution-evidence.json').read_text(encoding='utf-8'))
-    assert band_execution['productionAccepted'] and band_execution['requiredMaterialPaths'] == 283
-    assert band_execution['raw']['mirrored'] and band_execution['raw']['allMembersVerified']
-    assert set(band_execution['cases']) == {'Mixed16', 'TightMixed16', 'TightVertical16'}
-    assert band_execution['sourceProof']['fullBSourceReconstructsAOutsideEntryAndCompileTimeCapacitySelection']
-    assert band_execution['sourceProof']['allSampleDecodeTapMultiplyAddQuotientCertificateRoundingRepairBodiesExact']
-    for current in band_execution['cases'].values():
-        if current['caseId'] == 'TightVertical16':
-            continue  # Its previous geometry is superseded.
+    result_bands = json.loads((ROOT / 'benchmarks/bicubic-result-backed-bands-evidence.json').read_text(encoding='utf-8'))
+    assert result_bands['productionAccepted'] and result_bands['requiredMaterialPaths'] == 283
+    assert result_bands['raw']['mirrored'] and result_bands['raw']['allMembersVerified']
+    assert set(result_bands['cases']) == {'Mixed16', 'TightMixed16', 'TightVertical16'}
+    assert result_bands['sourceProof']['sharedLoopTokensExactAfterRangeAndCheckpointSubstitution']
+    assert result_bands['sourceProof']['originalWordTokensExact']
+    for current in result_bands['cases'].values():
         assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-        assert current['librarySha256'] == band_execution['producers']['linuxSha256']
+        assert current['librarySha256'] == result_bands['producers']['linuxSha256']
         assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
         assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
         assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
     assert all(v['rawGainSeparated'] and v['normalizedGainSeparated']
-               for c in band_execution['comparison'].values() for v in c['views'].values())
-    # Current costs supply the displayed bounded case. Superseded experiments
-    # remain in their reports, without becoming summary-rendering dependencies.
-    current = band_execution['cases']['TightMixed16']
+               for c in result_bands['comparison'].values() for v in c['views'].values())
+    current = result_bands['cases']['TightMixed16']
     label = word_labels['TightMixed16']
     positions = [i for i, (kind, row) in enumerate(rows) if kind == 'editing' and row.startswith('| ' + label + ' ')]
     assert len(positions) == 1
     rows[positions[0]] = ('editing', f'| {label} † → {current["outputWidth"]}×{current["outputHeight"]} | '
         f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
         f'{current["allocatedBytes"]:,} |')
-    bq = band_execution['qualification']
-    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5888
-    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
-    assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
-    vertical_word = json.loads((ROOT / 'benchmarks/bicubic-identity-word-geometry-evidence.json').read_text(encoding='utf-8'))
-    assert vertical_word['productionAccepted'] and vertical_word['requiredMaterialPaths'] == 283
-    assert vertical_word['raw']['mirrored'] and vertical_word['raw']['allMembersVerified']
-    assert vertical_word['sourceProof']['originalReconstructedOutsideEntryAndIdentityGeometry']
-    assert vertical_word['sourceProof']['allVerticalAccumulationQuotientCertificateRepairAndOwnershipBodiesExact']
-    assert all(v['rawGainSeparated'] and v['normalizedGainSeparated'] for v in vertical_word['comparison']['views'].values())
-    current = vertical_word['current']
-    assert current['caseId'] == 'TightVertical16' and current['status'] == 'pass' and current['upper'] <= 1
-    assert current['librarySha256'] == vertical_word['producers']['linuxSha256']
-    assert current['allOriginalGatesPassed'] and current['quietGuardsPassed']
-    assert current['actualIterations'] == current['nativeSamplesEachBracket'] == 12
-    assert current['managedRationalReferenceExact'] and current['sourceUnchanged'] and current['independentOwnedOutput']
-    merged_word = {**word_prep['cases'], **band_execution['cases'], 'TightVertical16': current}
-    assert vertical_word['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
-                                                     for state in ('pass', 'gap', 'uncertain')}
-    vq = vertical_word['qualification']
-    assert vq['fullChecksEachOs'] == vq['windows']['total'] == vq['linux']['total'] == 5905
-    assert vq['actualPackage']['sha256'] == vq['samePackageLinux']['sameActualPackageSha256']
-    assert vq['actualPackage']['verticalWordGeometryFrozenAdmissionAndSurvivorsPassed']
-    assert vq['samePackageLinux']['verticalWordGeometryFrozenAdmissionAndSurvivorsPassed']
+    current = result_bands['cases']['TightVertical16']
+    assert current['status'] == 'pass'
     rows.append(('editing', f'| Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → {current["outputWidth"]}×{current["outputHeight"]} | '
                  f'{current["managedUs"]:,.2f} | {current["nativeUs"]:,.2f} | {current["ratio"]:.3f} / {current["upper"]:.3f} | '
                  f'{current["allocatedBytes"]:,} |'))
+    bq = result_bands['qualification']
+    assert bq['fullChecksEachOs'] == bq['windows']['total'] == bq['linux']['total'] == 5948
+    assert bq['actualPackage']['sha256'] == bq['samePackageLinux']['sameActualPackageSha256']
+    assert bq['actualPackage']['largeBandsExactAndAdmittedPassed'] and bq['samePackageLinux']['largeBandsExactAndAdmittedPassed']
+    merged_word = {**word_prep['cases'], **result_bands['cases']}
     png = json.loads((ROOT / 'benchmarks/png-length-classification-evidence.json').read_text(encoding='utf-8'))
     assert png['productionAccepted'] and png['requiredMaterialPaths'] == 283
     pq = png['qualification']
@@ -1583,8 +1562,8 @@ def render():
     assert overlap['storage']['identity513WorkspaceAfterBytes'] == 367436
     assert overlap['storage']['ownedDecodedCapacityRemovedBytes'] == 16416
     merged_word.update({case: cost for case, cost in overlap['cases'].items() if case in merged_word})
-    assert overlap['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
-                                               for state in ('pass', 'gap', 'uncertain')}
+    assert result_bands['mergedWordStatusCounts'] == {state: sum(c['status'] == state for c in merged_word.values())
+                                                    for state in ('pass', 'gap', 'uncertain')}
     overlap_labels = {'Down8': 'Bicubic resize RGBA8',
                       'Down32x16_8': 'Bicubic RGBA8, 32×16 / default workspace',
                       'Cross8': 'Bicubic RGBA8, width down / height up, default workspace',
@@ -1803,11 +1782,22 @@ Current scope and remaining work:
   Native zimg retains graph/input/scratch; managed one-shot preparation is timed.
   Both OSes pass5,938full/live, affected normal/scalar/disabled-ISA checks and
   the SAME actual package/three examples. Four displayed rows refresh.
-  Fifteen word controls now9pass/5gap/1uncertain, with eleven unchanged paths
-  reused. [Bounded bands](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md)
-  retain default/4KiB mixed-word gaps917.38/987.47µs versus851.87/851.08µs,
-  uppers1.079/1.164. [Bounded vertical](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md)
-  remains458.51/native589.46µs,upper0.779 passing;113B/op.
+  [Result-backed bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) save
+  {result_bands['comparison']['Mixed16']['savedUs']:.2f}/{result_bands['comparison']['TightMixed16']['savedUs']:.2f}µs
+  on default/4KiB mixed word: {result_bands['cases']['Mixed16']['managedUs']:.2f}/
+  {result_bands['cases']['TightMixed16']['managedUs']:.2f}µs, uppers
+  {result_bands['cases']['Mixed16']['upper']:.3f}/{result_bands['cases']['TightMixed16']['upper']:.3f}.
+  Default passes/stops; tight remains a small gap. GC114B/op remains;28,136B is
+  borrowed from already-admitted output and retired before suffix stores.
+  No added heap or retained scratch. The shared vertical path regresses
+  {result_bands['sentinel']['rawChangeUs']:.2f}µs/{100*result_bands['sentinel']['rawChange']:.2f}%
+  against its contemporary original, but still passes upper
+  {result_bands['cases']['TightVertical16']['upper']:.3f},113B/op. This tradeoff is
+  retained with substantial mixed savings; no uniform gain claim. Both OSes pass
+  5,948full/live, affected normal/scalar/disabled-ISA checks and SAME actual
+  package/three examples. Fifteen word controls now
+  {result_bands['mergedWordStatusCounts']['pass']}pass/{result_bands['mergedWordStatusCounts']['gap']}gap/{result_bands['mergedWordStatusCounts']['uncertain']}uncertain;
+  twelve unchanged paths are reused. Historical bands/geometry stay in linked reports.
   [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) has five
   passes/three prepared gaps; plans retain139,800–333,396B and equivalent
   one-shot setup stays timed. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)

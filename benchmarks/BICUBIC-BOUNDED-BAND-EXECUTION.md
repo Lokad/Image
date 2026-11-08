@@ -1,5 +1,7 @@
 # Shared bounded-band bicubic execution
 
+Current mixed/vertical costs are superseded by [result-backed bands](BICUBIC-RESULT-BACKED-BANDS.md). This report retains stage history and raw evidence.
+
 The mixed-axis costs below remain valid. The vertical control is now superseded
 by [identity-axis geometry](BICUBIC-IDENTITY-WORD-GEOMETRY.md); its earlier cost
 and qualification are retained here as stage history.

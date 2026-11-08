@@ -1,0 +1,648 @@
+{
+  "project": "Lokad.Image",
+  "stage": "RBA624/RWB625/RWB626/RWB627",
+  "date": "2026-11-08",
+  "productionAccepted": true,
+  "requiredMaterialPaths": 283,
+  "warmParityComplete": false,
+  "publicationPostponed": true,
+  "producers": {
+    "windowsSha256": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+    "linuxSha256": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24"
+  },
+  "cases": {
+    "Mixed16": {
+      "managedUs": 841.5271095833334,
+      "nativeUs": 847.0306184895834,
+      "ratio": 0.9935025856372656,
+      "lower": 0.9895393887349511,
+      "upper": 0.9965614477213469,
+      "allocatedBytes": 114,
+      "status": "pass",
+      "librarySha256": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+      "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Default managed working limit. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "outputWidth": 1027,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": null,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "caseId": "Mixed16",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/rwb627-candidate-Mixed16-confirm-receipt.json",
+      "statistics": "tmp/rwb627-candidate-Mixed16-confirm-statistics.json"
+    },
+    "TightMixed16": {
+      "managedUs": 862.2130468749999,
+      "nativeUs": 844.22238671875,
+      "ratio": 1.0213103329635387,
+      "lower": 1.0102216035201006,
+      "upper": 1.0245617047943432,
+      "allocatedBytes": 114,
+      "status": "gap",
+      "librarySha256": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "6e289a9a8316325b78988adbad8ab7102c81e302216b79c45ef086410f6f691a",
+      "nativeOutputSha256": "e0defd82103be365a8eefb60a88d1e27a2c1208048bf4cec5e6b3f97b04f6e58",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 1027x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 2126896 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "outputWidth": 1027,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 2126896,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "caseId": "TightMixed16",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/rwb627-candidate-TightMixed16-confirm-receipt.json",
+      "statistics": "tmp/rwb627-candidate-TightMixed16-confirm-statistics.json"
+    },
+    "TightVertical16": {
+      "managedUs": 486.0168708479021,
+      "nativeUs": 593.1592044270834,
+      "ratio": 0.8193700227872764,
+      "lower": 0.8143600356719966,
+      "upper": 0.8239999773970196,
+      "allocatedBytes": 113,
+      "status": "pass",
+      "librarySha256": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "275a5c3d38d7ba7e6a1ca713fb69fd2ceaf665c18db8269f0bcc1d3e58dcd6fd",
+      "nativeOutputSha256": "f22048d3816fba849e7d71cb2918a1408b68d1bcbfdde98c95df7234813b76d2",
+      "boundary": "One resident original 513x259 RGBA16 raster to independently owned 513x129 bicubic output at the same sample depth. Complete public Resize, admission, allocation/materialization/disposal. Managed working limit 1596448 bytes (input+output+4096); additional scratch is bounded, preparation may reuse unmaterialized owned output capacity. FFmpeg zscale's zimg backend with B=0/C=0.5, encoded-space premultiplied filtering. TIMED complete packed-source deinterleaving, four-pixel clamped halo (4.697% input-area increase), filtering, independent planar/packed output allocation, repacking and release. Explicit geometry uses premultiplied float output and TIMED straight RGBA quantization after unpremultiplication, clearing RGB when rounded alpha is zero. Graph/input-workspace/scratch contexts reused; every call processes every selected sample. Managed exact rational pixels; Explicitly approved native-only RGB/alpha maximum1/RMSE0.25; normal/scalar bounded difference; zero-alpha RGBzero. This is the labeled scaler backend, not FFmpeg CLI. No output cache. Startup, IPC, I/O, generation and validation excluded; one CPU, normal SIMD, no concurrency. Only this geometry/depth is measured.",
+      "outputWidth": 513,
+      "outputHeight": 129,
+      "managedMaxWorkingBytes": 1596448,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true,
+      "managedRationalReferenceExact": true,
+      "caseId": "TightVertical16",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "receipt": "tmp/rwb627-candidate-TightVertical16-confirm-receipt.json",
+      "statistics": "tmp/rwb627-candidate-TightVertical16-confirm-statistics.json"
+    }
+  },
+  "statusCounts": {
+    "pass": 2,
+    "gap": 1,
+    "uncertain": 0
+  },
+  "mergedWordStatusCounts": {
+    "pass": 10,
+    "gap": 4,
+    "uncertain": 1
+  },
+  "comparison": {
+    "Mixed16": {
+      "originalUs": 927.8808143601191,
+      "currentUs": 841.5271095833334,
+      "savedUs": 86.35370477678566,
+      "rawReduction": 0.09306551384655637,
+      "normalizedReduction": 0.08983489262854316,
+      "nativePointChange": -0.003549489199100586,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      }
+    },
+    "TightMixed16": {
+      "originalUs": 1044.673642361111,
+      "currentUs": 862.2130468749999,
+      "savedUs": 182.46059548611106,
+      "rawReduction": 0.17465798703767832,
+      "normalizedReduction": 0.16734747107112513,
+      "nativePointChange": -0.008779791945095372,
+      "views": {
+        "statistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        },
+        "unfilteredActualStatistics": {
+          "rawGainSeparated": true,
+          "normalizedGainSeparated": true,
+          "rawLossSeparated": false,
+          "normalizedLossSeparated": false
+        }
+      }
+    }
+  },
+  "sentinel": {
+    "originalUs": 424.0403996527777,
+    "currentUs": 486.0168708479021,
+    "nativePointChange": 0.00013612544851349107,
+    "rawChangeUs": 61.97647119512442,
+    "rawChange": 0.14615699646984903,
+    "views": {
+      "statistics": {
+        "rawRegressionSeparated": true,
+        "normalizedRegressionSeparated": true
+      },
+      "unfilteredActualStatistics": {
+        "rawRegressionSeparated": true,
+        "normalizedRegressionSeparated": true
+      }
+    }
+  },
+  "sourceProof": {
+    "project": "Lokad.Image",
+    "stage": "RWB627",
+    "sharedLoopTokensExactAfterRangeAndCheckpointSubstitution": true,
+    "originalWordTokensExact": true,
+    "sourceSha256": "9ce75f42a08b40369628c2076618d54ef7f38e0cca33ada6da2832716341c00e",
+    "newHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "borrowedResultPayloadBytes": 28136,
+    "localWorkingReservationsBytes": [
+      4096,
+      8192
+    ],
+    "rootReservationCallsPerApply": 1,
+    "largeDecodedCheckpointRows": 32,
+    "largeVerticalAndOutputCheckpointRows": 8,
+    "bankLifetime": "Until ApplyRange64 returns; subsequent small-band suffix may overwrite bank. Separate geometry read only while complete band precedes geometry.SafeRows.",
+    "physicalNativePeakMeasured": false
+  },
+  "implementation": {
+    "hypothesis": "Borrow a disjoint unpublished result bank for a compile-time64-row vertical-filtered column band, then retire it and complete the suffix with the existing bounded8/16-row kernel. One shared arithmetic source, no decoded-history lookup or added heap/cache/retention.",
+    "endState": "One arithmetic/repair range body, compile-time4/8/16/64-row specializations, one preallocation4/8KiB admission and separate result/stack preparation. No new public API, owner, cross-operation cache or pool. Geometry already existed and is retained.",
+    "workModel": {
+      "project": "Lokad.Image",
+      "stage": "RBA624",
+      "productionChanged": false,
+      "allBuilds": 0,
+      "newProfilesOrTimings": 0,
+      "requiredMaterialPaths": 283,
+      "correctedScope": "FrozenMixed16/TightMixed16 enlarge width513\u21921027 and reduce height259\u2192129. Tight control has input+output+4096 local working bytes; default uses the8192B16row band. The separate packaged8KiB control is not the tight benchmark boundary. Do not transpose the axes or call this width reduction.",
+      "existing": "MixedWordColumnBicubicResize already has one value-type-specialized8/16row source body, paired-column decode/prefetch, six vertical-filtered column slots, staged output in dead decoded storage, and horizontal geometry in the unpublished result suffix. RSM598/RWH599 kept the same bands and added decoded-row history; both screens were unpromising. No absent preparation/extra per-pixel stackalloc is claimed.",
+      "hypothesis": "Use a larger compile-time64row band whose filtered-column cache, decoded pair and row plans borrow a disjoint result region before existing geometry. Process only rows preceding that region, then retire it and finish the overlapping suffix with the original8/16row range. Removes most repeated driver/band setup and overlapping source decode without history lookup/scatter traffic or new heap/retention.",
+      "endState": "One shared Apply<TBand> arithmetic/execution source with explicit typed workspace views, a64row specialization and existing8/16row fallbacks. Choose feasibility before shared admission; reserve existing external4/8KiB once for the operation. Borrow only already-admitted unpublished output; never inflate output capacity or create another quota/cache/session. Geometry and bank remain disjoint; no scratch reads after suffix publication begins.",
+      "layout": {
+        "resultBytes": 1059864,
+        "resultStride": 8216,
+        "geometryBytes": 86268,
+        "geometryStart": 973596,
+        "geometrySafeRows": 118,
+        "borrowedPayloadBytes": 28136,
+        "workspaceStart": 945408,
+        "workspaceEnd": 973568,
+        "workspaceSafeRows": 115,
+        "alignment": 64,
+        "rowsCapacity": 64,
+        "sourceCapacity": 144,
+        "byteRowOffsetsRemainExact": true,
+        "newHeapCapacityBytes": 0,
+        "newRetainedStateBytes": 0,
+        "cooperativeRoot": "Existing result owner charges the whole actual logical capacity throughout; external working reserve precedes stack allocation and stays4/8KiB. Refusal terminal. Bank/geometry retire before their output rows are overwritten."
+      },
+      "modeledCounts": {
+        "TightMixed16": {
+          "originalBands": [
+            [
+              0,
+              8
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              16,
+              8
+            ],
+            [
+              24,
+              8
+            ],
+            [
+              32,
+              8
+            ],
+            [
+              40,
+              8
+            ],
+            [
+              48,
+              8
+            ],
+            [
+              56,
+              8
+            ],
+            [
+              64,
+              8
+            ],
+            [
+              72,
+              8
+            ],
+            [
+              80,
+              8
+            ],
+            [
+              88,
+              8
+            ],
+            [
+              96,
+              8
+            ],
+            [
+              104,
+              8
+            ],
+            [
+              112,
+              8
+            ],
+            [
+              120,
+              8
+            ],
+            [
+              128,
+              1
+            ]
+          ],
+          "proposedBands": [
+            [
+              0,
+              64
+            ],
+            [
+              64,
+              51
+            ],
+            [
+              115,
+              8
+            ],
+            [
+              123,
+              6
+            ]
+          ],
+          "oldConvertedSourcePixels": 182115,
+          "proposedConvertedSourcePixels": 142614,
+          "conversionReduction": 0.21690140845070427,
+          "oldDriverColumns": 17459,
+          "proposedDriverColumns": 4108,
+          "driverReduction": 0.7647058823529411,
+          "externalWorkspaceBytes": 4096
+        },
+        "Mixed16": {
+          "originalBands": [
+            [
+              0,
+              16
+            ],
+            [
+              16,
+              16
+            ],
+            [
+              32,
+              16
+            ],
+            [
+              48,
+              16
+            ],
+            [
+              64,
+              16
+            ],
+            [
+              80,
+              16
+            ],
+            [
+              96,
+              16
+            ],
+            [
+              112,
+              16
+            ],
+            [
+              128,
+              1
+            ]
+          ],
+          "proposedBands": [
+            [
+              0,
+              64
+            ],
+            [
+              64,
+              51
+            ],
+            [
+              115,
+              14
+            ]
+          ],
+          "oldConvertedSourcePixels": 157491,
+          "proposedConvertedSourcePixels": 139536,
+          "conversionReduction": 0.1140065146579805,
+          "oldDriverColumns": 9243,
+          "proposedDriverColumns": 3081,
+          "driverReduction": 0.6666666666666667,
+          "externalWorkspaceBytes": 8192
+        }
+      },
+      "modelNotTiming": true,
+      "unresolved": [
+        "Counts are not CPU evidence; larger cache/output-store working sets or JIT layout can negate savings. Do not launch112/128row grids or replay history scattering.",
+        "Preserve exact tap/contribution order, quotient certificates, OriginalWord and final tiny-alpha repair. Extra cooperative polls must bound each column chunk to existing8/16row cadence.",
+        "Need a bounded shared execution/range refactor and actual C# independent pixels, suffix sentinel/lifetime, root/cancel/refusal/recovery tests before one existingTightMixed16 short. No production prototype yet.",
+        "Existing geometry minimum-band heuristic must use meaningful fallback preparation economics; it must not accidentally reject the original129row frozen control because64rows doubles the heuristic. Safety is explicit byte disjointness, not an arbitrary two-large-band threshold."
+      ],
+      "next": "Implement/refactor shared workspace/range preparation for64row result-backed execution only if it stays simpler than a duplicate engine. Keep numerical and API contracts. First frozen tight short, default sentinel if useful, then independent confirmation and affected standalone costs at acceptance; full W/L/scalar/actual package only coherent accepted stage.",
+      "sources": {
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "b2faa7cc1f251f5580af75f3340fe2eb2d8ac0d284ca546f2f4d3a035894c6e0",
+        "src/Lokad.Image/Internal/MixedBicubicGeometry.cs": "db5f4b5ddc2743d51021212b4a8b77d07c771f4a54f6d84b982732cbb8f05795"
+      },
+      "publicationPostponed": true
+    },
+    "scope": "Only width-enlarging/height-reducing16-bit bicubic can borrow the large bank. Tight identity-width specialization shares extracted execution but retains original geometry elision. Other guards, codecs, filters and cached identity dispatch remain source-unchanged."
+  },
+  "storage": {
+    "newOwnedHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0,
+    "borrowedResultPayloadBytes": 28136,
+    "borrowedResultRegionFrozen": [
+      945408,
+      973544
+    ],
+    "geometryStartFrozen": 973596,
+    "workspaceSafeRowsFrozen": 115,
+    "geometrySafeRowsFrozen": 118,
+    "localScratchReservationBytes": [
+      4096,
+      8192
+    ],
+    "smallStackArenaBytes": [
+      4096,
+      8192
+    ],
+    "retainedOperationScratchBytes": 0,
+    "mixedOutputOwnedUntilDisposalBytes": 1059864,
+    "verticalOutputOwnedUntilDisposalBytes": 529416,
+    "totalAllocatedBytes": {
+      "Mixed16": 114,
+      "TightMixed16": 114,
+      "TightVertical16": 113
+    },
+    "rootRefusalTerminal": true,
+    "rootReservationsPerApply": 1,
+    "physicalAndNativePeaksMeasured": false,
+    "existingOutputPool": "Unchanged default pixel pool is separate from operation scratch; governed outputs bypass it. No zero-total-retention claim.",
+    "packageSharedPeak": "Existing actual-package SIMD two-result checks retain2127920B peak (2*1059864+8192) and independently owned surviving outputs. Portable modes stay within that envelope."
+  },
+  "qualification": {
+    "fullChecksEachOs": 5948,
+    "windows": {
+      "project": "Lokad.Image",
+      "platform": "windows",
+      "productionSha256": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+      "full": [
+        2683,
+        2317,
+        948
+      ],
+      "total": 5948,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 84,
+        "internal-scalar": 84,
+        "public-normal": 556,
+        "public-scalar": 556
+      },
+      "affectedBicubicScalarEachOs": 640,
+      "identities": {
+        "src\\Lokad.Image\\bin\\Release\\net10.0\\Lokad.Image.dll": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+        "tests\\Lokad.Image.Tests\\bin\\Release\\net10.0\\Lokad.Image.Tests.dll": "a77a8a738700b21c3a7a4faa0c5904684f3bfab12809489825b49ed7bcb8817c",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+        "tests\\Lokad.Image.DifferentialTests\\bin\\Release\\net10.0\\Lokad.Image.dll": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+        "tools\\ImageProbe\\bin\\Release\\net10.0\\Lokad.Image.dll": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+        "tests\\Lokad.Image.PublicApi.Tests\\bin\\Release\\net10.0\\Lokad.Image.PublicApi.Tests.dll": "40e0cf0867450262b119e3e12d612b3258bf488d1665b687b2d93769509dba36",
+        "src\\Lokad.Image\\Internal\\MixedWordColumnBicubicResize.cs": "9ce75f42a08b40369628c2076618d54ef7f38e0cca33ada6da2832716341c00e"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "linux": {
+      "project": "Lokad.Image",
+      "platform": "linux",
+      "productionSha256": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+      "full": [
+        2683,
+        2317,
+        948
+      ],
+      "total": 5948,
+      "fullLivePassed": true,
+      "focused": {
+        "internal-normal": 84,
+        "internal-scalar": 84,
+        "public-normal": 556,
+        "public-scalar": 556
+      },
+      "affectedBicubicScalarEachOs": 640,
+      "identities": {
+        "src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+        "tests/Lokad.Image.Tests/bin/Release/net10.0/Lokad.Image.Tests.dll": "faa894210a316cd65f55cb165b111f8c117d1a90874d2d1c5ba2317ddeb0f7c6",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.dll": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+        "tests/Lokad.Image.DifferentialTests/bin/Release/net10.0/Lokad.Image.dll": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+        "tools/ImageProbe/bin/Release/net10.0/Lokad.Image.dll": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+        "tests/Lokad.Image.PublicApi.Tests/bin/Release/net10.0/Lokad.Image.PublicApi.Tests.dll": "64ed277789a9715cfc02cbc3f3881fa09072fde9aeebff0c8b8eccf14ea53356",
+        "src/Lokad.Image/Internal/MixedWordColumnBicubicResize.cs": "9ce75f42a08b40369628c2076618d54ef7f38e0cca33ada6da2832716341c00e"
+      },
+      "immutableCandidateReused": true,
+      "additionalCoreInternalHarnessNativeSelectorBuilds": 0
+    },
+    "focusedNormalScalarEachOs": {
+      "windows": {
+        "internal-normal": 84,
+        "internal-scalar": 84,
+        "public-normal": 556,
+        "public-scalar": 556
+      },
+      "linux": {
+        "internal-normal": 84,
+        "internal-scalar": 84,
+        "public-normal": 556,
+        "public-scalar": 556
+      }
+    },
+    "disabledIsaEachOs": {
+      "windows": {
+        "project": "Lokad.Image",
+        "platform": "windows",
+        "results": {
+          "internal-no-avx512": 188,
+          "public-no-avx512": 703,
+          "internal-no-avx2": 188,
+          "public-no-avx2": 703
+        },
+        "coreSha256": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+        "allBuilds": 0
+      },
+      "linux": {
+        "project": "Lokad.Image",
+        "platform": "linux",
+        "results": {
+          "internal-no-avx512": 188,
+          "public-no-avx512": 703,
+          "internal-no-avx2": 188,
+          "public-no-avx2": 703
+        },
+        "coreSha256": "a0c9dd32b432480cde0ed6e8f3c3acb74959a0f10772a61a6c6c3d77493fbf24",
+        "allBuilds": 0
+      }
+    },
+    "actualPackage": {
+      "project": "Lokad.Image",
+      "package": "artifacts/nugets/Lokad.Image.0.2.1.nupkg",
+      "sha256": "2c56b42a85771f7fb861f83e273678ffd476e3a81e8f1ef623fed3850b8c5c9a",
+      "symbolsSha256": "46b8c5bcf2d706dfe6d00f2a7bdbfae435b5551d3896c9d4b2de1315a17efb91",
+      "bytes": 434630,
+      "librarySha256": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publishedPackagesUnchanged": {
+        "artifacts/nugets/Lokad.Image.0.2.0.nupkg": "136ff43aba3afbbcca1f764cbea5b41a15cca15a27c1f69ae9605acbc514c40f"
+      },
+      "publicationPostponed": true
+    },
+    "samePackageLinux": {
+      "project": "Lokad.Image",
+      "sameActualPackageSha256": "2c56b42a85771f7fb861f83e273678ffd476e3a81e8f1ef623fed3850b8c5c9a",
+      "librarySha256": "3e0969368accbc6f09d1d153e61d312d62470077bdef068ea4038a1f413afd59",
+      "actualConsumerPassed": true,
+      "fastestPngExactByteWordSyncAsyncAdmissionPassed": true,
+      "groupedJpegEntropyAndOwnershipPassed": true,
+      "liveBaselineWindowSyncAsyncAndAdmissionPassed": true,
+      "horizontalCompressedAlphaPublicationPassed": true,
+      "mixedWordScheduleFrozenAdmissionAndSurvivorsPassed": true,
+      "largeBandsExactAndAdmittedPassed": true,
+      "livePngCursorSamplesAndOwnershipPassed": true,
+      "fontIndependentLayoutAndAdmissionRecoveryPassed": true,
+      "opaqueLiveSyncAsyncOwnedPassed": true,
+      "allExistingConsumerChecksPassed": true,
+      "progressiveStripsOwnershipPassed": true,
+      "genericCompletedPlanesOwnershipPassed": true,
+      "cachedHorizontalWindowsPassed": true,
+      "identityCacheRowsPassed": true,
+      "usageExamples": 3,
+      "publicationPostponed": true,
+      "tieredCompilation": false,
+      "jpegFullResolutionCmykExistingConsumerChecks": "Existing varying CMYK hash, owned/stream/async/caller RGB-gray, orientation, retained charges and cleanup plus directRGB MCU owner checks exercised without new consumer build inputs."
+    },
+    "sameActualPackageBothOs": true,
+    "allThreeExamplesBothOs": true
+  },
+  "reuse": {
+    "names": [
+      "Up16",
+      "TightUp16",
+      "HorizontalUp16",
+      "TightHorizontalUp16",
+      "VerticalUp16",
+      "TightVerticalUp16",
+      "Down16",
+      "Horizontal16",
+      "Vertical16",
+      "Cross16",
+      "TightHorizontal16",
+      "TightCross16"
+    ],
+    "providers": [
+      "bicubic-shared-word-preparation-evidence.json",
+      "bicubic-identity-cache-rows-evidence.json"
+    ],
+    "reason": "12word paths do not enter changed range execution;4current cached word costs useICR614. Source-valid codec/text/drawing/Lanczos evidence retained. No broad release-cost refresh claim."
+  },
+  "workflow": {
+    "mainAndEmbeddedVersionsEachOs": 3,
+    "finalImmutableVersionsEachOs": 1,
+    "focusedNormalScalarEachMode": {
+      "internal": 84,
+      "public": 556
+    },
+    "shortScreens": 1,
+    "contemporaryOriginalConfirmations": 3,
+    "candidateConfirmations": 3,
+    "favorableSamplingRepeats": 0,
+    "newProfiles": 0,
+    "fullQualificationEachOs": 1,
+    "packageMilestones": 1,
+    "initialCorrection": "First prototype625 normalLinux catches a shape with only61safe rows: test requires64. Changed193/97 to211/107 and added64-row internal cancellation chunks before timing626.627finalizes whitespace/comment/sizeof expression before confirmation. Initial logs, all modules/input sources and sole626short retained. No failed completed timing rerun.",
+    "historicalCostReconciliation": "OlderRBC567 mixed917.38/987.47 andgeometry458.51us are historical. ContemporaryJHB622 originals establish causal comparisons; new standalone reference brackets establish current parity. Do not infer regression/gain solely from those old costs."
+  },
+  "decision": "Accept86.35/182.46us mixed-direction gains with separated raw and normalized confidence and unchanged allocations. Explicit tradeoff: the shared bounded vertical path regresses61.98us/14.62percent against a contemporary original, with separated confidence, but its conservative upper.824 still passes. Keep its useful identity-geometry specialization and exact arithmetic, accept the joint preparation/execution stage without claiming uniform gains, and stop passing cases. DefaultMixed16 now passes, tightMixed16 retains~18usgap. No blanket resizing or one-shot native-setup parity claim.",
+  "next": "Keep defaultMixed16 and tightvertical passing cases stopped. Select substantial codec work from current attribution; progressive444JPEG and liveVP8 remain larger than residual tightmixed. Audit actual preparation/cursor/storage before a prototype. Keep exact encoder packets, managed pixels and independent public boundaries. Publication postponed.",
+  "raw": {
+    "file": "bicubic-result-backed-bands-qualified.tar.xz",
+    "sha256": "c7ab60b06a13c23d25cec7cb4e70111fbcbdada8820eb7e56c1bd3e97e9ff6cb",
+    "bytes": 18131756,
+    "members": 390,
+    "mirrored": true,
+    "allMembersVerified": true,
+    "dependencies": [
+      {
+        "file": "jpeg-prepared-huffman-bank-qualified.tar.xz",
+        "sha256": "14f0e8ed1f88d9714ef10b919fceff40e64c41395834bae39f3fda144f836776",
+        "bytes": 15360056,
+        "members": 457
+      },
+      {
+        "file": "bicubic-identity-cache-rows-qualified.tar.xz",
+        "sha256": "38182d3e21a2f068072676b45213be99288187cdb3fd68a6fd8cd838951c449e",
+        "bytes": 10891128,
+        "members": 308
+      }
+    ]
+  }
+}

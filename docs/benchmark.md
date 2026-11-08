@@ -104,11 +104,22 @@ Current scope and remaining work:
   Native zimg retains graph/input/scratch; managed one-shot preparation is timed.
   Both OSes pass5,938full/live, affected normal/scalar/disabled-ISA checks and
   the SAME actual package/three examples. Four displayed rows refresh.
-  Fifteen word controls now9pass/5gap/1uncertain, with eleven unchanged paths
-  reused. [Bounded bands](../benchmarks/BICUBIC-BOUNDED-BAND-EXECUTION.md)
-  retain default/4KiB mixed-word gaps917.38/987.47µs versus851.87/851.08µs,
-  uppers1.079/1.164. [Bounded vertical](../benchmarks/BICUBIC-IDENTITY-WORD-GEOMETRY.md)
-  remains458.51/native589.46µs,upper0.779 passing;113B/op.
+  [Result-backed bands](../benchmarks/BICUBIC-RESULT-BACKED-BANDS.md) save
+  86.35/182.46µs
+  on default/4KiB mixed word: 841.53/
+  862.21µs, uppers
+  0.997/1.025.
+  Default passes/stops; tight remains a small gap. GC114B/op remains;28,136B is
+  borrowed from already-admitted output and retired before suffix stores.
+  No added heap or retained scratch. The shared vertical path regresses
+  61.98µs/14.62%
+  against its contemporary original, but still passes upper
+  0.824,113B/op. This tradeoff is
+  retained with substantial mixed savings; no uniform gain claim. Both OSes pass
+  5,948full/live, affected normal/scalar/disabled-ISA checks and SAME actual
+  package/three examples. Fifteen word controls now
+  10pass/4gap/1uncertain;
+  twelve unchanged paths are reused. Historical bands/geometry stay in linked reports.
   [Lanczos](../benchmarks/LANCZOS-PAIRED-CERTIFICATE-PREPARATION.md) has five
   passes/three prepared gaps; plans retain139,800–333,396B and equivalent
   one-shot setup stays timed. [Streaming](../benchmarks/BICUBIC-SHARED-STREAMING.md)
@@ -297,7 +308,7 @@ settings do not establish matched quality.
 | Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 617.43 | 456.16 | 1.354 / 1.363 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 751.02 | 619.10 | 1.213 / 1.223 | 113 |
 | Bicubic RGBA8 wider-support reduction † H → 128×64 | 493.82 | 347.10 | 1.423 / 1.445 | 231,241 |
-| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 987.47 | 851.08 | 1.160 / 1.164 | 114 |
+| Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 862.21 | 844.22 | 1.021 / 1.025 | 114 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † H → 1027×129 | 1,167.23 | 864.52 | 1.350 / 1.367 | 530,400 |
 | Bicubic RGBA8 reduction, input+output+4 KiB † H → 64×32 | 545.55 | 370.06 | 1.474 / 1.506 | 8,329 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † H → 64×32 | 518.01 | 389.68 | 1.329 / 1.355 | 16,521 |
@@ -321,7 +332,7 @@ settings do not establish matched quality.
 | Prepared text RGBA16 / ImageSharp.Drawing (gap) † | 132.38 | 45.83 | 2.889 / 4.174 | 67,368 |
 | Composite RGBA8 / FFmpeg (gap) | 625.41 | 498.73 | 1.254 / 1.270 | 56 |
 | Composite RGBA16 / ImageSharp 3.1.12 (pass) | 627.24 | 696.25 | 0.901 / 0.922 | 56 |
-| Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 458.51 | 589.46 | 0.778 / 0.779 | 113 |
+| Bicubic RGBA16 height reduction, input+output+4 KiB (pass) † → 513×129 | 486.02 | 593.16 | 0.819 / 0.824 | 113 |
 
 **Inspection and pixel-coding validation**
 

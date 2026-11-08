@@ -2,6 +2,9 @@
 
 ## 0.2.1 — Unreleased
 
+- Reuse unpublished resize output for larger bicubic row bands, preserving exact
+  pixels, bounded scratch admission and independently owned results.
+
 - Share VP8 quantizer/rate preparation across luma/chroma searches, using bounded
   price views and deferred scratch writes with exact packets, unchanged admitted
   capacity and portable fallbacks.
